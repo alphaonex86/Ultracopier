@@ -1,0 +1,45 @@
+See the Development team section of http://ultracopier.first-world.info/contact.html for an updated list of Ultracopier team!
+
+=======================================================
+Core Developers =======================================
+=======================================================
+BRULE Herman or alpha_one_x86 <ultracopier@first-world.info>
+- Original author, API, kio_slaves, source
+
+=======================================================
+Ultracopier ===========================================
+=======================================================
+Ultracopier is licensed under the GNU General Public License version 3
+or later. The text of the GNU General Public License can be viewed at
+http://www.gnu.org/licenses/gpl.html
+See COPYING file.
+
+Ultracopier is an advanced file copier with copy list management.
+http://ultracopier.first-world.info/
+It requires the QT framework.
+
+See the CHANGELOG file for version and date information.
+
+=======================================================
+Building and install ==================================
+=======================================================
+Building requires gcc and QT4 lib.
+Then, run these commands in a terminal:
+
+qmake ultracopier.pro
+make
+
+Alternatively, you may use Qt creator to build the project 
+from GUI.
+
+=======================================================
+Only for Mac OS X =====================================
+=======================================================
+Ultracopier needs the Growl software.
+Requirements: Xcode and Qt SDK
+
+=======================================================
+Onyl for Debian, (K)Ubuntu ============================
+=======================================================
+Requirements: dev-tools build-essential qt4-dev qt4-qmake
+

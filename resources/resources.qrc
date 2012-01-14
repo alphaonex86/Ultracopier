@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ultracopier-128x128.png</file>
+        <file>ultracopier-16x16.png</file>
+        <file>document-encrypt.png</file>
+        <file>moveUp.png</file>
+        <file>moveDown.png</file>
+        <file>bug-128x128.png</file>
+        <file>none-128x128.png</file>
+        <file>Languages/en/flag.png</file>
+        <file>Languages/en/informations.xml</file>
+    </qresource>
+</RCC>

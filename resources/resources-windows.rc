@@ -1,0 +1,30 @@
+#include <windows.h>
+#include "../Variable.h"
+
+1 VERSIONINFO
+FILEVERSION ULTRACOPIER_WINDOWS_VERSION
+PRODUCTVERSION ULTRACOPIER_WINDOWS_VERSION
+FILETYPE VFT_APP
+{
+	BLOCK "StringFileInfo"
+	{
+		BLOCK "040904E4"
+		{
+			VALUE "CompanyName", "ultracopier.first-world.info"
+			VALUE "FileVersion", ULTRACOPIER_VERSION
+			VALUE "FileDescription", "Ultracopier under GPL3"
+			VALUE "InternalName", "ultracopier.exe"
+			VALUE "LegalCopyright", "GPL3"
+			VALUE "LegalTrademarks", "Ultracopier under GPL3"
+			VALUE "OriginalFilename", "ultracopier.exe"
+			VALUE "ProductName", "Ultracopier"
+			VALUE "ProductVersion", ULTRACOPIER_VERSION
+		}
+	}
+	BLOCK "VarFileInfo"
+	{
+		VALUE "Translation", 0x0409, 1252
+	}
+}
+
+IDI_ICON1               ICON    DISCARDABLE     "ultracopier.ico"

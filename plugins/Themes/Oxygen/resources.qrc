@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/add.png</file>
+        <file>resources/cancel.png</file>
+        <file>resources/main.png</file>
+        <file>resources/moveDown.png</file>
+        <file>resources/moveUp.png</file>
+        <file>resources/player_end.png</file>
+        <file>resources/player_pause.png</file>
+        <file>resources/player_play.png</file>
+        <file>resources/putOnBottom.png</file>
+        <file>resources/putOnTop.png</file>
+        <file>resources/remove.png</file>
+    </qresource>
+</RCC>
