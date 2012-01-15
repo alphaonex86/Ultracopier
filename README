@@ -1,13 +1,23 @@
 =======================================================
-Ultracopier ===========================================
+Description ===========================================
+=======================================================
+
+Ultracopier (http://ultracopier.first-world.info/) is free and open
+source software licensed under GPL3 that acts as a replacement for
+files copy dialogs.
+
+Main features include:
+ - pause/resume transfers
+ - dynamic speed limitation
+ - on-error resume,
+ - error/collision management
+
+=======================================================
+License ===============================================
 =======================================================
 Ultracopier is licensed under the GNU General Public License version 3.
 The text of the GNU General Public License can be viewed at http://www.gnu.org/licenses/gpl.html
 See COPYING file.
-
-Ultracopier is free and open source software licensed under GPL3 that acts as a replacement for files copy dialogs. Main features include: play/pause, speed limitation, on-error resume, error/collision management ...
-http://ultracopier.first-world.info/
-It requires the Qt framework.
 
 =======================================================
 Core Developers =======================================
