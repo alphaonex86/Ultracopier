@@ -92,11 +92,17 @@ class Core : public QObject, public GlobalClass
 		void copyFinished(const quint32 & orderId,bool withError);
 		void copyCanceled(const quint32 & orderId);
 	public slots:
+		/** \brief do copy with sources, but ask the destination */
 		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
+		/** \brief do copy with sources and destination */
 		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
+		/** \brief do move with sources, but ask the destination */
 		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
+		/** \brief do move with sources and destination */
 		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
+		/** \brief open copy/move windows with specific engine */
 		void addWindowCopyMove(CopyMode mode,QString name);
+		/** \brief open transfer (copy+move) windows with specific engine */
 		void addWindowTransfer(QString name);
 	private slots:
 		void copyInstanceCanceledByEngine();

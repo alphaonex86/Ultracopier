@@ -20,12 +20,19 @@ public:
 signals:
 	void newData();
 public slots:
+	/** method called when new transfer is started */
 	void newTransferStart(ItemOfCopyList);
+	/** method called when transfer is stopped */
 	void newTransferStop(quint64 id);
+	/** method called when new error is occurred */
 	void error(QString path,quint64 size,QDateTime mtime,QString error);
+	/** method called when the log file need be created */
 	void openLogs();
+	/** method called when the log file need be closed */
 	void closeLogs();
+	/** method called when one folder is removed */
 	void rmPath(QString path);
+	/** method called when one folder is created */
 	void mkPath(QString path);
 private slots:
 	void realDataWrite();

@@ -33,8 +33,11 @@ class PluginLoader : public QObject, GlobalClass
 public:
 	explicit PluginLoader(QObject *parent = 0);
 	~PluginLoader();
+	/** \brief to rended the state */
 	void resendState();
+	/** \brief should load plugin into file manager if needed */
 	void load();
+	/** \brief should unload plugin into file manager */
 	void unload();
 private slots:
 	void onePluginAdded(PluginsAvailable plugin);

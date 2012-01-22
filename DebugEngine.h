@@ -47,6 +47,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		\note This function is reentrant */
 		static void addDebugInformationStatic(DebugLevel level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
 		static void addDebugNote(const QString& text);
+		/** \brief structure for one debug item */
 		struct ItemOfDebug
 		{
 			DebugLevel_custom level;

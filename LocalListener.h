@@ -19,8 +19,9 @@ class LocalListener : public QObject
 {
     Q_OBJECT
 public:
-    explicit LocalListener(QObject *parent = 0);
+	explicit LocalListener(QObject *parent = 0);
 public slots:
+	/// try connect to existing server
 	bool tryConnect();
 	/// the listen server
 	void listenServer();

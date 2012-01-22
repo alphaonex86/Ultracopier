@@ -19,6 +19,7 @@
 class ExtraSocket
 {
 public:
+	/** \brief class to return always the same socket resolution */
 	static QString pathSocket(QString name);
 };
 

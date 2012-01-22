@@ -22,9 +22,13 @@ class AuthPlugin : public QThread
 public:
 	AuthPlugin(QObject * parent);
 	~AuthPlugin();
+	/** \brief stop all action to close ultracopier */
 	void stop();
+	/** \brief add path to check
+	  \param readPath list of read place
+	  \param searchPathPlugin list of plugin place
+	  */
 	void loadSearchPath(QStringList readPath,QStringList searchPathPlugin);
-	static QStringList getFileList(QString path);
 protected:
 	void run();
 private:
@@ -32,6 +36,7 @@ private:
 	QSemaphore sem;
 	QStringList readPath;
 	QStringList searchPathPlugin;
+	static QStringList getFileList(QString path);
 signals:
 	void authentifiedPath(QString);
 };

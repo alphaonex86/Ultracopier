@@ -26,11 +26,12 @@ enum CatchState
 	Caught
 };
 
+/// \brief Define the listening state
 enum ListeningState
 {
-	NotListening,
-	SemiListening,
-	FullListening
+	NotListening,///< 0 listener is listening
+	SemiListening,///< only part of listeners are listening
+	FullListening///< all the listeners are listening
 };
 
 enum CopyType
@@ -91,10 +92,10 @@ struct TimeDecomposition
 struct ItemOfCopyList
 {
 	quint64 id;
-	QString sourceFullPath;// full path with file name: /foo/foo.txt
-	QString sourceFileName;// full path with file name: foo.txt
-	QString destinationFullPath;// full path with file name: /foo/foo.txt
-	QString destinationFileName;// full path with file name: foo.txt
+	QString sourceFullPath;///< full path with file name: /foo/foo.txt
+	QString sourceFileName;///< full path with file name: foo.txt
+	QString destinationFullPath;///< full path with file name: /foo/foo.txt
+	QString destinationFileName;///< full path with file name: foo.txt
 	quint64 size;
 	CopyMode mode;
 };
@@ -107,12 +108,12 @@ struct ActionOnCopyList
 
 struct returnActionOnCopyList
 {
-	ReturnActionTypeCopyList type;// is OtherAction or AddingItem
-	//used if type != AddingItem
+	ReturnActionTypeCopyList type;///< is OtherAction or AddingItem
+	///< used if type != AddingItem
 	ActionOnCopyList userAction;
-	//if userAction.type == MoveItem
+	///< if userAction.type == MoveItem
 	int position;
-	//used if type == AddingItem
+	///< used if type == AddingItem
 	ItemOfCopyList addAction;
 };
 

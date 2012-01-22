@@ -6,13 +6,14 @@
 
 class CliParser : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit CliParser(QObject *parent = 0);
-
-signals:
-
+	explicit CliParser(QObject *parent = 0);
 public slots:
+	/** \brief method to parse the ultracopier arguments
+	  \param ultracopierArguments the argument list
+	  \param external true if the arguments come from other instance of ultracopier
+	*/
 	void cli(QStringList ultracopierArguments,bool external);
 };
 

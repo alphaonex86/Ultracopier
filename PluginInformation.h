@@ -22,8 +22,11 @@ class PluginInformation : public QDialog
 	public:
 		explicit PluginInformation();
 		~PluginInformation();
+		/** \brief get translated categorie */
 		QString categoryToTranslation(PluginType category);
+		/** \brief to get the new plugin informations */
 		void setPlugin(PluginsAvailable plugin);
+		/** \brief to set the language */
 		void setLanguage(QString language);
 	public slots:
 		void retranslateInformation();

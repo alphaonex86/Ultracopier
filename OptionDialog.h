@@ -16,7 +16,9 @@ class OptionDialog : public QDialog, public GlobalClass
 public:
 	explicit OptionDialog();
 	~OptionDialog();
+	/** \brief add the option widget from copy engine */
 	void addCopyEngineWidget(QString name,QWidget * options);
+	/** \brief remove the option widget from copy engine */
 	void removeCopyEngineWidget(QString name);
 protected:
 	void changeEvent(QEvent *e);

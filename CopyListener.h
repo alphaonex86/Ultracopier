@@ -24,7 +24,9 @@ class CopyListener : public QObject, public GlobalClass
 	public:
 		explicit CopyListener(QObject *parent = 0);
 		~CopyListener();
+		/** \brief send of one listener is loaded */
 		bool oneListenerIsLoaded();
+		/** \brief to resend the state */
 		void resendState();
 	private slots:
 		//void newPlugin();
@@ -40,9 +42,26 @@ class CopyListener : public QObject, public GlobalClass
 		#endif // ULTRACOPIER_DEBUG
 		void allPluginIsloaded();
 	public slots:
+		/** \brief the copy is finished
+		 \param orderId id used when it have send the copy
+		 \param withError true if it have found error
+		 \see newCopy()
+		 \see newMove()
+		*/
 		void copyFinished(const quint32 & orderId,bool withError);
+		/** \brief the copy is canceled by the user
+		 \param orderId id used when it have send the copy
+		 \see newCopy()
+		 \see newMove()
+		*/
 		void copyCanceled(const quint32 & orderId);
+		/** \brief try listen, to get copy/move from external source (mainly the file manager)
+		 \see close()
+		*/
 		void listen();
+		/** \brief stop listen, to get copy/move from external source (mainly the file manager)
+		 \see listen()
+		*/
 		void close();
 	signals:
 		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
