@@ -15,6 +15,7 @@
 #include "Environment.h"
 #include "ExtraSocket.h"
 
+/** \brief To have unique instance, and pass arguments to the existing instance if needed */
 class LocalListener : public QObject
 {
     Q_OBJECT

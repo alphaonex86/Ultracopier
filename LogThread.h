@@ -10,7 +10,10 @@
 #include "Environment.h"
 #include "StructEnumDefinition.h"
 
+/** \brief Log all the user oriented activity
 
+It use thread based storage to prevent gui thread freeze on log file writing when is out of the disk buffer. That's allow to async the event.
+*/
 class LogThread : public QThread, public GlobalClass
 {
     Q_OBJECT

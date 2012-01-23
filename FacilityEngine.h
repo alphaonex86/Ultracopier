@@ -4,6 +4,10 @@
 #include "interface/FacilityInterface.h"
 #include "Environment.h"
 
+/** \brief Class to group general function for the plugin
+
+This class is used into some plugin like copy engine plugin, to all into one place all common function, group the traduction, and all what it can grouped across all plugin into Ultracopier core application.
+*/
 class FacilityEngine : public FacilityInterface
 {
 	Q_OBJECT

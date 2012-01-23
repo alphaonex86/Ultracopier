@@ -10,6 +10,11 @@ namespace Ui {
     class OptionDialog;
 }
 
+/** \brief Dialog for the options
+
+  It's need manage the ultracopier options, plugins selection, plugin prority.
+  It's need manage too the plugin options and plugins informations.
+  */
 class OptionDialog : public QDialog, public GlobalClass
 {
 	Q_OBJECT

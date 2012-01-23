@@ -16,6 +16,7 @@
 	#include <windows.h>
 #endif
 
+/** \brief class to have general socket options */
 class ExtraSocket
 {
 public:

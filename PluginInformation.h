@@ -16,6 +16,7 @@ namespace Ui {
     class PluginInformation;
 }
 
+/** \brief to show the plugin information */
 class PluginInformation : public QDialog
 {
 	Q_OBJECT

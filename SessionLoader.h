@@ -23,6 +23,7 @@ This class load ALL plugin compatible to listen and catch the copy/move
 /// \todo SessionLoader -> put plugin by plugin loading to add plugin no reload all
 /// \todo async the plugin call
 
+/** \brief manage all SessionLoader plugin */
 class SessionLoader : public QObject, GlobalClass
 {
 	Q_OBJECT

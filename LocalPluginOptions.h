@@ -6,6 +6,12 @@
 #include "interface/OptionInterface.h"
 #include "OptionEngine.h"
 
+/** \brief To store the options
+
+  That's allow to have mutualised way to store the options. Then the plugins just keep Ultracopier manage it, the portable version will store on the disk near the application, and the normal version will keep at the normal location.
+
+  \see OptionEngine::OptionEngine()
+*/
 class LocalPluginOptions : public OptionInterface
 {
 	Q_OBJECT

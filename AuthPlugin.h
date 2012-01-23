@@ -16,6 +16,7 @@
 
 #include "Environment.h"
 
+/** \brief allow authentify the plugin */
 class AuthPlugin : public QThread
 {
 	Q_OBJECT

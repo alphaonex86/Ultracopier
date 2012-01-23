@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMessageBox>
 
+/** \brief class to parse all command line options */
 class CliParser : public QObject
 {
 	Q_OBJECT

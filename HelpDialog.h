@@ -21,6 +21,7 @@ namespace Ui {
 	class HelpDialog;
 }
 
+/** \brief Help dialog, and some user oriented repport/debug function */
 class HelpDialog : public QDialog, public GlobalClass {
 	Q_OBJECT
 	public:

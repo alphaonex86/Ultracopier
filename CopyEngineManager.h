@@ -23,6 +23,7 @@ namespace Ui {
 	class CopyEngineOptions;
 }
 
+/** \brief Manage copy engine plugins and their instance */
 class CopyEngineManager : public QObject, public GlobalClass
 {
 	Q_OBJECT
