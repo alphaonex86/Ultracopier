@@ -16,8 +16,7 @@
 #include "GlobalClass.h"
 #include "PluginLoader.h"
 
-/// \todo async the plugin call
-
+/** \brief to load all the listener and parse all event */
 class CopyListener : public QObject, public GlobalClass
 {
 	Q_OBJECT
