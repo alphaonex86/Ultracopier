@@ -228,6 +228,20 @@ void OptionDialog::loadOption()
 		newOptionValue("Write_log",	"folder_format",		options->getOptionValue("Write_log","folder_format"));
 	}
 	on_checkBox_Log_clicked();
+	if(plugins->getPluginsByCategory(PluginType_SessionLoader).size()>0)
+	{
+		ui->labelLoadAtSession->setToolTip("");
+		ui->LoadAtSessionStarting->setToolTip("");
+		ui->labelLoadAtSession->setEnabled(true);
+		ui->LoadAtSessionStarting->setEnabled(true);
+	}
+	else
+	{
+		ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+		ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+		ui->labelLoadAtSession->setEnabled(false);
+		ui->LoadAtSessionStarting->setEnabled(false);
+	}
 }
 
 void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
