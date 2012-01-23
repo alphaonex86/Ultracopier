@@ -27,17 +27,30 @@ class CopyEngineManager : public QObject, public GlobalClass
 {
 	Q_OBJECT
 public:
+	/** \brief internal structure to return one copy engine instance */
 	struct returnCopyEngine
 	{
-		PluginInterface_CopyEngine * engine;
-		bool canDoOnlyCopy;
-		CopyType type;
+		PluginInterface_CopyEngine * engine;	///< The copy engine instance
+		bool canDoOnlyCopy;			///< true if can do only the copy (not move)
+		CopyType type;				///< Kind of copy what it can do
 	};
 	explicit CopyEngineManager(OptionDialog *optionDialog);
+	/** \brief return copy engine instance when know the sources and destinations
+	  \param mode the mode (copy/move)
+	  \param protocolsUsedForTheSources list of sources used
+	  \param protocolsUsedForTheDestination list of destination used
+	  \see getCopyEngine()
+	  */
 	returnCopyEngine getCopyEngine(CopyMode mode,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination);
+	/** \brief return copy engine instance with specific engine
+	  \param mode the mode (copy/move)
+	  \param name name of the engine needed
+	  \see getCopyEngine()
+	  */
 	returnCopyEngine getCopyEngine(CopyMode mode,QString name);
 	//bool currentEngineCanDoOnlyCopy(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
 	//CopyType currentEngineGetCopyType(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
+	/** \brief to send all signal because all object is connected on it */
 	void setIsConnected();
 private slots:
 	void onePluginAdded(PluginsAvailable plugin);

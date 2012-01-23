@@ -33,6 +33,7 @@ EventDispatcher::EventDispatcher()
 	localListener.listenServer();
 	//show the ultracopier information
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Qt version: %1 (%2)").arg(qVersion()).arg(QT_VERSION));
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,COMPILERINFO);
