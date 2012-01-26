@@ -674,9 +674,9 @@ ItemOfCopyList ListThread::getTransferListEntry(quint64 id)
 		{
 			if(actionToDoList.at(index).type!=ActionType_Transfer)
 				return newItemToSend;
-			newItemToSend.sourceFullPath=actionToDoList.at(index).source.absolutePath();
+			newItemToSend.sourceFullPath=actionToDoList.at(index).source.absoluteFilePath();
 			newItemToSend.sourceFileName=actionToDoList.at(index).source.fileName();
-			newItemToSend.destinationFullPath=actionToDoList.at(index).destination.absolutePath();
+			newItemToSend.destinationFullPath=actionToDoList.at(index).destination.absoluteFilePath();
 			newItemToSend.destinationFileName=actionToDoList.at(index).destination.fileName();
 			newItemToSend.size=actionToDoList.at(index).size;
 			newItemToSend.mode=actionToDoList.at(index).mode;
@@ -1035,12 +1035,12 @@ void ListThread::doNewActions_inode_manipulation()
 						numberOfInodeOperation++;
 						ItemOfCopyList temp;
 						temp.destinationFileName=actionToDoList.at(int_for_loop).destination.fileName();
-						temp.destinationFullPath=actionToDoList.at(int_for_loop).destination.absolutePath();
+						temp.destinationFullPath=actionToDoList.at(int_for_loop).destination.absoluteFilePath();
 						temp.id=actionToDoList[int_for_loop].id;
 						temp.mode=actionToDoList[int_for_loop].mode;
 						temp.size=actionToDoList[int_for_loop].size;
 						temp.sourceFileName=actionToDoList.at(int_for_loop).source.fileName();
-						temp.sourceFullPath=actionToDoList.at(int_for_loop).source.absolutePath();
+						temp.sourceFullPath=actionToDoList.at(int_for_loop).source.absoluteFilePath();
 						emit newTransferStart(temp);		//should update interface information on this event
 						break;
 					}
