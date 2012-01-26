@@ -22,6 +22,7 @@ enum PluginType
 	PluginType_Themes
 };
 
+/// \brief structure to store the general plugin related information
 struct PluginsAvailable
 {
 	PluginType category;

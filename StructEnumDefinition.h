@@ -82,6 +82,7 @@ enum SizeUnit
 	SizeUnit_YottaByte
 };
 
+/// \brief structure for decompossed time
 struct TimeDecomposition
 {
 	quint16 second;
@@ -89,6 +90,7 @@ struct TimeDecomposition
 	quint16 hour;
 };
 
+/// \brief item to insert item in the interface
 struct ItemOfCopyList
 {
 	quint64 id;
@@ -100,12 +102,14 @@ struct ItemOfCopyList
 	CopyMode mode;
 };
 
+/// \brief The definition of no removing action on transfer list
 struct ActionOnCopyList
 {
 	ActionTypeCopyList type;
 	quint64 id;
 };
 
+/// \brief action normal or due to interface query on copy list
 struct returnActionOnCopyList
 {
 	ReturnActionTypeCopyList type;///< is OtherAction or AddingItem
@@ -117,6 +121,7 @@ struct returnActionOnCopyList
 	ItemOfCopyList addAction;
 };
 
+/// \brief to return file progression of previousled asked query
 struct returnSpecificFileProgression
 {
 	quint64 copiedSize;

@@ -77,7 +77,8 @@ HEADERS += ResourcesManager.h \
     interface/FacilityInterface.h \
     FacilityEngine.h \
     LogThread.h \
-    CompilerInfo.h
+    CompilerInfo.h \
+    StructEnumDefinition_UltracopierSpecific.h
 SOURCES += ThemesManager.cpp \
     ResourcesManager.cpp \
     main.cpp \
@@ -114,3 +115,4 @@ INCLUDEPATH += lib/qt-tar-xz/
 
 OTHER_FILES += \
     resources/resources-windows.rc
+
