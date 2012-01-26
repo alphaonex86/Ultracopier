@@ -34,7 +34,8 @@ PluginsManager::PluginsManager()
 	connect(this,			SIGNAL(newLanguageLoaded()),		&pluginInformationWindows,	SLOT(retranslateInformation()));
 //	connect(this,			SIGNAL(pluginListingIsfinish()),	options,SLOT(setInterfaceValue()));
 	//load the plugins list
-	this->start();
+	/// \bug bug when I put here: moveToThread(this);
+	start();
 }
 
 /// \brief Destroy the manager

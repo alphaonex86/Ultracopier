@@ -16,6 +16,7 @@ AuthPlugin::AuthPlugin(QObject * parent) :
 	stopIt=false;
 	//set sem to 1
 	sem.release();
+	moveToThread(this);
 }
 
 AuthPlugin::~AuthPlugin()

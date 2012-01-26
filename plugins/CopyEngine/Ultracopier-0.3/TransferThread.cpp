@@ -538,7 +538,10 @@ bool TransferThread::checkIfAllIsClosed()
 		return true;
 	}
 	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] wait self close");
 		return false;
+	}
 }
 
 /// \todo found way to retry that's

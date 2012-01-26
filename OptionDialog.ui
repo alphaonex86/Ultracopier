@@ -74,7 +74,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -576,6 +576,19 @@
           </layout>
          </item>
          <item>
+          <widget class="QCheckBox" name="checkBoxLog_sync">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="toolTip">
+            <string>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</string>
+           </property>
+           <property name="text">
+            <string>Synchronized log</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="checkBoxLog_transfer">
            <property name="enabled">
             <bool>false</bool>
@@ -674,12 +687,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>300</x>
-     <y>12</y>
+     <x>449</x>
+     <y>42</y>
     </hint>
     <hint type="destinationlabel">
-     <x>292</x>
-     <y>7</y>
+     <x>502</x>
+     <y>10</y>
     </hint>
    </hints>
   </connection>
@@ -726,8 +739,8 @@
      <y>21</y>
     </hint>
     <hint type="destinationlabel">
-     <x>372</x>
-     <y>77</y>
+     <x>582</x>
+     <y>105</y>
     </hint>
    </hints>
   </connection>
@@ -742,8 +755,8 @@
      <y>25</y>
     </hint>
     <hint type="destinationlabel">
-     <x>347</x>
-     <y>123</y>
+     <x>557</x>
+     <y>156</y>
     </hint>
    </hints>
   </connection>
@@ -754,12 +767,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>327</x>
-     <y>74</y>
+     <x>537</x>
+     <y>105</y>
     </hint>
     <hint type="destinationlabel">
-     <x>323</x>
-     <y>93</y>
+     <x>533</x>
+     <y>131</y>
     </hint>
    </hints>
   </connection>
@@ -770,12 +783,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>291</x>
-     <y>127</y>
+     <x>501</x>
+     <y>156</y>
     </hint>
     <hint type="destinationlabel">
-     <x>291</x>
-     <y>160</y>
+     <x>501</x>
+     <y>182</y>
     </hint>
    </hints>
   </connection>
@@ -790,8 +803,24 @@
      <y>15</y>
     </hint>
     <hint type="destinationlabel">
-     <x>246</x>
-     <y>179</y>
+     <x>456</x>
+     <y>207</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_Log</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>checkBoxLog_sync</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>12</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>

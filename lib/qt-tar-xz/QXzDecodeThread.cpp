@@ -2,6 +2,7 @@
 
 QXzDecodeThread::QXzDecodeThread()
 {
+	moveToThread(this);
 	DataToDecode=NULL;
 	error=false;
 }

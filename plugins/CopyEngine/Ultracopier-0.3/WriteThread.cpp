@@ -65,7 +65,7 @@ bool WriteThread::internalOpen()
 	QDir destinationFolder;
 	if(!destinationFolder.exists(destinationInfo.absolutePath()))
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Try create the path: %1")
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] "+QString("Try create the path: %1")
 					 .arg(destinationInfo.absolutePath()));
 		if(!destinationFolder.mkpath(destinationInfo.absolutePath()))
 		{
@@ -163,10 +163,12 @@ bool WriteThread::write(const QByteArray &data)
 
 void WriteThread::stop()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop()");
 	stopIt=true;
 	freeBlock.release();
-	/* useless because stopIt will close all thread
-	emit internalStartClose();*/
+	// useless because stopIt will close all thread, but if thread not runing run it
+	endIsDetected();
+	//emit internalStartClose();
 }
 
 void WriteThread::flushBuffer()

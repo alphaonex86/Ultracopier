@@ -55,6 +55,8 @@ private slots:
 	void on_checkBoxLog_error_clicked();
 	void on_pushButton_clicked();
 	void on_checkBoxLog_folder_clicked();
+	void on_checkBoxLog_sync_clicked();
+
 private:
 	Ui::OptionDialog *ui;
 	struct pluginStore

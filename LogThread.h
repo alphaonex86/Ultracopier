@@ -48,6 +48,7 @@ private:
 	QFile log;
 	QString replaceBaseVar(QString text);
 	QMutex mutex;
+	bool sync;
 protected:
 	void run();
 };

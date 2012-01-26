@@ -66,6 +66,7 @@ QString ReadThread::errorString()
 
 void ReadThread::stop()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop()");
 	stopIt=true;
 	emit internalStartClose();
 }
@@ -80,12 +81,14 @@ bool ReadThread::pause()
 
 void ReadThread::resume()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
 	if(putInPause)
 	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
 		putInPause=false;
 		stopIt=false;
 	}
+	else
+		return;
 	if(tryStartRead)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] already in try start");
@@ -242,8 +245,11 @@ void ReadThread::internalRead()
 			#endif
 			if(!writeThread->write(blockArray))
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] stopped because the write is stopped: "+QString::number(lastGoodPosition));
-				stopIt=true;
+				if(!stopIt)
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] stopped because the write is stopped: "+QString::number(lastGoodPosition));
+					stopIt=true;
+				}
 			}
 
 			#ifdef ULTRACOPIER_PLUGIN_DEBUG

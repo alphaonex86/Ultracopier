@@ -532,7 +532,7 @@ bool ListThread::skipInternal(quint64 id)
 	{
 		if(transferThreadList.at(index).id==id)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"skip one transfer");
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("skip one transfer: %1").arg(id));
 			transferThreadList.at(index).thread->skip();
 			return true;
 		}

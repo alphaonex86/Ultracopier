@@ -226,6 +226,7 @@ void OptionDialog::loadOption()
 		newOptionValue("Write_log",	"transfer_format",		options->getOptionValue("Write_log","transfer_format"));
 		newOptionValue("Write_log",	"error_format",			options->getOptionValue("Write_log","error_format"));
 		newOptionValue("Write_log",	"folder_format",		options->getOptionValue("Write_log","folder_format"));
+		newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
 	}
 	on_checkBox_Log_clicked();
 	if(plugins->getPluginsByCategory(PluginType_SessionLoader).size()>0)
@@ -311,6 +312,10 @@ void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
 		else if(name=="transfer")
 		{
 			ui->checkBoxLog_transfer->setChecked(value.toBool());
+		}
+		else if(name=="sync")
+		{
+			ui->checkBoxLog_sync->setChecked(value.toBool());
 		}
 		else if(name=="error")
 		{
@@ -657,5 +662,14 @@ void OptionDialog::on_pushButton_clicked()
 	{
 		ui->lineEditLog_File->setText(file);
 		on_lineEditLog_File_editingFinished();
+	}
+}
+
+void OptionDialog::on_checkBoxLog_sync_clicked()
+{
+	if(plugins->allPluginHaveBeenLoaded())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+		options->setOptionValue("Write_log","sync",ui->checkBoxLog_sync->isChecked());
 	}
 }

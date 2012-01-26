@@ -20,6 +20,7 @@ Core::Core(CopyEngineManager *copyEngineList)
 	connect(themes,			SIGNAL(theThemeNeedBeUnloaded()),			this,	SLOT(unloadInterface()));
 	connect(themes,			SIGNAL(theThemeIsReloaded()),				this,	SLOT(loadInterface()));
 	connect(&forUpateInformation,	SIGNAL(timeout()),					this,	SLOT(periodiqueSync()));
+
 	//load the GUI option
 	QString defaultLogFile="";
 	if(resources->getWritablePath()!="")
@@ -30,6 +31,7 @@ Core::Core(CopyEngineManager *copyEngineList)
 	KeysList.append(qMakePair(QString("transfer"),QVariant(true)));
 	KeysList.append(qMakePair(QString("error"),QVariant(true)));
 	KeysList.append(qMakePair(QString("folder"),QVariant(true)));
+	KeysList.append(qMakePair(QString("sync"),QVariant(false)));
 	KeysList.append(qMakePair(QString("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
 	KeysList.append(qMakePair(QString("error_format"),QVariant("[%time%] %path%, %error%")));
 	KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
@@ -37,7 +39,11 @@ Core::Core(CopyEngineManager *copyEngineList)
 	newOptionValue("Write_log",	"transfer",			options->getOptionValue("Write_log","transfer"));
 	newOptionValue("Write_log",	"error",			options->getOptionValue("Write_log","error"));
 	newOptionValue("Write_log",	"folder",			options->getOptionValue("Write_log","folder"));
+	newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
+
 	log.openLogs();
+
+	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
 }
 
 void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources)

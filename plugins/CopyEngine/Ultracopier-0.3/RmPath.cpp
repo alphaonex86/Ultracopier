@@ -5,6 +5,7 @@ RmPath::RmPath()
 	stopIt=false;
 	waitAction=false;
 	setObjectName("RmPath");
+	moveToThread(this);
 	start();
 }
 

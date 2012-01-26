@@ -5,6 +5,7 @@ MkPath::MkPath()
 	stopIt=false;
 	waitAction=false;
 	setObjectName("MkPath");
+	moveToThread(this);
 	start();
 }
 

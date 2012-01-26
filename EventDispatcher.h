@@ -2,8 +2,7 @@
 \brief Define the class of the event dispatcher
 \author alpha_one_x86
 \version 0.3
-\date 2010
-\example EventDispatcher.cpp */
+\date 2010 */
 
 #ifndef EVENT_DISPATCHER_H
 #define EVENT_DISPATCHER_H

@@ -4,11 +4,40 @@
 
 LogThread::LogThread()
 {
+	sync=false;
+	/** No here because code need direct access
+
+	//load the GUI option
+	QString defaultLogFile="";
+	if(resources->getWritablePath()!="")
+		defaultLogFile=resources->getWritablePath()+"ultracopier-files.log";
+	QList<QPair<QString, QVariant> > KeysList;
+	KeysList.append(qMakePair(QString("enabled"),QVariant(false)));
+	KeysList.append(qMakePair(QString("file"),QVariant(defaultLogFile)));
+	KeysList.append(qMakePair(QString("transfer"),QVariant(true)));
+	KeysList.append(qMakePair(QString("error"),QVariant(true)));
+	KeysList.append(qMakePair(QString("folder"),QVariant(true)));
+	KeysList.append(qMakePair(QString("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
+	KeysList.append(qMakePair(QString("error_format"),QVariant("[%time%] %path%, %error%")));
+	KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
+	options->addOptionGroup("Write_log",KeysList);
+	newOptionValue("Write_log",	"transfer",			options->getOptionValue("Write_log","transfer"));
+	newOptionValue("Write_log",	"error",			options->getOptionValue("Write_log","error"));
+	newOptionValue("Write_log",	"folder",			options->getOptionValue("Write_log","folder"));
+	newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
+	*/
+
+	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
+
+	moveToThread(this);
+	start();
 }
 
 LogThread::~LogThread()
 {
 	closeLogs();
+	quit();
+	wait();
 }
 
 void LogThread::openLogs()
@@ -16,18 +45,25 @@ void LogThread::openLogs()
 	if(options->getOptionValue("Write_log","enabled").toBool()==false)
 		return;
 	log.setFileName(options->getOptionValue("Write_log","file").toString());
-	if(!log.open(QIODevice::WriteOnly))
-		QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+	if(sync)
+	{
+		if(!log.open(QIODevice::WriteOnly|QIODevice::Unbuffered))
+			QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+	}
+	else
+	{
+		if(!log.open(QIODevice::WriteOnly))
+			QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+	}
 	newOptionValue("Write_log",	"transfer_format",		options->getOptionValue("Write_log","transfer_format"));
 	newOptionValue("Write_log",	"error_format",			options->getOptionValue("Write_log","error_format"));
 	newOptionValue("Write_log",	"folder_format",		options->getOptionValue("Write_log","folder_format"));
+	newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
 	start(QThread::IdlePriority);
 }
 
 void LogThread::closeLogs()
 {
-	quit();
-	wait(0);
 	if(log.isOpen() && data.size()>0)
 		log.write(data.toUtf8());
 	log.close();
@@ -45,9 +81,8 @@ void LogThread::newTransferStart(ItemOfCopyList item)
 	{
 		QMutexLocker lock_mutex(&mutex);
 		data+=text;
-		if(data.size()>4*1024*1024)
-			emit newData();
 	}
+	emit newData();
 }
 
 void LogThread::newTransferStop(quint64 id)
@@ -68,14 +103,13 @@ void LogThread::error(QString path,quint64 size,QDateTime mtime,QString error)
 	{
 		QMutexLocker lock_mutex(&mutex);
 		data+=text;
-		if(data.size()>4*1024*1024)
-			emit newData();
 	}
+	emit newData();
 }
 
 void LogThread::run()
 {
-	connect(this,SIGNAL(newData()),this,SLOT(realDataWrite()));
+	connect(this,SIGNAL(newData()),this,SLOT(realDataWrite()),Qt::QueuedConnection);
 	exec();
 }
 
@@ -88,17 +122,45 @@ void LogThread::realDataWrite()
 		currentData=data;
 		data.clear();
 	}
-	log.write(currentData.toUtf8());
+	if(log.write(currentData.toUtf8())==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unable to write into transfer log: %1").arg(log.errorString()));
+		return;
+	}
+	if(sync)
+	{
+		if(log.isOpen())
+			log.flush();
+	}
 }
 
 void LogThread::newOptionValue(QString group,QString name,QVariant value)
 {
-	if(group=="Write_log" && name=="transfer_format")
+	if(group!="Write_log")
+		return;
+	if(name=="transfer_format")
 		transfer_format=value.toString();
-	if(group=="Write_log" && name=="error_format")
+	if(name=="error_format")
 		error_format=value.toString();
-	if(group=="Write_log" && name=="folder_format")
+	if(name=="folder_format")
 		folder_format=value.toString();
+	if(name=="sync")
+	{
+		sync=value.toBool();
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("sync flag is set on: %1").arg(sync));
+		if(sync)
+		{
+			if(log.isOpen())
+				log.flush();
+		}
+	}
+	if(name=="enabled")
+	{
+		if(value.toBool())
+			openLogs();
+		else
+			closeLogs();
+	}
 }
 
 QString LogThread::replaceBaseVar(QString text)
@@ -118,9 +180,8 @@ void LogThread::rmPath(QString path)
 	{
 		QMutexLocker lock_mutex(&mutex);
 		data+=text;
-		if(data.size()>4*1024*1024)
-			emit newData();
 	}
+	emit newData();
 }
 
 void LogThread::mkPath(QString path)
@@ -134,7 +195,6 @@ void LogThread::mkPath(QString path)
 	{
 		QMutexLocker lock_mutex(&mutex);
 		data+=text;
-		if(data.size()>4*1024*1024)
-			emit newData();
 	}
+	emit newData();
 }
