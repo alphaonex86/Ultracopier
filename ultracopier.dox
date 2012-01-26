@@ -1,0 +1,35 @@
+/* -*- mode: C++ ; c-file-style: "stroustrup" -*- *****************************
+ * Ultracopier
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GPLv3
+ *****************************************************************************/
+
+/*
+  This file contains NO source code, just some documentation for doxygen to
+  parse.
+*/
+
+/*!
+  \mainpage Ultracopier
+
+  \section mainpage_overview Overview
+
+  Ultracopier provide an advanced copier with play/pause/resume, with advanced management like playlist.
+  This documentation is FOR DEVELOPMENT, use <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a> for end user documentation, general documentation, algorithm documentation.
+
+  \section mainpage_platforms Platforms
+
+  Ultracopier might be usable in all environments where you find Qt 4.\n
+  Ultracopier requires Qt 4.5.x or newer. Tested on Qt 4.7. Due to optimization Qt 4.8 usage will be better.
+
+  \section mainpage_downloads Downloads
+
+  Stable releases are available at the Ultracopier
+  <a href="http://ultracopier.first-world.info/">project page</a>.
+
+  \section license GPL Version 3
+  The core, and some default plugin are under GPL Version 3. See into each part to see the license.
+
+*/
+
