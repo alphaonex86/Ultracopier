@@ -62,7 +62,7 @@ DebugEngine::DebugEngine()
 	#ifdef ULTRACOPIER_VERSION_PORTABLE
 		#ifdef ULTRACOPIER_VERSION_PORTABLEAPPS
 			//Load the data folder path
-			QDir dir(QApplication::applicationDirPath());
+			QDir dir(QCoreApplication::applicationDirPath());
 			dir.cdUp();
 			dir.cdUp();
 			dir.cd("Data");
