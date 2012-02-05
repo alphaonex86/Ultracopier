@@ -30,6 +30,7 @@ namespace Ui {
 	class options;
 }
 
+/// \brief the implementation of copy engine plugin, manage directly few stuff, else pass to ListThread class.
 class copyEngine : public PluginInterface_CopyEngine
 {
         Q_OBJECT

@@ -107,25 +107,6 @@ void ThemesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"plugin not found");
 }
 
-/*/// \brief To change the current themes selected
-bool ThemesManager::changeCurrentTheme(QString theNewThemeToLoad)
-{
-	//load the extra files to check the themes availability
-	QString path="Themes/"+theNewThemeToLoad+"/";
-	if(currentStylePath!=path)
-	{
-		currentStylePath=path;
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Themes have changed for: \""+theNewThemeToLoad+"\", to path: \""+currentStylePath+"\"");
-		emit theThemeHaveChanged();
-		return true;
-	}
-	else
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Themes not changed, stay: \""+theNewThemeToLoad+"\", to path: \""+currentStylePath+"\"");
-		return false;
-	}
-}*/
-
 /** \brief To get image into the current themes, or default if not found
 \param filePath The file path to search, like toto.png resolved with the root of the current themes
 \see currentStylePath */
@@ -153,6 +134,7 @@ bool ThemesManager::getResourceFound(QString filePath)
 
 void ThemesManager::allPluginIsLoaded()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	currentPluginIndex=-1;
 	if(pluginList.size()==0)
 	{
@@ -206,6 +188,7 @@ void ThemesManager::allPluginIsLoaded()
 					pluginList[index].options=new LocalPluginOptions("Themes-"+name);
 					pluginList.at(index).factory->setResources(pluginList[index].options,pluginList.at(index).plugin.writablePath,pluginList.at(index).plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
 					currentPluginIndex=index;
+					currentStylePath=pluginList[index].plugin.path;
 					emit newThemeOptions(pluginList.at(index).factory->options(),true,true);
 					return;
 				}
@@ -215,6 +198,7 @@ void ThemesManager::allPluginIsLoaded()
 		}
 		index++;
 	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"theme not found!");
 	emit newThemeOptions(NULL,false,true);
 }
 

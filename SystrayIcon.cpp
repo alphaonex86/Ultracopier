@@ -35,14 +35,9 @@ SystrayIcon::SystrayIcon()
 	connect(actionMenuAbout,	SIGNAL(triggered()),					this,	SIGNAL(showHelp()));
 	connect(actionOptions,		SIGNAL(triggered()),					this,	SIGNAL(showOptions()));
 	connect(sysTrayIcon,		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),	this,	SLOT(CatchAction(QSystemTrayIcon::ActivationReason)));
-	/*connect(actionTransfer,		SIGNAL(triggered()),					this,	SLOT(CatchCopyQuery()));
-	connect(actionCopy,		SIGNAL(triggered()),					this,	SLOT(CatchCopyQuery()));
-	connect(actionMove,		SIGNAL(triggered()),					this,	SLOT(CatchMoveQuery()));
-	connect(actionTransferMulti,	SIGNAL(triggered()),					this,	SIGNAL(addWindowTransfer()));*/
 	connect(plugins,		SIGNAL(pluginListingIsfinish()),			this,	SLOT(reloadEngineList()));
 	//display the icon
 	updateCurrentTheme();
-//	newCanDoOnlyCopy(false);
 	//if theme/language change, update graphic part
 	connect(themes,		SIGNAL(theThemeIsReloaded()),				this,	SLOT(updateCurrentTheme()));
 	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			this,	SLOT(retranslateTheUI()));
@@ -61,8 +56,6 @@ SystrayIcon::~SystrayIcon()
 	delete actionMenuQuit;
 	delete actionMenuAbout;
 	delete actionOptions;
-/*	delete actionCopy;
-	delete actionMove;*/
 	delete systrayMenu;
 	delete copyMenu;
 	delete sysTrayIcon;
@@ -193,31 +186,28 @@ void SystrayIcon::updateSystrayIcon()
 /// \brief To update the current themes
 void SystrayIcon::updateCurrentTheme()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"icon: start");
 	//load the systray menu item
 	if(themes->getResourceFound("exit.png"))
-		IconQuit.addPixmap(themes->loadPixmap("exit.png"));
+		IconQuit=QIcon(themes->loadPixmap("exit.png"));
 	else
-		IconQuit.addFile(QString(""));
+		IconQuit=QIcon("");
 	actionMenuQuit->setIcon(IconQuit);
 	if(themes->getResourceFound("info.png"))
-		IconInfo.addPixmap(themes->loadPixmap("info.png"));
+		IconInfo=QIcon(themes->loadPixmap("info.png"));
 	else
-		IconInfo.addFile(QString(""));
+		IconInfo=QIcon("");
 	actionMenuAbout->setIcon(IconInfo);
 	if(themes->getResourceFound("tools.png"))
-		IconOptions.addPixmap(themes->loadPixmap("tools.png"));
+		IconOptions=QIcon(themes->loadPixmap("tools.png"));
 	else
-		IconOptions.addFile(QString(""));
+		IconOptions=QIcon("");
 	actionOptions->setIcon(IconOptions);
 	if(themes->getResourceFound("add.png"))
-		IconAdd.addPixmap(themes->loadPixmap("add.png"));
+		IconAdd=QIcon(themes->loadPixmap("add.png"));
 	else
-		IconAdd.addFile(QString(""));
-	//actionCopy->setIcon(IconAdd);
-	//actionMove->setIcon(IconAdd);
-	//actionTransfer->setIcon(IconAdd);
-	//actionTransferMulti->setIcon(IconAdd);
-	//copyMenu->setIcon(IconAdd);
+		IconAdd=QIcon("");
+	copyMenu->setIcon(IconAdd);
 	//update the systray icon
 	updateSystrayIcon();
 	reloadEngineList();

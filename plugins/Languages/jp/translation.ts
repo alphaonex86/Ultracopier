@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="13"/>
-        <source>Ultracopier is already running, right click on system tray icon (near the clock) to use it</source>
+        <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -26,42 +26,42 @@
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="192"/>
-        <source>No one copy engine support the moves</source>
+        <source>Cannot find any copy engine with motions support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="197"/>
-        <source>No one engine compatible found!</source>
+        <source>Cannot find any compatible engine!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="217"/>
-        <source>This copy engine not support the moves</source>
+        <source>This copy engine does not support motions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="230"/>
-        <source>The engine with this name is not found</source>
+        <source>Cannot find any engine with this name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="121"/>
-        <location filename="../../../Core.cpp" line="210"/>
-        <location filename="../../../Core.cpp" line="215"/>
+        <location filename="../../../Core.cpp" line="127"/>
+        <location filename="../../../Core.cpp" line="216"/>
+        <location filename="../../../Core.cpp" line="221"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="121"/>
-        <location filename="../../../Core.cpp" line="210"/>
+        <location filename="../../../Core.cpp" line="127"/>
+        <location filename="../../../Core.cpp" line="216"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="215"/>
+        <location filename="../../../Core.cpp" line="221"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation type="unfinished"></translation>
     </message>
@@ -232,19 +232,21 @@ This version is compiled as version: %1.</source>
     </message>
     <message>
         <location filename="../../../LocalListener.cpp" line="108"/>
-        <source>Timeout detected during the recomposition of data from the clients connected</source>
+        <source>Timeout while recomposing data from connected clients</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="20"/>
+        <location filename="../../../LogThread.cpp" line="51"/>
+        <location filename="../../../LogThread.cpp" line="56"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="20"/>
+        <location filename="../../../LogThread.cpp" line="51"/>
+        <location filename="../../../LogThread.cpp" line="56"/>
         <source>Unable to open file to keep the log file, error: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -397,11 +399,6 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="641"/>
-        <source>Where save the log file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui"/>
         <source>Write the log file into:</source>
         <translation type="unfinished"></translation>
@@ -419,6 +416,27 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui"/>
         <source>Write the folder operations:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="241"/>
+        <location filename="../../../OptionDialog.cpp" line="242"/>
+        <source>Disabled because you have any SessionLoader plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="660"/>
+        <source>Save logs as: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui"/>
+        <source>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui"/>
+        <source>Synchronized log</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -508,140 +526,140 @@ This version is compiled as version: %1.</source>
 <context>
     <name>PluginsManager</name>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="205"/>
+        <location filename="../../../PluginsManager.cpp" line="206"/>
         <source>informations.xml is not accessible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="211"/>
+        <location filename="../../../PluginsManager.cpp" line="212"/>
         <source>informations.xml not found into the plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="237"/>
-        <source>%1, Parse error at line %2, column %3: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="245"/>
-        <source>&quot;package&quot; root balise not found for the xml file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="321"/>
-        <source>Plugin duplicate found, already loaded!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="379"/>
-        <source>English text is missing into informations.xml for the balise: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="387"/>
-        <source>No have found this balise: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="469"/>
+        <location filename="../../../PluginsManager.cpp" line="470"/>
         <source>Dependencies part is wrong</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="488"/>
-        <source>Dependencies %1 have not been satisfied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="639"/>
+        <location filename="../../../PluginsManager.cpp" line="640"/>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="639"/>
-        <source>Are you sure to wish remove &quot;%1&quot; in version %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="650"/>
+        <location filename="../../../PluginsManager.cpp" line="651"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="650"/>
-        <source>Error during plugin removing, please check right of remove on the folder: 
-%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="673"/>
+        <location filename="../../../PluginsManager.cpp" line="674"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="673"/>
-        <source>Previous import is in progressing...</source>
+        <location filename="../../../PluginsManager.cpp" line="238"/>
+        <source>%1, parse error at line %2, column %3: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="676"/>
-        <source>Open Ultracopier plugin</source>
+        <location filename="../../../PluginsManager.cpp" line="246"/>
+        <source>&quot;package&quot; root tag not found for the xml file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="676"/>
-        <source>Ultracopier plugin (*.urc)</source>
+        <location filename="../../../PluginsManager.cpp" line="322"/>
+        <source>Duplicated plugin found, already loaded!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="689"/>
-        <location filename="../../../PluginsManager.cpp" line="712"/>
-        <location filename="../../../PluginsManager.cpp" line="779"/>
-        <location filename="../../../PluginsManager.cpp" line="792"/>
-        <location filename="../../../PluginsManager.cpp" line="810"/>
-        <location filename="../../../PluginsManager.cpp" line="816"/>
-        <location filename="../../../PluginsManager.cpp" line="822"/>
-        <location filename="../../../PluginsManager.cpp" line="828"/>
-        <location filename="../../../PluginsManager.cpp" line="834"/>
-        <location filename="../../../PluginsManager.cpp" line="841"/>
-        <source>Plugin loader</source>
+        <location filename="../../../PluginsManager.cpp" line="380"/>
+        <source>English text is missing into informations.xml for tag: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="689"/>
-        <source>Unable to open the plugin: %1</source>
+        <location filename="../../../PluginsManager.cpp" line="388"/>
+        <source>Tag not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="712"/>
-        <location filename="../../../PluginsManager.cpp" line="828"/>
-        <location filename="../../../PluginsManager.cpp" line="841"/>
-        <source>Unable to load the plugin content, please check it: %1</source>
+        <location filename="../../../PluginsManager.cpp" line="489"/>
+        <source>Dependencies %1 are not satisfied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="779"/>
-        <source>Unable to create a folder for install the plugin:
+        <location filename="../../../PluginsManager.cpp" line="640"/>
+        <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="651"/>
+        <source>Error while removing plugin, please check right of remove on the folder: 
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="792"/>
-        <source>Unable to create a file for install the plugin:
-%1
-Because:%2</source>
+        <location filename="../../../PluginsManager.cpp" line="674"/>
+        <source>Previous import is in progress...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="810"/>
+        <location filename="../../../PluginsManager.cpp" line="677"/>
+        <source>Open Ultracopier plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="677"/>
+        <source>Ultracopier plugin (*.urc)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="690"/>
+        <location filename="../../../PluginsManager.cpp" line="713"/>
+        <location filename="../../../PluginsManager.cpp" line="780"/>
+        <location filename="../../../PluginsManager.cpp" line="793"/>
+        <location filename="../../../PluginsManager.cpp" line="811"/>
+        <location filename="../../../PluginsManager.cpp" line="817"/>
+        <location filename="../../../PluginsManager.cpp" line="823"/>
+        <location filename="../../../PluginsManager.cpp" line="829"/>
+        <location filename="../../../PluginsManager.cpp" line="835"/>
+        <location filename="../../../PluginsManager.cpp" line="842"/>
+        <source>Plugin loader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="690"/>
+        <source>Unable to open the plugin: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="713"/>
+        <location filename="../../../PluginsManager.cpp" line="829"/>
+        <location filename="../../../PluginsManager.cpp" line="842"/>
+        <source>Unable to load the plugin content, please check it: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="780"/>
+        <source>Unable to create a folder to install the plugin:
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="793"/>
+        <source>Unable to create a file to install the plugin:
+%1
+since:%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="811"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="816"/>
-        <location filename="../../../PluginsManager.cpp" line="822"/>
-        <location filename="../../../PluginsManager.cpp" line="834"/>
+        <location filename="../../../PluginsManager.cpp" line="817"/>
+        <location filename="../../../PluginsManager.cpp" line="823"/>
+        <location filename="../../../PluginsManager.cpp" line="835"/>
         <source>Unable to load the plugin content, please check it</source>
         <translation type="unfinished"></translation>
     </message>
@@ -677,7 +695,7 @@ Because:%2</source>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="105"/>
-        <source>File is corrupt</source>
+        <source>File is corrupted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

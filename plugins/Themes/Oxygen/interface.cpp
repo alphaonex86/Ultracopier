@@ -54,6 +54,7 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 
 	//unpush the more button
 	ui->moreButton->setChecked(false);
+	on_moreButton_toggled(false);
 }
 
 void InterfacePlugin::uiUpdateSpeed()
@@ -1058,6 +1059,9 @@ void InterfacePlugin::on_moreButton_toggled(bool checked)
 		this->setMaximumHeight(16777215);
 	else
 		this->setMaximumHeight(130);
+	// usefull under windows
+	this->updateGeometry();
+	this->update();
 }
 
 void InterfacePlugin::on_comboBox_copyErrors_currentIndexChanged(int index)

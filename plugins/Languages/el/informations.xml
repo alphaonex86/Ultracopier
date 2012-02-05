@@ -17,7 +17,7 @@
 	<name>el</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
 	<dependencies><![CDATA[
-	=ultracopier-0.3.0.0
+	=ultracopier-0.3.0
 	]]></dependencies>
 	<!-- Additional information that is specific to the category (in this case Language). -->
 	<categorySpecific>

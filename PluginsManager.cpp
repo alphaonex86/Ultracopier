@@ -486,8 +486,8 @@ void PluginsManager::checkDependencies()
 					if(!depCheck)
 					{
 						pluginsList[index].informations.clear();
-						pluginsList[index].errorString=tr("Dependencies %1 are not satisfied").arg(dependenciesToParse);
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Dependencies %1 are not satisfied").arg(dependenciesToParse));
+						pluginsList[index].errorString=tr("Dependencies %1 are not satisfied, for plugin: %2").arg(dependenciesToParse).arg(pluginsList[index].path);
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Dependencies %1 are not satisfied, for plugin: %2").arg(dependenciesToParse).arg(pluginsList[index].path));
 						break;
 					}
 					indexOfDependencies++;
