@@ -1062,6 +1062,7 @@ void InterfacePlugin::on_moreButton_toggled(bool checked)
 	// usefull under windows
 	this->updateGeometry();
 	this->update();
+	this->adjustSize();
 }
 
 void InterfacePlugin::on_comboBox_copyErrors_currentIndexChanged(int index)
