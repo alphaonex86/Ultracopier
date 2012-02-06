@@ -1,0 +1,20 @@
+[Desktop Entry]
+Categories=Qt;Utility;
+Comment[en_US]=Copy/Move files with lot of options
+Comment=Copy/Move files with lot of options
+Exec=ultracopier %u
+GenericName[en_US]=Advanced copier
+GenericName=Advanced copier
+Icon=ultracopier.png
+MimeType=
+Name[en_US]=Ultracopier
+Name=Ultracopier
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
