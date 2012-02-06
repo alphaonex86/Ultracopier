@@ -9,7 +9,7 @@
 #include <QDir>
 
 #include "sessionLoader.h"
-void TestPlugin::setEnabled(bool newValue)
+void SessionLoaderPlugin::setEnabled(bool newValue)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
 	QFile link(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
@@ -33,11 +33,19 @@ void TestPlugin::setEnabled(bool newValue)
 	}
 }
 
-bool TestPlugin::getEnabled()
+bool SessionLoaderPlugin::getEnabled()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, return this value: "+QString::number(QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh")));
 	//return the value into the variable
 	return QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
 }
 
-Q_EXPORT_PLUGIN2(sessionLoader, TestPlugin);
+void SessionLoaderPlugin::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+{
+	Q_UNUSED(options);
+	Q_UNUSED(writePath);
+	Q_UNUSED(pluginPath);
+	Q_UNUSED(portableVersion);
+}
+
+Q_EXPORT_PLUGIN2(sessionLoader, SessionLoaderPlugin);
