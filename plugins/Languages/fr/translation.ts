@@ -11,7 +11,7 @@
     <message>
         <location filename="../../../CliParser.cpp" line="13"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier est déjà lancé, clique droit sur l&apos;icon du system tray (pret de l&apos;heure) pour l&apos;utilisé</translation>
     </message>
 </context>
 <context>
@@ -27,22 +27,22 @@
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="192"/>
         <source>Cannot find any copy engine with motions support</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver un moteur de copie avec le support des déplacements</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="197"/>
         <source>Cannot find any compatible engine!</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver un moteur de copie compatible!</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="217"/>
         <source>This copy engine does not support motions</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce moteur de copie ne support pas les déplacements</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="230"/>
         <source>Cannot find any engine with this name</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de trouver un moteur de copie avec ce nom</translation>
     </message>
 </context>
 <context>
@@ -234,7 +234,7 @@ Cette version est compilée comme version: %1.</translation>
     <message>
         <location filename="../../../LocalListener.cpp" line="108"/>
         <source>Timeout while recomposing data from connected clients</source>
-        <translation type="unfinished"></translation>
+        <translation>Timeout pendant la recompossition des données des clients connectés</translation>
     </message>
 </context>
 <context>
@@ -420,25 +420,27 @@ Cette version est compilée comme version: %1.</translation>
         <translation>Rédiger les opérations dossier:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="241"/>
-        <location filename="../../../OptionDialog.cpp" line="242"/>
+        <location filename="../../../OptionDialog.cpp" line="157"/>
+        <location filename="../../../OptionDialog.cpp" line="158"/>
+        <location filename="../../../OptionDialog.cpp" line="243"/>
+        <location filename="../../../OptionDialog.cpp" line="244"/>
         <source>Disabled because you have any SessionLoader plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="660"/>
+        <location filename="../../../OptionDialog.cpp" line="662"/>
         <source>Save logs as: </source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder les logs sous: </translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui"/>
         <source>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier est écrit directement quand il reçois une nouvelle entrée, mais il peu produire 50% de perte de performance</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui"/>
         <source>Synchronized log</source>
-        <translation type="unfinished"></translation>
+        <translation>Log syncronisé</translation>
     </message>
 </context>
 <context>
@@ -542,6 +544,18 @@ Cette version est compilée comme version: %1.</translation>
         <translation>Les dépendances sont fausses</translation>
     </message>
     <message>
+        <location filename="../../../PluginsManager.cpp" line="489"/>
+        <source>Dependencies %1 are not satisfied, for plugin: %2</source>
+        <translation>Dépendances %1 n&apos;ont pas été satisfaite, pour le plugin: %2</translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="651"/>
+        <source>Error while the removing plugin, please check right of remove on the folder: 
+%1</source>
+        <translation>Erreur pendant la suppression du plugin, merci de vérifié les droits sur le dossier: 
+%1</translation>
+    </message>
+    <message>
         <location filename="../../../PluginsManager.cpp" line="690"/>
         <location filename="../../../PluginsManager.cpp" line="713"/>
         <location filename="../../../PluginsManager.cpp" line="780"/>
@@ -573,48 +587,37 @@ Cette version est compilée comme version: %1.</translation>
     <message>
         <location filename="../../../PluginsManager.cpp" line="238"/>
         <source>%1, parse error at line %2, column %3: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1, erreur à la ligne %2, à l&apos;emplacement %3: %4</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="246"/>
         <source>&quot;package&quot; root tag not found for the xml file</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;package&quot; balise root non trouvé pour le fichier xml</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="322"/>
         <source>Duplicated plugin found, already loaded!</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin dupliqué trouvé, déjà chargé!</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="380"/>
-        <source>English text is missing into informations.xml for tag: %1</source>
-        <translation type="unfinished"></translation>
+        <source>English text missing into the informations.xml for the tag: %1</source>
+        <translation>Texte anglais manquant dans le informations.xml pour la balise: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="388"/>
         <source>Tag not found: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="489"/>
-        <source>Dependencies %1 are not satisfied</source>
-        <translation type="unfinished"></translation>
+        <translation>Balise non trouvé: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="640"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="651"/>
-        <source>Error while removing plugin, please check right of remove on the folder: 
-%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Etes vous sur de vouloir supprimé &quot;%1&quot; en version %2?</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="674"/>
         <source>Previous import is in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importation précédente en cour...</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="677"/>
@@ -642,14 +645,17 @@ Cette version est compilée comme version: %1.</translation>
         <location filename="../../../PluginsManager.cpp" line="780"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer un dossier pour installer le plugin:
+%1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="793"/>
         <source>Unable to create a file to install the plugin:
 %1
 since:%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer un fichier pour installer le plugin:
+%1
+depuis:%2</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="811"/>
@@ -697,8 +703,8 @@ since:%2</source>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="105"/>
-        <source>File is corrupted</source>
-        <translation type="unfinished"></translation>
+        <source>The file is corrupted</source>
+        <translation>Le fichier est corrompu</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="109"/>
@@ -714,85 +720,85 @@ since:%2</source>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="95"/>
+        <location filename="../../../SystrayIcon.cpp" line="88"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation>Pas d&apos;écouteur trouvé. Effectuez la copie manuelle par le clic droit sur l&apos;icône dans la zone de notification (près de l&apos;horloge).</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="112"/>
+        <location filename="../../../SystrayIcon.cpp" line="105"/>
         <source>Searching informations...</source>
         <translation>Recherche d&apos;informations...</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="127"/>
+        <location filename="../../../SystrayIcon.cpp" line="120"/>
         <source>Not catching the explorer copy/move</source>
         <translation>Ne pas capturer la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="132"/>
+        <location filename="../../../SystrayIcon.cpp" line="125"/>
         <source>Semi catching the explorer copy/move</source>
         <translation>Interception partielle des copies/déplacements de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="137"/>
+        <location filename="../../../SystrayIcon.cpp" line="130"/>
         <source>Catching the explorer copy/move</source>
         <translation>Interception des copies/déplacements de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="247"/>
+        <location filename="../../../SystrayIcon.cpp" line="237"/>
         <source>Action on the systray icon is unknown!</source>
         <translation>Action sur l&apos;icône du systray est inconnu!</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="295"/>
+        <location filename="../../../SystrayIcon.cpp" line="285"/>
         <source>&amp;About/Debug report</source>
         <translation>&amp;A propos d&apos;ultracopier/Debug</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="297"/>
+        <location filename="../../../SystrayIcon.cpp" line="287"/>
         <source>&amp;About</source>
         <translation>&amp;A propos d&apos;ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="299"/>
+        <location filename="../../../SystrayIcon.cpp" line="289"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="300"/>
+        <location filename="../../../SystrayIcon.cpp" line="290"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="346"/>
-        <location filename="../../../SystrayIcon.cpp" line="368"/>
+        <location filename="../../../SystrayIcon.cpp" line="336"/>
+        <location filename="../../../SystrayIcon.cpp" line="358"/>
         <source>Add &amp;copy</source>
         <translation>Ajouter une &amp;copie</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="352"/>
-        <location filename="../../../SystrayIcon.cpp" line="374"/>
+        <location filename="../../../SystrayIcon.cpp" line="342"/>
+        <location filename="../../../SystrayIcon.cpp" line="364"/>
         <source>Add &amp;transfer</source>
         <translation>Ajouter un &amp;transfert</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="356"/>
-        <location filename="../../../SystrayIcon.cpp" line="378"/>
+        <location filename="../../../SystrayIcon.cpp" line="346"/>
+        <location filename="../../../SystrayIcon.cpp" line="368"/>
         <source>Add &amp;move</source>
         <translation>Ajouter un &amp;déplacement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="301"/>
+        <location filename="../../../SystrayIcon.cpp" line="291"/>
         <source>A&amp;dd copy/moving</source>
         <translation>&amp;Ajouter une copie/déplacement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="247"/>
+        <location filename="../../../SystrayIcon.cpp" line="237"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="101"/>
+        <location filename="../../../SystrayIcon.cpp" line="94"/>
         <source>Information</source>
         <translation>Informations</translation>
     </message>

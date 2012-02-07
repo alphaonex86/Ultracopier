@@ -4,7 +4,7 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="+83"/>
+        <location filename="../../interface.cpp" line="+84"/>
         <source>Copy engine</source>
         <translation>Moteur de copie</translation>
     </message>

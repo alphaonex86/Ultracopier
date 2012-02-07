@@ -24,7 +24,7 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="51"/>
+        <location filename="../../MkPath.cpp" line="52"/>
         <source>Unable to create the folder</source>
         <translation>Impossible de créer le répertoire</translation>
     </message>
@@ -32,7 +32,7 @@
 <context>
     <name>ReadThread</name>
     <message>
-        <location filename="../../ReadThread.cpp" line="231"/>
+        <location filename="../../ReadThread.cpp" line="234"/>
         <source>Unable to read the source file: </source>
         <translation>Impossible de lire le fichier source: </translation>
     </message>
@@ -40,7 +40,7 @@
 <context>
     <name>RmPath</name>
     <message>
-        <location filename="../../RmPath.cpp" line="51"/>
+        <location filename="../../RmPath.cpp" line="52"/>
         <source>Unable to remove the folder</source>
         <translation>Impossible de supprimer le répertoire</translation>
     </message>
@@ -101,8 +101,8 @@
     </message>
     <message>
         <location filename="../../copyEngine.cpp" line="192"/>
-        <source>Overwrite if not same modification date</source>
-        <translation>Ecraser si la date de modification est différente</translation>
+        <source>Overwrite if the last modification dates are different</source>
+        <translation>Ecraser si les dates de modifications sont différentes</translation>
     </message>
     <message>
         <location filename="../../copyEngine.cpp" line="193"/>
@@ -403,11 +403,6 @@
     </message>
     <message>
         <location filename="../../options.ui"/>
-        <source>When folder colision</source>
-        <translation>En cas de collision de répertoires</translation>
-    </message>
-    <message>
-        <location filename="../../options.ui"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
@@ -435,6 +430,11 @@
         <location filename="../../options.ui"/>
         <source>Auto start the transfer</source>
         <translation>Démmarer automatiquement le transfert</translation>
+    </message>
+    <message>
+        <location filename="../../options.ui"/>
+        <source>When folder collision</source>
+        <translation>Lors d&apos;une collision de dossier</translation>
     </message>
 </context>
 <context>
