@@ -4,27 +4,27 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="83"/>
+        <location filename="../../interface.cpp" line="84"/>
         <source>Copy engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="96"/>
+        <location filename="../../interface.cpp" line="97"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="141"/>
+        <location filename="../../interface.cpp" line="142"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="666"/>
+        <location filename="../../interface.cpp" line="667"/>
         <source>Unlimited</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="845"/>
+        <location filename="../../interface.cpp" line="846"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>

@@ -24,7 +24,7 @@ PluginsManager::PluginsManager()
 	language="en";
 	stopIt=false;
 	editionSemList.release();
-	checkPluginThread=new AuthPlugin(this);
+	checkPluginThread=new AuthPlugin();
 	englishPluginType << "CopyEngine" << "Languages" << "Listener" << "PluginLoader" << "SessionLoader" << "Themes";
 	//catPlugin << tr("CopyEngine") << tr("Languages") << tr("Listener") << tr("PluginLoader") << tr("SessionLoader") << tr("Themes");
 	importingPlugin=false;
@@ -34,7 +34,7 @@ PluginsManager::PluginsManager()
 	connect(this,			SIGNAL(newLanguageLoaded()),		&pluginInformationWindows,	SLOT(retranslateInformation()));
 //	connect(this,			SIGNAL(pluginListingIsfinish()),	options,SLOT(setInterfaceValue()));
 	//load the plugins list
-	/// \bug bug when I put here: moveToThread(this);
+	/// \bug bug when I put here: moveToThread(this);, due to the direction connection to remove the plugin
 	start();
 }
 
@@ -377,8 +377,8 @@ void PluginsManager::loadBalise(QDomElement root,QString name,QList<QStringList>
 	if(multiLanguage && englishTextIsFoundForThisChild==false && englishNeedBeFound)
 	{
 		informations->clear();
-		*errorString=tr("English text is missing into informations.xml for tag: %1").arg(name);
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("English text is missing into informations.xml for tag: %1").arg(name));
+		*errorString=tr("English text missing into the informations.xml for the tag: %1").arg(name);
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("English text missing into the informations.xml for the tag: %1").arg(name));
 		return;
 	}
 	if(needHaveOneEntryMinimum && foundElement==0)
@@ -648,7 +648,7 @@ void PluginsManager::removeThePluginSelected(QString path)
 				if(!ResourcesManager::removeFolder(pluginsList.at(index).path))
 				{
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to remove the plugin");
-					QMessageBox::critical(NULL,tr("Error"),tr("Error while removing plugin, please check right of remove on the folder: \n%1").arg(pluginsList.at(index).path));
+					QMessageBox::critical(NULL,tr("Error"),tr("Error while the removing plugin, please check right of remove on the folder: \n%1").arg(pluginsList.at(index).path));
 				}
 				pluginsList.removeAt(index);
 				checkDependencies();

@@ -8,8 +8,7 @@
 
 #include "AuthPlugin.h"
 
-AuthPlugin::AuthPlugin(QObject * parent) :
-	QThread(parent)
+AuthPlugin::AuthPlugin()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//load the overall instance

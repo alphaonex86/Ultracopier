@@ -61,7 +61,6 @@ class EventDispatcher : public QObject, public GlobalClass
 			Core * CoreWindow;
 			QList<int> copyMoveEventIdManaged;
 		};
-		typedef struct CoreSession CoreSession;
 		/// \brief the systray icon
 		SystrayIcon *backgroundIcon;
 		/// \brief To lunch event only when the event loop is setup

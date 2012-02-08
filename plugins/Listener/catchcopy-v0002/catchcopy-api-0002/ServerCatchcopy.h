@@ -45,7 +45,6 @@ class ServerCatchcopy : public QObject
 			QList<quint32> queryNoReplied;
 			QTimer *detectTimeOut;
 		};
-		typedef struct Client Client;
 		QList<Client> ClientList;
 		struct LinkGlobalToLocalClient
 		{
@@ -53,7 +52,6 @@ class ServerCatchcopy : public QObject
 			quint32 orderId;
 			quint32 globalOrderId;
 		};
-		typedef struct LinkGlobalToLocalClient LinkGlobalToLocalClient;
 		QList<LinkGlobalToLocalClient> LinkGlobalToLocalClientList;
 		enum inputReturnType{Ok,Replied,ExtensionWrong,WrongArgument,WrongArgumentListSize,UnknowOrder};
 		inputReturnType parseInputCurrentProtocol(quint32 client,quint32 orderId,QStringList returnList);

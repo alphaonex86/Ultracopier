@@ -189,7 +189,7 @@ QList<QPair<QString,QString> > copyEngine::getCollisionAction()
 	tempItem.first=tr("Skip");tempItem.second="skip";list << tempItem;
 	tempItem.first=tr("Overwrite");tempItem.second="overwrite";list << tempItem;
 	tempItem.first=tr("Overwrite if newer");tempItem.second="overwriteIfNewer";list << tempItem;
-	tempItem.first=tr("Overwrite if last modification dates are different");tempItem.second="overwriteIfNotSameModificationDate";list << tempItem;
+	tempItem.first=tr("Overwrite if the last modification dates are different");tempItem.second="overwriteIfNotSameModificationDate";list << tempItem;
 	tempItem.first=tr("Rename");tempItem.second="rename";list << tempItem;
 	return list;
 }

@@ -137,7 +137,7 @@ void CopyListener::onePluginWillBeRemoved(PluginsAvailable plugin)
 			pluginList.at(indexPlugin).listenInterface->close();
 			disconnect(pluginList.at(indexPlugin).listenInterface);
 			pluginList.at(indexPlugin).pluginLoader->unload();
-			delete pluginList.at(index).options;
+			delete pluginList.at(indexPlugin).options;
 			pluginList.removeAt(indexPlugin);
 			sendState();
 			return;

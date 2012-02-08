@@ -50,7 +50,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 				fileIsSameDialog dialog(interface,source);
 				emit isInPause(true);
-				dialog.exec();
+				dialog.exec();/// \bug crash when external close
 				FileExistsAction newAction=dialog.getAction();
 				emit isInPause(false);
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -119,7 +119,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 				fileExistsDialog dialog(interface,source,destination);
 				emit isInPause(true);
-				dialog.exec();
+				dialog.exec();/// \bug crash when external close
 				FileExistsAction newAction=dialog.getAction();
 				emit isInPause(false);
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -212,7 +212,7 @@ void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
 			emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
 			fileErrorDialog dialog(interface,fileInfo,errorString);
 			emit isInPause(true);
-			dialog.exec();
+			dialog.exec();/// \bug crash when external close
 			FileErrorAction newAction=dialog.getAction();
 			emit isInPause(false);
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -298,7 +298,7 @@ void copyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 			dialogIsOpen=true;
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 			folderExistsDialog dialog(interface,source,isSame,destination);
-			dialog.exec();
+			dialog.exec();/// \bug crash when external close
 			FolderExistsAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
 			if(newAction==FolderExists_Cancel)
@@ -357,7 +357,7 @@ void copyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOr
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 			emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
 			fileErrorDialog dialog(interface,fileInfo,errorString);
-			dialog.exec();
+			dialog.exec();/// \bug crash when external close
 			FileErrorAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
 			if(newAction==FileError_Cancel)
@@ -429,7 +429,7 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 			emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
 			fileErrorDialog dialog(interface,folder,errorString);
-			dialog.exec();
+			dialog.exec();/// \bug crash when external close
 			FileErrorAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
 			if(newAction==FileError_Cancel)
@@ -525,7 +525,7 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 			emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
 			fileErrorDialog dialog(interface,folder,errorString);
-			dialog.exec();
+			dialog.exec();/// \bug crash when external close
 			FileErrorAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
 			if(newAction==FileError_Cancel)

@@ -713,8 +713,8 @@ void Core::copyInstanceCanceledByIndex(int index)
 	disconnectEngine(index);
 	disconnectInterface(index);
 	copyList.at(index).engine->cancel();
-	delete copyList.at(index).interface;
 	delete copyList.at(index).engine;
+	delete copyList.at(index).interface;
 	index_sub_loop=0;
 	loop_size=copyList.at(index).orderId.size();
 	while(index_sub_loop<loop_size)

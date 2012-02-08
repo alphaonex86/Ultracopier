@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMessageBox>
+#include <QCoreApplication>
 
 /** \brief class to parse all command line options */
 class CliParser : public QObject

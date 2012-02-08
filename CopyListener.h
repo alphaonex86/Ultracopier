@@ -79,7 +79,6 @@ class CopyListener : public QObject, public GlobalClass
 			bool inWaitOfReply;
 			LocalPluginOptions *options;
 		};
-		typedef struct PluginListener PluginListener;
 		QList<PluginListener> pluginList;
 		//for the options
 		quint32 nextOrderId;
@@ -91,7 +90,6 @@ class CopyListener : public QObject, public GlobalClass
 			quint32 pluginOrderId;
 			quint32 orderId;
 		};
-		typedef struct CopyRunning CopyRunning;
 		QList<CopyRunning> copyRunningList;
 		quint32 incrementOrderId();
 		bool tryListen;

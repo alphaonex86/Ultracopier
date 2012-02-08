@@ -64,14 +64,12 @@ class OptionEngine : public QObject, public Singleton<OptionEngine>
 			QVariant currentValue;
 			bool emptyList;
 		};
-		typedef struct OptionEngineGroupKey OptionEngineGroupKey;
 		/// \brief OptionEngineGroup then: Group
 		struct OptionEngineGroup
 		{
 			QString groupName;
 			QList<OptionEngineGroupKey> KeysList;
 		};
-		typedef struct OptionEngineGroup OptionEngineGroup;
 
 		/// \brief store the option group list
 		QList<OptionEngineGroup> GroupKeysList;

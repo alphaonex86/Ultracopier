@@ -13,6 +13,7 @@
 #include "interface/PluginInterface_CopyEngine.h"
 #include "fileErrorDialog.h"
 #include "fileExistsDialog.h"
+#include "folderExistsDialog.h"
 #include "fileIsSameDialog.h"
 #include "ui_options.h"
 #include "Environment.h"

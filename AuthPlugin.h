@@ -21,7 +21,7 @@ class AuthPlugin : public QThread
 {
 	Q_OBJECT
 public:
-	AuthPlugin(QObject * parent);
+	AuthPlugin();
 	~AuthPlugin();
 	/** \brief stop all action to close ultracopier */
 	void stop();

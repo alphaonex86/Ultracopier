@@ -154,6 +154,8 @@ void OptionDialog::changeEvent(QEvent *e)
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("the copy engine %1 have not the options").arg(index));
 			index++;
 		}
+		ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+		ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
 		break;
 	default:
 		break;

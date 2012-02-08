@@ -83,7 +83,7 @@ bool EventDispatcher::shouldBeClosed()
 void EventDispatcher::quit()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Will quit ultracopier");
-	disconnect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
+	//disconnect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
 	QCoreApplication::exit();
 }
 
