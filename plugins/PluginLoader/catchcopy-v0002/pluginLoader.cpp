@@ -199,7 +199,8 @@ bool Plugin::checkExistsDll()
 		}
 		else
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"OS seam not 64Bits, "+QString(arch)+"\\SysWOW64\\");
-		delete arch;
+		/// \note commented because it do a crash at the startup
+		//delete arch;
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to get env var");
