@@ -26,8 +26,9 @@
 		<!-- Short name, language name in English -->
 		<shortName><![CDATA[Japanese]]></shortName>
 		<!-- Short name, language ISO code -->
-		<shortName mainCode="true"><![CDATA[jp]]></shortName>
+		<shortName mainCode="true"><![CDATA[ja]]></shortName>
 		<!-- Short name, language ISO country code -->
+		<shortName><![CDATA[jp]]></shortName>
 		<shortName><![CDATA[jp_JP]]></shortName>
 	</categorySpecific>
 </package>

@@ -26,8 +26,11 @@
 		<!-- Short name, language name in English -->
 		<shortName><![CDATA[Chinese]]></shortName>
 		<!-- Short name, language ISO code -->
-		<shortName mainCode="true"><![CDATA[ch]]></shortName>
+		<shortName mainCode="true"><![CDATA[zh]]></shortName>
 		<!-- Short name, language ISO country code -->
-		<shortName><![CDATA[ch_CH]]></shortName>
+		<shortName><![CDATA[zh_CN]]></shortName>
+		<shortName><![CDATA[zh_HK]]></shortName>
+		<shortName><![CDATA[zh_TW]]></shortName>
+		<shortName><![CDATA[cn]]></shortName>
 	</categorySpecific>
 </package>
