@@ -23,6 +23,7 @@ EventDispatcher::EventDispatcher()
 	core=NULL;
 	qRegisterMetaType<CatchState>("CatchState");
 	qRegisterMetaType<ListeningState>("ListeningState");
+	qRegisterMetaType<QList<QUrl> >("QList<QUrl> ");
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(localListener.tryConnect())
 	{
@@ -47,12 +48,16 @@ EventDispatcher::EventDispatcher()
 	//add the options hidden, will not show in options pannel
 	KeysList.clear();
 	KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
+	KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
 	options->addOptionGroup("Ultracopier",KeysList);
 	if(options->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && options->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
 	{
 		//then ultracopier have been updated
 	}
 	options->setOptionValue("Ultracopier","Last_version_used",QVariant(ULTRACOPIER_VERSION));
+	int a=options->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
+	if(a<0 || a>2)
+		options->setOptionValue("Ultracopier","ActionOnManualOpen",QVariant(1));
 	sessionloader=new SessionLoader(this);
 	copyEngineList=new CopyEngineManager(&optionDialog);
 	core=new Core(copyEngineList);

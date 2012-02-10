@@ -127,6 +127,7 @@ class Core : public QObject, public GlobalClass
 		//for the extra logging
 		void rmPath(const QString &path);
 		void mkPath(const QString &path);
+		void urlDropped(QList<QUrl> urls);
 };
 
 #endif // CORE_H

@@ -46,4 +46,11 @@ enum DebugLevel_custom
 	DebugLevel_custom_UserNote
 };
 
+enum ActionOnManualOpen
+{
+	ActionOnManualOpen_Nothing=0x00,
+	ActionOnManualOpen_Folder=0x01,
+	ActionOnManualOpen_Files=0x02
+};
+
 #endif // STRUCTDEF_ULTRACOPIERSPECIFIC_H

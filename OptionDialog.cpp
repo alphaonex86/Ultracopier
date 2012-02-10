@@ -36,6 +36,7 @@ OptionDialog::OptionDialog() :
 	ui->pluginAdd->show();
 	ui->pluginRemove->show();
 	#endif
+	in_translation=false;
 }
 
 OptionDialog::~OptionDialog()
@@ -156,6 +157,15 @@ void OptionDialog::changeEvent(QEvent *e)
 		}
 		ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
 		ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+		ui->ActionOnManualOpen->setItemText(0,tr("Do nothing"));
+		ui->ActionOnManualOpen->setItemText(1,tr("Ask source as folder"));
+		ui->ActionOnManualOpen->setItemText(2,tr("Ask sources as files"));
+		ui->GroupWindowWhen->setItemText(0,tr("Never"));
+		ui->GroupWindowWhen->setItemText(1,tr("When source is same"));
+		ui->GroupWindowWhen->setItemText(2,tr("When destination is same"));
+		ui->GroupWindowWhen->setItemText(3,tr("When source and destination are same"));
+		ui->GroupWindowWhen->setItemText(4,tr("When source or destination are same"));
+		ui->GroupWindowWhen->setItemText(5,tr("Always"));
 		break;
 	default:
 		break;
@@ -211,6 +221,7 @@ void OptionDialog::loadOption()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	newOptionValue("Themes",	"Ultracopier_current_theme",	options->getOptionValue("Themes","Ultracopier_current_theme"));
+	newOptionValue("Ultracopier",	"ActionOnManualOpen",		options->getOptionValue("Ultracopier","ActionOnManualOpen"));
 	newOptionValue("Language",	"Language",			options->getOptionValue("Language","Language"));
 	newOptionValue("Language",	"Language_autodetect",		options->getOptionValue("Language","Language_autodetect"));
 	newOptionValue("SessionLoader",	"LoadAtSessionStarting",	options->getOptionValue("SessionLoader","LoadAtSessionStarting"));
@@ -338,6 +349,13 @@ void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
 		else if(name=="folder_format")
 		{
 			ui->lineEditLog_folder_format->setText(value.toString());
+		}
+	}
+	else if(group=="Ultracopier")
+	{
+		if(name=="ActionOnManualOpen")
+		{
+			ui->ActionOnManualOpen->setCurrentIndex(value.toInt());
 		}
 	}
 }
@@ -673,5 +691,16 @@ void OptionDialog::on_checkBoxLog_sync_clicked()
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 		options->setOptionValue("Write_log","sync",ui->checkBoxLog_sync->isChecked());
+	}
+}
+
+void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(int index)
+{
+	if(in_translation)
+		return;
+	if(index!=-1 && plugins->allPluginHaveBeenLoaded())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"data value: "+ui->ActionOnManualOpen->itemData(index).toString()+", string value: "+ui->ActionOnManualOpen->itemText(index)+", index: "+QString::number(index));
+		options->setOptionValue("Ultracopier","ActionOnManualOpen",index);
 	}
 }

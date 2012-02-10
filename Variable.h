@@ -10,9 +10,9 @@
 //Un-comment this next line to put ultracopier in debug mode
 #define ULTRACOPIER_DEBUG
 /// \brief the version
-#define ULTRACOPIER_VERSION		"0.3.0.1"
+#define ULTRACOPIER_VERSION		"0.3.0.2"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,1
+#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,2
 /// \brief define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS

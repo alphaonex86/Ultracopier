@@ -282,7 +282,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="icon">
@@ -432,7 +432,7 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/resources/cancel.png</normaloff>:/resources/cancel.png</iconset>
+             <normaloff>:/resources/remove.png</normaloff>:/resources/remove.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>

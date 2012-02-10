@@ -86,6 +86,14 @@ void Core::addWindowCopyMove(CopyMode mode,QString name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+name);
 	openNewCopy(mode,false,name);
+	ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)options->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
+	if(ActionOnManualOpen_value!=ActionOnManualOpen_Nothing)
+	{
+		if(ActionOnManualOpen_value==ActionOnManualOpen_Folder)
+			copyList.last().engine->userAddFolder(mode);
+		else
+			copyList.last().engine->userAddFile(mode);
+	}
 }
 
 /// \todo name to open the right copy engine
@@ -504,6 +512,7 @@ void Core::connectInterfaceAndSync(int index)
 	connect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
 	connect(copyList.at(index).interface,SIGNAL(resume()),					this,SLOT(resetSpeedDetectedInterface()));
 	connect(copyList.at(index).interface,SIGNAL(cancel()),					this,SLOT(copyInstanceCanceledByInterface()),Qt::QueuedConnection);
+	connect(copyList.at(index).interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection);
 
 	copyList.at(index).interface->setSpeedLimitation(copyList.at(index).engine->getSpeedLimitation());
 	copyList.at(index).interface->setErrorAction(copyList.at(index).engine->getErrorAction());
@@ -591,6 +600,7 @@ void Core::disconnectInterface(int index)
 	disconnect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
 	disconnect(copyList.at(index).interface,SIGNAL(resume()),				this,SLOT(resetSpeedDetectedInterface()));
 	disconnect(copyList.at(index).interface,SIGNAL(cancel()),				this,SLOT(copyInstanceCanceledByInterface()));
+	disconnect(copyList.at(index).interface,SIGNAL(urlDropped(QList<QUrl>)),		this,SLOT(urlDropped(QList<QUrl>)));
 }
 
 void Core::periodiqueSync()
@@ -770,3 +780,41 @@ void Core::mkPath(const QString &path)
 		log.mkPath(path);
 }
 
+void Core::urlDropped(QList<QUrl> urls)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	int index=indexCopySenderInterface();
+	if(index!=-1)
+	{
+		QStringList sources;
+		int index_loop=0;
+		while(index_loop<urls.size())
+		{
+			if(!urls.at(index_loop).isEmpty())
+				sources << urls.at(index_loop).toLocalFile();
+			index_loop++;
+		}
+		if(sources.size()==0)
+			return;
+		else
+		{
+			if(copyList.at(index).ignoreMode)
+			{
+				QMessageBox::StandardButton reply=QMessageBox::question(copyList.at(index).interface,tr("Transfer mode"),tr("Do you want do as a copy? Else if you reply no, it will be moved."),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Cancel);
+				if(reply==QMessageBox::Yes)
+					copyList.at(index).engine->newCopy(sources);
+				if(reply==QMessageBox::No)
+					copyList.at(index).engine->newMove(sources);
+			}
+			else
+			{
+				if(copyList.at(index).mode==Copy)
+					copyList.at(index).engine->newCopy(sources);
+				else
+					copyList.at(index).engine->newMove(sources);
+			}
+		}
+	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
+}

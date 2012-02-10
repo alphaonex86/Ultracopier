@@ -72,7 +72,7 @@ bool WriteThread::internalOpen()
 			if(!destinationFolder.exists(destinationInfo.absolutePath()))
 			{
 				/// \todo do real folder error here
-				errorString_internal="mkpath error";
+				errorString_internal="mkpath error on destination";
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable create the folder: %1, error: %2")
 							 .arg(destinationInfo.absolutePath())
 							 .arg(errorString_internal));

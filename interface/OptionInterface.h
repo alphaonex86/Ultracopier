@@ -26,10 +26,9 @@ class OptionInterface : public QObject
 		virtual QVariant getOptionValue(QString variableName) = 0;
 		/// \brief To set option value
 		virtual void setOptionValue(QString variableName,QVariant value) = 0;
-	/* signal to implement
 	signals:
 		//void newOptionValue(QString,QVariant);-> disabled because the value will not externally changed, then useless notification
-		void resetOptions();*/
+		void resetOptions();
 };
 
 #endif // OPTION_INTERFACE_H

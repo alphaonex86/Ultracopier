@@ -56,6 +56,7 @@ private slots:
 	void on_pushButton_clicked();
 	void on_checkBoxLog_folder_clicked();
 	void on_checkBoxLog_sync_clicked();
+	void on_ActionOnManualOpen_currentIndexChanged(int index);
 
 private:
 	Ui::OptionDialog *ui;
@@ -84,6 +85,7 @@ private:
 	int index,loop_size;
 	int loadedCopyEnginePlugin;
 	QTreeWidgetItem * treeWidgetItem;
+	bool in_translation;
 public slots:
 	void newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
 };

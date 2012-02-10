@@ -13,6 +13,7 @@
 #include <QWidget>
 #include <QList>
 #include <QPair>
+#include <QUrl>
 
 #include "interface/OptionInterface.h"
 #include "interface/FacilityInterface.h"
@@ -60,6 +61,7 @@ class PluginInterface_Themes : public QWidget
 		//user ask ask to add folder (add it with interface ask source/destination)
 		void userAddFolder(CopyMode);
 		void userAddFile(CopyMode);
+		void urlDropped(QList<QUrl> urls);
 		//action on the copy
 		void pause();
 		void resume();
@@ -84,6 +86,6 @@ class PluginInterface_ThemesFactory : public QObject
 		virtual void newLanguageLoaded() = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.1");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.2");
 
 #endif // PLUGININTERFACE_THEMES_H

@@ -55,6 +55,9 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 	//unpush the more button
 	ui->moreButton->setChecked(false);
 	on_moreButton_toggled(false);
+
+	/// \note important for drag and drop, \see dropEvent()
+	setAcceptDrops(true);
 }
 
 void InterfacePlugin::uiUpdateSpeed()
@@ -1075,4 +1078,39 @@ void InterfacePlugin::on_comboBox_fileCollisions_currentIndexChanged(int index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit sendCollisionAction(ui->comboBox_fileCollisions->itemData(index).toString());
+}
+
+/* drag event processing
+
+need setAcceptDrops(true); into the constructor
+need implementation to accept the drop:
+void dragEnterEvent(QDragEnterEvent* event);
+void dragMoveEvent(QDragMoveEvent* event);
+void dragLeaveEvent(QDragLeaveEvent* event);
+*/
+void InterfacePlugin::dropEvent(QDropEvent *event)
+{
+	const QMimeData* mimeData = event->mimeData();
+	if(mimeData->hasUrls())
+	{
+		emit urlDropped(mimeData->urls());
+		event->acceptProposedAction();
+	}
+}
+
+void InterfacePlugin::dragEnterEvent(QDragEnterEvent* event)
+{
+	// if some actions should not be usable, like move, this code must be adopted
+	event->acceptProposedAction();
+}
+
+void InterfacePlugin::dragMoveEvent(QDragMoveEvent* event)
+{
+	// if some actions should not be usable, like move, this code must be adopted
+	event->acceptProposedAction();
+}
+
+void InterfacePlugin::dragLeaveEvent(QDragLeaveEvent* event)
+{
+	event->accept();
 }

@@ -140,6 +140,24 @@ private:
 	int loop_size,loop_sub_size,index,indexAction;
 	QList<QTreeWidgetItem *> selectedItems;
 	QList<int> ids;
+	/** \brief drag event processing
+
+	need setAcceptDrops(true); into the constructor
+	need implementation to accept the drop:
+	void dragEnterEvent(QDragEnterEvent* event);
+	void dragMoveEvent(QDragMoveEvent* event);
+	void dragLeaveEvent(QDragLeaveEvent* event);
+	*/
+	void dropEvent(QDropEvent *event);
+	/** \brief accept all event to allow the drag and drop
+	  \see dropEvent() */
+	void dragEnterEvent(QDragEnterEvent* event);
+	/** \brief accept all event to allow the drag and drop
+	  \see dropEvent() */
+	void dragMoveEvent(QDragMoveEvent* event);
+	/** \brief accept all event to allow the drag and drop
+	  \see dropEvent() */
+	void dragLeaveEvent(QDragLeaveEvent* event);
 signals:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source
@@ -154,6 +172,7 @@ signals:
 	//user ask ask to add folder (add it with interface ask source/destination)
 	void userAddFolder(CopyMode);
 	void userAddFile(CopyMode);
+	void urlDropped(QList<QUrl> urls);
 	//action on the copy
 	void pause();
 	void resume();

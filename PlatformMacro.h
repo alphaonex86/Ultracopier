@@ -21,9 +21,9 @@
 		#define ULTRACOPIER_PLATFORM_CODE "windows-x86"
 	#endif
 #elif defined(Q_OS_MAC)
-	//Mac OS X universal
-	#define ULTRACOPIER_PLATFORM_NAME tr("Mac OS X universal")
-	#define ULTRACOPIER_PLATFORM_CODE "mac-os-x-universal"
+	//Mac OS X
+	#define ULTRACOPIER_PLATFORM_NAME tr("Mac OS X")
+	#define ULTRACOPIER_PLATFORM_CODE "mac-os-x"
 #elif defined(Q_OS_LINUX)
 	#if defined(__i386__)
 		//linux pc i386
