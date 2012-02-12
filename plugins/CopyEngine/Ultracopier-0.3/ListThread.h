@@ -159,6 +159,12 @@ private:
 	bool updateTheStatus_listing,updateTheStatus_copying;
 	EngineActionInProgress updateTheStatus_action_in_progress;
 	QSemaphore waitConstructor,waitCancel;
+	//memory variable for transfer thread creation
+	bool doRightTransfer;
+	bool keepDate;
+	int blockSize;
+	QStringList drives;
+	FileExistsAction alwaysDoThisActionForFileExists;
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
@@ -189,6 +195,8 @@ private slots:
 	void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
 	//to run the thread
 	void run();
+	/// \to create transfer thread
+	void createTransferThread();
 signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event
@@ -226,6 +234,8 @@ signals:
 	void send_errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread);
 	//to close
 	void tryCancel();
+	//to ask new transfer thread
+	void askNewTransferThread();
 };
 
 #endif // LISTTHREAD_H

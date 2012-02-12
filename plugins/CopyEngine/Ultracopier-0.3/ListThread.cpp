@@ -12,6 +12,8 @@
 /// \todo do QThread( parent )
 /** \todo when overwrite with large inode operation, it not start specificly the first in the list
   When that's is finish, send start file at real transfer start, not inode operation start **/
+/** \todo group setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) and setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
+  and check if I can choose case by case if I wish overwrite, skip, ... */
 
 ListThread::ListThread()
 {
@@ -32,6 +34,10 @@ ListThread::ListThread()
 	numberOfTransferIntoToDoList	= 0;
 	numberOfInodeOperation		= 0;
 	maxSpeed			= 0;
+	doRightTransfer			= false;
+	keepDate			= false;
+	blockSize			= 1024;
+	alwaysDoThisActionForFileExists = FileExists_NotSet;
 	/// \bug mising call for this part, or wrong sender detected
 	qRegisterMetaType<DebugLevel>("DebugLevel");
 	qRegisterMetaType<ItemOfCopyList>("ItemOfCopyList");
@@ -45,7 +51,8 @@ ListThread::ListThread()
 	timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
 	#endif
 	connect(this,SIGNAL(tryCancel()),this,SLOT(cancel()));
-	waitConstructor.acquire();
+	connect(this,SIGNAL(askNewTransferThread()),this,SLOT(createTransferThread()));
+	emit askNewTransferThread();
 }
 
 ListThread::~ListThread()
@@ -71,7 +78,7 @@ void ListThread::transferInodeIsClosed()
 	int countLocalParse=0;
 	#endif
 	int_for_loop=0;
-	while(int_for_loop<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(int_for_loop<transferThreadList.size())
 	{
 		if(transferThreadList.at(int_for_loop).thread==temp_transfer_thread)
 		{
@@ -152,7 +159,7 @@ void ListThread::transferPutAtBottom()
 	int countLocalParse=0;
 	#endif
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		if(transferThreadList.at(index).thread==transfer)
 		{
@@ -203,8 +210,9 @@ void ListThread::transferPutAtBottom()
 //set the copy info and options before runing
 void ListThread::setRightTransfer(const bool doRightTransfer)
 {
+	this->doRightTransfer=doRightTransfer;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->setRightTransfer(doRightTransfer);
 		index++;
@@ -214,8 +222,9 @@ void ListThread::setRightTransfer(const bool doRightTransfer)
 //set keep date
 void ListThread::setKeepDate(const bool keepDate)
 {
+	this->keepDate=keepDate;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->setKeepDate(keepDate);
 		index++;
@@ -225,8 +234,9 @@ void ListThread::setKeepDate(const bool keepDate)
 //set block size in KB
 void ListThread::setBlockSize(const int blockSize)
 {
+	this->blockSize=blockSize;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->setBlockSize(blockSize);
 		index++;
@@ -458,8 +468,9 @@ bool ListThread::newMove(QStringList sources,QString destination)
 
 void ListThread::setDrive(QStringList drives)
 {
+	this->drives=drives;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->setDrive(drives);
 		index++;
@@ -468,8 +479,9 @@ void ListThread::setDrive(QStringList drives)
 
 void ListThread::setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists)
 {
+	this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
 		index++;
@@ -492,7 +504,7 @@ void ListThread::pause()
 	}
 	putInPause=true;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->pause();
 		index++;
@@ -512,7 +524,7 @@ void ListThread::resume()
 	doNewActions_inode_manipulation();
 	doNewActions_start_transfer();
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->resume();
 		index++;
@@ -528,7 +540,7 @@ void ListThread::skip(quint64 id)
 bool ListThread::skipInternal(quint64 id)
 {
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		if(transferThreadList.at(index).id==id)
 		{
@@ -550,7 +562,7 @@ void ListThread::cancel()
 	stopIt=true;
 	disconnect(this);
         int index=0;
-        while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
         {
                 transferThreadList.at(index).thread->stop();
 		delete transferThreadList.at(index).thread;//->deleteLayer();
@@ -574,7 +586,7 @@ QPair<quint64,quint64> ListThread::getGeneralProgression()
 	qint64 oversize=0;
 	qint64 currentProgression=0;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		if(transferThreadList.at(index).thread->getStat()==TransferThread::Transfer)
 		{
@@ -596,7 +608,7 @@ returnSpecificFileProgression ListThread::getFileProgression(quint64 id)
 {
 	returnSpecificFileProgression returnedValue;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		if(transferThreadList.at(index).id==id)
 		{
@@ -636,7 +648,7 @@ bool ListThread::setSpeedLimitation(qint64 speedLimitation)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"maxSpeed: "+QString::number(maxSpeed));
 	maxSpeed=speedLimitation;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		transferThreadList.at(index).thread->setMaxSpeed(speedLimitation/ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER);
 		index++;
@@ -714,6 +726,7 @@ quint64 ListThread::realByteTransfered()
 //set data local to the thread
 void ListThread::setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
 {
+	this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
 	int index=0;
 	while(index<transferThreadList.size())
 	{
@@ -961,7 +974,7 @@ void ListThread::doNewActions_start_transfer()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//lunch the transfer in WaitForTheTransfer
 	int_for_loop=0;
-	while(int_for_loop<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
+	while(int_for_loop<transferThreadList.size() && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
 	{
 		if(transferThreadList.at(int_for_loop).thread->getStat()==TransferThread::WaitForTheTransfer)
 		{
@@ -971,7 +984,7 @@ void ListThread::doNewActions_start_transfer()
 		int_for_loop++;
 	}
 	int_for_loop=0;
-	while(int_for_loop<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
+	while(int_for_loop<transferThreadList.size() && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
 	{
 		if(transferThreadList.at(int_for_loop).thread->getStat()==TransferThread::PreOperation)
 		{
@@ -1004,7 +1017,7 @@ void ListThread::doNewActions_inode_manipulation()
 	int_for_loop=0;
 	number_rm_path_moved=0;
 	loop_size=actionToDoList.size();
-	while(int_for_loop<loop_size && numberOfInodeOperation<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(int_for_loop<loop_size && numberOfInodeOperation<transferThreadList.size())
 	{
 		if(!actionToDoList.at(int_for_loop).isRunning)
 		{
@@ -1012,7 +1025,7 @@ void ListThread::doNewActions_inode_manipulation()
 			switch(actionToDoList.at(int_for_loop).type)
 			{
 				case ActionType_Transfer:
-				while(int_for_internal_loop<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+				while(int_for_internal_loop<transferThreadList.size())
 				{
 					/**
 					  transferThreadList.at(int_for_internal_loop).id==0) /!\ important!
@@ -1046,7 +1059,7 @@ void ListThread::doNewActions_inode_manipulation()
 					}
 					int_for_internal_loop++;
 				}
-				if(int_for_internal_loop==ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+				if(int_for_internal_loop==transferThreadList.size())
 				{
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to found free thread to do the transfer");
 					return;
@@ -1169,7 +1182,7 @@ void ListThread::timedUpdateDebugDialog()
 {
 	QStringList newList;
 	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+	while(index<transferThreadList.size())
 	{
 		QString stat;
 		switch(transferThreadList.at(index).thread->getStat())
@@ -1212,7 +1225,7 @@ void ListThread::timedUpdateDebugDialog()
 				   .arg(actionToDoList.at(index).source.absoluteFilePath())
 				   .arg(actionToDoList.at(index).size)
 				   .arg(actionToDoList.at(index).destination.absoluteFilePath());
-		if(index>(ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT+2))
+		if(index>(transferThreadList.size()+2))
 		{
 			newList2 << QString("...");
 			break;
@@ -1252,32 +1265,44 @@ void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorStr
 //to run the thread
 void ListThread::run()
 {
-	int index=0;
-	while(index<ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
-	{
-		transfer newItem;
-		newItem.thread=new TransferThread();
-		newItem.id=0;
-		newItem.size=0;
-		transferThreadList << newItem;
-		connect(newItem.thread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(errorOnFile(QFileInfo,QString)),				this,SLOT(errorOnFile(QFileInfo,QString)),				Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(fileAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(fileAlreadyExists(QFileInfo,QFileInfo,bool)),			Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(tryPutAtBottom()),					this,SLOT(transferPutAtBottom()),					Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(readStopped()),						this,SLOT(transferIsFinished()),					Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(readStopped()),						this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
-		connect(newItem.thread,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
-		newItem.thread->start();
-		newItem.thread->setObjectName(QString("transfer %1").arg(index));
-		#ifdef ULTRACOPIER_PLUGIN_DEBUG
-		newItem.thread->setId(index);
-		#endif
-		index++;
-	}
 	connect(&mkPathQueue,SIGNAL(firstFolderFinish()),this,SLOT(mkPathFirstFolderFinish()),Qt::QueuedConnection);
 	connect(&rmPathQueue,SIGNAL(firstFolderFinish()),this,SLOT(rmPathFirstFolderFinish()),Qt::QueuedConnection);
-	waitConstructor.release();
 	exec();
+}
+
+/// \to create transfer thread
+void ListThread::createTransferThread()
+{
+	if(stopIt)
+		return;
+	transfer newItem;
+	newItem.thread=new TransferThread();
+	newItem.id=0;
+	newItem.size=0;
+	newItem.thread->setRightTransfer(doRightTransfer);
+	newItem.thread->setKeepDate(keepDate);
+	newItem.thread->setBlockSize(blockSize);
+	newItem.thread->setDrive(drives);
+	newItem.thread->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
+	newItem.thread->setMaxSpeed(maxSpeed/ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER);
+	transferThreadList << newItem;
+	connect(newItem.thread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(errorOnFile(QFileInfo,QString)),				this,SLOT(errorOnFile(QFileInfo,QString)),				Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(fileAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(fileAlreadyExists(QFileInfo,QFileInfo,bool)),			Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(tryPutAtBottom()),					this,SLOT(transferPutAtBottom()),					Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(readStopped()),						this,SLOT(transferIsFinished()),					Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(readStopped()),						this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
+	connect(newItem.thread,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
+	newItem.thread->start();
+	newItem.thread->setObjectName(QString("transfer %1").arg(transferThreadList.size()-1));
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	newItem.thread->setId(transferThreadList.size()-1);
+	#endif
+	if(transferThreadList.size()>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+		return;
+	if(stopIt)
+		return;
+	emit askNewTransferThread();
 }
