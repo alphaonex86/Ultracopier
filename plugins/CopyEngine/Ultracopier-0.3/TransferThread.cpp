@@ -26,12 +26,14 @@ TransferThread::TransferThread()
 	alwaysDoFileExistsAction= FileExists_NotSet;
 	readError		= false;
 	writeError		= false;
+	this->mkpathTransfer	= mkpathTransfer;
 	readThread.setWriteThread(&writeThread);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(&readThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	connect(&writeThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
 	connect(&clockForTheCopySpeed,	SIGNAL(timeout()),			this,	SLOT(timeOfTheBlockCopyFinished()));
+	maxTime=QDateTime(QDate(1990,1,1));
 }
 
 TransferThread::~TransferThread()
@@ -349,8 +351,12 @@ TransferThread::MoveReturn TransferThread::isMovedDirectly()
 			return MoveReturn_error;
 		}
 		QDir dir(destinationInfo.absolutePath());
-		if(!dir.exists())
-			dir.mkpath(destinationInfo.absolutePath());
+		{
+			mkpathTransfer->acquire();
+			if(!dir.exists())
+				dir.mkpath(destinationInfo.absolutePath());
+			mkpathTransfer->release();
+		}
 		if(!sourceFile.rename(destinationFile.fileName()))
 		{
 			if(sourceFile.exists())
@@ -785,6 +791,10 @@ void TransferThread::setDrive(QStringList drives)
 //fonction to edit the file date time
 bool TransferThread::changeFileDateTime(const QString &source,const QString &destination)
 {
+	/*
+	  if(maxTime>=sourceInfo.lastModified())
+		return;
+	  */
 	QFileInfo fileInfo(destination);
 	time_t ctime=fileInfo.created().toTime_t();
 	time_t actime=fileInfo.lastRead().toTime_t();
@@ -914,3 +924,9 @@ QChar TransferThread::writingLetter()
 }
 
 #endif
+
+void TransferThread::setMkpathTransfer(QSemaphore *mkpathTransfer)
+{
+	this->mkpathTransfer=mkpathTransfer;
+	writeThread.setMkpathTransfer(mkpathTransfer);
+}

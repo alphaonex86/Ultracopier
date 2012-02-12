@@ -10,6 +10,7 @@ WriteThread::WriteThread()
 	start();
 	moveToThread(this);
 	setObjectName("write");
+	this->mkpathTransfer	= mkpathTransfer;
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Idle;
 	#endif
@@ -63,26 +64,30 @@ bool WriteThread::internalOpen()
 	//mkpath check if exists and return true if already exists
 	QFileInfo destinationInfo(file);
 	QDir destinationFolder;
-	if(!destinationFolder.exists(destinationInfo.absolutePath()))
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] "+QString("Try create the path: %1")
-					 .arg(destinationInfo.absolutePath()));
-		if(!destinationFolder.mkpath(destinationInfo.absolutePath()))
+		mkpathTransfer->acquire();
+		if(!destinationFolder.exists(destinationInfo.absolutePath()))
 		{
-			if(!destinationFolder.exists(destinationInfo.absolutePath()))
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] "+QString("Try create the path: %1")
+						 .arg(destinationInfo.absolutePath()));
+			if(!destinationFolder.mkpath(destinationInfo.absolutePath()))
 			{
-				/// \todo do real folder error here
-				errorString_internal="mkpath error on destination";
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable create the folder: %1, error: %2")
-							 .arg(destinationInfo.absolutePath())
-							 .arg(errorString_internal));
-				emit error();
-				#ifdef ULTRACOPIER_PLUGIN_DEBUG
-				stat=Idle;
-				#endif
-				return false;
+				if(!destinationFolder.exists(destinationInfo.absolutePath()))
+				{
+					/// \todo do real folder error here
+					errorString_internal="mkpath error on destination";
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable create the folder: %1, error: %2")
+								 .arg(destinationInfo.absolutePath())
+								 .arg(errorString_internal));
+					emit error();
+					#ifdef ULTRACOPIER_PLUGIN_DEBUG
+					stat=Idle;
+					#endif
+					return false;
+				}
 			}
 		}
+		mkpathTransfer->release();
 	}
 	if(stopIt)
 		return false;
@@ -304,4 +309,9 @@ void WriteThread::internalFlushAndSeekToZero()
 	file.seek(0);
         stopIt=false;
         emit flushedAndSeekedToZero();
+}
+
+void WriteThread::setMkpathTransfer(QSemaphore *mkpathTransfer)
+{
+	this->mkpathTransfer=mkpathTransfer;
 }

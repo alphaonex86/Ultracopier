@@ -53,6 +53,7 @@ ListThread::ListThread()
 	connect(this,SIGNAL(tryCancel()),this,SLOT(cancel()));
 	connect(this,SIGNAL(askNewTransferThread()),this,SLOT(createTransferThread()));
 	emit askNewTransferThread();
+	mkpathTransfer.release();
 }
 
 ListThread::~ListThread()
@@ -1297,6 +1298,7 @@ void ListThread::createTransferThread()
 	connect(newItem.thread,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
 	newItem.thread->start();
 	newItem.thread->setObjectName(QString("transfer %1").arg(transferThreadList.size()-1));
+	newItem.thread->setMkpathTransfer(&mkpathTransfer);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	newItem.thread->setId(transferThreadList.size()-1);
 	#endif
@@ -1304,5 +1306,6 @@ void ListThread::createTransferThread()
 		return;
 	if(stopIt)
 		return;
+	doNewActions_inode_manipulation();
 	emit askNewTransferThread();
 }

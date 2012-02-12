@@ -17,6 +17,18 @@ fileIsSameDialog::fileIsSameDialog(QWidget *parent,QFileInfo fileInfo) :
 	ui->label_content_modified->setText(fileInfo.lastModified().toString());
 	ui->label_content_file_name->setText(fileInfo.fileName());
 	updateRenameButton();
+	QDateTime maxTime(QDate(1990,1,1));
+	if(maxTime<fileInfo.lastModified())
+	{
+		ui->label_modified->setVisible(true);
+		ui->label_content_modified->setVisible(true);
+		ui->label_content_modified->setText(fileInfo.lastModified().toString());
+	}
+	else
+	{
+		ui->label_modified->setVisible(false);
+		ui->label_content_modified->setVisible(false);
+	}
 }
 
 fileIsSameDialog::~fileIsSameDialog()

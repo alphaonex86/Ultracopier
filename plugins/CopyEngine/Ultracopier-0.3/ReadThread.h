@@ -95,7 +95,7 @@ private:
 	volatile bool	seekToZero;
         volatile bool	tryStartRead;
         qint64		size_at_open;
-        QDateTime	mtime_at_open;
+	QDateTime	mtime_at_open;
         //internal function
         bool seek(qint64 position);/// \todo search if is use full
 private slots:

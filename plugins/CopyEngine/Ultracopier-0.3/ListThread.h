@@ -6,6 +6,7 @@
 #include <QList>
 #include <QStringList>
 #include <QFileInfo>
+#include <QSemaphore>
 
 #include "scanFileOrFolder.h"
 #include "TransferThread.h"
@@ -96,6 +97,7 @@ public slots:
 	//restart transfer if it can
 	void restartTransferIfItCan();
 private:
+	QSemaphore mkpathTransfer;
 	QString sourceDrive;
 	bool sourceDriveMultiple;
 	bool stopIt;

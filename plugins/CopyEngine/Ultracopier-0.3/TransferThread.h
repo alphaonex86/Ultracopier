@@ -40,6 +40,7 @@ public:
 	QChar readingLetter();
 	QChar writingLetter();
 	#endif
+	void setMkpathTransfer(QSemaphore *mkpathTransfer);
 protected:
 	void run();
 signals:
@@ -146,7 +147,9 @@ private:
 	FileExistsAction	fileExistsAction;
 	FileExistsAction	alwaysDoFileExistsAction;
 	bool			needSkip,needRemove;
+	QDateTime		maxTime;
 	int			id;
+	QSemaphore		*mkpathTransfer;
 	//error management
 	bool			writeError,writeError_source_seeked,writeError_destination_reopened;
 	bool			readError;

@@ -21,6 +21,29 @@ fileExistsDialog::fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
 	ui->label_content_destination_size->setText(QString::number(destination.size()));
 	ui->label_content_destination_modified->setText(destination.lastModified().toString());
 	ui->label_content_destination_file_name->setText(destination.fileName());
+	QDateTime maxTime(QDate(1990,1,1));
+	if(maxTime<source.lastModified())
+	{
+		ui->label_source_modified->setVisible(true);
+		ui->label_content_source_modified->setVisible(true);
+		ui->label_content_source_modified->setText(source.lastModified().toString());
+	}
+	else
+	{
+		ui->label_source_modified->setVisible(false);
+		ui->label_content_source_modified->setVisible(false);
+	}
+	if(maxTime<destination.lastModified())
+	{
+		ui->label_destination_modified->setVisible(true);
+		ui->label_content_destination_modified->setVisible(true);
+		ui->label_content_destination_modified->setText(destination.lastModified().toString());
+	}
+	else
+	{
+		ui->label_destination_modified->setVisible(false);
+		ui->label_content_destination_modified->setVisible(false);
+	}
 }
 
 fileExistsDialog::~fileExistsDialog()

@@ -17,6 +17,7 @@ class WriteThread : public QThread
 public:
 	explicit WriteThread();
 	~WriteThread();
+	void setMkpathTransfer(QSemaphore *mkpathTransfer);
 protected:
 	void run();
 public:
@@ -75,6 +76,7 @@ private:
 	int			id;
 	bool			endDetected;
 	quint64			startSize;
+	QSemaphore		*mkpathTransfer;
 private slots:
 	bool internalOpen();
 	void internalWrite();

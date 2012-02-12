@@ -44,14 +44,18 @@ void MkPath::run()
 
 void MkPath::internalDoThisPath()
 {
-	if(!dir.mkpath(pathList.first()))
-	{
-		if(stopIt)
-			return;
-		waitAction=false;
-		emit errorOnFolder(pathList.first(),tr("Unable to create the folder"));
-		return;
-	}
+	if(!dir.exists(pathList.first()))
+		if(!dir.mkpath(pathList.first()))
+		{
+			if(!dir.exists(pathList.first()))
+			{
+				if(stopIt)
+					return;
+				waitAction=false;
+				emit errorOnFolder(pathList.first(),tr("Unable to create the folder"));
+				return;
+			}
+		}
 	pathList.removeFirst();
 	emit firstFolderFinish();
 	checkIfCanDoTheNext();

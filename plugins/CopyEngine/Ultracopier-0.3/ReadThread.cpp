@@ -476,3 +476,4 @@ bool ReadThread::isReading()
 {
         return isInReadLoop;
 }
+
