@@ -53,6 +53,11 @@ public:
 	//CopyType currentEngineGetCopyType(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
 	/** \brief to send all signal because all object is connected on it */
 	void setIsConnected();
+	/** \brief check if the protocols given is supported by the copy engine
+	  \see Core::newCopy()
+	  \see Core::newMove()
+	  */
+	bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination);
 private slots:
 	void onePluginAdded(PluginsAvailable plugin);
 	void onePluginWillBeRemoved(PluginsAvailable plugin);

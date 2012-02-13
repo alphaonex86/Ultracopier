@@ -142,7 +142,7 @@ void CopyEngineManager::onePluginWillBeUnloaded(PluginsAvailable plugin)
 
 CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mode,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, pluginList.size(): %1").arg(pluginList.size()));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, pluginList.size(): %1, mode: %2, and particular protocol").arg(pluginList.size()).arg((int)mode));
 	returnCopyEngine temp;
 	int index=0;
 	bool isTheGoodEngine=false;
@@ -204,7 +204,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mo
 
 CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mode,QString name)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, pluginList.size(): %1").arg(pluginList.size()));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, pluginList.size(): %1, with mode: %2, and name: %3").arg(pluginList.size()).arg((int)mode).arg(name));
 	returnCopyEngine temp;
 	int index=0;
 	while(index<pluginList.size())
@@ -314,3 +314,25 @@ void CopyEngineManager::allPluginIsloaded()
 	pluginList=newPluginList;
 }
 
+bool CopyEngineManager::protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination)
+{
+	int index=0;
+	while(index<pluginList.size())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("pluginList.at(%1).name: %2").arg(index).arg(pluginList.at(index).name));
+		if(pluginList.at(index).intances.contains(engine))
+		{
+			if(!pluginList.at(index).supportedProtocolsForTheDestination.contains(protocolsUsedForTheDestination))
+				return false;
+			int indexProto=0;
+			while(indexProto<protocolsUsedForTheSources.size())
+			{
+				if(!pluginList.at(index).supportedProtocolsForTheSource.contains(protocolsUsedForTheSources.at(indexProto)))
+					return false;
+				indexProto++;
+			}
+			return true;
+		}
+	}
+	return false;
+}

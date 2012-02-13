@@ -58,6 +58,45 @@ void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	//search to group the window
+	int GroupWindowWhen=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+	bool haveSameSource,haveSameDestination;
+	if(GroupWindowWhen!=0)
+	{
+		int index=0;
+		while(index<copyList.size())
+		{
+			if(!copyList.at(index).ignoreMode && copyList.at(index).mode==Copy)
+			{
+				if(GroupWindowWhen!=5)
+				{
+					if(GroupWindowWhen!=2)
+						haveSameSource=copyList.at(index).engine->haveSameSource(sources);
+					if(GroupWindowWhen!=1)
+						haveSameDestination=copyList.at(index).engine->haveSameDestination(destination);
+				}
+				if(
+					GroupWindowWhen==5 ||
+					(GroupWindowWhen==1 && haveSameSource) ||
+					(GroupWindowWhen==2 && haveSameDestination) ||
+					(GroupWindowWhen==3 && (haveSameSource && haveSameDestination)) ||
+					(GroupWindowWhen==4 && (haveSameSource || haveSameDestination))
+					)
+				{
+					/*protocols are same*/
+					if(copyEngineList->protocolsSupportedByTheCopyEngine(copyList.at(index).engine,protocolsUsedForTheSources,protocolsUsedForTheDestination))
+					{
+						copyList[index].orderId<<orderId;
+						copyList.at(index).engine->newCopy(sources,destination);
+						copyList.at(index).interface->haveExternalOrder();
+						return;
+					}
+				}
+			}
+			index++;
+		}
+	}
+	//else open new windows
 	openNewCopy(Copy,false,protocolsUsedForTheSources,protocolsUsedForTheDestination);
 	copyList.last().orderId<<orderId;
 	copyList.last().engine->newCopy(sources,destination);
@@ -75,6 +114,45 @@ void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	//search to group the window
+	int GroupWindowWhen=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+	bool haveSameSource,haveSameDestination;
+	if(GroupWindowWhen!=0)
+	{
+		int index=0;
+		while(index<copyList.size())
+		{
+			if(!copyList.at(index).ignoreMode && copyList.at(index).mode==Move)
+			{
+				if(GroupWindowWhen!=5)
+				{
+					if(GroupWindowWhen!=2)
+						haveSameSource=copyList.at(index).engine->haveSameSource(sources);
+					if(GroupWindowWhen!=1)
+						haveSameDestination=copyList.at(index).engine->haveSameDestination(destination);
+				}
+				if(
+					GroupWindowWhen==5 ||
+					(GroupWindowWhen==1 && haveSameSource) ||
+					(GroupWindowWhen==2 && haveSameDestination) ||
+					(GroupWindowWhen==3 && (haveSameSource && haveSameDestination)) ||
+					(GroupWindowWhen==4 && (haveSameSource || haveSameDestination))
+					)
+				{
+					/*protocols are same*/
+					if(copyEngineList->protocolsSupportedByTheCopyEngine(copyList.at(index).engine,protocolsUsedForTheSources,protocolsUsedForTheDestination))
+					{
+						copyList[index].orderId<<orderId;
+						copyList.at(index).engine->newCopy(sources,destination);
+						copyList.at(index).interface->haveExternalOrder();
+						return;
+					}
+				}
+			}
+			index++;
+		}
+	}
+	//else open new windows
 	openNewCopy(Move,false,protocolsUsedForTheSources,protocolsUsedForTheDestination);
 	copyList.last().orderId<<orderId;
 	copyList.last().engine->newMove(sources,destination);

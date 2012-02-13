@@ -49,6 +49,7 @@ EventDispatcher::EventDispatcher()
 	KeysList.clear();
 	KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
 	KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
+	KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
 	options->addOptionGroup("Ultracopier",KeysList);
 	if(options->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && options->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
 	{
@@ -58,6 +59,9 @@ EventDispatcher::EventDispatcher()
 	int a=options->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
 	if(a<0 || a>2)
 		options->setOptionValue("Ultracopier","ActionOnManualOpen",QVariant(1));
+	a=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+	if(a<0 || a>5)
+		options->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
 	sessionloader=new SessionLoader(this);
 	copyEngineList=new CopyEngineManager(&optionDialog);
 	core=new Core(copyEngineList);
