@@ -27,6 +27,7 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 	KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier-0.3")));
 	options->addOptionGroup("CopyEngine",KeysList);
 	isConnected=false;
+	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()));
 }
 
 void CopyEngineManager::onePluginAdded(PluginsAvailable plugin)
@@ -84,7 +85,7 @@ void CopyEngineManager::onePluginAdded(PluginsAvailable plugin)
 	connect(newItem.factory,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
 	#endif // ULTRACOPIER_DEBUG
 	newItem.options=new LocalPluginOptions("CopyEngine-"+newItem.name);
-	newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+	newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
 	newItem.optionsWidget=newItem.factory->options();
 	newItem.supportedProtocolsForTheSource=newItem.factory->supportedProtocolsForTheSource();
 	newItem.supportedProtocolsForTheDestination=newItem.factory->supportedProtocolsForTheDestination();

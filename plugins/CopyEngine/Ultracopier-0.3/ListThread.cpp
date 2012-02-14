@@ -15,10 +15,11 @@
 /** \todo group setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) and setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
   and check if I can choose case by case if I wish overwrite, skip, ... */
 
-ListThread::ListThread()
+ListThread::ListThread(FacilityInterface * facilityInterface)
 {
 	moveToThread(this);
 	start(HighPriority);
+	this->facilityInterface		= facilityInterface;
 	putInPause			= false;
 	sourceDrive			= "";
 	sourceDriveMultiple		= false;

@@ -12,6 +12,8 @@
 #include "ExtraSocket.h"
 #include "CompilerInfo.h"
 
+/// \todo group the facility engine
+
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
 {

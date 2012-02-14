@@ -2,12 +2,12 @@
 
 #include <QMessageBox>
 
-scanFileOrFolder::scanFileOrFolder(QObject *parent) :
-    QThread(parent)
+scanFileOrFolder::scanFileOrFolder()
 {
 	stopped	= true;
 	stopIt	= false;
 	setObjectName("ScanFileOrFolder");
+	folder_isolation=QRegExp("^(.*/)?([^/]+)/$");
 }
 
 scanFileOrFolder::~scanFileOrFolder()
@@ -35,8 +35,9 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 }
 
 //set action if Folder are same or exists
-void scanFileOrFolder::setFolderExistsAction(FolderExistsAction action)
+void scanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString newName)
 {
+	this->newName=newName;
 	folderExistsAction=action;
 	waitOneAction.release();
 }
@@ -108,9 +109,28 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 				return;
 			break;
 			case FolderExists_Rename:
-                                //use facility here
-                                destinationSuffixPath = tr("Copy of ")+destinationSuffixPath;
-                                finalDest = destination+destinationSuffixPath;
+				if(newName=="")
+				{
+					/// \todo use facility here
+					if(destinationSuffixPath.contains(folder_isolation))
+					{
+						prefix=destinationSuffixPath;
+						suffix=destinationSuffixPath;
+						prefix.replace(folder_isolation,"\\1");
+						suffix.replace(folder_isolation,"\\2");
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"full: "+destinationSuffixPath);
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"prefix: "+prefix);
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"suffix: "+suffix);
+						destinationSuffixPath = prefix+tr("Copy of ")+suffix;
+					}
+					else
+						destinationSuffixPath = tr("Copy of ")+"Unknow";
+				}
+				else
+					destinationSuffixPath = newName+"/";
+				destinationSuffixPath+="/";
+				finalDest = destination+destinationSuffixPath;
 			break;
 			default:
 				return;
@@ -134,9 +154,28 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 					return;
 				break;
 				case FolderExists_Rename:
-                                        //use facility here
-                                        destinationSuffixPath = tr("Copy of ")+destinationSuffixPath;
-                                        finalDest = destination+destinationSuffixPath;
+					if(newName=="")
+					{
+						/// \todo use facility here
+						if(destinationSuffixPath.contains(folder_isolation))
+						{
+							prefix=destinationSuffixPath;
+							suffix=destinationSuffixPath;
+							prefix.replace(folder_isolation,"\\1");
+							suffix.replace(folder_isolation,"\\2");
+							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
+							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"full: "+destinationSuffixPath);
+							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"prefix: "+prefix);
+							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"suffix: "+suffix);
+							destinationSuffixPath = prefix+tr("Copy of ")+suffix;
+						}
+						else
+							destinationSuffixPath = tr("Copy of ")+"Unknow";
+					}
+					else
+						destinationSuffixPath = newName;
+					destinationSuffixPath+="/";
+					finalDest = destination+destinationSuffixPath;
 				break;
 				default:
 					return;

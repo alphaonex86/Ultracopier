@@ -30,7 +30,7 @@ public:
 	Factory();
 	~Factory();
 	PluginInterface_CopyEngine * getInstance();
-	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	void setResources(OptionInterface * options,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion);
 	//get mode allowed
 	/// \brief define if can copy file, folder or both
 	CopyType getCopyType();
@@ -47,6 +47,7 @@ private:
 	QString StandardError;
 	QString StandardOutput;
 	bool errorFound;
+	FacilityInterface * facilityEngine;
 private slots:
 	void error(QProcess::ProcessError error);
 	void finished(int exitCode, QProcess::ExitStatus exitStatus);

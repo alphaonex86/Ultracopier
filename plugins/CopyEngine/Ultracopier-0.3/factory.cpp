@@ -44,7 +44,7 @@ Factory::~Factory()
 
 PluginInterface_CopyEngine * Factory::getInstance()
 {
-	copyEngine *realObject=new copyEngine();
+	copyEngine *realObject=new copyEngine(facilityEngine);
 	realObject->setDrive(mountSysPoint);
 	PluginInterface_CopyEngine * newTransferEngine=realObject;
 	connect(newTransferEngine,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
@@ -59,9 +59,10 @@ PluginInterface_CopyEngine * Factory::getInstance()
 	return newTransferEngine;
 }
 
-void Factory::setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath,bool portableVersion)
+void Factory::setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
+	this->facilityEngine=facilityInterface;
 	Q_UNUSED(portableVersion);
 	#ifndef ULTRACOPIER_PLUGIN_DEBUG
 		Q_UNUSED(writePath);

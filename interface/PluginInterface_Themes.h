@@ -79,7 +79,7 @@ class PluginInterface_ThemesFactory : public QObject
 	public:
 		virtual PluginInterface_Themes * getInstance() = 0;
 		//to set resources, writePath can be empty if read only mode
-		virtual void setResources(OptionInterface *,QString writePath,QString pluginPath,FacilityInterface *,bool portableVersion) = 0;
+		virtual void setResources(OptionInterface *,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion) = 0;
 		virtual QWidget * options() = 0;
 	public slots:
 		virtual void resetOptions() = 0;

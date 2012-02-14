@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <QSemaphore>
 
+#include "interface/PluginInterface_CopyEngine.h"
 #include "scanFileOrFolder.h"
 #include "TransferThread.h"
 #include "MkPath.h"
@@ -18,7 +19,7 @@ class ListThread : public QThread
 {
 	Q_OBJECT
 public:
-	explicit ListThread();
+	explicit ListThread(FacilityInterface * facilityInterface);
 	~ListThread();
 	//duplication copy detection
 	bool haveSameSource(QStringList sources);
@@ -154,6 +155,7 @@ private:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	QTimer timerUpdateDebugDialog;
 	#endif
+	FacilityInterface * facilityInterface;
 	//temp variable for not always alocate the memory
 	int int_for_loop,int_for_internal_loop,loop_size,lopp_sub_size,number_rm_path_moved;
 	TransferThread *temp_transfer_thread;

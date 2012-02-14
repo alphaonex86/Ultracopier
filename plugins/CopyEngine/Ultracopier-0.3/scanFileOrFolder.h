@@ -15,12 +15,12 @@ class scanFileOrFolder : public QThread
 {
 	Q_OBJECT
 public:
-	explicit scanFileOrFolder(QObject *parent = 0);
+	explicit scanFileOrFolder();
 	~scanFileOrFolder();
 	void stop();
 	bool isFinished();
 	//set action if Folder are same or exists
-	void setFolderExistsAction(FolderExistsAction action);
+	void setFolderExistsAction(FolderExistsAction action,QString newName="");
 	//set action if error
 	void setFolderErrorAction(FileErrorAction action);
 	//set if need check if the destination exists
@@ -46,6 +46,10 @@ private:
 	FolderExistsAction	folderExistsAction;
 	FileErrorAction		fileErrorAction;
 	volatile bool		checkDestinationExists;
+	QString			newName;
+	QRegExp			folder_isolation;
+	QString			prefix;
+	QString			suffix;
 };
 
 #endif // SCANFILEORFOLDER_H

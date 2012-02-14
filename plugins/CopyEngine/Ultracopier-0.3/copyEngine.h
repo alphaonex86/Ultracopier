@@ -36,7 +36,7 @@ class copyEngine : public PluginInterface_CopyEngine
 {
         Q_OBJECT
 public:
-	copyEngine();
+	copyEngine(FacilityInterface * facilityInterface);
 	~copyEngine();
 private:
 	ListThread *listThread;

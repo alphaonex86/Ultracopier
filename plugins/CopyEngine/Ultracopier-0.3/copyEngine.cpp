@@ -10,6 +10,7 @@
 
 #include "copyEngine.h"
 #include "folderExistsDialog.h"
+#include "interface/PluginInterface_CopyEngine.h"
 
 /// \todo do pushed or instant mount point (setDrive, ...)
 /// \todo semaphore to prevent dual mkpath
@@ -21,10 +22,10 @@ namespace Ui {
 	class options;
 }
 
-copyEngine::copyEngine() :
+copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	ui(new Ui::options())
 {
-	listThread=new ListThread();
+	listThread=new ListThread(facilityInterface);
 	qRegisterMetaType<TransferThread *>("TransferThread *");
 	qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
 	qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");

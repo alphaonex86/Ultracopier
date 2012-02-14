@@ -15,7 +15,9 @@
 #include <QWidget>
 #include <QDateTime>
 
-#include "OptionInterface.h"
+#include "interface/OptionInterface.h"
+#include "interface/FacilityInterface.h"
+#include "../StructEnumDefinition.h"
 
 /** This interface support:
  * - Multiple transfer and multiple transfer progression
@@ -105,7 +107,7 @@ class PluginInterface_CopyEngineFactory : public QObject
 	public:
 		virtual PluginInterface_CopyEngine * getInstance() = 0;
 		//to set resources, writePath can be empty if read only mode
-		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
+		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion) = 0;
 		//get mode allowed
 		/// \brief define if can copy file, folder or both
 		virtual CopyType getCopyType() = 0;
@@ -119,6 +121,6 @@ class PluginInterface_CopyEngineFactory : public QObject
 
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.1");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.2");
 
 #endif // PLUGININTERFACE_COPYENGINE_H
