@@ -10,7 +10,7 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
 	ui->label_error->setText(errorString);
 	ui->label_content_file_name->setText(fileInfo.fileName());
 	ui->label_content_size->setText(QString::number(fileInfo.size()));
-	QDateTime maxTime(QDate(1990,1,1));
+	QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 	if(maxTime<fileInfo.lastModified())
 	{
 		ui->label_modified->setVisible(true);

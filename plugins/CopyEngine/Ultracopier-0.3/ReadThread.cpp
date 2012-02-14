@@ -317,12 +317,16 @@ void ReadThread::startRead()
         }
 }
 
-void ReadThread::internalClose()
+void ReadThread::internalClose(bool callByTheDestructor)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
+	/// \note never send signal here, because it's called by the destructor
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
 	file.close();
+	if(!callByTheDestructor)
+		emit closed();
+
+	/// \note always the last of this function
 	isOpen.release();
-	emit closed();
 }
 
 /** \brief set block size

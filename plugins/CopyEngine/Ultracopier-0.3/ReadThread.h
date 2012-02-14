@@ -102,7 +102,7 @@ private slots:
 	bool internalOpen(bool resetLastGoodPosition=true);
 	bool internalReopen();
 	void internalRead();
-	void internalClose();
+	void internalClose(bool callByTheDestructor=false);
 	void postOperation();
 	void isInWait();
 };

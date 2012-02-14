@@ -12,6 +12,7 @@
 /// \todo manage error in pre and post operation
 /// \todo remove destination when canceled
 /// \todo test if source if closed by end but write error
+/// \todo pointer for readThread and writeThread to destroy the read before the write (prevent dead lock)
 
 /// \bug continue progress when write error
 
@@ -33,7 +34,7 @@ TransferThread::TransferThread()
 	connect(&writeThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
 	connect(&clockForTheCopySpeed,	SIGNAL(timeout()),			this,	SLOT(timeOfTheBlockCopyFinished()));
-	maxTime=QDateTime(QDate(1990,1,1));
+	maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 }
 
 TransferThread::~TransferThread()
@@ -42,7 +43,6 @@ TransferThread::~TransferThread()
 	disconnect(&readThread);
 	disconnect(&writeThread);
 	disconnect(this);
-	exit();
 	wait();
 }
 

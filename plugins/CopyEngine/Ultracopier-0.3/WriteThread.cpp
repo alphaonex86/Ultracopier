@@ -22,9 +22,9 @@ WriteThread::~WriteThread()
 	stop();
 	freeBlock.release();
 	emit internalStartClose();
-	quit();
 	disconnect(this);
 	isOpen.acquire();
+	quit();
 	wait();
 }
 
@@ -257,18 +257,21 @@ void WriteThread::postOperation()
 
 void WriteThread::internalClose(bool emitSignal)
 {
+	/// \note never send signal here, because it's called by the destructor
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Close;
 	#endif
 	if(startSize!=CurentCopiedSize)
 		file.resize(CurentCopiedSize);
 	file.close();
-	isOpen.release();
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Idle;
 	#endif
 	if(emitSignal)
 		emit closed();
+
+	/// \note always the last of this function
+	isOpen.release();
 }
 
 void WriteThread::internalReopen()
