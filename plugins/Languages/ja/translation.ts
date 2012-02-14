@@ -419,13 +419,15 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="241"/>
-        <location filename="../../../OptionDialog.cpp" line="242"/>
+        <location filename="../../../OptionDialog.cpp" line="157"/>
+        <location filename="../../../OptionDialog.cpp" line="158"/>
+        <location filename="../../../OptionDialog.cpp" line="243"/>
+        <location filename="../../../OptionDialog.cpp" line="244"/>
         <source>Disabled because you have any SessionLoader plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="660"/>
+        <location filename="../../../OptionDialog.cpp" line="662"/>
         <source>Save logs as: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -541,6 +543,11 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../PluginsManager.cpp" line="489"/>
+        <source>Dependencies %1 are not satisfied, for plugin: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../PluginsManager.cpp" line="640"/>
         <source>Remove %1</source>
         <translation type="unfinished"></translation>
@@ -548,6 +555,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="651"/>
         <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="651"/>
+        <source>Error while the removing plugin, please check right of remove on the folder: 
+%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -572,7 +585,7 @@ This version is compiled as version: %1.</source>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="380"/>
-        <source>English text is missing into informations.xml for tag: %1</source>
+        <source>English text missing into the informations.xml for the tag: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -581,19 +594,8 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="489"/>
-        <source>Dependencies %1 are not satisfied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../PluginsManager.cpp" line="640"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../PluginsManager.cpp" line="651"/>
-        <source>Error while removing plugin, please check right of remove on the folder: 
-%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -695,7 +697,7 @@ since:%2</source>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="105"/>
-        <source>File is corrupted</source>
+        <source>The file is corrupted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -712,85 +714,85 @@ since:%2</source>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="95"/>
+        <location filename="../../../SystrayIcon.cpp" line="88"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="101"/>
+        <location filename="../../../SystrayIcon.cpp" line="94"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="112"/>
+        <location filename="../../../SystrayIcon.cpp" line="105"/>
         <source>Searching informations...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="127"/>
+        <location filename="../../../SystrayIcon.cpp" line="120"/>
         <source>Not catching the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="132"/>
+        <location filename="../../../SystrayIcon.cpp" line="125"/>
         <source>Semi catching the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="137"/>
+        <location filename="../../../SystrayIcon.cpp" line="130"/>
         <source>Catching the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="247"/>
+        <location filename="../../../SystrayIcon.cpp" line="237"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="247"/>
+        <location filename="../../../SystrayIcon.cpp" line="237"/>
         <source>Action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="295"/>
+        <location filename="../../../SystrayIcon.cpp" line="285"/>
         <source>&amp;About/Debug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="297"/>
+        <location filename="../../../SystrayIcon.cpp" line="287"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="299"/>
+        <location filename="../../../SystrayIcon.cpp" line="289"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="300"/>
+        <location filename="../../../SystrayIcon.cpp" line="290"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="301"/>
+        <location filename="../../../SystrayIcon.cpp" line="291"/>
         <source>A&amp;dd copy/moving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="336"/>
+        <location filename="../../../SystrayIcon.cpp" line="358"/>
+        <source>Add &amp;copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="342"/>
+        <location filename="../../../SystrayIcon.cpp" line="364"/>
+        <source>Add &amp;transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="346"/>
         <location filename="../../../SystrayIcon.cpp" line="368"/>
-        <source>Add &amp;copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../SystrayIcon.cpp" line="352"/>
-        <location filename="../../../SystrayIcon.cpp" line="374"/>
-        <source>Add &amp;transfer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../SystrayIcon.cpp" line="356"/>
-        <location filename="../../../SystrayIcon.cpp" line="378"/>
         <source>Add &amp;move</source>
         <translation type="unfinished"></translation>
     </message>

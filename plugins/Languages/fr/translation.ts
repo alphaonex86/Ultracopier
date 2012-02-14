@@ -48,22 +48,32 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="127"/>
-        <location filename="../../../Core.cpp" line="216"/>
-        <location filename="../../../Core.cpp" line="221"/>
+        <location filename="../../../Core.cpp" line="147"/>
+        <location filename="../../../Core.cpp" line="236"/>
+        <location filename="../../../Core.cpp" line="241"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="127"/>
-        <location filename="../../../Core.cpp" line="216"/>
+        <location filename="../../../Core.cpp" line="147"/>
+        <location filename="../../../Core.cpp" line="236"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>Impossible de charger l&apos;interface, copie annulée</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="221"/>
+        <location filename="../../../Core.cpp" line="241"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>Impossible de charger le moteur de copie, copie annulée</translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="815"/>
+        <source>Transfer mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="815"/>
+        <source>Do you want do as a copy? Else if you reply no, it will be moved.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -420,15 +430,60 @@ Cette version est compilée comme version: %1.</translation>
         <translation>Rédiger les opérations dossier:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="157"/>
         <location filename="../../../OptionDialog.cpp" line="158"/>
-        <location filename="../../../OptionDialog.cpp" line="243"/>
-        <location filename="../../../OptionDialog.cpp" line="244"/>
+        <location filename="../../../OptionDialog.cpp" line="159"/>
+        <location filename="../../../OptionDialog.cpp" line="254"/>
+        <location filename="../../../OptionDialog.cpp" line="255"/>
         <source>Disabled because you have any SessionLoader plugin</source>
         <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="662"/>
+        <location filename="../../../OptionDialog.cpp" line="160"/>
+        <source>Do nothing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="161"/>
+        <source>Ask source as folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="162"/>
+        <source>Ask sources as files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="163"/>
+        <source>Never</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="164"/>
+        <source>When source is same</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="165"/>
+        <source>When destination is same</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="166"/>
+        <source>When source and destination are same</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="167"/>
+        <source>When source or destination are same</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="168"/>
+        <source>Always</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="680"/>
         <source>Save logs as: </source>
         <translation>Sauvegarder les logs sous: </translation>
     </message>
@@ -441,6 +496,16 @@ Cette version est compilée comme version: %1.</translation>
         <location filename="../../../OptionDialog.ui"/>
         <source>Synchronized log</source>
         <translation>Log syncronisé</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui"/>
+        <source>When manual open:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui"/>
+        <source>Group window when:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
