@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QApplication>
 #include "Environment.h"
-#include "interface/PluginInterface_SessionLoader.h"
+#include "../../../interface/PluginInterface_SessionLoader.h"
 
 class TestPlugin : public PluginInterface_SessionLoader
 {

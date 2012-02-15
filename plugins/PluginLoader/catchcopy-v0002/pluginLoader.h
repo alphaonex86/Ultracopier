@@ -17,7 +17,7 @@
 #include <windows.h>
 #include <tlhelp32.h>
 
-#include "interface/PluginInterface_PluginLoader.h"
+#include "../../../interface/PluginInterface_PluginLoader.h"
 #include "Environment.h"
 
 class Plugin : public PluginInterface_PluginLoader

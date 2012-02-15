@@ -6,7 +6,7 @@ HEADERS         = \
     DebugEngineMacro.h \
     Environment.h \
     Variable.h \
-    interface/PluginInterface_PluginLoader.h \
+    ../../../interface/PluginInterface_PluginLoader.h \
     PlatformMacro.h
 SOURCES         = \
     pluginLoader.cpp

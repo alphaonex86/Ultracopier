@@ -12,7 +12,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 
-#include "interface/PluginInterface_Themes.h"
+#include "../../../interface/PluginInterface_Themes.h"
 #include "ui_options.h"
 #include "interface.h"
 #include "Environment.h"

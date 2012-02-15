@@ -10,7 +10,7 @@
 
 #include "copyEngine.h"
 #include "folderExistsDialog.h"
-#include "interface/PluginInterface_CopyEngine.h"
+#include "../../../interface/PluginInterface_CopyEngine.h"
 
 /// \todo do pushed or instant mount point (setDrive, ...)
 /// \todo semaphore to prevent dual mkpath

@@ -9,7 +9,7 @@
 
 #include <QObject>
 #include "Environment.h"
-#include "interface/PluginInterface_SessionLoader.h"
+#include "../../../interface/PluginInterface_SessionLoader.h"
 
 class SessionLoaderPlugin : public PluginInterface_SessionLoader
 {

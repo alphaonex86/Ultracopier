@@ -10,7 +10,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 
-#include "interface/PluginInterface_CopyEngine.h"
+#include "../../../interface/PluginInterface_CopyEngine.h"
 #include "fileErrorDialog.h"
 #include "fileExistsDialog.h"
 #include "folderExistsDialog.h"

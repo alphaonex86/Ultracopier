@@ -10,7 +10,7 @@
 #include <QFileInfo>
 #include <QProcess>
 
-#include "interface/PluginInterface_CopyEngine.h"
+#include "../../../interface/PluginInterface_CopyEngine.h"
 #include "ui_options.h"
 #include "copyEngine.h"
 #include "Environment.h"

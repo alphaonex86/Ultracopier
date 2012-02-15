@@ -8,7 +8,7 @@
 #include <QFileInfo>
 #include <QSemaphore>
 
-#include "interface/PluginInterface_CopyEngine.h"
+#include "../../../interface/PluginInterface_CopyEngine.h"
 #include "scanFileOrFolder.h"
 #include "TransferThread.h"
 #include "MkPath.h"

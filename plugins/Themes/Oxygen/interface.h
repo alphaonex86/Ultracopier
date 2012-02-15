@@ -13,7 +13,7 @@
 #include <QCloseEvent>
 #include <QShortcut>
 
-#include "interface/PluginInterface_Themes.h"
+#include "../../../interface/PluginInterface_Themes.h"
 
 #include "ui_interface.h"
 #include "ui_options.h"
