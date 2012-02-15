@@ -15,8 +15,8 @@
 #include <QWidget>
 #include <QDateTime>
 
-#include "interface/OptionInterface.h"
-#include "interface/FacilityInterface.h"
+#include "OptionInterface.h"
+#include "FacilityInterface.h"
 #include "../StructEnumDefinition.h"
 
 /** This interface support:

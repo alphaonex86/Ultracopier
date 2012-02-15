@@ -15,8 +15,8 @@
 #include <QPair>
 #include <QUrl>
 
-#include "interface/OptionInterface.h"
-#include "interface/FacilityInterface.h"
+#include "OptionInterface.h"
+#include "FacilityInterface.h"
 #include "../StructEnumDefinition.h"
 
 class PluginInterface_Themes : public QWidget

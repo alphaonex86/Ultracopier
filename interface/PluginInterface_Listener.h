@@ -1,4 +1,4 @@
-/** \file SessionLoader_Listen.h
+/** \file PluginInterface_Listener.h
 \brief Define the interface of the plugin of type: listener
 \author alpha_one_x86
 \version 0.3

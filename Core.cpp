@@ -60,7 +60,7 @@ void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//search to group the window
 	int GroupWindowWhen=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
-	bool haveSameSource,haveSameDestination;
+	bool haveSameSource=false,haveSameDestination=false;
 	if(GroupWindowWhen!=0)
 	{
 		int index=0;
@@ -116,7 +116,7 @@ void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//search to group the window
 	int GroupWindowWhen=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
-	bool haveSameSource,haveSameDestination;
+	bool haveSameSource=false,haveSameDestination=false;
 	if(GroupWindowWhen!=0)
 	{
 		int index=0;

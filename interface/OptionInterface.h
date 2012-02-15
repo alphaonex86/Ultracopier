@@ -1,4 +1,4 @@
-/** \file OptionEngine.h
+/** \file OptionInterface.h
 \brief Define the class of the option engine
 \author alpha_one_x86
 \version 0.3
