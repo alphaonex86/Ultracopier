@@ -7,7 +7,6 @@ HEADERS         = copyEngine.h \
     fileExistsDialog.h \
     fileIsSameDialog.h \
     factory.h \
-    interface/PluginInterface_CopyEngine.h \
     StructEnumDefinition_CopyEngine.h \
     DebugEngineMacro.h \
     Variable.h \
