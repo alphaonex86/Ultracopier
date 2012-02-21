@@ -11,5 +11,6 @@
         <file>resources/putOnBottom.png</file>
         <file>resources/putOnTop.png</file>
         <file>resources/remove.png</file>
+        <file>resources/search.png</file>
     </qresource>
 </RCC>

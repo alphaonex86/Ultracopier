@@ -255,7 +255,9 @@ void CopyEngineManager::newOptionValue(QString groupName,QString variableName,QV
 
 void CopyEngineManager::setIsConnected()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	/* ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	  prevent bug, I don't know why, in one case it bug here
+	  */
 	isConnected=true;
 	int index=0;
 	while(index<pluginList.size())

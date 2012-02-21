@@ -42,12 +42,14 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 	TimerForSearch->setSingleShot(true);
 	searchShortcut  = new QShortcut(QKeySequence("Ctrl+F"),this);
 	searchShortcut2 = new QShortcut(QKeySequence("F3"),this);
+	searchShortcut3 = new QShortcut(QKeySequence("Escape"),this);//Qt::Key_Escape
 
 	//connect the search part
 	connect(TimerForSearch,			SIGNAL(timeout()),	this,	SLOT(hilightTheSearch()));
 	connect(searchShortcut,			SIGNAL(activated()),	this,	SLOT(searchBoxShortcut()));
 	connect(searchShortcut2,		SIGNAL(activated()),	this,	SLOT(on_pushButtonSearchNext_clicked()));
 	connect(ui->pushButtonCloseSearch,	SIGNAL(clicked()),	this,	SLOT(closeTheSearchBox()));
+	connect(searchShortcut3,		SIGNAL(activated()),	this,	SLOT(closeTheSearchBox()));
 
 	//reload directly untranslatable text
 	newLanguageLoaded();
@@ -869,22 +871,24 @@ void InterfacePlugin::closeTheSearchBox()
 	ui->pushButtonSearchPrev->hide();
 	ui->pushButtonSearchNext->hide();
 	ui->pushButtonCloseSearch->hide();
+	ui->searchButton->setChecked(false);
 	hilightTheSearch();
 }
 
 //search box shortcut
 void InterfacePlugin::searchBoxShortcut()
 {
-	if(ui->lineEditSearch->isHidden())
-	{
+/*	if(ui->lineEditSearch->isHidden())
+	{*/
 		ui->lineEditSearch->show();
 		ui->pushButtonSearchPrev->show();
 		ui->pushButtonSearchNext->show();
 		ui->pushButtonCloseSearch->show();
 		ui->lineEditSearch->setFocus(Qt::ShortcutFocusReason);
-	}
+		ui->searchButton->setChecked(true);
+/*	}
 	else
-		closeTheSearchBox();
+		closeTheSearchBox();*/
 }
 
 //hilight the search
@@ -1113,4 +1117,12 @@ void InterfacePlugin::dragMoveEvent(QDragMoveEvent* event)
 void InterfacePlugin::dragLeaveEvent(QDragLeaveEvent* event)
 {
 	event->accept();
+}
+
+void InterfacePlugin::on_searchButton_toggled(bool checked)
+{
+	if(checked)
+		searchBoxShortcut();
+	else
+		closeTheSearchBox();
 }

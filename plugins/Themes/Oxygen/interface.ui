@@ -440,6 +440,23 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="searchButton">
+           <property name="toolTip">
+            <string>Ctrl+F</string>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/resources/search.png</normaloff>:/resources/search.png</iconset>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -940,8 +957,8 @@ p, li { white-space: pre-wrap; }
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>157</x>
-     <y>147</y>
+     <x>218</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
      <x>149</x>
@@ -956,12 +973,12 @@ p, li { white-space: pre-wrap; }
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>111</x>
-     <y>279</y>
+     <x>121</x>
+     <y>304</y>
     </hint>
     <hint type="destinationlabel">
-     <x>192</x>
-     <y>279</y>
+     <x>328</x>
+     <y>305</y>
     </hint>
    </hints>
   </connection>

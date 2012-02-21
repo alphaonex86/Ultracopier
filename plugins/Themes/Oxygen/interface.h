@@ -98,6 +98,7 @@ private slots:
 	void on_moreButton_toggled(bool checked);
 	void on_comboBox_copyErrors_currentIndexChanged(int index);
 	void on_comboBox_fileCollisions_currentIndexChanged(int index);
+	void on_searchButton_toggled(bool checked);
 private:
 	struct ItemOfCopyListWithMoreInformations
 	{
@@ -133,6 +134,7 @@ private:
 	QWidget optionEngineWidget;
 	QShortcut *searchShortcut;
 	QShortcut *searchShortcut2;
+	QShortcut *searchShortcut3;
 	QTimer *TimerForSearch;
 	int currentIndexSearch;		///< Current index search in starting at the end
 	FacilityInterface * facilityEngine;
