@@ -20,9 +20,9 @@ EventDispatcher::EventDispatcher()
 	connect(&localListener,SIGNAL(cli(QStringList,bool)),&cliParser,SLOT(cli(QStringList,bool)),Qt::QueuedConnection);
 	copyMoveEventIdIndex=0;
 	backgroundIcon=NULL;
-	sessionloader=NULL;
-	copyEngineList=NULL;
-	core=NULL;
+	sessionloader=new SessionLoader(this);
+	copyEngineList=new CopyEngineManager(&optionDialog);
+	core=new Core(copyEngineList);
 	qRegisterMetaType<CatchState>("CatchState");
 	qRegisterMetaType<ListeningState>("ListeningState");
 	qRegisterMetaType<QList<QUrl> >("QList<QUrl> ");
@@ -43,7 +43,7 @@ EventDispatcher::EventDispatcher()
 	//To lunch some initialization after QApplication::exec() to quit eventually
 	lunchInitFunction.setInterval(0);
 	lunchInitFunction.setSingleShot(true);
-	connect(&lunchInitFunction,SIGNAL(timeout()),this,SLOT(initFunction()));
+	connect(&lunchInitFunction,SIGNAL(timeout()),this,SLOT(initFunction()),Qt::QueuedConnection);
 	lunchInitFunction.start();
 	//add the options to use
 	QList<QPair<QString, QVariant> > KeysList;
@@ -64,9 +64,6 @@ EventDispatcher::EventDispatcher()
 	a=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
 	if(a<0 || a>5)
 		options->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
-	sessionloader=new SessionLoader(this);
-	copyEngineList=new CopyEngineManager(&optionDialog);
-	core=new Core(copyEngineList);
 	connect(themes,		SIGNAL(newThemeOptions(QWidget*,bool,bool)),	&optionDialog,	SLOT(newThemeOptions(QWidget*,bool,bool)));
 }
 
@@ -101,6 +98,11 @@ void EventDispatcher::quit()
 /// \brief Called when event loop is setup
 void EventDispatcher::initFunction()
 {
+	if(core==NULL || copyEngineList==NULL)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to initialize correctly the software");
+		return;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Initialize the variable of event loop");
 	//load the systray icon
 	if(backgroundIcon==NULL)

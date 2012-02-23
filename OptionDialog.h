@@ -85,7 +85,6 @@ private:
 	int index,loop_size;
 	int loadedCopyEnginePlugin;
 	QTreeWidgetItem * treeWidgetItem;
-	bool in_translation;
 public slots:
 	void newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
 };

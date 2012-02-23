@@ -14,6 +14,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QFile>
+#include <QUrl>
 
 #include "Environment.h"
 #include "StructEnumDefinition.h"

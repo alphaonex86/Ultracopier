@@ -36,7 +36,6 @@ OptionDialog::OptionDialog() :
 	ui->pluginAdd->show();
 	ui->pluginRemove->show();
 	#endif
-	in_translation=false;
 }
 
 OptionDialog::~OptionDialog()
@@ -222,6 +221,7 @@ void OptionDialog::loadOption()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	newOptionValue("Themes",	"Ultracopier_current_theme",	options->getOptionValue("Themes","Ultracopier_current_theme"));
 	newOptionValue("Ultracopier",	"ActionOnManualOpen",		options->getOptionValue("Ultracopier","ActionOnManualOpen"));
+	newOptionValue("Ultracopier",	"GroupWindowWhen",		options->getOptionValue("Ultracopier","GroupWindowWhen"));
 	newOptionValue("Language",	"Language",			options->getOptionValue("Language","Language"));
 	newOptionValue("Language",	"Language_autodetect",		options->getOptionValue("Language","Language_autodetect"));
 	newOptionValue("SessionLoader",	"LoadAtSessionStarting",	options->getOptionValue("SessionLoader","LoadAtSessionStarting"));
@@ -356,6 +356,10 @@ void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
 		if(name=="ActionOnManualOpen")
 		{
 			ui->ActionOnManualOpen->setCurrentIndex(value.toInt());
+		}
+		if(name=="GroupWindowWhen")
+		{
+			ui->GroupWindowWhen->setCurrentIndex(value.toInt());
 		}
 	}
 }
@@ -696,8 +700,6 @@ void OptionDialog::on_checkBoxLog_sync_clicked()
 
 void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(int index)
 {
-	if(in_translation)
-		return;
 	if(index!=-1 && plugins->allPluginHaveBeenLoaded())
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"data value: "+ui->ActionOnManualOpen->itemData(index).toString()+", string value: "+ui->ActionOnManualOpen->itemText(index)+", index: "+QString::number(index));

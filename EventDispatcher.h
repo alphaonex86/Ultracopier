@@ -11,6 +11,8 @@
 #include <QStringList>
 #include <QString>
 #include <QTimer>
+#include <QList>
+#include <QUrl>
 
 #include "Environment.h"
 #include "Core.h"
