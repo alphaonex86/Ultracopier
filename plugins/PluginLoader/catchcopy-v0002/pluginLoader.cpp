@@ -349,14 +349,16 @@ bool Plugin::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"try it in win32");
 		// try with regsvr32, win32 because for admin dialog
 		wchar_t arrayArg[65535];
-		argumentsString.toWCharArray(arrayArg);
+		int size_lenght=argumentsString.toWCharArray(arrayArg);
+		//size_lenght*sizeof(wchar_t)
+		wcscpy(arrayArg+size_lenght*sizeof(wchar_t),TEXT("\0"));
 		SHELLEXECUTEINFO sei;
 		memset(&sei, 0, sizeof(sei));
 		sei.cbSize = sizeof(sei);
 		sei.fMask = SEE_MASK_UNICODE;
 		sei.lpVerb = TEXT("runas");
 		sei.lpFile = TEXT("regsvr32.exe");
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"arrayArg: "+QString::fromWCharArray(arrayArg));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght));
 		sei.lpParameters = arrayArg;
 		sei.nShow = SW_SHOW;
 		ok=ShellExecuteEx(&sei);

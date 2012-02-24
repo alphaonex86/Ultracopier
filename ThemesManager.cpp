@@ -163,7 +163,11 @@ void ThemesManager::allPluginIsLoaded()
 				{
 					if(pluginList.at(indexTemp).factory==factory)
 					{
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found"));
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found, current: %1, conflit plugin: %2, name: %3")
+						.arg(pluginList.at(index).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"))
+						.arg(pluginList.at(indexTemp).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"))
+						.arg(name)
+						);
 						pluginLoader->unload();
 						emit newThemeOptions(NULL,false,true);
 						return;

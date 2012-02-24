@@ -23,9 +23,6 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()));
 	plugins->unlockPluginListEdition();
 	//load the options
-	QList<QPair<QString, QVariant> > KeysList;
-	KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier-0.3")));
-	options->addOptionGroup("CopyEngine",KeysList);
 	isConnected=false;
 	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()));
 }

@@ -64,6 +64,11 @@ EventDispatcher::EventDispatcher()
 	a=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
 	if(a<0 || a>5)
 		options->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
+
+	KeysList.clear();
+	KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier-0.3")));
+	options->addOptionGroup("CopyEngine",KeysList);
+
 	connect(themes,		SIGNAL(newThemeOptions(QWidget*,bool,bool)),	&optionDialog,	SLOT(newThemeOptions(QWidget*,bool,bool)));
 }
 
