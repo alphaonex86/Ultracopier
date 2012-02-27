@@ -2,7 +2,8 @@
 \brief Define the class for all the class different of ResourcesManager, DebugEngine, ThemesManager, OptionEngine have object of this class at the global scope
 \author alpha_one_x86
 \version 0.3
-\date 2010 */
+\date 2010
+\licence GPL3, see the file COPYING */
 
 #ifndef GLOBAL_CLASS_H
 #define GLOBAL_CLASS_H
