@@ -54,6 +54,7 @@ public:
 	void setErrorAction(QList<QPair<QString,QString> >);
 	void setCopyType(CopyType);
 	void forceCopyMode(CopyMode);
+	void setTransferListOperation(TransferListOperation transferListOperation);
 	//edit the transfer list
 	void getActionOnList(QList<returnActionOnCopyList> returnActions);
 	void haveExternalOrder();
@@ -99,6 +100,8 @@ private slots:
 	void on_comboBox_copyErrors_currentIndexChanged(int index);
 	void on_comboBox_fileCollisions_currentIndexChanged(int index);
 	void on_searchButton_toggled(bool checked);
+	void on_exportTransferList_clicked();
+	void on_importTransferList_clicked();
 private:
 	struct ItemOfCopyListWithMoreInformations
 	{
@@ -171,6 +174,8 @@ signals:
 	void moveItemsUp(QList<int> ids);
 	void moveItemsDown(QList<int> ids);
 	void moveItemsOnBottom(QList<int> ids);
+	void exportTransferList();
+	void importTransferList();
 	//user ask ask to add folder (add it with interface ask source/destination)
 	void userAddFolder(CopyMode);
 	void userAddFile(CopyMode);

@@ -457,6 +457,28 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="exportTransferList">
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/resources/export-transfer-list.png</normaloff>:/resources/export-transfer-list.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="importTransferList">
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/resources/import-transfer-list.png</normaloff>:/resources/import-transfer-list.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer>
            <property name="orientation">
             <enum>Qt::Vertical</enum>

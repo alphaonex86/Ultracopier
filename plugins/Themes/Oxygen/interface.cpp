@@ -433,6 +433,12 @@ void InterfacePlugin::forceCopyMode(CopyMode mode)
 	updateModeAndType();
 }
 
+void InterfacePlugin::setTransferListOperation(TransferListOperation transferListOperation)
+{
+	ui->exportTransferList->setVisible(transferListOperation & TransferListOperation_Export);
+	ui->importTransferList->setVisible(transferListOperation & TransferListOperation_Import);
+}
+
 void InterfacePlugin::haveExternalOrder()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -1125,4 +1131,14 @@ void InterfacePlugin::on_searchButton_toggled(bool checked)
 		searchBoxShortcut();
 	else
 		closeTheSearchBox();
+}
+
+void InterfacePlugin::on_exportTransferList_clicked()
+{
+	emit exportTransferList();
+}
+
+void InterfacePlugin::on_importTransferList_clicked()
+{
+	emit importTransferList();
 }

@@ -12,5 +12,7 @@
         <file>resources/putOnTop.png</file>
         <file>resources/remove.png</file>
         <file>resources/search.png</file>
+        <file>resources/export-transfer-list.png</file>
+        <file>resources/import-transfer-list.png</file>
     </qresource>
 </RCC>

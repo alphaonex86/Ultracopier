@@ -15,7 +15,7 @@ class scanFileOrFolder : public QThread
 {
 	Q_OBJECT
 public:
-	explicit scanFileOrFolder();
+	explicit scanFileOrFolder(CopyMode mode);
 	~scanFileOrFolder();
 	void stop();
 	bool isFinished();
@@ -26,8 +26,8 @@ public:
 	//set if need check if the destination exists
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
 signals:
-	void folderTransfer(QString source,QString destination,int numberOfItem);
-	void fileTransfer(QFileInfo source,QFileInfo destination);
+	void folderTransfer(QString source,QString destination,int numberOfItem,CopyMode mode);
+	void fileTransfer(QFileInfo source,QFileInfo destination,CopyMode mode);
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
 	void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame);
@@ -50,6 +50,7 @@ private:
 	QRegExp			folder_isolation;
 	QString			prefix;
 	QString			suffix;
+	CopyMode		mode;
 };
 
 #endif // SCANFILEORFOLDER_H

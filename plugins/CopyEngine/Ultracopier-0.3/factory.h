@@ -11,6 +11,7 @@
 #include <QProcess>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
+#include "StructEnumDefinition.h"
 #include "ui_options.h"
 #include "copyEngine.h"
 #include "Environment.h"
@@ -34,6 +35,7 @@ public:
 	//get mode allowed
 	/// \brief define if can copy file, folder or both
 	CopyType getCopyType();
+	TransferListOperation getTransferListOperation();
 	bool canDoOnlyCopy();
 	QStringList supportedProtocolsForTheSource();
 	QStringList supportedProtocolsForTheDestination();

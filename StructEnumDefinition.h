@@ -41,6 +41,14 @@ enum CopyType
 	FileAndFolder		= Folder | File
 };
 
+enum TransferListOperation
+{
+	TransferListOperation_None		= 0x00000000,
+	TransferListOperation_Import		= 0x00000001,
+	TransferListOperation_Export		= 0x00000002,
+	TransferListOperation_ImportExport	= TransferListOperation_Import | TransferListOperation_Export
+};
+
 enum EngineActionInProgress
 {
 	Idle			= 0x00000000,

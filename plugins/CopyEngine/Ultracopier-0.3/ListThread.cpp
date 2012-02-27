@@ -14,6 +14,7 @@
   When that's is finish, send start file at real transfer start, not inode operation start **/
 /** \todo group setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) and setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
   and check if I can choose case by case if I wish overwrite, skip, ... */
+/// \todo move directly the folder when it's needed
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
@@ -256,10 +257,11 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
 {
 	this->checkDestinationFolderExists=checkDestinationFolderExists;
 	for(int i=0;i<scanFileOrFolderThreadsPool.size();i++)
-		scanFileOrFolderThreadsPool.at(i).thread->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
+		scanFileOrFolderThreadsPool.at(i)->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 }
 
-void ListThread::folderTransfer(const QString &source,const QString &destination,const int &numberOfItem)
+/// \todo optimize to drop this loop
+void ListThread::folderTransfer(const QString &source,const QString &destination,const int &numberOfItem,const CopyMode &mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source+", destination: "+destination+", numberOfItem: "+QString::number(numberOfItem));
 	QObject * senderThread = sender();
@@ -268,24 +270,15 @@ void ListThread::folderTransfer(const QString &source,const QString &destination
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer null (plugin copy engine)");
 		return;
 	}
-	int index=0;
-	while(index<scanFileOrFolderThreadsPool.size())
-	{
-		if(senderThread==scanFileOrFolderThreadsPool.at(index).thread)
-		{
-			if(scanFileOrFolderThreadsPool.at(index).mode==Move)
-				addToRmPath(source,numberOfItem);
-			emit newFolderListing(source);
-			if(numberOfItem==0)
-				addToMkPath(destination);
-			return;
-		}
-		index++;
-	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer not found (plugin copy engine)");
+	if(mode==Move)
+		addToRmPath(source,numberOfItem);
+	emit newFolderListing(source);
+	if(numberOfItem==0)
+		addToMkPath(destination);
 }
 
-void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo)
+/// \todo optimize to drop this loop
+void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode)
 {
 	QObject * senderThread = sender();
 	if(senderThread==NULL)
@@ -293,18 +286,8 @@ void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &d
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer null (plugin copy engine)");
 		return;
 	}
-	int index=0;
-	while(index<scanFileOrFolderThreadsPool.size())
-	{
-		if(senderThread==scanFileOrFolderThreadsPool.at(index).thread)
-		{
-			addToTransfer(sourceFileInfo,destinationFileInfo,scanFileOrFolderThreadsPool.at(index).mode);
-			emit newActionOnList();
-			return;
-		}
-		index++;
-	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer not found (plugin copy engine)");
+	addToTransfer(sourceFileInfo,destinationFileInfo,mode);
+	emit newActionOnList();
 }
 
 bool ListThread::haveSameSource(QStringList sources)
@@ -344,23 +327,20 @@ bool ListThread::haveSameDestination(QString destination)
 scanFileOrFolder * ListThread::newScanThread(CopyMode mode)
 {
 	//create new thread because is auto-detroyed
-	scanFileOrFolderThread newThread;
-	newThread.mode=mode;
-	newThread.thread=new scanFileOrFolder();
-	connect(newThread.thread,SIGNAL(finished()),							this,SLOT(scanThreadHaveFinish()));
-	connect(newThread.thread,SIGNAL(started()),							this,SLOT(updateTheStatus()));
-	connect(newThread.thread,SIGNAL(finished()),							this,SLOT(updateTheStatus()));
-	connect(newThread.thread,SIGNAL(folderTransfer(QString,QString,int)),				this,SLOT(folderTransfer(QString,QString,int)));
-	connect(newThread.thread,SIGNAL(fileTransfer(QFileInfo,QFileInfo)),				this,SLOT(fileTransfer(QFileInfo,QFileInfo)));
+	scanFileOrFolderThreadsPool << new scanFileOrFolder(mode);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finished()),							this,SLOT(scanThreadHaveFinish()));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(started()),							this,SLOT(updateTheStatus()));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finished()),							this,SLOT(updateTheStatus()));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderTransfer(QString,QString,int,CopyMode)),		this,SLOT(folderTransfer(QString,QString,int,CopyMode)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(fileTransfer(QFileInfo,QFileInfo,CopyMode)),			this,SLOT(fileTransfer(QFileInfo,QFileInfo,CopyMode)));
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	connect(newThread.thread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
-	connect(newThread.thread,SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)));
-	connect(newThread.thread,SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),			this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)));
-	scanFileOrFolderThreadsPool << newThread;
-	newThread.thread->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)));
+	scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 	updateTheStatus();
-	return newThread.thread;
+	return scanFileOrFolderThreadsPool.last();
 }
 
 void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
@@ -378,11 +358,11 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 			int index=0;
 			while(index<scanFileOrFolderThreadsPool.size())
 			{
-				if(senderThread==scanFileOrFolderThreadsPool.at(index).thread)
+				if(senderThread==scanFileOrFolderThreadsPool.at(index))
 				{
 					if(index!=0)
 						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"scanFileOrFolderThread is not the first (plugin copy engine)");
-                                        delete scanFileOrFolderThreadsPool.at(index).thread;
+					delete scanFileOrFolderThreadsPool.at(index);
 					scanFileOrFolderThreadsPool.removeAt(index);
 					isFound=true;
 					break;
@@ -397,10 +377,10 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 	if(scanFileOrFolderThreadsPool.size()>0)
 	{
 		//then start the next listing threads
-		if(scanFileOrFolderThreadsPool.first().thread->isFinished())
+		if(scanFileOrFolderThreadsPool.first()->isFinished())
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Start listing thread");
-			scanFileOrFolderThreadsPool.first().thread->start();
+			scanFileOrFolderThreadsPool.first()->start();
 		}
 		else
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"The listing thread is already running");
@@ -574,9 +554,9 @@ void ListThread::cancel()
         index=0;
         while(index<scanFileOrFolderThreadsPool.size())
         {
-                scanFileOrFolderThreadsPool.at(index).thread->stop();
-		delete scanFileOrFolderThreadsPool.at(index).thread;//->deleteLayer();
-		scanFileOrFolderThreadsPool[index].thread=NULL;
+		scanFileOrFolderThreadsPool.at(index)->stop();
+		delete scanFileOrFolderThreadsPool.at(index);//->deleteLayer();
+		scanFileOrFolderThreadsPool[index]=NULL;
                 index++;
 	}
 	waitCancel.release();
@@ -965,6 +945,99 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
 	}
 	emit newActionOnList();
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"stop");
+}
+
+void ListThread::exportTransferList(QString fileName)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	QFile transferFile(fileName);
+	if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
+	{
+		transferFile.write(QString("Ultracopier-0.3;CopyEngine-0.3\n").toUtf8());
+		int size=actionToDoList.size();
+		for (int index=0;index<size;++index) {
+			if(actionToDoList.at(index).type==ActionType_Transfer)
+			{
+				if(actionToDoList.at(index).mode==Copy)
+					transferFile.write(QString("Copy;%1;%2\n").arg(actionToDoList.at(index).source.absoluteFilePath()).arg(actionToDoList.at(index).destination.absoluteFilePath()).toUtf8());
+				else
+					transferFile.write(QString("Move;%1;%2\n").arg(actionToDoList.at(index).source.absoluteFilePath()).arg(actionToDoList.at(index).destination.absoluteFilePath()).toUtf8());
+			}
+		}
+		transferFile.close();
+	}
+	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable to save the transfer list: %1").arg(transferFile.errorString()));
+		emit errorTransferList(tr("Unable to save the transfer list: %1").arg(transferFile.errorString()));
+		return;
+	}
+}
+
+void ListThread::importTransferList(QString fileName)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	QFile transferFile(fileName);
+	if(transferFile.open(QIODevice::ReadOnly))
+	{
+		QString content;
+		QByteArray data=transferFile.readLine();
+		if(data.size()<=0)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Problem at the reading, or file size is null"));
+			emit errorTransferList(tr("Problem at the reading, or file size is null"));
+			return;
+		}
+		content=QString::fromUtf8(data);
+		if(content!="Ultracopier-0.3;CopyEngine-0.3\n")
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Wrong header: \"%1\"").arg(content));
+			emit errorTransferList(tr("Wrong header: \"%1\"").arg(content));
+			return;
+		}
+		bool errorFound=false,ignored_by_wrong_type=false;
+		QRegExp correctLine("^(Copy|Move);[^;]+;[^;]+\n$");
+		QStringList args;
+		CopyMode mode;
+		do
+		{
+			data=transferFile.readLine();
+			if(data.size()>0)
+			{
+				content=QString::fromUtf8(data);
+				//do the import here
+				if(content.contains(correctLine))
+				{
+					content.remove("\n");
+					args=content.split(";");
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("New data to import: %1,%2,%3").arg(args.at(0)).arg(args.at(1)).arg(args.at(2)));
+					if(args.at(0)=="Copy")
+						mode=Copy;
+					else
+						mode=Move;
+					addToTransfer(QFileInfo(args.at(1)),QFileInfo(args.at(2)),mode);
+				}
+				else
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Wrong line syntax: %1").arg(content));
+					errorFound=true;
+				}
+			}
+		}
+		while(data.size()>0);
+		transferFile.close();
+		if(errorFound)
+			emit warningTransferList(tr("Some error have been found during the line parsing"));
+		else if(ignored_by_wrong_type)
+			emit warningTransferList(tr("Some list is ignored because it not corresponds to the window transfer type"));
+		emit newActionOnList();
+	}
+	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable to open the transfer list: %1").arg(transferFile.errorString()));
+		emit errorTransferList(tr("Unable to open the transfer list: %1").arg(transferFile.errorString()));
+		return;
+	}
 }
 
 //do new actions

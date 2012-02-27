@@ -30,6 +30,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
 	qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");
 	qRegisterMetaType<DebugLevel>("DebugLevel");
+
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	debugDialogWindow.show();
 	#endif
@@ -48,11 +49,17 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	connect(listThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),			this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),		Qt::QueuedConnection);
 	#endif
+
 	connect(listThread,SIGNAL(send_fileAlreadyExists(QFileInfo,QFileInfo,bool,TransferThread *)),		this,SLOT(fileAlreadyExists(QFileInfo,QFileInfo,bool,TransferThread *)),	Qt::QueuedConnection);
 	connect(listThread,SIGNAL(send_errorOnFile(QFileInfo,QString,TransferThread *)),			this,SLOT(errorOnFile(QFileInfo,QString,TransferThread *)),			Qt::QueuedConnection);
 	connect(listThread,SIGNAL(send_folderAlreadyExists(QFileInfo,QFileInfo,bool,scanFileOrFolder *)),	this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool,scanFileOrFolder *)),	Qt::QueuedConnection);
 	connect(listThread,SIGNAL(send_errorOnFolder(QFileInfo,QString,scanFileOrFolder *)),			this,SLOT(errorOnFolder(QFileInfo,QString,scanFileOrFolder *)),			Qt::QueuedConnection);
 	connect(listThread,SIGNAL(updateTheDebugInfo(QStringList,QStringList,int)),				this,SLOT(updateTheDebugInfo(QStringList,QStringList,int)),			Qt::QueuedConnection);
+	connect(listThread,SIGNAL(errorTransferList(QString)),							this,SLOT(errorTransferList(QString)),						Qt::QueuedConnection);
+	connect(listThread,SIGNAL(warningTransferList(QString)),						this,SLOT(warningTransferList(QString)),					Qt::QueuedConnection);
+
+	connect(this,SIGNAL(signal_exportTransferList(QString)),listThread,SLOT(exportTransferList(QString)),Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_importTransferList(QString)),listThread,SLOT(importTransferList(QString)),Qt::QueuedConnection);
 	connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection);
 	interface			= NULL;
 	tempWidget			= NULL;
@@ -293,6 +300,32 @@ void copyEngine::moveItemsDown(QList<int> ids)
 void copyEngine::moveItemsOnBottom(QList<int> ids)
 {
 	listThread->moveItemsOnBottom(ids);
+}
+
+void copyEngine::exportTransferList()
+{
+	QString fileName = QFileDialog::getSaveFileName(NULL,tr("Save transfer list"),"transfer-list.lst",tr("Transfer list")+" (*.lst)");
+	if(fileName.isEmpty())
+		return;
+	emit signal_exportTransferList(fileName);
+}
+
+void copyEngine::importTransferList()
+{
+	QString fileName = QFileDialog::getOpenFileName(NULL,tr("Open transfer list"),"transfer-list.lst",tr("Transfer list")+" (*.lst)");
+	if(fileName.isEmpty())
+		return;
+	emit signal_importTransferList(fileName);
+}
+
+void copyEngine::warningTransferList(QString warning)
+{
+	QMessageBox::warning(interface,tr("Error"),warning);
+}
+
+void copyEngine::errorTransferList(QString error)
+{
+	QMessageBox::critical(interface,tr("Error"),error);
 }
 
 bool copyEngine::setSpeedLimitation(qint64 speedLimitation)

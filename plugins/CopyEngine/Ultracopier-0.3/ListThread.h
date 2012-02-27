@@ -7,6 +7,8 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QSemaphore>
+#include <QTextStream>
+#include <QFile>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "scanFileOrFolder.h"
@@ -78,6 +80,8 @@ public slots:
 	void moveItemsUp(QList<int> ids);
 	void moveItemsDown(QList<int> ids);
 	void moveItemsOnBottom(QList<int> ids);
+	void exportTransferList(QString fileName);
+	void importTransferList(QString fileName);
 	//speed limitation
 	bool setSpeedLimitation(qint64 speedLimitation);
 	//set the copy info and options before runing
@@ -104,12 +108,7 @@ private:
 	bool stopIt;
 	QString destinationDrive;
 	bool destinationDriveMultiple;
-	struct scanFileOrFolderThread
-	{
-		scanFileOrFolder * thread;
-		CopyMode mode;
-	};
-	QList<scanFileOrFolderThread> scanFileOrFolderThreadsPool;
+	QList<scanFileOrFolder *> scanFileOrFolderThreadsPool;
 	int numberOfTransferIntoToDoList;
 	//list of transfer thread
 	struct transfer
@@ -172,8 +171,8 @@ private:
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
-	void folderTransfer(const QString &source,const QString &destination,const int &numberOfItem);
-	void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo);
+	void folderTransfer(const QString &source,const QString &destination,const int &numberOfItem,const CopyMode &mode);
+	void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode);
 	//mkpath event
 	void mkPathFirstFolderFinish();
 	//rmpath event
@@ -240,6 +239,9 @@ signals:
 	void tryCancel();
 	//to ask new transfer thread
 	void askNewTransferThread();
+
+	void warningTransferList(QString warning);
+	void errorTransferList(QString error);
 };
 
 #endif // LISTTHREAD_H

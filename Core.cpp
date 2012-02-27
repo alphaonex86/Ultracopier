@@ -277,6 +277,7 @@ int Core::connectCopyEngine(CopyMode mode,bool ignoreMode,CopyEngineManager::ret
 			newItem.ignoreMode=ignoreMode;
 			newItem.mode=mode;
 			newItem.type=returnInformations.type;
+			newItem.transferListOperation=returnInformations.transferListOperation;
 			newItem.baseTime=0;
 			newItem.numberOfFile=0;
 			newItem.numberOfTransferedFile=0;
@@ -586,6 +587,8 @@ void Core::connectInterfaceAndSync(int index)
 	connect(copyList.at(index).interface,SIGNAL(moveItemsUp(QList<int>)),			copyList.at(index).engine,SLOT(moveItemsUp(QList<int>)));
 	connect(copyList.at(index).interface,SIGNAL(moveItemsDown(QList<int>)),			copyList.at(index).engine,SLOT(moveItemsDown(QList<int>)));
 	connect(copyList.at(index).interface,SIGNAL(moveItemsOnBottom(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsOnBottom(QList<int>)));
+	connect(copyList.at(index).interface,SIGNAL(exportTransferList()),			copyList.at(index).engine,SLOT(exportTransferList()));
+	connect(copyList.at(index).interface,SIGNAL(importTransferList()),			copyList.at(index).engine,SLOT(importTransferList()));
 
 	connect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
 	connect(copyList.at(index).interface,SIGNAL(resume()),					this,SLOT(resetSpeedDetectedInterface()));
@@ -596,6 +599,7 @@ void Core::connectInterfaceAndSync(int index)
 	copyList.at(index).interface->setErrorAction(copyList.at(index).engine->getErrorAction());
 	copyList.at(index).interface->setCollisionAction(copyList.at(index).engine->getCollisionAction());
 	copyList.at(index).interface->setCopyType(copyList.at(index).type);
+	copyList.at(index).interface->setTransferListOperation(copyList.at(index).transferListOperation);
 	copyList.at(index).interface->actionInProgess(copyList.at(index).action);
 	copyList.at(index).interface->isInPause(copyList.at(index).isPaused);
 	if(copyList.at(index).haveError)

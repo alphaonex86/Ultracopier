@@ -8,7 +8,9 @@
 #include <QList>
 #include <QStringList>
 #include <QFileInfo>
+#include <QFile>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "fileErrorDialog.h"
@@ -145,6 +147,8 @@ public slots:
 	void moveItemsUp(QList<int> ids);
 	void moveItemsDown(QList<int> ids);
 	void moveItemsOnBottom(QList<int> ids);
+	void exportTransferList();
+	void importTransferList();
 	//speed limitation
 	bool setSpeedLimitation(qint64 speedLimitation);///< -1 if not able, 0 if disabled
 	//action
@@ -170,6 +174,8 @@ public slots:
 private slots:
 	void setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox=true);
 	void setComboBoxFolderError(FileErrorAction action,bool changeComboBox=true);
+	void warningTransferList(QString warning);
+	void errorTransferList(QString error);
 signals:
 	//send information about the copy
 	void actionInProgess(EngineActionInProgress);	//should update interface information on this event
@@ -181,6 +187,9 @@ signals:
 	void newCollisionAction(QString action);
 	void newErrorAction(QString action);
 	void isInPause(bool);
+
+	void signal_exportTransferList(QString fileName);
+	void signal_importTransferList(QString fileName);
 
 	void newActionOnList();
 	void cancelAll();

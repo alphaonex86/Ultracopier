@@ -35,6 +35,7 @@ public:
 		PluginInterface_CopyEngine * engine;	///< The copy engine instance
 		bool canDoOnlyCopy;			///< true if can do only the copy (not move)
 		CopyType type;				///< Kind of copy what it can do
+		TransferListOperation transferListOperation;
 	};
 	explicit CopyEngineManager(OptionDialog *optionDialog);
 	/** \brief return copy engine instance when know the sources and destinations
@@ -83,6 +84,7 @@ private:
 		QList<PluginInterface_CopyEngine *> intances;
 		bool canDoOnlyCopy;
 		CopyType type;
+		TransferListOperation transferListOperation;
 		LocalPluginOptions *options;
 		QWidget *optionsWidget;
 	};

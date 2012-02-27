@@ -48,6 +48,7 @@ class PluginInterface_Themes : public QWidget
 		virtual void setErrorAction(QList<QPair<QString,QString> >) = 0;
 		virtual void setCopyType(CopyType) = 0;
 		virtual void forceCopyMode(CopyMode) = 0;//to force in copy or move, else support both
+		virtual void setTransferListOperation(TransferListOperation transferListOperation) = 0;
 		virtual void haveExternalOrder() = 0;//to notify the interface, which can hide add folder/filer button
 		virtual void isInPause(bool) = 0;
 	/* signal to implement
@@ -58,6 +59,8 @@ class PluginInterface_Themes : public QWidget
 		void moveItemsUp(QList<int> ids);
 		void moveItemsDown(QList<int> ids);
 		void moveItemsOnBottom(QList<int> ids);
+		void exportTransferList();
+		void importTransferList();
 		//user ask ask to add folder (add it with interface ask source/destination)
 		void userAddFolder(CopyMode);
 		void userAddFile(CopyMode);
@@ -86,6 +89,6 @@ class PluginInterface_ThemesFactory : public QObject
 		virtual void newLanguageLoaded() = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.2");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.3");
 
 #endif // PLUGININTERFACE_THEMES_H

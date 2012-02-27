@@ -73,6 +73,8 @@ class PluginInterface_CopyEngine : public QObject
 		virtual void moveItemsUp(QList<int> ids) = 0;
 		virtual void moveItemsDown(QList<int> ids) = 0;
 		virtual void moveItemsOnBottom(QList<int> ids) = 0;
+		virtual void exportTransferList() = 0;
+		virtual void importTransferList() = 0;
 		//speed limitation
 		virtual bool setSpeedLimitation(qint64 speedLimitation) = 0;///< -1 if not able, 0 if disabled
 		//action
@@ -111,6 +113,7 @@ class PluginInterface_CopyEngineFactory : public QObject
 		//get mode allowed
 		/// \brief define if can copy file, folder or both
 		virtual CopyType getCopyType() = 0;
+		virtual TransferListOperation getTransferListOperation() = 0;
 		virtual bool canDoOnlyCopy() = 0;
 		virtual QStringList supportedProtocolsForTheSource() = 0;
 		virtual QStringList supportedProtocolsForTheDestination() = 0;
@@ -121,6 +124,6 @@ class PluginInterface_CopyEngineFactory : public QObject
 
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.2");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.3");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

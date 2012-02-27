@@ -88,6 +88,7 @@ void CopyEngineManager::onePluginAdded(PluginsAvailable plugin)
 	newItem.supportedProtocolsForTheDestination=newItem.factory->supportedProtocolsForTheDestination();
 	newItem.canDoOnlyCopy=newItem.factory->canDoOnlyCopy();
 	newItem.type=newItem.factory->getCopyType();
+	newItem.transferListOperation=newItem.factory->getTransferListOperation();
 	optionDialog->addCopyEngineWidget(newItem.name,newItem.optionsWidget);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"plugin: "+newItem.name+" loaded, send options");
 	//emit newCopyEngineOptions(plugin.path,newItem.name,newItem.optionsWidget);
@@ -180,6 +181,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mo
 			temp.engine=pluginList[index].intances.last();
 			temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
 			temp.type=pluginList.at(index).type;
+			temp.transferListOperation=pluginList.at(index).transferListOperation;
 			return temp;
 		}
 		index++;
@@ -220,6 +222,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mo
 			temp.engine=pluginList[index].intances.last();
 			temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
 			temp.type=pluginList.at(index).type;
+			temp.transferListOperation=pluginList.at(index).transferListOperation;
 			return temp;
 		}
 		index++;

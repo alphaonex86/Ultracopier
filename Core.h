@@ -60,6 +60,7 @@ class Core : public QObject, public GlobalClass
 			QTime runningTime;
 			bool isRunning;
 			CopyType type;
+			TransferListOperation transferListOperation;
 			bool haveError;
 		};
 		QList<CopyInstance> copyList;

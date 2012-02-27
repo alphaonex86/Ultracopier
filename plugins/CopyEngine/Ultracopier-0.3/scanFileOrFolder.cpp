@@ -2,10 +2,11 @@
 
 #include <QMessageBox>
 
-scanFileOrFolder::scanFileOrFolder()
+scanFileOrFolder::scanFileOrFolder(CopyMode mode)
 {
 	stopped	= true;
 	stopIt	= false;
+	this->mode=mode;
 	setObjectName("ScanFileOrFolder");
 	folder_isolation=QRegExp("^(.*/)?([^/]+)/$");
 }
@@ -82,7 +83,7 @@ void scanFileOrFolder::run()
                         listFolder(source.absolutePath()+"/",destinationFolder.absolutePath()+"/",source.fileName()+"/",source.fileName()+"/");
 		}
 		else
-			emit fileTransfer(source,destination+source.fileName());
+			emit fileTransfer(source,destination+source.fileName(),mode);
 		sourceIndex++;
 	}
 	stopped=true;
@@ -204,7 +205,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 	/// \todo check here if the folder is not readable or not exists
 	QFileInfoList entryList=finalSource.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);//possible wait time here
 	int sizeEntryList=entryList.size();
-	emit folderTransfer(newSource,finalDest,sizeEntryList);
+	emit folderTransfer(newSource,finalDest,sizeEntryList,mode);
 	for (int index=0;index<sizeEntryList;++index)
 	{
 		if(stopIt)
@@ -214,7 +215,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 			//listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
                         listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too
 		else
-			emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileInfo.fileName());
+			emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileInfo.fileName(),mode);
 	}
 }
 

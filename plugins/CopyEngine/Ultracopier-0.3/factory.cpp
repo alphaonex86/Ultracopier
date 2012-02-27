@@ -125,6 +125,11 @@ CopyType Factory::getCopyType()
 	return FileAndFolder;
 }
 
+TransferListOperation Factory::getTransferListOperation()
+{
+	return TransferListOperation_ImportExport;
+}
+
 bool Factory::canDoOnlyCopy()
 {
 	return false;
