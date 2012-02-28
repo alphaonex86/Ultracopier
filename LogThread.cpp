@@ -115,6 +115,13 @@ void LogThread::run()
 
 void LogThread::realDataWrite()
 {
+	#ifdef ULTRACOPIER_DEBUG
+	if(!log.isOpen())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"transfer log not open");
+		return;
+	}
+	#endif // ULTRACOPIER_DEBUG
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString currentData;
 	{

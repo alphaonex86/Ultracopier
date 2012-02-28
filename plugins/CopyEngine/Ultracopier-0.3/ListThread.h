@@ -29,16 +29,9 @@ public:
 	//external soft like file browser have send copy/move list to do
 	bool newCopy(QStringList sources,QString destination);
 	bool newMove(QStringList sources,QString destination);
-	//get information about the copy
-	QPair<quint64,quint64> getGeneralProgression();
-	returnSpecificFileProgression getFileProgression(quint64 id);
-	QList<returnActionOnCopyList> getActionOnList();
-	quint64 realByteTransfered();		//real size transfered to right speed calculation
 	//speed limitation
 	qint64 getSpeedLimitation();
 	//transfer list
-	QList<ItemOfCopyList> getTransferList();
-	ItemOfCopyList getTransferListEntry(quint64 id);
 	void setDrive(QStringList drives);
 	//action
 	void setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
@@ -65,9 +58,21 @@ public:
 	//dir operation thread queue
 	MkPath mkPathQueue;
 	RmPath rmPathQueue;
-	//set the folder local colision
-	void setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists);
+	//to get the return value from copyEngine
+	bool getReturnBoolToCopyEngine();
+	QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine();
+	returnSpecificFileProgression getReturnSpecificFileProgressionToCopyEngine();
+	QList<returnActionOnCopyList> getReturnActionOnListToCopyEngine();
+	QList<ItemOfCopyList> getReturnListItemOfCopyListToCopyEngine();
+	ItemOfCopyList getReturnItemOfCopyListToCopyEngine();
 public slots:
+	//get information about the copy
+	void getGeneralProgression();
+	void getFileProgression(quint64 id);
+	void getActionOnList();
+	//transfer list
+	void getTransferList();
+	void getTransferListEntry(quint64 id);
 	//action on the copy
 	void pause();
 	void resume();
@@ -82,6 +87,8 @@ public slots:
 	void moveItemsOnBottom(QList<int> ids);
 	void exportTransferList(QString fileName);
 	void importTransferList(QString fileName);
+	//set the folder local colision
+	void setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists);
 	//speed limitation
 	bool setSpeedLimitation(qint64 speedLimitation);
 	//set the copy info and options before runing
@@ -168,6 +175,13 @@ private:
 	int blockSize;
 	QStringList drives;
 	FileExistsAction alwaysDoThisActionForFileExists;
+	//to return value to the copyEngine
+	bool returnBoolToCopyEngine;
+	QPair<quint64,quint64> returnPairQuint64ToCopyEngine;
+	returnSpecificFileProgression returnSpecificFileProgressionToCopyEngine;
+	QList<returnActionOnCopyList> returnActionOnListToCopyEngine;
+	QList<ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
+	ItemOfCopyList returnItemOfCopyListToCopyEngine;
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();

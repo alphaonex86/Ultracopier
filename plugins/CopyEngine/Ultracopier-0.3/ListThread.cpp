@@ -44,6 +44,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	qRegisterMetaType<DebugLevel>("DebugLevel");
 	qRegisterMetaType<ItemOfCopyList>("ItemOfCopyList");
 	qRegisterMetaType<QFileInfo>("QFileInfo");
+	qRegisterMetaType<CopyMode>("CopyMode");
 	#if ! defined (Q_CC_GNU)
 	ui->keepDate->setEnabled(false);
 	ui->keepDate->setToolTip("Not supported with this compiler");
@@ -260,16 +261,9 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
 		scanFileOrFolderThreadsPool.at(i)->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 }
 
-/// \todo optimize to drop this loop
 void ListThread::folderTransfer(const QString &source,const QString &destination,const int &numberOfItem,const CopyMode &mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source+", destination: "+destination+", numberOfItem: "+QString::number(numberOfItem));
-	QObject * senderThread = sender();
-	if(senderThread==NULL)
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer null (plugin copy engine)");
-		return;
-	}
 	if(mode==Move)
 		addToRmPath(source,numberOfItem);
 	emit newFolderListing(source);
@@ -277,19 +271,13 @@ void ListThread::folderTransfer(const QString &source,const QString &destination
 		addToMkPath(destination);
 }
 
-/// \todo optimize to drop this loop
 void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode)
 {
-	QObject * senderThread = sender();
-	if(senderThread==NULL)
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer null (plugin copy engine)");
-		return;
-	}
 	addToTransfer(sourceFileInfo,destinationFileInfo,mode);
 	emit newActionOnList();
 }
 
+// -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameSource(QStringList sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -307,6 +295,7 @@ bool ListThread::haveSameSource(QStringList sources)
 	return true;
 }
 
+// -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameDestination(QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -397,11 +386,13 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Put the copy engine in pause");
 			updateTheStatus();
+			putInPause=true;
 			emit isInPause(true);
 		}
 	}
 }
 
+// -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::newCopy(QStringList sources,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -411,11 +402,13 @@ bool ListThread::newCopy(QStringList sources,QString destination)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to get new thread");
 		return false;
 	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start the listing");
 	scanFileOrFolderThread->addToList(sources,destination);
 	scanThreadHaveFinish(true);
 	return true;
 }
 
+// -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::newMove(QStringList sources,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -474,6 +467,36 @@ void ListThread::setCollisionAction(FileExistsAction alwaysDoThisActionForFileEx
 void ListThread::setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists)
 {
 	this->alwaysDoThisActionForFolderExists=alwaysDoThisActionForFolderExists;
+}
+
+bool ListThread::getReturnBoolToCopyEngine()
+{
+	return returnBoolToCopyEngine;
+}
+
+QPair<quint64,quint64> ListThread::getReturnPairQuint64ToCopyEngine()
+{
+	return returnPairQuint64ToCopyEngine;
+}
+
+returnSpecificFileProgression ListThread::getReturnSpecificFileProgressionToCopyEngine()
+{
+	return returnSpecificFileProgressionToCopyEngine;
+}
+
+QList<returnActionOnCopyList> ListThread::getReturnActionOnListToCopyEngine()
+{
+	return returnActionOnListToCopyEngine;
+}
+
+QList<ItemOfCopyList> ListThread::getReturnListItemOfCopyListToCopyEngine()
+{
+	return returnListItemOfCopyListToCopyEngine;
+}
+
+ItemOfCopyList ListThread::getReturnItemOfCopyListToCopyEngine()
+{
+	return returnItemOfCopyListToCopyEngine;
 }
 
 void ListThread::pause()
@@ -563,7 +586,7 @@ void ListThread::cancel()
 }
 
 //first = current transfered byte, second = byte to transfer
-QPair<quint64,quint64> ListThread::getGeneralProgression()
+void ListThread::getGeneralProgression()
 {
 	qint64 oversize=0;
 	qint64 currentProgression=0;
@@ -579,44 +602,38 @@ QPair<quint64,quint64> ListThread::getGeneralProgression()
 		}
 		index++;
 	}
-	QPair<quint64,quint64> returnedValue;
-	returnedValue.first=bytesTransfered+currentProgression;
-	returnedValue.second=bytesToTransfer+oversize;
-	return returnedValue;
+	returnPairQuint64ToCopyEngine.first=bytesTransfered+currentProgression;
+	returnPairQuint64ToCopyEngine.second=bytesToTransfer+oversize;
 }
 
 //first = current transfered byte, second = byte to transfer
-returnSpecificFileProgression ListThread::getFileProgression(quint64 id)
+void ListThread::getFileProgression(quint64 id)
 {
-	returnSpecificFileProgression returnedValue;
 	int index=0;
 	while(index<transferThreadList.size())
 	{
 		if(transferThreadList.at(index).id==id)
 		{
-			returnedValue.copiedSize=transferThreadList.at(index).thread->copiedSize();
+			returnSpecificFileProgressionToCopyEngine.copiedSize=transferThreadList.at(index).thread->copiedSize();
 			qint64 oversize=0;
-			if(returnedValue.copiedSize>(quint64)transferThreadList.at(index).size)
-				oversize=returnedValue.copiedSize-transferThreadList.at(index).size;
-			returnedValue.totalSize=transferThreadList.at(index).size+oversize;
-			returnedValue.haveBeenLocated=true;
-			return returnedValue;
+			if(returnSpecificFileProgressionToCopyEngine.copiedSize>(quint64)transferThreadList.at(index).size)
+				oversize=returnSpecificFileProgressionToCopyEngine.copiedSize-transferThreadList.at(index).size;
+			returnSpecificFileProgressionToCopyEngine.totalSize=transferThreadList.at(index).size+oversize;
+			returnSpecificFileProgressionToCopyEngine.haveBeenLocated=true;
+			return;
 		}
 		index++;
 	}
-	returnedValue.copiedSize=0;
-	returnedValue.totalSize=0;
-	returnedValue.haveBeenLocated=false;
-	return returnedValue;
+	returnSpecificFileProgressionToCopyEngine.copiedSize=0;
+	returnSpecificFileProgressionToCopyEngine.totalSize=0;
+	returnSpecificFileProgressionToCopyEngine.haveBeenLocated=false;
 }
 
 //edit the transfer list
-QList<returnActionOnCopyList> ListThread::getActionOnList()
+void ListThread::getActionOnList()
 {
-	QList<returnActionOnCopyList> actionDone;
-	actionDone=this->actionDone;
-	this->actionDone.clear();
-	return actionDone;
+	returnActionOnListToCopyEngine=actionDone;
+	actionDone.clear();
 }
 
 //speed limitation
@@ -638,9 +655,10 @@ bool ListThread::setSpeedLimitation(qint64 speedLimitation)
 	return true;
 }
 
-QList<ItemOfCopyList> ListThread::getTransferList()
+// -> add thread safe, by Qt::BlockingQueuedConnection
+void ListThread::getTransferList()
 {
-	QList<ItemOfCopyList> listToSend;
+	returnListItemOfCopyListToCopyEngine.clear();
 	int size=actionToDoList.size();
 	for (int index=0;index<size;++index) {
 		if(actionToDoList.at(index).type==ActionType_Transfer)
@@ -653,32 +671,35 @@ QList<ItemOfCopyList> ListThread::getTransferList()
 			newItemToSend.size=actionToDoList.at(index).size;
 			newItemToSend.mode=actionToDoList.at(index).mode;
 			newItemToSend.id=actionToDoList.at(index).id;
-			listToSend << newItemToSend;
+			returnListItemOfCopyListToCopyEngine << newItemToSend;
 		}
 	}
-	return listToSend;
 }
 
-ItemOfCopyList ListThread::getTransferListEntry(quint64 id)
+// -> add thread safe, by Qt::BlockingQueuedConnection
+void ListThread::getTransferListEntry(quint64 id)
 {
-	ItemOfCopyList newItemToSend;
+	ItemOfCopyList returnItemOfCopyListToCopyEngine;
 	int size=actionToDoList.size();
 	for (int index=0;index<size;++index) {
 		if(id==actionToDoList.at(index).id)
 		{
 			if(actionToDoList.at(index).type!=ActionType_Transfer)
-				return newItemToSend;
-			newItemToSend.sourceFullPath=actionToDoList.at(index).source.absoluteFilePath();
-			newItemToSend.sourceFileName=actionToDoList.at(index).source.fileName();
-			newItemToSend.destinationFullPath=actionToDoList.at(index).destination.absoluteFilePath();
-			newItemToSend.destinationFileName=actionToDoList.at(index).destination.fileName();
-			newItemToSend.size=actionToDoList.at(index).size;
-			newItemToSend.mode=actionToDoList.at(index).mode;
-			newItemToSend.id=actionToDoList.at(index).id;
-			return newItemToSend;
+			{
+				this->returnItemOfCopyListToCopyEngine=returnItemOfCopyListToCopyEngine;
+				return;
+			}
+			returnItemOfCopyListToCopyEngine.sourceFullPath=actionToDoList.at(index).source.absoluteFilePath();
+			returnItemOfCopyListToCopyEngine.sourceFileName=actionToDoList.at(index).source.fileName();
+			returnItemOfCopyListToCopyEngine.destinationFullPath=actionToDoList.at(index).destination.absoluteFilePath();
+			returnItemOfCopyListToCopyEngine.destinationFileName=actionToDoList.at(index).destination.fileName();
+			returnItemOfCopyListToCopyEngine.size=actionToDoList.at(index).size;
+			returnItemOfCopyListToCopyEngine.mode=actionToDoList.at(index).mode;
+			returnItemOfCopyListToCopyEngine.id=actionToDoList.at(index).id;
+			return;
 		}
 	}
-	return newItemToSend;
+	this->returnItemOfCopyListToCopyEngine=returnItemOfCopyListToCopyEngine;
 }
 
 void ListThread::updateTheStatus()
@@ -695,14 +716,8 @@ void ListThread::updateTheStatus()
 		updateTheStatus_action_in_progress=Copying;
 	else
 		updateTheStatus_action_in_progress=Idle;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"emit actionInProgess("+QString::number(updateTheStatus_action_in_progress)+")");
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"emit actionInProgess("+QString::number(updateTheStatus_action_in_progress)+")");
 	emit actionInProgess(updateTheStatus_action_in_progress);
-}
-
-quint64 ListThread::realByteTransfered()
-{
-	QPair<quint64,quint64> item=ListThread::getGeneralProgression();
-	return item.first;
 }
 
 //set data local to the thread
@@ -732,6 +747,7 @@ quint64 ListThread::addToMkPath(const QDir& folder)
 //add file transfer to do
 quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode)
 {
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
 	//add to transfer list
 	numberOfTransferIntoToDoList++;
 	bytesToTransfer+= source.size();
@@ -1084,10 +1100,10 @@ void ListThread::doNewActions_start_transfer()
 
 void ListThread::doNewActions_inode_manipulation()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoList.size()));
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoList.size()));
 	if(stopIt || putInPause)
 		return;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//lunch the pre-op or inode op
 	int_for_loop=0;
 	number_rm_path_moved=0;
@@ -1184,7 +1200,7 @@ void ListThread::doNewActions_inode_manipulation()
 			stringList << QString("type: %1, source: %2").arg(actionToDoList.at(int_for_loop).type).arg(actionToDoList.at(int_for_loop).source.absoluteFilePath());
 		int_for_loop++;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoList type: %1").arg(stringList.join(",")));
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoList type: %1").arg(stringList.join(",")));
 	#endif
 }
 

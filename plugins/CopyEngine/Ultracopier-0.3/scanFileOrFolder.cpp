@@ -66,7 +66,7 @@ void scanFileOrFolder::run()
 	int sourceIndex=0;
 	while(sourceIndex<sources.size())
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"size source to list: "+QString::number(sourceIndex));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"size source to list: "+QString::number(sourceIndex)+"/"+QString::number(sources.size()));
 		if(stopIt)
 		{
 			stopped=true;
@@ -201,7 +201,6 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
 		}
 	} while(fileErrorAction==FileError_Retry);
-
 	/// \todo check here if the folder is not readable or not exists
 	QFileInfoList entryList=finalSource.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);//possible wait time here
 	int sizeEntryList=entryList.size();

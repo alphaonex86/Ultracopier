@@ -87,6 +87,7 @@ private:
 	FileErrorAction tempFileErrorAction;
 	FolderExistsAction tempFolderExistsAction;
 	FileExistsAction tempFileExistsAction;
+	quint64 size_for_speed;
 private slots:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	void updateTheDebugInfo(QStringList,QStringList,int);
@@ -188,8 +189,31 @@ signals:
 	void newErrorAction(QString action);
 	void isInPause(bool);
 
+	//action on the copy
+	void signal_pause();
+	void signal_resume();
+	void signal_skip(quint64 id);
+
+	//edit the transfer list
+	void signal_removeItems(QList<int> ids);
+	void signal_moveItemsOnTop(QList<int> ids);
+	void signal_moveItemsUp(QList<int> ids);
+	void signal_moveItemsDown(QList<int> ids);
+	void signal_moveItemsOnBottom(QList<int> ids);
 	void signal_exportTransferList(QString fileName);
 	void signal_importTransferList(QString fileName);
+
+	//action
+	void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
+	void signal_setComboBoxFolderColision(FolderExistsAction action);
+	void signal_setFolderColision(FolderExistsAction action);
+
+	//with return value
+	void signal_getGeneralProgression();
+	void signal_getFileProgression(quint64 id);
+	void signal_getActionOnList();
+	void signal_getTransferList();
+	void signal_getTransferListEntry(quint64 id);
 
 	void newActionOnList();
 	void cancelAll();

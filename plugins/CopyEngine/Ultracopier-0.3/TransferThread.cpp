@@ -48,7 +48,7 @@ TransferThread::~TransferThread()
 
 void TransferThread::run()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start: "+QString::number((qint64)QThread::currentThreadId()));
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start: "+QString::number((qint64)QThread::currentThreadId()));
 	stat			= Idle;
 	stopIt			= false;
 	fileExistsAction	= FileExists_NotSet;
@@ -184,7 +184,7 @@ void TransferThread::setFileRename(const QString &nameForRename)
 
 void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] action to do always: "+QString::number(action));
+	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] action to do always: "+QString::number(action));
 	alwaysDoFileExistsAction=action;
 }
 

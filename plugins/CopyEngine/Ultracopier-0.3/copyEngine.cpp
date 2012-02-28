@@ -30,6 +30,8 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
 	qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");
 	qRegisterMetaType<DebugLevel>("DebugLevel");
+	qRegisterMetaType<FileExistsAction>("FileExistsAction");
+	qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
 
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	debugDialogWindow.show();
@@ -58,8 +60,25 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	connect(listThread,SIGNAL(errorTransferList(QString)),							this,SLOT(errorTransferList(QString)),						Qt::QueuedConnection);
 	connect(listThread,SIGNAL(warningTransferList(QString)),						this,SLOT(warningTransferList(QString)),					Qt::QueuedConnection);
 
-	connect(this,SIGNAL(signal_exportTransferList(QString)),listThread,SLOT(exportTransferList(QString)),Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_importTransferList(QString)),listThread,SLOT(importTransferList(QString)),Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_pause()),						listThread,SLOT(pause()),				Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_resume()),						listThread,SLOT(resume()),				Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_skip(quint64)),					listThread,SLOT(skip(quint64)),				Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_setCollisionAction(FileExistsAction)),		listThread,SLOT(setAlwaysFileExistsAction(FileExistsAction)),	Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_setFolderColision(FolderExistsAction)),		listThread,SLOT(setFolderColision(FolderExistsAction)),	Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_removeItems(QList<int>)),				listThread,SLOT(removeItems(QList<int>)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_moveItemsOnTop(QList<int>)),				listThread,SLOT(moveItemsOnTop(QList<int>)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_moveItemsUp(QList<int>)),				listThread,SLOT(moveItemsUp(QList<int>)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_moveItemsDown(QList<int>)),				listThread,SLOT(moveItemsDown(QList<int>)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_moveItemsOnBottom(QList<int>)),			listThread,SLOT(moveItemsOnBottom(QList<int>)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_exportTransferList(QString)),			listThread,SLOT(exportTransferList(QString)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_importTransferList(QString)),			listThread,SLOT(importTransferList(QString)),		Qt::QueuedConnection);
+
+	connect(this,SIGNAL(signal_getGeneralProgression()),				listThread,SLOT(getGeneralProgression()),		Qt::BlockingQueuedConnection);
+	connect(this,SIGNAL(signal_getFileProgression(quint64)),			listThread,SLOT(getFileProgression(quint64)),		Qt::BlockingQueuedConnection);
+	connect(this,SIGNAL(signal_getActionOnList()),					listThread,SLOT(getActionOnList()),			Qt::BlockingQueuedConnection);
+	connect(this,SIGNAL(signal_getTransferList()),					listThread,SLOT(getTransferList()),			Qt::BlockingQueuedConnection);
+	connect(this,SIGNAL(signal_getTransferListEntry(quint64)),			listThread,SLOT(getTransferListEntry(quint64)),		Qt::BlockingQueuedConnection);
+
 	connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection);
 	interface			= NULL;
 	tempWidget			= NULL;
@@ -70,6 +89,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	alwaysDoThisActionForFileError	= FileError_NotSet;
 	checkDestinationFolderExists	= false;
 	stopIt				= false;
+	size_for_speed			= 0;
 }
 
 copyEngine::~copyEngine()
@@ -163,23 +183,28 @@ bool copyEngine::newMove(QStringList sources,QString destination)
 //get information about the copy
 QPair<quint64,quint64> copyEngine::getGeneralProgression()
 {
-	return listThread->getGeneralProgression();
+	emit signal_getGeneralProgression();
+	QPair<quint64,quint64> tempValue=listThread->getReturnPairQuint64ToCopyEngine();
+	size_for_speed=tempValue.first;
+	return tempValue;
 }
 
 returnSpecificFileProgression copyEngine::getFileProgression(quint64 id)
 {
-	return listThread->getFileProgression(id);
+	emit signal_getFileProgression(id);
+	return listThread->getReturnSpecificFileProgressionToCopyEngine();
 }
 
 quint64 copyEngine::realByteTransfered()
 {
-	return listThread->realByteTransfered();
+	return size_for_speed;
 }
 
 //edit the transfer list
 QList<returnActionOnCopyList> copyEngine::getActionOnList()
 {
-	return listThread->getActionOnList();
+	emit signal_getActionOnList();
+	return listThread->getReturnActionOnListToCopyEngine();
 }
 
 //speed limitation
@@ -215,12 +240,14 @@ QList<QPair<QString,QString> > copyEngine::getErrorAction()
 //transfer list
 QList<ItemOfCopyList> copyEngine::getTransferList()
 {
-	return listThread->getTransferList();
+	emit signal_getTransferList();
+	return listThread->getReturnListItemOfCopyListToCopyEngine();
 }
 
 ItemOfCopyList copyEngine::getTransferListEntry(quint64 id)
 {
-	return listThread->getTransferListEntry(id);
+	emit signal_getTransferListEntry(id);
+	return listThread->getReturnItemOfCopyListToCopyEngine();
 }
 
 void copyEngine::setDrive(QStringList drives)
@@ -257,17 +284,17 @@ bool copyEngine::userAddFile(CopyMode mode)
 
 void copyEngine::pause()
 {
-	listThread->pause();
+	emit signal_pause();
 }
 
 void copyEngine::resume()
 {
-	listThread->resume();
+	emit signal_resume();
 }
 
 void copyEngine::skip(quint64 id)
 {
-	listThread->skip(id);
+	emit signal_skip(id);
 }
 
 void copyEngine::cancel()
@@ -279,27 +306,27 @@ void copyEngine::cancel()
 
 void copyEngine::removeItems(QList<int> ids)
 {
-	listThread->removeItems(ids);
+	emit signal_removeItems(ids);
 }
 
 void copyEngine::moveItemsOnTop(QList<int> ids)
 {
-	listThread->moveItemsOnTop(ids);
+	emit signal_moveItemsOnTop(ids);
 }
 
 void copyEngine::moveItemsUp(QList<int> ids)
 {
-	listThread->moveItemsUp(ids);
+	emit signal_moveItemsUp(ids);
 }
 
 void copyEngine::moveItemsDown(QList<int> ids)
 {
-	listThread->moveItemsDown(ids);
+	emit signal_moveItemsDown(ids);
 }
 
 void copyEngine::moveItemsOnBottom(QList<int> ids)
 {
-	listThread->moveItemsOnBottom(ids);
+	emit signal_moveItemsOnBottom(ids);
 }
 
 void copyEngine::exportTransferList()
@@ -350,7 +377,7 @@ void copyEngine::setCollisionAction(QString action)
 		alwaysDoThisActionForFileExists=FileExists_Rename;
 	else
 		alwaysDoThisActionForFileExists=FileExists_NotSet;
-	listThread->setCollisionAction(alwaysDoThisActionForFileExists);
+	emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
 void copyEngine::setErrorAction(QString action)
@@ -459,7 +486,7 @@ void copyEngine::newLanguageLoaded()
 void copyEngine::setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox)
 {
 	alwaysDoThisActionForFolderExists=action;
-	listThread->setFolderColision(alwaysDoThisActionForFolderExists);
+	emit signal_setFolderColision(alwaysDoThisActionForFolderExists);
 	if(!changeComboBox || !uiIsInstalled)
 		return;
 	switch(action)
