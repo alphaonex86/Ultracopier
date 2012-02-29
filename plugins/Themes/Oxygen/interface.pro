@@ -1,7 +1,6 @@
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = interface.h \
-		../../../interface/PluginInterface_Themes.h \
 		StructEnumDefinition.h \
     factory.h \
     DebugEngineMacro.h \

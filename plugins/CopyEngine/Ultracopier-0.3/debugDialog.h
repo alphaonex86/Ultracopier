@@ -1,3 +1,5 @@
+#define IGNORE_MISSING_CLASS true
+
 #ifndef DEBUGDAILOG_H
 #define DEBUGDAILOG_H
 
