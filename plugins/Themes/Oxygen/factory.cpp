@@ -66,6 +66,39 @@ QWidget * Factory::options()
 	return tempWidget;
 }
 
+QIcon Factory::getIcon(QString fileName)
+{
+	if(fileName=="SystemTrayIcon/exit.png")
+	{
+		QIcon tempIcon=QIcon::fromTheme("application-exit");
+		if(!tempIcon.isNull())
+			return tempIcon;
+	}
+	if(fileName=="SystemTrayIcon/add.png")
+	{
+		QIcon tempIcon=QIcon::fromTheme("list-add");
+		if(!tempIcon.isNull())
+			return tempIcon;
+	}
+	if(fileName=="SystemTrayIcon/informations.png")
+	{
+		QIcon tempIcon=QIcon::fromTheme("help-about");
+		if(!tempIcon.isNull())
+			return tempIcon;
+	}
+	if(fileName=="SystemTrayIcon/options.png")
+	{
+		QIcon tempIcon=QIcon::fromTheme("applications-system");
+		if(!tempIcon.isNull())
+			return tempIcon;
+	}
+	QString path=":/resources/"+fileName;
+	if(QFile::exists(path))
+		return QPixmap(path);
+	else
+		return QPixmap();
+}
+
 void Factory::resetOptions()
 {
 }

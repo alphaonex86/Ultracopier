@@ -158,9 +158,9 @@ void SystrayIcon::updateSystrayIcon()
 	}
 	QIcon theNewSystrayIcon;
 	#ifdef Q_OS_WIN32
-	theNewSystrayIcon=themes->loadPixmap("systray_"+icon+"_Windows.png");
+	theNewSystrayIcon=themes->loadIcon("SystemTrayIcon/systray_"+icon+"_Windows.png");
 	#else
-	theNewSystrayIcon=themes->loadPixmap("systray_"+icon+"_Unix.png");
+	theNewSystrayIcon=themes->loadIcon("SystemTrayIcon/systray_"+icon+"_Unix.png");
 	#endif
 	if(theNewSystrayIcon.isNull())
 	{
@@ -189,26 +189,36 @@ void SystrayIcon::updateCurrentTheme()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"icon: start");
 	//load the systray menu item
-	if(themes->getResourceFound("exit.png"))
-		IconQuit=QIcon(themes->loadPixmap("exit.png"));
+	QIcon tempIcon;
+
+	tempIcon=themes->loadIcon("SystemTrayIcon/exit.png");
+	if(!tempIcon.isNull())
+		IconQuit=QIcon(tempIcon);
 	else
 		IconQuit=QIcon("");
 	actionMenuQuit->setIcon(IconQuit);
-	if(themes->getResourceFound("info.png"))
-		IconInfo=QIcon(themes->loadPixmap("info.png"));
+
+	tempIcon=themes->loadIcon("SystemTrayIcon/informations.png");
+	if(!tempIcon.isNull())
+		IconInfo=QIcon(tempIcon);
 	else
 		IconInfo=QIcon("");
 	actionMenuAbout->setIcon(IconInfo);
-	if(themes->getResourceFound("tools.png"))
-		IconOptions=QIcon(themes->loadPixmap("tools.png"));
+
+	tempIcon=themes->loadIcon("SystemTrayIcon/options.png");
+	if(!tempIcon.isNull())
+		IconOptions=QIcon(tempIcon);
 	else
 		IconOptions=QIcon("");
 	actionOptions->setIcon(IconOptions);
-	if(themes->getResourceFound("add.png"))
-		IconAdd=QIcon(themes->loadPixmap("add.png"));
+
+	tempIcon=themes->loadIcon("SystemTrayIcon/add.png");
+	if(!tempIcon.isNull())
+		IconAdd=QIcon(tempIcon);
 	else
 		IconAdd=QIcon("");
 	copyMenu->setIcon(IconAdd);
+
 	//update the systray icon
 	updateSystrayIcon();
 	reloadEngineList();

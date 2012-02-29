@@ -11,6 +11,8 @@
 #include <QWidget>
 #include <QMenu>
 #include <QCloseEvent>
+#include <QFile>
+#include <QIcon>
 
 #include "../../../interface/PluginInterface_Themes.h"
 #include "ui_options.h"
@@ -31,6 +33,7 @@ public:
 	PluginInterface_Themes * getInstance();
 	void setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath,FacilityInterface * facilityEngine,bool portableVersion);
 	QWidget * options();
+	QIcon getIcon(QString fileName);
 private slots:
 	void checkBoxHaveChanged(bool toggled);
 	void resetOptions();

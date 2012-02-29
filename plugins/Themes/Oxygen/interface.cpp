@@ -60,6 +60,63 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 
 	/// \note important for drag and drop, \see dropEvent()
 	setAcceptDrops(true);
+
+	// try set the OS icon
+	QIcon tempIcon;
+
+	tempIcon=QIcon::fromTheme("application-exit");
+	if(!tempIcon.isNull())
+	{
+		ui->cancelButton->setIcon(tempIcon);
+		ui->pushButtonCloseSearch->setIcon(tempIcon);
+	}
+
+	tempIcon=QIcon::fromTheme("edit-delete");
+	if(!tempIcon.isNull())
+		ui->del->setIcon(tempIcon);
+
+	tempIcon=QIcon::fromTheme("media-playback-pause");
+	if(!tempIcon.isNull())
+	{
+		player_pause=tempIcon;
+		ui->pauseButton->setIcon(tempIcon);
+	}
+	else
+		player_pause=QIcon(":/resources/player_pause.png");
+
+	tempIcon=QIcon::fromTheme("media-playback-play");
+	if(!tempIcon.isNull())
+		player_play=tempIcon;
+	else
+		player_play=QIcon(":/resources/player_play.png");
+
+	tempIcon=QIcon::fromTheme("media-skip-forward");
+	if(!tempIcon.isNull())
+		ui->skipButton->setIcon(tempIcon);
+
+	tempIcon=QIcon::fromTheme("edit-find");
+	if(!tempIcon.isNull())
+		ui->searchButton->setIcon(tempIcon);
+
+	tempIcon=QIcon::fromTheme("document-open");
+	if(!tempIcon.isNull())
+		ui->importTransferList->setIcon(tempIcon);
+
+	tempIcon=QIcon::fromTheme("document-save");
+	if(!tempIcon.isNull())
+		ui->exportTransferList->setIcon(tempIcon);
+
+	tempIcon=QIcon::fromTheme("list-add");
+	if(!tempIcon.isNull())
+	{
+		ui->add->setIcon(tempIcon);
+		ui->actionAddFile->setIcon(tempIcon);
+		ui->actionAddFileToCopy->setIcon(tempIcon);
+		ui->actionAddFileToMove->setIcon(tempIcon);
+		ui->actionAddFolder->setIcon(tempIcon);
+		ui->actionAddFolderToCopy->setIcon(tempIcon);
+		ui->actionAddFolderToMove->setIcon(tempIcon);
+	}
 }
 
 void InterfacePlugin::uiUpdateSpeed()
@@ -183,7 +240,7 @@ void InterfacePlugin::newTransferStart(const ItemOfCopyList &item)
 	{
 		if(graphicItemList.at(index).id==item.id)
 		{
-			graphicItemList.at(index).item->setIcon(0,QIcon(":/resources/player_play.png"));
+			graphicItemList.at(index).item->setIcon(0,player_play);
 			break;
 		}
 		index++;
@@ -204,7 +261,7 @@ void InterfacePlugin::newTransferStop(const quint64 &id)
 		if(graphicItemList.at(index).id==id)
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"item to remove found");
-			graphicItemList.at(index).item->setIcon(0,QIcon(":/resources/player_pause.png"));
+			graphicItemList.at(index).item->setIcon(0,player_pause);
 			break;
 		}
 		index++;
@@ -452,12 +509,12 @@ void InterfacePlugin::isInPause(bool isInPause)
 	storeIsInPause=isInPause;
 	if(isInPause)
 	{
-		ui->pauseButton->setIcon(QIcon(":/resources/player_play.png"));
+		ui->pauseButton->setIcon(player_play);
 		ui->pauseButton->setText(facilityEngine->translateText("Resume"));
 	}
 	else
 	{
-		ui->pauseButton->setIcon(QIcon(":/resources/player_pause.png"));
+		ui->pauseButton->setIcon(player_pause);
 		ui->pauseButton->setText(facilityEngine->translateText("Pause"));
 	}
 }

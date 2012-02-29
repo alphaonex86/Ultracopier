@@ -10,7 +10,7 @@
 
 #include <QString>
 #include <QObject>
-#include <QPixmap>
+#include <QIcon>
 #include <QList>
 #include <QPluginLoader>
 
@@ -39,11 +39,9 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
 		/** \brief To get image into the current themes, or default if not found
 		\param filePath The file path to search, like toto.png resolved with the root of the current themes
 		\see currentStylePath */
-		QPixmap loadPixmap(QString filePath);
-		/** \brief To get if resource is found
-		\param filePath The file path to search, like toto.png resolved with the root of the current themes
-		\see currentStylePath */
-		bool getResourceFound(QString filePath);
+		QIcon loadIcon(QString fileName);
+		/** \brief To get if one themes instance
+		\see Core() */
 		PluginInterface_Themes * getThemesInstance();
 	private:
 		/// \brief Create the manager and load the defaults variables

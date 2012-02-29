@@ -111,26 +111,12 @@ void ThemesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
 /** \brief To get image into the current themes, or default if not found
 \param filePath The file path to search, like toto.png resolved with the root of the current themes
 \see currentStylePath */
-QPixmap ThemesManager::loadPixmap(QString filePath)
+QIcon ThemesManager::loadIcon(QString fileName)
 {
-	if(getResourceFound(filePath))
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Current theme file is found: "+currentStylePath+filePath);
-		return QPixmap(currentStylePath+filePath);
-	}
-	else
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Default theme file loaded: "+currentStylePath+filePath);
-		return QPixmap(defaultStylePath+filePath);
-	}
-}
-
-/** \brief To get if resource is found
-\param filePath The file path to search, like toto.png resolved with the root of the current themes
-\see currentStylePath */
-bool ThemesManager::getResourceFound(QString filePath)
-{
-	return QFile::exists(currentStylePath+filePath);
+	if(currentPluginIndex==-1)
+		return QPixmap();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Send interface pixmap: "+fileName);
+	return pluginList.at(currentPluginIndex).factory->getIcon(fileName);
 }
 
 void ThemesManager::allPluginIsLoaded()

@@ -14,6 +14,7 @@
 #include <QList>
 #include <QPair>
 #include <QUrl>
+#include <QIcon>
 
 #include "OptionInterface.h"
 #include "FacilityInterface.h"
@@ -87,6 +88,7 @@ class PluginInterface_ThemesFactory : public QObject
 	public slots:
 		virtual void resetOptions() = 0;
 		virtual void newLanguageLoaded() = 0;
+		virtual QIcon getIcon(QString fileName) = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.3");

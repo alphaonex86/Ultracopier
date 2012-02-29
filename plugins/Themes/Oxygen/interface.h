@@ -141,6 +141,7 @@ private:
 	QTimer *TimerForSearch;
 	int currentIndexSearch;		///< Current index search in starting at the end
 	FacilityInterface * facilityEngine;
+	QIcon player_play,player_pause;
 	//temp variables
 	int loop_size,loop_sub_size,index,indexAction;
 	QList<QTreeWidgetItem *> selectedItems;

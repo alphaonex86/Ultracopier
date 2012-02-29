@@ -28,6 +28,13 @@ TRANSLATIONS   += Languages/fr/translation.ts \
     Languages/no/translation.ts \
     Languages/pt/translation.ts
 
+win32 {
+    RESOURCES += resources_windows.qrc
+}
+!win32 {
+    RESOURCES += resources_unix.qrc
+}
+
 RESOURCES	+= resources.qrc
 
 FORMS += \
