@@ -122,6 +122,9 @@ p, li { white-space: pre-wrap; }
          <height>20</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string>Shutdown when is finish</string>
+       </property>
        <property name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/resources/SystemTrayIcon/exit.png</normaloff>:/resources/SystemTrayIcon/exit.png</iconset>

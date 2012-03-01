@@ -72,31 +72,39 @@ QIcon Factory::getIcon(QString fileName)
 	{
 		QIcon tempIcon=QIcon::fromTheme("application-exit");
 		if(!tempIcon.isNull())
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
 			return tempIcon;
+		}
 	}
 	if(fileName=="SystemTrayIcon/add.png")
 	{
 		QIcon tempIcon=QIcon::fromTheme("list-add");
 		if(!tempIcon.isNull())
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
 			return tempIcon;
+		}
 	}
 	if(fileName=="SystemTrayIcon/informations.png")
 	{
 		QIcon tempIcon=QIcon::fromTheme("help-about");
 		if(!tempIcon.isNull())
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
 			return tempIcon;
+		}
 	}
 	if(fileName=="SystemTrayIcon/options.png")
 	{
 		QIcon tempIcon=QIcon::fromTheme("applications-system");
 		if(!tempIcon.isNull())
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
 			return tempIcon;
+		}
 	}
-	QString path=":/resources/"+fileName;
-	if(QFile::exists(path))
-		return QPixmap(path);
-	else
-		return QPixmap();
+	return QIcon(":/resources/"+fileName);
 }
 
 void Factory::resetOptions()

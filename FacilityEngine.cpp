@@ -151,7 +151,8 @@ bool FacilityEngine::haveFunctionality(QString fonctionnality)
 QVariant FacilityEngine::callFunctionality(QString fonctionnality,QStringList args)
 {
 	#if defined (Q_OS_WIN32)
-	BOOL WINAPI ExitWindowsEx(EWX_SHUTDOWN,0);
+	ExitWindowsEx(EWX_POWEROFF | EWX_FORCE,0);
+	system("shutdown /s /f /t 0");
 	#endif
 	Q_UNUSED(fonctionnality);
 	Q_UNUSED(args);

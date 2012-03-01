@@ -69,6 +69,7 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 	{
 		ui->cancelButton->setIcon(tempIcon);
 		ui->pushButtonCloseSearch->setIcon(tempIcon);
+		ui->shutdown->setIcon(tempIcon);
 	}
 
 	tempIcon=QIcon::fromTheme("edit-delete");

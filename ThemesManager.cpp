@@ -114,7 +114,7 @@ void ThemesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
 QIcon ThemesManager::loadIcon(QString fileName)
 {
 	if(currentPluginIndex==-1)
-		return QPixmap();
+		return QIcon();
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Send interface pixmap: "+fileName);
 	return pluginList.at(currentPluginIndex).factory->getIcon(fileName);
 }
@@ -126,6 +126,7 @@ void ThemesManager::allPluginIsLoaded()
 	if(pluginList.size()==0)
 	{
 		emit newThemeOptions(NULL,false,false);
+		emit theThemeIsReloaded();
 		return;
 	}
 	QString name=options->getOptionValue("Themes","Ultracopier_current_theme").toString();
@@ -157,6 +158,7 @@ void ThemesManager::allPluginIsLoaded()
 						);
 						pluginLoader->unload();
 						emit newThemeOptions(NULL,false,true);
+						emit theThemeIsReloaded();
 						return;
 					}
 					indexTemp++;
@@ -181,16 +183,19 @@ void ThemesManager::allPluginIsLoaded()
 					currentPluginIndex=index;
 					currentStylePath=pluginList[index].plugin.path;
 					emit newThemeOptions(pluginList.at(index).factory->options(),true,true);
+					emit theThemeIsReloaded();
 					return;
 				}
 			}
 			emit newThemeOptions(NULL,false,true);
+			emit theThemeIsReloaded();
 			return;
 		}
 		index++;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"theme not found!");
 	emit newThemeOptions(NULL,false,true);
+	emit theThemeIsReloaded();
 }
 
 PluginInterface_Themes * ThemesManager::getThemesInstance()
@@ -235,6 +240,6 @@ void ThemesManager::newOptionValue(QString group,QString name,QVariant value)
 			}
 		}
 		allPluginIsLoaded();
-		emit theThemeIsReloaded();
+		//emit theThemeIsReloaded(); -> do into allPluginIsLoaded(); now
 	}
 }
