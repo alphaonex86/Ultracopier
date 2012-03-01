@@ -102,7 +102,7 @@ bool QXzDecode::decodeStream(QDataStream *stream_xz_decode_in,QDataStream *strea
 			return isDecoded;
 		case XZ_DATA_ERROR:
 		case XZ_BUF_ERROR:
-			error=tr("File is corrupted");
+			error=tr("The file is corrupted");
 			xz_dec_end(s);
 			return isDecoded;
 		default:

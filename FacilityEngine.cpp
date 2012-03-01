@@ -1,5 +1,9 @@
 #include "FacilityEngine.h"
 
+#if defined (Q_OS_WIN32)
+#include <windows.h>
+#endif
+
 FacilityEngine::FacilityEngine()
 {
 	retranslate();
@@ -132,3 +136,24 @@ TimeDecomposition FacilityEngine::secondsToTimeDecomposition(quint32 seconds)
 	return returnValue;
 }
 
+/// \brief have the functionality
+bool FacilityEngine::haveFunctionality(QString fonctionnality)
+{
+	#if defined (Q_OS_WIN32)
+	if(fonctionnality=="shutdown")
+		return true;
+	#endif
+	Q_UNUSED(fonctionnality);
+	return false;
+}
+
+/// \brief call the fonctionnality
+QVariant FacilityEngine::callFunctionality(QString fonctionnality,QStringList args)
+{
+	#if defined (Q_OS_WIN32)
+	BOOL WINAPI ExitWindowsEx(EWX_SHUTDOWN,0);
+	#endif
+	Q_UNUSED(fonctionnality);
+	Q_UNUSED(args);
+	return QVariant();
+}

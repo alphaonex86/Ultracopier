@@ -5,7 +5,10 @@ HEADERS         = interface.h \
     factory.h \
     DebugEngineMacro.h \
     Environment.h \
-    Variable.h
+    Variable.h \
+    ../../../interface/PluginInterface_Themes.h \
+    ../../../interface/FacilityInterface.h \
+    ../../../interface/OptionInterface.h
 SOURCES         = interface.cpp \
     factory.cpp
 TARGET          = $$qtLibraryTarget(interface)

@@ -53,8 +53,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	connect(&timerUpdateDebugDialog,SIGNAL(timeout()),this,SLOT(timedUpdateDebugDialog()));
 	timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
 	#endif
-	connect(this,SIGNAL(tryCancel()),this,SLOT(cancel()));
-	connect(this,SIGNAL(askNewTransferThread()),this,SLOT(createTransferThread()));
+	connect(this,SIGNAL(tryCancel()),this,SLOT(cancel()),Qt::QueuedConnection);
+	connect(this,SIGNAL(askNewTransferThread()),this,SLOT(createTransferThread()),Qt::QueuedConnection);
 	emit askNewTransferThread();
 	mkpathTransfer.release();
 }
@@ -62,7 +62,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 ListThread::~ListThread()
 {
 	emit tryCancel();
-	quit();
 	waitCancel.acquire();
 	wait();
 }
@@ -561,9 +560,11 @@ bool ListThread::skipInternal(quint64 id)
 
 void ListThread::cancel()
 {
-	quit();
 	if(stopIt)
+	{
+		waitCancel.release();
 		return;
+	}
 	stopIt=true;
 	disconnect(this);
         int index=0;
@@ -582,6 +583,7 @@ void ListThread::cancel()
 		scanFileOrFolderThreadsPool[index]=NULL;
                 index++;
 	}
+	quit();
 	waitCancel.release();
 }
 

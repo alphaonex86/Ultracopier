@@ -1,6 +1,10 @@
 #ifndef FACILITYENGINE_H
 #define FACILITYENGINE_H
 
+#include <QVariant>
+#include <QString>
+#include <QStringList>
+
 #include "interface/FacilityInterface.h"
 #include "Environment.h"
 
@@ -23,6 +27,10 @@ public:
 	QString speedToString(double speed);
 	/// \brief Decompose the time in second
 	TimeDecomposition secondsToTimeDecomposition(quint32 seconds);
+	/// \brief have the fonctionnality
+	bool haveFunctionality(QString fonctionnality);
+	/// \brief call the fonctionnality
+	QVariant callFunctionality(QString fonctionnality,QStringList args=QStringList());
 private:
 	//translated string
 	QString Translation_Copy_engine;

@@ -117,6 +117,9 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 		ui->actionAddFolderToCopy->setIcon(tempIcon);
 		ui->actionAddFolderToMove->setIcon(tempIcon);
 	}
+
+	shutdown=facilityEngine->haveFunctionality("shutdown");
+	ui->shutdown->setVisible(shutdown);
 }
 
 void InterfacePlugin::uiUpdateSpeed()
@@ -177,6 +180,11 @@ void InterfacePlugin::actionInProgess(EngineActionInProgress action)
 		case Idle:
 			if(haveStarted)
 			{
+				if(shutdown && ui->shutdown->isChecked())
+				{
+					facilityEngine->callFunctionality("shutdown");
+					return;
+				}
 				switch(ui->comboBox_copyEnd->currentIndex())
 				{
 					case 2:

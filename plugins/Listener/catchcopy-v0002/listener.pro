@@ -8,7 +8,8 @@ HEADERS         = listener.h \
     Environment.h \
     Variable.h \
     DebugEngineMacro.h \
-    StructEnumDefinition.h
+    StructEnumDefinition.h \
+    ../../../interface/PluginInterface_Listener.h
 SOURCES         = listener.cpp \
     catchcopy-api-0002/ServerCatchcopy.cpp \
     catchcopy-api-0002/ExtraSocketCatchcopy.cpp

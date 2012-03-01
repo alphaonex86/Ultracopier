@@ -164,6 +164,8 @@ private:
 	/** \brief accept all event to allow the drag and drop
 	  \see dropEvent() */
 	void dragLeaveEvent(QDragLeaveEvent* event);
+	//have functionality
+	bool shutdown;
 signals:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source

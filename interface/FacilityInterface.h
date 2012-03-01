@@ -7,13 +7,14 @@
 #ifndef FACILITY_INTERFACE_H
 #define FACILITY_INTERFACE_H
 
+#include <QVariant>
 #include <QString>
+#include <QStringList>
 
 #include "../StructEnumDefinition.h"
 
 class FacilityInterface : public QObject
 {
-	Q_OBJECT
 	public:
 		/// \brief To force the text re-translation
 		virtual void retranslate() = 0;
@@ -27,7 +28,10 @@ class FacilityInterface : public QObject
 		virtual QString speedToString(double speed) = 0;
 		/// \brief Decompose the time in second
 		virtual TimeDecomposition secondsToTimeDecomposition(quint32 seconds) = 0;
-		//second remaining -> text
+		/// \brief have the fonctionnality
+		virtual bool haveFunctionality(QString fonctionnality) = 0;
+		/// \brief call the fonctionnality
+		virtual QVariant callFunctionality(QString fonctionnality,QStringList args=QStringList()) = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

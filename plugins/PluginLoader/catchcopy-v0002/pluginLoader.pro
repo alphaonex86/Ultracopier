@@ -6,7 +6,8 @@ HEADERS         = \
     DebugEngineMacro.h \
     Environment.h \
     Variable.h \
-    PlatformMacro.h
+    PlatformMacro.h \
+    ../../../interface/PluginInterface_PluginLoader.h
 SOURCES         = \
     pluginLoader.cpp
 TARGET          = $$qtLibraryTarget(pluginLoader)

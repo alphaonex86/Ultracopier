@@ -18,7 +18,10 @@ HEADERS         = copyEngine.h \
     MkPath.h \
     folderExistsDialog.h \
     AvancedQFile.h \
-    ListThread.h
+    ListThread.h \
+    ../../../interface/PluginInterface_CopyEngine.h \
+    ../../../interface/OptionInterface.h \
+    ../../../interface/FacilityInterface.h
 SOURCES         = copyEngine.cpp \
     scanFileOrFolder.cpp \
     fileErrorDialog.cpp \
