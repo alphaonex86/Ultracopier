@@ -39,24 +39,23 @@ public:
 	void newTransferStart(const ItemOfCopyList &item);
 	void newTransferStop(const quint64 &id);//is stopped, example: because error have occurred, and try later, don't remove the item!
 	void newFolderListing(const QString &path);
-	void detectedSpeed(quint64 speed);//in byte per seconds
-	void remainingTime(int remainingSeconds);
-	void newCollisionAction(QString action);
-	void newErrorAction(QString action);
+	void detectedSpeed(const quint64 &speed);//in byte per seconds
+	void remainingTime(const int &remainingSeconds);
+	void newCollisionAction(const QString &action);
+	void newErrorAction(const QString &action);
 	void errorDetected();
 	//speed limitation
-	bool setSpeedLimitation(qint64 speedLimitation);///< -1 if not able, 0 if disabled
-	void speed(qint64);
+	bool setSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
 	//get information about the copy
-	void setGeneralProgression(quint64 current,quint64 total);
-	void setFileProgression(quint64 id,quint64 current,quint64 total);
-	void setCollisionAction(QList<QPair<QString,QString> >);
-	void setErrorAction(QList<QPair<QString,QString> >);
+	void setGeneralProgression(const quint64 &current,const quint64 &total);
+	void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total);
+	void setCollisionAction(const QList<QPair<QString,QString> > &);
+	void setErrorAction(const QList<QPair<QString,QString> > &);
 	void setCopyType(CopyType);
 	void forceCopyMode(CopyMode);
 	void setTransferListOperation(TransferListOperation transferListOperation);
 	//edit the transfer list
-	void getActionOnList(QList<returnActionOnCopyList> returnActions);
+	void getActionOnList(const QList<returnActionOnCopyList> &returnActions);
 	void haveExternalOrder();
 	void isInPause(bool);
 	QWidget * getOptionsEngineWidget();

@@ -13,6 +13,7 @@
 
 #include "../StructEnumDefinition.h"
 
+/// \brief To define the interface, to pass the facility object from Ultracopier to the plugins without compatibility problem
 class FacilityInterface : public QObject
 {
 	public:

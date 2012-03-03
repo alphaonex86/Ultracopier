@@ -31,7 +31,7 @@ public:
 	Factory();
 	~Factory();
 	PluginInterface_CopyEngine * getInstance();
-	void setResources(OptionInterface * options,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion);
+	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
 	//get mode allowed
 	/// \brief define if can copy file, folder or both
 	CopyType getCopyType();

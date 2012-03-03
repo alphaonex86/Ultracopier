@@ -14,6 +14,9 @@
 
 #include "../StructEnumDefinition.h"
 
+/** \brief to pass the options to the plugin, the instance is created into Ultracopier from the class LocalPluginOptions()
+ * \see LocalPluginOptions()
+ * **/
 class OptionInterface : public QObject
 {
 	Q_OBJECT

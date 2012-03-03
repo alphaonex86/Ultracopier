@@ -15,16 +15,24 @@
 
 #include "../StructEnumDefinition.h"
 
+/** \brief To define the interface between Ultracopier and the listener
+ * */
 class PluginInterface_Listen : public QObject
 {
 	Q_OBJECT
 	public:
+		/// \brief put this plugin in listen mode
 		virtual void listen() = 0;
+		/// \brief put close the listen
 		virtual void close() = 0;
+		/// \brief to get the error string
 		virtual const QString errorString() = 0;
+		/// \brief set the resources for the plugin
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
 	public slots:
+		/// \brief send when copy is finished
 		virtual void copyFinished(quint32 orderId,bool withError) = 0;
+		/// \brief send when copy is canceled
 		virtual void copyCanceled(quint32 orderId) = 0;
 	/* signal to implement
 	signals:

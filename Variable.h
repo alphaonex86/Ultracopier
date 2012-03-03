@@ -8,28 +8,30 @@
 #ifndef VARIABLE_H
 #define VARIABLE_H
 
-//Un-comment this next line to put ultracopier in debug mode
+/// \brief Un-comment this next line to put ultracopier in debug mode
 #define ULTRACOPIER_DEBUG
 /// \brief the version
-#define ULTRACOPIER_VERSION		"0.3.0.3"
+#define ULTRACOPIER_VERSION		"0.3.0.4"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,3
-/// \brief define if the version is portable or not
+#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,4
+// define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
 /// \brief define time to update the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500
 
-//5*ULTRACOPIER_TIME_INTERFACE_UPDATE = 5*500 to get 2.5s
+/** \brief How many value store to calculate the average value
+ * 5*ULTRACOPIER_TIME_INTERFACE_UPDATE = 5*500 to get 2.5s
+ * */
 #define ULTRACOPIER_MAXVALUESPEEDSTORED 5
 
-//the socket name
+/// \brief the socket name, to have unique instance of ultracopier, and pass arguments between the instance
 #define ULTRACOPIER_SOCKETNAME "ultracopier-0.3"
 
-//to have internet support
+/// \brief to have internet support, to communicate with the web site for update and plugins
 #define ULTRACOPIER_INTERNET_SUPPORT
 
-//to disable plugin support to do all in one version with static Qt for the protable version
+/// \brief to disable plugin support to do all in one version with static Qt for the protable version
 #define ULTRACOPIER_PLUGIN_SUPPORT
 
 #endif // VARIABLE_H

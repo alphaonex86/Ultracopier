@@ -13,15 +13,19 @@
 
 #include "../StructEnumDefinition.h"
 
+/** \brief To define the interface between Ultracopier and the session loader
+ * */
 class PluginInterface_SessionLoader : public QObject
 {
-	Q_OBJECT
 	public:
+		/// \brief set enabled/disabled
 		virtual void setEnabled(bool) = 0;
+		/// \brief get if is enabled
 		virtual bool getEnabled() = 0;
+		/// \brief set the resources
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/0.3.0.1");
+Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/0.3.0.4");
 
 #endif // PLUGININTERFACE_SESSIONLOADER_H

@@ -13,12 +13,15 @@
 
 #include "../StructEnumDefinition.h"
 
+/** \brief To define the interface between Ultracopier and the plugin loader
+ * */
 class PluginInterface_PluginLoader : public QObject
 {
 	Q_OBJECT
 	public:
+		/// \brief try enable/disable the catching
 		virtual void setEnabled(bool) = 0;
-		//to set resources, writePath can be empty if read only mode
+		/// \brief to set resources, writePath can be empty if read only mode
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
 	/* signal to implement
 	signals:

@@ -20,37 +20,62 @@
 #include "FacilityInterface.h"
 #include "../StructEnumDefinition.h"
 
+/** \brief To define the interface between Ultracopier and the interface
+ * */
 class PluginInterface_Themes : public QWidget
 {
 	Q_OBJECT
 	public slots:
 		//send information about the copy
+		/// \brief to set the action in progress
 		virtual void actionInProgess(EngineActionInProgress) = 0;
+		/// \brief new transfer have started
 		virtual void newTransferStart(const ItemOfCopyList &item) = 0;
-		virtual void newTransferStop(const quint64 &id) = 0;//is stopped, example: because error have occurred, and try later, don't remove the item!
+		/** \brief one transfer have been stopped
+		 * is stopped, example: because error have occurred, and try later, don't remove the item! */
+		virtual void newTransferStop(const quint64 &id) = 0;
+		/// \brief the new folder is listing
 		virtual void newFolderListing(const QString &path) = 0;
-		virtual void detectedSpeed(quint64 speed) = 0;//in byte per seconds
-		virtual void speed(qint64) = 0;
-		virtual void remainingTime(int remainingSeconds) = 0;
-		virtual void newCollisionAction(QString action) = 0;
-		virtual void newErrorAction(QString action) = 0;
+		/** \brief show the detected speed
+		 * in byte per seconds */
+		virtual void detectedSpeed(const quint64 &speed) = 0;
+		/** \brief show the remaining time
+		 * time in seconds */
+		virtual void remainingTime(const int &remainingSeconds) = 0;
+		/// \brief set the current collision action
+		virtual void newCollisionAction(const QString &action) = 0;
+		/// \brief set the current error action
+		virtual void newErrorAction(const QString &action) = 0;
+		/// \brief set one error is detected
 		virtual void errorDetected() = 0;
-		//speed limitation
-		virtual bool setSpeedLimitation(qint64 speedLimitation) = 0;///< -1 if not able, 0 if disabled
+		/** \brief the max speed used
+		 * in byte per seconds, -1 if not able, 0 if disabled */
+		virtual bool setSpeedLimitation(const qint64 &speedLimitation) = 0;
 	public:
+		/// \brief get the widget for the copy engine
 		virtual QWidget * getOptionsEngineWidget() = 0;
+		/// \brief to set if the copy engine is found
 		virtual void getOptionsEngineEnabled(bool isEnabled) = 0;
-		//edit the transfer list
-		virtual void getActionOnList(QList<returnActionOnCopyList>) = 0;
-		//get information about the copy
-		virtual void setGeneralProgression(quint64 current,quint64 total) = 0;
-		virtual void setFileProgression(quint64 id,quint64 current,quint64 total) = 0;
-		virtual void setCollisionAction(QList<QPair<QString,QString> >) = 0;
-		virtual void setErrorAction(QList<QPair<QString,QString> >) = 0;
+		/// \brief get action on the transfer list (add/move/remove)
+		virtual void getActionOnList(const QList<returnActionOnCopyList> &returnActions) = 0;
+		/// \brief show the general progression
+		virtual void setGeneralProgression(const quint64 &current,const quint64 &total) = 0;
+		/// \brief show the file progression
+		virtual void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total) = 0;
+		/// \brief set collision action
+		virtual void setCollisionAction(const QList<QPair<QString,QString> > &collisionActionList) = 0;
+		/// \brief set error action
+		virtual void setErrorAction(const QList<QPair<QString,QString> > &errorActionList) = 0;
+		/// \brief set the copyType -> file or folder
 		virtual void setCopyType(CopyType) = 0;
-		virtual void forceCopyMode(CopyMode) = 0;//to force in copy or move, else support both
+		/// \brief set the copyMove -> copy or move, to force in copy or move, else support both
+		virtual void forceCopyMode(CopyMode) = 0;
+		/// \brief set if transfer list is exportable/importable
 		virtual void setTransferListOperation(TransferListOperation transferListOperation) = 0;
-		virtual void haveExternalOrder() = 0;//to notify the interface, which can hide add folder/filer button
+		/** \brief set if the order is external (like file manager copy)
+		 * to notify the interface, which can hide add folder/filer button */
+		virtual void haveExternalOrder() = 0;
+		/// \brief set if is in pause
 		virtual void isInPause(bool) = 0;
 	/* signal to implement
 	signals:
@@ -81,16 +106,21 @@ class PluginInterface_ThemesFactory : public QObject
 {
 	Q_OBJECT
 	public:
+		/// \brief to get one instance
 		virtual PluginInterface_Themes * getInstance() = 0;
-		//to set resources, writePath can be empty if read only mode
-		virtual void setResources(OptionInterface *,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion) = 0;
+		/// \brief to set resources, writePath can be empty if read only mode
+		virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,bool portableVersion) = 0;
+		/// \brief to get the default options
 		virtual QWidget * options() = 0;
 	public slots:
+		/// \brief to reset as default the local options
 		virtual void resetOptions() = 0;
+		/// \brief retranslate the language because the language have changed
 		virtual void newLanguageLoaded() = 0;
-		virtual QIcon getIcon(QString fileName) = 0;
+		/// \brief to get a resource icon for the systray
+		virtual QIcon getIcon(const QString &fileName) = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.3");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.4");
 
 #endif // PLUGININTERFACE_THEMES_H

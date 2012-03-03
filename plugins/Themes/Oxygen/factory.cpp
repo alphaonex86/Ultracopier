@@ -31,7 +31,7 @@ PluginInterface_Themes * Factory::getInstance()
 	return newInterface;
 }
 
-void Factory::setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath,FacilityInterface * facilityEngine,bool portableVersion)
+void Factory::setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,bool portableVersion)
 {
 	Q_UNUSED(portableVersion);
 	Q_UNUSED(writePath);
@@ -66,7 +66,7 @@ QWidget * Factory::options()
 	return tempWidget;
 }
 
-QIcon Factory::getIcon(QString fileName)
+QIcon Factory::getIcon(const QString &fileName)
 {
 	if(fileName=="SystemTrayIcon/exit.png")
 	{

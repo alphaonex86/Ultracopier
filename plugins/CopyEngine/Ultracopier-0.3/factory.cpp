@@ -59,7 +59,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
 	return newTransferEngine;
 }
 
-void Factory::setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath,FacilityInterface * facilityInterface,bool portableVersion)
+void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
 	this->facilityEngine=facilityInterface;
@@ -83,9 +83,9 @@ void Factory::setResources(OptionInterface * optionsEngine,QString writePath,QSt
 	#else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"CHECK LIST TYPE not set");
 	#endif
-	if(optionsEngine!=NULL)
+	if(options!=NULL)
 	{
-		this->optionsEngine=optionsEngine;
+		optionsEngine=options;
 		//load the options
 		QList<QPair<QString, QVariant> > KeysList;
 		KeysList.append(qMakePair(QString("doRightTransfer"),QVariant(true)));

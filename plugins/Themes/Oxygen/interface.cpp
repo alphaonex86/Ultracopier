@@ -303,12 +303,12 @@ void InterfacePlugin::newFolderListing(const QString &path)
 		ui->from->setText(path);
 }
 
-void InterfacePlugin::detectedSpeed(quint64 speed)//in byte per seconds
+void InterfacePlugin::detectedSpeed(const quint64 &speed)//in byte per seconds
 {
 	ui->currentSpeed->setText(facilityEngine->speedToString(speed));
 }
 
-void InterfacePlugin::remainingTime(int remainingSeconds)
+void InterfacePlugin::remainingTime(const int &remainingSeconds)
 {
 	if(remainingSeconds==-1)
 		ui->labelTimeRemaining->setText("<html><body>&#8734;</body></html>");
@@ -319,14 +319,14 @@ void InterfacePlugin::remainingTime(int remainingSeconds)
 	}
 }
 
-void InterfacePlugin::newCollisionAction(QString action)
+void InterfacePlugin::newCollisionAction(const QString &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(ui->comboBox_fileCollisions->findData(action)!=-1)
 		ui->comboBox_fileCollisions->setCurrentIndex(ui->comboBox_fileCollisions->findData(action));
 }
 
-void InterfacePlugin::newErrorAction(QString action)
+void InterfacePlugin::newErrorAction(const QString &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(ui->comboBox_copyErrors->findData(action)!=-1)
@@ -339,7 +339,7 @@ void InterfacePlugin::errorDetected()
 }
 
 //speed limitation
-bool InterfacePlugin::setSpeedLimitation(qint64 speedLimitation)
+bool InterfacePlugin::setSpeedLimitation(const qint64 &speedLimitation)
 {
 	currentSpeed=speedLimitation;
 	updateSpeed();
@@ -347,7 +347,7 @@ bool InterfacePlugin::setSpeedLimitation(qint64 speedLimitation)
 }
 
 //get information about the copy
-void InterfacePlugin::setGeneralProgression(quint64 current,quint64 total)
+void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64 &total)
 {
 	currentSize=current;
 	totalSize=total;
@@ -360,7 +360,7 @@ void InterfacePlugin::setGeneralProgression(quint64 current,quint64 total)
 		ui->progressBar_all->setValue(0);
 }
 
-void InterfacePlugin::setFileProgression(quint64 id,quint64 current,quint64 total)
+void InterfacePlugin::setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total)
 {
 	index=0;
 	loop_size=currentProgressList.size();
@@ -379,7 +379,7 @@ void InterfacePlugin::setFileProgression(quint64 id,quint64 current,quint64 tota
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
 }
 
-void InterfacePlugin::setCollisionAction(QList<QPair<QString,QString> > list)
+void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &list)
 {
 	ui->comboBox_fileCollisions->clear();
 	index=0;
@@ -391,7 +391,7 @@ void InterfacePlugin::setCollisionAction(QList<QPair<QString,QString> > list)
 	}
 }
 
-void InterfacePlugin::setErrorAction(QList<QPair<QString,QString> > list)
+void InterfacePlugin::setErrorAction(const QList<QPair<QString,QString> > &list)
 {
 	ui->comboBox_fileCollisions->clear();
 	index=0;
@@ -403,12 +403,8 @@ void InterfacePlugin::setErrorAction(QList<QPair<QString,QString> > list)
 	}
 }
 
-void InterfacePlugin::speed(qint64)
-{
-}
-
 //edit the transfer list
-void InterfacePlugin::getActionOnList(QList<returnActionOnCopyList> returnActions)
+void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
 {
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
 	indexAction=0;

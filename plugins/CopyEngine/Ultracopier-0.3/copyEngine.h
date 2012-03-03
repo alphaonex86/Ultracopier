@@ -111,16 +111,16 @@ public:
 	bool getOptionsEngine(QWidget * tempWidget);				//to send the options panel
 	void setInterfacePointer(QWidget * interface);		//to have interface widget to do modal dialog
 	//return empty if multiple
-	bool haveSameSource(QStringList sources);
-	bool haveSameDestination(QString destination);
+	bool haveSameSource(const QStringList &sources);
+	bool haveSameDestination(const QString &destination);
 	//external soft like file browser have send copy/move list to do
-	bool newCopy(QStringList sources);
-	bool newCopy(QStringList sources,QString destination);
-	bool newMove(QStringList sources);
-	bool newMove(QStringList sources,QString destination);
+	bool newCopy(const QStringList &sources);
+	bool newCopy(const QStringList &sources,const QString &destination);
+	bool newMove(const QStringList &sources);
+	bool newMove(const QStringList &sources,const QString &destination);
 	//get information about the copy
 	QPair<quint64,quint64> getGeneralProgression();			//first = current transfered byte, second = byte to transfer
-	returnSpecificFileProgression getFileProgression(quint64 id);	//first = current transfered byte, second = byte to transfer
+	returnSpecificFileProgression getFileProgression(const quint64 &id);	//first = current transfered byte, second = byte to transfer
 	quint64 realByteTransfered();					//real size transfered to right speed calculation
 	//edit the transfer list
 	QList<returnActionOnCopyList> getActionOnList();
@@ -131,30 +131,30 @@ public:
 	QList<QPair<QString,QString> > getErrorAction();
 	//transfer list
 	QList<ItemOfCopyList> getTransferList();
-	ItemOfCopyList getTransferListEntry(quint64 id);
-	void setDrive(QStringList drives);
+	ItemOfCopyList getTransferListEntry(const quint64 &id);
+	void setDrive(const QStringList &drives);
 public slots:
 	//user ask ask to add folder (add it with interface ask source/destination)
-	bool userAddFolder(CopyMode mode);
-	bool userAddFile(CopyMode mode);
+	bool userAddFolder(const CopyMode &mode);
+	bool userAddFile(const CopyMode &mode);
 	//action on the copy
 	void pause();
 	void resume();
-	void skip(quint64 id);
+	void skip(const quint64 &id);
 	void cancel();
 	//edit the transfer list
-	void removeItems(QList<int> ids);
-	void moveItemsOnTop(QList<int> ids);
-	void moveItemsUp(QList<int> ids);
-	void moveItemsDown(QList<int> ids);
-	void moveItemsOnBottom(QList<int> ids);
+	void removeItems(const QList<int> &ids);
+	void moveItemsOnTop(const QList<int> &ids);
+	void moveItemsUp(const QList<int> &ids);
+	void moveItemsDown(const QList<int> &ids);
+	void moveItemsOnBottom(const QList<int> &ids);
 	void exportTransferList();
 	void importTransferList();
 	//speed limitation
-	bool setSpeedLimitation(qint64 speedLimitation);///< -1 if not able, 0 if disabled
+	bool setSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
 	//action
-	void setCollisionAction(QString action);
-	void setErrorAction(QString action);
+	void setCollisionAction(const QString &action);
+	void setErrorAction(const QString &action);
 	//set the copy info and options before runing
 	void setRightTransfer(const bool doRightTransfer);
 	//set keep date
@@ -175,8 +175,8 @@ public slots:
 private slots:
 	void setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox=true);
 	void setComboBoxFolderError(FileErrorAction action,bool changeComboBox=true);
-	void warningTransferList(QString warning);
-	void errorTransferList(QString error);
+	void warningTransferList(const QString &warning);
+	void errorTransferList(const QString &error);
 signals:
 	//send information about the copy
 	void actionInProgess(EngineActionInProgress);	//should update interface information on this event

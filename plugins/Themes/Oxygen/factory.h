@@ -31,9 +31,9 @@ public:
 	Factory();
 	~Factory();
 	PluginInterface_Themes * getInstance();
-	void setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath,FacilityInterface * facilityEngine,bool portableVersion);
+	void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,bool portableVersion);
 	QWidget * options();
-	QIcon getIcon(QString fileName);
+	QIcon getIcon(const QString &fileName);
 private slots:
 	void checkBoxHaveChanged(bool toggled);
 	void resetOptions();

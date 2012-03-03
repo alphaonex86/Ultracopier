@@ -529,6 +529,9 @@ p, li { white-space: pre-wrap; }
            <property name="rootIsDecorated">
             <bool>false</bool>
            </property>
+           <property name="uniformRowHeights">
+            <bool>true</bool>
+           </property>
            <column>
             <property name="text">
              <string>Source</string>

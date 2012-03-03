@@ -1,3 +1,10 @@
+/** \file LogThread.h
+\brief The thread to do the log but not block the main thread
+\author alpha_one_x86
+\version 0.3
+\date 2010
+\licence GPL3, see the file COPYING */
+
 #ifndef LOGTHREAD_H
 #define LOGTHREAD_H
 

@@ -111,6 +111,9 @@ This version is compiled as version: %1.</string>
      <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
+     <property name="uniformRowHeights">
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text">
        <string notr="true">Time</string>

@@ -1,3 +1,10 @@
+/** \file CliParser.h
+\brief To group into one class, the CLI parsing
+\author alpha_one_x86
+\version 0.3
+\date 2010
+\licence GPL3, see the file COPYING */
+
 #ifndef CLIPARSER_H
 #define CLIPARSER_H
 

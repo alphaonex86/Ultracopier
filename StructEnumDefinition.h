@@ -35,6 +35,7 @@ enum ListeningState
 	FullListening///< all the listeners are listening
 };
 
+/// \brief Define the copy type, if folder, file or both
 enum CopyType
 {
 	Folder			= 0x00000001,
@@ -42,6 +43,7 @@ enum CopyType
 	FileAndFolder		= Folder | File
 };
 
+/// \brief transfer list operation, can define nothing, the import/export or both
 enum TransferListOperation
 {
 	TransferListOperation_None		= 0x00000000,

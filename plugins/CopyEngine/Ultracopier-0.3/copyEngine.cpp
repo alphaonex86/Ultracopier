@@ -136,17 +136,17 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 	this->interface=interface;
 }
 
-bool copyEngine::haveSameSource(QStringList sources)
+bool copyEngine::haveSameSource(const QStringList &sources)
 {
 	return listThread->haveSameSource(sources);
 }
 
-bool copyEngine::haveSameDestination(QString destination)
+bool copyEngine::haveSameDestination(const QString &destination)
 {
 	return listThread->haveSameDestination(destination);
 }
 
-bool copyEngine::newCopy(QStringList sources)
+bool copyEngine::newCopy(const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
@@ -158,12 +158,12 @@ bool copyEngine::newCopy(QStringList sources)
 	return listThread->newCopy(sources,destination);
 }
 
-bool copyEngine::newCopy(QStringList sources,QString destination)
+bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
 {
 	return listThread->newCopy(sources,destination);
 }
 
-bool copyEngine::newMove(QStringList sources)
+bool copyEngine::newMove(const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
@@ -175,7 +175,7 @@ bool copyEngine::newMove(QStringList sources)
 	return listThread->newMove(sources,destination);
 }
 
-bool copyEngine::newMove(QStringList sources,QString destination)
+bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 {
 	return listThread->newMove(sources,destination);
 }
@@ -189,7 +189,7 @@ QPair<quint64,quint64> copyEngine::getGeneralProgression()
 	return tempValue;
 }
 
-returnSpecificFileProgression copyEngine::getFileProgression(quint64 id)
+returnSpecificFileProgression copyEngine::getFileProgression(const quint64 &id)
 {
 	emit signal_getFileProgression(id);
 	return listThread->getReturnSpecificFileProgressionToCopyEngine();
@@ -244,18 +244,18 @@ QList<ItemOfCopyList> copyEngine::getTransferList()
 	return listThread->getReturnListItemOfCopyListToCopyEngine();
 }
 
-ItemOfCopyList copyEngine::getTransferListEntry(quint64 id)
+ItemOfCopyList copyEngine::getTransferListEntry(const quint64 &id)
 {
 	emit signal_getTransferListEntry(id);
 	return listThread->getReturnItemOfCopyListToCopyEngine();
 }
 
-void copyEngine::setDrive(QStringList drives)
+void copyEngine::setDrive(const QStringList &drives)
 {
 	listThread->setDrive(drives);
 }
 
-bool copyEngine::userAddFolder(CopyMode mode)
+bool copyEngine::userAddFolder(const CopyMode &mode)
 {
 	QString source = QFileDialog::getExistingDirectory(interface,tr("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if(source.isEmpty() || source.isNull() || source=="")
@@ -266,7 +266,7 @@ bool copyEngine::userAddFolder(CopyMode mode)
 		return newMove(QStringList() << source);
 }
 
-bool copyEngine::userAddFile(CopyMode mode)
+bool copyEngine::userAddFile(const CopyMode &mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QStringList sources = QFileDialog::getOpenFileNames(
@@ -292,7 +292,7 @@ void copyEngine::resume()
 	emit signal_resume();
 }
 
-void copyEngine::skip(quint64 id)
+void copyEngine::skip(const quint64 &id)
 {
 	emit signal_skip(id);
 }
@@ -304,27 +304,27 @@ void copyEngine::cancel()
 	listThread->cancel();
 }
 
-void copyEngine::removeItems(QList<int> ids)
+void copyEngine::removeItems(const QList<int> &ids)
 {
 	emit signal_removeItems(ids);
 }
 
-void copyEngine::moveItemsOnTop(QList<int> ids)
+void copyEngine::moveItemsOnTop(const QList<int> &ids)
 {
 	emit signal_moveItemsOnTop(ids);
 }
 
-void copyEngine::moveItemsUp(QList<int> ids)
+void copyEngine::moveItemsUp(const QList<int> &ids)
 {
 	emit signal_moveItemsUp(ids);
 }
 
-void copyEngine::moveItemsDown(QList<int> ids)
+void copyEngine::moveItemsDown(const QList<int> &ids)
 {
 	emit signal_moveItemsDown(ids);
 }
 
-void copyEngine::moveItemsOnBottom(QList<int> ids)
+void copyEngine::moveItemsOnBottom(const QList<int> &ids)
 {
 	emit signal_moveItemsOnBottom(ids);
 }
@@ -345,24 +345,24 @@ void copyEngine::importTransferList()
 	emit signal_importTransferList(fileName);
 }
 
-void copyEngine::warningTransferList(QString warning)
+void copyEngine::warningTransferList(const QString &warning)
 {
 	QMessageBox::warning(interface,tr("Error"),warning);
 }
 
-void copyEngine::errorTransferList(QString error)
+void copyEngine::errorTransferList(const QString &error)
 {
 	QMessageBox::critical(interface,tr("Error"),error);
 }
 
-bool copyEngine::setSpeedLimitation(qint64 speedLimitation)
+bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
 	maxSpeed=speedLimitation;
 	return listThread->setSpeedLimitation(speedLimitation);
 }
 
-void copyEngine::setCollisionAction(QString action)
+void copyEngine::setCollisionAction(const QString &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"action: "+action);
 	if(action=="skip")
@@ -380,7 +380,7 @@ void copyEngine::setCollisionAction(QString action)
 	emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
-void copyEngine::setErrorAction(QString action)
+void copyEngine::setErrorAction(const QString &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"action: "+action);
 	if(action=="skip")

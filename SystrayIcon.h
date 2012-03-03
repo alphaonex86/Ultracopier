@@ -1,4 +1,4 @@
-/** \file SystrayIcon.cpp
+/** \file SystrayIcon.h
 \brief Define the class of the systray icon
 \author alpha_one_x86
 \version 0.3
