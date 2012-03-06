@@ -1,3 +1,9 @@
+/** \file ReadThread.h
+\brief Thread changed to open/close and read the source file
+\author alpha_one_x86
+\version 0.3
+\date 2011 */
+
 #ifndef READTHREAD_H
 #define READTHREAD_H
 
@@ -13,6 +19,7 @@
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
+/// \brief Thread changed to open/close and read the source file
 class ReadThread : public QThread
 {
 	Q_OBJECT
@@ -22,27 +29,35 @@ public:
 protected:
 	void run();
 public:
+	/// \brief open with the name and copy mode
 	void open(const QString &name,const CopyMode &mode);
+	/// \brief return the error string
 	QString errorString();
 	//QByteArray read(qint64 position,qint64 maxSize);
+	/// \brief stop the copy
 	void stop();
+	/// \brief put the copy in pause
 	bool pause();
+	/// \brief resume the copy
 	void resume();
+	/// \brief get the size of the source file
 	qint64 size();
+	/// \brief get the last good position
 	qint64 getLastGoodPosition();
+	/// \brief start the reading of the source file
 	void startRead();
-	//set the current max speed in KB/s
+	/// \brief set the current max speed in KB/s
 	int setMaxSpeed(int maxSpeed);
-	//set block size in KB
+	/// \brief set block size in KB
 	bool setBlockSize(const int blockSize);
-	//reopen after an error
+	/// \brief reopen after an error
         void reopen();
-	//set the write thread
+	/// \brief set the write thread
 	void setWriteThread(WriteThread * writeThread);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	//to set the id
+	/// \brief to set the id
 	void setId(int id);
-	//stat
+	/// \brief stat
 	enum ReadStat
 	{
 		Idle=0,
@@ -52,9 +67,12 @@ public:
 	};
 	ReadStat stat;
 	#endif
+	/// \brief return if it's reading
         bool isReading();
+	/// \brief executed at regular interval to do a speed throling 
 	void timeOfTheBlockCopyFinished();
 public slots:
+	/// \brief to reset the copy, and put at the same state when it just open
 	void seekToZeroAndWait();
 signals:
 	void error();

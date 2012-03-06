@@ -1,3 +1,9 @@
+/** \file ListThread.h
+\brief Define the list thread, and management to the action to do
+\author alpha_one_x86
+\version 0.3
+\date 2011 */
+
 #ifndef LISTTHREAD_H
 #define LISTTHREAD_H
 
@@ -17,6 +23,7 @@
 #include "RmPath.h"
 #include "Environment.h"
 
+/// \brief Define the list thread, and management to the action to do
 class ListThread : public QThread
 {
 	Q_OBJECT
@@ -24,33 +31,50 @@ public:
 	explicit ListThread(FacilityInterface * facilityInterface);
 	~ListThread();
 	//duplication copy detection
+	/** \brief compare the current sources of the copy, with the passed arguments
+	 * \param sources the sources list to compares with the current sources list
+	 * \return true if have same sources, else false (or empty) */
 	bool haveSameSource(QStringList sources);
+	/** \brief compare the current destination of the copy, with the passed arguments
+	 * \param destination the destination to compares with the current destination
+	 * \return true if have same destination, else false (or empty) */
 	bool haveSameDestination(QString destination);
 	//external soft like file browser have send copy/move list to do
+	/** \brief send copy with destination
+	 * \param sources the sources list to copy
+	 * \param destination the destination to copy
+	 * \return true if the copy have been accepted */
 	bool newCopy(QStringList sources,QString destination);
+	/** \brief send move without destination, ask the destination
+	 * \param sources the sources list to move
+	 * \param destination the destination to move
+	 * \return true if the move have been accepted */
 	bool newMove(QStringList sources,QString destination);
-	//speed limitation
+	/** \brief get the speed limitation
+	 * < -1 if not able, 0 if disabled */
 	qint64 getSpeedLimitation();
-	//transfer list
+	/** \brief to set drives detected
+	 * specific to this copy engine */
 	void setDrive(QStringList drives);
-	//action
+	/// \brief to set the collision action
 	void setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
-	//structure
+	/// \brief get action type
 	enum ActionType
 	{
 		ActionType_Transfer=0,
 		ActionType_MkPath=1,
 		ActionType_RmPath=2
 	};
+	/// \brief to store one action to do
 	struct actionToDo
 	{
-		ActionType type;
+		ActionType type;///< \see ActionType
 		quint64 id;
 		qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
 		QFileInfo source;///< Used to set: source for transfer, folder to create, folder to drop
 		QFileInfo destination;
 		CopyMode mode;
-		bool isRunning;
+		bool isRunning;///< store if the action si running
 		//TransferThread * transfer; // -> see transferThreadList
 	};
 	QList<actionToDo> actionToDoList;
@@ -67,46 +91,77 @@ public:
 	ItemOfCopyList getReturnItemOfCopyListToCopyEngine();
 public slots:
 	//get information about the copy
+	/** \brief to get the general progression
+	 * first = current transfered byte, second = byte to transfer */
 	void getGeneralProgression();
-	void getFileProgression(quint64 id);
+	/** \brief to get the progression for a specific file
+	 * \param id the id of the transfer, id send during population the transfer list
+	 * first = current transfered byte, second = byte to transfer */
+	void getFileProgression(const quint64 &id);
+	/** \brief to get the action in waiting on the transfer list */
 	void getActionOnList();
 	//transfer list
+	/** \brief to get the transfer list
+	 * Used when the interface is changed, useful to minimize the memory size */
 	void getTransferList();
-	void getTransferListEntry(quint64 id);
+	/** \brief to get one transfer info
+	 * Used by the interface which show multiple transfer */
+	void getTransferListEntry(const quint64 &id);
 	//action on the copy
+	/// \brief put the transfer in pause
 	void pause();
+	/// \brief resume the transfer
 	void resume();
-	void skip(quint64 id);
-	bool skipInternal(quint64 id);//internal skip
+	/** \brief skip one transfer entry
+	 * \param id id of the file to remove */
+	void skip(const quint64 &id);
+	/** \brief skip as interanl one transfer entry
+	 * \param id id of the file to remove */
+	bool skipInternal(const quint64 &id);
+	/// \brief cancel all the transfer
 	void cancel();
 	//edit the transfer list
-	void removeItems(QList<int> ids);
-	void moveItemsOnTop(QList<int> ids);
-	void moveItemsUp(QList<int> ids);
-	void moveItemsDown(QList<int> ids);
-	void moveItemsOnBottom(QList<int> ids);
-	void exportTransferList(QString fileName);
-	void importTransferList(QString fileName);
-	//set the folder local colision
+	/** \brief remove the selected item
+	 * \param ids ids is the id list of the selected items */
+	void removeItems(const QList<int> &ids);
+	/** \brief move on top of the list the selected item
+	 * \param ids ids is the id list of the selected items */
+	void moveItemsOnTop(const QList<int> &ids);
+	/** \brief move up the list the selected item
+	 * \param ids ids is the id list of the selected items */
+	void moveItemsUp(const QList<int> &ids);
+	/** \brief move down the list the selected item
+	 * \param ids ids is the id list of the selected items */
+	void moveItemsDown(const QList<int> &ids);
+	/** \brief move on bottom of the list the selected item
+	 * \param ids ids is the id list of the selected items */
+	void moveItemsOnBottom(const QList<int> &ids);
+	/// \brief export the transfer list into a file
+	void exportTransferList(const QString &fileName);
+	/// \brief import the transfer list into a file
+	void importTransferList(const QString &fileName);
+	/// \brief set the folder local colision
 	void setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists);
-	//speed limitation
-	bool setSpeedLimitation(qint64 speedLimitation);
-	//set the copy info and options before runing
+	/** \brief to set the speed limitation
+	 * -1 if not able, 0 if disabled */
+	bool setSpeedLimitation(const qint64 &speedLimitation);
+	/// \brief set the copy info and options before runing
 	void setRightTransfer(const bool doRightTransfer);
-	//set keep date
+	/// \brief set keep date
 	void setKeepDate(const bool keepDate);
-	//set block size in KB
+	/// \brief set block size in KB
 	void setBlockSize(const int blockSize);
-	//set auto start
+	/// \brief set auto start
 	void setAutoStart(const bool autoStart);
-	//set check destination folder
+	/// \brief set check destination folder
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
-	//set data local to the thread
+	/// \brief set data local to the thread
 	void setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists);
-	//do new actions
+	/// \brief do new actions, start transfer
 	void doNewActions_start_transfer();
+	/// \brief do new actions, do the inode manipulation
 	void doNewActions_inode_manipulation();
-	//restart transfer if it can
+	/// \brief restart transfer if it can
 	void restartTransferIfItCan();
 private:
 	QSemaphore mkpathTransfer;

@@ -1,5 +1,5 @@
-/** \file server.h
-\brief Define the server to listen catchcopy in protocol v0002
+/** \file listener.h
+\brief Define the server compatible with Ultracopier interface
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
@@ -12,19 +12,26 @@
 #include "../../../interface/PluginInterface_Listener.h"
 #include "catchcopy-api-0002/ServerCatchcopy.h"
 
+/// \brief Define the server compatible with Ultracopier interface
 class CatchCopyPlugin : public PluginInterface_Listen
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface_Listen)
 public:
 	CatchCopyPlugin();
+	/// \brief try listen the copy/move
 	void listen();
+	/// \brief stop listen to copy/move
 	void close();
+	/// \brief return the error strong
 	const QString errorString();
+	/// \brief set resources for this plugins
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
 public slots:
-	void copyFinished(quint32 orderId,bool withError);
-	void copyCanceled(quint32 orderId);
+	/// \brief say to the client that's the copy/move is finished
+	void transferFinished(quint32 orderId,bool withError);
+	/// \brief say to the client that's the copy/move is finished
+	void transferCanceled(quint32 orderId);
 private:
 	ServerCatchcopy server;
 private slots:
@@ -35,10 +42,15 @@ signals:
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
 	#endif
+	/// \brief new state
 	void newState(ListeningState state);
+	/// \brief new copy is incoming
 	void newCopy(quint32 orderId,QStringList sources);
+	/// \brief new copy is incoming, with destination
 	void newCopy(quint32 orderId,QStringList sources,QString destination);
+	/// \brief new move is incoming
 	void newMove(quint32 orderId,QStringList sources);
+	/// \brief new move is incoming, with destination
 	void newMove(quint32 orderId,QStringList sources,QString destination);
 };
 

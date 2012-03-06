@@ -1,9 +1,3 @@
-/** \file ListThread.cpp
-\brief Define the list thread
-\author alpha_one_x86
-\version 0.3
-\date 2011 */
-
 #include "ListThread.h"
 
 /// \todo do pushed or instant mount point (setDrive, ...)

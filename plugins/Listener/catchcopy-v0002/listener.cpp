@@ -1,9 +1,3 @@
-/** \file server.cpp
-\brief Define the server
-\author alpha_one_x86
-\version 0.3
-\date 2010 */
-
 #include <QtCore>
 #include <QMessageBox>
 
@@ -52,13 +46,13 @@ void CatchCopyPlugin::setResources(OptionInterface * options,QString writePath,Q
 
 Q_EXPORT_PLUGIN2(listener, CatchCopyPlugin);
 
-void CatchCopyPlugin::copyFinished(quint32 orderId,bool withError)
+void CatchCopyPlugin::transferFinished(quint32 orderId,bool withError)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, orderId: "+QString::number(orderId)+", withError: "+QString::number(withError));
 	server.copyFinished(orderId,withError);
 }
 
-void CatchCopyPlugin::copyCanceled(quint32 orderId)
+void CatchCopyPlugin::transferCanceled(quint32 orderId)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, orderId: "+QString::number(orderId));
 	server.copyCanceled(orderId);

@@ -31,9 +31,9 @@ class PluginInterface_Listen : public QObject
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
 	public slots:
 		/// \brief send when copy is finished
-		virtual void copyFinished(quint32 orderId,bool withError) = 0;
+		virtual void transferFinished(quint32 orderId,bool withError) = 0;
 		/// \brief send when copy is canceled
-		virtual void copyCanceled(quint32 orderId) = 0;
+		virtual void transferCanceled(quint32 orderId) = 0;
 	/* signal to implement
 	signals:
 		void newState(ListeningState state);

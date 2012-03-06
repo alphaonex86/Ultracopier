@@ -212,7 +212,7 @@ void CopyListener::copyFinished(const quint32 & orderId,bool withError)
 		{
 			orderList.removeAll(orderId);
 			if(copyRunningList.at(index).listenInterface!=NULL)
-				copyRunningList.at(index).listenInterface->copyFinished(copyRunningList.at(index).pluginOrderId,withError);
+				copyRunningList.at(index).listenInterface->transferFinished(copyRunningList.at(index).pluginOrderId,withError);
 			copyRunningList.removeAt(index);
 			return;
 		}
@@ -230,7 +230,7 @@ void CopyListener::copyCanceled(const quint32 & orderId)
 		{
 			orderList.removeAll(orderId);
 			if(copyRunningList.at(index).listenInterface!=NULL)
-				copyRunningList.at(index).listenInterface->copyCanceled(copyRunningList.at(index).pluginOrderId);
+				copyRunningList.at(index).listenInterface->transferCanceled(copyRunningList.at(index).pluginOrderId);
 			copyRunningList.removeAt(index);
 			return;
 		}

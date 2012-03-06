@@ -23,7 +23,11 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QListWidget" name="transferThreadList"/>
+         <widget class="QListWidget" name="transferThreadList">
+          <property name="uniformItemSizes">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -35,7 +39,11 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QListWidget" name="tranferList"/>
+         <widget class="QListWidget" name="tranferList">
+          <property name="uniformItemSizes">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

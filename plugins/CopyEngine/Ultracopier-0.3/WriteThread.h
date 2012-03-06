@@ -1,3 +1,9 @@
+/** \file WriteThread.h
+\brief Thread changed to open/close and write the destination file
+\author alpha_one_x86
+\version 0.3
+\date 2011 */
+
 #ifndef WRITETHREAD_H
 #define WRITETHREAD_H
 
@@ -11,23 +17,30 @@
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
+/// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QThread
 {
 	Q_OBJECT
 public:
 	explicit WriteThread();
 	~WriteThread();
+	/// \brief to have semaphore to do mkpath one by one
 	void setMkpathTransfer(QSemaphore *mkpathTransfer);
 protected:
 	void run();
 public:
+	/// \brief open the destination to open it
 	void open(const QString &name,const quint64 &startSize);
+	/// \brief to return the error string
 	QString errorString();
+	/// \brief to stop all
 	void stop();
+	/// \brief to write data
 	bool write(const QByteArray &data);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	//to set the id
+	/// \brief to set the id
 	void setId(int id);
+	/// \brief get the write stat
 	enum WriteStat
 	{
 		Idle=0,
@@ -38,10 +51,15 @@ public:
 	WriteStat stat;
 	#endif
 public slots:
+	/// \brief start the operation
 	void postOperation();
+	/// \brief flush buffer
 	void flushBuffer();
+	/// \brief set the end is detected
 	void endIsDetected();
+	/// \brief reopen the file
 	void reopen();
+	/// \brief flush and seek to zero
         void flushAndSeekToZero();
 signals:
 	void error();

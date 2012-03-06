@@ -1,3 +1,9 @@
+/** \file scanFileOrFolder.h
+\brief Thread changed to list recursively the folder
+\author alpha_one_x86
+\version 0.3
+\date 2011 */
+
 #include <QThread>
 #include <QStringList>
 #include <QString>
@@ -11,19 +17,22 @@
 #ifndef SCANFILEORFOLDER_H
 #define SCANFILEORFOLDER_H
 
+/// \brief Thread changed to list recursively the folder
 class scanFileOrFolder : public QThread
 {
 	Q_OBJECT
 public:
 	explicit scanFileOrFolder(CopyMode mode);
 	~scanFileOrFolder();
+	/// \brief to the a folder listing
 	void stop();
+	/// \brief to get if is finished
 	bool isFinished();
-	//set action if Folder are same or exists
+	/// \brief set action if Folder are same or exists
 	void setFolderExistsAction(FolderExistsAction action,QString newName="");
-	//set action if error
+	/// \brief set action if error
 	void setFolderErrorAction(FileErrorAction action);
-	//set if need check if the destination exists
+	/// \brief set if need check if the destination exists
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
 signals:
 	void folderTransfer(QString source,QString destination,int numberOfItem,CopyMode mode);

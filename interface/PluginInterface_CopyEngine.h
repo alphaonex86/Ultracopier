@@ -150,8 +150,9 @@ class PluginInterface_CopyEngine : public QObject
 		virtual void importTransferList() = 0;
 		
 		
-		/// \brief to set the speed limitation
-		virtual bool setSpeedLimitation(const qint64 &speedLimitation) = 0;///< -1 if not able, 0 if disabled
+		/** \brief to set the speed limitation
+		 * -1 if not able, 0 if disabled */
+		virtual bool setSpeedLimitation(const qint64 &speedLimitation) = 0;
 		
 		
 		//action
@@ -182,6 +183,7 @@ class PluginInterface_CopyEngine : public QObject
 		void mkPath(QString path);*/
 };
 
+/// \brief To define the interface for the factory to do copy engine instance
 class PluginInterface_CopyEngineFactory : public QObject
 {
 	Q_OBJECT

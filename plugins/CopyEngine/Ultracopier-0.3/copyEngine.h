@@ -61,22 +61,22 @@ private:
 	FolderExistsAction		alwaysDoThisActionForFolderExists;
 	bool				dialogIsOpen;
 	volatile bool			stopIt;
-	//error queue
+	/// \brief error queue
 	struct errorQueueItem
 	{
-		TransferThread * transfer;	// NULL if send by scan thread
-		scanFileOrFolder * scan;	// NULL if send by transfer thread
+		TransferThread * transfer;	///< NULL if send by scan thread
+		scanFileOrFolder * scan;	///< NULL if send by transfer thread
 		bool mkPath;
 		bool rmPath;
 		QFileInfo inode;
 		QString errorString;
 	};
 	QList<errorQueueItem> errorQueue;
-	//already exists queue
+	/// \brief already exists queue
 	struct alreadyExistsQueueItem
 	{
-		TransferThread * transfer;	// NULL if send by scan thread
-		scanFileOrFolder * scan;	// NULL if send by transfer thread
+		TransferThread * transfer;	///< NULL if send by scan thread
+		scanFileOrFolder * scan;	///< NULL if send by transfer thread
 		QFileInfo source;
 		QFileInfo destination;
 		bool isSame;
@@ -108,69 +108,140 @@ private slots:
 	//show one new dialog if needed
 	void showOneNewDialog();
 public:
-	bool getOptionsEngine(QWidget * tempWidget);				//to send the options panel
-	void setInterfacePointer(QWidget * interface);		//to have interface widget to do modal dialog
+	/** \brief to send the options panel
+	 * \return return false if have not the options
+	 * \param tempWidget the widget to generate on it the options */
+	bool getOptionsEngine(QWidget * tempWidget);
+	/** \brief to have interface widget to do modal dialog
+	 * \param interface to have the widget of the interface, useful for modal dialog */
+	void setInterfacePointer(QWidget * interface);
 	//return empty if multiple
+	/** \brief compare the current sources of the copy, with the passed arguments
+	 * \param sources the sources list to compares with the current sources list
+	 * \return true if have same sources, else false (or empty) */
 	bool haveSameSource(const QStringList &sources);
+	/** \brief compare the current destination of the copy, with the passed arguments
+	 * \param destination the destination to compares with the current destination
+	 * \return true if have same destination, else false (or empty) */
 	bool haveSameDestination(const QString &destination);
 	//external soft like file browser have send copy/move list to do
+	/** \brief send copy without destination, ask the destination
+	 * \param sources the sources list to copy
+	 * \return true if the copy have been accepted */
 	bool newCopy(const QStringList &sources);
+	/** \brief send copy with destination
+	 * \param sources the sources list to copy
+	 * \param destination the destination to copy
+	 * \return true if the copy have been accepted */
 	bool newCopy(const QStringList &sources,const QString &destination);
+	/** \brief send move without destination, ask the destination
+	 * \param sources the sources list to move
+	 * \return true if the move have been accepted */
 	bool newMove(const QStringList &sources);
+	/** \brief send move without destination, ask the destination
+	 * \param sources the sources list to move
+	 * \param destination the destination to move
+	 * \return true if the move have been accepted */
 	bool newMove(const QStringList &sources,const QString &destination);
 	//get information about the copy
-	QPair<quint64,quint64> getGeneralProgression();			//first = current transfered byte, second = byte to transfer
-	returnSpecificFileProgression getFileProgression(const quint64 &id);	//first = current transfered byte, second = byte to transfer
-	quint64 realByteTransfered();					//real size transfered to right speed calculation
+	/** \brief to get the general progression
+	 * first = current transfered byte, second = byte to transfer */
+	QPair<quint64,quint64> getGeneralProgression();
+	/** \brief to get the progression for a specific file
+	 * \param id the id of the transfer, id send during population the transfer list
+	 * first = current transfered byte, second = byte to transfer */
+	returnSpecificFileProgression getFileProgression(const quint64 &id);
+	/** \brief to get byte read, use by Ultracopier for the speed calculation
+	 * real size transfered to right speed calculation */
+	quint64 realByteTransfered();
 	//edit the transfer list
+	/** \brief to get the action in waiting on the transfer list */
 	QList<returnActionOnCopyList> getActionOnList();
 	//speed limitation
-	qint64 getSpeedLimitation();///< -1 if not able, 0 if disabled
+	/** \brief get the speed limitation
+	 * < -1 if not able, 0 if disabled */
+	qint64 getSpeedLimitation();
 	//get collision action
+	/** \brief get the collision action list */
 	QList<QPair<QString,QString> > getCollisionAction();
+	/** \brief get the collision error list */
 	QList<QPair<QString,QString> > getErrorAction();
 	//transfer list
+	/** \brief to get the transfer list
+	 * Used when the interface is changed, useful to minimize the memory size */
 	QList<ItemOfCopyList> getTransferList();
+	/** \brief to get one transfer info
+	 * Used by the interface which show multiple transfer */
 	ItemOfCopyList getTransferListEntry(const quint64 &id);
+	
+	/** \brief to set drives detected
+	 * specific to this copy engine */
 	void setDrive(const QStringList &drives);
 public slots:
 	//user ask ask to add folder (add it with interface ask source/destination)
+	/** \brief add folder called on the interface
+	 * Used by manual adding */
 	bool userAddFolder(const CopyMode &mode);
+	/** \brief add file called on the interface
+	 * Used by manual adding */
 	bool userAddFile(const CopyMode &mode);
 	//action on the copy
+	/// \brief put the transfer in pause
 	void pause();
+	/// \brief resume the transfer
 	void resume();
+	/** \brief skip one transfer entry
+	 * \param id id of the file to remove */
 	void skip(const quint64 &id);
+	/// \brief cancel all the transfer
 	void cancel();
 	//edit the transfer list
+	/** \brief remove the selected item
+	 * \param ids ids is the id list of the selected items */
 	void removeItems(const QList<int> &ids);
+	/** \brief move on top of the list the selected item
+	 * \param ids ids is the id list of the selected items */
 	void moveItemsOnTop(const QList<int> &ids);
+	/** \brief move up the list the selected item
+	 * \param ids ids is the id list of the selected items */
 	void moveItemsUp(const QList<int> &ids);
+	/** \brief move down the list the selected item
+	 * \param ids ids is the id list of the selected items */
 	void moveItemsDown(const QList<int> &ids);
+	/** \brief move on bottom of the list the selected item
+	 * \param ids ids is the id list of the selected items */
 	void moveItemsOnBottom(const QList<int> &ids);
+	/// \brief export the transfer list into a file
 	void exportTransferList();
+	/// \brief import the transfer list into a file
 	void importTransferList();
-	//speed limitation
-	bool setSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
+	/** \brief to set the speed limitation
+	 * -1 if not able, 0 if disabled */
+	bool setSpeedLimitation(const qint64 &speedLimitation);
 	//action
+	/// \brief to set the collision action
 	void setCollisionAction(const QString &action);
+	/// \brief to set the error action
 	void setErrorAction(const QString &action);
-	//set the copy info and options before runing
+	
+	// specific to this copy engine
+	
+	/// \brief set if the rights shoul be keep
 	void setRightTransfer(const bool doRightTransfer);
-	//set keep date
+	/// \brief set keep date
 	void setKeepDate(const bool keepDate);
-	//set block size in KB
+	/// \brief set block size in KB
 	void setBlockSize(const int blockSize);
-	//set auto start
+	/// \brief set auto start
 	void setAutoStart(const bool autoStart);
-	//set check destination folder
+	/// \brief set if need check if the destination folder exists
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
-	//reset widget
+	/// \brief reset widget
 	void resetTempWidget();
 	//autoconnect
 	void on_comboBoxFolderColision_currentIndexChanged(int index);
 	void on_comboBoxFolderError_currentIndexChanged(int index);
-	//set the translate
+	/// \brief need retranslate the insterface
 	void newLanguageLoaded();
 private slots:
 	void setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox=true);

@@ -1,5 +1,5 @@
 /** \file factory.h
-\brief Define the factory
+\brief Define the factory to create new instance
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
@@ -23,6 +23,7 @@ namespace Ui {
 	class options;
 }
 
+/** \brief to generate copy engine instance */
 class Factory : public PluginInterface_CopyEngineFactory
 {
 	Q_OBJECT
@@ -30,15 +31,22 @@ class Factory : public PluginInterface_CopyEngineFactory
 public:
 	Factory();
 	~Factory();
+	/// \brief to return the instance of the copy engine
 	PluginInterface_CopyEngine * getInstance();
+	/// \brief set the resources, to store options, to have facilityInterface
 	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
 	//get mode allowed
 	/// \brief define if can copy file, folder or both
 	CopyType getCopyType();
+	/// \brief to return which kind of transfer list operation is supported
 	TransferListOperation getTransferListOperation();
+	/// \brief define if can only copy, or copy and move
 	bool canDoOnlyCopy();
+	/// \brief to get the supported protocols for the source
 	QStringList supportedProtocolsForTheSource();
+	/// \brief to get the supported protocols for the destination
 	QStringList supportedProtocolsForTheDestination();
+	/// \brief to get the options of the copy engine
 	QWidget * options();
 private:
 	Ui::options *ui;

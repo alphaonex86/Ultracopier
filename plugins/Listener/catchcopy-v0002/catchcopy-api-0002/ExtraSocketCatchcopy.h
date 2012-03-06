@@ -16,9 +16,11 @@
 	#include <windows.h>
 #endif
 
+/// \brief to have extra socket function
 class ExtraSocketCatchcopy
 {
 public:
+	/// \brief to get the socket path
 	static const QString pathSocket();
 };
 

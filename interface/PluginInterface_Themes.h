@@ -102,6 +102,7 @@ class PluginInterface_Themes : public QWidget
 		void newSpeedLimitation(qint64);///< -1 if not able, 0 if disabled*/
 };
 
+/// \brief To define the interface for the factory to do themes instance
 class PluginInterface_ThemesFactory : public QObject
 {
 	Q_OBJECT
