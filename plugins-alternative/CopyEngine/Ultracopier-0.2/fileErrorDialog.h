@@ -1,3 +1,9 @@
+/** \file fileErrorDialog.h
+\brief Define the dialog error on the file
+\author alpha_one_x86
+\version 0.3
+\date 2010 */
+
 #include <QDialog>
 #include <QWidget>
 #include <QString>
@@ -12,14 +18,18 @@ namespace Ui {
 	class fileErrorDialog;
 }
 
+/// \brief to show error dialog, and ask what do
 class fileErrorDialog : public QDialog
 {
 	Q_OBJECT
 public:
 	explicit fileErrorDialog();
 	~fileErrorDialog();
+	/// \brief set the file information
 	void setInfo(QFileInfo fileInfo,QString errorString,bool canPutAtTheEnd);
+	/// \brief return the the always checkbox is checked
 	bool getAlways();
+	/// \brief return the action clicked
 	FileErrorAction getAction();
 protected:
 	void changeEvent(QEvent *e);

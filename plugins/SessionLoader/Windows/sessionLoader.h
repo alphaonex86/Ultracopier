@@ -1,18 +1,19 @@
-/** \file session-loader.h
-\brief Define the session plugin loader test
+/** \file sessionLoader.h
+\brief Define the session loader
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
 
-#ifndef SESSION_LOADER_TEST_H
-#define SESSION_LOADER_TEST_H
+#ifndef SESSION_LOADER_H
+#define SESSION_LOADER_H
 
 #include <QObject>
 #include <QApplication>
 #include "Environment.h"
 #include "../../../interface/PluginInterface_SessionLoader.h"
 
-class TestPlugin : public PluginInterface_SessionLoader
+/// \brief Define the session loader
+class SessionLoader : public PluginInterface_SessionLoader
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface_SessionLoader)
@@ -27,4 +28,4 @@ signals:
 	#endif
 };
 
-#endif // SESSION_LOADER_TEST_H
+#endif // SESSION_LOADER_H

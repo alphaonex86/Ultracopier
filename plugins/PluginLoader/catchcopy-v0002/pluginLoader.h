@@ -1,5 +1,5 @@
-/** \file session-loader.h
-\brief Define the session plugin loader test
+/** \file pluginLoader.h
+\brief Define the plugin loader
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
@@ -20,13 +20,14 @@
 #include "../../../interface/PluginInterface_PluginLoader.h"
 #include "Environment.h"
 
-class Plugin : public PluginInterface_PluginLoader
+/// \brief \brief Define the plugin loader
+class PluginLoader : public PluginInterface_PluginLoader
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface_PluginLoader)
 public:
-        Plugin();
-        ~Plugin();
+        PluginLoader();
+        ~PluginLoader();
         void setEnabled(bool);
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
 private:

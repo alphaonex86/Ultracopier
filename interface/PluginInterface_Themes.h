@@ -111,15 +111,15 @@ class PluginInterface_ThemesFactory : public QObject
 		virtual PluginInterface_Themes * getInstance() = 0;
 		/// \brief to set resources, writePath can be empty if read only mode
 		virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,bool portableVersion) = 0;
-		/// \brief to get the default options
+		/// \brief to get the default options widget
 		virtual QWidget * options() = 0;
+		/// \brief to get a resource icon
+		virtual QIcon getIcon(const QString &fileName) = 0;
 	public slots:
 		/// \brief to reset as default the local options
 		virtual void resetOptions() = 0;
 		/// \brief retranslate the language because the language have changed
 		virtual void newLanguageLoaded() = 0;
-		/// \brief to get a resource icon for the systray
-		virtual QIcon getIcon(const QString &fileName) = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.4");

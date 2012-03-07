@@ -126,16 +126,16 @@ public slots:
 	void removeItems(const QList<int> &ids);
 	/** \brief move on top of the list the selected item
 	 * \param ids ids is the id list of the selected items */
-	void moveItemsOnTop(const QList<int> &ids);
+	void moveItemsOnTop(QList<int> ids);
 	/** \brief move up the list the selected item
 	 * \param ids ids is the id list of the selected items */
-	void moveItemsUp(const QList<int> &ids);
+	void moveItemsUp(QList<int> ids);
 	/** \brief move down the list the selected item
 	 * \param ids ids is the id list of the selected items */
-	void moveItemsDown(const QList<int> &ids);
+	void moveItemsDown(QList<int> ids);
 	/** \brief move on bottom of the list the selected item
 	 * \param ids ids is the id list of the selected items */
-	void moveItemsOnBottom(const QList<int> &ids);
+	void moveItemsOnBottom(QList<int> ids);
 	/// \brief export the transfer list into a file
 	void exportTransferList(const QString &fileName);
 	/// \brief import the transfer list into a file

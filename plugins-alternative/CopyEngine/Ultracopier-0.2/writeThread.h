@@ -10,6 +10,12 @@
 
 ****************************************************************************/
 
+/** \file writeThread.h
+\brief Thread changed write to the destination file
+\author alpha_one_x86
+\version 0.3
+\date 2011 */
+
 #include <QObject>
 #include <QThread>
 #include <QByteArray>
@@ -30,19 +36,28 @@
 #ifndef WRITETHREAD_H
 #define WRITETHREAD_H
 
+/// \brief Thread changed write to the destination file
 class writeThread : public QThread
 {
 	Q_OBJECT
 	public:
 		writeThread(QObject * parent = 0);
 		~writeThread();
+		/// \brief set the files
 		void setFiles(QString sourcePath,QString destinationPath);
+		/// \brief try open the destination
 		QString openDestination();
+		/// \brief stop all
 		void stop();
+		/// \brief write a new block
 		void addNewBlock(QByteArray newBlock);
+		/// \brief keep date
 		void setKeepDate(bool keepDate);
+		/// \brief preallocate the file
 		void setPreallocation(bool preallocation);
+		/// \brief skip the current file
 		void skipTheCurrentFile();
+		/// \brief the current stat
 		enum currentStat {
 		NotRunning,
 		WaitingTask,

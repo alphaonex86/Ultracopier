@@ -16,7 +16,8 @@ HEADERS         = copyEngine.h \
     Variable.h \
     debugDialog.h \
     folderExistsDialog.h \
-    AvancedQFile.h
+    AvancedQFile.h \
+    ../../../interface/PluginInterface_CopyEngine.h
 SOURCES         = copyEngine.cpp \
     scanFileOrFolder.cpp \
     writeThread.cpp \

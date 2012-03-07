@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/SystemTrayIcon/informations.png</file>
+    </qresource>
+</RCC>

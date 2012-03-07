@@ -1,5 +1,5 @@
 /** \file interface.h
-\brief Define the interface test
+\brief Define the interface
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
@@ -28,40 +28,68 @@ namespace Ui {
 	class interfaceCopy;
 }
 
-class InterfacePlugin : public PluginInterface_Themes
+/// \brief Define the interface
+class Themes : public PluginInterface_Themes
 {
 	Q_OBJECT
 public:
-	InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * facilityEngine);
-	~InterfacePlugin();
+	Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine);
+	~Themes();
 	//send information about the copy
+	/// \brief to set the action in progress
 	void actionInProgess(EngineActionInProgress);
+	/// \brief new transfer have started
 	void newTransferStart(const ItemOfCopyList &item);
-	void newTransferStop(const quint64 &id);//is stopped, example: because error have occurred, and try later, don't remove the item!
+	/** \brief one transfer have been stopped
+	 * is stopped, example: because error have occurred, and try later, don't remove the item! */
+	void newTransferStop(const quint64 &id);
+	/// \brief the new folder is listing
 	void newFolderListing(const QString &path);
-	void detectedSpeed(const quint64 &speed);//in byte per seconds
+	/** \brief show the detected speed
+	 * in byte per seconds */
+	void detectedSpeed(const quint64 &speed);
+	/** \brief show the remaining time
+	 * time in seconds */
 	void remainingTime(const int &remainingSeconds);
+	/// \brief set the current collision action
 	void newCollisionAction(const QString &action);
+	/// \brief set the current error action
 	void newErrorAction(const QString &action);
+	/// \brief set one error is detected
 	void errorDetected();
 	//speed limitation
-	bool setSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
+	/** \brief the max speed used
+	 * in byte per seconds, -1 if not able, 0 if disabled */
+	bool setSpeedLimitation(const qint64 &speedLimitation);
 	//get information about the copy
+	/// \brief show the general progression
 	void setGeneralProgression(const quint64 &current,const quint64 &total);
+	/// \brief show the file progression
 	void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total);
+	/// \brief set collision action
 	void setCollisionAction(const QList<QPair<QString,QString> > &);
+	/// \brief set error action
 	void setErrorAction(const QList<QPair<QString,QString> > &);
+	/// \brief set the copyType -> file or folder
 	void setCopyType(CopyType);
+	/// \brief set the copyMove -> copy or move, to force in copy or move, else support both
 	void forceCopyMode(CopyMode);
+	/// \brief set if transfer list is exportable/importable
 	void setTransferListOperation(TransferListOperation transferListOperation);
 	//edit the transfer list
+	/// \brief get action on the transfer list (add/move/remove)
 	void getActionOnList(const QList<returnActionOnCopyList> &returnActions);
+	/** \brief set if the order is external (like file manager copy)
+	 * to notify the interface, which can hide add folder/filer button */
 	void haveExternalOrder();
+	/// \brief set if is in pause
 	void isInPause(bool);
+	/// \brief get the widget for the copy engine
 	QWidget * getOptionsEngineWidget();
+	/// \brief to set if the copy engine is found
 	void getOptionsEngineEnabled(bool isEnabled);
 public slots:
-	//set the translate
+	/// \brief set the translate
 	void newLanguageLoaded();
 private slots:
 	void on_putOnTop_clicked();

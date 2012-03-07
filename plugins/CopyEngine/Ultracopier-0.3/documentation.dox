@@ -16,7 +16,8 @@
   \section mainpage_platforms Platforms
 
   This plugin might be usable in all environments where you find Qt 4, but Gcc is requiered for some part.\n
-  This plugin requires Qt 4.5.x or newer. Tested on Qt 4.7. Due to optimization Qt 4.8 usage will be better. To be compatible with the official Ultracopier plugins, you need compil it with Gcc.
+  This plugin requires Qt 4.5.x or newer. Tested on Qt 4.7. Due to optimization Qt 4.8 usage will be better.\n
+  To be compatible with the official Ultracopier plugins, you need compil it with Gcc, Qt4.8, and same env as Ultracopier have been compiled, see the documentation.
 
   \section mainpage_downloads Downloads
 

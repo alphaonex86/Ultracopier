@@ -1,5 +1,5 @@
 /** \file factory.h
-\brief Define the factory
+\brief Define the factory, to create instance of the interface
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
@@ -23,6 +23,7 @@ namespace Ui {
 	class options;
 }
 
+/// \brief Define the factory, to create instance of the interface
 class Factory : public PluginInterface_ThemesFactory
 {
 	Q_OBJECT
@@ -30,9 +31,13 @@ class Factory : public PluginInterface_ThemesFactory
 public:
 	Factory();
 	~Factory();
+	/// \brief to return the instance of the copy engine
 	PluginInterface_Themes * getInstance();
+	/// \brief set the resources, to store options, to have facilityInterface
 	void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,bool portableVersion);
+	/// \brief to get the default options widget
 	QWidget * options();
+	/// \brief to get a resource icon
 	QIcon getIcon(const QString &fileName);
 private slots:
 	void checkBoxHaveChanged(bool toggled);

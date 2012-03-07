@@ -7,7 +7,7 @@
 #include "pluginLoader.h"
 #include "PlatformMacro.h"
 
-Plugin::Plugin()
+PluginLoader::PluginLoader()
 {
 	//set the startup value into the variable
 	dllChecked=false;
@@ -18,13 +18,13 @@ Plugin::Plugin()
 	needBeRegistred=false;
 }
 
-Plugin::~Plugin()
+PluginLoader::~PluginLoader()
 {
         ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"destructor");
         setEnabled(false);
 }
 
-void Plugin::setEnabled(bool needBeRegistred)
+void PluginLoader::setEnabled(bool needBeRegistred)
 {
 	if(!checkExistsDll())
 	{
@@ -175,7 +175,7 @@ void Plugin::setEnabled(bool needBeRegistred)
 		emit newState(Semiuncaught);
 }
 
-bool Plugin::checkExistsDll()
+bool PluginLoader::checkExistsDll()
 {
 	if(dllChecked)
 	{
@@ -243,7 +243,7 @@ bool Plugin::checkExistsDll()
 
 #ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
 
-CatchState Plugin::lauchWithElevatedPrivileges(bool needBeRegistred)
+CatchState PluginLoader::lauchWithElevatedPrivileges(bool needBeRegistred)
 {
 	QStringList argumentsList;
 	// try with regsvr32, win32 because for admin dialog
@@ -294,7 +294,7 @@ CatchState Plugin::lauchWithElevatedPrivileges(bool needBeRegistred)
 
 #endif
 
-void Plugin::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+void PluginLoader::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
 {
 	Q_UNUSED(options);
         this->pluginPath=pluginPath;
@@ -317,7 +317,7 @@ void Plugin::setResources(OptionInterface * options,QString writePath,QString pl
 	}
 }
 
-bool Plugin::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
+bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
 {
 	QStringList arguments;
 	arguments.append("/s");
@@ -373,7 +373,7 @@ bool Plugin::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
 
 Q_EXPORT_PLUGIN2(pluginLoader, Plugin);
 
-bool WINAPI Plugin::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
+bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 {
 	/* Search address of module */
 	MODULEENTRY32W meModule;
@@ -429,7 +429,7 @@ bool WINAPI Plugin::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 	return true;
 }
 
-void Plugin::HardUnloadDLL(QString myDllName)
+void PluginLoader::HardUnloadDLL(QString myDllName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+myDllName);
 	HANDLE hSnapShot1;

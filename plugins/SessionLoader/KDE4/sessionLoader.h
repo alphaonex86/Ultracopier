@@ -1,5 +1,5 @@
-/** \file session-loader.h
-\brief Define the session plugin loader test
+/** \file sessionLoader.h
+\brief Define the session loader
 \author alpha_one_x86
 \version 0.3
 \date 2010 */
@@ -11,13 +11,17 @@
 #include "Environment.h"
 #include "../../../interface/PluginInterface_SessionLoader.h"
 
+/// \brief Define the session loader
 class SessionLoaderPlugin : public PluginInterface_SessionLoader
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface_SessionLoader)
 public:
+	/// \brief to set if it's enabled or not
 	void setEnabled(bool);
+	/// \brief to get if is enabled
 	bool getEnabled();
+	/// \brief set the resources for the plugins
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
 signals:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG

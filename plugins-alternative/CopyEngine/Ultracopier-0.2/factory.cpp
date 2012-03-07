@@ -57,11 +57,14 @@ PluginInterface_CopyEngine * Factory::getInstance()
 	return newTransferEngine;
 }
 
-void Factory::setResources(OptionInterface * optionsEngine,QString writePath,QString pluginPath)
+void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
 	Q_UNUSED(writePath)
 	Q_UNUSED(pluginPath)
+	Q_UNUSED(options)
+	Q_UNUSED(facilityInterface)
+	Q_UNUSED(portableVersion)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,COMPILERINFO);
 	#if ! defined (Q_CC_GNU)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to change date time of files, only gcc is supported");
@@ -118,6 +121,12 @@ QStringList Factory::supportedProtocolsForTheDestination()
 CopyType Factory::getCopyType()
 {
 	return FileAndFolder;
+}
+
+/// \brief define if can import/export or nothing
+TransferListOperation Factory::getTransferListOperation()
+{
+	return TransferListOperation_None;
 }
 
 bool Factory::canDoOnlyCopy()

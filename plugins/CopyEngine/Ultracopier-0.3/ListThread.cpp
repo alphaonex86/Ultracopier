@@ -530,12 +530,12 @@ void ListThread::resume()
 	emit isInPause(false);
 }
 
-void ListThread::skip(quint64 id)
+void ListThread::skip(const quint64 &id)
 {
 	skipInternal(id);
 }
 
-bool ListThread::skipInternal(quint64 id)
+bool ListThread::skipInternal(const quint64 &id)
 {
 	int index=0;
 	while(index<transferThreadList.size())
@@ -603,7 +603,7 @@ void ListThread::getGeneralProgression()
 }
 
 //first = current transfered byte, second = byte to transfer
-void ListThread::getFileProgression(quint64 id)
+void ListThread::getFileProgression(const quint64 &id)
 {
 	int index=0;
 	while(index<transferThreadList.size())
@@ -638,7 +638,7 @@ qint64 ListThread::getSpeedLimitation()
 	return maxSpeed;
 }
 
-bool ListThread::setSpeedLimitation(qint64 speedLimitation)
+bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"maxSpeed: "+QString::number(maxSpeed));
 	maxSpeed=speedLimitation;
@@ -673,7 +673,7 @@ void ListThread::getTransferList()
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
-void ListThread::getTransferListEntry(quint64 id)
+void ListThread::getTransferListEntry(const quint64 &id)
 {
 	ItemOfCopyList returnItemOfCopyListToCopyEngine;
 	int size=actionToDoList.size();
@@ -793,7 +793,7 @@ quint64 ListThread::generateIdNumber()
 }
 
 //warning the first entry is accessible will copy
-void ListThread::removeItems(QList<int> ids)
+void ListThread::removeItems(const QList<int> &ids)
 {
 	for(int i=0;i<ids.size();i++)
 		skipInternal(ids.at(i));
@@ -959,7 +959,7 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"stop");
 }
 
-void ListThread::exportTransferList(QString fileName)
+void ListThread::exportTransferList(const QString &fileName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QFile transferFile(fileName);
@@ -986,7 +986,7 @@ void ListThread::exportTransferList(QString fileName)
 	}
 }
 
-void ListThread::importTransferList(QString fileName)
+void ListThread::importTransferList(const QString &fileName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QFile transferFile(fileName);

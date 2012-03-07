@@ -19,8 +19,7 @@ namespace Ui {
 /// \brief class to the dialog to have debug information
 class debugDialog : public QWidget
 {
-    Q_OBJECT
-
+	Q_OBJECT
 public:
 	explicit debugDialog(QWidget *parent = 0);
 	~debugDialog();

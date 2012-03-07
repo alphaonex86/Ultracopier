@@ -10,7 +10,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
+Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
 	ui(new Ui::interfaceCopy())
 {
 	this->facilityEngine=facilityEngine;
@@ -123,7 +123,7 @@ InterfacePlugin::InterfacePlugin(bool checkBoxShowSpeed,FacilityInterface * faci
 	ui->shutdown->setVisible(shutdown);
 }
 
-void InterfacePlugin::uiUpdateSpeed()
+void Themes::uiUpdateSpeed()
 {
 	if(!ui->checkBoxShowSpeed->isChecked())
 		emit newSpeedLimitation(0);
@@ -131,7 +131,7 @@ void InterfacePlugin::uiUpdateSpeed()
 		emit newSpeedLimitation(ui->limitSpeed->value());
 }
 
-InterfacePlugin::~InterfacePlugin()
+Themes::~Themes()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	disconnect(ui->actionAddFile);
@@ -139,18 +139,18 @@ InterfacePlugin::~InterfacePlugin()
 	delete menu;
 }
 
-QWidget * InterfacePlugin::getOptionsEngineWidget()
+QWidget * Themes::getOptionsEngineWidget()
 {
 	return &optionEngineWidget;
 }
 
-void InterfacePlugin::getOptionsEngineEnabled(bool isEnabled)
+void Themes::getOptionsEngineEnabled(bool isEnabled)
 {
 	if(isEnabled)
 		ui->tabWidget->addTab(&optionEngineWidget,tr("Copy engine"));
 }
 
-void InterfacePlugin::closeEvent(QCloseEvent *event)
+void Themes::closeEvent(QCloseEvent *event)
 {
 	event->ignore();
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -158,12 +158,12 @@ void InterfacePlugin::closeEvent(QCloseEvent *event)
 	emit cancel();
 }
 
-void InterfacePlugin::updateOverallInformation()
+void Themes::updateOverallInformation()
 {
 	ui->overall->setText(tr("File %1/%2, size: %3/%4").arg(currentFile).arg(totalFile).arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
 }
 
-void InterfacePlugin::actionInProgess(EngineActionInProgress action)
+void Themes::actionInProgess(EngineActionInProgress action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"start: "+QString::number(action));
 	this->action=action;
@@ -220,7 +220,7 @@ void InterfacePlugin::actionInProgess(EngineActionInProgress action)
 	}
 }
 
-void InterfacePlugin::newTransferStart(const ItemOfCopyList &item)
+void Themes::newTransferStart(const ItemOfCopyList &item)
 {
 	index=0;
 	loop_size=0;
@@ -258,7 +258,7 @@ void InterfacePlugin::newTransferStart(const ItemOfCopyList &item)
 }
 
 //is stopped, example: because error have occurred, and try later, don't remove the item!
-void InterfacePlugin::newTransferStop(const quint64 &id)
+void Themes::newTransferStop(const quint64 &id)
 {
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+QString::number(id));
 
@@ -296,19 +296,19 @@ void InterfacePlugin::newTransferStop(const quint64 &id)
 		ui->skipButton->setEnabled(false);
 }
 
-void InterfacePlugin::newFolderListing(const QString &path)
+void Themes::newFolderListing(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(action==Listing)
 		ui->from->setText(path);
 }
 
-void InterfacePlugin::detectedSpeed(const quint64 &speed)//in byte per seconds
+void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
 {
 	ui->currentSpeed->setText(facilityEngine->speedToString(speed));
 }
 
-void InterfacePlugin::remainingTime(const int &remainingSeconds)
+void Themes::remainingTime(const int &remainingSeconds)
 {
 	if(remainingSeconds==-1)
 		ui->labelTimeRemaining->setText("<html><body>&#8734;</body></html>");
@@ -319,27 +319,27 @@ void InterfacePlugin::remainingTime(const int &remainingSeconds)
 	}
 }
 
-void InterfacePlugin::newCollisionAction(const QString &action)
+void Themes::newCollisionAction(const QString &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(ui->comboBox_fileCollisions->findData(action)!=-1)
 		ui->comboBox_fileCollisions->setCurrentIndex(ui->comboBox_fileCollisions->findData(action));
 }
 
-void InterfacePlugin::newErrorAction(const QString &action)
+void Themes::newErrorAction(const QString &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(ui->comboBox_copyErrors->findData(action)!=-1)
 		ui->comboBox_copyErrors->setCurrentIndex(ui->comboBox_copyErrors->findData(action));
 }
 
-void InterfacePlugin::errorDetected()
+void Themes::errorDetected()
 {
 	haveError=true;
 }
 
 //speed limitation
-bool InterfacePlugin::setSpeedLimitation(const qint64 &speedLimitation)
+bool Themes::setSpeedLimitation(const qint64 &speedLimitation)
 {
 	currentSpeed=speedLimitation;
 	updateSpeed();
@@ -347,7 +347,7 @@ bool InterfacePlugin::setSpeedLimitation(const qint64 &speedLimitation)
 }
 
 //get information about the copy
-void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64 &total)
+void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 {
 	currentSize=current;
 	totalSize=total;
@@ -360,7 +360,7 @@ void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64
 		ui->progressBar_all->setValue(0);
 }
 
-void InterfacePlugin::setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total)
+void Themes::setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total)
 {
 	index=0;
 	loop_size=currentProgressList.size();
@@ -379,7 +379,7 @@ void InterfacePlugin::setFileProgression(const quint64 &id,const quint64 &curren
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
 }
 
-void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &list)
+void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)
 {
 	ui->comboBox_fileCollisions->clear();
 	index=0;
@@ -391,7 +391,7 @@ void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &l
 	}
 }
 
-void InterfacePlugin::setErrorAction(const QList<QPair<QString,QString> > &list)
+void Themes::setErrorAction(const QList<QPair<QString,QString> > &list)
 {
 	ui->comboBox_fileCollisions->clear();
 	index=0;
@@ -404,7 +404,7 @@ void InterfacePlugin::setErrorAction(const QList<QPair<QString,QString> > &list)
 }
 
 //edit the transfer list
-void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
+void Themes::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
 {
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
 	indexAction=0;
@@ -476,14 +476,14 @@ void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList> &retur
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"graphicItemList.size(): "+QString::number(graphicItemList.size()));
 }
 
-void InterfacePlugin::setCopyType(CopyType type)
+void Themes::setCopyType(CopyType type)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	this->type=type;
 	updateModeAndType();
 }
 
-void InterfacePlugin::forceCopyMode(CopyMode mode)
+void Themes::forceCopyMode(CopyMode mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	modeIsForced=true;
@@ -495,19 +495,19 @@ void InterfacePlugin::forceCopyMode(CopyMode mode)
 	updateModeAndType();
 }
 
-void InterfacePlugin::setTransferListOperation(TransferListOperation transferListOperation)
+void Themes::setTransferListOperation(TransferListOperation transferListOperation)
 {
 	ui->exportTransferList->setVisible(transferListOperation & TransferListOperation_Export);
 	ui->importTransferList->setVisible(transferListOperation & TransferListOperation_Import);
 }
 
-void InterfacePlugin::haveExternalOrder()
+void Themes::haveExternalOrder()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 //	ui->moreButton->toggle();
 }
 
-void InterfacePlugin::isInPause(bool isInPause)
+void Themes::isInPause(bool isInPause)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"isInPause: "+QString::number(isInPause));
 	//resume in auto the pause
@@ -524,7 +524,7 @@ void InterfacePlugin::isInPause(bool isInPause)
 	}
 }
 
-void InterfacePlugin::updateCurrentFileInformation()
+void Themes::updateCurrentFileInformation()
 {
 	if(currentProgressList.size()>0)
 	{
@@ -549,7 +549,7 @@ void InterfacePlugin::updateCurrentFileInformation()
 }
 
 
-void InterfacePlugin::on_putOnTop_clicked()
+void Themes::on_putOnTop_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
@@ -575,7 +575,7 @@ void InterfacePlugin::on_putOnTop_clicked()
 		emit moveItemsOnTop(ids);
 }
 
-void InterfacePlugin::on_pushUp_clicked()
+void Themes::on_pushUp_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
@@ -600,7 +600,7 @@ void InterfacePlugin::on_pushUp_clicked()
 		emit moveItemsUp(ids);
 }
 
-void InterfacePlugin::on_pushDown_clicked()
+void Themes::on_pushDown_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
@@ -625,7 +625,7 @@ void InterfacePlugin::on_pushDown_clicked()
 		emit moveItemsDown(ids);
 }
 
-void InterfacePlugin::on_putOnBottom_clicked()
+void Themes::on_putOnBottom_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
@@ -650,7 +650,7 @@ void InterfacePlugin::on_putOnBottom_clicked()
 		emit moveItemsOnBottom(ids);
 }
 
-void InterfacePlugin::on_del_clicked()
+void Themes::on_del_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
@@ -675,20 +675,20 @@ void InterfacePlugin::on_del_clicked()
 		emit removeItems(ids);
 }
 
-void InterfacePlugin::on_cancelButton_clicked()
+void Themes::on_cancelButton_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	this->hide();
 	emit cancel();
 }
 
-void InterfacePlugin::on_checkBoxShowSpeed_toggled(bool checked)
+void Themes::on_checkBoxShowSpeed_toggled(bool checked)
 {
 	if(checked==checked)
 		updateSpeed();
 }
 
-void InterfacePlugin::on_SliderSpeed_valueChanged(int value)
+void Themes::on_SliderSpeed_valueChanged(int value)
 {
 	switch(value)
 	{
@@ -714,7 +714,7 @@ void InterfacePlugin::on_SliderSpeed_valueChanged(int value)
 	emit newSpeedLimitation(currentSpeed);
 }
 
-void InterfacePlugin::updateSpeed()
+void Themes::updateSpeed()
 {
 	bool checked;
 	if(currentSpeed==-1)
@@ -800,13 +800,13 @@ void InterfacePlugin::updateSpeed()
 	}
 }
 
-void InterfacePlugin::on_limitSpeed_valueChanged(int value)
+void Themes::on_limitSpeed_valueChanged(int value)
 {
 	currentSpeed=value;
 	emit newSpeedLimitation(currentSpeed);
 }
 
-void InterfacePlugin::on_checkBox_limitSpeed_clicked()
+void Themes::on_checkBox_limitSpeed_clicked()
 {
 	if(ui->checkBox_limitSpeed->isChecked())
 	{
@@ -819,7 +819,7 @@ void InterfacePlugin::on_checkBox_limitSpeed_clicked()
 		currentSpeed=0;
 }
 
-void InterfacePlugin::on_pauseButton_clicked()
+void Themes::on_pauseButton_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(storeIsInPause)
@@ -828,7 +828,7 @@ void InterfacePlugin::on_pauseButton_clicked()
 		emit pause();
 }
 
-void InterfacePlugin::on_skipButton_clicked()
+void Themes::on_skipButton_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(currentProgressList.size()>0)
@@ -837,7 +837,7 @@ void InterfacePlugin::on_skipButton_clicked()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to skip the transfer, because no transfer running");
 }
 
-void InterfacePlugin::updateModeAndType()
+void Themes::updateModeAndType()
 {
 	menu->clear();
 	if(modeIsForced)
@@ -873,43 +873,43 @@ void InterfacePlugin::updateModeAndType()
 	}
 }
 
-void InterfacePlugin::forcedModeAddFile()
+void Themes::forcedModeAddFile()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit userAddFile(mode);
 }
 
-void InterfacePlugin::forcedModeAddFolder()
+void Themes::forcedModeAddFolder()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit userAddFolder(mode);
 }
 
-void InterfacePlugin::forcedModeAddFileToCopy()
+void Themes::forcedModeAddFileToCopy()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit userAddFile(Copy);
 }
 
-void InterfacePlugin::forcedModeAddFolderToCopy()
+void Themes::forcedModeAddFolderToCopy()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit userAddFolder(Copy);
 }
 
-void InterfacePlugin::forcedModeAddFileToMove()
+void Themes::forcedModeAddFileToMove()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit userAddFile(Move);
 }
 
-void InterfacePlugin::forcedModeAddFolderToMove()
+void Themes::forcedModeAddFolderToMove()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit userAddFolder(Move);
 }
 
-void InterfacePlugin::newLanguageLoaded()
+void Themes::newLanguageLoaded()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(modeIsForced)
@@ -925,13 +925,13 @@ void InterfacePlugin::newLanguageLoaded()
 	on_moreButton_toggled(ui->moreButton->isChecked());
 }
 
-void InterfacePlugin::on_pushButtonCloseSearch_clicked()
+void Themes::on_pushButtonCloseSearch_clicked()
 {
 	closeTheSearchBox();
 }
 
 //close the search box
-void InterfacePlugin::closeTheSearchBox()
+void Themes::closeTheSearchBox()
 {
 	currentIndexSearch = -1;
 	ui->lineEditSearch->clear();
@@ -944,7 +944,7 @@ void InterfacePlugin::closeTheSearchBox()
 }
 
 //search box shortcut
-void InterfacePlugin::searchBoxShortcut()
+void Themes::searchBoxShortcut()
 {
 /*	if(ui->lineEditSearch->isHidden())
 	{*/
@@ -960,7 +960,7 @@ void InterfacePlugin::searchBoxShortcut()
 }
 
 //hilight the search
-void InterfacePlugin::hilightTheSearch()
+void Themes::hilightTheSearch()
 {
 	QFont *fontNormal=new QFont();
 	QTreeWidgetItem * item=NULL;
@@ -1014,7 +1014,7 @@ void InterfacePlugin::hilightTheSearch()
 	delete fontNormal;
 }
 
-void InterfacePlugin::on_pushButtonSearchPrev_clicked()
+void Themes::on_pushButtonSearchPrev_clicked()
 {
 	if(!ui->lineEditSearch->text().isEmpty() && ui->CopyList->topLevelItemCount()>0)
 	{
@@ -1059,7 +1059,7 @@ void InterfacePlugin::on_pushButtonSearchPrev_clicked()
 	}
 }
 
-void InterfacePlugin::on_pushButtonSearchNext_clicked()
+void Themes::on_pushButtonSearchNext_clicked()
 {
 	if(ui->lineEditSearch->text().isEmpty())
 	{
@@ -1112,12 +1112,12 @@ void InterfacePlugin::on_pushButtonSearchNext_clicked()
 	}
 }
 
-void InterfacePlugin::on_lineEditSearch_returnPressed()
+void Themes::on_lineEditSearch_returnPressed()
 {
 	hilightTheSearch();
 }
 
-void InterfacePlugin::on_lineEditSearch_textChanged(QString text)
+void Themes::on_lineEditSearch_textChanged(QString text)
 {
 	if(text=="")
 	{
@@ -1128,7 +1128,7 @@ void InterfacePlugin::on_lineEditSearch_textChanged(QString text)
 		TimerForSearch->start();
 }
 
-void InterfacePlugin::on_moreButton_toggled(bool checked)
+void Themes::on_moreButton_toggled(bool checked)
 {
 	if(checked)
 		this->setMaximumHeight(16777215);
@@ -1140,13 +1140,13 @@ void InterfacePlugin::on_moreButton_toggled(bool checked)
 	this->adjustSize();
 }
 
-void InterfacePlugin::on_comboBox_copyErrors_currentIndexChanged(int index)
+void Themes::on_comboBox_copyErrors_currentIndexChanged(int index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit sendErrorAction(ui->comboBox_copyErrors->itemData(index).toString());
 }
 
-void InterfacePlugin::on_comboBox_fileCollisions_currentIndexChanged(int index)
+void Themes::on_comboBox_fileCollisions_currentIndexChanged(int index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit sendCollisionAction(ui->comboBox_fileCollisions->itemData(index).toString());
@@ -1160,7 +1160,7 @@ void dragEnterEvent(QDragEnterEvent* event);
 void dragMoveEvent(QDragMoveEvent* event);
 void dragLeaveEvent(QDragLeaveEvent* event);
 */
-void InterfacePlugin::dropEvent(QDropEvent *event)
+void Themes::dropEvent(QDropEvent *event)
 {
 	const QMimeData* mimeData = event->mimeData();
 	if(mimeData->hasUrls())
@@ -1170,24 +1170,24 @@ void InterfacePlugin::dropEvent(QDropEvent *event)
 	}
 }
 
-void InterfacePlugin::dragEnterEvent(QDragEnterEvent* event)
+void Themes::dragEnterEvent(QDragEnterEvent* event)
 {
 	// if some actions should not be usable, like move, this code must be adopted
 	event->acceptProposedAction();
 }
 
-void InterfacePlugin::dragMoveEvent(QDragMoveEvent* event)
+void Themes::dragMoveEvent(QDragMoveEvent* event)
 {
 	// if some actions should not be usable, like move, this code must be adopted
 	event->acceptProposedAction();
 }
 
-void InterfacePlugin::dragLeaveEvent(QDragLeaveEvent* event)
+void Themes::dragLeaveEvent(QDragLeaveEvent* event)
 {
 	event->accept();
 }
 
-void InterfacePlugin::on_searchButton_toggled(bool checked)
+void Themes::on_searchButton_toggled(bool checked)
 {
 	if(checked)
 		searchBoxShortcut();
@@ -1195,12 +1195,12 @@ void InterfacePlugin::on_searchButton_toggled(bool checked)
 		closeTheSearchBox();
 }
 
-void InterfacePlugin::on_exportTransferList_clicked()
+void Themes::on_exportTransferList_clicked()
 {
 	emit exportTransferList();
 }
 
-void InterfacePlugin::on_importTransferList_clicked()
+void Themes::on_importTransferList_clicked()
 {
 	emit importTransferList();
 }

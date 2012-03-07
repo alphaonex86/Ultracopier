@@ -10,7 +10,7 @@
 #include <QFileInfo>
 #include <QProcess>
 
-#include "interface/PluginInterface_CopyEngine.h"
+#include "../../../interface/PluginInterface_CopyEngine.h"
 #include "ui_options.h"
 #include "copyEngine.h"
 #include "Environment.h"
@@ -22,6 +22,7 @@ namespace Ui {
 	class options;
 }
 
+/** \brief to generate copy engine instance */
 class Factory : public PluginInterface_CopyEngineFactory
 {
 	Q_OBJECT
@@ -29,14 +30,22 @@ class Factory : public PluginInterface_CopyEngineFactory
 public:
 	Factory();
 	~Factory();
+	/// \brief to return the instance of the copy engine
 	PluginInterface_CopyEngine * getInstance();
-	void setResources(OptionInterface * options,QString writePath,QString pluginPath);
+	/// \brief set the resources, to store options, to have facilityInterface
+	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
 	//get mode allowed
 	/// \brief define if can copy file, folder or both
 	CopyType getCopyType();
+	/// \brief define if can import/export or nothing
+	TransferListOperation getTransferListOperation();
+	/// \brief define if can only copy, or copy and move
 	bool canDoOnlyCopy();
+	/// \brief to get the supported protocols for the source
 	QStringList supportedProtocolsForTheSource();
+	/// \brief to get the supported protocols for the destination
 	QStringList supportedProtocolsForTheDestination();
+	/// \brief to get the options of the copy engine
 	QWidget * options();
 private:
 	Ui::options *ui;
@@ -65,6 +74,10 @@ public slots:
 	void newLanguageLoaded();
 signals:
 	void reloadLanguage();
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	/// \brief To debug source
+	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+	#endif
 };
 
 #endif // FACTORY_H

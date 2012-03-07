@@ -1,3 +1,9 @@
+/** \file fileIsSameDialog.h
+\brief Define the dialog when file is same
+\author alpha_one_x86
+\version 0.3
+\date 2010 */
+
 #include <QDialog>
 #include <QWidget>
 #include <QString>
@@ -12,15 +18,20 @@ namespace Ui {
 	class fileIsSameDialog;
 }
 
+/// \brief Define the dialog when file is same
 class fileIsSameDialog : public QDialog
 {
 	Q_OBJECT
 public:
 	explicit fileIsSameDialog();
 	~fileIsSameDialog();
+	/// \brief set the file informations
 	void setInfo(QFileInfo fileInfo);
+	/// \brief return the the always checkbox is checked
 	bool getAlways();
+	/// \brief return the action clicked
 	FileExistsAction getAction();
+	/// \brief get the new name
 	QString getNewName();
 protected:
 	void changeEvent(QEvent *e);

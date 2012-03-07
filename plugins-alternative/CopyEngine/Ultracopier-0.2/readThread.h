@@ -10,6 +10,12 @@
  
 ****************************************************************************/
 
+/** \file readThread.h
+\brief Thread changed to open/close and read the source file
+\author alpha_one_x86
+\version 0.3
+\date 2011 */
+
 #include <QObject>
 #include <QThread>
 #include <QFile>

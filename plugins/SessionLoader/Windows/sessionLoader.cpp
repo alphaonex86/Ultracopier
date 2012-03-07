@@ -14,7 +14,7 @@
 
 #include "sessionLoader.h"
 
-void TestPlugin::setEnabled(bool newValue)
+void SessionLoader::setEnabled(bool newValue)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
 	//set value into the variable
@@ -32,7 +32,7 @@ void TestPlugin::setEnabled(bool newValue)
         RegCloseKey(ultracopier_regkey);
 }
 
-bool TestPlugin::getEnabled()
+bool SessionLoader::getEnabled()
 {
         ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//return the value into the variable
@@ -47,7 +47,7 @@ bool TestPlugin::getEnabled()
         return temp;
 }
 
-void TestPlugin::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+void SessionLoader::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
 {
 	Q_UNUSED(options);
 	Q_UNUSED(writePath);

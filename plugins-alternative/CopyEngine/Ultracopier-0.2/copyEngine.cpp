@@ -199,7 +199,7 @@ bool copyEngine::getOptionsEngine(QWidget *tempWidget)
 	return true;
 }
 
-bool copyEngine::haveSameSource(QStringList sources)
+bool copyEngine::haveSameSource(const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(sourceDriveMultiple)
@@ -216,7 +216,7 @@ bool copyEngine::haveSameSource(QStringList sources)
 	return true;
 }
 
-bool copyEngine::haveSameDestination(QString destination)
+bool copyEngine::haveSameDestination(const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(destinationDriveMultiple)
@@ -243,7 +243,7 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 }
 
 //user ask ask to add folder (add it with interface ask source/destination)
-bool copyEngine::userAddFolder(CopyMode mode)
+bool copyEngine::userAddFolder(const CopyMode &mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString source = QFileDialog::getExistingDirectory(interface,tr("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
@@ -255,7 +255,7 @@ bool copyEngine::userAddFolder(CopyMode mode)
 		return newMove(QStringList() << source);
 }
 
-bool copyEngine::userAddFile(CopyMode mode)
+bool copyEngine::userAddFile(const CopyMode &mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QStringList sources = QFileDialog::getOpenFileNames(
@@ -354,7 +354,7 @@ void copyEngine::scanThreadHaveFinish(bool skipFirstRemove)
 }
 
 //external soft like file browser have send copy/move list to do
-bool copyEngine::newCopy(QStringList sources)
+bool copyEngine::newCopy(const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
@@ -366,7 +366,7 @@ bool copyEngine::newCopy(QStringList sources)
 	return newCopy(sources,destination);
 }
 
-bool copyEngine::newCopy(QStringList sources,QString destination)
+bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	scanFileOrFolder * scanFileOrFolderThread = newScanThread(Copy);
@@ -398,7 +398,7 @@ bool copyEngine::newCopy(QStringList sources,QString destination)
 	return true;
 }
 
-bool copyEngine::newMove(QStringList sources)
+bool copyEngine::newMove(const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
@@ -410,7 +410,7 @@ bool copyEngine::newMove(QStringList sources)
 	return newMove(sources,destination);
 }
 
-bool copyEngine::newMove(QStringList sources,QString destination)
+bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	scanFileOrFolder * scanFileOrFolderThread = newScanThread(Move);
@@ -442,17 +442,17 @@ bool copyEngine::newMove(QStringList sources,QString destination)
 	return true;
 }
 
-void copyEngine::setDrive(QStringList drives)
+void copyEngine::setDrive(const QStringList &drives)
 {
 	threadOfTheTransfer.setDrive(drives);
 }
 
 //action on the copy
-void copyEngine::start()
+/*void copyEngine::start()
 {
 	if(threadOfTheTransfer.isFinished())
 		threadOfTheTransfer.start();
-}
+}*/
 
 void copyEngine::pause()
 {
@@ -467,7 +467,7 @@ void copyEngine::resume()
 		threadOfTheTransfer.resumeTransfer();
 }
 
-void copyEngine::skip(quint64 id)
+void copyEngine::skip(const quint64 &id)
 {
 	threadOfTheTransfer.skipCurrentTransfer(id);
 }
@@ -492,7 +492,7 @@ QPair<quint64,quint64> copyEngine::getGeneralProgression()
 }
 
 //first = current transfered byte, second = byte to transfer
-returnSpecificFileProgression copyEngine::getFileProgression(quint64 id)
+returnSpecificFileProgression copyEngine::getFileProgression(const quint64 &id)
 {
 	return threadOfTheTransfer.getFileProgression(id);
 }
@@ -504,27 +504,27 @@ returnSpecificFileProgression copyEngine::getFileProgression(quint64 id)
 	return true;
 }*/
 
-void copyEngine::removeItems(QList<int> ids)
+void copyEngine::removeItems(const QList<int> &ids)
 {
 	threadOfTheTransfer.removeItems(ids);
 }
 
-void copyEngine::moveItemsOnTop(QList<int> ids)
+void copyEngine::moveItemsOnTop(const QList<int> &ids)
 {
 	threadOfTheTransfer.moveItemsOnTop(ids);
 }
 
-void copyEngine::moveItemsUp(QList<int> ids)
+void copyEngine::moveItemsUp(const QList<int> &ids)
 {
 	threadOfTheTransfer.moveItemsUp(ids);
 }
 
-void copyEngine::moveItemsDown(QList<int> ids)
+void copyEngine::moveItemsDown(const QList<int> &ids)
 {
 	threadOfTheTransfer.moveItemsDown(ids);
 }
 
-void copyEngine::moveItemsOnBottom(QList<int> ids)
+void copyEngine::moveItemsOnBottom(const QList<int> &ids)
 {
 	threadOfTheTransfer.moveItemsOnBottom(ids);
 }
@@ -541,7 +541,7 @@ qint64 copyEngine::getSpeedLimitation()
 	return maxSpeed;
 }
 
-bool copyEngine::setSpeedLimitation(qint64 speedLimitation)
+bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 {
 	maxSpeed=speedLimitation;
 	threadOfTheTransfer.setMaxSpeed(speedLimitation);
@@ -571,7 +571,7 @@ QList<QPair<QString,QString> > copyEngine::getErrorAction()
 	return list;
 }
 
-void copyEngine::setCollisionAction(QString action)
+void copyEngine::setCollisionAction(const QString &action)
 {
 	if(action=="skip")
 		alwaysDoThisActionForFileExists=FileExists_Skip;
@@ -587,7 +587,7 @@ void copyEngine::setCollisionAction(QString action)
 		alwaysDoThisActionForFileExists=FileExists_NotSet;
 }
 
-void copyEngine::setErrorAction(QString action)
+void copyEngine::setErrorAction(const QString &action)
 {
 	if(action=="skip")
 		alwaysDoThisActionForFileError=FileError_Skip;
@@ -602,7 +602,7 @@ QList<ItemOfCopyList> copyEngine::getTransferList()
 	return threadOfTheTransfer.getTransferList();
 }
 
-ItemOfCopyList copyEngine::getTransferListEntry(quint64 id)
+ItemOfCopyList copyEngine::getTransferListEntry(const quint64 &id)
 {
 	return threadOfTheTransfer.getTransferListEntry(id);
 }

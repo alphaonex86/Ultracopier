@@ -23,7 +23,7 @@ Factory::~Factory()
 PluginInterface_Themes * Factory::getInstance()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	PluginInterface_Themes * newInterface=new InterfacePlugin(
+	PluginInterface_Themes * newInterface=new Themes(
 				optionsEngine->getOptionValue("checkBoxShowSpeed").toBool(),facilityEngine
 				);
 	connect(newInterface,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));

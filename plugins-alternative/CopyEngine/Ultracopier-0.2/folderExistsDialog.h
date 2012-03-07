@@ -1,3 +1,9 @@
+/** \file folderExistsDialog.h
+\brief Define the dialog when file exists
+\author alpha_one_x86
+\version 0.3
+\date 2010 */
+
 #ifndef FOLDERISSAMEDIALOG_H
 #define FOLDERISSAMEDIALOG_H
 
@@ -12,16 +18,20 @@ namespace Ui {
     class folderExistsDialog;
 }
 
+/// \brief Define the dialog when file exists
 class folderExistsDialog : public QDialog
 {
-    Q_OBJECT
-
+	Q_OBJECT
 public:
 	explicit folderExistsDialog();
 	~folderExistsDialog();
+	/// \brief set file information
 	void setInfo(QFileInfo source,bool isSame,QFileInfo destination);
+	/// \brief return the the always checkbox is checked
 	bool getAlways();
+	/// \brief return the action clicked
 	FolderExistsAction getAction();
+	/// \brief get the new name
 	QString getNewName();
 protected:
 	void changeEvent(QEvent *e);

@@ -1,4 +1,4 @@
-/** \file StructEnumDefinition.h
+/** \file StructEnumDefinition_CopyEngine.h
 \brief Define the structure and enumeration used in the copy engine
 \author alpha_one_x86
 \version 0.3

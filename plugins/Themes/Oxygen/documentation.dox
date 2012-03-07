@@ -1,0 +1,29 @@
+/* -*- mode: C++ ; c-file-style: "stroustrup" -*- **/
+
+/*
+  This file contains NO source code, just some documentation for doxygen to
+  parse.
+*/
+
+/*!
+  \mainpage Oxygen
+
+  \section mainpage_overview Overview
+
+  It's the default interface for Ultracopier. The first version, it's greatly inspirated by Supercopier. But have well evolued.\n
+  More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>. Is part of Ultracopier 0.3 project.
+
+  \section mainpage_platforms Platforms
+
+  This plugin might be usable in all environments where you find Qt 4.\n
+  To be compatible with the official Ultracopier plugins, you need compil it with Gcc, Qt4.8, and same env as Ultracopier have been compiled, see the documentation.
+
+  \section mainpage_downloads Downloads
+
+  You can found link on <a href="http://ultracopier.first-world.info/">Ultracopier (Supercopier/Teracopy)</a> project page, via git, snapshot sources, ...
+
+  \section license GPL Version 3
+  The code source is under GPL3. The image is extacted from Oxygen icon pack of KDE4.
+
+*/
+
