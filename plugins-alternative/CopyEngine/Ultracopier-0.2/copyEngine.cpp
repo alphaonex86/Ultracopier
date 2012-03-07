@@ -529,6 +529,15 @@ void copyEngine::moveItemsOnBottom(const QList<int> &ids)
 	threadOfTheTransfer.moveItemsOnBottom(ids);
 }
 
+/// \brief export the transfer list into a file
+void copyEngine::exportTransferList()
+{
+}
+
+/// \brief import the transfer list into a file
+void copyEngine::importTransferList()
+{
+}
 
 QList<returnActionOnCopyList> copyEngine::getActionOnList()
 {

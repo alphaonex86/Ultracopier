@@ -52,18 +52,31 @@ public slots:
 	//set the translate
 	void newLanguageLoaded();
 public:
+	/// \brief get the widget for the copy engine
 	QWidget * getOptionsEngineWidget();
+	/// \brief to set if the copy engine is found
 	void getOptionsEngineEnabled(bool isEnabled);
-	//edit the transfer list
-	void getActionOnList(const QList<returnActionOnCopyList> &);
+	/// \brief get action on the transfer list (add/move/remove)
+	void getActionOnList(const QList<returnActionOnCopyList> &returnActions);
 	//get information about the copy
+	/// \brief show the general progression
 	void setGeneralProgression(const quint64 &current,const quint64 &total);
+	/// \brief show the file progression
 	void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total);
+	/// \brief set collision action
 	void setCollisionAction(const QList<QPair<QString,QString> > &);
+	/// \brief set error action
 	void setErrorAction(const QList<QPair<QString,QString> > &);
+	/// \brief set the copyType -> file or folder
 	void setCopyType(CopyType);
-	void forceCopyMode(CopyMode);//to force in copy or move, else support both
-	void haveExternalOrder();//to notify the interface, which can hide add folder/filer button
+	/// \brief set the copyMove -> copy or move, to force in copy or move, else support both
+	void forceCopyMode(CopyMode);
+	/// \brief set if transfer list is exportable/importable
+	void setTransferListOperation(TransferListOperation transferListOperation);
+	/** \brief set if the order is external (like file manager copy)
+	 * to notify the interface, which can hide add folder/filer button */
+	void haveExternalOrder();
+	/// \brief set if is in pause
 	void isInPause(bool);
 signals:
 	//set the transfer list
