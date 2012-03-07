@@ -371,7 +371,7 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 	return ok;
 }
 
-Q_EXPORT_PLUGIN2(pluginLoader, Plugin);
+Q_EXPORT_PLUGIN2(pluginLoader, PluginLoader);
 
 bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 {

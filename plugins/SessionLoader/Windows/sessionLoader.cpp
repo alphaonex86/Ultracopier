@@ -55,4 +55,4 @@ void SessionLoader::setResources(OptionInterface * options,QString writePath,QSt
 	Q_UNUSED(portableVersion);
 }
 
-Q_EXPORT_PLUGIN2(sessionLoader, TestPlugin);
+Q_EXPORT_PLUGIN2(sessionLoader, SessionLoader);
