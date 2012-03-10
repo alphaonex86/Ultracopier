@@ -22,8 +22,6 @@ win32:RC_FILE += resources/resources-windows.rc
 TARGET = ultracopier
 macx { 
     ICON = resources/ultracopier.icns
-    QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.5.sdk
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.5
 }
 FORMS += HelpDialog.ui \
     PluginInformation.ui \
