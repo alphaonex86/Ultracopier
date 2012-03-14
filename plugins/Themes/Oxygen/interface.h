@@ -4,8 +4,8 @@
 \version 0.3
 \date 2010 */
 
-#ifndef INTERFACE_TEST_H
-#define INTERFACE_TEST_H
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
 #include <QObject>
 #include <QWidget>
@@ -18,10 +18,11 @@
 #include "ui_interface.h"
 #include "ui_options.h"
 #include "Environment.h"
+#include "TransferModel.h"
 
 // for windows progress bar
 #ifndef __GNUC__
-#    include <shobjidl.h>
+#include <shobjidl.h>
 #endif
 
 namespace Ui {
@@ -135,11 +136,6 @@ private:
 		quint64 currentProgression;
 		ItemOfCopyList generalData;
 	};
-	struct graphicItem
-	{
-		quint64 id;
-		QTreeWidgetItem * item;
-	};
 	Ui::interfaceCopy *ui;
 	quint64 currentFile;
 	quint64 totalFile;
@@ -151,7 +147,6 @@ private:
 	EngineActionInProgress action;
 	void closeEvent(QCloseEvent *event);
 	QList<ItemOfCopyListWithMoreInformations> currentProgressList;
-	QList<graphicItem> graphicItemList;
 	qint64 currentSpeed;
 	void updateSpeed();
 	bool storeIsInPause;
@@ -171,8 +166,10 @@ private:
 	QIcon player_play,player_pause;
 	//temp variables
 	int loop_size,loop_sub_size,index,indexAction;
-	QList<QTreeWidgetItem *> selectedItems;
 	QList<int> ids;
+	quint64 baseRow,addRow,removeRow;
+	/// \brief the custom transfer model
+	TransferModel transferModel;
 	/** \brief drag event processing
 
 	need setAcceptDrops(true); into the constructor
@@ -221,4 +218,4 @@ signals:
 	void newSpeedLimitation(qint64);
 };
 
-#endif // INTERFACE_TEST_H
+#endif // INTERFACE_H

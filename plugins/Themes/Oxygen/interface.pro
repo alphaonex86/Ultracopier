@@ -8,9 +8,11 @@ HEADERS         = interface.h \
     Variable.h \
     ../../../interface/PluginInterface_Themes.h \
     ../../../interface/FacilityInterface.h \
-    ../../../interface/OptionInterface.h
+    ../../../interface/OptionInterface.h \
+    TransferModel.h
 SOURCES         = interface.cpp \
-    factory.cpp
+    factory.cpp \
+    TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)
 TRANSLATIONS   += Languages/fr/translation.ts \
     Languages/ar/translation.ts \

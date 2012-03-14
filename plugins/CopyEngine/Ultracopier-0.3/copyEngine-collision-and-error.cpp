@@ -398,13 +398,13 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 			listThread->mkPathQueue.retry();
 		return;
 		case FileError_PutToEndOfTheList:
-			while(error_index<listThread->actionToDoList.size())
+			while(error_index<listThread->actionToDoListInode.size())
 			{
-				if(listThread->actionToDoList.at(error_index).type==ListThread::ActionType_MkPath)
+				if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
 				{
 					listThread->mkPathQueue.skip();
-					listThread->actionToDoList.move(error_index,listThread->actionToDoList.size()-1);
-					listThread->actionToDoList[error_index].isRunning=false;
+					listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
+					listThread->actionToDoListInode[error_index].isRunning=false;
 					listThread->numberOfInodeOperation--;
 					listThread->doNewActions_inode_manipulation();
 					return;
@@ -450,13 +450,13 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 					listThread->mkPathQueue.retry();
 				break;
 				case FileError_PutToEndOfTheList:
-					while(error_index<listThread->actionToDoList.size())
+					while(error_index<listThread->actionToDoListInode.size())
 					{
-						if(listThread->actionToDoList.at(error_index).type==ListThread::ActionType_MkPath)
+						if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
 						{
 							listThread->mkPathQueue.skip();
-							listThread->actionToDoList.move(error_index,listThread->actionToDoList.size()-1);
-							listThread->actionToDoList[error_index].isRunning=false;
+							listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
+							listThread->actionToDoListInode[error_index].isRunning=false;
 							listThread->numberOfInodeOperation--;
 							listThread->doNewActions_inode_manipulation();
 							break;
@@ -494,13 +494,13 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 			listThread->rmPathQueue.retry();
 		return;
 		case FileError_PutToEndOfTheList:
-			while(error_index<listThread->actionToDoList.size())
+			while(error_index<listThread->actionToDoListInode.size())
 			{
-				if(listThread->actionToDoList.at(error_index).type==ListThread::ActionType_MkPath)
+				if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
 				{
 					listThread->rmPathQueue.skip();
-					listThread->actionToDoList.move(error_index,listThread->actionToDoList.size()-1);
-					listThread->actionToDoList[error_index].isRunning=false;
+					listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
+					listThread->actionToDoListInode[error_index].isRunning=false;
 					listThread->numberOfInodeOperation--;
 					listThread->doNewActions_inode_manipulation();
 					return;
@@ -546,13 +546,13 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 					listThread->rmPathQueue.retry();
 				break;
 				case FileError_PutToEndOfTheList:
-					while(error_index<listThread->actionToDoList.size())
+					while(error_index<listThread->actionToDoListInode.size())
 					{
-						if(listThread->actionToDoList.at(error_index).type==ListThread::ActionType_MkPath)
+						if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
 						{
 							listThread->rmPathQueue.skip();
-							listThread->actionToDoList.move(error_index,listThread->actionToDoList.size()-1);
-							listThread->actionToDoList[error_index].isRunning=false;
+							listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
+							listThread->actionToDoListInode[error_index].isRunning=false;
 							listThread->numberOfInodeOperation--;
 							listThread->doNewActions_inode_manipulation();
 							break;

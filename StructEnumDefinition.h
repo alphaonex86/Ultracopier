@@ -38,9 +38,8 @@ enum ListeningState
 /// \brief Define the copy type, if folder, file or both
 enum CopyType
 {
-	Folder			= 0x00000001,
-	File			= 0x00000002,
-	FileAndFolder		= Folder | File
+	File			= 0x00000001,
+	FileAndFolder		= 0x00000002
 };
 
 /// \brief transfer list operation, can define nothing, the import/export or both
@@ -58,18 +57,6 @@ enum EngineActionInProgress
 	Listing			= 0x00000001,
 	Copying			= 0x00000002,
 	CopyingAndListing	= Listing | Copying
-};
-
-enum ActionTypeCopyList
-{
-	MoveItem,
-	RemoveItem
-};
-
-enum ReturnActionTypeCopyList
-{
-	AddingItem,
-	OtherAction
 };
 
 enum DebugLevel
@@ -101,6 +88,27 @@ struct TimeDecomposition
 	quint16 hour;
 };
 
+/// \brief to return file progression of previousled asked query
+struct returnSpecificFileProgression
+{
+	quint64 copiedSize;
+	quint64 totalSize;
+	bool haveBeenLocated;
+};
+
+//////////////////////////// Return list //////////////////////////////
+enum ActionTypeCopyList
+{
+	MoveItem,
+	RemoveItem
+};
+
+enum ReturnActionTypeCopyList
+{
+	AddingItem,
+	OtherAction
+};
+
 /// \brief item to insert item in the interface
 struct ItemOfCopyList
 {
@@ -116,28 +124,21 @@ struct ItemOfCopyList
 /// \brief The definition of no removing action on transfer list
 struct ActionOnCopyList
 {
-	ActionTypeCopyList type;
-	quint64 id;
+	ActionTypeCopyList type;//MoveItem or RemoveItem
+	
+	int current_position;
+	///< if userAction.type == MoveItem
+	int position;
 };
 
 /// \brief action normal or due to interface query on copy list
 struct returnActionOnCopyList
 {
 	ReturnActionTypeCopyList type;///< is OtherAction or AddingItem
-	///< used if type != AddingItem
-	ActionOnCopyList userAction;
-	///< if userAction.type == MoveItem
-	int position;
 	///< used if type == AddingItem
 	ItemOfCopyList addAction;
-};
-
-/// \brief to return file progression of previousled asked query
-struct returnSpecificFileProgression
-{
-	quint64 copiedSize;
-	quint64 totalSize;
-	bool haveBeenLocated;
+	// else
+	ActionOnCopyList userAction;
 };
 
 #endif // STRUCTDEF_H

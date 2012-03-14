@@ -58,17 +58,9 @@ public:
 	void setDrive(QStringList drives);
 	/// \brief to set the collision action
 	void setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
-	/// \brief get action type
-	enum ActionType
-	{
-		ActionType_Transfer=0,
-		ActionType_MkPath=1,
-		ActionType_RmPath=2
-	};
 	/// \brief to store one action to do
-	struct actionToDo
+	struct actionToDoTransfer
 	{
-		ActionType type;///< \see ActionType
 		quint64 id;
 		qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
 		QFileInfo source;///< Used to set: source for transfer, folder to create, folder to drop
@@ -77,8 +69,24 @@ public:
 		bool isRunning;///< store if the action si running
 		//TransferThread * transfer; // -> see transferThreadList
 	};
-	QList<actionToDo> actionToDoList;
-	int				numberOfInodeOperation;
+	QList<actionToDoTransfer> actionToDoListTransfer;
+	/// \brief get action type
+	enum ActionType
+	{
+		ActionType_MkPath=1,
+		ActionType_RmPath=2
+	};
+	/// \brief to store one action to do
+	struct actionToDoInode
+	{
+		ActionType type;///< \see ActionType
+		quint64 id;
+		qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
+		QFileInfo source;///< Used to set: source for transfer, folder to create, folder to drop
+		bool isRunning;///< store if the action si running
+	};
+	QList<actionToDoInode> actionToDoListInode;
+	int numberOfInodeOperation;
 	//dir operation thread queue
 	MkPath mkPathQueue;
 	RmPath rmPathQueue;
@@ -159,8 +167,15 @@ public slots:
 	void setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists);
 	/// \brief do new actions, start transfer
 	void doNewActions_start_transfer();
-	/// \brief do new actions, do the inode manipulation
+	/** \brief lunch the pre-op or inode op
+	  1) locate the next next item to do into the both list
+	    1a) optimisation posible on the mkpath/rmpath
+	  2) determine what need be lunched
+	  3) lunch it, rerun the 2)
+	  */
 	void doNewActions_inode_manipulation();
+	/// \brief for the inode manipulation, do the transfer
+	void doNewActions_inode_manipulation_do_tranfer();
 	/// \brief restart transfer if it can
 	void restartTransferIfItCan();
 private:
@@ -172,14 +187,7 @@ private:
 	bool destinationDriveMultiple;
 	QList<scanFileOrFolder *> scanFileOrFolderThreadsPool;
 	int numberOfTransferIntoToDoList;
-	//list of transfer thread
-	struct transfer
-	{
-		TransferThread * thread;
-		quint64 id;
-		qint64 size;
-	};//for quick current running search
-	QList<transfer>			transferThreadList;
+	QList<TransferThread *>		transferThreadList;
 	scanFileOrFolder *		newScanThread(CopyMode mode);
 	quint64				bytesToTransfer;
 	quint64				bytesTransfered;
@@ -218,12 +226,16 @@ private:
 	#endif
 	FacilityInterface * facilityInterface;
 	//temp variable for not always alocate the memory
-	int int_for_loop,int_for_internal_loop,loop_size,lopp_sub_size,number_rm_path_moved;
+	int int_for_loop,int_for_internal_loop,int_for_transfer_thread_search,loop_size,loop_sub_size,loop_sub_size_transfer_thread_search,number_rm_path_moved;
 	TransferThread *temp_transfer_thread;
 	bool isFound;
 	bool updateTheStatus_listing,updateTheStatus_copying;
 	EngineActionInProgress updateTheStatus_action_in_progress;
 	QSemaphore waitConstructor,waitCancel;
+	int actionToDoListTransfer_count,actionToDoListInode_count;
+	bool doTransfer,doInode;
+	qint64 oversize,currentProgression;
+	TransferThread* currentTransferThread;
 	//memory variable for transfer thread creation
 	bool doRightTransfer;
 	bool keepDate;
@@ -248,7 +260,8 @@ private slots:
 	void rmPathFirstFolderFinish();
 	//transfer is finished
 	void transferIsFinished();
-	//put the current file at bottom
+	/** \brief put the current file at bottom in case of error
+	\note ONLY IN CASE OF ERROR */
 	void transferPutAtBottom();
 	//transfer is finished
 	void transferInodeIsClosed();

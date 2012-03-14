@@ -53,6 +53,10 @@ public:
 	#endif
 	/// \brief to have semaphore, and try create just one by one
 	void setMkpathTransfer(QSemaphore *mkpathTransfer);
+	/// \brief to store the transfer id
+	quint64			transferId;
+	/// \brief to store the transfer size
+	quint64			transferSize;
 protected:
 	void run();
 signals:

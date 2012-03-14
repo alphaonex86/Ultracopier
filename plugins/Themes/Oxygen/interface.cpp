@@ -15,6 +15,8 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
 {
 	this->facilityEngine=facilityEngine;
 	ui->setupUi(this);
+	ui->TransferList->setModel(&transferModel);
+	transferModel.setFacilityEngine(facilityEngine);
 	ui->tabWidget->setCurrentIndex(0);
 	ui->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
 	currentFile	= 0;
@@ -243,7 +245,7 @@ void Themes::newTransferStart(const ItemOfCopyList &item)
 	currentProgressList<<newItem;
 	ui->skipButton->setEnabled(true);
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Start transfer new item: "+QString::number(currentProgressList.last().generalData.id)+", with size: "+QString::number(currentProgressList.last().generalData.size));
-	index=0;
+/*	index=0;
 	loop_size=graphicItemList.size();
 	while(index<loop_size)
 	{
@@ -253,7 +255,7 @@ void Themes::newTransferStart(const ItemOfCopyList &item)
 			break;
 		}
 		index++;
-	}
+	}*/
 	updateCurrentFileInformation();
 }
 
@@ -264,7 +266,7 @@ void Themes::newTransferStop(const quint64 &id)
 
 	//update the icon, but the item can be removed before from the transfer list, then not found
 	index=0;
-	loop_size=graphicItemList.size();
+/*	loop_size=graphicItemList.size();
 	while(index<loop_size)
 	{
 		if(graphicItemList.at(index).id==id)
@@ -274,7 +276,7 @@ void Themes::newTransferStop(const quint64 &id)
 			break;
 		}
 		index++;
-	}
+	}*/
 
 	//update the internal transfer list
 	index=0;
@@ -404,76 +406,22 @@ void Themes::setErrorAction(const QList<QPair<QString,QString> > &list)
 }
 
 //edit the transfer list
+/// \todo check and re-enable to selection
 void Themes::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
 {
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
-	indexAction=0;
-	index=0;
-	loop_size=returnActions.size();
-	while(indexAction<loop_size)
-	{
-		if(returnActions.at(indexAction).type==AddingItem)
-		{
-			graphicItem newItem;
-			newItem.id=returnActions.at(indexAction).addAction.id;
-			QStringList listString;
-			listString << returnActions.at(indexAction).addAction.sourceFullPath << facilityEngine->sizeToString(returnActions.at(indexAction).addAction.size) << returnActions.at(indexAction).addAction.destinationFullPath;
-			newItem.item=new QTreeWidgetItem(listString);
-			ui->CopyList->addTopLevelItem(newItem.item);
-			totalFile++;
-			graphicItemList<<newItem;
-			totalSize+=returnActions.at(indexAction).addAction.size;
-			//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Add item: "+QString::number(newItem.id)+", with size: "+QString::number(returnActions.at(indexAction).addAction.size));
-			updateOverallInformation();
-		}
-		else
-		{
-			index=0;
-			loop_sub_size=graphicItemList.size();
-			while(index<loop_sub_size)
-			{
-				if(graphicItemList.at(index).id==returnActions.at(indexAction).userAction.id)
-				{
-					int pos=ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item);
-					if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-					{
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Warning, graphical item not located");
-					}
-					else
-					{
-						bool isSelected=graphicItemList.at(index).item->isSelected();
-						switch(returnActions.at(indexAction).userAction.type)
-						{
-							case MoveItem:
-								ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"MoveItem: "+QString::number(returnActions.at(indexAction).userAction.id)+", position: "+QString::number(returnActions.at(indexAction).position));
-								ui->CopyList->insertTopLevelItem(returnActions.at(indexAction).position,ui->CopyList->takeTopLevelItem(pos));
-								graphicItemList.at(index).item->setSelected(isSelected);
-								graphicItemList.move(index,returnActions.at(indexAction).position);
-							break;
-							case RemoveItem:
-								//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Remove: "+QString::number(returnActions.at(indexAction).userAction.id));
-								delete graphicItemList.at(index).item;
-								graphicItemList.removeAt(index);
-								currentFile++;
-								updateOverallInformation();
-							break;
-						}
-					}
-					break;
-				}
-				index++;
-			}
-		}
-		indexAction++;
-	}
-	if(graphicItemList.size()==0)
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
+	QList<quint64> returnValue=transferModel.synchronizeItems(returnActions);
+	totalFile+=returnValue[0];
+	totalSize+=returnValue[1];
+	currentFile+=returnValue[2];
+	if(transferModel.rowCount()==0)
 	{
 		ui->progressBar_all->setValue(65535);
 		ui->progressBar_file->setValue(65535);
 		currentSize=totalSize;
-		updateOverallInformation();
 	}
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"graphicItemList.size(): "+QString::number(graphicItemList.size()));
+	updateOverallInformation();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"transferModel.rowCount(): "+QString::number(transferModel.rowCount()));
 }
 
 void Themes::setCopyType(CopyType type)
@@ -551,7 +499,7 @@ void Themes::updateCurrentFileInformation()
 
 void Themes::on_putOnTop_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
 	ids.clear();
 	index=0;
@@ -572,12 +520,12 @@ void Themes::on_putOnTop_clicked()
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsOnTop(ids);
+		emit moveItemsOnTop(ids);*/
 }
 
 void Themes::on_pushUp_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
 	ids.clear();
 	index=0;
@@ -597,12 +545,12 @@ void Themes::on_pushUp_clicked()
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsUp(ids);
+		emit moveItemsUp(ids);*/
 }
 
 void Themes::on_pushDown_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
 	ids.clear();
 	index=0;
@@ -622,12 +570,12 @@ void Themes::on_pushDown_clicked()
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsDown(ids);
+		emit moveItemsDown(ids);*/
 }
 
 void Themes::on_putOnBottom_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
 	ids.clear();
 	index=0;
@@ -647,12 +595,12 @@ void Themes::on_putOnBottom_clicked()
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsOnBottom(ids);
+		emit moveItemsOnBottom(ids);*/
 }
 
 void Themes::on_del_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	selectedItems=ui->CopyList->selectedItems();
 	ids.clear();
 	index=0;
@@ -672,7 +620,7 @@ void Themes::on_del_clicked()
 		index++;
 	}
 	if(ids.size()>0)
-		emit removeItems(ids);
+		emit removeItems(ids);*/
 }
 
 void Themes::on_cancelButton_clicked()
@@ -842,12 +790,9 @@ void Themes::updateModeAndType()
 	menu->clear();
 	if(modeIsForced)
 	{
-		if(type==File || type==FileAndFolder)
-		{
-			menu->addAction(ui->actionAddFile);
-			connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-		}
-		if(type==Folder || type==FileAndFolder)
+		menu->addAction(ui->actionAddFile);
+		connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
+		if(type==FileAndFolder)
 		{
 			menu->addAction(ui->actionAddFolder);
 			connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
@@ -855,20 +800,16 @@ void Themes::updateModeAndType()
 	}
 	else
 	{
-		if(type==File || type==FileAndFolder)
-		{
-			menu->addAction(ui->actionAddFileToCopy);
-			menu->addAction(ui->actionAddFileToMove);
-			connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-			connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-		}
-		if(type==Folder || type==FileAndFolder)
+		menu->addAction(ui->actionAddFileToCopy);
+		menu->addAction(ui->actionAddFileToMove);
+		connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
+		connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
+		if(type==FileAndFolder)
 		{
 			menu->addAction(ui->actionAddFolderToCopy);
 			menu->addAction(ui->actionAddFolderToMove);
 			connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
 			connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-
 		}
 	}
 }
@@ -962,7 +903,7 @@ void Themes::searchBoxShortcut()
 //hilight the search
 void Themes::hilightTheSearch()
 {
-	QFont *fontNormal=new QFont();
+/*	QFont *fontNormal=new QFont();
 	QTreeWidgetItem * item=NULL;
 	//get the ids to do actions
 	int i=0;
@@ -1011,12 +952,12 @@ void Themes::hilightTheSearch()
 		else
 			ui->lineEditSearch->setStyleSheet("");
 	}
-	delete fontNormal;
+	delete fontNormal;*/
 }
 
 void Themes::on_pushButtonSearchPrev_clicked()
 {
-	if(!ui->lineEditSearch->text().isEmpty() && ui->CopyList->topLevelItemCount()>0)
+/*	if(!ui->lineEditSearch->text().isEmpty() && ui->CopyList->topLevelItemCount()>0)
 	{
 		hilightTheSearch();
 		int searchStart;
@@ -1056,12 +997,12 @@ void Themes::on_pushButtonSearchPrev_clicked()
 		}
 		else
 			ui->lineEditSearch->setStyleSheet("background-color: rgb(255, 150, 150);");
-	}
+	}*/
 }
 
 void Themes::on_pushButtonSearchNext_clicked()
 {
-	if(ui->lineEditSearch->text().isEmpty())
+/*	if(ui->lineEditSearch->text().isEmpty())
 	{
 		if(ui->lineEditSearch->isHidden())
 			searchBoxShortcut();
@@ -1109,7 +1050,7 @@ void Themes::on_pushButtonSearchNext_clicked()
 			else
 				ui->lineEditSearch->setStyleSheet("background-color: rgb(255, 150, 150);");
 		}
-	}
+	}*/
 }
 
 void Themes::on_lineEditSearch_returnPressed()
