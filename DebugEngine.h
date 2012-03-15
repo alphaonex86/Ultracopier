@@ -101,6 +101,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		QString addDebugInformation_time;
 		QString addDebugInformation_htmlFormat;
 		QString addDebugInformation_textFormat;*/
+		quint32 addDebugInformationCallNumber;
 	signals:
 		/// \brief Send that's when new debug info is added
 		void newDebugInformation();

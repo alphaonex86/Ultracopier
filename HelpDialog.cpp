@@ -90,16 +90,26 @@ void HelpDialog::reloadTextValue()
 void HelpDialog::addDebugText()
 {
 	QList<DebugEngine::ItemOfDebug> returnedList=debug_engine_instance->getItemList();
+	QTreeWidgetItem * item;
+	QBrush brush;
+	QFont functionFont;
+	functionFont.setItalic(true);
+	functionFont.setUnderline(true);
+	QFont timeFont;
+	timeFont.setBold(true);
+	QFont noteFont;
+	noteFont.setBold(true);
+	noteFont.setPointSize(15);
 	int index=0;
-	while(index<returnedList.size())
+	int loop_size=returnedList.size();
+	while(index<loop_size)
 	{
-		QTreeWidgetItem * item=new QTreeWidgetItem(ui->debugView,QStringList()
+		item=new QTreeWidgetItem(ui->debugView,QStringList()
 							    << returnedList.at(index).time
 							    << returnedList.at(index).file
 							    << returnedList.at(index).function
 							    << returnedList.at(index).location
 							    << returnedList.at(index).text);
-		QBrush brush;
 		switch(returnedList.at(index).level)
 		{
 			case DebugLevel_custom_Information:
@@ -118,11 +128,6 @@ void HelpDialog::addDebugText()
 				brush=QBrush(QColor(0,0,0));
 			break;
 		}
-		QFont functionFont;
-		functionFont.setItalic(true);
-		functionFont.setUnderline(true);
-		QFont timeFont;
-		timeFont.setBold(true);
 		item->setForeground(0,brush);
 		item->setFont(0,timeFont);
 		item->setForeground(1,brush);
@@ -132,9 +137,6 @@ void HelpDialog::addDebugText()
 		item->setForeground(4,brush);
 		if(returnedList.at(index).level==DebugLevel_custom_UserNote)
 		{
-			QFont noteFont;
-			noteFont.setBold(true);
-			noteFont.setPointSize(15);
 			item->setFont(0,noteFont);
 			item->setFont(1,noteFont);
 			item->setFont(2,noteFont);
@@ -143,6 +145,11 @@ void HelpDialog::addDebugText()
 		}
 		ui->debugView->insertTopLevelItem(ui->debugView->columnCount(),item);
 		index++;
+	}
+	if(loop_size==ULTRACOPIER_DEBUG_MAX_GUI_LINE)
+	{
+		item=new QTreeWidgetItem(ui->debugView,QStringList() << "...");
+		ui->debugView->insertTopLevelItem(ui->debugView->columnCount(),item);
 	}
 }
 
