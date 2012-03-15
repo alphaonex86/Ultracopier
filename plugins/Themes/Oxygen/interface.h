@@ -12,6 +12,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 #include <QShortcut>
+#include <QItemSelectionModel>
 
 #include "../../../interface/PluginInterface_Themes.h"
 
@@ -130,6 +131,7 @@ private slots:
 	void on_searchButton_toggled(bool checked);
 	void on_exportTransferList_clicked();
 	void on_importTransferList_clicked();
+	void selectionChangedSlot(const QItemSelection &, const QItemSelection &);
 private:
 	struct ItemOfCopyListWithMoreInformations
 	{
@@ -164,6 +166,8 @@ private:
 	int currentIndexSearch;		///< Current index search in starting at the end
 	FacilityInterface * facilityEngine;
 	QIcon player_play,player_pause;
+	QItemSelectionModel *selectionModel;
+	QModelIndexList selectedItems;
 	//temp variables
 	int loop_size,loop_sub_size,index,indexAction;
 	QList<int> ids;

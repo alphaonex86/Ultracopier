@@ -123,6 +123,17 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
 
 	shutdown=facilityEngine->haveFunctionality("shutdown");
 	ui->shutdown->setVisible(shutdown);
+
+	selectionModel=ui->TransferList->selectionModel();
+}
+
+Themes::~Themes()
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	disconnect(ui->actionAddFile);
+	disconnect(ui->actionAddFolder);
+	delete selectionModel;
+	delete menu;
 }
 
 void Themes::uiUpdateSpeed()
@@ -131,14 +142,6 @@ void Themes::uiUpdateSpeed()
 		emit newSpeedLimitation(0);
 	else
 		emit newSpeedLimitation(ui->limitSpeed->value());
-}
-
-Themes::~Themes()
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	disconnect(ui->actionAddFile);
-	disconnect(ui->actionAddFolder);
-	delete menu;
 }
 
 QWidget * Themes::getOptionsEngineWidget()
@@ -499,128 +502,82 @@ void Themes::updateCurrentFileInformation()
 
 void Themes::on_putOnTop_clicked()
 {
-/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	selectedItems=ui->CopyList->selectedItems();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	selectedItems=selectionModel->selectedRows();
 	ids.clear();
 	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size && selectedItems.size()>0)
+	loop_size=selectedItems.size();
+	while(index<loop_size)
 	{
-		#ifdef ULTRACOPIER_PLUGIN_DEBUG
-		if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to locate in the real gui the item id: "+QString::number(graphicItemList.at(index).id)+", pointer: "+QString::number((quint64)graphicItemList.at(index).item));
-		else
-		#endif
-		if(selectedItems.contains(graphicItemList.at(index).item))
-		{
-			ids << graphicItemList.at(index).id;
-			selectedItems.removeOne(graphicItemList.at(index).item);
-		}
+		ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsOnTop(ids);*/
+		emit moveItemsOnTop(ids);
 }
 
 void Themes::on_pushUp_clicked()
 {
-/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	selectedItems=ui->CopyList->selectedItems();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	selectedItems=selectionModel->selectedRows();
 	ids.clear();
 	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size && selectedItems.size()>0)
+	loop_size=selectedItems.size();
+	while(index<loop_size)
 	{
-		#ifdef ULTRACOPIER_PLUGIN_DEBUG
-		if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to locate in the real gui the item id: "+QString::number(graphicItemList.at(index).id)+", pointer: "+QString::number((quint64)graphicItemList.at(index).item));
-		else
-		#endif
-		if(selectedItems.contains(graphicItemList.at(index).item))
-		{
-			ids << graphicItemList.at(index).id;
-			selectedItems.removeOne(graphicItemList.at(index).item);
-		}
+		ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsUp(ids);*/
+		emit moveItemsUp(ids);
 }
 
 void Themes::on_pushDown_clicked()
 {
-/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	selectedItems=ui->CopyList->selectedItems();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	selectedItems=selectionModel->selectedRows();
 	ids.clear();
 	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size && selectedItems.size()>0)
+	loop_size=selectedItems.size();
+	while(index<loop_size)
 	{
-		#ifdef ULTRACOPIER_PLUGIN_DEBUG
-		if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to locate in the real gui the item id: "+QString::number(graphicItemList.at(index).id)+", pointer: "+QString::number((quint64)graphicItemList.at(index).item));
-		else
-		#endif
-		if(selectedItems.contains(graphicItemList.at(index).item))
-		{
-			ids << graphicItemList.at(index).id;
-			selectedItems.removeOne(graphicItemList.at(index).item);
-		}
+		ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsDown(ids);*/
+		emit moveItemsDown(ids);
 }
 
 void Themes::on_putOnBottom_clicked()
 {
-/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	selectedItems=ui->CopyList->selectedItems();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	selectedItems=selectionModel->selectedRows();
 	ids.clear();
 	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size && selectedItems.size()>0)
+	loop_size=selectedItems.size();
+	while(index<loop_size)
 	{
-		#ifdef ULTRACOPIER_PLUGIN_DEBUG
-		if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to locate in the real gui the item id: "+QString::number(graphicItemList.at(index).id)+", pointer: "+QString::number((quint64)graphicItemList.at(index).item));
-		else
-		#endif
-		if(selectedItems.contains(graphicItemList.at(index).item))
-		{
-			ids << graphicItemList.at(index).id;
-			selectedItems.removeOne(graphicItemList.at(index).item);
-		}
+		ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
 		index++;
 	}
 	if(ids.size()>0)
-		emit moveItemsOnBottom(ids);*/
+		emit moveItemsOnBottom(ids);
 }
 
 void Themes::on_del_clicked()
 {
-/*	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	selectedItems=ui->CopyList->selectedItems();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	selectedItems=selectionModel->selectedRows();
 	ids.clear();
 	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size && selectedItems.size()>0)
+	loop_size=selectedItems.size();
+	while(index<loop_size)
 	{
-		#ifdef ULTRACOPIER_PLUGIN_DEBUG
-		if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to locate in the real gui the item id: "+QString::number(graphicItemList.at(index).id)+", pointer: "+QString::number((quint64)graphicItemList.at(index).item));
-		else
-		#endif
-		if(selectedItems.contains(graphicItemList.at(index).item))
-		{
-			ids << graphicItemList.at(index).id;
-			selectedItems.removeOne(graphicItemList.at(index).item);
-		}
+		ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
 		index++;
 	}
 	if(ids.size()>0)
-		emit removeItems(ids);*/
+		emit removeItems(ids);
 }
 
 void Themes::on_cancelButton_clicked()
