@@ -65,7 +65,7 @@ ThemesManager::~ThemesManager()
 	ResourcesManager::destroyInstanceAtTheLastCall();
 }
 
-void ThemesManager::onePluginAdded(PluginsAvailable plugin)
+void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_Themes)
 		return;
@@ -79,7 +79,7 @@ void ThemesManager::onePluginAdded(PluginsAvailable plugin)
 	/**/
 }
 
-void ThemesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
+void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_Themes)
 		return;
@@ -111,7 +111,7 @@ void ThemesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
 /** \brief To get image into the current themes, or default if not found
 \param filePath The file path to search, like toto.png resolved with the root of the current themes
 \see currentStylePath */
-QIcon ThemesManager::loadIcon(QString fileName)
+QIcon ThemesManager::loadIcon(const QString &fileName)
 {
 	if(currentPluginIndex==-1)
 		return QIcon();
@@ -213,7 +213,7 @@ void ThemesManager::debugInformation(DebugLevel level,const QString& fonction,co
 }
 #endif // ULTRACOPIER_DEBUG
 
-void ThemesManager::newOptionValue(QString group,QString name,QVariant value)
+void ThemesManager::newOptionValue(const QString &group,const QString &name,const QVariant &value)
 {
 	if(group=="Themes" && name=="Ultracopier_current_theme")
 	{

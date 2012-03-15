@@ -43,30 +43,31 @@ void FacilityEngine::retranslate()
 }
 
 /// \brief convert size in Byte to String
-QString FacilityEngine::sizeToString(double size)
+QString FacilityEngine::sizeToString(const double &size)
 {
-	if(size<1024)
-		return QString::number(size)+sizeUnitToString(SizeUnit_byte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_KiloByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_MegaByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_GigaByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_TeraByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_PetaByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_ExaByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_ZettaByte);
-	if((size=size/1024)<1024)
-		return adaptString(size)+sizeUnitToString(SizeUnit_YottaByte);
+	double size_temp=size;
+	if(size_temp<1024)
+		return QString::number(size_temp)+sizeUnitToString(SizeUnit_byte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_KiloByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_MegaByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_GigaByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_TeraByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_PetaByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_ExaByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_ZettaByte);
+	if((size_temp=size_temp/1024)<1024)
+		return adaptString(size_temp)+sizeUnitToString(SizeUnit_YottaByte);
 	return Translation_tooBig;
 }
 
-QString FacilityEngine::adaptString(float size)
+QString FacilityEngine::adaptString(const float &size)
 {
 	if(size>=100)
 		return QString::number(size,'f',0);
@@ -76,7 +77,7 @@ QString FacilityEngine::adaptString(float size)
 
 
 /// \brief convert size unit to String
-QString FacilityEngine::sizeUnitToString(SizeUnit sizeUnit)
+QString FacilityEngine::sizeUnitToString(const SizeUnit &sizeUnit)
 {
 	switch(sizeUnit)
 	{
@@ -105,7 +106,7 @@ QString FacilityEngine::sizeUnitToString(SizeUnit sizeUnit)
 }
 
 /// \brief translate the text
-QString FacilityEngine::translateText(QString text)
+QString FacilityEngine::translateText(const QString &text)
 {
 	if(text=="Copy engine")
 		return Translation_Copy_engine;
@@ -126,26 +127,27 @@ QString FacilityEngine::translateText(QString text)
 }
 
 /// \brief speed to string in byte per seconds
-QString FacilityEngine::speedToString(double speed)
+QString FacilityEngine::speedToString(const double &speed)
 {
 	return sizeToString(speed)+Translation_perSecond;
 }
 /// \brief Decompose the time in second
-TimeDecomposition FacilityEngine::secondsToTimeDecomposition(quint32 seconds)
+TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const quint32 &seconds)
 {
+	quint32 seconds_temp=seconds;
 	TimeDecomposition returnValue;
-	returnValue.second=seconds%60;
-	seconds-=returnValue.second;
-	seconds/=60;
-	returnValue.minute=seconds%60;
-	seconds-=returnValue.minute;
-	seconds/=60;
-	returnValue.hour=seconds;
+	returnValue.second=seconds_temp%60;
+	seconds_temp-=returnValue.second;
+	seconds_temp/=60;
+	returnValue.minute=seconds_temp%60;
+	seconds_temp-=returnValue.minute;
+	seconds_temp/=60;
+	returnValue.hour=seconds_temp;
 	return returnValue;
 }
 
 /// \brief have the functionality
-bool FacilityEngine::haveFunctionality(QString fonctionnality)
+bool FacilityEngine::haveFunctionality(const QString &fonctionnality)
 {
 	#if defined (Q_OS_WIN32)
 	if(fonctionnality=="shutdown")
@@ -156,7 +158,7 @@ bool FacilityEngine::haveFunctionality(QString fonctionnality)
 }
 
 /// \brief call the fonctionnality
-QVariant FacilityEngine::callFunctionality(QString fonctionnality,QStringList args)
+QVariant FacilityEngine::callFunctionality(const QString &fonctionnality,const QStringList &args)
 {
 	#if defined (Q_OS_WIN32)
 	ExitWindowsEx(EWX_POWEROFF | EWX_FORCE,0);

@@ -35,7 +35,7 @@ SessionLoader::~SessionLoader()
 		onePluginWillBeRemoved(currentPlugin);
 }
 
-void SessionLoader::onePluginAdded(PluginsAvailable plugin)
+void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_SessionLoader)
 		return;
@@ -79,7 +79,7 @@ void SessionLoader::onePluginAdded(PluginsAvailable plugin)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to load the plugin: "+pluginLoader->errorString());
 }
 
-void SessionLoader::onePluginWillBeRemoved(PluginsAvailable plugin)
+void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_SessionLoader)
 		return;
@@ -100,7 +100,7 @@ void SessionLoader::onePluginWillBeRemoved(PluginsAvailable plugin)
 	}
 }
 
-void SessionLoader::newOptionValue(QString groupName,QString variableName,QVariant value)
+void SessionLoader::newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
 	if(groupName=="SessionLoader" && variableName=="Enabled")
 	{

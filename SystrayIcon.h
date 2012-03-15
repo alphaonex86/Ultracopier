@@ -35,10 +35,10 @@ class SystrayIcon : public QObject, public GlobalClass
 		\see tryCatchCopy()
 		\see tryUncatchCopy()
 		\param state is the new state */
-		void listenerReady(ListeningState state,bool havePlugin,bool someAreInWaitOfReply);
-		void pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply);
-		void addCopyEngine(QString name,bool canDoOnlyCopy);
-		void removeCopyEngine(QString name);
+		void listenerReady(const ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
+		void pluginLoaderReady(const CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
+		void addCopyEngine(const QString &name,const bool &canDoOnlyCopy);
+		void removeCopyEngine(const QString &name);
 	private:
 		QSystemTrayIcon* sysTrayIcon;		///< Pointer on the systray icon
 		QMenu* systrayMenu;			///< Pointer on the menu

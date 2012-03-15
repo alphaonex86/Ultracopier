@@ -95,7 +95,7 @@ QString LanguagesManager::getTheRightLanguage()
 
 /* \brief To set the current language
 \param newLanguage Should be short name code found into informations.xml of language file */
-void LanguagesManager::setCurrentLanguage(QString newLanguage)
+void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+newLanguage);
 	//protection for re-set the same language
@@ -196,7 +196,7 @@ void LanguagesManager::setCurrentLanguage(QString newLanguage)
 }
 
 /// \brief check if short name is found into language
-QString LanguagesManager::getMainShortName(QString shortName)
+QString LanguagesManager::getMainShortName(const QString &shortName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;
@@ -221,7 +221,7 @@ void LanguagesManager::allPluginIsLoaded()
 	return currentLanguage;
 }*/
 
-void LanguagesManager::onePluginAdded(PluginsAvailable plugin)
+void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_Languages)
 		return;
@@ -260,7 +260,7 @@ void LanguagesManager::onePluginAdded(PluginsAvailable plugin)
 		setCurrentLanguage(getTheRightLanguage());
 }
 
-void LanguagesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
+void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;
@@ -274,7 +274,7 @@ void LanguagesManager::onePluginWillBeRemoved(PluginsAvailable plugin)
 	}
 }
 
-void LanguagesManager::newOptionValue(QString group)
+void LanguagesManager::newOptionValue(const QString &group)
 {
 	if(group=="Language")
 	{

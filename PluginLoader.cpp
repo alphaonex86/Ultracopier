@@ -44,7 +44,7 @@ void PluginLoader::resendState()
 	sendState(true);
 }
 
-void PluginLoader::onePluginAdded(PluginsAvailable plugin)
+void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_PluginLoader)
 		return;
@@ -98,7 +98,7 @@ void PluginLoader::onePluginAdded(PluginsAvailable plugin)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to load the plugin: "+pluginLoader->errorString());
 }
 
-void PluginLoader::onePluginWillBeRemoved(PluginsAvailable plugin)
+void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_PluginLoader)
 		return;
@@ -205,7 +205,7 @@ void PluginLoader::sendState(bool force)
 	last_inWaitOfReply=found_inWaitOfReply;
 }
 
-void PluginLoader::newState(CatchState state)
+void PluginLoader::newState(const CatchState &state)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, state: %1").arg(state));
 	PluginInterface_PluginLoader *temp=qobject_cast<PluginInterface_PluginLoader *>(QObject::sender());

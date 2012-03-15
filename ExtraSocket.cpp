@@ -7,7 +7,7 @@
 
 #include "ExtraSocket.h"
 
-QString ExtraSocket::pathSocket(QString name)
+QString ExtraSocket::pathSocket(const QString &name)
 {
 #ifdef Q_OS_UNIX
 	return name+"-"+QString::number(getuid());

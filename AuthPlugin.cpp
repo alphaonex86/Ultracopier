@@ -25,7 +25,7 @@ AuthPlugin::~AuthPlugin()
 	stop();
 }
 
-QStringList AuthPlugin::getFileList(QString path)
+QStringList AuthPlugin::getFileList(const QString &path)
 {
 	QStringList list;
 	QDir dir(path);
@@ -109,7 +109,7 @@ void AuthPlugin::run()
 	sem.release();
 }
 
-void AuthPlugin::loadSearchPath(QStringList readPath,QStringList searchPathPlugin)
+void AuthPlugin::loadSearchPath(const QStringList &readPath,const QStringList &searchPathPlugin)
 {
 	this->readPath=readPath;
 	this->searchPathPlugin=searchPathPlugin;

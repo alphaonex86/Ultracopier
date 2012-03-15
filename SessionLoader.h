@@ -32,9 +32,9 @@ class SessionLoader : public QObject, GlobalClass
 		explicit SessionLoader(QObject *parent = 0);
 		~SessionLoader();
 	private slots:
-		void onePluginAdded(PluginsAvailable plugin);
-		void onePluginWillBeRemoved(PluginsAvailable plugin);
-		void newOptionValue(QString groupName,QString variableName,QVariant value);
+		void onePluginAdded(const PluginsAvailable &plugin);
+		void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+		void newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
 		#ifdef ULTRACOPIER_DEBUG
 		void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
 		#endif // ULTRACOPIER_DEBUG

@@ -12,7 +12,7 @@ CliParser::CliParser(QObject *parent) :
 {
 }
 
-void CliParser::cli(QStringList ultracopierArguments,bool external)
+void CliParser::cli(const QStringList &ultracopierArguments,const bool &external)
 {
 	if(ultracopierArguments.size()==1)
 	{

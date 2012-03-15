@@ -20,19 +20,19 @@ class FacilityInterface : public QObject
 		/// \brief To force the text re-translation
 		virtual void retranslate() = 0;
 		/// \brief convert size in Byte to String
-		virtual QString sizeToString(double size) = 0;
+		virtual QString sizeToString(const double &size) = 0;
 		/// \brief convert size unit to String
-		virtual QString sizeUnitToString(SizeUnit sizeUnit) = 0;
+		virtual QString sizeUnitToString(const SizeUnit &sizeUnit) = 0;
 		/// \brief translate the text
-		virtual QString translateText(QString text) = 0;
+		virtual QString translateText(const QString &text) = 0;
 		/// \brief speed to string in byte per seconds
-		virtual QString speedToString(double speed) = 0;
+		virtual QString speedToString(const double &speed) = 0;
 		/// \brief Decompose the time in second
-		virtual TimeDecomposition secondsToTimeDecomposition(quint32 seconds) = 0;
+		virtual TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) = 0;
 		/// \brief have the fonctionnality
-		virtual bool haveFunctionality(QString fonctionnality) = 0;
+		virtual bool haveFunctionality(const QString &fonctionnality) = 0;
 		/// \brief call the fonctionnality
-		virtual QVariant callFunctionality(QString fonctionnality,QStringList args=QStringList()) = 0;
+		virtual QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList()) = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

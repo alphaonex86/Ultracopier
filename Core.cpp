@@ -47,7 +47,7 @@ Core::Core(CopyEngineManager *copyEngineList)
 	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
 }
 
-void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources)
+void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	openNewCopy(Copy,false,protocolsUsedForTheSources);
@@ -56,7 +56,7 @@ void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 	copyList.last().interface->haveExternalOrder();
 }
 
-void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination)
+void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//search to group the window
@@ -104,7 +104,7 @@ void Core::newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 	copyList.last().interface->haveExternalOrder();
 }
 
-void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources)
+void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
 	openNewCopy(Move,false,protocolsUsedForTheSources);
 	copyList.last().orderId<<orderId;
@@ -112,7 +112,7 @@ void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 	copyList.last().interface->haveExternalOrder();
 }
 
-void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination)
+void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//search to group the window
@@ -161,7 +161,7 @@ void Core::newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStrin
 }
 
 /// \todo name to open the right copy engine
-void Core::addWindowCopyMove(CopyMode mode,QString name)
+void Core::addWindowCopyMove(const CopyMode &mode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+name);
 	openNewCopy(mode,false,name);
@@ -176,7 +176,7 @@ void Core::addWindowCopyMove(CopyMode mode,QString name)
 }
 
 /// \todo name to open the right copy engine
-void Core::addWindowTransfer(QString name)
+void Core::addWindowTransfer(const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start"+name);
 	openNewCopy(Copy,true,name);
@@ -244,21 +244,21 @@ int Core::incrementId()
 	return nextId;
 }
 
-int Core::openNewCopy(CopyMode mode,bool ignoreMode,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination)
+int Core::openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,protocolsUsedForTheSources,protocolsUsedForTheDestination);
 	return connectCopyEngine(mode,ignoreMode,returnInformations);
 }
 
-int Core::openNewCopy(CopyMode mode,bool ignoreMode,QString name)
+int Core::openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, mode: "+QString::number(mode)+", name: "+name);
 	CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,name);
 	return connectCopyEngine(mode,ignoreMode,returnInformations);
 }
 
-int Core::connectCopyEngine(CopyMode mode,bool ignoreMode,CopyEngineManager::returnCopyEngine returnInformations)
+int Core::connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations)
 {
 	if(returnInformations.canDoOnlyCopy)
 	{
@@ -328,7 +328,7 @@ void Core::resetSpeedDetectedInterface()
 		resetSpeedDetected(index);
 }
 
-void Core::resetSpeedDetected(int index)
+void Core::resetSpeedDetected(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start on %1").arg(index));
 	copyList[index].runningTime.restart();
@@ -336,7 +336,7 @@ void Core::resetSpeedDetected(int index)
 	copyList[index].lastSpeedTime.clear();
 }
 
-void Core::actionInProgess(EngineActionInProgress action)
+void Core::actionInProgess(const EngineActionInProgress &action)
 {
 	index=indexCopySenderCopyEngine();
 	if(index!=-1)
@@ -459,7 +459,7 @@ void Core::newFolderListing(const QString &path)
 	}
 }
 
-void Core::newCollisionAction(QString action)
+void Core::newCollisionAction(const QString &action)
 {
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
@@ -469,7 +469,7 @@ void Core::newCollisionAction(QString action)
 	}
 }
 
-void Core::newErrorAction(QString action)
+void Core::newErrorAction(const QString &action)
 {
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
@@ -479,7 +479,7 @@ void Core::newErrorAction(QString action)
 	}
 }
 
-void Core::isInPause(bool isPaused)
+void Core::isInPause(const bool &isPaused)
 {
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
@@ -557,7 +557,7 @@ int Core::indexCopySenderInterface()
 	return -1;
 }
 
-void Core::connectEngine(int index)
+void Core::connectEngine(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
 	disconnectEngine(index);
@@ -579,7 +579,7 @@ void Core::connectEngine(int index)
 	//connect(currentCopyInstance.nextConditionalSync,SIGNAL(timeout()),			this,SLOT(mkPath(QString)),Qt::QueuedConnection);
 }
 
-void Core::connectInterfaceAndSync(int index)
+void Core::connectInterfaceAndSync(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
 	disconnectInterface(index);
@@ -655,7 +655,7 @@ void Core::connectInterfaceAndSync(int index)
 	periodiqueSync(index);
 }
 
-void Core::disconnectEngine(int index)
+void Core::disconnectEngine(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
 	CopyInstance& currentCopyInstance=copyList[index];
@@ -674,7 +674,7 @@ void Core::disconnectEngine(int index)
 
 }
 
-void Core::disconnectInterface(int index)
+void Core::disconnectInterface(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
 	CopyInstance& currentCopyInstance=copyList[index];
@@ -711,7 +711,7 @@ void Core::periodiqueSync()
 	}
 }
 
-void Core::periodiqueSync(int index)
+void Core::periodiqueSync(const int &index)
 {
 	CopyInstance& currentCopyInstance=copyList[index];
 	if(currentCopyInstance.engine==NULL || currentCopyInstance.interface==NULL)
@@ -816,7 +816,7 @@ void Core::plannedConditionalSync()
 	return;
 }
 
-void Core::conditionalSync(int index)
+void Core::conditionalSync(const int &index)
 {
 	CopyInstance& currentCopyInstance=copyList[index];
 	//check if planned call is not programmed
@@ -854,7 +854,7 @@ void Core::copyInstanceCanceledByInterface()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
-void Core::copyInstanceCanceledByIndex(int index)
+void Core::copyInstanceCanceledByIndex(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, remove with the index: "+QString::number(index));
 	disconnectEngine(index);
@@ -919,7 +919,7 @@ void Core::mkPath(const QString &path)
 		log.mkPath(path);
 }
 
-void Core::urlDropped(QList<QUrl> urls)
+void Core::urlDropped(const QList<QUrl> &urls)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=indexCopySenderInterface();

@@ -211,7 +211,7 @@ bool DebugEngine::removeTheLockFile()
 		return true;
 }
 
-void DebugEngine::addDebugInformationStatic(DebugLevel level,const QString& function,const QString& text,const QString& file,const int& ligne,const QString& location)
+void DebugEngine::addDebugInformationStatic(const DebugLevel &level,const QString& function,const QString& text,const QString& file,const int& ligne,const QString& location)
 {
 	DebugEngine *debug_engine_instance=DebugEngine::getInstance();
 	DebugLevel_custom tempLevel=DebugLevel_custom_Information;
@@ -244,7 +244,7 @@ void DebugEngine::addDebugNote(const QString& text)
 }
 
 /// \brief For add message info, this function is thread safe
-void DebugEngine::addDebugInformation(DebugLevel_custom level,const QString& function,const QString& text,QString file,const int& ligne,const QString& location)
+void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QString& function,const QString& text,QString file,const int& ligne,const QString& location)
 {
 	//Remove the compiler extra patch generated
 	file=file.remove(QRegExp("\\.\\.?[/\\\\]([^/]+[/\\\\])?"));

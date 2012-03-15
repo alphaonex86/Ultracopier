@@ -59,7 +59,7 @@ PluginsManager::~PluginsManager()
 }
 
 /// \brief set current language
-void PluginsManager::setLanguage(QString language)
+void PluginsManager::setLanguage(const QString &language)
 {
 	this->language=language;
 }
@@ -128,7 +128,7 @@ void PluginsManager::run()
 	checkDependencies();
 }
 
-QString PluginsManager::categoryToString(PluginType category)
+QString PluginsManager::categoryToString(const PluginType &category)
 {
 	switch(category)
 	{
@@ -157,12 +157,12 @@ QString PluginsManager::categoryToString(PluginType category)
 	}
 }
 
-QString PluginsManager::categoryToTranslation(PluginType category)
+QString PluginsManager::categoryToTranslation(const PluginType &category)
 {
 	return pluginInformationWindows.categoryToTranslation(category);
 }
 
-bool PluginsManager::isSamePlugin(PluginsAvailable pluginA,PluginsAvailable pluginB)
+bool PluginsManager::isSamePlugin(const PluginsAvailable &pluginA,const PluginsAvailable &pluginB)
 {
 	if(pluginA.category!=pluginB.category)
 		return false;
@@ -181,7 +181,7 @@ bool PluginsManager::isSamePlugin(PluginsAvailable pluginA,PluginsAvailable plug
 	return true;
 }
 
-bool PluginsManager::loadPluginInformation(QString path)
+bool PluginsManager::loadPluginInformation(const QString &path)
 {
 	PluginsAvailable tempPlugin;
 	tempPlugin.isAuth	= false;
@@ -228,7 +228,7 @@ bool PluginsManager::loadPluginInformation(QString path)
 	}
 }
 
-void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,QByteArray xml)
+void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray &xml)
 {
 	QString errorStr;
 	int errorLine;
@@ -342,7 +342,7 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,QByteArray xml)
 }
 
 /// \brief to load the multi-language balise
-void PluginsManager::loadBalise(QDomElement root,QString name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum,bool multiLanguage,bool englishNeedBeFound)
+void PluginsManager::loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum,bool multiLanguage,bool englishNeedBeFound)
 {
 	int foundElement=0;
 	bool englishTextIsFoundForThisChild=false;
@@ -391,7 +391,7 @@ void PluginsManager::loadBalise(QDomElement root,QString name,QList<QStringList>
 }
 
 /// \brief to load the get dom specific
-QString PluginsManager::getDomSpecific(QDomElement root,QString name,QList<QPair<QString,QString> > listChildAttribute)
+QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute)
 {
 	QDomElement child = root.firstChildElement(name);
 	int index,loop_size;
@@ -423,7 +423,7 @@ QString PluginsManager::getDomSpecific(QDomElement root,QString name,QList<QPair
 }
 
 /// \brief to load the get dom specific
-QString PluginsManager::getDomSpecific(QDomElement root,QString name)
+QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &name)
 {
 	QDomElement child = root.firstChildElement(name);
 	while(!child.isNull())
@@ -501,7 +501,7 @@ void PluginsManager::checkDependencies()
 }
 
 /// \brief get the version
-QString PluginsManager::getPluginVersion(QString pluginName)
+QString PluginsManager::getPluginVersion(const QString &pluginName)
 {
 	if(pluginName=="ultracopier")
 		return ULTRACOPIER_VERSION;
@@ -527,7 +527,7 @@ QString PluginsManager::getPluginVersion(QString pluginName)
 }
 
 /// \brief To compare version
-bool PluginsManager::compareVersion(QString versionA,QString sign,QString versionB)
+bool PluginsManager::compareVersion(const QString &versionA,const QString &sign,const QString &versionB)
 {
 	QStringList versionANumber=versionA.split(".");
 	QStringList versionBNumber=versionB.split(".");
@@ -576,11 +576,11 @@ bool PluginsManager::compareVersion(QString versionA,QString sign,QString versio
 	return defaultReturnValue;
 }
 
-QList<PluginsAvailable> PluginsManager::getPluginsByCategory(PluginType category)
+QList<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginType &category)
 {
 	QList<PluginsAvailable> list;
-	int index=0;
-	while(index<pluginsList.size())
+	int index=0,loop_size=pluginsList.size();
+	while(index<loop_size)
 	{
 		if(pluginsList.at(index).category==category && pluginsList.at(index).errorString=="")
 			list<<pluginsList.at(index);
@@ -604,7 +604,7 @@ QList<PluginsAvailable> PluginsManager::getPlugins()
 
 /// \brief show the information
 /// \todo pass plugin info
-void PluginsManager::showInformation(QString path)
+void PluginsManager::showInformation(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;
@@ -627,7 +627,7 @@ void PluginsManager::showInformationDoubleClick()
 //	showInformation(false);
 }
 
-void PluginsManager::removeThePluginSelected(QString path)
+void PluginsManager::removeThePluginSelected(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;
@@ -661,7 +661,7 @@ void PluginsManager::removeThePluginSelected(QString path)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"item not selected");
 }
 
-void PluginsManager::addPlugin(ImportBackend backend)
+void PluginsManager::addPlugin(const ImportBackend &backend)
 {
 	if(backend==ImportBackend_File)
 		excuteTheFileBackendLoader();
@@ -693,7 +693,7 @@ void PluginsManager::excuteTheFileBackendLoader()
 	}
 }
 
-void PluginsManager::lunchDecodeThread(QByteArray data)
+void PluginsManager::lunchDecodeThread(const QByteArray &data)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	decodeThread.setData(data);
@@ -845,7 +845,7 @@ void PluginsManager::decodingFinished()
 	importingPlugin=false;
 }
 
-void PluginsManager::newAuthPath(QString path)
+void PluginsManager::newAuthPath(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;
@@ -862,7 +862,7 @@ void PluginsManager::newAuthPath(QString path)
 }
 
 /// \brief transfor short plugin name into file name
-QString PluginsManager::getResolvedPluginName(QString name)
+QString PluginsManager::getResolvedPluginName(const QString &name)
 {
 	#if defined(Q_OS_LINUX)
 		return "lib"+name+".so";

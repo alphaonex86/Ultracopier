@@ -28,7 +28,7 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()));
 }
 
-void CopyEngineManager::onePluginAdded(PluginsAvailable plugin)
+void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_CopyEngine)
 		return;
@@ -101,7 +101,7 @@ void CopyEngineManager::onePluginAdded(PluginsAvailable plugin)
 		emit addCopyEngine(newItem.name,newItem.canDoOnlyCopy);
 }
 
-void CopyEngineManager::onePluginWillBeRemoved(PluginsAvailable plugin)
+void CopyEngineManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	int index=0;
 	while(index<pluginList.size())
@@ -120,7 +120,7 @@ void CopyEngineManager::onePluginWillBeRemoved(PluginsAvailable plugin)
 	}
 }
 
-void CopyEngineManager::onePluginWillBeUnloaded(PluginsAvailable plugin)
+void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_CopyEngine)
 		return;
@@ -140,7 +140,7 @@ void CopyEngineManager::onePluginWillBeUnloaded(PluginsAvailable plugin)
 	}
 }
 
-CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mode,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination)
+CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const CopyMode &mode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, pluginList.size(): %1, mode: %2, and particular protocol").arg(pluginList.size()).arg((int)mode));
 	returnCopyEngine temp;
@@ -203,7 +203,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mo
 	return temp;
 }
 
-CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(CopyMode mode,QString name)
+CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const CopyMode &mode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, pluginList.size(): %1, with mode: %2, and name: %3").arg(pluginList.size()).arg((int)mode).arg(name));
 	returnCopyEngine temp;
@@ -244,7 +244,7 @@ void CopyEngineManager::debugInformation(DebugLevel level,const QString& fonctio
 #endif // ULTRACOPIER_DEBUG
 
 /// \brief To notify when new value into a group have changed
-void CopyEngineManager::newOptionValue(QString groupName,QString variableName,QVariant value)
+void CopyEngineManager::newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
 	if(groupName=="CopyEngine" && variableName=="List")
 	{
@@ -318,7 +318,7 @@ void CopyEngineManager::allPluginIsloaded()
 	pluginList=newPluginList;
 }
 
-bool CopyEngineManager::protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination)
+bool CopyEngineManager::protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {
 	int index=0;
 	while(index<pluginList.size())

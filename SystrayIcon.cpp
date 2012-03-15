@@ -62,7 +62,7 @@ SystrayIcon::~SystrayIcon()
 	delete sysTrayIcon;
 }
 
-void SystrayIcon::listenerReady(ListeningState state,bool havePlugin,bool someAreInWaitOfReply)
+void SystrayIcon::listenerReady(const ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("state: %1, havePlugin: %2, someAreInWaitOfReply: %3").arg(state).arg(havePlugin).arg(someAreInWaitOfReply));
 	Q_UNUSED(someAreInWaitOfReply);
@@ -74,7 +74,7 @@ void SystrayIcon::listenerReady(ListeningState state,bool havePlugin,bool someAr
 		showTryCatchMessageWithNoListener();
 }
 
-void SystrayIcon::pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply)
+void SystrayIcon::pluginLoaderReady(const CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("state: %1, havePlugin: %2, someAreInWaitOfReply: %3").arg(state).arg(havePlugin).arg(someAreInWaitOfReply));
 	Q_UNUSED(someAreInWaitOfReply);
@@ -304,7 +304,7 @@ void SystrayIcon::retranslateTheUI()
 	updateSystrayIcon();
 }
 
-void SystrayIcon::addCopyEngine(QString name,bool canDoOnlyCopy)
+void SystrayIcon::addCopyEngine(const QString &name,const bool &canDoOnlyCopy)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	EngineEntry entry;
@@ -315,7 +315,7 @@ void SystrayIcon::addCopyEngine(QString name,bool canDoOnlyCopy)
 		reloadEngineList();
 }
 
-void SystrayIcon::removeCopyEngine(QString name)
+void SystrayIcon::removeCopyEngine(const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;

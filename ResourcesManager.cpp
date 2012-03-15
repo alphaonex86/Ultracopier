@@ -88,7 +88,7 @@ ResourcesManager::~ResourcesManager()
 }
 
 /// \brief Get folder presence and the path
-QString ResourcesManager::getFolderReadPath(QString path)
+QString ResourcesManager::getFolderReadPath(const QString &path)
 {
 	index=0;
 	loop_size=searchPath.size();
@@ -103,7 +103,7 @@ QString ResourcesManager::getFolderReadPath(QString path)
 }
 
 /// \brief Get folder presence, the path and check in the folder and sub-folder the file presence
-QString ResourcesManager::getFolderReadPathMultiple(QString path,QStringList fileToCheck)
+QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck)
 {
 	index=0;
 	loop_size=searchPath.size();
@@ -117,7 +117,7 @@ QString ResourcesManager::getFolderReadPathMultiple(QString path,QStringList fil
 	return "";
 }
 
-bool ResourcesManager::checkFolderContent(QString path,QStringList fileToCheck)
+bool ResourcesManager::checkFolderContent(const QString &path,const QStringList &fileToCheck)
 {
 	QDir dir(path);
 	if(dir.exists()) // if the path have been found, then return the full path
@@ -142,7 +142,7 @@ bool ResourcesManager::checkFolderContent(QString path,QStringList fileToCheck)
 }
 
 /// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
-QString ResourcesManager::AddSlashIfNeeded(QString path)
+QString ResourcesManager::AddSlashIfNeeded(const QString &path)
 {
 	if(path.contains(QRegExp("[/\\\\]$")))
 		return path;
@@ -174,7 +174,7 @@ QStringList ResourcesManager::getReadPath()
 }
 
 /// \brief remove folder
-bool ResourcesManager::removeFolder(QString dir)
+bool ResourcesManager::removeFolder(const QString &dir)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder to remove: "+dir);
 	bool errorFound=false;

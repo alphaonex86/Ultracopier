@@ -30,13 +30,13 @@ class CopyListener : public QObject, public GlobalClass
 		void resendState();
 	private slots:
 		//void newPlugin();
-		void newPluginCopy(quint32 orderId,QStringList sources);
-		void newPluginCopy(quint32 orderId,QStringList sources,QString destination);
-		void newPluginMove(quint32 orderId,QStringList sources);
-		void newPluginMove(quint32 orderId,QStringList sources,QString destination);
-		void onePluginAdded(PluginsAvailable plugin);
-		void onePluginWillBeRemoved(PluginsAvailable plugin);
-		void newState(ListeningState state);
+		void newPluginCopy(const quint32 &orderId,const QStringList &sources);
+		void newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination);
+		void newPluginMove(const quint32 &orderId,const QStringList &sources);
+		void newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
+		void onePluginAdded(const PluginsAvailable &plugin);
+		void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+		void newState(const ListeningState &state);
 		#ifdef ULTRACOPIER_DEBUG
 		void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
 		#endif // ULTRACOPIER_DEBUG
@@ -48,7 +48,7 @@ class CopyListener : public QObject, public GlobalClass
 		 \see newCopy()
 		 \see newMove()
 		*/
-		void copyFinished(const quint32 & orderId,bool withError);
+		void copyFinished(const quint32 & orderId,const bool &withError);
 		/** \brief the copy is canceled by the user
 		 \param orderId id used when it have send the copy
 		 \see newCopy()

@@ -44,7 +44,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 	friend class Singleton<PluginsManager>;
 	public:
 		/// \brief to get plugins of type specific
-		QList<PluginsAvailable> getPluginsByCategory(PluginType type);
+		QList<PluginsAvailable> getPluginsByCategory(const PluginType &type);
 		/** \brief to get plugins
 		  \todo check where is used to convert to PluginsAvailable
 		  */
@@ -53,16 +53,16 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 		//QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
 		//QString getTranslatedText(PluginsAvailable plugin,QString informationName);
 		/// \brief transform short plugin name into file name
-		static QString getResolvedPluginName(QString name);
-		static bool isSamePlugin(PluginsAvailable pluginA,PluginsAvailable pluginB);
+		static QString getResolvedPluginName(const QString &name);
+		static bool isSamePlugin(const PluginsAvailable &pluginA,const PluginsAvailable &pluginB);
 		void lockPluginListEdition();
 		void unlockPluginListEdition();
 		bool allPluginHaveBeenLoaded();
 		/// \brief to load the get dom specific
-		QString getDomSpecific(QDomElement root,QString name,QList<QPair<QString,QString> > listChildAttribute);
-		QString getDomSpecific(QDomElement root,QString name);
+		QString getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute);
+		QString getDomSpecific(const QDomElement &root,const QString &name);
 		/// \brief set current language
-		void setLanguage(QString language);
+		void setLanguage(const QString &language);
 		/// \brief Enumeration of plugin add backend
 		enum ImportBackend
 		{
@@ -83,13 +83,13 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 		/// \brief List of plugins
 		QList<PluginsAvailable> pluginsList;
 		/// \brief to load the multi-language balise
-		void loadBalise(QDomElement root,QString name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
+		void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
 		/// \brief check the dependencies
 		void checkDependencies();
 		/// \brief get the version
-		QString getPluginVersion(QString pluginName);
+		QString getPluginVersion(const QString &pluginName);
 		/// \brief To compare version
-		bool compareVersion(QString versionA,QString sign,QString versionB);
+		bool compareVersion(const QString &versionA,const QString &sign,const QString &versionB);
 		/// \brief plugin information windows
 		PluginInformation pluginInformationWindows;
 		/// \brief list of cat plugin type
@@ -102,43 +102,43 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 		void loadPluginList();
 		QAction *backendMenuFile;		///< Pointer on the file backend menu
 		bool importingPlugin;
-		void lunchDecodeThread(QByteArray data);
+		void lunchDecodeThread(const QByteArray &data);
 		QXzDecodeThread decodeThread;
-		void loadPluginXml(PluginsAvailable * thePlugin,QByteArray xml);
+		void loadPluginXml(PluginsAvailable * thePlugin,const QByteArray &xml);
 		AuthPlugin *checkPluginThread;
 		QStringList readPluginPath;
-		bool loadPluginInformation(QString path);
+		bool loadPluginInformation(const QString &path);
 		QSemaphore editionSemList;
 		bool stopIt;
 		bool pluginLoaded;
 		QString language;
 		void excuteTheFileBackendLoader();
-		QString categoryToString(PluginType category);
-		QString categoryToTranslation(PluginType category);
+		QString categoryToString(const PluginType &category);
+		QString categoryToTranslation(const PluginType &category);
 		//temp variable
 		int index,loop_size,sub_index,loop_sub_size;
 	private slots:
 		/// \brief show the information
 		void showInformationDoubleClick();
 		void decodingFinished();
-		void newAuthPath(QString path);
+		void newAuthPath(const QString &path);
 		void post_operation();
 /*	public slots:
 		/// \brief to refresh the plugin list
 		void refreshPluginList(QString mainShortName="en");*/
 	signals:
 		void pluginListingIsfinish();
-		void onePluginAdded(PluginsAvailable);
-		void onePluginWillBeRemoved(PluginsAvailable); // when will be really removed
-		void onePluginWillBeUnloaded(PluginsAvailable);//just unload to quit the application
+		void onePluginAdded(const PluginsAvailable&);
+		void onePluginWillBeRemoved(const PluginsAvailable&); // when will be really removed
+		void onePluginWillBeUnloaded(const PluginsAvailable&);//just unload to quit the application
 		void needLangToRefreshPluginList();
 		void newLanguageLoaded();
 	protected:
 		void run();
 	public slots: //do gui action
-		void showInformation(QString path);
-		void removeThePluginSelected(QString path);
-		void addPlugin(ImportBackend backend);
+		void showInformation(const QString &path);
+		void removeThePluginSelected(const QString &path);
+		void addPlugin(const ImportBackend &backend);
 };
 
 /// \brief to do structure comparaison

@@ -46,7 +46,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		QString getTheDebugEnd();
 		/** \brief For add message info, this function
 		\note This function is reentrant */
-		static void addDebugInformationStatic(DebugLevel level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
+		static void addDebugInformationStatic(const DebugLevel &level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
 		static void addDebugNote(const QString& text);
 		/** \brief structure for one debug item */
 		struct ItemOfDebug
@@ -65,7 +65,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		\warning This function can be only call by the graphical thread */
 		void saveBugReport();
 		/// \todo Put into DebugEngine the dialog to send by the net
-		void addDebugInformation(DebugLevel_custom level,const QString& fonction,const QString& text,QString file="",const int& ligne=-1,const QString& location="Core");
+		void addDebugInformation(const DebugLevel_custom &level,const QString& fonction,const QString& text,QString file="",const int& ligne=-1,const QString& location="Core");
 	private:
 		/// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 		DebugEngine();

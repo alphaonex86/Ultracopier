@@ -7,7 +7,7 @@
 
 #include "LocalPluginOptions.h"
 
-LocalPluginOptions::LocalPluginOptions(QString group)
+LocalPluginOptions::LocalPluginOptions(const QString &group)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+group+"\",[...])");
 	groupOptionAdded=false;
@@ -27,7 +27,7 @@ LocalPluginOptions::~LocalPluginOptions()
 }
 
 /// \brief To add option group to options
-bool LocalPluginOptions::addOptionGroup(QList<QPair<QString, QVariant> > KeysList)
+bool LocalPluginOptions::addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+group+"\",[...])");
 	if(groupOptionAdded)
@@ -43,13 +43,13 @@ bool LocalPluginOptions::addOptionGroup(QList<QPair<QString, QVariant> > KeysLis
 }
 
 /// \brief To get option value
-QVariant LocalPluginOptions::getOptionValue(QString variableName)
+QVariant LocalPluginOptions::getOptionValue(const QString &variableName)
 {
 	return options->getOptionValue(group,variableName);
 }
 
 /// \brief To set option value
-void LocalPluginOptions::setOptionValue(QString variableName,QVariant value)
+void LocalPluginOptions::setOptionValue(const QString &variableName,const QVariant &value)
 {
 	options->setOptionValue(group,variableName,value);
 }

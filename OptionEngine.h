@@ -93,7 +93,7 @@ class OptionEngine : public QObject, public Singleton<OptionEngine>
 		//temp variable
 		int loop_size,loop_sub_size,indexGroup,indexGroupKey,index;
 	signals:
-		void newOptionValue(QString,QString,QVariant);
+		void newOptionValue(const QString&,const QString&,const QVariant&);
 		void resetOptions();
 };
 

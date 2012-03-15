@@ -30,7 +30,7 @@ public:
 	  \param readPath list of read place
 	  \param searchPathPlugin list of plugin place
 	  */
-	void loadSearchPath(QStringList readPath,QStringList searchPathPlugin);
+	void loadSearchPath(const QStringList &readPath,const QStringList &searchPathPlugin);
 protected:
 	void run();
 private:
@@ -38,7 +38,7 @@ private:
 	QSemaphore sem;
 	QStringList readPath;
 	QStringList searchPathPlugin;
-	static QStringList getFileList(QString path);
+	static QStringList getFileList(const QString &path);
 signals:
 	void authentifiedPath(QString);
 };

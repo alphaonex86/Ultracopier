@@ -39,7 +39,7 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
 		/** \brief To get image into the current themes, or default if not found
 		\param filePath The file path to search, like toto.png resolved with the root of the current themes
 		\see currentStylePath */
-		QIcon loadIcon(QString fileName);
+		QIcon loadIcon(const QString &fileName);
 		/** \brief To get if one themes instance
 		\see Core() */
 		PluginInterface_Themes * getThemesInstance();
@@ -78,10 +78,10 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
 		void newThemeOptions(QWidget *,bool isLoaded,bool havePlugin);
 	private slots:
 		/// \brief reload the themes
-		void onePluginAdded(PluginsAvailable plugin);
-		void onePluginWillBeRemoved(PluginsAvailable plugin);
+		void onePluginAdded(const PluginsAvailable &plugin);
+		void onePluginWillBeRemoved(const PluginsAvailable &plugin);
 		void allPluginIsLoaded();
-		void newOptionValue(QString group,QString name,QVariant value);
+		void newOptionValue(const QString &group,const QString &name,const QVariant &value);
 		#ifdef ULTRACOPIER_DEBUG
 		void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
 		#endif // ULTRACOPIER_DEBUG

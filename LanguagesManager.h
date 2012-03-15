@@ -42,7 +42,7 @@ class LanguagesManager : public QObject, public Singleton<LanguagesManager>
 		OptionEngine *options;
 		/** \brief To set the current language
 		\param newLanguage Should be short name code found into informations.xml of language file */
-		void setCurrentLanguage(QString newLanguage);
+		void setCurrentLanguage(const QString &newLanguage);
 		/// \brief Structure of language
 		struct LanguagesAvailable
 		{
@@ -56,7 +56,7 @@ class LanguagesManager : public QObject, public Singleton<LanguagesManager>
 		/// \brief To store the language detected
 		QList<LanguagesAvailable> LanguagesAvailableList;
 		/// \brief check if short name is found into language
-		QString getMainShortName(QString shortName);
+		QString getMainShortName(const QString &shortName);
 		/// \brief Store the object of resources manager
 		ResourcesManager *resources;
 		/// \brief Store the object of plugin manager
@@ -70,12 +70,12 @@ class LanguagesManager : public QObject, public Singleton<LanguagesManager>
 		/// \brief load the language in languagePath
 		void allPluginIsLoaded();
 		//plugin management
-		void onePluginAdded(PluginsAvailable plugin);
-		void onePluginWillBeRemoved(PluginsAvailable plugin);
-		void newOptionValue(QString group);
+		void onePluginAdded(const PluginsAvailable &plugin);
+		void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+		void newOptionValue(const QString &group);
 	signals:
 		//send the language is loaded or the new language is loaded
-		void newLanguageLoaded(QString mainShortName);
+		void newLanguageLoaded(const QString &mainShortName);
 };
 
 #endif // LANGUAGES_MANAGER_H

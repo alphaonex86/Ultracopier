@@ -47,13 +47,13 @@ public:
 	/** \brief should unload plugin into file manager */
 	void unload();
 private slots:
-	void onePluginAdded(PluginsAvailable plugin);
-	void onePluginWillBeRemoved(PluginsAvailable plugin);
+	void onePluginAdded(const PluginsAvailable &plugin);
+	void onePluginWillBeRemoved(const PluginsAvailable &plugin);
 	#ifdef ULTRACOPIER_DEBUG
 	void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
 	#endif // ULTRACOPIER_DEBUG
 	void allPluginIsloaded();
-	void newState(CatchState state);
+	void newState(const CatchState &state);
 private:
 	//variable
 	struct LocalPlugin

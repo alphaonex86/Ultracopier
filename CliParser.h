@@ -23,7 +23,7 @@ public slots:
 	  \param ultracopierArguments the argument list
 	  \param external true if the arguments come from other instance of ultracopier
 	*/
-	void cli(QStringList ultracopierArguments,bool external);
+	void cli(const QStringList &ultracopierArguments,const bool &external);
 };
 
 #endif // CLIPARSER_H

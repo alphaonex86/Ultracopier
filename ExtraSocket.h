@@ -22,7 +22,7 @@ class ExtraSocket
 {
 public:
 	/** \brief class to return always the same socket resolution */
-	static QString pathSocket(QString name);
+	static QString pathSocket(const QString &name);
 };
 
 #endif // EXTRASOCKET_H

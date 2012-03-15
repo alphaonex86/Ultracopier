@@ -50,7 +50,7 @@ void CopyListener::resendState()
 	}
 }
 
-void CopyListener::onePluginAdded(PluginsAvailable plugin)
+void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_Listener)
 		return;
@@ -118,7 +118,7 @@ bool CopyListener::oneListenerIsLoaded()
 	return (pluginList.size()>0);
 }
 
-void CopyListener::onePluginWillBeRemoved(PluginsAvailable plugin)
+void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_Listener)
 		return;
@@ -148,7 +148,7 @@ void CopyListener::onePluginWillBeRemoved(PluginsAvailable plugin)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"not found");
 }
 
-void CopyListener::newState(ListeningState state)
+void CopyListener::newState(const ListeningState &state)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	PluginInterface_Listen *temp=qobject_cast<PluginInterface_Listen *>(QObject::sender());
@@ -202,7 +202,7 @@ void CopyListener::close()
 	copyRunningList.clear();
 }
 
-void CopyListener::copyFinished(const quint32 & orderId,bool withError)
+void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	int index=0;
@@ -238,7 +238,7 @@ void CopyListener::copyCanceled(const quint32 & orderId)
 	}
 }
 
-void CopyListener::newPluginCopy(quint32 orderId,QStringList sources)
+void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";"));
 	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
@@ -250,7 +250,7 @@ void CopyListener::newPluginCopy(quint32 orderId,QStringList sources)
 	emit newCopy(orderId,QStringList() << "file",sources);
 }
 
-void CopyListener::newPluginCopy(quint32 orderId,QStringList sources,QString destination)
+void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";")+", destination: "+destination);
 	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
@@ -262,7 +262,7 @@ void CopyListener::newPluginCopy(quint32 orderId,QStringList sources,QString des
 	emit newCopy(orderId,QStringList() << "file",sources,"file",destination);
 }
 
-void CopyListener::newPluginMove(quint32 orderId,QStringList sources)
+void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";"));
 	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
@@ -274,7 +274,7 @@ void CopyListener::newPluginMove(quint32 orderId,QStringList sources)
 	emit newMove(orderId,QStringList() << "file",sources);
 }
 
-void CopyListener::newPluginMove(quint32 orderId,QStringList sources,QString destination)
+void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";")+", destination: "+destination);
 	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());

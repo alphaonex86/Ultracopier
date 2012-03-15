@@ -30,13 +30,13 @@ class ResourcesManager : public QObject, public Singleton<ResourcesManager>
 	public:
 		/** \brief Get folder presence and the path
 		\return Empty QString if not found */
-		QString getFolderReadPath(QString path);
+		QString getFolderReadPath(const QString &path);
 		/** \brief Get folder presence, the path and check in the folder and sub-folder the file presence
 		\return Empty QString if not found */
-		QString getFolderReadPathMultiple(QString path,QStringList fileToCheck);
-		bool checkFolderContent(QString path,QStringList fileToCheck);
+		QString getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck);
+		bool checkFolderContent(const QString &path,const QStringList &fileToCheck);
 		/// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
-		static QString AddSlashIfNeeded(QString path);
+		static QString AddSlashIfNeeded(const QString &path);
 		/// \brief get the writable path
 		QString getWritablePath();
 		/// \brief disable the writable path, if ultracopier is unable to write into
@@ -44,7 +44,7 @@ class ResourcesManager : public QObject, public Singleton<ResourcesManager>
 		/// \brief get the read path
 		QStringList getReadPath();
 		/// \brief remove folder
-		static bool removeFolder(QString dir);
+		static bool removeFolder(const QString &dir);
 	private:
 		/// \brief List of the path to read only access
 		QStringList searchPath;

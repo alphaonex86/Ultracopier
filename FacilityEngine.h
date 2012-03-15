@@ -26,19 +26,19 @@ class FacilityEngine : public FacilityInterface
 public:
 	explicit FacilityEngine();
 	/// \brief convert size in Byte to String
-	QString sizeToString(double size);
+	QString sizeToString(const double &size);
 	/// \brief convert size unit to String
-	QString sizeUnitToString(SizeUnit sizeUnit);
+	QString sizeUnitToString(const SizeUnit &sizeUnit);
 	/// \brief translate the text
-	QString translateText(QString text);
+	QString translateText(const QString &text);
 	/// \brief speed to string in byte per seconds
-	QString speedToString(double speed);
+	QString speedToString(const double &speed);
 	/// \brief Decompose the time in second
-	TimeDecomposition secondsToTimeDecomposition(quint32 seconds);
+	TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds);
 	/// \brief have the fonctionnality
-	bool haveFunctionality(QString fonctionnality);
+	bool haveFunctionality(const QString &fonctionnality);
 	/// \brief call the fonctionnality
-	QVariant callFunctionality(QString fonctionnality,QStringList args=QStringList());
+	QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
 private:
 	//translated string
 	QString Translation_Copy_engine;
@@ -61,7 +61,7 @@ private:
 	QString Translation_ZB;
 	QString Translation_YB;
 	//internal fonction
-	QString adaptString(float nb);
+	QString adaptString(const float &nb);
 public slots:
 	/// \brief To force the text re-translation
 	void retranslate();

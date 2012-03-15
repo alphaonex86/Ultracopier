@@ -67,24 +67,24 @@ class Core : public QObject, public GlobalClass
 			QTimer *nextConditionalSync;
 		};
 		QList<CopyInstance> copyList;
-		int openNewCopy(CopyMode mode,bool ignoreMode,QStringList protocolsUsedForTheSources=QStringList(),QString protocolsUsedForTheDestination="");
-		int openNewCopy(CopyMode mode,bool ignoreMode,QString name);
+		int openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources=QStringList(),const QString &protocolsUsedForTheDestination="");
+		int openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QString &name);
 		int incrementId();
 		int nextId;
 		QList<int> idList;
 		QTime lastProgressionTime;
 		int indexCopySenderCopyEngine();
 		int indexCopySenderInterface();
-		void connectEngine(int index);
-		void connectInterfaceAndSync(int index);
-		void disconnectEngine(int index);
-		void disconnectInterface(int index);
-		void periodiqueSync(int index);
+		void connectEngine(const int &index);
+		void connectInterfaceAndSync(const int &index);
+		void disconnectEngine(const int &index);
+		void disconnectInterface(const int &index);
+		void periodiqueSync(const int &index);
 		void plannedConditionalSync();
-		void conditionalSync(int index);
+		void conditionalSync(const int &index);
 		QTimer forUpateInformation;
-		void resetSpeedDetected(int index);
-		int connectCopyEngine(CopyMode mode,bool ignoreMode,CopyEngineManager::returnCopyEngine returnInformations);
+		void resetSpeedDetected(const int &index);
+		int connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
 		LogThread log;
 		bool log_enable;
 		bool log_enable_transfer;
@@ -99,28 +99,28 @@ class Core : public QObject, public GlobalClass
 		void copyCanceled(const quint32 & orderId);
 	public slots:
 		/** \brief do copy with sources, but ask the destination */
-		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
+		void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
 		/** \brief do copy with sources and destination */
-		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
+		void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
 		/** \brief do move with sources, but ask the destination */
-		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
+		void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
 		/** \brief do move with sources and destination */
-		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
+		void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
 		/** \brief open copy/move windows with specific engine */
-		void addWindowCopyMove(CopyMode mode,QString name);
+		void addWindowCopyMove(const CopyMode &mode,const QString &name);
 		/** \brief open transfer (copy+move) windows with specific engine */
-		void addWindowTransfer(QString name);
+		void addWindowTransfer(const QString &name);
 	private slots:
 		void copyInstanceCanceledByEngine();
 		void copyInstanceCanceledByInterface();
-		void copyInstanceCanceledByIndex(int index);
-		void actionInProgess(EngineActionInProgress action);
+		void copyInstanceCanceledByIndex(const int &index);
+		void actionInProgess(const EngineActionInProgress &action);
 		void newTransferStart(const ItemOfCopyList &item);
 		void newTransferStop(const quint64 &id);
 		void newFolderListing(const QString &path);
-		void newCollisionAction(QString action);
-		void newErrorAction(QString action);
-		void isInPause(bool);
+		void newCollisionAction(const QString &action);
+		void newErrorAction(const QString &action);
+		void isInPause(const bool&);
 		void periodiqueSync();
 		void newActionOnList();
 		void resetSpeedDetectedEngine();
@@ -133,7 +133,7 @@ class Core : public QObject, public GlobalClass
 		//for the extra logging
 		void rmPath(const QString &path);
 		void mkPath(const QString &path);
-		void urlDropped(QList<QUrl> urls);
+		void urlDropped(const QList<QUrl> &urls);
 };
 
 #endif // CORE_H

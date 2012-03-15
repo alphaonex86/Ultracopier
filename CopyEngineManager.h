@@ -45,13 +45,13 @@ public:
 	  \param protocolsUsedForTheDestination list of destination used
 	  \see getCopyEngine()
 	  */
-	returnCopyEngine getCopyEngine(CopyMode mode,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination);
+	returnCopyEngine getCopyEngine(const CopyMode &mode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination);
 	/** \brief return copy engine instance with specific engine
 	  \param mode the mode (copy/move)
 	  \param name name of the engine needed
 	  \see getCopyEngine()
 	  */
-	returnCopyEngine getCopyEngine(CopyMode mode,QString name);
+	returnCopyEngine getCopyEngine(const CopyMode &mode,const QString &name);
 	//bool currentEngineCanDoOnlyCopy(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
 	//CopyType currentEngineGetCopyType(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
 	/** \brief to send all signal because all object is connected on it */
@@ -60,16 +60,16 @@ public:
 	  \see Core::newCopy()
 	  \see Core::newMove()
 	  */
-	bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination);
+	bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination);
 private slots:
-	void onePluginAdded(PluginsAvailable plugin);
-	void onePluginWillBeRemoved(PluginsAvailable plugin);
-	void onePluginWillBeUnloaded(PluginsAvailable plugin);
+	void onePluginAdded(const PluginsAvailable &plugin);
+	void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+	void onePluginWillBeUnloaded(const PluginsAvailable &plugin);
 	#ifdef ULTRACOPIER_DEBUG
 	void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
 	#endif // ULTRACOPIER_DEBUG
 	/// \brief To notify when new value into a group have changed
-	void newOptionValue(QString groupName,QString variableName,QVariant value);
+	void newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
 	void allPluginIsloaded();
 private:
 	/// \brief the option interface

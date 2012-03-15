@@ -58,7 +58,7 @@ private slots:
 	void error(QLocalSocket::LocalSocketError theErrorDefine);
 	#endif
 signals:
-	void cli(QStringList ultracopierArguments,bool external);
+	void cli(const QStringList &ultracopierArguments,const bool &external);
 };
 
 #endif // LOCALLISTENER_H

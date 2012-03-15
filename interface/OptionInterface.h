@@ -22,13 +22,13 @@ class OptionInterface : public QObject
 	Q_OBJECT
 	public:
 		/// \brief To add option group to options
-		virtual bool addOptionGroup(QList<QPair<QString, QVariant> > KeysList) = 0;
+		virtual bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList) = 0;
 		/*/// \brief To remove option group to options, removed to the load plugin
 		virtual bool removeOptionGroup() = 0;*/
 		/// \brief To get option value
-		virtual QVariant getOptionValue(QString variableName) = 0;
+		virtual QVariant getOptionValue(const QString &variableName) = 0;
 		/// \brief To set option value
-		virtual void setOptionValue(QString variableName,QVariant value) = 0;
+		virtual void setOptionValue(const QString &variableName,const QVariant &value) = 0;
 	signals:
 		//void newOptionValue(QString,QVariant);-> disabled because the value will not externally changed, then useless notification
 		void resetOptions();
