@@ -4,32 +4,32 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="56"/>
+        <location filename="../../interface.cpp" line="62"/>
         <source>Total: %3 of %4</source>
         <translation>Total: %3 sur %4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="57"/>
+        <location filename="../../interface.cpp" line="63"/>
         <source>%1 of %2</source>
         <translation>%1 sur %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="91"/>
+        <location filename="../../interface.cpp" line="97"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="332"/>
+        <location filename="../../interface.cpp" line="333"/>
         <source>Copy</source>
         <translation>Copie</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="334"/>
+        <location filename="../../interface.cpp" line="335"/>
         <source>Move</source>
         <translation>Déplacement</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="342"/>
+        <location filename="../../interface.cpp" line="343"/>
         <source>%1% done</source>
         <translation>%1% fait</translation>
     </message>

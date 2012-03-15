@@ -289,6 +289,9 @@ int Core::connectCopyEngine(CopyMode mode,bool ignoreMode,CopyEngineManager::ret
 			newItem.baseTime=0;//stored in ms
 			newItem.isRunning=false;
 			newItem.haveError=false;
+			newItem.lastConditionalSync.start();
+			newItem.nextConditionalSync=new QTimer();
+			newItem.nextConditionalSync->setSingleShot(true);
 
 			if(!ignoreMode)
 				newItem.interface->forceCopyMode(mode);
@@ -363,7 +366,6 @@ void Core::actionInProgess(EngineActionInProgress action)
 			}
 		}
 		//do sync
-		conditionalSync(index);
 		periodiqueSync(index);
 		copyList[index].action=action;
 		if(copyList.at(index).interface!=NULL)
@@ -385,18 +387,20 @@ void Core::actionInProgess(EngineActionInProgress action)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the interface sender");
 }
 
+//temporise, to send only after the transfer list
 void Core::newTransferStart(const ItemOfCopyList &item)
 {
 	index=indexCopySenderCopyEngine();
 	if(index!=-1)
 	{
+		CopyInstance& currentCopyInstance=copyList[index];
 		//is too heavy for normal usage, then enable it only in debug mode to develop
 		#ifdef ULTRACOPIER_DEBUG
 		index_sub_loop=0;
-		loop_size=copyList.at(index).transferItemList.size();
+		loop_size=currentCopyInstance.transferItemList.size();
 		while(index_sub_loop<loop_size)
 		{
-			if(copyList.at(index).transferItemList.at(index_sub_loop).id==item.id)
+			if(currentCopyInstance.transferItemList.at(index_sub_loop).id==item.id)
 			{
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"duplicate id sended!");
 				return;
@@ -404,10 +408,10 @@ void Core::newTransferStart(const ItemOfCopyList &item)
 			index_sub_loop++;
 		}
 		#endif // ULTRACOPIER_DEBUG
-		conditionalSync(index);
-		copyList[index].transferItemList<<item;
-		copyList[index].progressionList<<0;
-		copyList.at(index).interface->newTransferStart(item);
+		//conditionalSync(index); -> do by a clean way
+		currentCopyInstance.transferItemList<<item;
+		currentCopyInstance.progressionList<<0;
+		currentCopyInstance.interface->newTransferStart(item);
 		if(log_enable_transfer)
 			log.newTransferStart(item);
 	}
@@ -415,26 +419,31 @@ void Core::newTransferStart(const ItemOfCopyList &item)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
+//temporise, to send only after the transfer list
 void Core::newTransferStop(const quint64 &id)
 {
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
 	{
+		CopyInstance& currentCopyInstance=copyList[index];
 		index_sub_loop=0;
-		loop_size=copyList.at(index).transferItemList.size();
+		loop_size=currentCopyInstance.transferItemList.size();
+		currentCopyInstance.interface->newTransferStop(id);
+		#ifdef ULTRACOPIER_DEBUG
 		while(index_sub_loop<loop_size)
 		{
-			if(copyList.at(index).transferItemList.at(index_sub_loop).id==id)
+			if(currentCopyInstance.transferItemList.at(index_sub_loop).id==id)
 			{
-				conditionalSync(index);
-				copyList[index].progressionList.removeAt(index_sub_loop);
-				copyList[index].transferItemList.removeAt(index_sub_loop);
-				copyList.at(index).interface->newTransferStop(id);
+				//conditionalSync(index); -> do by a clean way
+				currentCopyInstance.progressionList.removeAt(index_sub_loop);
+				currentCopyInstance.transferItemList.removeAt(index_sub_loop);
+
 				return;
 			}
 			index_sub_loop++;
 		}
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"id not found order: "+QString::number(id));
+		#endif // ULTRACOPIER_DEBUG
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"sender not found");
@@ -445,7 +454,6 @@ void Core::newFolderListing(const QString &path)
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
 	{
-		conditionalSync(index);
 		copyList[index].folderListing=path;
 		copyList.at(index).interface->newFolderListing(path);
 	}
@@ -478,7 +486,6 @@ void Core::isInPause(bool isPaused)
 	{
 		if(!isPaused)
 			resetSpeedDetected(index);
-		conditionalSync(index);
 		copyList[index].isPaused=isPaused;
 		copyList.at(index).interface->isInPause(isPaused);
 	}
@@ -555,18 +562,21 @@ void Core::connectEngine(int index)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
 	disconnectEngine(index);
 
-	connect(copyList.at(index).engine,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SLOT(newTransferStart(ItemOfCopyList)),Qt::QueuedConnection);//to check to change
-	connect(copyList.at(index).engine,SIGNAL(newTransferStop(quint64)),			this,SLOT(newTransferStop(quint64)),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)),Qt::QueuedConnection);//to check to change
-	connect(copyList.at(index).engine,SIGNAL(newCollisionAction(QString)),			this,SLOT(newCollisionAction(QString)),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(newActionOnList()),				this,SLOT(newActionOnList()),Qt::QueuedConnection);//to check to change
-	connect(copyList.at(index).engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)),Qt::QueuedConnection);//to check to change
-	connect(copyList.at(index).engine,SIGNAL(cancelAll()),					this,SLOT(copyInstanceCanceledByEngine()),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)),Qt::QueuedConnection);
-	connect(copyList.at(index).engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)),Qt::QueuedConnection);
+	CopyInstance& currentCopyInstance=copyList[index];
+	connect(currentCopyInstance.engine,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SLOT(newTransferStart(ItemOfCopyList)),Qt::QueuedConnection);//to check to change
+	connect(currentCopyInstance.engine,SIGNAL(newTransferStop(quint64)),			this,SLOT(newTransferStop(quint64)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)),Qt::QueuedConnection);//to check to change
+	connect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),			this,SLOT(newCollisionAction(QString)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(newActionOnList()),				this,SLOT(newActionOnList()),Qt::QueuedConnection);//to check to change
+	connect(currentCopyInstance.engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)),Qt::QueuedConnection);//to check to change
+	connect(currentCopyInstance.engine,SIGNAL(cancelAll()),					this,SLOT(copyInstanceCanceledByEngine()),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)),Qt::QueuedConnection);
+
+	//connect(currentCopyInstance.nextConditionalSync,SIGNAL(timeout()),			this,SLOT(mkPath(QString)),Qt::QueuedConnection);
 }
 
 void Core::connectInterfaceAndSync(int index)
@@ -574,43 +584,44 @@ void Core::connectInterfaceAndSync(int index)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
 	disconnectInterface(index);
 
-	connect(copyList.at(index).interface,SIGNAL(pause()),					copyList.at(index).engine,SLOT(pause()));
-	connect(copyList.at(index).interface,SIGNAL(resume()),					copyList.at(index).engine,SLOT(resume()));
-	connect(copyList.at(index).interface,SIGNAL(skip(quint64)),				copyList.at(index).engine,SLOT(skip(quint64)));
-	connect(copyList.at(index).interface,SIGNAL(sendErrorAction(QString)),			copyList.at(index).engine,SLOT(setErrorAction(QString)));
-	connect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		copyList.at(index).engine,SLOT(setSpeedLimitation(qint64)));
-	connect(copyList.at(index).interface,SIGNAL(sendCollisionAction(QString)),		copyList.at(index).engine,SLOT(setCollisionAction(QString)));
-	connect(copyList.at(index).interface,SIGNAL(userAddFolder(CopyMode)),			copyList.at(index).engine,SLOT(userAddFolder(CopyMode)));
-	connect(copyList.at(index).interface,SIGNAL(userAddFile(CopyMode)),			copyList.at(index).engine,SLOT(userAddFile(CopyMode)));
+	CopyInstance& currentCopyInstance=copyList[index];
+	connect(currentCopyInstance.interface,SIGNAL(pause()),					currentCopyInstance.engine,SLOT(pause()));
+	connect(currentCopyInstance.interface,SIGNAL(resume()),					currentCopyInstance.engine,SLOT(resume()));
+	connect(currentCopyInstance.interface,SIGNAL(skip(quint64)),				currentCopyInstance.engine,SLOT(skip(quint64)));
+	connect(currentCopyInstance.interface,SIGNAL(sendErrorAction(QString)),			currentCopyInstance.engine,SLOT(setErrorAction(QString)));
+	connect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		currentCopyInstance.engine,SLOT(setSpeedLimitation(qint64)));
+	connect(currentCopyInstance.interface,SIGNAL(sendCollisionAction(QString)),		currentCopyInstance.engine,SLOT(setCollisionAction(QString)));
+	connect(currentCopyInstance.interface,SIGNAL(userAddFolder(CopyMode)),			currentCopyInstance.engine,SLOT(userAddFolder(CopyMode)));
+	connect(currentCopyInstance.interface,SIGNAL(userAddFile(CopyMode)),			currentCopyInstance.engine,SLOT(userAddFile(CopyMode)));
 
-	connect(copyList.at(index).interface,SIGNAL(removeItems(QList<int>)),			copyList.at(index).engine,SLOT(removeItems(QList<int>)));
-	connect(copyList.at(index).interface,SIGNAL(moveItemsOnTop(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsOnTop(QList<int>)));
-	connect(copyList.at(index).interface,SIGNAL(moveItemsUp(QList<int>)),			copyList.at(index).engine,SLOT(moveItemsUp(QList<int>)));
-	connect(copyList.at(index).interface,SIGNAL(moveItemsDown(QList<int>)),			copyList.at(index).engine,SLOT(moveItemsDown(QList<int>)));
-	connect(copyList.at(index).interface,SIGNAL(moveItemsOnBottom(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsOnBottom(QList<int>)));
-	connect(copyList.at(index).interface,SIGNAL(exportTransferList()),			copyList.at(index).engine,SLOT(exportTransferList()));
-	connect(copyList.at(index).interface,SIGNAL(importTransferList()),			copyList.at(index).engine,SLOT(importTransferList()));
+	connect(currentCopyInstance.interface,SIGNAL(removeItems(QList<int>)),			currentCopyInstance.engine,SLOT(removeItems(QList<int>)));
+	connect(currentCopyInstance.interface,SIGNAL(moveItemsOnTop(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnTop(QList<int>)));
+	connect(currentCopyInstance.interface,SIGNAL(moveItemsUp(QList<int>)),			currentCopyInstance.engine,SLOT(moveItemsUp(QList<int>)));
+	connect(currentCopyInstance.interface,SIGNAL(moveItemsDown(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsDown(QList<int>)));
+	connect(currentCopyInstance.interface,SIGNAL(moveItemsOnBottom(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnBottom(QList<int>)));
+	connect(currentCopyInstance.interface,SIGNAL(exportTransferList()),			currentCopyInstance.engine,SLOT(exportTransferList()));
+	connect(currentCopyInstance.interface,SIGNAL(importTransferList()),			currentCopyInstance.engine,SLOT(importTransferList()));
 
-	connect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
-	connect(copyList.at(index).interface,SIGNAL(resume()),					this,SLOT(resetSpeedDetectedInterface()));
-	connect(copyList.at(index).interface,SIGNAL(cancel()),					this,SLOT(copyInstanceCanceledByInterface()),Qt::QueuedConnection);
-	connect(copyList.at(index).interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection);
+	connect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
+	connect(currentCopyInstance.interface,SIGNAL(resume()),					this,SLOT(resetSpeedDetectedInterface()));
+	connect(currentCopyInstance.interface,SIGNAL(cancel()),					this,SLOT(copyInstanceCanceledByInterface()),Qt::QueuedConnection);
+	connect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection);
 
-	copyList.at(index).interface->setSpeedLimitation(copyList.at(index).engine->getSpeedLimitation());
-	copyList.at(index).interface->setErrorAction(copyList.at(index).engine->getErrorAction());
-	copyList.at(index).interface->setCollisionAction(copyList.at(index).engine->getCollisionAction());
-	copyList.at(index).interface->setCopyType(copyList.at(index).type);
-	copyList.at(index).interface->setTransferListOperation(copyList.at(index).transferListOperation);
-	copyList.at(index).interface->actionInProgess(copyList.at(index).action);
-	copyList.at(index).interface->isInPause(copyList.at(index).isPaused);
-	if(copyList.at(index).haveError)
-		copyList.at(index).interface->errorDetected();
-	QWidget *tempWidget=copyList.at(index).interface->getOptionsEngineWidget();
+	currentCopyInstance.interface->setSpeedLimitation(currentCopyInstance.engine->getSpeedLimitation());
+	currentCopyInstance.interface->setErrorAction(currentCopyInstance.engine->getErrorAction());
+	currentCopyInstance.interface->setCollisionAction(currentCopyInstance.engine->getCollisionAction());
+	currentCopyInstance.interface->setCopyType(currentCopyInstance.type);
+	currentCopyInstance.interface->setTransferListOperation(currentCopyInstance.transferListOperation);
+	currentCopyInstance.interface->actionInProgess(currentCopyInstance.action);
+	currentCopyInstance.interface->isInPause(currentCopyInstance.isPaused);
+	if(currentCopyInstance.haveError)
+		currentCopyInstance.interface->errorDetected();
+	QWidget *tempWidget=currentCopyInstance.interface->getOptionsEngineWidget();
 	if(tempWidget!=NULL)
-		copyList.at(index).interface->getOptionsEngineEnabled(copyList.at(index).engine->getOptionsEngine(tempWidget));
+		currentCopyInstance.interface->getOptionsEngineEnabled(currentCopyInstance.engine->getOptionsEngine(tempWidget));
 
 	//put entry into the interface
-	QList<ItemOfCopyList> transferList=copyList.at(index).engine->getTransferList();
+	QList<ItemOfCopyList> transferList=currentCopyInstance.engine->getTransferList();
 	loop_size=transferList.size();
 	if(loop_size)
 	{
@@ -624,18 +635,18 @@ void Core::connectInterfaceAndSync(int index)
 			realActionToSend << newAction;
 			index_sub_loop++;
 		}
-		copyList.at(index).interface->getActionOnList(realActionToSend);
+		currentCopyInstance.interface->getActionOnList(realActionToSend);
 	}
 
 	//start the already started item
-	loop_size=copyList.at(index).transferItemList.size();
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("copyList.at(index).transferItemList.size(): %1").arg(loop_size));
+	loop_size=currentCopyInstance.transferItemList.size();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("currentCopyInstance.transferItemList.size(): %1").arg(loop_size));
 	if(loop_size>0)
 	{
 		index_sub_loop=0;
 		while(index_sub_loop<loop_size)
 		{
-			copyList.at(index).interface->newTransferStart(copyList.at(index).transferItemList.at(index_sub_loop));
+			currentCopyInstance.interface->newTransferStart(currentCopyInstance.transferItemList.at(index_sub_loop));
 			index_sub_loop++;
 		}
 	}
@@ -647,43 +658,45 @@ void Core::connectInterfaceAndSync(int index)
 void Core::disconnectEngine(int index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
-	disconnect(copyList.at(index).engine,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SLOT(newTransferStart(ItemOfCopyList)));//to check to change
-	disconnect(copyList.at(index).engine,SIGNAL(newTransferStop(quint64)),			this,SLOT(newTransferStop(quint64)));
-	disconnect(copyList.at(index).engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)));//to check to change
-	disconnect(copyList.at(index).engine,SIGNAL(newCollisionAction(QString)),		this,SLOT(newCollisionAction(QString)));
-	disconnect(copyList.at(index).engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)));
-	disconnect(copyList.at(index).engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)));
-	disconnect(copyList.at(index).engine,SIGNAL(newActionOnList()),				this,SLOT(newActionOnList()));//to check to change
-	disconnect(copyList.at(index).engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)));//to check to change
-	disconnect(copyList.at(index).engine,SIGNAL(cancelAll()),				this,SLOT(copyInstanceCanceledByEngine()));
-	disconnect(copyList.at(index).engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)));
-	disconnect(copyList.at(index).engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)));
-	disconnect(copyList.at(index).engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)));
+	CopyInstance& currentCopyInstance=copyList[index];
+	disconnect(currentCopyInstance.engine,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SLOT(newTransferStart(ItemOfCopyList)));//to check to change
+	disconnect(currentCopyInstance.engine,SIGNAL(newTransferStop(quint64)),			this,SLOT(newTransferStop(quint64)));
+	disconnect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)));//to check to change
+	disconnect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),		this,SLOT(newCollisionAction(QString)));
+	disconnect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)));
+	disconnect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)));
+	disconnect(currentCopyInstance.engine,SIGNAL(newActionOnList()),				this,SLOT(newActionOnList()));//to check to change
+	disconnect(currentCopyInstance.engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)));//to check to change
+	disconnect(currentCopyInstance.engine,SIGNAL(cancelAll()),				this,SLOT(copyInstanceCanceledByEngine()));
+	disconnect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)));
+	disconnect(currentCopyInstance.engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)));
+	disconnect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)));
 
 }
 
 void Core::disconnectInterface(int index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
-	disconnect(copyList.at(index).interface,SIGNAL(pause()),				copyList.at(index).engine,SLOT(pause()));
-	disconnect(copyList.at(index).interface,SIGNAL(resume()),				copyList.at(index).engine,SLOT(resume()));
-	disconnect(copyList.at(index).interface,SIGNAL(skip(quint64)),				copyList.at(index).engine,SLOT(skip(quint64)));
-	disconnect(copyList.at(index).interface,SIGNAL(sendErrorAction(QString)),		copyList.at(index).engine,SLOT(setErrorAction(QString)));
-	disconnect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		copyList.at(index).engine,SLOT(setSpeedLimitation(qint64)));
-	disconnect(copyList.at(index).interface,SIGNAL(sendCollisionAction(QString)),		copyList.at(index).engine,SLOT(setCollisionAction(QString)));
-	disconnect(copyList.at(index).interface,SIGNAL(userAddFolder(CopyMode)),		copyList.at(index).engine,SLOT(userAddFolder(CopyMode)));
-	disconnect(copyList.at(index).interface,SIGNAL(userAddFile(CopyMode)),			copyList.at(index).engine,SLOT(userAddFile(CopyMode)));
+	CopyInstance& currentCopyInstance=copyList[index];
+	disconnect(currentCopyInstance.interface,SIGNAL(pause()),				currentCopyInstance.engine,SLOT(pause()));
+	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				currentCopyInstance.engine,SLOT(resume()));
+	disconnect(currentCopyInstance.interface,SIGNAL(skip(quint64)),				currentCopyInstance.engine,SLOT(skip(quint64)));
+	disconnect(currentCopyInstance.interface,SIGNAL(sendErrorAction(QString)),		currentCopyInstance.engine,SLOT(setErrorAction(QString)));
+	disconnect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		currentCopyInstance.engine,SLOT(setSpeedLimitation(qint64)));
+	disconnect(currentCopyInstance.interface,SIGNAL(sendCollisionAction(QString)),		currentCopyInstance.engine,SLOT(setCollisionAction(QString)));
+	disconnect(currentCopyInstance.interface,SIGNAL(userAddFolder(CopyMode)),		currentCopyInstance.engine,SLOT(userAddFolder(CopyMode)));
+	disconnect(currentCopyInstance.interface,SIGNAL(userAddFile(CopyMode)),			currentCopyInstance.engine,SLOT(userAddFile(CopyMode)));
 
-	disconnect(copyList.at(index).interface,SIGNAL(removeItems(QList<int>)),		copyList.at(index).engine,SLOT(removeItems(QList<int>)));
-	disconnect(copyList.at(index).interface,SIGNAL(moveItemsOnTop(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsOnTop(QList<int>)));
-	disconnect(copyList.at(index).interface,SIGNAL(moveItemsUp(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsUp(QList<int>)));
-	disconnect(copyList.at(index).interface,SIGNAL(moveItemsDown(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsDown(QList<int>)));
-	disconnect(copyList.at(index).interface,SIGNAL(moveItemsOnBottom(QList<int>)),		copyList.at(index).engine,SLOT(moveItemsOnBottom(QList<int>)));
+	disconnect(currentCopyInstance.interface,SIGNAL(removeItems(QList<int>)),		currentCopyInstance.engine,SLOT(removeItems(QList<int>)));
+	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsOnTop(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnTop(QList<int>)));
+	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsUp(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsUp(QList<int>)));
+	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsDown(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsDown(QList<int>)));
+	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsOnBottom(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnBottom(QList<int>)));
 
-	disconnect(copyList.at(index).interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
-	disconnect(copyList.at(index).interface,SIGNAL(resume()),				this,SLOT(resetSpeedDetectedInterface()));
-	disconnect(copyList.at(index).interface,SIGNAL(cancel()),				this,SLOT(copyInstanceCanceledByInterface()));
-	disconnect(copyList.at(index).interface,SIGNAL(urlDropped(QList<QUrl>)),		this,SLOT(urlDropped(QList<QUrl>)));
+	disconnect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
+	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				this,SLOT(resetSpeedDetectedInterface()));
+	disconnect(currentCopyInstance.interface,SIGNAL(cancel()),				this,SLOT(copyInstanceCanceledByInterface()));
+	disconnect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),		this,SLOT(urlDropped(QList<QUrl>)));
 }
 
 void Core::periodiqueSync()
@@ -700,62 +713,63 @@ void Core::periodiqueSync()
 
 void Core::periodiqueSync(int index)
 {
-	if(copyList.at(index).engine==NULL || copyList.at(index).interface==NULL)
+	CopyInstance& currentCopyInstance=copyList[index];
+	if(currentCopyInstance.engine==NULL || currentCopyInstance.interface==NULL)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"some thread is null");
 		return;
 	}
 	//transfer to interface the progression
-	QPair<quint64,quint64> byteProgression=copyList.at(index).engine->getGeneralProgression();
-	copyList.at(index).interface->setGeneralProgression(byteProgression.first,byteProgression.second);
+	QPair<quint64,quint64> byteProgression=currentCopyInstance.engine->getGeneralProgression();
+	currentCopyInstance.interface->setGeneralProgression(byteProgression.first,byteProgression.second);
 
 	/** ***************** Do time calcul ******************* **/
-	if(!copyList.at(index).isPaused)
+	if(!currentCopyInstance.isPaused)
 	{
 		//calcul the last difference of the transfere
-		quint64 realByteTransfered=copyList.at(index).engine->realByteTransfered();
+		quint64 realByteTransfered=currentCopyInstance.engine->realByteTransfered();
 		quint64 diffCopiedSize=0;
-		if(realByteTransfered>=copyList.at(index).lastProgression)
-			diffCopiedSize=realByteTransfered-copyList.at(index).lastProgression;
-		copyList[index].lastProgression=realByteTransfered;
+		if(realByteTransfered>=currentCopyInstance.lastProgression)
+			diffCopiedSize=realByteTransfered-currentCopyInstance.lastProgression;
+		currentCopyInstance.lastProgression=realByteTransfered;
 		//do the remaining time calculation
-		//byte per ms: lastProgression/(baseTime+copyList.at(index).runningTime.elapsed()
-		//copyList.at(index).lastProgression
-		if(copyList.at(index).lastProgression==0)
-			copyList.at(index).interface->remainingTime(-1);
+		//byte per ms: lastProgression/(baseTime+currentCopyInstance.runningTime.elapsed()
+		//currentCopyInstance.lastProgression
+		if(currentCopyInstance.lastProgression==0)
+			currentCopyInstance.interface->remainingTime(-1);
 		else
-			copyList.at(index).interface->remainingTime(
+			currentCopyInstance.interface->remainingTime(
 				(
 				(double)(byteProgression.second-byteProgression.first)
-				*(copyList.at(index).baseTime+copyList.at(index).runningTime.elapsed())
-				/(copyList.at(index).lastProgression)
+				*(currentCopyInstance.baseTime+currentCopyInstance.runningTime.elapsed())
+				/(currentCopyInstance.lastProgression)
 				)/1000
 			);
 		if(lastProgressionTime.isNull())
 			lastProgressionTime.start();
 		else
 		{
-			if((copyList.at(index).action==Copying || copyList.at(index).action==CopyingAndListing))
+			if((currentCopyInstance.action==Copying || currentCopyInstance.action==CopyingAndListing))
 			{
-				copyList[index].lastSpeedTime << lastProgressionTime.elapsed();
-				copyList[index].lastSpeedDetected << diffCopiedSize;
-				while(copyList.at(index).lastSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+				currentCopyInstance.lastSpeedTime << lastProgressionTime.elapsed();
+				currentCopyInstance.lastSpeedDetected << diffCopiedSize;
+				while(currentCopyInstance.lastSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
 				{
-					copyList[index].lastSpeedTime.removeFirst();
-					copyList[index].lastSpeedDetected.removeFirst();
+					currentCopyInstance.lastSpeedTime.removeFirst();
+					currentCopyInstance.lastSpeedDetected.removeFirst();
 				}
 				totTime=0;
 				totSpeed=0;
 				index_sub_loop=0;
-				loop_size=copyList.at(index).lastSpeedDetected.size();
+				loop_size=currentCopyInstance.lastSpeedDetected.size();
 				while(index_sub_loop<loop_size)
 				{
-					totTime+=copyList.at(index).lastSpeedTime.at(index_sub_loop);
-					totSpeed+=copyList.at(index).lastSpeedDetected.at(index_sub_loop);
+					totTime+=currentCopyInstance.lastSpeedTime.at(index_sub_loop);
+					totSpeed+=currentCopyInstance.lastSpeedDetected.at(index_sub_loop);
 					index_sub_loop++;
 				}
 				totTime/=1000;
-				copyList.at(index).interface->detectedSpeed(totSpeed/totTime);
+				currentCopyInstance.interface->detectedSpeed(totSpeed/totTime);
 			}
 			lastProgressionTime.restart();
 		}
@@ -763,21 +777,61 @@ void Core::periodiqueSync(int index)
 
 	//transfer of the progression for each transfer
 	index_sub_loop=0;
-	loop_size=copyList.at(index).transferItemList.size();
+	loop_size=currentCopyInstance.transferItemList.size();
 	while(index_sub_loop<loop_size)
 	{
-		returnSpecificFileProgression progression=copyList.at(index).engine->getFileProgression(copyList.at(index).transferItemList.at(index_sub_loop).id);
+		returnSpecificFileProgression progression=currentCopyInstance.engine->getFileProgression(currentCopyInstance.transferItemList.at(index_sub_loop).id);
 		if(progression.haveBeenLocated)
-			copyList.at(index).interface->setFileProgression(copyList.at(index).transferItemList.at(index_sub_loop).id,progression.copiedSize,progression.totalSize);
+			currentCopyInstance.interface->setFileProgression(currentCopyInstance.transferItemList.at(index_sub_loop).id,progression.copiedSize,progression.totalSize);
 		index_sub_loop++;
 	}
 }
 
+void Core::plannedConditionalSync()
+{
+	QObject * senderObject=sender();
+	if(senderObject==NULL)
+	{
+		//QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Qt sender() NULL");
+		return;
+	}
+	index=0;
+	loop_size=copyList.size();
+	while(index<loop_size)
+	{
+		if(copyList.at(index).nextConditionalSync==senderObject)
+		{
+			#ifdef ULTRACOPIER_DEBUG
+			if(copyList.at(index).nextConditionalSync->isActive())
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Timer already considered as active");
+			#endif // ULTRACOPIER_DEBUG
+			conditionalSync(index);
+			return;
+		}
+		index++;
+	}
+	//QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Sender not located in the list");
+	return;
+}
+
 void Core::conditionalSync(int index)
 {
-	QList<returnActionOnCopyList> returnActions=copyList.at(index).engine->getActionOnList();
+	CopyInstance& currentCopyInstance=copyList[index];
+	//check if planned call is not programmed
+	if(currentCopyInstance.nextConditionalSync->isActive())
+		return;
+	//useless to report the action into less than 2ms, it's why you have -2
+	if(currentCopyInstance.lastConditionalSync.elapsed()<(ULTRACOPIER_TIME_INTERFACE_UPDATE_TRASNFER_LIST-2))
+	{
+		currentCopyInstance.nextConditionalSync->start();
+		return;
+	}
+	QList<returnActionOnCopyList> returnActions=currentCopyInstance.engine->getActionOnList();
 	if(returnActions.size()>0)
-		copyList.at(index).interface->getActionOnList(returnActions);
+		currentCopyInstance.interface->getActionOnList(returnActions);
+	currentCopyInstance.lastConditionalSync.restart();
 }
 
 void Core::copyInstanceCanceledByEngine()
@@ -805,17 +859,19 @@ void Core::copyInstanceCanceledByIndex(int index)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, remove with the index: "+QString::number(index));
 	disconnectEngine(index);
 	disconnectInterface(index);
-	copyList.at(index).engine->cancel();
-	delete copyList.at(index).engine;
-	delete copyList.at(index).interface;
+	CopyInstance& currentCopyInstance=copyList[index];
+	currentCopyInstance.engine->cancel();
+	delete currentCopyInstance.nextConditionalSync;
+	delete currentCopyInstance.engine;
+	delete currentCopyInstance.interface;
 	index_sub_loop=0;
-	loop_size=copyList.at(index).orderId.size();
+	loop_size=currentCopyInstance.orderId.size();
 	while(index_sub_loop<loop_size)
 	{
-		emit copyCanceled(copyList.at(index).orderId.at(index_sub_loop));
+		emit copyCanceled(currentCopyInstance.orderId.at(index_sub_loop));
 		index_sub_loop++;
 	}
-	copyList[index].orderId.clear();
+	currentCopyInstance.orderId.clear();
 	copyList.removeAt(index);
 	if(copyList.size()==0)
 		forUpateInformation.stop();

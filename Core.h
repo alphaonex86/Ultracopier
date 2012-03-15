@@ -63,6 +63,8 @@ class Core : public QObject, public GlobalClass
 			CopyType type;
 			TransferListOperation transferListOperation;
 			bool haveError;
+			QTime lastConditionalSync;
+			QTimer *nextConditionalSync;
 		};
 		QList<CopyInstance> copyList;
 		int openNewCopy(CopyMode mode,bool ignoreMode,QStringList protocolsUsedForTheSources=QStringList(),QString protocolsUsedForTheDestination="");
@@ -78,6 +80,7 @@ class Core : public QObject, public GlobalClass
 		void disconnectEngine(int index);
 		void disconnectInterface(int index);
 		void periodiqueSync(int index);
+		void plannedConditionalSync();
 		void conditionalSync(int index);
 		QTimer forUpateInformation;
 		void resetSpeedDetected(int index);

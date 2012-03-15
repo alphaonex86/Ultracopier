@@ -36,8 +36,10 @@ LogThread::LogThread()
 
 	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
 
+	enabled=false;
+
 	moveToThread(this);
-	start();
+	start(QThread::IdlePriority);
 }
 
 LogThread::~LogThread()
@@ -55,29 +57,42 @@ void LogThread::openLogs()
 	if(sync)
 	{
 		if(!log.open(QIODevice::WriteOnly|QIODevice::Unbuffered))
+		{
 			QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+		}
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"opened log: "+options->getOptionValue("Write_log","file").toString());
 	}
 	else
 	{
 		if(!log.open(QIODevice::WriteOnly))
+		{
 			QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+		}
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"opened log: "+options->getOptionValue("Write_log","file").toString());
 	}
 	newOptionValue("Write_log",	"transfer_format",		options->getOptionValue("Write_log","transfer_format"));
 	newOptionValue("Write_log",	"error_format",			options->getOptionValue("Write_log","error_format"));
 	newOptionValue("Write_log",	"folder_format",		options->getOptionValue("Write_log","folder_format"));
 	newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
-	start(QThread::IdlePriority);
+	connect(this,SIGNAL(newData()),this,SLOT(realDataWrite()),Qt::QueuedConnection);
 }
 
 void LogThread::closeLogs()
 {
+	disconnect(this,SIGNAL(newData()),this,SLOT(realDataWrite()));
 	if(log.isOpen() && data.size()>0)
 		log.write(data.toUtf8());
 	log.close();
 }
 
-void LogThread::newTransferStart(ItemOfCopyList item)
+void LogThread::newTransferStart(const ItemOfCopyList &item)
 {
+	if(!enabled)
+		return;
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+item.sourceFullPath);
 	QString text=transfer_format+"\n";
 	text=replaceBaseVar(text);
@@ -92,13 +107,17 @@ void LogThread::newTransferStart(ItemOfCopyList item)
 	emit newData();
 }
 
-void LogThread::newTransferStop(quint64 id)
+void LogThread::newTransferStop(const quint64 &id)
 {
+	if(!enabled)
+		return;
 	Q_UNUSED(id)
 }
 
-void LogThread::error(QString path,quint64 size,QDateTime mtime,QString error)
+void LogThread::error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error)
 {
+	if(!enabled)
+		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=error_format+"\n";
 	text=replaceBaseVar(text);
@@ -116,7 +135,6 @@ void LogThread::error(QString path,quint64 size,QDateTime mtime,QString error)
 
 void LogThread::run()
 {
-	connect(this,SIGNAL(newData()),this,SLOT(realDataWrite()),Qt::QueuedConnection);
 	exec();
 }
 
@@ -148,7 +166,7 @@ void LogThread::realDataWrite()
 	}
 }
 
-void LogThread::newOptionValue(QString group,QString name,QVariant value)
+void LogThread::newOptionValue(const QString &group,const QString &name,const QVariant &value)
 {
 	if(group!="Write_log")
 		return;
@@ -170,7 +188,8 @@ void LogThread::newOptionValue(QString group,QString name,QVariant value)
 	}
 	if(name=="enabled")
 	{
-		if(value.toBool())
+		enabled=value.toBool();
+		if(enabled)
 			openLogs();
 		else
 			closeLogs();
@@ -183,8 +202,10 @@ QString LogThread::replaceBaseVar(QString text)
 	return text;
 }
 
-void LogThread::rmPath(QString path)
+void LogThread::rmPath(const QString &path)
 {
+	if(!enabled)
+		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=folder_format+"\n";
 	text=replaceBaseVar(text);
@@ -198,8 +219,10 @@ void LogThread::rmPath(QString path)
 	emit newData();
 }
 
-void LogThread::mkPath(QString path)
+void LogThread::mkPath(const QString &path)
 {
+	if(!enabled)
+		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=folder_format+"\n";
 	text=replaceBaseVar(text);

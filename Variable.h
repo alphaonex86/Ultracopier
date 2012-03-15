@@ -19,6 +19,9 @@
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
 /// \brief define time to update the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500
+/** \brief Need be greater than 2, but greater than 20 to be efficient
+  \see Core::conditionalSync(int index) */
+#define ULTRACOPIER_TIME_INTERFACE_UPDATE_TRASNFER_LIST 40
 
 /** \brief How many value store to calculate the average value
  * 5*ULTRACOPIER_TIME_INTERFACE_UPDATE = 5*500 to get 2.5s

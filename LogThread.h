@@ -31,22 +31,22 @@ signals:
 	void newData();
 public slots:
 	/** method called when new transfer is started */
-	void newTransferStart(ItemOfCopyList);
+	void newTransferStart(const ItemOfCopyList &item);
 	/** method called when transfer is stopped */
-	void newTransferStop(quint64 id);
+	void newTransferStop(const quint64 &id);
 	/** method called when new error is occurred */
-	void error(QString path,quint64 size,QDateTime mtime,QString error);
+	void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
 	/** method called when the log file need be created */
 	void openLogs();
 	/** method called when the log file need be closed */
 	void closeLogs();
 	/** method called when one folder is removed */
-	void rmPath(QString path);
+	void rmPath(const QString &path);
 	/** method called when one folder is created */
-	void mkPath(QString path);
+	void mkPath(const QString &path);
 private slots:
 	void realDataWrite();
-	void newOptionValue(QString group,QString name,QVariant value);
+	void newOptionValue(const QString &group,const QString &name,const QVariant &value);
 private:
 	QString data;
 	QString transfer_format;
@@ -56,6 +56,7 @@ private:
 	QString replaceBaseVar(QString text);
 	QMutex mutex;
 	bool sync;
+	bool enabled;
 protected:
 	void run();
 };
