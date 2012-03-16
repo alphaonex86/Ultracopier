@@ -86,10 +86,6 @@ class Core : public QObject, public GlobalClass
 		void resetSpeedDetected(const int &index);
 		int connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
 		LogThread log;
-		bool log_enable;
-		bool log_enable_transfer;
-		bool log_enable_error;
-		bool log_enable_folder;
 		//temp variable
 		int index,index_sub_loop,loop_size,loop_sub_size;
 		double totTime;
@@ -127,7 +123,6 @@ class Core : public QObject, public GlobalClass
 		void resetSpeedDetectedInterface();
 		void loadInterface();
 		void unloadInterface();
-		void newOptionValue(const QString &group,const QString &name,const QVariant &value);
 		//error occurred
 		void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
 		//for the extra logging

@@ -27,8 +27,6 @@ class LogThread : public QThread, public GlobalClass
 public:
 	explicit LogThread();
 	 ~LogThread();
-signals:
-	void newData();
 public slots:
 	/** method called when new transfer is started */
 	void newTransferStart(const ItemOfCopyList &item);
@@ -45,8 +43,12 @@ public slots:
 	/** method called when one folder is created */
 	void mkPath(const QString &path);
 private slots:
-	void realDataWrite();
+	/** \to write the data into the file */
+	void realDataWrite(const QString &text);
+	/** \to update the options value */
 	void newOptionValue(const QString &group,const QString &name,const QVariant &value);
+signals:
+	void newData(const QString &text);
 private:
 	QString data;
 	QString transfer_format;
@@ -54,9 +56,11 @@ private:
 	QString folder_format;
 	QFile log;
 	QString replaceBaseVar(QString text);
-	QMutex mutex;
 	bool sync;
 	bool enabled;
+	bool log_enable_transfer;
+	bool log_enable_error;
+	bool log_enable_folder;
 protected:
 	void run();
 };

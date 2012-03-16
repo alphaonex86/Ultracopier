@@ -21,30 +21,6 @@ Core::Core(CopyEngineManager *copyEngineList)
 	connect(themes,			SIGNAL(theThemeNeedBeUnloaded()),			this,	SLOT(unloadInterface()));
 	connect(themes,			SIGNAL(theThemeIsReloaded()),				this,	SLOT(loadInterface()));
 	connect(&forUpateInformation,	SIGNAL(timeout()),					this,	SLOT(periodiqueSync()));
-
-	//load the GUI option
-	QString defaultLogFile="";
-	if(resources->getWritablePath()!="")
-		defaultLogFile=resources->getWritablePath()+"ultracopier-files.log";
-	QList<QPair<QString, QVariant> > KeysList;
-	KeysList.append(qMakePair(QString("enabled"),QVariant(false)));
-	KeysList.append(qMakePair(QString("file"),QVariant(defaultLogFile)));
-	KeysList.append(qMakePair(QString("transfer"),QVariant(true)));
-	KeysList.append(qMakePair(QString("error"),QVariant(true)));
-	KeysList.append(qMakePair(QString("folder"),QVariant(true)));
-	KeysList.append(qMakePair(QString("sync"),QVariant(false)));
-	KeysList.append(qMakePair(QString("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
-	KeysList.append(qMakePair(QString("error_format"),QVariant("[%time%] %path%, %error%")));
-	KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
-	options->addOptionGroup("Write_log",KeysList);
-	newOptionValue("Write_log",	"transfer",			options->getOptionValue("Write_log","transfer"));
-	newOptionValue("Write_log",	"error",			options->getOptionValue("Write_log","error"));
-	newOptionValue("Write_log",	"folder",			options->getOptionValue("Write_log","folder"));
-	newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
-
-	log.openLogs();
-
-	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
 }
 
 void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
@@ -412,8 +388,7 @@ void Core::newTransferStart(const ItemOfCopyList &item)
 		currentCopyInstance.transferItemList<<item;
 		currentCopyInstance.progressionList<<0;
 		currentCopyInstance.interface->newTransferStart(item);
-		if(log_enable_transfer)
-			log.newTransferStart(item);
+		log.newTransferStart(item);
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
@@ -881,8 +856,7 @@ void Core::copyInstanceCanceledByIndex(const int &index)
 //error occurred
 void Core::error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error)
 {
-	if(log_enable_error)
-		log.error(path,size,mtime,error);
+	log.error(path,size,mtime,error);
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
 	{
@@ -893,30 +867,15 @@ void Core::error(const QString &path,const quint64 &size,const QDateTime &mtime,
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
-void Core::newOptionValue(const QString &group,const QString &name,const QVariant &value)
-{
-	if(group=="Write_log")
-	{
-		if(name=="transfer")
-			log_enable_transfer=options->getOptionValue("Write_log","transfer").toBool() && value.toBool();
-		else if(name=="error")
-			log_enable_error=options->getOptionValue("Write_log","transfer").toBool() && value.toBool();
-		else if(name=="folder")
-			log_enable_folder=options->getOptionValue("Write_log","transfer").toBool() && value.toBool();
-	}
-}
-
 //for the extra logging
 void Core::rmPath(const QString &path)
 {
-	if(log_enable_error)
-		log.rmPath(path);
+	log.rmPath(path);
 }
 
 void Core::mkPath(const QString &path)
 {
-	if(log_enable_error)
-		log.mkPath(path);
+	log.mkPath(path);
 }
 
 void Core::urlDropped(const QList<QUrl> &urls)
