@@ -188,9 +188,11 @@ private:
 	bool sended_state_preOperationStopped;
         bool sended_state_readStopped;
 	bool sended_state_writeStopped;
-        //different post-operation
+	//different post-operation
 	bool checkIfAllIsClosed();
 	bool doFilePostOperation();
+	//different pre-operation
+	void tryOpen();
 };
 
 #endif // TRANSFERTHREAD_H

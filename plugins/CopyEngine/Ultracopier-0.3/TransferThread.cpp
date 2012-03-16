@@ -232,13 +232,22 @@ void TransferThread::preOperation()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] need move"+source);
 		return;
 	}
+	tryOpen();
+}
+
+void TransferThread::tryOpen()
+{
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start source and destination: "+source+" and "+destination);
-	readIsOpenVariable		= true;
-	writeIsOpenVariable		= true;
-	readIsClosedVariable		= false;
-	writeIsClosedVariable		= false;
-	readThread.open(source,mode);
-	writeThread.open(destination,sourceInfo.size());
+	if(!readIsOpenVariable)
+	{
+		readError=false;
+		readThread.open(source,mode);
+	}
+	if(!writeIsOpenVariable)
+	{
+		writeError=false;
+		writeThread.open(destination,sourceInfo.size());
+	}
 }
 
 bool TransferThread::isSame()
@@ -666,6 +675,14 @@ void TransferThread::getReadError()
 //retry after error
 void TransferThread::retryAfterError()
 {
+	//opening error
+	if(stat==PreOperation)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(stat));
+		tryOpen();
+		return;
+	}
+	//data streaming error
 	if(stat!=PostOperation && stat!=Transfer)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(stat));
