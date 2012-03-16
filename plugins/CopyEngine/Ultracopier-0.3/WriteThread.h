@@ -77,7 +77,7 @@ signals:
 	void internalStartEndOfFile();
         void internalStartFlushAndSeekToZero();
 	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 private:
 	QString			name;
 	QString			errorString_internal;

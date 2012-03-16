@@ -1,12 +1,16 @@
 #include "TransferModel.h"
 
-#include <QStringList>
-#include <QDebug>
-
 #define COLUMN_COUNT 3
-#define CHECK_DUPLICATE false
 
 // Model
+
+TransferModel::TransferModel()
+{
+	start=QIcon(":/resources/player_play.png");
+	stop=QIcon(":/resources/player_pause.png");
+	currentIndexSearch=0;
+	haveSearchItem=false;
+}
 
 int TransferModel::columnCount( const QModelIndex& parent ) const
 {
@@ -24,7 +28,7 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
 	const transfertItem& item = transfertItemList[row];
 	if(role==Qt::UserRole)
 		return item.id;
-	else
+	else if(role==Qt::DisplayRole)
 	{
 		switch(column)
 		{
@@ -40,6 +44,34 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
 			default:
 			return QVariant();
 		}
+	}
+	else if(role==Qt::DecorationRole)
+	{
+		switch(column)
+		{
+			case 0:
+				if(startId.contains(item.id))
+					return start;
+				else if(stopId.contains(item.id))
+					return stop;
+				else
+					return QVariant();
+			break;
+			default:
+			return QVariant();
+		}
+	}
+	else if(role==Qt::BackgroundRole)
+	{
+		if(!search_text.isEmpty() && (item.source.indexOf(search_text,0,Qt::CaseInsensitive)!=-1 || item.destination.indexOf(search_text,0,Qt::CaseInsensitive)!=-1))
+		{
+			if(haveSearchItem && searchId==item.id)
+				return QColor(255,150,150,100);
+			else
+				return QColor(255,255,0,100);
+		}
+		else
+			return QVariant();
 	}
 	return QVariant();
 }
@@ -78,20 +110,23 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
 		item.id=value.toULongLong();
 		return true;
 	}
-	else
+	else if(role==Qt::DisplayRole)
 	{
 		switch(column)
 		{
 			case 0:
 				item.source=value.toString();
+				emit dataChanged(index,index);
 				return true;
 			break;
 			case 1:
 				item.size=value.toString();
+				emit dataChanged(index,index);
 				return true;
 			break;
 			case 2:
 				item.destination=value.toString();
+				emit dataChanged(index,index);
 				return true;
 			break;
 			default:
@@ -109,14 +144,14 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
 QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyList>& returnActions)
 {
 	loop_size=returnActions.size();
-	index=0;
+	index_for_loop=0;
 	totalFile=0;
 	totalSize=0;
 	currentFile=0;
 	emit layoutAboutToBeChanged();
-	while(index<loop_size)
+	while(index_for_loop<loop_size)
 	{
-		const returnActionOnCopyList& action=returnActions.at(index);
+		const returnActionOnCopyList& action=returnActions.at(index_for_loop);
 		if(action.type==AddingItem)
 		{
 			transfertItem newItem;
@@ -129,13 +164,20 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 			totalSize+=action.addAction.size;
 		}
 		else if(action.userAction.type==MoveItem)
+		{
+			//bool current_entry=
 			transfertItemList.move(action.userAction.current_position,action.userAction.position);
+		}
 		else if(action.userAction.type==RemoveItem)
 		{
+			if(currentIndexSearch>0 && action.userAction.current_position<=currentIndexSearch)
+				currentIndexSearch--;
 			transfertItemList.removeAt(action.userAction.current_position);
 			currentFile++;
+			startId.removeOne(action.addAction.id);
+			stopId.removeOne(action.addAction.id);
 		}
-		index++;
+		index_for_loop++;
 	}
 	emit layoutChanged();
 	return QList<quint64>() << totalFile << totalSize << currentFile;
@@ -146,3 +188,86 @@ void TransferModel::setFacilityEngine(FacilityInterface * facilityEngine)
 	this->facilityEngine=facilityEngine;
 }
 
+/// \brief new transfer have started
+void TransferModel::newTransferStart(const quint64 &id)
+{
+	emit layoutAboutToBeChanged();
+	startId << id;
+	emit layoutChanged();
+}
+
+/** \brief one transfer have been stopped
+ * is stopped, example: because error have occurred, and try later, don't remove the item! */
+void TransferModel::newTransferStop(const quint64 &id)
+{
+	emit layoutAboutToBeChanged();
+	stopId << id;
+	emit layoutChanged();
+}
+
+int TransferModel::search(const QString &text,bool searchNext)
+{
+	emit layoutAboutToBeChanged();
+	search_text=text;
+	emit layoutChanged();
+	if(transfertItemList.size()==0)
+		return -1;
+	if(text.isEmpty())
+		return -1;
+	if(searchNext)
+	{
+		currentIndexSearch++;
+		if(currentIndexSearch>=loop_size)
+			currentIndexSearch=0;
+	}
+	index_for_loop=0;
+	loop_size=transfertItemList.size();
+	while(index_for_loop<loop_size)
+	{
+		if(transfertItemList.at(currentIndexSearch).source.indexOf(search_text,0,Qt::CaseInsensitive)!=-1 || transfertItemList.at(currentIndexSearch).destination.indexOf(search_text,0,Qt::CaseInsensitive)!=-1)
+		{
+			haveSearchItem=true;
+			searchId=transfertItemList.at(currentIndexSearch).id;
+			return currentIndexSearch;
+		}
+		currentIndexSearch++;
+		if(currentIndexSearch>=loop_size)
+			currentIndexSearch=0;
+		index_for_loop++;
+	}
+	haveSearchItem=false;
+	return -1;
+}
+
+int TransferModel::searchPrev(const QString &text)
+{
+	emit layoutAboutToBeChanged();
+	search_text=text;
+	emit layoutChanged();
+	if(transfertItemList.size()==0)
+		return -1;
+	if(text.isEmpty())
+		return -1;
+	if(currentIndexSearch==0)
+		currentIndexSearch=loop_size-1;
+	else
+		currentIndexSearch--;
+	index_for_loop=0;
+	loop_size=transfertItemList.size();
+	while(index_for_loop<loop_size)
+	{
+		if(transfertItemList.at(currentIndexSearch).source.indexOf(search_text,0,Qt::CaseInsensitive)!=-1 || transfertItemList.at(currentIndexSearch).destination.indexOf(search_text,0,Qt::CaseInsensitive)!=-1)
+		{
+			haveSearchItem=true;
+			searchId=transfertItemList.at(currentIndexSearch).id;
+			return currentIndexSearch;
+		}
+		if(currentIndexSearch==0)
+			currentIndexSearch=loop_size-1;
+		else
+			currentIndexSearch--;
+		index_for_loop++;
+	}
+	haveSearchItem=false;
+	return -1;
+}

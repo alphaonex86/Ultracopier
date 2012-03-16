@@ -534,6 +534,7 @@ void ListThread::resume()
 void ListThread::skip(const quint64 &id)
 {
 	skipInternal(id);
+	emit newActionOnList();
 }
 
 bool ListThread::skipInternal(const quint64 &id)
@@ -550,7 +551,25 @@ bool ListThread::skipInternal(const quint64 &id)
 		}
 		index++;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"skip transfer not found");
+	int_for_internal_loop=0;
+	loop_size=actionToDoListTransfer.size();
+	while(int_for_internal_loop<loop_size)
+	{
+		if(actionToDoListTransfer.at(int_for_internal_loop).id==id)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id));
+			returnActionOnCopyList newAction;
+			newAction.type=OtherAction;
+			newAction.addAction.id=id;
+			newAction.userAction.type=RemoveItem;
+			newAction.userAction.current_position=int_for_internal_loop;
+			actionDone << newAction;
+			actionToDoListTransfer.removeAt(int_for_internal_loop);
+			return true;
+		}
+		int_for_internal_loop++;
+	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("skip transfer not found: %1").arg(id));
 	return false;
 }
 
@@ -796,6 +815,7 @@ void ListThread::removeItems(const QList<int> &ids)
 {
 	for(int i=0;i<ids.size();i++)
 		skipInternal(ids.at(i));
+	emit newActionOnList();
 }
 
 //put on top

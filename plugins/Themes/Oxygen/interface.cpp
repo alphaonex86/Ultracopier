@@ -37,6 +37,13 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
 	connect(ui->limitSpeed,		SIGNAL(valueChanged(int)),	this,	SLOT(uiUpdateSpeed()));
 	connect(ui->checkBox_limitSpeed,SIGNAL(toggled(bool)),		this,	SLOT(uiUpdateSpeed()));
 
+	connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
+	connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
+	connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
+	connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
+	connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
+	connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
+
 	//setup the search part
 	closeTheSearchBox();
 	TimerForSearch  = new QTimer(this);
@@ -248,17 +255,7 @@ void Themes::newTransferStart(const ItemOfCopyList &item)
 	currentProgressList<<newItem;
 	ui->skipButton->setEnabled(true);
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Start transfer new item: "+QString::number(currentProgressList.last().generalData.id)+", with size: "+QString::number(currentProgressList.last().generalData.size));
-/*	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size)
-	{
-		if(graphicItemList.at(index).id==item.id)
-		{
-			graphicItemList.at(index).item->setIcon(0,player_play);
-			break;
-		}
-		index++;
-	}*/
+	transferModel.newTransferStart(item.id);
 	updateCurrentFileInformation();
 }
 
@@ -268,18 +265,7 @@ void Themes::newTransferStop(const quint64 &id)
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+QString::number(id));
 
 	//update the icon, but the item can be removed before from the transfer list, then not found
-	index=0;
-/*	loop_size=graphicItemList.size();
-	while(index<loop_size)
-	{
-		if(graphicItemList.at(index).id==id)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"item to remove found");
-			graphicItemList.at(index).item->setIcon(0,player_pause);
-			break;
-		}
-		index++;
-	}*/
+	transferModel.newTransferStop(id);
 
 	//update the internal transfer list
 	index=0;
@@ -748,25 +734,17 @@ void Themes::updateModeAndType()
 	if(modeIsForced)
 	{
 		menu->addAction(ui->actionAddFile);
-		connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
 		if(type==FileAndFolder)
-		{
 			menu->addAction(ui->actionAddFolder);
-			connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
-		}
 	}
 	else
 	{
 		menu->addAction(ui->actionAddFileToCopy);
 		menu->addAction(ui->actionAddFileToMove);
-		connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-		connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
 		if(type==FileAndFolder)
 		{
 			menu->addAction(ui->actionAddFolderToCopy);
 			menu->addAction(ui->actionAddFolderToMove);
-			connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-			connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
 		}
 	}
 }
@@ -858,156 +836,43 @@ void Themes::searchBoxShortcut()
 }
 
 //hilight the search
-void Themes::hilightTheSearch()
+void Themes::hilightTheSearch(bool searchNext)
 {
-/*	QFont *fontNormal=new QFont();
-	QTreeWidgetItem * item=NULL;
-	//get the ids to do actions
-	int i=0;
-	loop_size=ui->CopyList->topLevelItemCount();
+	int result=transferModel.search(ui->lineEditSearch->text(),searchNext);
 	if(ui->lineEditSearch->text().isEmpty())
-	{
-		while(i<loop_size)
-		{
-			item=ui->CopyList->topLevelItem(i);
-			item->setBackgroundColor(0,QColor(255,255,255,0));
-			item->setBackgroundColor(1,QColor(255,255,255,0));
-			item->setBackgroundColor(2,QColor(255,255,255,0));
-			item->setFont(0,*fontNormal);
-			item->setFont(1,*fontNormal);
-			item->setFont(2,*fontNormal);
-			i++;
-		}
 		ui->lineEditSearch->setStyleSheet("");
-	}
 	else
 	{
-		bool itemFound=false;
-		while(i<loop_size)
-		{
-			item=ui->CopyList->topLevelItem(i);
-			if(item->text(0).indexOf(ui->lineEditSearch->text(),0,Qt::CaseInsensitive)!=-1 || item->text(2).indexOf(ui->lineEditSearch->text(),0,Qt::CaseInsensitive)!=-1)
-			{
-				itemFound=true;
-				item->setBackgroundColor(0,QColor(255,255,0,100));
-				item->setBackgroundColor(1,QColor(255,255,0,100));
-				item->setBackgroundColor(2,QColor(255,255,0,100));
-			}
-			else
-			{
-				item->setBackgroundColor(0,QColor(255,255,255,0));
-				item->setBackgroundColor(1,QColor(255,255,255,0));
-				item->setBackgroundColor(2,QColor(255,255,255,0));
-			}
-			item->setFont(0,*fontNormal);
-			item->setFont(1,*fontNormal);
-			item->setFont(2,*fontNormal);
-			i++;
-		}
-		if(!itemFound)
+		if(result==-1)
 			ui->lineEditSearch->setStyleSheet("background-color: rgb(255, 150, 150);");
 		else
-			ui->lineEditSearch->setStyleSheet("");
+		{
+			ui->lineEditSearch->setStyleSheet("background-color: rgb(193,255,176);");
+			ui->TransferList->scrollTo(transferModel.index(result,0));
+		}
 	}
-	delete fontNormal;*/
 }
 
 void Themes::on_pushButtonSearchPrev_clicked()
 {
-/*	if(!ui->lineEditSearch->text().isEmpty() && ui->CopyList->topLevelItemCount()>0)
+	int result=transferModel.searchPrev(ui->lineEditSearch->text());
+	if(ui->lineEditSearch->text().isEmpty())
+		ui->lineEditSearch->setStyleSheet("");
+	else
 	{
-		hilightTheSearch();
-		int searchStart;
-		if(currentIndexSearch<0 || currentIndexSearch>=ui->CopyList->topLevelItemCount())
-			searchStart=ui->CopyList->topLevelItemCount()-1;
-		else
-			searchStart=ui->CopyList->topLevelItemCount()-currentIndexSearch-2;
-		int count=0;
-		QTreeWidgetItem *curs=NULL;
-		loop_size=ui->CopyList->topLevelItemCount();
-		while(count<loop_size)
-		{
-			if(searchStart<0)
-				searchStart+=ui->CopyList->topLevelItemCount();
-			if(ui->CopyList->topLevelItem(searchStart)->text(0).indexOf(ui->lineEditSearch->text(),0,Qt::CaseInsensitive)!=-1 || ui->CopyList->topLevelItem(searchStart)->text(0).indexOf(ui->lineEditSearch->text(),0,Qt::CaseInsensitive)!=-1)
-			{
-				curs=ui->CopyList->topLevelItem(searchStart);
-				break;
-			}
-			searchStart--;
-			count++;
-		}
-		if(curs!=NULL)
-		{
-			currentIndexSearch=ui->CopyList->topLevelItemCount()-1-ui->CopyList->indexOfTopLevelItem(curs);
-			ui->lineEditSearch->setStyleSheet("");
-			QFont *bold=new QFont();
-			bold->setBold(true);
-			curs->setFont(0,*bold);
-			curs->setFont(1,*bold);
-			curs->setFont(2,*bold);
-			curs->setBackgroundColor(0,QColor(255,255,0,200));
-			curs->setBackgroundColor(1,QColor(255,255,0,200));
-			curs->setBackgroundColor(2,QColor(255,255,0,200));
-			ui->CopyList->scrollToItem(curs);
-			delete bold;
-		}
-		else
+		if(result==-1)
 			ui->lineEditSearch->setStyleSheet("background-color: rgb(255, 150, 150);");
-	}*/
+		else
+		{
+			ui->lineEditSearch->setStyleSheet("background-color: rgb(193,255,176);");
+			ui->TransferList->scrollTo(transferModel.index(result,0));
+		}
+	}
 }
 
 void Themes::on_pushButtonSearchNext_clicked()
 {
-/*	if(ui->lineEditSearch->text().isEmpty())
-	{
-		if(ui->lineEditSearch->isHidden())
-			searchBoxShortcut();
-	}
-	else
-	{
-		if(ui->CopyList->topLevelItemCount()>0)
-		{
-			hilightTheSearch();
-			int searchStart;
-			if(currentIndexSearch<0 || currentIndexSearch>=ui->CopyList->topLevelItemCount())
-				searchStart=0;
-			else
-				searchStart=ui->CopyList->topLevelItemCount()-currentIndexSearch;
-			int count=0;
-			QTreeWidgetItem *curs=NULL;
-			loop_size=ui->CopyList->topLevelItemCount();
-			while(count<loop_size)
-			{
-				if(searchStart>=ui->CopyList->topLevelItemCount())
-					searchStart-=ui->CopyList->topLevelItemCount();
-				if(ui->CopyList->topLevelItem(searchStart)->text(0).indexOf(ui->lineEditSearch->text(),0,Qt::CaseInsensitive)!=-1 || ui->CopyList->topLevelItem(searchStart)->text(0).indexOf(ui->lineEditSearch->text(),0,Qt::CaseInsensitive)!=-1)
-				{
-					curs=ui->CopyList->topLevelItem(searchStart);
-					break;
-				}
-				searchStart++;
-				count++;
-			}
-			if(curs!=NULL)
-			{
-				currentIndexSearch=ui->CopyList->topLevelItemCount()-1-ui->CopyList->indexOfTopLevelItem(curs);
-				ui->lineEditSearch->setStyleSheet("");
-				QFont *bold=new QFont();
-				bold->setBold(true);
-				curs->setFont(0,*bold);
-				curs->setFont(1,*bold);
-				curs->setFont(2,*bold);
-				curs->setBackgroundColor(0,QColor(255,255,0,200));
-				curs->setBackgroundColor(1,QColor(255,255,0,200));
-				curs->setBackgroundColor(2,QColor(255,255,0,200));
-				ui->CopyList->scrollToItem(curs);
-				delete bold;
-			}
-			else
-				ui->lineEditSearch->setStyleSheet("background-color: rgb(255, 150, 150);");
-		}
-	}*/
+	hilightTheSearch(true);
 }
 
 void Themes::on_lineEditSearch_returnPressed()
