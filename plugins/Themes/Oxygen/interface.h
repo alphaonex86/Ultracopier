@@ -131,7 +131,6 @@ private slots:
 	void on_searchButton_toggled(bool checked);
 	void on_exportTransferList_clicked();
 	void on_importTransferList_clicked();
-	void selectionChangedSlot(const QItemSelection &, const QItemSelection &);
 private:
 	struct ItemOfCopyListWithMoreInformations
 	{

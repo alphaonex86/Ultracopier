@@ -174,8 +174,6 @@ public slots:
 	  3) lunch it, rerun the 2)
 	  */
 	void doNewActions_inode_manipulation();
-	/// \brief for the inode manipulation, do the transfer
-	void doNewActions_inode_manipulation_do_tranfer();
 	/// \brief restart transfer if it can
 	void restartTransferIfItCan();
 private:
