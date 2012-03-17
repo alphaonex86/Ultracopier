@@ -23,6 +23,13 @@ InterfacePlugin::InterfacePlugin() :
 	menu=new QMenu(this);
 	ui->toolButton->setMenu(menu);
 	updateModeAndType();
+
+	connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
+	connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
+	connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
+	connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
+	connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
+	connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
 }
 
 InterfacePlugin::~InterfacePlugin()
@@ -65,33 +72,18 @@ void InterfacePlugin::updateModeAndType()
 	menu->clear();
 	if(modeIsForced)
 	{
-		if(type==File || type==FileAndFolder)
-		{
-			menu->addAction(ui->actionAddFile);
-			connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-		}
-		if(type==Folder || type==FileAndFolder)
-		{
+		menu->addAction(ui->actionAddFile);
+		if(type==FileAndFolder)
 			menu->addAction(ui->actionAddFolder);
-			connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
-		}
 	}
 	else
 	{
-		if(type==File || type==FileAndFolder)
-		{
-			menu->addAction(ui->actionAddFileToCopy);
-			menu->addAction(ui->actionAddFileToMove);
-			connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-			connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-		}
-		if(type==Folder || type==FileAndFolder)
+		menu->addAction(ui->actionAddFileToCopy);
+		menu->addAction(ui->actionAddFileToMove);
+		if(type==FileAndFolder)
 		{
 			menu->addAction(ui->actionAddFolderToCopy);
 			menu->addAction(ui->actionAddFolderToMove);
-			connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-			connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-
 		}
 	}
 }

@@ -26,6 +26,13 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
 	haveStarted		= false;
 	speedString		= facilityEngine->speedToString(0);
 	ui->toolButtonMenu->setMenu(&menu);
+	
+	connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
+	connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
+	connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
+	connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
+	connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
+	connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
 }
 
 InterfacePlugin::~InterfacePlugin()
@@ -271,38 +278,18 @@ void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList> &retur
 		}
 		else
 		{
-			index=0;
-			loop_sub_size=graphicItemList.size();
-			while(index<loop_sub_size)
+			bool isSelected=graphicItemList.at(index).item->isSelected();
+			switch(returnActions.at(indexAction).userAction.type)
 			{
-				if(graphicItemList.at(index).id==returnActions.at(indexAction).userAction.id)
-				{
-					int pos=ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item);
-					if(ui->CopyList->indexOfTopLevelItem(graphicItemList.at(index).item)==-1)
-					{
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Warning, graphical item not located");
-					}
-					else
-					{
-						bool isSelected=graphicItemList.at(index).item->isSelected();
-						switch(returnActions.at(indexAction).userAction.type)
-						{
-							case MoveItem:
-								ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"MoveItem: "+QString::number(returnActions.at(indexAction).userAction.id)+", position: "+QString::number(returnActions.at(indexAction).position));
-								ui->CopyList->insertTopLevelItem(returnActions.at(indexAction).position,ui->CopyList->takeTopLevelItem(pos));
-								graphicItemList.at(index).item->setSelected(isSelected);
-								graphicItemList.move(index,returnActions.at(indexAction).position);
-							break;
-							case RemoveItem:
-								ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Remove: "+QString::number(returnActions.at(indexAction).userAction.id));
-								graphicItemList.at(index).item->setIcon(0,QIcon(":/resources/checkbox.png"));
-								updateOverallInformation();
-							break;
-						}
-					}
-					break;
-				}
-				index++;
+				case MoveItem:
+					ui->CopyList->insertTopLevelItem(returnActions.at(indexAction).userAction.moveAt,ui->CopyList->takeTopLevelItem(returnActions.at(indexAction).userAction.position));
+					graphicItemList.at(returnActions.at(indexAction).userAction.moveAt).item->setSelected(isSelected);
+					graphicItemList.move(returnActions.at(indexAction).userAction.moveAt,returnActions.at(indexAction).userAction.position);
+				break;
+				case RemoveItem:
+					graphicItemList.at(returnActions.at(indexAction).userAction.moveAt).item->setIcon(0,QIcon(":/resources/checkbox.png"));
+					updateOverallInformation();
+				break;
 			}
 		}
 		indexAction++;
@@ -416,33 +403,18 @@ void InterfacePlugin::updateModeAndType()
 	menu.clear();
 	if(modeIsForced)
 	{
-		if(type==File || type==FileAndFolder)
-		{
-			menu.addAction(ui->actionAddFile);
-			connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-		}
-		if(type==Folder || type==FileAndFolder)
-		{
+		menu.addAction(ui->actionAddFile);
+		if(type==FileAndFolder)
 			menu.addAction(ui->actionAddFolder);
-			connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
-		}
 	}
 	else
 	{
-		if(type==File || type==FileAndFolder)
-		{
-			menu.addAction(ui->actionAddFileToCopy);
-			menu.addAction(ui->actionAddFileToMove);
-			connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-			connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-		}
-		if(type==Folder || type==FileAndFolder)
+		menu.addAction(ui->actionAddFileToCopy);
+		menu.addAction(ui->actionAddFileToMove);
+		if(type==FileAndFolder)
 		{
 			menu.addAction(ui->actionAddFolderToCopy);
 			menu.addAction(ui->actionAddFolderToMove);
-			connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-			connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-
 		}
 	}
 }

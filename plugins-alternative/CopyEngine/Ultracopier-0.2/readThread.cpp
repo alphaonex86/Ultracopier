@@ -392,14 +392,14 @@ void readThread::writeThreadOperationFinish()
 			if(currentIndex!=-1)
 			{
 				newAction.type=OtherAction;
-				newAction.userAction.id=listTransfer.at(index).id;
+				newAction.userAction.position=index;
 				currentId=listTransfer.at(index).id;
 				mode=listTransfer.at(index).mode;
 				newAction.userAction.type=RemoveItem;
 				sourceFolder=listTransfer.at(index).source.absoluteDir();
 				actionDone << newAction;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"listTransfer.removeAt("+QString::number(currentIndex)+"), with id: "+QString::number(listTransfer.at(index).id)+", with source: "+listTransfer.at(index).source.absoluteFilePath());
-				listTransfer.removeAt(currentIndex);
+				listTransfer.removeAt(index);
 			}
 		}
 		if(currentIndex!=-1)//put in write thread
@@ -511,7 +511,7 @@ void readThread::removeItemInTransferList(quint64 id,bool skipIfIsRunning,bool c
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"this transfer is not running, just remove of the list");
 					returnActionOnCopyList newAction;
 					newAction.type=OtherAction;
-					newAction.userAction.id=listTransfer.at(index).id;
+					newAction.userAction.position=index;
 					newAction.userAction.type=RemoveItem;
 					actionDone << newAction;
 					listTransfer.removeAt(index);
@@ -555,9 +555,9 @@ void readThread::moveItemsOnTop(QList<int> ids)
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(indexToMove));
 				returnActionOnCopyList newAction;
 				newAction.type=OtherAction;
-				newAction.userAction.id=listTransfer.at(i).id;
+				newAction.userAction.position=i;
 				newAction.userAction.type=MoveItem;
-				newAction.position=indexToMove;
+				newAction.userAction.moveAt=indexToMove;
 				actionDone << newAction;
 				listTransfer.move(i,indexToMove);
 				indexToMove++;
@@ -597,9 +597,9 @@ void readThread::moveItemsUp(QList<int> ids)
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(i-1));
 					returnActionOnCopyList newAction;
 					newAction.type=OtherAction;
-					newAction.userAction.id=listTransfer.at(i).id;
+					newAction.userAction.position=i;
 					newAction.userAction.type=MoveItem;
-					newAction.position=i-1;
+					newAction.userAction.moveAt=i-1;
 					actionDone << newAction;
 					listTransfer.swap(i,i-1);
 					haveChanged=true;
@@ -647,9 +647,9 @@ void readThread::moveItemsDown(QList<int> ids)
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(i+1));
 					returnActionOnCopyList newAction;
 					newAction.type=OtherAction;
-					newAction.userAction.id=listTransfer.at(i).id;
+					newAction.userAction.position=i;
 					newAction.userAction.type=MoveItem;
-					newAction.position=i+1;
+					newAction.userAction.moveAt=i+1;
 					actionDone << newAction;
 					listTransfer.swap(i,i+1);
 					haveChanged=true;
@@ -695,9 +695,9 @@ void readThread::moveItemsOnBottom(QList<int> ids)
 				ids.removeOne(listTransfer.at(i).id);
 				returnActionOnCopyList newAction;
 				newAction.type=OtherAction;
-				newAction.userAction.id=listTransfer.at(i).id;
+				newAction.userAction.position=i;
 				newAction.userAction.type=MoveItem;
-				newAction.position=indexToMove;
+				newAction.userAction.moveAt=indexToMove;
 				actionDone << newAction;
 				listTransfer.move(i,indexToMove);
 				indexToMove--;

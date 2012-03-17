@@ -90,7 +90,7 @@ void ListThread::transferInodeIsClosed()
 			newAction.type=OtherAction;
 			newAction.addAction.id=temp_transfer_thread->transferId;
 			newAction.userAction.type=RemoveItem;
-			newAction.userAction.current_position=int_for_internal_loop;
+			newAction.userAction.position=int_for_internal_loop;
 			actionDone << newAction;
 			/// \todo check if item is at the right thread
 			quint64 temp_id=temp_transfer_thread->transferId;
@@ -562,7 +562,7 @@ bool ListThread::skipInternal(const quint64 &id)
 			newAction.type=OtherAction;
 			newAction.addAction.id=id;
 			newAction.userAction.type=RemoveItem;
-			newAction.userAction.current_position=int_for_internal_loop;
+			newAction.userAction.position=int_for_internal_loop;
 			actionDone << newAction;
 			actionToDoListTransfer.removeAt(int_for_internal_loop);
 			return true;
@@ -834,8 +834,8 @@ void ListThread::moveItemsOnTop(QList<int> ids)
 			newAction.type=OtherAction;
 			newAction.addAction.id=actionToDoListTransfer.at(i).id;
 			newAction.userAction.type=MoveItem;
-			newAction.userAction.position=indexToMove;
-			newAction.userAction.current_position=i;
+			newAction.userAction.moveAt=indexToMove;
+			newAction.userAction.position=i;
 			actionDone << newAction;
 			actionToDoListTransfer.move(i,indexToMove);
 			indexToMove++;
@@ -869,8 +869,8 @@ void ListThread::moveItemsUp(QList<int> ids)
 				newAction.type=OtherAction;
 				newAction.addAction.id=actionToDoListTransfer.at(i).id;
 				newAction.userAction.type=MoveItem;
-				newAction.userAction.position=lastGoodPositionExtern;
-				newAction.userAction.current_position=i;
+				newAction.userAction.moveAt=lastGoodPositionExtern;
+				newAction.userAction.position=i;
 				actionDone << newAction;
 				actionToDoListTransfer.swap(i,lastGoodPositionReal);
 				haveChanged=true;
@@ -915,8 +915,8 @@ void ListThread::moveItemsDown(QList<int> ids)
 				newAction.type=OtherAction;
 				newAction.addAction.id=actionToDoListTransfer.at(i).id;
 				newAction.userAction.type=MoveItem;
-				newAction.userAction.position=lastGoodPositionReal;
-				newAction.userAction.current_position=i;
+				newAction.userAction.moveAt=lastGoodPositionReal;
+				newAction.userAction.position=i;
 				actionDone << newAction;
 				actionToDoListTransfer.swap(i,lastGoodPositionReal);
 				haveChanged=true;
@@ -961,8 +961,8 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
 			newAction.type=OtherAction;
 			newAction.addAction.id=actionToDoListTransfer.at(i).id;
 			newAction.userAction.type=MoveItem;
-			newAction.userAction.position=lastGoodPositionExtern;
-			newAction.userAction.current_position=i;
+			newAction.userAction.moveAt=lastGoodPositionExtern;
+			newAction.userAction.position=i;
 			actionDone << newAction;
 			actionToDoListTransfer.move(i,lastGoodPositionReal);
 			lastGoodPositionReal--;

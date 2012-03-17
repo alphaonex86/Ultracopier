@@ -127,9 +127,9 @@ struct ActionOnCopyList
 {
 	ActionTypeCopyList type;//MoveItem or RemoveItem
 	
-	int current_position;
-	///< if userAction.type == MoveItem
 	int position;
+	///< if userAction.type == MoveItem
+	int moveAt;
 };
 
 /// \brief action normal or due to interface query on copy list

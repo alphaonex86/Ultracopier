@@ -166,13 +166,13 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 		else if(action.userAction.type==MoveItem)
 		{
 			//bool current_entry=
-			transfertItemList.move(action.userAction.current_position,action.userAction.position);
+			transfertItemList.move(action.userAction.position,action.userAction.moveAt);
 		}
 		else if(action.userAction.type==RemoveItem)
 		{
-			if(currentIndexSearch>0 && action.userAction.current_position<=currentIndexSearch)
+			if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
 				currentIndexSearch--;
-			transfertItemList.removeAt(action.userAction.current_position);
+			transfertItemList.removeAt(action.userAction.position);
 			currentFile++;
 			startId.removeOne(action.addAction.id);
 			stopId.removeOne(action.addAction.id);
