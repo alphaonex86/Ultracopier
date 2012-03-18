@@ -200,12 +200,9 @@ private:
 	int				maxSpeed;
 	FolderExistsAction		alwaysDoThisActionForFolderExists;
 	bool				checkDestinationFolderExists;
-	//mk path to do
-	quint64 addToMkPath(const QDir& folder);
+
 	//add file transfer to do
 	quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode);
-	//add rm path to do
-	void addToRmPath(const QDir& folder,const int& inodeToRemove);
 	//generate id number
 	quint64 generateIdNumber();
 	//warning the first entry is accessible will copy
@@ -279,6 +276,10 @@ private slots:
 	void run();
 	/// \to create transfer thread
 	void createTransferThread();
+	//mk path to do
+	quint64 addToMkPath(const QDir& folder);
+	//add rm path to do
+	void addToRmPath(const QDir& folder,const int& inodeToRemove);
 signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event

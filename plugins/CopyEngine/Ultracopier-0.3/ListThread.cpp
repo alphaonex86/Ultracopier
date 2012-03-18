@@ -300,7 +300,6 @@ scanFileOrFolder * ListThread::newScanThread(CopyMode mode)
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finished()),							this,SLOT(scanThreadHaveFinish()));
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(started()),							this,SLOT(updateTheStatus()));
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finished()),							this,SLOT(updateTheStatus()));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderTransfer(QString,QString,int,CopyMode)),		this,SLOT(folderTransfer(QString,QString,int,CopyMode)));
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(fileTransfer(QFileInfo,QFileInfo,CopyMode)),			this,SLOT(fileTransfer(QFileInfo,QFileInfo,CopyMode)));
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));

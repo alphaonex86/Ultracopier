@@ -61,7 +61,7 @@ void scanFileOrFolder::stop()
 void scanFileOrFolder::run()
 {
 	stopped=false;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start the listing with destination: "+destination);
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+QString::number(mode));
         QDir destinationFolder(destination);
 	int sourceIndex=0;
 	while(sourceIndex<sources.size())
@@ -214,12 +214,15 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 		QFileInfo fileInfo=entryList.at(index);
 		if(fileInfo.isDir())//possible wait time here
 			//listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
-                        listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too
+			listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too
 		else
 			emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileInfo.fileName(),mode);
 	}
 	if(mode==Move)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"newSource: "+newSource+", sizeEntryList: "+QString::number(sizeEntryList));
 		emit addToRmPath(newSource,sizeEntryList);
+	}
 }
 
 //set if need check if the destination exists
