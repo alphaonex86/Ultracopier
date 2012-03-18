@@ -99,11 +99,7 @@ void LogThread::closeLogs()
 void LogThread::newTransferStart(const ItemOfCopyList &item)
 {
 	if(!log_enable_transfer)
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"transfer not enabled: "+item.sourceFullPath);
 		return;
-	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+item.sourceFullPath);
 	QString text=transfer_format+"\n";
 	text=replaceBaseVar(text);
 	//Variable is %source%, %size%, %destination%
@@ -124,7 +120,6 @@ void LogThread::error(const QString &path,const quint64 &size,const QDateTime &m
 {
 	if(!log_enable_error)
 		return;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=error_format+"\n";
 	text=replaceBaseVar(text);
 	//Variable is %path%, %size%, %mtime%, %error%
@@ -206,7 +201,6 @@ void LogThread::rmPath(const QString &path)
 {
 	if(!log_enable_folder)
 		return;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=folder_format+"\n";
 	text=replaceBaseVar(text);
 	//Variable is %operation% %path%
@@ -219,7 +213,6 @@ void LogThread::mkPath(const QString &path)
 {
 	if(!log_enable_folder)
 		return;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=folder_format+"\n";
 	text=replaceBaseVar(text);
 	//Variable is %operation% %path%

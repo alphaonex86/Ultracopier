@@ -285,7 +285,7 @@ signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
-	void newTransferStart(const ItemOfCopyList&);		//should update interface information on this event
+	void newTransferStart(const ItemOfCopyList &);		//should update interface information on this event
 	void newTransferStop(const quint64 &id);		//should update interface information on this event, is stopped, example: because error have occurred, and try later, don't remove the item!
 
 	void newFolderListing(const QString &path);
@@ -302,8 +302,8 @@ signals:
         void rmPath(QString path);
         void mkPath(QString path);
         /// \brief To debug source
-        void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+        void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
 	void updateTheDebugInfo(QStringList,QStringList,int);
 	#endif
 

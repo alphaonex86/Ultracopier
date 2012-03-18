@@ -138,6 +138,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
 		return;
 	}
+	//to prevent multiple file alocation into ListThread::doNewActions_inode_manipulation()
 	stat			= PreOperation;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start, source: "+source+", destination: "+destination);
 	this->source			= source;

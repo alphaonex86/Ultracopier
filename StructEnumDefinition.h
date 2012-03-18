@@ -16,24 +16,24 @@
 /// \brief Define the mode of the copy window/request, if need be copy or move
 enum CopyMode
 {
-	Copy,
-	Move
+	Copy=0x00000000,
+	Move=0x00000001
 };
 
 /// \brief Define the catching state, if the copy is totally catch of the explorer, partially or nothing
 enum CatchState
 {
-	Uncaught,
-	Semiuncaught,
-	Caught
+	Uncaught=0x00000000,
+	Semiuncaught=0x00000001,
+	Caught=0x00000002
 };
 
 /// \brief Define the listening state
 enum ListeningState
 {
-	NotListening,///< 0 listener is listening
-	SemiListening,///< only part of listeners are listening
-	FullListening///< all the listeners are listening
+	NotListening=0x00000000,///< 0 listener is listening
+	SemiListening=0x00000001,///< only part of listeners are listening
+	FullListening=0x00000002///< all the listeners are listening
 };
 
 /// \brief Define the copy type, if folder, file or both
@@ -62,10 +62,10 @@ enum EngineActionInProgress
 
 enum DebugLevel
 {
-	DebugLevel_Information,
-	DebugLevel_Critical,
-	DebugLevel_Warning,
-	DebugLevel_Notice
+	DebugLevel_Information=0x00000001,
+	DebugLevel_Critical=0x00000002,
+	DebugLevel_Warning=0x00000003,
+	DebugLevel_Notice=0x00000004
 };
 
 enum SizeUnit
@@ -100,14 +100,14 @@ struct returnSpecificFileProgression
 //////////////////////////// Return list //////////////////////////////
 enum ActionTypeCopyList
 {
-	MoveItem,
-	RemoveItem
+	MoveItem=0x00000000,
+	RemoveItem=0x00000001
 };
 
 enum ReturnActionTypeCopyList
 {
-	AddingItem,
-	OtherAction
+	AddingItem=0x00000000,
+	OtherAction=0x00000001
 };
 
 /// \brief item to insert item in the interface

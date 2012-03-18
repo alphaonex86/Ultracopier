@@ -85,7 +85,7 @@ void ListThread::transferInodeIsClosed()
 	{
 		if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("[%1] have finish, put at idle; for id: %2").arg(int_for_loop).arg(temp_transfer_thread->transferId));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("[%1] have finish, put at idle; for id: %2").arg(int_for_internal_loop).arg(temp_transfer_thread->transferId));
 			returnActionOnCopyList newAction;
 			newAction.type=OtherAction;
 			newAction.addAction.id=temp_transfer_thread->transferId;
@@ -93,7 +93,6 @@ void ListThread::transferInodeIsClosed()
 			newAction.userAction.position=int_for_internal_loop;
 			actionDone << newAction;
 			/// \todo check if item is at the right thread
-			quint64 temp_id=temp_transfer_thread->transferId;
 			actionToDoListTransfer.removeAt(int_for_internal_loop);
 			/// \todo add the oversize to all size here
 			bytesTransfered+=temp_transfer_thread->transferSize;
@@ -103,7 +102,7 @@ void ListThread::transferInodeIsClosed()
 			countLocalParse++;
 			#endif
 			isFound=true;
-			emit newTransferStop(temp_id);
+			emit newActionOnList();
 			break;
 		}
 		int_for_internal_loop++;
@@ -119,10 +118,7 @@ void ListThread::transferInodeIsClosed()
 	if(countLocalParse!=1)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("countLocalParse != 1"));
 	#endif
-	if(actionToDoListTransfer.size()==0)
-		updateTheStatus();
-	else
-		doNewActions_inode_manipulation();
+	doNewActions_inode_manipulation();
 }
 
 //transfer is finished
@@ -716,7 +712,7 @@ void ListThread::updateTheStatus()
 	/*if(threadOfTheTransfer.haveContent())
 		copy=true;*/
 	updateTheStatus_listing=scanFileOrFolderThreadsPool.size()>0;
-	updateTheStatus_copying=actionToDoListTransfer.size()>0;
+	updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
 	if(updateTheStatus_copying && updateTheStatus_listing)
 		updateTheStatus_action_in_progress=CopyingAndListing;
 	else if(updateTheStatus_listing)
@@ -1071,7 +1067,7 @@ void ListThread::importTransferList(const QString &fileName)
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoListTransfer.size()));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1").arg(actionToDoListTransfer.size()));
 	if(stopIt || putInPause)
 		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -1162,7 +1158,6 @@ void ListThread::doNewActions_inode_manipulation()
 				currentTransferThread=transferThreadList[int_for_transfer_thread_search];
 				if(currentTransferThread->getStat()==TransferThread::Idle && currentTransferThread->transferId==0) // /!\ important!
 				{
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("[%1] is idle, use it for %2").arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.fileName()));
 					currentTransferThread->transferId=currentActionToDoTransfer.id;
 					currentTransferThread->transferSize=currentActionToDoTransfer.size;
 					currentTransferThread->setFiles(
@@ -1172,6 +1167,8 @@ void ListThread::doNewActions_inode_manipulation()
 						currentActionToDoTransfer.mode
 						);
 					currentActionToDoTransfer.isRunning=true;
+
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("[%1] id: %2 is idle, use it for %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
 
 					/// \note wrong position? Else write why it's here
 					ItemOfCopyList temp;
@@ -1183,6 +1180,7 @@ void ListThread::doNewActions_inode_manipulation()
 					temp.sourceFileName=currentActionToDoTransfer.source.fileName();
 					temp.sourceFullPath=currentActionToDoTransfer.source.absoluteFilePath();
 					emit newTransferStart(temp);		//should update interface information on this event
+					int_for_transfer_thread_search++;
 					break;
 				}
 				int_for_transfer_thread_search++;
@@ -1208,6 +1206,11 @@ void ListThread::doNewActions_inode_manipulation()
 			#include "ListThread_InodeAction.cpp"
 		}
 		int_for_internal_loop++;
+	}
+	if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
+	{
+		updateTheStatus();
+		return;
 	}
 	//error  checking
 	if((actionToDoListTransfer_count+actionToDoListInode_count)>ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
@@ -1246,10 +1249,7 @@ void ListThread::mkPathFirstFolderFinish()
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
 			actionToDoListInode.removeAt(int_for_loop);
 			numberOfInodeOperation--;
-			if(actionToDoListInode.size()==0)
-				updateTheStatus();
-			else
-				doNewActions_inode_manipulation();
+			doNewActions_inode_manipulation();
 			return;
 		}
 		int_for_loop++;
@@ -1268,10 +1268,7 @@ void ListThread::rmPathFirstFolderFinish()
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
 			actionToDoListInode.removeAt(int_for_loop);
 			numberOfInodeOperation--;
-			if(actionToDoListInode.size()==0)
-				updateTheStatus();
-			else
-				doNewActions_inode_manipulation();
+			doNewActions_inode_manipulation();
 			return;
 		}
 		int_for_loop++;
