@@ -251,16 +251,6 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
 		scanFileOrFolderThreadsPool.at(i)->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 }
 
-void ListThread::folderTransfer(const QString &source,const QString &destination,const int &numberOfItem,const CopyMode &mode)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source+", destination: "+destination+", numberOfItem: "+QString::number(numberOfItem));
-	if(mode==Move)
-		addToRmPath(source,numberOfItem);
-	emit newFolderListing(source);
-	if(numberOfItem==0)
-		addToMkPath(destination);
-}
-
 void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode)
 {
 	addToTransfer(sourceFileInfo,destinationFileInfo,mode);
@@ -315,6 +305,10 @@ scanFileOrFolder * ListThread::newScanThread(CopyMode mode)
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(newFolderListing(QString)),					this,SIGNAL(newFolderListing(QString)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToRmPath(QDir,int)),					this,SLOT(addToRmPath(QDir,int)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToMkPath(QDir)),						this,SLOT(addToMkPath(QDir)));
+
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)));
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)));
 	scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
@@ -750,6 +744,7 @@ void ListThread::setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionFo
 //mk path to do
 quint64 ListThread::addToMkPath(const QDir& folder)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: "+folder.absolutePath());
 	actionToDoInode temp;
 	temp.type	= ActionType_MkPath;
 	temp.id		= generateIdNumber();
@@ -792,6 +787,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
 //add rm path to do
 void ListThread::addToRmPath(const QDir& folder,const int& inodeToRemove)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: "+folder.absolutePath()+",inodeToRemove: "+QString::number(inodeToRemove));
 	actionToDoInode temp;
 	temp.type	= ActionType_RmPath;
 	temp.id		= generateIdNumber();

@@ -204,7 +204,9 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 	/// \todo check here if the folder is not readable or not exists
 	QFileInfoList entryList=finalSource.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);//possible wait time here
 	int sizeEntryList=entryList.size();
-	emit folderTransfer(newSource,finalDest,sizeEntryList,mode);
+	emit newFolderListing(newSource);
+	if(sizeEntryList==0)
+		emit addToMkPath(finalDest);
 	for (int index=0;index<sizeEntryList;++index)
 	{
 		if(stopIt)
@@ -216,6 +218,8 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 		else
 			emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileInfo.fileName(),mode);
 	}
+	if(mode==Move)
+		emit addToRmPath(newSource,sizeEntryList);
 }
 
 //set if need check if the destination exists

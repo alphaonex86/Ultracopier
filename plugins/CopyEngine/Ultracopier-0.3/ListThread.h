@@ -250,7 +250,6 @@ private:
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
-	void folderTransfer(const QString &source,const QString &destination,const int &numberOfItem,const CopyMode &mode);
 	void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode);
 	//mkpath event
 	void mkPathFirstFolderFinish();
@@ -284,12 +283,12 @@ signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
-        void newTransferStart(ItemOfCopyList);		//should update interface information on this event
-        void newTransferStop(quint64 id);		//should update interface information on this event, is stopped, example: because error have occurred, and try later, don't remove the item!
+	void newTransferStart(const ItemOfCopyList&);		//should update interface information on this event
+	void newTransferStop(const quint64 &id);		//should update interface information on this event, is stopped, example: because error have occurred, and try later, don't remove the item!
 
-        void newFolderListing(QString path);
-        void newCollisionAction(QString action);
-        void newErrorAction(QString action);
+	void newFolderListing(const QString &path);
+	void newCollisionAction(QString action);
+	void newErrorAction(QString action);
         void isInPause(bool);
 
         void newActionOnList();

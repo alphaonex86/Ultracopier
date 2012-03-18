@@ -35,12 +35,15 @@ public:
 	/// \brief set if need check if the destination exists
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
 signals:
-	void folderTransfer(QString source,QString destination,int numberOfItem,CopyMode mode);
-	void fileTransfer(QFileInfo source,QFileInfo destination,CopyMode mode);
+	void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const CopyMode &mode);
 	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame);
-	void errorOnFolder(QFileInfo fileInfo,QString errorString);
+	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+	void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
+	void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
+
+	void newFolderListing(const QString &path);
+	void addToMkPath(const QDir& folder);
+	void addToRmPath(const QDir& folder,const int& inodeToRemove);
 public slots:
 	void addToList(const QStringList& sources,const QString& destination);
 protected:
