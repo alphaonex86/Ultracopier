@@ -95,7 +95,11 @@ void TransferThread::internalStartTheTransfer()
 {
 	if(stat==Idle)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] can't start transfert at idle");
+		if(mode!=Move)
+		{
+			/// \bug can pass here because in case of direct move on same media, it return to idle stat directly
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] can't start transfert at idle");
+		}
 		return;
 	}
 	if(stat==PostOperation)

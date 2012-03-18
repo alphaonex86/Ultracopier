@@ -223,7 +223,7 @@ bool PluginsManager::loadPluginInformation(const QString &path)
 	}
 	else
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Error detected, the not loaded: "+tempPlugin.errorString+", for patch: "+tempPlugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Error detected, the not loaded: "+tempPlugin.errorString+", for path: "+tempPlugin.path);
 		return false;
 	}
 }

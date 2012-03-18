@@ -23,6 +23,8 @@
 #include "StructEnumDefinition_UltracopierSpecific.h"
 #include "Singleton.h"
 
+#ifdef ULTRACOPIER_DEBUG
+
 /** \brief Define the class for the debug
 
 This class provide all needed for the debug mode of ultracopier */
@@ -106,5 +108,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		/// \brief Send that's when new debug info is added
 		void newDebugInformation();
 };
+
+#endif // ULTRACOPIER_DEBUG
 
 #endif // DEBUG_ENGINE_H

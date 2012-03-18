@@ -11,6 +11,7 @@
 #include <QFileDialog>
 #include <QLocalSocket>
 
+#include "Variable.h"
 #include "DebugEngine.h"
 #include "ExtraSocket.h"
 
@@ -20,6 +21,8 @@
 #else
 	#define ULTRACOPIER_DEBUGCONSOLE(a,b) addDebugInformation(a,__func__,b)
 #endif
+
+#ifdef ULTRACOPIER_DEBUG
 
 /// \brief initiate the ultracopier event dispatcher and check if no other session is running
 DebugEngine::DebugEngine()
@@ -379,3 +382,5 @@ bool DebugEngine::tryConnect()
 	else
 		return false;
 }
+
+#endif

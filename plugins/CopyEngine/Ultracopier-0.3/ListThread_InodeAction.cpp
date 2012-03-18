@@ -40,10 +40,10 @@ case ActionType_RmPath:
 	}
 	else //have not finish all the transfer into it, do it later
 	{
-		actionToDoListInode.move(int_for_loop,loop_size-1);
+		actionToDoListInode.move(int_for_internal_loop,actionToDoListInode_count-1);
+		currentActionToDoInode.id=generateIdNumber();
 		number_rm_path_moved++;
-		if(!numberOfTranferRuning)
-			currentActionToDoInode.size=0;
+		currentActionToDoInode.size=0;
 		continue;
 	}
 break;
