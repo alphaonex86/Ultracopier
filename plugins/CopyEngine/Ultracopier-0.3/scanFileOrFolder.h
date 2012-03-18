@@ -40,10 +40,11 @@ signals:
 	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 	void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
 	void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
+	void finishedTheListing();
 
 	void newFolderListing(const QString &path);
-	void addToMkPath(const QDir& folder);
-	void addToRmPath(const QDir& folder,const int& inodeToRemove);
+	void addToMkPath(const QString& folder);
+	void addToRmPath(const QString& folder,const int& inodeToRemove);
 public slots:
 	void addToList(const QStringList& sources,const QString& destination);
 protected:

@@ -16,8 +16,9 @@ MkPath::~MkPath()
 	wait();
 }
 
-void MkPath::addPath(QString path)
+void MkPath::addPath(const QString &path)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
 	if(stopIt)
 		return;
 	emit internalStartAddPath(path);
@@ -44,6 +45,7 @@ void MkPath::run()
 
 void MkPath::internalDoThisPath()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+pathList.first());
 	if(!dir.exists(pathList.first()))
 		if(!dir.mkpath(pathList.first()))
 		{
@@ -52,6 +54,7 @@ void MkPath::internalDoThisPath()
 				if(stopIt)
 					return;
 				waitAction=false;
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
 				emit errorOnFolder(pathList.first(),tr("Unable to create the folder"));
 				return;
 			}
@@ -61,8 +64,9 @@ void MkPath::internalDoThisPath()
 	checkIfCanDoTheNext();
 }
 
-void MkPath::internalAddPath(QString path)
+void MkPath::internalAddPath(const QString &path)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
 	pathList << path;
 	checkIfCanDoTheNext();
 }

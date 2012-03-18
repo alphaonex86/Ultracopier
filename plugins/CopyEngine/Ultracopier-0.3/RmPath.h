@@ -14,6 +14,8 @@
 #include <QStringList>
 #include <QDir>
 
+#include "Environment.h"
+
 /// \brief Remove the path given as queued rmpath
 class RmPath : public QThread
 {
@@ -22,14 +24,15 @@ public:
 	explicit RmPath();
 	~RmPath();
 	/// \brief add new path to remove
-	void addPath(QString path);
+	void addPath(const QString &path);
 signals:
-	void errorOnFolder(QFileInfo,QString);
+	void errorOnFolder(const QFileInfo &,const QString &);
 	void firstFolderFinish();
-	void internalStartAddPath(QString path);
+	void internalStartAddPath(const QString &path);
 	void internalStartDoThisPath();
 	void internalStartSkip();
 	void internalStartRetry();
+	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 public slots:
 	void skip();
 	void retry();
@@ -43,7 +46,7 @@ private:
 	QDir dir;
 private slots:
 	void internalDoThisPath();
-	void internalAddPath(QString path);
+	void internalAddPath(const QString &path);
 	void internalSkip();
 	void internalRetry();
 };

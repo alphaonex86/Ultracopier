@@ -14,6 +14,8 @@
 #include <QStringList>
 #include <QDir>
 
+#include "Environment.h"
+
 /// \brief Make the path given as queued mkpath
 class MkPath : public QThread
 {
@@ -22,14 +24,15 @@ public:
 	explicit MkPath();
 	~MkPath();
 	/// \brief add path to make
-	void addPath(QString path);
+	void addPath(const QString &path);
 signals:
-	void errorOnFolder(QFileInfo,QString);
+	void errorOnFolder(const QFileInfo &,const QString &);
 	void firstFolderFinish();
-	void internalStartAddPath(QString path);
+	void internalStartAddPath(const QString &path);
 	void internalStartDoThisPath();
 	void internalStartSkip();
 	void internalStartRetry();
+	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 public slots:
 	/// \brief skip after creation error
 	void skip();
@@ -45,7 +48,7 @@ private:
 	QDir dir;
 private slots:
 	void internalDoThisPath();
-	void internalAddPath(QString path);
+	void internalAddPath(const QString &path);
 	void internalSkip();
 	void internalRetry();
 };

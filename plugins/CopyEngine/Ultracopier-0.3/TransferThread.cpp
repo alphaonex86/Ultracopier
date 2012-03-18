@@ -29,10 +29,7 @@ TransferThread::TransferThread()
 	writeError		= false;
 	this->mkpathTransfer	= mkpathTransfer;
 	readThread.setWriteThread(&writeThread);
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	connect(&readThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
-	connect(&writeThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
-	#endif
+
 	connect(&clockForTheCopySpeed,	SIGNAL(timeout()),			this,	SLOT(timeOfTheBlockCopyFinished()));
 	maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 }
@@ -77,6 +74,12 @@ void TransferThread::run()
 	connect(&readThread,SIGNAL(resumeAfterErrorByRestartAll()),                     &writeThread,	SLOT(flushAndSeekToZero()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(flushedAndSeekedToZero()),                          this,           SLOT(readThreadResumeAfterError()),	Qt::QueuedConnection);
 	connect(this,SIGNAL(internalTryStartTheTransfer()),	this,					SLOT(internalStartTheTransfer()),	Qt::QueuedConnection);
+
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	connect(&readThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
+	connect(&writeThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
+	#endif
+
 	/// \todo do the current post opt only after the read write opt
 	exec();
 }

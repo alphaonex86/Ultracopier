@@ -16,8 +16,9 @@ RmPath::~RmPath()
 	wait();
 }
 
-void RmPath::addPath(QString path)
+void RmPath::addPath(const QString &path)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
 	if(stopIt)
 		return;
 	emit internalStartAddPath(path);
@@ -44,11 +45,13 @@ void RmPath::run()
 
 void RmPath::internalDoThisPath()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+pathList.first());
 	if(!dir.rmpath(pathList.first()))
 	{
 		if(stopIt)
 			return;
 		waitAction=false;
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
 		emit errorOnFolder(pathList.first(),tr("Unable to remove the folder"));
 		return;
 	}
@@ -57,8 +60,9 @@ void RmPath::internalDoThisPath()
 	checkIfCanDoTheNext();
 }
 
-void RmPath::internalAddPath(QString path)
+void RmPath::internalAddPath(const QString &path)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
 	pathList << path;
 	checkIfCanDoTheNext();
 }

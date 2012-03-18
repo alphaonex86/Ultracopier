@@ -14,6 +14,8 @@ scanFileOrFolder::scanFileOrFolder(CopyMode mode)
 scanFileOrFolder::~scanFileOrFolder()
 {
 	stop();
+	quit();
+	wait();
 }
 
 bool scanFileOrFolder::isFinished()
@@ -53,9 +55,7 @@ void scanFileOrFolder::setFolderErrorAction(FileErrorAction action)
 void scanFileOrFolder::stop()
 {
 	stopIt=true;
-	quit();
 	waitOneAction.release();
-	wait();
 }
 
 void scanFileOrFolder::run()
@@ -87,6 +87,9 @@ void scanFileOrFolder::run()
 		sourceIndex++;
 	}
 	stopped=true;
+	if(stopIt)
+		return;
+	emit finishedTheListing();
 }
 
 void scanFileOrFolder::listFolder(const QString& source,const QString& destination,const QString& sourceSuffixPath,QString destinationSuffixPath)

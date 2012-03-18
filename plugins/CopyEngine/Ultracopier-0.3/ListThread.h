@@ -82,10 +82,11 @@ public:
 		ActionType type;///< \see ActionType
 		quint64 id;
 		qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
-		QFileInfo source;///< Used to set: source for transfer, folder to create, folder to drop
+		QFileInfo folder;///< Used to set: source for transfer, folder to create, folder to drop
 		bool isRunning;///< store if the action si running
 	};
 	QList<actionToDoInode> actionToDoListInode;
+	QList<actionToDoInode> actionToDoListInode_afterTheTransfer;
 	int numberOfInodeOperation;
 	//dir operation thread queue
 	MkPath mkPathQueue;
@@ -277,9 +278,9 @@ private slots:
 	/// \to create transfer thread
 	void createTransferThread();
 	//mk path to do
-	quint64 addToMkPath(const QDir& folder);
+	quint64 addToMkPath(const QString& folder);
 	//add rm path to do
-	void addToRmPath(const QDir& folder,const int& inodeToRemove);
+	void addToRmPath(const QString& folder,const int& inodeToRemove);
 signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event

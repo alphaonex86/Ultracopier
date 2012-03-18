@@ -295,21 +295,23 @@ bool ListThread::haveSameDestination(QString destination)
 
 scanFileOrFolder * ListThread::newScanThread(CopyMode mode)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start with: "+QString::number(mode));
+
 	//create new thread because is auto-detroyed
 	scanFileOrFolderThreadsPool << new scanFileOrFolder(mode);
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finished()),							this,SLOT(scanThreadHaveFinish()));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(started()),							this,SLOT(updateTheStatus()));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finished()),							this,SLOT(updateTheStatus()));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(fileTransfer(QFileInfo,QFileInfo,CopyMode)),			this,SLOT(fileTransfer(QFileInfo,QFileInfo,CopyMode)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finishedTheListing()),					this,SLOT(scanThreadHaveFinish()),				Qt::QueuedConnection);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(started()),							this,SLOT(updateTheStatus()),					Qt::QueuedConnection);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(finishedTheListing()),					this,SLOT(updateTheStatus()),					Qt::QueuedConnection);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(fileTransfer(QFileInfo,QFileInfo,CopyMode)),			this,SLOT(fileTransfer(QFileInfo,QFileInfo,CopyMode)),		Qt::QueuedConnection);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(newFolderListing(QString)),					this,SIGNAL(newFolderListing(QString)));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToRmPath(QDir,int)),					this,SLOT(addToRmPath(QDir,int)));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToMkPath(QDir)),						this,SLOT(addToMkPath(QDir)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToRmPath(QString,int)),					this,SLOT(addToRmPath(QString,int)),				Qt::QueuedConnection);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToMkPath(QString)),					this,SLOT(addToMkPath(QString)),				Qt::QueuedConnection);
 
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)));
-	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)));
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)),	Qt::QueuedConnection);
 	scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 	updateTheStatus();
 	return scanFileOrFolderThreadsPool.last();
@@ -741,16 +743,32 @@ void ListThread::setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionFo
 }
 
 //mk path to do
-quint64 ListThread::addToMkPath(const QDir& folder)
+quint64 ListThread::addToMkPath(const QString& folder)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: "+folder.absolutePath());
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: "+folder);
 	actionToDoInode temp;
 	temp.type	= ActionType_MkPath;
 	temp.id		= generateIdNumber();
-	temp.source.setFile(folder.absolutePath());
+	temp.folder.setFile(folder);
 	temp.isRunning	= false;
 	actionToDoListInode << temp;
 	return temp.id;
+}
+
+//add rm path to do
+void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: "+folder+",inodeToRemove: "+QString::number(inodeToRemove));
+	actionToDoInode temp;
+	temp.type	= ActionType_RmPath;
+	temp.id		= generateIdNumber();
+	temp.size	= inodeToRemove;
+	temp.folder.setFile(folder);
+	temp.isRunning	= false;
+	if(inodeToRemove==0)
+		actionToDoListInode << temp;
+	else
+		actionToDoListInode_afterTheTransfer << temp;
 }
 
 //add file transfer to do
@@ -781,19 +799,6 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
 	actionDone << newAction;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source.absoluteFilePath()+",destination: "+destination.absoluteFilePath()+", add entry: "+QString::number(temp.id));
 	return temp.id;
-}
-
-//add rm path to do
-void ListThread::addToRmPath(const QDir& folder,const int& inodeToRemove)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: "+folder.absolutePath()+",inodeToRemove: "+QString::number(inodeToRemove));
-	actionToDoInode temp;
-	temp.type	= ActionType_RmPath;
-	temp.id		= generateIdNumber();
-	temp.size	= inodeToRemove;
-	temp.source.setFile(folder.absolutePath());
-	temp.isRunning	= false;
-	actionToDoListInode << temp;
 }
 
 //generate id number
@@ -1092,6 +1097,14 @@ void ListThread::doNewActions_start_transfer()
 		}
 		int_for_loop++;
 	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"numberOfTranferRuning: "+QString::number(numberOfTranferRuning));
+	if(numberOfTranferRuning==0)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"numberOfTranferRuning==0");
+		actionToDoListInode << actionToDoListInode_afterTheTransfer;
+		actionToDoListInode_afterTheTransfer.clear();
+		doNewActions_inode_manipulation();
+	}
 }
 
 /** \brief lunch the pre-op or inode op
@@ -1230,7 +1243,7 @@ void ListThread::mkPathFirstFolderFinish()
 	{
 		if(actionToDoListInode.at(int_for_loop).type==ActionType_MkPath)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).source.absoluteFilePath()));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
 			actionToDoListInode.removeAt(int_for_loop);
 			numberOfInodeOperation--;
 			if(actionToDoListInode.size()==0)
@@ -1252,7 +1265,7 @@ void ListThread::rmPathFirstFolderFinish()
 	{
 		if(actionToDoListInode.at(int_for_loop).type==ActionType_RmPath)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).source.absoluteFilePath()));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
 			actionToDoListInode.removeAt(int_for_loop);
 			numberOfInodeOperation--;
 			if(actionToDoListInode.size()==0)
@@ -1358,6 +1371,10 @@ void ListThread::run()
 {
 	connect(&mkPathQueue,SIGNAL(firstFolderFinish()),this,SLOT(mkPathFirstFolderFinish()),Qt::QueuedConnection);
 	connect(&rmPathQueue,SIGNAL(firstFolderFinish()),this,SLOT(rmPathFirstFolderFinish()),Qt::QueuedConnection);
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	connect(&mkPathQueue,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
+	connect(&rmPathQueue,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
+	#endif // ULTRACOPIER_PLUGIN_DEBUG
 	exec();
 }
 
@@ -1376,12 +1393,13 @@ void ListThread::createTransferThread()
 	last->setDrive(drives);
 	last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
 	last->setMaxSpeed(maxSpeed/ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER);
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(last,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
+	#endif // ULTRACOPIER_PLUGIN_DEBUG
 	connect(last,SIGNAL(errorOnFile(QFileInfo,QString)),				this,SLOT(errorOnFile(QFileInfo,QString)),				Qt::QueuedConnection);
 	connect(last,SIGNAL(fileAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(fileAlreadyExists(QFileInfo,QFileInfo,bool)),			Qt::QueuedConnection);
-	connect(last,SIGNAL(tryPutAtBottom()),					this,SLOT(transferPutAtBottom()),					Qt::QueuedConnection);
+	connect(last,SIGNAL(tryPutAtBottom()),						this,SLOT(transferPutAtBottom()),					Qt::QueuedConnection);
 	connect(last,SIGNAL(readStopped()),						this,SLOT(transferIsFinished()),					Qt::QueuedConnection);
-	connect(last,SIGNAL(readStopped()),						this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
 	connect(last,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
 	connect(last,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
 	connect(last,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
