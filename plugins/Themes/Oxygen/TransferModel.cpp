@@ -50,10 +50,10 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
 		switch(column)
 		{
 			case 0:
-				if(startId.contains(item.id))
-					return start;
-				else if(stopId.contains(item.id))
+				if(stopId.contains(item.id))
 					return stop;
+				else if(startId.contains(item.id))
+					return start;
 				else
 					return QVariant();
 			break;
@@ -201,6 +201,7 @@ void TransferModel::newTransferStart(const quint64 &id)
 void TransferModel::newTransferStop(const quint64 &id)
 {
 	emit layoutAboutToBeChanged();
+	startId.removeOne(id);
 	stopId << id;
 	emit layoutChanged();
 }
