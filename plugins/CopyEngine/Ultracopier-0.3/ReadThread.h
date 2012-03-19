@@ -19,6 +19,8 @@
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
+/// \todo do fake open/close
+
 /// \brief Thread changed to open/close and read the source file
 class ReadThread : public QThread
 {
@@ -71,6 +73,12 @@ public:
         bool isReading();
 	/// \brief executed at regular interval to do a speed throling 
 	void timeOfTheBlockCopyFinished();
+	/// \brief do the fake open
+	void fakeOpen();
+	/// \brief do the fake readIsStarted
+	void fakeReadIsStarted();
+	/// \brief do the fake readIsStopped
+	void fakeReadIsStopped();
 public slots:
 	/// \brief to reset the copy, and put at the same state when it just open
 	void seekToZeroAndWait();
@@ -114,6 +122,7 @@ private:
         volatile bool	tryStartRead;
         qint64		size_at_open;
 	QDateTime	mtime_at_open;
+	bool		fakeMode;
         //internal function
         bool seek(qint64 position);/// \todo search if is use full
 private slots:

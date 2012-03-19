@@ -36,10 +36,7 @@ case ActionType_RmPath:
 		currentActionToDoInode.isRunning=true;
 		numberOfInodeOperation++;
 		if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT"));
 			return;
-		}
 	}
 	else //have not finish all the transfer into it, do it later
 	{

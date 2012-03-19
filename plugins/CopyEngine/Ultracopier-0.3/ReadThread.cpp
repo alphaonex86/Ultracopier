@@ -54,6 +54,7 @@ void ReadThread::open(const QString &name,const CopyMode &mode)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] previous file is already try read: "+file.fileName()+", try open: "+this->name);
                 return;
         }
+	fakeMode=false;
 	this->name=name;
         this->mode=mode;
 	emit internalStartOpen();
@@ -321,12 +322,14 @@ void ReadThread::internalClose(bool callByTheDestructor)
 {
 	/// \note never send signal here, because it's called by the destructor
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
-	file.close();
+	if(!fakeMode)
+		file.close();
 	if(!callByTheDestructor)
 		emit closed();
 
 	/// \note always the last of this function
-	isOpen.release();
+	if(!fakeMode)
+		isOpen.release();
 }
 
 /** \brief set block size
@@ -383,6 +386,25 @@ void ReadThread::timeOfTheBlockCopyFinished()
 	if(waitNewClockForSpeed.available()<ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT)
 		waitNewClockForSpeed.release();
 	//why not just use waitNewClockForSpeed.release() ?
+}
+
+/// \brief do the fake open
+void ReadThread::fakeOpen()
+{
+	fakeMode=true;
+	emit opened();
+}
+
+/// \brief do the fake writeIsStarted
+void ReadThread::fakeReadIsStarted()
+{
+	emit readIsStarted();
+}
+
+/// \brief do the fake writeIsStopped
+void ReadThread::fakeReadIsStopped()
+{
+	emit readIsStopped();
 }
 
 qint64 ReadThread::getLastGoodPosition()

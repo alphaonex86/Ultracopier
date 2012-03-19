@@ -148,6 +148,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
 	fileExistsAction		= FileExists_NotSet;
 	canStartTransfer		= false;
 	sended_state_preOperationStopped= false;
+	canBeMovedDirectlyVariable	= false;
 	resetExtraVariable();
 	emit internalStartPreOperation();
 }
@@ -234,10 +235,12 @@ void TransferThread::preOperation()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] destination exists: "+source);
 		return;
 	}
-	MoveReturn returnMoved=isMovedDirectly();
-	if(returnMoved==MoveReturn_moved || returnMoved==MoveReturn_error)
+	if(canBeMovedDirectly())
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] need move"+source);
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] need moved directly: "+source);
+		canBeMovedDirectlyVariable=true;
+		readThread.fakeOpen();
+		writeThread.fakeOpen();
 		return;
 	}
 	tryOpen();
@@ -349,55 +352,55 @@ bool TransferThread::destinationExists()
 	return false;
 }
 
-TransferThread::MoveReturn TransferThread::isMovedDirectly()
+void TransferThread::tryMoveDirectly()
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start the system move");
+
+	//move if on same mount point
+	QFile sourceFile(sourceInfo.absoluteFilePath());
+	QFile destinationFile(destinationInfo.absoluteFilePath());
+	if(destinationFile.exists() && !destinationFile.remove())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
+		emit errorOnFile(destinationInfo,destinationFile.errorString());
+		return;
+	}
+	QDir dir(destinationInfo.absolutePath());
+	{
+		mkpathTransfer->acquire();
+		if(!dir.exists())
+			dir.mkpath(destinationInfo.absolutePath());
+		mkpathTransfer->release();
+	}
+	if(!sourceFile.rename(destinationFile.fileName()))
+	{
+		if(sourceFile.exists())
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("file not not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+		else if(!dir.exists())
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do real move %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+		emit errorOnFile(sourceFile,sourceFile.errorString());
+		return;
+	}
+	readThread.fakeReadIsStarted();
+	writeThread.fakeWriteIsStarted();
+	readThread.fakeReadIsStopped();
+	writeThread.fakeWriteIsStopped();
+}
+
+bool TransferThread::canBeMovedDirectly()
 {
 	//move if on same mount point
 	#if defined (Q_OS_LINUX) || defined (Q_OS_WIN32)
 	if(mode!=Move)
-		return MoveReturn_skip;
+		return false;
 	if(mountSysPoint.size()==0)
-		return MoveReturn_skip;
+		return false;
 	if(getDrive(destinationInfo.fileName())==getDrive(sourceInfo.fileName()))
-	{
-		QFile sourceFile(sourceInfo.absoluteFilePath());
-		QFile destinationFile(destinationInfo.absoluteFilePath());
-		if(destinationFile.exists() && !destinationFile.remove())
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
-			emit errorOnFile(destinationInfo,destinationFile.errorString());
-			return MoveReturn_error;
-		}
-		QDir dir(destinationInfo.absolutePath());
-		{
-			mkpathTransfer->acquire();
-			if(!dir.exists())
-				dir.mkpath(destinationInfo.absolutePath());
-			mkpathTransfer->release();
-		}
-		if(!sourceFile.rename(destinationFile.fileName()))
-		{
-			if(sourceFile.exists())
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("file not not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
-			else if(!dir.exists())
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
-			else
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do real move %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
-			emit errorOnFile(sourceFile,sourceFile.errorString());
-			return MoveReturn_error;
-		}
-		//here the transfer is finish before have start real moving
-		//execptionnal case where all is done duriong the pre-operation
-		doFilePostOperation();
-		stat=Idle;
-		emit postOperationStopped();
-		//return false because it not need be continue
-		return MoveReturn_moved;
-	}
-	else
-		return MoveReturn_skip;
-	#else
-		return MoveReturn_skip;
+		return true;
 	#endif
+	return false;
 }
 
 void TransferThread::readIsReady()
@@ -432,8 +435,13 @@ void TransferThread::ifCanStartTransfer()
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stat=Transfer");
 			stat=Transfer;
-			needRemove=true;
-			readThread.startRead();
+			if(!canBeMovedDirectlyVariable)
+			{
+				needRemove=true;
+				readThread.startRead();
+			}
+			else
+				tryMoveDirectly();
 		}
 	}
 }
@@ -586,8 +594,11 @@ void TransferThread::postOperation()
 
 	if(!needSkip)
 	{
+		if(!doFilePostOperation())
+			return;
+
 		//remove source in moving mode
-		if(mode==Move)
+		if(mode==Move && !canBeMovedDirectlyVariable)
 		{
 			if(QFile::exists(destination))
 			{
@@ -601,9 +612,6 @@ void TransferThread::postOperation()
 			else
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] try remove source but destination not exists!");
 		}
-
-		if(!doFilePostOperation())
-			return;
 	}
 	else//do difference skip a file and skip this error case
 	{
@@ -627,7 +635,7 @@ void TransferThread::postOperation()
 bool TransferThread::doFilePostOperation()
 {
 	//do operation needed by copy
-	if(mode!=Move)
+	if(!canBeMovedDirectlyVariable)
 	{
 		//set the time if no write thread used
 		if(keepDate)
@@ -694,6 +702,12 @@ void TransferThread::retryAfterError()
 	if(stat!=PostOperation && stat!=Transfer)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(stat));
+		return;
+	}
+	if(canBeMovedDirectlyVariable)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] retry the system move");
+		tryMoveDirectly();
 		return;
 	}
 	if(writeError)

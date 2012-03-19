@@ -157,6 +157,7 @@ private:
 	bool			writeIsFinishVariable;
 	bool			readIsClosedVariable;
 	bool			writeIsClosedVariable;
+	bool			canBeMovedDirectlyVariable;
 	volatile bool		stopIt;
 	volatile bool		canStartTransfer;
 	int			blockSize;
@@ -177,7 +178,8 @@ private:
 	//different pre-operation
 	bool isSame();
 	bool destinationExists();
-	MoveReturn isMovedDirectly();
+	bool canBeMovedDirectly();
+	void tryMoveDirectly();
 	void ifCanStartTransfer();
 	//fonction to edit the file date time
 	bool changeFileDateTime(const QString &source,const QString &destination);

@@ -128,6 +128,7 @@ void WriteThread::open(const QString &name,const quint64 &startSize)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+name);
 	if(stopIt)
 		return;
+	fakeMode=false;
 	this->name=name;
 	this->startSize=startSize;
 	endDetected=false;
@@ -261,9 +262,12 @@ void WriteThread::internalClose(bool emitSignal)
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Close;
 	#endif
-	if(startSize!=CurentCopiedSize)
-		file.resize(CurentCopiedSize);
-	file.close();
+	if(!fakeMode)
+	{
+		if(startSize!=CurentCopiedSize)
+			file.resize(CurentCopiedSize);
+		file.close();
+	}
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Idle;
 	#endif
@@ -271,7 +275,8 @@ void WriteThread::internalClose(bool emitSignal)
 		emit closed();
 
 	/// \note always the last of this function
-	isOpen.release();
+	if(!fakeMode)
+		isOpen.release();
 }
 
 void WriteThread::internalReopen()
@@ -299,6 +304,25 @@ void WriteThread::setId(int id)
 	this->id=id;
 }
 #endif
+
+/// \brief do the fake open
+void WriteThread::fakeOpen()
+{
+	fakeMode=true;
+	emit opened();
+}
+
+/// \brief do the fake writeIsStarted
+void WriteThread::fakeWriteIsStarted()
+{
+	emit writeIsStarted();
+}
+
+/// \brief do the fake writeIsStopped
+void WriteThread::fakeWriteIsStopped()
+{
+	emit writeIsStopped();
+}
 
 void WriteThread::flushAndSeekToZero()
 {

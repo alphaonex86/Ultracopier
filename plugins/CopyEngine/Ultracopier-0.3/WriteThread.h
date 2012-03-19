@@ -50,6 +50,12 @@ public:
 	};
 	WriteStat stat;
 	#endif
+	/// \brief do the fake open
+	void fakeOpen();
+	/// \brief do the fake writeIsStarted
+	void fakeWriteIsStarted();
+	/// \brief do the fake writeIsStopped
+	void fakeWriteIsStopped();
 public slots:
 	/// \brief start the operation
 	void postOperation();
@@ -95,6 +101,7 @@ private:
 	bool			endDetected;
 	quint64			startSize;
 	QSemaphore		*mkpathTransfer;
+	bool			fakeMode;
 private slots:
 	bool internalOpen();
 	void internalWrite();

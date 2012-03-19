@@ -468,7 +468,6 @@ void Core::isInPause(const bool &isPaused)
 
 void Core::newActionOnList()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("start"));
 	int index=indexCopySenderCopyEngine();
 	if(index!=-1)
 		conditionalSync(index);
