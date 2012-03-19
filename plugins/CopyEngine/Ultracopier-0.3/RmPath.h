@@ -44,6 +44,7 @@ private:
 	QStringList pathList;
 	void checkIfCanDoTheNext();
 	QDir dir;
+	bool rmpath(const QDir &dir);
 private slots:
 	void internalDoThisPath();
 	void internalAddPath(const QString &path);

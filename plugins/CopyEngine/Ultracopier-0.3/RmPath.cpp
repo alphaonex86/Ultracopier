@@ -46,11 +46,11 @@ void RmPath::run()
 void RmPath::internalDoThisPath()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+pathList.first());
-	if(!dir.rmpath(pathList.first()))
+	if(!rmpath(pathList.first()))
 	{
 		if(stopIt)
 			return;
-		waitAction=false;
+		waitAction=true;
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
 		emit errorOnFolder(pathList.first(),tr("Unable to remove the folder"));
 		return;
@@ -60,11 +60,43 @@ void RmPath::internalDoThisPath()
 	checkIfCanDoTheNext();
 }
 
+/** remplace QDir::rmpath() because it return false if the folder not exists
+  and seam bug with parent folder */
+bool RmPath::rmpath(const QDir &dir)
+{
+	if(!dir.exists())
+		return true;
+	bool allHaveWork=true;
+	QFileInfoList list = dir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);
+	for (int i = 0; i < list.size(); ++i)
+	{
+		QFileInfo fileInfo(list.at(i));
+		if(!fileInfo.isDir())
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"found a file: "+fileInfo.fileName());
+			allHaveWork=false;
+		}
+		else
+		{
+			//return the fonction for scan the new folder
+			if(!rmpath(dir.absolutePath()+fileInfo.fileName()+'/'))
+				allHaveWork=false;
+		}
+	}
+	if(!allHaveWork)
+		return allHaveWork;
+	allHaveWork=dir.rmdir(dir.absolutePath());
+	if(!allHaveWork)
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to remove the folder: "+dir.absolutePath());
+	return allHaveWork;
+}
+
 void RmPath::internalAddPath(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
 	pathList << path;
-	checkIfCanDoTheNext();
+	if(!waitAction)
+		checkIfCanDoTheNext();
 }
 
 void RmPath::checkIfCanDoTheNext()

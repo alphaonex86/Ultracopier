@@ -53,7 +53,7 @@ void MkPath::internalDoThisPath()
 			{
 				if(stopIt)
 					return;
-				waitAction=false;
+				waitAction=true;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
 				emit errorOnFolder(pathList.first(),tr("Unable to create the folder"));
 				return;
@@ -68,7 +68,8 @@ void MkPath::internalAddPath(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
 	pathList << path;
-	checkIfCanDoTheNext();
+	if(!waitAction)
+		checkIfCanDoTheNext();
 }
 
 void MkPath::checkIfCanDoTheNext()

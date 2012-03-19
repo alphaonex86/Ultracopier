@@ -9,6 +9,7 @@
 /** \todo group setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) and setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
   and check if I can choose case by case if I wish overwrite, skip, ... */
 /// \todo move directly the folder when it's needed
+/// \todo connect folder error of mkpath and rmpath class
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
