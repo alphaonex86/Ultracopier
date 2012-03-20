@@ -302,8 +302,10 @@ signals:
         void rmPath(QString path);
         void mkPath(QString path);
         /// \brief To debug source
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+	#endif
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-        void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
 	void updateTheDebugInfo(QStringList,QStringList,int);
 	#endif
 
