@@ -26,25 +26,29 @@ void RmPath::addPath(const QString &path)
 
 void RmPath::skip()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit internalStartSkip();
 }
 
 void RmPath::retry()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit internalStartRetry();
 }
 
 void RmPath::run()
 {
-	connect(this,SIGNAL(internalStartAddPath(QString)),this,SLOT(internalAddPath(QString)));
-	connect(this,SIGNAL(internalStartDoThisPath()),this,SLOT(internalDoThisPath()));
-	connect(this,SIGNAL(internalStartSkip()),this,SLOT(internalSkip()));
-	connect(this,SIGNAL(internalStartRetry()),this,SLOT(internalRetry()));
+	connect(this,SIGNAL(internalStartAddPath(QString)),this,SLOT(internalAddPath(QString)),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartDoThisPath()),this,SLOT(internalDoThisPath()),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartSkip()),this,SLOT(internalSkip()),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartRetry()),this,SLOT(internalRetry()),Qt::QueuedConnection);
 	exec();
 }
 
 void RmPath::internalDoThisPath()
 {
+	if(waitAction || pathList.isEmpty())
+		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+pathList.first());
 	if(!rmpath(pathList.first()))
 	{
@@ -107,6 +111,7 @@ void RmPath::checkIfCanDoTheNext()
 
 void RmPath::internalSkip()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	waitAction=false;
 	pathList.removeFirst();
 	emit firstFolderFinish();
@@ -115,6 +120,7 @@ void RmPath::internalSkip()
 
 void RmPath::internalRetry()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	waitAction=false;
 	checkIfCanDoTheNext();
 }

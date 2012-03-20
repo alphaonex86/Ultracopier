@@ -59,6 +59,8 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	connect(listThread,SIGNAL(updateTheDebugInfo(QStringList,QStringList,int)),				this,SLOT(updateTheDebugInfo(QStringList,QStringList,int)),			Qt::QueuedConnection);
 	connect(listThread,SIGNAL(errorTransferList(QString)),							this,SLOT(errorTransferList(QString)),						Qt::QueuedConnection);
 	connect(listThread,SIGNAL(warningTransferList(QString)),						this,SLOT(warningTransferList(QString)),					Qt::QueuedConnection);
+	connect(listThread,SIGNAL(mkPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(mkPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection);
+	connect(listThread,SIGNAL(rmPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(rmPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection);
 
 	connect(this,SIGNAL(signal_pause()),						listThread,SLOT(pause()),				Qt::QueuedConnection);
 	connect(this,SIGNAL(signal_resume()),						listThread,SLOT(resume()),				Qt::QueuedConnection);

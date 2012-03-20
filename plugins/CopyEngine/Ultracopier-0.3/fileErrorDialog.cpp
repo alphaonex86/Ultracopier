@@ -1,7 +1,7 @@
 #include "fileErrorDialog.h"
 #include "ui_fileErrorDialog.h"
 
-fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString) :
+fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString,bool havePutAtTheEndButton) :
 	QDialog(parent),
 	ui(new Ui::fileErrorDialog)
 {
@@ -22,6 +22,8 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
 		ui->label_modified->setVisible(false);
 		ui->label_content_modified->setVisible(false);
 	}
+	if(!havePutAtTheEndButton)
+		ui->PutToBottom->hide();
 }
 
 fileErrorDialog::~fileErrorDialog()

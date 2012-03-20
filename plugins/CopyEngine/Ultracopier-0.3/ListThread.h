@@ -316,6 +316,10 @@ signals:
 	void send_folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread);
 	/// \note Can be call without queue because all call will be serialized
 	void send_errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread);
+	//mkpath error event
+	void mkPathErrorOnFolder(QFileInfo fileInfo,QString errorString);
+	//rmpath error event
+	void rmPathErrorOnFolder(QFileInfo fileInfo,QString errorString);
 	//to close
 	void tryCancel();
 	//to ask new transfer thread

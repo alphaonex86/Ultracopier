@@ -397,22 +397,6 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 		case FileError_Retry:
 			listThread->mkPathQueue.retry();
 		return;
-		case FileError_PutToEndOfTheList:
-			while(error_index<listThread->actionToDoListInode.size())
-			{
-				if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
-				{
-					listThread->mkPathQueue.skip();
-					listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
-					listThread->actionToDoListInode[error_index].isRunning=false;
-					listThread->numberOfInodeOperation--;
-					listThread->doNewActions_inode_manipulation();
-					return;
-				}
-				error_index++;
-			}
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"todo list item not found");
-		break;
 		default:
 			if(dialogIsOpen)
 			{
@@ -429,7 +413,7 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 			dialogIsOpen=true;
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 			emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
-			fileErrorDialog dialog(interface,folder,errorString);
+			fileErrorDialog dialog(interface,folder,errorString,false);
 			dialog.exec();/// \bug crash when external close
 			FileErrorAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -439,9 +423,12 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 				return;
 			}
 			if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
+			{
 				setComboBoxFolderError(newAction);
+				alwaysDoThisActionForFolderError=newAction;
+			}
 			dialogIsOpen=false;
-			switch(tempFileErrorAction)
+			switch(newAction)
 			{
 				case FileError_Skip:
 					listThread->mkPathQueue.skip();
@@ -449,23 +436,8 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 				case FileError_Retry:
 					listThread->mkPathQueue.retry();
 				break;
-				case FileError_PutToEndOfTheList:
-					while(error_index<listThread->actionToDoListInode.size())
-					{
-						if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
-						{
-							listThread->mkPathQueue.skip();
-							listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
-							listThread->actionToDoListInode[error_index].isRunning=false;
-							listThread->numberOfInodeOperation--;
-							listThread->doNewActions_inode_manipulation();
-							break;
-						}
-						error_index++;
-					}
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"todo list item not found");
-				break;
 				default:
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unknow switch case: "+QString::number(newAction));
 				break;
 			}
 			if(!isCalledByShowOneNewDialog)
@@ -493,22 +465,6 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 		case FileError_Retry:
 			listThread->rmPathQueue.retry();
 		return;
-		case FileError_PutToEndOfTheList:
-			while(error_index<listThread->actionToDoListInode.size())
-			{
-				if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
-				{
-					listThread->rmPathQueue.skip();
-					listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
-					listThread->actionToDoListInode[error_index].isRunning=false;
-					listThread->numberOfInodeOperation--;
-					listThread->doNewActions_inode_manipulation();
-					return;
-				}
-				error_index++;
-			}
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"todo list item not found");
-		break;
 		default:
 			if(dialogIsOpen)
 			{
@@ -525,7 +481,7 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 			dialogIsOpen=true;
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
 			emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
-			fileErrorDialog dialog(interface,folder,errorString);
+			fileErrorDialog dialog(interface,folder,errorString,false);
 			dialog.exec();/// \bug crash when external close
 			FileErrorAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -535,9 +491,13 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 				return;
 			}
 			if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
+			{
 				setComboBoxFolderError(newAction);
+				alwaysDoThisActionForFolderError=newAction;
+			}
 			dialogIsOpen=false;
-			switch(tempFileErrorAction)
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"do the action");
+			switch(newAction)
 			{
 				case FileError_Skip:
 					listThread->rmPathQueue.skip();
@@ -545,23 +505,8 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 				case FileError_Retry:
 					listThread->rmPathQueue.retry();
 				break;
-				case FileError_PutToEndOfTheList:
-					while(error_index<listThread->actionToDoListInode.size())
-					{
-						if(listThread->actionToDoListInode.at(error_index).type==ListThread::ActionType_MkPath)
-						{
-							listThread->rmPathQueue.skip();
-							listThread->actionToDoListInode.move(error_index,listThread->actionToDoListInode.size()-1);
-							listThread->actionToDoListInode[error_index].isRunning=false;
-							listThread->numberOfInodeOperation--;
-							listThread->doNewActions_inode_manipulation();
-							break;
-						}
-						error_index++;
-					}
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"todo list item not found");
-				break;
 				default:
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unknow switch case: "+QString::number(newAction));
 				break;
 			}
 			if(!isCalledByShowOneNewDialog)

@@ -13,6 +13,11 @@
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
+	qRegisterMetaType<DebugLevel>("DebugLevel");
+	qRegisterMetaType<ItemOfCopyList>("ItemOfCopyList");
+	qRegisterMetaType<QFileInfo>("QFileInfo");
+	qRegisterMetaType<CopyMode>("CopyMode");
+
 	moveToThread(this);
 	start(HighPriority);
 	this->facilityInterface		= facilityInterface;
@@ -35,11 +40,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	keepDate			= false;
 	blockSize			= 1024;
 	alwaysDoThisActionForFileExists = FileExists_NotSet;
-	/// \bug mising call for this part, or wrong sender detected
-	qRegisterMetaType<DebugLevel>("DebugLevel");
-	qRegisterMetaType<ItemOfCopyList>("ItemOfCopyList");
-	qRegisterMetaType<QFileInfo>("QFileInfo");
-	qRegisterMetaType<CopyMode>("CopyMode");
+
 	#if ! defined (Q_CC_GNU)
 	ui->keepDate->setEnabled(false);
 	ui->keepDate->setToolTip("Not supported with this compiler");
@@ -48,8 +49,17 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	connect(&timerUpdateDebugDialog,SIGNAL(timeout()),this,SLOT(timedUpdateDebugDialog()));
 	timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
 	#endif
-	connect(this,SIGNAL(tryCancel()),this,SLOT(cancel()),Qt::QueuedConnection);
-	connect(this,SIGNAL(askNewTransferThread()),this,SLOT(createTransferThread()),Qt::QueuedConnection);
+	connect(this,		SIGNAL(tryCancel()),							this,SLOT(cancel()),							Qt::QueuedConnection);
+	connect(this,		SIGNAL(askNewTransferThread()),						this,SLOT(createTransferThread()),					Qt::QueuedConnection);
+	connect(&mkPathQueue,	SIGNAL(firstFolderFinish()),						this,SLOT(mkPathFirstFolderFinish()),					Qt::QueuedConnection);
+	connect(&rmPathQueue,	SIGNAL(firstFolderFinish()),						this,SLOT(rmPathFirstFolderFinish()),					Qt::QueuedConnection);
+	connect(&mkPathQueue,	SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SIGNAL(mkPathErrorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
+	connect(&rmPathQueue,	SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SIGNAL(rmPathErrorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	connect(&mkPathQueue,	SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
+	connect(&rmPathQueue,	SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
+	#endif // ULTRACOPIER_PLUGIN_DEBUG
+
 	emit askNewTransferThread();
 	mkpathTransfer.release();
 }
@@ -1377,12 +1387,6 @@ void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorStr
 //to run the thread
 void ListThread::run()
 {
-	connect(&mkPathQueue,SIGNAL(firstFolderFinish()),this,SLOT(mkPathFirstFolderFinish()),Qt::QueuedConnection);
-	connect(&rmPathQueue,SIGNAL(firstFolderFinish()),this,SLOT(rmPathFirstFolderFinish()),Qt::QueuedConnection);
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	connect(&mkPathQueue,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
-	connect(&rmPathQueue,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
-	#endif // ULTRACOPIER_PLUGIN_DEBUG
 	exec();
 }
 

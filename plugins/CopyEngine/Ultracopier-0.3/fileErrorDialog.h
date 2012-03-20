@@ -24,7 +24,7 @@ class fileErrorDialog : public QDialog
 	Q_OBJECT
 public:
 	/// \brief create the object and pass all the informations to it
-	explicit fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString);
+	explicit fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString,bool havePutAtTheEndButton=true);
 	~fileErrorDialog();
 	/// \brief return the the always checkbox is checked
 	bool getAlways();

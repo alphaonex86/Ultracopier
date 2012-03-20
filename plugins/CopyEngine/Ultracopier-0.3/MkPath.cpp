@@ -26,25 +26,29 @@ void MkPath::addPath(const QString &path)
 
 void MkPath::skip()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit internalStartSkip();
 }
 
 void MkPath::retry()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit internalStartRetry();
 }
 
 void MkPath::run()
 {
-	connect(this,SIGNAL(internalStartAddPath(QString)),this,SLOT(internalAddPath(QString)));
-	connect(this,SIGNAL(internalStartDoThisPath()),this,SLOT(internalDoThisPath()));
-	connect(this,SIGNAL(internalStartSkip()),this,SLOT(internalSkip()));
-	connect(this,SIGNAL(internalStartRetry()),this,SLOT(internalRetry()));
+	connect(this,SIGNAL(internalStartAddPath(QString)),this,SLOT(internalAddPath(QString)),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartDoThisPath()),this,SLOT(internalDoThisPath()),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartSkip()),this,SLOT(internalSkip()),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartRetry()),this,SLOT(internalRetry()),Qt::QueuedConnection);
 	exec();
 }
 
 void MkPath::internalDoThisPath()
 {
+	if(waitAction || pathList.isEmpty())
+		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+pathList.first());
 	if(!dir.exists(pathList.first()))
 		if(!dir.mkpath(pathList.first()))
@@ -80,6 +84,7 @@ void MkPath::checkIfCanDoTheNext()
 
 void MkPath::internalSkip()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	waitAction=false;
 	pathList.removeFirst();
 	emit firstFolderFinish();
@@ -88,6 +93,7 @@ void MkPath::internalSkip()
 
 void MkPath::internalRetry()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	waitAction=false;
 	checkIfCanDoTheNext();
 }
