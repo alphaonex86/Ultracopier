@@ -174,7 +174,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 					{
 						if(!temp->load(LanguagesAvailableList.at(index).path+"qt.qm") || temp->isEmpty())
 						{
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to load the translation file: "+QString("qt_")+newLanguage+", into: "+QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to load the translation file: qt.qm, into: "+LanguagesAvailableList.at(index).path);
 							delete temp;
 						}
 						else
