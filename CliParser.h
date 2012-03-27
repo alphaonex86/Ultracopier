@@ -24,6 +24,15 @@ public slots:
 	  \param external true if the arguments come from other instance of ultracopier
 	*/
 	void cli(const QStringList &ultracopierArguments,const bool &external);
+signals:
+	/** new copy without destination have been pased by the CLI */
+	void newCopy(QStringList sources);
+	/** new copy with destination have been pased by the CLI */
+	void newCopy(QStringList sources,QString destination);
+	/** new move without destination have been pased by the CLI */
+	void newMove(QStringList sources);
+	/** new move with destination have been pased by the CLI */
+	void newMove(QStringList sources,QString destination);
 };
 
 #endif // CLIPARSER_H

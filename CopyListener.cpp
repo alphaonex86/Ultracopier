@@ -60,7 +60,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 	QObject *pluginInstance = pluginLoader->instance();
 	if(pluginInstance)
 	{
-		PluginInterface_Listen *listen = qobject_cast<PluginInterface_Listen *>(pluginInstance);
+		PluginInterface_Listener *listen = qobject_cast<PluginInterface_Listener *>(pluginInstance);
 		//check if found
 		int index=0;
 		while(index<pluginList.size())
@@ -151,7 +151,7 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 void CopyListener::newState(const ListeningState &state)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	PluginInterface_Listen *temp=qobject_cast<PluginInterface_Listen *>(QObject::sender());
+	PluginInterface_Listener *temp=qobject_cast<PluginInterface_Listener *>(QObject::sender());
 	if(temp==NULL)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("listener not located!"));
@@ -202,6 +202,30 @@ void CopyListener::close()
 	copyRunningList.clear();
 }
 
+/** new copy without destination have been pased by the CLI */
+void CopyListener::newCopy(QStringList sources)
+{
+	emit newCopy(incrementOrderId(),QStringList() << "file",sources);
+}
+
+/** new copy with destination have been pased by the CLI */
+void CopyListener::newCopy(QStringList sources,QString destination)
+{
+	emit newCopy(incrementOrderId(),QStringList() << "file",sources,"file",destination);
+}
+
+/** new move without destination have been pased by the CLI */
+void CopyListener::newMove(QStringList sources)
+{
+	emit newMove(incrementOrderId(),QStringList() << "file",sources);
+}
+
+/** new move with destination have been pased by the CLI */
+void CopyListener::newMove(QStringList sources,QString destination)
+{
+	emit newMove(incrementOrderId(),QStringList() << "file",sources,"file",destination);
+}
+
 void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -241,7 +265,7 @@ void CopyListener::copyCanceled(const quint32 & orderId)
 void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";"));
-	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
+	PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
 	CopyRunning newCopyInformation;
 	newCopyInformation.listenInterface	= plugin;
 	newCopyInformation.pluginOrderId	= orderId;
@@ -253,7 +277,7 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sourc
 void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";")+", destination: "+destination);
-	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
+	PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
 	CopyRunning newCopyInformation;
 	newCopyInformation.listenInterface	= plugin;
 	newCopyInformation.pluginOrderId	= orderId;
@@ -265,7 +289,7 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sourc
 void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";"));
-	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
+	PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
 	CopyRunning newCopyInformation;
 	newCopyInformation.listenInterface	= plugin;
 	newCopyInformation.pluginOrderId	= orderId;
@@ -277,7 +301,7 @@ void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sourc
 void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";")+", destination: "+destination);
-	PluginInterface_Listen *plugin		= qobject_cast<PluginInterface_Listen *>(sender());
+	PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
 	CopyRunning newCopyInformation;
 	newCopyInformation.listenInterface	= plugin;
 	newCopyInformation.pluginOrderId	= orderId;

@@ -63,6 +63,14 @@ class CopyListener : public QObject, public GlobalClass
 		 \see listen()
 		*/
 		void close();
+		/** new copy without destination have been pased by the CLI */
+		void newCopy(QStringList sources);
+		/** new copy with destination have been pased by the CLI */
+		void newCopy(QStringList sources,QString destination);
+		/** new move without destination have been pased by the CLI */
+		void newMove(QStringList sources);
+		/** new move with destination have been pased by the CLI */
+		void newMove(QStringList sources,QString destination);
 	signals:
 		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
 		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
@@ -73,7 +81,7 @@ class CopyListener : public QObject, public GlobalClass
 	private:
 		struct PluginListener
 		{
-			PluginInterface_Listen *listenInterface;
+			PluginInterface_Listener *listenInterface;
 			QPluginLoader *pluginLoader;
 			QString path;
 			ListeningState state;
@@ -87,7 +95,7 @@ class CopyListener : public QObject, public GlobalClass
 		//for the copy as suspend
 		struct CopyRunning
 		{
-			PluginInterface_Listen *listenInterface;
+			PluginInterface_Listener *listenInterface;
 			quint32 pluginOrderId;
 			quint32 orderId;
 		};

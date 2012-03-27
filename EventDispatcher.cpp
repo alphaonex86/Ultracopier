@@ -71,6 +71,10 @@ EventDispatcher::EventDispatcher()
 	options->addOptionGroup("CopyEngine",KeysList);
 
 	connect(themes,		SIGNAL(newThemeOptions(QWidget*,bool,bool)),	&optionDialog,	SLOT(newThemeOptions(QWidget*,bool,bool)));
+	connect(&cliParser,	SIGNAL(newCopy(QStringList)),			&copyServer,	SLOT(newCopy(QStringList)));
+	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		&copyServer,	SLOT(newCopy(QStringList,QString)));
+	connect(&cliParser,	SIGNAL(newMove(QStringList)),			&copyServer,	SLOT(newMove(QStringList)));
+	connect(&cliParser,	SIGNAL(newMove(QStringList,QString)),		&copyServer,	SLOT(newMove(QStringList,QString)));
 }
 
 /// \brief Destroy the ultracopier event dispatcher
