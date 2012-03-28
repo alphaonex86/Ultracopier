@@ -351,9 +351,9 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 		ui->progressBar_all->setValue(0);
 }
 
-void Themes::setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total)
+void Themes::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
-	index=0;
+/*	index=0;
 	loop_size=currentProgressList.size();
 	while(index<loop_size)
 	{
@@ -367,7 +367,7 @@ void Themes::setFileProgression(const quint64 &id,const quint64 &current,const q
 		}
 		index++;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");*/
 }
 
 void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)

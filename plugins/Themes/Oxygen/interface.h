@@ -67,7 +67,7 @@ public:
 	/// \brief show the general progression
 	void setGeneralProgression(const quint64 &current,const quint64 &total);
 	/// \brief show the file progression
-	void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total);
+	void setFileProgression(const QList<ProgressionItem> &progressionList);
 	/// \brief set collision action
 	void setCollisionAction(const QList<QPair<QString,QString> > &);
 	/// \brief set error action
