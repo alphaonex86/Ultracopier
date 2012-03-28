@@ -26,7 +26,8 @@ EventDispatcher::EventDispatcher()
 	core=new Core(copyEngineList);
 	qRegisterMetaType<CatchState>("CatchState");
 	qRegisterMetaType<ListeningState>("ListeningState");
-	qRegisterMetaType<QList<QUrl> >("QList<QUrl> ");
+	qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
+	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(localListener.tryConnect())
 	{

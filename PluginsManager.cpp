@@ -293,7 +293,7 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
 						{
 							#ifndef ULTRACOPIER_VERSION_PORTABLE
 							if(thePlugin->informations.last().last()!=ULTRACOPIER_PLATFORM_CODE)
-								thePlugin->errorString="Wrong platform code";
+								thePlugin->errorString="Wrong platform code: "+thePlugin->informations.last().last();
 							#endif
 						}
 					}

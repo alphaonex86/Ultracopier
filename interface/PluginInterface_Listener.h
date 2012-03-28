@@ -17,7 +17,7 @@
 
 /** \brief To define the interface between Ultracopier and the listener
  * */
-class PluginInterface_Listen : public QObject
+class PluginInterface_Listener : public QObject
 {
 	Q_OBJECT
 	public:
@@ -43,6 +43,6 @@ class PluginInterface_Listen : public QObject
 		void newMove(quint32 orderId,QStringList sources,QString destination);*/
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_Listen,"first-world.info.ultracopier.PluginInterface.Listener/0.3.0.1");
+Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/0.3.0.5");
 
 #endif // PLUGININTERFACE_LISTENER_H

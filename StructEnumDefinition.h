@@ -70,15 +70,15 @@ enum DebugLevel
 
 enum SizeUnit
 {
-	SizeUnit_byte,
-	SizeUnit_KiloByte,
-	SizeUnit_MegaByte,
-	SizeUnit_GigaByte,
-	SizeUnit_TeraByte,
-	SizeUnit_PetaByte,
-	SizeUnit_ExaByte,
-	SizeUnit_ZettaByte,
-	SizeUnit_YottaByte
+	SizeUnit_byte=0x00000000,
+	SizeUnit_KiloByte=0x00000001,
+	SizeUnit_MegaByte=0x00000002,
+	SizeUnit_GigaByte=0x00000003,
+	SizeUnit_TeraByte=0x00000004,
+	SizeUnit_PetaByte=0x00000005,
+	SizeUnit_ExaByte=0x00000006,
+	SizeUnit_ZettaByte=0x00000007,
+	SizeUnit_YottaByte=0x00000008
 };
 
 /// \brief structure for decompossed time
@@ -89,31 +89,34 @@ struct TimeDecomposition
 	quint16 hour;
 };
 
-/// \brief to return file progression of previousled asked query
-struct returnSpecificFileProgression
-{
-	quint64 copiedSize;
-	quint64 totalSize;
-	bool haveBeenLocated;
-};
-
 //////////////////////////// Return list //////////////////////////////
 enum ActionTypeCopyList
 {
+	//playlist action
 	MoveItem=0x00000000,
-	RemoveItem=0x00000001
+	RemoveItem=0x00000001,
+	AddingItem=0x00000002,
+	//Item action
+	PreOperation=0x00000003,
+	Transfer=0x00000004,
+	PostOperation=0x00000005,
+	CustomOperation=0x00000006
 };
 
-enum ReturnActionTypeCopyList
+/// \brief structure for progression item
+struct ProgressionItem
 {
-	AddingItem=0x00000000,
-	OtherAction=0x00000001
+	quint64 id;
+	quint64 current;
+	quint64 total;
 };
 
 /// \brief item to insert item in the interface
 struct ItemOfCopyList
 {
+	// if type == CustomOperation, then 0 = without progression, 1 = with progression
 	quint64 id;
+	// if type == CustomOperation, then is the translated name of the operation
 	QString sourceFullPath;///< full path with file name: /foo/foo.txt
 	QString sourceFileName;///< full path with file name: foo.txt
 	QString destinationFullPath;///< full path with file name: /foo/foo.txt
@@ -125,20 +128,18 @@ struct ItemOfCopyList
 /// \brief The definition of no removing action on transfer list
 struct ActionOnCopyList
 {
-	ActionTypeCopyList type;//MoveItem or RemoveItem
-	
 	int position;
-	///< if userAction.type == MoveItem
+	///< if type == MoveItem
 	int moveAt;
 };
 
 /// \brief action normal or due to interface query on copy list
 struct returnActionOnCopyList
 {
-	ReturnActionTypeCopyList type;///< is OtherAction or AddingItem
-	///< used if type == AddingItem
+	ActionTypeCopyList type;
+	///< used if type == AddingItem || type == PreOperation (for interface without transfer list) || type == CustomOperation
 	ItemOfCopyList addAction;
-	// else
+	///< used if type != AddingItem
 	ActionOnCopyList userAction;
 };
 

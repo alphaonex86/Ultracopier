@@ -36,6 +36,11 @@ class Core : public QObject, public GlobalClass
 		Core(CopyEngineManager *copyEngineList);
 	private:
 		CopyEngineManager *copyEngineList;
+		struct RunningTransfer
+		{
+			ItemOfCopyList item;
+			bool progression;
+		};
 		struct CopyInstance
 		{
 			int id;
@@ -50,8 +55,7 @@ class Core : public QObject, public GlobalClass
 			quint64 lastProgression;//store the real byte transfered, used in time remaining calculation
 			QList<quint64> lastSpeedDetected;//stored in bytes
 			QList<double> lastSpeedTime;//stored in ms
-			QList<ItemOfCopyList> transferItemList;//full info of started item
-			QList<quint64> progressionList;
+			QList<RunningTransfer> transferItemList;//full info of started item, to have wich progression to poll
 			QList<quint32> orderId;//external order send via listener plugin
 			QString folderListing;
 			QString collisionAction;
@@ -80,8 +84,6 @@ class Core : public QObject, public GlobalClass
 		void disconnectEngine(const int &index);
 		void disconnectInterface(const int &index);
 		void periodiqueSync(const int &index);
-		void plannedConditionalSync();
-		void conditionalSync(const int &index);
 		QTimer forUpateInformation;
 		void resetSpeedDetected(const int &index);
 		int connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
@@ -111,14 +113,11 @@ class Core : public QObject, public GlobalClass
 		void copyInstanceCanceledByInterface();
 		void copyInstanceCanceledByIndex(const int &index);
 		void actionInProgess(const EngineActionInProgress &action);
-		void newTransferStart(const ItemOfCopyList &item);
-		void newTransferStop(const quint64 &id);
 		void newFolderListing(const QString &path);
 		void newCollisionAction(const QString &action);
 		void newErrorAction(const QString &action);
 		void isInPause(const bool&);
 		void periodiqueSync();
-		void newActionOnList();
 		void resetSpeedDetectedEngine();
 		void resetSpeedDetectedInterface();
 		void loadInterface();

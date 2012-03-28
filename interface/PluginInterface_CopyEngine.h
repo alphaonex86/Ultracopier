@@ -72,20 +72,10 @@ class PluginInterface_CopyEngine : public QObject
 		virtual bool newMove(const QStringList &sources,const QString &destination) = 0;
 		
 		
-		//get information about the copy
-		/** \brief to get the general progression
-		 * first = current transfered byte, second = byte to transfer */
-		virtual QPair<quint64,quint64> getGeneralProgression() = 0;
-		/** \brief to get the progression for a specific file
-		 * \param id the id of the transfer, id send during population the transfer list
-		 * first = current transfered byte, second = byte to transfer */
-		virtual returnSpecificFileProgression getFileProgression(const quint64 &id) = 0;
 		/** \brief to get byte read, use by Ultracopier for the speed calculation
 		 * real size transfered to right speed calculation */
 		virtual quint64 realByteTransfered() = 0;
 		
-		/** \brief to get the action in waiting on the transfer list */
-		virtual QList<returnActionOnCopyList> getActionOnList() = 0;
 		
 		/** \brief get the speed limitation
 		 * < -1 if not able, 0 if disabled */
@@ -100,12 +90,9 @@ class PluginInterface_CopyEngine : public QObject
 		
 		
 		//transfer list
-		/** \brief to get the transfer list
+		/** \brief to sync the transfer list
 		 * Used when the interface is changed, useful to minimize the memory size */
-		virtual QList<ItemOfCopyList> getTransferList() = 0;
-		/** \brief to get one transfer info
-		 * Used by the interface which show multiple transfer */
-		virtual ItemOfCopyList getTransferListEntry(const quint64 &id) = 0;
+		virtual void syncTransferList() = 0;
 	public slots:
 		//user ask ask to add folder (add it with interface ask source/destination)
 		/** \brief add folder called on the interface
@@ -165,15 +152,23 @@ class PluginInterface_CopyEngine : public QObject
 		//send information about the copy
 		void actionInProgess(EngineActionInProgress engineActionInProgress);	//should update interface information on this event
 		
-		void newTransferStart(ItemOfCopyList itemOfCopyList);		//should update interface information on this event
-		void newTransferStop(quint64 id);		//should update interface information on this event, is stopped, example: because error have occurred, and try later, don't remove the item!
-		
 		void newFolderListing(QString path);
 		void newCollisionAction(QString action);
 		void newErrorAction(QString action);
 		void isInPause(bool isInPause);
 		
-		void newActionOnList();
+		void newActionOnList(QList<returnActionOnCopyList>);///very important, need be temporized to group the modification to do and not flood the interface
+
+		/ ** \brief to get the progression for a specific file
+		 * \param id the id of the transfer, id send during population the transfer list
+		 * first = current transfered byte, second = byte to transfer * /
+		void pushFileProgression(const QList<const ProgressionItem &> &progressionList);
+		//get information about the copy
+		/ ** \brief to get the general progression
+		 * first = current transfered byte, second = byte to transfer * /
+		void pushGeneralProgression(QPair<quint64,quint64>);
+		
+		
 		void cancelAll();
 		
 		//send error occurred
@@ -213,6 +208,6 @@ class PluginInterface_CopyEngineFactory : public QObject
 
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.4");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.5");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

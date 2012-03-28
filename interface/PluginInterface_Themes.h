@@ -29,11 +29,7 @@ class PluginInterface_Themes : public QWidget
 		//send information about the copy
 		/// \brief to set the action in progress
 		virtual void actionInProgess(EngineActionInProgress) = 0;
-		/// \brief new transfer have started
-		virtual void newTransferStart(const ItemOfCopyList &item) = 0;
-		/** \brief one transfer have been stopped
-		 * is stopped, example: because error have occurred, and try later, don't remove the item! */
-		virtual void newTransferStop(const quint64 &id) = 0;
+
 		/// \brief the new folder is listing
 		virtual void newFolderListing(const QString &path) = 0;
 		/** \brief show the detected speed
@@ -61,7 +57,7 @@ class PluginInterface_Themes : public QWidget
 		/// \brief show the general progression
 		virtual void setGeneralProgression(const quint64 &current,const quint64 &total) = 0;
 		/// \brief show the file progression
-		virtual void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total) = 0;
+		virtual void setFileProgression(const QList<const ProgressionItem &> &progressionList) = 0;
 		/// \brief set collision action
 		virtual void setCollisionAction(const QList<QPair<QString,QString> > &collisionActionList) = 0;
 		/// \brief set error action
@@ -122,6 +118,6 @@ class PluginInterface_ThemesFactory : public QObject
 		virtual void newLanguageLoaded() = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.4");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.5");
 
 #endif // PLUGININTERFACE_THEMES_H

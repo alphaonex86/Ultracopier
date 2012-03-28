@@ -363,67 +363,6 @@ void Core::actionInProgess(const EngineActionInProgress &action)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the interface sender");
 }
 
-//temporise, to send only after the transfer list
-void Core::newTransferStart(const ItemOfCopyList &item)
-{
-	index=indexCopySenderCopyEngine();
-	if(index!=-1)
-	{
-		CopyInstance& currentCopyInstance=copyList[index];
-		//is too heavy for normal usage, then enable it only in debug mode to develop
-		#ifdef ULTRACOPIER_DEBUG
-		index_sub_loop=0;
-		loop_size=currentCopyInstance.transferItemList.size();
-		while(index_sub_loop<loop_size)
-		{
-			if(currentCopyInstance.transferItemList.at(index_sub_loop).id==item.id)
-			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"duplicate id sended!");
-				return;
-			}
-			index_sub_loop++;
-		}
-		#endif // ULTRACOPIER_DEBUG
-		//conditionalSync(index); -> do by a clean way
-		currentCopyInstance.transferItemList<<item;
-		currentCopyInstance.progressionList<<0;
-		currentCopyInstance.interface->newTransferStart(item);
-		log.newTransferStart(item);
-	}
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
-}
-
-//temporise, to send only after the transfer list
-void Core::newTransferStop(const quint64 &id)
-{
-	int index=indexCopySenderCopyEngine();
-	if(index!=-1)
-	{
-		CopyInstance& currentCopyInstance=copyList[index];
-		index_sub_loop=0;
-		loop_size=currentCopyInstance.transferItemList.size();
-		currentCopyInstance.interface->newTransferStop(id);
-		#ifdef ULTRACOPIER_DEBUG
-		while(index_sub_loop<loop_size)
-		{
-			if(currentCopyInstance.transferItemList.at(index_sub_loop).id==id)
-			{
-				//conditionalSync(index); -> do by a clean way
-				currentCopyInstance.progressionList.removeAt(index_sub_loop);
-				currentCopyInstance.transferItemList.removeAt(index_sub_loop);
-
-				return;
-			}
-			index_sub_loop++;
-		}
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"id not found order: "+QString::number(id));
-		#endif // ULTRACOPIER_DEBUG
-	}
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"sender not found");
-}
-
 void Core::newFolderListing(const QString &path)
 {
 	int index=indexCopySenderCopyEngine();
@@ -464,13 +403,6 @@ void Core::isInPause(const bool &isPaused)
 		copyList[index].isPaused=isPaused;
 		copyList.at(index).interface->isInPause(isPaused);
 	}
-}
-
-void Core::newActionOnList()
-{
-	int index=indexCopySenderCopyEngine();
-	if(index!=-1)
-		conditionalSync(index);
 }
 
 int Core::indexCopySenderCopyEngine()
@@ -582,6 +514,10 @@ void Core::connectInterfaceAndSync(const int &index)
 	connect(currentCopyInstance.interface,SIGNAL(cancel()),					this,SLOT(copyInstanceCanceledByInterface()),Qt::QueuedConnection);
 	connect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection);
 
+	connect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(pushFileProgression(QList<ProgressionItem>)),	Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(QPair<quint64,quint64>)),	currentCopyInstance.interface,SLOT(setGeneralProgression(QPair<quint64,quint64>)),	Qt::QueuedConnection);
+
 	currentCopyInstance.interface->setSpeedLimitation(currentCopyInstance.engine->getSpeedLimitation());
 	currentCopyInstance.interface->setErrorAction(currentCopyInstance.engine->getErrorAction());
 	currentCopyInstance.interface->setCollisionAction(currentCopyInstance.engine->getCollisionAction());
@@ -596,35 +532,7 @@ void Core::connectInterfaceAndSync(const int &index)
 		currentCopyInstance.interface->getOptionsEngineEnabled(currentCopyInstance.engine->getOptionsEngine(tempWidget));
 
 	//put entry into the interface
-	QList<ItemOfCopyList> transferList=currentCopyInstance.engine->getTransferList();
-	loop_size=transferList.size();
-	if(loop_size)
-	{
-		QList<returnActionOnCopyList> realActionToSend;
-		index_sub_loop=0;
-		while(index_sub_loop<loop_size)
-		{
-			returnActionOnCopyList newAction;
-			newAction.addAction	= transferList.at(index_sub_loop);
-			newAction.type		= AddingItem;
-			realActionToSend << newAction;
-			index_sub_loop++;
-		}
-		currentCopyInstance.interface->getActionOnList(realActionToSend);
-	}
-
-	//start the already started item
-	loop_size=currentCopyInstance.transferItemList.size();
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("currentCopyInstance.transferItemList.size(): %1").arg(loop_size));
-	if(loop_size>0)
-	{
-		index_sub_loop=0;
-		while(index_sub_loop<loop_size)
-		{
-			currentCopyInstance.interface->newTransferStart(currentCopyInstance.transferItemList.at(index_sub_loop));
-			index_sub_loop++;
-		}
-	}
+	currentCopyInstance.engine->syncTransferList();
 
 	//force the updating, without wait the timer
 	periodiqueSync(index);
@@ -672,6 +580,10 @@ void Core::disconnectInterface(const int &index)
 	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				this,SLOT(resetSpeedDetectedInterface()));
 	disconnect(currentCopyInstance.interface,SIGNAL(cancel()),				this,SLOT(copyInstanceCanceledByInterface()));
 	disconnect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),		this,SLOT(urlDropped(QList<QUrl>)));
+
+	disconnect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)));
+	disconnect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(pushFileProgression(QList<ProgressionItem>)));
+	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(QPair<quint64,quint64>)),	currentCopyInstance.interface,SLOT(setGeneralProgression(QPair<quint64,quint64>)));
 }
 
 void Core::periodiqueSync()
@@ -694,9 +606,6 @@ void Core::periodiqueSync(const int &index)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"some thread is null");
 		return;
 	}
-	//transfer to interface the progression
-	QPair<quint64,quint64> byteProgression=currentCopyInstance.engine->getGeneralProgression();
-	currentCopyInstance.interface->setGeneralProgression(byteProgression.first,byteProgression.second);
 
 	/** ***************** Do time calcul ******************* **/
 	if(!currentCopyInstance.isPaused)
@@ -715,7 +624,7 @@ void Core::periodiqueSync(const int &index)
 		else
 			currentCopyInstance.interface->remainingTime(
 				(
-				(double)(byteProgression.second-byteProgression.first)
+				(double)(realByteTransfered)
 				*(currentCopyInstance.baseTime+currentCopyInstance.runningTime.elapsed())
 				/(currentCopyInstance.lastProgression)
 				)/1000
@@ -749,64 +658,6 @@ void Core::periodiqueSync(const int &index)
 			lastProgressionTime.restart();
 		}
 	}
-
-	//transfer of the progression for each transfer
-	index_sub_loop=0;
-	loop_size=currentCopyInstance.transferItemList.size();
-	while(index_sub_loop<loop_size)
-	{
-		returnSpecificFileProgression progression=currentCopyInstance.engine->getFileProgression(currentCopyInstance.transferItemList.at(index_sub_loop).id);
-		if(progression.haveBeenLocated)
-			currentCopyInstance.interface->setFileProgression(currentCopyInstance.transferItemList.at(index_sub_loop).id,progression.copiedSize,progression.totalSize);
-		index_sub_loop++;
-	}
-}
-
-void Core::plannedConditionalSync()
-{
-	QObject * senderObject=sender();
-	if(senderObject==NULL)
-	{
-		//QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Qt sender() NULL");
-		return;
-	}
-	index=0;
-	loop_size=copyList.size();
-	while(index<loop_size)
-	{
-		if(copyList.at(index).nextConditionalSync==senderObject)
-		{
-			#ifdef ULTRACOPIER_DEBUG
-			if(copyList.at(index).nextConditionalSync->isActive())
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Timer already considered as active");
-			#endif // ULTRACOPIER_DEBUG
-			conditionalSync(index);
-			return;
-		}
-		index++;
-	}
-	//QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Sender not located in the list");
-	return;
-}
-
-void Core::conditionalSync(const int &index)
-{
-	CopyInstance& currentCopyInstance=copyList[index];
-	//check if planned call is not programmed
-	if(currentCopyInstance.nextConditionalSync->isActive())
-		return;
-	//useless to report the action into less than 2ms, it's why you have -2
-	if(currentCopyInstance.lastConditionalSync.elapsed()<(ULTRACOPIER_TIME_INTERFACE_UPDATE_TRASNFER_LIST-2))
-	{
-		currentCopyInstance.nextConditionalSync->start();
-		return;
-	}
-	QList<returnActionOnCopyList> returnActions=currentCopyInstance.engine->getActionOnList();
-	if(returnActions.size()>0)
-		currentCopyInstance.interface->getActionOnList(returnActions);
-	currentCopyInstance.lastConditionalSync.restart();
 }
 
 void Core::copyInstanceCanceledByEngine()
