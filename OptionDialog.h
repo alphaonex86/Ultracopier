@@ -65,6 +65,8 @@ private slots:
 	void on_checkBoxLog_sync_clicked();
 	void on_ActionOnManualOpen_currentIndexChanged(int index);
 
+	void on_GroupWindowWhen_currentIndexChanged(int index);
+
 private:
 	Ui::OptionDialog *ui;
 	struct pluginStore

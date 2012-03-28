@@ -160,6 +160,9 @@ public slots:
 	void doNewActions_inode_manipulation();
 	/// \brief restart transfer if it can
 	void restartTransferIfItCan();
+
+	/// \brief update the transfer stat
+	void newTransferStat(TransferThread::TransferStat stat,quint64 id);
 private:
 	QSemaphore mkpathTransfer;
 	QString sourceDrive;
@@ -226,6 +229,10 @@ private:
 	QPair<quint64,quint64> returnPairQuint64ToCopyEngine;
 	QList<ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
 	ItemOfCopyList returnItemOfCopyListToCopyEngine;
+	//send action done timer
+	QTimer timerActionDone;
+	//send progression timer
+	QTimer timerProgression;
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
@@ -262,6 +269,10 @@ private slots:
 	quint64 addToMkPath(const QString& folder);
 	//add rm path to do
 	void addToRmPath(const QString& folder,const int& inodeToRemove);
+	//send action done
+	void sendActionDone();
+	//send progression
+	void timerProgression();
 signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event

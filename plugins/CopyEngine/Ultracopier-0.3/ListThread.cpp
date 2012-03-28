@@ -692,6 +692,16 @@ void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
 		actionToDoListInode_afterTheTransfer << temp;
 }
 
+//send action done
+void ListThread::sendActionDone()
+{
+}
+
+//send progression
+void ListThread::timerProgression()
+{
+}
+
 //add file transfer to do
 quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode)
 {
@@ -1085,15 +1095,38 @@ void ListThread::doNewActions_inode_manipulation()
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("[%1] id: %2 is idle, use it for %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
 
 					/// \note wrong position? Else write why it's here
-					ItemOfCopyList temp;
-					temp.destinationFileName=currentActionToDoTransfer.destination.fileName();
-					temp.destinationFullPath=currentActionToDoTransfer.destination.absoluteFilePath();
-					temp.id=currentActionToDoTransfer.id;
-					temp.mode=currentActionToDoTransfer.mode;
-					temp.size=currentActionToDoTransfer.size;
-					temp.sourceFileName=currentActionToDoTransfer.source.fileName();
-					temp.sourceFullPath=currentActionToDoTransfer.source.absoluteFilePath();
-//					emit newTransferStart(temp);		//should update interface information on this event
+					returnActionOnCopyList newAction;
+					switch(stat)
+					{
+						case TransferThread::Idle:
+							newAction.type=PreOperation;
+						break;
+						case TransferThread::PreOperation:
+							newAction.type=PreOperation;
+						break;
+						case TransferThread::WaitForTheTransfer:
+							newAction.type=PreOperation;
+						break;
+						case TransferThread::Transfer:
+							newAction.type=Transfer;
+						break;
+						case TransferThread::PostTransfer:
+							newAction.type=PostOperation;
+						break;
+						case TransferThread::PostOperation:
+							newAction.type=PostOperation;
+						break;
+						default:
+						break;
+					}
+					newAction.addAction.id			= currentActionToDoTransfer.id;
+					newAction.addAction.sourceFullPath	= currentActionToDoTransfer.source.absoluteFilePath();
+					newAction.addAction.sourceFileName	= currentActionToDoTransfer.source.fileName();
+					newAction.addAction.destinationFullPath	= currentActionToDoTransfer.destination.absoluteFilePath();
+					newAction.addAction.destinationFileName	= currentActionToDoTransfer.destination.fileName();
+					newAction.addAction.size		= currentActionToDoTransfer.size;
+					newAction.addAction.mode		= currentActionToDoTransfer.mode;
+					actionDone << newAction;
 					int_for_transfer_thread_search++;
 					break;
 				}
@@ -1145,6 +1178,37 @@ void ListThread::restartTransferIfItCan()
 		numberOfTranferRuning++;
 	}
 	doNewActions_start_transfer();
+}
+
+/// \brief update the transfer stat
+void ListThread::newTransferStat(TransferThread::TransferStat stat,quint64 id)
+{
+	returnActionOnCopyList newAction;
+	switch(stat)
+	{
+		case TransferThread::Idle:
+			return;
+		break;
+		case TransferThread::PreOperation:
+			return;
+		break;
+		case TransferThread::WaitForTheTransfer:
+			return;
+		break;
+		case TransferThread::Transfer:
+			newAction.type=Transfer;
+		break;
+		case TransferThread::PostTransfer:
+			newAction.type=PostOperation;
+		break;
+		case TransferThread::PostOperation:
+			return;
+		break;
+		default:
+		break;
+	}
+	newAction.addAction.id			= id;
+	actionDone << newAction;
 }
 
 void ListThread::mkPathFirstFolderFinish()

@@ -140,6 +140,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
 	}
 	//to prevent multiple file alocation into ListThread::doNewActions_inode_manipulation()
 	stat			= PreOperation;
+	//emit pushStat(stat,transferId);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start, source: "+source+", destination: "+destination);
 	this->source			= source;
 	this->destination		= destination;
@@ -442,7 +443,10 @@ void TransferThread::ifCanStartTransfer()
 			}
 			else
 				tryMoveDirectly();
+			emit pushStat(stat,transferId);
 		}
+		else
+			//emit pushStat(stat,transferId);
 	}
 }
 
@@ -528,6 +532,7 @@ void TransferThread::readIsFinish()
 	readIsFinishVariable=true;
 	canStartTransfer=false;
 	stat=PostTransfer;
+	emit pushStat(stat,transferId);
 }
 
 void TransferThread::readIsClosed()
@@ -565,6 +570,7 @@ bool TransferThread::checkIfAllIsClosed()
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] emit internalStartPostOperation() to do the real post operation");
 		stat=PostOperation;
+		//emit pushStat(stat,transferId);
 		emit internalStartPostOperation();
 		return true;
 	}

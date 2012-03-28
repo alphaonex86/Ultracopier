@@ -23,6 +23,10 @@
 //if set, check the inode type at scanFileOrFolder, deprecated into the new algorithm and not used
 #define ULTRACOPIER_PLUGIN_CHECKLISTTYPE
 
+/** \brief Need be greater than 2, but greater than 20 to be efficient */
+#define ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST 40
+#define ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION 200
+
 #endif // VARIABLE_H
 
 

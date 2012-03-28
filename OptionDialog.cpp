@@ -713,3 +713,12 @@ void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(int index)
 		options->setOptionValue("Ultracopier","ActionOnManualOpen",index);
 	}
 }
+
+void OptionDialog::on_GroupWindowWhen_currentIndexChanged(int index)
+{
+	if(index!=-1 && plugins->allPluginHaveBeenLoaded())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"data value: "+ui->GroupWindowWhen->itemData(index).toString()+", string value: "+ui->GroupWindowWhen->itemText(index)+", index: "+QString::number(index));
+		options->setOptionValue("Ultracopier","GroupWindowWhen",index);
+	}
+}

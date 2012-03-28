@@ -79,6 +79,8 @@ signals:
 	void tryPutAtBottom();
 	//force into the right thread
 	void internalTryStartTheTransfer();
+	/// \brief update the transfer stat
+	void pushStat(TransferStat,quint64);
 public slots:
 	/// \brief to start the transfer of data
 	void startTheTransfer();
