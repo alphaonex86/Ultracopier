@@ -157,16 +157,16 @@ class PluginInterface_CopyEngine : public QObject
 		void newErrorAction(QString action);
 		void isInPause(bool isInPause);
 		
-		void newActionOnList(QList<returnActionOnCopyList>);///very important, need be temporized to group the modification to do and not flood the interface
+		void newActionOnList(const QList<returnActionOnCopyList>&);///very important, need be temporized to group the modification to do and not flood the interface
 
 		/ ** \brief to get the progression for a specific file
 		 * \param id the id of the transfer, id send during population the transfer list
 		 * first = current transfered byte, second = byte to transfer * /
-		void pushFileProgression(const QList<const ProgressionItem &> &progressionList);
+		void pushFileProgression(const QList<ProgressionItem> &progressionList);
 		//get information about the copy
 		/ ** \brief to get the general progression
 		 * first = current transfered byte, second = byte to transfer * /
-		void pushGeneralProgression(QPair<quint64,quint64>);
+		void pushGeneralProgression(const quint64 &,const quint64 &);
 		
 		
 		void cancelAll();

@@ -143,20 +143,9 @@ public:
 	 * \param destination the destination to move
 	 * \return true if the move have been accepted */
 	bool newMove(const QStringList &sources,const QString &destination);
-	//get information about the copy
-	/** \brief to get the general progression
-	 * first = current transfered byte, second = byte to transfer */
-	QPair<quint64,quint64> getGeneralProgression();
-	/** \brief to get the progression for a specific file
-	 * \param id the id of the transfer, id send during population the transfer list
-	 * first = current transfered byte, second = byte to transfer */
-	returnSpecificFileProgression getFileProgression(const quint64 &id);
 	/** \brief to get byte read, use by Ultracopier for the speed calculation
 	 * real size transfered to right speed calculation */
 	quint64 realByteTransfered();
-	//edit the transfer list
-	/** \brief to get the action in waiting on the transfer list */
-	QList<returnActionOnCopyList> getActionOnList();
 	//speed limitation
 	/** \brief get the speed limitation
 	 * < -1 if not able, 0 if disabled */
@@ -166,17 +155,14 @@ public:
 	QList<QPair<QString,QString> > getCollisionAction();
 	/** \brief get the collision error list */
 	QList<QPair<QString,QString> > getErrorAction();
-	//transfer list
-	/** \brief to get the transfer list
-	 * Used when the interface is changed, useful to minimize the memory size */
-	QList<ItemOfCopyList> getTransferList();
-	/** \brief to get one transfer info
-	 * Used by the interface which show multiple transfer */
-	ItemOfCopyList getTransferListEntry(const quint64 &id);
 	
 	/** \brief to set drives detected
 	 * specific to this copy engine */
 	void setDrive(const QStringList &drives);
+
+	/** \brief to sync the transfer list
+	 * Used when the interface is changed, useful to minimize the memory size */
+	void syncTransferList();
 public slots:
 	//user ask ask to add folder (add it with interface ask source/destination)
 	/** \brief add folder called on the interface
@@ -252,8 +238,16 @@ signals:
 	//send information about the copy
 	void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
-	void newTransferStart(ItemOfCopyList);		//should update interface information on this event
-	void newTransferStop(quint64 id);		//should update interface information on this event, is stopped, example: because error have occurred, and try later, don't remove the item!
+	void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
+
+	/** \brief to get the progression for a specific file
+	 * \param id the id of the transfer, id send during population the transfer list
+	 * first = current transfered byte, second = byte to transfer */
+	void pushFileProgression(const QList<ProgressionItem> &progressionList);
+	//get information about the copy
+	/** \brief to get the general progression
+	 * first = current transfered byte, second = byte to transfer */
+	void pushGeneralProgression(const quint64 &,const quint64 &);
 
 	void newFolderListing(QString path);
 	void newCollisionAction(QString action);
@@ -286,7 +280,6 @@ signals:
 	void signal_getTransferList();
 	void signal_getTransferListEntry(quint64 id);
 
-	void newActionOnList();
 	void cancelAll();
 
 	//send error occurred

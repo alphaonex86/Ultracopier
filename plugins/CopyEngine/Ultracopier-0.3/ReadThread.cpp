@@ -289,6 +289,14 @@ void ReadThread::internalRead()
 		*/
 	}
 	while(sizeReaden>0 && !stopIt);
+	if(lastGoodPosition>file.size())
+	{
+		errorString_internal=tr("File truncated during the read, possible data change");
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())));
+		emit error();
+		isInReadLoop=false;
+		return;
+	}
 	isInReadLoop=false;
 	if(stopIt)
 	{

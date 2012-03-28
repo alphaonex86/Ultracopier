@@ -58,6 +58,9 @@ public:
 	void setDrive(QStringList drives);
 	/// \brief to set the collision action
 	void setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
+	/** \brief to sync the transfer list
+	 * Used when the interface is changed, useful to minimize the memory size */
+	void syncTransferList();
 	/// \brief to store one action to do
 	struct actionToDoTransfer
 	{
@@ -94,28 +97,8 @@ public:
 	//to get the return value from copyEngine
 	bool getReturnBoolToCopyEngine();
 	QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine();
-	returnSpecificFileProgression getReturnSpecificFileProgressionToCopyEngine();
-	QList<returnActionOnCopyList> getReturnActionOnListToCopyEngine();
-	QList<ItemOfCopyList> getReturnListItemOfCopyListToCopyEngine();
 	ItemOfCopyList getReturnItemOfCopyListToCopyEngine();
 public slots:
-	//get information about the copy
-	/** \brief to get the general progression
-	 * first = current transfered byte, second = byte to transfer */
-	void getGeneralProgression();
-	/** \brief to get the progression for a specific file
-	 * \param id the id of the transfer, id send during population the transfer list
-	 * first = current transfered byte, second = byte to transfer */
-	void getFileProgression(const quint64 &id);
-	/** \brief to get the action in waiting on the transfer list */
-	void getActionOnList();
-	//transfer list
-	/** \brief to get the transfer list
-	 * Used when the interface is changed, useful to minimize the memory size */
-	void getTransferList();
-	/** \brief to get one transfer info
-	 * Used by the interface which show multiple transfer */
-	void getTransferListEntry(const quint64 &id);
 	//action on the copy
 	/// \brief put the transfer in pause
 	void pause();
@@ -241,8 +224,6 @@ private:
 	//to return value to the copyEngine
 	bool returnBoolToCopyEngine;
 	QPair<quint64,quint64> returnPairQuint64ToCopyEngine;
-	returnSpecificFileProgression returnSpecificFileProgressionToCopyEngine;
-	QList<returnActionOnCopyList> returnActionOnListToCopyEngine;
 	QList<ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
 	ItemOfCopyList returnItemOfCopyListToCopyEngine;
 private slots:
@@ -285,15 +266,22 @@ signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
-	void newTransferStart(const ItemOfCopyList &);		//should update interface information on this event
-	void newTransferStop(const quint64 &id);		//should update interface information on this event, is stopped, example: because error have occurred, and try later, don't remove the item!
+	void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
+
+	/** \brief to get the progression for a specific file
+	 * \param id the id of the transfer, id send during population the transfer list
+	 * first = current transfered byte, second = byte to transfer */
+	void pushFileProgression(const QList<ProgressionItem> &progressionList);
+	//get information about the copy
+	/** \brief to get the general progression
+	 * first = current transfered byte, second = byte to transfer */
+	void pushGeneralProgression(const quint64 &,const quint64 &);
 
 	void newFolderListing(const QString &path);
 	void newCollisionAction(QString action);
 	void newErrorAction(QString action);
         void isInPause(bool);
 
-        void newActionOnList();
 	void cancelAll();
 
         //send error occurred

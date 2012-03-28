@@ -37,17 +37,17 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	debugDialogWindow.show();
 	#endif
 	connect(listThread,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SIGNAL(actionInProgess(EngineActionInProgress)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SIGNAL(newTransferStart(ItemOfCopyList)),		Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newTransferStop(quint64)),			this,SIGNAL(newTransferStop(quint64)),			Qt::QueuedConnection);
 	connect(listThread,SIGNAL(newFolderListing(QString)),			this,SIGNAL(newFolderListing(QString)),			Qt::QueuedConnection);
 	connect(listThread,SIGNAL(newCollisionAction(QString)),			this,SIGNAL(newCollisionAction(QString)),		Qt::QueuedConnection);
 	connect(listThread,SIGNAL(newErrorAction(QString)),			this,SIGNAL(newErrorAction(QString)),			Qt::QueuedConnection);
 	connect(listThread,SIGNAL(isInPause(bool)),				this,SIGNAL(isInPause(bool)),				Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newActionOnList()),				this,SIGNAL(newActionOnList()),				Qt::QueuedConnection);
 	connect(listThread,SIGNAL(cancelAll()),					this,SIGNAL(cancelAll()),				Qt::QueuedConnection);
 	connect(listThread,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SIGNAL(error(QString,quint64,QDateTime,QString)),	Qt::QueuedConnection);
 	connect(listThread,SIGNAL(rmPath(QString)),				this,SIGNAL(rmPath(QString)),				Qt::QueuedConnection);
 	connect(listThread,SIGNAL(mkPath(QString)),				this,SIGNAL(mkPath(QString)),				Qt::QueuedConnection);
+	connect(listThread,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	this,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
+	connect(listThread,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		this,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	Qt::QueuedConnection);
+	connect(listThread,SIGNAL(pushGeneralProgression(quint64,quint64)),		this,SIGNAL(pushGeneralProgression(quint64,quint64)),		Qt::QueuedConnection);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	connect(listThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),			this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),		Qt::QueuedConnection);
 	#endif
@@ -182,31 +182,9 @@ bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 	return listThread->newMove(sources,destination);
 }
 
-//get information about the copy
-QPair<quint64,quint64> copyEngine::getGeneralProgression()
-{
-	emit signal_getGeneralProgression();
-	QPair<quint64,quint64> tempValue=listThread->getReturnPairQuint64ToCopyEngine();
-	size_for_speed=tempValue.first;
-	return tempValue;
-}
-
-returnSpecificFileProgression copyEngine::getFileProgression(const quint64 &id)
-{
-	emit signal_getFileProgression(id);
-	return listThread->getReturnSpecificFileProgressionToCopyEngine();
-}
-
 quint64 copyEngine::realByteTransfered()
 {
 	return size_for_speed;
-}
-
-//edit the transfer list
-QList<returnActionOnCopyList> copyEngine::getActionOnList()
-{
-	emit signal_getActionOnList();
-	return listThread->getReturnActionOnListToCopyEngine();
 }
 
 //speed limitation
@@ -239,22 +217,16 @@ QList<QPair<QString,QString> > copyEngine::getErrorAction()
 	return list;
 }
 
-//transfer list
-QList<ItemOfCopyList> copyEngine::getTransferList()
-{
-	emit signal_getTransferList();
-	return listThread->getReturnListItemOfCopyListToCopyEngine();
-}
-
-ItemOfCopyList copyEngine::getTransferListEntry(const quint64 &id)
-{
-	emit signal_getTransferListEntry(id);
-	return listThread->getReturnItemOfCopyListToCopyEngine();
-}
-
 void copyEngine::setDrive(const QStringList &drives)
 {
 	listThread->setDrive(drives);
+}
+
+/** \brief to sync the transfer list
+ * Used when the interface is changed, useful to minimize the memory size */
+void copyEngine::syncTransferList()
+{
+	listThread->syncTransferList();
 }
 
 bool copyEngine::userAddFolder(const CopyMode &mode)

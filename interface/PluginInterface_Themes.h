@@ -57,7 +57,7 @@ class PluginInterface_Themes : public QWidget
 		/// \brief show the general progression
 		virtual void setGeneralProgression(const quint64 &current,const quint64 &total) = 0;
 		/// \brief show the file progression
-		virtual void setFileProgression(const QList<const ProgressionItem &> &progressionList) = 0;
+		virtual void setFileProgression(const QList<ProgressionItem> &progressionList) = 0;
 		/// \brief set collision action
 		virtual void setCollisionAction(const QList<QPair<QString,QString> > &collisionActionList) = 0;
 		/// \brief set error action
