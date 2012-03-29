@@ -445,7 +445,7 @@ void TransferThread::ifCanStartTransfer()
 				tryMoveDirectly();
 			emit pushStat(stat,transferId);
 		}
-		else
+		//else
 			//emit pushStat(stat,transferId);
 	}
 }

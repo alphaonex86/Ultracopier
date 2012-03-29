@@ -202,6 +202,8 @@ private:
 	bool moveDownItem(quint64 id);
 	//put on bottom
 	bool moveOnBottomItem(quint64 id);
+	//general transfer
+	void startGeneralTransfer();
 	//debug windows if needed
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	QTimer timerUpdateDebugDialog;
@@ -272,7 +274,7 @@ private slots:
 	//send action done
 	void sendActionDone();
 	//send progression
-	void timerProgression();
+	void sendProgression();
 signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event

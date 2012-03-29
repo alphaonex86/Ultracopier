@@ -49,6 +49,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	connect(&timerUpdateDebugDialog,SIGNAL(timeout()),this,SLOT(timedUpdateDebugDialog()));
 	timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
 	#endif
+	connect(&timerActionDone,SIGNAL(timeout()),							this,SLOT(sendActionDone()));
+	connect(&timerProgression,SIGNAL(timeout()),							this,SLOT(sendProgression()));
 	connect(this,		SIGNAL(tryCancel()),							this,SLOT(cancel()),							Qt::QueuedConnection);
 	connect(this,		SIGNAL(askNewTransferThread()),						this,SLOT(createTransferThread()),					Qt::QueuedConnection);
 	connect(&mkPathQueue,	SIGNAL(firstFolderFinish()),						this,SLOT(mkPathFirstFolderFinish()),					Qt::QueuedConnection);
@@ -62,6 +64,10 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 
 	emit askNewTransferThread();
 	mkpathTransfer.release();
+	timerActionDone.setSingleShot(true);
+	timerActionDone.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
+	timerProgression.setSingleShot(true);
+	timerProgression.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
 }
 
 ListThread::~ListThread()
@@ -276,7 +282,6 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
 void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode)
 {
 	addToTransfer(sourceFileInfo,destinationFileInfo,mode);
-//	emit newActionOnList();
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
@@ -387,7 +392,7 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 		if(autoStart)
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Auto start the copy");
-			doNewActions_inode_manipulation();
+			startGeneralTransfer();
 		}
 		else
 		{
@@ -396,6 +401,12 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 			emit isInPause(true);
 		}
 	}
+}
+
+void ListThread::startGeneralTransfer()
+{
+	doNewActions_inode_manipulation();
+	timerProgression.start();
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
@@ -526,7 +537,7 @@ void ListThread::resume()
 		return;
 	}
 	putInPause=false;
-	doNewActions_inode_manipulation();
+	startGeneralTransfer();
 	doNewActions_start_transfer();
 	int index=0;
 	loop_sub_size_transfer_thread_search=transferThreadList.size();
@@ -648,6 +659,8 @@ void ListThread::updateTheStatus()
 		updateTheStatus_action_in_progress=Idle;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"emit actionInProgess("+QString::number(updateTheStatus_action_in_progress)+")");
 	emit actionInProgess(updateTheStatus_action_in_progress);
+	if(updateTheStatus_action_in_progress==Idle)
+		sendActionDone();
 }
 
 //set data local to the thread
@@ -695,17 +708,57 @@ void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
 //send action done
 void ListThread::sendActionDone()
 {
+	if(actionDone.size()>0)
+	{
+		emit newActionOnList(actionDone);
+		actionDone.clear();
+	}
+	if(actionToDoListTransfer.size()>0)
+		timerActionDone.start();
 }
 
 //send progression
-void ListThread::timerProgression()
+void ListThread::sendProgression()
 {
+	if(actionToDoListTransfer.size()==0)
+		return;
+	qint64 copiedSize,totalSize,localOverSize;
+	QList<ProgressionItem> progressionList;
+	TransferThread *thread;
+	oversize=0;
+	currentProgression=0;
+	int_for_loop=0;
+	loop_size=transferThreadList.size();
+	while(int_for_loop<loop_size)
+	{
+		thread=transferThreadList.at(int_for_loop);
+		if(thread->getStat()==TransferThread::Transfer)
+		{
+			copiedSize=thread->copiedSize();
+			currentProgression+=copiedSize;
+			if(copiedSize>(qint64)thread->transferSize)
+				localOverSize=copiedSize-thread->transferSize;
+			totalSize=thread->transferSize+localOverSize;
+			ProgressionItem tempItem;
+			tempItem.current=copiedSize;
+			tempItem.id=thread->transferId;
+			tempItem.total=totalSize;
+			progressionList << tempItem;
+			oversize+=localOverSize;
+		}
+		int_for_loop++;
+	}
+	emit pushFileProgression(progressionList);
+	emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
+	timerProgression.start();
 }
 
 //add file transfer to do
 quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode)
 {
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
+	if(actionToDoListTransfer.size()==0)
+		timerActionDone.start();
 	//add to transfer list
 	numberOfTransferIntoToDoList++;
 	bytesToTransfer+= source.size();
@@ -1096,29 +1149,7 @@ void ListThread::doNewActions_inode_manipulation()
 
 					/// \note wrong position? Else write why it's here
 					returnActionOnCopyList newAction;
-					switch(stat)
-					{
-						case TransferThread::Idle:
-							newAction.type=PreOperation;
-						break;
-						case TransferThread::PreOperation:
-							newAction.type=PreOperation;
-						break;
-						case TransferThread::WaitForTheTransfer:
-							newAction.type=PreOperation;
-						break;
-						case TransferThread::Transfer:
-							newAction.type=Transfer;
-						break;
-						case TransferThread::PostTransfer:
-							newAction.type=PostOperation;
-						break;
-						case TransferThread::PostOperation:
-							newAction.type=PostOperation;
-						break;
-						default:
-						break;
-					}
+					newAction.type				= PreOperation;
 					newAction.addAction.id			= currentActionToDoTransfer.id;
 					newAction.addAction.sourceFullPath	= currentActionToDoTransfer.source.absoluteFilePath();
 					newAction.addAction.sourceFileName	= currentActionToDoTransfer.source.fileName();
