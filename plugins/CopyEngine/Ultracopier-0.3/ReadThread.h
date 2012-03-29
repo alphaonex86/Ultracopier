@@ -10,7 +10,6 @@
 #include <QThread>
 #include <QByteArray>
 #include <QSemaphore>
-#include <QFile>
 #include <QTimer>
 #include <QDateTime>
 #include <QFileInfo>
@@ -18,6 +17,7 @@
 #include "WriteThread.h"
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
+#include "AvancedQFile.h"
 
 /// \todo do fake open/close
 
@@ -103,7 +103,7 @@ signals:
 private:
 	QString		name;
 	QString		errorString_internal;
-	QFile		file;
+	AvancedQFile	file;
 	volatile bool	stopIt;
 	CopyMode	mode;
 	qint64		lastGoodPosition;

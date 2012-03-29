@@ -10,12 +10,12 @@
 #include <QThread>
 #include <QByteArray>
 #include <QString>
-#include <QFile>
 #include <QMutex>
 #include <QSemaphore>
 
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
+#include "AvancedQFile.h"
 
 /// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QThread
@@ -87,7 +87,7 @@ signals:
 private:
 	QString			name;
 	QString			errorString_internal;
-	QFile			file;
+	AvancedQFile		file;
         volatile bool		stopIt;
 	QMutex			accessList;		///< For use the list
 	QSemaphore		freeBlock;
