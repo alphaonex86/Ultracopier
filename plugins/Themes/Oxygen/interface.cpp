@@ -232,61 +232,6 @@ void Themes::actionInProgess(EngineActionInProgress action)
 	}
 }
 
-void Themes::newTransferStart(const ItemOfCopyList &item)
-{
-	index=0;
-	loop_size=0;
-	//is too heavy for normal usage, then enable it only in debug mode to develop
-	#ifdef ULTRACOPIER_DEBUG
-	loop_size=graphicItemList.size();
-	while(index<loop_size)
-	{
-		if(graphicItemList.at(index).id==item.id)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Duplicate start transfer : "+QString::number(item.id));
-			return;
-		}
-		index++;
-	}
-	#endif // ULTRACOPIER_DEBUG
-	ItemOfCopyListWithMoreInformations newItem;
-	newItem.currentProgression=0;
-	newItem.generalData=item;
-	currentProgressList<<newItem;
-	ui->skipButton->setEnabled(true);
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Start transfer new item: "+QString::number(currentProgressList.last().generalData.id)+", with size: "+QString::number(currentProgressList.last().generalData.size));
-	transferModel.newTransferStart(item.id);
-	updateCurrentFileInformation();
-}
-
-//is stopped, example: because error have occurred, and try later, don't remove the item!
-void Themes::newTransferStop(const quint64 &id)
-{
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+QString::number(id));
-
-	//update the icon, but the item can be removed before from the transfer list, then not found
-	transferModel.newTransferStop(id);
-
-	//update the internal transfer list
-	index=0;
-	loop_size=currentProgressList.size();
-	while(index<loop_size)
-	{
-		if(currentProgressList.at(index).generalData.id==id)
-		{
-			//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"at index: "+QString::number(index)+", remove item: "+QString::number(currentProgressList.at(index).generalData.id)+", with size: "+QString::number(currentProgressList.at(index).generalData.size));
-			currentProgressList.removeAt(index);
-			updateCurrentFileInformation();
-			break;
-		}
-		index++;
-	}
-
-	//update skip button if needed
-	if(currentProgressList.size()==0)
-		ui->skipButton->setEnabled(false);
-}
-
 void Themes::newFolderListing(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -353,21 +298,9 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 
 void Themes::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
-/*	index=0;
-	loop_size=currentProgressList.size();
-	while(index<loop_size)
-	{
-		if(currentProgressList.at(index).generalData.id==id)
-		{
-			currentProgressList[index].generalData.size=total;
-			currentProgressList[index].currentProgression=current;
-			if(index==0)
-				updateCurrentFileInformation();
-			return;
-		}
-		index++;
-	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");*/
+	setFileProgression(progressionList);
+	updateCurrentFileInformation();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
 }
 
 void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)
@@ -463,15 +396,13 @@ void Themes::isInPause(bool isInPause)
 
 void Themes::updateCurrentFileInformation()
 {
-	if(currentProgressList.size()>0)
+	TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
+	if(transfertItem.haveItem)
 	{
-		ui->from->setText(currentProgressList.first().generalData.sourceFullPath);
-		ui->to->setText(currentProgressList.first().generalData.destinationFullPath);
-		ui->current_file->setText(currentProgressList.first().generalData.destinationFileName+", "+facilityEngine->sizeToString(currentProgressList.first().generalData.size));
-		if(currentProgressList.first().generalData.size>0)
-			ui->progressBar_file->setValue(((double)currentProgressList.first().currentProgression/currentProgressList.first().generalData.size)*65535);
-		else
-			ui->progressBar_file->setValue(0);
+		ui->from->setText(transfertItem.from);
+		ui->to->setText(transfertItem.to);
+		ui->current_file->setText(transfertItem.current_file);
+		ui->progressBar_file->setValue(transfertItem.progressBar_file);
 	}
 	else
 	{
@@ -722,8 +653,9 @@ void Themes::on_pauseButton_clicked()
 void Themes::on_skipButton_clicked()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	if(currentProgressList.size()>0)
-		emit skip(currentProgressList.first().generalData.id);
+	TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
+	if(transfertItem.haveItem)
+		emit skip(transfertItem.id);
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to skip the transfer, because no transfer running");
 }

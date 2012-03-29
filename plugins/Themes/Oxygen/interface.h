@@ -40,11 +40,6 @@ public:
 	//send information about the copy
 	/// \brief to set the action in progress
 	void actionInProgess(EngineActionInProgress);
-	/// \brief new transfer have started
-	void newTransferStart(const ItemOfCopyList &item);
-	/** \brief one transfer have been stopped
-	 * is stopped, example: because error have occurred, and try later, don't remove the item! */
-	void newTransferStop(const quint64 &id);
 	/// \brief the new folder is listing
 	void newFolderListing(const QString &path);
 	/** \brief show the detected speed
@@ -132,11 +127,6 @@ private slots:
 	void on_exportTransferList_clicked();
 	void on_importTransferList_clicked();
 private:
-	struct ItemOfCopyListWithMoreInformations
-	{
-		quint64 currentProgression;
-		ItemOfCopyList generalData;
-	};
 	Ui::interfaceCopy *ui;
 	quint64 currentFile;
 	quint64 totalFile;
@@ -147,7 +137,6 @@ private:
 	QMenu *menu;
 	EngineActionInProgress action;
 	void closeEvent(QCloseEvent *event);
-	QList<ItemOfCopyListWithMoreInformations> currentProgressList;
 	qint64 currentSpeed;
 	void updateSpeed();
 	bool storeIsInPause;

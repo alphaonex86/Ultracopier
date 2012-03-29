@@ -152,30 +152,115 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 	while(index_for_loop<loop_size)
 	{
 		const returnActionOnCopyList& action=returnActions.at(index_for_loop);
-		if(action.type==AddingItem)
+		switch(action.type)
 		{
-			transfertItem newItem;
-			newItem.id=action.addAction.id;
-			newItem.source=action.addAction.sourceFullPath;
-			newItem.size=facilityEngine->sizeToString(action.addAction.size);
-			newItem.destination=action.addAction.destinationFullPath;
-			transfertItemList<<newItem;
-			totalFile++;
-			totalSize+=action.addAction.size;
-		}
-		else if(action.type==MoveItem)
-		{
-			//bool current_entry=
-			transfertItemList.move(action.userAction.position,action.userAction.moveAt);
-		}
-		else if(action.type==RemoveItem)
-		{
-			if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
-				currentIndexSearch--;
-			transfertItemList.removeAt(action.userAction.position);
-			currentFile++;
-			startId.removeOne(action.addAction.id);
-			stopId.removeOne(action.addAction.id);
+			case AddingItem:
+			{
+				transfertItem newItem;
+				newItem.id=action.addAction.id;
+				newItem.source=action.addAction.sourceFullPath;
+				newItem.size=facilityEngine->sizeToString(action.addAction.size);
+				newItem.destination=action.addAction.destinationFullPath;
+				transfertItemList<<newItem;
+				totalFile++;
+				totalSize+=action.addAction.size;
+			}
+			break;
+			case MoveItem:
+			{
+				//bool current_entry=
+				transfertItemList.move(action.userAction.position,action.userAction.moveAt);
+			}
+			break;
+			case RemoveItem:
+			{
+				if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
+					currentIndexSearch--;
+				transfertItemList.removeAt(action.userAction.position);
+				currentFile++;
+				startId.removeOne(action.addAction.id);
+				stopId.removeOne(action.addAction.id);
+			}
+			break;
+			case PreOperation:
+			{
+				ItemOfCopyListWithMoreInformations tempItem;
+				tempItem.currentProgression=0;
+				tempItem.generalData=action.addAction;
+				InternalRunningOperation << tempItem;
+			}
+			break;
+			case Transfer:
+			{
+				if(!startId.contains(action.addAction.id))
+					startId << action.addAction.id;
+				stopId.removeOne(action.addAction.id);
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			case PostOperation:
+			{
+				if(!stopId.contains(action.addAction.id))
+					stopId << action.addAction.id;
+				startId.removeOne(action.addAction.id);
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation.removeAt(sub_index_for_loop);
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			case CustomOperation:
+			{
+				bool custom_with_progression=(action.addAction.size==1);
+				//without progression
+				if(custom_with_progression)
+				{
+					if(startId.removeOne(action.addAction.id))
+						if(!stopId.contains(action.addAction.id))
+							stopId << action.addAction.id;
+				}
+				//with progression
+				else
+				{
+					stopId.removeOne(action.addAction.id);
+					if(!startId.contains(action.addAction.id))
+						startId << action.addAction.id;
+				}
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
+						InternalRunningOperation[sub_index_for_loop].custom_with_progression=custom_with_progression;
+						InternalRunningOperation[sub_index_for_loop].currentProgression=0;
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			default:
+				//unknow code, ignore it
+			break;
 		}
 		index_for_loop++;
 	}
@@ -186,24 +271,6 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 void TransferModel::setFacilityEngine(FacilityInterface * facilityEngine)
 {
 	this->facilityEngine=facilityEngine;
-}
-
-/// \brief new transfer have started
-void TransferModel::newTransferStart(const quint64 &id)
-{
-	emit layoutAboutToBeChanged();
-	startId << id;
-	emit layoutChanged();
-}
-
-/** \brief one transfer have been stopped
- * is stopped, example: because error have occurred, and try later, don't remove the item! */
-void TransferModel::newTransferStop(const quint64 &id)
-{
-	emit layoutAboutToBeChanged();
-	startId.removeOne(id);
-	stopId << id;
-	emit layoutChanged();
 }
 
 int TransferModel::search(const QString &text,bool searchNext)
@@ -271,4 +338,44 @@ int TransferModel::searchPrev(const QString &text)
 	}
 	haveSearchItem=false;
 	return -1;
+}
+
+void TransferModel::setFileProgression(const QList<ProgressionItem> &progressionList)
+{
+	loop_size=InternalRunningOperation.size();
+	sub_loop_size=progressionList.size();
+	index_for_loop=0;
+	while(index_for_loop<loop_size)
+	{
+		sub_index_for_loop=0;
+		while(sub_index_for_loop<sub_loop_size)
+		{
+			if(progressionList.at(sub_index_for_loop).id==InternalRunningOperation.at(index_for_loop).generalData.id)
+			{
+				InternalRunningOperation[sub_index_for_loop].generalData.size=progressionList.at(loop_size).total;
+				InternalRunningOperation[sub_index_for_loop].currentProgression=progressionList.at(loop_size).current;
+				break;
+			}
+			sub_index_for_loop++;
+		}
+		index_for_loop++;
+	}
+}
+
+TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
+{
+	currentTransfertItem returnItem;
+	returnItem.haveItem=InternalRunningOperation.size()>0;
+	if(returnItem.haveItem)
+	{
+		const ItemOfCopyListWithMoreInformations &itemTransfer=InternalRunningOperation.first();
+		returnItem.from=itemTransfer.generalData.sourceFullPath;
+		returnItem.to=itemTransfer.generalData.destinationFullPath;
+		returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
+		if(itemTransfer.generalData.size>0)
+			returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+		else
+			returnItem.progressBar_file=0;
+	}
+	return returnItem;
 }

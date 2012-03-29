@@ -16,6 +16,7 @@
 class TransferModel : public QAbstractTableModel
 {
 	Q_OBJECT
+public:
 	struct transfertItem
 	{
 		quint64 id;
@@ -23,7 +24,23 @@ class TransferModel : public QAbstractTableModel
 		QString size;
 		QString destination;
 	};
-public:
+	struct ItemOfCopyListWithMoreInformations
+	{
+		quint64 currentProgression;
+		ItemOfCopyList generalData;
+		ActionTypeCopyList actionType;
+		bool custom_with_progression;
+	};
+	struct currentTransfertItem
+	{
+		quint64 id;
+		bool haveItem;
+		QString from;
+		QString to;
+		QString current_file;
+		int progressBar_file;
+	};
+
 	TransferModel();
 
 	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -35,20 +52,20 @@ public:
 	QList<quint64> synchronizeItems(const QList<returnActionOnCopyList>& returnActions);
 	void setFacilityEngine(FacilityInterface * facilityEngine);
 
-	/// \brief new transfer have started
-	void newTransferStart(const quint64 &id);
-	/** \brief one transfer have been stopped
-	 * is stopped, example: because error have occurred, and try later, don't remove the item! */
-	void newTransferStop(const quint64 &id);
-
 	int search(const QString &text,bool searchNext);
 	int searchPrev(const QString &text);
+
+	void setFileProgression(const QList<ProgressionItem> &progressionList);
+
+	currentTransfertItem getCurrentTransfertItem();
 protected:
 	QList<transfertItem> transfertItemList;
 	QList<quint64> startId,stopId;
+	QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;
 	QIcon start,stop;
 private:
 	int loop_size,index_for_loop;
+	int sub_loop_size,sub_index_for_loop;
 	int row,column;
 	quint64 totalFile,totalSize,currentFile;
 	FacilityInterface * facilityEngine;
