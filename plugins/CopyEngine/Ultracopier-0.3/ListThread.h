@@ -275,11 +275,14 @@ private slots:
 	void sendActionDone();
 	//send progression
 	void sendProgression();
+	//send the progression
+	void syncTransferList_internal();
 signals:
         //send information about the copy
         void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
 	void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
+	void syncReady();
 
 	/** \brief to get the progression for a specific file
 	 * \param id the id of the transfer, id send during population the transfer list
@@ -319,6 +322,8 @@ signals:
 	void send_folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread);
 	/// \note Can be call without queue because all call will be serialized
 	void send_errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread);
+	//send the progression
+	void send_syncTransferList();
 	//mkpath error event
 	void mkPathErrorOnFolder(QFileInfo fileInfo,QString errorString);
 	//rmpath error event

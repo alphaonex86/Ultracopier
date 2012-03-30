@@ -57,6 +57,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	connect(&rmPathQueue,	SIGNAL(firstFolderFinish()),						this,SLOT(rmPathFirstFolderFinish()),					Qt::QueuedConnection);
 	connect(&mkPathQueue,	SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SIGNAL(mkPathErrorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
 	connect(&rmPathQueue,	SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SIGNAL(rmPathErrorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
+	connect(this,		SIGNAL(send_syncTransferList()),					this,SLOT(syncTransferList_internal()),					Qt::QueuedConnection);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(&mkPathQueue,	SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
 	connect(&rmPathQueue,	SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
@@ -486,6 +487,8 @@ void ListThread::setCollisionAction(FileExistsAction alwaysDoThisActionForFileEx
  * Used when the interface is changed, useful to minimize the memory size */
 void ListThread::syncTransferList()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	emit send_syncTransferList();
 }
 
 //set the folder local colision
@@ -751,6 +754,65 @@ void ListThread::sendProgression()
 	emit pushFileProgression(progressionList);
 	emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
 	timerProgression.start();
+}
+
+//send the progression
+void ListThread::syncTransferList_internal()
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	emit syncReady();
+	actionDone.clear();
+	//do list operation
+	TransferThread *transferThread;
+	loop_size=actionToDoListTransfer.size();
+	loop_sub_size=transferThreadList.size();
+	//this loop to have at max ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT, not ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*transferThreadList.size()
+	for(int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
+		const actionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
+		returnActionOnCopyList newAction;
+		newAction.type				= AddingItem;
+		newAction.addAction.id			= item.id;
+		newAction.addAction.sourceFullPath	= item.source.absoluteFilePath();
+		newAction.addAction.sourceFileName	= item.source.fileName();
+		newAction.addAction.destinationFullPath	= item.destination.absoluteFilePath();
+		newAction.addAction.destinationFileName	= item.destination.fileName();
+		newAction.addAction.size		= item.size;
+		newAction.addAction.mode		= item.mode;
+		actionDone << newAction;
+		if(item.isRunning)
+		{
+			for(int_for_internal_loop=0; int_for_internal_loop<loop_sub_size; ++int_for_internal_loop) {
+				transferThread=transferThreadList.at(int_for_internal_loop);
+				returnActionOnCopyList newAction;
+				newAction.type				= PreOperation;
+				newAction.addAction.id			= item.id;
+				newAction.addAction.sourceFullPath	= item.source.absoluteFilePath();
+				newAction.addAction.sourceFileName	= item.source.fileName();
+				newAction.addAction.destinationFullPath	= item.destination.absoluteFilePath();
+				newAction.addAction.destinationFileName	= item.destination.fileName();
+				newAction.addAction.size		= item.size;
+				newAction.addAction.mode		= item.mode;
+				actionDone << newAction;
+				if(transferThread->getStat()!=TransferThread::PreOperation)
+				{
+					returnActionOnCopyList newAction;
+					switch(transferThread->getStat())
+					{
+						case TransferThread::Transfer:
+							newAction.type=Transfer;
+						break;
+						case TransferThread::PostTransfer:
+							newAction.type=PostOperation;
+						break;
+						default:
+						break;
+					}
+					newAction.addAction.id			= item.id;
+					actionDone << newAction;
+				}
+			}
+		}
+	}
 }
 
 //add file transfer to do

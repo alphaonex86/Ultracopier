@@ -239,6 +239,7 @@ signals:
 	void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
 	void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
+	void syncReady();
 
 	/** \brief to get the progression for a specific file
 	 * \param id the id of the transfer, id send during population the transfer list

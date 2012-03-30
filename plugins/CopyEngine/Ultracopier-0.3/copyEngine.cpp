@@ -48,6 +48,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	connect(listThread,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	this,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
 	connect(listThread,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		this,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	Qt::QueuedConnection);
 	connect(listThread,SIGNAL(pushGeneralProgression(quint64,quint64)),		this,SIGNAL(pushGeneralProgression(quint64,quint64)),		Qt::QueuedConnection);
+	connect(listThread,SIGNAL(syncReady()),						this,SIGNAL(syncReady()),					Qt::QueuedConnection);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	connect(listThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),			this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),		Qt::QueuedConnection);
 	#endif
