@@ -273,13 +273,6 @@ signals:
 	void signal_setComboBoxFolderColision(FolderExistsAction action);
 	void signal_setFolderColision(FolderExistsAction action);
 
-	//with return value
-	void signal_getGeneralProgression();
-	void signal_getFileProgression(quint64 id);
-	void signal_getActionOnList();
-	void signal_getTransferList();
-	void signal_getTransferListEntry(quint64 id);
-
 	void cancelAll();
 
 	//send error occurred

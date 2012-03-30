@@ -22,6 +22,11 @@ public:
 	bool setLastModified(QDateTime time);
 	/// \brief set last read date
 	bool setLastRead(QDateTime time);
+	
+/*	//fileName
+	void close();
+	bool	open ( FILE * fh, OpenMode mode )
+	bool	open ( int fd, OpenMode mode )*/
 };
 
 #endif // AVANCEDQFILE_H

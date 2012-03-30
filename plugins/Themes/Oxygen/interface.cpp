@@ -298,7 +298,7 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 
 void Themes::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
-	setFileProgression(progressionList);
+	transferModel.setFileProgression(progressionList);
 	updateCurrentFileInformation();
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
 }

@@ -13,6 +13,13 @@
 #include "ExtraSocket.h"
 #include "CompilerInfo.h"
 
+#ifdef Q_OS_UNIX
+	#include <unistd.h>
+	#include <sys/types.h>
+#else
+	#include <windows.h>
+#endif
+
 /// \todo group the facility engine
 
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
@@ -28,6 +35,7 @@ EventDispatcher::EventDispatcher()
 	qRegisterMetaType<ListeningState>("ListeningState");
 	qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
 	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
+	qRegisterMetaType<QList<returnActionOnCopyList> >("QList<returnActionOnCopyList>");
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(localListener.tryConnect())
 	{
@@ -42,6 +50,26 @@ EventDispatcher::EventDispatcher()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,COMPILERINFO);
+	#ifdef Q_OS_UNIX
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Unix user: ")+QString::number(getuid()));
+	#else
+		QString userName;
+		DWORD size=0;
+		if(GetUserNameW(NULL,&size) || (GetLastError()!=ERROR_INSUFFICIENT_BUFFER))
+		{
+		}
+		else
+		{
+			WCHAR * userNameW=new WCHAR[size];
+			if(GetUserNameW(userNameW,&size))
+			{
+				userName.fromWCharArray(userNameW,size*2);
+				//userName=QString(QByteArray((char*)userNameW,size*2-2).toHex());
+			}
+			delete userNameW;
+		}
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Windows user: ")+userName);
+	#endif
 	//To lunch some initialization after QApplication::exec() to quit eventually
 	lunchInitFunction.setInterval(0);
 	lunchInitFunction.setSingleShot(true);

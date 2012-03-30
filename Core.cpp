@@ -470,13 +470,10 @@ void Core::connectEngine(const int &index)
 	disconnectEngine(index);
 
 	CopyInstance& currentCopyInstance=copyList[index];
-	connect(currentCopyInstance.engine,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SLOT(newTransferStart(ItemOfCopyList)),Qt::QueuedConnection);//to check to change
-	connect(currentCopyInstance.engine,SIGNAL(newTransferStop(quint64)),			this,SLOT(newTransferStop(quint64)),Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)),Qt::QueuedConnection);//to check to change
 	connect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),			this,SLOT(newCollisionAction(QString)),Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)),Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)),Qt::QueuedConnection);
-	connect(currentCopyInstance.engine,SIGNAL(newActionOnList()),				this,SLOT(newActionOnList()),Qt::QueuedConnection);//to check to change
 	connect(currentCopyInstance.engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)),Qt::QueuedConnection);//to check to change
 	connect(currentCopyInstance.engine,SIGNAL(cancelAll()),					this,SLOT(copyInstanceCanceledByEngine()),Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)),Qt::QueuedConnection);
@@ -515,8 +512,8 @@ void Core::connectInterfaceAndSync(const int &index)
 	connect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection);
 
 	connect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
-	connect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(pushFileProgression(QList<ProgressionItem>)),	Qt::QueuedConnection);
-	connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(QPair<quint64,quint64>)),	currentCopyInstance.interface,SLOT(setGeneralProgression(QPair<quint64,quint64>)),	Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(setFileProgression(QList<ProgressionItem>)),		Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)),		Qt::QueuedConnection);
 
 	currentCopyInstance.interface->setSpeedLimitation(currentCopyInstance.engine->getSpeedLimitation());
 	currentCopyInstance.interface->setErrorAction(currentCopyInstance.engine->getErrorAction());
@@ -542,13 +539,10 @@ void Core::disconnectEngine(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
 	CopyInstance& currentCopyInstance=copyList[index];
-	disconnect(currentCopyInstance.engine,SIGNAL(newTransferStart(ItemOfCopyList)),		this,SLOT(newTransferStart(ItemOfCopyList)));//to check to change
-	disconnect(currentCopyInstance.engine,SIGNAL(newTransferStop(quint64)),			this,SLOT(newTransferStop(quint64)));
 	disconnect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)));//to check to change
 	disconnect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),		this,SLOT(newCollisionAction(QString)));
 	disconnect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)));
 	disconnect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)));
-	disconnect(currentCopyInstance.engine,SIGNAL(newActionOnList()),				this,SLOT(newActionOnList()));//to check to change
 	disconnect(currentCopyInstance.engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)));//to check to change
 	disconnect(currentCopyInstance.engine,SIGNAL(cancelAll()),				this,SLOT(copyInstanceCanceledByEngine()));
 	disconnect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)));
@@ -582,8 +576,8 @@ void Core::disconnectInterface(const int &index)
 	disconnect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),		this,SLOT(urlDropped(QList<QUrl>)));
 
 	disconnect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)));
-	disconnect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(pushFileProgression(QList<ProgressionItem>)));
-	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(QPair<quint64,quint64>)),	currentCopyInstance.interface,SLOT(setGeneralProgression(QPair<quint64,quint64>)));
+	disconnect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	currentCopyInstance.interface,SLOT(setFileProgression(QList<ProgressionItem>)));
+	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)));
 }
 
 void Core::periodiqueSync()

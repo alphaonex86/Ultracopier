@@ -352,8 +352,8 @@ void TransferModel::setFileProgression(const QList<ProgressionItem> &progression
 		{
 			if(progressionList.at(sub_index_for_loop).id==InternalRunningOperation.at(index_for_loop).generalData.id)
 			{
-				InternalRunningOperation[sub_index_for_loop].generalData.size=progressionList.at(loop_size).total;
-				InternalRunningOperation[sub_index_for_loop].currentProgression=progressionList.at(loop_size).current;
+				InternalRunningOperation[index_for_loop].generalData.size=progressionList.at(sub_index_for_loop).total;
+				InternalRunningOperation[index_for_loop].currentProgression=progressionList.at(sub_index_for_loop).current;
 				break;
 			}
 			sub_index_for_loop++;

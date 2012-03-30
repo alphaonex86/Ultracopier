@@ -75,12 +75,6 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	connect(this,SIGNAL(signal_exportTransferList(QString)),			listThread,SLOT(exportTransferList(QString)),		Qt::QueuedConnection);
 	connect(this,SIGNAL(signal_importTransferList(QString)),			listThread,SLOT(importTransferList(QString)),		Qt::QueuedConnection);
 
-	connect(this,SIGNAL(signal_getGeneralProgression()),				listThread,SLOT(getGeneralProgression()),		Qt::BlockingQueuedConnection);
-	connect(this,SIGNAL(signal_getFileProgression(quint64)),			listThread,SLOT(getFileProgression(quint64)),		Qt::BlockingQueuedConnection);
-	connect(this,SIGNAL(signal_getActionOnList()),					listThread,SLOT(getActionOnList()),			Qt::BlockingQueuedConnection);
-	connect(this,SIGNAL(signal_getTransferList()),					listThread,SLOT(getTransferList()),			Qt::BlockingQueuedConnection);
-	connect(this,SIGNAL(signal_getTransferListEntry(quint64)),			listThread,SLOT(getTransferListEntry(quint64)),		Qt::BlockingQueuedConnection);
-
 	connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection);
 	interface			= NULL;
 	tempWidget			= NULL;

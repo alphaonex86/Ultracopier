@@ -100,7 +100,7 @@ enum ActionTypeCopyList
 	PreOperation=0x00000003,
 	Transfer=0x00000004,
 	PostOperation=0x00000005,
-	CustomOperation=0x00000006
+	CustomOperation=0x00000006 /// \note this need be used after preoperation and before postoperation
 };
 
 /// \brief structure for progression item
@@ -114,13 +114,13 @@ struct ProgressionItem
 /// \brief item to insert item in the interface
 struct ItemOfCopyList
 {
-	// if type == CustomOperation, then 0 = without progression, 1 = with progression
 	quint64 id;
 	// if type == CustomOperation, then is the translated name of the operation
 	QString sourceFullPath;///< full path with file name: /foo/foo.txt
 	QString sourceFileName;///< full path with file name: foo.txt
 	QString destinationFullPath;///< full path with file name: /foo/foo.txt
 	QString destinationFileName;///< full path with file name: foo.txt
+	// if type == CustomOperation, then 0 = without progression, 1 = with progression
 	quint64 size;
 	CopyMode mode;
 };

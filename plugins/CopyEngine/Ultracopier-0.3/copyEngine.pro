@@ -64,3 +64,5 @@ FORMS += \
     fileIsSameDialog.ui \
     debugDialog.ui \
     folderExistsDialog.ui
+
+OTHER_FILES += informations.xml
