@@ -10,7 +10,7 @@
 
 PluginInterface_Themes * Factory::getInstance()
 {
-	PluginInterface_Themes * newInterface=new InterfacePlugin();
+	PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);
 	connect(this,SIGNAL(reloadLanguage()),newInterface,SLOT(newLanguageLoaded()));
 	return newInterface;
 }
@@ -20,7 +20,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 	Q_UNUSED(options)
 	Q_UNUSED(writePath)
 	Q_UNUSED(pluginPath)
-	Q_UNUSED(facilityEngine)
+	this->facilityEngine=facilityEngine;
 	Q_UNUSED(portableVersion)
 }
 

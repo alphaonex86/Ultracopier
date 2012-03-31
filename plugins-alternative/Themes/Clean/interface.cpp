@@ -9,7 +9,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-InterfacePlugin::InterfacePlugin() :
+InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
 	ui(new Ui::interface())
 {
 	ui->setupUi(this);
@@ -19,6 +19,7 @@ InterfacePlugin::InterfacePlugin() :
 	totalSize	= 0;
 	modeIsForced	= false;
 	haveStarted	= false;
+	this->facilityEngine	= facilityEngine;
 	this->show();
 	menu=new QMenu(this);
 	ui->toolButton->setMenu(menu);
@@ -229,13 +230,6 @@ void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64
 	ui->progressBar->setValue(((double)current/total)*65535);
 }
 
-void InterfacePlugin::setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total)
-{
-	Q_UNUSED(id)
-	Q_UNUSED(current)
-	Q_UNUSED(total)
-}
-
 void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &list)
 {
 	Q_UNUSED(list)
@@ -269,3 +263,153 @@ void InterfacePlugin::newLanguageLoaded()
 	ui->retranslateUi(this);
 	updateTitle();
 }
+
+/*
+  Return[0]: totalFile
+  Return[1]: totalSize
+  Return[2]: currentFile
+  */
+void InterfacePlugin::synchronizeItems(const QList<returnActionOnCopyList>& returnActions)
+{
+	loop_size=returnActions.size();
+	index_for_loop=0;
+	while(index_for_loop<loop_size)
+	{
+		const returnActionOnCopyList& action=returnActions.at(index_for_loop);
+		switch(action.type)
+		{
+			case AddingItem:
+			{
+				totalFile++;
+				totalSize+=action.addAction.size;
+			}
+			break;
+			case RemoveItem:
+				currentFile++;
+			break;
+			case PreOperation:
+			{
+				ItemOfCopyListWithMoreInformations tempItem;
+				tempItem.currentProgression=0;
+				tempItem.generalData=action.addAction;
+				totalFile+=action.addAction.size;
+				InternalRunningOperation << tempItem;
+			}
+			break;
+			case Transfer:
+			{
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			case PostOperation:
+			{
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation.removeAt(sub_index_for_loop);
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			case CustomOperation:
+			{
+				bool custom_with_progression=(action.addAction.size==1);
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
+						InternalRunningOperation[sub_index_for_loop].custom_with_progression=custom_with_progression;
+						InternalRunningOperation[sub_index_for_loop].currentProgression=0;
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			default:
+				//unknow code, ignore it
+			break;
+		}
+		index_for_loop++;
+	}
+}
+
+void InterfacePlugin::setFileProgression(const QList<ProgressionItem> &progressionList)
+{
+	loop_size=InternalRunningOperation.size();
+	sub_loop_size=progressionList.size();
+	index_for_loop=0;
+	while(index_for_loop<loop_size)
+	{
+		sub_index_for_loop=0;
+		while(sub_index_for_loop<sub_loop_size)
+		{
+			if(progressionList.at(sub_index_for_loop).id==InternalRunningOperation.at(index_for_loop).generalData.id)
+			{
+				InternalRunningOperation[index_for_loop].generalData.size=progressionList.at(sub_index_for_loop).total;
+				InternalRunningOperation[index_for_loop].currentProgression=progressionList.at(sub_index_for_loop).current;
+				break;
+			}
+			sub_index_for_loop++;
+		}
+		index_for_loop++;
+	}
+}
+
+InterfacePlugin::currentTransfertItem InterfacePlugin::getCurrentTransfertItem()
+{
+	currentTransfertItem returnItem;
+	returnItem.haveItem=InternalRunningOperation.size()>0;
+	if(returnItem.haveItem)
+	{
+		const ItemOfCopyListWithMoreInformations &itemTransfer=InternalRunningOperation.first();
+		returnItem.from=itemTransfer.generalData.sourceFullPath;
+		returnItem.to=itemTransfer.generalData.destinationFullPath;
+		returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
+		switch(itemTransfer.actionType)
+		{
+			case CustomOperation:
+			if(!itemTransfer.custom_with_progression)
+				returnItem.progressBar_file=0;
+			else
+			{
+				if(itemTransfer.generalData.size>0)
+					returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+				else
+					returnItem.progressBar_file=0;
+			}
+			break;
+			case Transfer:
+			if(itemTransfer.generalData.size>0)
+				returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+			else
+				returnItem.progressBar_file=0;
+			break;
+			case PostOperation:
+				returnItem.progressBar_file=65535;
+			break;
+			default:
+				returnItem.progressBar_file=0;
+		}
+	}
+	return returnItem;
+}
+

@@ -51,7 +51,24 @@ public slots:
 	bool setSpeedLimitation(const qint64 &speedLimitation);
 	//set the translate
 	void newLanguageLoaded();
+	void synchronizeItems(const QList<returnActionOnCopyList>& returnActions);
 public:
+	struct ItemOfCopyListWithMoreInformations
+	{
+		quint64 currentProgression;
+		ItemOfCopyList generalData;
+		ActionTypeCopyList actionType;
+		bool custom_with_progression;
+	};
+	struct currentTransfertItem
+	{
+		quint64 id;
+		bool haveItem;
+		QString from;
+		QString to;
+		QString current_file;
+		int progressBar_file;
+	};
 	/// \brief get the widget for the copy engine
 	QWidget * getOptionsEngineWidget();
 	/// \brief to set if the copy engine is found
@@ -62,7 +79,7 @@ public:
 	/// \brief show the general progression
 	void setGeneralProgression(const quint64 &current,const quint64 &total);
 	/// \brief show the file progression
-	void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total);
+	void setFileProgression(const QList<ProgressionItem> &progressionList);
 	/// \brief set collision action
 	void setCollisionAction(const QList<QPair<QString,QString> > &);
 	/// \brief set error action
@@ -95,7 +112,7 @@ signals:
 	void newSpeedLimitation(qint64);///< -1 if not able, 0 if disabled
 public:
 	//constructor and destructor
-	InterfacePlugin();
+	InterfacePlugin(FacilityInterface * facilityEngine);
 	~InterfacePlugin();
 private:
 	Ui::interface *ui;
@@ -112,6 +129,11 @@ private:
 	CopyType type;
 	CopyMode mode;
 	bool haveStarted;
+	QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;
+	int loop_size,index_for_loop;
+	int sub_loop_size,sub_index_for_loop;
+	currentTransfertItem getCurrentTransfertItem();
+	FacilityInterface * facilityEngine;
 private slots:
 	void forcedModeAddFile();
 	void forcedModeAddFolder();

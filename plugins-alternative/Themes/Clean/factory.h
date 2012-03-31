@@ -32,6 +32,8 @@ class Factory : public PluginInterface_ThemesFactory
 	public slots:
 		void resetOptions();
 		void newLanguageLoaded();
+	private:
+		FacilityInterface * facilityEngine;
 };
 
 #endif // FACTORY_H
