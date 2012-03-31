@@ -181,6 +181,7 @@ void Core::loadInterface()
 				if(!copyList.at(index).ignoreMode)
 					copyList.at(index).interface->forceCopyMode(copyList.at(index).mode);
 				connectInterfaceAndSync(copyList.count()-1);
+				copyList.at(index).engine->syncTransferList();
 			}
 			index++;
 		}
@@ -204,6 +205,7 @@ void Core::unloadInterface()
 			disconnectInterface(index);
 			delete copyList.at(index).interface;
 			copyList[index].interface=NULL;
+			copyList[index].copyEngineIsSync=false;
 		}
 		index++;
 	}
@@ -268,6 +270,7 @@ int Core::connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngin
 			newItem.lastConditionalSync.start();
 			newItem.nextConditionalSync=new QTimer();
 			newItem.nextConditionalSync->setSingleShot(true);
+			newItem.copyEngineIsSync=true;
 
 			if(!ignoreMode)
 				newItem.interface->forceCopyMode(mode);
@@ -479,8 +482,7 @@ void Core::connectEngine(const int &index)
 	connect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)),Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)),Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)),Qt::QueuedConnection);
-
-	//connect(currentCopyInstance.nextConditionalSync,SIGNAL(timeout()),			this,SLOT(mkPath(QString)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(syncReady()),					this,SLOT(syncReady()),Qt::QueuedConnection);
 }
 
 void Core::connectInterfaceAndSync(const int &index)
@@ -510,8 +512,8 @@ void Core::connectInterfaceAndSync(const int &index)
 	connect(currentCopyInstance.interface,SIGNAL(resume()),					this,SLOT(resetSpeedDetectedInterface()));
 	connect(currentCopyInstance.interface,SIGNAL(cancel()),					this,SLOT(copyInstanceCanceledByInterface()),Qt::QueuedConnection);
 	connect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection);
+	connect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),this,SLOT(getActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
 
-	connect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(setFileProgression(QList<ProgressionItem>)),		Qt::QueuedConnection);
 	connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)),		Qt::QueuedConnection);
 
@@ -721,6 +723,27 @@ void Core::rmPath(const QString &path)
 void Core::mkPath(const QString &path)
 {
 	log.mkPath(path);
+}
+
+void Core::syncReady()
+{
+	int index=indexCopySenderCopyEngine();
+	if(index!=-1)
+		copyList[index].copyEngineIsSync=true;
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
+}
+
+void Core::getActionOnList(const QList<returnActionOnCopyList> & actionList)
+{
+	int index=indexCopySenderCopyEngine();
+	if(index!=-1)
+	{
+		if(copyList[index].copyEngineIsSync)
+			copyList[index].interface->getActionOnList(actionList);
+	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
 void Core::urlDropped(const QList<QUrl> &urls)

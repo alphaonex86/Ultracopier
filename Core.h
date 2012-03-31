@@ -69,6 +69,7 @@ class Core : public QObject, public GlobalClass
 			bool haveError;
 			QTime lastConditionalSync;
 			QTimer *nextConditionalSync;
+			bool copyEngineIsSync;
 		};
 		QList<CopyInstance> copyList;
 		int openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources=QStringList(),const QString &protocolsUsedForTheDestination="");
@@ -128,6 +129,8 @@ class Core : public QObject, public GlobalClass
 		void rmPath(const QString &path);
 		void mkPath(const QString &path);
 		void urlDropped(const QList<QUrl> &urls);
+		void syncReady();
+		void getActionOnList(const QList<returnActionOnCopyList> & actionList);
 };
 
 #endif // CORE_H
