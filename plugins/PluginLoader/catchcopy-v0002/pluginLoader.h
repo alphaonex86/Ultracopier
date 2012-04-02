@@ -33,11 +33,7 @@ public:
 private:
 	QString pluginPath;
 	QStringList importantDll,secondDll;
-	bool RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet=true);
-	#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-	bool needElevatedPrivileges;
-	CatchState lauchWithElevatedPrivileges(bool needBeRegistred);
-	#endif
+	bool RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet);
 	bool checkExistsDll();
 	bool dllChecked;
 	bool needBeRegistred;

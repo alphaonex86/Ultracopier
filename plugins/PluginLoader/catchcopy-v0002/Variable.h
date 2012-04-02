@@ -10,8 +10,6 @@
 //Un-comment this next line to put ultracopier plugin in debug mode
 #define ULTRACOPIER_PLUGIN_DEBUG
 
-//#define ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-
 #endif // VARIABLE_H
 
 

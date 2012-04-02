@@ -50,7 +50,11 @@ bool ServerCatchcopy::listen()
 	}
 	else
 	{
-		server.removeServer(pathSocket);
+		if(!server.removeServer(pathSocket))
+		{
+			error_string="Unable to remove the old server";
+			emit error(error_string);
+		}
 		if(server.listen(pathSocket))
 			return true;
 		else
@@ -73,7 +77,11 @@ void ServerCatchcopy::close()
 			index++;
 		}
 		server.close();
-		QLocalServer::removeServer(pathSocket);
+		if(!server.removeServer(pathSocket))
+		{
+			error_string="Unable to remove the old server";
+			emit error(error_string);
+		}
 	}
 }
 

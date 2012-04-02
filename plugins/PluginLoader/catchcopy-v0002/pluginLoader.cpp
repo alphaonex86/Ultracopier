@@ -7,14 +7,19 @@
 #include "pluginLoader.h"
 #include "PlatformMacro.h"
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	#define CATCHCOPY_DLL_32 "catchcopy32d.dll"
+	#define CATCHCOPY_DLL_64 "catchcopy64d.dll"
+#else
+	#define CATCHCOPY_DLL_32 "catchcopy32.dll"
+	#define CATCHCOPY_DLL_64 "catchcopy64.dll"
+#endif
+
 PluginLoader::PluginLoader()
 {
 	//set the startup value into the variable
 	dllChecked=false;
 	
-	#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-	needElevatedPrivileges=false;
-	#endif
 	needBeRegistred=false;
 }
 
@@ -39,9 +44,6 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	}
 	this->needBeRegistred=needBeRegistred;
 	int index=0;
-	#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-	needElevatedPrivileges=false;
-	#endif
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, needBeRegistred: "+QString::number(needBeRegistred));
 
 	bool oneHaveFound=false;
@@ -81,18 +83,9 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	int importantDll_count=0,secondDll_count=0;
 	while(index<importantDll.size())
 	{
-		if(!RegisterShellExtDll(pluginPath+importantDll.at(index),needBeRegistred))
+		if(!RegisterShellExtDll(pluginPath+importantDll.at(index),needBeRegistred,false))
 		{
-			#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-			if(needElevatedPrivileges)
-			{
-				CatchState returnCode=lauchWithElevatedPrivileges(needBeRegistred);
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("After launch with win32: %1").arg(returnCode));
-				emit newState(returnCode);
-				return;
-			}
-			#endif
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the important dll have failed: "+importantDll.at(index));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"the important dll have failed: "+importantDll.at(index));
 			importantDll_have_bug=true;
 		}
 		else
@@ -106,18 +99,9 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	index=0;
 	while(index<secondDll.size())
 	{
-		if(!RegisterShellExtDll(pluginPath+secondDll.at(index),needBeRegistred))
+		if(!RegisterShellExtDll(pluginPath+secondDll.at(index),needBeRegistred,true))
 		{
-			#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-			if(needElevatedPrivileges)
-			{
-				CatchState returnCode=lauchWithElevatedPrivileges(needBeRegistred);
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("After launch with win32: %1").arg(returnCode));
-				emit newState(returnCode);
-				return;
-			}
-			#endif
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the second dll have failed: "+secondDll.at(index));
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"the second dll have failed: "+secondDll.at(index));
 			secondDll_have_bug=true;
 		}
 		else
@@ -205,11 +189,20 @@ bool PluginLoader::checkExistsDll()
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to get env var");
 	
-	if(!is64Bits && ((importantDll.size()+secondDll.size())>1))
+	if(!is64Bits)
 	{
+		if((importantDll.size()+secondDll.size())>1)
+		{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Not load 64Bits dll");
-		importantDll.removeOne("catchcopy64.dll");
-		secondDll.removeOne("catchcopy64.dll");
+		importantDll.removeOne(CATCHCOPY_DLL_64);
+		secondDll.removeOne(CATCHCOPY_DLL_64);
+		}
+	}
+	else
+	{
+		QStringList tempList=importantDll;
+		importantDll=secondDll;
+		secondDll=tempList;
 	}
 	#endif
 
@@ -241,59 +234,6 @@ bool PluginLoader::checkExistsDll()
 		return false;
 }
 
-#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-
-CatchState PluginLoader::lauchWithElevatedPrivileges(bool needBeRegistred)
-{
-	QStringList argumentsList;
-	// try with regsvr32, win32 because for admin dialog
-	if(needBeRegistred)
-		argumentsList << "1";
-	else
-		argumentsList << "0";
-	if(importantDll.size()<=0)
-		argumentsList << "[empty]";
-	else
-		argumentsList << "\""+importantDll.join(";")+"\"";
-	if(secondDll.size()<=0)
-		argumentsList << "[empty]";
-	else
-		argumentsList << "\""+secondDll.join(";")+"\"";
-
-	QString argumentsString=argumentsList.join(" ");
-	QString applicationPath=pluginPath;
-	applicationPath+="catchcopy-launcher.exe";
-
-	int result=0;
-	wchar_t arrayArg[65535];
-	wchar_t applicationWindowsPath[65535];
-	argumentsString.toWCharArray(arrayArg);
-	applicationPath.toWCharArray(applicationWindowsPath);
-	SHELLEXECUTEINFO sei;
-	memset(&sei, 0, sizeof(sei));
-	sei.cbSize = sizeof(sei);
-	sei.fMask = SEE_MASK_UNICODE;
-	sei.lpVerb = TEXT("runas");
-	sei.lpFile = applicationWindowsPath;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"arrayArg: "+QString::fromWCharArray(arrayArg));
-	sei.lpParameters = arrayArg;
-	sei.nShow = SW_SHOW;
-	ShellExecuteEx(&sei);
-	/*if(!)
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("unable to run the application"));
-		return Uncaught;
-	}
-	result=
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("tryied it in win32: %1").arg(result));*/
-	if(needBeRegistred)
-		return Caught;
-	else
-		return Uncaught;
-}
-
-#endif
-
 void PluginLoader::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
 {
 	Q_UNUSED(options);
@@ -301,24 +241,61 @@ void PluginLoader::setResources(OptionInterface * options,QString writePath,QStr
 	if(portableVersion)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("version portable detected"));
-		secondDll << "catchcopy32.dll" << "catchcopy64.dll";
+		secondDll << CATCHCOPY_DLL_32 << CATCHCOPY_DLL_64;
 	}
 	else
 	{
 		#if defined(_M_X64)//64Bits
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("64Bits version detected"));
-			importantDll << "catchcopy64.dll";
-			secondDll << "catchcopy32.dll";
+			importantDll << CATCHCOPY_DLL_64;
+			secondDll << CATCHCOPY_DLL_32;
 		#else//32Bits
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("32Bits version detected"));
-			importantDll << "catchcopy32.dll";
-			secondDll << "catchcopy64.dll";
+			importantDll << CATCHCOPY_DLL_32;
+			secondDll << CATCHCOPY_DLL_64;
 		#endif
 	}
 }
 
 bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
 {
+	////////////////////////////// First way to load //////////////////////////////
+	
+	wchar_t arrayArg[65535];
+	int size_lenght;
+	// first try - load dll and register it manually.
+	HRESULT hResult = S_OK;
+	// if failed - try by loading extension manually (would fail on vista when running as user)
+	hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	if(SUCCEEDED(hResult))
+	{
+		HRESULT (STDAPICALLTYPE *pfn)(void);
+		size_lenght=dllPath.toWCharArray(arrayArg);
+		HINSTANCE hMod = LoadLibrary(arrayArg);	// load the dll
+		if(hMod == NULL)
+			hResult = HRESULT_FROM_WIN32(GetLastError());
+		if(SUCCEEDED(hResult) && !hMod)
+			hResult = E_FAIL;
+		if(SUCCEEDED(hResult))
+		{
+			(FARPROC&)pfn = GetProcAddress(hMod, (bRegister ? "DllRegisterServer" : "DllUnregisterServer"));
+			if(pfn == NULL)
+				hResult = E_FAIL;
+			if(SUCCEEDED(hResult))
+				hResult = (*pfn)();
+
+			CoFreeLibrary(hMod);
+		}
+		CoUninitialize();
+		if(SUCCEEDED(hResult) && SCODE_CODE(hResult) != ERROR_ACCESS_DENIED)
+			return true;
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("fail by LoadLibrary: %1, error code: %2").arg(dllPath).arg((quint32)hResult));
+	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("fail by CoInitializeEx: %1, error code: %2").arg(dllPath).arg((quint32)hResult));
+	
+	////////////////////////////// Second way to load //////////////////////////////
 	QStringList arguments;
 	arguments.append("/s");
 	if(!bRegister)
@@ -341,28 +318,28 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 		ok=true;
 	if(result==5)
 	{
-		#ifdef ULTRACOPIER_PLUGIN_CATCHCOPY_LAUNCHER
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("regsvr32 terminated with: %1, need elevated privileges").arg(result));
-		needElevatedPrivileges=true;
-		return false;
-		#else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"try it in win32");
-		// try with regsvr32, win32 because for admin dialog
-		wchar_t arrayArg[65535];
-		int size_lenght=argumentsString.toWCharArray(arrayArg);
-		//size_lenght*sizeof(wchar_t)
-		wcscpy(arrayArg+size_lenght*sizeof(wchar_t),TEXT("\0"));
-		SHELLEXECUTEINFO sei;
-		memset(&sei, 0, sizeof(sei));
-		sei.cbSize = sizeof(sei);
-		sei.fMask = SEE_MASK_UNICODE;
-		sei.lpVerb = TEXT("runas");
-		sei.lpFile = TEXT("regsvr32.exe");
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght));
-		sei.lpParameters = arrayArg;
-		sei.nShow = SW_SHOW;
-		ok=ShellExecuteEx(&sei);
-		#endif
+		if(!quiet)
+		{
+			////////////////////////////// Last way to load //////////////////////////////
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"try it in win32");
+			// try with regsvr32, win32 because for admin dialog
+
+			size_lenght=argumentsString.toWCharArray(arrayArg);
+			//size_lenght*sizeof(wchar_t)
+			wcscpy(arrayArg+size_lenght*sizeof(wchar_t),TEXT("\0"));
+			SHELLEXECUTEINFO sei;
+			memset(&sei, 0, sizeof(sei));
+			sei.cbSize = sizeof(sei);
+			sei.fMask = SEE_MASK_UNICODE;
+			sei.lpVerb = TEXT("runas");
+			sei.lpFile = TEXT("regsvr32.exe");
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght));
+			sei.lpParameters = arrayArg;
+			sei.nShow = SW_SHOW;
+			ok=ShellExecuteEx(&sei);
+		}
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"not try because need be quiet: "+dllPath);
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("regsvr32 terminated with: %1").arg(result));

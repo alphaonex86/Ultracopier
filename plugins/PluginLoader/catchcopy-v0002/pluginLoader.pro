@@ -12,3 +12,6 @@ SOURCES         = \
     pluginLoader.cpp
 TARGET          = $$qtLibraryTarget(pluginLoader)
 TRANSLATIONS   += Languages/fr/translation.ts
+
+LIBS += -lole32
+

@@ -47,17 +47,17 @@ class PluginInterface_Themes : public QWidget
 		/** \brief the max speed used
 		 * in byte per seconds, -1 if not able, 0 if disabled */
 		virtual bool setSpeedLimitation(const qint64 &speedLimitation) = 0;
-	public:
-		/// \brief get the widget for the copy engine
-		virtual QWidget * getOptionsEngineWidget() = 0;
-		/// \brief to set if the copy engine is found
-		virtual void getOptionsEngineEnabled(bool isEnabled) = 0;
 		/// \brief get action on the transfer list (add/move/remove)
 		virtual void getActionOnList(const QList<returnActionOnCopyList> &returnActions) = 0;
 		/// \brief show the general progression
 		virtual void setGeneralProgression(const quint64 &current,const quint64 &total) = 0;
 		/// \brief show the file progression
 		virtual void setFileProgression(const QList<ProgressionItem> &progressionList) = 0;
+	public:
+		/// \brief get the widget for the copy engine
+		virtual QWidget * getOptionsEngineWidget() = 0;
+		/// \brief to set if the copy engine is found
+		virtual void getOptionsEngineEnabled(bool isEnabled) = 0;
 		/// \brief set collision action
 		virtual void setCollisionAction(const QList<QPair<QString,QString> > &collisionActionList) = 0;
 		/// \brief set error action
