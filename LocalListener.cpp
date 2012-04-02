@@ -16,6 +16,15 @@ LocalListener::LocalListener(QObject *parent) :
 	connect(&TimeOutQLocalSocket, SIGNAL(timeout()), this, SLOT(timeoutDectected()));
 }
 
+LocalListener::~LocalListener()
+{
+	if(localServer.isListening())
+	{
+		localServer.close();
+		QLocalServer::removeServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
+	}
+}
+
 bool LocalListener::tryConnect()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");

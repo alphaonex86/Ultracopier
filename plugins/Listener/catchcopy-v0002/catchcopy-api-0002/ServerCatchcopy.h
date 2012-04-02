@@ -21,6 +21,7 @@ class ServerCatchcopy : public QObject
 	Q_OBJECT
 	public:
 		ServerCatchcopy();
+		~ServerCatchcopy();
 		/// \brief return if is listening
 		bool isListening();
 		/// \brief try listen
@@ -40,6 +41,7 @@ class ServerCatchcopy : public QObject
 		/// \brief get the name
 		QString getName();
 	private:
+		QString pathSocket;
 		QString name;
 		QString error_string;
 		QLocalServer server;

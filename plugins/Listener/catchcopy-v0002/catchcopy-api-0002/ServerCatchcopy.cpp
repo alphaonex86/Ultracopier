@@ -17,6 +17,11 @@ ServerCatchcopy::ServerCatchcopy()
 	connect(&server, SIGNAL(newConnection()), this, SLOT(newConnection()));
 }
 
+ServerCatchcopy::~ServerCatchcopy()
+{
+	close();
+}
+
 bool ServerCatchcopy::isListening()
 {
 	return server.isListening();
@@ -35,7 +40,8 @@ QString ServerCatchcopy::getName()
 bool ServerCatchcopy::listen()
 {
 	QLocalSocket socketTestConnection;
-	socketTestConnection.connectToServer(ExtraSocketCatchcopy::pathSocket());
+	pathSocket=ExtraSocketCatchcopy::pathSocket();
+	socketTestConnection.connectToServer(pathSocket);
 	if(socketTestConnection.waitForConnected(CATCHCOPY_COMMUNICATION_TIMEOUT))
 	{
 		error_string="Other server is listening";
@@ -44,12 +50,12 @@ bool ServerCatchcopy::listen()
 	}
 	else
 	{
-		server.removeServer(ExtraSocketCatchcopy::pathSocket());
-		if(server.listen(ExtraSocketCatchcopy::pathSocket()))
+		server.removeServer(pathSocket);
+		if(server.listen(pathSocket))
 			return true;
 		else
 		{
-			error_string=QString("Unable to listen %1: %2").arg(ExtraSocketCatchcopy::pathSocket()).arg(server.errorString());
+			error_string=QString("Unable to listen %1: %2").arg(pathSocket).arg(server.errorString());
 			emit error(error_string);
 			return false;
 		}
@@ -58,13 +64,17 @@ bool ServerCatchcopy::listen()
 
 void ServerCatchcopy::close()
 {
-	int index=0;
-	while(index<ClientList.size())
+	if(server.isListening())
 	{
-		ClientList.at(index).socket->disconnectFromServer();
-		index++;
+		int index=0;
+		while(index<ClientList.size())
+		{
+			ClientList.at(index).socket->disconnectFromServer();
+			index++;
+		}
+		server.close();
+		QLocalServer::removeServer(pathSocket);
 	}
-	server.close();
 }
 
 const QString ServerCatchcopy::errorStringServer()

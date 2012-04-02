@@ -372,10 +372,31 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 		returnItem.from=itemTransfer.generalData.sourceFullPath;
 		returnItem.to=itemTransfer.generalData.destinationFullPath;
 		returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
-		if(itemTransfer.generalData.size>0)
-			returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
-		else
-			returnItem.progressBar_file=0;
+		switch(itemTransfer.actionType)
+		{
+			case CustomOperation:
+			if(!itemTransfer.custom_with_progression)
+				returnItem.progressBar_file=0;
+			else
+			{
+				if(itemTransfer.generalData.size>0)
+					returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+				else
+					returnItem.progressBar_file=0;
+			}
+			break;
+			case Transfer:
+			if(itemTransfer.generalData.size>0)
+				returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+			else
+				returnItem.progressBar_file=0;
+			break;
+			case PostOperation:
+				returnItem.progressBar_file=65535;
+			break;
+			default:
+				returnItem.progressBar_file=0;
+		}
 	}
 	return returnItem;
 }

@@ -13,10 +13,10 @@
 #include "catchcopy-api-0002/ServerCatchcopy.h"
 
 /// \brief Define the server compatible with Ultracopier interface
-class CatchCopyPlugin : public PluginInterface_Listen
+class CatchCopyPlugin : public PluginInterface_Listener
 {
 	Q_OBJECT
-	Q_INTERFACES(PluginInterface_Listen)
+	Q_INTERFACES(PluginInterface_Listener)
 public:
 	CatchCopyPlugin();
 	/// \brief try listen the copy/move

@@ -33,6 +33,10 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
 	connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
 	connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
 	connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
+
+	iconStart=QIcon(":/resources/player_play.png");
+	iconPause=QIcon(":/resources/player_pause.png");
+	iconStop=QIcon(":/resources/checkbox.png");
 }
 
 InterfacePlugin::~InterfacePlugin()
@@ -108,64 +112,6 @@ void InterfacePlugin::actionInProgess(EngineActionInProgress action)
 	}
 }
 
-void InterfacePlugin::newTransferStart(const ItemOfCopyList &item)
-{
-	ItemOfCopyListWithMoreInformations newItem;
-	newItem.currentProgression=0;
-	newItem.generalData=item;
-	currentProgressList<<newItem;
-	ui->skipButton->setEnabled(true);
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Start transfer new item: "+QString::number(currentProgressList.last().generalData.id)+", with size: "+QString::number(currentProgressList.last().generalData.size));
-	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size)
-	{
-		if(graphicItemList.at(index).id==item.id)
-		{
-			graphicItemList.at(index).item->setIcon(0,QIcon(":/resources/player_play.png"));
-			//ui->CopyList->scrollToItem(graphicItemList.at(index).item);
-			break;
-		}
-		index++;
-	}
-	updateCurrentFileInformation();
-}
-
-void InterfacePlugin::newTransferStop(const quint64 &id)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	index=0;
-	loop_size=graphicItemList.size();
-	while(index<loop_size)
-	{
-		if(graphicItemList.at(index).id==id)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"item to remove found");
-			graphicItemList.at(index).item->setIcon(0,QIcon(":/resources/checkbox.png"));
-			ui->CopyList->scrollToItem(graphicItemList.at(index).item);
-			currentFile++;
-			updateOverallInformation();
-			break;
-		}
-		index++;
-	}
-	index=0;
-	loop_size=currentProgressList.size();
-	while(index<loop_size)
-	{
-		if(currentProgressList.at(index).generalData.id==id)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Remove item: "+QString::number(currentProgressList.at(index).generalData.id)+", with size: "+QString::number(currentProgressList.at(index).generalData.size));
-			currentProgressList.removeAt(index);
-			updateCurrentFileInformation();
-			break;
-		}
-		index++;
-	}
-	if(currentProgressList.size()==0)
-		ui->skipButton->setEnabled(false);
-}
-
 void InterfacePlugin::newFolderListing(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -227,25 +173,6 @@ void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64
 		ui->progressBar_all->setValue(0);
 }
 
-void InterfacePlugin::setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total)
-{
-	index=0;
-	loop_size=currentProgressList.size();
-	while(index<loop_size)
-	{
-		if(currentProgressList.at(index).generalData.id==id)
-		{
-			currentProgressList[index].generalData.size=total;
-			currentProgressList[index].currentProgression=current;
-			if(index==0)
-				updateCurrentFileInformation();
-			return;
-		}
-		index++;
-	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
-}
-
 void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &list)
 {
 	Q_UNUSED(list);
@@ -254,54 +181,6 @@ void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &l
 void InterfacePlugin::setErrorAction(const QList<QPair<QString,QString> > &list)
 {
 	Q_UNUSED(list);
-}
-
-//edit the transfer list
-void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
-{
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
-	indexAction=0;
-	loop_size=returnActions.size();
-	while(indexAction<loop_size)
-	{
-		if(returnActions.at(indexAction).type==AddingItem)
-		{
-			graphicItem newItem;
-			newItem.id=returnActions.at(indexAction).addAction.id;
-			newItem.item=new QTreeWidgetItem(QStringList() << returnActions.at(indexAction).addAction.sourceFullPath << facilityEngine->sizeToString(returnActions.at(indexAction).addAction.size) << returnActions.at(indexAction).addAction.destinationFullPath);
-			ui->CopyList->addTopLevelItem(newItem.item);
-			totalFile++;
-			graphicItemList<<newItem;
-			totalSize+=returnActions.at(indexAction).addAction.size;
-			//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Add item: "+QString::number(newItem.id)+", with size: "+QString::number(returnActions.at(indexAction).addAction.size));
-			updateOverallInformation();
-		}
-		else
-		{
-			bool isSelected=graphicItemList.at(index).item->isSelected();
-			switch(returnActions.at(indexAction).userAction.type)
-			{
-				case MoveItem:
-					ui->CopyList->insertTopLevelItem(returnActions.at(indexAction).userAction.moveAt,ui->CopyList->takeTopLevelItem(returnActions.at(indexAction).userAction.position));
-					graphicItemList.at(returnActions.at(indexAction).userAction.moveAt).item->setSelected(isSelected);
-					graphicItemList.move(returnActions.at(indexAction).userAction.moveAt,returnActions.at(indexAction).userAction.position);
-				break;
-				case RemoveItem:
-					graphicItemList.at(returnActions.at(indexAction).userAction.moveAt).item->setIcon(0,QIcon(":/resources/checkbox.png"));
-					updateOverallInformation();
-				break;
-			}
-		}
-		indexAction++;
-	}
-	if(graphicItemList.size()==0)
-	{
-		ui->progressBar_all->setValue(65535);
-		ui->progressBar_file->setValue(65535);
-		currentSize=totalSize;
-		updateOverallInformation();
-	}
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"graphicItemList.size(): "+QString::number(graphicItemList.size()));
 }
 
 void InterfacePlugin::setCopyType(CopyType type)
@@ -465,4 +344,186 @@ void InterfacePlugin::newLanguageLoaded()
 	if(haveStarted)
 		updateCurrentFileInformation();
 	updateOverallInformation();
+}
+
+/*
+  Return[0]: totalFile
+  Return[1]: totalSize
+  Return[2]: currentFile
+  */
+void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList>& returnActions)
+{
+	loop_size=returnActions.size();
+	index_for_loop=0;
+	while(index_for_loop<loop_size)
+	{
+		const returnActionOnCopyList& action=returnActions.at(index_for_loop);
+		switch(action.type)
+		{
+			case AddingItem:
+			{
+				InternalRunningOperationGraphic.insert(action.addAction.id,new QTreeWidgetItem(QStringList() << action.addAction.sourceFullPath << facilityEngine->sizeToString(action.addAction.size) << action.addAction.destinationFullPath));
+				ui->CopyList->addTopLevelItem(InternalRunningOperationGraphic[action.addAction.id]);
+				totalFile++;
+				totalSize+=action.addAction.size;
+			}
+			break;
+			case MoveItem:
+				ui->CopyList->move(action.userAction.position,action.userAction.moveAt);
+			break;
+			case RemoveItem:
+			{
+				InternalRunningOperationGraphic[action.addAction.id]->setIcon(0,iconStop);
+				InternalRunningOperationGraphic.remove(action.addAction.id);
+				//delete ui->CopyList->topLevelItem(action.userAction.position);
+				currentFile++;
+				startId.removeOne(action.addAction.id);
+				stopId.removeOne(action.addAction.id);
+			}
+			break;
+			case PreOperation:
+			{
+				ItemOfCopyListWithMoreInformations tempItem;
+				tempItem.currentProgression=0;
+				tempItem.generalData=action.addAction;
+				InternalRunningOperation << tempItem;
+			}
+			break;
+			case Transfer:
+			{
+				if(!startId.contains(action.addAction.id))
+					startId << action.addAction.id;
+				stopId.removeOne(action.addAction.id);
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
+						break;
+					}
+					sub_index_for_loop++;
+				}
+				InternalRunningOperationGraphic[action.addAction.id]->setIcon(0,iconStart);
+			}
+			break;
+			case PostOperation:
+			{
+				if(!stopId.contains(action.addAction.id))
+					stopId << action.addAction.id;
+				startId.removeOne(action.addAction.id);
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation.removeAt(sub_index_for_loop);
+						break;
+					}
+					sub_index_for_loop++;
+				}
+				InternalRunningOperationGraphic[action.addAction.id]->setIcon(0,iconPause);
+			}
+			break;
+			case CustomOperation:
+			{
+				bool custom_with_progression=(action.addAction.size==1);
+				//without progression
+				if(custom_with_progression)
+				{
+					if(startId.removeOne(action.addAction.id))
+						if(!stopId.contains(action.addAction.id))
+							stopId << action.addAction.id;
+				}
+				//with progression
+				else
+				{
+					stopId.removeOne(action.addAction.id);
+					if(!startId.contains(action.addAction.id))
+						startId << action.addAction.id;
+				}
+				sub_index_for_loop=0;
+				sub_loop_size=InternalRunningOperation.size();
+				while(sub_index_for_loop<sub_loop_size)
+				{
+					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
+					{
+						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
+						InternalRunningOperation[sub_index_for_loop].custom_with_progression=custom_with_progression;
+						InternalRunningOperation[sub_index_for_loop].currentProgression=0;
+						break;
+					}
+					sub_index_for_loop++;
+				}
+			}
+			break;
+			default:
+				//unknow code, ignore it
+			break;
+		}
+		index_for_loop++;
+	}
+}
+
+void InterfacePlugin::setFileProgression(const QList<ProgressionItem> &progressionList)
+{
+	loop_size=InternalRunningOperation.size();
+	sub_loop_size=progressionList.size();
+	index_for_loop=0;
+	while(index_for_loop<loop_size)
+	{
+		sub_index_for_loop=0;
+		while(sub_index_for_loop<sub_loop_size)
+		{
+			if(progressionList.at(sub_index_for_loop).id==InternalRunningOperation.at(index_for_loop).generalData.id)
+			{
+				InternalRunningOperation[index_for_loop].generalData.size=progressionList.at(sub_index_for_loop).total;
+				InternalRunningOperation[index_for_loop].currentProgression=progressionList.at(sub_index_for_loop).current;
+				break;
+			}
+			sub_index_for_loop++;
+		}
+		index_for_loop++;
+	}
+}
+
+InterfacePlugin::currentTransfertItem InterfacePlugin::getCurrentTransfertItem()
+{
+	currentTransfertItem returnItem;
+	returnItem.haveItem=InternalRunningOperation.size()>0;
+	if(returnItem.haveItem)
+	{
+		const ItemOfCopyListWithMoreInformations &itemTransfer=InternalRunningOperation.first();
+		returnItem.from=itemTransfer.generalData.sourceFullPath;
+		returnItem.to=itemTransfer.generalData.destinationFullPath;
+		returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
+		switch(itemTransfer.actionType)
+		{
+			case CustomOperation:
+			if(!itemTransfer.custom_with_progression)
+				returnItem.progressBar_file=0;
+			else
+			{
+				if(itemTransfer.generalData.size>0)
+					returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+				else
+					returnItem.progressBar_file=0;
+			}
+			break;
+			case Transfer:
+			if(itemTransfer.generalData.size>0)
+				returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+			else
+				returnItem.progressBar_file=0;
+			break;
+			case PostOperation:
+				returnItem.progressBar_file=65535;
+			break;
+			default:
+				returnItem.progressBar_file=0;
+		}
+	}
+	return returnItem;
 }

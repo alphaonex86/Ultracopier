@@ -7,5 +7,6 @@
         <file>resources/checkbox.png</file>
         <file>resources/main.png</file>
         <file>resources/player_play.png</file>
+        <file>resources/player_pause.png</file>
     </qresource>
 </RCC>

@@ -30,6 +30,17 @@ private:
 	{
 		quint64 currentProgression;
 		ItemOfCopyList generalData;
+		ActionTypeCopyList actionType;
+		bool custom_with_progression;
+	};
+	struct currentTransfertItem
+	{
+		quint64 id;
+		bool haveItem;
+		QString from;
+		QString to;
+		QString current_file;
+		int progressBar_file;
 	};
 	struct graphicItem
 	{
@@ -59,6 +70,12 @@ private:
 	QMenu menu;
 	FacilityInterface * facilityEngine;
 	int loop_size,loop_sub_size,indexAction,index;
+	int index_for_loop,sub_loop_size,sub_index_for_loop;
+	currentTransfertItem getCurrentTransfertItem();
+	QList<quint64> startId,stopId;///< To show what is started, what is stopped
+	QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;///< to have progression and stat
+	QHash<quint64,QTreeWidgetItem *> InternalRunningOperationGraphic;
+	QIcon iconStart,iconPause,iconStop;
 public:
 	//send information about the copy
 	/// \brief to set the action in progress
@@ -92,7 +109,7 @@ public:
 	/// \brief show the general progression
 	void setGeneralProgression(const quint64 &current,const quint64 &total);
 	/// \brief show the file progression
-	void setFileProgression(const quint64 &id,const quint64 &current,const quint64 &total);
+	void setFileProgression(const QList<ProgressionItem> &progressionList);
 	/// \brief set collision action
 	void setCollisionAction(const QList<QPair<QString,QString> > &);
 	/// \brief set error action
@@ -103,9 +120,6 @@ public:
 	void forceCopyMode(CopyMode);
 	/// \brief set if transfer list is exportable/importable
 	void setTransferListOperation(TransferListOperation transferListOperation);
-	//edit the transfer list
-	/// \brief get action on the transfer list (add/move/remove)
-	void getActionOnList(const QList<returnActionOnCopyList> &returnActions);
 	/** \brief set if the order is external (like file manager copy)
 	 * to notify the interface, which can hide add folder/filer button */
 	void haveExternalOrder();
@@ -154,6 +168,7 @@ signals:
 public slots:
 	//set the translate
 	void newLanguageLoaded();
+	void getActionOnList(const QList<returnActionOnCopyList>& returnActions);
 };
 
 #endif // INTERFACE_TEST_H
