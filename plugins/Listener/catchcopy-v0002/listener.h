@@ -8,6 +8,7 @@
 #define SERVER_H
 
 #include <QObject>
+
 #include "Environment.h"
 #include "../../../interface/PluginInterface_Listener.h"
 #include "catchcopy-api-0002/ServerCatchcopy.h"

@@ -50,26 +50,7 @@ EventDispatcher::EventDispatcher()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,COMPILERINFO);
-	#ifdef Q_OS_UNIX
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Unix user: ")+QString::number(getuid()));
-	#else
-		QString userName;
-		DWORD size=0;
-		if(GetUserNameW(NULL,&size) || (GetLastError()!=ERROR_INSUFFICIENT_BUFFER))
-		{
-		}
-		else
-		{
-			WCHAR * userNameW=new WCHAR[size];
-			if(GetUserNameW(userNameW,&size))
-			{
-				userName.fromWCharArray(userNameW,size*2);
-				//userName=QString(QByteArray((char*)userNameW,size*2-2).toHex());
-			}
-			delete userNameW;
-		}
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Windows user: ")+userName);
-	#endif
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,QString("Local socket: ")+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
 	//To lunch some initialization after QApplication::exec() to quit eventually
 	lunchInitFunction.setInterval(0);
 	lunchInitFunction.setSingleShot(true);

@@ -8,6 +8,8 @@
 #include "VariablesCatchcopy.h"
 #include "ExtraSocketCatchcopy.h"
 
+#include <QFile>
+
 ServerCatchcopy::ServerCatchcopy()
 {
 	name="Default avanced copier";
@@ -15,6 +17,11 @@ ServerCatchcopy::ServerCatchcopy()
 	idNextClient=0;
 	error_string="Unknown error";
 	connect(&server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+	#ifdef Q_OS_WIN32
+	setTheRights.setSingleShot(true);
+	setTheRights.setInterval(1000);
+	connect(&setTheRights,SIGNAL(timeout()),this,SLOT(setRights()));
+	#endif
 }
 
 ServerCatchcopy::~ServerCatchcopy()
@@ -56,7 +63,12 @@ bool ServerCatchcopy::listen()
 			emit error(error_string);
 		}
 		if(server.listen(pathSocket))
+		{
+			#ifdef Q_OS_WIN32
+			setTheRights.start();
+			#endif
 			return true;
+		}
 		else
 		{
 			error_string=QString("Unable to listen %1: %2").arg(pathSocket).arg(server.errorString());
