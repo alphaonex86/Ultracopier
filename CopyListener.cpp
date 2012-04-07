@@ -202,28 +202,53 @@ void CopyListener::close()
 	copyRunningList.clear();
 }
 
+QStringList CopyListener::parseWildcardSources(QStringList sources)
+{
+	QStringList returnList;
+	int index=0;
+	while(index<sources.size())
+	{
+		if(sources.at(index).contains("*"))
+		{
+			QFileInfo info(sources.at(index));
+			QDir folder(info.absoluteDir());
+			QFileInfoList fileFile=folder.entryInfoList(QStringList() << info.fileName());
+			int index=0;
+			while(index<fileFile.size())
+			{
+				returnList << fileFile.at(index).absoluteFilePath();
+				index++;
+			}
+		}
+		else
+			returnList << sources.at(index);
+		index++;
+	}
+	return returnList;
+}
+
 /** new copy without destination have been pased by the CLI */
 void CopyListener::newCopy(QStringList sources)
 {
-	emit newCopy(incrementOrderId(),QStringList() << "file",sources);
+	emit newCopy(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources));
 }
 
 /** new copy with destination have been pased by the CLI */
 void CopyListener::newCopy(QStringList sources,QString destination)
 {
-	emit newCopy(incrementOrderId(),QStringList() << "file",sources,"file",destination);
+	emit newCopy(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources),"file",destination);
 }
 
 /** new move without destination have been pased by the CLI */
 void CopyListener::newMove(QStringList sources)
 {
-	emit newMove(incrementOrderId(),QStringList() << "file",sources);
+	emit newMove(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources));
 }
 
 /** new move with destination have been pased by the CLI */
 void CopyListener::newMove(QStringList sources,QString destination)
 {
-	emit newMove(incrementOrderId(),QStringList() << "file",sources,"file",destination);
+	emit newMove(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources),"file",destination);
 }
 
 void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
