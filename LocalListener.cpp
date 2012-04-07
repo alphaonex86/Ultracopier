@@ -94,6 +94,7 @@ bool LocalListener::tryConnect()
 	else
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"connection failed, continu...");
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 		emit cli(ultracopierArguments,false);
 		return false;
 	}
@@ -178,6 +179,7 @@ void LocalListener::dataIncomming()
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"socket->bytesAvailable(): "+QString::number(socket->bytesAvailable())+", for total of: "+QString::number(socket->bytesAvailable()+sizeof(quint32)));
 				QStringList ultracopierArguments;
 				in >> ultracopierArguments;
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 				emit cli(ultracopierArguments,true);
 				clientList[index].data.clear();
 				clientList[index].haveData=false;
@@ -196,6 +198,7 @@ void LocalListener::dataIncomming()
 				QDataStream in(clientList.at(index).data);
 				QStringList ultracopierArguments;
 				in >> ultracopierArguments;
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 				emit cli(ultracopierArguments,true);
 				clientList[index].data.clear();
 				clientList[index].haveData=false;
