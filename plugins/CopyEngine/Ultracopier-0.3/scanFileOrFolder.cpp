@@ -25,7 +25,6 @@ bool scanFileOrFolder::isFinished()
 
 void scanFileOrFolder::addToList(const QStringList& sources,const QString& destination)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
 	stopIt=false;
 	this->sources=sources;
         this->destination=destination;
@@ -35,6 +34,7 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 			this->destination+=QDir::separator();*/
 		if(!destination.endsWith("/") && !destination.endsWith("\\"))
 			this->destination+="/";//put unix separator because it's transformed into that's under windows too
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
 }
 
 //set action if Folder are same or exists

@@ -227,28 +227,43 @@ QStringList CopyListener::parseWildcardSources(QStringList sources)
 	return returnList;
 }
 
+QStringList CopyListener::stripSeparator(QStringList sources)
+{
+	int index=0;
+	while(index<sources.size())
+	{
+		sources[index].remove(QRegExp("[\\\\/]+$"));
+		index++;
+	}
+	return sources;
+}
+
 /** new copy without destination have been pased by the CLI */
 void CopyListener::newCopy(QStringList sources)
 {
-	emit newCopy(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)));
 }
 
 /** new copy with destination have been pased by the CLI */
 void CopyListener::newCopy(QStringList sources,QString destination)
 {
-	emit newCopy(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources),"file",destination);
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)),"file",destination);
 }
 
 /** new move without destination have been pased by the CLI */
 void CopyListener::newMove(QStringList sources)
 {
-	emit newMove(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)));
 }
 
 /** new move with destination have been pased by the CLI */
 void CopyListener::newMove(QStringList sources,QString destination)
 {
-	emit newMove(incrementOrderId(),QStringList() << "file",parseWildcardSources(sources),"file",destination);
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)),"file",destination);
 }
 
 void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
@@ -296,7 +311,7 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sourc
 	newCopyInformation.pluginOrderId	= orderId;
 	newCopyInformation.orderId		= incrementOrderId();
 	copyRunningList << newCopyInformation;
-	emit newCopy(orderId,QStringList() << "file",sources);
+	emit newCopy(orderId,QStringList() << "file",stripSeparator(sources));
 }
 
 void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination)
@@ -308,7 +323,7 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sourc
 	newCopyInformation.pluginOrderId	= orderId;
 	newCopyInformation.orderId		= incrementOrderId();
 	copyRunningList << newCopyInformation;
-	emit newCopy(orderId,QStringList() << "file",sources,"file",destination);
+	emit newCopy(orderId,QStringList() << "file",stripSeparator(sources),"file",destination);
 }
 
 void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources)
@@ -320,7 +335,7 @@ void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sourc
 	newCopyInformation.pluginOrderId	= orderId;
 	newCopyInformation.orderId		= incrementOrderId();
 	copyRunningList << newCopyInformation;
-	emit newMove(orderId,QStringList() << "file",sources);
+	emit newMove(orderId,QStringList() << "file",stripSeparator(sources));
 }
 
 void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination)
@@ -332,7 +347,7 @@ void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sourc
 	newCopyInformation.pluginOrderId	= orderId;
 	newCopyInformation.orderId		= incrementOrderId();
 	copyRunningList << newCopyInformation;
-	emit newMove(orderId,QStringList() << "file",sources,"file",destination);
+	emit newMove(orderId,QStringList() << "file",stripSeparator(sources),"file",destination);
 }
 
 quint32 CopyListener::incrementOrderId()

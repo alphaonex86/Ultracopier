@@ -12,6 +12,8 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 
+#include "Environment.h"
+
 /** \brief class to parse all command line options */
 class CliParser : public QObject
 {

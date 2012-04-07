@@ -34,7 +34,7 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
 
 void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination);
 	//search to group the window
 	int GroupWindowWhen=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
 	bool haveSameSource=false,haveSameDestination=false;

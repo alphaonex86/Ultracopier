@@ -413,7 +413,7 @@ void ListThread::startGeneralTransfer()
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::newCopy(QStringList sources,QString destination)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+sources.join(";")+", destination: "+destination);
 	scanFileOrFolder * scanFileOrFolderThread = newScanThread(Copy);
 	if(scanFileOrFolderThread==NULL)
 	{

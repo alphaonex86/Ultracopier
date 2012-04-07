@@ -14,6 +14,7 @@ CliParser::CliParser(QObject *parent) :
 
 void CliParser::cli(const QStringList &ultracopierArguments,const bool &external)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 	if(ultracopierArguments.size()==1)
 	{
 		if(external)
@@ -64,6 +65,9 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 			}
 			return;
 		}
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Command line not understand");
+		QMessageBox::warning(NULL,tr("Warning"),tr("Command line not understand"));
 	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Command line not understand");
 	QMessageBox::warning(NULL,tr("Warning"),tr("Command line not understand"));
 }
