@@ -183,7 +183,6 @@ private:
 	qint64				actualRealByteTransfered;
 	int				preOperationNumber;
 	int				numberOfTranferRuning;
-	QList<quint64>			orderStarted;///< list the order id
 	int				maxSpeed;
 	FolderExistsAction		alwaysDoThisActionForFolderExists;
 	bool				checkDestinationFolderExists;

@@ -178,47 +178,37 @@ void ListThread::transferPutAtBottom()
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	int countLocalParse=0;
 	#endif
-	int index=0;
-	loop_sub_size_transfer_thread_search=transferThreadList.size();
-	while(index<loop_sub_size_transfer_thread_search)
+	int indexAction=0;
+	while(indexAction<actionToDoListTransfer.size())
 	{
-		if(transferThreadList.at(index)==transfer)
+		if(actionToDoListTransfer.at(indexAction).id==transfer->transferId)
 		{
-			int indexAction=0;
-			while(indexAction<actionToDoListTransfer.size())
-			{
-				if(actionToDoListTransfer.at(indexAction).id==transferThreadList.at(index)->transferId)
-				{
-					//push for interface at the end
-					returnActionOnCopyList newAction;
-					newAction.type=MoveItem;
-					newAction.addAction.id=transferThreadList.at(index)->transferId;
-					newAction.userAction.position=actionToDoListTransfer.size()-1;
-					actionDone << newAction;
-					//do the wait stat
-					actionToDoListTransfer[index].isRunning=false;
-					//move at the end
-					actionToDoListTransfer.move(indexAction,actionToDoListTransfer.size()-1);
-					//reset the thread list stat
-					transferThreadList[index]->transferId=0;
-					transferThreadList[index]->transferSize=0;
-					#ifdef ULTRACOPIER_PLUGIN_DEBUG
-					countLocalParse++;
-					#endif
-					isFound=true;
-					break;
-				}
-				indexAction++;
-			}
-			if(!isFound)
-			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(transferThreadList.at(index)->transferId).arg(index));
-				transferThreadList[index]->transferId=0;
-				transferThreadList[index]->transferSize=0;
-			}
+			//push for interface at the end
+			returnActionOnCopyList newAction;
+			newAction.type=MoveItem;
+			newAction.addAction.id=transfer->transferId;
+			newAction.userAction.position=actionToDoListTransfer.size()-1;
+			actionDone << newAction;
+			//do the wait stat
+			actionToDoListTransfer[indexAction].isRunning=false;
+			//move at the end
+			actionToDoListTransfer.move(indexAction,actionToDoListTransfer.size()-1);
+			//reset the thread list stat
+			transfer->transferId=0;
+			transfer->transferSize=0;
+			#ifdef ULTRACOPIER_PLUGIN_DEBUG
+			countLocalParse++;
+			#endif
+			isFound=true;
 			break;
 		}
-		index++;
+		indexAction++;
+	}
+	if(!isFound)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(transfer->transferId));
+		transfer->transferId=0;
+		transfer->transferSize=0;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("countLocalParse: %1").arg(countLocalParse));
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -349,31 +339,16 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"listing thread have finish, skipFirstRemove: "+QString::number(skipFirstRemove));
 	if(!skipFirstRemove)
 	{
-		QObject * senderThread = sender();
+		scanFileOrFolder * senderThread = qobject_cast<scanFileOrFolder *>(QObject::sender());
 		if(senderThread==NULL)
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer null (plugin copy engine)");
 		else
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start the next thread, scanFileOrFolderThreadsPool.size(): "+QString::number(scanFileOrFolderThreadsPool.size()));
-			bool isFound=false;
-			int index=0;
-			while(index<scanFileOrFolderThreadsPool.size())
-			{
-				if(senderThread==scanFileOrFolderThreadsPool.at(index))
-				{
-					if(index!=0)
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"scanFileOrFolderThread is not the first (plugin copy engine)");
-					delete scanFileOrFolderThreadsPool.at(index);
-					scanFileOrFolderThreadsPool.removeAt(index);
-					if(scanFileOrFolderThreadsPool.size()==0)
-						updateTheStatus();
-					isFound=true;
-					break;
-				}
-				index++;
-			}
-			if(!isFound)
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"sender pointer not found (plugin copy engine)");
+			delete senderThread;
+			scanFileOrFolderThreadsPool.removeOne(senderThread);
+			if(scanFileOrFolderThreadsPool.size()==0)
+				updateTheStatus();
 		}
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start the next thread, scanFileOrFolderThreadsPool.size(): "+QString::number(scanFileOrFolderThreadsPool.size()));

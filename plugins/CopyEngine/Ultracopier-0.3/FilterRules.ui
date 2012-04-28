@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FilterRules</class>
+ <widget class="QDialog" name="FilterRules">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>290</width>
+    <height>136</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Search:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="3">
+    <widget class="QLineEdit" name="search"/>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Search type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QComboBox" name="search_type">
+     <item>
+      <property name="text">
+       <string>Raw text</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Simplified regex</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Perl's regex</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Apply on:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QComboBox" name="apply_on">
+     <item>
+      <property name="text">
+       <string>File</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Folder</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>File and folder</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="5">
+    <widget class="QCheckBox" name="need_match_all">
+     <property name="text">
+      <string>All string need match</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>68</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1" colspan="3">
+    <widget class="QPushButton" name="save">
+     <property name="text">
+      <string>Save</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="4">
+    <widget class="QPushButton" name="close">
+     <property name="text">
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>close</sender>
+   <signal>clicked()</signal>
+   <receiver>FilterRules</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>245</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
