@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>306</width>
-    <height>184</height>
+    <width>304</width>
+    <height>289</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -142,8 +142,119 @@
      </property>
     </widget>
    </item>
+   <item row="7" column="0">
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>Do checksum</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QComboBox" name="comboBox">
+     <item>
+      <property name="text">
+       <string>Quick md5</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Quick sha1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Full crc32</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Full md5</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Full sha1</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Enable OS buffer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="text">
+      <string>OS buffer only if lower than</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="QSpinBox" name="spinBox">
+     <property name="suffix">
+      <string>KB</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>2048</number>
+     </property>
+     <property name="value">
+      <number>512</number>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Filters</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QCheckBox" name="checkBox_4">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Checksulm only after error</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>238</x>
+     <y>153</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

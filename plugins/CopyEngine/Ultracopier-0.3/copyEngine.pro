@@ -21,7 +21,9 @@ HEADERS         = copyEngine.h \
     ListThread.h \
     ../../../interface/PluginInterface_CopyEngine.h \
     ../../../interface/OptionInterface.h \
-    ../../../interface/FacilityInterface.h
+    ../../../interface/FacilityInterface.h \
+    Filters.h \
+    FilterRules.h
 SOURCES         = copyEngine.cpp \
     scanFileOrFolder.cpp \
     fileErrorDialog.cpp \
@@ -37,7 +39,9 @@ SOURCES         = copyEngine.cpp \
     folderExistsDialog.cpp \
     AvancedQFile.cpp \
     copyEngine-collision-and-error.cpp \
-    ListThread.cpp
+    ListThread.cpp \
+    Filters.cpp \
+    FilterRules.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS   += Languages/fr/translation.ts \
     Languages/ar/translation.ts \
@@ -63,6 +67,11 @@ FORMS += \
     fileExistsDialog.ui \
     fileIsSameDialog.ui \
     debugDialog.ui \
-    folderExistsDialog.ui
+    folderExistsDialog.ui \
+    Filters.ui \
+    FilterRules.ui
 
 OTHER_FILES += informations.xml
+
+RESOURCES += \
+    resources.qrc
