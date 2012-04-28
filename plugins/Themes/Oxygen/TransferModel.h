@@ -60,8 +60,8 @@ public:
 	currentTransfertItem getCurrentTransfertItem();
 protected:
 	QList<transfertItem> transfertItemList;///< To have a transfer list for the user
-	QList<quint64> startId,stopId;///< To show what is started, what is stopped
-	QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;///< to have progression and stat
+	QSet<quint64> startId,stopId;///< To show what is started, what is stopped
+	QHash<quint64,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
 	QIcon start,stop;
 private:
 	int loop_size,index_for_loop;
