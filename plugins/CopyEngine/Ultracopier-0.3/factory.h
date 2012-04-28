@@ -15,6 +15,7 @@
 #include "ui_options.h"
 #include "copyEngine.h"
 #include "Environment.h"
+#include "Filters.h"
 
 #ifndef FACTORY_H
 #define FACTORY_H
@@ -58,6 +59,7 @@ private:
 	QString StandardOutput;
 	bool errorFound;
 	FacilityInterface * facilityEngine;
+	Filters *filters;
 private slots:
 	void error(QProcess::ProcessError error);
 	void finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -67,6 +69,8 @@ private slots:
 	void setKeepDate(bool keepDate);
 	void setBlockSize(int blockSize);
 	void setAutoStart(bool autoStart);
+	void showFilterDialog();
+	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
 public slots:
 	void resetOptions();
 	void newLanguageLoaded();

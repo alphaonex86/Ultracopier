@@ -18,6 +18,7 @@ Factory::Factory() :
 	ui->setupUi(tempWidget);
 	errorFound=false;
 	optionsEngine=NULL;
+	filters=new Filters(tempWidget);
 	#if defined (Q_OS_WIN32)
 	QFileInfoList temp=QDir::drives();
 	for (int i = 0; i < temp.size(); ++i) {
@@ -35,10 +36,14 @@ Factory::Factory() :
 	connect(ui->keepDate,		SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
 	connect(ui->blockSize,		SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
 	connect(ui->autoStart,		SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
+
+	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
+	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
 }
 
 Factory::~Factory()
 {
+	delete filters;
 	delete ui;
 }
 
@@ -225,6 +230,31 @@ void Factory::setAutoStart(bool autoStart)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
 	if(optionsEngine!=NULL)
 		optionsEngine->setOptionValue("autoStart",autoStart);
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::showFilterDialog()
+{
+	filters->setFilters(
+	    optionsEngine->getOptionValue("includeStrings").toStringList(),
+	    optionsEngine->getOptionValue("includeOptions").toStringList(),
+	    optionsEngine->getOptionValue("excludeStrings").toStringList(),
+	    optionsEngine->getOptionValue("excludeOptions").toStringList()
+	    );
+	filters->exec();
+}
+
+void Factory::sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+	if(optionsEngine!=NULL)
+	{
+		optionsEngine->setOptionValue("includeStrings",includeStrings);
+		optionsEngine->setOptionValue("includeOptions",includeOptions);
+		optionsEngine->setOptionValue("excludeStrings",excludeStrings);
+		optionsEngine->setOptionValue("excludeOptions",excludeOptions);
+	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }

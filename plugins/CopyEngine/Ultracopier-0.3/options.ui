@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>304</width>
-    <height>289</height>
+    <width>320</width>
+    <height>318</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -216,7 +216,7 @@
     </widget>
    </item>
    <item row="12" column="0">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="filters">
      <property name="text">
       <string>Filters</string>
      </property>

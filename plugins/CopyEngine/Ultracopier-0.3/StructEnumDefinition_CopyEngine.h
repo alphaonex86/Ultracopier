@@ -48,4 +48,18 @@ enum FolderExistsAction
 	FolderExists_Rename
 };
 
+enum SearchType
+{
+	SearchType_rawText,
+	SearchType_simpleRegex,
+	SearchType_perlRegex,
+};
+
+enum ApplyOn
+{
+	ApplyOn_file,
+	ApplyOn_fileAndFolder,
+	ApplyOn_folder,
+};
+
 #endif // STRUCTDEF_COPYENGINE_H
