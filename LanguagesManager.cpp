@@ -31,13 +31,14 @@ LanguagesManager::LanguagesManager()
 	}
 	//load the plugins
 	plugins->lockPluginListEdition();
+	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,	SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,	SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
+	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,	SLOT(allPluginIsLoaded()),Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Languages);
 	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
-	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,	SLOT(onePluginAdded(PluginsAvailable)));
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,	SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,	SLOT(allPluginIsLoaded()));
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 	//load the GUI option
 	QList<QPair<QString, QVariant> > KeysList;
@@ -46,8 +47,8 @@ LanguagesManager::LanguagesManager()
 	options->addOptionGroup("Language",KeysList);
 //	connect(this,	SIGNAL(newLanguageLoaded(QString)),			plugins,SLOT(refreshPluginList(QString)));
 //	connect(this,	SIGNAL(newLanguageLoaded(QString)),			this,SLOT(retranslateTheUI()));
-	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString)));
-	connect(this,	SIGNAL(newLanguageLoaded(QString)),			plugins,SIGNAL(newLanguageLoaded()));
+	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString)),Qt::QueuedConnection);
+	connect(this,	SIGNAL(newLanguageLoaded(QString)),			plugins,SIGNAL(newLanguageLoaded()),Qt::QueuedConnection);
 }
 
 /// \brief Destroy the language manager

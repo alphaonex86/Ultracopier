@@ -15,14 +15,15 @@ PluginLoader::PluginLoader(QObject *parent) :
 	plugins=PluginsManager::getInstance();
 	//load the plugin
 	plugins->lockPluginListEdition();
-	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_PluginLoader);
-	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
 	qRegisterMetaType<CatchState>("CatchState");
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)));
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
 	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()));
+	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
+	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_PluginLoader);
+	foreach(PluginsAvailable currentPlugin,list)
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 	needEnable=false;
 	last_state=Uncaught;

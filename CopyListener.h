@@ -78,6 +78,7 @@ class CopyListener : public QObject, public GlobalClass
 		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
 		void listenerReady(ListeningState state,bool havePlugin,bool someAreInWaitOfReply);
 		void pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply);
+		void previouslyPluginAdded(PluginsAvailable);
 	private:
 		struct PluginListener
 		{

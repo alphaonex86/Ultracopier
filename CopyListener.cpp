@@ -23,10 +23,13 @@ CopyListener::CopyListener(QObject *parent) :
 		onePluginAdded(currentPlugin);
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
 	qRegisterMetaType<ListeningState>("ListeningState");
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)));
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
 	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()));
+	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
 	connect(&pluginLoader,SIGNAL(pluginLoaderReady(CatchState,bool,bool)),	this,SIGNAL(pluginLoaderReady(CatchState,bool,bool)));
+	foreach(PluginsAvailable currentPlugin,list)
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 	last_state=NotListening;
 	last_have_plugin=false;

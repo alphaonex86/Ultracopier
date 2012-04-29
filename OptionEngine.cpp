@@ -191,8 +191,8 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 		}
 		indexGroup++;
 	}
-	QMessageBox::critical(NULL,"Internal error","Get the option value but not found");
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"group \""+groupName+"\" not found, internal bug!");
+	QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
 	//return default value
 	return QVariant();
 }

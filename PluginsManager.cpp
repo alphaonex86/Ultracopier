@@ -29,10 +29,10 @@ PluginsManager::PluginsManager()
 	englishPluginType << "CopyEngine" << "Languages" << "Listener" << "PluginLoader" << "SessionLoader" << "Themes";
 	//catPlugin << tr("CopyEngine") << tr("Languages") << tr("Listener") << tr("PluginLoader") << tr("SessionLoader") << tr("Themes");
 	importingPlugin=false;
-	connect(&decodeThread,		SIGNAL(decodedIsFinish()),		this,				SLOT(decodingFinished()));
-	connect(checkPluginThread,	SIGNAL(authentifiedPath(QString)),	this,				SLOT(newAuthPath(QString)));
-	connect(this,			SIGNAL(finished()),			this,				SLOT(post_operation()));
-	connect(this,			SIGNAL(newLanguageLoaded()),		&pluginInformationWindows,	SLOT(retranslateInformation()));
+	connect(&decodeThread,		SIGNAL(decodedIsFinish()),		this,				SLOT(decodingFinished()),Qt::QueuedConnection);
+	connect(checkPluginThread,	SIGNAL(authentifiedPath(QString)),	this,				SLOT(newAuthPath(QString)),Qt::QueuedConnection);
+	connect(this,			SIGNAL(finished()),			this,				SLOT(post_operation()),Qt::QueuedConnection);
+	connect(this,			SIGNAL(newLanguageLoaded()),		&pluginInformationWindows,	SLOT(retranslateInformation()),Qt::QueuedConnection);
 //	connect(this,			SIGNAL(pluginListingIsfinish()),	options,SLOT(setInterfaceValue()));
 	//load the plugins list
 	/// \bug bug when I put here: moveToThread(this);, due to the direction connection to remove the plugin
@@ -649,7 +649,7 @@ void PluginsManager::removeThePluginSelected(const QString &path)
 				if(!ResourcesManager::removeFolder(pluginsList.at(index).path))
 				{
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to remove the plugin");
-					QMessageBox::critical(NULL,tr("Error"),tr("Error while the removing plugin, please check right of remove on the folder: \n%1").arg(pluginsList.at(index).path));
+					QMessageBox::critical(NULL,tr("Error"),tr("Error while the removing plugin, please check the rights on the folder: \n%1").arg(pluginsList.at(index).path));
 				}
 				pluginsList.removeAt(index);
 				checkDependencies();

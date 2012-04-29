@@ -31,12 +31,13 @@ ThemesManager::ThemesManager()
 
 	//connect the plugin management
 	plugins->lockPluginListEdition();
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
+	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsLoaded()),Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Themes);
 	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)));
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsLoaded()));
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 
 	//do the options
@@ -48,8 +49,8 @@ ThemesManager::ThemesManager()
 	defaultStylePath=":/Themes/"+QString(ULTRACOPIER_DEFAULT_STYLE)+"/";
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Default style: "+defaultStylePath);
 	currentStylePath=defaultStylePath;
-	connect(options,	SIGNAL(newOptionValue(QString,QString,QVariant)),	this,		SLOT(newOptionValue(QString,QString,QVariant)));
-	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()));
+	connect(options,	SIGNAL(newOptionValue(QString,QString,QVariant)),	this,		SLOT(newOptionValue(QString,QString,QVariant)),Qt::QueuedConnection);
+	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()),Qt::QueuedConnection);
 }
 
 /// \brief Destroy the themes manager

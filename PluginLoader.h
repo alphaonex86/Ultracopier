@@ -74,6 +74,7 @@ private:
 	void sendState(bool force=false);
 signals:
 	void pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply);
+	void previouslyPluginAdded(PluginsAvailable);
 };
 
 #endif // PluginLoader_H

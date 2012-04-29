@@ -33,6 +33,7 @@
   That's allow to have mutualised way to store the options. Then the plugins just keep Ultracopier manage it, the portable version will store on the disk near the application, and the normal version will keep at the normal location.
   That's allow to have cache and buffer to not slow down Ultracopier when it's doing heavy copy/move.
 */
+/// \todo Use QHash to have fast options engine
 class OptionEngine : public QObject, public Singleton<OptionEngine>
 {
 	Q_OBJECT

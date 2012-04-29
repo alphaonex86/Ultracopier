@@ -76,6 +76,7 @@ class LanguagesManager : public QObject, public Singleton<LanguagesManager>
 	signals:
 		//send the language is loaded or the new language is loaded
 		void newLanguageLoaded(const QString &mainShortName);
+		void previouslyPluginAdded(PluginsAvailable);
 };
 
 #endif // LANGUAGES_MANAGER_H

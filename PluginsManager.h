@@ -38,6 +38,7 @@ namespace Ui {
 /** \brief Define the class to manage and load the resources linked with the themes
 
 This class provide a core load and manage the resources */
+/// \todo use QHash to boot the load speed
 class PluginsManager : public QThread, public Singleton<PluginsManager>
 {
 	Q_OBJECT

@@ -15,15 +15,16 @@ SessionLoader::SessionLoader(QObject *parent) :
 	QList<QPair<QString, QVariant> > KeysList;
 	KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
 	options->addOptionGroup("SessionLoader",KeysList);
-	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
+	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)),Qt::QueuedConnection);
 	//load the plugin
 	plugins->lockPluginListEdition();
+	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
 	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
-	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)));
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 }
 

@@ -97,6 +97,7 @@ signals:
 	//void newCopyEngineOptions(QString,QString,QWidget *);
 	void addCopyEngine(QString name,bool canDoOnlyCopy);
 	void removeCopyEngine(QString name);
+	void previouslyPluginAdded(PluginsAvailable);
 };
 
 #endif // COPYENGINEMANAGER_H

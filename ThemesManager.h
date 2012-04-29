@@ -76,6 +76,7 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
 		void theThemeNeedBeUnloaded();
 		void theThemeIsReloaded();
 		void newThemeOptions(QWidget *,bool isLoaded,bool havePlugin);
+		void previouslyPluginAdded(PluginsAvailable);
 	private slots:
 		/// \brief reload the themes
 		void onePluginAdded(const PluginsAvailable &plugin);

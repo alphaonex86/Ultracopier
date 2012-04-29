@@ -16,16 +16,17 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 	this->optionDialog=optionDialog;
 	//setup the ui layout
 	plugins->lockPluginListEdition();
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
+	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
+	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_CopyEngine);
 	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)));
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()));
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 	//load the options
 	isConnected=false;
-	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()));
+	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()),Qt::QueuedConnection);
 }
 
 void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
