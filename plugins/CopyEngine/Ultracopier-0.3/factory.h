@@ -71,6 +71,12 @@ private slots:
 	void setAutoStart(bool autoStart);
 	void showFilterDialog();
 	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+	void on_doChecksum_toggled(bool);
+	void on_checksumType_currentIndexChanged(int index);
+	void on_checksumOnlyOnError_toggled(bool);
+	void on_osBuffer_toggled(bool);
+	void on_osBufferLimited_toggled(bool);
+	void on_osBufferLimit_editingFinished();
 public slots:
 	void resetOptions();
 	void newLanguageLoaded();

@@ -143,14 +143,14 @@
     </widget>
    </item>
    <item row="7" column="0">
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="doChecksum">
      <property name="text">
       <string>Do checksum</string>
      </property>
     </widget>
    </item>
    <item row="7" column="1">
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="checksumType">
      <item>
       <property name="text">
        <string>Quick md5</string>
@@ -186,21 +186,21 @@
     </widget>
    </item>
    <item row="10" column="1">
-    <widget class="QCheckBox" name="checkBox_2">
+    <widget class="QCheckBox" name="osBuffer">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
    <item row="11" column="0">
-    <widget class="QCheckBox" name="checkBox_3">
+    <widget class="QCheckBox" name="osBufferLimited">
      <property name="text">
       <string>OS buffer only if lower than</string>
      </property>
     </widget>
    </item>
    <item row="11" column="1">
-    <widget class="QSpinBox" name="spinBox">
+    <widget class="QSpinBox" name="osBufferLimit">
      <property name="suffix">
       <string>KB</string>
      </property>
@@ -223,7 +223,7 @@
     </widget>
    </item>
    <item row="8" column="1">
-    <widget class="QCheckBox" name="checkBox_4">
+    <widget class="QCheckBox" name="checksumOnlyOnError">
      <property name="text">
       <string/>
      </property>
@@ -241,9 +241,9 @@
  <resources/>
  <connections>
   <connection>
-   <sender>checkBox</sender>
+   <sender>doChecksum</sender>
    <signal>toggled(bool)</signal>
-   <receiver>comboBox</receiver>
+   <receiver>checksumType</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

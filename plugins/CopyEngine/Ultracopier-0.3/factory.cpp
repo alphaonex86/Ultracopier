@@ -10,6 +10,7 @@
 #include "factory.h"
 
 /// \todo connect in global options the change
+/// \todo do the translating as instant WITH protection of the combobox (via setText)
 
 Factory::Factory() :
 	ui(new Ui::options())
@@ -104,6 +105,12 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		KeysList.append(qMakePair(QString("includeOptions"),QVariant(QStringList())));
 		KeysList.append(qMakePair(QString("excludeStrings"),QVariant(QStringList())));
 		KeysList.append(qMakePair(QString("excludeOptions"),QVariant(QStringList())));
+		KeysList.append(qMakePair(QString("doChecksum"),QVariant(true)));
+		KeysList.append(qMakePair(QString("checksumType"),QVariant(2)));
+		KeysList.append(qMakePair(QString("checksumOnlyOnError"),QVariant(true)));
+		KeysList.append(qMakePair(QString("osBuffer"),QVariant(true)));
+		KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(true)));
+		KeysList.append(qMakePair(QString("osBufferLimit"),QVariant(2048)));
 		optionsEngine->addOptionGroup(KeysList);
 		#if ! defined (Q_CC_GNU)
 		ui->keepDate->setEnabled(false);
@@ -116,6 +123,12 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toInt());
 		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toInt());
 		ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
+		ui->doChecksum->setChecked(optionsEngine->getOptionValue("doChecksum").toBool());
+		ui->checksumType->setCurrentIndex(optionsEngine->getOptionValue("checksumType").toInt());
+		ui->checksumOnlyOnError->setChecked(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
+		ui->osBuffer->setChecked(optionsEngine->getOptionValue("osBuffer").toBool());
+		ui->osBufferLimited->setChecked(optionsEngine->getOptionValue("osBufferLimited").toBool());
+		ui->osBufferLimit->setValue(optionsEngine->getOptionValue("osBufferLimit").toUInt());
 		filters->setFilters(optionsEngine->getOptionValue("includeStrings").toStringList(),
 			optionsEngine->getOptionValue("includeOptions").toStringList(),
 			optionsEngine->getOptionValue("excludeStrings").toStringList(),
@@ -276,3 +289,57 @@ void Factory::newLanguageLoaded()
 }
 
 Q_EXPORT_PLUGIN2(copyEngine, Factory);
+
+void Factory::on_doChecksum_toggled(bool doChecksum)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("doChecksum",doChecksum);
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::on_checksumType_currentIndexChanged(int index)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the combobox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("checksumType",index);
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::on_checksumOnlyOnError_toggled(bool checksumOnlyOnError)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("checksumOnlyOnError",checksumOnlyOnError);
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::on_osBuffer_toggled(bool osBuffer)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("osBuffer",osBuffer);
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::on_osBufferLimited_toggled(bool osBufferLimited)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("osBufferLimited",osBufferLimited);
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::on_osBufferLimit_editingFinished()
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the spinbox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("osBufferLimit",ui->osBufferLimit->value());
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
