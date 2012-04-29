@@ -151,6 +151,9 @@
    </item>
    <item row="7" column="1">
     <widget class="QComboBox" name="checksumType">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <item>
       <property name="text">
        <string>Quick md5</string>
@@ -247,12 +250,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>157</y>
+     <x>207</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
-     <x>238</x>
-     <y>153</y>
+     <x>315</x>
+     <y>206</y>
     </hint>
    </hints>
   </connection>

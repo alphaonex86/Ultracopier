@@ -37,9 +37,17 @@ Factory::Factory() :
 	connect(ui->keepDate,		SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
 	connect(ui->blockSize,		SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
 	connect(ui->autoStart,		SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
+	connect(ui->doChecksum,		SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
+	connect(ui->checksumType,	SIGNAL(currentIndexChanged(int)),this,SLOT(checksumType_currentIndexChanged(int)));
+	connect(ui->checksumOnlyOnError,SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
+	connect(ui->osBuffer,		SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
+	connect(ui->osBufferLimited,	SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
+	connect(ui->osBufferLimit,	SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
 
 	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
 	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
+
+	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 Factory::~Factory()
@@ -109,8 +117,12 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		KeysList.append(qMakePair(QString("checksumType"),QVariant(2)));
 		KeysList.append(qMakePair(QString("checksumOnlyOnError"),QVariant(true)));
 		KeysList.append(qMakePair(QString("osBuffer"),QVariant(true)));
+		#ifdef 	Q_OS_WIN32
 		KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(true)));
-		KeysList.append(qMakePair(QString("osBufferLimit"),QVariant(2048)));
+		#else
+		KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(false)));
+		#endif
+		KeysList.append(qMakePair(QString("osBufferLimit"),QVariant(512)));
 		optionsEngine->addOptionGroup(KeysList);
 		#if ! defined (Q_CC_GNU)
 		ui->keepDate->setEnabled(false);
@@ -118,13 +130,14 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		#endif
 		ui->doRightTransfer->setChecked(optionsEngine->getOptionValue("doRightTransfer").toBool());
 		ui->keepDate->setChecked(optionsEngine->getOptionValue("keepDate").toBool());
-		ui->blockSize->setValue(optionsEngine->getOptionValue("blockSize").toInt());
+		ui->blockSize->setValue(optionsEngine->getOptionValue("blockSize").toUInt());
 		ui->autoStart->setChecked(optionsEngine->getOptionValue("autoStart").toBool());
-		ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toInt());
-		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toInt());
+		ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toUInt());
+		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
 		ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
 		ui->doChecksum->setChecked(optionsEngine->getOptionValue("doChecksum").toBool());
-		ui->checksumType->setCurrentIndex(optionsEngine->getOptionValue("checksumType").toInt());
+		QMessageBox::critical(NULL,"f",QString::number(optionsEngine->getOptionValue("checksumType").toUInt()));
+		ui->checksumType->setCurrentIndex(optionsEngine->getOptionValue("checksumType").toUInt());
 		ui->checksumOnlyOnError->setChecked(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
 		ui->osBuffer->setChecked(optionsEngine->getOptionValue("osBuffer").toBool());
 		ui->osBufferLimited->setChecked(optionsEngine->getOptionValue("osBufferLimited").toBool());
@@ -290,7 +303,7 @@ void Factory::newLanguageLoaded()
 
 Q_EXPORT_PLUGIN2(copyEngine, Factory);
 
-void Factory::on_doChecksum_toggled(bool doChecksum)
+void Factory::doChecksum_toggled(bool doChecksum)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
 	if(optionsEngine!=NULL)
@@ -299,7 +312,7 @@ void Factory::on_doChecksum_toggled(bool doChecksum)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::on_checksumType_currentIndexChanged(int index)
+void Factory::checksumType_currentIndexChanged(int index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the combobox have changed");
 	if(optionsEngine!=NULL)
@@ -308,7 +321,7 @@ void Factory::on_checksumType_currentIndexChanged(int index)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::on_checksumOnlyOnError_toggled(bool checksumOnlyOnError)
+void Factory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
 	if(optionsEngine!=NULL)
@@ -317,25 +330,27 @@ void Factory::on_checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::on_osBuffer_toggled(bool osBuffer)
+void Factory::osBuffer_toggled(bool osBuffer)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
 	if(optionsEngine!=NULL)
 		optionsEngine->setOptionValue("osBuffer",osBuffer);
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void Factory::on_osBufferLimited_toggled(bool osBufferLimited)
+void Factory::osBufferLimited_toggled(bool osBufferLimited)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
 	if(optionsEngine!=NULL)
 		optionsEngine->setOptionValue("osBufferLimited",osBufferLimited);
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void Factory::on_osBufferLimit_editingFinished()
+void Factory::osBufferLimit_editingFinished()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the spinbox have changed");
 	if(optionsEngine!=NULL)
