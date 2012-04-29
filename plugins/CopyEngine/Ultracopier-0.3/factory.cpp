@@ -100,6 +100,10 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
 		KeysList.append(qMakePair(QString("folderColision"),QVariant(0)));
 		KeysList.append(qMakePair(QString("checkDestinationFolder"),QVariant(true)));
+		KeysList.append(qMakePair(QString("includeStrings"),QVariant(QStringList())));
+		KeysList.append(qMakePair(QString("includeOptions"),QVariant(QStringList())));
+		KeysList.append(qMakePair(QString("excludeStrings"),QVariant(QStringList())));
+		KeysList.append(qMakePair(QString("excludeOptions"),QVariant(QStringList())));
 		optionsEngine->addOptionGroup(KeysList);
 		#if ! defined (Q_CC_GNU)
 		ui->keepDate->setEnabled(false);
@@ -112,6 +116,11 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toInt());
 		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toInt());
 		ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
+		filters->setFilters(optionsEngine->getOptionValue("includeStrings").toStringList(),
+			optionsEngine->getOptionValue("includeOptions").toStringList(),
+			optionsEngine->getOptionValue("excludeStrings").toStringList(),
+			optionsEngine->getOptionValue("excludeOptions").toStringList()
+		);
 	}
 }
 

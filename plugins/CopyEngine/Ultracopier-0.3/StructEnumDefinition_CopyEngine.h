@@ -4,6 +4,8 @@
 \version 0.3
 \date 2010 */
 
+#include <QString>
+
 #ifndef STRUCTDEF_COPYENGINE_H
 #define STRUCTDEF_COPYENGINE_H
 
@@ -60,6 +62,14 @@ enum ApplyOn
 	ApplyOn_file,
 	ApplyOn_fileAndFolder,
 	ApplyOn_folder,
+};
+
+struct Filters_rules
+{
+	QString search_text;
+	SearchType search_type;
+	ApplyOn apply_on;
+	bool need_match_all;
 };
 
 #endif // STRUCTDEF_COPYENGINE_H

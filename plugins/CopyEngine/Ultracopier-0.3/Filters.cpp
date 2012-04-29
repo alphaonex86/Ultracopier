@@ -1,6 +1,8 @@
 #include "Filters.h"
 #include "ui_Filters.h"
 
+#include <QMessageBox>
+
 Filters::Filters(QWidget *parent) :
         QDialog(parent),
         ui(new Ui::Filters)
@@ -19,6 +21,7 @@ void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,Q
 		return;
 	Filters_rules new_item;
 
+	include.clear();
 	int index=0;
 	while(index<includeStrings.size())
 	{
@@ -44,6 +47,7 @@ void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,Q
 		index++;
 	}
 
+	exclude.clear();
 	index=0;
 	while(index<excludeStrings.size())
 	{
@@ -118,7 +122,7 @@ void Filters::reShowAll()
 	{
 		QString entryShow=exclude.at(index).search_text+" (";
 		QStringList optionsToShow;
-		switch(include.at(index).search_type)
+		switch(exclude.at(index).search_type)
 		{
 			case SearchType_rawText:
 				optionsToShow << tr("Raw text");
@@ -152,12 +156,12 @@ void Filters::reShowAll()
 	}
 }
 
-QList<Filters::Filters_rules> Filters::getInclude()
+QList<Filters_rules> Filters::getInclude()
 {
 	return include;
 }
 
-QList<Filters::Filters_rules> Filters::getExclude()
+QList<Filters_rules> Filters::getExclude()
 {
 	return exclude;
 }
@@ -297,6 +301,46 @@ void Filters::on_remove_inclusion_clicked()
 	}
 	if(removedEntry)
 	{
+		reShowAll();
+		haveNewFilters();
+	}
+}
+
+void Filters::on_add_exclusion_clicked()
+{
+	FilterRules dialog(this);
+	dialog.exec();
+	if(dialog.getIsValid())
+	{
+		Filters_rules new_item;
+		new_item.apply_on=dialog.get_apply_on();
+		new_item.need_match_all=dialog.get_need_match_all();
+		new_item.search_text=dialog.get_search_text();
+		new_item.search_type=dialog.get_search_type();
+		exclude << new_item;
+		reShowAll();
+		haveNewFilters();
+	}
+}
+
+void Filters::on_buttonBox_clicked(QAbstractButton *button)
+{
+	if(ui->buttonBox->buttonRole(button)==QDialogButtonBox::RejectRole)
+		reject();
+}
+
+void Filters::on_add_inclusion_clicked()
+{
+	FilterRules dialog(this);
+	dialog.exec();
+	if(dialog.getIsValid())
+	{
+		Filters_rules new_item;
+		new_item.apply_on=dialog.get_apply_on();
+		new_item.need_match_all=dialog.get_need_match_all();
+		new_item.search_text=dialog.get_search_text();
+		new_item.search_type=dialog.get_search_type();
+		include << new_item;
 		reShowAll();
 		haveNewFilters();
 	}
