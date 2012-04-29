@@ -345,3 +345,35 @@ void Filters::on_add_inclusion_clicked()
 		haveNewFilters();
 	}
 }
+
+void Filters::on_edit_exclusion_clicked()
+{
+	bool editedEntry=false;
+	int index=0;
+	while(index<ui->exclusion->count())
+	{
+		if(ui->exclusion->item(index)->isSelected())
+		{
+			FilterRules dialog(this);
+			dialog.set_apply_on(exclude[index].apply_on);
+			dialog.set_need_match_all(exclude[index].need_match_all);
+			dialog.set_search_text(exclude[index].search_text);
+			dialog.set_search_type(exclude[index].search_type);
+			dialog.exec();
+			if(dialog.getIsValid())
+			{
+				exclude[index].apply_on=dialog.get_apply_on();
+				exclude[index].need_match_all=dialog.get_need_match_all();
+				exclude[index].search_text=dialog.get_search_text();
+				exclude[index].search_type=dialog.get_search_type();
+				editedEntry=true;
+			}
+		}
+		index++;
+	}
+	if(editedEntry)
+	{
+		reShowAll();
+		haveNewFilters();
+	}
+}

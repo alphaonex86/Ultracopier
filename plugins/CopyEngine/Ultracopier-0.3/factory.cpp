@@ -245,12 +245,12 @@ void Factory::setAutoStart(bool autoStart)
 
 void Factory::showFilterDialog()
 {
-	filters->setFilters(
-	    optionsEngine->getOptionValue("includeStrings").toStringList(),
-	    optionsEngine->getOptionValue("includeOptions").toStringList(),
-	    optionsEngine->getOptionValue("excludeStrings").toStringList(),
-	    optionsEngine->getOptionValue("excludeOptions").toStringList()
-	    );
+	if(optionsEngine==NULL)
+	{
+		QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+		return;
+	}
 	filters->exec();
 }
 

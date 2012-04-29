@@ -35,6 +35,7 @@ private slots:
 	void on_add_exclusion_clicked();
 	void on_buttonBox_clicked(QAbstractButton *button);
 	void on_add_inclusion_clicked();
+	void on_edit_exclusion_clicked();
 };
 
 #endif // FILTERS_H

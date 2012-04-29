@@ -23,6 +23,10 @@ public:
 	SearchType get_search_type();
 	ApplyOn get_apply_on();
 	bool get_need_match_all();
+	void set_search_text(QString search_text);
+	void set_search_type(SearchType search_type);
+	void set_apply_on(ApplyOn apply_on);
+	void set_need_match_all(bool need_match_all);
 private slots:
 	void on_search_textChanged(const QString &arg1);
 	void on_isValid_clicked();

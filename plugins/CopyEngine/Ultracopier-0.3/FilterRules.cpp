@@ -1,6 +1,8 @@
 #include "FilterRules.h"
 #include "ui_FilterRules.h"
 
+#include <QMessageBox>
+
 FilterRules::FilterRules(QWidget *parent) :
         QDialog(parent),
         ui(new Ui::FilterRules)
@@ -56,6 +58,48 @@ ApplyOn FilterRules::get_apply_on()
 bool FilterRules::get_need_match_all()
 {
 	return ui->need_match_all->isChecked();
+}
+
+void FilterRules::set_search_text(QString search_text)
+{
+	ui->search->setText(search_text);
+}
+
+void FilterRules::set_search_type(SearchType search_type)
+{
+	switch(search_type)
+	{
+		case SearchType_rawText:
+			ui->search_type->setCurrentIndex(0);
+		break;
+		case SearchType_simpleRegex:
+			ui->search_type->setCurrentIndex(1);
+		break;
+		case SearchType_perlRegex:
+			ui->search_type->setCurrentIndex(2);
+		break;
+	}
+}
+
+void FilterRules::set_apply_on(ApplyOn apply_on)
+{
+	switch(apply_on)
+	{
+		case ApplyOn_file:
+			ui->apply_on->setCurrentIndex(0);
+		break;
+		case ApplyOn_fileAndFolder:
+			ui->apply_on->setCurrentIndex(1);
+		break;
+		case ApplyOn_folder:
+			ui->apply_on->setCurrentIndex(2);
+		break;
+	}
+}
+
+void FilterRules::set_need_match_all(bool need_match_all)
+{
+	ui->need_match_all->setChecked(need_match_all);
 }
 
 void FilterRules::on_search_textChanged(const QString &arg1)
