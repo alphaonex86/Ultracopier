@@ -529,6 +529,8 @@ void Core::connectInterfaceAndSync(const int &index)
 	QWidget *tempWidget=currentCopyInstance.interface->getOptionsEngineWidget();
 	if(tempWidget!=NULL)
 		currentCopyInstance.interface->getOptionsEngineEnabled(currentCopyInstance.engine->getOptionsEngine(tempWidget));
+	//important, to have the modal dialog
+	currentCopyInstance.engine->setInterfacePointer(currentCopyInstance.interface);
 
 	//put entry into the interface
 	currentCopyInstance.engine->syncTransferList();
