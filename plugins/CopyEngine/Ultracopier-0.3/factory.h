@@ -77,6 +77,7 @@ private slots:
 	void osBuffer_toggled(bool);
 	void osBufferLimited_toggled(bool);
 	void osBufferLimit_editingFinished();
+	void checksumIgnoreIfImpossible_toggled(bool);
 public slots:
 	void resetOptions();
 	void newLanguageLoaded();

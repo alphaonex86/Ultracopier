@@ -33,16 +33,16 @@ Factory::Factory() :
 	connect(&mount,SIGNAL(readyReadStandardError()),		this,SLOT(readyReadStandardError()));
 	mount.start("mount");
 	#endif
-	connect(ui->doRightTransfer,	SIGNAL(toggled(bool)),		this,SLOT(setDoRightTransfer(bool)));
-	connect(ui->keepDate,		SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
-	connect(ui->blockSize,		SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
-	connect(ui->autoStart,		SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
-	connect(ui->doChecksum,		SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
-	connect(ui->checksumType,	SIGNAL(currentIndexChanged(int)),this,SLOT(checksumType_currentIndexChanged(int)));
-	connect(ui->checksumOnlyOnError,SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
-	connect(ui->osBuffer,		SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
-	connect(ui->osBufferLimited,	SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
-	connect(ui->osBufferLimit,	SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
+	connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setDoRightTransfer(bool)));
+	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
+	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
+	connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
+	connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
+	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
+	connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
+	connect(ui->osBuffer,			SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
+	connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
+	connect(ui->osBufferLimit,		SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
 
 	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
 	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
@@ -72,7 +72,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
 	realObject->setCheckDestinationFolderExists(	optionsEngine->getOptionValue("checkDestinationFolder").toBool());
 
 	realObject->set_doChecksum(optionsEngine->getOptionValue("doChecksum").toBool());
-	realObject->set_checksumType(optionsEngine->getOptionValue("checksumType").toUInt());
+	realObject->set_checksumIgnoreIfImpossible(optionsEngine->getOptionValue("checksumIgnoreIfImpossible").toBool());
 	realObject->set_checksumOnlyOnError(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
 	realObject->set_osBuffer(optionsEngine->getOptionValue("osBuffer").toBool());
 	realObject->set_osBufferLimited(optionsEngine->getOptionValue("osBufferLimited").toBool());
@@ -126,7 +126,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		KeysList.append(qMakePair(QString("excludeStrings"),QVariant(QStringList())));
 		KeysList.append(qMakePair(QString("excludeOptions"),QVariant(QStringList())));
 		KeysList.append(qMakePair(QString("doChecksum"),QVariant(true)));
-		KeysList.append(qMakePair(QString("checksumType"),QVariant(2)));
+		KeysList.append(qMakePair(QString("checksumIgnoreIfImpossible"),QVariant(true)));
 		KeysList.append(qMakePair(QString("checksumOnlyOnError"),QVariant(true)));
 		KeysList.append(qMakePair(QString("osBuffer"),QVariant(true)));
 		#ifdef 	Q_OS_WIN32
@@ -148,7 +148,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
 		ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
 		ui->doChecksum->setChecked(optionsEngine->getOptionValue("doChecksum").toBool());
-		ui->checksumType->setCurrentIndex(optionsEngine->getOptionValue("checksumType").toUInt());
+		ui->checksumIgnoreIfImpossible->setChecked(optionsEngine->getOptionValue("checksumIgnoreIfImpossible").toBool());
 		ui->checksumOnlyOnError->setChecked(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
 		ui->osBuffer->setChecked(optionsEngine->getOptionValue("osBuffer").toBool());
 		ui->osBufferLimited->setChecked(optionsEngine->getOptionValue("osBufferLimited").toBool());
@@ -298,15 +298,6 @@ void Factory::doChecksum_toggled(bool doChecksum)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::checksumType_currentIndexChanged(int index)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the combobox have changed");
-	if(optionsEngine!=NULL)
-		optionsEngine->setOptionValue("checksumType",index);
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
-}
-
 void Factory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
@@ -366,6 +357,15 @@ void Factory::sendNewFilters(QStringList includeStrings,QStringList includeOptio
 		optionsEngine->setOptionValue("excludeStrings",excludeStrings);
 		optionsEngine->setOptionValue("excludeOptions",excludeOptions);
 	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+	if(optionsEngine!=NULL)
+		optionsEngine->setOptionValue("checksumIgnoreIfImpossible",checksumIgnoreIfImpossible);
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }
