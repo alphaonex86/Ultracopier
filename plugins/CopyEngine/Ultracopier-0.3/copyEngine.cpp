@@ -128,7 +128,7 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 	setAutoStart(autoStart);
 	setCheckDestinationFolderExists(checkDestinationFolderExists);
 	set_doChecksum(doChecksum);
-	set_checksumType(checksumType);
+	set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
 	set_checksumOnlyOnError(checksumOnlyOnError);
 	set_osBuffer(osBuffer);
 	set_osBufferLimited(osBufferLimited);
@@ -142,16 +142,16 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 {
 	this->interface=interface;
 	filters=new Filters(interface);
-	connect(ui->doRightTransfer,	SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
-	connect(ui->keepDate,		SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
-	connect(ui->blockSize,		SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
-	connect(ui->autoStart,		SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
-	connect(ui->doChecksum,		SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
-	connect(ui->checksumType,	SIGNAL(currentIndexChanged(int)),this,SLOT(checksumType_currentIndexChanged(int)));
-	connect(ui->checksumOnlyOnError,SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
-	connect(ui->osBuffer,		SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
-	connect(ui->osBufferLimited,	SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
-	connect(ui->osBufferLimit,	SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
+	connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
+	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
+	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
+	connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
+	connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
+	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(set_checksumIgnoreIfImpossible(bool)));
+	connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
+	connect(ui->osBuffer,			SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
+	connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
+	connect(ui->osBufferLimit,		SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
 
 	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
 	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
@@ -257,11 +257,11 @@ void copyEngine::set_doChecksum(bool doChecksum)
 	this->doChecksum=doChecksum;
 }
 
-void copyEngine::set_checksumType(unsigned int type)
+void copyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
 {
 	if(uiIsInstalled)
-		ui->checksumType->setCurrentIndex(type);
-	this->checksumType=type;
+		ui->checksumIgnoreIfImpossible->setChecked(checksumIgnoreIfImpossible);
+	this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
 }
 
 void copyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)

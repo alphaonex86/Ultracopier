@@ -92,7 +92,7 @@ private:
 	quint64 size_for_speed;
 
 	bool doChecksum;
-	unsigned int checksumType;
+	bool checksumIgnoreIfImpossible;
 	bool checksumOnlyOnError;
 	bool osBuffer;
 	bool osBufferLimited;
@@ -184,7 +184,7 @@ public:
 	void syncTransferList();
 
 	void set_doChecksum(bool doChecksum);
-	void set_checksumType(unsigned int type);
+	void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
 	void set_checksumOnlyOnError(bool checksumOnlyOnError);
 	void set_osBuffer(bool osBuffer);
 	void set_osBufferLimited(bool osBufferLimited);
