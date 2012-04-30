@@ -26,6 +26,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	ui(new Ui::options())
 {
 	listThread=new ListThread(facilityInterface);
+	filters=NULL;
 	qRegisterMetaType<TransferThread *>("TransferThread *");
 	qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
 	qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");
@@ -91,6 +92,8 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 
 copyEngine::~copyEngine()
 {
+	if(filters!=NULL)
+		delete filters;
 	stopIt=true;
 	delete listThread;
         delete ui;
@@ -124,6 +127,13 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 	setBlockSize(blockSize);
 	setAutoStart(autoStart);
 	setCheckDestinationFolderExists(checkDestinationFolderExists);
+	set_doChecksum(doChecksum);
+	set_checksumType(checksumType);
+	set_checksumOnlyOnError(checksumOnlyOnError);
+	set_osBuffer(osBuffer);
+	set_osBufferLimited(osBufferLimited);
+	set_osBufferLimit(osBufferLimit);
+	set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 	return true;
 }
 
@@ -131,6 +141,22 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 void copyEngine::setInterfacePointer(QWidget * interface)
 {
 	this->interface=interface;
+	filters=new Filters(interface);
+	connect(ui->doRightTransfer,	SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
+	connect(ui->keepDate,		SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
+	connect(ui->blockSize,		SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
+	connect(ui->autoStart,		SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
+	connect(ui->doChecksum,		SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
+	connect(ui->checksumType,	SIGNAL(currentIndexChanged(int)),this,SLOT(checksumType_currentIndexChanged(int)));
+	connect(ui->checksumOnlyOnError,SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
+	connect(ui->osBuffer,		SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
+	connect(ui->osBufferLimited,	SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
+	connect(ui->osBufferLimit,	SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
+
+	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
+	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
+
+	filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 }
 
 bool copyEngine::haveSameSource(const QStringList &sources)
@@ -223,6 +249,59 @@ void copyEngine::syncTransferList()
 {
 	listThread->syncTransferList();
 }
+
+void copyEngine::set_doChecksum(bool doChecksum)
+{
+	if(uiIsInstalled)
+		ui->doChecksum->setChecked(doChecksum);
+	this->doChecksum=doChecksum;
+}
+
+void copyEngine::set_checksumType(unsigned int type)
+{
+	if(uiIsInstalled)
+		ui->checksumType->setCurrentIndex(type);
+	this->checksumType=type;
+}
+
+void copyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
+{
+	if(uiIsInstalled)
+		ui->checksumOnlyOnError->setChecked(checksumOnlyOnError);
+	this->checksumOnlyOnError=checksumOnlyOnError;
+}
+
+void copyEngine::set_osBuffer(bool osBuffer)
+{
+	if(uiIsInstalled)
+		ui->osBuffer->setChecked(osBuffer);
+	this->osBuffer=osBuffer;
+}
+
+void copyEngine::set_osBufferLimited(bool osBufferLimited)
+{
+	if(uiIsInstalled)
+		ui->osBufferLimited->setChecked(osBufferLimited);
+	this->osBufferLimited=osBufferLimited;
+}
+
+void copyEngine::set_osBufferLimit(unsigned int osBufferLimit)
+{
+	if(uiIsInstalled)
+		ui->osBufferLimit->setValue(osBufferLimit);
+	this->osBufferLimit=osBufferLimit;
+}
+
+void copyEngine::set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+{
+	if(filters!=NULL)
+		filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+	this->includeStrings=includeStrings;
+	this->includeOptions=includeOptions;
+	this->excludeStrings=excludeStrings;
+	this->excludeOptions=excludeOptions;
+}
+
 
 bool copyEngine::userAddFolder(const CopyMode &mode)
 {
@@ -489,4 +568,40 @@ void copyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboB
 			ui->comboBoxFolderError->setCurrentIndex(0);
 		break;
 	}
+}
+
+void copyEngine::doChecksum_toggled(bool doChecksum)
+{
+}
+
+void copyEngine::checksumType_currentIndexChanged(int index)
+{
+}
+
+void copyEngine::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
+{
+}
+
+void copyEngine::osBuffer_toggled(bool osBuffer)
+{
+	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
+}
+
+void copyEngine::osBufferLimited_toggled(bool osBufferLimited)
+{
+	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
+}
+
+void copyEngine::osBufferLimit_editingFinished()
+{
+}
+
+void copyEngine::showFilterDialog()
+{
+	if(filters!=NULL)
+		filters->exec();
+}
+
+void copyEngine::sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+{
 }

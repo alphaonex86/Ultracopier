@@ -70,6 +70,18 @@ PluginInterface_CopyEngine * Factory::getInstance()
 	realObject->on_comboBoxFolderColision_currentIndexChanged(ui->comboBoxFolderColision->currentIndex());
 	realObject->on_comboBoxFolderError_currentIndexChanged(ui->comboBoxFolderError->currentIndex());
 	realObject->setCheckDestinationFolderExists(	optionsEngine->getOptionValue("checkDestinationFolder").toBool());
+
+	realObject->set_doChecksum(optionsEngine->getOptionValue("doChecksum").toBool());
+	realObject->set_checksumType(optionsEngine->getOptionValue("checksumType").toUInt());
+	realObject->set_checksumOnlyOnError(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
+	realObject->set_osBuffer(optionsEngine->getOptionValue("osBuffer").toBool());
+	realObject->set_osBufferLimited(optionsEngine->getOptionValue("osBufferLimited").toBool());
+	realObject->set_osBufferLimit(optionsEngine->getOptionValue("osBufferLimit").toUInt());
+	realObject->set_setFilters(optionsEngine->getOptionValue("includeStrings").toStringList(),
+		optionsEngine->getOptionValue("includeOptions").toStringList(),
+		optionsEngine->getOptionValue("excludeStrings").toStringList(),
+		optionsEngine->getOptionValue("excludeOptions").toStringList()
+	);
 	return newTransferEngine;
 }
 
@@ -136,7 +148,6 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
 		ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
 		ui->doChecksum->setChecked(optionsEngine->getOptionValue("doChecksum").toBool());
-		QMessageBox::critical(NULL,"f",QString::number(optionsEngine->getOptionValue("checksumType").toUInt()));
 		ui->checksumType->setCurrentIndex(optionsEngine->getOptionValue("checksumType").toUInt());
 		ui->checksumOnlyOnError->setChecked(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
 		ui->osBuffer->setChecked(optionsEngine->getOptionValue("osBuffer").toBool());
@@ -269,31 +280,6 @@ void Factory::setAutoStart(bool autoStart)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::showFilterDialog()
-{
-	if(optionsEngine==NULL)
-	{
-		QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
-		return;
-	}
-	filters->exec();
-}
-
-void Factory::sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
-	if(optionsEngine!=NULL)
-	{
-		optionsEngine->setOptionValue("includeStrings",includeStrings);
-		optionsEngine->setOptionValue("includeOptions",includeOptions);
-		optionsEngine->setOptionValue("excludeStrings",excludeStrings);
-		optionsEngine->setOptionValue("excludeOptions",excludeOptions);
-	}
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
-}
-
 void Factory::newLanguageLoaded()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, retranslate the widget options");
@@ -355,6 +341,31 @@ void Factory::osBufferLimit_editingFinished()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the spinbox have changed");
 	if(optionsEngine!=NULL)
 		optionsEngine->setOptionValue("osBufferLimit",ui->osBufferLimit->value());
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::showFilterDialog()
+{
+	if(optionsEngine==NULL)
+	{
+		QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+		return;
+	}
+	filters->exec();
+}
+
+void Factory::sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+	if(optionsEngine!=NULL)
+	{
+		optionsEngine->setOptionValue("includeStrings",includeStrings);
+		optionsEngine->setOptionValue("includeOptions",includeOptions);
+		optionsEngine->setOptionValue("excludeStrings",excludeStrings);
+		optionsEngine->setOptionValue("excludeOptions",excludeOptions);
+	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
 }

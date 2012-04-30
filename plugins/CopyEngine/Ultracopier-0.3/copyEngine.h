@@ -20,6 +20,7 @@
 #include "ui_options.h"
 #include "Environment.h"
 #include "ListThread.h"
+#include "Filters.h"
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 #include "debugDialog.h"
@@ -49,6 +50,7 @@ private:
 	Ui::options *			ui;
 	bool				uiIsInstalled;
 	QWidget *			interface;
+	Filters *			filters;
 	int				maxSpeed;
 	bool				doRightTransfer;
 	bool				keepDate;
@@ -88,6 +90,14 @@ private:
 	FolderExistsAction tempFolderExistsAction;
 	FileExistsAction tempFileExistsAction;
 	quint64 size_for_speed;
+
+	bool doChecksum;
+	unsigned int checksumType;
+	bool checksumOnlyOnError;
+	bool osBuffer;
+	bool osBufferLimited;
+	unsigned int osBufferLimit;
+	QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
 private slots:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	void updateTheDebugInfo(QStringList,QStringList,int);
@@ -107,6 +117,15 @@ private slots:
 	void rmPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
 	//show one new dialog if needed
 	void showOneNewDialog();
+	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+
+	void doChecksum_toggled(bool);
+	void checksumType_currentIndexChanged(int index);
+	void checksumOnlyOnError_toggled(bool);
+	void osBuffer_toggled(bool);
+	void osBufferLimited_toggled(bool);
+	void osBufferLimit_editingFinished();
+	void showFilterDialog();
 public:
 	/** \brief to send the options panel
 	 * \return return false if have not the options
@@ -163,6 +182,14 @@ public:
 	/** \brief to sync the transfer list
 	 * Used when the interface is changed, useful to minimize the memory size */
 	void syncTransferList();
+
+	void set_doChecksum(bool doChecksum);
+	void set_checksumType(unsigned int type);
+	void set_checksumOnlyOnError(bool checksumOnlyOnError);
+	void set_osBuffer(bool osBuffer);
+	void set_osBufferLimited(bool osBufferLimited);
+	void set_osBufferLimit(unsigned int osBufferLimit);
+	void set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
 public slots:
 	//user ask ask to add folder (add it with interface ask source/destination)
 	/** \brief add folder called on the interface
