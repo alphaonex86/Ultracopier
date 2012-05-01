@@ -30,7 +30,7 @@ protected:
 	void run();
 public:
 	/// \brief open the destination to open it
-	void open(const QString &name,const quint64 &startSize);
+	void open(const QString &name,const quint64 &startSize,const bool &buffer);
 	/// \brief to return the error string
 	QString errorString();
 	/// \brief to stop all
@@ -102,6 +102,7 @@ private:
 	quint64			startSize;
 	QSemaphore		*mkpathTransfer;
 	bool			fakeMode;
+	bool			buffer;
 private slots:
 	bool internalOpen();
 	void internalWrite();

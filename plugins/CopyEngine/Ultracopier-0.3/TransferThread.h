@@ -57,6 +57,12 @@ public:
 	quint64			transferId;
 	/// \brief to store the transfer size
 	quint64			transferSize;
+
+	void set_doChecksum(bool doChecksum);
+	void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
+	void set_checksumOnlyOnError(bool checksumOnlyOnError);
+	void set_osBuffer(bool osBuffer);
+	void set_osBufferLimited(bool osBufferLimited);
 protected:
 	void run();
 signals:
@@ -114,6 +120,8 @@ public slots:
 	qint64 copiedSize();
 	/// \brief put the current file at bottom
 	void putAtBottom();
+
+	void set_osBufferLimit(unsigned int osBufferLimit);
 private slots:
 	void preOperation();
 	void readIsReady();
@@ -174,6 +182,12 @@ private:
 	QDateTime		maxTime;
 	int			id;
 	QSemaphore		*mkpathTransfer;
+	bool			doChecksum;
+	bool			checksumIgnoreIfImpossible;
+	bool			checksumOnlyOnError;
+	bool			osBuffer;
+	bool			osBufferLimited;
+	unsigned int		osBufferLimit;
 	//error management
 	bool			writeError,writeError_source_seeked,writeError_destination_reopened;
 	bool			readError;

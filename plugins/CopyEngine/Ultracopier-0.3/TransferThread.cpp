@@ -258,7 +258,7 @@ void TransferThread::tryOpen()
 	if(!writeIsOpenVariable)
 	{
 		writeError=false;
-		writeThread.open(destination,sourceInfo.size());
+		writeThread.open(destination,size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)));
 	}
 }
 
@@ -917,6 +917,11 @@ void TransferThread::putAtBottom()
 	emit tryPutAtBottom();
 }
 
+void TransferThread::set_osBufferLimit(unsigned int osBufferLimit)
+{
+	this->osBufferLimit=osBufferLimit;
+}
+
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 //to set the id
 void TransferThread::setId(int id)
@@ -975,3 +980,29 @@ void TransferThread::setMkpathTransfer(QSemaphore *mkpathTransfer)
 	this->mkpathTransfer=mkpathTransfer;
 	writeThread.setMkpathTransfer(mkpathTransfer);
 }
+
+void TransferThread::set_doChecksum(bool doChecksum)
+{
+	this->doChecksum=doChecksum;
+}
+
+void TransferThread::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
+{
+	this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
+}
+
+void TransferThread::set_checksumOnlyOnError(bool checksumOnlyOnError)
+{
+	this->checksumOnlyOnError=checksumOnlyOnError;
+}
+
+void TransferThread::set_osBuffer(bool osBuffer)
+{
+	this->osBuffer=osBuffer;
+}
+
+void TransferThread::set_osBufferLimited(bool osBufferLimited)
+{
+	this->osBufferLimited=osBufferLimited;
+}
+

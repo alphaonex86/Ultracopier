@@ -33,6 +33,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	qRegisterMetaType<DebugLevel>("DebugLevel");
 	qRegisterMetaType<FileExistsAction>("FileExistsAction");
 	qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
+	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
 
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	debugDialogWindow.show();
@@ -76,6 +77,8 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	connect(this,SIGNAL(signal_moveItemsOnBottom(QList<int>)),			listThread,SLOT(moveItemsOnBottom(QList<int>)),		Qt::QueuedConnection);
 	connect(this,SIGNAL(signal_exportTransferList(QString)),			listThread,SLOT(exportTransferList(QString)),		Qt::QueuedConnection);
 	connect(this,SIGNAL(signal_importTransferList(QString)),			listThread,SLOT(importTransferList(QString)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(send_osBufferLimit(uint)),					listThread,SLOT(set_osBufferLimit(uint)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(send_setFilters(QList<Filters_rules>,QList<Filters_rules>)),listThread,SLOT(set_setFilters(QList<Filters_rules>,QList<Filters_rules>)),		Qt::QueuedConnection);
 
 	connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection);
 	interface			= NULL;
@@ -153,7 +156,7 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 	connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
 	connect(ui->osBufferLimit,		SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
 
-	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
+	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters()));
 	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
 
 	filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
@@ -252,6 +255,7 @@ void copyEngine::syncTransferList()
 
 void copyEngine::set_doChecksum(bool doChecksum)
 {
+	listThread->set_doChecksum(doChecksum);
 	if(uiIsInstalled)
 		ui->doChecksum->setChecked(doChecksum);
 	this->doChecksum=doChecksum;
@@ -259,6 +263,7 @@ void copyEngine::set_doChecksum(bool doChecksum)
 
 void copyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
 {
+	listThread->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
 	if(uiIsInstalled)
 		ui->checksumIgnoreIfImpossible->setChecked(checksumIgnoreIfImpossible);
 	this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
@@ -266,6 +271,7 @@ void copyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
 
 void copyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
 {
+	listThread->set_checksumOnlyOnError(checksumOnlyOnError);
 	if(uiIsInstalled)
 		ui->checksumOnlyOnError->setChecked(checksumOnlyOnError);
 	this->checksumOnlyOnError=checksumOnlyOnError;
@@ -273,6 +279,7 @@ void copyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
 
 void copyEngine::set_osBuffer(bool osBuffer)
 {
+	listThread->set_osBuffer(osBuffer);
 	if(uiIsInstalled)
 		ui->osBuffer->setChecked(osBuffer);
 	this->osBuffer=osBuffer;
@@ -280,6 +287,7 @@ void copyEngine::set_osBuffer(bool osBuffer)
 
 void copyEngine::set_osBufferLimited(bool osBufferLimited)
 {
+	listThread->set_osBufferLimited(osBufferLimited);
 	if(uiIsInstalled)
 		ui->osBufferLimited->setChecked(osBufferLimited);
 	this->osBufferLimited=osBufferLimited;
@@ -287,6 +295,7 @@ void copyEngine::set_osBufferLimited(bool osBufferLimited)
 
 void copyEngine::set_osBufferLimit(unsigned int osBufferLimit)
 {
+	emit send_osBufferLimit(osBufferLimit);
 	if(uiIsInstalled)
 		ui->osBufferLimit->setValue(osBufferLimit);
 	this->osBufferLimit=osBufferLimit;
@@ -295,13 +304,15 @@ void copyEngine::set_osBufferLimit(unsigned int osBufferLimit)
 void copyEngine::set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
 {
 	if(filters!=NULL)
+	{
 		filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+		emit send_setFilters(filters->getInclude(),filters->getExclude());
+	}
 	this->includeStrings=includeStrings;
 	this->includeOptions=includeOptions;
 	this->excludeStrings=excludeStrings;
 	this->excludeOptions=excludeOptions;
 }
-
 
 bool copyEngine::userAddFolder(const CopyMode &mode)
 {
@@ -572,28 +583,29 @@ void copyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboB
 
 void copyEngine::doChecksum_toggled(bool doChecksum)
 {
-}
-
-void copyEngine::checksumType_currentIndexChanged(int index)
-{
+	listThread->set_doChecksum(doChecksum);
 }
 
 void copyEngine::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
+	listThread->set_checksumOnlyOnError(checksumOnlyOnError);
 }
 
 void copyEngine::osBuffer_toggled(bool osBuffer)
 {
+	listThread->set_osBuffer(osBuffer);
 	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void copyEngine::osBufferLimited_toggled(bool osBufferLimited)
 {
+	listThread->set_osBufferLimited(osBufferLimited);
 	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void copyEngine::osBufferLimit_editingFinished()
 {
+	emit send_osBufferLimit(ui->osBufferLimit->value());
 }
 
 void copyEngine::showFilterDialog()
@@ -602,6 +614,8 @@ void copyEngine::showFilterDialog()
 		filters->exec();
 }
 
-void copyEngine::sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+void copyEngine::sendNewFilters()
 {
+	if(filters!=NULL)
+		emit send_setFilters(filters->getInclude(),filters->getExclude());
 }

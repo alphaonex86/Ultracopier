@@ -117,10 +117,9 @@ private slots:
 	void rmPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
 	//show one new dialog if needed
 	void showOneNewDialog();
-	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+	void sendNewFilters();
 
 	void doChecksum_toggled(bool);
-	void checksumType_currentIndexChanged(int index);
 	void checksumOnlyOnError_toggled(bool);
 	void osBuffer_toggled(bool);
 	void osBufferLimited_toggled(bool);
@@ -315,6 +314,9 @@ signals:
 
 	//other signals
 	void queryOneNewDialog();
+
+	void send_osBufferLimit(unsigned int osBufferLimit);
+	void send_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
 };
 
 #endif // COPY_ENGINE_H

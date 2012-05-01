@@ -39,7 +39,13 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	doRightTransfer			= false;
 	keepDate			= false;
 	blockSize			= 1024;
+	osBufferLimit			= 512;
 	alwaysDoThisActionForFileExists = FileExists_NotSet;
+	doChecksum			= false;
+	checksumIgnoreIfImpossible	= true;
+	checksumOnlyOnError		= true;
+	osBuffer			= false;
+	osBufferLimited			= false;
 
 	#if ! defined (Q_CC_GNU)
 	ui->keepDate->setEnabled(false);
@@ -485,6 +491,66 @@ QPair<quint64,quint64> ListThread::getReturnPairQuint64ToCopyEngine()
 ItemOfCopyList ListThread::getReturnItemOfCopyListToCopyEngine()
 {
 	return returnItemOfCopyListToCopyEngine;
+}
+
+void ListThread::set_doChecksum(bool doChecksum)
+{
+	this->doChecksum=doChecksum;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		transferThreadList.at(index)->set_doChecksum(doChecksum);
+		index++;
+	}
+}
+
+void ListThread::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
+{
+	this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		transferThreadList.at(index)->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
+		index++;
+	}
+}
+
+void ListThread::set_checksumOnlyOnError(bool checksumOnlyOnError)
+{
+	this->checksumOnlyOnError=checksumOnlyOnError;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		transferThreadList.at(index)->set_checksumOnlyOnError(checksumOnlyOnError);
+		index++;
+	}
+}
+
+void ListThread::set_osBuffer(bool osBuffer)
+{
+	this->osBuffer=osBuffer;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		transferThreadList.at(index)->set_osBuffer(osBuffer);
+		index++;
+	}
+}
+
+void ListThread::set_osBufferLimited(bool osBufferLimited)
+{
+	this->osBufferLimited=osBufferLimited;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		transferThreadList.at(index)->set_osBufferLimited(osBufferLimited);
+		index++;
+	}
 }
 
 void ListThread::pause()
@@ -1279,6 +1345,22 @@ void ListThread::newTransferStat(TransferThread::TransferStat stat,quint64 id)
 	actionDone << newAction;
 }
 
+void ListThread::set_osBufferLimit(unsigned int osBufferLimit)
+{
+	this->osBufferLimit=osBufferLimit;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		transferThreadList.at(index)->set_osBufferLimit(osBufferLimit);
+		index++;
+	}
+}
+
+void ListThread::set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
+{
+}
+
 void ListThread::mkPathFirstFolderFinish()
 {
 	int_for_loop=0;
@@ -1429,6 +1511,12 @@ void ListThread::createTransferThread()
 	last->setDrive(drives);
 	last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
 	last->setMaxSpeed(maxSpeed/ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER);
+	last->set_doChecksum(doChecksum);
+	last->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
+	last->set_checksumOnlyOnError(checksumOnlyOnError);
+	last->set_osBuffer(osBuffer);
+	last->set_osBufferLimited(osBufferLimited);
+	last->set_osBufferLimit(osBufferLimit);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(last,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
 	#endif // ULTRACOPIER_PLUGIN_DEBUG

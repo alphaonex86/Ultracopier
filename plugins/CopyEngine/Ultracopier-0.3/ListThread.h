@@ -98,6 +98,12 @@ public:
 	bool getReturnBoolToCopyEngine();
 	QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine();
 	ItemOfCopyList getReturnItemOfCopyListToCopyEngine();
+
+	void set_doChecksum(bool doChecksum);
+	void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
+	void set_checksumOnlyOnError(bool checksumOnlyOnError);
+	void set_osBuffer(bool osBuffer);
+	void set_osBufferLimited(bool osBufferLimited);
 public slots:
 	//action on the copy
 	/// \brief put the transfer in pause
@@ -163,6 +169,9 @@ public slots:
 
 	/// \brief update the transfer stat
 	void newTransferStat(TransferThread::TransferStat stat,quint64 id);
+
+	void set_osBufferLimit(unsigned int osBufferLimit);
+	void set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
 private:
 	QSemaphore mkpathTransfer;
 	QString sourceDrive;
@@ -186,6 +195,12 @@ private:
 	int				maxSpeed;
 	FolderExistsAction		alwaysDoThisActionForFolderExists;
 	bool				checkDestinationFolderExists;
+	bool				doChecksum;
+	bool				checksumIgnoreIfImpossible;
+	bool				checksumOnlyOnError;
+	bool				osBuffer;
+	bool				osBufferLimited;
+	unsigned int			osBufferLimit;
 
 	//add file transfer to do
 	quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode);

@@ -15,6 +15,7 @@ WriteThread::WriteThread()
 	stat=Idle;
 	#endif
 	CurentCopiedSize=0;
+	buffer=false;
 }
 
 WriteThread::~WriteThread()
@@ -92,7 +93,10 @@ bool WriteThread::internalOpen()
 	if(stopIt)
 		return false;
 	//try open it
-	if(file.open(QIODevice::ReadWrite))
+	QIODevice::OpenMode flags=QIODevice::ReadWrite;
+	if(!buffer)
+		flags|=QIODevice::Unbuffered;
+	if(file.open(flags))
 	{
 		if(stopIt)
 			return false;
@@ -123,7 +127,7 @@ bool WriteThread::internalOpen()
 	}
 }
 
-void WriteThread::open(const QString &name,const quint64 &startSize)
+void WriteThread::open(const QString &name,const quint64 &startSize,const bool &buffer)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+name);
 	if(stopIt)
@@ -131,6 +135,7 @@ void WriteThread::open(const QString &name,const quint64 &startSize)
 	fakeMode=false;
 	this->name=name;
 	this->startSize=startSize;
+	this->buffer=buffer;
 	endDetected=false;
 	emit internalStartOpen();
 }
