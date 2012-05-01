@@ -42,7 +42,8 @@ void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,Q
 		if(options.contains("need_match_all"))
 			new_item.need_match_all=true;
 
-		include << new_item;
+		if(convertToRegex(new_item))
+			include << new_item;
 
 		index++;
 	}
@@ -68,7 +69,8 @@ void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,Q
 		if(options.contains("need_match_all"))
 			new_item.need_match_all=true;
 
-		exclude << new_item;
+		if(convertToRegex(new_item))
+			exclude << new_item;
 
 		index++;
 	}
@@ -262,6 +264,50 @@ void Filters::haveNewFilters()
 	emit sendNewFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 }
 
+bool Filters::convertToRegex(Filters_rules &item)
+{
+	bool isValid=!item.search_text.isEmpty();
+	if(isValid)
+	{
+		QRegExp regex;
+		QString tempString;
+		if(item.search_type==SearchType_rawText)
+		{
+			tempString=QRegExp::escape(item.search_text);
+			if(tempString.contains('/') || tempString.contains('\\'))
+				isValid=false;
+		}
+		else if(item.search_type==SearchType_simpleRegex)
+		{
+			tempString=QRegExp::escape(item.search_text);
+			tempString.replace("\\*","[^\\\\/]*");
+		}
+		else if(item.search_type==SearchType_perlRegex)
+		{
+			tempString=item.search_text;
+			if(tempString.startsWith('^') && tempString.endsWith('$'))
+			{
+				item.need_match_all=true;
+				tempString.remove(QRegExp("^\\^"));
+				tempString.remove(QRegExp("\\$$"));
+				item.search_text=tempString;
+			}
+		}
+		if(isValid)
+		{
+			if(item.need_match_all==true)
+				tempString="^"+tempString+"$";
+			regex=QRegExp(tempString);
+			isValid=regex.isValid() && !regex.isEmpty();
+			item.regex=regex;
+			return true;
+		}
+		else
+			return false;
+	}
+	return false;
+}
+
 void Filters::on_remove_exclusion_clicked()
 {
 	bool removedEntry=false;
@@ -340,7 +386,8 @@ void Filters::on_add_inclusion_clicked()
 		new_item.need_match_all=dialog.get_need_match_all();
 		new_item.search_text=dialog.get_search_text();
 		new_item.search_type=dialog.get_search_type();
-		include << new_item;
+		if(convertToRegex(new_item))
+			include << new_item;
 		reShowAll();
 		haveNewFilters();
 	}
@@ -366,6 +413,42 @@ void Filters::on_edit_exclusion_clicked()
 				exclude[index].need_match_all=dialog.get_need_match_all();
 				exclude[index].search_text=dialog.get_search_text();
 				exclude[index].search_type=dialog.get_search_type();
+				if(!convertToRegex(exclude[index]))
+					exclude.removeAt(index);
+				editedEntry=true;
+			}
+		}
+		index++;
+	}
+	if(editedEntry)
+	{
+		reShowAll();
+		haveNewFilters();
+	}
+}
+
+void Filters::on_edit_inclusion_clicked()
+{
+	bool editedEntry=false;
+	int index=0;
+	while(index<ui->inclusion->count())
+	{
+		if(ui->inclusion->item(index)->isSelected())
+		{
+			FilterRules dialog(this);
+			dialog.set_apply_on(exclude[index].apply_on);
+			dialog.set_need_match_all(exclude[index].need_match_all);
+			dialog.set_search_text(exclude[index].search_text);
+			dialog.set_search_type(exclude[index].search_type);
+			dialog.exec();
+			if(dialog.getIsValid())
+			{
+				exclude[index].apply_on=dialog.get_apply_on();
+				exclude[index].need_match_all=dialog.get_need_match_all();
+				exclude[index].search_text=dialog.get_search_text();
+				exclude[index].search_type=dialog.get_search_type();
+				if(!convertToRegex(exclude[index]))
+					exclude.removeAt(index);
 				editedEntry=true;
 			}
 		}

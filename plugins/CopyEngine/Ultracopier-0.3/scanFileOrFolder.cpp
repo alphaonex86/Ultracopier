@@ -37,6 +37,15 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
 }
 
+void scanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
+{
+	QMutexLocker lock(&filtersMutex);
+	this->include_send=include;
+	this->exclude_send=exclude;
+	reloadTheNewFilters=true;
+	haveFilters=include_send.size()>0 || exclude_send.size()>0;
+}
+
 //set action if Folder are same or exists
 void scanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString newName)
 {
@@ -212,9 +221,86 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 		emit addToMkPath(finalDest);
 	for (int index=0;index<sizeEntryList;++index)
 	{
+		QFileInfo fileInfo=entryList.at(index);
 		if(stopIt)
 			return;
-		QFileInfo fileInfo=entryList.at(index);
+		if(haveFilters)
+		{
+			if(reloadTheNewFilters)
+			{
+				QMutexLocker lock(&filtersMutex);
+				QCoreApplication::processEvents(QEventLoop::AllEvents);
+				reloadTheNewFilters=false;
+			}
+			QString fileName=fileInfo.fileName();
+			if(fileInfo.isDir())
+			{
+				bool excluded=false,included=(include.size()==0);
+				int filters_index=0;
+				while(filters_index<exclude.size())
+				{
+					if(exclude.at(filters_index).apply_on==ApplyOn_folder || exclude.at(filters_index).apply_on==ApplyOn_fileAndFolder)
+					{
+						if(fileName.contains(exclude.at(filters_index).regex))
+						{
+							excluded=true;
+							break;
+						}
+					}
+				}
+				if(excluded)
+					break;
+				filters_index=0;
+				while(filters_index<include.size())
+				{
+					if(include.at(filters_index).apply_on==ApplyOn_folder || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
+					{
+						if(fileName.contains(include.at(filters_index).regex))
+						{
+							included=true;
+							break;
+						}
+					}
+				}
+				if(!included)
+					break;
+				listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileName+"/");
+			}
+			else
+			{
+				bool excluded=false,included=(include.size()==0);
+				int filters_index=0;
+				while(filters_index<exclude.size())
+				{
+					if(exclude.at(filters_index).apply_on==ApplyOn_file || exclude.at(filters_index).apply_on==ApplyOn_fileAndFolder)
+					{
+						if(fileName.contains(exclude.at(filters_index).regex))
+						{
+							excluded=true;
+							break;
+						}
+					}
+				}
+				if(excluded)
+					break;
+				filters_index=0;
+				while(filters_index<include.size())
+				{
+					if(include.at(filters_index).apply_on==ApplyOn_file || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
+					{
+						if(fileName.contains(include.at(filters_index).regex))
+						{
+							included=true;
+							break;
+						}
+					}
+				}
+				if(!included)
+					break;
+				emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileName,mode);
+			}
+			continue;
+		}
 		if(fileInfo.isDir())//possible wait time here
 			//listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
 			listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too

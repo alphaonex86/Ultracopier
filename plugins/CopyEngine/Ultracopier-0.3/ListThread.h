@@ -201,6 +201,7 @@ private:
 	bool				osBuffer;
 	bool				osBufferLimited;
 	unsigned int			osBufferLimit;
+	QList<Filters_rules>		include,exclude;
 
 	//add file transfer to do
 	quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode);

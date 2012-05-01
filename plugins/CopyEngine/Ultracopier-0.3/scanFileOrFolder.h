@@ -11,6 +11,9 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QSemaphore>
+#include <QEventLoop>
+#include <QCoreApplication>
+#include <QMutexLocker>
 
 #include "Environment.h"
 
@@ -47,6 +50,7 @@ signals:
 	void addToRmPath(const QString& folder,const int& inodeToRemove);
 public slots:
 	void addToList(const QStringList& sources,const QString& destination);
+	void setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
 protected:
 	void run();
 private:
@@ -64,6 +68,11 @@ private:
 	QString			prefix;
 	QString			suffix;
 	CopyMode		mode;
+	QList<Filters_rules>	include,exclude;
+	QList<Filters_rules>	include_send,exclude_send;
+	bool			reloadTheNewFilters;
+	bool			haveFilters;
+	QMutex			filtersMutex;
 };
 
 #endif // SCANFILEORFOLDER_H

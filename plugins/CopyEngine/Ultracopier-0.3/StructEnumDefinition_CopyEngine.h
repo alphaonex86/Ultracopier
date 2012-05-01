@@ -5,6 +5,7 @@
 \date 2010 */
 
 #include <QString>
+#include <QRegExp>
 
 #ifndef STRUCTDEF_COPYENGINE_H
 #define STRUCTDEF_COPYENGINE_H
@@ -70,6 +71,7 @@ struct Filters_rules
 	SearchType search_type;
 	ApplyOn apply_on;
 	bool need_match_all;
+	QRegExp regex;
 };
 
 #endif // STRUCTDEF_COPYENGINE_H

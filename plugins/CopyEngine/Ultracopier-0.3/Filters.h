@@ -27,6 +27,7 @@ private:
 	QList<Filters_rules> exclude;
 	void changeEvent(QEvent *e);
 	void haveNewFilters();
+	bool convertToRegex(Filters_rules &item);
 signals:
 	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
 private slots:
@@ -36,6 +37,7 @@ private slots:
 	void on_buttonBox_clicked(QAbstractButton *button);
 	void on_add_inclusion_clicked();
 	void on_edit_exclusion_clicked();
+	void on_edit_inclusion_clicked();
 };
 
 #endif // FILTERS_H

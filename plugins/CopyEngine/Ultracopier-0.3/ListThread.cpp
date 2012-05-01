@@ -17,6 +17,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	qRegisterMetaType<ItemOfCopyList>("ItemOfCopyList");
 	qRegisterMetaType<QFileInfo>("QFileInfo");
 	qRegisterMetaType<CopyMode>("CopyMode");
+	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
 
 	moveToThread(this);
 	start(HighPriority);
@@ -334,6 +335,8 @@ scanFileOrFolder * ListThread::newScanThread(CopyMode mode)
 
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)),	Qt::QueuedConnection);
+
+	scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
 	scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 	if(scanFileOrFolderThreadsPool.size()==1)
 		updateTheStatus();
@@ -1359,6 +1362,14 @@ void ListThread::set_osBufferLimit(unsigned int osBufferLimit)
 
 void ListThread::set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
 {
+	this->include=include;
+	this->exclude=exclude;
+	int index=0;
+	while(index<scanFileOrFolderThreadsPool.size())
+	{
+		scanFileOrFolderThreadsPool.at(index)->setFilters(include,exclude);
+		index++;
+	}
 }
 
 void ListThread::mkPathFirstFolderFinish()
