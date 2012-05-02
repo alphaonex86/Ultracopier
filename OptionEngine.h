@@ -21,6 +21,7 @@
 #include <QAbstractButton>
 #include <QTimer>
 #include <QWidget>
+#include <QHash>
 
 #include "interface/OptionInterface.h"
 
@@ -61,20 +62,13 @@ class OptionEngine : public QObject, public Singleton<OptionEngine>
 		/// \brief OptionEngineGroupKey then: Group -> Key
 		struct OptionEngineGroupKey
 		{
-			QString variableName;
 			QVariant defaultValue;
 			QVariant currentValue;
 			bool emptyList;
 		};
-		/// \brief OptionEngineGroup then: Group
-		struct OptionEngineGroup
-		{
-			QString groupName;
-			QList<OptionEngineGroupKey> KeysList;
-		};
 
 		/// \brief store the option group list
-		QList<OptionEngineGroup> GroupKeysList;
+		QHash<QString,QHash<QString,OptionEngineGroupKey> > GroupKeysList;
 		QStringList unmanagedTabName;
 		/// \brief Enumeration of backend
 		enum Backend

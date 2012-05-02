@@ -88,26 +88,11 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+groupName+"\",[...])");
 	//search if previous with the same name exists
-	indexGroup=0;
-	loop_size=GroupKeysList.size();
-	while(indexGroup<loop_size)
+	if(GroupKeysList.contains(groupName))
 	{
-		if(GroupKeysList.at(indexGroup).groupName==groupName)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"group already used previously");
-			break;
-		}
-		indexGroup++;
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"group already used previously");
+		return false;
 	}
-	//else create the entry
-	if(indexGroup==loop_size)
-	{
-		OptionEngineGroup tempEntry;
-		tempEntry.groupName=groupName;
-		GroupKeysList << tempEntry;
-	}
-	//here GroupKeysList.at(indexGroup) can be used
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"variable used: GroupKeysList.at("+QString::number(indexGroup)+")");
 	//if the backend is file, enter into the group
 	if(currentBackend==File)
 		settings->beginGroup(groupName);
@@ -118,29 +103,30 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 	while(index<loop_size)
 	{
 		OptionEngineGroupKey theCurrentKey;
-		theCurrentKey.variableName=KeysList.at(index).first;
 		theCurrentKey.defaultValue=KeysList.at(index).second;
-		theCurrentKey.emptyList=false;
 		//if memory backend, load the default value into the current value
 		if(currentBackend==Memory)
 			theCurrentKey.currentValue=theCurrentKey.defaultValue;
-		else if(settings->contains(theCurrentKey.variableName))//if file backend, load the default value from the file
-			theCurrentKey.currentValue=settings->value(theCurrentKey.variableName);
-		else //or if not found load the default value and set into the file
+		else
 		{
-			theCurrentKey.currentValue=theCurrentKey.defaultValue;
-			//to switch default value if is unchanged
-			//settings->setValue(theCurrentKey.variableName,theCurrentKey.defaultValue);
+			if(settings->contains(KeysList.at(index).first))//if file backend, load the default value from the file
+				theCurrentKey.currentValue=settings->value(KeysList.at(index).first);
+			else //or if not found load the default value and set into the file
+			{
+				theCurrentKey.currentValue=theCurrentKey.defaultValue;
+				//to switch default value if is unchanged
+				//settings->setValue(KeysList.at(index).first,theCurrentKey.defaultValue);
+			}
+			if(settings->status()!=QSettings::NoError)
+			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Have writing error, switch to memory only options");
+				#ifdef ULTRACOPIER_VERSION_PORTABLE
+				resources->disableWritablePath();
+				#endif // ULTRACOPIER_VERSION_PORTABLE
+				currentBackend=Memory;
+			}
 		}
-		if(settings->status()!=QSettings::NoError)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Have writing error, switch to memory only options");
-			#ifdef ULTRACOPIER_VERSION_PORTABLE
-			resources->disableWritablePath();
-			#endif // ULTRACOPIER_VERSION_PORTABLE
-			currentBackend=Memory;
-		}
-		GroupKeysList[indexGroup].KeysList << theCurrentKey;
+		GroupKeysList[groupName][KeysList.at(index).first]=theCurrentKey;
 		index++;
 	}
 	//if the backend is file, leave into the group
@@ -153,43 +139,21 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 bool OptionEngine::removeOptionGroup(const QString &groupName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, groupName: "+groupName);
-	indexGroup=0;
-	loop_size=GroupKeysList.size();
-	while(indexGroup<loop_size)
-	{
-		if(GroupKeysList.at(indexGroup).groupName==groupName)
-		{
-			GroupKeysList.removeAt(indexGroup);
-			return true;
-		}
-		indexGroup++;
-	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName);
+	if(GroupKeysList.remove(groupName)!=1)
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName);
 	return false;
 }
 
 /// \brief To get option value
 QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &variableName)
 {
-	indexGroup=0;
-	loop_size=GroupKeysList.size();
-	while(indexGroup<loop_size)
+	if(GroupKeysList.contains(groupName))
 	{
-		if(GroupKeysList.at(indexGroup).groupName==groupName)
-		{
-			//search if previous with the same name exists
-			indexGroupKey=0;
-			loop_sub_size=GroupKeysList.at(indexGroup).KeysList.size();
-			while(indexGroupKey<loop_sub_size)
-			{
-				if(GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).variableName==variableName)
-					return GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).currentValue;
-				indexGroupKey++;
-			}
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
-			return QVariant();
-		}
-		indexGroup++;
+		if(GroupKeysList[groupName].contains(variableName))
+			return GroupKeysList[groupName][variableName].currentValue;
+		QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
+		return QVariant();
 	}
 	QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
@@ -201,67 +165,60 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 void OptionEngine::setOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value.toString()+"\"");
-	indexGroup=0;
-	loop_size=GroupKeysList.size();
-	while(indexGroup<loop_size)
+
+	if(GroupKeysList.contains(groupName))
 	{
-		if(GroupKeysList.at(indexGroup).groupName==groupName)
+		if(GroupKeysList[groupName].contains(variableName))
 		{
-			//search if previous with the same name exists
-			indexGroupKey=0;
-			loop_sub_size=GroupKeysList.at(indexGroup).KeysList.size();
-			while(indexGroupKey<loop_sub_size)
+			GroupKeysList[groupName][variableName].currentValue=value;
+			if(currentBackend==File)
 			{
-				if(GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).variableName==variableName)
+				settings->beginGroup(groupName);
+				settings->setValue(variableName,value);
+				settings->endGroup();
+				if(settings->status()!=QSettings::NoError)
 				{
-					if(GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).currentValue!=value) //protection to prevent same value writing
-					{
-						GroupKeysList[indexGroup].KeysList[indexGroupKey].currentValue=value;
-						if(currentBackend==File)
-						{
-							settings->beginGroup(groupName);
-							settings->setValue(variableName,value);
-							settings->endGroup();
-							if(settings->status()!=QSettings::NoError)
-							{
-								ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Have writing error, switch to memory only options");
-								#ifdef ULTRACOPIER_VERSION_PORTABLE
-								resources->disableWritablePath();
-								#endif // ULTRACOPIER_VERSION_PORTABLE
-								currentBackend=Memory;
-							}
-						}
-						emit newOptionValue(groupName,variableName,value);
-					}
-					return;
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Have writing error, switch to memory only options");
+					#ifdef ULTRACOPIER_VERSION_PORTABLE
+					resources->disableWritablePath();
+					#endif // ULTRACOPIER_VERSION_PORTABLE
+					currentBackend=Memory;
 				}
-				indexGroupKey++;
 			}
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"value not found, internal bug, groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value.toString()+"\"");
+			emit newOptionValue(groupName,variableName,value);
 			return;
 		}
-		indexGroup++;
+		QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
+		return;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"group \""+groupName+"\" not found, internal bug, groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value.toString()+"\"");
+	QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
 }
 
 //the reset of right value of widget need be do into the calling object
 void OptionEngine::internal_resetToDefaultValue()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	int indexGroup=0;
-	while(indexGroup<GroupKeysList.size())
+
+	QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i = GroupKeysList.constBegin();
+	QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i_end = GroupKeysList.constEnd();
+	QHash<QString,OptionEngineGroupKey>::const_iterator j;
+	QHash<QString,OptionEngineGroupKey>::const_iterator j_end;
+	while (i != i_end)
 	{
-		//search if previous with the same name exists
-		int indexGroupKey=0;
-		while(indexGroupKey<GroupKeysList.at(indexGroup).KeysList.size())
+		j = i.value().constBegin();
+		j_end = i.value().constEnd();
+		while (j != j_end)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"option check: "+GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).variableName);
-			if(GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).currentValue!=GroupKeysList.at(indexGroup).KeysList.at(indexGroupKey).defaultValue)
-				GroupKeysList[indexGroup].KeysList[indexGroupKey].currentValue=GroupKeysList[indexGroup].KeysList[indexGroupKey].defaultValue;
-			indexGroupKey++;
+			if(j.value().currentValue!=j.value().defaultValue)
+			{
+				j.value().currentValue!=j.value().defaultValue;
+				emit newOptionValue(i.key(),j.key(),j.value().currentValue);
+			}
+			++j;
 		}
-		indexGroup++;
+		++i;
 	}
 }
 
