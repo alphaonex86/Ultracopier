@@ -135,6 +135,7 @@ void ReadThread::checkSum()
 	QCryptographicHash hash(QCryptographicHash::Sha1);
 	isInReadLoop=true;
 	lastGoodPosition=0;
+	seek(0);
 	int sizeReaden=0;
 	do
 	{
@@ -183,8 +184,6 @@ void ReadThread::checkSum()
 						break;
 				}
 			}
-			/*if(lastGoodPosition>size)
-				oversize=lastGoodPosition-size;*/
 		}
 	}
 	while(sizeReaden>0 && !stopIt);
@@ -354,8 +353,6 @@ void ReadThread::internalRead()
 						break;
 				}
 			}
-                        /*if(lastGoodPosition>size)
-                                oversize=lastGoodPosition-size;*/
 		}
 		/*
 		if(lastGoodPosition>16*1024)

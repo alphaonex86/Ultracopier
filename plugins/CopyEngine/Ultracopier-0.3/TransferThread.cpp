@@ -14,6 +14,7 @@
 /// \todo test if source if closed by end but write error
 /// \todo pointer for readThread and writeThread to destroy the read before the write (prevent dead lock)
 /// \todo read close never call
+/// \todo readThreadIsReopened for the checksum, or if source read have failed (network share disconnecte and reconnected)
 
 /// \bug continue progress when write error
 
@@ -485,6 +486,7 @@ void TransferThread::setKeepDate(const bool keepDate)
 void TransferThread::setMaxSpeed(int maxSpeed)
 {
 	int interval=readThread.setMaxSpeed(maxSpeed);
+	writeThread.setMaxSpeed(maxSpeed);
 	if(maxSpeed>0)
 	{
 		clockForTheCopySpeed.setInterval(interval);
@@ -502,7 +504,7 @@ void TransferThread::setMaxSpeed(int maxSpeed)
 bool TransferThread::setBlockSize(const unsigned int blockSize)
 {
 	this->blockSize=blockSize;
-	return readThread.setBlockSize(blockSize);
+	return readThread.setBlockSize(blockSize) && writeThread.setBlockSize(blockSize);
 }
 
 //pause the copy
@@ -598,6 +600,7 @@ void TransferThread::compareChecksum()
 		else
 		{
 			//emit error here, and wait to resume
+			emit errorOnFile(destinationInfo,"Checksum not match");
 		}
 	}
 }
@@ -774,7 +777,7 @@ void TransferThread::retryAfterError()
 		return;
 	}
 	//data streaming error
-	if(stat!=PostOperation && stat!=Transfer)
+	if(stat!=PostOperation && stat!=Transfer && stat!=Checksum)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(stat));
 		return;
@@ -783,6 +786,22 @@ void TransferThread::retryAfterError()
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] retry the system move");
 		tryMoveDirectly();
+		return;
+	}
+	if(stat==Checksum)
+	{
+		if(writeError)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start and resume the write error");
+			writeThread.reopen();
+		}
+		else if(readError)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start and resume the read error");
+			readThread.reopen();
+		}
+		else //only checksum difference
+			ifCanStartTransfer();
 		return;
 	}
 	if(writeError)
@@ -808,6 +827,11 @@ void TransferThread::writeThreadIsReopened()
 		return;
 	}
 	writeError_destination_reopened=true;
+	if(stat==Checksum)
+	{
+		writeThread.startCheckSum();
+		return;
+	}
 	if(writeError_source_seeked && writeError_destination_reopened)
 		resumeTransferAfterWriteError();
 }
@@ -1016,6 +1040,9 @@ QChar TransferThread::readingLetter()
 	case ReadThread::WaitWritePipe:
 		return 'W';
 	break;
+	case ReadThread::Checksum:
+		return 'S';
+	break;
 	default:
 		return '?';
 	}
@@ -1036,6 +1063,12 @@ QChar TransferThread::writingLetter()
 	break;
 	case WriteThread::Close:
 		return 'C';
+	break;
+	case WriteThread::Read:
+		return 'R';
+	break;
+	case WriteThread::Checksum:
+		return 'S';
 	break;
 	default:
 		return '?';

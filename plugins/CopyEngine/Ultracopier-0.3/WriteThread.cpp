@@ -386,6 +386,14 @@ int WriteThread::setMaxSpeed(const int maxSpeed)
 	}
 }
 
+/// \brief For give timer every X ms
+void WriteThread::timeOfTheBlockCopyFinished()
+{
+	if(waitNewClockForSpeed.available()<ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT)
+		waitNewClockForSpeed.release();
+	//why not just use waitNewClockForSpeed.release() ?
+}
+
 void WriteThread::flushAndSeekToZero()
 {
         stopIt=true;
@@ -398,6 +406,7 @@ void WriteThread::checkSum()
 	//QByteArray blockArray;
 	QCryptographicHash hash(QCryptographicHash::Sha1);
 	lastGoodPosition=0;
+	file.seek(0);
 	int sizeReaden=0;
 	do
 	{
@@ -445,8 +454,6 @@ void WriteThread::checkSum()
 						break;
 				}
 			}
-			/*if(lastGoodPosition>size)
-				oversize=lastGoodPosition-size;*/
 		}
 	}
 	while(sizeReaden>0 && !stopIt);

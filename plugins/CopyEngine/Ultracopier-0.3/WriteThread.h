@@ -63,6 +63,8 @@ public:
 	void startCheckSum();
 	/// \brief set the current max speed in KB/s
 	int setMaxSpeed(int maxSpeed);
+	/// \brief For give timer every X ms
+	void timeOfTheBlockCopyFinished();
 	/// \brief set block size in KB
 	bool setBlockSize(const int blockSize);
 public slots:
