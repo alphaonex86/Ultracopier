@@ -16,6 +16,8 @@ WriteThread::WriteThread()
 	#endif
 	CurentCopiedSize=0;
 	buffer=false;
+	putInPause=false;
+	blockSize=1024*1024;
 }
 
 WriteThread::~WriteThread()
@@ -336,6 +338,54 @@ void WriteThread::startCheckSum()
 	emit internalStartChecksum();
 }
 
+/** \brief set block size
+\param block the new block size in KB
+\return Return true if succes */
+bool WriteThread::setBlockSize(const int blockSize)
+{
+	if(blockSize<1 || blockSize>16384)
+	{
+		this->blockSize=blockSize*1024;
+		//set the new max speed because the timer have changed
+		setMaxSpeed(maxSpeed);
+		return true;
+	}
+	else
+		return false;
+}
+
+/*! \brief Set the max speed
+\param tempMaxSpeed Set the max speed in KB/s, 0 for no limit */
+int WriteThread::setMaxSpeed(const int maxSpeed)
+{
+	if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
+		waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());
+	this->maxSpeed=maxSpeed;
+	if(this->maxSpeed>0)
+	{
+		int NewInterval,newMultiForBigSpeed=0;
+		do
+		{
+			newMultiForBigSpeed++;
+			NewInterval=(blockSize*newMultiForBigSpeed)/(this->maxSpeed);
+		}
+		while (NewInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
+		if(NewInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
+		{
+			NewInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
+			newMultiForBigSpeed=1;
+			blockSize=this->maxSpeed*NewInterval;
+		}
+		MultiForBigSpeed=newMultiForBigSpeed;
+		return NewInterval;
+	}
+	else
+	{
+		waitNewClockForSpeed.release();
+		return 0;
+	}
+}
+
 void WriteThread::flushAndSeekToZero()
 {
         stopIt=true;
@@ -345,10 +395,10 @@ void WriteThread::flushAndSeekToZero()
 
 void WriteThread::checkSum()
 {
-	QByteArray blockArray;
-	QCryptographicHash hash;
-	isInReadLoop=true;
+	//QByteArray blockArray;
+	QCryptographicHash hash(QCryptographicHash::Sha1);
 	lastGoodPosition=0;
+	int sizeReaden=0;
 	do
 	{
 		//read one block
@@ -365,7 +415,6 @@ void WriteThread::checkSum()
 			errorString_internal=tr("Unable to read the source file: ")+file.errorString()+" ("+QString::number(file.error())+")";
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("file.error()!=QFile::NoError: %1, error: %2").arg(QString::number(file.error())).arg(errorString_internal));
 			emit error();
-			isInReadLoop=false;
 			return;
 		}
 		sizeReaden=blockArray.size();
@@ -406,14 +455,12 @@ void WriteThread::checkSum()
 		errorString_internal=tr("File truncated during the read, possible data change");
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())));
 		emit error();
-		isInReadLoop=false;
 		return;
 	}
-	isInReadLoop=false;
 	if(stopIt)
 	{
-		if(putInPause)
-			emit isInPause();
+/*		if(putInPause)
+			emit isInPause();*/
 		stopIt=false;
 		return;
 	}

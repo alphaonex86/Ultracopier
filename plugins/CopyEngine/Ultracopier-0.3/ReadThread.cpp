@@ -132,9 +132,10 @@ void ReadThread::postOperation()
 void ReadThread::checkSum()
 {
 	QByteArray blockArray;
-	QCryptographicHash hash;
+	QCryptographicHash hash(QCryptographicHash::Sha1);
 	isInReadLoop=true;
 	lastGoodPosition=0;
+	int sizeReaden=0;
 	do
 	{
 		//read one block
@@ -205,24 +206,6 @@ void ReadThread::checkSum()
 	}
 	emit checksumFinish(hash.result());
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop the read");
-}
-
-void ReadThread::startRead()
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
-	if(tryStartRead)
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] already in try start");
-		return;
-	}
-	if(isInReadLoop)
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] double event dropped");
-	else
-	{
-		tryStartRead=true;
-		emit internalStartRead();
-	}
-	emit checksumFinish(QByteArray().resize(2));
 }
 
 bool ReadThread::internalOpen(bool resetLastGoodPosition)
