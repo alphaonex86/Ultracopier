@@ -1,0 +1,23 @@
+See README to have general informations
+
+=======================================================
+Licence for the source ================================
+=======================================================
+All images into resources/ is extracted from the oxygen pack of KDE 4.8. Some are directly remaked from the png version.
+*.ts and *.qm into resources/ or plugins/Languages/ is under GPL3.
+All images into plugins/Languages/ are extracted from piwik.
+All informations.xml into plugins/Languages/ are under GPL3.
+All the file *.dox *.h *.cpp *.pro *.ui at the root, interface/ folder of the source are under GPL3.
+The files: QTarDecode.cpp, QTarDecode.h, QXzDecode.cpp,
+QXzDecode.h, QXzDecodeThread.cpp, QXzDecodeThread.h into: lib/qt-tar-xz/ are under GPL3.
+The other file into lib/qt-tar-xz/ is XZ Embedded.
+All *.qrc into resources/ are under GPL3.
+
+======================================================
+Licensing of XZ Embedded =============================
+======================================================
+
+All the files in this package have been written by Lasse Collin
+and/or Igor Pavlov. All these files have been put into the
+public domain. You can do whatever you want with these files.
+As usual, this software is provided "as is", without any warranty.
