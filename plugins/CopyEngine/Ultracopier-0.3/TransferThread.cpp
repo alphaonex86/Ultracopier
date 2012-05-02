@@ -13,6 +13,7 @@
 /// \todo remove destination when canceled
 /// \todo test if source if closed by end but write error
 /// \todo pointer for readThread and writeThread to destroy the read before the write (prevent dead lock)
+/// \todo read close never call
 
 /// \bug continue progress when write error
 
@@ -57,17 +58,19 @@ void TransferThread::run()
 	connect(this,SIGNAL(internalStartPreOperation()),	this,					SLOT(preOperation()),		Qt::QueuedConnection);
 	connect(this,SIGNAL(internalStartPostOperation()),	this,					SLOT(postOperation()),		Qt::QueuedConnection);
         //the state change operation
-	connect(&readThread,SIGNAL(readIsStopped()),		&readThread,				SLOT(postOperation()),		Qt::QueuedConnection);
+	//connect(&readThread,SIGNAL(readIsStopped()),		&readThread,				SLOT(postOperation()),		Qt::QueuedConnection);//commented to do the checksum
 	connect(&readThread,SIGNAL(opened()),			this,					SLOT(readIsReady()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(opened()),			this,					SLOT(writeIsReady()),		Qt::QueuedConnection);
 	connect(&readThread,SIGNAL(readIsStopped()),		this,					SLOT(readIsStopped()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(writeIsStopped()),		this,					SLOT(writeIsStopped()),		Qt::QueuedConnection);
 	connect(&readThread,SIGNAL(readIsStopped()),		&writeThread,				SLOT(endIsDetected()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(writeIsStopped()),		&writeThread,				SLOT(postOperation()),		Qt::QueuedConnection);
+	//connect(&writeThread,SIGNAL(writeIsStopped()),		&writeThread,				SLOT(postOperation()),		Qt::QueuedConnection);//commented to do the checksum
 	connect(&readThread,SIGNAL(readIsStopped()),		this,					SLOT(readIsFinish()),		Qt::QueuedConnection);
 	connect(&readThread,SIGNAL(closed()),			this,					SLOT(readIsClosed()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(closed()),			this,					SLOT(writeIsClosed()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(reopened()),		this,					SLOT(writeThreadIsReopened()),	Qt::QueuedConnection);
+	connect(&readThread,SIGNAL(checksumFinish(QByteArray)),	this,					SLOT(readChecksumFinish(QByteArray)),	Qt::QueuedConnection);
+	connect(&writeThread,SIGNAL(checksumFinish(QByteArray)),this,					SLOT(writeChecksumFinish(QByteArray)),	Qt::QueuedConnection);
         //error management
 	connect(&readThread,SIGNAL(isSeekToZeroAndWait()),	this,					SLOT(readThreadIsSeekToZeroAndWait()),	Qt::QueuedConnection);
 	connect(&readThread,SIGNAL(resumeAfterErrorByRestartAtTheLastPosition()),	this,		SLOT(readThreadResumeAfterError()),	Qt::QueuedConnection);
@@ -150,6 +153,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
 	canStartTransfer		= false;
 	sended_state_preOperationStopped= false;
 	canBeMovedDirectlyVariable	= false;
+	fileContentError		= false;
 	resetExtraVariable();
 	emit internalStartPreOperation();
 }
@@ -531,8 +535,71 @@ void TransferThread::readIsFinish()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
 	readIsFinishVariable=true;
 	canStartTransfer=false;
-	stat=PostTransfer;
+	//check here if need start checksuming or not
+	real_doChecksum=doChecksum && (!checksumOnlyOnError || fileContentError);
+	if(real_doChecksum)
+	{
+		stat=Checksum;
+		sourceChecksum=QByteArray();
+		destinationChecksum=QByteArray();
+		readThread.startCheckSum();
+	}
+	else
+	{
+		stat=PostTransfer;
+		readThread.postOperation();
+	}
 	emit pushStat(stat,transferId);
+}
+
+void TransferThread::writeIsFinish()
+{
+	if(writeIsFinishVariable)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] double event dropped");
+		return;
+	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
+	writeIsFinishVariable=true;
+	//check here if need start checksuming or not
+	if(real_doChecksum)
+	{
+		stat=Checksum;
+		writeThread.startCheckSum();
+	}
+	else
+		writeThread.postOperation();
+}
+
+void TransferThread::readChecksumFinish(const QByteArray& checksum)
+{
+	sourceChecksum=checksum;
+	compareChecksum();
+}
+
+void TransferThread::writeChecksumFinish(const QByteArray& checksum)
+{
+	destinationChecksum=checksum;
+	compareChecksum();
+}
+
+void TransferThread::compareChecksum()
+{
+	if(sourceChecksum.size()==destinationChecksum.size())
+	{
+		//assume checksum as always good
+		if(true || sourceChecksum==destinationChecksum)
+		{
+			readThread.postOperation();
+			writeThread.postOperation();
+			stat=PostTransfer;
+			emit pushStat(stat,transferId);
+		}
+		else
+		{
+			//emit error here, and wait to resume
+		}
+	}
 }
 
 void TransferThread::readIsClosed()
@@ -673,6 +740,7 @@ void TransferThread::getWriteError()
                 return;
         }
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
+	fileContentError		= true;
 	writeError			= true;
 	writeIsReadyVariable		= false;
 	writeError_source_seeked	= false;
@@ -688,6 +756,7 @@ void TransferThread::getReadError()
                 return;
         }
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
+	fileContentError	= true;
 	readError		= true;
 	writeIsReadyVariable	= false;
 	readIsReadyVariable	= false;

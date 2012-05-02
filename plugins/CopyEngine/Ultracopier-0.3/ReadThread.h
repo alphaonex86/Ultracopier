@@ -13,6 +13,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QCryptographicHash>
 
 #include "WriteThread.h"
 #include "Environment.h"
@@ -65,7 +66,8 @@ public:
 		Idle=0,
 		InodeOperation=1,
 		Read=2,
-		WaitWritePipe=3
+		WaitWritePipe=3,
+		Checksum=4
 	};
 	ReadStat stat;
 	#endif
@@ -79,9 +81,14 @@ public:
 	void fakeReadIsStarted();
 	/// \brief do the fake readIsStopped
 	void fakeReadIsStopped();
+	/// do the checksum
+	void startCheckSum();
 public slots:
 	/// \brief to reset the copy, and put at the same state when it just open
 	void seekToZeroAndWait();
+	void postOperation();
+	/// do the checksum
+	void checkSum();
 signals:
 	void error();
 	void isInPause();
@@ -93,13 +100,16 @@ signals:
 	void checkIfIsWait();
 	void resumeAfterErrorByRestartAll();
 	void resumeAfterErrorByRestartAtTheLastPosition();
+	void checksumFinish(const QByteArray&);
         // internal signals
-        void internalStartOpen();
+	void internalStartOpen();
+	void internalStartChecksum();
         void internalStartReopen();
         void internalStartRead();
         void internalStartClose();
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+
 private:
 	QString		name;
 	QString		errorString_internal;
@@ -130,7 +140,6 @@ private slots:
 	bool internalReopen();
 	void internalRead();
 	void internalClose(bool callByTheDestructor=false);
-	void postOperation();
 	void isInWait();
 };
 

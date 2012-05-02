@@ -34,8 +34,9 @@ public:
 		PreOperation=1,
 		WaitForTheTransfer=2,
 		Transfer=3,
-		PostTransfer=4,
-		PostOperation=5
+		Checksum=4,
+		PostTransfer=5,
+		PostOperation=6
 	};
 	/// \brief get transfer stat
 	TransferStat getStat();
@@ -127,11 +128,15 @@ private slots:
 	void readIsReady();
 	void writeIsReady();
 	void readIsFinish();
+	void writeIsFinish();
 	void readIsClosed();
 	void writeIsClosed();
 	void postOperation();
 	void getWriteError();
 	void getReadError();
+	void readChecksumFinish(const QByteArray&);
+	void writeChecksumFinish(const QByteArray&);
+	void compareChecksum();
 	//void syncAfterErrorAndReadFinish();
 	void readThreadIsSeekToZeroAndWait();
 	void writeThreadIsReopened();
@@ -168,6 +173,7 @@ private:
 	bool			readIsClosedVariable;
 	bool			writeIsClosedVariable;
 	bool			canBeMovedDirectlyVariable;
+	QByteArray		sourceChecksum,destinationChecksum;
 	volatile bool		stopIt;
 	volatile bool		canStartTransfer;
 	int			blockSize;
@@ -182,7 +188,7 @@ private:
 	QDateTime		maxTime;
 	int			id;
 	QSemaphore		*mkpathTransfer;
-	bool			doChecksum;
+	bool			doChecksum,real_doChecksum;
 	bool			checksumIgnoreIfImpossible;
 	bool			checksumOnlyOnError;
 	bool			osBuffer;
@@ -191,6 +197,7 @@ private:
 	//error management
 	bool			writeError,writeError_source_seeked,writeError_destination_reopened;
 	bool			readError;
+	bool			fileContentError;
 	//different pre-operation
 	bool isSame();
 	bool destinationExists();

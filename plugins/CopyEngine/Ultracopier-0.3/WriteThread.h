@@ -12,6 +12,7 @@
 #include <QString>
 #include <QMutex>
 #include <QSemaphore>
+#include <QCryptographicHash>
 
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
@@ -46,7 +47,8 @@ public:
 		Idle=0,
 		InodeOperation=1,
 		Write=2,
-		Close=3
+		Close=3,
+		Checksum=4
 	};
 	WriteStat stat;
 	#endif
@@ -56,6 +58,8 @@ public:
 	void fakeWriteIsStarted();
 	/// \brief do the fake writeIsStopped
 	void fakeWriteIsStopped();
+	/// do the checksum
+	void startCheckSum();
 public slots:
 	/// \brief start the operation
 	void postOperation();
@@ -67,6 +71,8 @@ public slots:
 	void reopen();
 	/// \brief flush and seek to zero
         void flushAndSeekToZero();
+	/// do the checksum
+	void checkSum();
 signals:
 	void error();
 	void opened();
@@ -75,8 +81,10 @@ signals:
 	void writeIsStopped();
         void flushedAndSeekedToZero();
 	void closed();
+	void checksumFinish(const QByteArray&);
         //internal signals
         void internalStartOpen();
+	void internalStartChecksum();
 	void internalStartReopen();
 	void internalStartWrite();
 	void internalStartClose();

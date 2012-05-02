@@ -37,6 +37,7 @@ void WriteThread::run()
         connect(this,SIGNAL(internalStartClose()),              this,SLOT(internalClose()),             Qt::QueuedConnection);
 	connect(this,SIGNAL(internalStartEndOfFile()),		this,SLOT(internalEndOfFile()),		Qt::QueuedConnection);
 	connect(this,SIGNAL(internalStartFlushAndSeekToZero()), this,SLOT(internalFlushAndSeekToZero()),Qt::QueuedConnection);
+	connect(this,SIGNAL(internalStartChecksum()),		this,SLOT(checkSum()),			Qt::QueuedConnection);
 	exec();
 }
 
@@ -329,10 +330,95 @@ void WriteThread::fakeWriteIsStopped()
 	emit writeIsStopped();
 }
 
+/// do the checksum
+void WriteThread::startCheckSum()
+{
+	emit internalStartChecksum();
+}
+
 void WriteThread::flushAndSeekToZero()
 {
         stopIt=true;
         emit internalStartFlushAndSeekToZero();
+}
+
+
+void WriteThread::checkSum()
+{
+	QByteArray blockArray;
+	QCryptographicHash hash;
+	isInReadLoop=true;
+	lastGoodPosition=0;
+	do
+	{
+		//read one block
+		#ifdef ULTRACOPIER_PLUGIN_DEBUG
+		stat=Read;
+		#endif
+		blockArray=file.read(blockSize);
+		#ifdef ULTRACOPIER_PLUGIN_DEBUG
+		stat=Idle;
+		#endif
+
+		if(file.error()!=QFile::NoError)
+		{
+			errorString_internal=tr("Unable to read the source file: ")+file.errorString()+" ("+QString::number(file.error())+")";
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("file.error()!=QFile::NoError: %1, error: %2").arg(QString::number(file.error())).arg(errorString_internal));
+			emit error();
+			isInReadLoop=false;
+			return;
+		}
+		sizeReaden=blockArray.size();
+		if(sizeReaden>0)
+		{
+			#ifdef ULTRACOPIER_PLUGIN_DEBUG
+			stat=Checksum;
+			#endif
+			hash.addData(blockArray);
+			#ifdef ULTRACOPIER_PLUGIN_DEBUG
+			stat=Idle;
+			#endif
+
+			if(stopIt)
+				break;
+
+			lastGoodPosition+=blockArray.size();
+
+			//wait for limitation speed if stop not query
+			if(maxSpeed>0)
+			{
+				numberOfBlockCopied++;
+				if(numberOfBlockCopied>=MultiForBigSpeed)
+				{
+					numberOfBlockCopied=0;
+					waitNewClockForSpeed.acquire();
+					if(stopIt)
+						break;
+				}
+			}
+			/*if(lastGoodPosition>size)
+				oversize=lastGoodPosition-size;*/
+		}
+	}
+	while(sizeReaden>0 && !stopIt);
+	if(lastGoodPosition>file.size())
+	{
+		errorString_internal=tr("File truncated during the read, possible data change");
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())));
+		emit error();
+		isInReadLoop=false;
+		return;
+	}
+	isInReadLoop=false;
+	if(stopIt)
+	{
+		if(putInPause)
+			emit isInPause();
+		stopIt=false;
+		return;
+	}
+	emit checksumFinish(hash.result());
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop the read");
 }
 
 void WriteThread::internalFlushAndSeekToZero()
