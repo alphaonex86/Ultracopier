@@ -134,10 +134,14 @@ public slots:
 	/** \brief move on bottom of the list the selected item
 	 * \param ids ids is the id list of the selected items */
 	void moveItemsOnBottom(QList<int> ids);
+
+	/** \brief give the forced mode, to export/import transfer list */
+	void forceMode(const CopyMode &mode);
 	/// \brief export the transfer list into a file
 	void exportTransferList(const QString &fileName);
 	/// \brief import the transfer list into a file
 	void importTransferList(const QString &fileName);
+
 	/// \brief set the folder local colision
 	void setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists);
 	/** \brief to set the speed limitation
@@ -202,6 +206,8 @@ private:
 	bool				osBufferLimited;
 	unsigned int			osBufferLimit;
 	QList<Filters_rules>		include,exclude;
+	CopyMode			mode;
+	bool				forcedMode;
 
 	//add file transfer to do
 	quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode);

@@ -90,6 +90,8 @@ private:
 	FolderExistsAction tempFolderExistsAction;
 	FileExistsAction tempFileExistsAction;
 	quint64 size_for_speed;
+	CopyMode			mode;
+	bool				forcedMode;
 
 	bool doChecksum;
 	bool checksumIgnoreIfImpossible;
@@ -223,10 +225,14 @@ public slots:
 	/** \brief move on bottom of the list the selected item
 	 * \param ids ids is the id list of the selected items */
 	void moveItemsOnBottom(const QList<int> &ids);
+
+	/** \brief give the forced mode, to export/import transfer list */
+	void forceMode(const CopyMode &mode);
 	/// \brief export the transfer list into a file
 	void exportTransferList();
 	/// \brief import the transfer list into a file
 	void importTransferList();
+
 	/** \brief to set the speed limitation
 	 * -1 if not able, 0 if disabled */
 	bool setSpeedLimitation(const qint64 &speedLimitation);
@@ -276,24 +282,26 @@ signals:
 	 * first = current transfered byte, second = byte to transfer */
 	void pushGeneralProgression(const quint64 &,const quint64 &);
 
-	void newFolderListing(QString path);
-	void newCollisionAction(QString action);
-	void newErrorAction(QString action);
+	void newFolderListing(const QString &path);
+	void newCollisionAction(const QString &action);
+	void newErrorAction(const QString &action);
 	void isInPause(bool);
 
 	//action on the copy
 	void signal_pause();
 	void signal_resume();
-	void signal_skip(quint64 id);
+	void signal_skip(const quint64 &id);
 
 	//edit the transfer list
-	void signal_removeItems(QList<int> ids);
-	void signal_moveItemsOnTop(QList<int> ids);
-	void signal_moveItemsUp(QList<int> ids);
-	void signal_moveItemsDown(QList<int> ids);
-	void signal_moveItemsOnBottom(QList<int> ids);
-	void signal_exportTransferList(QString fileName);
-	void signal_importTransferList(QString fileName);
+	void signal_removeItems(const QList<int> &ids);
+	void signal_moveItemsOnTop(const QList<int> &ids);
+	void signal_moveItemsUp(const QList<int> &ids);
+	void signal_moveItemsDown(const QList<int> &ids);
+	void signal_moveItemsOnBottom(const QList<int> &ids);
+
+	void signal_forceMode(const CopyMode &mode);
+	void signal_exportTransferList(const QString &fileName);
+	void signal_importTransferList(const QString &fileName);
 
 	//action
 	void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
@@ -303,10 +311,10 @@ signals:
 	void cancelAll();
 
 	//send error occurred
-	void error(QString path,quint64 size,QDateTime mtime,QString error);
+	void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
 	//for the extra logging
-	void rmPath(QString path);
-	void mkPath(QString path);
+	void rmPath(const QString &path);
+	void mkPath(const QString &path);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
@@ -315,8 +323,8 @@ signals:
 	//other signals
 	void queryOneNewDialog();
 
-	void send_osBufferLimit(unsigned int osBufferLimit);
-	void send_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
+	void send_osBufferLimit(const unsigned int &osBufferLimit);
+	void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
 };
 
 #endif // COPY_ENGINE_H

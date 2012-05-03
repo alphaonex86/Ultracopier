@@ -1064,19 +1064,66 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"stop");
 }
 
+/** \brief give the forced mode, to export/import transfer list */
+void ListThread::forceMode(const CopyMode &mode)
+{
+	if(mode==Copy)
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Force mode to copy"));
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Force mode to move"));
+	this->mode=mode;
+	forcedMode=true;
+}
+
 void ListThread::exportTransferList(const QString &fileName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QFile transferFile(fileName);
 	if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
 	{
-		transferFile.write(QString("Ultracopier-0.3;CopyEngine-0.3\n").toUtf8());
+		transferFile.write(QString("Ultracopier-0.3;Transfer-list;").toUtf8());
+		if(!forcedMode)
+			transferFile.write(QString("Transfer;").toUtf8());
+		else
+		{
+			if(mode==Copy)
+				transferFile.write(QString("Copy;").toUtf8());
+			else
+				transferFile.write(QString("Move;").toUtf8());
+		}
+		transferFile.write(QString("CopyEngine-0.3\n").toUtf8());
+		bool haveError=false;
 		int size=actionToDoListTransfer.size();
 		for (int index=0;index<size;++index) {
 			if(actionToDoListTransfer.at(index).mode==Copy)
-				transferFile.write(QString("Copy;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
-			else
-				transferFile.write(QString("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+			{
+				if(!forcedMode || mode==Copy)
+				{
+					if(forcedMode)
+						transferFile.write(QString("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+					else
+						transferFile.write(QString("Copy;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+				}
+				else
+					haveError=true;
+			}
+			else if(actionToDoListTransfer.at(index).mode==Move)
+			{
+				if(!forcedMode || mode==Move)
+				{
+					if(forcedMode)
+						transferFile.write(QString("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+					else
+						transferFile.write(QString("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+				}
+				else
+					haveError=true;
+			}
+		}
+		if(haveError)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
+			emit errorTransferList(tr("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
 		}
 		transferFile.close();
 	}
@@ -1103,16 +1150,44 @@ void ListThread::importTransferList(const QString &fileName)
 			return;
 		}
 		content=QString::fromUtf8(data);
-		if(content!="Ultracopier-0.3;CopyEngine-0.3\n")
+		if(content!="Ultracopier-0.3;Transfer-list;Transfer;CopyEngine-0.3\n" && content!="Ultracopier-0.3;Transfer-list;Copy;CopyEngine-0.3\n" && content!="Ultracopier-0.3;Transfer-list;Move;CopyEngine-0.3\n")
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Wrong header: \"%1\"").arg(content));
 			emit errorTransferList(tr("Wrong header: \"%1\"").arg(content));
 			return;
 		}
+		bool transferListMixedMode=false;
+		if(content=="Ultracopier-0.3;Transfer-list;Transfer;CopyEngine-0.3\n")
+		{
+			if(forcedMode)
+			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("The transfer list is in mixed mode, but this instance is not in this mode"));
+				emit errorTransferList(tr("The transfer list is in mixed mode, but this instance is not in this mode"));
+				return;
+			}
+			else
+				transferListMixedMode=true;
+		}
+		if(content=="Ultracopier-0.3;Transfer-list;Copy;CopyEngine-0.3\n" && (!forcedMode || mode==Copy))
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("The transfer list is in mixed mode, but this instance is not in this mode"));
+			emit errorTransferList(tr("The transfer list is in mixed mode, but this instance is not in this mode"));
+			return;
+		}
+		if(content=="Ultracopier-0.3;Transfer-list;Move;CopyEngine-0.3\n" && (!forcedMode || mode==Move))
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("The transfer list is in mixed mode, but this instance is not in this mode"));
+			emit errorTransferList(tr("The transfer list is in mixed mode, but this instance is not in this mode"));
+			return;
+		}
 		bool errorFound=false,ignored_by_wrong_type=false;
-		QRegExp correctLine("^(Copy|Move);[^;]+;[^;]+\n$");
+		QRegExp correctLine;
+		if(transferListMixedMode)
+			correctLine=QRegExp("^(Copy|Move);[^;]+;[^;]+\n$");
+		else
+			correctLine=QRegExp("^[^;]+;[^;]+\n$");
 		QStringList args;
-		CopyMode mode;
+		CopyMode tempMode;
 		do
 		{
 			data=transferFile.readLine();
@@ -1124,12 +1199,20 @@ void ListThread::importTransferList(const QString &fileName)
 				{
 					content.remove("\n");
 					args=content.split(";");
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("New data to import: %1,%2,%3").arg(args.at(0)).arg(args.at(1)).arg(args.at(2)));
-					if(args.at(0)=="Copy")
-						mode=Copy;
+					if(forcedMode)
+					{
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("New data to import in forced mode: %2,%3").arg(args.at(0)).arg(args.at(1)));
+						addToTransfer(QFileInfo(args.at(0)),QFileInfo(args.at(1)),mode);
+					}
 					else
-						mode=Move;
-					addToTransfer(QFileInfo(args.at(1)),QFileInfo(args.at(2)),mode);
+					{
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("New data to import: %1,%2,%3").arg(args.at(0)).arg(args.at(1)).arg(args.at(2)));
+						if(args.at(0)=="Copy")
+							tempMode=Copy;
+						else
+							tempMode=Move;
+						addToTransfer(QFileInfo(args.at(1)),QFileInfo(args.at(2)),tempMode);
+					}
 				}
 				else
 				{

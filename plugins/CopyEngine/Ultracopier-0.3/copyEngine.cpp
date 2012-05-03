@@ -174,6 +174,12 @@ bool copyEngine::haveSameDestination(const QString &destination)
 
 bool copyEngine::newCopy(const QStringList &sources)
 {
+	if(forcedMode && mode!=Copy)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
+		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to move, you can't copy with it"));
+		return false;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if(destination.isEmpty() || destination.isNull() || destination=="")
@@ -186,11 +192,23 @@ bool copyEngine::newCopy(const QStringList &sources)
 
 bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
 {
+	if(forcedMode && mode!=Copy)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
+		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to move, you can't copy with it"));
+		return false;
+	}
 	return listThread->newCopy(sources,destination);
 }
 
 bool copyEngine::newMove(const QStringList &sources)
 {
+	if(forcedMode && mode!=Move)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
+		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to copy, you can't move with it"));
+		return false;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if(destination.isEmpty() || destination.isNull() || destination=="")
@@ -203,6 +221,12 @@ bool copyEngine::newMove(const QStringList &sources)
 
 bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 {
+	if(forcedMode && mode!=Move)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
+		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to copy, you can't move with it"));
+		return false;
+	}
 	return listThread->newMove(sources,destination);
 }
 
@@ -386,6 +410,24 @@ void copyEngine::moveItemsDown(const QList<int> &ids)
 void copyEngine::moveItemsOnBottom(const QList<int> &ids)
 {
 	emit signal_moveItemsOnBottom(ids);
+}
+
+/** \brief give the forced mode, to export/import transfer list */
+void copyEngine::forceMode(const CopyMode &mode)
+{
+	if(forcedMode)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Mode forced previously"));
+		QMessageBox::critical(NULL,tr("Internal error"),tr("The mode have been forced previously, it's internal error, please report it"));
+		return;
+	}
+	if(mode==Copy)
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Force mode to copy"));
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Force mode to move"));
+	this->mode=mode;
+	forcedMode=true;
+	emit signal_forceMode(mode);
 }
 
 void copyEngine::exportTransferList()

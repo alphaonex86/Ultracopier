@@ -273,7 +273,10 @@ int Core::connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngin
 			newItem.copyEngineIsSync=true;
 
 			if(!ignoreMode)
+			{
 				newItem.interface->forceCopyMode(mode);
+				newItem.engine->forceMode(mode);
+			}
 			if(copyList.size()==0)
 				forUpateInformation.start();
 			copyList << newItem;

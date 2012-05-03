@@ -131,6 +131,10 @@ class PluginInterface_CopyEngine : public QObject
 		/** \brief move on bottom of the list the selected item
 		 * \param ids ids is the id list of the selected items */
 		virtual void moveItemsOnBottom(const QList<int> &ids) = 0;
+
+
+		/** \brief give the forced mode, to export/import transfer list */
+		virtual void forceMode(const CopyMode &mode) = 0;
 		/// \brief export the transfer list into a file
 		virtual void exportTransferList() = 0;
 		/// \brief import the transfer list into a file
@@ -209,6 +213,6 @@ class PluginInterface_CopyEngineFactory : public QObject
 
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.5");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.6");
 
 #endif // PLUGININTERFACE_COPYENGINE_H
