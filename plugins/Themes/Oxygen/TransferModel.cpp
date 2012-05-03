@@ -317,15 +317,15 @@ int TransferModel::searchPrev(const QString &text)
 
 void TransferModel::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
-	sub_loop_size=progressionList.size();
+	loop_size=progressionList.size();
 	index_for_loop=0;
 	while(index_for_loop<loop_size)
 	{
-		if(internalRunningOperation.contains(progressionList.at(sub_index_for_loop).id))
+		if(internalRunningOperation.contains(progressionList.at(index_for_loop).id))
 		{
-			ItemOfCopyListWithMoreInformations &item=internalRunningOperation[progressionList.at(sub_index_for_loop).id];
-			item.generalData.size=progressionList.at(sub_index_for_loop).total;
-			item.currentProgression=progressionList.at(sub_index_for_loop).current;
+			ItemOfCopyListWithMoreInformations &item=internalRunningOperation[progressionList.at(index_for_loop).id];
+			item.generalData.size=progressionList.at(index_for_loop).total;
+			item.currentProgression=progressionList.at(index_for_loop).current;
 		}
 		index_for_loop++;
 	}
