@@ -47,6 +47,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	checksumOnlyOnError		= true;
 	osBuffer			= false;
 	osBufferLimited			= false;
+	forcedMode			= false;
 
 	#if ! defined (Q_CC_GNU)
 	ui->keepDate->setEnabled(false);
@@ -82,6 +83,7 @@ ListThread::~ListThread()
 {
 	emit tryCancel();
 	waitCancel.acquire();
+	quit();
 	wait();
 }
 

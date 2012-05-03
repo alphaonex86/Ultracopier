@@ -34,6 +34,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	qRegisterMetaType<FileExistsAction>("FileExistsAction");
 	qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
 	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
+	qRegisterMetaType<CopyMode>("CopyMode");
 
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	debugDialogWindow.show();
@@ -77,6 +78,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	connect(this,SIGNAL(signal_moveItemsOnBottom(QList<int>)),			listThread,SLOT(moveItemsOnBottom(QList<int>)),		Qt::QueuedConnection);
 	connect(this,SIGNAL(signal_exportTransferList(QString)),			listThread,SLOT(exportTransferList(QString)),		Qt::QueuedConnection);
 	connect(this,SIGNAL(signal_importTransferList(QString)),			listThread,SLOT(importTransferList(QString)),		Qt::QueuedConnection);
+	connect(this,SIGNAL(signal_forceMode(CopyMode)),				listThread,SLOT(forceMode(CopyMode)),			Qt::QueuedConnection);
 	connect(this,SIGNAL(send_osBufferLimit(uint)),					listThread,SLOT(set_osBufferLimit(uint)),		Qt::QueuedConnection);
 	connect(this,SIGNAL(send_setFilters(QList<Filters_rules>,QList<Filters_rules>)),listThread,SLOT(set_setFilters(QList<Filters_rules>,QList<Filters_rules>)),		Qt::QueuedConnection);
 
@@ -91,6 +93,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	checkDestinationFolderExists	= false;
 	stopIt				= false;
 	size_for_speed			= 0;
+	forcedMode			= false;
 }
 
 copyEngine::~copyEngine()
