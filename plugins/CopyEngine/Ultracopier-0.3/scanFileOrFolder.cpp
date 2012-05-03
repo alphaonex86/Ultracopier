@@ -26,7 +26,7 @@ bool scanFileOrFolder::isFinished()
 void scanFileOrFolder::addToList(const QStringList& sources,const QString& destination)
 {
 	stopIt=false;
-	this->sources=sources;
+	this->sources=parseWildcardSources(sources);
         this->destination=destination;
 	if(sources.size()>1 || QFileInfo(destination).isDir())
 		/* Disabled because the separator transformation product bug
@@ -35,6 +35,75 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 		if(!destination.endsWith("/") && !destination.endsWith("\\"))
 			this->destination+="/";//put unix separator because it's transformed into that's under windows too
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
+}
+
+
+QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
+{
+	QStringList returnList;
+	int index=0;
+	while(index<sources.size())
+	{
+		if(sources.at(index).contains("*"))
+		{
+			QStringList toParse=sources.at(index).split(QRegExp("[/\\]"));
+			QList<QStringList> recomposedSource;
+			while(toParse.size()>0)
+			{
+				if(toParse.first().contains('*'))
+				{
+					QList<QStringList> newRecomposedSource;
+					QRegExp toResolv=QRegExp(toParse.first().replace('*',"[^/\\]*"));
+					int index_recomposedSource=0;
+					while(index_recomposedSource<recomposedSource.size())
+					{
+						QFileInfo info(recomposedSource.at(index_recomposedSource).join("/"));
+						if(info.isDir())
+						{
+							QDir folder(info.absoluteDir());
+							QFileInfoList fileFile=folder.entryInfoList(QStringList() << info.fileName());
+							int index_fileList=0;
+							while(index_fileList<fileFile.size())
+							{
+								if(info.fileName().contains(toResolv))
+								{
+									QStringList tempList=recomposedSource.at(index_recomposedSource);
+									tempList << info.fileName();
+									newRecomposedSource << tempList;
+								}
+								index_fileList++;
+							}
+						}
+						index_recomposedSource++;
+					}
+					recomposedSource=newRecomposedSource;
+				}
+				else
+				{
+					int index_recomposedSource=0;
+					while(index_recomposedSource<recomposedSource.size())
+					{
+						recomposedSource[index_recomposedSource] << toParse.first();
+						if(!QFileInfo(recomposedSource.at(index_recomposedSource).join("/")).exists())
+							recomposedSource.removeAt(index_recomposedSource);
+						else
+							index_recomposedSource++;
+					}
+				}
+				toParse.removeFirst();
+			}
+			int index_recomposedSource=0;
+			while(index_recomposedSource<recomposedSource.size())
+			{
+				returnList<<recomposedSource.at(index_recomposedSource).join("/");
+				index_recomposedSource++;
+			}
+		}
+		else
+			returnList << sources.at(index);
+		index++;
+	}
+	return returnList;
 }
 
 void scanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)

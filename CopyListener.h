@@ -107,7 +107,6 @@ class CopyListener : public QObject, public GlobalClass
 		ListeningState last_state;
 		bool last_have_plugin,last_inWaitOfReply;
 		void sendState(bool force=false);
-		QStringList parseWildcardSources(QStringList sources);
 		QStringList stripSeparator(QStringList sources);
 };
 

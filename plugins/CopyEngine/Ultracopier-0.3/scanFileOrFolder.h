@@ -73,6 +73,12 @@ private:
 	bool			reloadTheNewFilters;
 	bool			haveFilters;
 	QMutex			filtersMutex;
+	/** Parse the multiple wildcard source, it allow resolv multiple wildcard with Qt into their path
+	 * The string: /toto/f*a/yy*a/toto.mp3
+	 * Will give: /toto/f1a/yy*a/toto.mp3, /toto/f2a/yy*a/toto.mp3
+	 * Will give: /toto/f2a/yy1a/toto.mp3, /toto/f2a/yy2a/toto.mp3
+	*/
+	QStringList		parseWildcardSources(const QStringList &sources);
 };
 
 #endif // SCANFILEORFOLDER_H

@@ -205,31 +205,6 @@ void CopyListener::close()
 	copyRunningList.clear();
 }
 
-QStringList CopyListener::parseWildcardSources(QStringList sources)
-{
-	QStringList returnList;
-	int index=0;
-	while(index<sources.size())
-	{
-		if(sources.at(index).contains("*"))
-		{
-			QFileInfo info(sources.at(index));
-			QDir folder(info.absoluteDir());
-			QFileInfoList fileFile=folder.entryInfoList(QStringList() << info.fileName());
-			int index=0;
-			while(index<fileFile.size())
-			{
-				returnList << fileFile.at(index).absoluteFilePath();
-				index++;
-			}
-		}
-		else
-			returnList << sources.at(index);
-		index++;
-	}
-	return returnList;
-}
-
 QStringList CopyListener::stripSeparator(QStringList sources)
 {
 	int index=0;
@@ -245,28 +220,28 @@ QStringList CopyListener::stripSeparator(QStringList sources)
 void CopyListener::newCopy(QStringList sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)));
+	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(sources));
 }
 
 /** new copy with destination have been pased by the CLI */
 void CopyListener::newCopy(QStringList sources,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)),"file",destination);
+	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(sources),"file",destination);
 }
 
 /** new move without destination have been pased by the CLI */
 void CopyListener::newMove(QStringList sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)));
+	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(sources));
 }
 
 /** new move with destination have been pased by the CLI */
 void CopyListener::newMove(QStringList sources,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(parseWildcardSources(sources)),"file",destination);
+	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(sources),"file",destination);
 }
 
 void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
