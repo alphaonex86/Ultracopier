@@ -165,7 +165,7 @@ public:
 	bool newMove(const QStringList &sources,const QString &destination);
 	/** \brief send the new transfer list
 	 * \param file the transfer list */
-	virtual void newTransferList(const QString &file) = 0;
+	void newTransferList(const QString &file);
 
 	/** \brief to get byte read, use by Ultracopier for the speed calculation
 	 * real size transfered to right speed calculation */
