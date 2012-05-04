@@ -31,6 +31,7 @@ EventDispatcher::EventDispatcher()
 	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		&copyServer,	SLOT(newCopy(QStringList,QString)));
 	connect(&cliParser,	SIGNAL(newMove(QStringList)),			&copyServer,	SLOT(newMove(QStringList)));
 	connect(&cliParser,	SIGNAL(newMove(QStringList,QString)),		&copyServer,	SLOT(newMove(QStringList,QString)));
+	connect(&cliParser,	SIGNAL(newTransferList(QString,QString,QString)),&copyServer,	SLOT(newTransferList(QString,QString,QString)));
 	copyMoveEventIdIndex=0;
 	backgroundIcon=NULL;
 	stopIt=false;

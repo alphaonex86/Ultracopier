@@ -233,6 +233,11 @@ bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 	return listThread->newMove(sources,destination);
 }
 
+void copyEngine::newTransferList(const QString &file)
+{
+	emit signal_importTransferList(file);
+}
+
 quint64 copyEngine::realByteTransfered()
 {
 	return size_for_speed;

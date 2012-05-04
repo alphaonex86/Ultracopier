@@ -35,6 +35,8 @@ signals:
 	void newMove(QStringList sources);
 	/** new move with destination have been pased by the CLI */
 	void newMove(QStringList sources,QString destination);
+	/** new transfer list pased by the CLI */
+	void newTransferList(QString engine,QString mode,QString file);
 };
 
 #endif // CLIPARSER_H

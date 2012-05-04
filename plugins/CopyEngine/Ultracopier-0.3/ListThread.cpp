@@ -1144,7 +1144,7 @@ void ListThread::importTransferList(const QString &fileName)
 	if(transferFile.open(QIODevice::ReadOnly))
 	{
 		QString content;
-		QByteArray data=transferFile.readLine();
+		QByteArray data=transferFile.readLine(64);
 		if(data.size()<=0)
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Problem at the reading, or file size is null"));
@@ -1192,7 +1192,7 @@ void ListThread::importTransferList(const QString &fileName)
 		CopyMode tempMode;
 		do
 		{
-			data=transferFile.readLine();
+			data=transferFile.readLine(65535*2);
 			if(data.size()>0)
 			{
 				content=QString::fromUtf8(data);

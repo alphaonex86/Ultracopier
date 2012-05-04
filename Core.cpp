@@ -10,6 +10,8 @@
 
 #include "Core.h"
 
+/// \todo rename openNewCopy() to openNewInstance()
+
 Core::Core(CopyEngineManager *copyEngineList)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -26,7 +28,12 @@ Core::Core(CopyEngineManager *copyEngineList)
 void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	openNewCopy(Copy,false,protocolsUsedForTheSources);
+	if(openNewCopyEngineInstance(Copy,false,protocolsUsedForTheSources)==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+		QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+		return;
+	}
 	copyList.last().orderId<<orderId;
 	copyList.last().engine->newCopy(sources);
 	copyList.last().interface->haveExternalOrder();
@@ -74,7 +81,12 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
 		}
 	}
 	//else open new windows
-	openNewCopy(Copy,false,protocolsUsedForTheSources,protocolsUsedForTheDestination);
+	if(openNewCopyEngineInstance(Copy,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+		QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+		return;
+	}
 	copyList.last().orderId<<orderId;
 	copyList.last().engine->newCopy(sources,destination);
 	copyList.last().interface->haveExternalOrder();
@@ -82,7 +94,12 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
 
 void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
-	openNewCopy(Move,false,protocolsUsedForTheSources);
+	if(openNewCopyEngineInstance(Move,false,protocolsUsedForTheSources)==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+		QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+		return;
+	}
 	copyList.last().orderId<<orderId;
 	copyList.last().engine->newMove(sources);
 	copyList.last().interface->haveExternalOrder();
@@ -130,7 +147,12 @@ void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForThe
 		}
 	}
 	//else open new windows
-	openNewCopy(Move,false,protocolsUsedForTheSources,protocolsUsedForTheDestination);
+	if(openNewCopyEngineInstance(Move,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+		QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+		return;
+	}
 	copyList.last().orderId<<orderId;
 	copyList.last().engine->newMove(sources,destination);
 	copyList.last().interface->haveExternalOrder();
@@ -140,7 +162,12 @@ void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForThe
 void Core::addWindowCopyMove(const CopyMode &mode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+name);
-	openNewCopy(mode,false,name);
+	if(openNewCopyEngineInstance(mode,false,name)==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+		QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+		return;
+	}
 	ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)options->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
 	if(ActionOnManualOpen_value!=ActionOnManualOpen_Nothing)
 	{
@@ -155,7 +182,52 @@ void Core::addWindowCopyMove(const CopyMode &mode,const QString &name)
 void Core::addWindowTransfer(const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start"+name);
-	openNewCopy(Copy,true,name);
+	if(openNewCopyEngineInstance(Copy,true,name)==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+		QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+		return;
+	}
+}
+
+/** new transfer list pased by the CLI */
+void Core::newTransferList(QString engine,QString mode,QString file)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("engine: %1, mode: %2, file: %3").arg(engine).arg(mode).arg(file));
+	if(mode=="Transfer")
+	{
+		if(openNewCopyEngineInstance(Copy,true,engine)==-1)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+			QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+			return;
+		}
+	}
+	else if(mode=="Copy")
+	{
+		if(openNewCopyEngineInstance(Copy,false,engine)==-1)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+			QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+			return;
+		}
+	}
+	else if(mode=="Move")
+	{
+		if(openNewCopyEngineInstance(Move,false,engine)==-1)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to get a copy engine instance");
+			QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+			return;
+		}
+	}
+	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The mode arguement is no understand");
+		QMessageBox::critical(NULL,tr("Error"),tr("The mode arguement is no understand"));
+		return;
+	}
+	copyList.last().engine->newTransferList(file);
 }
 
 void Core::loadInterface()
@@ -222,17 +294,21 @@ int Core::incrementId()
 	return nextId;
 }
 
-int Core::openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
+int Core::openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,protocolsUsedForTheSources,protocolsUsedForTheDestination);
+	if(returnInformations.engine==NULL)
+		return -1;
 	return connectCopyEngine(mode,ignoreMode,returnInformations);
 }
 
-int Core::openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QString &name)
+int Core::openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, mode: "+QString::number(mode)+", name: "+name);
 	CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,name);
+	if(returnInformations.engine==NULL)
+		return -1;
 	return connectCopyEngine(mode,ignoreMode,returnInformations);
 }
 

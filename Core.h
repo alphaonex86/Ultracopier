@@ -72,8 +72,8 @@ class Core : public QObject, public GlobalClass
 			bool copyEngineIsSync;
 		};
 		QList<CopyInstance> copyList;
-		int openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources=QStringList(),const QString &protocolsUsedForTheDestination="");
-		int openNewCopy(const CopyMode &mode,const bool &ignoreMode,const QString &name);
+		int openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources=QStringList(),const QString &protocolsUsedForTheDestination="");
+		int openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QString &name);
 		int incrementId();
 		int nextId;
 		QList<int> idList;
@@ -109,6 +109,8 @@ class Core : public QObject, public GlobalClass
 		void addWindowCopyMove(const CopyMode &mode,const QString &name);
 		/** \brief open transfer (copy+move) windows with specific engine */
 		void addWindowTransfer(const QString &name);
+		/** new transfer list pased by the CLI */
+		void newTransferList(QString engine,QString mode,QString file);
 	private slots:
 		void copyInstanceCanceledByEngine();
 		void copyInstanceCanceledByInterface();

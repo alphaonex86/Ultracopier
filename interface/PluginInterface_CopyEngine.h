@@ -70,6 +70,9 @@ class PluginInterface_CopyEngine : public QObject
 		 * \param destination the destination to move
 		 * \return true if the move have been accepted */
 		virtual bool newMove(const QStringList &sources,const QString &destination) = 0;
+		/** \brief send the new transfer list
+		 * \param file the transfer list */
+		virtual void newTransferList(const QString &file) = 0;
 		
 		
 		/** \brief to get byte read, use by Ultracopier for the speed calculation

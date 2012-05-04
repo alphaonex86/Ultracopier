@@ -163,6 +163,10 @@ public:
 	 * \param destination the destination to move
 	 * \return true if the move have been accepted */
 	bool newMove(const QStringList &sources,const QString &destination);
+	/** \brief send the new transfer list
+	 * \param file the transfer list */
+	virtual void newTransferList(const QString &file) = 0;
+
 	/** \brief to get byte read, use by Ultracopier for the speed calculation
 	 * real size transfered to right speed calculation */
 	quint64 realByteTransfered();
