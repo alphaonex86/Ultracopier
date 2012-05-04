@@ -464,6 +464,18 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QToolButton" name="searchButton">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Ctrl+F</string>
            </property>
@@ -481,6 +493,18 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QToolButton" name="exportTransferList">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/export-transfer-list.png</normaloff>:/resources/export-transfer-list.png</iconset>
@@ -492,6 +516,18 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QToolButton" name="importTransferList">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/import-transfer-list.png</normaloff>:/resources/import-transfer-list.png</iconset>
