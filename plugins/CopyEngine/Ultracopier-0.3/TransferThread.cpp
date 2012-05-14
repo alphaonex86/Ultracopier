@@ -66,7 +66,6 @@ void TransferThread::run()
 	connect(&writeThread,SIGNAL(writeIsStopped()),		this,					SLOT(writeIsStopped()),		Qt::QueuedConnection);
 	connect(&readThread,SIGNAL(readIsStopped()),		&writeThread,				SLOT(endIsDetected()),		Qt::QueuedConnection);
 	//connect(&writeThread,SIGNAL(writeIsStopped()),		&writeThread,				SLOT(postOperation()),		Qt::QueuedConnection);//commented to do the checksum
-	connect(&readThread,SIGNAL(readIsStopped()),		this,					SLOT(readIsFinish()),		Qt::QueuedConnection);
 	connect(&readThread,SIGNAL(closed()),			this,					SLOT(readIsClosed()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(closed()),			this,					SLOT(writeIsClosed()),		Qt::QueuedConnection);
 	connect(&writeThread,SIGNAL(reopened()),		this,					SLOT(writeThreadIsReopened()),	Qt::QueuedConnection);
@@ -587,6 +586,7 @@ void TransferThread::writeChecksumFinish(const QByteArray& checksum)
 
 void TransferThread::compareChecksum()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] start");
 	if(sourceChecksum.size()==destinationChecksum.size())
 	{
 		//assume checksum as always good
@@ -889,6 +889,7 @@ void TransferThread::readIsStopped()
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] drop dual read stopped");
+	readIsFinish();
 }
 
 void TransferThread::writeIsStopped()
@@ -902,6 +903,7 @@ void TransferThread::writeIsStopped()
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] double event dropped");
+	writeIsFinish();
 }
 
 void TransferThread::timeOfTheBlockCopyFinished()

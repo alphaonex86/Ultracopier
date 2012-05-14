@@ -123,6 +123,7 @@ private slots:
 
 	void doChecksum_toggled(bool);
 	void checksumOnlyOnError_toggled(bool);
+	void checksumIgnoreIfImpossible_toggled(bool);
 	void osBuffer_toggled(bool);
 	void osBufferLimited_toggled(bool);
 	void osBufferLimit_editingFinished();

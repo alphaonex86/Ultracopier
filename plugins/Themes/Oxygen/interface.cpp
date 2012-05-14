@@ -300,7 +300,6 @@ void Themes::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
 	transferModel.setFileProgression(progressionList);
 	updateCurrentFileInformation();
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to found the file");
 }
 
 void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)

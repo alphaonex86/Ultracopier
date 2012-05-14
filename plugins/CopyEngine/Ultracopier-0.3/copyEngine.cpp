@@ -153,7 +153,7 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
 	connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
 	connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
-	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(set_checksumIgnoreIfImpossible(bool)));
+	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
 	connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
 	connect(ui->osBuffer,			SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
 	connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
@@ -639,6 +639,11 @@ void copyEngine::doChecksum_toggled(bool doChecksum)
 void copyEngine::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
 	listThread->set_checksumOnlyOnError(checksumOnlyOnError);
+}
+
+void copyEngine::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
+{
+	listThread->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
 }
 
 void copyEngine::osBuffer_toggled(bool osBuffer)
