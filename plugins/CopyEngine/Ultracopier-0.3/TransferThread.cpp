@@ -211,6 +211,7 @@ void TransferThread::resetExtraVariable()
 	readIsReadyVariable		= false;
 	writeIsReadyVariable		= false;
 	readIsFinishVariable		= false;
+	writeIsFinishVariable		= false;
 	readIsClosedVariable		= false;
 	writeIsClosedVariable		= false;
 	needSkip			= false;
