@@ -26,6 +26,7 @@ SessionLoader::SessionLoader(QObject *parent) :
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
+	shouldEnabled=options->getOptionValue("SessionLoader","LoadAtSessionStarting").toBool();
 }
 
 SessionLoader::~SessionLoader()
@@ -71,6 +72,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
 			newEntry.sessionLoaderInterface=sessionLoader;
 			newEntry.path=plugin.path;
 			newEntry.sessionLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+			newEntry.sessionLoaderInterface->setEnabled(shouldEnabled);
 			pluginList << newEntry;
 		}
 		else
@@ -103,9 +105,10 @@ void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 
 void SessionLoader::newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
-	if(groupName=="SessionLoader" && variableName=="Enabled")
+	if(groupName=="SessionLoader" && variableName=="LoadAtSessionStarting")
 	{
-		bool shouldEnabled=value.toBool();
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, value: %1").arg(value.toBool()));
+		shouldEnabled=value.toBool();
 		int index=0;
 		while(index<pluginList.size())
 		{

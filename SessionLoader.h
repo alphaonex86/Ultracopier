@@ -48,6 +48,7 @@ class SessionLoader : public QObject, GlobalClass
 			LocalPluginOptions *options;
 		};
 		QList<LocalPlugin> pluginList;
+		bool shouldEnabled;
 	signals:
 		void previouslyPluginAdded(PluginsAvailable);
 };
