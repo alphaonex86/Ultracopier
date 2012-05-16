@@ -72,7 +72,6 @@ private slots:
 	void showFilterDialog();
 	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
 	void doChecksum_toggled(bool);
-	void checksumType_currentIndexChanged(int index);
 	void checksumOnlyOnError_toggled(bool);
 	void osBuffer_toggled(bool);
 	void osBufferLimited_toggled(bool);
