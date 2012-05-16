@@ -23,6 +23,10 @@ SystrayIcon::SystrayIcon()
 	actionOptions		= new QAction(this);
 	//actionTransfer		= new QAction(this);
 	copyMenu		= new QMenu();
+	//to prevent init bug
+	stateListener=NotListening;
+	statePluginLoader=Uncaught;
+
 	sysTrayIcon->setContextMenu(systrayMenu);
 	sysTrayIcon->setToolTip("Ultracopier");
 	#ifdef Q_OS_WIN32
@@ -32,6 +36,7 @@ SystrayIcon::SystrayIcon()
 	#endif
 	sysTrayIcon->show();
 	//connect the action
+	connect(&timerCheckSetTooltip,	SIGNAL(timeout()),					this,	SLOT(checkSetTooltip()));
 	connect(actionMenuQuit,		SIGNAL(triggered()),					this,	SIGNAL(quit()));
 	connect(actionMenuAbout,	SIGNAL(triggered()),					this,	SIGNAL(showHelp()));
 	connect(actionOptions,		SIGNAL(triggered()),					this,	SIGNAL(showOptions()));
@@ -49,6 +54,9 @@ SystrayIcon::SystrayIcon()
 	systrayMenu->insertSeparator(actionOptions);
 	retranslateTheUI();
 	updateSystrayIcon();
+
+	timerCheckSetTooltip.setSingleShot(true);
+	timerCheckSetTooltip.start(1000);
 }
 
 /// \brief Hide and destroy the icon in the systray
@@ -60,6 +68,17 @@ SystrayIcon::~SystrayIcon()
 	delete systrayMenu;
 	delete copyMenu;
 	delete sysTrayIcon;
+}
+
+void SystrayIcon::checkSetTooltip()
+{
+	if(sysTrayIcon->isSystemTrayAvailable())
+	{
+		sysTrayIcon->setToolTip("Ultracopier");
+		updateSystrayIcon();
+	}
+	else
+		timerCheckSetTooltip.start();
 }
 
 void SystrayIcon::listenerReady(const ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply)
@@ -99,7 +118,7 @@ void SystrayIcon::showSystrayMessage(const QString& text)
 void SystrayIcon::updateSystrayIcon()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, haveListenerInfo %1, havePluginLoaderInfo: %2").arg(haveListenerInfo).arg(havePluginLoaderInfo));
-	QString toolTip;
+	QString toolTip="???";
 	QString icon;
 	if(!haveListenerInfo || !havePluginLoaderInfo)
 	{

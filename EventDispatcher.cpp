@@ -31,7 +31,6 @@ EventDispatcher::EventDispatcher()
 	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		&copyServer,	SLOT(newCopy(QStringList,QString)));
 	connect(&cliParser,	SIGNAL(newMove(QStringList)),			&copyServer,	SLOT(newMove(QStringList)));
 	connect(&cliParser,	SIGNAL(newMove(QStringList,QString)),		&copyServer,	SLOT(newMove(QStringList,QString)));
-	connect(&cliParser,	SIGNAL(newTransferList(QString,QString,QString)),&copyServer,	SLOT(newTransferList(QString,QString,QString)));
 	copyMoveEventIdIndex=0;
 	backgroundIcon=NULL;
 	stopIt=false;
@@ -79,6 +78,8 @@ EventDispatcher::EventDispatcher()
 	KeysList.clear();
 	KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier-0.3")));
 	options->addOptionGroup("CopyEngine",KeysList);
+
+	connect(&cliParser,	SIGNAL(newTransferList(QString,QString,QString)),core,	SLOT(newTransferList(QString,QString,QString)));
 }
 
 /// \brief Destroy the ultracopier event dispatcher

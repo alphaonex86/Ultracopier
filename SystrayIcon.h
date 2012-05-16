@@ -12,6 +12,7 @@
 #include <QObject>
 #include <QAction>
 #include <QMenu>
+#include <QTimer>
 
 #include "Environment.h"
 #include "GlobalClass.h"
@@ -64,6 +65,7 @@ class SystrayIcon : public QObject, public GlobalClass
 		CatchState statePluginLoader;
 		bool haveListenerInfo,havePluginLoaderInfo;
 		bool haveListener,havePluginLoader;
+		QTimer timerCheckSetTooltip;
 	private slots:
 		/// \brief To update the current themes
 		void updateCurrentTheme();
@@ -79,6 +81,7 @@ class SystrayIcon : public QObject, public GlobalClass
 		/// \brief to retranslate the ui
 		void retranslateTheUI();
 		void reloadEngineList();
+		void checkSetTooltip();
 	signals:
 		/// \brief Quit ultracopier
 		void quit();
