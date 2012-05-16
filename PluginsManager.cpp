@@ -100,9 +100,9 @@ void PluginsManager::run()
 			QDir dir(pluginComposed);
 			if(stopIt)
 				return;
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"search plugin into: "+pluginComposed);
 			if(dir.exists())
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"search plugin into: "+pluginComposed);
 				foreach(QString dirName, dir.entryList(QDir::Dirs|QDir::NoDotAndDotDot))
 				{
 					if(stopIt)
