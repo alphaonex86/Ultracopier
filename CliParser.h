@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QMessageBox>
 #include <QCoreApplication>
+#include <QFile>
 
 #include "Environment.h"
 
