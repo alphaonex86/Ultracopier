@@ -51,6 +51,7 @@ class SystrayIcon : public QObject, public GlobalClass
 		QIcon IconInfo;			///< Pointer on the icon for info
 		QIcon IconAdd;				///< Pointer on the icon for add
 		QIcon IconOptions;			///< Pointer on the options
+		bool tryCatch;
 		/// \brief To update the systray icon
 		void updateSystrayIcon();
 		void showTryCatchMessageWithNoListener();

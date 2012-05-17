@@ -134,6 +134,7 @@ void PluginLoader::load()
 		pluginList.at(index).PluginLoaderInterface->setEnabled(true);
 		index++;
 	}
+	sendState(true);
 }
 
 void PluginLoader::unload()
@@ -147,6 +148,7 @@ void PluginLoader::unload()
 		pluginList.at(index).PluginLoaderInterface->setEnabled(false);
 		index++;
 	}
+	sendState(true);
 }
 
 #ifdef ULTRACOPIER_DEBUG
@@ -186,7 +188,12 @@ void PluginLoader::sendState(bool force)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("current_state: %1").arg(current_state));
 	if(current_state==Uncaught)
 	{
-		if(found_not_listen && !found_listen)
+		if(!found_not_listen && !found_listen)
+		{
+			if(needEnable)
+				current_state=Caught;
+		}
+		else if(found_not_listen && !found_listen)
 			current_state=Uncaught;
 		else if(!found_not_listen && found_listen)
 			current_state=Caught;
@@ -201,7 +208,7 @@ void PluginLoader::sendState(bool force)
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Skip the signal sending"));
-	last_state=Uncaught;
+	last_state=current_state;
 	last_have_plugin=have_plugin;
 	last_inWaitOfReply=found_inWaitOfReply;
 }

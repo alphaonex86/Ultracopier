@@ -383,7 +383,7 @@ void CopyListener::sendState(bool force)
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Skip the signal sending"));
-	last_state=NotListening;
+	last_state=current_state;
 	last_have_plugin=have_plugin;
 	last_inWaitOfReply=found_inWaitOfReply;
 }
