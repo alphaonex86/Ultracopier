@@ -139,7 +139,6 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 	set_osBuffer(osBuffer);
 	set_osBufferLimited(osBufferLimited);
 	set_osBufferLimit(osBufferLimit);
-	set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 	return true;
 }
 
@@ -147,7 +146,7 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 void copyEngine::setInterfacePointer(QWidget * interface)
 {
 	this->interface=interface;
-	filters=new Filters(interface);
+	filters=new Filters(tempWidget);
 	connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
 	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
 	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
@@ -163,6 +162,7 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
 
 	filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+	set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 }
 
 bool copyEngine::haveSameSource(const QStringList &sources)

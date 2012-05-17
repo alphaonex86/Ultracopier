@@ -1447,6 +1447,7 @@ void ListThread::set_osBufferLimit(unsigned int osBufferLimit)
 
 void ListThread::set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("include.size(): %1, exclude.size(): %2").arg(include.size()).arg(exclude.size()));
 	this->include=include;
 	this->exclude=exclude;
 	int index=0;

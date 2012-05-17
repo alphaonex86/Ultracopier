@@ -108,11 +108,13 @@ QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
 
 void scanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QMutexLocker lock(&filtersMutex);
 	this->include_send=include;
 	this->exclude_send=exclude;
 	reloadTheNewFilters=true;
 	haveFilters=include_send.size()>0 || exclude_send.size()>0;
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("haveFilters: %1, include_send.size(): %2, exclude_send.size(): %3").arg(haveFilters).arg(include_send.size()).arg(exclude_send.size()));
 }
 
 //set action if Folder are same or exists
@@ -300,6 +302,8 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 				QMutexLocker lock(&filtersMutex);
 				QCoreApplication::processEvents(QEventLoop::AllEvents);
 				reloadTheNewFilters=false;
+				this->include=this->include_send;
+				this->exclude=this->exclude_send;
 			}
 			QString fileName=fileInfo.fileName();
 			if(fileInfo.isDir())
@@ -316,24 +320,30 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 							break;
 						}
 					}
+					filters_index++;
 				}
 				if(excluded)
-					break;
-				filters_index=0;
-				while(filters_index<include.size())
+				{}
+				else
 				{
-					if(include.at(filters_index).apply_on==ApplyOn_folder || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
+					filters_index=0;
+					while(filters_index<include.size())
 					{
-						if(fileName.contains(include.at(filters_index).regex))
+						if(include.at(filters_index).apply_on==ApplyOn_folder || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
 						{
-							included=true;
-							break;
+							if(fileName.contains(include.at(filters_index).regex))
+							{
+								included=true;
+								break;
+							}
 						}
+						filters_index++;
 					}
+					if(!included)
+					{}
+					else
+						listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileName+"/");
 				}
-				if(!included)
-					break;
-				listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileName+"/");
 			}
 			else
 			{
@@ -349,32 +359,40 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 							break;
 						}
 					}
+					filters_index++;
 				}
 				if(excluded)
-					break;
-				filters_index=0;
-				while(filters_index<include.size())
+				{}
+				else
 				{
-					if(include.at(filters_index).apply_on==ApplyOn_file || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
+					filters_index=0;
+					while(filters_index<include.size())
 					{
-						if(fileName.contains(include.at(filters_index).regex))
+						if(include.at(filters_index).apply_on==ApplyOn_file || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
 						{
-							included=true;
-							break;
+							if(fileName.contains(include.at(filters_index).regex))
+							{
+								included=true;
+								break;
+							}
 						}
+						filters_index++;
 					}
+					if(!included)
+					{}
+					else
+						emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileName,mode);
 				}
-				if(!included)
-					break;
-				emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileName,mode);
 			}
-			continue;
 		}
-		if(fileInfo.isDir())//possible wait time here
-			//listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
-			listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too
 		else
-			emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileInfo.fileName(),mode);
+		{
+			if(fileInfo.isDir())//possible wait time here
+				//listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
+				listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too
+			else
+				emit fileTransfer(fileInfo.absoluteFilePath(),finalDest+fileInfo.fileName(),mode);
+		}
 	}
 	if(mode==Move)
 	{
