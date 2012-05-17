@@ -16,7 +16,6 @@ SystrayIcon::SystrayIcon()
 	//setup the systray icon
 	haveListenerInfo	= false;
 	havePluginLoaderInfo	= false;
-	tryCatch		= false;
 	sysTrayIcon		= new QSystemTrayIcon();
 	systrayMenu		= new QMenu();
 	actionMenuAbout		= new QAction(this);
@@ -249,20 +248,15 @@ void SystrayIcon::CatchAction(QSystemTrayIcon::ActivationReason reason)
 	if(reason==QSystemTrayIcon::DoubleClick || reason==QSystemTrayIcon::Trigger)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Double click on system tray icon");
-		if(stateListener!=NotListening || statePluginLoader!=Uncaught)
-		{
-			tryCatch=false;
+		if(stateListener!=NotListening)
 			emit tryUncatchCopy();
-		}
 		else
 		{
 			if(!haveListener)
 			{
-				tryCatch=false;
 				showTryCatchMessageWithNoListener();
 				return;
 			}
-			tryCatch=true;
 			emit tryCatchCopy();
 		}
 	}
