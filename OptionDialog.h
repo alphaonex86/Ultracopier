@@ -96,6 +96,8 @@ private:
 	QTreeWidgetItem * treeWidgetItem;
 public slots:
 	void newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
+signals:
+	void previouslyPluginAdded(PluginsAvailable);
 };
 
 #endif // OPTIONDIALOG_H

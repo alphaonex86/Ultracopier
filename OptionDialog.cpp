@@ -30,13 +30,14 @@ OptionDialog::OptionDialog() :
 	//load the plugins
 	plugins->lockPluginListEdition();
 	QList<PluginsAvailable> list=plugins->getPlugins();
-	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
+	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
 	connect(plugins,	SIGNAL(onePluginAdded(PluginsAvailable)),		this,	SLOT(onePluginAdded(PluginsAvailable)));
 	connect(plugins,	SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,	SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
 	connect(plugins,	SIGNAL(pluginListingIsfinish()),			this,	SLOT(loadOption()));
 	connect(options,	SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
+	foreach(PluginsAvailable currentPlugin,list)
+		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
 	defaultImportBackend=PluginsManager::ImportBackend_File;
 	#ifndef ULTRACOPIER_PLUGIN_SUPPORT

@@ -19,8 +19,6 @@ CopyListener::CopyListener(QObject *parent) :
 	options->addOptionGroup("CopyListener",KeysList);
 	plugins->lockPluginListEdition();
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
-	foreach(PluginsAvailable currentPlugin,list)
-		onePluginAdded(currentPlugin);
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
 	qRegisterMetaType<ListeningState>("ListeningState");
 	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
@@ -70,7 +68,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 		{
 			if(pluginList.at(index).listenInterface==listen)
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found"));
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found %1 for %2").arg(pluginList.at(index).path).arg(plugin.path));
 				pluginLoader->unload();
 				return;
 			}
