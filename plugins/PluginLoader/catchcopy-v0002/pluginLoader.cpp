@@ -1,4 +1,4 @@
-/** \file session-loader.cpp
+/** \file pluginLoader.cpp
 \brief Define the session plugin loader test
 \author alpha_one_x86
 \version 0.3
@@ -8,12 +8,14 @@
 #include "PlatformMacro.h"
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
-	#define CATCHCOPY_DLL_32 "catchcopy32d.dll"
-	#define CATCHCOPY_DLL_64 "catchcopy64d.dll"
+	#define NORMAL_EXT "d.dll"
+	#define SECOND_EXT ".dll"
 #else
-	#define CATCHCOPY_DLL_32 "catchcopy32.dll"
-	#define CATCHCOPY_DLL_64 "catchcopy64.dll"
+	#define NORMAL_EXT ".dll"
+	#define SECOND_EXT "d.dll"
 #endif
+#define CATCHCOPY_DLL_32 "catchcopy32"
+#define CATCHCOPY_DLL_64 "catchcopy64"
 
 PluginLoader::PluginLoader()
 {
@@ -209,23 +211,37 @@ bool PluginLoader::checkExistsDll()
 	int index=0;
 	while(index<importantDll.size())
 	{
-		if(!QFile::exists(pluginPath+importantDll.at(index)))
+		if(!QFile::exists(pluginPath+importantDll.at(index)+NORMAL_EXT))
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file not found, drop to the list: "+importantDll.at(index));
-			importantDll.removeAt(index);
-			index--;
+			if(!QFile::exists(pluginPath+importantDll.at(index)+SECOND_EXT))
+			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file not found, drop to the list: "+importantDll.at(index));
+				importantDll.removeAt(index);
+				index--;
+			}
+			else
+				importantDll[index]+=SECOND_EXT;
 		}
+		else
+			importantDll[index]+=NORMAL_EXT;
 		index++;
 	}
 	index=0;
 	while(index<secondDll.size())
 	{
-		if(!QFile::exists(pluginPath+secondDll.at(index)))
+		if(!QFile::exists(pluginPath+secondDll.at(index)+NORMAL_EXT))
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file not found, drop to the list: "+secondDll.at(index));
-			secondDll.removeAt(index);
-			index--;
+			if(!QFile::exists(pluginPath+secondDll.at(index)+SECOND_EXT))
+			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file not found, drop to the list: "+secondDll.at(index));
+				secondDll.removeAt(index);
+				index--;
+			}
+			else
+				secondDll[index]+=SECOND_EXT;
 		}
+		else
+			secondDll[index]+=NORMAL_EXT;
 		index++;
 	}
 	if(importantDll.size()>0 || secondDll.size()>0)
