@@ -71,13 +71,64 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
 	if(plugin.category!=PluginType_Themes)
 		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+plugin.name);
-	PluginsAvailableThemes newThemes;
-	newThemes.plugin=plugin;
-	newThemes.factory=NULL;
-	newThemes.pluginLoader=NULL;
-	pluginList << newThemes;
-	//setFileName
-	/**/
+	PluginsAvailableThemes newPlugin;
+	newPlugin.plugin=plugin;
+	QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"));
+	QObject *pluginInstance = pluginLoader->instance();
+	if(pluginInstance==NULL)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(newPlugin.plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
+		pluginLoader->unload();
+	}
+	else
+	{
+		PluginInterface_ThemesFactory *factory = qobject_cast<PluginInterface_ThemesFactory *>(pluginInstance);
+		//check if found
+		int indexTemp=0;
+		while(indexTemp<pluginList.size())
+		{
+			if(pluginList.at(indexTemp).factory==factory)
+			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found, current: %1, conflit plugin: %2, name: %3")
+				.arg(newPlugin.plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"))
+				.arg(pluginList.at(indexTemp).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"))
+				.arg(newPlugin.plugin.name)
+				);
+				pluginLoader->unload();
+				emit newThemeOptions(NULL,false,true);
+				emit theThemeIsReloaded();
+				return;
+			}
+			indexTemp++;
+		}
+		if(factory==NULL)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unable to cast the plugin: %1").arg(pluginLoader->errorString()));
+			pluginLoader->unload();
+		}
+		else
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("preload: %1, at the index: %2").arg(newPlugin.plugin.name).arg(QString::number(pluginList.size())));
+			#ifdef ULTRACOPIER_DEBUG
+			qRegisterMetaType<DebugLevel>("DebugLevel");
+			connect(factory,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
+			#endif // ULTRACOPIER_DEBUG
+			connect(languages,SIGNAL(newLanguageLoaded(QString)),factory,SLOT(newLanguageLoaded()));
+			newPlugin.factory=factory;
+			newPlugin.pluginLoader=pluginLoader;
+			newPlugin.options=new LocalPluginOptions("Themes-"+newPlugin.plugin.name);
+			newPlugin.factory->setResources(newPlugin.options,newPlugin.plugin.writablePath,newPlugin.plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+			currentStylePath=newPlugin.plugin.path;
+			pluginList << newPlugin;
+			if(plugins->allPluginHaveBeenLoaded())
+				allPluginIsLoaded();
+			emit newThemeOptions(newPlugin.factory->options(),true,true);
+			emit theThemeIsReloaded();
+			return;
+		}
+	}
+	emit newThemeOptions(NULL,false,true);
+	emit theThemeIsReloaded();
 }
 
 void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
@@ -123,7 +174,6 @@ QIcon ThemesManager::loadIcon(const QString &fileName)
 void ThemesManager::allPluginIsLoaded()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	currentPluginIndex=-1;
 	if(pluginList.size()==0)
 	{
 		emit newThemeOptions(NULL,false,false);
@@ -136,65 +186,13 @@ void ThemesManager::allPluginIsLoaded()
 	{
 		if(pluginList.at(index).plugin.name==name)
 		{
-			QPluginLoader *pluginLoader=new QPluginLoader(pluginList.at(index).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"));
-			QObject *pluginInstance = pluginLoader->instance();
-			if(pluginInstance==NULL)
-			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(pluginList.at(index).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
-				pluginLoader->unload();
-			}
-			else
-			{
-				PluginInterface_ThemesFactory *factory = qobject_cast<PluginInterface_ThemesFactory *>(pluginInstance);
-				//check if found
-				int indexTemp=0;
-				while(indexTemp<pluginList.size())
-				{
-					if(pluginList.at(indexTemp).factory==factory)
-					{
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found, current: %1, conflit plugin: %2, name: %3")
-						.arg(pluginList.at(index).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"))
-						.arg(pluginList.at(indexTemp).plugin.path+QDir::separator()+plugins->getResolvedPluginName("interface"))
-						.arg(name)
-						);
-						pluginLoader->unload();
-						emit newThemeOptions(NULL,false,true);
-						emit theThemeIsReloaded();
-						return;
-					}
-					indexTemp++;
-				}
-				if(factory==NULL)
-				{
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unable to cast the plugin: %1").arg(pluginLoader->errorString()));
-					pluginLoader->unload();
-				}
-				else
-				{
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"preload: "+name+", at the index: "+QString::number(index)+", name at this index: "+pluginList[index].plugin.name);
-					#ifdef ULTRACOPIER_DEBUG
-					qRegisterMetaType<DebugLevel>("DebugLevel");
-					connect(factory,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
-					#endif // ULTRACOPIER_DEBUG
-					connect(languages,SIGNAL(newLanguageLoaded(QString)),factory,SLOT(newLanguageLoaded()));
-					pluginList[index].factory=factory;
-					pluginList[index].pluginLoader=pluginLoader;
-					pluginList[index].options=new LocalPluginOptions("Themes-"+name);
-					pluginList.at(index).factory->setResources(pluginList[index].options,pluginList.at(index).plugin.writablePath,pluginList.at(index).plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
-					currentPluginIndex=index;
-					currentStylePath=pluginList[index].plugin.path;
-					emit newThemeOptions(pluginList.at(index).factory->options(),true,true);
-					emit theThemeIsReloaded();
-					return;
-				}
-			}
-			emit newThemeOptions(NULL,false,true);
-			emit theThemeIsReloaded();
+			currentPluginIndex=index;
 			return;
 		}
 		index++;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"theme not found!");
+	currentPluginIndex=-1;
 	emit newThemeOptions(NULL,false,true);
 	emit theThemeIsReloaded();
 }
@@ -202,7 +200,10 @@ void ThemesManager::allPluginIsLoaded()
 PluginInterface_Themes * ThemesManager::getThemesInstance()
 {
 	if(currentPluginIndex==-1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to load the interface, copy aborted");
 		return NULL;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Send interface: "+pluginList.at(currentPluginIndex).plugin.name);
 	return pluginList.at(currentPluginIndex).factory->getInstance();
 }
