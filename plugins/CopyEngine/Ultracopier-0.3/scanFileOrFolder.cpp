@@ -40,35 +40,42 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 
 QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
 {
+	QRegExp splitFolder("[/\\\\]");
 	QStringList returnList;
 	int index=0;
 	while(index<sources.size())
 	{
 		if(sources.at(index).contains("*"))
 		{
-			QStringList toParse=sources.at(index).split(QRegExp("[/\\]"));
+			QStringList toParse=sources.at(index).split(splitFolder);
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("before wildcard parse: %1, toParse: %2, is valid: %3").arg(sources.at(index)).arg(toParse.join(", ")).arg(splitFolder.isValid()));
 			QList<QStringList> recomposedSource;
+			recomposedSource << (QStringList() << "");
 			while(toParse.size()>0)
 			{
 				if(toParse.first().contains('*'))
 				{
+					QString toParseFirst=toParse.first();
+					if(toParseFirst=="")
+						toParseFirst+="/";
 					QList<QStringList> newRecomposedSource;
-					QRegExp toResolv=QRegExp(toParse.first().replace('*',"[^/\\]*"));
+					QRegExp toResolv=QRegExp(toParseFirst.replace('*',"[^/\\\\]*"));
 					int index_recomposedSource=0;
-					while(index_recomposedSource<recomposedSource.size())
+					while(index_recomposedSource<recomposedSource.size())//parse each url part
 					{
 						QFileInfo info(recomposedSource.at(index_recomposedSource).join("/"));
 						if(info.isDir())
 						{
-							QDir folder(info.absoluteDir());
-							QFileInfoList fileFile=folder.entryInfoList(QStringList() << info.fileName());
+							QDir folder(info.absoluteFilePath());
+							QFileInfoList fileFile=folder.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//QStringList() << toResolv
+							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("list the folder: %1, with the wildcard: %2").arg(info.absoluteFilePath()).arg(toResolv.pattern()));
 							int index_fileList=0;
 							while(index_fileList<fileFile.size())
 							{
-								if(info.fileName().contains(toResolv))
+								if(fileFile.at(index_fileList).fileName().contains(toResolv))
 								{
 									QStringList tempList=recomposedSource.at(index_recomposedSource);
-									tempList << info.fileName();
+									tempList << fileFile.at(index_fileList).fileName();
 									newRecomposedSource << tempList;
 								}
 								index_fileList++;
@@ -80,6 +87,7 @@ QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
 				}
 				else
 				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("add toParse: %1").arg(toParse.join("/")));
 					int index_recomposedSource=0;
 					while(index_recomposedSource<recomposedSource.size())
 					{
@@ -285,7 +293,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 		}
 	} while(fileErrorAction==FileError_Retry);
 	/// \todo check here if the folder is not readable or not exists
-	QFileInfoList entryList=finalSource.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);//possible wait time here
+	QFileInfoList entryList=finalSource.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst|QDir::Name|QDir::IgnoreCase);//possible wait time here
 	int sizeEntryList=entryList.size();
 	emit newFolderListing(newSource);
 	if(sizeEntryList==0)
