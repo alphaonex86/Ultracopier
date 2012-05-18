@@ -35,7 +35,7 @@ class Themes : public PluginInterface_Themes
 {
 	Q_OBJECT
 public:
-	Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine);
+	Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool moreButtonPushed);
 	~Themes();
 	//send information about the copy
 	/// \brief to set the action in progress

@@ -40,7 +40,8 @@ public:
 	/// \brief to get a resource icon
 	QIcon getIcon(const QString &fileName);
 private slots:
-	void checkBoxHaveChanged(bool toggled);
+	void checkBoxShowSpeedHaveChanged(bool toggled);
+	void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
 	void resetOptions();
 	void newLanguageLoaded();
 private:

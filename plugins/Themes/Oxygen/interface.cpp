@@ -10,7 +10,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
+Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool moreButtonPushed) :
 	ui(new Ui::interfaceCopy())
 {
 	this->facilityEngine=facilityEngine;
@@ -64,7 +64,7 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine) :
 	newLanguageLoaded();
 
 	//unpush the more button
-	ui->moreButton->setChecked(false);
+	ui->moreButton->setChecked(moreButtonPushed);
 	on_moreButton_toggled(false);
 
 	/// \note important for drag and drop, \see dropEvent()
