@@ -59,9 +59,12 @@ Factory::~Factory()
 PluginInterface_CopyEngine * Factory::getInstance()
 {
 	copyEngine *realObject=new copyEngine(facilityEngine);
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	connect(realObject,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+	#endif
+	realObject->connectTheSignalsSlots();
 	realObject->setDrive(mountSysPoint);
 	PluginInterface_CopyEngine * newTransferEngine=realObject;
-	connect(newTransferEngine,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	connect(this,SIGNAL(reloadLanguage()),newTransferEngine,SLOT(newLanguageLoaded()));
 	realObject->setRightTransfer(		optionsEngine->getOptionValue("doRightTransfer").toBool());
 	realObject->setKeepDate(		optionsEngine->getOptionValue("keepDate").toBool());

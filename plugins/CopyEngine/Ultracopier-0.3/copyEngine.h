@@ -41,6 +41,7 @@ class copyEngine : public PluginInterface_CopyEngine
 public:
 	copyEngine(FacilityInterface * facilityInterface);
 	~copyEngine();
+	void connectTheSignalsSlots();
 private:
 	ListThread *listThread;
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW

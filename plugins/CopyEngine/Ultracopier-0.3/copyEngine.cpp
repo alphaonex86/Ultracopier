@@ -34,55 +34,11 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	qRegisterMetaType<FileExistsAction>("FileExistsAction");
 	qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
 	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
+	qRegisterMetaType<QList<int> >("QList<int>");
 	qRegisterMetaType<CopyMode>("CopyMode");
+	qRegisterMetaType<QList<returnActionOnCopyList> >("QList<returnActionOnCopyList>");
+	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
 
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-	debugDialogWindow.show();
-	#endif
-	connect(listThread,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SIGNAL(actionInProgess(EngineActionInProgress)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newFolderListing(QString)),			this,SIGNAL(newFolderListing(QString)),			Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newCollisionAction(QString)),			this,SIGNAL(newCollisionAction(QString)),		Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newErrorAction(QString)),			this,SIGNAL(newErrorAction(QString)),			Qt::QueuedConnection);
-	connect(listThread,SIGNAL(isInPause(bool)),				this,SIGNAL(isInPause(bool)),				Qt::QueuedConnection);
-	connect(listThread,SIGNAL(cancelAll()),					this,SIGNAL(cancelAll()),				Qt::QueuedConnection);
-	connect(listThread,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SIGNAL(error(QString,quint64,QDateTime,QString)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(rmPath(QString)),				this,SIGNAL(rmPath(QString)),				Qt::QueuedConnection);
-	connect(listThread,SIGNAL(mkPath(QString)),				this,SIGNAL(mkPath(QString)),				Qt::QueuedConnection);
-	connect(listThread,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	this,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		this,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(pushGeneralProgression(quint64,quint64)),		this,SIGNAL(pushGeneralProgression(quint64,quint64)),		Qt::QueuedConnection);
-	connect(listThread,SIGNAL(syncReady()),						this,SIGNAL(syncReady()),					Qt::QueuedConnection);
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-	connect(listThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),			this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),		Qt::QueuedConnection);
-	#endif
-
-	connect(listThread,SIGNAL(send_fileAlreadyExists(QFileInfo,QFileInfo,bool,TransferThread *)),		this,SLOT(fileAlreadyExists(QFileInfo,QFileInfo,bool,TransferThread *)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(send_errorOnFile(QFileInfo,QString,TransferThread *)),			this,SLOT(errorOnFile(QFileInfo,QString,TransferThread *)),			Qt::QueuedConnection);
-	connect(listThread,SIGNAL(send_folderAlreadyExists(QFileInfo,QFileInfo,bool,scanFileOrFolder *)),	this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool,scanFileOrFolder *)),	Qt::QueuedConnection);
-	connect(listThread,SIGNAL(send_errorOnFolder(QFileInfo,QString,scanFileOrFolder *)),			this,SLOT(errorOnFolder(QFileInfo,QString,scanFileOrFolder *)),			Qt::QueuedConnection);
-	connect(listThread,SIGNAL(updateTheDebugInfo(QStringList,QStringList,int)),				this,SLOT(updateTheDebugInfo(QStringList,QStringList,int)),			Qt::QueuedConnection);
-	connect(listThread,SIGNAL(errorTransferList(QString)),							this,SLOT(errorTransferList(QString)),						Qt::QueuedConnection);
-	connect(listThread,SIGNAL(warningTransferList(QString)),						this,SLOT(warningTransferList(QString)),					Qt::QueuedConnection);
-	connect(listThread,SIGNAL(mkPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(mkPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection);
-	connect(listThread,SIGNAL(rmPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(rmPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection);
-
-	connect(this,SIGNAL(signal_pause()),						listThread,SLOT(pause()),				Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_resume()),						listThread,SLOT(resume()),				Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_skip(quint64)),					listThread,SLOT(skip(quint64)),				Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_setCollisionAction(FileExistsAction)),		listThread,SLOT(setAlwaysFileExistsAction(FileExistsAction)),	Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_setFolderColision(FolderExistsAction)),		listThread,SLOT(setFolderColision(FolderExistsAction)),	Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_removeItems(QList<int>)),				listThread,SLOT(removeItems(QList<int>)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_moveItemsOnTop(QList<int>)),				listThread,SLOT(moveItemsOnTop(QList<int>)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_moveItemsUp(QList<int>)),				listThread,SLOT(moveItemsUp(QList<int>)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_moveItemsDown(QList<int>)),				listThread,SLOT(moveItemsDown(QList<int>)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_moveItemsOnBottom(QList<int>)),			listThread,SLOT(moveItemsOnBottom(QList<int>)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_exportTransferList(QString)),			listThread,SLOT(exportTransferList(QString)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_importTransferList(QString)),			listThread,SLOT(importTransferList(QString)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(signal_forceMode(CopyMode)),				listThread,SLOT(forceMode(CopyMode)),			Qt::QueuedConnection);
-	connect(this,SIGNAL(send_osBufferLimit(uint)),					listThread,SLOT(set_osBufferLimit(uint)),		Qt::QueuedConnection);
-	connect(this,SIGNAL(send_setFilters(QList<Filters_rules>,QList<Filters_rules>)),listThread,SLOT(set_setFilters(QList<Filters_rules>,QList<Filters_rules>)),		Qt::QueuedConnection);
-
-	connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection);
 	interface			= NULL;
 	tempWidget			= NULL;
 	uiIsInstalled			= false;
@@ -103,6 +59,96 @@ copyEngine::~copyEngine()
 	stopIt=true;
 	delete listThread;
         delete ui;
+}
+
+void copyEngine::connectTheSignalsSlots()
+{
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+	debugDialogWindow.show();
+	#endif
+	if(!connect(listThread,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SIGNAL(actionInProgess(EngineActionInProgress)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect actionInProgess()");
+	if(!connect(listThread,SIGNAL(newFolderListing(QString)),			this,SIGNAL(newFolderListing(QString)),			Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newFolderListing()");
+	if(!connect(listThread,SIGNAL(newCollisionAction(QString)),			this,SIGNAL(newCollisionAction(QString)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newCollisionAction()");
+	if(!connect(listThread,SIGNAL(newErrorAction(QString)),			this,SIGNAL(newErrorAction(QString)),			Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newErrorAction()");
+	if(!connect(listThread,SIGNAL(isInPause(bool)),				this,SIGNAL(isInPause(bool)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect isInPause()");
+	if(!connect(listThread,SIGNAL(cancelAll()),					this,SIGNAL(cancelAll()),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect cancelAll()");
+	if(!connect(listThread,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SIGNAL(error(QString,quint64,QDateTime,QString)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect error()");
+	if(!connect(listThread,SIGNAL(rmPath(QString)),				this,SIGNAL(rmPath(QString)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect rmPath()");
+	if(!connect(listThread,SIGNAL(mkPath(QString)),				this,SIGNAL(mkPath(QString)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect mkPath()");
+	if(!connect(listThread,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	this,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newActionOnList()");
+	if(!connect(listThread,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		this,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect pushFileProgression()");
+	if(!connect(listThread,SIGNAL(pushGeneralProgression(quint64,quint64)),		this,SIGNAL(pushGeneralProgression(quint64,quint64)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect pushGeneralProgression()");
+	if(!connect(listThread,SIGNAL(syncReady()),						this,SIGNAL(syncReady()),					Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect syncReady()");
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+	if(!connect(listThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),			this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect debugInformation()");
+	#endif
+
+	if(!connect(listThread,SIGNAL(send_fileAlreadyExists(QFileInfo,QFileInfo,bool,TransferThread *)),		this,SLOT(fileAlreadyExists(QFileInfo,QFileInfo,bool,TransferThread *)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_fileAlreadyExists()");
+	if(!connect(listThread,SIGNAL(send_errorOnFile(QFileInfo,QString,TransferThread *)),			this,SLOT(errorOnFile(QFileInfo,QString,TransferThread *)),			Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_errorOnFile()");
+	if(!connect(listThread,SIGNAL(send_folderAlreadyExists(QFileInfo,QFileInfo,bool,scanFileOrFolder *)),	this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool,scanFileOrFolder *)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_folderAlreadyExists()");
+	if(!connect(listThread,SIGNAL(send_errorOnFolder(QFileInfo,QString,scanFileOrFolder *)),			this,SLOT(errorOnFolder(QFileInfo,QString,scanFileOrFolder *)),			Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_errorOnFolder()");
+	if(!connect(listThread,SIGNAL(updateTheDebugInfo(QStringList,QStringList,int)),				this,SLOT(updateTheDebugInfo(QStringList,QStringList,int)),			Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect updateTheDebugInfo()");
+	if(!connect(listThread,SIGNAL(errorTransferList(QString)),							this,SLOT(errorTransferList(QString)),						Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect errorTransferList()");
+	if(!connect(listThread,SIGNAL(warningTransferList(QString)),						this,SLOT(warningTransferList(QString)),					Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect warningTransferList()");
+	if(!connect(listThread,SIGNAL(mkPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(mkPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect mkPathErrorOnFolder()");
+	if(!connect(listThread,SIGNAL(rmPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(rmPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect rmPathErrorOnFolder()");
+
+	if(!connect(this,SIGNAL(signal_pause()),						listThread,SLOT(pause()),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_pause()");
+	if(!connect(this,SIGNAL(signal_resume()),						listThread,SLOT(resume()),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_resume()");
+	if(!connect(this,SIGNAL(signal_skip(quint64)),					listThread,SLOT(skip(quint64)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_skip()");
+	if(!connect(this,SIGNAL(signal_setCollisionAction(FileExistsAction)),		listThread,SLOT(setAlwaysFileExistsAction(FileExistsAction)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
+	if(!connect(this,SIGNAL(signal_setFolderColision(FolderExistsAction)),		listThread,SLOT(setFolderColision(FolderExistsAction)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_setFolderColision()");
+	if(!connect(this,SIGNAL(signal_removeItems(QList<int>)),				listThread,SLOT(removeItems(QList<int>)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_removeItems()");
+	if(!connect(this,SIGNAL(signal_moveItemsOnTop(QList<int>)),				listThread,SLOT(moveItemsOnTop(QList<int>)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsOnTop()");
+	if(!connect(this,SIGNAL(signal_moveItemsUp(QList<int>)),				listThread,SLOT(moveItemsUp(QList<int>)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsUp()");
+	if(!connect(this,SIGNAL(signal_moveItemsDown(QList<int>)),				listThread,SLOT(moveItemsDown(QList<int>)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsDown()");
+	if(!connect(this,SIGNAL(signal_moveItemsOnBottom(QList<int>)),			listThread,SLOT(moveItemsOnBottom(QList<int>)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsOnBottom()");
+	if(!connect(this,SIGNAL(signal_exportTransferList(QString)),			listThread,SLOT(exportTransferList(QString)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_exportTransferList()");
+	if(!connect(this,SIGNAL(signal_importTransferList(QString)),			listThread,SLOT(importTransferList(QString)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_importTransferList()");
+	if(!connect(this,SIGNAL(signal_forceMode(CopyMode)),				listThread,SLOT(forceMode(CopyMode)),			Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_forceMode()");
+	if(!connect(this,SIGNAL(send_osBufferLimit(uint)),					listThread,SLOT(set_osBufferLimit(uint)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_osBufferLimit()");
+	if(!connect(this,SIGNAL(send_setFilters(QList<Filters_rules>,QList<Filters_rules>)),listThread,SLOT(set_setFilters(QList<Filters_rules>,QList<Filters_rules>)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_setFilters()");
+
+	if(!connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect queryOneNewDialog()");
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW

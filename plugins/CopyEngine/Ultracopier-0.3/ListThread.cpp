@@ -757,6 +757,7 @@ void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
 //send action done
 void ListThread::sendActionDone()
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(actionDone.size()>0)
 	{
 		emit newActionOnList(actionDone);
