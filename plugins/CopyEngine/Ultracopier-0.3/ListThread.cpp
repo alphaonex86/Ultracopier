@@ -57,8 +57,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	connect(&timerUpdateDebugDialog,SIGNAL(timeout()),this,SLOT(timedUpdateDebugDialog()));
 	timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
 	#endif
-	connect(&timerActionDone,SIGNAL(timeout()),							this,SLOT(sendActionDone()));
-	connect(&timerProgression,SIGNAL(timeout()),							this,SLOT(sendProgression()));
 	connect(this,		SIGNAL(tryCancel()),							this,SLOT(cancel()),							Qt::QueuedConnection);
 	connect(this,		SIGNAL(askNewTransferThread()),						this,SLOT(createTransferThread()),					Qt::QueuedConnection);
 	connect(&mkPathQueue,	SIGNAL(firstFolderFinish()),						this,SLOT(mkPathFirstFolderFinish()),					Qt::QueuedConnection);
@@ -73,10 +71,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 
 	emit askNewTransferThread();
 	mkpathTransfer.release();
-	timerActionDone.setSingleShot(true);
-	timerActionDone.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
-	timerProgression.setSingleShot(true);
-	timerProgression.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
+	timerActionDone=NULL;
+	timerProgression=NULL;
 }
 
 ListThread::~ListThread()
@@ -393,7 +389,10 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 void ListThread::startGeneralTransfer()
 {
 	doNewActions_inode_manipulation();
-	timerProgression.start();
+	if(timerProgression!=NULL)
+		timerProgression->start();
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"internal bug, pointer on QTimer is NULL");
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
@@ -668,6 +667,12 @@ void ListThread::cancel()
 		scanFileOrFolderThreadsPool[index]=NULL;
                 index++;
 	}
+	if(timerActionDone!=NULL)
+		delete timerActionDone;
+	if(timerProgression!=NULL)
+		delete timerProgression;
+	timerActionDone=NULL;
+	timerProgression=NULL;
 	quit();
 	waitCancel.release();
 }
@@ -757,14 +762,19 @@ void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
 //send action done
 void ListThread::sendActionDone()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(actionDone.size()>0)
 	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 		emit newActionOnList(actionDone);
 		actionDone.clear();
 	}
 	if(actionToDoListTransfer.size()>0)
-		timerActionDone.start();
+	{
+		if(timerActionDone!=NULL)
+			timerActionDone->start();
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"internal bug, pointer on QTimer is NULL");
+	}
 }
 
 //send progression
@@ -800,7 +810,10 @@ void ListThread::sendProgression()
 	}
 	emit pushFileProgression(progressionList);
 	emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
-	timerProgression.start();
+	if(timerProgression!=NULL)
+		timerProgression->start();
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"can't start QTimer because the pointer is NULL");
 }
 
 //send the progression
@@ -867,7 +880,12 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
 {
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
 	if(actionToDoListTransfer.size()==0)
-		timerActionDone.start();
+	{
+		if(timerActionDone!=NULL)
+			timerActionDone->start();
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"can't start QTimer because the pointer is NULL");
+	}
 	//add to transfer list
 	numberOfTransferIntoToDoList++;
 	bytesToTransfer+= source.size();
@@ -1591,6 +1609,15 @@ void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorStr
 //to run the thread
 void ListThread::run()
 {
+	timerActionDone=new QTimer();
+	timerActionDone->setSingleShot(true);
+	timerActionDone->setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
+	timerProgression=new QTimer();
+	timerProgression->setSingleShot(true);
+	timerProgression->setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
+	connect(timerActionDone,SIGNAL(timeout()),							this,SLOT(sendActionDone()));
+	connect(timerProgression,SIGNAL(timeout()),							this,SLOT(sendProgression()));
+
 	exec();
 }
 

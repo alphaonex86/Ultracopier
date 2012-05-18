@@ -253,9 +253,9 @@ private:
 	QList<ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
 	ItemOfCopyList returnItemOfCopyListToCopyEngine;
 	//send action done timer
-	QTimer timerActionDone;
+	QTimer *timerActionDone;
 	//send progression timer
-	QTimer timerProgression;
+	QTimer *timerProgression;
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
