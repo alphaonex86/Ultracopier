@@ -176,6 +176,7 @@ public slots:
 
 	void set_osBufferLimit(unsigned int osBufferLimit);
 	void set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
+	void set_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 private:
 	QSemaphore mkpathTransfer;
 	QString sourceDrive;
@@ -208,6 +209,8 @@ private:
 	QList<Filters_rules>		include,exclude;
 	CopyMode			mode;
 	bool				forcedMode;
+	QString				firstRenamingRule;
+	QString				otherRenamingRule;
 
 	//add file transfer to do
 	quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode);
@@ -356,6 +359,7 @@ signals:
 
 	void warningTransferList(QString warning);
 	void errorTransferList(QString error);
+	void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 };
 
 #endif // LISTTHREAD_H

@@ -298,30 +298,40 @@ bool TransferThread::destinationExists()
 			QString absolutePath=destinationInfo.absolutePath();
 			QString fileName=destinationInfo.fileName();
 			QString suffix="";
+			QString newFileName;
+			//resolv the suffix
 			if(fileName.contains(QRegExp("^(.*)(\\.[a-z0-9]+)$")))
 			{
 				suffix=fileName;
 				suffix.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\2");
 				fileName.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\1");
 			}
+			//resolv the new name
+			int num=1;
 			do
 			{
-				if(!fileName.startsWith(tr("Copy of ")))
-					fileName=tr("Copy of ")+fileName;
+				if(num==1)
+				{
+					if(firstRenamingRule=="")
+						newFileName=tr("%1 - copy").arg(fileName);
+					else
+					{
+						newFileName=firstRenamingRule;
+						newFileName.replace("%name%",fileName);
+					}
+				}
 				else
 				{
-					if(fileName.contains(QRegExp("_[0-9]+$")))
-					{
-						QString number=fileName;
-						number.replace(QRegExp("^.*_([0-9]+)$"),"\\1");
-						int num=number.toInt()+1;
-						fileName.remove(QRegExp("[0-9]+$"));
-						fileName+=QString::number(num);
-					}
+					if(otherRenamingRule=="")
+						newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
 					else
-						fileName+="_2";
+					{
+						newFileName=otherRenamingRule;
+						newFileName.replace("%name%",fileName);
+						newFileName.replace("%number%",QString::number(num));
+					}
 				}
-				destination=absolutePath+QDir::separator()+fileName+suffix;
+				destination=absolutePath+QDir::separator()+newFileName+suffix;
 				destinationInfo.setFile(destination);
 			}
 			while(destinationInfo.exists());
@@ -1111,3 +1121,8 @@ void TransferThread::set_osBufferLimited(bool osBufferLimited)
 	this->osBufferLimited=osBufferLimited;
 }
 
+void TransferThread::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+{
+	this->firstRenamingRule=firstRenamingRule;
+	this->otherRenamingRule=otherRenamingRule;
+}

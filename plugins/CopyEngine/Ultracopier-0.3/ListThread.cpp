@@ -338,6 +338,7 @@ scanFileOrFolder * ListThread::newScanThread(CopyMode mode)
 	scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 	if(scanFileOrFolderThreadsPool.size()==1)
 		updateTheStatus();
+	scanFileOrFolderThreadsPool.last()->setRenamingRules(firstRenamingRule,otherRenamingRule);
 	return scanFileOrFolderThreadsPool.last();
 }
 
@@ -1477,6 +1478,13 @@ void ListThread::set_setFilters(QList<Filters_rules> include,QList<Filters_rules
 	}
 }
 
+void ListThread::set_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+{
+	this->firstRenamingRule=firstRenamingRule;
+	this->otherRenamingRule=otherRenamingRule;
+	emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
+}
+
 void ListThread::mkPathFirstFolderFinish()
 {
 	int_for_loop=0;
@@ -1642,6 +1650,7 @@ void ListThread::createTransferThread()
 	last->set_osBuffer(osBuffer);
 	last->set_osBufferLimited(osBufferLimited);
 	last->set_osBufferLimit(osBufferLimit);
+
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(last,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
 	#endif // ULTRACOPIER_PLUGIN_DEBUG
@@ -1652,9 +1661,13 @@ void ListThread::createTransferThread()
 	connect(last,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
 	connect(last,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
 	connect(last,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
+
+	connect(this,SIGNAL(send_sendNewRenamingRules(QString,QString)),		last,SLOT(setRenamingRules(QString,QString)),				Qt::QueuedConnection);
+
 	last->start();
 	last->setObjectName(QString("transfer %1").arg(transferThreadList.size()-1));
 	last->setMkpathTransfer(&mkpathTransfer);
+	last->setRenamingRules(firstRenamingRule,otherRenamingRule);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	last->setId(transferThreadList.size()-1);
 	#endif

@@ -123,6 +123,7 @@ public slots:
 	void putAtBottom();
 
 	void set_osBufferLimit(unsigned int osBufferLimit);
+	void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 private slots:
 	void preOperation();
 	void readIsReady();
@@ -194,6 +195,8 @@ private:
 	bool			osBuffer;
 	bool			osBufferLimited;
 	unsigned int		osBufferLimit;
+	QString			firstRenamingRule;
+	QString			otherRenamingRule;
 	//error management
 	bool			writeError,writeError_source_seeked,writeError_destination_reopened;
 	bool			readError;

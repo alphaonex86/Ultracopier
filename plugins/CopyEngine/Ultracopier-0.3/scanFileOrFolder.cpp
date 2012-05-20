@@ -203,24 +203,42 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 			case FolderExists_Rename:
 				if(newName=="")
 				{
-					/// \todo use facility here
-					if(destinationSuffixPath.contains(folder_isolation))
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"full: "+destinationSuffixPath);
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"prefix: "+prefix);
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"suffix: "+suffix);
+					//resolv the new name
+					QFileInfo destinationInfo;
+					int num=1;
+					do
 					{
-						prefix=destinationSuffixPath;
-						suffix=destinationSuffixPath;
-						prefix.replace(folder_isolation,"\\1");
-						suffix.replace(folder_isolation,"\\2");
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"full: "+destinationSuffixPath);
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"prefix: "+prefix);
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"suffix: "+suffix);
-						destinationSuffixPath = prefix+tr("Copy of ")+suffix;
+						if(num==1)
+						{
+							if(firstRenamingRule=="")
+								destinationSuffixPath=tr("%1 - copy").arg(suffix);
+							else
+							{
+								destinationSuffixPath=firstRenamingRule;
+								destinationSuffixPath.replace("%name%",suffix);
+							}
+						}
+						else
+						{
+							if(otherRenamingRule=="")
+								destinationSuffixPath=tr("%1 - copy (%2)").arg(suffix).arg(num);
+							else
+							{
+								destinationSuffixPath=otherRenamingRule;
+								destinationSuffixPath.replace("%name%",suffix);
+								destinationSuffixPath.replace("%number%",QString::number(num));
+							}
+						}
+						destinationInfo.setFile(prefix+destinationSuffixPath);
 					}
-					else
-						destinationSuffixPath = tr("Copy of ")+"Unknow";
+					while(destinationInfo.exists());
 				}
 				else
-					destinationSuffixPath = newName+"/";
+					destinationSuffixPath = newName;
 				destinationSuffixPath+="/";
 				finalDest = destination+destinationSuffixPath;
 			break;
@@ -248,21 +266,39 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 				case FolderExists_Rename:
 					if(newName=="")
 					{
-						/// \todo use facility here
-						if(destinationSuffixPath.contains(folder_isolation))
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"full: "+destinationSuffixPath);
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"prefix: "+prefix);
+						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"suffix: "+suffix);
+						//resolv the new name
+						QFileInfo destinationInfo;
+						int num=1;
+						do
 						{
-							prefix=destinationSuffixPath;
-							suffix=destinationSuffixPath;
-							prefix.replace(folder_isolation,"\\1");
-							suffix.replace(folder_isolation,"\\2");
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"full: "+destinationSuffixPath);
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"prefix: "+prefix);
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"suffix: "+suffix);
-							destinationSuffixPath = prefix+tr("Copy of ")+suffix;
+							if(num==1)
+							{
+								if(firstRenamingRule=="")
+									destinationSuffixPath=tr("%1 - copy").arg(suffix);
+								else
+								{
+									destinationSuffixPath=firstRenamingRule;
+									destinationSuffixPath.replace("%name%",suffix);
+								}
+							}
+							else
+							{
+								if(otherRenamingRule=="")
+									destinationSuffixPath=tr("%1 - copy (%2)").arg(suffix).arg(num);
+								else
+								{
+									destinationSuffixPath=otherRenamingRule;
+									destinationSuffixPath.replace("%name%",suffix);
+									destinationSuffixPath.replace("%number%",QString::number(num));
+								}
+							}
+							destinationInfo.setFile(prefix+destinationSuffixPath);
 						}
-						else
-							destinationSuffixPath = tr("Copy of ")+"Unknow";
+						while(destinationInfo.exists());
 					}
 					else
 						destinationSuffixPath = newName;
@@ -413,4 +449,10 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 void scanFileOrFolder::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
 {
 	this->checkDestinationExists=checkDestinationFolderExists;
+}
+
+void scanFileOrFolder::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+{
+	this->firstRenamingRule=firstRenamingRule;
+	this->otherRenamingRule=otherRenamingRule;
 }

@@ -37,6 +37,7 @@ public:
 	void setFolderErrorAction(FileErrorAction action);
 	/// \brief set if need check if the destination exists
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
+	void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 signals:
 	void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const CopyMode &mode);
 	/// \brief To debug source
@@ -73,6 +74,8 @@ private:
 	bool			reloadTheNewFilters;
 	bool			haveFilters;
 	QMutex			filtersMutex;
+	QString			firstRenamingRule;
+	QString			otherRenamingRule;
 	/** Parse the multiple wildcard source, it allow resolv multiple wildcard with Qt into their path
 	 * The string: /toto/f*a/yy*a/toto.mp3
 	 * Will give: /toto/f1a/yy*a/toto.mp3, /toto/f2a/yy*a/toto.mp3
