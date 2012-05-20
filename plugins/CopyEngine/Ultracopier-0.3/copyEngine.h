@@ -21,6 +21,7 @@
 #include "Environment.h"
 #include "ListThread.h"
 #include "Filters.h"
+#include "RenamingRules.h"
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 #include "debugDialog.h"
@@ -52,6 +53,7 @@ private:
 	bool				uiIsInstalled;
 	QWidget *			interface;
 	Filters *			filters;
+	RenamingRules *			renamingRules;
 	int				maxSpeed;
 	bool				doRightTransfer;
 	bool				keepDate;
@@ -101,6 +103,8 @@ private:
 	bool osBufferLimited;
 	unsigned int osBufferLimit;
 	QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
+	QString firstRenamingRule;
+	QString otherRenamingRule;
 private slots:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	void updateTheDebugInfo(QStringList,QStringList,int);
@@ -129,6 +133,8 @@ private slots:
 	void osBufferLimited_toggled(bool);
 	void osBufferLimit_editingFinished();
 	void showFilterDialog();
+	void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+	void showRenamingRules();
 public:
 	/** \brief to send the options panel
 	 * \return return false if have not the options
@@ -197,6 +203,7 @@ public:
 	void set_osBufferLimited(bool osBufferLimited);
 	void set_osBufferLimit(unsigned int osBufferLimit);
 	void set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+	void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 public slots:
 	//user ask ask to add folder (add it with interface ask source/destination)
 	/** \brief add folder called on the interface
@@ -331,6 +338,7 @@ signals:
 
 	void send_osBufferLimit(const unsigned int &osBufferLimit);
 	void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
+	void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 };
 
 #endif // COPY_ENGINE_H

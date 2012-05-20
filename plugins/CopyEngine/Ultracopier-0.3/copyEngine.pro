@@ -23,7 +23,8 @@ HEADERS         = copyEngine.h \
     ../../../interface/OptionInterface.h \
     ../../../interface/FacilityInterface.h \
     Filters.h \
-    FilterRules.h
+    FilterRules.h \
+    RenamingRules.h
 SOURCES         = copyEngine.cpp \
     scanFileOrFolder.cpp \
     fileErrorDialog.cpp \
@@ -41,7 +42,8 @@ SOURCES         = copyEngine.cpp \
     copyEngine-collision-and-error.cpp \
     ListThread.cpp \
     Filters.cpp \
-    FilterRules.cpp
+    FilterRules.cpp \
+    RenamingRules.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS   += Languages/fr/translation.ts \
     Languages/ar/translation.ts \
@@ -69,7 +71,8 @@ FORMS += \
     debugDialog.ui \
     folderExistsDialog.ui \
     Filters.ui \
-    FilterRules.ui
+    FilterRules.ui \
+    RenamingRules.ui
 
 OTHER_FILES += informations.xml
 

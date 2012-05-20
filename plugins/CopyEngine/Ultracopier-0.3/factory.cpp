@@ -20,6 +20,7 @@ Factory::Factory() :
 	errorFound=false;
 	optionsEngine=NULL;
 	filters=new Filters(tempWidget);
+	renamingRules=new RenamingRules(tempWidget);
 	#if defined (Q_OS_WIN32)
 	QFileInfoList temp=QDir::drives();
 	for (int i = 0; i < temp.size(); ++i) {
@@ -46,12 +47,15 @@ Factory::Factory() :
 
 	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
 	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
+	connect(renamingRules,SIGNAL(sendNewRenamingRules(QString,QString)),this,SLOT(sendNewRenamingRules(QString,QString)));
+	connect(ui->renamingRules,SIGNAL(clicked()),this,SLOT(showRenamingRules()));
 
 	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 Factory::~Factory()
 {
+	delete renamingRules;
 	delete filters;
 	delete ui;
 }
@@ -85,6 +89,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
 		optionsEngine->getOptionValue("excludeStrings").toStringList(),
 		optionsEngine->getOptionValue("excludeOptions").toStringList()
 	);
+	realObject->setRenamingRules(optionsEngine->getOptionValue("firstRenamingRule").toString(),optionsEngine->getOptionValue("otherRenamingRule").toString());
 	return newTransferEngine;
 }
 
@@ -132,6 +137,8 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 		KeysList.append(qMakePair(QString("checksumIgnoreIfImpossible"),QVariant(true)));
 		KeysList.append(qMakePair(QString("checksumOnlyOnError"),QVariant(true)));
 		KeysList.append(qMakePair(QString("osBuffer"),QVariant(true)));
+		KeysList.append(qMakePair(QString("firstRenamingRule"),QVariant("")));
+		KeysList.append(qMakePair(QString("otherRenamingRule"),QVariant("")));
 		#ifdef 	Q_OS_WIN32
 		KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(true)));
 		#else
@@ -161,6 +168,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
 			optionsEngine->getOptionValue("excludeStrings").toStringList(),
 			optionsEngine->getOptionValue("excludeOptions").toStringList()
 		);
+		renamingRules->setRenamingRules(optionsEngine->getOptionValue("firstRenamingRule").toString(),optionsEngine->getOptionValue("otherRenamingRule").toString());
 	}
 }
 
@@ -362,6 +370,29 @@ void Factory::sendNewFilters(QStringList includeStrings,QStringList includeOptio
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+	if(optionsEngine!=NULL)
+	{
+		optionsEngine->setOptionValue("firstRenamingRule",firstRenamingRule);
+		optionsEngine->setOptionValue("otherRenamingRule",otherRenamingRule);
+	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::showRenamingRules()
+{
+	if(optionsEngine==NULL)
+	{
+		QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+		return;
+	}
+	renamingRules->exec();
 }
 
 void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)

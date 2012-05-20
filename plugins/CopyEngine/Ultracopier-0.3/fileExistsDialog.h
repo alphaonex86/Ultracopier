@@ -25,7 +25,7 @@ class fileExistsDialog : public QDialog
 	Q_OBJECT
 public:
 	/// \brief create the object and pass all the informations to it
-	explicit fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination);
+	explicit fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
 	~fileExistsDialog();
 	/// \brief return the the always checkbox is checked
 	bool getAlways();
@@ -51,6 +51,8 @@ private:
 	FileExistsAction action;
 	QString oldName;
 	QFileInfo destinationInfo;
+	QString firstRenamingRule;
+	QString otherRenamingRule;
 };
 
 #endif // FILEEXISTSDIALOG_H

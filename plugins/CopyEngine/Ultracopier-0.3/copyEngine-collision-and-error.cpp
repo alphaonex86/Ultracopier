@@ -48,7 +48,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
 				}
 				dialogIsOpen=true;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
-				fileIsSameDialog dialog(interface,source);
+				fileIsSameDialog dialog(interface,source,firstRenamingRule,otherRenamingRule);
 				emit isInPause(true);
 				dialog.exec();/// \bug crash when external close
 				FileExistsAction newAction=dialog.getAction();
@@ -117,7 +117,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
 				}
 				dialogIsOpen=true;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
-				fileExistsDialog dialog(interface,source,destination);
+				fileExistsDialog dialog(interface,source,destination,firstRenamingRule,otherRenamingRule);
 				emit isInPause(true);
 				dialog.exec();/// \bug crash when external close
 				FileExistsAction newAction=dialog.getAction();
@@ -297,7 +297,7 @@ void copyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 			}
 			dialogIsOpen=true;
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"show dialog");
-			folderExistsDialog dialog(interface,source,isSame,destination);
+			folderExistsDialog dialog(interface,source,isSame,destination,firstRenamingRule,otherRenamingRule);
 			dialog.exec();/// \bug crash when external close
 			FolderExistsAction newAction=dialog.getAction();
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"close dialog: "+QString::number(newAction));

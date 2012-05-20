@@ -16,6 +16,7 @@
 #include "copyEngine.h"
 #include "Environment.h"
 #include "Filters.h"
+#include "RenamingRules.h"
 
 #ifndef FACTORY_H
 #define FACTORY_H
@@ -60,6 +61,7 @@ private:
 	bool errorFound;
 	FacilityInterface * facilityEngine;
 	Filters *filters;
+	RenamingRules *renamingRules;
 private slots:
 	void error(QProcess::ProcessError error);
 	void finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -77,6 +79,8 @@ private slots:
 	void osBufferLimited_toggled(bool);
 	void osBufferLimit_editingFinished();
 	void checksumIgnoreIfImpossible_toggled(bool);
+	void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+	void showRenamingRules();
 public slots:
 	void resetOptions();
 	void newLanguageLoaded();

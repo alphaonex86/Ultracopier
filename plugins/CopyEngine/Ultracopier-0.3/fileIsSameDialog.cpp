@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-fileIsSameDialog::fileIsSameDialog(QWidget *parent,QFileInfo fileInfo) :
+fileIsSameDialog::fileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule) :
 	QDialog(parent),
 	ui(new Ui::fileIsSameDialog)
 {
@@ -29,6 +29,8 @@ fileIsSameDialog::fileIsSameDialog(QWidget *parent,QFileInfo fileInfo) :
 		ui->label_modified->setVisible(false);
 		ui->label_content_modified->setVisible(false);
 	}
+	this->firstRenamingRule=firstRenamingRule;
+	this->otherRenamingRule=otherRenamingRule;
 }
 
 fileIsSameDialog::~fileIsSameDialog()
@@ -67,30 +69,40 @@ void fileIsSameDialog::on_SuggestNewName_clicked()
 	QString fileName=destinationInfo.fileName();
 	QString suffix="";
 	QString destination;
+	QString newFileName;
+	//resolv the suffix
 	if(fileName.contains(QRegExp("^(.*)(\\.[a-z0-9]+)$")))
 	{
 		suffix=fileName;
 		suffix.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\2");
 		fileName.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\1");
 	}
+	//resolv the new name
+	int num=1;
 	do
 	{
-		if(!fileName.startsWith(tr("Copy of ")))
-			fileName=tr("Copy of ")+fileName;
+		if(num==1)
+		{
+			if(firstRenamingRule=="")
+				newFileName=tr("%1 - copy").arg(fileName);
+			else
+			{
+				newFileName=firstRenamingRule;
+				newFileName.replace("%name%",fileName);
+			}
+		}
 		else
 		{
-			if(fileName.contains(QRegExp("_[0-9]+$")))
-			{
-				QString number=fileName;
-				number.replace(QRegExp("^.*_([0-9]+)$"),"\\1");
-				int num=number.toInt()+1;
-				fileName.remove(QRegExp("[0-9]+$"));
-				fileName+=QString::number(num);
-			}
+			if(otherRenamingRule=="")
+				newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
 			else
-				fileName+="_2";
+			{
+				newFileName=otherRenamingRule;
+				newFileName.replace("%name%",fileName);
+				newFileName.replace("%number%",QString::number(num));
+			}
 		}
-		destination=absolutePath+QDir::separator()+fileName+suffix;
+		destination=absolutePath+QDir::separator()+newFileName+suffix;
 		destinationInfo.setFile(destination);
 	}
 	while(destinationInfo.exists());

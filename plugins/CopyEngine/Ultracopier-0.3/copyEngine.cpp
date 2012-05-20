@@ -27,6 +27,7 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 {
 	listThread=new ListThread(facilityInterface);
 	filters=NULL;
+	renamingRules=NULL;
 	qRegisterMetaType<TransferThread *>("TransferThread *");
 	qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
 	qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");
@@ -56,6 +57,8 @@ copyEngine::~copyEngine()
 {
 	if(filters!=NULL)
 		delete filters;
+	if(renamingRules!=NULL)
+		delete renamingRules;
 	stopIt=true;
 	delete listThread;
         delete ui;
@@ -146,6 +149,8 @@ void copyEngine::connectTheSignalsSlots()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_osBufferLimit()");
 	if(!connect(this,SIGNAL(send_setFilters(QList<Filters_rules>,QList<Filters_rules>)),listThread,SLOT(set_setFilters(QList<Filters_rules>,QList<Filters_rules>)),		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_setFilters()");
+	if(!connect(this,SIGNAL(send_sendNewRenamingRules(QString,QString)),listThread,SLOT(set_sendNewRenamingRules(QString,QString)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_sendNewRenamingRules()");
 
 	if(!connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect queryOneNewDialog()");
@@ -193,6 +198,7 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 {
 	this->interface=interface;
 	filters=new Filters(tempWidget);
+	renamingRules=new RenamingRules(tempWidget);
 	connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
 	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
 	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
@@ -209,6 +215,14 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 
 	filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 	set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+
+	renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
+	emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
+
+	if(!connect(renamingRules,SIGNAL(sendNewRenamingRules(QString,QString)),this,SLOT(sendNewRenamingRules(QString,QString))))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
+	if(!connect(ui->renamingRules,SIGNAL(clicked()),this,SLOT(showRenamingRules())))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect renamingRules.clicked()");
 }
 
 bool copyEngine::haveSameSource(const QStringList &sources)
@@ -390,6 +404,11 @@ void copyEngine::set_setFilters(QStringList includeStrings,QStringList includeOp
 	this->includeOptions=includeOptions;
 	this->excludeStrings=excludeStrings;
 	this->excludeOptions=excludeOptions;
+}
+
+void copyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+{
+	sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
 bool copyEngine::userAddFolder(const CopyMode &mode)
@@ -719,4 +738,23 @@ void copyEngine::sendNewFilters()
 {
 	if(filters!=NULL)
 		emit send_setFilters(filters->getInclude(),filters->getExclude());
+}
+
+void copyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+	this->firstRenamingRule=firstRenamingRule;
+	this->otherRenamingRule=otherRenamingRule;
+	emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
+}
+
+void copyEngine::showRenamingRules()
+{
+	if(renamingRules==NULL)
+	{
+		QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+		return;
+	}
+	renamingRules->exec();
 }

@@ -3,13 +3,14 @@
 
 #include <QMessageBox>
 
-folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination) :
+folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
 	QDialog(parent),
 	ui(new Ui::folderExistsDialog)
 {
 	ui->setupUi(this);
 	action=FolderExists_Cancel;
 	oldName=source.fileName();
+	this->destinationInfo=destinationInfo;
 	ui->lineEditNewName->setText(oldName);
 	ui->lineEditNewName->setPlaceholderText(oldName);
 	ui->label_content_source_modified->setText(source.lastModified().toString());
@@ -29,6 +30,8 @@ folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isS
 		ui->label_content_destination_modified->setText(destination.lastModified().toString());
 		ui->label_content_destination_folder_name->setText(destination.fileName());
 	}
+	this->firstRenamingRule=firstRenamingRule;
+	this->otherRenamingRule=otherRenamingRule;
 }
 
 folderExistsDialog::~folderExistsDialog()
@@ -58,7 +61,49 @@ QString folderExistsDialog::getNewName()
 
 void folderExistsDialog::on_SuggestNewName_clicked()
 {
-	ui->lineEditNewName->setText(tr("Copy of ")+oldName);
+	QFileInfo destinationInfo=this->destinationInfo;
+	QString absolutePath=destinationInfo.absolutePath();
+	QString fileName=destinationInfo.fileName();
+	QString suffix="";
+	QString destination;
+	QString newFileName;
+	//resolv the suffix
+	if(fileName.contains(QRegExp("^(.*)(\\.[a-z0-9]+)$")))
+	{
+		suffix=fileName;
+		suffix.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\2");
+		fileName.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\1");
+	}
+	//resolv the new name
+	int num=1;
+	do
+	{
+		if(num==1)
+		{
+			if(firstRenamingRule=="")
+				newFileName=tr("%1 - copy").arg(fileName);
+			else
+			{
+				newFileName=firstRenamingRule;
+				newFileName.replace("%name%",fileName);
+			}
+		}
+		else
+		{
+			if(otherRenamingRule=="")
+				newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
+			else
+			{
+				newFileName=otherRenamingRule;
+				newFileName.replace("%name%",fileName);
+				newFileName.replace("%number%",QString::number(num));
+			}
+		}
+		destination=absolutePath+QDir::separator()+newFileName+suffix;
+		destinationInfo.setFile(destination);
+	}
+	while(destinationInfo.exists());
+	ui->lineEditNewName->setText(fileName+suffix);
 }
 
 void folderExistsDialog::on_Rename_clicked()
