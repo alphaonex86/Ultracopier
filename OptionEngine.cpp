@@ -170,6 +170,10 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
 	{
 		if(GroupKeysList[groupName].contains(variableName))
 		{
+			//prevent re-write the same value into the variable
+			if(GroupKeysList[groupName][variableName].currentValue==value)
+				return;
+			//write ONLY the new value
 			GroupKeysList[groupName][variableName].currentValue=value;
 			if(currentBackend==File)
 			{
