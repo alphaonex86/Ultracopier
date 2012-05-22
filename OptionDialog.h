@@ -94,6 +94,7 @@ private:
 	int index,loop_size;
 	int loadedCopyEnginePlugin;
 	QTreeWidgetItem * treeWidgetItem;
+	bool allPluginsIsLoaded;
 public slots:
 	void newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
 signals:

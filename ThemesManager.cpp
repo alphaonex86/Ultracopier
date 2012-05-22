@@ -219,6 +219,8 @@ void ThemesManager::newOptionValue(const QString &group,const QString &name,cons
 {
 	if(group=="Themes" && name=="Ultracopier_current_theme")
 	{
+		if(!plugins->allPluginHaveBeenLoaded())
+			return;
 		if(currentPluginIndex!=-1 && value.toString()!=pluginList.at(currentPluginIndex).plugin.name)
 		{
 			int tempCurrentPluginIndex=currentPluginIndex;
