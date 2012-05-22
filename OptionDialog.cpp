@@ -317,7 +317,18 @@ void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
 		if(name=="List")
 		{
 			if(!ignoreCopyEngineListEdition)
-				ui->CopyEngineList->addItems(value.toStringList());
+			{
+				QStringList copyEngine=value.toStringList();
+				copyEngine.removeDuplicates();
+				int index=0;
+				int loop_size=ui->CopyEngineList->count();
+				while(index<loop_size)
+				{
+					copyEngine.removeOne(ui->CopyEngineList->item(index)->text());
+					index++;
+				}
+				ui->CopyEngineList->addItems(copyEngine);
+			}
 		}
 	}
 	else if(group=="Write_log")
@@ -416,7 +427,7 @@ void OptionDialog::on_LoadAtSessionStarting_toggled(bool checked)
 
 void OptionDialog::on_CopyEngineList_itemSelectionChanged()
 {
-	if(ui->CopyEngineList->selectedItems().size()!=0)
+	if(ui->CopyEngineList->selectedItems().size()!=0 && ui->CopyEngineList->count()>1)
 	{
 		ui->toolButtonUp->setEnabled(true);
 		ui->toolButtonDown->setEnabled(true);
@@ -525,13 +536,26 @@ void OptionDialog::addCopyEngineWidget(QString name,QWidget * options)
 		}
 		index++;
 	}
+	//add to real list
 	pluginCopyEngine temp;
-	temp.item=new QTreeWidgetItem(QStringList() << name);
 	temp.name=name;
 	temp.options=options;
+	temp.item=new QTreeWidgetItem(QStringList() << name);
 	copyEngineList << temp;
+	//add the specific options
 	ui->treeWidget->topLevelItem(2)->addChild(copyEngineList.at(index).item);
 	ui->stackedWidget->addWidget(options);
+	//but can loaded by the previous options!
+	index=0;
+	loop_size=ui->CopyEngineList->count();
+	while(index<loop_size)
+	{
+		if(ui->CopyEngineList->item(index)->text()==name)
+			break;
+		index++;
+	}
+	if(index==loop_size)
+		ui->CopyEngineList->addItems(QStringList() << name);
 }
 
 void OptionDialog::removeCopyEngineWidget(QString name)
