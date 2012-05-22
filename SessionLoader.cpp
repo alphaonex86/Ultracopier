@@ -13,7 +13,11 @@ SessionLoader::SessionLoader(QObject *parent) :
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//load the options
 	QList<QPair<QString, QVariant> > KeysList;
+	#ifdef ULTRACOPIER_VERSION_PORTABLE
+	KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(false)));
+	#else
 	KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
+	#endif
 	options->addOptionGroup("SessionLoader",KeysList);
 	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)),Qt::QueuedConnection);
 	//load the plugin
