@@ -333,6 +333,7 @@ bool TransferThread::destinationExists()
 				}
 				destination=absolutePath+QDir::separator()+newFileName+suffix;
 				destinationInfo.setFile(destination);
+				num++;
 			}
 			while(destinationInfo.exists());
 			return false;

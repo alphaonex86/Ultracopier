@@ -233,6 +233,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 								destinationSuffixPath.replace("%number%",QString::number(num));
 							}
 						}
+						num++;
 						destinationInfo.setFile(prefix+destinationSuffixPath);
 					}
 					while(destinationInfo.exists());
@@ -297,6 +298,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
 								}
 							}
 							destinationInfo.setFile(prefix+destinationSuffixPath);
+							num++;
 						}
 						while(destinationInfo.exists());
 					}

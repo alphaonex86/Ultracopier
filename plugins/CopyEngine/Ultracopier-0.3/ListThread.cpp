@@ -1262,7 +1262,7 @@ void ListThread::importTransferList(const QString &fileName)
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: ").arg(actionToDoListTransfer.size()).arg(numberOfTranferRuning));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()).arg(numberOfTranferRuning));
 	if(stopIt || putInPause)
 		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");

@@ -119,9 +119,10 @@ void fileExistsDialog::on_SuggestNewName_clicked()
 		}
 		destination=absolutePath+QDir::separator()+newFileName+suffix;
 		destinationInfo.setFile(destination);
+		num++;
 	}
 	while(destinationInfo.exists());
-	ui->lineEditNewName->setText(fileName+suffix);
+	ui->lineEditNewName->setText(newFileName+suffix);
 }
 
 void fileExistsDialog::on_Rename_clicked()
