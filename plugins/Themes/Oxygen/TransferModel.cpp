@@ -164,6 +164,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 				transfertItemList<<newItem;
 				totalFile++;
 				totalSize+=action.addAction.size;
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, size: %2, name: %3").arg(action.addAction.id).arg(action.addAction.size).arg(action.addAction.sourceFullPath));
 			}
 			break;
 			case MoveItem:
@@ -315,7 +316,7 @@ int TransferModel::searchPrev(const QString &text)
 	return -1;
 }
 
-void TransferModel::setFileProgression(const QList<ProgressionItem> &progressionList)
+void TransferModel::setFileProgression(QList<ProgressionItem> &progressionList)
 {
 	loop_size=progressionList.size();
 	index_for_loop=0;
@@ -323,12 +324,18 @@ void TransferModel::setFileProgression(const QList<ProgressionItem> &progression
 	{
 		if(internalRunningOperation.contains(progressionList.at(index_for_loop).id))
 		{
-			ItemOfCopyListWithMoreInformations &item=internalRunningOperation[progressionList.at(index_for_loop).id];
-			item.generalData.size=progressionList.at(index_for_loop).total;
-			item.currentProgression=progressionList.at(index_for_loop).current;
+			internalRunningOperation[progressionList.at(index_for_loop).id].generalData.size=progressionList.at(index_for_loop).total;
+			internalRunningOperation[progressionList.at(index_for_loop).id].currentProgression=progressionList.at(index_for_loop).current;
+			#ifdef ULTRACOPIER_PLUGIN_DEBUG
+			progressionList.removeAt(index_for_loop);
+			#endif
 		}
 		index_for_loop++;
 	}
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	if(progressionList.size()>0)
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"progression remaning items");
+	#endif
 }
 
 TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()

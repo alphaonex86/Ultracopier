@@ -132,6 +132,10 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
 	ui->shutdown->setVisible(shutdown);
 
 	selectionModel=ui->TransferList->selectionModel();
+
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+	#endif
 }
 
 Themes::~Themes()
@@ -298,7 +302,8 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 
 void Themes::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
-	transferModel.setFileProgression(progressionList);
+	QList<ProgressionItem> progressionListBis=progressionList;
+	transferModel.setFileProgression(progressionListBis);
 	updateCurrentFileInformation();
 }
 

@@ -10,6 +10,7 @@
 #include <QString>
 
 #include "StructEnumDefinition.h"
+#include "Environment.h"
 
 #include "../../../interface/FacilityInterface.h"
 
@@ -55,7 +56,7 @@ public:
 	int search(const QString &text,bool searchNext);
 	int searchPrev(const QString &text);
 
-	void setFileProgression(const QList<ProgressionItem> &progressionList);
+	void setFileProgression(QList<ProgressionItem> &progressionList);
 
 	currentTransfertItem getCurrentTransfertItem();
 protected:
@@ -74,6 +75,11 @@ private:
 	int currentIndexSearch;
 	bool haveSearchItem;
 	quint64 searchId;
+signals:
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	/// \brief To debug source
+	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+	#endif
 };
 
 #endif // TRANSFERMODEL_H

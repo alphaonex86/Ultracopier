@@ -299,7 +299,7 @@ private slots:
 	void sendActionDone();
 	//send progression
 	void sendProgression();
-	//send the progression
+	//send the progression, after full reset of the interface (then all is empty)
 	void syncTransferList_internal();
 signals:
         //send information about the copy

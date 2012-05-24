@@ -19,6 +19,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	qRegisterMetaType<CopyMode>("CopyMode");
 	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
 
+	timerActionDone=NULL;
+	timerProgression=NULL;
 	moveToThread(this);
 	start(HighPriority);
 	this->facilityInterface		= facilityInterface;
@@ -71,8 +73,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 
 	emit askNewTransferThread();
 	mkpathTransfer.release();
-	timerActionDone=NULL;
-	timerProgression=NULL;
 }
 
 ListThread::~ListThread()
@@ -799,6 +799,8 @@ void ListThread::sendProgression()
 			currentProgression+=copiedSize;
 			if(copiedSize>(qint64)thread->transferSize)
 				localOverSize=copiedSize-thread->transferSize;
+			else
+				localOverSize=0;
 			totalSize=thread->transferSize+localOverSize;
 			ProgressionItem tempItem;
 			tempItem.current=copiedSize;
@@ -817,7 +819,7 @@ void ListThread::sendProgression()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"can't start QTimer because the pointer is NULL");
 }
 
-//send the progression
+//send the progression, after full reset of the interface (then all is empty)
 void ListThread::syncTransferList_internal()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -831,7 +833,7 @@ void ListThread::syncTransferList_internal()
 	for(int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
 		const actionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
 		returnActionOnCopyList newAction;
-		newAction.type				= AddingItem;
+		newAction.type				= PreOperation;
 		newAction.addAction.id			= item.id;
 		newAction.addAction.sourceFullPath	= item.source.absoluteFilePath();
 		newAction.addAction.sourceFileName	= item.source.fileName();
@@ -840,6 +842,7 @@ void ListThread::syncTransferList_internal()
 		newAction.addAction.size		= item.size;
 		newAction.addAction.mode		= item.mode;
 		actionDone << newAction;
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, size: %2, name: %3, size2: %4").arg(item.id).arg(item.size).arg(item.source.absoluteFilePath()).arg(newAction.addAction.size));
 		if(item.isRunning)
 		{
 			for(int_for_internal_loop=0; int_for_internal_loop<loop_sub_size; ++int_for_internal_loop) {
@@ -909,7 +912,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
 	newAction.addAction.size		= temp.size;
 	newAction.addAction.mode		= mode;
 	actionDone << newAction;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source.absoluteFilePath()+",destination: "+destination.absoluteFilePath()+", add entry: "+QString::number(temp.id));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("source: %1, destination: %2, add entry: %3, size: %4, size2: %5").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(newAction.addAction.size));
 	return temp.id;
 }
 
