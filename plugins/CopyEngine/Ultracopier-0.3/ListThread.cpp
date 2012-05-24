@@ -86,6 +86,7 @@ ListThread::~ListThread()
 //transfer is finished
 void ListThread::transferInodeIsClosed()
 {
+	qint64 copiedSize;
 	numberOfInodeOperation--;
 	temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
 	if(temp_transfer_thread==NULL)
@@ -118,7 +119,15 @@ void ListThread::transferInodeIsClosed()
 			actionToDoListTransfer.removeAt(int_for_internal_loop);
 			if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
 				updateTheStatus();
-			/// \todo add the oversize to all size here
+
+			copiedSize=temp_transfer_thread->copiedSize();
+			if(copiedSize>(qint64)temp_transfer_thread->transferSize)
+			{
+				oversize=copiedSize-temp_transfer_thread->transferSize;
+				bytesToTransfer+=oversize;
+				bytesTransfered+=oversize;
+			}
+
 			bytesTransfered+=temp_transfer_thread->transferSize;
 			temp_transfer_thread->transferId=0;
 			temp_transfer_thread->transferSize=0;
