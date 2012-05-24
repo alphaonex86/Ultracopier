@@ -242,7 +242,8 @@ private:
 	QSemaphore waitConstructor,waitCancel;
 	int actionToDoListTransfer_count,actionToDoListInode_count;
 	bool doTransfer,doInode;
-	qint64 oversize,currentProgression;
+	qint64 oversize;//used as temp variable
+	qint64 currentProgression;
 	TransferThread* currentTransferThread;
 	//memory variable for transfer thread creation
 	bool doRightTransfer;
@@ -259,6 +260,8 @@ private:
 	QTimer *timerActionDone;
 	//send progression timer
 	QTimer *timerProgression;
+
+	void realByteTransfered();
 private slots:
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
@@ -360,6 +363,7 @@ signals:
 	void warningTransferList(QString warning);
 	void errorTransferList(QString error);
 	void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+	void send_realBytesTransfered(quint64);
 };
 
 #endif // LISTTHREAD_H

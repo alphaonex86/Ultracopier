@@ -1122,6 +1122,19 @@ void TransferThread::set_osBufferLimited(bool osBufferLimited)
 	this->osBufferLimited=osBufferLimited;
 }
 
+//not copied size, because that's count to the checksum, ...
+quint64 TransferThread::realByteTransfered()
+{
+	switch(stat)
+	{
+	case Transfer:
+	case PostOperation:
+		return readThread.getLastGoodPosition();
+	default:
+		return 0;
+	}
+}
+
 void TransferThread::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
 	this->firstRenamingRule=firstRenamingRule;

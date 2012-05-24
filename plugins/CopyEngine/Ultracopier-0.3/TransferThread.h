@@ -64,6 +64,9 @@ public:
 	void set_checksumOnlyOnError(bool checksumOnlyOnError);
 	void set_osBuffer(bool osBuffer);
 	void set_osBufferLimited(bool osBufferLimited);
+
+	//not copied size, because that's count to the checksum, ...
+	quint64 realByteTransfered();
 protected:
 	void run();
 signals:

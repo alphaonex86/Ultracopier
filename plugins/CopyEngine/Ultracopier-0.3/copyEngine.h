@@ -92,7 +92,7 @@ private:
 	FileErrorAction tempFileErrorAction;
 	FolderExistsAction tempFolderExistsAction;
 	FileExistsAction tempFileExistsAction;
-	quint64 size_for_speed;
+	quint64 size_for_speed;//because direct access to list thread into the main thread can't be do
 	CopyMode			mode;
 	bool				forcedMode;
 
@@ -135,6 +135,7 @@ private slots:
 	void showFilterDialog();
 	void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 	void showRenamingRules();
+	void get_realBytesTransfered(quint64 realBytesTransfered);
 public:
 	/** \brief to send the options panel
 	 * \return return false if have not the options

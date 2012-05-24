@@ -118,6 +118,8 @@ void copyEngine::connectTheSignalsSlots()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect mkPathErrorOnFolder()");
 	if(!connect(listThread,SIGNAL(rmPathErrorOnFolder(QFileInfo,QString)),					this,SLOT(rmPathErrorOnFolder(QFileInfo,QString)),				Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect rmPathErrorOnFolder()");
+	if(!connect(listThread,SIGNAL(send_realBytesTransfered(quint64)),					this,SLOT(get_realBytesTransfered(quint64)),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
 
 	if(!connect(this,SIGNAL(signal_pause()),						listThread,SLOT(pause()),				Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_pause()");
@@ -298,6 +300,7 @@ void copyEngine::newTransferList(const QString &file)
 	emit signal_importTransferList(file);
 }
 
+//because direct access to list thread into the main thread can't be do
 quint64 copyEngine::realByteTransfered()
 {
 	return size_for_speed;
@@ -757,4 +760,9 @@ void copyEngine::showRenamingRules()
 		return;
 	}
 	renamingRules->exec();
+}
+
+void copyEngine::get_realBytesTransfered(quint64 realBytesTransfered)
+{
+	size_for_speed=realBytesTransfered;
 }

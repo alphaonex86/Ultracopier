@@ -567,6 +567,19 @@ void ListThread::set_osBufferLimited(bool osBufferLimited)
 	}
 }
 
+void ListThread::realByteTransfered()
+{
+	quint64 totalRealByteTransfered=0;
+	int index=0;
+	loop_sub_size_transfer_thread_search=transferThreadList.size();
+	while(index<loop_sub_size_transfer_thread_search)
+	{
+		totalRealByteTransfered+=transferThreadList.at(index)->realByteTransfered();
+		index++;
+	}
+	emit send_realBytesTransfered(totalRealByteTransfered);
+}
+
 void ListThread::pause()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -822,6 +835,7 @@ void ListThread::sendProgression()
 	}
 	emit pushFileProgression(progressionList);
 	emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
+	realByteTransfered();
 	if(timerProgression!=NULL)
 		timerProgression->start();
 	else
