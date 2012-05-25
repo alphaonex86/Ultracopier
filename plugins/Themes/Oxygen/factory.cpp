@@ -43,7 +43,7 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
 		this->optionsEngine=optionsEngine;
 		//load the options
 		QList<QPair<QString, QVariant> > KeysList;
-		KeysList.append(qMakePair(QString("checkBoxShowSpeed"),QVariant(true)));
+		KeysList.append(qMakePair(QString("checkBoxShowSpeed"),QVariant(false)));
 		KeysList.append(qMakePair(QString("moreButtonPushed"),QVariant(false)));
 		optionsEngine->addOptionGroup(KeysList);
 		connect(optionsEngine,SIGNAL(resetOptions()),this,SLOT(resetOptions()));
