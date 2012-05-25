@@ -211,6 +211,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const CopyM
 	int index=0;
 	while(index<pluginList.size())
 	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Check matching: %1").arg(pluginList.at(index).name));
 		if(pluginList.at(index).name==name)
 		{
 			if(mode==Move && pluginList.at(index).canDoOnlyCopy)
@@ -229,8 +230,8 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const CopyM
 		}
 		index++;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Cannot find any engine with this name");
-	QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any engine with this name"));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Cannot find any engine with this name: %1").arg(name));
+	QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any engine with this name: %1").arg(name));
 	temp.engine=NULL;
 	temp.type=File;
 	temp.canDoOnlyCopy=true;

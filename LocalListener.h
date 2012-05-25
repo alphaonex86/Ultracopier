@@ -21,9 +21,10 @@
 
 #include "Environment.h"
 #include "ExtraSocket.h"
+#include "GlobalClass.h"
 
 /** \brief To have unique instance, and pass arguments to the existing instance if needed */
-class LocalListener : public QObject
+class LocalListener : public QObject, public GlobalClass
 {
     Q_OBJECT
 public:
@@ -58,6 +59,8 @@ private slots:
 	\param theErrorDefine The error define */
 	void error(QLocalSocket::LocalSocketError theErrorDefine);
 	#endif
+	/// \can now parse the cli
+	void allPluginIsloaded();
 signals:
 	void cli(const QStringList &ultracopierArguments,const bool &external);
 };

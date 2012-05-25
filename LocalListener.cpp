@@ -14,6 +14,7 @@ LocalListener::LocalListener(QObject *parent) :
 	TimeOutQLocalSocket.setInterval(500);
 	TimeOutQLocalSocket.setSingleShot(true);
 	connect(&TimeOutQLocalSocket, SIGNAL(timeout()), this, SLOT(timeoutDectected()));
+	connect(plugins,SIGNAL(pluginListingIsfinish()),this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
 }
 
 LocalListener::~LocalListener()
@@ -95,7 +96,6 @@ bool LocalListener::tryConnect()
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"connection failed, continu...");
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
-		emit cli(ultracopierArguments,false);
 		return false;
 	}
 }
@@ -263,3 +263,15 @@ void LocalListener::error(QLocalSocket::LocalSocketError theErrorDefine)
 	}
 }
 #endif
+
+/// \can now parse the cli
+void LocalListener::allPluginIsloaded()
+{
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	QStringList ultracopierArguments=QCoreApplication::arguments();
+	//remove excutable path because is useless (unsafe to use)
+	ultracopierArguments.removeFirst();
+	//add the current path to file full path resolution if needed
+	ultracopierArguments.insert(0,QFSFileEngine::currentPath());
+	emit cli(ultracopierArguments,false);
+}

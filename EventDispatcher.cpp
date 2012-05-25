@@ -128,6 +128,8 @@ void EventDispatcher::initFunction()
 	if(localListener.tryConnect())
 	{
 		stopIt=true;
+		//why before removed???
+		QCoreApplication::quit();
 		return;
 	}
 	localListener.listenServer();
