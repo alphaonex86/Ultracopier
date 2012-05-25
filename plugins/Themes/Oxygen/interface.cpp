@@ -28,8 +28,7 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
 	menu=new QMenu(this);
 	ui->add->setMenu(menu);
 	on_checkBoxShowSpeed_toggled(ui->checkBoxShowSpeed->isChecked());
-	currentSpeed	= -1;
-	updateSpeed();
+	currentSpeed	= 0;
 	storeIsInPause	= false;
 	isInPause(false);
 	modeIsForced	= false;
@@ -136,6 +135,8 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
+
+	updateSpeed();
 }
 
 Themes::~Themes()
@@ -149,10 +150,18 @@ Themes::~Themes()
 
 void Themes::uiUpdateSpeed()
 {
-	if(!ui->checkBoxShowSpeed->isChecked())
+	if(ui->checkBoxShowSpeed->isChecked())
+		return;
+	if(!ui->checkBox_limitSpeed->isChecked())
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("emit newSpeedLimitation(0)"));
 		emit newSpeedLimitation(0);
+	}
 	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("emit newSpeedLimitation(%1)").arg(ui->limitSpeed->value()));
 		emit newSpeedLimitation(ui->limitSpeed->value());
+	}
 }
 
 QWidget * Themes::getOptionsEngineWidget()
@@ -510,12 +519,14 @@ void Themes::on_cancelButton_clicked()
 
 void Themes::on_checkBoxShowSpeed_toggled(bool checked)
 {
-	if(checked==checked)
-		updateSpeed();
+	Q_UNUSED(checked);
+	updateSpeed();
 }
 
 void Themes::on_SliderSpeed_valueChanged(int value)
 {
+	if(!ui->checkBoxShowSpeed->isChecked())
+		return;
 	switch(value)
 	{
 		case 0:
@@ -537,28 +548,21 @@ void Themes::on_SliderSpeed_valueChanged(int value)
 			currentSpeed=1024*128;
 		break;
 	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("value: %1").arg(value));
 	emit newSpeedLimitation(currentSpeed);
+	updateSpeed();
 }
 
 void Themes::updateSpeed()
 {
-	bool checked;
-	if(currentSpeed==-1)
+	ui->groupBoxSpeedLimit->setVisible(!ui->checkBoxShowSpeed->isChecked());
+	ui->label_Slider_speed->setVisible(ui->checkBoxShowSpeed->isChecked());
+	ui->SliderSpeed->setVisible(ui->checkBoxShowSpeed->isChecked());
+	ui->label_SpeedMaxValue->setVisible(ui->checkBoxShowSpeed->isChecked());
+
+	if(ui->checkBoxShowSpeed->isChecked())
 	{
-		ui->checkBoxShowSpeed->setEnabled(false);
-		checked=false;
-	}
-	else
-	{
-		ui->checkBoxShowSpeed->setEnabled(true);
-		checked=ui->checkBox_limitSpeed->isChecked();
-	}
-	ui->label_Slider_speed->setVisible(checked);
-	ui->SliderSpeed->setVisible(checked);
-	ui->label_SpeedMaxValue->setVisible(checked);
-	ui->checkBox_limitSpeed->setEnabled(checked);
-	if(checked)
-	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"checked");
 		ui->limitSpeed->setEnabled(false);
 		if(currentSpeed==0)
 		{
@@ -628,6 +632,7 @@ void Themes::updateSpeed()
 
 void Themes::on_limitSpeed_valueChanged(int value)
 {
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("value: %1").arg(value));
 	currentSpeed=value;
 	emit newSpeedLimitation(currentSpeed);
 }

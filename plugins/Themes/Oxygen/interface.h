@@ -137,7 +137,7 @@ private:
 	QMenu *menu;
 	EngineActionInProgress action;
 	void closeEvent(QCloseEvent *event);
-	qint64 currentSpeed;
+	qint64 currentSpeed;//into KB/s
 	void updateSpeed();
 	bool storeIsInPause;
 	bool modeIsForced;
