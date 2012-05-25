@@ -125,6 +125,7 @@ private:
 	QSemaphore		*mkpathTransfer;
 	bool			fakeMode;
 	bool			buffer;
+	bool			needRemoveTheFile;
 private slots:
 	bool internalOpen();
 	void internalWrite();

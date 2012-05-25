@@ -17,16 +17,20 @@ WriteThread::WriteThread()
 	CurentCopiedSize=0;
 	buffer=false;
 	putInPause=false;
+	needRemoveTheFile=false;
 	blockSize=1024*1024;
 }
 
 WriteThread::~WriteThread()
 {
-	stop();
+	stopIt=true;
+	needRemoveTheFile=true;
 	freeBlock.release();
+	// useless because stopIt will close all thread, but if thread not runing run it
+	//endIsDetected();
 	emit internalStartClose();
-	disconnect(this);
 	isOpen.acquire();
+	disconnect(this);
 	quit();
 	wait();
 }
@@ -114,6 +118,7 @@ bool WriteThread::internalOpen()
 		stat=Idle;
 		#endif
 		isOpen.acquire();
+		needRemoveTheFile=false;
 		return true;
 	}
 	else
@@ -178,7 +183,10 @@ bool WriteThread::write(const QByteArray &data)
 void WriteThread::stop()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop()");
+	needRemoveTheFile=true;
 	stopIt=true;
+	if(isOpen.available()>0)
+		return;
 	freeBlock.release();
 	// useless because stopIt will close all thread, but if thread not runing run it
 	endIsDetected();
@@ -270,11 +278,20 @@ void WriteThread::internalClose(bool emitSignal)
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Close;
 	#endif
-	if(!fakeMode)
+	if(!fakeMode && file.isOpen())
 	{
-		if(startSize!=CurentCopiedSize)
-			file.resize(CurentCopiedSize);
+		if(!needRemoveTheFile)
+		{
+			if(startSize!=CurentCopiedSize)
+				file.resize(CurentCopiedSize);
+		}
 		file.close();
+		if(needRemoveTheFile)
+		{
+			if(file.remove())
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
+		}
+		needRemoveTheFile=false;
 	}
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	stat=Idle;

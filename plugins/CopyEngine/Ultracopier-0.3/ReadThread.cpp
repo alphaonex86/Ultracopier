@@ -70,6 +70,8 @@ void ReadThread::stop()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop()");
 	stopIt=true;
+	if(isOpen.available()>0)
+		return;
 	emit internalStartClose();
 }
 

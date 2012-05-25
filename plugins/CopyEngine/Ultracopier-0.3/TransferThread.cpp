@@ -534,6 +534,8 @@ void TransferThread::resume()
 void TransferThread::stop()
 {
 	stopIt=true;
+	if(stat==Idle)
+		return;
 	readThread.stop();
 	writeThread.stop();
 }
