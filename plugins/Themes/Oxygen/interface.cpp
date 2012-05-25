@@ -153,15 +153,11 @@ void Themes::uiUpdateSpeed()
 	if(ui->checkBoxShowSpeed->isChecked())
 		return;
 	if(!ui->checkBox_limitSpeed->isChecked())
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("emit newSpeedLimitation(0)"));
-		emit newSpeedLimitation(0);
-	}
+		currentSpeed=0;
 	else
-	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("emit newSpeedLimitation(%1)").arg(ui->limitSpeed->value()));
-		emit newSpeedLimitation(ui->limitSpeed->value());
-	}
+		currentSpeed=ui->limitSpeed->value();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("emit newSpeedLimitation(%1)").arg(currentSpeed));
+	emit newSpeedLimitation(currentSpeed);
 }
 
 QWidget * Themes::getOptionsEngineWidget()
@@ -628,26 +624,6 @@ void Themes::updateSpeed()
 		ui->checkBox_limitSpeed->setEnabled(currentSpeed!=-1);
 		ui->limitSpeed->setEnabled(ui->checkBox_limitSpeed->isChecked());
 	}
-}
-
-void Themes::on_limitSpeed_valueChanged(int value)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("value: %1").arg(value));
-	currentSpeed=value;
-	emit newSpeedLimitation(currentSpeed);
-}
-
-void Themes::on_checkBox_limitSpeed_clicked()
-{
-	if(ui->checkBox_limitSpeed->isChecked())
-	{
-		if(ui->checkBoxShowSpeed->isChecked())
-			on_SliderSpeed_valueChanged(ui->SliderSpeed->value());
-		else
-			on_limitSpeed_valueChanged(ui->limitSpeed->value());
-	}
-	else
-		currentSpeed=0;
 }
 
 void Themes::on_pauseButton_clicked()

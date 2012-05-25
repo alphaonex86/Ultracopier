@@ -97,8 +97,6 @@ private slots:
 	void on_cancelButton_clicked();
 	void on_checkBoxShowSpeed_toggled(bool checked);
 	void on_SliderSpeed_valueChanged(int value);
-	void on_limitSpeed_valueChanged(int );
-	void on_checkBox_limitSpeed_clicked();
 	void on_pauseButton_clicked();
 	void on_skipButton_clicked();
 	void forcedModeAddFile();
@@ -137,7 +135,7 @@ private:
 	QMenu *menu;
 	EngineActionInProgress action;
 	void closeEvent(QCloseEvent *event);
-	qint64 currentSpeed;//into KB/s
+	qint64 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
 	void updateSpeed();
 	bool storeIsInPause;
 	bool modeIsForced;
