@@ -708,7 +708,7 @@ qint64 ListThread::getSpeedLimitation()
 
 bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"maxSpeed: "+QString::number(maxSpeed));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
 	maxSpeed=speedLimitation;
 	int_for_loop=0;
 	loop_size=transferThreadList.size();

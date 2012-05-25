@@ -197,7 +197,7 @@ private:
 	qint64				actualRealByteTransfered;
 	int				preOperationNumber;
 	int				numberOfTranferRuning;
-	int				maxSpeed;
+	int				maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
 	FolderExistsAction		alwaysDoThisActionForFolderExists;
 	bool				checkDestinationFolderExists;
 	bool				doChecksum;
