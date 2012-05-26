@@ -347,10 +347,13 @@ void Themes::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
 	currentFile+=returnValue[2];
 	if(transferModel.rowCount()==0)
 	{
+		ui->skipButton->setEnabled(false);
 		ui->progressBar_all->setValue(65535);
 		ui->progressBar_file->setValue(65535);
 		currentSize=totalSize;
 	}
+	else
+		ui->skipButton->setEnabled(true);
 	updateOverallInformation();
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"transferModel.rowCount(): "+QString::number(transferModel.rowCount()));
 }
