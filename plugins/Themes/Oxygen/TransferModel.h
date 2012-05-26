@@ -59,6 +59,8 @@ public:
 	void setFileProgression(QList<ProgressionItem> &progressionList);
 
 	currentTransfertItem getCurrentTransfertItem();
+
+	quint64 firstId();
 protected:
 	QList<transfertItem> transfertItemList;///< To have a transfer list for the user
 	QSet<quint64> startId,stopId;///< To show what is started, what is stopped

@@ -81,6 +81,14 @@ int TransferModel::rowCount( const QModelIndex& parent ) const
 	return parent == QModelIndex() ? transfertItemList.count() : 0;
 }
 
+quint64 TransferModel::firstId()
+{
+	if(transfertItemList.count()>0)
+		return transfertItemList[0].id;
+	else
+		return 0;
+}
+
 QVariant TransferModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
 	if ( role == Qt::DisplayRole && orientation == Qt::Horizontal && section >= 0 && section < COLUMN_COUNT ) {

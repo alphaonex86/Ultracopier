@@ -640,12 +640,22 @@ void Themes::on_pauseButton_clicked()
 
 void Themes::on_skipButton_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
 	if(transfertItem.haveItem)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("skip at running: %1").arg(transfertItem.id));
 		emit skip(transfertItem.id);
+	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to skip the transfer, because no transfer running");
+	{
+		if(transferModel.rowCount()>1)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("skip at idle: %1").arg(transferModel.firstId()));
+			emit skip(transferModel.firstId());
+		}
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to skip the transfer, because no transfer running");
+	}
 }
 
 void Themes::updateModeAndType()
