@@ -691,9 +691,15 @@ void ListThread::cancel()
                 index++;
 	}
 	if(timerActionDone!=NULL)
+	{
+		timerActionDone->stop();
 		delete timerActionDone;
+	}
 	if(timerProgression!=NULL)
+	{
+		timerProgression->stop();
 		delete timerProgression;
+	}
 	timerActionDone=NULL;
 	timerProgression=NULL;
 	quit();
