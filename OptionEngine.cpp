@@ -151,12 +151,12 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 	{
 		if(GroupKeysList[groupName].contains(variableName))
 			return GroupKeysList[groupName][variableName].currentValue;
-		QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+		QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
 		return QVariant();
 	}
-	QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+	QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
 	//return default value
 	return QVariant();
 }
@@ -192,12 +192,12 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
 			emit newOptionValue(groupName,variableName,value);
 			return;
 		}
-		QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+		QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
 		return;
 	}
-	QMessageBox::critical(NULL,"Internal error",tr("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Get the option value but not found: %1 %2").arg(groupName).arg(variableName));
+	QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
 }
 
 //the reset of right value of widget need be do into the calling object

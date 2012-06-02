@@ -2,31 +2,49 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr" sourcelanguage="en">
 <context>
-    <name>InterfacePlugin</name>
+    <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+87"/>
-        <source>Copy engine</source>
-        <translation>Moteur de copie</translation>
-    </message>
-    <message>
-        <location line="+13"/>
+        <location filename="../../interface.cpp" line="+184"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+50"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location line="+525"/>
+        <location line="+24"/>
+        <source>Time remaining: </source>
+        <translation>Temps restant: </translation>
+    </message>
+    <message>
+        <location line="+314"/>
         <source>Unlimited</source>
         <translation>Illimité</translation>
     </message>
     <message>
-        <location line="+179"/>
+        <location line="+156"/>
         <source>File Name, 0KB</source>
         <translation>Nom de fichier, 0Ko</translation>
+    </message>
+</context>
+<context>
+    <name>TransferModel</name>
+    <message>
+        <location filename="../../TransferModel.cpp" line="+97"/>
+        <source>Source</source>
+        <translation>Source</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Target</source>
+        <translation>Destination</translation>
     </message>
 </context>
 <context>
@@ -80,21 +98,6 @@
         <location/>
         <source>Copy list</source>
         <translation>Liste de copie</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Source</source>
-        <translation>Source</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Size</source>
-        <translation>Taille</translation>
-    </message>
-    <message>
-        <location/>
-        <source>Destination</source>
-        <translation>Destination</translation>
     </message>
     <message>
         <location/>
@@ -201,6 +204,16 @@
         <source>Copy folder</source>
         <translation>Copier un répertoire</translation>
     </message>
+    <message>
+        <location/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Shutdown when is finish</source>
+        <translation>Fermer quand est fini</translation>
+    </message>
 </context>
 <context>
     <name>options</name>
@@ -213,6 +226,11 @@
         <location/>
         <source>Show speed as main informations</source>
         <translation>Montrer la vitesse comme une information principale</translation>
+    </message>
+    <message>
+        <location/>
+        <source>Start with more button pushed</source>
+        <translation>Démarrer avec le boutton plus pressé</translation>
     </message>
 </context>
 </TS>

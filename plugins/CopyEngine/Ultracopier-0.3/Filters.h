@@ -21,11 +21,11 @@ public:
 	void reShowAll();
 	QList<Filters_rules> getInclude();
 	QList<Filters_rules> getExclude();
+	void newLanguageLoaded();
 private:
 	Ui::Filters *ui;
 	QList<Filters_rules> include;
 	QList<Filters_rules> exclude;
-	void changeEvent(QEvent *e);
 	void haveNewFilters();
 	bool convertToRegex(Filters_rules &item);
 signals:

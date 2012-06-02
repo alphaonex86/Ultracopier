@@ -521,12 +521,16 @@ bool TransferThread::setBlockSize(const unsigned int blockSize)
 //pause the copy
 void TransferThread::pause()
 {
+	if(stat==Idle)
+		return;
 	readThread.pause();
 }
 
 //resume the copy
 void TransferThread::resume()
 {
+	if(stat==Idle)
+		return;
 	readThread.resume();
 }
 

@@ -168,7 +168,7 @@ QWidget * Themes::getOptionsEngineWidget()
 void Themes::getOptionsEngineEnabled(bool isEnabled)
 {
 	if(isEnabled)
-		ui->tabWidget->addTab(&optionEngineWidget,tr("Copy engine"));
+		ui->tabWidget->addTab(&optionEngineWidget,facilityEngine->translateText("Copy engine"));
 }
 
 void Themes::closeEvent(QCloseEvent *event)
@@ -255,13 +255,16 @@ void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
 
 void Themes::remainingTime(const int &remainingSeconds)
 {
+	QString labelTimeRemaining("<html><body style=\"white-space:nowrap;\">"+tr("Time remaining: "));
 	if(remainingSeconds==-1)
-		ui->labelTimeRemaining->setText("<html><body>&#8734;</body></html>");
+		labelTimeRemaining+="&#8734;";
 	else
 	{
 		TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(remainingSeconds);
-		ui->labelTimeRemaining->setText(QString::number(time.hour)+":"+QString::number(time.minute)+":"+QString::number(time.second));
+		labelTimeRemaining+=QString::number(time.hour)+":"+QString::number(time.minute)+":"+QString::number(time.second);
 	}
+	labelTimeRemaining+="</body></html>";
+	ui->labelTimeRemaining->setText(labelTimeRemaining);
 }
 
 void Themes::newCollisionAction(const QString &action)

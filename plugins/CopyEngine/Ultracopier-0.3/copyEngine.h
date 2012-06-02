@@ -105,6 +105,11 @@ private:
 	QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
 	QString firstRenamingRule;
 	QString otherRenamingRule;
+
+	//send action done timer
+	QTimer timerActionDone;
+	//send progression timer
+	QTimer timerProgression;
 private slots:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	void updateTheDebugInfo(QStringList,QStringList,int);
@@ -136,6 +141,7 @@ private slots:
 	void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
 	void showRenamingRules();
 	void get_realBytesTransfered(quint64 realBytesTransfered);
+	void newActionInProgess(EngineActionInProgress);
 public:
 	/** \brief to send the options panel
 	 * \return return false if have not the options

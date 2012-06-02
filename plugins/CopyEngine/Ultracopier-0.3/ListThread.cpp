@@ -19,8 +19,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	qRegisterMetaType<CopyMode>("CopyMode");
 	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
 
-	timerActionDone=NULL;
-	timerProgression=NULL;
 	moveToThread(this);
 	start(HighPriority);
 	this->facilityInterface		= facilityInterface;
@@ -399,10 +397,6 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 void ListThread::startGeneralTransfer()
 {
 	doNewActions_inode_manipulation();
-	if(timerProgression!=NULL)
-		timerProgression->start();
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"internal bug, pointer on QTimer is NULL");
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
@@ -690,18 +684,6 @@ void ListThread::cancel()
 		scanFileOrFolderThreadsPool[index]=NULL;
                 index++;
 	}
-	if(timerActionDone!=NULL)
-	{
-		timerActionDone->stop();
-		delete timerActionDone;
-	}
-	if(timerProgression!=NULL)
-	{
-		timerProgression->stop();
-		delete timerProgression;
-	}
-	timerActionDone=NULL;
-	timerProgression=NULL;
 	quit();
 	waitCancel.release();
 }
@@ -797,13 +779,6 @@ void ListThread::sendActionDone()
 		emit newActionOnList(actionDone);
 		actionDone.clear();
 	}
-	if(actionToDoListTransfer.size()>0)
-	{
-		if(timerActionDone!=NULL)
-			timerActionDone->start();
-		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"internal bug, pointer on QTimer is NULL");
-	}
 }
 
 //send progression
@@ -842,10 +817,6 @@ void ListThread::sendProgression()
 	emit pushFileProgression(progressionList);
 	emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
 	realByteTransfered();
-	if(timerProgression!=NULL)
-		timerProgression->start();
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"can't start QTimer because the pointer is NULL");
 }
 
 //send the progression, after full reset of the interface (then all is empty)
@@ -911,14 +882,6 @@ void ListThread::syncTransferList_internal()
 //add file transfer to do
 quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const CopyMode& mode)
 {
-	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
-	if(actionToDoListTransfer.size()==0)
-	{
-		if(timerActionDone!=NULL)
-			timerActionDone->start();
-		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"can't start QTimer because the pointer is NULL");
-	}
 	//add to transfer list
 	numberOfTransferIntoToDoList++;
 	bytesToTransfer+= source.size();
@@ -1234,7 +1197,7 @@ void ListThread::importTransferList(const QString &fileName)
 			emit errorTransferList(tr("The transfer list is in move mode, but this instance is not in this mode"));
 			return;
 		}
-		bool errorFound=false,ignored_by_wrong_type=false;
+		bool errorFound=false;
 		QRegExp correctLine;
 		if(transferListMixedMode)
 			correctLine=QRegExp("^(Copy|Move);[^;]+;[^;]+\n$");
@@ -1279,8 +1242,6 @@ void ListThread::importTransferList(const QString &fileName)
 		transferFile.close();
 		if(errorFound)
 			emit warningTransferList(tr("Some error have been found during the line parsing"));
-		else if(ignored_by_wrong_type)
-			emit warningTransferList(tr("Some list is ignored because it not corresponds to the window transfer type"));
 //		emit newActionOnList();
 	}
 	else
@@ -1649,15 +1610,6 @@ void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorStr
 //to run the thread
 void ListThread::run()
 {
-	timerActionDone=new QTimer();
-	timerActionDone->setSingleShot(true);
-	timerActionDone->setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
-	timerProgression=new QTimer();
-	timerProgression->setSingleShot(true);
-	timerProgression->setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
-	connect(timerActionDone,SIGNAL(timeout()),							this,SLOT(sendActionDone()));
-	connect(timerProgression,SIGNAL(timeout()),							this,SLOT(sendProgression()));
-
 	exec();
 }
 

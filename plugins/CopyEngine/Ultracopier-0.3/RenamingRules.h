@@ -15,6 +15,7 @@ public:
 	explicit RenamingRules(QWidget *parent = 0);
 	~RenamingRules();
 	void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+	void newLanguageLoaded();
 private:
 	Ui::RenamingRules *ui;
 	void connectUI();

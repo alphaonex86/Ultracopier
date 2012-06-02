@@ -13,12 +13,14 @@
 /// \brief Max number of ligne show on the GUI
 #define ULTRACOPIER_DEBUG_MAX_GUI_LINE 5000
 /// \brief the version
-#define ULTRACOPIER_VERSION		"0.3.0.6"
+#define ULTRACOPIER_VERSION		"0.3.0.7"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,6
+#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,7
 // define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
+// define if the version is ultimate, need change only the name in the code
+//#define ULTRACOPIER_VERSION_ULTIMATE
 /// \brief define time to update the speed detection update ont the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500
 

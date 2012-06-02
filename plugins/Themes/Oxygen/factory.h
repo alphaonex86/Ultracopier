@@ -42,6 +42,7 @@ public:
 private slots:
 	void checkBoxShowSpeedHaveChanged(bool toggled);
 	void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
+public slots:
 	void resetOptions();
 	void newLanguageLoaded();
 private:

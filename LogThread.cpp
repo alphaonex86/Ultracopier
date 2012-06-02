@@ -62,7 +62,7 @@ void LogThread::openLogs()
 		return;
 	if(log.isOpen())
 	{
-		QMessageBox::critical(NULL,tr("Error"),tr("log file already open, error: %1").arg(log.errorString()));
+		QMessageBox::critical(NULL,tr("Error"),tr("Log file already open, error: %1").arg(log.errorString()));
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("log file already open, error: %1").arg(log.errorString()));
 		return;
 	}

@@ -51,6 +51,13 @@ copyEngine::copyEngine(FacilityInterface * facilityInterface) :
 	stopIt				= false;
 	size_for_speed			= 0;
 	forcedMode			= false;
+
+	//implement the SingleShot in this class
+	//timerActionDone.setSingleShot(true);
+	timerActionDone.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_TRASNFER_LIST);
+	//timerProgression.setSingleShot(true);
+	timerProgression.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
+
 }
 
 copyEngine::~copyEngine()
@@ -71,6 +78,8 @@ void copyEngine::connectTheSignalsSlots()
 	#endif
 	if(!connect(listThread,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SIGNAL(actionInProgess(EngineActionInProgress)),	Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect actionInProgess()");
+	if(!connect(listThread,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(newActionInProgess(EngineActionInProgress)),	Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect actionInProgess() to slot");
 	if(!connect(listThread,SIGNAL(newFolderListing(QString)),			this,SIGNAL(newFolderListing(QString)),			Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newFolderListing()");
 	if(!connect(listThread,SIGNAL(newCollisionAction(QString)),			this,SIGNAL(newCollisionAction(QString)),		Qt::QueuedConnection))
@@ -153,6 +162,10 @@ void copyEngine::connectTheSignalsSlots()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_setFilters()");
 	if(!connect(this,SIGNAL(send_sendNewRenamingRules(QString,QString)),listThread,SLOT(set_sendNewRenamingRules(QString,QString)),		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_sendNewRenamingRules()");
+	if(!connect(&timerActionDone,SIGNAL(timeout()),							listThread,SLOT(sendActionDone())))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect timerActionDone");
+	if(!connect(&timerProgression,SIGNAL(timeout()),							listThread,SLOT(sendProgression())))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect timerProgression");
 
 	if(!connect(this,SIGNAL(queryOneNewDialog()),SLOT(showOneNewDialog()),Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect queryOneNewDialog()");
@@ -460,6 +473,8 @@ void copyEngine::cancel()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	stopIt=true;
+	timerProgression.stop();
+	timerActionDone.stop();
 	listThread->cancel();
 }
 
@@ -765,4 +780,18 @@ void copyEngine::showRenamingRules()
 void copyEngine::get_realBytesTransfered(quint64 realBytesTransfered)
 {
 	size_for_speed=realBytesTransfered;
+}
+
+void copyEngine::newActionInProgess(EngineActionInProgress action)
+{
+	if(action==Idle)
+	{
+		timerProgression.stop();
+		timerActionDone.stop();
+	}
+	else
+	{
+		timerProgression.start();
+		timerActionDone.start();
+	}
 }

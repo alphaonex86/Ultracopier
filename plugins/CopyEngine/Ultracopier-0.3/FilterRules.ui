@@ -2,16 +2,19 @@
 <ui version="4.0">
  <class>FilterRules</class>
  <widget class="QDialog" name="FilterRules">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>289</width>
-    <height>229</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Filter dialog</string>
+   <string>Filters dialog</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -102,7 +105,7 @@
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="isValid">
         <property name="text">
-         <string>Regex is valid</string>
+         <string>The regex is valid</string>
         </property>
        </widget>
       </item>
@@ -119,7 +122,7 @@
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="matched">
         <property name="text">
-         <string>The test string is matched by the regex</string>
+         <string>The test string match with the regex</string>
         </property>
        </widget>
       </item>

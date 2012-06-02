@@ -177,6 +177,11 @@ public slots:
 	void set_osBufferLimit(unsigned int osBufferLimit);
 	void set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
 	void set_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+
+	//send action done
+	void sendActionDone();
+	//send progression
+	void sendProgression();
 private:
 	QSemaphore mkpathTransfer;
 	QString sourceDrive;
@@ -256,10 +261,6 @@ private:
 	QPair<quint64,quint64> returnPairQuint64ToCopyEngine;
 	QList<ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
 	ItemOfCopyList returnItemOfCopyListToCopyEngine;
-	//send action done timer
-	QTimer *timerActionDone;
-	//send progression timer
-	QTimer *timerProgression;
 
 	void realByteTransfered();
 private slots:
@@ -298,10 +299,6 @@ private slots:
 	quint64 addToMkPath(const QString& folder);
 	//add rm path to do
 	void addToRmPath(const QString& folder,const int& inodeToRemove);
-	//send action done
-	void sendActionDone();
-	//send progression
-	void sendProgression();
 	//send the progression, after full reset of the interface (then all is empty)
 	void syncTransferList_internal();
 signals:

@@ -78,3 +78,8 @@ void RenamingRules::otherRenamingRule_haveChanged()
 	emit sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
+void RenamingRules::newLanguageLoaded()
+{
+	ui->retranslateUi(this);
+	setRenamingRules(firstRenamingRule,otherRenamingRule);
+}

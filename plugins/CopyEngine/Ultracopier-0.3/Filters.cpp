@@ -168,16 +168,10 @@ QList<Filters_rules> Filters::getExclude()
 	return exclude;
 }
 
-void Filters::changeEvent(QEvent *e)
+void Filters::newLanguageLoaded()
 {
-	QDialog::changeEvent(e);
-	switch (e->type()) {
-	case QEvent::LanguageChange:
-		reShowAll();
-		break;
-	default:
-		break;
-	}
+	ui->retranslateUi(this);
+	reShowAll();
 }
 
 void Filters::haveNewFilters()
@@ -218,7 +212,7 @@ void Filters::haveNewFilters()
 			break;
 		}
 		if(include.at(index).need_match_all)
-			optionsToShow << tr("need_match_all");
+			optionsToShow << tr("Full match");
 		includeOptions<<optionsToShow.join(";");
 		index++;
 	}
@@ -257,7 +251,7 @@ void Filters::haveNewFilters()
 			break;
 		}
 		if(exclude.at(index).need_match_all)
-			optionsToShow << tr("need_match_all");
+			optionsToShow << tr("Full match");
 		excludeOptions<<optionsToShow.join(";");
 		index++;
 	}

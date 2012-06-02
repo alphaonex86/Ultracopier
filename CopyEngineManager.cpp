@@ -13,6 +13,7 @@
 CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()),Qt::DirectConnection);
 	this->optionDialog=optionDialog;
 	//setup the ui layout
 	plugins->lockPluginListEdition();
@@ -26,7 +27,6 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 	plugins->unlockPluginListEdition();
 	//load the options
 	isConnected=false;
-	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()),Qt::QueuedConnection);
 }
 
 void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)

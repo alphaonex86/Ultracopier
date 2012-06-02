@@ -174,7 +174,7 @@
    <item row="9" column="0" colspan="2">
     <widget class="QCheckBox" name="osBufferLimited">
      <property name="text">
-      <string>OS buffer only if lower than</string>
+      <string>OS buffer only if smaller than</string>
      </property>
     </widget>
    </item>

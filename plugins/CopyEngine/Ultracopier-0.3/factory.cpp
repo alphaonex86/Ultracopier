@@ -295,6 +295,11 @@ void Factory::newLanguageLoaded()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, retranslate the widget options");
 	ui->retranslateUi(tempWidget);
+	if(optionsEngine!=NULL)
+	{
+		filters->newLanguageLoaded();
+		renamingRules->newLanguageLoaded();
+	}
 	emit reloadLanguage();
 }
 

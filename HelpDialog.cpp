@@ -61,7 +61,11 @@ void HelpDialog::reloadTextValue()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QString text=ui->label_ultracopier->text();
+	#ifdef ULTRACOPIER_VERSION_ULTIMATE
+	text=text.replace("%1",QString("Ultimate %1").arg(ULTRACOPIER_VERSION));
+	#else
 	text=text.replace("%1",ULTRACOPIER_VERSION);
+	#endif
 	ui->label_ultracopier->setText(text);
 
 	text=ui->label_description->text();
