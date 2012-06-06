@@ -132,8 +132,9 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	{
 		if(!RegisterShellExtDll(pluginPath+secondDll.at(index),needBeRegistred,
 			!(
-				allDllIsImportant || 
-				correctlyLoaded.contains(secondDll.at(index))
+				(needBeRegistred && allDllIsImportant)
+				||
+				(!needBeRegistred && correctlyLoaded.contains(secondDll.at(index)))
 			)
 		))
 		{
