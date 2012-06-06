@@ -44,6 +44,7 @@ bool LocalListener::tryConnect()
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"localSocket is not valid!");
 			return false;
 		}
+		emit cli(ultracopierArguments,false,true);
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"connection succes, number arguments given: "+QString::number(ultracopierArguments.size()));
 		#ifdef ULTRACOPIER_DEBUG
 		for (int i = 0; i < ultracopierArguments.size(); ++i) {
@@ -180,7 +181,7 @@ void LocalListener::dataIncomming()
 				QStringList ultracopierArguments;
 				in >> ultracopierArguments;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
-				emit cli(ultracopierArguments,true);
+				emit cli(ultracopierArguments,true,false);
 				clientList[index].data.clear();
 				clientList[index].haveData=false;
 			}
@@ -199,7 +200,7 @@ void LocalListener::dataIncomming()
 				QStringList ultracopierArguments;
 				in >> ultracopierArguments;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
-				emit cli(ultracopierArguments,true);
+				emit cli(ultracopierArguments,true,false);
 				clientList[index].data.clear();
 				clientList[index].haveData=false;
 			}
@@ -273,5 +274,5 @@ void LocalListener::allPluginIsloaded()
 	ultracopierArguments.removeFirst();
 	//add the current path to file full path resolution if needed
 	ultracopierArguments.insert(0,QFSFileEngine::currentPath());
-	emit cli(ultracopierArguments,false);
+	emit cli(ultracopierArguments,false,false);
 }

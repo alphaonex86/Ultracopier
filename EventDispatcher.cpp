@@ -26,7 +26,7 @@
 EventDispatcher::EventDispatcher()
 {
 	copyServer=new CopyListener(&optionDialog);
-	connect(&localListener,SIGNAL(cli(QStringList,bool)),&cliParser,SLOT(cli(QStringList,bool)),Qt::QueuedConnection);
+	connect(&localListener,SIGNAL(cli(QStringList,bool,bool)),&cliParser,SLOT(cli(QStringList,bool,bool)),Qt::QueuedConnection);
 	connect(themes,		SIGNAL(newThemeOptions(QWidget*,bool,bool)),	&optionDialog,	SLOT(newThemeOptions(QWidget*,bool,bool)));
 	connect(&cliParser,	SIGNAL(newCopy(QStringList)),			copyServer,	SLOT(newCopy(QStringList)));
 	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		copyServer,	SLOT(newCopy(QStringList,QString)));

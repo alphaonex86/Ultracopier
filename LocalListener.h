@@ -62,7 +62,7 @@ private slots:
 	/// \can now parse the cli
 	void allPluginIsloaded();
 signals:
-	void cli(const QStringList &ultracopierArguments,const bool &external);
+	void cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck);
 };
 
 #endif // LOCALLISTENER_H

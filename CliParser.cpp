@@ -7,12 +7,14 @@
 
 #include "CliParser.h"
 
+#include <QDebug>
+
 CliParser::CliParser(QObject *parent) :
     QObject(parent)
 {
 }
 
-void CliParser::cli(const QStringList &ultracopierArguments,const bool &external)
+void CliParser::cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 	if(ultracopierArguments.size()==1)
@@ -22,15 +24,30 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 		// else do nothing, is normal starting without arguements
 		return;
 	}
-	if(ultracopierArguments.size()==2 && ultracopierArguments.last()=="quit" && external)
+	if(ultracopierArguments.size()==2)
 	{
-		QCoreApplication::exit();
+		if(ultracopierArguments.last()=="quit" && external)
+		{
+			if(onlyCheck)
+				return;
+			QCoreApplication::exit();
+			return;
+		}
+		if(ultracopierArguments.last()=="--help")
+		{
+			showHelp(false);
+			return;
+		}
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Command line not understand");
+		showHelp();
 		return;
 	}
 	if(ultracopierArguments.size()==3)
 	{
 		if(ultracopierArguments[1]=="Transfer-list")
 		{
+			if(onlyCheck)
+				return;
 			QFile transferFile(ultracopierArguments.last());
 			if(transferFile.open(QIODevice::ReadOnly))
 			{
@@ -65,12 +82,15 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 			return;
 		}
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Command line not understand");
-		QMessageBox::warning(NULL,tr("Warning"),tr("Command line not understand"));
+		showHelp();
+		return;
 	}
 	if(ultracopierArguments.size()>3)
 	{
 		if(ultracopierArguments[1]=="Copy" || ultracopierArguments[1]=="cp")
 		{
+			if(onlyCheck)
+				return;
 			QStringList transferList=ultracopierArguments;
 			transferList.removeFirst();
 			transferList.removeFirst();
@@ -89,6 +109,8 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 		}
 		if(ultracopierArguments[1]=="Move" || ultracopierArguments[1]=="mv")
 		{
+			if(onlyCheck)
+				return;
 			QStringList transferList=ultracopierArguments;
 			transferList.removeFirst();
 			transferList.removeFirst();
@@ -106,8 +128,36 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 			return;
 		}
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Command line not understand");
-		QMessageBox::warning(NULL,tr("Warning"),tr("Command line not understand"));
+		showHelp();
+		return;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Command line not understand");
-	QMessageBox::warning(NULL,tr("Warning"),tr("Command line not understand"));
+	showHelp();
+}
+
+void CliParser::showHelp(const bool &incorrectArguments)
+{
+	if(incorrectArguments)
+		qDebug() << "Incorrect arguments detected";
+	qDebug() << tr("The arguments possibles are:");
+	qDebug() << "--help : "+tr("To have this help");
+	qDebug() << "quit : "+tr("To quit the other instance running (if have)");
+	qDebug() << "Transfer-list [transfer list file] : "+tr("To pass transfer list to do");
+	qDebug() << "cp [source [source2]] [destination] : "+tr("To copy source separated by space to destination. If destination is \"?\", ultracopier will ask it to the user");
+	qDebug() << "mv [source [source2]] [destination] : "+tr("Same as above, but with move");
+
+	QString message;
+	if(incorrectArguments)
+		message+="<b>"+tr("Command line not understand")+"</b><br />\n";
+	message+=+"<b></b>"+tr("The arguments possibles are:")+"\n<ul>";
+	message+="<li><b>--help</b> : "+tr("To have this help")+"</li>\n";
+	message+="<li><b>quit</b> : "+tr("To quit the other instance running (if have)")+"</li>\n";
+	message+="<li><b>Transfer-list [transfer list file]</b> : "+tr("To pass transfer list to do")+"</li>\n";
+	message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy source separated by space to destination. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
+	message+="<li><b>mv [source [source2]] [destination]</b> : "+tr("Same as above, but with move")+"</li>\n";
+	message+=+"</ul>";
+	if(incorrectArguments)
+		QMessageBox::warning(NULL,tr("Warning"),message);
+	else
+		QMessageBox::information(NULL,tr("Help"),message);
 }
