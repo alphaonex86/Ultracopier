@@ -33,6 +33,8 @@ class FacilityInterface : public QObject
 		virtual bool haveFunctionality(const QString &fonctionnality) = 0;
 		/// \brief call the fonctionnality
 		virtual QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList()) = 0;
+		/// \brief Do the simplified time
+		virtual QString simplifiedRemainingTime(const quint32 &seconds) = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

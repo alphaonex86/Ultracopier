@@ -9,7 +9,7 @@
 #include <QDir>
 
 #include "sessionLoader.h"
-void SessionLoaderPlugin::setEnabled(bool newValue)
+void SessionLoader::setEnabled(bool newValue)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
 	QFile link(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
@@ -33,14 +33,14 @@ void SessionLoaderPlugin::setEnabled(bool newValue)
 	}
 }
 
-bool SessionLoaderPlugin::getEnabled()
+bool SessionLoader::getEnabled()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, return this value: "+QString::number(QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh")));
 	//return the value into the variable
 	return QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
 }
 
-void SessionLoaderPlugin::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+void SessionLoader::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
 {
 	Q_UNUSED(options);
 	Q_UNUSED(writePath);
@@ -48,4 +48,15 @@ void SessionLoaderPlugin::setResources(OptionInterface * options,QString writePa
 	Q_UNUSED(portableVersion);
 }
 
-Q_EXPORT_PLUGIN2(sessionLoader, SessionLoaderPlugin);
+/// \brief to get the options widget, NULL if not have
+QWidget * SessionLoader::options()
+{
+	return NULL;
+}
+
+/// \brief to reload the translation, because the new language have been loaded
+void SessionLoader::newLanguageLoaded()
+{
+}
+
+Q_EXPORT_PLUGIN2(sessionLoader, SessionLoader);

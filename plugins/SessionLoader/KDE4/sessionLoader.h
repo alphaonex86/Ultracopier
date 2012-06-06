@@ -12,7 +12,7 @@
 #include "../../../interface/PluginInterface_SessionLoader.h"
 
 /// \brief Define the session loader
-class SessionLoaderPlugin : public PluginInterface_SessionLoader
+class SessionLoader : public PluginInterface_SessionLoader
 {
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface_SessionLoader)
@@ -23,6 +23,10 @@ public:
 	bool getEnabled();
 	/// \brief set the resources for the plugins
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	/// \brief to get the options widget, NULL if not have
+	QWidget * options();
+	/// \brief to reload the translation, because the new language have been loaded
+	void newLanguageLoaded();
 signals:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source

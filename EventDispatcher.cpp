@@ -25,16 +25,17 @@
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
 {
+	copyServer=new CopyListener(&optionDialog);
 	connect(&localListener,SIGNAL(cli(QStringList,bool)),&cliParser,SLOT(cli(QStringList,bool)),Qt::QueuedConnection);
 	connect(themes,		SIGNAL(newThemeOptions(QWidget*,bool,bool)),	&optionDialog,	SLOT(newThemeOptions(QWidget*,bool,bool)));
-	connect(&cliParser,	SIGNAL(newCopy(QStringList)),			&copyServer,	SLOT(newCopy(QStringList)));
-	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		&copyServer,	SLOT(newCopy(QStringList,QString)));
-	connect(&cliParser,	SIGNAL(newMove(QStringList)),			&copyServer,	SLOT(newMove(QStringList)));
-	connect(&cliParser,	SIGNAL(newMove(QStringList,QString)),		&copyServer,	SLOT(newMove(QStringList,QString)));
+	connect(&cliParser,	SIGNAL(newCopy(QStringList)),			copyServer,	SLOT(newCopy(QStringList)));
+	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		copyServer,	SLOT(newCopy(QStringList,QString)));
+	connect(&cliParser,	SIGNAL(newMove(QStringList)),			copyServer,	SLOT(newMove(QStringList)));
+	connect(&cliParser,	SIGNAL(newMove(QStringList,QString)),		copyServer,	SLOT(newMove(QStringList,QString)));
 	copyMoveEventIdIndex=0;
 	backgroundIcon=NULL;
 	stopIt=false;
-	sessionloader=new SessionLoader(this);
+	sessionloader=new SessionLoader(&optionDialog);
 	copyEngineList=new CopyEngineManager(&optionDialog);
 	core=new Core(copyEngineList);
 	qRegisterMetaType<CatchState>("CatchState");
@@ -94,6 +95,7 @@ EventDispatcher::~EventDispatcher()
 		delete sessionloader;
 	if(backgroundIcon!=NULL)
 		delete backgroundIcon;
+	delete copyServer;
 }
 
 /// \brief return if need be close
@@ -119,12 +121,12 @@ void EventDispatcher::initFunction()
 		return;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Initialize the variable of event loop");
-	connect(&copyServer,	SIGNAL(newCopy(quint32,QStringList,QStringList)),			core,		SLOT(newCopy(quint32,QStringList,QStringList)));
-	connect(&copyServer,	SIGNAL(newCopy(quint32,QStringList,QStringList,QString,QString)),	core,		SLOT(newCopy(quint32,QStringList,QStringList,QString,QString)));
-	connect(&copyServer,	SIGNAL(newMove(quint32,QStringList,QStringList)),			core,		SLOT(newMove(quint32,QStringList,QStringList)));
-	connect(&copyServer,	SIGNAL(newMove(quint32,QStringList,QStringList,QString,QString)),	core,		SLOT(newMove(quint32,QStringList,QStringList,QString,QString)));
-	connect(core,		SIGNAL(copyFinished(quint32,bool)),					&copyServer,	SLOT(copyFinished(quint32,bool)));
-	connect(core,		SIGNAL(copyCanceled(quint32)),						&copyServer,	SLOT(copyCanceled(quint32)));
+	connect(copyServer,	SIGNAL(newCopy(quint32,QStringList,QStringList)),			core,		SLOT(newCopy(quint32,QStringList,QStringList)));
+	connect(copyServer,	SIGNAL(newCopy(quint32,QStringList,QStringList,QString,QString)),	core,		SLOT(newCopy(quint32,QStringList,QStringList,QString,QString)));
+	connect(copyServer,	SIGNAL(newMove(quint32,QStringList,QStringList)),			core,		SLOT(newMove(quint32,QStringList,QStringList)));
+	connect(copyServer,	SIGNAL(newMove(quint32,QStringList,QStringList,QString,QString)),	core,		SLOT(newMove(quint32,QStringList,QStringList,QString,QString)));
+	connect(core,		SIGNAL(copyFinished(quint32,bool)),					copyServer,	SLOT(copyFinished(quint32,bool)));
+	connect(core,		SIGNAL(copyCanceled(quint32)),						copyServer,	SLOT(copyCanceled(quint32)));
 	if(localListener.tryConnect())
 	{
 		stopIt=true;
@@ -143,13 +145,13 @@ void EventDispatcher::initFunction()
 		connect(backgroundIcon,	SIGNAL(quit()),this,SLOT(quit()));
 		//show option is for OptionEngine object
 		connect(backgroundIcon,	SIGNAL(showOptions()),						&optionDialog,	SLOT(show()));
-		connect(&copyServer,	SIGNAL(listenerReady(ListeningState,bool,bool)),		backgroundIcon,	SLOT(listenerReady(ListeningState,bool,bool)));
-		connect(&copyServer,	SIGNAL(pluginLoaderReady(CatchState,bool,bool)),		backgroundIcon,	SLOT(pluginLoaderReady(CatchState,bool,bool)));
-		connect(backgroundIcon,	SIGNAL(tryCatchCopy()),						&copyServer,	SLOT(listen()));
-		connect(backgroundIcon,	SIGNAL(tryUncatchCopy()),					&copyServer,	SLOT(close()));
+		connect(copyServer,	SIGNAL(listenerReady(ListeningState,bool,bool)),		backgroundIcon,	SLOT(listenerReady(ListeningState,bool,bool)));
+		connect(copyServer,	SIGNAL(pluginLoaderReady(CatchState,bool,bool)),		backgroundIcon,	SLOT(pluginLoaderReady(CatchState,bool,bool)));
+		connect(backgroundIcon,	SIGNAL(tryCatchCopy()),						copyServer,	SLOT(listen()));
+		connect(backgroundIcon,	SIGNAL(tryUncatchCopy()),					copyServer,	SLOT(close()));
 		if(options->getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
-			copyServer.listen();
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer.oneListenerIsLoaded()));
+			copyServer->listen();
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
 		//backgroundIcon->readyToListen(copyServer.oneListenerIsLoaded());
 
 		connect(backgroundIcon,	SIGNAL(addWindowCopyMove(CopyMode,QString)),				core,		SLOT(addWindowCopyMove(CopyMode,QString)));
@@ -157,7 +159,7 @@ void EventDispatcher::initFunction()
 		connect(copyEngineList,	SIGNAL(addCopyEngine(QString,bool)),					backgroundIcon,	SLOT(addCopyEngine(QString,bool)));
 		connect(copyEngineList,	SIGNAL(removeCopyEngine(QString)),					backgroundIcon,	SLOT(removeCopyEngine(QString)));
 		copyEngineList->setIsConnected();
-		copyServer.resendState();
+		copyServer->resendState();
 	}
 	//conntect the last chance signal before quit
 	connect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));

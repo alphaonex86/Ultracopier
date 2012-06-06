@@ -23,11 +23,16 @@ class PluginInterface_PluginLoader : public QObject
 		virtual void setEnabled(bool) = 0;
 		/// \brief to set resources, writePath can be empty if read only mode
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
+		/// \brief to get the options widget, NULL if not have
+		virtual QWidget * options() = 0;
+	public slots:
+		/// \brief to reload the translation, because the new language have been loaded
+		virtual void newLanguageLoaded() = 0;
 	/* signal to implement
 	signals:
 		void newState(CatchState);*/
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/0.3.0.1");
+Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/0.3.0.8");
 
 #endif // PLUGININTERFACE_PLUGINLOADER_H

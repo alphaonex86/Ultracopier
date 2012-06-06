@@ -7,10 +7,10 @@
 
 #include "SessionLoader.h"
 
-SessionLoader::SessionLoader(QObject *parent) :
-	QObject(parent)
+SessionLoader::SessionLoader(OptionDialog *optionDialog)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	this->optionDialog=optionDialog;
 	//load the options
 	QList<QPair<QString, QVariant> > KeysList;
 	#ifdef ULTRACOPIER_VERSION_PORTABLE
@@ -77,6 +77,8 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
 			newEntry.path=plugin.path;
 			newEntry.sessionLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
 			newEntry.sessionLoaderInterface->setEnabled(shouldEnabled);
+			optionDialog->addPluginOptionWidget(PluginType_SessionLoader,plugin.name,newEntry.sessionLoaderInterface->options());
+			connect(languages,SIGNAL(newLanguageLoaded(QString)),newEntry.sessionLoaderInterface,SLOT(newLanguageLoaded()));
 			pluginList << newEntry;
 		}
 		else

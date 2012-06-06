@@ -7,11 +7,11 @@
 
 #include "CopyListener.h"
 
-
-CopyListener::CopyListener(QObject *parent) :
-	QObject(parent)
+CopyListener::CopyListener(OptionDialog *optionDialog)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	this->optionDialog=optionDialog;
+	pluginLoader=new PluginLoader(optionDialog);
 	//load the options
 	tryListen=false;
 	QList<QPair<QString, QVariant> > KeysList;
@@ -25,7 +25,7 @@ CopyListener::CopyListener(QObject *parent) :
 	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
 	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
 	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
-	connect(&pluginLoader,SIGNAL(pluginLoaderReady(CatchState,bool,bool)),	this,SIGNAL(pluginLoaderReady(CatchState,bool,bool)));
+	connect(pluginLoader,SIGNAL(pluginLoaderReady(CatchState,bool,bool)),	this,SIGNAL(pluginLoaderReady(CatchState,bool,bool)));
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
@@ -40,6 +40,7 @@ CopyListener::~CopyListener()
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
 	foreach(PluginsAvailable currentPlugin,list)
 		onePluginWillBeRemoved(currentPlugin);
+	delete pluginLoader;
 }
 
 void CopyListener::resendState()
@@ -47,7 +48,7 @@ void CopyListener::resendState()
 	if(plugins->allPluginHaveBeenLoaded())
 	{
 		sendState(true);
-		pluginLoader.resendState();
+		pluginLoader->resendState();
 	}
 }
 
@@ -57,8 +58,8 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 		return;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"try load: "+plugin.path+PluginsManager::getResolvedPluginName("listener"));
 	//setFileName
-	QPluginLoader *pluginLoader=new QPluginLoader(plugin.path+PluginsManager::getResolvedPluginName("listener"));
-	QObject *pluginInstance = pluginLoader->instance();
+	QPluginLoader *pluginOfPluginLoader=new QPluginLoader(plugin.path+PluginsManager::getResolvedPluginName("listener"));
+	QObject *pluginInstance = pluginOfPluginLoader->instance();
 	if(pluginInstance)
 	{
 		PluginInterface_Listener *listen = qobject_cast<PluginInterface_Listener *>(pluginInstance);
@@ -69,7 +70,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 			if(pluginList.at(index).listenInterface==listen)
 			{
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Plugin already found %1 for %2").arg(pluginList.at(index).path).arg(plugin.path));
-				pluginLoader->unload();
+				pluginOfPluginLoader->unload();
 				return;
 			}
 			index++;
@@ -86,12 +87,14 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 			connect(listen,SIGNAL(newMove(quint32,QStringList,QString)),	this,SLOT(newPluginMove(quint32,QStringList,QString)));
 			PluginListener newPluginListener;
 			newPluginListener.listenInterface	= listen;
-			newPluginListener.pluginLoader		= pluginLoader;
+			newPluginListener.pluginLoader		= pluginOfPluginLoader;
 			newPluginListener.path			= plugin.path+PluginsManager::getResolvedPluginName("listener");
 			newPluginListener.state			= NotListening;
 			newPluginListener.inWaitOfReply		= false;
 			newPluginListener.options=new LocalPluginOptions("Listener-"+plugin.name);
 			newPluginListener.listenInterface->setResources(newPluginListener.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+			optionDialog->addPluginOptionWidget(PluginType_Listener,plugin.name,newPluginListener.listenInterface->options());
+			connect(languages,SIGNAL(newLanguageLoaded(QString)),newPluginListener.listenInterface,SLOT(newLanguageLoaded()));
 			pluginList << newPluginListener;
 			connect(pluginList.last().listenInterface,SIGNAL(newState(ListeningState)),this,SLOT(newState(ListeningState)));
 			if(tryListen)
@@ -101,10 +104,10 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 			}
 		}
 		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to cast the plugin: "+pluginLoader->errorString());
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to cast the plugin: "+pluginOfPluginLoader->errorString());
 	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to load the plugin: "+pluginLoader->errorString());
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to load the plugin: "+pluginOfPluginLoader->errorString());
 }
 
 #ifdef ULTRACOPIER_DEBUG
@@ -185,14 +188,14 @@ void CopyListener::listen()
 		pluginList.at(index).listenInterface->listen();
 		index++;
 	}
-	pluginLoader.load();
+	pluginLoader->load();
 }
 
 void CopyListener::close()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	tryListen=false;
-	pluginLoader.unload();
+	pluginLoader->unload();
 	int index=0;
 	while(index<pluginList.size())
 	{

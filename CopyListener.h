@@ -16,13 +16,14 @@
 #include "Environment.h"
 #include "GlobalClass.h"
 #include "PluginLoader.h"
+#include "OptionDialog.h"
 
 /** \brief to load all the listener and parse all event */
 class CopyListener : public QObject, public GlobalClass
 {
 	Q_OBJECT
 	public:
-		explicit CopyListener(QObject *parent = 0);
+		explicit CopyListener(OptionDialog *optionDialog);
 		~CopyListener();
 		/** \brief send of one listener is loaded */
 		bool oneListenerIsLoaded();
@@ -103,11 +104,12 @@ class CopyListener : public QObject, public GlobalClass
 		QList<CopyRunning> copyRunningList;
 		quint32 incrementOrderId();
 		bool tryListen;
-		PluginLoader pluginLoader;
+		PluginLoader *pluginLoader;
 		ListeningState last_state;
 		bool last_have_plugin,last_inWaitOfReply;
 		void sendState(bool force=false);
 		QStringList stripSeparator(QStringList sources);
+		OptionDialog *optionDialog;
 };
 
 #endif // COPYLISTENER_H

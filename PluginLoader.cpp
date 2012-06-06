@@ -7,10 +7,10 @@
 
 #include "PluginLoader.h"
 
-PluginLoader::PluginLoader(QObject *parent) :
-	QObject(parent)
+PluginLoader::PluginLoader(OptionDialog *optionDialog)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	this->optionDialog=optionDialog;
 	//load the overall instance
 	plugins=PluginsManager::getInstance();
 	//load the plugin
@@ -84,7 +84,9 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
 			newEntry.inWaitOfReply			= false;
 			pluginList << newEntry;
 			PluginLoader->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+			optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.PluginLoaderInterface->options());
 			connect(pluginList.last().PluginLoaderInterface,SIGNAL(newState(CatchState)),this,SLOT(newState(CatchState)));
+			connect(languages,SIGNAL(newLanguageLoaded(QString)),newEntry.PluginLoaderInterface,SLOT(newLanguageLoaded()));
 			if(needEnable)
 			{
 				pluginList.last().inWaitOfReply=true;

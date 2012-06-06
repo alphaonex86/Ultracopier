@@ -28,11 +28,15 @@ public:
 	const QString errorString();
 	/// \brief set resources for this plugins
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	/// \brief to get the options widget, NULL if not have
+	QWidget * options();
 public slots:
 	/// \brief say to the client that's the copy/move is finished
 	void transferFinished(quint32 orderId,bool withError);
 	/// \brief say to the client that's the copy/move is finished
 	void transferCanceled(quint32 orderId);
+	/// \brief to reload the translation, because the new language have been loaded
+	void newLanguageLoaded();
 private:
 	ServerCatchcopy server;
 private slots:

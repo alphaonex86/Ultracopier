@@ -20,6 +20,7 @@ This class load ALL plugin compatible to listen and catch the copy/move
 #include "interface/PluginInterface_SessionLoader.h"
 #include "PluginsManager.h"
 #include "GlobalClass.h"
+#include "OptionDialog.h"
 
 /// \todo SessionLoader -> put plugin by plugin loading to add plugin no reload all
 /// \todo async the plugin call
@@ -29,7 +30,7 @@ class SessionLoader : public QObject, GlobalClass
 {
 	Q_OBJECT
 	public:
-		explicit SessionLoader(QObject *parent = 0);
+		explicit SessionLoader(OptionDialog *optionDialog);
 		~SessionLoader();
 	private slots:
 		void onePluginAdded(const PluginsAvailable &plugin);
@@ -49,6 +50,7 @@ class SessionLoader : public QObject, GlobalClass
 		};
 		QList<LocalPlugin> pluginList;
 		bool shouldEnabled;
+		OptionDialog *optionDialog;
 	signals:
 		void previouslyPluginAdded(PluginsAvailable);
 };

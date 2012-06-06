@@ -40,6 +40,10 @@ void FacilityEngine::retranslate()
 	Translation_EB=tr("EB");
 	Translation_ZB=tr("ZB");
 	Translation_YB=tr("YB");
+	Translation_SimplifiedRemaningTime_LessThan10s=tr("Less than %10 seconds");
+	Translation_SimplifiedRemaningTime_AboutSeconds=tr("About %10 seconds remaining");
+	Translation_SimplifiedRemaningTime_AboutMinutes=tr("About %1 minutes remaining");
+	Translation_SimplifiedRemaningTime_AboutHours=tr("About %1 hours remaining");
 }
 
 /// \brief convert size in Byte to String
@@ -167,4 +171,19 @@ QVariant FacilityEngine::callFunctionality(const QString &fonctionnality,const Q
 	Q_UNUSED(fonctionnality);
 	Q_UNUSED(args);
 	return QVariant();
+}
+
+/// \brief Do the simplified time
+QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds)
+{
+	if(seconds<50)
+	{
+		if(seconds<10)
+			return Translation_SimplifiedRemaningTime_LessThan10s.arg(seconds/10+1);
+		else
+			return Translation_SimplifiedRemaningTime_AboutSeconds.arg(seconds/10+1);
+	}
+	if(seconds<3600)
+		return Translation_SimplifiedRemaningTime_AboutMinutes.arg(seconds/60);
+	return Translation_SimplifiedRemaningTime_AboutHours.arg(seconds/3600);
 }

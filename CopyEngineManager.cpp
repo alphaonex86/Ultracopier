@@ -91,7 +91,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
 	newItem.canDoOnlyCopy=newItem.factory->canDoOnlyCopy();
 	newItem.type=newItem.factory->getCopyType();
 	newItem.transferListOperation=newItem.factory->getTransferListOperation();
-	optionDialog->addCopyEngineWidget(newItem.name,newItem.optionsWidget);
+	optionDialog->addPluginOptionWidget(PluginType_CopyEngine,newItem.name,newItem.optionsWidget);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"plugin: "+newItem.name+" loaded, send options");
 	//emit newCopyEngineOptions(plugin.path,newItem.name,newItem.optionsWidget);
 	pluginList << newItem;
@@ -131,7 +131,6 @@ void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
 	{
 		if(pluginList.at(index).path==plugin.path)
 		{
-			optionDialog->removeCopyEngineWidget(pluginList.at(index).name);
 			delete pluginList.at(index).options;
 			delete pluginList.at(index).factory;
 			pluginList.at(index).pointer->unload();

@@ -20,6 +20,7 @@ This class load ALL plugin compatible to listen and catch the copy/move
 #include "interface/PluginInterface_PluginLoader.h"
 #include "PluginsManager.h"
 #include "GlobalClass.h"
+#include "OptionDialog.h"
 
 namespace Ui {
     class PluginLoaderOptions;
@@ -38,7 +39,7 @@ class PluginLoader : public QObject, GlobalClass
 {
 	Q_OBJECT
 public:
-	explicit PluginLoader(QObject *parent = 0);
+	explicit PluginLoader(OptionDialog *optionDialog);
 	~PluginLoader();
 	/** \brief to rended the state */
 	void resendState();
@@ -72,6 +73,7 @@ private:
 	CatchState last_state;
 	bool last_have_plugin,last_inWaitOfReply;
 	void sendState(bool force=false);
+	OptionDialog *optionDialog;
 signals:
 	void pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply);
 	void previouslyPluginAdded(PluginsAvailable);

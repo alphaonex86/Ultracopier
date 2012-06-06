@@ -18,9 +18,16 @@ class SessionLoader : public PluginInterface_SessionLoader
 	Q_OBJECT
 	Q_INTERFACES(PluginInterface_SessionLoader)
 public:
+	/// \brief to set if it's enabled or not
 	void setEnabled(bool);
+	/// \brief to get if is enabled
 	bool getEnabled();
+	/// \brief set the resources for the plugins
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	/// \brief to get the options widget, NULL if not have
+	QWidget * options();
+	/// \brief to reload the translation, because the new language have been loaded
+	void newLanguageLoaded();
 signals:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source

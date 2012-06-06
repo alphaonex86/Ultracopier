@@ -29,9 +29,7 @@ public:
 	explicit OptionDialog();
 	~OptionDialog();
 	/** \brief add the option widget from copy engine */
-	void addCopyEngineWidget(QString name,QWidget * options);
-	/** \brief remove the option widget from copy engine */
-	void removeCopyEngineWidget(QString name);
+	void addPluginOptionWidget(PluginType category,QString name,QWidget * options);
 protected:
 	void changeEvent(QEvent *e);
 private slots:
@@ -76,18 +74,18 @@ private:
 		bool isWritable;
 	};
 	QList<pluginStore> pluginLink;
-	struct pluginCopyEngine
+	struct pluginOptionsWidget
 	{
 		QString name;
 		QTreeWidgetItem * item;
 		QWidget *options;
+		PluginType category;
 	};
-	QList<pluginCopyEngine> copyEngineList;
+	QList<pluginOptionsWidget> pluginOptionsWidgetList;
 	void addLanguage(PluginsAvailable plugin);
 	void removeLanguage(PluginsAvailable plugin);
 	void addTheme(PluginsAvailable plugin);
 	void removeTheme(PluginsAvailable plugin);
-	void removeCopyEngine(PluginsAvailable plugin);
 	QStringList copyEngineStringList();
 	bool ignoreCopyEngineListEdition;
 	PluginsManager::ImportBackend defaultImportBackend;

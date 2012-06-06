@@ -118,6 +118,6 @@ class PluginInterface_ThemesFactory : public QObject
 		virtual void newLanguageLoaded() = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.5");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.8");
 
 #endif // PLUGININTERFACE_THEMES_H

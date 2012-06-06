@@ -7,11 +7,32 @@ HEADERS         = \
     Environment.h \
     Variable.h \
     PlatformMacro.h \
-    ../../../interface/PluginInterface_PluginLoader.h
+    ../../../interface/PluginInterface_PluginLoader.h \
+    OptionsWidget.h
 SOURCES         = \
-    pluginLoader.cpp
+    pluginLoader.cpp \
+    OptionsWidget.cpp
 TARGET          = $$qtLibraryTarget(pluginLoader)
-TRANSLATIONS   += Languages/fr/translation.ts
+TRANSLATIONS   += Languages/fr/translation.ts \
+    Languages/ar/translation.ts \
+    Languages/ch/translation.ts \
+    Languages/es/translation.ts \
+    Languages/de/translation.ts \
+    Languages/el/translation.ts \
+    Languages/it/translation.ts \
+    Languages/jp/translation.ts \
+    Languages/id/translation.ts \
+    Languages/pl/translation.ts \
+    Languages/ru/translation.ts \
+    Languages/tr/translation.ts \
+    Languages/th/translation.ts \
+    Languages/hi/translation.ts \
+    Languages/nl/translation.ts \
+    Languages/no/translation.ts \
+    Languages/pt/translation.ts
 
 LIBS += -lole32
+
+FORMS += \
+    OptionsWidget.ui
 

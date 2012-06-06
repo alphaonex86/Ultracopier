@@ -39,6 +39,8 @@ public:
 	bool haveFunctionality(const QString &fonctionnality);
 	/// \brief call the fonctionnality
 	QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
+	/// \brief Do the simplified time
+	QString simplifiedRemainingTime(const quint32 &seconds);
 private:
 	//translated string
 	QString Translation_Copy_engine;
@@ -60,6 +62,11 @@ private:
 	QString Translation_EB;
 	QString Translation_ZB;
 	QString Translation_YB;
+	//simplified remaining time
+	QString Translation_SimplifiedRemaningTime_LessThan10s;
+	QString Translation_SimplifiedRemaningTime_AboutSeconds;
+	QString Translation_SimplifiedRemaningTime_AboutMinutes;
+	QString Translation_SimplifiedRemaningTime_AboutHours;
 	//internal fonction
 	QString adaptString(const float &nb);
 public slots:

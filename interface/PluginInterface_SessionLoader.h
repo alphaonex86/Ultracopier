@@ -24,8 +24,13 @@ class PluginInterface_SessionLoader : public QObject
 		virtual bool getEnabled() = 0;
 		/// \brief set the resources
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
+		/// \brief to get the options widget, NULL if not have
+		virtual QWidget * options() = 0;
+	public slots:
+		/// \brief to reload the translation, because the new language have been loaded
+		virtual void newLanguageLoaded() = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/0.3.0.4");
+Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/0.3.0.8");
 
 #endif // PLUGININTERFACE_SESSIONLOADER_H

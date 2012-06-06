@@ -29,11 +29,15 @@ class PluginInterface_Listener : public QObject
 		virtual const QString errorString() = 0;
 		/// \brief set the resources for the plugin
 		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
+		/// \brief to get the options widget, NULL if not have
+		virtual QWidget * options() = 0;
 	public slots:
 		/// \brief send when copy is finished
 		virtual void transferFinished(quint32 orderId,bool withError) = 0;
 		/// \brief send when copy is canceled
 		virtual void transferCanceled(quint32 orderId) = 0;
+		/// \brief to reload the translation, because the new language have been loaded
+		virtual void newLanguageLoaded() = 0;
 	/* signal to implement
 	signals:
 		void newState(ListeningState state);
@@ -43,6 +47,6 @@ class PluginInterface_Listener : public QObject
 		void newMove(quint32 orderId,QStringList sources,QString destination);*/
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/0.3.0.5");
+Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/0.3.0.8");
 
 #endif // PLUGININTERFACE_LISTENER_H

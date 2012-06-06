@@ -55,4 +55,15 @@ void SessionLoader::setResources(OptionInterface * options,QString writePath,QSt
 	Q_UNUSED(portableVersion);
 }
 
+/// \brief to get the options widget, NULL if not have
+QWidget * SessionLoader::options()
+{
+	return NULL;
+}
+
+/// \brief to reload the translation, because the new language have been loaded
+void SessionLoader::newLanguageLoaded()
+{
+}
+
 Q_EXPORT_PLUGIN2(sessionLoader, SessionLoader);

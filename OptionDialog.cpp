@@ -19,13 +19,11 @@ OptionDialog::OptionDialog() :
 	allPluginsIsLoaded=false;
 	ui->setupUi(this);
 	ui->treeWidget->topLevelItem(0)->setSelected(true);
-	ui->treeWidget->topLevelItem(2)->setExpanded(true);
-	ui->pluginList->topLevelItem(0)->setExpanded(true);
-	ui->pluginList->topLevelItem(1)->setExpanded(true);
-	ui->pluginList->topLevelItem(2)->setExpanded(true);
-	ui->pluginList->topLevelItem(3)->setExpanded(true);
-	ui->pluginList->topLevelItem(4)->setExpanded(true);
-	ui->pluginList->topLevelItem(5)->setExpanded(true);
+	ui->treeWidget->topLevelItem(3)->setTextColor(0,QColor(150, 150, 150, 255));
+	ui->treeWidget->topLevelItem(4)->setTextColor(0,QColor(150, 150, 150, 255));
+	ui->treeWidget->topLevelItem(5)->setTextColor(0,QColor(150, 150, 150, 255));
+	ui->treeWidget->expandAll();
+	ui->pluginList->expandAll();
 	on_treeWidget_itemSelectionChanged();
 
 	//load the plugins
@@ -91,6 +89,27 @@ void OptionDialog::onePluginAdded(PluginsAvailable plugin)
 void OptionDialog::onePluginWillBeRemoved(PluginsAvailable plugin)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	//remove if have options
+	index=0;
+	loop_size=pluginOptionsWidgetList.size();
+	if(plugin.category==PluginType_CopyEngine || plugin.category==PluginType_Listener || plugin.category==PluginType_PluginLoader || plugin.category==PluginType_SessionLoader)
+	{
+		while(index<loop_size)
+		{
+			if(plugin.category==pluginOptionsWidgetList.at(index).category && plugin.name==pluginOptionsWidgetList.at(index).name)
+			{
+				if(pluginOptionsWidgetList.at(index).item->isSelected())
+				{
+					pluginOptionsWidgetList.at(index).item->setSelected(false);
+					ui->treeWidget->topLevelItem(0)->setSelected(true);
+				}
+				delete pluginOptionsWidgetList.at(index).item;
+				break;
+			}
+			index++;
+		}
+	}
+	//remove from general list
 	index=0;
 	loop_size=pluginLink.size();
 	while(index<loop_size)
@@ -102,8 +121,6 @@ void OptionDialog::onePluginWillBeRemoved(PluginsAvailable plugin)
 				removeLanguage(plugin);
 			else if(plugin.category==PluginType_Themes)
 				removeTheme(plugin);
-			else if(plugin.category==PluginType_CopyEngine)
-				removeCopyEngine(plugin);
 			pluginLink.removeAt(index);
 			return;
 		}
@@ -154,16 +171,22 @@ void OptionDialog::changeEvent(QEvent *e)
 	case QEvent::LanguageChange:
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"retranslate the ui");
 		ui->retranslateUi(this);
+		//old code to reload the widget because it dropped by the translation
+		/*
 		index=0;
-		loop_size=copyEngineList.size();
+		loop_size=pluginOptionsWidgetList.size();
 		while(index<loop_size)
 		{
-			if(copyEngineList.at(index).options!=NULL)
-				ui->treeWidget->topLevelItem(2)->addChild(copyEngineList.at(index).item);
+			if(pluginOptionsWidgetList.at(index).options!=NULL)
+				ui->treeWidget->topLevelItem(2)->addChild(pluginOptionsWidgetList.at(index).item);
 			else
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("the copy engine %1 have not the options").arg(index));
 			index++;
-		}
+		}*/
+		ui->treeWidget->topLevelItem(2)->setText(0,tr("Copy engine"));
+		ui->treeWidget->topLevelItem(3)->setText(0,tr("Listener"));
+		ui->treeWidget->topLevelItem(4)->setText(0,tr("Plugin loader"));
+		ui->treeWidget->topLevelItem(5)->setText(0,tr("Session loader"));
 		ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
 		ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
 		ui->ActionOnManualOpen->setItemText(0,tr("Do nothing"));
@@ -187,34 +210,68 @@ void OptionDialog::on_treeWidget_itemSelectionChanged()
 	if(listSelectedItem.size()!=1)
 		return;
 	QTreeWidgetItem * selectedItem=listSelectedItem.first();
+	//general
 	if(selectedItem==ui->treeWidget->topLevelItem(0))
 		ui->stackedWidget->setCurrentIndex(0);
+	//plugins
 	else if(selectedItem==ui->treeWidget->topLevelItem(1))
 		ui->stackedWidget->setCurrentIndex(1);
+	//Copy engine
 	else if(selectedItem==ui->treeWidget->topLevelItem(2))
 		ui->stackedWidget->setCurrentIndex(2);
-	else if(selectedItem==ui->treeWidget->topLevelItem(3))
-		ui->stackedWidget->setCurrentIndex(3);
-	else if(selectedItem==ui->treeWidget->topLevelItem(4))
-		ui->stackedWidget->setCurrentIndex(4);
+	//Listener
+		//do nothing
+	//PluginLoader
+		//do nothing
+	//SessionLoader
+		//do nothing
+	//Themes
+	else if(selectedItem==ui->treeWidget->topLevelItem(6))
+		ui->stackedWidget->setCurrentIndex(7);
+	//log
+	else if(selectedItem==ui->treeWidget->topLevelItem(7))
+		ui->stackedWidget->setCurrentIndex(8);
 	else
 	{
-		loadedCopyEnginePlugin=0;
-		index=0;
-		loop_size=copyEngineList.size();
-		while(index<loop_size)
+		int index;
+		if(selectedItem->parent()==ui->treeWidget->topLevelItem(2))
 		{
-			if(copyEngineList.at(index).options!=NULL)
-				loadedCopyEnginePlugin++;
-			if(copyEngineList.at(index).item->isSelected())
-			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"ui->stackedWidget->setCurrentIndex("+QString::number(3+loadedCopyEnginePlugin)+")");
-				ui->stackedWidget->setCurrentIndex(4+loadedCopyEnginePlugin);
-				return;
-			}
-			index++;
+			ui->stackedWidget->setCurrentIndex(3);
+			index=selectedItem->parent()->indexOfChild(selectedItem);
+			if(index!=-1)
+				ui->stackedOptionsCopyEngine->setCurrentIndex(index);
+			else
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"selection into of sub item wrong???");
 		}
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"selection into option list cat not found");
+		else if(selectedItem->parent()==ui->treeWidget->topLevelItem(3))
+		{
+			ui->stackedWidget->setCurrentIndex(4);
+			index=selectedItem->parent()->indexOfChild(selectedItem);
+			if(index!=-1)
+				ui->stackedOptionsListener->setCurrentIndex(index);
+			else
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"selection into of sub item wrong???");
+		}
+		else if(selectedItem->parent()==ui->treeWidget->topLevelItem(4))
+		{
+			ui->stackedWidget->setCurrentIndex(5);
+			index=selectedItem->parent()->indexOfChild(selectedItem);
+			if(index!=-1)
+				ui->stackedOptionsPluginLoader->setCurrentIndex(index);
+			else
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"selection into of sub item wrong???");
+		}
+		else if(selectedItem->parent()==ui->treeWidget->topLevelItem(5))
+		{
+			ui->stackedWidget->setCurrentIndex(6);
+			index=selectedItem->parent()->indexOfChild(selectedItem);
+			if(index!=-1)
+				ui->stackedOptionsSessionLoader->setCurrentIndex(index);
+			else
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"selection into of sub item wrong???");
+		}
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"selection into option list cat not found");
 	}
 }
 
@@ -533,71 +590,69 @@ void OptionDialog::newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bo
 	}
 }
 
-void OptionDialog::removeCopyEngine(PluginsAvailable plugin)
+void OptionDialog::addPluginOptionWidget(PluginType category,QString name,QWidget * options)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	removeCopyEngineWidget(plugin.name);
-}
-
-void OptionDialog::addCopyEngineWidget(QString name,QWidget * options)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start: %1").arg(name));
-	index=0;
-	loop_size=copyEngineList.size();
-	while(index<loop_size)
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start: %1, category: %2").arg(name).arg(category));
+	//prevent send the empty options
+	if(options!=NULL)
 	{
-		if(copyEngineList.at(index).name==name)
+		index=0;
+		loop_size=pluginOptionsWidgetList.size();
+		while(index<loop_size)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"already found: "+name);
-			return;
-		}
-		index++;
-	}
-	//add to real list
-	pluginCopyEngine temp;
-	temp.name=name;
-	temp.options=options;
-	temp.item=new QTreeWidgetItem(QStringList() << name);
-	copyEngineList << temp;
-	//add the specific options
-	ui->treeWidget->topLevelItem(2)->addChild(copyEngineList.at(index).item);
-	ui->stackedWidget->addWidget(options);
-	//but can loaded by the previous options!
-	index=0;
-	loop_size=ui->CopyEngineList->count();
-	while(index<loop_size)
-	{
-		if(ui->CopyEngineList->item(index)->text()==name)
-			break;
-		index++;
-	}
-	if(index==loop_size)
-		ui->CopyEngineList->addItems(QStringList() << name);
-}
-
-void OptionDialog::removeCopyEngineWidget(QString name)
-{
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	index=0;
-	loop_size=copyEngineList.size();
-	while(index<loop_size)
-	{
-		if(copyEngineList.at(index).name==name)
-		{
-			if(copyEngineList.at(index).options!=NULL)
-				ui->stackedWidget->removeWidget(copyEngineList.at(index).options);
-			if(copyEngineList.at(index).item->isSelected())
+			if(pluginOptionsWidgetList.at(index).name==name)
 			{
-				copyEngineList.at(index).item->setSelected(false);
-				ui->treeWidget->topLevelItem(0)->setSelected(true);
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"already found: "+name);
+				return;
 			}
-			delete copyEngineList.at(index).item;
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ui->stackedWidget->count(): "+QString::number(ui->stackedWidget->count()));
+			index++;
+		}
+		//add to real list
+		pluginOptionsWidget temp;
+		temp.name=name;
+		temp.options=options;
+		temp.item=new QTreeWidgetItem(QStringList() << name);
+		temp.category=category;
+		pluginOptionsWidgetList << temp;
+		//add the specific options
+		switch(category)
+		{
+		case PluginType_CopyEngine:
+			ui->treeWidget->topLevelItem(2)->addChild(pluginOptionsWidgetList.at(index).item);
+			ui->stackedOptionsCopyEngine->addWidget(options);
+			break;
+		case PluginType_Listener:
+			ui->treeWidget->topLevelItem(3)->addChild(pluginOptionsWidgetList.at(index).item);
+			ui->stackedOptionsListener->addWidget(options);
+			break;
+		case PluginType_PluginLoader:
+			ui->treeWidget->topLevelItem(4)->addChild(pluginOptionsWidgetList.at(index).item);
+			ui->stackedOptionsPluginLoader->addWidget(options);
+			break;
+		case PluginType_SessionLoader:
+			ui->treeWidget->topLevelItem(5)->addChild(pluginOptionsWidgetList.at(index).item);
+			ui->stackedOptionsSessionLoader->addWidget(options);
+			break;
+		default:
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Unable to parse this unknow type of plugin: "+name);
 			return;
 		}
-		index++;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"not found is the list: "+name);
+	//only for copy engine
+	if(category==PluginType_CopyEngine)
+	{
+		//but can loaded by the previous options
+		index=0;
+		loop_size=ui->CopyEngineList->count();
+		while(index<loop_size)
+		{
+			if(ui->CopyEngineList->item(index)->text()==name)
+				break;
+			index++;
+		}
+		if(index==loop_size)
+			ui->CopyEngineList->addItems(QStringList() << name);
+	}
 }
 
 void OptionDialog::on_pluginList_itemSelectionChanged()

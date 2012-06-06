@@ -44,6 +44,12 @@ void CatchCopyPlugin::setResources(OptionInterface * options,QString writePath,Q
 	Q_UNUSED(portableVersion);
 }
 
+/// \brief to get the options widget, NULL if not have
+QWidget * CatchCopyPlugin::options()
+{
+	return NULL;
+}
+
 Q_EXPORT_PLUGIN2(listener, CatchCopyPlugin);
 
 void CatchCopyPlugin::transferFinished(quint32 orderId,bool withError)
@@ -56,6 +62,11 @@ void CatchCopyPlugin::transferCanceled(quint32 orderId)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, orderId: "+QString::number(orderId));
 	server.copyCanceled(orderId);
+}
+
+/// \brief to reload the translation, because the new language have been loaded
+void CatchCopyPlugin::newLanguageLoaded()
+{
 }
 
 void CatchCopyPlugin::error(QString error)

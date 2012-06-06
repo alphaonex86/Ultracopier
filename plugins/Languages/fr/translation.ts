@@ -45,30 +45,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="194"/>
-        <location filename="../../../CopyEngineManager.cpp" line="199"/>
-        <location filename="../../../CopyEngineManager.cpp" line="220"/>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="193"/>
+        <location filename="../../../CopyEngineManager.cpp" line="198"/>
+        <location filename="../../../CopyEngineManager.cpp" line="219"/>
+        <location filename="../../../CopyEngineManager.cpp" line="233"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="194"/>
+        <location filename="../../../CopyEngineManager.cpp" line="193"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>Impossible de trouver un moteur de copie avec le support des déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="199"/>
+        <location filename="../../../CopyEngineManager.cpp" line="198"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Impossible de trouver un moteur de copie compatible!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="220"/>
+        <location filename="../../../CopyEngineManager.cpp" line="219"/>
         <source>This copy engine does not support motions</source>
         <translation>Ce moteur de copie ne support pas les déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="233"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Impossible de trouvé un moteur avec ce nom: %1</translation>
     </message>
@@ -224,6 +224,26 @@
         <source>YB</source>
         <translation>Yo</translation>
     </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="43"/>
+        <source>Less than %10 seconds</source>
+        <translation>Moins de %10 secondes</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="44"/>
+        <source>About %10 seconds remaining</source>
+        <translation>Environ %10 secondes restantes</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="45"/>
+        <source>About %1 minutes remaining</source>
+        <translation>Environ %1 minutes restantes</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="46"/>
+        <source>About %1 hours remaining</source>
+        <translation>Environ %1 heures restantes</translation>
+    </message>
 </context>
 <context>
     <name>HelpDialog</name>
@@ -343,6 +363,7 @@ Cette version est compilée comme version: %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui"/>
+        <location filename="../../../OptionDialog.cpp" line="186"/>
         <source>Copy engine</source>
         <translation>Moteurs de copie</translation>
     </message>
@@ -393,16 +414,19 @@ Cette version est compilée comme version: %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui"/>
+        <location filename="../../../OptionDialog.cpp" line="187"/>
         <source>Listener</source>
         <translation>Écouteur</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui"/>
+        <location filename="../../../OptionDialog.cpp" line="188"/>
         <source>Plugin loader</source>
         <translation>Chargeur de plugin</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui"/>
+        <location filename="../../../OptionDialog.cpp" line="189"/>
         <source>Session loader</source>
         <translation>Chargeur de session</translation>
     </message>
@@ -492,60 +516,60 @@ Cette version est compilée comme version: %1.</translation>
         <translation>Rédiger les opérations dossier:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="167"/>
-        <location filename="../../../OptionDialog.cpp" line="168"/>
-        <location filename="../../../OptionDialog.cpp" line="264"/>
-        <location filename="../../../OptionDialog.cpp" line="265"/>
+        <location filename="../../../OptionDialog.cpp" line="190"/>
+        <location filename="../../../OptionDialog.cpp" line="191"/>
+        <location filename="../../../OptionDialog.cpp" line="321"/>
+        <location filename="../../../OptionDialog.cpp" line="322"/>
         <source>Disabled because you have any SessionLoader plugin</source>
         <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="169"/>
+        <location filename="../../../OptionDialog.cpp" line="192"/>
         <source>Do nothing</source>
         <translation>Ne rien faire</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="170"/>
+        <location filename="../../../OptionDialog.cpp" line="193"/>
         <source>Ask source as folder</source>
         <translation>Demander la source comme un dossier</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="171"/>
+        <location filename="../../../OptionDialog.cpp" line="194"/>
         <source>Ask sources as files</source>
         <translation>Demander la sources comme des fichiers</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="172"/>
+        <location filename="../../../OptionDialog.cpp" line="195"/>
         <source>Never</source>
         <translation>Jamais</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="173"/>
+        <location filename="../../../OptionDialog.cpp" line="196"/>
         <source>When source is same</source>
         <translation>Quand la source est la même</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="174"/>
+        <location filename="../../../OptionDialog.cpp" line="197"/>
         <source>When destination is same</source>
         <translation>Quand la destination est la même</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="175"/>
+        <location filename="../../../OptionDialog.cpp" line="198"/>
         <source>When source and destination are same</source>
         <translation>Quand la destination et la source sont les mêmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="176"/>
+        <location filename="../../../OptionDialog.cpp" line="199"/>
         <source>When source or destination are same</source>
         <translation>Quand la destination ou la source sont les mêmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="177"/>
+        <location filename="../../../OptionDialog.cpp" line="200"/>
         <source>Always</source>
         <translation>Toujours</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="733"/>
+        <location filename="../../../OptionDialog.cpp" line="788"/>
         <source>Save logs as: </source>
         <translation>Sauvegarder les logs sous: </translation>
     </message>

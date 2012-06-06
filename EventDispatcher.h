@@ -73,7 +73,7 @@ class EventDispatcher : public QObject, public GlobalClass
 		/// \brief the session loader
 		SessionLoader *sessionloader;
 		bool stopIt;
-		CopyListener copyServer;
+		CopyListener *copyServer;
 		Core *core;
 		OptionDialog optionDialog;
 		CopyEngineManager *copyEngineList;

@@ -21,8 +21,26 @@ PluginLoader::PluginLoader()
 {
 	//set the startup value into the variable
 	dllChecked=false;
-	
+	optionsEngine=NULL;
+	allDllIsImportant=false;
 	needBeRegistred=false;
+	changeOfArchDetected=false;
+	is64Bits=false;
+	connect(&optionsWidget,SIGNAL(sendAllDllIsImportant(bool)),this,SLOT(setAllDllIsImportant(bool)));
+
+#if defined(_M_X64)//64Bits
+	is64Bits=true;
+#else//32Bits
+	char *arch=getenv("windir");
+	if(arch!=NULL)
+	{
+		QDir dir;
+		if(dir.exists(QString(arch)+"\\SysWOW64\\"))
+			is64Bits=true;
+		/// \note commented because it do a crash at the startup, and useless, because is global variable, it should be removed only by the OS
+		//delete arch;
+	}
+#endif
 }
 
 PluginLoader::~PluginLoader()
@@ -37,6 +55,8 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("No dll exists"));
 		emit newState(Uncaught);
+		if(!needBeRegistred)
+			correctlyLoaded.clear();
 		return;
 	}
 	if(this->needBeRegistred==needBeRegistred)
@@ -46,7 +66,7 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	}
 	this->needBeRegistred=needBeRegistred;
 	int index=0;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, needBeRegistred: "+QString::number(needBeRegistred));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, needBeRegistred: %1, allDllIsImportant: %2").arg(needBeRegistred).arg(allDllIsImportant));
 
 	bool oneHaveFound=false;
 	index=0;
@@ -76,6 +96,8 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("No dll have found"));
 		emit newState(Uncaught);
+		if(!needBeRegistred)
+			correctlyLoaded.clear();
 		return;
 	}
 
@@ -87,11 +109,18 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	{
 		if(!RegisterShellExtDll(pluginPath+importantDll.at(index),needBeRegistred,false))
 		{
+			if(changeOfArchDetected)
+			{
+				setEnabled(needBeRegistred);
+				return;
+			}
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"the important dll have failed: "+importantDll.at(index));
 			importantDll_have_bug=true;
 		}
 		else
 		{
+			if(needBeRegistred)
+				correctlyLoaded << importantDll.at(index);
 			importantDll_is_loaded=true;
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the important dll have been loaded: "+importantDll.at(index));
 		}
@@ -101,13 +130,20 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	index=0;
 	while(index<secondDll.size())
 	{
-		if(!RegisterShellExtDll(pluginPath+secondDll.at(index),needBeRegistred,true))
+		if(!RegisterShellExtDll(pluginPath+secondDll.at(index),needBeRegistred,
+			!(
+				allDllIsImportant || 
+				correctlyLoaded.contains(secondDll.at(index))
+			)
+		))
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"the second dll have failed: "+secondDll.at(index));
 			secondDll_have_bug=true;
 		}
 		else
 		{
+			if(needBeRegistred)
+				correctlyLoaded << secondDll.at(index);
 			secondDll_is_loaded=true;
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the second dll have been loaded: "+secondDll.at(index));
 		}
@@ -159,6 +195,9 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 		emit newState(Caught);
 	else
 		emit newState(Semiuncaught);
+	
+	if(!needBeRegistred)
+		correctlyLoaded.clear();
 }
 
 bool PluginLoader::checkExistsDll()
@@ -171,42 +210,19 @@ bool PluginLoader::checkExistsDll()
 			return false;
 	}
 	dllChecked=true;
-	
-	#if defined(ULTRACOPIER_VERSION_PORTABLE) || ! defined(_M_X64)
-	bool is64Bits=false;
-	char *arch=getenv("windir");
-	if(arch!=NULL)
+
+	if(is64Bits)
 	{
-		QDir dir;
-		if(dir.exists(QString(arch)+"\\SysWOW64\\"))
-		{
-			is64Bits=true;
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"OS seam 64Bits, "+QString(arch)+"\\SysWOW64\\");
-		}
-		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"OS seam not 64Bits, "+QString(arch)+"\\SysWOW64\\");
-		/// \note commented because it do a crash at the startup
-		//delete arch;
-	}
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to get env var");
-	
-	if(!is64Bits)
-	{
-		if((importantDll.size()+secondDll.size())>1)
-		{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Not load 64Bits dll");
-		importantDll.removeOne(CATCHCOPY_DLL_64);
-		secondDll.removeOne(CATCHCOPY_DLL_64);
-		}
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"64Bits is important");
+		importantDll << CATCHCOPY_DLL_64;
+		secondDll << CATCHCOPY_DLL_32;
 	}
 	else
 	{
-		QStringList tempList=importantDll;
-		importantDll=secondDll;
-		secondDll=tempList;
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"32Bits is important");
+		importantDll << CATCHCOPY_DLL_32;
+		secondDll << CATCHCOPY_DLL_64;
 	}
-	#endif
 
 	int index=0;
 	while(index<importantDll.size())
@@ -254,22 +270,14 @@ void PluginLoader::setResources(OptionInterface * options,QString writePath,QStr
 {
 	Q_UNUSED(options);
         this->pluginPath=pluginPath;
-	if(portableVersion)
+	this->optionsEngine=options;
+	if(optionsEngine!=NULL)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("version portable detected"));
-		secondDll << CATCHCOPY_DLL_32 << CATCHCOPY_DLL_64;
-	}
-	else
-	{
-		#if defined(_M_X64)//64Bits
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("64Bits version detected"));
-			importantDll << CATCHCOPY_DLL_64;
-			secondDll << CATCHCOPY_DLL_32;
-		#else//32Bits
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("32Bits version detected"));
-			importantDll << CATCHCOPY_DLL_32;
-			secondDll << CATCHCOPY_DLL_64;
-		#endif
+		QList<QPair<QString, QVariant> > KeysList;
+		KeysList.append(qMakePair(QString("allDllIsImportant"),QVariant(false)));
+		optionsEngine->addOptionGroup(KeysList);
+		allDllIsImportant=optionsEngine->getOptionValue("allDllIsImportant").toBool();
+		optionsWidget.setAllDllIsImportant(allDllIsImportant);
 	}
 }
 
@@ -332,9 +340,20 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 	bool ok=false;
 	if(result==0)
 		ok=true;
+	#if ! defined(_M_X64)
+	if(result==999 && !changeOfArchDetected)//code of wrong arch for the dll
+	{
+		changeOfArchDetected=true;
+		QStringList temp;
+		temp = importantDll;
+		secondDll = importantDll;
+		importantDll = temp;
+		return false;
+	}
+	#endif
 	if(result==5)
 	{
-		if(!quiet)
+		if(!quiet || (!bRegister && correctlyLoaded.contains(dllPath)))
 		{
 			////////////////////////////// Last way to load //////////////////////////////
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"try it in win32");
@@ -359,6 +378,7 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("regsvr32 terminated with: %1").arg(result));
+	correctlyLoaded.remove(dllPath);
 	if(!bRegister)
 		HardUnloadDLL(dllPath);
 	return ok;
@@ -477,4 +497,21 @@ void PluginLoader::HardUnloadDLL(QString myDllName)
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"uProcess.th32ProcessID > 99999 for "+myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
 	}
 	CloseHandle(hSnapShot1);
+}
+
+/// \brief to get the options widget, NULL if not have
+QWidget * PluginLoader::options()
+{
+	return &optionsWidget;
+}
+
+void PluginLoader::newLanguageLoaded()
+{
+	optionsWidget.retranslate();
+}
+
+void PluginLoader::setAllDllIsImportant(bool allDllIsImportant)
+{
+	this->allDllIsImportant=allDllIsImportant;
+	optionsEngine->setOptionValue("allDllIsImportant",allDllIsImportant);
 }
