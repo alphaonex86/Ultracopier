@@ -345,7 +345,8 @@ int Core::connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngin
 			newItem.baseTime=0;
 			newItem.numberOfFile=0;
 			newItem.numberOfTransferedFile=0;
-			newItem.sizeToCopy=0;
+			newItem.currentProgression=0;
+			newItem.totalProgression=0;
 			newItem.action=Idle;
 			newItem.lastProgression=0;//store the real byte transfered, used in time remaining calculation
 			newItem.isPaused=false;
@@ -636,6 +637,8 @@ void Core::connectInterfaceAndSync(const int &index)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushFileProgression()").arg(index).arg((quint64)sender()));
 	if(!connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)),		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression()").arg(index).arg((quint64)sender()));
+	if(!connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		this,SLOT(pushGeneralProgression(quint64,quint64)),		Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
 
 	currentCopyInstance.interface->setSpeedLimitation(currentCopyInstance.engine->getSpeedLimitation());
 	currentCopyInstance.interface->setErrorAction(currentCopyInstance.engine->getErrorAction());
@@ -729,24 +732,27 @@ void Core::periodiqueSync(const int &index)
 	if(!currentCopyInstance.isPaused)
 	{
 		//calcul the last difference of the transfere
-		quint64 realByteTransfered=currentCopyInstance.engine->realByteTransfered();
-		quint64 diffCopiedSize=0;
+		realByteTransfered=currentCopyInstance.engine->realByteTransfered();
+		diffCopiedSize=0;
 		if(realByteTransfered>=currentCopyInstance.lastProgression)
 			diffCopiedSize=realByteTransfered-currentCopyInstance.lastProgression;
 		currentCopyInstance.lastProgression=realByteTransfered;
-		//do the remaining time calculation
-		//byte per ms: lastProgression/(baseTime+currentCopyInstance.runningTime.elapsed()
-		//currentCopyInstance.lastProgression
-		if(currentCopyInstance.lastProgression==0)
+
+		// algo 1:
+		// ((double)currentProgression)/totalProgression -> example: done 80% -> 0.8
+		// baseTime+runningTime -> example: done into 80s, remaining time: 80/0.8-80=80*(1/0.8-1)=20s
+		// algo 2 (not used):
+		// remaining byte/current speed
+
+		transferAddedTime=currentCopyInstance.baseTime+currentCopyInstance.runningTime.elapsed();
+
+		//remaining time: (total byte - lastProgression)/byte per ms since the start
+		if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
 			currentCopyInstance.interface->remainingTime(-1);
 		else
-			currentCopyInstance.interface->remainingTime(
-				(
-				(double)(realByteTransfered)
-				*(currentCopyInstance.baseTime+currentCopyInstance.runningTime.elapsed())
-				/(currentCopyInstance.lastProgression)
-				)/1000
-			);
+			currentCopyInstance.interface->remainingTime(transferAddedTime*((double)currentCopyInstance.totalProgression/(double)currentCopyInstance.currentProgression-1)/1000);
+
+		//do the speed calculation
 		if(lastProgressionTime.isNull())
 			lastProgressionTime.start();
 		else
@@ -864,6 +870,18 @@ void Core::getActionOnList(const QList<returnActionOnCopyList> & actionList)
 	{
 		if(copyList[index].copyEngineIsSync)
 			copyList[index].interface->getActionOnList(actionList);
+	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
+}
+
+void Core::pushGeneralProgression(const quint64 &current,const quint64 &total)
+{
+	int index=indexCopySenderCopyEngine();
+	if(index!=-1)
+	{
+		copyList[index].currentProgression=current;
+		copyList[index].totalProgression=total;
 	}
 	else
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");

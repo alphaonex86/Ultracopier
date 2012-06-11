@@ -50,9 +50,9 @@ class Core : public QObject, public GlobalClass
 			CopyMode mode;
 			quint64 numberOfFile;
 			quint64 numberOfTransferedFile;
-			quint64 sizeToCopy;
+			quint64 currentProgression,totalProgression;//store the file byte transfered, used into the remaining time
 			EngineActionInProgress action;
-			quint64 lastProgression;//store the real byte transfered, used in time remaining calculation
+			quint64 lastProgression;//store the real byte transfered, used in speed calculation
 			QList<quint64> lastSpeedDetected;//stored in bytes
 			QList<double> lastSpeedTime;//stored in ms
 			QList<RunningTransfer> transferItemList;//full info of started item, to have wich progression to poll
@@ -93,6 +93,10 @@ class Core : public QObject, public GlobalClass
 		int index,index_sub_loop,loop_size,loop_sub_size;
 		double totTime;
 		double totSpeed;
+		quint64 realByteTransfered;
+		quint64 transferSpeed;
+		quint64 transferAddedTime;
+		quint64 diffCopiedSize;
 	signals:
 		void copyFinished(const quint32 & orderId,bool withError);
 		void copyCanceled(const quint32 & orderId);
@@ -133,6 +137,7 @@ class Core : public QObject, public GlobalClass
 		void urlDropped(const QList<QUrl> &urls);
 		void syncReady();
 		void getActionOnList(const QList<returnActionOnCopyList> & actionList);
+		void pushGeneralProgression(const quint64 &current,const quint64 &total);
 };
 
 #endif // CORE_H
