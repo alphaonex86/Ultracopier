@@ -172,7 +172,7 @@ public slots:
 	void restartTransferIfItCan();
 
 	/// \brief update the transfer stat
-	void newTransferStat(TransferThread::TransferStat stat,quint64 id);
+	void newTransferStat(TransferStat stat,quint64 id);
 
 	void set_osBufferLimit(unsigned int osBufferLimit);
 	void set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
@@ -249,6 +249,8 @@ private:
 	bool doTransfer,doInode;
 	qint64 oversize;//used as temp variable
 	qint64 currentProgression;
+	qint64 copiedSize,totalSize,localOverSize;
+	QList<ProgressionItem> progressionList;
 	TransferThread* currentTransferThread;
 	//memory variable for transfer thread creation
 	bool doRightTransfer;
@@ -261,6 +263,7 @@ private:
 	QPair<quint64,quint64> returnPairQuint64ToCopyEngine;
 	QList<ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
 	ItemOfCopyList returnItemOfCopyListToCopyEngine;
+	ProgressionItem tempItem;
 
 	void realByteTransfered();
 private slots:

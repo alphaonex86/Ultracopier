@@ -424,9 +424,9 @@ void Themes::updateCurrentFileInformation()
 		ui->from->setText("");
 		ui->to->setText("");
 		ui->current_file->setText("-");
-		if(haveStarted)
+		if(haveStarted && transferModel.rowCount()==0)
 			ui->progressBar_file->setValue(65535);
-		else
+		else if(!haveStarted)
 			ui->progressBar_file->setValue(0);
 	}
 }

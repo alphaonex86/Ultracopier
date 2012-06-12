@@ -196,16 +196,21 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 				ItemOfCopyListWithMoreInformations tempItem;
 				tempItem.currentProgression=0;
 				tempItem.generalData=action.addAction;
+				tempItem.actionType=action.type;
 				internalRunningOperation[action.addAction.id]=tempItem;
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("set for file %1: actionType: PreOperation").arg(action.addAction.id));
 			}
 			break;
 			case Transfer:
 			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("found entry for file %1: actionType: Transfer").arg(action.addAction.id));
 				if(!startId.contains(action.addAction.id))
 					startId << action.addAction.id;
 				stopId.remove(action.addAction.id);
 				if(internalRunningOperation.contains(action.addAction.id))
 					internalRunningOperation[action.addAction.id].actionType=action.type;
+				else
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unable to found entry for file %1: actionType: Transfer").arg(action.addAction.id));
 			}
 			break;
 			case PostOperation:
@@ -380,7 +385,11 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 			break;
 			default:
 				returnItem.progressBar_file=0;
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+				break;
 		}
 	}
+	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("No have running item"));
 	return returnItem;
 }

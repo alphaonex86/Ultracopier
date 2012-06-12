@@ -27,17 +27,6 @@ class TransferThread : public QThread
 public:
 	explicit TransferThread();
 	~TransferThread();
-	/// \brief to have the transfer status
-	enum TransferStat
-	{
-		Idle=0,
-		PreOperation=1,
-		WaitForTheTransfer=2,
-		Transfer=3,
-		Checksum=4,
-		PostTransfer=5,
-		PostOperation=6
-	};
 	/// \brief get transfer stat
 	TransferStat getStat();
 	/// \brief get drive of an file or folder

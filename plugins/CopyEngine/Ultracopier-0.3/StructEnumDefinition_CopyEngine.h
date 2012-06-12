@@ -32,6 +32,18 @@ enum FileErrorAction
 	FileError_PutToEndOfTheList
 };
 
+/// \brief to have the transfer status
+enum TransferStat
+{
+	TransferStat_Idle=0,
+	TransferStat_PreOperation=1,
+	TransferStat_WaitForTheTransfer=2,
+	TransferStat_Transfer=3,
+	TransferStat_Checksum=4,
+	TransferStat_PostTransfer=5,
+	TransferStat_PostOperation=6
+};
+
 /// \brief Define overwrite mode
 /*enum OverwriteMode
 {

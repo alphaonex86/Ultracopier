@@ -23,10 +23,12 @@ PluginLoader::PluginLoader()
 	dllChecked=false;
 	optionsEngine=NULL;
 	allDllIsImportant=false;
+	Debug=false;
 	needBeRegistred=false;
 	changeOfArchDetected=false;
 	is64Bits=false;
 	connect(&optionsWidget,SIGNAL(sendAllDllIsImportant(bool)),this,SLOT(setAllDllIsImportant(bool)));
+	connect(&optionsWidget,SIGNAL(sendDebug(bool)),this,SLOT(setDebug(bool)));
 
 #if defined(_M_X64)//64Bits
 	is64Bits=true;
@@ -276,14 +278,30 @@ void PluginLoader::setResources(OptionInterface * options,QString writePath,QStr
 	{
 		QList<QPair<QString, QVariant> > KeysList;
 		KeysList.append(qMakePair(QString("allDllIsImportant"),QVariant(false)));
+		KeysList.append(qMakePair(QString("Debug"),QVariant(false)));
 		optionsEngine->addOptionGroup(KeysList);
 		allDllIsImportant=optionsEngine->getOptionValue("allDllIsImportant").toBool();
+		Debug=optionsEngine->getOptionValue("Debug").toBool();
 		optionsWidget.setAllDllIsImportant(allDllIsImportant);
+		optionsWidget.setDebug(Debug);
 	}
 }
 
 bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
 {
+	if(Debug)
+	{
+		QString message;
+		if(bRegister)
+			message+=QString("Try load the dll: %1, and ").arg(dllPath);
+		else
+			message+=QString("Try unload the dll: %1, and ").arg(dllPath);
+		if(quiet)
+			message+=QString("don't open the UAC");
+		else
+			message+=QString("open the UAC if needed");
+		QMessageBox::information(NULL,"Debug",message);
+	}
 	////////////////////////////// First way to load //////////////////////////////
 	
 	wchar_t arrayArg[65535];
@@ -322,7 +340,8 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 	
 	////////////////////////////// Second way to load //////////////////////////////
 	QStringList arguments;
-	arguments.append("/s");
+	if(!Debug)
+		arguments.append("/s");
 	if(!bRegister)
 		arguments.append("/u");
 	arguments.append(dllPath);
@@ -515,4 +534,10 @@ void PluginLoader::setAllDllIsImportant(bool allDllIsImportant)
 {
 	this->allDllIsImportant=allDllIsImportant;
 	optionsEngine->setOptionValue("allDllIsImportant",allDllIsImportant);
+}
+
+void PluginLoader::setDebug(bool Debug)
+{
+	this->Debug=Debug;
+	optionsEngine->setOptionValue("Debug",Debug);
 }

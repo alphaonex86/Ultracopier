@@ -18,6 +18,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 	qRegisterMetaType<QFileInfo>("QFileInfo");
 	qRegisterMetaType<CopyMode>("CopyMode");
 	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
+	qRegisterMetaType<TransferStat>("TransferStat");
 
 	moveToThread(this);
 	start(HighPriority);
@@ -96,7 +97,7 @@ void ListThread::transferInodeIsClosed()
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	int countLocalParse=0;
 	#endif
-	if(temp_transfer_thread->getStat()!=TransferThread::Idle)
+	if(temp_transfer_thread->getStat()!=TransferStat_Idle)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("transfer thread not idle!"));
 		return;
@@ -786,28 +787,24 @@ void ListThread::sendProgression()
 {
 	if(actionToDoListTransfer.size()==0)
 		return;
-	qint64 copiedSize,totalSize,localOverSize;
-	QList<ProgressionItem> progressionList;
-	TransferThread *thread;
 	oversize=0;
 	currentProgression=0;
 	int_for_loop=0;
 	loop_size=transferThreadList.size();
 	while(int_for_loop<loop_size)
 	{
-		thread=transferThreadList.at(int_for_loop);
-		if(thread->getStat()==TransferThread::Transfer)
+		temp_transfer_thread=transferThreadList.at(int_for_loop);
+		if(temp_transfer_thread->getStat()==TransferStat_Transfer)
 		{
-			copiedSize=thread->copiedSize();
+			copiedSize=temp_transfer_thread->copiedSize();
 			currentProgression+=copiedSize;
-			if(copiedSize>(qint64)thread->transferSize)
-				localOverSize=copiedSize-thread->transferSize;
+			if(copiedSize>(qint64)temp_transfer_thread->transferSize)
+				localOverSize=copiedSize-temp_transfer_thread->transferSize;
 			else
 				localOverSize=0;
-			totalSize=thread->transferSize+localOverSize;
-			ProgressionItem tempItem;
+			totalSize=temp_transfer_thread->transferSize+localOverSize;
 			tempItem.current=copiedSize;
-			tempItem.id=thread->transferId;
+			tempItem.id=temp_transfer_thread->transferId;
 			tempItem.total=totalSize;
 			progressionList << tempItem;
 			oversize+=localOverSize;
@@ -815,6 +812,7 @@ void ListThread::sendProgression()
 		int_for_loop++;
 	}
 	emit pushFileProgression(progressionList);
+	progressionList.clear();
 	emit pushGeneralProgression(bytesTransfered+currentProgression,bytesToTransfer+oversize);
 	realByteTransfered();
 }
@@ -857,15 +855,15 @@ void ListThread::syncTransferList_internal()
 				newAction.addAction.size		= item.size;
 				newAction.addAction.mode		= item.mode;
 				actionDone << newAction;
-				if(transferThread->getStat()!=TransferThread::PreOperation)
+				if(transferThread->getStat()!=TransferStat_PreOperation)
 				{
 					returnActionOnCopyList newAction;
 					switch(transferThread->getStat())
 					{
-						case TransferThread::Transfer:
+						case TransferStat_Transfer:
 							newAction.type=Transfer;
 						break;
-						case TransferThread::PostTransfer:
+						case TransferStat_PostTransfer:
 							newAction.type=PostOperation;
 						break;
 						default:
@@ -1264,7 +1262,7 @@ void ListThread::doNewActions_start_transfer()
 	loop_size=transferThreadList.size();
 	while(int_for_loop<loop_size && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
 	{
-		if(transferThreadList.at(int_for_loop)->getStat()==TransferThread::WaitForTheTransfer)
+		if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_WaitForTheTransfer)
 		{
 			transferThreadList.at(int_for_loop)->startTheTransfer();
 			numberOfTranferRuning++;
@@ -1274,7 +1272,7 @@ void ListThread::doNewActions_start_transfer()
 	int_for_loop=0;
 	while(int_for_loop<loop_size && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
 	{
-		if(transferThreadList.at(int_for_loop)->getStat()==TransferThread::PreOperation)
+		if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_PreOperation)
 		{
 			transferThreadList.at(int_for_loop)->startTheTransfer();
 			numberOfTranferRuning++;
@@ -1337,7 +1335,7 @@ void ListThread::doNewActions_inode_manipulation()
 					I this case it lose all data
 					*/
 				currentTransferThread=transferThreadList[int_for_transfer_thread_search];
-				if(currentTransferThread->getStat()==TransferThread::Idle && currentTransferThread->transferId==0) // /!\ important!
+				if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0) // /!\ important!
 				{
 					currentTransferThread->transferId=currentActionToDoTransfer.id;
 					currentTransferThread->transferSize=currentActionToDoTransfer.size;
@@ -1407,7 +1405,7 @@ void ListThread::restartTransferIfItCan()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("transfer thread not located!"));
 		return;
 	}
-	if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER && transfer->getStat()==TransferThread::WaitForTheTransfer)
+	if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER && transfer->getStat()==TransferStat_WaitForTheTransfer)
 	{
 		transfer->startTheTransfer();
 		numberOfTranferRuning++;
@@ -1416,30 +1414,32 @@ void ListThread::restartTransferIfItCan()
 }
 
 /// \brief update the transfer stat
-void ListThread::newTransferStat(TransferThread::TransferStat stat,quint64 id)
+void ListThread::newTransferStat(TransferStat stat,quint64 id)
 {
 	returnActionOnCopyList newAction;
 	switch(stat)
 	{
-		case TransferThread::Idle:
+		case TransferStat_Idle:
 			return;
 		break;
-		case TransferThread::PreOperation:
+		case TransferStat_PreOperation:
 			return;
 		break;
-		case TransferThread::WaitForTheTransfer:
+		case TransferStat_WaitForTheTransfer:
 			return;
 		break;
-		case TransferThread::Transfer:
+		case TransferStat_Transfer:
 			newAction.type=Transfer;
 		break;
-		case TransferThread::PostTransfer:
+		case TransferStat_PostTransfer:
+		case TransferStat_PostOperation:
 			newAction.type=PostOperation;
 		break;
-		case TransferThread::PostOperation:
-			return;
+		case TransferStat_Checksum:
+			newAction.type=PostOperation;
 		break;
 		default:
+			return;
 		break;
 	}
 	newAction.addAction.id			= id;
@@ -1532,22 +1532,22 @@ void ListThread::timedUpdateDebugDialog()
 		QString stat;
 		switch(transferThreadList.at(index)->getStat())
 		{
-		case TransferThread::Idle:
+		case TransferStat_Idle:
 			stat="Idle";
 			break;
-		case TransferThread::PreOperation:
+		case TransferStat_PreOperation:
 			stat="PreOperation";
 			break;
-		case TransferThread::WaitForTheTransfer:
+		case TransferStat_WaitForTheTransfer:
 			stat="WaitForTheTransfer";
 			break;
-		case TransferThread::Transfer:
+		case TransferStat_Transfer:
 			stat="Transfer";
 			break;
-		case TransferThread::PostOperation:
+		case TransferStat_PostOperation:
 			stat="PostOperation";
 			break;
-		case TransferThread::PostTransfer:
+		case TransferStat_PostTransfer:
 			stat="PostTransfer";
 			break;
 		default:
@@ -1645,6 +1645,7 @@ void ListThread::createTransferThread()
 	connect(last,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
 	connect(last,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
 	connect(last,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
+	connect(last,SIGNAL(pushStat(TransferStat,quint64)),		this,SLOT(newTransferStat(TransferStat,quint64)),	Qt::QueuedConnection);
 
 	connect(this,SIGNAL(send_sendNewRenamingRules(QString,QString)),		last,SLOT(setRenamingRules(QString,QString)),				Qt::QueuedConnection);
 

@@ -51,7 +51,7 @@ private:
 	void HardUnloadDLL(QString myDllName);
 	OptionInterface * optionsEngine;
 	OptionsWidget optionsWidget;
-	bool allDllIsImportant;
+	bool allDllIsImportant,Debug;
 	bool changeOfArchDetected,is64Bits;
 signals:
 	void newState(CatchState);
@@ -61,6 +61,7 @@ signals:
 	#endif
 private slots:
 	void setAllDllIsImportant(bool allDllIsImportant);
+	void setDebug(bool Debug);
 };
 
 #endif // PLUGIN_LOADER_TEST_H
