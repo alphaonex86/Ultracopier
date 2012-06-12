@@ -324,6 +324,7 @@ void OptionDialog::loadOption()
 		ui->LoadAtSessionStarting->setEnabled(false);
 	}
 	allPluginsIsLoaded=true;
+	on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 }
 
 void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
@@ -460,6 +461,21 @@ void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(int index)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"data value: "+ui->Ultracopier_current_theme->itemData(index).toString()+", string value: "+ui->Ultracopier_current_theme->itemText(index)+", index: "+QString::number(index));
 		options->setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(index));
+		int index_loop=0;
+		loop_size=pluginOptionsWidgetList.size();
+		while(index_loop<loop_size)
+		{
+			if(pluginOptionsWidgetList.at(index_loop).name==ui->Ultracopier_current_theme->itemData(index).toString())
+			{
+				if(pluginOptionsWidgetList.at(index_loop).options==NULL)
+					ui->stackedWidgetThemes->setCurrentIndex(1);
+				else
+					ui->stackedWidgetThemes->setCurrentWidget(pluginOptionsWidgetList.at(index_loop).options);
+				return;
+			}
+			index_loop++;
+		}
+		ui->stackedWidgetThemes->setCurrentIndex(0);
 	}
 }
 
@@ -559,35 +575,21 @@ QStringList OptionDialog::copyEngineStringList()
 	return newList;
 }
 
-void OptionDialog::newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
+void OptionDialog::newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	while(ui->stackedWidgetThemes->count()>3)
-		ui->stackedWidgetThemes->removeWidget(ui->stackedWidgetThemes->widget(3));
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start: isLoaded: %1, havePlugin: %2, name: %3").arg(isLoaded).arg(havePlugin).arg(name));
+	pluginOptionsWidget tempItem;
+	tempItem.name=name;
+	tempItem.item=NULL;
+	tempItem.options=theNewOptionsWidget;
+	tempItem.category=PluginType_Themes;
+	pluginOptionsWidgetList << tempItem;
 	if(theNewOptionsWidget!=NULL)
 	{
 		ui->stackedWidgetThemes->addWidget(theNewOptionsWidget);
-		ui->stackedWidgetThemes->setCurrentWidget(theNewOptionsWidget);
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"set the last page");
 	}
-	else
-	{
-		if(isLoaded)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"set the page, no option for this plugin");
-			ui->stackedWidgetThemes->setCurrentIndex(1);
-		}
-		else if(!havePlugin)
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"set the page, no plugin");
-			ui->stackedWidgetThemes->setCurrentIndex(2);
-		}
-		else
-		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"set the page, unable to load plugin options");
-			ui->stackedWidgetThemes->setCurrentIndex(0);
-		}
-	}
+	on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 }
 
 void OptionDialog::addPluginOptionWidget(PluginType category,QString name,QWidget * options)

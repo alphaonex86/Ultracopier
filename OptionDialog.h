@@ -94,7 +94,7 @@ private:
 	QTreeWidgetItem * treeWidgetItem;
 	bool allPluginsIsLoaded;
 public slots:
-	void newThemeOptions(QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
+	void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
 signals:
 	void previouslyPluginAdded(PluginsAvailable);
 };

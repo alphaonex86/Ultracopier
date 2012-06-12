@@ -95,7 +95,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
 				.arg(newPlugin.plugin.name)
 				);
 				pluginLoader->unload();
-				emit newThemeOptions(NULL,false,true);
+				emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
 				emit theThemeIsReloaded();
 				return;
 			}
@@ -122,12 +122,12 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
 			pluginList << newPlugin;
 			if(plugins->allPluginHaveBeenLoaded())
 				allPluginIsLoaded();
-			emit newThemeOptions(newPlugin.factory->options(),true,true);
+			emit newThemeOptions(newPlugin.plugin.name,newPlugin.factory->options(),true,true);
 			emit theThemeIsReloaded();
 			return;
 		}
 	}
-	emit newThemeOptions(NULL,false,true);
+	emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
 	emit theThemeIsReloaded();
 }
 
@@ -176,7 +176,6 @@ void ThemesManager::allPluginIsLoaded()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(pluginList.size()==0)
 	{
-		emit newThemeOptions(NULL,false,false);
 		emit theThemeIsReloaded();
 		return;
 	}
@@ -193,7 +192,6 @@ void ThemesManager::allPluginIsLoaded()
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"theme not found!");
 	currentPluginIndex=-1;
-	emit newThemeOptions(NULL,false,true);
 	emit theThemeIsReloaded();
 }
 

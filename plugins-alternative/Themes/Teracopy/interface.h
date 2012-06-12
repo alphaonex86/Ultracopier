@@ -16,6 +16,7 @@
 
 #include "ui_interface.h"
 #include "Environment.h"
+#include "TransferModel.h"
 
 namespace Ui {
 	class interfaceCopy;
@@ -42,11 +43,6 @@ private:
 		QString current_file;
 		int progressBar_file;
 	};
-	struct graphicItem
-	{
-		quint64 id;
-		QTreeWidgetItem * item;
-	};
 	Ui::interfaceCopy *ui;
 	quint64 currentFile;
 	quint64 totalFile;
@@ -57,7 +53,6 @@ private:
 	EngineActionInProgress action;
 	void closeEvent(QCloseEvent *event);
 	QList<ItemOfCopyListWithMoreInformations> currentProgressList;
-	QList<graphicItem> graphicItemList;
 	QString speedString;
 	bool storeIsInPause;
 	bool modeIsForced;
@@ -74,8 +69,8 @@ private:
 	currentTransfertItem getCurrentTransfertItem();
 	QList<quint64> startId,stopId;///< To show what is started, what is stopped
 	QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;///< to have progression and stat
-	QHash<quint64,QTreeWidgetItem *> InternalRunningOperationGraphic;
-	QIcon iconStart,iconPause,iconStop;
+	/// \brief the custom transfer model
+	TransferModel transferModel;
 public:
 	//send information about the copy
 	/// \brief to set the action in progress

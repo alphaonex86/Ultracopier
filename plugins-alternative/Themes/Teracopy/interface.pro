@@ -7,9 +7,11 @@ HEADERS         = interface.h \
     DebugEngineMacro.h \
     Environment.h \
     Variable.h \
-    ../../../interface/PluginInterface_Themes.h
+    ../../../interface/PluginInterface_Themes.h \
+    TransferModel.h
 SOURCES         = interface.cpp \
-    factory.cpp
+    factory.cpp \
+    TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)
 TRANSLATIONS   += Languages/fr/translation.ts \
     Languages/ar/translation.ts \

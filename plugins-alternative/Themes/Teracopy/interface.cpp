@@ -15,6 +15,9 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
 {
 	this->facilityEngine=facilityEngine;
 	ui->setupUi(this);
+	ui->TransferList->setModel(&transferModel);
+	transferModel.setFacilityEngine(facilityEngine);
+
 	currentFile		= 0;
 	totalFile		= 0;
 	currentSize		= 0;
@@ -34,9 +37,9 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
 	connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
 	connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
 
-	iconStart=QIcon(":/resources/player_play.png");
-	iconPause=QIcon(":/resources/player_pause.png");
-	iconStop=QIcon(":/resources/checkbox.png");
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+	#endif
 }
 
 InterfacePlugin::~InterfacePlugin()
@@ -235,18 +238,25 @@ void InterfacePlugin::isInPause(bool isInPause)
 
 void InterfacePlugin::updateCurrentFileInformation()
 {
-	if(currentProgressList.size()>0)
+	TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
+	if(transfertItem.haveItem)
 	{
-		ui->from->setText(currentProgressList.first().generalData.sourceFullPath);
-		if(currentProgressList.first().generalData.size>0)
-			ui->progressBar_file->setValue(((double)currentProgressList.first().currentProgression/currentProgressList.first().generalData.size)*65535);
-		else
-			ui->progressBar_file->setValue(0);
+		ui->from->setText(transfertItem.from);
+		//commented because not displayed on this interface
+		//ui->to->setText(transfertItem.to);
+		//ui->current_file->setText(transfertItem.current_file);
+		ui->progressBar_file->setValue(transfertItem.progressBar_file);
 	}
 	else
 	{
-		ui->from->setText("-");
-		ui->progressBar_file->setValue(65535);
+		ui->from->setText("");
+		//commented because not displayed on this interface
+		//ui->to->setText("");
+		//ui->current_file->setText("-");
+		if(haveStarted && transferModel.rowCount()==0)
+			ui->progressBar_file->setValue(65535);
+		else if(!haveStarted)
+			ui->progressBar_file->setValue(0);
 	}
 }
 
@@ -270,11 +280,22 @@ void InterfacePlugin::on_pauseButton_clicked()
 
 void InterfacePlugin::on_skipButton_clicked()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	if(currentProgressList.size()>0)
-		emit skip(currentProgressList.first().generalData.id);
+	TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
+	if(transfertItem.haveItem)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("skip at running: %1").arg(transfertItem.id));
+		emit skip(transfertItem.id);
+	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to skip the transfer, because no transfer running");
+	{
+		if(transferModel.rowCount()>1)
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("skip at idle: %1").arg(transferModel.firstId()));
+			emit skip(transferModel.firstId());
+		}
+		else
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to skip the transfer, because no transfer running");
+	}
 }
 
 void InterfacePlugin::updateModeAndType()
@@ -353,140 +374,29 @@ void InterfacePlugin::newLanguageLoaded()
   */
 void InterfacePlugin::getActionOnList(const QList<returnActionOnCopyList>& returnActions)
 {
-	loop_size=returnActions.size();
-	index_for_loop=0;
-	while(index_for_loop<loop_size)
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
+	QList<quint64> returnValue=transferModel.synchronizeItems(returnActions);
+	totalFile+=returnValue[0];
+	totalSize+=returnValue[1];
+	currentFile+=returnValue[2];
+	if(transferModel.rowCount()==0)
 	{
-		const returnActionOnCopyList& action=returnActions.at(index_for_loop);
-		switch(action.type)
-		{
-			case AddingItem:
-			{
-				InternalRunningOperationGraphic.insert(action.addAction.id,new QTreeWidgetItem(QStringList() << action.addAction.sourceFullPath << facilityEngine->sizeToString(action.addAction.size) << action.addAction.destinationFullPath));
-				ui->CopyList->addTopLevelItem(InternalRunningOperationGraphic[action.addAction.id]);
-				totalFile++;
-				totalSize+=action.addAction.size;
-			}
-			break;
-			case MoveItem:
-				ui->CopyList->move(action.userAction.position,action.userAction.moveAt);
-			break;
-			case RemoveItem:
-			{
-				InternalRunningOperationGraphic[action.addAction.id]->setIcon(0,iconStop);
-				InternalRunningOperationGraphic.remove(action.addAction.id);
-				//delete ui->CopyList->topLevelItem(action.userAction.position);
-				currentFile++;
-				startId.removeOne(action.addAction.id);
-				stopId.removeOne(action.addAction.id);
-			}
-			break;
-			case PreOperation:
-			{
-				ItemOfCopyListWithMoreInformations tempItem;
-				tempItem.currentProgression=0;
-				tempItem.generalData=action.addAction;
-				InternalRunningOperation << tempItem;
-			}
-			break;
-			case Transfer:
-			{
-				if(!startId.contains(action.addAction.id))
-					startId << action.addAction.id;
-				stopId.removeOne(action.addAction.id);
-				sub_index_for_loop=0;
-				sub_loop_size=InternalRunningOperation.size();
-				while(sub_index_for_loop<sub_loop_size)
-				{
-					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
-					{
-						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
-						break;
-					}
-					sub_index_for_loop++;
-				}
-				InternalRunningOperationGraphic[action.addAction.id]->setIcon(0,iconStart);
-			}
-			break;
-			case PostOperation:
-			{
-				if(!stopId.contains(action.addAction.id))
-					stopId << action.addAction.id;
-				startId.removeOne(action.addAction.id);
-				sub_index_for_loop=0;
-				sub_loop_size=InternalRunningOperation.size();
-				while(sub_index_for_loop<sub_loop_size)
-				{
-					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
-					{
-						InternalRunningOperation.removeAt(sub_index_for_loop);
-						break;
-					}
-					sub_index_for_loop++;
-				}
-				InternalRunningOperationGraphic[action.addAction.id]->setIcon(0,iconPause);
-			}
-			break;
-			case CustomOperation:
-			{
-				bool custom_with_progression=(action.addAction.size==1);
-				//without progression
-				if(custom_with_progression)
-				{
-					if(startId.removeOne(action.addAction.id))
-						if(!stopId.contains(action.addAction.id))
-							stopId << action.addAction.id;
-				}
-				//with progression
-				else
-				{
-					stopId.removeOne(action.addAction.id);
-					if(!startId.contains(action.addAction.id))
-						startId << action.addAction.id;
-				}
-				sub_index_for_loop=0;
-				sub_loop_size=InternalRunningOperation.size();
-				while(sub_index_for_loop<sub_loop_size)
-				{
-					if(InternalRunningOperation.at(sub_index_for_loop).generalData.id==action.addAction.id)
-					{
-						InternalRunningOperation[sub_index_for_loop].actionType=action.type;
-						InternalRunningOperation[sub_index_for_loop].custom_with_progression=custom_with_progression;
-						InternalRunningOperation[sub_index_for_loop].currentProgression=0;
-						break;
-					}
-					sub_index_for_loop++;
-				}
-			}
-			break;
-			default:
-				//unknow code, ignore it
-			break;
-		}
-		index_for_loop++;
+		ui->skipButton->setEnabled(false);
+		ui->progressBar_all->setValue(65535);
+		ui->progressBar_file->setValue(65535);
+		currentSize=totalSize;
 	}
+	else
+		ui->skipButton->setEnabled(true);
+	updateOverallInformation();
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"transferModel.rowCount(): "+QString::number(transferModel.rowCount()));
 }
 
 void InterfacePlugin::setFileProgression(const QList<ProgressionItem> &progressionList)
 {
-	loop_size=InternalRunningOperation.size();
-	sub_loop_size=progressionList.size();
-	index_for_loop=0;
-	while(index_for_loop<loop_size)
-	{
-		sub_index_for_loop=0;
-		while(sub_index_for_loop<sub_loop_size)
-		{
-			if(progressionList.at(sub_index_for_loop).id==InternalRunningOperation.at(index_for_loop).generalData.id)
-			{
-				InternalRunningOperation[index_for_loop].generalData.size=progressionList.at(sub_index_for_loop).total;
-				InternalRunningOperation[index_for_loop].currentProgression=progressionList.at(sub_index_for_loop).current;
-				break;
-			}
-			sub_index_for_loop++;
-		}
-		index_for_loop++;
-	}
+	QList<ProgressionItem> progressionListBis=progressionList;
+	transferModel.setFileProgression(progressionListBis);
+	updateCurrentFileInformation();
 }
 
 InterfacePlugin::currentTransfertItem InterfacePlugin::getCurrentTransfertItem()
