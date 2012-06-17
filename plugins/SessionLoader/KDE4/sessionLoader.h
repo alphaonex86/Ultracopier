@@ -25,6 +25,7 @@ public:
 	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
 	/// \brief to get the options widget, NULL if not have
 	QWidget * options();
+public slots:
 	/// \brief to reload the translation, because the new language have been loaded
 	void newLanguageLoaded();
 signals:

@@ -105,7 +105,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>7</number>
+        <number>8</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -684,10 +684,20 @@
          <item>
           <widget class="QLineEdit" name="lineEditLog_transfer_format">
            <property name="toolTip">
-            <string>The variables are %time%, %source%, %size%, %destination%</string>
+            <string extracomment="%time%, %source%, %size%, %destination% should not be translated">The variables are %time%, %source%, %size%, %destination%</string>
            </property>
            <property name="placeholderText">
-            <string>Format</string>
+            <string notr="true">[%time%] %source% (%size%) %destination%</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string extracomment="%time%, %source%, %size%, %destination% should not be translated">The variables are %time%, %source%, %size%, %destination%</string>
            </property>
           </widget>
          </item>
@@ -704,10 +714,20 @@
          <item>
           <widget class="QLineEdit" name="lineEditLog_error_format">
            <property name="toolTip">
-            <string>The variables are %time%, %path%, %size%, %mtime%, %error%</string>
+            <string extracomment="%time%, %path%, %size%, %mtime%, %error% should not be translated">The variables are %time%, %path%, %size%, %mtime%, %error%</string>
            </property>
            <property name="placeholderText">
-            <string>Format</string>
+            <string notr="true">[%time%] %path%, %error%</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string extracomment="%time%, %path%, %size%, %mtime%, %error% should not be translated">The variables are %time%, %path%, %size%, %mtime%, %error%</string>
            </property>
           </widget>
          </item>
@@ -726,8 +746,21 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="toolTip">
+            <string extracomment="%path%, %operation% should not be translated">The variables are %path%, %operation%</string>
+           </property>
            <property name="placeholderText">
-            <string>Format</string>
+            <string notr="true">[%time%] %operation% %path%</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_10">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string extracomment="%path%, %operation% should not be translated">The variables are %path%, %operation%</string>
            </property>
           </widget>
          </item>

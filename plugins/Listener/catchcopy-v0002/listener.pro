@@ -14,4 +14,4 @@ SOURCES         = listener.cpp \
     catchcopy-api-0002/ServerCatchcopy.cpp \
     catchcopy-api-0002/ExtraSocketCatchcopy.cpp
 TARGET          = $$qtLibraryTarget(listener)
-TRANSLATIONS   += Languages/fr/translation.ts
+

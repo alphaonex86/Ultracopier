@@ -8,4 +8,4 @@ HEADERS         = sessionLoader.h \
     ../../../interface/PluginInterface_SessionLoader.h
 SOURCES         = sessionLoader.cpp
 TARGET          = $$qtLibraryTarget(sessionLoader)
-TRANSLATIONS   += Languages/fr/translation.ts
+

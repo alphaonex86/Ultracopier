@@ -13,14 +13,14 @@ SOURCES         = interface.cpp \
     factory.cpp \
     TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)
-TRANSLATIONS   += Languages/fr/translation.ts \
+TRANSLATIONS += Languages/fr/translation.ts \
     Languages/ar/translation.ts \
-    Languages/ch/translation.ts \
+    Languages/zh/translation.ts \
     Languages/es/translation.ts \
     Languages/de/translation.ts \
     Languages/el/translation.ts \
     Languages/it/translation.ts \
-    Languages/jp/translation.ts \
+    Languages/ja/translation.ts \
     Languages/id/translation.ts \
     Languages/pl/translation.ts \
     Languages/ru/translation.ts \
@@ -29,7 +29,8 @@ TRANSLATIONS   += Languages/fr/translation.ts \
     Languages/hi/translation.ts \
     Languages/nl/translation.ts \
     Languages/no/translation.ts \
-    Languages/pt/translation.ts
+    Languages/pt/translation.ts \
+    Languages/ko/translation.ts
 
 RESOURCES	+= resources.qrc
 

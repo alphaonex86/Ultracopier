@@ -29,14 +29,14 @@
       <item>
        <widget class="QLineEdit" name="firstRenamingRule">
         <property name="placeholderText">
-         <string>%name% - copy</string>
+         <string extracomment="%name% should not be translated">%name% - copy</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string extracomment=" should not be translated">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -52,14 +52,14 @@
       <item>
        <widget class="QLineEdit" name="otherRenamingRule">
         <property name="placeholderText">
-         <string>%name% - copy (%number%)</string>
+         <string extracomment="%name%, %number% should not be translated">%name% - copy (%number%)</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string extracomment="%name%, %number% should not be translated">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>

@@ -2,12 +2,12 @@ TEMPLATE = app
 QT += network xml
 TRANSLATIONS += plugins/Languages/fr/translation.ts \
     plugins/Languages/ar/translation.ts \
-    plugins/Languages/ch/translation.ts \
+    plugins/Languages/zh/translation.ts \
     plugins/Languages/es/translation.ts \
     plugins/Languages/de/translation.ts \
     plugins/Languages/el/translation.ts \
     plugins/Languages/it/translation.ts \
-    plugins/Languages/jp/translation.ts \
+    plugins/Languages/ja/translation.ts \
     plugins/Languages/id/translation.ts \
     plugins/Languages/pl/translation.ts \
     plugins/Languages/ru/translation.ts \
@@ -16,7 +16,8 @@ TRANSLATIONS += plugins/Languages/fr/translation.ts \
     plugins/Languages/hi/translation.ts \
     plugins/Languages/nl/translation.ts \
     plugins/Languages/no/translation.ts \
-    plugins/Languages/pt/translation.ts
+    plugins/Languages/pt/translation.ts \
+    plugins/Languages/ko/translation.ts
 
 win32:RC_FILE += resources/resources-windows.rc
 TARGET = ultracopier

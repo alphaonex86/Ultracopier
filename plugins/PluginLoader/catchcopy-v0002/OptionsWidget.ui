@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>195</width>
-    <height>54</height>
+    <height>58</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -21,7 +21,7 @@
    <item>
     <widget class="QCheckBox" name="Debug">
      <property name="text">
-      <string>Debug</string>
+      <string notr="true">Debug</string>
      </property>
     </widget>
    </item>

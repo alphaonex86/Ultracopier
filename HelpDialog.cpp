@@ -81,6 +81,7 @@ void HelpDialog::reloadTextValue()
 	ui->label_description->setText(text);
 
 	text=ui->label_site->text();
+	//: This site need be the official site of ultracopier, into the right languages, english if not exists
 	text=text.replace("%1",tr("http://ultracopier.first-world.info/"));
 	ui->label_site->setText(text);
 

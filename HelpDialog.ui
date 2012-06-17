@@ -67,7 +67,7 @@
        <item>
         <widget class="QLabel" name="label_description">
          <property name="text">
-          <string>Based on Qt. It provide advanced copier with more advanced feature. It's under GPL3.
+          <string extracomment="%1 will be replaced by a variable content (normal, debug, ...)">Based on Qt. It provide advanced copier with more advanced feature. It's under GPL3.
 This version is compiled as version: %1.</string>
          </property>
         </widget>
@@ -75,7 +75,7 @@ This version is compiled as version: %1.</string>
        <item>
         <widget class="QLabel" name="label_site">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For more information see the website &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string extracomment="%1 will be remplaced by the website into the corresponding languages">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For more information see the website &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="openExternalLinks">
           <bool>true</bool>
@@ -85,7 +85,7 @@ This version is compiled as version: %1.</string>
        <item>
         <widget class="QLabel" name="label_platform">
          <property name="text">
-          <string>Platform: %1</string>
+          <string extracomment="%1 will be replaced by the platform (windows, mac, linux, ...)">Platform: %1</string>
          </property>
         </widget>
        </item>
