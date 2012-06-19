@@ -12,6 +12,7 @@
 #include <QVariant>
 #include <QString>
 #include <QStringList>
+#include <QHash>
 
 #include "interface/FacilityInterface.h"
 #include "Environment.h"
@@ -42,14 +43,6 @@ public:
 	/// \brief Do the simplified time
 	QString simplifiedRemainingTime(const quint32 &seconds);
 private:
-	//translated string
-	QString Translation_Copy_engine;
-	QString Translation_Copy;
-	QString Translation_Move;
-	QString Translation_Pause;
-	QString Translation_Resume;
-	QString Translation_Skip;
-	QString Translation_Unlimited;
 	//undirect translated string
 	QString Translation_perSecond;
 	QString Translation_tooBig;
@@ -69,6 +62,7 @@ private:
 	QString Translation_SimplifiedRemaningTime_AboutHours;
 	//internal fonction
 	QString adaptString(const float &nb);
+	QHash<QString,QString> translations;
 public slots:
 	/// \brief To force the text re-translation
 	void retranslate();

@@ -217,7 +217,7 @@ void OptionEngine::internal_resetToDefaultValue()
 		{
 			if(j.value().currentValue!=j.value().defaultValue)
 			{
-				j.value().currentValue!=j.value().defaultValue;
+				GroupKeysList[i.key()][j.key()].currentValue=j.value().defaultValue;
 				emit newOptionValue(i.key(),j.key(),j.value().currentValue);
 			}
 			++j;

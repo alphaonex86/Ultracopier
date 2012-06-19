@@ -20,14 +20,6 @@ FacilityEngine::FacilityEngine()
 /// \brief To force the text re-translation
 void FacilityEngine::retranslate()
 {
-	//translated string
-	Translation_Copy_engine=tr("Copy engine");
-	Translation_Copy=tr("Copy");
-	Translation_Move=tr("Move");
-	Translation_Pause=tr("Pause");
-	Translation_Resume=tr("Resume");
-	Translation_Skip=tr("Skip");
-	Translation_Unlimited=tr("Unlimited");
 	//undirect translated string
 	Translation_perSecond="/"+tr("s");
 	Translation_tooBig=tr("Too big");
@@ -44,6 +36,42 @@ void FacilityEngine::retranslate()
 	Translation_SimplifiedRemaningTime_AboutSeconds=tr("About %10 seconds remaining");
 	Translation_SimplifiedRemaningTime_AboutMinutes=tr("About %1 minutes remaining");
 	Translation_SimplifiedRemaningTime_AboutHours=tr("About %1 hours remaining");
+	//load the translations tab
+	translations["Copy engine"]=tr("Copy engine");
+	translations["Copy"]=tr("Copy");
+	translations["Move"]=tr("Move");
+	translations["Pause"]=tr("Pause");
+	translations["Resume"]=tr("Resume");
+	translations["Skip"]=tr("Skip");
+	translations["Unlimited"]=tr("Unlimited");
+	translations["Source"]=tr("Source");
+	translations["Size"]=tr("Size");
+	translations["Destination"]=tr("Destination");
+	translations["Quit"]=tr("Quit");
+	translations["Target"]=tr("Target");
+	translations["Time remaining:"]=tr("Time remaining:");
+	translations["Listing"]=tr("Listing");
+	translations["Copying"]=tr("Copying");
+	translations["Listing and copying"]=tr("Listing and copying");
+	translations["Time remaining:"]=tr("Time remaining:");
+	//for copy engine
+	translations["Ask"]=tr("Ask");
+	translations["Skip"]=tr("Skip");
+	translations["Overwrite"]=tr("Overwrite");
+	translations["Overwrite if newer"]=tr("Overwrite if newer");
+	translations["Overwrite if the last modification dates are different"]=tr("Overwrite if the last modification dates are different");
+	translations["Rename"]=tr("Rename");
+	translations["Put to end of the list"]=tr("Put to end of the list");
+	translations["Select source directory"]=tr("Select source directory");
+	translations["Select destination directory"]=tr("Select destination directory");
+	translations["Internal error"]=tr("Internal error");
+	translations["Select one or more files to open"]=tr("Select one or more files to open");
+	translations["All files"]=tr("All files");
+	translations["Save transfer list"]=tr("Save transfer list");
+	translations["Open transfer list"]=tr("Open transfer list");
+	translations["Transfer list"]=tr("Transfer list");
+	translations["Error"]=tr("Error");
+	translations["Not supported on this platform"]=tr("Not supported on this platform");
 }
 
 /// \brief convert size in Byte to String
@@ -112,22 +140,13 @@ QString FacilityEngine::sizeUnitToString(const SizeUnit &sizeUnit)
 /// \brief translate the text
 QString FacilityEngine::translateText(const QString &text)
 {
-	if(text=="Copy engine")
-		return Translation_Copy_engine;
-	if(text=="Copy")
-		return Translation_Copy;
-	if(text=="Move")
-		return Translation_Move;
-	if(text=="Pause")
-		return Translation_Pause;
-	if(text=="Resume")
-		return Translation_Resume;
-	if(text=="Skip")
-		return Translation_Skip;
-	if(text=="Unlimited")
-		return Translation_Unlimited;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"text: "+text);
-	return text;
+	if(translations.contains(text))
+		return translations[text];
+	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"text: "+text);
+		return text;
+	}
 }
 
 /// \brief speed to string in byte per seconds

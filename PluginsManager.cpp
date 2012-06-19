@@ -283,7 +283,7 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
 				else if(tempCat=="Themes")
 					thePlugin->category=PluginType_Themes;
 				else
-					thePlugin->errorString="Unknow category: "+(int)thePlugin->category;
+					thePlugin->errorString="Unknow category: "+QString::number((int)thePlugin->category);
 				if(thePlugin->errorString.isEmpty())
 				{
 					if(thePlugin->category!=PluginType_Languages)

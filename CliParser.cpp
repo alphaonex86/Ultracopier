@@ -143,7 +143,7 @@ void CliParser::showHelp(const bool &incorrectArguments)
 	qDebug() << "--help : "+tr("To have this help");
 	qDebug() << "quit : "+tr("To quit the other instance running (if have)");
 	qDebug() << "Transfer-list [transfer list file] : "+tr("To pass transfer list to do");
-	qDebug() << "cp [source [source2]] [destination] : "+tr("To copy source separated by space to destination. If destination is \"?\", ultracopier will ask it to the user");
+	qDebug() << "cp [source [source2]] [destination] : "+tr("To copy sources separated by space to destination. If destination is \"?\", ultracopier will ask it to the user");
 	qDebug() << "mv [source [source2]] [destination] : "+tr("Same as above, but with move");
 
 	QString message;
@@ -153,7 +153,7 @@ void CliParser::showHelp(const bool &incorrectArguments)
 	message+="<li><b>--help</b> : "+tr("To have this help")+"</li>\n";
 	message+="<li><b>quit</b> : "+tr("To quit the other instance running (if have)")+"</li>\n";
 	message+="<li><b>Transfer-list [transfer list file]</b> : "+tr("To pass transfer list to do")+"</li>\n";
-	message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy source separated by space to destination. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
+	message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy sources separated by space to destination. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
 	message+="<li><b>mv [source [source2]] [destination]</b> : "+tr("Same as above, but with move")+"</li>\n";
 	message+=+"</ul>";
 	if(incorrectArguments)

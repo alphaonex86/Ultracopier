@@ -577,6 +577,8 @@ QStringList OptionDialog::copyEngineStringList()
 
 void OptionDialog::newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
 {
+	Q_UNUSED(isLoaded);
+	Q_UNUSED(havePlugin);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start: isLoaded: %1, havePlugin: %2, name: %3").arg(isLoaded).arg(havePlugin).arg(name));
 	pluginOptionsWidget tempItem;
 	tempItem.name=name;
