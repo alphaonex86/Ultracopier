@@ -399,13 +399,13 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 		{
 			case CustomOperation:
 			if(!itemTransfer.custom_with_progression)
-				returnItem.progressBar_file=0;
+				returnItem.progressBar_file=-1;
 			else
 			{
 				if(itemTransfer.generalData.size>0)
 					returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
 				else
-					returnItem.progressBar_file=0;
+					returnItem.progressBar_file=-1;
 			}
 			break;
 			case Transfer:
@@ -416,6 +416,9 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 			break;
 			case PostOperation:
 				returnItem.progressBar_file=65535;
+			break;
+			case PreOperation:
+				returnItem.progressBar_file=0;
 			break;
 			default:
 				returnItem.progressBar_file=0;

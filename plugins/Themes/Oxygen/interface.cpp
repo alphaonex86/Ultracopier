@@ -417,7 +417,13 @@ void Themes::updateCurrentFileInformation()
 		ui->from->setText(transfertItem.from);
 		ui->to->setText(transfertItem.to);
 		ui->current_file->setText(transfertItem.current_file);
-		ui->progressBar_file->setValue(transfertItem.progressBar_file);
+		if(transfertItem.progressBar_file!=-1)
+		{
+			ui->progressBar_file->setRange(0,65535);
+			ui->progressBar_file->setValue(transfertItem.progressBar_file);
+		}
+		else
+			ui->progressBar_file->setRange(0,0);
 	}
 	else
 	{

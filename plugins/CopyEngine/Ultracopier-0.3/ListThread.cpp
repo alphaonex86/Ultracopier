@@ -794,7 +794,7 @@ void ListThread::sendProgression()
 	while(int_for_loop<loop_size)
 	{
 		temp_transfer_thread=transferThreadList.at(int_for_loop);
-		if(temp_transfer_thread->getStat()==TransferStat_Transfer)
+		if(temp_transfer_thread->getStat()==TransferStat_Transfer || temp_transfer_thread->getStat()==TransferStat_Checksum)
 		{
 			copiedSize=temp_transfer_thread->copiedSize();
 			currentProgression+=copiedSize;
@@ -803,7 +803,10 @@ void ListThread::sendProgression()
 			else
 				localOverSize=0;
 			totalSize=temp_transfer_thread->transferSize+localOverSize;
-			tempItem.current=copiedSize;
+			if(temp_transfer_thread->getStat()==TransferStat_Checksum)
+				tempItem.current=temp_transfer_thread->realByteTransfered();
+			else
+				tempItem.current=copiedSize;
 			tempItem.id=temp_transfer_thread->transferId;
 			tempItem.total=totalSize;
 			progressionList << tempItem;
@@ -1456,7 +1459,7 @@ void ListThread::newTransferStat(TransferStat stat,quint64 id)
 			newAction.type=PostOperation;
 		break;
 		case TransferStat_Checksum:
-			newAction.type=PostOperation;
+			newAction.type=CustomOperation;
 		break;
 		default:
 			return;
@@ -1668,7 +1671,7 @@ void ListThread::createTransferThread()
 	connect(last,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
 	connect(last,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
 	connect(last,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
-	connect(last,SIGNAL(pushStat(TransferStat,quint64)),		this,SLOT(newTransferStat(TransferStat,quint64)),	Qt::QueuedConnection);
+	connect(last,SIGNAL(pushStat(TransferStat,quint64)),				this,SLOT(newTransferStat(TransferStat,quint64)),	Qt::QueuedConnection);
 
 	connect(this,SIGNAL(send_sendNewRenamingRules(QString,QString)),		last,SLOT(setRenamingRules(QString,QString)),				Qt::QueuedConnection);
 

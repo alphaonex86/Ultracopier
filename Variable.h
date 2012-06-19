@@ -13,9 +13,9 @@
 /// \brief Max number of ligne show on the GUI
 #define ULTRACOPIER_DEBUG_MAX_GUI_LINE 5000
 /// \brief the version
-#define ULTRACOPIER_VERSION		"0.3.0.8"
+#define ULTRACOPIER_VERSION		"0.3.0.9"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,8
+#define ULTRACOPIER_WINDOWS_VERSION	0,3,0,9
 // define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS

@@ -628,7 +628,7 @@ void TransferThread::compareChecksum()
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] the checksum not match");
 		//emit error here, and wait to resume
-		emit errorOnFile(destinationInfo,"Checksum not match");
+		emit errorOnFile(destinationInfo,tr("The checksums not match"));
 	}
 }
 
@@ -1048,6 +1048,8 @@ qint64 TransferThread::copiedSize()
 	case TransferStat_Transfer:
 	case TransferStat_PostOperation:
 		return readThread.getLastGoodPosition();
+	case TransferStat_Checksum:
+		return transferSize;
 	default:
 		return 0;
 	}
@@ -1164,7 +1166,10 @@ quint64 TransferThread::realByteTransfered()
 	{
 	case TransferStat_Transfer:
 	case TransferStat_PostOperation:
+	case TransferStat_Checksum:
 		return readThread.getLastGoodPosition();
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] transferSize: "+QString::number(transferSize));
+		return transferSize;
 	default:
 		return 0;
 	}

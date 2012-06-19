@@ -257,6 +257,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 				//without progression
 				if(custom_with_progression)
 				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("switch the file: %1 to custom operation with progression").arg(action.addAction.id));
 					if(startId.remove(action.addAction.id))
 						if(!stopId.contains(action.addAction.id))
 							stopId << action.addAction.id;
@@ -264,6 +265,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 				//with progression
 				else
 				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("switch the file: %1 to custom operation without progression").arg(action.addAction.id));
 					stopId.remove(action.addAction.id);
 					if(!startId.contains(action.addAction.id))
 						startId << action.addAction.id;
@@ -395,13 +397,13 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 		{
 			case CustomOperation:
 			if(!itemTransfer.custom_with_progression)
-				returnItem.progressBar_file=0;
+				returnItem.progressBar_file=-1;
 			else
 			{
 				if(itemTransfer.generalData.size>0)
 					returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
 				else
-					returnItem.progressBar_file=0;
+					returnItem.progressBar_file=-1;
 			}
 			break;
 			case Transfer:
@@ -412,6 +414,9 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 			break;
 			case PostOperation:
 				returnItem.progressBar_file=65535;
+			break;
+			case PreOperation:
+				returnItem.progressBar_file=0;
 			break;
 			default:
 				returnItem.progressBar_file=0;
