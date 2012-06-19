@@ -231,7 +231,7 @@ void Themes::actionInProgess(EngineActionInProgress action)
 		case CopyingAndListing:
 			ui->pauseButton->setEnabled(true);
 			haveStarted=true;
-			ui->cancelButton->setText(tr("Quit"));
+			ui->cancelButton->setText(facilityEngine->translateText("Quit"));
 		break;
 		case Idle:
 			ui->pauseButton->setEnabled(false);
@@ -255,7 +255,7 @@ void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
 
 void Themes::remainingTime(const int &remainingSeconds)
 {
-	QString labelTimeRemaining("<html><body style=\"white-space:nowrap;\">"+tr("Time remaining: "));
+	QString labelTimeRemaining("<html><body style=\"white-space:nowrap;\">"+facilityEngine->translateText("Time remaining:")+" ");
 	if(remainingSeconds==-1)
 		labelTimeRemaining+="&#8734;";
 	else
@@ -569,7 +569,7 @@ void Themes::updateSpeed()
 		if(currentSpeed==0)
 		{
 			ui->SliderSpeed->setValue(0);
-			ui->label_SpeedMaxValue->setText(tr("Unlimited"));
+			ui->label_SpeedMaxValue->setText(facilityEngine->translateText("Unlimited"));
 		}
 		else if(currentSpeed<=1024)
 		{

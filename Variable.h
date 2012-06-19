@@ -9,7 +9,7 @@
 #define VARIABLE_H
 
 /// \brief Un-comment this next line to put ultracopier in debug mode
-//#define ULTRACOPIER_DEBUG
+#define ULTRACOPIER_DEBUG
 /// \brief Max number of ligne show on the GUI
 #define ULTRACOPIER_DEBUG_MAX_GUI_LINE 5000
 /// \brief the version

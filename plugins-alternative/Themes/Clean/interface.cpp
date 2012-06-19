@@ -130,16 +130,16 @@ void InterfacePlugin::updateTitle()
 	switch(action)
 	{
 		case Listing:
-			actionString=tr("Listing");
+			actionString=facilityEngine->translateText("Listing");
 		break;
 		case Copying:
-			actionString=tr("Copying");
+			actionString=facilityEngine->translateText("Copying");
 		break;
 		case CopyingAndListing:
-			actionString=tr("Listing & Copying");
+			actionString=facilityEngine->translateText("Listing and copying");
 		break;
 		case Idle:
-			actionString=tr("Ultracopier");
+			actionString="Ultracopier";
 		break;
 	}
 	this->setWindowTitle(actionString+" - "+tr("%1/%2 files, %3/%4").arg(currentFile).arg(totalFile).arg(currentSize).arg(totalSize));

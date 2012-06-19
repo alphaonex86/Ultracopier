@@ -96,20 +96,31 @@ public:
 	/// \brief set if is in pause
 	void isInPause(bool);
 signals:
+	#ifdef ULTRACOPIER_PLUGIN_DEBUG
+	/// \brief To debug source
+	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+	#endif
 	//set the transfer list
-	void setActionOnList(ActionOnCopyList action);
+	void removeItems(QList<int> ids);
+	void moveItemsOnTop(QList<int> ids);
+	void moveItemsUp(QList<int> ids);
+	void moveItemsDown(QList<int> ids);
+	void moveItemsOnBottom(QList<int> ids);
+	void exportTransferList();
+	void importTransferList();
 	//user ask ask to add folder (add it with interface ask source/destination)
 	void userAddFolder(CopyMode);
 	void userAddFile(CopyMode);
+	void urlDropped(QList<QUrl> urls);
 	//action on the copy
 	void pause();
 	void resume();
 	void skip(quint64 id);
 	void cancel();
 	//edit the action
-	void setCollisionAction(QString action);
-	void setErrorAction(QString action);
-	void newSpeedLimitation(qint64);///< -1 if not able, 0 if disabled
+	void sendCollisionAction(QString action);
+	void sendErrorAction(QString action);
+	void newSpeedLimitation(qint64);
 public:
 	//constructor and destructor
 	InterfacePlugin(FacilityInterface * facilityEngine);

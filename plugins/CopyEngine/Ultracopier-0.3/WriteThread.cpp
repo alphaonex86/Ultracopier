@@ -190,7 +190,8 @@ void WriteThread::stop()
 	freeBlock.release();
 	// useless because stopIt will close all thread, but if thread not runing run it
 	endIsDetected();
-	//emit internalStartClose();
+	//for the stop for skip: void TransferThread::skip()
+	emit internalStartClose();
 }
 
 void WriteThread::flushBuffer()
@@ -319,6 +320,7 @@ void WriteThread::reopen()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
 	stopIt=true;
+	endDetected=false;
 	emit internalStartReopen();
 }
 
@@ -422,6 +424,7 @@ void WriteThread::checkSum()
 {
 	//QByteArray blockArray;
 	QCryptographicHash hash(QCryptographicHash::Sha1);
+	endDetected=false;
 	lastGoodPosition=0;
 	file.seek(0);
 	int sizeReaden=0;

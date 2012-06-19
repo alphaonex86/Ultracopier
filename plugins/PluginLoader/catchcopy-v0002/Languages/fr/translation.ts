@@ -4,7 +4,7 @@
 <context>
     <name>OptionsWidget</name>
     <message>
-        <location filename="../../OptionsWidget.ui"/>
+        <location filename="../../OptionsWidget.ui" line="17"/>
         <source>All the dlls are importants</source>
         <translation>Toutes les dlls sont importantes</translation>
     </message>

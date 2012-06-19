@@ -94,11 +94,11 @@ QVariant TransferModel::headerData( int section, Qt::Orientation orientation, in
 	if ( role == Qt::DisplayRole && orientation == Qt::Horizontal && section >= 0 && section < COLUMN_COUNT ) {
 		switch ( section ) {
 			case 0:
-			return tr( "Source" );
+			return facilityEngine->translateText("Source");
 			case 1:
-			return tr( "Size" );
+			return facilityEngine->translateText("Size");
 			case 2:
-			return tr( "Target" );
+			return facilityEngine->translateText("Destination");
 		}
 	}
 
@@ -178,6 +178,26 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 			case MoveItem:
 			{
 				//bool current_entry=
+				if(action.userAction.position<0)
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+					break;
+				}
+				if(action.userAction.position>(transfertItemList.size()-1))
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+					break;
+				}
+				if(action.userAction.moveAt<0)
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+					break;
+				}
+				if(action.userAction.moveAt>(transfertItemList.size()-1))
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+					break;
+				}
 				transfertItemList.move(action.userAction.position,action.userAction.moveAt);
 			}
 			break;
@@ -185,6 +205,16 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 			{
 				if(currentIndexSearch>0 && action.userAction.position<=currentIndexSearch)
 					currentIndexSearch--;
+				if(action.userAction.position<0)
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+					break;
+				}
+				if(action.userAction.position>(transfertItemList.size()-1))
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+					break;
+				}
 				transfertItemList.removeAt(action.userAction.position);
 				currentFile++;
 				startId.remove(action.addAction.id);
@@ -389,7 +419,7 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 				break;
 		}
 	}
-	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("No have running item"));
+/*	else
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("No have running item"));*/
 	return returnItem;
 }

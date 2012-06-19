@@ -926,6 +926,11 @@ void ListThread::removeItems(const QList<int> &ids)
 //put on top
 void ListThread::moveItemsOnTop(QList<int> ids)
 {
+	if(actionToDoListTransfer.size()<=1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"list size is empty");
+		return;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//do list operation
 	int indexToMove=0;
@@ -956,6 +961,11 @@ void ListThread::moveItemsOnTop(QList<int> ids)
 //move up
 void ListThread::moveItemsUp(QList<int> ids)
 {
+	if(actionToDoListTransfer.size()<=1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"list size is empty");
+		return;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//do list operation
 	int lastGoodPositionExtern=0;
@@ -1002,6 +1012,11 @@ void ListThread::moveItemsUp(QList<int> ids)
 //move down
 void ListThread::moveItemsDown(QList<int> ids)
 {
+	if(actionToDoListTransfer.size()<=1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"list size is empty");
+		return;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//do list operation
 	int lastGoodPositionExtern=numberOfTransferIntoToDoList;
@@ -1049,6 +1064,11 @@ void ListThread::moveItemsDown(QList<int> ids)
 //put on bottom
 void ListThread::moveItemsOnBottom(QList<int> ids)
 {
+	if(actionToDoListTransfer.size()<=1)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"list size is empty");
+		return;
+	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//do list operation
 	int lastGoodPositionExtern=numberOfTransferIntoToDoList;
@@ -1549,6 +1569,9 @@ void ListThread::timedUpdateDebugDialog()
 			break;
 		case TransferStat_PostTransfer:
 			stat="PostTransfer";
+			break;
+		case TransferStat_Checksum:
+			stat="Checksum";
 			break;
 		default:
 			stat=QString("??? (%1)").arg(transferThreadList.at(index)->getStat());

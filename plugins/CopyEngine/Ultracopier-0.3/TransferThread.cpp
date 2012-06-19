@@ -558,6 +558,7 @@ void TransferThread::readIsFinish()
 	real_doChecksum=doChecksum && (!checksumOnlyOnError || fileContentError);
 	if(real_doChecksum)
 	{
+		readIsFinishVariable=false;
 		stat=TransferStat_Checksum;
 		sourceChecksum=QByteArray();
 		destinationChecksum=QByteArray();
@@ -583,6 +584,7 @@ void TransferThread::writeIsFinish()
 	//check here if need start checksuming or not
 	if(real_doChecksum)
 	{
+		writeIsFinishVariable=false;
 		stat=TransferStat_Checksum;
 		writeThread.startCheckSum();
 	}
@@ -604,22 +606,29 @@ void TransferThread::writeChecksumFinish(const QByteArray& checksum)
 
 void TransferThread::compareChecksum()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] start");
-	if(sourceChecksum.size()==destinationChecksum.size())
+	if(sourceChecksum.size()==0)
 	{
-		//assume checksum as always good
-		if(true || sourceChecksum==destinationChecksum)
-		{
-			readThread.postOperation();
-			writeThread.postOperation();
-			stat=TransferStat_PostTransfer;
-			emit pushStat(stat,transferId);
-		}
-		else
-		{
-			//emit error here, and wait to resume
-			emit errorOnFile(destinationInfo,"Checksum not match");
-		}
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] the checksum of source is missing");
+		return;
+	}
+	if(destinationChecksum.size()==0)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] the checksum of destination is missing");
+		return;
+	}
+	if(sourceChecksum==destinationChecksum)
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] the checksum match");
+		readThread.postOperation();
+		writeThread.postOperation();
+		stat=TransferStat_PostTransfer;
+		emit pushStat(stat,transferId);
+	}
+	else
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] the checksum not match");
+		//emit error here, and wait to resume
+		emit errorOnFile(destinationInfo,"Checksum not match");
 	}
 }
 
@@ -664,7 +673,12 @@ bool TransferThread::checkIfAllIsClosed()
 	}
 	else
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] wait self close");
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] "+QString("wait self close: readIsReadyVariable: %1, readIsClosedVariable: %2, writeIsReadyVariable: %3, writeIsClosedVariable: %4")
+					 .arg(readIsReadyVariable)
+					 .arg(readIsClosedVariable)
+					 .arg(writeIsReadyVariable)
+					 .arg(writeIsClosedVariable)
+					 );
 		return false;
 	}
 }
@@ -819,7 +833,11 @@ void TransferThread::retryAfterError()
 			readThread.reopen();
 		}
 		else //only checksum difference
+		{
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] retry all the transfer");
+			canStartTransfer=true;
 			ifCanStartTransfer();
+		}
 		return;
 	}
 	if(writeError)
@@ -991,6 +1009,17 @@ void TransferThread::skip()
 		}
 		break;
 	case TransferStat_Transfer:
+		needSkip=true;
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] case Transfer, readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
+		if(!checkIfAllIsClosed())
+		{
+			if(readIsReadyVariable && !readIsClosedVariable)
+				readThread.stop();
+			if(writeIsReadyVariable && !writeIsClosedVariable)
+				writeThread.stop();
+		}
+		break;
+	case TransferStat_Checksum:
 		needSkip=true;
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] case Transfer, readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
 		if(!checkIfAllIsClosed())

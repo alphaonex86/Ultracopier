@@ -108,7 +108,7 @@ void InterfacePlugin::actionInProgess(EngineActionInProgress action)
 			haveStarted=true;
 		break;
 		case Idle:
-			ui->cancelButton->setText(tr("Quit"));
+			ui->cancelButton->setText(facilityEngine->translateText("Quit"));
 		break;
 		default:
 		break;
@@ -199,9 +199,9 @@ void InterfacePlugin::forceCopyMode(CopyMode mode)
 	modeIsForced=true;
 	this->mode=mode;
 	if(mode==Copy)
-		this->setWindowTitle("Ultracopier - "+tr("Copy"));
+		this->setWindowTitle("Ultracopier - "+facilityEngine->translateText("Copy"));
 	else
-		this->setWindowTitle("Ultracopier - "+tr("Move"));
+		this->setWindowTitle("Ultracopier - "+facilityEngine->translateText("Move"));
 	updateModeAndType();
 }
 

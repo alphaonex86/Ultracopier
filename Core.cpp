@@ -665,8 +665,8 @@ void Core::connectInterfaceAndSync(const int &index)
 void Core::disconnectEngine(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
-	CopyInstance& currentCopyInstance=copyList[index];
-	disconnect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)));//to check to change
+//	CopyInstance& currentCopyInstance=copyList[index];
+/*	disconnect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)));//to check to change
 	disconnect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),		this,SLOT(newCollisionAction(QString)));
 	disconnect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)));
 	disconnect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)));
@@ -674,7 +674,7 @@ void Core::disconnectEngine(const int &index)
 	disconnect(currentCopyInstance.engine,SIGNAL(cancelAll()),				this,SLOT(copyInstanceCanceledByEngine()));
 	disconnect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)));
 	disconnect(currentCopyInstance.engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)));
-	disconnect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)));
+	disconnect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)));*/
 
 }
 
@@ -682,7 +682,7 @@ void Core::disconnectInterface(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
 	CopyInstance& currentCopyInstance=copyList[index];
-	disconnect(currentCopyInstance.interface,SIGNAL(pause()),				currentCopyInstance.engine,SLOT(pause()));
+/*	disconnect(currentCopyInstance.interface,SIGNAL(pause()),				currentCopyInstance.engine,SLOT(pause()));
 	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				currentCopyInstance.engine,SLOT(resume()));
 	disconnect(currentCopyInstance.interface,SIGNAL(skip(quint64)),				currentCopyInstance.engine,SLOT(skip(quint64)));
 	disconnect(currentCopyInstance.interface,SIGNAL(sendErrorAction(QString)),		currentCopyInstance.engine,SLOT(setErrorAction(QString)));
@@ -704,7 +704,7 @@ void Core::disconnectInterface(const int &index)
 
 	disconnect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)));
 	disconnect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	currentCopyInstance.interface,SLOT(setFileProgression(QList<ProgressionItem>)));
-	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)));
+	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)));*/
 }
 
 void Core::periodiqueSync()

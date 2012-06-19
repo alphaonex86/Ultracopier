@@ -22,10 +22,11 @@ namespace Ui {
 	class options;
 }
 
-copyEngine::copyEngine(FacilityInterface * facilityInterface) :
+copyEngine::copyEngine(FacilityInterface * facilityEngine) :
 	ui(new Ui::options())
 {
-	listThread=new ListThread(facilityInterface);
+	listThread=new ListThread(facilityEngine);
+	this->facilityEngine=facilityEngine;
 	filters=NULL;
 	renamingRules=NULL;
 	qRegisterMetaType<TransferThread *>("TransferThread *");
@@ -214,30 +215,34 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 	this->interface=interface;
 	filters=new Filters(tempWidget);
 	renamingRules=new RenamingRules(tempWidget);
-	connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
-	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
-	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
-	connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
-	connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
-	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
-	connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
-	connect(ui->osBuffer,			SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
-	connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
-	connect(ui->osBufferLimit,		SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
 
-	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters()));
-	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
+	if(uiIsInstalled)
+	{
+		connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setRightTransfer(bool)));
+		connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
+		connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
+		connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
+		connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
+		connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
+		connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
+		connect(ui->osBuffer,			SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
+		connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
+		connect(ui->osBufferLimit,		SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
+
+		connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters()));
+		connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
+
+		if(!connect(renamingRules,SIGNAL(sendNewRenamingRules(QString,QString)),this,SLOT(sendNewRenamingRules(QString,QString))))
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
+		if(!connect(ui->renamingRules,SIGNAL(clicked()),this,SLOT(showRenamingRules())))
+			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect renamingRules.clicked()");
+	}
 
 	filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 	set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
 
 	renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
 	emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
-
-	if(!connect(renamingRules,SIGNAL(sendNewRenamingRules(QString,QString)),this,SLOT(sendNewRenamingRules(QString,QString))))
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
-	if(!connect(ui->renamingRules,SIGNAL(clicked()),this,SLOT(showRenamingRules())))
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect renamingRules.clicked()");
 }
 
 bool copyEngine::haveSameSource(const QStringList &sources)
@@ -255,11 +260,11 @@ bool copyEngine::newCopy(const QStringList &sources)
 	if(forcedMode && mode!=Copy)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
-		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to move, you can't copy with it"));
+		QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to move, you can't copy with it"));
 		return false;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if(destination.isEmpty() || destination.isNull() || destination=="")
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Canceled by the user");
@@ -273,7 +278,7 @@ bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
 	if(forcedMode && mode!=Copy)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
-		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to move, you can't copy with it"));
+		QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to move, you can't copy with it"));
 		return false;
 	}
 	return listThread->newCopy(sources,destination);
@@ -284,11 +289,11 @@ bool copyEngine::newMove(const QStringList &sources)
 	if(forcedMode && mode!=Move)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
-		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to copy, you can't move with it"));
+		QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to copy, you can't move with it"));
 		return false;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	QString destination = QFileDialog::getExistingDirectory(interface,tr("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if(destination.isEmpty() || destination.isNull() || destination=="")
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Canceled by the user");
@@ -302,7 +307,7 @@ bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 	if(forcedMode && mode!=Move)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
-		QMessageBox::critical(NULL,tr("Internal error"),tr("The engine is forced to copy, you can't move with it"));
+		QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to copy, you can't move with it"));
 		return false;
 	}
 	return listThread->newMove(sources,destination);
@@ -330,12 +335,12 @@ QList<QPair<QString,QString> > copyEngine::getCollisionAction()
 {
 	QPair<QString,QString> tempItem;
 	QList<QPair<QString,QString> > list;
-	tempItem.first=tr("Ask");tempItem.second="ask";list << tempItem;
-	tempItem.first=tr("Skip");tempItem.second="skip";list << tempItem;
-	tempItem.first=tr("Overwrite");tempItem.second="overwrite";list << tempItem;
-	tempItem.first=tr("Overwrite if newer");tempItem.second="overwriteIfNewer";list << tempItem;
-	tempItem.first=tr("Overwrite if the last modification dates are different");tempItem.second="overwriteIfNotSameModificationDate";list << tempItem;
-	tempItem.first=tr("Rename");tempItem.second="rename";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Ask");tempItem.second="ask";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Skip");tempItem.second="skip";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Overwrite");tempItem.second="overwrite";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Overwrite if newer");tempItem.second="overwriteIfNewer";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Overwrite if the last modification dates are different");tempItem.second="overwriteIfNotSameModificationDate";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Rename");tempItem.second="rename";list << tempItem;
 	return list;
 }
 
@@ -343,9 +348,9 @@ QList<QPair<QString,QString> > copyEngine::getErrorAction()
 {
 	QPair<QString,QString> tempItem;
 	QList<QPair<QString,QString> > list;
-	tempItem.first=tr("Ask");tempItem.second="ask";list << tempItem;
-	tempItem.first=tr("Skip");tempItem.second="skip";list << tempItem;
-	tempItem.first=tr("Put to end of the list");tempItem.second="putToEndOfTheList";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Ask");tempItem.second="ask";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Skip");tempItem.second="skip";list << tempItem;
+	tempItem.first=facilityEngine->translateText("Put to end of the list");tempItem.second="putToEndOfTheList";list << tempItem;
 	return list;
 }
 
@@ -429,7 +434,7 @@ void copyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamin
 
 bool copyEngine::userAddFolder(const CopyMode &mode)
 {
-	QString source = QFileDialog::getExistingDirectory(interface,tr("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	QString source = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 	if(source.isEmpty() || source.isNull() || source=="")
 		return false;
 	if(mode==Copy)
@@ -443,9 +448,9 @@ bool copyEngine::userAddFile(const CopyMode &mode)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	QStringList sources = QFileDialog::getOpenFileNames(
 		interface,
-		tr("Select one or more files to open"),
+		facilityEngine->translateText("Select one or more files to open"),
 		"",
-		tr("All files")+" (*)");
+		facilityEngine->translateText("All files")+" (*)");
 	if(sources.isEmpty())
 		return false;
 	if(mode==Copy)
@@ -509,7 +514,7 @@ void copyEngine::forceMode(const CopyMode &mode)
 	if(forcedMode)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Mode forced previously"));
-		QMessageBox::critical(NULL,tr("Internal error"),tr("The mode have been forced previously, it's internal error, please report it"));
+		QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The mode have been forced previously, it's internal error, please report it"));
 		return;
 	}
 	if(mode==Copy)
@@ -523,7 +528,7 @@ void copyEngine::forceMode(const CopyMode &mode)
 
 void copyEngine::exportTransferList()
 {
-	QString fileName = QFileDialog::getSaveFileName(NULL,tr("Save transfer list"),"transfer-list.lst",tr("Transfer list")+" (*.lst)");
+	QString fileName = QFileDialog::getSaveFileName(NULL,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
 	if(fileName.isEmpty())
 		return;
 	emit signal_exportTransferList(fileName);
@@ -531,7 +536,7 @@ void copyEngine::exportTransferList()
 
 void copyEngine::importTransferList()
 {
-	QString fileName = QFileDialog::getOpenFileName(NULL,tr("Open transfer list"),"transfer-list.lst",tr("Transfer list")+" (*.lst)");
+	QString fileName = QFileDialog::getOpenFileName(NULL,facilityEngine->translateText("Open transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
 	if(fileName.isEmpty())
 		return;
 	emit signal_importTransferList(fileName);
@@ -539,12 +544,12 @@ void copyEngine::importTransferList()
 
 void copyEngine::warningTransferList(const QString &warning)
 {
-	QMessageBox::warning(interface,tr("Error"),warning);
+	QMessageBox::warning(interface,facilityEngine->translateText("Error"),warning);
 }
 
 void copyEngine::errorTransferList(const QString &error)
 {
-	QMessageBox::critical(interface,tr("Error"),error);
+	QMessageBox::critical(interface,facilityEngine->translateText("Error"),error);
 }
 
 bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)

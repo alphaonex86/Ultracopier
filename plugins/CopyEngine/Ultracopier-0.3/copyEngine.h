@@ -40,7 +40,7 @@ class copyEngine : public PluginInterface_CopyEngine
 {
         Q_OBJECT
 public:
-	copyEngine(FacilityInterface * facilityInterface);
+	copyEngine(FacilityInterface * facilityEngine);
 	~copyEngine();
 	void connectTheSignalsSlots();
 private:
@@ -54,6 +54,7 @@ private:
 	QWidget *			interface;
 	Filters *			filters;
 	RenamingRules *			renamingRules;
+	FacilityInterface *		facilityEngine;
 	int				maxSpeed;
 	bool				doRightTransfer;
 	bool				keepDate;
