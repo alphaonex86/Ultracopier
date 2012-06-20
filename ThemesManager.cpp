@@ -186,6 +186,7 @@ void ThemesManager::allPluginIsLoaded()
 		if(pluginList.at(index).plugin.name==name)
 		{
 			currentPluginIndex=index;
+			emit theThemeIsReloaded();
 			return;
 		}
 		index++;

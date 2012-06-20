@@ -681,8 +681,9 @@ void Core::disconnectEngine(const int &index)
 void Core::disconnectInterface(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
-	CopyInstance& currentCopyInstance=copyList[index];
-/*	disconnect(currentCopyInstance.interface,SIGNAL(pause()),				currentCopyInstance.engine,SLOT(pause()));
+	Q_UNUSED(index);
+/*	CopyInstance& currentCopyInstance=copyList[index];
+	disconnect(currentCopyInstance.interface,SIGNAL(pause()),				currentCopyInstance.engine,SLOT(pause()));
 	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				currentCopyInstance.engine,SLOT(resume()));
 	disconnect(currentCopyInstance.interface,SIGNAL(skip(quint64)),				currentCopyInstance.engine,SLOT(skip(quint64)));
 	disconnect(currentCopyInstance.interface,SIGNAL(sendErrorAction(QString)),		currentCopyInstance.engine,SLOT(setErrorAction(QString)));
