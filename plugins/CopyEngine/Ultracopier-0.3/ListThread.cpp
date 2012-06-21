@@ -85,7 +85,6 @@ ListThread::~ListThread()
 //transfer is finished
 void ListThread::transferInodeIsClosed()
 {
-	qint64 copiedSize;
 	numberOfInodeOperation--;
 	temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
 	if(temp_transfer_thread==NULL)
@@ -119,15 +118,6 @@ void ListThread::transferInodeIsClosed()
 			if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
 				updateTheStatus();
 
-			copiedSize=temp_transfer_thread->copiedSize();
-			if(copiedSize>(qint64)temp_transfer_thread->transferSize)
-			{
-				oversize=copiedSize-temp_transfer_thread->transferSize;
-				bytesToTransfer+=oversize;
-				bytesTransfered+=oversize;
-			}
-
-			bytesTransfered+=temp_transfer_thread->transferSize;
 			temp_transfer_thread->transferId=0;
 			temp_transfer_thread->transferSize=0;
 			#ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -170,6 +160,17 @@ void ListThread::transferIsFinished()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("transfer thread not located!"));
 		return;
 	}
+
+	//add the current size of file, to general size because it's finish
+	copiedSize=temp_transfer_thread->copiedSize();
+	if(copiedSize>(qint64)temp_transfer_thread->transferSize)
+	{
+		oversize=copiedSize-temp_transfer_thread->transferSize;
+		bytesToTransfer+=oversize;
+		bytesTransfered+=oversize;
+	}
+	bytesTransfered+=temp_transfer_thread->transferSize;
+
 //	emit newTransferStop(temp_transfer_thread->transferId);
 	numberOfTranferRuning--;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start transferIsFinished(), numberOfTranferRuning: "+QString::number(numberOfTranferRuning));
@@ -797,11 +798,17 @@ void ListThread::sendProgression()
 		if(temp_transfer_thread->getStat()==TransferStat_Transfer || temp_transfer_thread->getStat()==TransferStat_Checksum)
 		{
 			copiedSize=temp_transfer_thread->copiedSize();
+
+			//for the general progression
 			currentProgression+=copiedSize;
+
+			//the oversize (when the file is bigger after/during the copy then what was during the listing)
 			if(copiedSize>(qint64)temp_transfer_thread->transferSize)
 				localOverSize=copiedSize-temp_transfer_thread->transferSize;
 			else
 				localOverSize=0;
+
+			//the current size copied
 			totalSize=temp_transfer_thread->transferSize+localOverSize;
 			if(temp_transfer_thread->getStat()==TransferStat_Checksum)
 				tempItem.current=temp_transfer_thread->realByteTransfered();
@@ -810,6 +817,8 @@ void ListThread::sendProgression()
 			tempItem.id=temp_transfer_thread->transferId;
 			tempItem.total=totalSize;
 			progressionList << tempItem;
+
+			//add the oversize to the general progression
 			oversize+=localOverSize;
 		}
 		int_for_loop++;

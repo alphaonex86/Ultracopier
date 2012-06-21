@@ -117,7 +117,6 @@ bool ReadThread::seek(qint64 position)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start with: "+QString::number(position));
 	if(position>file.size())
 		return false;
-	lastGoodPosition=position;
 	return file.seek(position);
 }
 
@@ -237,6 +236,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
 		putInPause=false;
 		if(resetLastGoodPosition)
 		{
+			lastGoodPosition=0;
 			seek(0);
 			emit opened();
 		}
@@ -502,13 +502,13 @@ void ReadThread::startCheckSum()
 
 qint64 ReadThread::getLastGoodPosition()
 {
-	if(lastGoodPosition>file.size())
+	/*if(lastGoodPosition>file.size())
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] Bug, the lastGoodPosition is greater than the file size!");
 		return file.size();
 	}
-	else
-		return lastGoodPosition;
+	else*/
+	return lastGoodPosition;
 }
 
 //reopen after an error
@@ -533,8 +533,7 @@ bool ReadThread::internalReopen()
         {
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"["+QString::number(id)+"] source file have changed since the last open, restart all");
                 //fix this function like the close function
-                lastGoodPosition=0;
-                if(internalOpen(false))
+		if(internalOpen(true))
                 {
                         emit resumeAfterErrorByRestartAll();
                         return true;
