@@ -388,10 +388,15 @@ void TransferModel::setFileProgression(QList<ProgressionItem> &progressionList)
 TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 {
 	currentTransfertItem returnItem;
-	returnItem.haveItem=internalRunningOperation.size()>0;
+	returnItem.haveItem=startId.size()>0;
 	if(returnItem.haveItem)
 	{
-		const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.constBegin().value();
+		if(!internalRunningOperation.contains(*startId.constBegin()))
+		{
+			returnItem.haveItem=false;
+			return returnItem;
+		}
+		const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation[*startId.constBegin()];
 		returnItem.from=itemTransfer.generalData.sourceFullPath;
 		returnItem.to=itemTransfer.generalData.destinationFullPath;
 		returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
@@ -414,10 +419,14 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 			else
 				returnItem.progressBar_file=0;
 			break;
+			//should never pass here
 			case PostOperation:
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
 				returnItem.progressBar_file=65535;
 			break;
+			//should never pass here
 			case PreOperation:
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
 				returnItem.progressBar_file=0;
 			break;
 			default:
