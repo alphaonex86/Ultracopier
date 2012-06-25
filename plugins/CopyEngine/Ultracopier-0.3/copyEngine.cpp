@@ -63,10 +63,12 @@ copyEngine::copyEngine(FacilityInterface * facilityEngine) :
 
 copyEngine::~copyEngine()
 {
-	if(filters!=NULL)
+	/*if(filters!=NULL)
 		delete filters;
 	if(renamingRules!=NULL)
 		delete renamingRules;
+		destroyed by the widget parent, here the interface
+	*/
 	stopIt=true;
 	delete listThread;
         delete ui;
@@ -89,8 +91,6 @@ void copyEngine::connectTheSignalsSlots()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newErrorAction()");
 	if(!connect(listThread,SIGNAL(isInPause(bool)),				this,SIGNAL(isInPause(bool)),				Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect isInPause()");
-	if(!connect(listThread,SIGNAL(cancelAll()),					this,SIGNAL(cancelAll()),				Qt::QueuedConnection))
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect cancelAll()");
 	if(!connect(listThread,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SIGNAL(error(QString,quint64,QDateTime,QString)),	Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect error()");
 	if(!connect(listThread,SIGNAL(rmPath(QString)),				this,SIGNAL(rmPath(QString)),				Qt::QueuedConnection))
@@ -105,6 +105,8 @@ void copyEngine::connectTheSignalsSlots()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect pushGeneralProgression()");
 	if(!connect(listThread,SIGNAL(syncReady()),						this,SIGNAL(syncReady()),					Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect syncReady()");
+	if(!connect(listThread,SIGNAL(canBeDeleted()),						this,SIGNAL(canBeDeleted()),					Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect canBeDeleted()");
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	if(!connect(listThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),			this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect debugInformation()");
@@ -131,6 +133,8 @@ void copyEngine::connectTheSignalsSlots()
 	if(!connect(listThread,SIGNAL(send_realBytesTransfered(quint64)),					this,SLOT(get_realBytesTransfered(quint64)),				Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
 
+	if(!connect(this,SIGNAL(tryCancel()),						listThread,SIGNAL(tryCancel()),				Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect tryCancel()");
 	if(!connect(this,SIGNAL(signal_pause()),						listThread,SLOT(pause()),				Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_pause()");
 	if(!connect(this,SIGNAL(signal_resume()),						listThread,SLOT(resume()),				Qt::QueuedConnection))
@@ -480,7 +484,7 @@ void copyEngine::cancel()
 	stopIt=true;
 	timerProgression.stop();
 	timerActionDone.stop();
-	listThread->cancel();
+	emit tryCancel();
 }
 
 void copyEngine::removeItems(const QList<int> &ids)

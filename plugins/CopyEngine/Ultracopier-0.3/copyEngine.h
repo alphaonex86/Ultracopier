@@ -329,7 +329,14 @@ signals:
 	void signal_setComboBoxFolderColision(FolderExistsAction action);
 	void signal_setFolderColision(FolderExistsAction action);
 
+	//when the cancel is clicked on copy engine dialog
 	void cancelAll();
+
+	//internal cancel
+	void tryCancel();
+
+	//when can be deleted
+	void canBeDeleted();
 
 	//send error occurred
 	void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);

@@ -176,8 +176,11 @@ class PluginInterface_CopyEngine : public QObject
 		 * first = current transfered byte, second = byte to transfer * /
 		void pushGeneralProgression(const quint64 &,const quint64 &);
 		
-		
+		//when the cancel is clicked on copy engine dialog
 		void cancelAll();
+
+		//when can be deleted
+		void canBeDeleted();
 		
 		//send error occurred
 		void error(QString path,quint64 size,QDateTime mtime,QString error);
@@ -216,6 +219,6 @@ class PluginInterface_CopyEngineFactory : public QObject
 
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.8");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.10");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

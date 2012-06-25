@@ -325,7 +325,8 @@ signals:
 	void newErrorAction(QString action);
         void isInPause(bool);
 
-	void cancelAll();
+	//when can be deleted
+	void canBeDeleted();
 
         //send error occurred
         void error(QString path,quint64 size,QDateTime mtime,QString error);

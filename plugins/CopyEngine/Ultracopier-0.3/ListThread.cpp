@@ -667,7 +667,6 @@ void ListThread::cancel()
 		return;
 	}
 	stopIt=true;
-	disconnect(this);
         int index=0;
 	loop_size=transferThreadList.size();
 	while(index<loop_size)
@@ -688,6 +687,7 @@ void ListThread::cancel()
 	}
 	quit();
 	waitCancel.release();
+	emit canBeDeleted();
 }
 
 //speed limitation

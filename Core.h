@@ -119,6 +119,7 @@ class Core : public QObject, public GlobalClass
 		void copyInstanceCanceledByEngine();
 		void copyInstanceCanceledByInterface();
 		void copyInstanceCanceledByIndex(const int &index);
+		void deleteCopyEngine();
 		void actionInProgess(const EngineActionInProgress &action);
 		void newFolderListing(const QString &path);
 		void newCollisionAction(const QString &action);

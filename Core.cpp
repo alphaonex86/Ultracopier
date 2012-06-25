@@ -370,8 +370,8 @@ int Core::connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngin
 			connectInterfaceAndSync(copyList.count()-1);
 			return newItem.id;
 		}
-		delete newItem.engine;
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to load the interface, copy aborted");
+		delete newItem.engine;
 		QMessageBox::critical(NULL,tr("Error"),tr("Unable to load the interface, copy aborted"));
 	}
 	else
@@ -581,6 +581,8 @@ void Core::connectEngine(const int &index)
 	if(!connect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)),Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for mkPath()").arg(index).arg((quint64)sender()));
 	if(!connect(currentCopyInstance.engine,SIGNAL(syncReady()),					this,SLOT(syncReady()),Qt::QueuedConnection))
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
+	if(!connect(currentCopyInstance.engine,SIGNAL(canBeDeleted()),					this,SLOT(deleteCopyEngine()),Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
 }
 
@@ -813,7 +815,7 @@ void Core::copyInstanceCanceledByIndex(const int &index)
 	CopyInstance& currentCopyInstance=copyList[index];
 	currentCopyInstance.engine->cancel();
 	delete currentCopyInstance.nextConditionalSync;
-	delete currentCopyInstance.engine;
+	currentCopyInstance.engine->cancel();
 	delete currentCopyInstance.interface;
 	index_sub_loop=0;
 	loop_size=currentCopyInstance.orderId.size();
@@ -827,6 +829,27 @@ void Core::copyInstanceCanceledByIndex(const int &index)
 	if(copyList.size()==0)
 		forUpateInformation.stop();
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"copyList.size(): "+QString::number(copyList.size()));
+}
+
+void Core::deleteCopyEngine()
+{
+	QObject * senderObject=sender();
+	if(senderObject==NULL)
+	{
+		//QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Qt sender() NULL");
+		return;
+	}
+	PluginInterface_CopyEngine * copyEngine = static_cast<PluginInterface_CopyEngine *>(senderObject);
+	if(copyEngine==NULL)
+	{
+		//QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Qt sender() NULL");
+		return;
+	}
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, delete the copy engine");
+	delete copyEngine;
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"stop, delete the copy engine");
 }
 
 //error occurred
