@@ -10,8 +10,6 @@
 
 #include "Core.h"
 
-/// \todo rename openNewCopy() to openNewInstance()
-
 Core::Core(CopyEngineManager *copyEngineList)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -167,7 +165,7 @@ void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForThe
 	copyList.last().interface->haveExternalOrder();
 }
 
-/// \todo name to open the right copy engine
+/// \brief name to open the right copy engine
 void Core::addWindowCopyMove(const CopyMode &mode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+name);
@@ -187,7 +185,7 @@ void Core::addWindowCopyMove(const CopyMode &mode,const QString &name)
 	}
 }
 
-/// \todo name to open the right copy engine
+/// \brief name to open the right copy engine
 void Core::addWindowTransfer(const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start"+name);

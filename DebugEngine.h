@@ -66,7 +66,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		/** \brief ask to the user where save the bug report
 		\warning This function can be only call by the graphical thread */
 		void saveBugReport();
-		/// \todo Put into DebugEngine the dialog to send by the net
+
 		void addDebugInformation(const DebugLevel_custom &level,const QString& fonction,const QString& text,QString file="",const int& ligne=-1,const QString& location="Core");
 	private:
 		/// \brief Initiate the ultracopier event dispatcher and check if no other session is running

@@ -148,7 +148,7 @@ private:
 		MoveReturn_moved=1,
 		MoveReturn_error=2
 	};
-	TransferStat		stat;
+	TransferStat		transfer_stat;
 	ReadThread		readThread;
 	WriteThread		writeThread;
 	QString			source;

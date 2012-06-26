@@ -11,6 +11,7 @@ namespace Ui {
 class Filters;
 }
 
+/** To add/edit one filter rules */
 class Filters : public QDialog
 {
 	Q_OBJECT

@@ -9,9 +9,6 @@
 
 #include "factory.h"
 
-/// \todo connect in global options the change
-/// \todo do the translating as instant WITH protection of the combobox (via setText)
-
 Factory::Factory() :
 	ui(new Ui::options())
 {

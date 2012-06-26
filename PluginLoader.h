@@ -26,9 +26,6 @@ namespace Ui {
     class PluginLoaderOptions;
 }
 
-/// \todo PluginLoader -> put plugin by plugin loading to add plugin no reload all
-/// \todo async the plugin call
-
 /** \brief Load the plugin
 
   It use ResourcesManager(), but it provide more higher abstraction. It parse the plugins information, check it, check the dependancies.

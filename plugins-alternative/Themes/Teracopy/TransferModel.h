@@ -14,18 +14,20 @@
 
 #include "../../../interface/FacilityInterface.h"
 
+/// \brief model to store the transfer list
 class TransferModel : public QAbstractTableModel
 {
 	Q_OBJECT
 public:
+	/// \brief the transfer item displayed
 	struct transfertItem
 	{
 		quint64 id;
 		QString source;
 		QString size;
 		QString destination;
-		bool done;
 	};
+	/// \brief the transfer item with progression
 	struct ItemOfCopyListWithMoreInformations
 	{
 		quint64 currentProgression;
@@ -33,6 +35,7 @@ public:
 		ActionTypeCopyList actionType;
 		bool custom_with_progression;
 	};
+	/// \brief returned first transfer item
 	struct currentTransfertItem
 	{
 		quint64 id;

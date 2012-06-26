@@ -53,6 +53,7 @@ public slots:
 	void newLanguageLoaded();
 	void synchronizeItems(const QList<returnActionOnCopyList>& returnActions);
 public:
+	/// \brief the transfer item with progression
 	struct ItemOfCopyListWithMoreInformations
 	{
 		quint64 currentProgression;
@@ -60,6 +61,7 @@ public:
 		ActionTypeCopyList actionType;
 		bool custom_with_progression;
 	};
+	/// \brief returned first transfer item
 	struct currentTransfertItem
 	{
 		quint64 id;

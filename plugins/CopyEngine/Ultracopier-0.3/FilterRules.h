@@ -11,6 +11,7 @@ namespace Ui {
 class FilterRules;
 }
 
+/** All the filter rules to include/exclude some file during the listing */
 class FilterRules : public QDialog
 {
 	Q_OBJECT

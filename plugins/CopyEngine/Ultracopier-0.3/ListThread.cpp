@@ -1,16 +1,5 @@
 #include "ListThread.h"
 
-/// \todo do pushed or instant mount point (setDrive, ...)
-/// \todo semaphore to prevent dual mkpath
-/// \todo repair the mkpath, to use mkpath class before file transfer to have the folder
-/// \todo do QThread( parent )
-/** \todo when overwrite with large inode operation, it not start specificly the first in the list
-  When that's is finish, send start file at real transfer start, not inode operation start **/
-/** \todo group setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) and setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
-  and check if I can choose case by case if I wish overwrite, skip, ... */
-/// \todo move directly the folder when it's needed
-/// \todo connect folder error of mkpath and rmpath class
-
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
 	qRegisterMetaType<DebugLevel>("DebugLevel");

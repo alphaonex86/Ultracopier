@@ -20,8 +20,6 @@
 #include "StructEnumDefinition_CopyEngine.h"
 #include "AvancedQFile.h"
 
-/// \todo do fake open/close
-
 /// \brief Thread changed to open/close and read the source file
 class ReadThread : public QThread
 {

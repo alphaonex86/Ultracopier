@@ -9,18 +9,28 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
 	action=FileError_Cancel;
 	ui->label_error->setText(errorString);
 	ui->label_content_file_name->setText(fileInfo.fileName());
-	ui->label_content_size->setText(QString::number(fileInfo.size()));
-	QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
-	if(maxTime<fileInfo.lastModified())
+	if(fileInfo.exists())
 	{
-		ui->label_modified->setVisible(true);
-		ui->label_content_modified->setVisible(true);
-		ui->label_content_modified->setText(fileInfo.lastModified().toString());
+		ui->label_content_size->setText(QString::number(fileInfo.size()));
+		QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
+		if(maxTime<fileInfo.lastModified())
+		{
+			ui->label_modified->setVisible(true);
+			ui->label_content_modified->setVisible(true);
+			ui->label_content_modified->setText(fileInfo.lastModified().toString());
+		}
+		else
+		{
+			ui->label_modified->setVisible(false);
+			ui->label_content_modified->setVisible(false);
+		}
 	}
 	else
 	{
-		ui->label_modified->setVisible(false);
-		ui->label_content_modified->setVisible(false);
+		ui->label_size->hide();
+		ui->label_content_size->hide();
+		ui->label_modified->hide();
+		ui->label_content_modified->hide();
 	}
 	if(!havePutAtTheEndButton)
 		ui->PutToBottom->hide();

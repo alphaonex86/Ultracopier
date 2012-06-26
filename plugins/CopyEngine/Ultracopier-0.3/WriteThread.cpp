@@ -5,7 +5,6 @@
 WriteThread::WriteThread()
 {
 	stopIt=false;
-	/// \test lot of level of priority
 	isOpen.release();
 	start();
 	moveToThread(this);

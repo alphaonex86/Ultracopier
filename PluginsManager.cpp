@@ -598,7 +598,6 @@ QList<PluginsAvailable> PluginsManager::getPlugins()
 }
 
 /// \brief show the information
-/// \todo pass plugin info
 void PluginsManager::showInformation(const QString &path)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");

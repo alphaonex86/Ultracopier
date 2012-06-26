@@ -77,6 +77,7 @@ enum ApplyOn
 	ApplyOn_folder,
 };
 
+/** to store into different way the filter rules to be exported */
 struct Filters_rules
 {
 	QString search_text;

@@ -6,24 +6,15 @@
 #ifdef Q_CC_GNU
 //this next header is needed to change file time/date under gcc
 #include <utime.h>
+#include <sys/stat.h>
 #endif
-
-/// \todo manage case resume after error, because previously inode opt free before
-/// \todo manage error in pre and post operation
-/// \todo remove destination when canceled
-/// \todo test if source if closed by end but write error
-/// \todo pointer for readThread and writeThread to destroy the read before the write (prevent dead lock)
-/// \todo read close never call
-/// \todo readThreadIsReopened for the checksum, or if source read have failed (network share disconnecte and reconnected)
-
-/// \bug continue progress when write error
 
 TransferThread::TransferThread()
 {
 	start();
 	moveToThread(this);
 	needSkip		= false;
-	stat			= TransferStat_Idle;
+	transfer_stat			= TransferStat_Idle;
 	stopIt			= false;
 	fileExistsAction	= FileExists_NotSet;
 	alwaysDoFileExistsAction= FileExists_NotSet;
@@ -48,7 +39,7 @@ TransferThread::~TransferThread()
 void TransferThread::run()
 {
 	//ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start: "+QString::number((qint64)QThread::currentThreadId()));
-	stat			= TransferStat_Idle;
+	transfer_stat			= TransferStat_Idle;
 	stopIt			= false;
 	fileExistsAction	= FileExists_NotSet;
 	alwaysDoFileExistsAction= FileExists_NotSet;
@@ -83,13 +74,12 @@ void TransferThread::run()
 	connect(&writeThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
 	#endif
 
-	/// \todo do the current post opt only after the read write opt
 	exec();
 }
 
 TransferStat TransferThread::getStat()
 {
-	return stat;
+	return transfer_stat;
 }
 
 void TransferThread::startTheTransfer()
@@ -99,7 +89,7 @@ void TransferThread::startTheTransfer()
 
 void TransferThread::internalStartTheTransfer()
 {
-	if(stat==TransferStat_Idle)
+	if(transfer_stat==TransferStat_Idle)
 	{
 		if(mode!=Move)
 		{
@@ -108,12 +98,12 @@ void TransferThread::internalStartTheTransfer()
 		}
 		return;
 	}
-	if(stat==TransferStat_PostOperation)
+	if(transfer_stat==TransferStat_PostOperation)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] can't start transfert at PostOperation");
 		return;
 	}
-	if(stat==TransferStat_Transfer)
+	if(transfer_stat==TransferStat_Transfer)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] can't start transfert at Transfer");
 		return;
@@ -136,13 +126,13 @@ void TransferThread::internalStartTheTransfer()
 
 void TransferThread::setFiles(const QString &source,const qint64 &size,const QString &destination,const CopyMode &mode)
 {
-	if(stat!=TransferStat_Idle)
+	if(transfer_stat!=TransferStat_Idle)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
 		return;
 	}
 	//to prevent multiple file alocation into ListThread::doNewActions_inode_manipulation()
-	stat			= TransferStat_PreOperation;
+	transfer_stat			= TransferStat_PreOperation;
 	//emit pushStat(stat,transferId);
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start, source: "+source+", destination: "+destination);
 	this->source			= source;
@@ -160,7 +150,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
 
 void TransferThread::setFileExistsAction(const FileExistsAction &action)
 {
-	if(stat!=TransferStat_PreOperation)
+	if(transfer_stat!=TransferStat_PreOperation)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
 		return;
@@ -181,7 +171,7 @@ void TransferThread::setFileExistsAction(const FileExistsAction &action)
 
 void TransferThread::setFileRename(const QString &nameForRename)
 {
-	if(stat!=TransferStat_PreOperation)
+	if(transfer_stat!=TransferStat_PreOperation)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
 		return;
@@ -222,7 +212,7 @@ void TransferThread::resetExtraVariable()
 
 void TransferThread::preOperation()
 {
-	if(stat!=TransferStat_PreOperation)
+	if(transfer_stat!=TransferStat_PreOperation)
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
 		return;
@@ -289,7 +279,7 @@ bool TransferThread::destinationExists()
 	{
 		if(fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_Skip)
 		{
-			stat=TransferStat_Idle;
+			transfer_stat=TransferStat_Idle;
 			emit postOperationStopped();
 			return true;
 		}
@@ -344,7 +334,7 @@ bool TransferThread::destinationExists()
 				return false;
 			else
 			{
-				stat=TransferStat_Idle;
+				transfer_stat=TransferStat_Idle;
 				emit postOperationStopped();
 				return true;
 			}
@@ -355,7 +345,7 @@ bool TransferThread::destinationExists()
 				return false;
 			else
 			{
-				stat=TransferStat_Idle;
+				transfer_stat=TransferStat_Idle;
 				emit postOperationStopped();
 				return true;
 			}
@@ -439,7 +429,7 @@ void TransferThread::ifCanStartTransfer()
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] readIsReadyVariable: "+QString::number(readIsReadyVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable));
 	if(readIsReadyVariable && writeIsReadyVariable)
 	{
-		stat=TransferStat_WaitForTheTransfer;
+		transfer_stat=TransferStat_WaitForTheTransfer;
 		sended_state_readStopped	= false;
 		sended_state_writeStopped	= false;
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stat=WaitForTheTransfer");
@@ -451,7 +441,7 @@ void TransferThread::ifCanStartTransfer()
 		if(canStartTransfer)
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stat=Transfer");
-			stat=TransferStat_Transfer;
+			transfer_stat=TransferStat_Transfer;
 			if(!canBeMovedDirectlyVariable)
 			{
 				needRemove=true;
@@ -459,7 +449,7 @@ void TransferThread::ifCanStartTransfer()
 			}
 			else
 				tryMoveDirectly();
-			emit pushStat(stat,transferId);
+			emit pushStat(transfer_stat,transferId);
 		}
 		//else
 			//emit pushStat(stat,transferId);
@@ -521,7 +511,7 @@ bool TransferThread::setBlockSize(const unsigned int blockSize)
 //pause the copy
 void TransferThread::pause()
 {
-	if(stat==TransferStat_Idle)
+	if(transfer_stat==TransferStat_Idle)
 		return;
 	readThread.pause();
 }
@@ -529,7 +519,7 @@ void TransferThread::pause()
 //resume the copy
 void TransferThread::resume()
 {
-	if(stat==TransferStat_Idle)
+	if(transfer_stat==TransferStat_Idle)
 		return;
 	readThread.resume();
 }
@@ -538,7 +528,7 @@ void TransferThread::resume()
 void TransferThread::stop()
 {
 	stopIt=true;
-	if(stat==TransferStat_Idle)
+	if(transfer_stat==TransferStat_Idle)
 		return;
 	readThread.stop();
 	writeThread.stop();
@@ -559,17 +549,17 @@ void TransferThread::readIsFinish()
 	if(real_doChecksum)
 	{
 		readIsFinishVariable=false;
-		stat=TransferStat_Checksum;
+		transfer_stat=TransferStat_Checksum;
 		sourceChecksum=QByteArray();
 		destinationChecksum=QByteArray();
 		readThread.startCheckSum();
 	}
 	else
 	{
-		stat=TransferStat_PostTransfer;
+		transfer_stat=TransferStat_PostTransfer;
 		readThread.postOperation();
 	}
-	emit pushStat(stat,transferId);
+	emit pushStat(transfer_stat,transferId);
 }
 
 void TransferThread::writeIsFinish()
@@ -585,7 +575,7 @@ void TransferThread::writeIsFinish()
 	if(real_doChecksum)
 	{
 		writeIsFinishVariable=false;
-		stat=TransferStat_Checksum;
+		transfer_stat=TransferStat_Checksum;
 		writeThread.startCheckSum();
 	}
 	else
@@ -621,8 +611,8 @@ void TransferThread::compareChecksum()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] the checksum match");
 		readThread.postOperation();
 		writeThread.postOperation();
-		stat=TransferStat_PostTransfer;
-		emit pushStat(stat,transferId);
+		transfer_stat=TransferStat_PostTransfer;
+		emit pushStat(transfer_stat,transferId);
 	}
 	else
 	{
@@ -666,7 +656,7 @@ bool TransferThread::checkIfAllIsClosed()
 	if((!readIsReadyVariable || readIsClosedVariable) && (!writeIsReadyVariable || writeIsClosedVariable))
 	{
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] emit internalStartPostOperation() to do the real post operation");
-		stat=TransferStat_PostOperation;
+		transfer_stat=TransferStat_PostOperation;
 		//emit pushStat(stat,transferId);
 		emit internalStartPostOperation();
 		return true;
@@ -687,9 +677,9 @@ bool TransferThread::checkIfAllIsClosed()
 /// \todo the rights copy
 void TransferThread::postOperation()
 {
-	if(stat!=TransferStat_PostOperation)
+	if(transfer_stat!=TransferStat_PostOperation)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] need be in transfer, source: "+source+", destination: "+destination+", stat:"+QString::number(stat));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] need be in transfer, source: "+source+", destination: "+destination+", stat:"+QString::number(transfer_stat));
 		return;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
@@ -735,7 +725,7 @@ void TransferThread::postOperation()
 		else
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] try remove destination but not exists!");
 	}
-	stat=TransferStat_Idle;
+	transfer_stat=TransferStat_Idle;
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] emit postOperationStopped()");
 	emit postOperationStopped();
 }
@@ -802,16 +792,16 @@ void TransferThread::getReadError()
 void TransferThread::retryAfterError()
 {
 	//opening error
-	if(stat==TransferStat_PreOperation)
+	if(transfer_stat==TransferStat_PreOperation)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(stat));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(transfer_stat));
 		tryOpen();
 		return;
 	}
 	//data streaming error
-	if(stat!=TransferStat_PostOperation && stat!=TransferStat_Transfer && stat!=TransferStat_Checksum)
+	if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_Checksum)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(stat));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"["+QString::number(id)+"] is not idle, source: "+source+", destination: "+destination+", stat: "+QString::number(transfer_stat));
 		return;
 	}
 	if(canBeMovedDirectlyVariable)
@@ -820,7 +810,7 @@ void TransferThread::retryAfterError()
 		tryMoveDirectly();
 		return;
 	}
-	if(stat==TransferStat_Checksum)
+	if(transfer_stat==TransferStat_Checksum)
 	{
 		if(writeError)
 		{
@@ -863,7 +853,7 @@ void TransferThread::writeThreadIsReopened()
 		return;
 	}
 	writeError_destination_reopened=true;
-	if(stat==TransferStat_Checksum)
+	if(transfer_stat==TransferStat_Checksum)
 	{
 		writeThread.startCheckSum();
 		return;
@@ -971,19 +961,25 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
 	  if(maxTime>=sourceInfo.lastModified())
 		return;
 	  */
-	QFileInfo fileInfo(destination);
-	time_t ctime=fileInfo.created().toTime_t();
-	time_t actime=fileInfo.lastRead().toTime_t();
-	time_t modtime=fileInfo.lastModified().toTime_t();
+	/** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
 	#ifdef Q_CC_GNU
+		struct stat info;
+		stat(QString(source).toLatin1().data(),&info);
+		time_t ctime=info.st_ctim.tv_sec;
+		time_t actime=info.st_atim.tv_sec;
+		time_t modtime=info.st_mtim.tv_sec;
 		//this function avalaible on unix and mingw
 		utimbuf butime;
 		butime.actime=actime;
 		butime.modtime=modtime;
 		//creation time not exists into unix world
 		Q_UNUSED(ctime)
-		return utime(source.toLatin1().data(),&butime)==0;
+		return utime(destination.toLatin1().data(),&butime)==0;
 	#else
+		QFileInfo fileInfo(destination);
+		time_t ctime=fileInfo.created().toTime_t();
+		time_t actime=fileInfo.lastRead().toTime_t();
+		time_t modtime=fileInfo.lastModification().toTime_t();
 		return false;
 	#endif
 	return true;
@@ -992,8 +988,8 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
 //skip the copy
 void TransferThread::skip()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start with stat: "+QString::number(stat));
-	switch(stat)
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start with stat: "+QString::number(transfer_stat));
+	switch(transfer_stat)
 	{
 	case TransferStat_PreOperation:
 	case TransferStat_WaitForTheTransfer:
@@ -1043,7 +1039,7 @@ void TransferThread::skip()
 //return info about the copied size
 qint64 TransferThread::copiedSize()
 {
-	switch(stat)
+	switch(transfer_stat)
 	{
 	case TransferStat_Transfer:
 	case TransferStat_PostOperation:
@@ -1162,7 +1158,7 @@ void TransferThread::set_osBufferLimited(bool osBufferLimited)
 //not copied size, because that's count to the checksum, ...
 quint64 TransferThread::realByteTransfered()
 {
-	switch(stat)
+	switch(transfer_stat)
 	{
 	case TransferStat_Transfer:
 	case TransferStat_PostOperation:

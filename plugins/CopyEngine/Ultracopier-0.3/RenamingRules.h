@@ -8,6 +8,7 @@ namespace Ui {
 class RenamingRules;
 }
 
+/** Define rules for renaming */
 class RenamingRules : public QDialog
 {
 	Q_OBJECT

@@ -12,16 +12,6 @@
 #include "folderExistsDialog.h"
 #include "../../../interface/PluginInterface_CopyEngine.h"
 
-/// \todo do pushed or instant mount point (setDrive, ...)
-/// \todo semaphore to prevent dual mkpath
-/// \todo repair the mkpath, to use mkpath class before file transfer to have the folder
-/** \todo when overwrite with large inode operation, it not start specificly the first in the list
-  When that's is finish, send start file at real transfer start, not inode operation start **/
-
-namespace Ui {
-	class options;
-}
-
 copyEngine::copyEngine(FacilityInterface * facilityEngine) :
 	ui(new Ui::options())
 {

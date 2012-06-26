@@ -38,7 +38,6 @@ namespace Ui {
 /** \brief Define the class to manage and load the resources linked with the themes
 
 This class provide a core load and manage the resources */
-/// \todo use QHash to boot the load speed
 class PluginsManager : public QThread, public Singleton<PluginsManager>
 {
 	Q_OBJECT
@@ -46,9 +45,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 	public:
 		/// \brief to get plugins of type specific
 		QList<PluginsAvailable> getPluginsByCategory(const PluginType &type);
-		/** \brief to get plugins
-		  \todo check where is used to convert to PluginsAvailable
-		  */
+		/** \brief to get plugins */
 		QList<PluginsAvailable> getPlugins();
 		/// \brief get translated text
 		//QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
