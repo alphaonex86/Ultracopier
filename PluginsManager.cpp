@@ -630,7 +630,6 @@ void PluginsManager::removeThePluginSelected(const QString &path)
 		if(pluginsList.at(index).path==path)
 		{
 			QMessageBox::StandardButton reply;
-			/// \todo check if previous version as internal, if yes ask if switch to it, else remove and do marked to disable the internal version too
 	//		if(pluginsList.at(index).internalVersionAlternative.isEmpty())
 				reply = QMessageBox::question(NULL,tr("Remove %1").arg(pluginsList.at(index).name),tr("Are you sure about removing \"%1\" in version %2?").arg(pluginsList.at(index).name).arg(pluginsList.at(index).version),QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
 	//		else

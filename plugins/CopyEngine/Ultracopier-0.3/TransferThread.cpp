@@ -6,7 +6,13 @@
 #ifdef Q_CC_GNU
 //this next header is needed to change file time/date under gcc
 #include <utime.h>
+#include <time.h>
+#include <unistd.h>
 #include <sys/stat.h>
+#endif
+
+#ifndef Q_OS_UNIX
+#include <windows.h>
 #endif
 
 TransferThread::TransferThread()
@@ -962,9 +968,9 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
 		return;
 	  */
 	/** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
-	#ifdef Q_CC_GNU
+	#ifdef Q_OS_UNIX
 		struct stat info;
-		stat(QString(source).toLatin1().data(),&info);
+		stat(source.toLatin1().data(),&info);
 		time_t ctime=info.st_ctim.tv_sec;
 		time_t actime=info.st_atim.tv_sec;
 		time_t modtime=info.st_mtim.tv_sec;
@@ -976,13 +982,62 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
 		Q_UNUSED(ctime)
 		return utime(destination.toLatin1().data(),&butime)==0;
 	#else
-		QFileInfo fileInfo(destination);
-		time_t ctime=fileInfo.created().toTime_t();
-		time_t actime=fileInfo.lastRead().toTime_t();
-		time_t modtime=fileInfo.lastModification().toTime_t();
-		return false;
+		#ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+			struct __stat64 info;
+			_stat64(source.toLatin1().data(),&info);
+			time_t ctime=info.st_ctime;
+			time_t actime=info.st_atime;
+			time_t modtime=info.st_mtime;
+			//this function avalaible on unix and mingw
+			utimbuf butime;
+			butime.actime=actime;
+			butime.modtime=modtime;
+			//creation time not exists into unix world
+			Q_UNUSED(ctime)
+			return utime(destination.toLatin1().data(),&butime)==0;
+		#else
+			wchar_t filePath[65535];
+			source.toWCharArray(filePath);
+			HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+			destination.toWCharArray(filePath);
+			HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+			if(hFileSouce == INVALID_HANDLE_VALUE)
+			{
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open failed to read");
+				return false;
+			}
+			if(hFileDestination == INVALID_HANDLE_VALUE)
+			{
+				CloseHandle(hFileSouce);
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open failed to write");
+				return false;
+			}
+			FILETIME ftCreate, ftAccess, ftWrite;
+			if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
+			{
+				CloseHandle(hFileSouce);
+				CloseHandle(hFileDestination);
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to get the file time");
+				return false;
+			}
+			if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
+			{
+				CloseHandle(hFileSouce);
+				CloseHandle(hFileDestination);
+				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to set the file time");
+				return false;
+			}
+			CloseHandle(hFileSouce);
+			CloseHandle(hFileDestination);
+			return true;
+		#endif
 	#endif
-	return true;
+	/*QFileInfo fileInfo(destination);
+	time_t ctime=fileInfo.created().toTime_t();
+	time_t actime=fileInfo.lastRead().toTime_t();
+	time_t modtime=fileInfo.lastModification().toTime_t();
+	*/
+	return false;
 }
 
 //skip the copy
