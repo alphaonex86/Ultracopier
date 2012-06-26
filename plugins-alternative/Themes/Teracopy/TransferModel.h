@@ -26,6 +26,7 @@ public:
 		QString source;
 		QString size;
 		QString destination;
+		bool done;
 	};
 	/// \brief the transfer item with progression
 	struct ItemOfCopyListWithMoreInformations
