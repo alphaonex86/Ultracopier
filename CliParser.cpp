@@ -14,6 +14,10 @@ CliParser::CliParser(QObject *parent) :
 {
 }
 
+/** \brief method to parse the ultracopier arguments
+  \param ultracopierArguments the argument list
+  \param external true if the arguments come from other instance of ultracopier
+*/
 void CliParser::cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
@@ -135,6 +139,8 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 	showHelp();
 }
 
+/** \brief show the help
+ *\param incorrectArguments if the help is call because the arguments are wrong */
 void CliParser::showHelp(const bool &incorrectArguments)
 {
 	if(incorrectArguments)

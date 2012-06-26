@@ -62,7 +62,7 @@ EventDispatcher::EventDispatcher()
 	KeysList.clear();
 	KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
 	KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
-	KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(3)));
+	KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
 	options->addOptionGroup("Ultracopier",KeysList);
 	if(options->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && options->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
 	{

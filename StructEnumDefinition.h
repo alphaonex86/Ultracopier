@@ -60,12 +60,13 @@ enum EngineActionInProgress
 	CopyingAndListing	= Listing | Copying
 };
 
+/// \brief the level of information
 enum DebugLevel
 {
-	DebugLevel_Information=0x00000001,
-	DebugLevel_Critical=0x00000002,
-	DebugLevel_Warning=0x00000003,
-	DebugLevel_Notice=0x00000004
+	DebugLevel_Information=0x00000001,	///< Information like the compiler, OS, Qt version, all to know in witch condition ultracopier is launched
+	DebugLevel_Critical=0x00000002,		///< Critical error, where it don't know how skip it
+	DebugLevel_Warning=0x00000003,		///< Error, but have way to skip it
+	DebugLevel_Notice=0x00000004		///< General information to debug, what file is open, what event is received, ...
 };
 
 enum SizeUnit
@@ -96,7 +97,7 @@ enum ActionTypeCopyList
 	MoveItem=0x00000000,
 	RemoveItem=0x00000001,
 	AddingItem=0x00000002,
-	//Item action
+	//Item action, to inform the stat of one entry
 	PreOperation=0x00000003,
 	Transfer=0x00000004,
 	PostOperation=0x00000005,

@@ -72,23 +72,47 @@ class Core : public QObject, public GlobalClass
 			bool copyEngineIsSync;
 		};
 		QList<CopyInstance> copyList;
+		/** open with specific source/destination
+		\param move Copy or move
+		\param ignoreMode if need ignore the mode
+		\param protocolsUsedForTheSources protocols used for sources
+		\param protocolsUsedForTheDestination protocols used for destination
+		*/
 		int openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources=QStringList(),const QString &protocolsUsedForTheDestination="");
+		/** open with specific copy engine
+		\param move Copy or move
+		\param ignoreMode if need ignore the mode
+		\param protocolsUsedForTheSources protocols used for sources
+		\param protocolsUsedForTheDestination protocols used for destination
+		*/
 		int openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QString &name);
-		int incrementId();
-		int nextId;
-		QList<int> idList;
-		QTime lastProgressionTime;
+
+		/// \brief get the right copy instance (copy engine + interface), by signal emited from copy engine
 		int indexCopySenderCopyEngine();
+		/// \brief get the right copy instance (copy engine + interface), by signal emited from interface
 		int indexCopySenderInterface();
+
 		void connectEngine(const int &index);
 		void connectInterfaceAndSync(const int &index);
 		void disconnectEngine(const int &index);
 		void disconnectInterface(const int &index);
-		void periodiqueSync(const int &index);
-		QTimer forUpateInformation;
+
+		/** \brief update at periodic interval, the synchronization between copy engine and interface, but for specific entry
+		\see forUpateInformation */
+		void periodicSynchronization(const int &index);
+
+		//for the internal management
+		int incrementId();
+		int nextId;
+		QList<int> idList;
+		QTime lastProgressionTime;
+		QTimer forUpateInformation;///< used to call \see periodicSynchronization()
 		void resetSpeedDetected(const int &index);
+
+		/** Connect the copy engine instance provided previously to the management */
 		int connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
-		LogThread log;
+
+		LogThread log;///< To save the log like mkpath, rmpath, error, copy, ...
 		//temp variable
 		int index,index_sub_loop,loop_size,loop_sub_size;
 		double totTime;
@@ -116,27 +140,45 @@ class Core : public QObject, public GlobalClass
 		/** new transfer list pased by the CLI */
 		void newTransferList(QString engine,QString mode,QString file);
 	private slots:
+		/// \brief the copy engine have canceled the transfer
 		void copyInstanceCanceledByEngine();
+		/// \brief the interface have canceled the transfer
 		void copyInstanceCanceledByInterface();
+		/// \brief the transfer have been canceled
 		void copyInstanceCanceledByIndex(const int &index);
+		/// \brief only when the copy engine say it's ready to delete them self, it call this
 		void deleteCopyEngine();
+
+		// some stat update
 		void actionInProgess(const EngineActionInProgress &action);
 		void newFolderListing(const QString &path);
 		void newCollisionAction(const QString &action);
 		void newErrorAction(const QString &action);
 		void isInPause(const bool&);
-		void periodiqueSync();
+
+		/** \brief update at periodic interval, the synchronization between copy engine and interface
+		\see forUpateInformation */
+		void periodicSynchronization();
+
+		//reset some information
 		void resetSpeedDetectedEngine();
 		void resetSpeedDetectedInterface();
+
+		//load the interface
 		void loadInterface();
 		void unloadInterface();
+
 		//error occurred
 		void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
 		//for the extra logging
 		void rmPath(const QString &path);
 		void mkPath(const QString &path);
+
+		/// \brief used to drag and drop files
 		void urlDropped(const QList<QUrl> &urls);
+		/// \brief to rsync after a new interface connection
 		void syncReady();
+
 		void getActionOnList(const QList<returnActionOnCopyList> & actionList);
 		void pushGeneralProgression(const quint64 &current,const quint64 &total);
 };

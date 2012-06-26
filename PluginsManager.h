@@ -83,6 +83,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 		ResourcesManager *resources;
 		/// \brief List of plugins
 		QList<PluginsAvailable> pluginsList;
+		QMultiMap<PluginType,PluginsAvailable> pluginsListIndexed;
 		/// \brief to load the multi-language balise
 		void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
 		/// \brief check the dependencies

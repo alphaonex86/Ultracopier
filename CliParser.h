@@ -39,6 +39,8 @@ signals:
 	/** new transfer list pased by the CLI */
 	void newTransferList(QString engine,QString mode,QString file);
 private:
+	/** \brief show the help
+	 *\param incorrectArguments if the help is call because the arguments are wrong */
 	void showHelp(const bool &incorrectArguments=true);
 };
 

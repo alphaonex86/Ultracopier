@@ -22,7 +22,7 @@ Core::Core(CopyEngineManager *copyEngineList)
 	//connect(&copyEngineList,	SIGNAL(newCanDoOnlyCopy(bool)),				this,	SIGNAL(newCanDoOnlyCopy(bool)));
 	connect(themes,			SIGNAL(theThemeNeedBeUnloaded()),			this,	SLOT(unloadInterface()));
 	connect(themes,			SIGNAL(theThemeIsReloaded()),				this,	SLOT(loadInterface()));
-	connect(&forUpateInformation,	SIGNAL(timeout()),					this,	SLOT(periodiqueSync()));
+	connect(&forUpateInformation,	SIGNAL(timeout()),					this,	SLOT(periodicSynchronization()));
 
 	qRegisterMetaType<QList<returnActionOnCopyList> >("QList<returnActionOnCopyList>");
 	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
@@ -116,7 +116,7 @@ void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForThe
 
 void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination);
 	//search to group the window
 	int GroupWindowWhen=options->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
 	bool haveSameSource=false,haveSameDestination=false;
@@ -303,6 +303,12 @@ int Core::incrementId()
 	return nextId;
 }
 
+/** open with specific source/destination
+\param move Copy or move
+\param ignoreMode if need ignore the mode
+\param protocolsUsedForTheSources protocols used for sources
+\param protocolsUsedForTheDestination protocols used for destination
+*/
 int Core::openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -312,6 +318,12 @@ int Core::openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,
 	return connectCopyEngine(mode,ignoreMode,returnInformations);
 }
 
+/** open with specific copy engine
+\param move Copy or move
+\param ignoreMode if need ignore the mode
+\param protocolsUsedForTheSources protocols used for sources
+\param protocolsUsedForTheDestination protocols used for destination
+*/
 int Core::openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,const QString &name)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, mode: "+QString::number(mode)+", name: "+name);
@@ -321,6 +333,7 @@ int Core::openNewCopyEngineInstance(const CopyMode &mode,const bool &ignoreMode,
 	return connectCopyEngine(mode,ignoreMode,returnInformations);
 }
 
+/** Connect the copy engine instance provided previously to the management */
 int Core::connectCopyEngine(const CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations)
 {
 	if(returnInformations.canDoOnlyCopy)
@@ -434,7 +447,7 @@ void Core::actionInProgess(const EngineActionInProgress &action)
 			}
 		}
 		//do sync
-		periodiqueSync(index);
+		periodicSynchronization(index);
 		copyList[index].action=action;
 		if(copyList.at(index).interface!=NULL)
 			copyList.at(index).interface->actionInProgess(action);
@@ -497,6 +510,7 @@ void Core::isInPause(const bool &isPaused)
 	}
 }
 
+/// \brief get the right copy instance (copy engine + interface), by signal emited from copy engine
 int Core::indexCopySenderCopyEngine()
 {
 	QObject * senderObject=sender();
@@ -519,6 +533,7 @@ int Core::indexCopySenderCopyEngine()
 	return -1;
 }
 
+/// \brief get the right copy instance (copy engine + interface), by signal emited from interface
 int Core::indexCopySenderInterface()
 {
 	QObject * senderObject=sender();
@@ -661,7 +676,7 @@ void Core::connectInterfaceAndSync(const int &index)
 	currentCopyInstance.engine->syncTransferList();
 
 	//force the updating, without wait the timer
-	periodiqueSync(index);
+	periodicSynchronization(index);
 }
 
 void Core::disconnectEngine(const int &index)
@@ -710,19 +725,19 @@ void Core::disconnectInterface(const int &index)
 	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)));*/
 }
 
-void Core::periodiqueSync()
+void Core::periodicSynchronization()
 {
 	index_sub_loop=0;
 	loop_size=copyList.size();
 	while(index_sub_loop<loop_size)
 	{
 		if(copyList.at(index_sub_loop).action==Copying || copyList.at(index_sub_loop).action==CopyingAndListing)
-			periodiqueSync(index_sub_loop);
+			periodicSynchronization(index_sub_loop);
 		index_sub_loop++;
 	}
 }
 
-void Core::periodiqueSync(const int &index)
+void Core::periodicSynchronization(const int &index)
 {
 	CopyInstance& currentCopyInstance=copyList[index];
 	if(currentCopyInstance.engine==NULL || currentCopyInstance.interface==NULL)
@@ -787,6 +802,7 @@ void Core::periodiqueSync(const int &index)
 	}
 }
 
+/// \brief the copy engine have canceled the transfer
 void Core::copyInstanceCanceledByEngine()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -797,6 +813,7 @@ void Core::copyInstanceCanceledByEngine()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
+/// \brief the interface have canceled the transfer
 void Core::copyInstanceCanceledByInterface()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -807,6 +824,7 @@ void Core::copyInstanceCanceledByInterface()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
+/// \brief the transfer have been canceled
 void Core::copyInstanceCanceledByIndex(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, remove with the index: "+QString::number(index));
@@ -831,6 +849,7 @@ void Core::copyInstanceCanceledByIndex(const int &index)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"copyList.size(): "+QString::number(copyList.size()));
 }
 
+/// \brief only when the copy engine say it's ready to delete them self, it call this
 void Core::deleteCopyEngine()
 {
 	QObject * senderObject=sender();
@@ -877,6 +896,7 @@ void Core::mkPath(const QString &path)
 	log.mkPath(path);
 }
 
+/// \brief to rsync after a new interface connection
 void Core::syncReady()
 {
 	int index=indexCopySenderCopyEngine();
@@ -911,6 +931,7 @@ void Core::pushGeneralProgression(const quint64 &current,const quint64 &total)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
+/// \brief used to drag and drop files
 void Core::urlDropped(const QList<QUrl> &urls)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");

@@ -164,11 +164,12 @@ QString PluginsManager::categoryToTranslation(const PluginType &category)
 
 bool PluginsManager::isSamePlugin(const PluginsAvailable &pluginA,const PluginsAvailable &pluginB)
 {
-	if(pluginA.category!=pluginB.category)
-		return false;
+	/*if(pluginA.category!=pluginB.category)
+		return false;*/
+	//only this test should be suffisent
 	if(pluginA.path!=pluginB.path)
 		return false;
-	if(pluginA.name!=pluginB.name)
+	/*if(pluginA.name!=pluginB.name)
 		return false;
 	if(pluginA.writablePath!=pluginB.writablePath)
 		return false;
@@ -177,7 +178,7 @@ bool PluginsManager::isSamePlugin(const PluginsAvailable &pluginA,const PluginsA
 	if(pluginA.version!=pluginB.version)
 		return false;
 	if(pluginA.informations!=pluginB.informations)
-		return false;
+		return false;*/
 	return true;
 }
 
@@ -215,6 +216,8 @@ bool PluginsManager::loadPluginInformation(const QString &path)
 	}
 	editionSemList.acquire();
 	pluginsList << tempPlugin;
+	if(tempPlugin.errorString=="")
+		pluginsListIndexed.insert(tempPlugin.category,tempPlugin);
 	editionSemList.release();
 	if(tempPlugin.errorString=="")
 	{
@@ -578,15 +581,7 @@ bool PluginsManager::compareVersion(const QString &versionA,const QString &sign,
 
 QList<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginType &category)
 {
-	QList<PluginsAvailable> list;
-	int index=0,loop_size=pluginsList.size();
-	while(index<loop_size)
-	{
-		if(pluginsList.at(index).category==category && pluginsList.at(index).errorString=="")
-			list<<pluginsList.at(index);
-		index++;
-	}
-	return list;
+	return pluginsListIndexed.values(category);
 }
 
 QList<PluginsAvailable> PluginsManager::getPlugins()
@@ -651,6 +646,7 @@ void PluginsManager::removeThePluginSelected(const QString &path)
 					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to remove the plugin");
 					QMessageBox::critical(NULL,tr("Error"),tr("Error while the removing plugin, please check the rights on the folder: \n%1").arg(pluginsList.at(index).path));
 				}
+				pluginsListIndexed.remove(pluginsList.at(index).category,pluginsList.at(index));
 				pluginsList.removeAt(index);
 				checkDependencies();
 			}
