@@ -43,7 +43,8 @@ SOURCES         = copyEngine.cpp \
     ListThread.cpp \
     Filters.cpp \
     FilterRules.cpp \
-    RenamingRules.cpp
+    RenamingRules.cpp \
+    ListThread_InodeAction.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += Languages/fr/translation.ts \
     Languages/ar/translation.ts \
