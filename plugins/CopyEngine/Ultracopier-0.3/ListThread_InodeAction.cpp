@@ -5,6 +5,8 @@
 \version 0.3
 \date 2011 */
 
+#ifdef LISTTHREAD_H
+
 //do the inode action
 actionToDoInode& currentActionToDoInode=actionToDoListInode[int_for_internal_loop];
 switch(currentActionToDoInode.type)
@@ -52,3 +54,5 @@ default:
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Wrong type at inode action"));
 	return;
 }
+
+#endif

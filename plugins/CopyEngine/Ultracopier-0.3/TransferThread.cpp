@@ -276,7 +276,6 @@ bool TransferThread::isSame()
 
 bool TransferThread::destinationExists()
 {
-	/// \todo do the overwrite: FileExists_OverwriteIfNotSameModificationDate
 	//check if destination exists
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] overwrite: "+QString::number(fileExistsAction)+", always action: "+QString::number(alwaysDoFileExistsAction));
 	if(alwaysDoFileExistsAction==FileExists_Overwrite || readError || writeError)
@@ -969,25 +968,12 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
 	  */
 	/** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
 	#ifdef Q_OS_UNIX
-		struct stat info;
-		stat(source.toLatin1().data(),&info);
-		time_t ctime=info.st_ctim.tv_sec;
-		time_t actime=info.st_atim.tv_sec;
-		time_t modtime=info.st_mtim.tv_sec;
-		//this function avalaible on unix and mingw
-		utimbuf butime;
-		butime.actime=actime;
-		butime.modtime=modtime;
-		//creation time not exists into unix world
-		Q_UNUSED(ctime)
-		return utime(destination.toLatin1().data(),&butime)==0;
-	#else
-		#ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-			struct __stat64 info;
-			_stat64(source.toLatin1().data(),&info);
-			time_t ctime=info.st_ctime;
-			time_t actime=info.st_atime;
-			time_t modtime=info.st_mtime;
+		#ifdef Q_OS_LINUX
+			struct stat info;
+			stat(source.toLatin1().data(),&info);
+			time_t ctime=info.st_ctim.tv_sec;
+			time_t actime=info.st_atim.tv_sec;
+			time_t modtime=info.st_mtim.tv_sec;
 			//this function avalaible on unix and mingw
 			utimbuf butime;
 			butime.actime=actime;
@@ -995,48 +981,74 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
 			//creation time not exists into unix world
 			Q_UNUSED(ctime)
 			return utime(destination.toLatin1().data(),&butime)==0;
+		#else //mainly for mac
+			QFileInfo fileInfo(destination);
+			time_t ctime=fileInfo.created().toTime_t();
+			time_t actime=fileInfo.lastRead().toTime_t();
+			time_t modtime=fileInfo.lastModified().toTime_t();
+			//this function avalaible on unix and mingw
+			utimbuf butime;
+			butime.actime=actime;
+			butime.modtime=modtime;
+			//creation time not exists into unix world
+			Q_UNUSED(ctime)
+			return utime(destination.toLatin1().data(),&butime)==0;
+		#endif
+	#else
+		#ifdef Q_OS_WIN32
+			#ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+				struct __stat64 info;
+				_stat64(source.toLatin1().data(),&info);
+				time_t ctime=info.st_ctime;
+				time_t actime=info.st_atime;
+				time_t modtime=info.st_mtime;
+				//this function avalaible on unix and mingw
+				utimbuf butime;
+				butime.actime=actime;
+				butime.modtime=modtime;
+				//creation time not exists into unix world
+				Q_UNUSED(ctime)
+				return utime(destination.toLatin1().data(),&butime)==0;
+			#else
+				wchar_t filePath[65535];
+				source.toWCharArray(filePath);
+				HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+				destination.toWCharArray(filePath);
+				HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+				if(hFileSouce == INVALID_HANDLE_VALUE)
+				{
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open failed to read");
+					return false;
+				}
+				if(hFileDestination == INVALID_HANDLE_VALUE)
+				{
+					CloseHandle(hFileSouce);
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open failed to write");
+					return false;
+				}
+				FILETIME ftCreate, ftAccess, ftWrite;
+				if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
+				{
+					CloseHandle(hFileSouce);
+					CloseHandle(hFileDestination);
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to get the file time");
+					return false;
+				}
+				if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
+				{
+					CloseHandle(hFileSouce);
+					CloseHandle(hFileDestination);
+					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to set the file time");
+					return false;
+				}
+				CloseHandle(hFileSouce);
+				CloseHandle(hFileDestination);
+				return true;
+			#endif
 		#else
-			wchar_t filePath[65535];
-			source.toWCharArray(filePath);
-			HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-			destination.toWCharArray(filePath);
-			HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
-			if(hFileSouce == INVALID_HANDLE_VALUE)
-			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open failed to read");
-				return false;
-			}
-			if(hFileDestination == INVALID_HANDLE_VALUE)
-			{
-				CloseHandle(hFileSouce);
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] open failed to write");
-				return false;
-			}
-			FILETIME ftCreate, ftAccess, ftWrite;
-			if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
-			{
-				CloseHandle(hFileSouce);
-				CloseHandle(hFileDestination);
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to get the file time");
-				return false;
-			}
-			if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
-			{
-				CloseHandle(hFileSouce);
-				CloseHandle(hFileDestination);
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] unable to set the file time");
-				return false;
-			}
-			CloseHandle(hFileSouce);
-			CloseHandle(hFileDestination);
-			return true;
+			return false;
 		#endif
 	#endif
-	/*QFileInfo fileInfo(destination);
-	time_t ctime=fileInfo.created().toTime_t();
-	time_t actime=fileInfo.lastRead().toTime_t();
-	time_t modtime=fileInfo.lastModification().toTime_t();
-	*/
 	return false;
 }
 

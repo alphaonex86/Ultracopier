@@ -24,6 +24,13 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
 			ui->label_modified->setVisible(false);
 			ui->label_content_modified->setVisible(false);
 		}
+		if(fileInfo.isDir())
+		{
+			this->setWindowTitle(tr("Error on folder"));
+			ui->label_size->hide();
+			ui->label_content_size->hide();
+			ui->label_file_name->setText(tr("Folder name"));
+		}
 	}
 	else
 	{

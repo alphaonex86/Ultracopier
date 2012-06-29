@@ -83,7 +83,7 @@ bool RmPath::rmpath(const QDir &dir)
 		else
 		{
 			//return the fonction for scan the new folder
-			if(!rmpath(dir.absolutePath()+fileInfo.fileName()+'/'))
+			if(!rmpath(dir.absolutePath()+'/'+fileInfo.fileName()+'/'))
 				allHaveWork=false;
 		}
 	}
