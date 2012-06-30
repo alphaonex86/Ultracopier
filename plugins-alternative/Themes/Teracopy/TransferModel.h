@@ -26,7 +26,6 @@ public:
 		QString source;
 		QString size;
 		QString destination;
-		bool done;
 	};
 	/// \brief the transfer item with progression
 	struct ItemOfCopyListWithMoreInformations
@@ -68,6 +67,7 @@ public:
 	quint64 firstId();
 protected:
 	QList<transfertItem> transfertItemList;///< To have a transfer list for the user
+	QList<transfertItem> transfertItemListDone;///< To have a transfer list for the user
 	QSet<quint64> startId,stopId;///< To show what is started, what is stopped
 	QHash<quint64,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
 	QIcon iconStart,iconPause,iconStop;

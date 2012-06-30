@@ -13,6 +13,9 @@
 #include <QAction>
 #include <QMenu>
 #include <QTimer>
+#include <QDropEvent>
+#include <QList>
+#include <QUrl>
 
 #include "Environment.h"
 #include "GlobalClass.h"
@@ -20,7 +23,7 @@
 /** \brief The systray icon
 
 This class provide a systray icon and its functions */
-class SystrayIcon : public QObject, public GlobalClass
+class SystrayIcon : public QSystemTrayIcon, public GlobalClass
 {
 	Q_OBJECT
 	public:
@@ -41,7 +44,6 @@ class SystrayIcon : public QObject, public GlobalClass
 		void addCopyEngine(const QString &name,const bool &canDoOnlyCopy);
 		void removeCopyEngine(const QString &name);
 	private:
-		QSystemTrayIcon* sysTrayIcon;		///< Pointer on the systray icon
 		QMenu* systrayMenu;			///< Pointer on the menu
 		QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)
 		QAction* actionMenuQuit;		///< Pointer on the Quit action
@@ -66,6 +68,24 @@ class SystrayIcon : public QObject, public GlobalClass
 		bool haveListenerInfo,havePluginLoaderInfo;
 		bool haveListener,havePluginLoader;
 		QTimer timerCheckSetTooltip;
+		/** \brief drag event processing (impossible with Qt on systray)
+
+		need setAcceptDrops(true); into the constructor
+		need implementation to accept the drop:
+		void dragEnterEvent(QDragEnterEvent* event);
+		void dragMoveEvent(QDragMoveEvent* event);
+		void dragLeaveEvent(QDragLeaveEvent* event);
+		*/
+		void dropEvent(QDropEvent *event);
+		/** \brief accept all event to allow the drag and drop
+		  \see dropEvent() */
+		void dragEnterEvent(QDragEnterEvent* event);
+		/** \brief accept all event to allow the drag and drop
+		  \see dropEvent() */
+		void dragMoveEvent(QDragMoveEvent* event);
+		/** \brief accept all event to allow the drag and drop
+		  \see dropEvent() */
+		void dragLeaveEvent(QDragLeaveEvent* event);
 	private slots:
 		/// \brief To update the current themes
 		void updateCurrentTheme();
@@ -98,6 +118,7 @@ class SystrayIcon : public QObject, public GlobalClass
 		\return The core object of the new window created */
 		void addWindowCopyMove(CopyMode mode,QString name);
 		void addWindowTransfer(QString name);
+		void urlDropped(QList<QUrl> urls);
 };
 
 #endif // SYSTRAY_ICON_H

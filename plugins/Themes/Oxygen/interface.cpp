@@ -405,7 +405,10 @@ void Themes::isInPause(bool isInPause)
 	else
 	{
 		ui->pauseButton->setIcon(player_pause);
-		ui->pauseButton->setText(facilityEngine->translateText("Pause"));
+		if(haveStarted)
+			ui->pauseButton->setText(facilityEngine->translateText("Pause"));
+		else
+			ui->pauseButton->setText(facilityEngine->translateText("Start"));
 	}
 }
 

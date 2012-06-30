@@ -16,7 +16,6 @@ SystrayIcon::SystrayIcon()
 	//setup the systray icon
 	haveListenerInfo	= false;
 	havePluginLoaderInfo	= false;
-	sysTrayIcon		= new QSystemTrayIcon();
 	systrayMenu		= new QMenu();
 	actionMenuAbout		= new QAction(this);
 	actionMenuQuit		= new QAction(this);
@@ -27,20 +26,20 @@ SystrayIcon::SystrayIcon()
 	stateListener=NotListening;
 	statePluginLoader=Uncaught;
 
-	sysTrayIcon->setContextMenu(systrayMenu);
-	sysTrayIcon->setToolTip("Ultracopier");
+	setContextMenu(systrayMenu);
+	setToolTip("Ultracopier");
 	#ifdef Q_OS_WIN32
-	sysTrayIcon->setIcon(QIcon(":/systray_Uncaught_Windows.png"));
+	setIcon(QIcon(":/systray_Uncaught_Windows.png"));
 	#else
-	sysTrayIcon->setIcon(QIcon(":/systray_Uncaught_Unix.png"));
+	setIcon(QIcon(":/systray_Uncaught_Unix.png"));
 	#endif
-	sysTrayIcon->show();
+	show();
 	//connect the action
 	connect(&timerCheckSetTooltip,	SIGNAL(timeout()),					this,	SLOT(checkSetTooltip()));
 	connect(actionMenuQuit,		SIGNAL(triggered()),					this,	SIGNAL(quit()));
 	connect(actionMenuAbout,	SIGNAL(triggered()),					this,	SIGNAL(showHelp()));
 	connect(actionOptions,		SIGNAL(triggered()),					this,	SIGNAL(showOptions()));
-	connect(sysTrayIcon,		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),	this,	SLOT(CatchAction(QSystemTrayIcon::ActivationReason)));
+	connect(this,		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),	this,	SLOT(CatchAction(QSystemTrayIcon::ActivationReason)));
 	connect(plugins,		SIGNAL(pluginListingIsfinish()),			this,	SLOT(reloadEngineList()));
 	//display the icon
 	updateCurrentTheme();
@@ -57,6 +56,10 @@ SystrayIcon::SystrayIcon()
 
 	timerCheckSetTooltip.setSingleShot(true);
 	timerCheckSetTooltip.start(1000);
+
+	//impossible with Qt on systray
+	/// \note important for drag and drop, \see dropEvent()
+	systrayMenu->setAcceptDrops(true);
 }
 
 /// \brief Hide and destroy the icon in the systray
@@ -67,14 +70,13 @@ SystrayIcon::~SystrayIcon()
 	delete actionOptions;
 	delete systrayMenu;
 	delete copyMenu;
-	delete sysTrayIcon;
 }
 
 void SystrayIcon::checkSetTooltip()
 {
-	if(sysTrayIcon->isSystemTrayAvailable())
+	if(isSystemTrayAvailable())
 	{
-		sysTrayIcon->setToolTip("Ultracopier");
+		setToolTip("Ultracopier");
 		updateSystrayIcon();
 	}
 	else
@@ -111,7 +113,7 @@ void SystrayIcon::showTryCatchMessageWithNoListener()
 /// \brief To show a message linked to the systray icon
 void SystrayIcon::showSystrayMessage(const QString& text)
 {
-	sysTrayIcon->showMessage(tr("Information"),text,QSystemTrayIcon::Information,0);
+	showMessage(tr("Information"),text,QSystemTrayIcon::Information,0);
 }
 
 /// \brief To update the systray icon
@@ -197,9 +199,47 @@ void SystrayIcon::updateSystrayIcon()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"icon: systray_"+icon+"_Unix.png");
 		#endif
 	}
-	sysTrayIcon->setIcon(theNewSystrayIcon);
-	sysTrayIcon->setToolTip("Ultracopier - "+toolTip);
+	setIcon(theNewSystrayIcon);
+	setToolTip("Ultracopier - "+toolTip);
 }
+
+/* drag event processing (impossible with Qt on systray)
+
+need setAcceptDrops(true); into the constructor
+need implementation to accept the drop:
+void dragEnterEvent(QDragEnterEvent* event);
+void dragMoveEvent(QDragMoveEvent* event);
+void dragLeaveEvent(QDragLeaveEvent* event);
+*/
+void SystrayIcon::dropEvent(QDropEvent *event)
+{
+	const QMimeData* mimeData = event->mimeData();
+	if(mimeData->hasUrls())
+	{
+		//impossible with Qt on systray
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"mimeData->urls().size()"+QString::number(mimeData->urls().size()));
+		emit urlDropped(mimeData->urls());
+		event->acceptProposedAction();
+	}
+}
+
+void SystrayIcon::dragEnterEvent(QDragEnterEvent* event)
+{
+	// if some actions should not be usable, like move, this code must be adopted
+	event->acceptProposedAction();
+}
+
+void SystrayIcon::dragMoveEvent(QDragMoveEvent* event)
+{
+	// if some actions should not be usable, like move, this code must be adopted
+	event->acceptProposedAction();
+}
+
+void SystrayIcon::dragLeaveEvent(QDragLeaveEvent* event)
+{
+	event->accept();
+}
+
 
 /// \brief To update the current themes
 void SystrayIcon::updateCurrentTheme()

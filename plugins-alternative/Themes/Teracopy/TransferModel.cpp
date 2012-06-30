@@ -51,9 +51,9 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
 		switch(column)
 		{
 			case 0:
-				if(item.done)
+				/*if(item.done)
 					return iconStop;
-				else if(stopId.contains(item.id))
+				else */if(stopId.contains(item.id))
 					return iconPause;
 				else if(startId.contains(item.id))
 					return iconStart;
@@ -172,7 +172,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 				newItem.source=action.addAction.sourceFullPath;
 				newItem.size=facilityEngine->sizeToString(action.addAction.size);
 				newItem.destination=action.addAction.destinationFullPath;
-				newItem.done=false;
+//				newItem.done=false;
 				transfertItemList<<newItem;
 				totalFile++;
 				totalSize+=action.addAction.size;
