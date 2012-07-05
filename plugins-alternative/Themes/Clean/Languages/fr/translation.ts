@@ -12,11 +12,6 @@
 <context>
     <name>interface</name>
     <message>
-        <location filename="../../interface.ui" line="14"/>
-        <source>Ultracopier</source>
-        <translation>Ultracopier</translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="32"/>
         <source>Action:</source>
         <translation>Action:</translation>

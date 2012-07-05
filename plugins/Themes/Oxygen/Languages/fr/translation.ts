@@ -9,7 +9,7 @@
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+544"/>
+        <location line="+553"/>
         <source>File Name, 0KB</source>
         <translation>Nom de fichier, 0Ko</translation>
     </message>
@@ -187,12 +187,7 @@
 <context>
     <name>options</name>
     <message>
-        <location filename="../../options.ui" line="+14"/>
-        <source>Form</source>
-        <translation>Depuis</translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location filename="../../options.ui" line="+20"/>
         <source>Show speed as main informations</source>
         <translation>Montrer la vitesse comme une information principale</translation>
     </message>

@@ -1,218 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="es" sourcelanguage="en">
 <context>
-    <name>InterfacePlugin</name>
+    <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="87"/>
-        <source>Copy engine</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="100"/>
+        <location filename="../../interface.cpp" line="184"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation type="unfinished"></translation>
+        <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="145"/>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="670"/>
-        <source>Unlimited</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="849"/>
+        <location filename="../../interface.cpp" line="737"/>
         <source>File Name, 0KB</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de archivo, 0KB</translation>
     </message>
 </context>
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="35"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>De:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="69"/>
         <source>To:</source>
-        <translation type="unfinished"></translation>
+        <translation>Para:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="196"/>
         <source>0KB/sec</source>
-        <translation type="unfinished"></translation>
+        <translation>0KB/sec</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="216"/>
         <source>&amp;More</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Más</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="236"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pausa</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="250"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Omitir</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="261"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cancelar</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="276"/>
+        <location filename="../../interface.ui" line="748"/>
         <source>Limit copy speed at:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limitar la velocidad de copia en:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="293"/>
         <source>Unlimited</source>
-        <translation type="unfinished"></translation>
+        <translation>Ilimitado</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="323"/>
         <source>Copy list</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia la lista</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
-        <source>Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.ui"/>
-        <source>Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.ui"/>
-        <source>Destination</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="591"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Anterior</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="598"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Próximo</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="637"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="646"/>
         <source>Copy end</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia final</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="667"/>
         <source>At the end of the copy: </source>
-        <translation type="unfinished"></translation>
+        <translation>Al final de la copia: </translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="706"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished"></translation>
+        <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="711"/>
         <source>Never close</source>
-        <translation type="unfinished"></translation>
+        <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="716"/>
         <source>Always close</source>
-        <translation type="unfinished"></translation>
+        <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="727"/>
         <source>Speed limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Límite de velocidad</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="758"/>
         <source> KB/s</source>
-        <translation type="unfinished"></translation>
+        <translation> KB/s</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="790"/>
         <source>File collisions</source>
-        <translation type="unfinished"></translation>
+        <translation>Colisiones de archivos</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="811"/>
+        <location filename="../../interface.ui" line="871"/>
         <source>What to do: </source>
-        <translation type="unfinished"></translation>
+        <translation>Qué hacer: </translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="850"/>
         <source>Copy errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Errores de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="928"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Interfaz</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="939"/>
         <source>Show speed as main informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="976"/>
         <source>Add file</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir archivo</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="985"/>
         <source>Add folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="994"/>
         <source>Move file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="1003"/>
         <source>Move folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Mueva la carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="1012"/>
         <source>Copy file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia el archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="1021"/>
         <source>Copy folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia la carpeta</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="487"/>
+        <source>Ctrl+F</source>
+        <translation>Ctrl+F</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="133"/>
+        <source>Shutdown when is finish</source>
+        <translation>Apagar cuando se termine</translation>
     </message>
 </context>
 <context>
     <name>options</name>
     <message>
-        <location filename="../../options.ui"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../options.ui" line="20"/>
+        <source>Show speed as main informations</source>
+        <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
     <message>
-        <location filename="../../options.ui"/>
-        <source>Show speed as main informations</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../options.ui" line="33"/>
+        <source>Start with more button pushed</source>
+        <translation>Comience con más botón pulsado</translation>
     </message>
 </context>
 </TS>

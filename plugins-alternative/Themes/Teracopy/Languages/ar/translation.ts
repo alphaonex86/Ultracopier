@@ -4,32 +4,17 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="62"/>
-        <source>Total: %3 of %4</source>
+        <location filename="../../interface.cpp" line="76"/>
+        <source>Total: %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="63"/>
+        <location filename="../../interface.cpp" line="77"/>
         <source>%1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="97"/>
-        <source>Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="333"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="335"/>
-        <source>Move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="343"/>
+        <location filename="../../interface.cpp" line="212"/>
         <source>%1% done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -37,32 +22,32 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="159"/>
         <source>&amp;More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="172"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="210"/>
         <source>&amp;Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="232"/>
         <source>&amp;Skip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="251"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="281"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -71,37 +56,32 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
-        <source>Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="308"/>
         <source>Add file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="317"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="326"/>
         <source>Move file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="335"/>
         <source>Move folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="344"/>
         <source>Copy file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui"/>
+        <location filename="../../interface.ui" line="353"/>
         <source>Copy folder</source>
         <translation type="unfinished"></translation>
     </message>

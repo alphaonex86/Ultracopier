@@ -73,7 +73,7 @@ void InterfacePlugin::closeEvent(QCloseEvent *event)
 
 void InterfacePlugin::updateOverallInformation()
 {
-	ui->overall->setText(tr("Total: %3 of %4").arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
+	ui->overall->setText(tr("Total: %1 of %2").arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
 	ui->labelNumberFile->setText(tr("%1 of %2").arg(currentFile).arg(totalFile));
 }
 

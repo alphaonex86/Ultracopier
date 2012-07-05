@@ -12,12 +12,7 @@
 <context>
     <name>interface</name>
     <message>
-        <location filename="../../interface.ui" line="+14"/>
-        <source>Ultracopier</source>
-        <translation type="unfinished">Ultracopier</translation>
-    </message>
-    <message>
-        <location line="+18"/>
+        <location filename="../../interface.ui" line="+32"/>
         <source>Action:</source>
         <translation type="unfinished">실행:</translation>
     </message>

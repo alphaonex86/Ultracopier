@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ultracopier</string>
+   <string notr="true">Ultracopier</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/systray_Caught_Unix.png</normaloff>:/systray_Caught_Unix.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">

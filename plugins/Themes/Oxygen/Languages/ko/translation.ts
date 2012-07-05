@@ -9,7 +9,7 @@
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+544"/>
+        <location line="+553"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished">파일명, 0KB</translation>
     </message>
@@ -187,12 +187,7 @@
 <context>
     <name>options</name>
     <message>
-        <location filename="../../options.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished">양식</translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location filename="../../options.ui" line="+20"/>
         <source>Show speed as main informations</source>
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
