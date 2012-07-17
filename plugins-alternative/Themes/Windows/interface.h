@@ -52,7 +52,6 @@ public slots:
 	bool setSpeedLimitation(const qint64 &speedLimitation);
 	//set the translate
 	void newLanguageLoaded();
-	void synchronizeItems(const QList<returnActionOnCopyList>& returnActions);
 public:
 	/// \brief the transfer item with progression
 	struct ItemOfCopyListWithMoreInformations

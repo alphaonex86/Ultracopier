@@ -279,6 +279,7 @@ void InterfacePlugin::newLanguageLoaded()
 {
 	ui->retranslateUi(this);
 	updateTitle();
+	updateInformations();
 }
 
 void InterfacePlugin::setFileProgression(const QList<ProgressionItem> &progressionList)
@@ -367,7 +368,31 @@ void InterfacePlugin::updateInformations()
 	if(remainingSeconds>=0)
 		remainingTime=facilityEngine->simplifiedRemainingTime(remainingSeconds);
 	else
-		remainingTime=facilityEngine->translateText(tr("Unknow remaining time"));
+		remainingTime=facilityEngine->translateText(tr("Unknown remaining time"));
+	if(!modeIsForced)
+	{
+		if(transferModel.totalFile>1)
+			ui->label_main->setText(tr("Transferring %1 items (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+		else
+			ui->label_main->setText(tr("Transferring %1 item (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+	}
+	else
+	{
+		if(mode==Copy)
+		{
+			if(transferModel.totalFile>1)
+				ui->label_main->setText(tr("Copying %1 items (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+			else
+				ui->label_main->setText(tr("Copying %1 item (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+		}
+		else
+		{
+			if(transferModel.totalFile>1)
+				ui->label_main->setText(tr("Moving %1 items (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+			else
+				ui->label_main->setText(tr("Moving %1 item (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+		}
+	}
 
 	if(transfertItem.haveItem)
 	{
@@ -391,8 +416,14 @@ void InterfacePlugin::updateInformations()
 	{
 		if(transfertItem.haveItem)
 		{
-			QString simplifiedFrom=transfertItem.from.replace(QRegExp("^.*[/\\]([^/\\]*)$"), "\\1");
-			QString simplifiedTo=transfertItem.to.replace(QRegExp("^.*[/\\]([^/\\]*)$"), "\\1");
+			QString simplifiedFrom=transfertItem.from;
+			QString simplifiedTo=transfertItem.to;
+			simplifiedFrom.remove(QRegExp("/$"));
+			simplifiedTo.remove(QRegExp("/$"));
+			simplifiedFrom.replace('\\','/');
+			simplifiedTo.replace('\\','/');
+			simplifiedFrom.replace(QRegExp("^.*/([^/]+)$"), "\\1");
+			simplifiedTo.replace(QRegExp("^.*/([^/]+)$"), "\\1");
 			ui->label_file->setText(transfertItem.current_file);
 			ui->label_from->setText(QString("<b>%1</b> (%2)").arg(simplifiedFrom).arg(transfertItem.from));
 			ui->label_to->setText(QString("<b>%1</b> (%2)").arg(simplifiedTo).arg(transfertItem.to));
@@ -414,8 +445,14 @@ void InterfacePlugin::updateInformations()
 	{
 		if(transfertItem.haveItem)
 		{
-			QString simplifiedFrom=transfertItem.from.replace(QRegExp("^.*[/\\]([^/\\]*)$"), "\\1");
-			QString simplifiedTo=transfertItem.to.replace(QRegExp("^.*[/\\]([^/\\]*)$"), "\\1");
+			QString simplifiedFrom=transfertItem.from;
+			QString simplifiedTo=transfertItem.to;
+			simplifiedFrom.remove(QRegExp("/$"));
+			simplifiedTo.remove(QRegExp("/$"));
+			simplifiedFrom.replace('\\','/');
+			simplifiedTo.replace('\\','/');
+			simplifiedFrom.replace(QRegExp("^.*/([^/]+)$"), "\\1");
+			simplifiedTo.replace(QRegExp("^.*/([^/]+)$"), "\\1");
 			ui->text->setText(tr("from <b>%1</b> (%2) to <b>%3</b> (%4)<br />%5")
 					  .arg(transfertItem.from)
 					  .arg(simplifiedFrom)

@@ -65,9 +65,6 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 {
 	loop_size=returnActions.size();
 	index_for_loop=0;
-	totalFile=0;
-	totalSize=0;
-	currentFile=0;
 	emit layoutAboutToBeChanged();
 	while(index_for_loop<loop_size)
 	{
@@ -76,18 +73,20 @@ QList<quint64> TransferModel::synchronizeItems(const QList<returnActionOnCopyLis
 		{
 			case AddingItem:
 			{
-				totalFile++;
-				totalSize+=action.addAction.size;
+				this->totalFile++;
+				this->totalSize+=action.addAction.size;
 			}
 			break;
 			case RemoveItem:
-				currentFile++;
+				this->currentFile++;
 			break;
 			case PreOperation:
 			{
 				ItemOfCopyListWithMoreInformations tempItem;
 				tempItem.currentProgression=0;
 				tempItem.generalData=action.addAction;
+				tempItem.generalData.destinationFullPath.remove(tempItem.generalData.destinationFullPath.size()-tempItem.generalData.destinationFileName.size(),tempItem.generalData.destinationFileName.size());
+				tempItem.generalData.sourceFullPath.remove(tempItem.generalData.sourceFullPath.size()-tempItem.generalData.sourceFileName.size(),tempItem.generalData.sourceFileName.size());
 				tempItem.actionType=action.type;
 				internalRunningOperation[action.addAction.id]=tempItem;
 				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("set for file %1: actionType: PreOperation").arg(action.addAction.id));

@@ -73,7 +73,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label_main">
         <property name="styleSheet">
          <string notr="true">background-color: rgba(255, 0, 0, 0);
 font: 12pt &quot;Sans Serif&quot;;</string>
