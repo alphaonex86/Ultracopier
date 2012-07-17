@@ -292,7 +292,7 @@ void InterfacePlugin::synchronizeItems(const QList<returnActionOnCopyList>& retu
 				ItemOfCopyListWithMoreInformations tempItem;
 				tempItem.currentProgression=0;
 				tempItem.generalData=action.addAction;
-				totalFile+=action.addAction.size;
+				currentSize+=action.addAction.size;
 				InternalRunningOperation << tempItem;
 			}
 			break;
