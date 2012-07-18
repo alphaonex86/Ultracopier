@@ -106,6 +106,8 @@ void InterfacePlugin::closeEvent(QCloseEvent *event)
 void InterfacePlugin::detectedSpeed(const quint64 &speed)
 {
 	this->speed=speed;
+	if(ui->more->isChecked())
+		ui->label_speed->setText(facilityEngine->speedToString(speed));
 }
 
 QWidget * InterfacePlugin::getOptionsEngineWidget()
@@ -133,28 +135,7 @@ void InterfacePlugin::forceCopyMode(CopyMode mode)
 
 void InterfacePlugin::updateTitle()
 {
-	QString actionString;
-	switch(action)
-	{
-		case Listing:
-			actionString=facilityEngine->translateText("Listing");
-		break;
-		case Copying:
-			actionString=facilityEngine->translateText("Copying");
-		break;
-		case CopyingAndListing:
-			actionString=facilityEngine->translateText("Listing and copying");
-		break;
-		case Idle:
-			actionString="Ultracopier";
-		break;
-	}
-	QString remainingTime;
-	if(remainingSeconds>=0)
-		remainingTime=facilityEngine->simplifiedRemainingTime(remainingSeconds);
-	else
-		remainingTime=facilityEngine->translateText(tr("Unknow remaining time"));
-	this->setWindowTitle(remainingTime+" - "+actionString);
+	remainingTime(remainingSeconds);
 }
 
 void InterfacePlugin::actionInProgess(EngineActionInProgress action)
@@ -208,8 +189,35 @@ void InterfacePlugin::newFolderListing(const QString &path)
 void InterfacePlugin::remainingTime(const int &remainingSeconds)
 {
 	this->remainingSeconds=remainingSeconds;
-	Q_UNUSED(remainingSeconds)
-	updateInformations();
+
+	QString remainingTime;
+	if(remainingSeconds>=0)
+		remainingTime=facilityEngine->simplifiedRemainingTime(remainingSeconds);
+	else
+		remainingTime=facilityEngine->translateText(tr("Unknown remaining time"));
+
+	QString actionString;
+	switch(action)
+	{
+		case Listing:
+			actionString=facilityEngine->translateText("Listing");
+		break;
+		case Copying:
+			actionString=facilityEngine->translateText("Copying");
+		break;
+		case CopyingAndListing:
+			actionString=facilityEngine->translateText("Listing and copying");
+		break;
+		case Idle:
+			actionString="Ultracopier";
+		break;
+	}
+	this->setWindowTitle(remainingTime+" - "+actionString);
+
+	if(ui->more->isChecked())
+		ui->label_remaining_time->setText(remainingTime);
+	else
+		updateInformations();
 }
 
 void InterfacePlugin::newCollisionAction(const QString &action)
@@ -364,11 +372,6 @@ void InterfacePlugin::updateDetails()
 void InterfacePlugin::updateInformations()
 {
 	TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
-	QString remainingTime;
-	if(remainingSeconds>=0)
-		remainingTime=facilityEngine->simplifiedRemainingTime(remainingSeconds);
-	else
-		remainingTime=facilityEngine->translateText(tr("Unknown remaining time"));
 	if(!modeIsForced)
 	{
 		if(transferModel.totalFile>1)
@@ -427,24 +430,25 @@ void InterfacePlugin::updateInformations()
 			ui->label_file->setText(transfertItem.current_file);
 			ui->label_from->setText(QString("<b>%1</b> (%2)").arg(simplifiedFrom).arg(transfertItem.from));
 			ui->label_to->setText(QString("<b>%1</b> (%2)").arg(simplifiedTo).arg(transfertItem.to));
-			ui->label_remaining_time->setText(remainingTime);
 			ui->label_items->setText(QString("%1 (%2)").arg(transferModel.totalFile-transferModel.currentFile).arg(facilityEngine->sizeToString(progression_total-progression_current)));
-			ui->label_speed->setText(facilityEngine->speedToString(speed));
 		}
 		else
 		{
 			ui->label_file->setText("");
 			ui->label_from->setText("");
 			ui->label_to->setText("");
-			ui->label_remaining_time->setText(remainingTime);
 			ui->label_items->setText(QString("%1 (%2)").arg(transferModel.totalFile-transferModel.currentFile).arg(facilityEngine->sizeToString(progression_total-progression_current)));
-			ui->label_speed->setText(facilityEngine->speedToString(speed));
 		}
 	}
 	else
 	{
 		if(transfertItem.haveItem)
 		{
+			QString remainingTime;
+			if(remainingSeconds>=0)
+				remainingTime=facilityEngine->simplifiedRemainingTime(remainingSeconds);
+			else
+				remainingTime=facilityEngine->translateText(tr("Unknown remaining time"));
 			QString simplifiedFrom=transfertItem.from;
 			QString simplifiedTo=transfertItem.to;
 			simplifiedFrom.remove(QRegExp("/$"));
