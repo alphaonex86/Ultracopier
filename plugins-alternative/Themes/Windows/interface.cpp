@@ -446,10 +446,10 @@ void InterfacePlugin::updateInformations()
 			simplifiedFrom.replace(QRegExp("^.*/([^/]+)$"), "\\1");
 			simplifiedTo.replace(QRegExp("^.*/([^/]+)$"), "\\1");
 			ui->text->setText(tr("from <b>%1</b> (%2) to <b>%3</b> (%4)<br />%5")
-					  .arg(transfertItem.from)
 					  .arg(simplifiedFrom)
-					  .arg(transfertItem.to)
+					  .arg(transfertItem.from)
 					  .arg(simplifiedTo)
+					  .arg(transfertItem.to)
 					  .arg(remainingTime)
 					  );
 		}
