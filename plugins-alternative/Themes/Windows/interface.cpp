@@ -131,6 +131,7 @@ void InterfacePlugin::forceCopyMode(CopyMode mode)
 	modeIsForced=true;
 	this->mode=mode;
 	updateModeAndType();
+	updateInformations();
 }
 
 void InterfacePlugin::updateTitle()
@@ -196,23 +197,7 @@ void InterfacePlugin::remainingTime(const int &remainingSeconds)
 	else
 		remainingTime=facilityEngine->translateText(tr("Unknown remaining time"));
 
-	QString actionString;
-	switch(action)
-	{
-		case Listing:
-			actionString=facilityEngine->translateText("Listing");
-		break;
-		case Copying:
-			actionString=facilityEngine->translateText("Copying");
-		break;
-		case CopyingAndListing:
-			actionString=facilityEngine->translateText("Listing and copying");
-		break;
-		case Idle:
-			actionString="Ultracopier";
-		break;
-	}
-	this->setWindowTitle(remainingTime+" - "+actionString);
+	this->setWindowTitle(remainingTime);
 
 	if(ui->more->isChecked())
 		ui->label_remaining_time->setText(remainingTime);

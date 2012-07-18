@@ -274,6 +274,9 @@ font: 12pt &quot;Sans Serif&quot;;</string>
         <property name="maximum">
          <number>65535</number>
         </property>
+        <property name="textVisible">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
      </layout>
