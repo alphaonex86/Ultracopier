@@ -283,7 +283,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widget_3" native="true">
+    <widget class="QWidget" name="widget_bottom" native="true">
      <property name="minimumSize">
       <size>
        <width>420</width>
@@ -295,9 +295,6 @@ font: 12pt &quot;Sans Serif&quot;;</string>
        <width>420</width>
        <height>42</height>
       </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(237, 237, 237);</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="leftMargin">

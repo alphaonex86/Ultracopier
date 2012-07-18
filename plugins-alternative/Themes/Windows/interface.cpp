@@ -38,6 +38,9 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
 	#endif
+	#ifndef Q_OS_WIN32
+	ui->widget_bottom->setStyleSheet("background-color: rgb(237, 237, 237);");
+	#endif
 }
 
 InterfacePlugin::~InterfacePlugin()
