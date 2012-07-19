@@ -1,5 +1,7 @@
 #include "Catchcopy.h"
 
+#include <QCoreApplication>
+
 Catchcopy::Catchcopy()
 {
 }

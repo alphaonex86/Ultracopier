@@ -24,8 +24,13 @@ void CatchCopyPlugin::listen()
 		emit newState(NotListening);
 		return;
 	}
+	if(!QDBusConnection::sessionBus().registerObject("/", &catchcopy, QDBusConnection::ExportAllSlots))
+	{
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QDBusConnection::sessionBus().lastError().message());
+		emit newState(NotListening);
+		return;
+	}
 	emit newState(FullListening);
-	QDBusConnection::sessionBus().registerObject("/", &catchcopy, QDBusConnection::ExportAllSlots);
 }
 
 void CatchCopyPlugin::close()
