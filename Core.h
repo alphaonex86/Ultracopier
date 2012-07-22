@@ -99,7 +99,7 @@ class Core : public QObject, public GlobalClass
 
 		/** \brief update at periodic interval, the synchronization between copy engine and interface, but for specific entry
 		\see forUpateInformation */
-		void periodicSynchronization(const int &index);
+		void periodicSynchronizationWithIndex(const int &index);
 
 		//for the internal management
 		int incrementId();
@@ -126,11 +126,11 @@ class Core : public QObject, public GlobalClass
 		void copyCanceled(const quint32 & orderId);
 	public slots:
 		/** \brief do copy with sources, but ask the destination */
-		void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
+		void newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
 		/** \brief do copy with sources and destination */
 		void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
 		/** \brief do move with sources, but ask the destination */
-		void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
+		void newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
 		/** \brief do move with sources and destination */
 		void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
 		/** \brief open copy/move windows with specific engine */

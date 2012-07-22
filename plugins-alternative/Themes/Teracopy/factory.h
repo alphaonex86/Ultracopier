@@ -20,6 +20,7 @@
 class Factory : public PluginInterface_ThemesFactory
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_ThemesFactory)
 public:
 	/// \brief to return the instance of the copy engine
@@ -35,10 +36,6 @@ public slots:
 	void newLanguageLoaded();
 signals:
 	void reloadLanguage();
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
 private:
 	FacilityInterface * facilityEngine;
 };

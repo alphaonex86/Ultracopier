@@ -17,11 +17,11 @@
 	<description xml:lang="en"><![CDATA[This plugin allow Ultracopier to be loaded at the session opening under windows]]></description>
 	<description xml:lang="fr"><![CDATA[Ce plugin permet de charger Ultracopier à l'ouverture de la sessions sous windows]]></description>
 	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
-	<version>0.3.0.8</version>
+	<version>0.3.1.0</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>Windows</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
 	<dependencies><![CDATA[
-	>=ultracopier-0.3.0.8
+	>=ultracopier-0.3.1.0
 	]]></dependencies>
 </package>

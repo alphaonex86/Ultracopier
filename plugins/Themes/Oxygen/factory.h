@@ -27,6 +27,7 @@ namespace Ui {
 class Factory : public PluginInterface_ThemesFactory
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_ThemesFactory)
 public:
 	Factory();
@@ -34,7 +35,7 @@ public:
 	/// \brief to return the instance of the copy engine
 	PluginInterface_Themes * getInstance();
 	/// \brief set the resources, to store options, to have facilityInterface
-	void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,bool portableVersion);
+	void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion);
 	/// \brief to get the default options widget
 	QWidget * options();
 	/// \brief to get a resource icon
@@ -52,10 +53,6 @@ private:
 	FacilityInterface * facilityEngine;
 signals:
 	void reloadLanguage();
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
 };
 
 #endif // FACTORY_H

@@ -29,14 +29,14 @@ LogThread::LogThread()
 	KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
 	options->addOptionGroup("Write_log",KeysList);
 
-	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
+	connect(options,&OptionEngine::newOptionValue,	this,	&LogThread::newOptionValue);
 
 	enabled=false;
 
 	moveToThread(this);
 	start(QThread::IdlePriority);
 
-	connect(this,	SIGNAL(newData(QString)),		this,SLOT(realDataWrite(QString)),Qt::QueuedConnection);
+	connect(this,	&LogThread::newData,		this,&LogThread::realDataWrite,Qt::QueuedConnection);
 
 	newOptionValue("Write_log",	"transfer",			options->getOptionValue("Write_log","transfer"));
 	newOptionValue("Write_log",	"error",			options->getOptionValue("Write_log","error"));

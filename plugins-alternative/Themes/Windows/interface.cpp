@@ -118,18 +118,18 @@ QWidget * InterfacePlugin::getOptionsEngineWidget()
         return NULL;
 }
 
-void InterfacePlugin::getOptionsEngineEnabled(bool isEnabled)
+void InterfacePlugin::getOptionsEngineEnabled(const bool &isEnabled)
 {
         Q_UNUSED(isEnabled)
 }
 
-void InterfacePlugin::setCopyType(CopyType type)
+void InterfacePlugin::setCopyType(const CopyType &type)
 {
 	this->type=type;
 	updateModeAndType();
 }
 
-void InterfacePlugin::forceCopyMode(CopyMode mode)
+void InterfacePlugin::forceCopyMode(const CopyMode &mode)
 {
 	modeIsForced=true;
 	this->mode=mode;
@@ -142,7 +142,7 @@ void InterfacePlugin::updateTitle()
 	remainingTime(remainingSeconds);
 }
 
-void InterfacePlugin::actionInProgess(EngineActionInProgress action)
+void InterfacePlugin::actionInProgess(const EngineActionInProgress &action)
 {
 	this->action=action;
 	switch(action)
@@ -222,7 +222,7 @@ void InterfacePlugin::errorDetected()
 {
 }
 
-void InterfacePlugin::setTransferListOperation(TransferListOperation transferListOperation)
+void InterfacePlugin::setTransferListOperation(const TransferListOperation &transferListOperation)
 {
 	Q_UNUSED(transferListOperation)
 }
@@ -264,7 +264,7 @@ void InterfacePlugin::haveExternalOrder()
 	ui->toolButton->hide();
 }
 
-void InterfacePlugin::isInPause(bool isInPause)
+void InterfacePlugin::isInPause(const bool &isInPause)
 {
 	//resume in auto the pause
 	if(isInPause)
@@ -334,8 +334,8 @@ void InterfacePlugin::on_more_toggled(bool checked)
 
 void InterfacePlugin::updateDetails()
 {
-	ui->text->setShown(!ui->more->isChecked());
-	ui->details->setShown(ui->more->isChecked());
+	ui->text->setHidden(ui->more->isChecked());
+	ui->details->setHidden(!ui->more->isChecked());
 	if(ui->more->isChecked())
 	{
 		this->setMinimumHeight(242);

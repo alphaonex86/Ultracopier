@@ -31,7 +31,7 @@ PluginInterface_Themes * Factory::getInstance()
 	return newInterface;
 }
 
-void Factory::setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,bool portableVersion)
+void Factory::setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
 {
 	Q_UNUSED(portableVersion);
 	Q_UNUSED(writePath);
@@ -141,6 +141,3 @@ void Factory::newLanguageLoaded()
 	ui->retranslateUi(tempWidget);
 	emit reloadLanguage();
 }
-
-Q_EXPORT_PLUGIN2(interface, Factory);
-

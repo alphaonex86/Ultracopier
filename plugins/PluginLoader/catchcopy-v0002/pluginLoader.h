@@ -26,6 +26,7 @@
 class PluginLoader : public PluginInterface_PluginLoader
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.PluginLoader/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_PluginLoader)
 public:
         PluginLoader();
@@ -53,12 +54,6 @@ private:
 	OptionsWidget optionsWidget;
 	bool allDllIsImportant,Debug;
 	bool changeOfArchDetected,is64Bits;
-signals:
-	void newState(CatchState);
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
 private slots:
 	void setAllDllIsImportant(bool allDllIsImportant);
 	void setDebug(bool Debug);

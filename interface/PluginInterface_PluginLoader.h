@@ -20,19 +20,21 @@ class PluginInterface_PluginLoader : public QObject
 	Q_OBJECT
 	public:
 		/// \brief try enable/disable the catching
-		virtual void setEnabled(bool) = 0;
+		virtual void setEnabled(const bool &enabled) = 0;
 		/// \brief to set resources, writePath can be empty if read only mode
-		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
+		virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion) = 0;
 		/// \brief to get the options widget, NULL if not have
 		virtual QWidget * options() = 0;
 	public slots:
 		/// \brief to reload the translation, because the new language have been loaded
 		virtual void newLanguageLoaded() = 0;
-	/* signal to implement
+	// signal to implement
 	signals:
-		void newState(CatchState);*/
+		void newState(const CatchState &catchstate);
+		/// \brief To debug source
+		void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/0.3.0.8");
+Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/0.4.0.0");
 
 #endif // PLUGININTERFACE_PLUGINLOADER_H

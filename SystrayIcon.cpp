@@ -6,6 +6,7 @@
 \licence GPL3, see the file COPYING */
 
 #include <QMessageBox>
+#include <QMimeData>
 
 #include "SystrayIcon.h"
 
@@ -35,17 +36,17 @@ SystrayIcon::SystrayIcon()
 	#endif
 	show();
 	//connect the action
-	connect(&timerCheckSetTooltip,	SIGNAL(timeout()),					this,	SLOT(checkSetTooltip()));
-	connect(actionMenuQuit,		SIGNAL(triggered()),					this,	SIGNAL(quit()));
-	connect(actionMenuAbout,	SIGNAL(triggered()),					this,	SIGNAL(showHelp()));
-	connect(actionOptions,		SIGNAL(triggered()),					this,	SIGNAL(showOptions()));
-	connect(this,		SIGNAL(activated(QSystemTrayIcon::ActivationReason)),	this,	SLOT(CatchAction(QSystemTrayIcon::ActivationReason)));
-	connect(plugins,		SIGNAL(pluginListingIsfinish()),			this,	SLOT(reloadEngineList()));
+	connect(&timerCheckSetTooltip,	&QTimer::timeout,					this,	&SystrayIcon::checkSetTooltip);
+	connect(actionMenuQuit,		&QAction::triggered,					this,	&SystrayIcon::quit);
+	connect(actionMenuAbout,	&QAction::triggered,					this,	&SystrayIcon::showHelp);
+	connect(actionOptions,		&QAction::triggered,					this,	&SystrayIcon::showOptions);
+	connect(this,			&SystrayIcon::activated,				this,	&SystrayIcon::CatchAction);
+	connect(plugins,		&PluginsManager::pluginListingIsfinish,			this,	&SystrayIcon::reloadEngineList);
 	//display the icon
 	updateCurrentTheme();
 	//if theme/language change, update graphic part
-	connect(themes,		SIGNAL(theThemeIsReloaded()),				this,	SLOT(updateCurrentTheme()));
-	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			this,	SLOT(retranslateTheUI()));
+	connect(themes,			&ThemesManager::theThemeIsReloaded,			this,	&SystrayIcon::updateCurrentTheme);
+	connect(languages,		&LanguagesManager::newLanguageLoaded,			this,	&SystrayIcon::retranslateTheUI);
 	systrayMenu->addMenu(copyMenu);
 	systrayMenu->addAction(actionOptions);
 	systrayMenu->addAction(actionMenuAbout);
@@ -405,17 +406,17 @@ void SystrayIcon::reloadEngineList()
 	if(engineEntryList.size()==1)
 	{
 		QAction *copy=new QAction(IconAdd,tr("Add &copy"),copyMenu);
-		connect(copy,SIGNAL(triggered()),this,SLOT(CatchCopyQuery()));
+		connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
 		copy->setData(engineEntryList.first().name);
 		copyMenu->addAction(copy);
 		if(!engineEntryList.first().canDoOnlyCopy)
 		{
 			QAction *transfer=new QAction(IconAdd,tr("Add &transfer"),copyMenu);
-			connect(transfer,SIGNAL(triggered()),this,SLOT(CatchTransferQuery()));
+			connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
 			transfer->setData(engineEntryList.first().name);
 			copyMenu->addAction(transfer);
 			QAction *move=new QAction(IconAdd,tr("Add &move"),copyMenu);
-			connect(move,SIGNAL(triggered()),this,SLOT(CatchMoveQuery()));
+			connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
 			move->setData(engineEntryList.first().name);
 			copyMenu->addAction(move);
 		}
@@ -427,17 +428,17 @@ void SystrayIcon::reloadEngineList()
 		{
 			QMenu * menu=new QMenu(engineEntryList.at(index).name);
 			QAction *copy=new QAction(IconAdd,tr("Add &copy"),menu);
-			connect(copy,SIGNAL(triggered()),this,SLOT(CatchCopyQuery()));
+			connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
 			copy->setData(engineEntryList.at(index).name);
 			menu->addAction(copy);
 			if(!engineEntryList.at(index).canDoOnlyCopy)
 			{
 				QAction *transfer=new QAction(IconAdd,tr("Add &transfer"),menu);
-				connect(transfer,SIGNAL(triggered()),this,SLOT(CatchTransferQuery()));
+				connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
 				transfer->setData(engineEntryList.at(index).name);
 				menu->addAction(transfer);
 				QAction *move=new QAction(IconAdd,tr("Add &move"),menu);
-				connect(move,SIGNAL(triggered()),this,SLOT(CatchMoveQuery()));
+				connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
 				move->setData(engineEntryList.at(index).name);
 				menu->addAction(move);
 			}

@@ -29,11 +29,11 @@ public slots:
 	void cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck);
 signals:
 	/** new copy without destination have been pased by the CLI */
-	void newCopy(QStringList sources);
+	void newCopyWithoutDestination(QStringList sources);
 	/** new copy with destination have been pased by the CLI */
 	void newCopy(QStringList sources,QString destination);
 	/** new move without destination have been pased by the CLI */
-	void newMove(QStringList sources);
+	void newMoveWithoutDestination(QStringList sources);
 	/** new move with destination have been pased by the CLI */
 	void newMove(QStringList sources,QString destination);
 	/** new transfer list pased by the CLI */

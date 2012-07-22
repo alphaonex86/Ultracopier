@@ -279,7 +279,7 @@ void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &d
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
-bool ListThread::haveSameSource(QStringList sources)
+bool ListThread::haveSameSource(const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(sourceDriveMultiple)
@@ -297,7 +297,7 @@ bool ListThread::haveSameSource(QStringList sources)
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
-bool ListThread::haveSameDestination(QString destination)
+bool ListThread::haveSameDestination(const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(destinationDriveMultiple)
@@ -391,7 +391,7 @@ void ListThread::startGeneralTransfer()
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
-bool ListThread::newCopy(QStringList sources,QString destination)
+bool ListThread::newCopy(const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+sources.join(";")+", destination: "+destination);
 	scanFileOrFolder * scanFileOrFolderThread = newScanThread(Copy);
@@ -407,7 +407,7 @@ bool ListThread::newCopy(QStringList sources,QString destination)
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
-bool ListThread::newMove(QStringList sources,QString destination)
+bool ListThread::newMove(const QStringList &sources,const QString &destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	scanFileOrFolder * scanFileOrFolderThread = newScanThread(Move);
@@ -439,7 +439,7 @@ bool ListThread::newMove(QStringList sources,QString destination)
 	return true;
 }
 
-void ListThread::setDrive(QStringList drives)
+void ListThread::setDrive(const QStringList &drives)
 {
 	this->drives=drives;
 	int index=0;
@@ -451,7 +451,7 @@ void ListThread::setDrive(QStringList drives)
 	}
 }
 
-void ListThread::setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists)
+void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists)
 {
 	this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
 	int index=0;
@@ -472,7 +472,7 @@ void ListThread::syncTransferList()
 }
 
 //set the folder local colision
-void ListThread::setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists)
+void ListThread::setFolderColision(const FolderExistsAction &alwaysDoThisActionForFolderExists)
 {
 	this->alwaysDoThisActionForFolderExists=alwaysDoThisActionForFolderExists;
 }
@@ -720,7 +720,7 @@ void ListThread::updateTheStatus()
 }
 
 //set data local to the thread
-void ListThread::setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists)
+void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisActionForFileExists)
 {
 	this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
 	int_for_loop=0;
@@ -1435,7 +1435,7 @@ void ListThread::restartTransferIfItCan()
 }
 
 /// \brief update the transfer stat
-void ListThread::newTransferStat(TransferStat stat,quint64 id)
+void ListThread::newTransferStat(const TransferStat &stat,const quint64 &id)
 {
 	returnActionOnCopyList newAction;
 	switch(stat)
@@ -1467,7 +1467,7 @@ void ListThread::newTransferStat(TransferStat stat,quint64 id)
 	actionDone << newAction;
 }
 
-void ListThread::set_osBufferLimit(unsigned int osBufferLimit)
+void ListThread::set_osBufferLimit(const unsigned int &osBufferLimit)
 {
 	this->osBufferLimit=osBufferLimit;
 	int index=0;
@@ -1479,7 +1479,7 @@ void ListThread::set_osBufferLimit(unsigned int osBufferLimit)
 	}
 }
 
-void ListThread::set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
+void ListThread::set_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("include.size(): %1, exclude.size(): %2").arg(include.size()).arg(exclude.size()));
 	this->include=include;
@@ -1492,7 +1492,7 @@ void ListThread::set_setFilters(QList<Filters_rules> include,QList<Filters_rules
 	}
 }
 
-void ListThread::set_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void ListThread::set_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
 {
 	this->firstRenamingRule=firstRenamingRule;
 	this->otherRenamingRule=otherRenamingRule;

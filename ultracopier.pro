@@ -1,5 +1,5 @@
 TEMPLATE = app
-QT += network xml
+QT += network xml widgets
 TRANSLATIONS += plugins/Languages/fr/translation.ts \
     plugins/Languages/ar/translation.ts \
     plugins/Languages/zh/translation.ts \

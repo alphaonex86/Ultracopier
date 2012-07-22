@@ -165,7 +165,7 @@ QWidget * Themes::getOptionsEngineWidget()
 	return &optionEngineWidget;
 }
 
-void Themes::getOptionsEngineEnabled(bool isEnabled)
+void Themes::getOptionsEngineEnabled(const bool &isEnabled)
 {
 	if(isEnabled)
 		ui->tabWidget->addTab(&optionEngineWidget,facilityEngine->translateText("Copy engine"));
@@ -184,7 +184,7 @@ void Themes::updateOverallInformation()
 	ui->overall->setText(tr("File %1/%2, size: %3/%4").arg(currentFile).arg(totalFile).arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
 }
 
-void Themes::actionInProgess(EngineActionInProgress action)
+void Themes::actionInProgess(const EngineActionInProgress &action)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"start: "+QString::number(action));
 	this->action=action;
@@ -361,14 +361,14 @@ void Themes::getActionOnList(const QList<returnActionOnCopyList> &returnActions)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"transferModel.rowCount(): "+QString::number(transferModel.rowCount()));
 }
 
-void Themes::setCopyType(CopyType type)
+void Themes::setCopyType(const CopyType &type)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	this->type=type;
 	updateModeAndType();
 }
 
-void Themes::forceCopyMode(CopyMode mode)
+void Themes::forceCopyMode(const CopyMode &mode)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	modeIsForced=true;
@@ -380,7 +380,7 @@ void Themes::forceCopyMode(CopyMode mode)
 	updateModeAndType();
 }
 
-void Themes::setTransferListOperation(TransferListOperation transferListOperation)
+void Themes::setTransferListOperation(const TransferListOperation &transferListOperation)
 {
 	ui->exportTransferList->setVisible(transferListOperation & TransferListOperation_Export);
 	ui->importTransferList->setVisible(transferListOperation & TransferListOperation_Import);
@@ -392,7 +392,7 @@ void Themes::haveExternalOrder()
 //	ui->moreButton->toggle();
 }
 
-void Themes::isInPause(bool isInPause)
+void Themes::isInPause(const bool &isInPause)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"isInPause: "+QString::number(isInPause));
 	//resume in auto the pause

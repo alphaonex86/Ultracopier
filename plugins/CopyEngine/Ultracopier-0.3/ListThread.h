@@ -34,30 +34,30 @@ public:
 	/** \brief compare the current sources of the copy, with the passed arguments
 	 * \param sources the sources list to compares with the current sources list
 	 * \return true if have same sources, else false (or empty) */
-	bool haveSameSource(QStringList sources);
+	bool haveSameSource(const QStringList &sources);
 	/** \brief compare the current destination of the copy, with the passed arguments
 	 * \param destination the destination to compares with the current destination
 	 * \return true if have same destination, else false (or empty) */
-	bool haveSameDestination(QString destination);
+	bool haveSameDestination(const QString &destination);
 	//external soft like file browser have send copy/move list to do
 	/** \brief send copy with destination
 	 * \param sources the sources list to copy
 	 * \param destination the destination to copy
 	 * \return true if the copy have been accepted */
-	bool newCopy(QStringList sources,QString destination);
+	bool newCopy(const QStringList &sources,const QString &destination);
 	/** \brief send move without destination, ask the destination
 	 * \param sources the sources list to move
 	 * \param destination the destination to move
 	 * \return true if the move have been accepted */
-	bool newMove(QStringList sources,QString destination);
+	bool newMove(const QStringList &sources,const QString &destination);
 	/** \brief get the speed limitation
 	 * < -1 if not able, 0 if disabled */
 	qint64 getSpeedLimitation();
 	/** \brief to set drives detected
 	 * specific to this copy engine */
-	void setDrive(QStringList drives);
+	void setDrive(const QStringList &drives);
 	/// \brief to set the collision action
-	void setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
+	void setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists);
 	/** \brief to sync the transfer list
 	 * Used when the interface is changed, useful to minimize the memory size */
 	void syncTransferList();
@@ -143,7 +143,7 @@ public slots:
 	void importTransferList(const QString &fileName);
 
 	/// \brief set the folder local colision
-	void setFolderColision(FolderExistsAction alwaysDoThisActionForFolderExists);
+	void setFolderColision(const FolderExistsAction &alwaysDoThisActionForFolderExists);
 	/** \brief to set the speed limitation
 	 * -1 if not able, 0 if disabled */
 	bool setSpeedLimitation(const qint64 &speedLimitation);
@@ -158,7 +158,7 @@ public slots:
 	/// \brief set check destination folder
 	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
 	/// \brief set data local to the thread
-	void setAlwaysFileExistsAction(FileExistsAction alwaysDoThisActionForFileExists);
+	void setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisActionForFileExists);
 	/// \brief do new actions, start transfer
 	void doNewActions_start_transfer();
 	/** \brief lunch the pre-op or inode op
@@ -172,11 +172,11 @@ public slots:
 	void restartTransferIfItCan();
 
 	/// \brief update the transfer stat
-	void newTransferStat(TransferStat stat,quint64 id);
+	void newTransferStat(const TransferStat &stat,const quint64 &id);
 
-	void set_osBufferLimit(unsigned int osBufferLimit);
-	void set_setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
-	void set_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+	void set_osBufferLimit(const unsigned int &osBufferLimit);
+	void set_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
+	void set_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
 
 	//send action done
 	void sendActionDone();
@@ -222,15 +222,15 @@ private:
 	//generate id number
 	quint64 generateIdNumber();
 	//warning the first entry is accessible will copy
-	bool removeItems(quint64 id);
+	bool removeSingleItem(const quint64 &id);
 	//put on top
-	bool moveOnTopItem(quint64 id);
+	bool moveOnTopItem(const quint64 &id);
 	//move up
-	bool moveUpItem(quint64 id);
+	bool moveUpItem(const quint64 &id);
 	//move down
-	bool moveDownItem(quint64 id);
+	bool moveDownItem(const quint64 &id);
 	//put on bottom
-	bool moveOnBottomItem(quint64 id);
+	bool moveOnBottomItem(const quint64 &id);
 	//general transfer
 	void startGeneralTransfer();
 	//debug windows if needed
@@ -306,7 +306,7 @@ private slots:
 	void syncTransferList_internal();
 signals:
         //send information about the copy
-        void actionInProgess(EngineActionInProgress);	//should update interface information on this event
+	void actionInProgess(const EngineActionInProgress &);	//should update interface information on this event
 
 	void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
 	void syncReady();
@@ -321,50 +321,50 @@ signals:
 	void pushGeneralProgression(const quint64 &,const quint64 &);
 
 	void newFolderListing(const QString &path);
-	void newCollisionAction(QString action);
-	void newErrorAction(QString action);
-        void isInPause(bool);
+	void newCollisionAction(const QString &action);
+	void newErrorAction(const QString &action);
+	void isInPause(const bool &);
 
 	//when can be deleted
 	void canBeDeleted();
 
         //send error occurred
-        void error(QString path,quint64 size,QDateTime mtime,QString error);
+	void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
         //for the extra logging
-        void rmPath(QString path);
-        void mkPath(QString path);
+	void rmPath(const QString &path);
+	void mkPath(const QString &path);
         /// \brief To debug source
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 	#endif
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-	void updateTheDebugInfo(QStringList,QStringList,int);
+	void updateTheDebugInfo(const QStringList &,const QStringList&,const int &);
 	#endif
 
 	//other signal
 	/// \note Can be call without queue because all call will be serialized
-	void send_fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread);
+	void send_fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,TransferThread * thread);
 	/// \note Can be call without queue because all call will be serialized
-	void send_errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread);
+	void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
 	/// \note Can be call without queue because all call will be serialized
-	void send_folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread);
+	void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,scanFileOrFolder * thread);
 	/// \note Can be call without queue because all call will be serialized
-	void send_errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread);
+	void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,scanFileOrFolder * thread);
 	//send the progression
 	void send_syncTransferList();
 	//mkpath error event
-	void mkPathErrorOnFolder(QFileInfo fileInfo,QString errorString);
+	void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
 	//rmpath error event
-	void rmPathErrorOnFolder(QFileInfo fileInfo,QString errorString);
+	void rmPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
 	//to close
 	void tryCancel();
 	//to ask new transfer thread
 	void askNewTransferThread();
 
-	void warningTransferList(QString warning);
-	void errorTransferList(QString error);
-	void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
-	void send_realBytesTransfered(quint64);
+	void warningTransferList(const QString &warning);
+	void errorTransferList(const QString &error);
+	void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
+	void send_realBytesTransfered(const quint64 &);
 };
 
 #endif // LISTTHREAD_H

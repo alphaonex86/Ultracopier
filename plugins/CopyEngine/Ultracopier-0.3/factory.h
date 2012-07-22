@@ -29,6 +29,7 @@ namespace Ui {
 class Factory : public PluginInterface_CopyEngineFactory
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_CopyEngineFactory)
 public:
 	Factory();
@@ -72,7 +73,7 @@ private slots:
 	void setBlockSize(int blockSize);
 	void setAutoStart(bool autoStart);
 	void showFilterDialog();
-	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+	void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions);
 	void doChecksum_toggled(bool);
 	void checksumOnlyOnError_toggled(bool);
 	void osBuffer_toggled(bool);
@@ -86,10 +87,6 @@ public slots:
 	void newLanguageLoaded();
 signals:
 	void reloadLanguage();
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
 };
 
 #endif // FACTORY_H

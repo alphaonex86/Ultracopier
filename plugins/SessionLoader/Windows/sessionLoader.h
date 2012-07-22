@@ -16,6 +16,7 @@
 class SessionLoader : public PluginInterface_SessionLoader
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.SessionLoader/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_SessionLoader)
 public:
 	/// \brief to set if it's enabled or not
@@ -29,11 +30,6 @@ public:
 public slots:
 	/// \brief to reload the translation, because the new language have been loaded
 	void newLanguageLoaded();
-signals:
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
 };
 
 #endif // SESSION_LOADER_H

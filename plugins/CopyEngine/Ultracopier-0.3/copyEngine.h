@@ -115,6 +115,22 @@ private slots:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 	void updateTheDebugInfo(QStringList,QStringList,int);
 	#endif
+
+	/************* External  call ********************/
+	//dialog message
+	/// \note Can be call without queue because all call will be serialized
+	void fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread);
+	/// \note Can be call without queue because all call will be serialized
+	void errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread);
+	/// \note Can be call without queue because all call will be serialized
+	void folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread);
+	/// \note Can be call without queue because all call will be serialized
+	void errorOnFolderSlot(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread);
+	//mkpath event
+	void mkPathErrorOnFolderSlot(QFileInfo,QString);
+	//rmpath event
+	void rmPathErrorOnFolderSlot(QFileInfo,QString);
+
 	//dialog message
 	/// \note Can be call without queue because all call will be serialized
 	void fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
@@ -128,6 +144,7 @@ private slots:
 	void mkPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
 	//rmpath event
 	void rmPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
+
 	//show one new dialog if needed
 	void showOneNewDialog();
 	void sendNewFilters();
@@ -289,24 +306,24 @@ private slots:
 	void errorTransferList(const QString &error);
 signals:
 	//send information about the copy
-	void actionInProgess(EngineActionInProgress);	//should update interface information on this event
+	//void actionInProgess(EngineActionInProgress);	//should update interface information on this event
 
-	void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
-	void syncReady();
+	//void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
+	//void syncReady();
 
 	/** \brief to get the progression for a specific file
 	 * \param id the id of the transfer, id send during population the transfer list
 	 * first = current transfered byte, second = byte to transfer */
-	void pushFileProgression(const QList<ProgressionItem> &progressionList);
+	//void pushFileProgression(const QList<ProgressionItem> &progressionList);
 	//get information about the copy
 	/** \brief to get the general progression
 	 * first = current transfered byte, second = byte to transfer */
-	void pushGeneralProgression(const quint64 &,const quint64 &);
+	//void pushGeneralProgression(const quint64 &,const quint64 &);
 
-	void newFolderListing(const QString &path);
+	/*void newFolderListing(const QString &path);
 	void newCollisionAction(const QString &action);
 	void newErrorAction(const QString &action);
-	void isInPause(bool);
+	void isInPause(bool);*/
 
 	//action on the copy
 	void signal_pause();
@@ -336,13 +353,13 @@ signals:
 	void tryCancel();
 
 	//when can be deleted
-	void canBeDeleted();
+	//void canBeDeleted();
 
 	//send error occurred
-	void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
+	/*void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
 	//for the extra logging
 	void rmPath(const QString &path);
-	void mkPath(const QString &path);
+	void mkPath(const QString &path);*/
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);

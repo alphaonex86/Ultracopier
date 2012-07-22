@@ -154,26 +154,26 @@ class PluginInterface_CopyEngine : public QObject
 		virtual void setCollisionAction(const QString &action) = 0;
 		/// \brief to set the error action
 		virtual void setErrorAction(const QString &action) = 0;
-	/* signal to implement
+	// signal to implement
 	signals:
 		//send information about the copy
-		void actionInProgess(EngineActionInProgress engineActionInProgress);	//should update interface information on this event
+		void actionInProgess(const EngineActionInProgress &engineActionInProgress);	//should update interface information on this event
 		
-		void newFolderListing(QString path);
-		void newCollisionAction(QString action);
-		void newErrorAction(QString action);
-		void isInPause(bool isInPause);
+		void newFolderListing(const QString &path);
+		void newCollisionAction(const QString &action);
+		void newErrorAction(const QString &action);
+		void isInPause(const bool &isInPause);
 		
 		void newActionOnList(const QList<returnActionOnCopyList>&);///very important, need be temporized to group the modification to do and not flood the interface
 		void syncReady();
 
-		/ ** \brief to get the progression for a specific file
+		/** \brief to get the progression for a specific file
 		 * \param id the id of the transfer, id send during population the transfer list
-		 * first = current transfered byte, second = byte to transfer * /
+		 * first = current transfered byte, second = byte to transfer */
 		void pushFileProgression(const QList<ProgressionItem> &progressionList);
 		//get information about the copy
-		/ ** \brief to get the general progression
-		 * first = current transfered byte, second = byte to transfer * /
+		/** \brief to get the general progression
+		 * first = current transfered byte, second = byte to transfer */
 		void pushGeneralProgression(const quint64 &,const quint64 &);
 		
 		//when the cancel is clicked on copy engine dialog
@@ -183,10 +183,10 @@ class PluginInterface_CopyEngine : public QObject
 		void canBeDeleted();
 		
 		//send error occurred
-		void error(QString path,quint64 size,QDateTime mtime,QString error);
+		void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
 		//for the extra logging
-		void rmPath(QString path);
-		void mkPath(QString path);*/
+		void rmPath(const QString &path);
+		void mkPath(const QString &path);
 };
 
 /// \brief To define the interface for the factory to do copy engine instance
@@ -216,9 +216,11 @@ class PluginInterface_CopyEngineFactory : public QObject
 		virtual void resetOptions() = 0;
 		/// \brief to reload the translation, because the new language have been loaded
 		virtual void newLanguageLoaded() = 0;
-
+	signals:
+		/// \brief To debug source
+		void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.3.0.10");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.4.0.0");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

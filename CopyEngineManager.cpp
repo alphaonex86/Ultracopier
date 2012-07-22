@@ -13,14 +13,14 @@
 CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()),Qt::DirectConnection);
+	connect(languages,	&LanguagesManager::newLanguageLoaded,			&facilityEngine,&FacilityEngine::retranslate,Qt::DirectConnection);
 	this->optionDialog=optionDialog;
 	//setup the ui layout
 	plugins->lockPluginListEdition();
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
+	connect(this,&CopyEngineManager::previouslyPluginAdded,			this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginAdded,			this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyEngineManager::onePluginWillBeRemoved,Qt::DirectConnection);
+	connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&CopyEngineManager::allPluginIsloaded,Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_CopyEngine);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
@@ -80,8 +80,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
 		return;
 	}
 	#ifdef ULTRACOPIER_DEBUG
-	qRegisterMetaType<DebugLevel>("DebugLevel");
-	connect(newItem.factory,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
+	connect(newItem.factory,&PluginInterface_CopyEngineFactory::debugInformation,this,&CopyEngineManager::debugInformation,Qt::QueuedConnection);
 	#endif // ULTRACOPIER_DEBUG
 	newItem.options=new LocalPluginOptions("CopyEngine-"+newItem.name);
 	newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
@@ -95,7 +94,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"plugin: "+newItem.name+" loaded, send options");
 	//emit newCopyEngineOptions(plugin.path,newItem.name,newItem.optionsWidget);
 	pluginList << newItem;
-	connect(languages,SIGNAL(newLanguageLoaded(QString)),newItem.factory,SLOT(newLanguageLoaded()));
+	connect(languages,&LanguagesManager::newLanguageLoaded,newItem.factory,&PluginInterface_CopyEngineFactory::newLanguageLoaded);
 	if(plugins->allPluginHaveBeenLoaded())
 		allPluginIsloaded();
 	if(isConnected)

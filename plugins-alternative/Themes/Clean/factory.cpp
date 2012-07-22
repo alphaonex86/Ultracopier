@@ -66,5 +66,3 @@ void Factory::newLanguageLoaded()
 {
 	emit reloadLanguage();
 }
-
-Q_EXPORT_PLUGIN2(interface, Factory);

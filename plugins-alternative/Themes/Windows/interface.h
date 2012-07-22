@@ -26,7 +26,7 @@ class InterfacePlugin : public PluginInterface_Themes
 public slots:
 	//send information about the copy
 	/// \brief to set the action in progress
-	void actionInProgess(EngineActionInProgress);
+	void actionInProgess(const EngineActionInProgress &);
 	/// \brief new transfer have started
 	void newTransferStart(const ItemOfCopyList &item);
 	/** \brief one transfer have been stopped
@@ -74,7 +74,7 @@ public:
 	/// \brief get the widget for the copy engine
 	QWidget * getOptionsEngineWidget();
 	/// \brief to set if the copy engine is found
-	void getOptionsEngineEnabled(bool isEnabled);
+	void getOptionsEngineEnabled(const bool &isEnabled);
 	/// \brief get action on the transfer list (add/move/remove)
 	void getActionOnList(const QList<returnActionOnCopyList> &returnActions);
 	//get information about the copy
@@ -87,22 +87,22 @@ public:
 	/// \brief set error action
 	void setErrorAction(const QList<QPair<QString,QString> > &);
 	/// \brief set the copyType -> file or folder
-	void setCopyType(CopyType);
+	void setCopyType(const CopyType &);
 	/// \brief set the copyMove -> copy or move, to force in copy or move, else support both
-	void forceCopyMode(CopyMode);
+	void forceCopyMode(const CopyMode &);
 	/// \brief set if transfer list is exportable/importable
-	void setTransferListOperation(TransferListOperation transferListOperation);
+	void setTransferListOperation(const TransferListOperation &transferListOperation);
 	/** \brief set if the order is external (like file manager copy)
 	 * to notify the interface, which can hide add folder/filer button */
 	void haveExternalOrder();
 	/// \brief set if is in pause
-	void isInPause(bool);
+	void isInPause(const bool &);
 signals:
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
 	#endif
-	//set the transfer list
+/*	//set the transfer list
 	void removeItems(QList<int> ids);
 	void moveItemsOnTop(QList<int> ids);
 	void moveItemsUp(QList<int> ids);
@@ -122,7 +122,7 @@ signals:
 	//edit the action
 	void sendCollisionAction(QString action);
 	void sendErrorAction(QString action);
-	void newSpeedLimitation(qint64);
+	void newSpeedLimitation(qint64);*/
 public:
 	//constructor and destructor
 	InterfacePlugin(FacilityInterface * facilityEngine);

@@ -34,7 +34,7 @@ class SessionLoader : public QObject, GlobalClass
 		void onePluginWillBeRemoved(const PluginsAvailable &plugin);
 		void newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
 		#ifdef ULTRACOPIER_DEBUG
-		void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
+		void debugInformation(const DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
 		#endif // ULTRACOPIER_DEBUG
 	private:
 		//variable

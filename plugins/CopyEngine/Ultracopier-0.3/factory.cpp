@@ -12,6 +12,18 @@
 Factory::Factory() :
 	ui(new Ui::options())
 {
+	qRegisterMetaType<TransferThread *>("TransferThread *");
+	qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
+	qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");
+	qRegisterMetaType<DebugLevel>("DebugLevel");
+	qRegisterMetaType<FileExistsAction>("FileExistsAction");
+	qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
+	qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
+	qRegisterMetaType<QList<int> >("QList<int>");
+	qRegisterMetaType<CopyMode>("CopyMode");
+	qRegisterMetaType<QList<returnActionOnCopyList> >("QList<returnActionOnCopyList>");
+	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
+
 	tempWidget=new QWidget();
 	ui->setupUi(tempWidget);
 	errorFound=false;
@@ -25,27 +37,27 @@ Factory::Factory() :
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
 	#elif defined (Q_OS_LINUX)
-	connect(&mount,SIGNAL(error(QProcess::ProcessError)),		this,SLOT(error(QProcess::ProcessError)));
-	connect(&mount,SIGNAL(finished(int,QProcess::ExitStatus)),	this,SLOT(finished(int,QProcess::ExitStatus)));
-	connect(&mount,SIGNAL(readyReadStandardOutput()),		this,SLOT(readyReadStandardOutput()));
-	connect(&mount,SIGNAL(readyReadStandardError()),		this,SLOT(readyReadStandardError()));
+	connect(&mount,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),				this,&Factory::error);
+	connect(&mount,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),				this,&Factory::finished);
+	connect(&mount,&QProcess::readyReadStandardOutput,		this,&Factory::readyReadStandardOutput);
+	connect(&mount,&QProcess::readyReadStandardError,		this,&Factory::readyReadStandardError);
 	mount.start("mount");
 	#endif
-	connect(ui->doRightTransfer,		SIGNAL(toggled(bool)),		this,SLOT(setDoRightTransfer(bool)));
-	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
-	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
-	connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
-	connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
-	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
-	connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
-	connect(ui->osBuffer,			SIGNAL(toggled(bool)),		this,SLOT(osBuffer_toggled(bool)));
-	connect(ui->osBufferLimited,		SIGNAL(toggled(bool)),		this,SLOT(osBufferLimited_toggled(bool)));
-	connect(ui->osBufferLimit,		SIGNAL(editingFinished()),	this,SLOT(osBufferLimit_editingFinished()));
+	connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&Factory::setDoRightTransfer);
+	connect(ui->keepDate,			&QCheckBox::toggled,		this,&Factory::setKeepDate);
+	connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&Factory::setBlockSize);
+	connect(ui->autoStart,			&QCheckBox::toggled,		this,&Factory::setAutoStart);
+	connect(ui->doChecksum,			&QCheckBox::toggled,		this,&Factory::doChecksum_toggled);
+	connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&Factory::checksumIgnoreIfImpossible_toggled);
+	connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&Factory::checksumOnlyOnError_toggled);
+	connect(ui->osBuffer,			&QCheckBox::toggled,		this,&Factory::osBuffer_toggled);
+	connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&Factory::osBufferLimited_toggled);
+	connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&Factory::osBufferLimit_editingFinished);
 
-	connect(filters,SIGNAL(sendNewFilters(QStringList,QStringList,QStringList,QStringList)),this,SLOT(sendNewFilters(QStringList,QStringList,QStringList,QStringList)));
-	connect(ui->filters,SIGNAL(clicked()),this,SLOT(showFilterDialog()));
-	connect(renamingRules,SIGNAL(sendNewRenamingRules(QString,QString)),this,SLOT(sendNewRenamingRules(QString,QString)));
-	connect(ui->renamingRules,SIGNAL(clicked()),this,SLOT(showRenamingRules()));
+	connect(filters,&Filters::sendNewFilters,this,&Factory::sendNewFilters);
+	connect(ui->filters,&QPushButton::clicked,this,&Factory::showFilterDialog);
+	connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&Factory::sendNewRenamingRules);
+	connect(ui->renamingRules,&QPushButton::clicked,this,&Factory::showRenamingRules);
 
 	ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
@@ -61,12 +73,12 @@ PluginInterface_CopyEngine * Factory::getInstance()
 {
 	copyEngine *realObject=new copyEngine(facilityEngine);
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	connect(realObject,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+	connect(realObject,&copyEngine::debugInformation,this,&Factory::debugInformation);
 	#endif
 	realObject->connectTheSignalsSlots();
 	realObject->setDrive(mountSysPoint);
 	PluginInterface_CopyEngine * newTransferEngine=realObject;
-	connect(this,SIGNAL(reloadLanguage()),newTransferEngine,SLOT(newLanguageLoaded()));
+	connect(this,&Factory::reloadLanguage,realObject,&copyEngine::newLanguageLoaded);
 	realObject->setRightTransfer(		optionsEngine->getOptionValue("doRightTransfer").toBool());
 	realObject->setKeepDate(		optionsEngine->getOptionValue("keepDate").toBool());
 	realObject->setBlockSize(		optionsEngine->getOptionValue("blockSize").toInt());
@@ -300,8 +312,6 @@ void Factory::newLanguageLoaded()
 	emit reloadLanguage();
 }
 
-Q_EXPORT_PLUGIN2(copyEngine, Factory);
-
 void Factory::doChecksum_toggled(bool doChecksum)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
@@ -360,7 +370,7 @@ void Factory::showFilterDialog()
 	filters->exec();
 }
 
-void Factory::sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
 	if(optionsEngine!=NULL)

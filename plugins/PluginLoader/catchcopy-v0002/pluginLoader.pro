@@ -1,3 +1,4 @@
+QT += widgets
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = \

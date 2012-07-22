@@ -75,7 +75,7 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
 		/// \brief send this signal when the themes have changed
 		void theThemeNeedBeUnloaded();
 		void theThemeIsReloaded();
-		void newThemeOptions(QString name,QWidget *,bool isLoaded,bool havePlugin);
+		void newThemeOptions(const QString &name,QWidget *,const bool &isLoaded,const bool &havePlugin);
 		void previouslyPluginAdded(PluginsAvailable);
 	private slots:
 		/// \brief reload the themes

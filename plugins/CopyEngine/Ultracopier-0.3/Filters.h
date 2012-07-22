@@ -27,10 +27,11 @@ private:
 	Ui::Filters *ui;
 	QList<Filters_rules> include;
 	QList<Filters_rules> exclude;
-	void haveNewFilters();
+	void updateFilters();
 	bool convertToRegex(Filters_rules &item);
 signals:
-	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+	void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions);
+	void haveNewFilters();
 private slots:
 	void on_remove_exclusion_clicked();
 	void on_remove_inclusion_clicked();

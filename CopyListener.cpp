@@ -21,11 +21,11 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
 	qRegisterMetaType<ListeningState>("ListeningState");
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
-	connect(pluginLoader,SIGNAL(pluginLoaderReady(CatchState,bool,bool)),	this,SIGNAL(pluginLoaderReady(CatchState,bool,bool)));
+	connect(this,&CopyListener::previouslyPluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyListener::onePluginWillBeRemoved,Qt::DirectConnection);
+	connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&CopyListener::allPluginIsloaded,Qt::QueuedConnection);
+	connect(pluginLoader,&PluginLoader::pluginLoaderReady,			this,&CopyListener::pluginLoaderReady);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
@@ -79,12 +79,12 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 		{
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Plugin correctly loaded");
 			#ifdef ULTRACOPIER_DEBUG
-			connect(listen,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)));
+			connect(listen,&PluginInterface_Listener::debugInformation,this,&CopyListener::debugInformation);
 			#endif // ULTRACOPIER_DEBUG
-			connect(listen,SIGNAL(newCopy(quint32,QStringList)),		this,SLOT(newPluginCopy(quint32,QStringList)));
-			connect(listen,SIGNAL(newCopy(quint32,QStringList,QString)),	this,SLOT(newPluginCopy(quint32,QStringList,QString)));
-			connect(listen,SIGNAL(newMove(quint32,QStringList)),		this,SLOT(newPluginMove(quint32,QStringList)));
-			connect(listen,SIGNAL(newMove(quint32,QStringList,QString)),	this,SLOT(newPluginMove(quint32,QStringList,QString)));
+			connect(listen,&PluginInterface_Listener::newCopyWithoutDestination,		this,&CopyListener::newPluginCopyWithoutDestination);
+			connect(listen,&PluginInterface_Listener::newCopy,				this,&CopyListener::newPluginCopy);
+			connect(listen,&PluginInterface_Listener::newMoveWithoutDestination,		this,&CopyListener::newPluginMoveWithoutDestination);
+			connect(listen,&PluginInterface_Listener::newMove,				this,&CopyListener::newPluginMove);
 			PluginListener newPluginListener;
 			newPluginListener.listenInterface	= listen;
 			newPluginListener.pluginLoader		= pluginOfPluginLoader;
@@ -94,9 +94,9 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
 			newPluginListener.options=new LocalPluginOptions("Listener-"+plugin.name);
 			newPluginListener.listenInterface->setResources(newPluginListener.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
 			optionDialog->addPluginOptionWidget(PluginType_Listener,plugin.name,newPluginListener.listenInterface->options());
-			connect(languages,SIGNAL(newLanguageLoaded(QString)),newPluginListener.listenInterface,SLOT(newLanguageLoaded()));
+			connect(languages,&LanguagesManager::newLanguageLoaded,newPluginListener.listenInterface,&PluginInterface_Listener::newLanguageLoaded);
 			pluginList << newPluginListener;
-			connect(pluginList.last().listenInterface,SIGNAL(newState(ListeningState)),this,SLOT(newState(ListeningState)));
+			connect(pluginList.last().listenInterface,&PluginInterface_Listener::newState,this,&CopyListener::newState);
 			if(tryListen)
 			{
 				pluginList.last().inWaitOfReply=true;
@@ -140,7 +140,7 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 				index++;
 			}
 			pluginList.at(indexPlugin).listenInterface->close();
-			disconnect(pluginList.at(indexPlugin).listenInterface);
+			delete pluginList.at(indexPlugin).listenInterface;
 			pluginList.at(indexPlugin).pluginLoader->unload();
 			delete pluginList.at(indexPlugin).options;
 			pluginList.removeAt(indexPlugin);
@@ -218,28 +218,28 @@ QStringList CopyListener::stripSeparator(QStringList sources)
 }
 
 /** new copy without destination have been pased by the CLI */
-void CopyListener::newCopy(QStringList sources)
+void CopyListener::copyWithoutDestination(QStringList sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(sources));
+	emit newCopyWithoutDestination(incrementOrderId(),QStringList() << "file",stripSeparator(sources));
 }
 
 /** new copy with destination have been pased by the CLI */
-void CopyListener::newCopy(QStringList sources,QString destination)
+void CopyListener::copy(QStringList sources,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit newCopy(incrementOrderId(),QStringList() << "file",stripSeparator(sources),"file",destination);
 }
 
 /** new move without destination have been pased by the CLI */
-void CopyListener::newMove(QStringList sources)
+void CopyListener::moveWithoutDestination(QStringList sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
-	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(sources));
+	emit newMoveWithoutDestination(incrementOrderId(),QStringList() << "file",stripSeparator(sources));
 }
 
 /** new move with destination have been pased by the CLI */
-void CopyListener::newMove(QStringList sources,QString destination)
+void CopyListener::move(QStringList sources,QString destination)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	emit newMove(incrementOrderId(),QStringList() << "file",stripSeparator(sources),"file",destination);
@@ -281,7 +281,7 @@ void CopyListener::copyCanceled(const quint32 & orderId)
 	}
 }
 
-void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources)
+void CopyListener::newPluginCopyWithoutDestination(const quint32 &orderId,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";"));
 	PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
@@ -290,7 +290,7 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sourc
 	newCopyInformation.pluginOrderId	= orderId;
 	newCopyInformation.orderId		= incrementOrderId();
 	copyRunningList << newCopyInformation;
-	emit newCopy(orderId,QStringList() << "file",stripSeparator(sources));
+	emit newCopyWithoutDestination(orderId,QStringList() << "file",stripSeparator(sources));
 }
 
 void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination)
@@ -305,7 +305,7 @@ void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sourc
 	emit newCopy(orderId,QStringList() << "file",stripSeparator(sources),"file",destination);
 }
 
-void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources)
+void CopyListener::newPluginMoveWithoutDestination(const quint32 &orderId,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"sources: "+sources.join(";"));
 	PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
@@ -314,7 +314,7 @@ void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sourc
 	newCopyInformation.pluginOrderId	= orderId;
 	newCopyInformation.orderId		= incrementOrderId();
 	copyRunningList << newCopyInformation;
-	emit newMove(orderId,QStringList() << "file",stripSeparator(sources));
+	emit newMoveWithoutDestination(orderId,QStringList() << "file",stripSeparator(sources));
 }
 
 void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination)

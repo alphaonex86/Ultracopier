@@ -17,10 +17,10 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
 	plugins->lockPluginListEdition();
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
 	qRegisterMetaType<CatchState>("CatchState");
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
+	connect(this,&PluginLoader::previouslyPluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginWillBeRemoved,this,&PluginLoader::onePluginWillBeRemoved,Qt::DirectConnection);
+	connect(plugins,&PluginsManager::pluginListingIsfinish,	this,&PluginLoader::allPluginIsloaded,Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_PluginLoader);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
@@ -73,7 +73,7 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
 		if(PluginLoader)
 		{
 			#ifdef ULTRACOPIER_DEBUG
-			connect(PluginLoader,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)));
+			connect(PluginLoader,&PluginInterface_PluginLoader::debugInformation,this,&PluginLoader::debugInformation);
 			#endif // ULTRACOPIER_DEBUG
 			LocalPlugin newEntry;
 			newEntry.options=new LocalPluginOptions("PluginLoader-"+plugin.name);
@@ -85,8 +85,8 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
 			pluginList << newEntry;
 			PluginLoader->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
 			optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.PluginLoaderInterface->options());
-			connect(pluginList.last().PluginLoaderInterface,SIGNAL(newState(CatchState)),this,SLOT(newState(CatchState)));
-			connect(languages,SIGNAL(newLanguageLoaded(QString)),newEntry.PluginLoaderInterface,SLOT(newLanguageLoaded()));
+			connect(pluginList.last().PluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoader::newState);
+			connect(languages,&LanguagesManager::newLanguageLoaded,newEntry.PluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded);
 			if(needEnable)
 			{
 				pluginList.last().inWaitOfReply=true;

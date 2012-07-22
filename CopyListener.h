@@ -31,9 +31,9 @@ class CopyListener : public QObject, public GlobalClass
 		void resendState();
 	private slots:
 		//void newPlugin();
-		void newPluginCopy(const quint32 &orderId,const QStringList &sources);
+		void newPluginCopyWithoutDestination(const quint32 &orderId,const QStringList &sources);
 		void newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination);
-		void newPluginMove(const quint32 &orderId,const QStringList &sources);
+		void newPluginMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
 		void newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
 		void onePluginAdded(const PluginsAvailable &plugin);
 		void onePluginWillBeRemoved(const PluginsAvailable &plugin);
@@ -65,21 +65,21 @@ class CopyListener : public QObject, public GlobalClass
 		*/
 		void close();
 		/** new copy without destination have been pased by the CLI */
-		void newCopy(QStringList sources);
+		void copyWithoutDestination(QStringList sources);
 		/** new copy with destination have been pased by the CLI */
-		void newCopy(QStringList sources,QString destination);
+		void copy(QStringList sources,QString destination);
 		/** new move without destination have been pased by the CLI */
-		void newMove(QStringList sources);
+		void moveWithoutDestination(QStringList sources);
 		/** new move with destination have been pased by the CLI */
-		void newMove(QStringList sources,QString destination);
+		void move(QStringList sources,QString destination);
 	signals:
-		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
-		void newCopy(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
-		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources);
-		void newMove(quint32 orderId,QStringList protocolsUsedForTheSources,QStringList sources,QString protocolsUsedForTheDestination,QString destination);
-		void listenerReady(ListeningState state,bool havePlugin,bool someAreInWaitOfReply);
-		void pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply);
-		void previouslyPluginAdded(PluginsAvailable);
+		void newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
+		void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
+		void newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
+		void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
+		void listenerReady(const ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
+		void pluginLoaderReady(const CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
+		void previouslyPluginAdded(const PluginsAvailable &);
 	private:
 		struct PluginListener
 		{

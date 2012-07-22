@@ -17,10 +17,10 @@ Core::Core(CopyEngineManager *copyEngineList)
 	nextId=0;
 	forUpateInformation.setInterval(ULTRACOPIER_TIME_INTERFACE_UPDATE);
 	loadInterface();
-	//connect(&copyEngineList,	SIGNAL(newCanDoOnlyCopy(bool)),				this,	SIGNAL(newCanDoOnlyCopy(bool)));
-	connect(themes,			SIGNAL(theThemeNeedBeUnloaded()),			this,	SLOT(unloadInterface()));
-	connect(themes,			SIGNAL(theThemeIsReloaded()),				this,	SLOT(loadInterface()));
-	connect(&forUpateInformation,	SIGNAL(timeout()),					this,	SLOT(periodicSynchronization()));
+	//connect(&copyEngineList,	&CopyEngineManager::newCanDoOnlyCopy,				this,	&Core::newCanDoOnlyCopy);
+	connect(themes,			&ThemesManager::theThemeNeedBeUnloaded,				this,	&Core::unloadInterface);
+	connect(themes,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface);
+	connect(&forUpateInformation,	&QTimer::timeout,						this,	&Core::periodicSynchronization);
 
 	qRegisterMetaType<QList<returnActionOnCopyList> >("QList<returnActionOnCopyList>");
 	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
@@ -32,7 +32,7 @@ Core::Core(CopyEngineManager *copyEngineList)
 	qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
 }
 
-void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
+void Core::newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	if(openNewCopyEngineInstance(Copy,false,protocolsUsedForTheSources)==-1)
@@ -99,7 +99,7 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
 	copyList.last().interface->haveExternalOrder();
 }
 
-void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
+void Core::newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
 	if(openNewCopyEngineInstance(Move,false,protocolsUsedForTheSources)==-1)
 	{
@@ -230,8 +230,8 @@ void Core::newTransferList(QString engine,QString mode,QString file)
 	}
 	else
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The mode arguement is no understand");
-		QMessageBox::critical(NULL,tr("Error"),tr("The mode arguement is no understand"));
+		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The argument for the mode is not understand");
+		QMessageBox::critical(NULL,tr("Error"),tr("The argument for the mode is not understand"));
 		return;
 	}
 	copyList.last().engine->newTransferList(file);
@@ -445,7 +445,7 @@ void Core::actionInProgess(const EngineActionInProgress &action)
 			}
 		}
 		//do sync
-		periodicSynchronization(index);
+		periodicSynchronizationWithIndex(index);
 		copyList[index].action=action;
 		if(copyList.at(index).interface!=NULL)
 			copyList.at(index).interface->actionInProgess(action);
@@ -575,27 +575,27 @@ void Core::connectEngine(const int &index)
 	disconnectEngine(index);
 
 	CopyInstance& currentCopyInstance=copyList[index];
-	if(!connect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)),Qt::QueuedConnection))//to check to change
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing,			this,&Core::newFolderListing,Qt::QueuedConnection))//to check to change
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newFolderListing()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),			this,SLOT(newCollisionAction(QString)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newCollisionAction,			this,&Core::newCollisionAction,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newCollisionAction()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newErrorAction,			this,&Core::newErrorAction,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newErrorAction()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess,	this,&Core::actionInProgess,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for actionInProgess()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)),Qt::QueuedConnection))//to check to change
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::isInPause,				this,&Core::isInPause,Qt::QueuedConnection))//to check to change
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for isInPause()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(cancelAll()),					this,SLOT(copyInstanceCanceledByEngine()),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::cancelAll,					this,&Core::copyInstanceCanceledByEngine,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for cancelAll()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::error,	this,&Core::error,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for error()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::rmPath,				this,&Core::rmPath,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for rmPath()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath,				this,&Core::mkPath,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for mkPath()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(syncReady()),					this,SLOT(syncReady()),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::syncReady,					this,&Core::syncReady,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(canBeDeleted()),					this,SLOT(deleteCopyEngine()),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::canBeDeleted,					this,&Core::deleteCopyEngine,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
 }
 
@@ -605,54 +605,54 @@ void Core::connectInterfaceAndSync(const int &index)
 	disconnectInterface(index);
 
 	CopyInstance& currentCopyInstance=copyList[index];
-	if(!connect(currentCopyInstance.interface,SIGNAL(pause()),					currentCopyInstance.engine,SLOT(pause())))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::pause,					currentCopyInstance.engine,&PluginInterface_CopyEngine::pause))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pause()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(resume()),					currentCopyInstance.engine,SLOT(resume())))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::resume,					currentCopyInstance.engine,&PluginInterface_CopyEngine::resume))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(skip(quint64)),				currentCopyInstance.engine,SLOT(skip(quint64))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::skip,				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for skip()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(sendErrorAction(QString)),			currentCopyInstance.engine,SLOT(setErrorAction(QString))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::sendErrorAction,			currentCopyInstance.engine,&PluginInterface_CopyEngine::setErrorAction))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for sendErrorAction()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		currentCopyInstance.engine,SLOT(setSpeedLimitation(qint64))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		currentCopyInstance.engine,&PluginInterface_CopyEngine::setSpeedLimitation))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(sendCollisionAction(QString)),		currentCopyInstance.engine,SLOT(setCollisionAction(QString))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::sendCollisionAction,		currentCopyInstance.engine,&PluginInterface_CopyEngine::setCollisionAction))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for sendCollisionAction()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(userAddFolder(CopyMode)),			currentCopyInstance.engine,SLOT(userAddFolder(CopyMode))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFolder,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFolder))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for userAddFolder()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(userAddFile(CopyMode)),			currentCopyInstance.engine,SLOT(userAddFile(CopyMode))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for userAddFile()").arg(index).arg((quint64)sender()));
 
-	if(!connect(currentCopyInstance.interface,SIGNAL(removeItems(QList<int>)),			currentCopyInstance.engine,SLOT(removeItems(QList<int>))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::removeItems,			currentCopyInstance.engine,&PluginInterface_CopyEngine::removeItems))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for removeItems()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(moveItemsOnTop(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnTop(QList<int>))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnTop,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnTop))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnTop()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(moveItemsUp(QList<int>)),			currentCopyInstance.engine,SLOT(moveItemsUp(QList<int>))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsUp,			currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsUp))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsUp()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(moveItemsDown(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsDown(QList<int>))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsDown,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsDown))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsDown()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(moveItemsOnBottom(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnBottom(QList<int>))))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnBottom,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnBottom))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnBottom()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(exportTransferList()),			currentCopyInstance.engine,SLOT(exportTransferList())))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::exportTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::exportTransferList))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for exportTransferList()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(importTransferList()),			currentCopyInstance.engine,SLOT(importTransferList())))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::importTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::importTransferList))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for importTransferList()").arg(index).arg((quint64)sender()));
 
-	if(!connect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface())))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		this,&Core::resetSpeedDetectedInterface))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(resume()),					this,SLOT(resetSpeedDetectedInterface())))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::resume,					this,&Core::resetSpeedDetectedInterface))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(cancel()),					this,SLOT(copyInstanceCanceledByInterface()),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::cancel,					this,&Core::copyInstanceCanceledByInterface,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for cancel()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),			this,SLOT(urlDropped(QList<QUrl>)),Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::urlDropped,			this,&Core::urlDropped,Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for urlDropped()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),this,SLOT(getActionOnList(QList<returnActionOnCopyList>)),	Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList,this,&Core::getActionOnList,	Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newActionOnList()").arg(index).arg((quint64)sender()));
 
-	if(!connect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),		currentCopyInstance.interface,SLOT(setFileProgression(QList<ProgressionItem>)),		Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression,		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushFileProgression()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)),		Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression,		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression()").arg(index).arg((quint64)sender()));
-	if(!connect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		this,SLOT(pushGeneralProgression(quint64,quint64)),		Qt::QueuedConnection))
+	if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		this,&Core::pushGeneralProgression,		Qt::QueuedConnection))
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
 
 	currentCopyInstance.interface->setSpeedLimitation(currentCopyInstance.engine->getSpeedLimitation());
@@ -674,22 +674,22 @@ void Core::connectInterfaceAndSync(const int &index)
 	currentCopyInstance.engine->syncTransferList();
 
 	//force the updating, without wait the timer
-	periodicSynchronization(index);
+	periodicSynchronizationWithIndex(index);
 }
 
 void Core::disconnectEngine(const int &index)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
 //	CopyInstance& currentCopyInstance=copyList[index];
-/*	disconnect(currentCopyInstance.engine,SIGNAL(newFolderListing(QString)),			this,SLOT(newFolderListing(QString)));//to check to change
-	disconnect(currentCopyInstance.engine,SIGNAL(newCollisionAction(QString)),		this,SLOT(newCollisionAction(QString)));
-	disconnect(currentCopyInstance.engine,SIGNAL(newErrorAction(QString)),			this,SLOT(newErrorAction(QString)));
-	disconnect(currentCopyInstance.engine,SIGNAL(actionInProgess(EngineActionInProgress)),	this,SLOT(actionInProgess(EngineActionInProgress)));
-	disconnect(currentCopyInstance.engine,SIGNAL(isInPause(bool)),				this,SLOT(isInPause(bool)));//to check to change
-	disconnect(currentCopyInstance.engine,SIGNAL(cancelAll()),				this,SLOT(copyInstanceCanceledByEngine()));
-	disconnect(currentCopyInstance.engine,SIGNAL(error(QString,quint64,QDateTime,QString)),	this,SLOT(error(QString,quint64,QDateTime,QString)));
-	disconnect(currentCopyInstance.engine,SIGNAL(rmPath(QString)),				this,SLOT(rmPath(QString)));
-	disconnect(currentCopyInstance.engine,SIGNAL(mkPath(QString)),				this,SLOT(mkPath(QString)));*/
+/*	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing(QString)),			this,&Core::newFolderListing(QString)));//to check to change
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newCollisionAction(QString)),		this,&Core::newCollisionAction(QString)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newErrorAction(QString)),			this,&Core::newErrorAction(QString)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess(EngineActionInProgress)),	this,&Core::actionInProgess(EngineActionInProgress)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::isInPause(bool)),				this,&Core::isInPause(bool)));//to check to change
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::cancelAll()),				this,&Core::copyInstanceCanceledByEngine()));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::error(QString,quint64,QDateTime,QString)),	this,&Core::error(QString,quint64,QDateTime,QString)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::rmPath(QString)),				this,&Core::rmPath(QString)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath(QString)),				this,&Core::mkPath(QString)));*/
 
 }
 
@@ -698,29 +698,29 @@ void Core::disconnectInterface(const int &index)
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start with index: %1").arg(index));
 	Q_UNUSED(index);
 /*	CopyInstance& currentCopyInstance=copyList[index];
-	disconnect(currentCopyInstance.interface,SIGNAL(pause()),				currentCopyInstance.engine,SLOT(pause()));
-	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				currentCopyInstance.engine,SLOT(resume()));
-	disconnect(currentCopyInstance.interface,SIGNAL(skip(quint64)),				currentCopyInstance.engine,SLOT(skip(quint64)));
-	disconnect(currentCopyInstance.interface,SIGNAL(sendErrorAction(QString)),		currentCopyInstance.engine,SLOT(setErrorAction(QString)));
-	disconnect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		currentCopyInstance.engine,SLOT(setSpeedLimitation(qint64)));
-	disconnect(currentCopyInstance.interface,SIGNAL(sendCollisionAction(QString)),		currentCopyInstance.engine,SLOT(setCollisionAction(QString)));
-	disconnect(currentCopyInstance.interface,SIGNAL(userAddFolder(CopyMode)),		currentCopyInstance.engine,SLOT(userAddFolder(CopyMode)));
-	disconnect(currentCopyInstance.interface,SIGNAL(userAddFile(CopyMode)),			currentCopyInstance.engine,SLOT(userAddFile(CopyMode)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::pause()),				currentCopyInstance.engine,&PluginInterface_CopyEngine::pause()));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::resume()),				currentCopyInstance.engine,&PluginInterface_CopyEngine::resume()));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::skip(quint64)),				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip(quint64)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::sendErrorAction(QString)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::setErrorAction(QString)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation(qint64)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::setSpeedLimitation(qint64)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::sendCollisionAction(QString)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::setCollisionAction(QString)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFolder(CopyMode)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFolder(CopyMode)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile(CopyMode)),			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile(CopyMode)));
 
-	disconnect(currentCopyInstance.interface,SIGNAL(removeItems(QList<int>)),		currentCopyInstance.engine,SLOT(removeItems(QList<int>)));
-	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsOnTop(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnTop(QList<int>)));
-	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsUp(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsUp(QList<int>)));
-	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsDown(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsDown(QList<int>)));
-	disconnect(currentCopyInstance.interface,SIGNAL(moveItemsOnBottom(QList<int>)),		currentCopyInstance.engine,SLOT(moveItemsOnBottom(QList<int>)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::removeItems(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::removeItems(QList<int>)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnTop(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnTop(QList<int>)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsUp(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsUp(QList<int>)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsDown(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsDown(QList<int>)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnBottom(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnBottom(QList<int>)));
 
-	disconnect(currentCopyInstance.interface,SIGNAL(newSpeedLimitation(qint64)),		this,SLOT(resetSpeedDetectedInterface()));
-	disconnect(currentCopyInstance.interface,SIGNAL(resume()),				this,SLOT(resetSpeedDetectedInterface()));
-	disconnect(currentCopyInstance.interface,SIGNAL(cancel()),				this,SLOT(copyInstanceCanceledByInterface()));
-	disconnect(currentCopyInstance.interface,SIGNAL(urlDropped(QList<QUrl>)),		this,SLOT(urlDropped(QList<QUrl>)));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation(qint64)),		this,&Core::resetSpeedDetectedInterface()));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::resume()),				this,&Core::resetSpeedDetectedInterface()));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::cancel()),				this,&Core::copyInstanceCanceledByInterface()));
+	disconnect(currentCopyInstance.interface,&PluginInterface_Themes::urlDropped(QList<QUrl>)),		this,&Core::urlDropped(QList<QUrl>)));
 
-	disconnect(currentCopyInstance.engine,SIGNAL(newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,SLOT(getActionOnList(QList<returnActionOnCopyList>)));
-	disconnect(currentCopyInstance.engine,SIGNAL(pushFileProgression(QList<ProgressionItem>)),	currentCopyInstance.interface,SLOT(setFileProgression(QList<ProgressionItem>)));
-	disconnect(currentCopyInstance.engine,SIGNAL(pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,SLOT(setGeneralProgression(quint64,quint64)));*/
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,&PluginInterface_Themes::getActionOnList(QList<returnActionOnCopyList>)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression(QList<ProgressionItem>)),	currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression(QList<ProgressionItem>)));
+	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression(quint64,quint64)));*/
 }
 
 void Core::periodicSynchronization()
@@ -730,12 +730,12 @@ void Core::periodicSynchronization()
 	while(index_sub_loop<loop_size)
 	{
 		if(copyList.at(index_sub_loop).action==Copying || copyList.at(index_sub_loop).action==CopyingAndListing)
-			periodicSynchronization(index_sub_loop);
+			periodicSynchronizationWithIndex(index_sub_loop);
 		index_sub_loop++;
 	}
 }
 
-void Core::periodicSynchronization(const int &index)
+void Core::periodicSynchronizationWithIndex(const int &index)
 {
 	CopyInstance& currentCopyInstance=copyList[index];
 	if(currentCopyInstance.engine==NULL || currentCopyInstance.interface==NULL)

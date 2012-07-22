@@ -18,8 +18,8 @@ HelpDialog::HelpDialog() :
 	ui->setupUi(this);
 	reloadTextValue();
 	#ifdef ULTRACOPIER_DEBUG
-	connect(debug_engine_instance,SIGNAL(newDebugInformation()),this,SLOT(addDebugText()));
-	connect(ui->pushButtonSaveBugReport,SIGNAL(clicked()),debug_engine_instance,SLOT(saveBugReport()));
+	connect(debug_engine_instance,&DebugEngine::newDebugInformation,this,&HelpDialog::addDebugText);
+	connect(ui->pushButtonSaveBugReport,&QPushButton::clicked,debug_engine_instance,&DebugEngine::saveBugReport);
 	#else // ULTRACOPIER_DEBUG
 	ui->lineEditInsertDebug->hide();
 	ui->debugView->hide();
@@ -28,11 +28,11 @@ HelpDialog::HelpDialog() :
 	this->setMaximumSize(QSize(500,128));
 	/*timeToSetText.setInterval(250);
 	timeToSetText.setSingleShot(true);
-	connect(&timeToSetText,SIGNAL(timeout()),this,SLOT(showDebugText()));*/
+	connect(&timeToSetText,QTimer::timeout,this,&DebugEngine::showDebugText);*/
 	ui->pushButtonClose->hide();
 	#endif // ULTRACOPIER_DEBUG
 	//connect the about Qt
-	connect(ui->pushButtonAboutQt,SIGNAL(toggled(bool)),qApp,SLOT(aboutQt()));
+	connect(ui->pushButtonAboutQt,&QPushButton::toggled,&QApplication::aboutQt);
 }
 
 /// \brief Destruct the object

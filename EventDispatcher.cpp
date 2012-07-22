@@ -5,9 +5,9 @@
 \date 2010
 \licence GPL3, see the file COPYING */
 
-#include <QFSFileEngine>
 #include <QCoreApplication>
 #include <QMessageBox>
+#include <QWidget>
 
 #include "EventDispatcher.h"
 #include "ExtraSocket.h"
@@ -24,18 +24,19 @@
 EventDispatcher::EventDispatcher()
 {
 	copyServer=new CopyListener(&optionDialog);
-	connect(&localListener,SIGNAL(cli(QStringList,bool,bool)),&cliParser,SLOT(cli(QStringList,bool,bool)),Qt::QueuedConnection);
-	connect(themes,		SIGNAL(newThemeOptions(QString,QWidget*,bool,bool)),	&optionDialog,	SLOT(newThemeOptions(QString,QWidget*,bool,bool)));
-	connect(&cliParser,	SIGNAL(newCopy(QStringList)),			copyServer,	SLOT(newCopy(QStringList)));
-	connect(&cliParser,	SIGNAL(newCopy(QStringList,QString)),		copyServer,	SLOT(newCopy(QStringList,QString)));
-	connect(&cliParser,	SIGNAL(newMove(QStringList)),			copyServer,	SLOT(newMove(QStringList)));
-	connect(&cliParser,	SIGNAL(newMove(QStringList,QString)),		copyServer,	SLOT(newMove(QStringList,QString)));
+	connect(&localListener,&LocalListener::cli,&cliParser,&CliParser::cli,Qt::QueuedConnection);
+	connect(themes,		&ThemesManager::newThemeOptions,			&optionDialog,	&OptionDialog::newThemeOptions);
+	connect(&cliParser,	&CliParser::newCopyWithoutDestination,			copyServer,	&CopyListener::copyWithoutDestination);
+	connect(&cliParser,	&CliParser::newCopy,					copyServer,	&CopyListener::copy);
+	connect(&cliParser,	&CliParser::newMoveWithoutDestination,			copyServer,	&CopyListener::moveWithoutDestination);
+	connect(&cliParser,	&CliParser::newMove,					copyServer,	&CopyListener::move);
 	copyMoveEventIdIndex=0;
 	backgroundIcon=NULL;
 	stopIt=false;
 	sessionloader=new SessionLoader(&optionDialog);
 	copyEngineList=new CopyEngineManager(&optionDialog);
 	core=new Core(copyEngineList);
+	qRegisterMetaType<DebugLevel>("DebugLevel");
 	qRegisterMetaType<CatchState>("CatchState");
 	qRegisterMetaType<ListeningState>("ListeningState");
 	qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
@@ -52,7 +53,7 @@ EventDispatcher::EventDispatcher()
 	//To lunch some initialization after QApplication::exec() to quit eventually
 	lunchInitFunction.setInterval(0);
 	lunchInitFunction.setSingleShot(true);
-	connect(&lunchInitFunction,SIGNAL(timeout()),this,SLOT(initFunction()),Qt::QueuedConnection);
+	connect(&lunchInitFunction,&QTimer::timeout,this,&EventDispatcher::initFunction,Qt::QueuedConnection);
 	lunchInitFunction.start();
 	//add the options to use
 	QList<QPair<QString, QVariant> > KeysList;
@@ -78,7 +79,7 @@ EventDispatcher::EventDispatcher()
 	KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier-0.3")));
 	options->addOptionGroup("CopyEngine",KeysList);
 
-	connect(&cliParser,	SIGNAL(newTransferList(QString,QString,QString)),core,	SLOT(newTransferList(QString,QString,QString)));
+	connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);
 }
 
 /// \brief Destroy the ultracopier event dispatcher
@@ -119,12 +120,12 @@ void EventDispatcher::initFunction()
 		return;
 	}
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Initialize the variable of event loop");
-	connect(copyServer,	SIGNAL(newCopy(quint32,QStringList,QStringList)),			core,		SLOT(newCopy(quint32,QStringList,QStringList)));
-	connect(copyServer,	SIGNAL(newCopy(quint32,QStringList,QStringList,QString,QString)),	core,		SLOT(newCopy(quint32,QStringList,QStringList,QString,QString)));
-	connect(copyServer,	SIGNAL(newMove(quint32,QStringList,QStringList)),			core,		SLOT(newMove(quint32,QStringList,QStringList)));
-	connect(copyServer,	SIGNAL(newMove(quint32,QStringList,QStringList,QString,QString)),	core,		SLOT(newMove(quint32,QStringList,QStringList,QString,QString)));
-	connect(core,		SIGNAL(copyFinished(quint32,bool)),					copyServer,	SLOT(copyFinished(quint32,bool)));
-	connect(core,		SIGNAL(copyCanceled(quint32)),						copyServer,	SLOT(copyCanceled(quint32)));
+	connect(copyServer,	&CopyListener::newCopyWithoutDestination,			core,		&Core::newCopyWithoutDestination);
+	connect(copyServer,	&CopyListener::newCopy,						core,		&Core::newCopy);
+	connect(copyServer,	&CopyListener::newMoveWithoutDestination,			core,		&Core::newMoveWithoutDestination);
+	connect(copyServer,	&CopyListener::newMove,						core,		&Core::newMove);
+	connect(core,		&Core::copyFinished,						copyServer,	&CopyListener::copyFinished);
+	connect(core,		&Core::copyCanceled,						copyServer,	&CopyListener::copyCanceled);
 	if(localListener.tryConnect())
 	{
 		stopIt=true;
@@ -139,29 +140,29 @@ void EventDispatcher::initFunction()
 		backgroundIcon=new SystrayIcon();
 		//connect the slot
 		//quit is for this object
-//		connect(core,		SIGNAL(newCanDoOnlyCopy(bool)),					backgroundIcon,	SLOT(newCanDoOnlyCopy(bool)));
-		connect(backgroundIcon,	SIGNAL(quit()),this,SLOT(quit()));
+//		connect(core,		&Core::newCanDoOnlyCopy,					backgroundIcon,	&SystrayIcon::newCanDoOnlyCopy);
+		connect(backgroundIcon,	&SystrayIcon::quit,this,&EventDispatcher::quit);
 		//show option is for OptionEngine object
-		connect(backgroundIcon,	SIGNAL(showOptions()),						&optionDialog,	SLOT(show()));
-		connect(copyServer,	SIGNAL(listenerReady(ListeningState,bool,bool)),		backgroundIcon,	SLOT(listenerReady(ListeningState,bool,bool)));
-		connect(copyServer,	SIGNAL(pluginLoaderReady(CatchState,bool,bool)),		backgroundIcon,	SLOT(pluginLoaderReady(CatchState,bool,bool)));
-		connect(backgroundIcon,	SIGNAL(tryCatchCopy()),						copyServer,	SLOT(listen()));
-		connect(backgroundIcon,	SIGNAL(tryUncatchCopy()),					copyServer,	SLOT(close()));
+		connect(backgroundIcon,	&SystrayIcon::showOptions,					&optionDialog,	&OptionDialog::show);
+		connect(copyServer,	&CopyListener::listenerReady,					backgroundIcon,	&SystrayIcon::listenerReady);
+		connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady);
+		connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen);
+		connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,					copyServer,	&CopyListener::close);
 		if(options->getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
 			copyServer->listen();
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
 		//backgroundIcon->readyToListen(copyServer.oneListenerIsLoaded());
 
-		connect(backgroundIcon,	SIGNAL(addWindowCopyMove(CopyMode,QString)),				core,		SLOT(addWindowCopyMove(CopyMode,QString)));
-		connect(backgroundIcon,	SIGNAL(addWindowTransfer(QString)),					core,		SLOT(addWindowTransfer(QString)));
-		connect(copyEngineList,	SIGNAL(addCopyEngine(QString,bool)),					backgroundIcon,	SLOT(addCopyEngine(QString,bool)));
-		connect(copyEngineList,	SIGNAL(removeCopyEngine(QString)),					backgroundIcon,	SLOT(removeCopyEngine(QString)));
+		connect(backgroundIcon,	&SystrayIcon::addWindowCopyMove,				core,		&Core::addWindowCopyMove);
+		connect(backgroundIcon,	&SystrayIcon::addWindowTransfer,				core,		&Core::addWindowTransfer);
+		connect(copyEngineList,	&CopyEngineManager::addCopyEngine,				backgroundIcon,	&SystrayIcon::addCopyEngine);
+		connect(copyEngineList,	&CopyEngineManager::removeCopyEngine,				backgroundIcon,	&SystrayIcon::removeCopyEngine);
 		copyEngineList->setIsConnected();
 		copyServer->resendState();
 	}
 	//conntect the last chance signal before quit
-	connect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
+	connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit);
 	//connect the slot for the help dialog
-	connect(backgroundIcon,SIGNAL(showHelp()),&theHelp,SLOT(show()));
+	connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show);
 }
 

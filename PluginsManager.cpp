@@ -29,11 +29,11 @@ PluginsManager::PluginsManager()
 	englishPluginType << "CopyEngine" << "Languages" << "Listener" << "PluginLoader" << "SessionLoader" << "Themes";
 	//catPlugin << tr("CopyEngine") << tr("Languages") << tr("Listener") << tr("PluginLoader") << tr("SessionLoader") << tr("Themes");
 	importingPlugin=false;
-	connect(&decodeThread,		SIGNAL(decodedIsFinish()),		this,				SLOT(decodingFinished()),Qt::QueuedConnection);
-	connect(checkPluginThread,	SIGNAL(authentifiedPath(QString)),	this,				SLOT(newAuthPath(QString)),Qt::QueuedConnection);
-	connect(this,			SIGNAL(finished()),			this,				SLOT(post_operation()),Qt::QueuedConnection);
-	connect(this,			SIGNAL(newLanguageLoaded()),		&pluginInformationWindows,	SLOT(retranslateInformation()),Qt::QueuedConnection);
-//	connect(this,			SIGNAL(pluginListingIsfinish()),	options,SLOT(setInterfaceValue()));
+	connect(&decodeThread,		&QXzDecodeThread::decodedIsFinish,		this,				&PluginsManager::decodingFinished,Qt::QueuedConnection);
+	connect(checkPluginThread,	&AuthPlugin::authentifiedPath,			this,				&PluginsManager::newAuthPath,Qt::QueuedConnection);
+	connect(this,			&PluginsManager::finished,			this,				&PluginsManager::post_operation,Qt::QueuedConnection);
+	connect(this,			&PluginsManager::newLanguageLoaded,		&pluginInformationWindows,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
+//	connect(this,			&PluginsManager::pluginListingIsfinish,		options,&OptionEngine::setInterfaceValue);
 	//load the plugins list
 	/// \bug bug when I put here: moveToThread(this);, due to the direction connection to remove the plugin
 	start();

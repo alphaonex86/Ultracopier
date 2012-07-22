@@ -174,7 +174,7 @@ void Filters::newLanguageLoaded()
 	reShowAll();
 }
 
-void Filters::haveNewFilters()
+void Filters::updateFilters()
 {
 	QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
 	int index=0;
@@ -256,6 +256,7 @@ void Filters::haveNewFilters()
 		index++;
 	}
 	emit sendNewFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+	emit haveNewFilters();
 }
 
 bool Filters::convertToRegex(Filters_rules &item)
@@ -320,7 +321,7 @@ void Filters::on_remove_exclusion_clicked()
 	if(removedEntry)
 	{
 		reShowAll();
-		haveNewFilters();
+		updateFilters();
 	}
 }
 
@@ -342,7 +343,7 @@ void Filters::on_remove_inclusion_clicked()
 	if(removedEntry)
 	{
 		reShowAll();
-		haveNewFilters();
+		updateFilters();
 	}
 }
 
@@ -359,7 +360,7 @@ void Filters::on_add_exclusion_clicked()
 		new_item.search_type=dialog.get_search_type();
 		exclude << new_item;
 		reShowAll();
-		haveNewFilters();
+		updateFilters();
 	}
 }
 
@@ -383,7 +384,7 @@ void Filters::on_add_inclusion_clicked()
 		if(convertToRegex(new_item))
 			include << new_item;
 		reShowAll();
-		haveNewFilters();
+		updateFilters();
 	}
 }
 
@@ -417,7 +418,7 @@ void Filters::on_edit_exclusion_clicked()
 	if(editedEntry)
 	{
 		reShowAll();
-		haveNewFilters();
+		updateFilters();
 	}
 }
 
@@ -451,6 +452,6 @@ void Filters::on_edit_inclusion_clicked()
 	if(editedEntry)
 	{
 		reShowAll();
-		haveNewFilters();
+		updateFilters();
 	}
 }

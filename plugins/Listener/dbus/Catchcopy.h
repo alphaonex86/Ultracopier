@@ -10,11 +10,11 @@ class Catchcopy : public QObject
 public:
 	explicit Catchcopy();
 signals:
-	void newCopy(quint32 id,QStringList sources,QString destination);
-	void newMove(quint32 id,QStringList sources,QString destination);
+	void newCopy(const quint32 &id,const QStringList &sources,const QString &destination);
+	void newMove(const quint32 &id,const QStringList &sources,const QString &destination);
 public slots:
-	Q_SCRIPTABLE void copy(QStringList sources,QString destination);
-	Q_SCRIPTABLE void move(QStringList sources,QString destination);
+	Q_SCRIPTABLE void copy(const QStringList &sources,const QString &destination);
+	Q_SCRIPTABLE void move(const QStringList &sources,const QString &destination);
 };
 
 #endif // CATCHCOPY_H

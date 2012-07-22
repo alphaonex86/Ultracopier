@@ -6,7 +6,6 @@
 \licence GPL3, see the file COPYING */
 
 #include <QDir>
-#include <QFSFileEngine>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QLocalSocket>
@@ -88,7 +87,7 @@ DebugEngine::DebugEngine()
 			#define EXTRA_HOME_PATH "/.config/Ultracopier/"
 		#endif
 		//Load the user path only if exists and writable
-		QDir dir(QFSFileEngine::homePath()+EXTRA_HOME_PATH);
+		QDir dir(QDir::homePath()+EXTRA_HOME_PATH);
 		bool errorFound=false;
 		//If user's directory not exists create it
 		if(!dir.exists())
@@ -353,14 +352,15 @@ QString DebugEngine::getTheDebugEnd()
 }
 
 /// \brief Drop the html entities
-QString DebugEngine::htmlEntities(QString text)
+QString DebugEngine::htmlEntities(const QString &text)
 {
-	text.replace('&',"&amp;");
-	text.replace('"',"&quot;");
-	text.replace('\'',"&#039;");
-	text.replace('<',"&lt;");
-	text.replace('>',"&gt;");
-	return text;
+	QString newText(text);
+	newText.replace('&',"&amp;");
+	newText.replace('"',"&quot;");
+	newText.replace('\'',"&#039;");
+	newText.replace('<',"&lt;");
+	newText.replace('>',"&gt;");
+	return newText;
 }
 
 /// \brief return the current backend

@@ -7,7 +7,8 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <QObject>
+#include <QString>
+#include <QtPlugin>
 
 #include "Environment.h"
 #include "../../../interface/PluginInterface_Listener.h"
@@ -17,6 +18,7 @@
 class CatchCopyPlugin : public PluginInterface_Listener
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.Listener/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_Listener)
 public:
 	CatchCopyPlugin();
@@ -27,14 +29,14 @@ public:
 	/// \brief return the error strong
 	const QString errorString();
 	/// \brief set resources for this plugins
-	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
 	/// \brief to get the options widget, NULL if not have
 	QWidget * options();
 public slots:
 	/// \brief say to the client that's the copy/move is finished
-	void transferFinished(quint32 orderId,bool withError);
+	void transferFinished(const quint32 &orderId,const bool &withError);
 	/// \brief say to the client that's the copy/move is finished
-	void transferCanceled(quint32 orderId);
+	void transferCanceled(const quint32 &orderId);
 	/// \brief to reload the translation, because the new language have been loaded
 	void newLanguageLoaded();
 private:
@@ -42,21 +44,6 @@ private:
 private slots:
 	void error(QString error);
 	void clientName(quint32 client,QString name);
-signals:
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	/// \brief To debug source
-	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
-	/// \brief new state
-	void newState(ListeningState state);
-	/// \brief new copy is incoming
-	void newCopy(quint32 orderId,QStringList sources);
-	/// \brief new copy is incoming, with destination
-	void newCopy(quint32 orderId,QStringList sources,QString destination);
-	/// \brief new move is incoming
-	void newMove(quint32 orderId,QStringList sources);
-	/// \brief new move is incoming, with destination
-	void newMove(quint32 orderId,QStringList sources,QString destination);
 };
 
 #endif // SERVER_H

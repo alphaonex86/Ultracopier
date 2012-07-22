@@ -13,7 +13,7 @@ LocalPluginOptions::LocalPluginOptions(const QString &group)
 	groupOptionAdded=false;
 	this->group=group;
 	options=OptionEngine::getInstance();
-	connect(options,SIGNAL(resetOptions()),this,SIGNAL(resetOptions()));
+	connect(options,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
 }
 
 LocalPluginOptions::~LocalPluginOptions()

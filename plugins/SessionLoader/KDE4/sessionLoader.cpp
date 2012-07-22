@@ -58,5 +58,3 @@ QWidget * SessionLoader::options()
 void SessionLoader::newLanguageLoaded()
 {
 }
-
-Q_EXPORT_PLUGIN2(sessionLoader, SessionLoader);

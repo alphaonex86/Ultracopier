@@ -39,7 +39,7 @@ public:
 	~Themes();
 	//send information about the copy
 	/// \brief to set the action in progress
-	void actionInProgess(EngineActionInProgress);
+	void actionInProgess(const EngineActionInProgress &);
 	/// \brief the new folder is listing
 	void newFolderListing(const QString &path);
 	/** \brief show the detected speed
@@ -68,11 +68,11 @@ public:
 	/// \brief set error action
 	void setErrorAction(const QList<QPair<QString,QString> > &);
 	/// \brief set the copyType -> file or folder
-	void setCopyType(CopyType);
+	void setCopyType(const CopyType &);
 	/// \brief set the copyMove -> copy or move, to force in copy or move, else support both
-	void forceCopyMode(CopyMode);
+	void forceCopyMode(const CopyMode &);
 	/// \brief set if transfer list is exportable/importable
-	void setTransferListOperation(TransferListOperation transferListOperation);
+	void setTransferListOperation(const TransferListOperation &transferListOperation);
 	//edit the transfer list
 	/// \brief get action on the transfer list (add/move/remove)
 	void getActionOnList(const QList<returnActionOnCopyList> &returnActions);
@@ -80,11 +80,11 @@ public:
 	 * to notify the interface, which can hide add folder/filer button */
 	void haveExternalOrder();
 	/// \brief set if is in pause
-	void isInPause(bool);
+	void isInPause(const bool &);
 	/// \brief get the widget for the copy engine
 	QWidget * getOptionsEngineWidget();
 	/// \brief to set if the copy engine is found
-	void getOptionsEngineEnabled(bool isEnabled);
+	void getOptionsEngineEnabled(const bool &isEnabled);
 public slots:
 	/// \brief set the translate
 	void newLanguageLoaded();
@@ -181,11 +181,9 @@ private:
 	//have functionality
 	bool shutdown;
 signals:
-	#ifdef ULTRACOPIER_PLUGIN_DEBUG
 	/// \brief To debug source
 	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
-	#endif
-	//set the transfer list
+/*	//set the transfer list
 	void removeItems(QList<int> ids);
 	void moveItemsOnTop(QList<int> ids);
 	void moveItemsUp(QList<int> ids);
@@ -205,7 +203,7 @@ signals:
 	//edit the action
 	void sendCollisionAction(QString action);
 	void sendErrorAction(QString action);
-	void newSpeedLimitation(qint64);
+	void newSpeedLimitation(qint64);*/
 };
 
 #endif // INTERFACE_H

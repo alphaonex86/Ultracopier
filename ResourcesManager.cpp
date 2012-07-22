@@ -8,7 +8,6 @@
 #include <QDir>
 #include <QFile>
 #include <QApplication>
-#include <QFSFileEngine>
 #include <QFileInfo>
 
 
@@ -48,12 +47,13 @@ ResourcesManager::ResourcesManager()
 			#define EXTRA_HOME_PATH "/.config/Ultracopier/"
 		#endif
 		#ifdef Q_OS_LINUX
-			QDir linuxDir("/usr/share/ultracopier/");
-			if(linuxDir.exists())
+			if(QDir("/usr/share/ultracopier/").exists())
 				searchPath<<"/usr/share/ultracopier/";
+			if(QDir("/usr/lib/ultracopier/").exists())
+				searchPath<<"/usr/lib/ultracopier/";
 		#endif
 		//load the user path but only if exists and writable
-		QDir dir(QFSFileEngine::homePath()+EXTRA_HOME_PATH);
+		QDir dir(QDir::homePath()+EXTRA_HOME_PATH);
 		if(dir.exists())
 		{
 			writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());

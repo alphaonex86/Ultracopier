@@ -30,11 +30,11 @@ OptionDialog::OptionDialog() :
 	plugins->lockPluginListEdition();
 	QList<PluginsAvailable> list=plugins->getPlugins();
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,	SIGNAL(onePluginAdded(PluginsAvailable)),		this,	SLOT(onePluginAdded(PluginsAvailable)));
-	connect(plugins,	SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,	SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,	SIGNAL(pluginListingIsfinish()),			this,	SLOT(loadOption()),Qt::QueuedConnection);
-	connect(options,	SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)));
+	connect(this,&OptionDialog::previouslyPluginAdded,			this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,	&PluginsManager::onePluginAdded,		this,	&OptionDialog::onePluginAdded);
+	connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
+	connect(plugins,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
+	connect(options,	&OptionEngine::newOptionValue,			this,	&OptionDialog::newOptionValue);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
 	plugins->unlockPluginListEdition();
@@ -51,7 +51,7 @@ OptionDialog::~OptionDialog()
 }
 
 //plugin management
-void OptionDialog::onePluginAdded(PluginsAvailable plugin)
+void OptionDialog::onePluginAdded(const PluginsAvailable &plugin)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+plugin.name+" ("+QString::number(plugin.category)+")");
 	pluginStore newItem;
@@ -86,7 +86,7 @@ void OptionDialog::onePluginAdded(PluginsAvailable plugin)
 	}
 }
 
-void OptionDialog::onePluginWillBeRemoved(PluginsAvailable plugin)
+void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
 	//remove if have options
@@ -327,7 +327,7 @@ void OptionDialog::loadOption()
 	on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 }
 
-void OptionDialog::newOptionValue(QString group,QString name,QVariant value)
+void OptionDialog::newOptionValue(const QString &group,const QString &name,const QVariant &value)
 {
 	if(group=="Themes")
 	{
@@ -594,7 +594,7 @@ void OptionDialog::newThemeOptions(QString name,QWidget* theNewOptionsWidget,boo
 	on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 }
 
-void OptionDialog::addPluginOptionWidget(PluginType category,QString name,QWidget * options)
+void OptionDialog::addPluginOptionWidget(const PluginType &category,const QString &name,QWidget * options)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start: %1, category: %2").arg(name).arg(category));
 	//prevent send the empty options

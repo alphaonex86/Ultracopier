@@ -7,14 +7,16 @@
 
 #include "LocalListener.h"
 
+#include <QLocalSocket>
+
 LocalListener::LocalListener(QObject *parent) :
     QObject(parent)
 {
 	//for detect the timeout on QLocalSocket
 	TimeOutQLocalSocket.setInterval(500);
 	TimeOutQLocalSocket.setSingleShot(true);
-	connect(&TimeOutQLocalSocket, SIGNAL(timeout()), this, SLOT(timeoutDectected()));
-	connect(plugins,SIGNAL(pluginListingIsfinish()),this,SLOT(allPluginIsloaded()),Qt::QueuedConnection);
+	connect(&TimeOutQLocalSocket, &QTimer::timeout, this, &LocalListener::timeoutDectected);
+	connect(plugins,&PluginsManager::pluginListingIsfinish,this, &LocalListener::allPluginIsloaded,Qt::QueuedConnection);
 }
 
 LocalListener::~LocalListener()
@@ -34,7 +36,7 @@ bool LocalListener::tryConnect()
 	//remove excutable path because is useless (unsafe to use)
 	ultracopierArguments.removeFirst();
 	//add the current path to file full path resolution if needed
-	ultracopierArguments.insert(0,QFSFileEngine::currentPath());
+	ultracopierArguments.insert(0,QDir::currentPath());
 	QLocalSocket localSocket;
 	localSocket.connectToServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME),QIODevice::WriteOnly);
 	if(localSocket.waitForConnected(1000))
@@ -112,7 +114,7 @@ void LocalListener::listenServer()
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
 	}
 	else
-		connect(&localServer, SIGNAL(newConnection()), this, SLOT(newConnexion()));
+		connect(&localServer, &QLocalServer::newConnection, this, &LocalListener::newConnexion);
 }
 
 //the time is done
@@ -240,10 +242,12 @@ void LocalListener::newConnexion()
 	composedData newClient;
 	newClient.socket = localServer.nextPendingConnection();
 	#ifdef ULTRACOPIER_DEBUG
-	connect(newClient.socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(error(QLocalSocket::LocalSocketError)));
+	connect(newClient.socket, static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LocalListener::error);
+	//connect(newClient.socket, &QLocalSocket::error, this, &LocalListener::error);
+	//connect(newClient.socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(error(QLocalSocket::LocalSocketError)));
 	#endif
-	connect(newClient.socket, SIGNAL(readyRead()), this, SLOT(dataIncomming()));
-	connect(newClient.socket, SIGNAL(disconnected()), this, SLOT(deconnectClient()));
+	connect(newClient.socket, &QLocalSocket::readyRead, this, &LocalListener::dataIncomming);
+	connect(newClient.socket, &QLocalSocket::disconnected, this, &LocalListener::deconnectClient);
 	newClient.size=-1;
 	newClient.haveData=false;
 	clientList << newClient;
@@ -273,6 +277,6 @@ void LocalListener::allPluginIsloaded()
 	//remove excutable path because is useless (unsafe to use)
 	ultracopierArguments.removeFirst();
 	//add the current path to file full path resolution if needed
-	ultracopierArguments.insert(0,QFSFileEngine::currentPath());
+	ultracopierArguments.insert(0,QDir::currentPath());
 	emit cli(ultracopierArguments,false,false);
 }

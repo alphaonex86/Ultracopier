@@ -14,7 +14,6 @@
 #include <QStringList>
 #include <QString>
 #include <QCoreApplication>
-#include <QFSFileEngine>
 #include <QMessageBox>
 #include <QTimer>
 #include <QList>

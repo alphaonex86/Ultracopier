@@ -32,10 +32,10 @@ LanguagesManager::LanguagesManager()
 	//load the plugins
 	plugins->lockPluginListEdition();
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,	SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,	SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,	SLOT(allPluginIsLoaded()),Qt::QueuedConnection);
+	connect(this,&LanguagesManager::previouslyPluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+	connect(plugins,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Languages);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
@@ -45,10 +45,10 @@ LanguagesManager::LanguagesManager()
 	KeysList.append(qMakePair(QString("Language"),QVariant("en")));
 	KeysList.append(qMakePair(QString("Language_autodetect"),QVariant(true)));
 	options->addOptionGroup("Language",KeysList);
-//	connect(this,	SIGNAL(newLanguageLoaded(QString)),			plugins,SLOT(refreshPluginList(QString)));
-//	connect(this,	SIGNAL(newLanguageLoaded(QString)),			this,SLOT(retranslateTheUI()));
-	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString)),Qt::QueuedConnection);
-	connect(this,	SIGNAL(newLanguageLoaded(QString)),			plugins,SIGNAL(newLanguageLoaded()),Qt::QueuedConnection);
+//	connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::refreshPluginList);
+//	connect(this,	&LanguagesManager::newLanguageLoaded,			this,&LanguagesManager::retranslateTheUI);
+	connect(options,&OptionEngine::newOptionValue,				this,	&LanguagesManager::newOptionValue,Qt::QueuedConnection);
+	connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::newLanguageLoaded,Qt::QueuedConnection);
 }
 
 /// \brief Destroy the language manager

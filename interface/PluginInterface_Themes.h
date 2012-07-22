@@ -28,7 +28,7 @@ class PluginInterface_Themes : public QWidget
 	public slots:
 		//send information about the copy
 		/// \brief to set the action in progress
-		virtual void actionInProgess(EngineActionInProgress) = 0;
+		virtual void actionInProgess(const EngineActionInProgress&) = 0;
 
 		/// \brief the new folder is listing
 		virtual void newFolderListing(const QString &path) = 0;
@@ -57,45 +57,45 @@ class PluginInterface_Themes : public QWidget
 		/// \brief get the widget for the copy engine
 		virtual QWidget * getOptionsEngineWidget() = 0;
 		/// \brief to set if the copy engine is found
-		virtual void getOptionsEngineEnabled(bool isEnabled) = 0;
+		virtual void getOptionsEngineEnabled(const bool &isEnabled) = 0;
 		/// \brief set collision action
 		virtual void setCollisionAction(const QList<QPair<QString,QString> > &collisionActionList) = 0;
 		/// \brief set error action
 		virtual void setErrorAction(const QList<QPair<QString,QString> > &errorActionList) = 0;
 		/// \brief set the copyType -> file or folder
-		virtual void setCopyType(CopyType) = 0;
+		virtual void setCopyType(const CopyType&) = 0;
 		/// \brief set the copyMove -> copy or move, to force in copy or move, else support both
-		virtual void forceCopyMode(CopyMode) = 0;
+		virtual void forceCopyMode(const CopyMode&) = 0;
 		/// \brief set if transfer list is exportable/importable
-		virtual void setTransferListOperation(TransferListOperation transferListOperation) = 0;
+		virtual void setTransferListOperation(const TransferListOperation &transferListOperation) = 0;
 		/** \brief set if the order is external (like file manager copy)
 		 * to notify the interface, which can hide add folder/filer button */
 		virtual void haveExternalOrder() = 0;
 		/// \brief set if is in pause
-		virtual void isInPause(bool) = 0;
-	/* signal to implement
+		virtual void isInPause(const bool &isInPause) = 0;
+	// signal to implement
 	signals:
 		//set the transfer list
-		void removeItems(QList<int> ids);
-		void moveItemsOnTop(QList<int> ids);
-		void moveItemsUp(QList<int> ids);
-		void moveItemsDown(QList<int> ids);
-		void moveItemsOnBottom(QList<int> ids);
+		void removeItems(const QList<int> &ids);
+		void moveItemsOnTop(const QList<int> &ids);
+		void moveItemsUp(const QList<int> &ids);
+		void moveItemsDown(const QList<int> &ids);
+		void moveItemsOnBottom(const QList<int> &ids);
 		void exportTransferList();
 		void importTransferList();
 		//user ask ask to add folder (add it with interface ask source/destination)
-		void userAddFolder(CopyMode);
-		void userAddFile(CopyMode);
-		void urlDropped(QList<QUrl> urls);
+		void userAddFolder(const CopyMode &mode);
+		void userAddFile(const CopyMode &mode);
+		void urlDropped(const QList<QUrl> &urls);
 		//action on the copy
 		void pause();
 		void resume();
-		void skip(quint64 id);
+		void skip(const quint64 &id);
 		void cancel();
 		//edit the action
-		void sendCollisionAction(QString action);
-		void sendErrorAction(QString action);
-		void newSpeedLimitation(qint64);///< -1 if not able, 0 if disabled*/
+		void sendCollisionAction(const QString &action);
+		void sendErrorAction(const QString &action);
+		void newSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
 };
 
 /// \brief To define the interface for the factory to do themes instance
@@ -106,7 +106,7 @@ class PluginInterface_ThemesFactory : public QObject
 		/// \brief to get one instance
 		virtual PluginInterface_Themes * getInstance() = 0;
 		/// \brief to set resources, writePath can be empty if read only mode
-		virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,bool portableVersion) = 0;
+		virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion) = 0;
 		/// \brief to get the default options widget
 		virtual QWidget * options() = 0;
 		/// \brief to get a resource icon
@@ -116,8 +116,11 @@ class PluginInterface_ThemesFactory : public QObject
 		virtual void resetOptions() = 0;
 		/// \brief retranslate the language because the language have changed
 		virtual void newLanguageLoaded() = 0;
+	signals:
+		/// \brief To debug source
+		void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.3.0.8");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0");
 
 #endif // PLUGININTERFACE_THEMES_H

@@ -1,12 +1,11 @@
 #include <QtCore>
-#include <QMessageBox>
 
 #include "listener.h"
 
 CatchCopyPlugin::CatchCopyPlugin()
 {
-	connect(&catchcopy,SIGNAL(newCopy(quint32,QStringList,QString)),	this,SIGNAL(newCopy(quint32,QStringList,QString)));
-	connect(&catchcopy,SIGNAL(newMove(quint32,QStringList,QString)),	this,SIGNAL(newMove(quint32,QStringList,QString)));
+	connect(&catchcopy,&Catchcopy::newCopy,	this,&CatchCopyPlugin::newCopy);
+	connect(&catchcopy,&Catchcopy::newMove,	this,&CatchCopyPlugin::newMove);
 }
 
 void CatchCopyPlugin::listen()
@@ -47,7 +46,7 @@ const QString CatchCopyPlugin::errorString()
 	return "Unknow error";
 }
 
-void CatchCopyPlugin::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+void CatchCopyPlugin::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
 {
 	Q_UNUSED(options);
 	Q_UNUSED(writePath);
@@ -61,14 +60,12 @@ QWidget * CatchCopyPlugin::options()
 	return NULL;
 }
 
-Q_EXPORT_PLUGIN2(listener, CatchCopyPlugin);
-
-void CatchCopyPlugin::transferFinished(quint32 orderId,bool withError)
+void CatchCopyPlugin::transferFinished(const quint32 &orderId,const bool &withError)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, orderId: "+QString::number(orderId)+", withError: "+QString::number(withError));
 }
 
-void CatchCopyPlugin::transferCanceled(quint32 orderId)
+void CatchCopyPlugin::transferCanceled(const quint32 &orderId)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, orderId: "+QString::number(orderId));
 }

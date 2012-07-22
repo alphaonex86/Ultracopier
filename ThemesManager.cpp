@@ -31,10 +31,10 @@ ThemesManager::ThemesManager()
 
 	//connect the plugin management
 	plugins->lockPluginListEdition();
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
-	connect(plugins,SIGNAL(pluginListingIsfinish()),			this,SLOT(allPluginIsLoaded()),Qt::QueuedConnection);
+	connect(this,&ThemesManager::previouslyPluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+	connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&ThemesManager::allPluginIsLoaded,Qt::QueuedConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Themes);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
@@ -49,8 +49,8 @@ ThemesManager::ThemesManager()
 	defaultStylePath=":/Themes/"+QString(ULTRACOPIER_DEFAULT_STYLE)+"/";
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Default style: "+defaultStylePath);
 	currentStylePath=defaultStylePath;
-	connect(options,	SIGNAL(newOptionValue(QString,QString,QVariant)),	this,		SLOT(newOptionValue(QString,QString,QVariant)),Qt::QueuedConnection);
-	connect(languages,	SIGNAL(newLanguageLoaded(QString)),			&facilityEngine,SLOT(retranslate()),Qt::QueuedConnection);
+	connect(options,	&OptionEngine::newOptionValue,	this,		&ThemesManager::newOptionValue,Qt::QueuedConnection);
+	connect(languages,	&LanguagesManager::newLanguageLoaded,		&facilityEngine,&FacilityEngine::retranslate,Qt::QueuedConnection);
 }
 
 /// \brief Destroy the themes manager
@@ -111,9 +111,9 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
 			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("preload: %1, at the index: %2").arg(newPlugin.plugin.name).arg(QString::number(pluginList.size())));
 			#ifdef ULTRACOPIER_DEBUG
 			qRegisterMetaType<DebugLevel>("DebugLevel");
-			connect(factory,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
+			connect(factory,&PluginInterface_ThemesFactory::debugInformation,this,&ThemesManager::debugInformation,Qt::QueuedConnection);
 			#endif // ULTRACOPIER_DEBUG
-			connect(languages,SIGNAL(newLanguageLoaded(QString)),factory,SLOT(newLanguageLoaded()));
+			connect(languages,&LanguagesManager::newLanguageLoaded,factory,&PluginInterface_ThemesFactory::newLanguageLoaded);
 			newPlugin.factory=factory;
 			newPlugin.pluginLoader=pluginLoader;
 			newPlugin.options=new LocalPluginOptions("Themes-"+newPlugin.plugin.name);

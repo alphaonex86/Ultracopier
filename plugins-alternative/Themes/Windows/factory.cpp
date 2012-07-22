@@ -15,7 +15,7 @@ PluginInterface_Themes * Factory::getInstance()
 	return newInterface;
 }
 
-void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,bool portableVersion)
+void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
 {
 	Q_UNUSED(options)
 	Q_UNUSED(writePath)
@@ -66,5 +66,3 @@ void Factory::newLanguageLoaded()
 {
 	emit reloadLanguage();
 }
-
-Q_EXPORT_PLUGIN2(interface, Factory);

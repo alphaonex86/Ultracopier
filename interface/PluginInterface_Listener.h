@@ -28,25 +28,27 @@ class PluginInterface_Listener : public QObject
 		/// \brief to get the error string
 		virtual const QString errorString() = 0;
 		/// \brief set the resources for the plugin
-		virtual void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion) = 0;
+		virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion) = 0;
 		/// \brief to get the options widget, NULL if not have
 		virtual QWidget * options() = 0;
 	public slots:
 		/// \brief send when copy is finished
-		virtual void transferFinished(quint32 orderId,bool withError) = 0;
+		virtual void transferFinished(const quint32 &orderId,const bool &withError) = 0;
 		/// \brief send when copy is canceled
-		virtual void transferCanceled(quint32 orderId) = 0;
+		virtual void transferCanceled(const quint32 &orderId) = 0;
 		/// \brief to reload the translation, because the new language have been loaded
 		virtual void newLanguageLoaded() = 0;
-	/* signal to implement
 	signals:
-		void newState(ListeningState state);
-		void newCopy(quint32 orderId,QStringList sources);
-		void newCopy(quint32 orderId,QStringList sources,QString destination);
-		void newMove(quint32 orderId,QStringList sources);
-		void newMove(quint32 orderId,QStringList sources,QString destination);*/
+		void newState(const ListeningState &state);
+		void newCopyWithoutDestination(const quint32 &orderId,const QStringList &sources);
+		void newCopy(const quint32 &orderId,const QStringList &sources,const QString &destination);
+		void newMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
+		void newMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
+	signals:
+		/// \brief To debug source
+		void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/0.3.0.8");
+Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/0.4.0.0");
 
 #endif // PLUGININTERFACE_LISTENER_H

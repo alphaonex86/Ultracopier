@@ -29,17 +29,17 @@ public:
 	explicit OptionDialog();
 	~OptionDialog();
 	/** \brief add the option widget from copy engine */
-	void addPluginOptionWidget(PluginType category,QString name,QWidget * options);
+	void addPluginOptionWidget(const PluginType &category,const QString &name,QWidget * options);
 protected:
 	void changeEvent(QEvent *e);
 private slots:
 	void on_treeWidget_itemSelectionChanged();
 	void on_buttonBox_clicked(QAbstractButton *button);
 	//plugin management
-	void onePluginAdded(PluginsAvailable plugin);
-	void onePluginWillBeRemoved(PluginsAvailable plugin);
+	void onePluginAdded(const PluginsAvailable &plugin);
+	void onePluginWillBeRemoved(const PluginsAvailable &plugin);
 	void loadOption();
-	void newOptionValue(QString group,QString name,QVariant value);
+	void newOptionValue(const QString &group,const QString &name,const QVariant &value);
 	void on_Ultracopier_current_theme_currentIndexChanged(int index);
 	void on_Language_currentIndexChanged(int index);
 	void on_Language_autodetect_toggled(bool checked);
@@ -96,7 +96,7 @@ private:
 public slots:
 	void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
 signals:
-	void previouslyPluginAdded(PluginsAvailable);
+	void previouslyPluginAdded(const PluginsAvailable &plugin);
 };
 
 #endif // OPTIONDIALOG_H

@@ -11,6 +11,44 @@
 #include "copyEngine.h"
 #include "folderExistsDialog.h"
 
+//dialog message
+/// \note Can be call without queue because all call will be serialized
+void copyEngine::fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread)
+{
+	fileAlreadyExistsSlot(source,destination,isSame,thread);
+}
+
+/// \note Can be call without queue because all call will be serialized
+void copyEngine::errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread)
+{
+	errorOnFileSlot(fileInfo,errorString,thread);
+}
+
+/// \note Can be call without queue because all call will be serialized
+void copyEngine::folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread)
+{
+	folderAlreadyExistsSlot(source,destination,isSame,thread);
+}
+
+/// \note Can be call without queue because all call will be serialized
+void copyEngine::errorOnFolderSlot(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread)
+{
+	errorOnFolderSlot(fileInfo,errorString,thread);
+}
+
+//mkpath event
+void copyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error)
+{
+	mkPathErrorOnFolderSlot(folder,error);
+}
+
+//rmpath event
+void copyEngine::rmPathErrorOnFolderSlot(QFileInfo folder,QString error)
+{
+	rmPathErrorOnFolderSlot(folder,error);
+}
+
+
 /// \note Can be call without queue because all call will be serialized
 void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
 {

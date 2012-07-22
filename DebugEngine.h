@@ -89,7 +89,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
 		/// \brief String for the end of log file
 		QString endOfLogFile;
 		/// \brief Drop the html entities
-		QString htmlEntities(QString text);
+		QString htmlEntities(const QString &text);
 		/// \brief To store the debug informations
 		QString debugHtmlContent;
 		/// \brief The current backend

@@ -101,7 +101,7 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 			if(transferList.last()=="?")
 			{
 				transferList.removeLast();
-				emit newCopy(transferList);
+				emit newCopyWithoutDestination(transferList);
 			}
 			else
 			{
@@ -121,7 +121,7 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 			if(transferList.last()=="?")
 			{
 				transferList.removeLast();
-				emit newMove(transferList);
+				emit newMoveWithoutDestination(transferList);
 			}
 			else
 			{

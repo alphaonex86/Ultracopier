@@ -6,12 +6,12 @@ Catchcopy::Catchcopy()
 {
 }
 
-void Catchcopy::copy(QStringList sources,QString destination)
+void Catchcopy::copy(const QStringList &sources,const QString &destination)
 {
 	emit newCopy(0,sources,destination);
 }
 
-void Catchcopy::move(QStringList sources,QString destination)
+void Catchcopy::move(const QStringList &sources,const QString &destination)
 {
 	emit newMove(0,sources,destination);
 }

@@ -27,8 +27,8 @@ PluginLoader::PluginLoader()
 	needBeRegistred=false;
 	changeOfArchDetected=false;
 	is64Bits=false;
-	connect(&optionsWidget,SIGNAL(sendAllDllIsImportant(bool)),this,SLOT(setAllDllIsImportant(bool)));
-	connect(&optionsWidget,SIGNAL(sendDebug(bool)),this,SLOT(setDebug(bool)));
+	connect(&optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&PluginLoader::setAllDllIsImportant);
+	connect(&optionsWidget,&OptionsWidget::sendDebug,this,&PluginLoader::setDebug);
 
 #if defined(_M_X64)//64Bits
 	is64Bits=true;
@@ -403,8 +403,6 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 		HardUnloadDLL(dllPath);
 	return ok;
 }
-
-Q_EXPORT_PLUGIN2(pluginLoader, PluginLoader);
 
 bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 {

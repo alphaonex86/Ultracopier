@@ -19,13 +19,13 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
 	KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
 	#endif
 	options->addOptionGroup("SessionLoader",KeysList);
-	connect(options,SIGNAL(newOptionValue(QString,QString,QVariant)),	this,	SLOT(newOptionValue(QString,QString,QVariant)),Qt::QueuedConnection);
+	connect(options,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
 	//load the plugin
 	plugins->lockPluginListEdition();
 	qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-	connect(this,SIGNAL(previouslyPluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginAdded(PluginsAvailable)),		this,SLOT(onePluginAdded(PluginsAvailable)),Qt::QueuedConnection);
-	connect(plugins,SIGNAL(onePluginWillBeRemoved(PluginsAvailable)),	this,SLOT(onePluginWillBeRemoved(PluginsAvailable)),Qt::DirectConnection);
+	connect(this,&SessionLoader::previouslyPluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
+	connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);
 	QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
 	foreach(PluginsAvailable currentPlugin,list)
 		emit previouslyPluginAdded(currentPlugin);
@@ -70,7 +70,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
 		if(sessionLoader)
 		{
 			#ifdef ULTRACOPIER_DEBUG
-			connect(sessionLoader,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SLOT(debugInformation(DebugLevel,QString,QString,QString,int)));
+			connect(sessionLoader,&PluginInterface_SessionLoader::debugInformation,this,&SessionLoader::debugInformation);
 			#endif // ULTRACOPIER_DEBUG
 			newEntry.options=new LocalPluginOptions("SessionLoader-"+plugin.name);
 			newEntry.sessionLoaderInterface=sessionLoader;
@@ -78,7 +78,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
 			newEntry.sessionLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
 			newEntry.sessionLoaderInterface->setEnabled(shouldEnabled);
 			optionDialog->addPluginOptionWidget(PluginType_SessionLoader,plugin.name,newEntry.sessionLoaderInterface->options());
-			connect(languages,SIGNAL(newLanguageLoaded(QString)),newEntry.sessionLoaderInterface,SLOT(newLanguageLoaded()));
+			connect(languages,&LanguagesManager::newLanguageLoaded,newEntry.sessionLoaderInterface,&PluginInterface_SessionLoader::newLanguageLoaded);
 			pluginList << newEntry;
 		}
 		else
@@ -125,7 +125,7 @@ void SessionLoader::newOptionValue(const QString &groupName,const QString &varia
 }
 
 #ifdef ULTRACOPIER_DEBUG
-void SessionLoader::debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
+void SessionLoader::debugInformation(const DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
 {
 	DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Session loader plugin");
 }
