@@ -29,20 +29,20 @@ WriteThread::~WriteThread()
 	//endIsDetected();
 	emit internalStartClose();
 	isOpen.acquire();
-	disconnect(this);
+	//disconnect(this);//-> do into ~TransferThread()
 	quit();
 	wait();
 }
 
 void WriteThread::run()
 {
-        connect(this,SIGNAL(internalStartOpen()),               this,SLOT(internalOpen()),              Qt::QueuedConnection);
-        connect(this,SIGNAL(internalStartReopen()),             this,SLOT(internalReopen()),            Qt::QueuedConnection);
-        connect(this,SIGNAL(internalStartWrite()),              this,SLOT(internalWrite()),             Qt::QueuedConnection);
-        connect(this,SIGNAL(internalStartClose()),              this,SLOT(internalClose()),             Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartEndOfFile()),		this,SLOT(internalEndOfFile()),		Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartFlushAndSeekToZero()), this,SLOT(internalFlushAndSeekToZero()),Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartChecksum()),		this,SLOT(checkSum()),			Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartOpen,			this,&WriteThread::internalOpen,		Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartReopen,			this,&WriteThread::internalReopen,		Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartWrite,			this,&WriteThread::internalWrite,		Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartClose,			this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartEndOfFile,		this,&WriteThread::internalEndOfFile,		Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartFlushAndSeekToZero,	this,&WriteThread::internalFlushAndSeekToZero,	Qt::QueuedConnection);
+	connect(this,&WriteThread::internalStartChecksum,		this,&WriteThread::checkSum,			Qt::QueuedConnection);
 	exec();
 }
 
@@ -270,6 +270,11 @@ void WriteThread::postOperation()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] start");
 	emit internalStartClose();
+}
+
+void WriteThread::internalCloseSlot()
+{
+	internalClose();
 }
 
 void WriteThread::internalClose(bool emitSignal)

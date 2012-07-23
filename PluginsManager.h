@@ -21,6 +21,7 @@
 #include <QCryptographicHash>
 #include <QString>
 #include <QSemaphore>
+#include <QRegularExpression>
 
 #include "Environment.h"
 #include "Singleton.h"
@@ -116,6 +117,8 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
 		QString categoryToTranslation(const PluginType &category);
 		//temp variable
 		int index,loop_size,sub_index,loop_sub_size;
+		QRegularExpression regexp_to_clean_1,regexp_to_clean_2,regexp_to_clean_3,regexp_to_clean_4,regexp_to_clean_5;
+		QRegularExpression regexp_to_dep_1,regexp_to_dep_2,regexp_to_dep_3,regexp_to_dep_4,regexp_to_dep_5,regexp_to_dep_6;
 	private slots:
 		/// \brief show the information
 		void showInformationDoubleClick();

@@ -13,10 +13,9 @@
 ServerCatchcopy::ServerCatchcopy()
 {
 	name="Default avanced copier";
-	autoReply=true;
 	idNextClient=0;
 	error_string="Unknown error";
-	connect(&server, SIGNAL(newConnection()), this, SLOT(newConnection()));
+	connect(&server, &QLocalServer::newConnection, this, &ServerCatchcopy::newConnection);
 }
 
 ServerCatchcopy::~ServerCatchcopy()
@@ -57,6 +56,7 @@ bool ServerCatchcopy::listen()
 			error_string="Unable to remove the old server";
 			emit error(error_string);
 		}
+		server.setSocketOptions(QLocalServer::UserAccessOption);
 		if(server.listen(pathSocket))
 			return true;
 		else
@@ -119,17 +119,17 @@ void ServerCatchcopy::newConnection()
 			newClient.detectTimeOut		= new QTimer(this);
 			newClient.detectTimeOut->setSingleShot(true);
 			newClient.detectTimeOut->setInterval(CATCHCOPY_COMMUNICATION_TIMEOUT);
-			connect(newClient.socket,	SIGNAL(error(QLocalSocket::LocalSocketError)),	this, SLOT(connectionError(QLocalSocket::LocalSocketError)));
-			connect(newClient.socket,	SIGNAL(readyRead()),				this, SLOT(readyRead()));
-			connect(newClient.socket,	SIGNAL(disconnected()),				this, SLOT(disconnected()));
-			connect(newClient.detectTimeOut,SIGNAL(timeout()),				this, SLOT(checkTimeOut()));
+			connect(newClient.socket,	static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),	this, &ServerCatchcopy::connectionError);
+			connect(newClient.socket,	&QIODevice::readyRead,										this, &ServerCatchcopy::readyRead);
+			connect(newClient.socket,	&QLocalSocket::disconnected,				 					this, &ServerCatchcopy::disconnected);
+			connect(newClient.detectTimeOut,&QTimer::timeout,										this, &ServerCatchcopy::checkTimeOut);
 			ClientList << newClient;
 			emit connectedClient(newClient.id);
 		}
 	}
 }
 
-bool ServerCatchcopy::clientIdFound(quint32 id)
+bool ServerCatchcopy::clientIdFound(const quint32 &id)
 {
 	int index=0;
 	while(index<ClientList.size())
@@ -142,7 +142,7 @@ bool ServerCatchcopy::clientIdFound(quint32 id)
 }
 
 /// \brief new error at connexion
-void ServerCatchcopy::connectionError(QLocalSocket::LocalSocketError error)
+void ServerCatchcopy::connectionError(const QLocalSocket::LocalSocketError &error)
 {
 	QLocalSocket *socket=qobject_cast<QLocalSocket *>(QObject::sender());
 	if(socket==NULL)
@@ -178,13 +178,14 @@ void ServerCatchcopy::disconnected()
 		if(ClientList.at(index).socket==socket)
 		{
 			emit disconnectedClient(ClientList.at(index).id);
-			disconnect(ClientList.at(index).socket);
-			disconnect(ClientList.at(index).detectTimeOut);
-			delete ClientList.at(index).detectTimeOut;
+			//disconnect(ClientList.at(index).socket);
+			//disconnect(ClientList.at(index).detectTimeOut);
 			ClientList.at(index).socket->abort();
 			ClientList.at(index).socket->disconnectFromServer();
 			ClientList.at(index).socket->deleteLater();
 			ClientList.removeAt(index);
+			delete ClientList.at(index).detectTimeOut;
+			delete ClientList.at(index).socket;
 			return;
 		}
 		index++;
@@ -192,7 +193,7 @@ void ServerCatchcopy::disconnected()
 	qWarning() << "Unlocated client!";
 }
 
-void ServerCatchcopy::disconnectClient(quint32 id)
+void ServerCatchcopy::disconnectClient(const quint32 &id)
 {
 	int index=0;
 	while(index<ClientList.size())
@@ -283,7 +284,7 @@ void ServerCatchcopy::readyRead()
 						return;
 					}
 					ClientList[index].queryNoReplied << orderId;
-					if(!ClientList.at(index).firstProtocolReplied && returnList.size()==2 && returnList.first()=="protocol" && autoReply)
+					if(!ClientList.at(index).firstProtocolReplied && returnList.size()==2 && returnList.first()=="protocol")
 					{
 						ClientList[index].firstProtocolReplied=true;
 						protocolSupported(ClientList.at(index).id,orderId,(returnList.last()==CATCHCOPY_PROTOCOL_VERSION));
@@ -304,7 +305,7 @@ void ServerCatchcopy::readyRead()
 	qWarning() << "Unallocated client!";
 }
 
-bool ServerCatchcopy::checkDataIntegrity(QByteArray data)
+bool ServerCatchcopy::checkDataIntegrity(const QByteArray &data)
 {
 	quint32 orderId;
 	qint32 listSize;
@@ -344,7 +345,7 @@ bool ServerCatchcopy::checkDataIntegrity(QByteArray data)
 	return true;
 }
 
-void ServerCatchcopy::parseInput(quint32 client,quint32 orderId,QStringList returnList)
+void ServerCatchcopy::parseInput(const quint32 &client,const quint32 &orderId,const QStringList &returnList)
 {
 	switch(parseInputCurrentProtocol(client,orderId,returnList))
 	{
@@ -354,35 +355,23 @@ void ServerCatchcopy::parseInput(quint32 client,quint32 orderId,QStringList retu
 		case Replied:
 		break;
 		case ExtensionWrong:
-			if(autoReply)
-				protocolExtensionSupported(client,orderId,false);
-			else
-				emit newQuery(client,orderId,returnList);
+			//protocolExtensionSupported(client,orderId,false);
 		break;
 		case WrongArgument:
-			if(autoReply)
-				incorrectArgument(client,orderId);
-			else
-				emit newQuery(client,orderId,returnList);
+			incorrectArgument(client,orderId);
 		break;
 		case WrongArgumentListSize:
-			if(autoReply)
-				incorrectArgumentListSize(client,orderId);
-			else
-				emit newQuery(client,orderId,returnList);
+			incorrectArgumentListSize(client,orderId);
 		break;
 		case UnknowOrder:
 			emit error("Unknown query");
 			qWarning() << "Unknown query";
-			if(autoReply)
-				unknowOrder(client,orderId);
-			else
-				emit newQuery(client,orderId,returnList);
+			unknowOrder(client,orderId);
 		break;
 	}
 }
 
-ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(quint32 client,quint32 orderId,QStringList returnList)
+ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(const quint32 &client,const quint32 &orderId,const QStringList &returnList)
 {
 	if(returnList.size()==0)
 		return WrongArgumentListSize;
@@ -399,13 +388,6 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(quin
 	{
 		if(returnList.size()>3 || returnList.size()<2)
 			return WrongArgumentListSize;
-		if(!autoReply)
-		{
-			if(returnList.size()==2)
-				emit askProtocolExtension(client,orderId,returnList.last());
-			else
-				emit askProtocolExtension(client,orderId,returnList.at(1),returnList.last());
-		}
 		return ExtensionWrong;
 	}
 	else if(firstArgument=="client")
@@ -413,16 +395,8 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(quin
 		if(returnList.size()!=2)
 			return WrongArgumentListSize;
 		emit clientName(client,returnList.last());
-		if(autoReply)
-		{
-			clientRegistered(client,orderId);
-			return Replied;
-		}
-		else
-		{
-			emit clientName(client,orderId,returnList.last());
-			return Ok;
-		}
+		clientRegistered(client,orderId);
+		return Replied;
 	}
 	else if(firstArgument=="server")
 	{
@@ -430,16 +404,8 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(quin
 			return WrongArgumentListSize;
 		if(returnList.last()!="name?")
 			return WrongArgument;
-		if(autoReply)
-		{
-			serverName(client,orderId,name);
-			return Replied;
-		}
-		else
-		{
-			askServerName(client,orderId);
-			return Ok;
-		}
+		serverName(client,orderId,name);
+		return Replied;
 	}
 	else if(firstArgument=="cp")
 	{
@@ -457,7 +423,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(quin
 			return WrongArgumentListSize;
 		QStringList sourceList=returnList;
 		sourceList.removeFirst();
-		emitNewCopy(client,orderId,sourceList);
+		emitNewCopyWithoutDestination(client,orderId,sourceList);
 		return Ok;
 	}
 	else if(firstArgument=="mv")
@@ -476,27 +442,25 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(quin
 			return WrongArgumentListSize;
 		QStringList sourceList=returnList;
 		sourceList.removeFirst();
-		emitNewMove(client,orderId,sourceList);
+		emitNewMoveWithoutDestination(client,orderId,sourceList);
 		return Ok;
 	}
 	else //if is not supported
 		return UnknowOrder;
 }
 
-void ServerCatchcopy::emitNewCopy(quint32 client,quint32 orderId,QStringList sources)
+void ServerCatchcopy::emitNewCopyWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources)
 {
-	emit newCopy(client,orderId,sources);
 	LinkGlobalToLocalClient newAssociation;
 	newAssociation.idClient=client;
 	newAssociation.orderId=orderId;
 	newAssociation.globalOrderId=incrementOrderId();
 	LinkGlobalToLocalClientList << newAssociation;
-	emit newCopy(newAssociation.globalOrderId,sources);
+	emit newCopyWithoutDestination(newAssociation.globalOrderId,sources);
 }
 
-void ServerCatchcopy::emitNewCopy(quint32 client,quint32 orderId,QStringList sources,QString destination)
+void ServerCatchcopy::emitNewCopy(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
-	emit newCopy(client,orderId,sources,destination);
 	LinkGlobalToLocalClient newAssociation;
 	newAssociation.idClient=client;
 	newAssociation.orderId=orderId;
@@ -505,20 +469,18 @@ void ServerCatchcopy::emitNewCopy(quint32 client,quint32 orderId,QStringList sou
 	emit newCopy(newAssociation.globalOrderId,sources,destination);
 }
 
-void ServerCatchcopy::emitNewMove(quint32 client,quint32 orderId,QStringList sources)
+void ServerCatchcopy::emitNewMoveWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources)
 {
-	emit newMove(client,orderId,sources);
 	LinkGlobalToLocalClient newAssociation;
 	newAssociation.idClient=client;
 	newAssociation.orderId=orderId;
 	newAssociation.globalOrderId=incrementOrderId();
 	LinkGlobalToLocalClientList << newAssociation;
-	emit newMove(newAssociation.globalOrderId,sources);
+	emit newMoveWithoutDestination(newAssociation.globalOrderId,sources);
 }
 
-void ServerCatchcopy::emitNewMove(quint32 client,quint32 orderId,QStringList sources,QString destination)
+void ServerCatchcopy::emitNewMove(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
-	emit newMove(client,orderId,sources,destination);
 	LinkGlobalToLocalClient newAssociation;
 	newAssociation.idClient=client;
 	newAssociation.orderId=orderId;
@@ -527,7 +489,7 @@ void ServerCatchcopy::emitNewMove(quint32 client,quint32 orderId,QStringList sou
 	emit newMove(newAssociation.globalOrderId,sources,destination);
 }
 
-void ServerCatchcopy::copyFinished(quint32 globalOrderId,bool withError)
+void ServerCatchcopy::copyFinished(const quint32 &globalOrderId,const bool &withError)
 {
 	int index=0;
 	while(index<LinkGlobalToLocalClientList.size())
@@ -543,7 +505,7 @@ void ServerCatchcopy::copyFinished(quint32 globalOrderId,bool withError)
 	}
 }
 
-void ServerCatchcopy::copyCanceled(quint32 globalOrderId)
+void ServerCatchcopy::copyCanceled(const quint32 &globalOrderId)
 {
 	int index=0;
 	while(index<LinkGlobalToLocalClientList.size())
@@ -559,22 +521,12 @@ void ServerCatchcopy::copyCanceled(quint32 globalOrderId)
 	}
 }
 
-void ServerCatchcopy::setAutoReply(bool value)
-{
-	autoReply=value;
-}
-
-bool ServerCatchcopy::getAutoReply()
-{
-	return autoReply;
-}
-
-void ServerCatchcopy::reply(quint32 client,quint32 orderId,quint32 returnCode,QString returnString)
+void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QString &returnString)
 {
 	reply(client,orderId,returnCode,QStringList() << returnString);
 }
 
-void ServerCatchcopy::reply(quint32 client,quint32 orderId,quint32 returnCode,QStringList returnList)
+void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QStringList &returnList)
 {
 	int index=0;
 	while(index<ClientList.size())
@@ -599,8 +551,6 @@ void ServerCatchcopy::reply(quint32 client,quint32 orderId,quint32 returnCode,QS
 				out << returnList;
 				out.device()->seek(0);
 				out << block.size();
-				emit dataSend(client,orderId,returnCode,block);
-				emit dataSend(client,orderId,returnCode,returnList);
 				do
 				{
 					QByteArray blockToSend;
@@ -641,7 +591,7 @@ void ServerCatchcopy::reply(quint32 client,quint32 orderId,quint32 returnCode,QS
 	qWarning() << "Client id not found:" << client;
 }
 
-void ServerCatchcopy::protocolSupported(quint32 client,quint32 orderId,bool value)
+void ServerCatchcopy::protocolSupported(const quint32 &client,const quint32 &orderId,const bool &value)
 {
 	if(value)
 		reply(client,orderId,1000,"protocol supported");
@@ -649,35 +599,27 @@ void ServerCatchcopy::protocolSupported(quint32 client,quint32 orderId,bool valu
 		reply(client,orderId,5003,"protocol not supported");
 }
 
-void ServerCatchcopy::incorrectArgumentListSize(quint32 client,quint32 orderId)
+void ServerCatchcopy::incorrectArgumentListSize(const quint32 &client,const quint32 &orderId)
 {
 	reply(client,orderId,5000,"incorrect argument list size");
 }
 
-void ServerCatchcopy::incorrectArgument(quint32 client,quint32 orderId)
+void ServerCatchcopy::incorrectArgument(const quint32 &client,const quint32 &orderId)
 {
 	reply(client,orderId,5001,"incorrect argument");
 }
 
-void ServerCatchcopy::protocolExtensionSupported(quint32 client,quint32 orderId,bool value)
-{
-	if(value)
-		reply(client,orderId,1001,"protocol extension supported");
-	else
-		reply(client,orderId,1002,"protocol extension not supported");
-}
-
-void ServerCatchcopy::clientRegistered(quint32 client,quint32 orderId)
+void ServerCatchcopy::clientRegistered(const quint32 &client,const quint32 &orderId)
 {
 	reply(client,orderId,1003,"client registered");
 }
 
-void ServerCatchcopy::serverName(quint32 client,quint32 orderId,QString name)
+void ServerCatchcopy::serverName(const quint32 &client,const quint32 &orderId,const QString &name)
 {
 	reply(client,orderId,1004,name);
 }
 
-void ServerCatchcopy::copyFinished(quint32 client,quint32 orderId,bool withError)
+void ServerCatchcopy::copyFinished(const quint32 &client,const quint32 &orderId,const bool &withError)
 {
 	if(!withError)
 		reply(client,orderId,1005,"finished");
@@ -685,12 +627,12 @@ void ServerCatchcopy::copyFinished(quint32 client,quint32 orderId,bool withError
 		reply(client,orderId,1006,"finished with error(s)");
 }
 
-void ServerCatchcopy::copyCanceled(quint32 client,quint32 orderId)
+void ServerCatchcopy::copyCanceled(const quint32 &client,const quint32 &orderId)
 {
 	reply(client,orderId,1007,"canceled");
 }
 
-void ServerCatchcopy::unknowOrder(quint32 client,quint32 orderId)
+void ServerCatchcopy::unknowOrder(const quint32 &client,const quint32 &orderId)
 {
 	reply(client,orderId,5002,"unknown order");
 }

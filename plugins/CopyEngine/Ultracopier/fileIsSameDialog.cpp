@@ -71,11 +71,11 @@ void fileIsSameDialog::on_SuggestNewName_clicked()
 	QString destination;
 	QString newFileName;
 	//resolv the suffix
-	if(fileName.contains(QRegExp("^(.*)(\\.[a-z0-9]+)$")))
+	if(fileName.contains(QRegularExpression("^(.*)(\\.[a-z0-9]+)$")))
 	{
 		suffix=fileName;
-		suffix.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\2");
-		fileName.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\1");
+		suffix.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\2");
+		fileName.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\1");
 	}
 	//resolv the new name
 	int num=1;

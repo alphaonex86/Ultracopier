@@ -1,6 +1,3516 @@
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.cpp Rsync/ListThread.cpp
---- Ultracopier-0.3/ListThread.cpp	2012-06-26 14:12:53.082114806 +0200
-+++ Rsync/ListThread.cpp	2012-06-29 22:21:40.395733284 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/ar/translation.ts Rsync/Languages/ar/translation.ts
+--- Ultracopier/Languages/ar/translation.ts	2012-07-18 15:40:37.521771818 +0200
++++ Rsync/Languages/ar/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/de/translation.ts Rsync/Languages/de/translation.ts
+--- Ultracopier/Languages/de/translation.ts	2012-07-18 15:40:37.531771819 +0200
++++ Rsync/Languages/de/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation>Optionen Fehler</translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Optionen Motor nicht geladen wird, kann nicht auf die Filter zu übersetzen</translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation>Kann nicht tun, verschieben oder kopieren Artikel in den falschen gezwungen Modus: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation>Unfähig, die Transferliste sparen: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation>Problem an der Lektüre, der Oder Dateigröße IST Null</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation>Falsche Header: &quot;%1&quot;</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation>Die Transferliste ist im gemischten Modus, aber diese Instanz ist in diesem Modus nicht</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation>Die Transferliste ist im Copy-Mode, aber dieser Fall ist in diesem Modus nicht</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation>Die Transferliste ist in Verschiebe-Modus, aber diese Instanz ist in diesem Modus nicht</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation>Einige Fehler wurden während des Parsing gefunden</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation>Unfähig, die Transferliste geöffnet: %1</translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation>Der Ordner kann nicht entfernen</translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation>%1 - kopieren</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - kopieren (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation>Die Prüfsummen nicht überein</translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation>Der Motor wird gezwungen sich zu bewegen, können Sie mit ihr nicht zu kopieren</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation>Der Motor ist gezwungen, zu kopieren, können Sie nicht mit ihm bewegen</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation>Der Modus wurden vorher gezwungen, es interner Fehler ist, melden Sie dies bitte</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation>Optionen Fehler</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Optionen Motor nicht geladen wird, kann nicht auf die Filter zu übersetzen</translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation>Prüfen Sie, ob Zielordner vorhanden ist</translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation>Wenn Ordner Kollision</translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation>%1 - kopieren</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - kopieren (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation>Der Ordner existiert nicht</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation>Der Ordner ist nicht lesbar</translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/el/translation.ts Rsync/Languages/el/translation.ts
+--- Ultracopier/Languages/el/translation.ts	2012-07-18 15:40:37.541771820 +0200
++++ Rsync/Languages/el/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/es/translation.ts Rsync/Languages/es/translation.ts
+--- Ultracopier/Languages/es/translation.ts	2012-07-18 15:40:37.531771819 +0200
++++ Rsync/Languages/es/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation>Error de opciones</translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Opciones del motor no está cargado, no se puede acceder a los filtros</translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation>No se puede hacer para mover o copiar elemento en modo incorrecto obligado: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation>No se puede guardar la lista de transferencias: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation>Problema en la lectura, o el tamaño del archivo es nulo</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation>Encabezado incorrecto: &quot;%1&quot;</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation>La lista de transferencia está en modo mixto, pero este caso no es de este modo</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation>La lista de transferencia está en el modo de copia, pero esta instancia no está en este modo</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation>La lista de transferencia es el modo de desplazamiento, pero esta instancia no está en este modo</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation>Algunos errores han sido encontrados durante el análisis de línea</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation>No se puede abrir la lista de transferencias: %1</translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation>No se puede eliminar la carpeta</translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation>%1 - copia</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - copia (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation>Las sumas de comprobación no coincide</translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation>El motor se ve obligado a moverse, no se puede copiar con ella</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation>El motor se ve obligado a copiar, no te puedes mover con él</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation>El modo se han visto obligados con anterioridad, es un error interno, por favor repórtelo</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation>Opciones de error</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Opciones del motor no está cargado, no se puede acceder a los filtros</translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation>Compruebe si existe la carpeta de destino</translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation>Cuando la colisión carpeta</translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation>%1 - copia</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - copia (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation>La carpeta no existe</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation>La carpeta no se puede leer</translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/fr/translation.ts Rsync/Languages/fr/translation.ts
+--- Ultracopier/Languages/fr/translation.ts	2012-07-18 15:40:37.511771820 +0200
++++ Rsync/Languages/fr/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation>Erreur d&apos;options</translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Moteur d&apos;options non chargé, impossible d&apos;accédrer aux filtres</translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation>Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation>Impossible de sauvegarde la liste de transfer: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation>Probléme à la lecture, ou fichier de taille nulle</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation>Mauvaise en-tête: &quot;%1&quot;</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation>La list de transfer est en mode mixte, mais l&apos;instance n&apos;est pas dans ce mode</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation>La list de transfer est en mode copie, mais l&apos;instance n&apos;est pas dans ce mode</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation>La list de transfer est en mode déplacement, mais l&apos;instance n&apos;est pas dans ce mode</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation>Quelque erreur ont été trouvé durrant l&apos;analise des lignes</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation>Impossible d&apos;ouvrir la list de transfer: %1</translation>
+     </message>
+@@ -307,25 +307,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation>Impossible de supprimer le répertoire</translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation>%1 - copie</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - copie (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation>Les checksums ne correspondent pas</translation>
+     </message>
+@@ -346,29 +352,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation>Le moteur est forcé en déplacement, vous ne pouvez pas copier avec</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation>Le moteur est forcé en copie, vous ne pouvez pas déplacer avec</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation>Le mode as été forcé précédement, c&apos;est une erreur interne, merci de le repporter</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation>Erreur d&apos;options</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Moteur d&apos;options non chargé, impossible d&apos;accédrer aux filtres</translation>
+     </message>
+@@ -766,6 +772,11 @@
+         <translation>Régles de renommage</translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="191"/>
+         <source>OS buffer only if smaller than</source>
+         <translation>Buffer de l&apos;OS seulement si plus petit que</translation>
+@@ -774,24 +785,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation>%1 - copie</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - copie (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation>Le répertoire  n&apos;existe pas</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation>Le répertoire n&apos;est pas lisible</translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/hi/translation.ts Rsync/Languages/hi/translation.ts
+--- Ultracopier/Languages/hi/translation.ts	2012-07-18 15:40:37.571771820 +0200
++++ Rsync/Languages/hi/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/id/translation.ts Rsync/Languages/id/translation.ts
+--- Ultracopier/Languages/id/translation.ts	2012-07-18 15:40:37.551771821 +0200
++++ Rsync/Languages/id/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/it/translation.ts Rsync/Languages/it/translation.ts
+--- Ultracopier/Languages/it/translation.ts	2012-07-18 15:40:37.541771820 +0200
++++ Rsync/Languages/it/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation>opzioni di errore</translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Opzioni del motore non viene caricato, non possono accedere ai filtri</translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation>Impossibile fare per spostare o copiare elemento in male modo forzato: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation>Impossibile salvare la lista dei trasferimenti: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation>Problema alla lettura, o la dimensione del file è nullo</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation>Sbagliato intestazione: &quot;%1&quot;</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation>La lista di trasferimento è in modalità mista, ma questa istanza non è in questa modalità</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation>La lista di trasferimento è in modalità di copia, ma questa istanza non è in questa modalità</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation>La lista di trasferimento è in modalità di spostamento, ma questa istanza non è in questa modalità</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation>Alcuni errori sono stati trovati durante l&apos;analisi linea</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation>Impossibile aprire la lista di trasferimento: %1</translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation>Impossibile rimuovere la cartella</translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation>%1 - copia</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - copia (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation>Il checksum non corrisponde</translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation>Il motore è costretto a muoversi, non è possibile copiare con esso</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation>Il motore è costretto a copiare, non è possibile spostare con esso</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation>La modalità sono stati costretti in precedenza, è un errore interno, si prega di segnalarlo</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation>opzioni di errore</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Opzioni del motore non viene caricato, non possono accedere ai filtri</translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation>Controllare se la cartella di destinazione esiste</translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation>Quando collisione cartella</translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation>%1 - copia</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - copia (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation>La cartella non esiste</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation>La cartella non è leggibile</translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/ja/translation.ts Rsync/Languages/ja/translation.ts
+--- Ultracopier/Languages/ja/translation.ts	2012-07-18 15:40:37.551771821 +0200
++++ Rsync/Languages/ja/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -719,6 +725,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="43"/>
+         <location filename="../../options.ui" line="198"/>
+         <source>KB</source>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/ko/translation.ts Rsync/Languages/ko/translation.ts
+--- Ultracopier/Languages/ko/translation.ts	2012-07-18 15:40:37.591771819 +0200
++++ Rsync/Languages/ko/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation>폴더를 제거할 수 없습니다</translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -719,6 +725,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="43"/>
+         <location filename="../../options.ui" line="198"/>
+         <source>KB</source>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation>폴더가 존재하지 않습니다</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation>폴더를 읽을 수 없습니다</translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/nl/translation.ts Rsync/Languages/nl/translation.ts
+--- Ultracopier/Languages/nl/translation.ts	2012-07-18 15:40:37.581771821 +0200
++++ Rsync/Languages/nl/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/no/translation.ts Rsync/Languages/no/translation.ts
+--- Ultracopier/Languages/no/translation.ts	2012-07-18 15:40:37.581771821 +0200
++++ Rsync/Languages/no/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/pl/translation.ts Rsync/Languages/pl/translation.ts
+--- Ultracopier/Languages/pl/translation.ts	2012-07-18 15:40:37.551771821 +0200
++++ Rsync/Languages/pl/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/pt/translation.ts Rsync/Languages/pt/translation.ts
+--- Ultracopier/Languages/pt/translation.ts	2012-07-18 15:40:37.591771819 +0200
++++ Rsync/Languages/pt/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/ru/translation.ts Rsync/Languages/ru/translation.ts
+--- Ultracopier/Languages/ru/translation.ts	2012-07-18 15:40:37.561771819 +0200
++++ Rsync/Languages/ru/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation>Опции ошибке</translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Параметры двигателя не загружается, не может получить доступ к фильтрам</translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation>Невозможно сделать, чтобы скопировать или переместить элемент в неправильном форсированном режиме: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation>Невозможно сохранить трансфер: %1</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation>Проблема при чтении или размер файла нулевой</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation>Неправильный заголовок: &quot;%1&quot;</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation>Трансфер в смешанном режиме, но этот экземпляр не в этом режиме</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation>Передача списка в режиме копирования, но этот экземпляр не в этом режиме</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation>Трансфер в режим перемещения, но этот экземпляр не в этом режиме</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation>Некоторые ошибки были обнаружены в ходе разбора линия</translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation>Не удается открыть трансфер: %1</translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation>Не удается удалить папку</translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation>%1 - копия</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - копия (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation>Контрольные суммы не совпадают</translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation>Двигатель вынуждены покинуть свои дома, вы не можете скопировать с ним</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation>Двигатель вынужден копии, вы не можете двигаться вместе с ним</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation>Режим был вынужден ранее, это внутренняя ошибка, пожалуйста, сообщите об этом</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation>Опции ошибке</translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation>Параметры двигателя не загружается, не может получить доступ к фильтрам</translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation>Убедитесь, что папка существует</translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation>Когда папка столкновения</translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation>%1 - копия</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation>%1 - копия (%2)</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation>Папка не существует</translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation>Папки не читается</translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/th/translation.ts Rsync/Languages/th/translation.ts
+--- Ultracopier/Languages/th/translation.ts	2012-07-18 15:40:37.571771820 +0200
++++ Rsync/Languages/th/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/tr/translation.ts Rsync/Languages/tr/translation.ts
+--- Ultracopier/Languages/tr/translation.ts	2012-07-18 15:40:37.561771819 +0200
++++ Rsync/Languages/tr/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -722,6 +728,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="87"/>
+         <source>When folder collision</source>
+         <translation type="unfinished"></translation>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/Languages/zh/translation.ts Rsync/Languages/zh/translation.ts
+--- Ultracopier/Languages/zh/translation.ts	2012-07-18 15:40:37.521771818 +0200
++++ Rsync/Languages/zh/translation.ts	2012-07-18 15:40:38.000000000 +0200
+@@ -24,14 +24,14 @@
+ <context>
+     <name>Factory</name>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../factory.cpp" line="356"/>
+-        <location filename="../../factory.cpp" line="393"/>
++        <location filename="../../factory.cpp" line="369"/>
++        <location filename="../../factory.cpp" line="406"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -178,47 +178,47 @@
+ <context>
+     <name>ListThread</name>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1162"/>
++        <location filename="../../ListThread.cpp" line="1192"/>
+         <source>Unable do to move or copy item into wrong forced mode: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1169"/>
++        <location filename="../../ListThread.cpp" line="1199"/>
+         <source>Unable to save the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1185"/>
++        <location filename="../../ListThread.cpp" line="1215"/>
+         <source>Problem at the reading, or file size is null</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1192"/>
++        <location filename="../../ListThread.cpp" line="1222"/>
+         <source>Wrong header: &quot;%1&quot;</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1201"/>
++        <location filename="../../ListThread.cpp" line="1231"/>
+         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1210"/>
++        <location filename="../../ListThread.cpp" line="1240"/>
+         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1216"/>
++        <location filename="../../ListThread.cpp" line="1246"/>
+         <source>The transfer list is in move mode, but this instance is not in this mode</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1263"/>
++        <location filename="../../ListThread.cpp" line="1293"/>
+         <source>Some error have been found during the line parsing</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../ListThread.cpp" line="1269"/>
++        <location filename="../../ListThread.cpp" line="1299"/>
+         <source>Unable to open the transfer list: %1</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -303,25 +303,31 @@
+ <context>
+     <name>RmPath</name>
+     <message>
+-        <location filename="../../RmPath.cpp" line="59"/>
++        <location filename="../../RmPath.cpp" line="61"/>
++        <location filename="../../RmPath.cpp" line="75"/>
+         <source>Unable to remove the folder</source>
+         <translation type="unfinished"></translation>
+     </message>
++    <message>
++        <location filename="../../RmPath.cpp" line="85"/>
++        <source>Unable to remove the file</source>
++        <translation type="unfinished"></translation>
++    </message>
+ </context>
+ <context>
+     <name>TransferThread</name>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="311"/>
++        <location filename="../../TransferThread.cpp" line="312"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="321"/>
++        <location filename="../../TransferThread.cpp" line="322"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../TransferThread.cpp" line="626"/>
++        <location filename="../../TransferThread.cpp" line="627"/>
+         <source>The checksums not match</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -342,29 +348,29 @@
+ <context>
+     <name>copyEngine</name>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="257"/>
+-        <location filename="../../copyEngine.cpp" line="275"/>
++        <location filename="../../copyEngine.cpp" line="260"/>
++        <location filename="../../copyEngine.cpp" line="278"/>
+         <source>The engine is forced to move, you can&apos;t copy with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="286"/>
+-        <location filename="../../copyEngine.cpp" line="304"/>
++        <location filename="../../copyEngine.cpp" line="289"/>
++        <location filename="../../copyEngine.cpp" line="307"/>
+         <source>The engine is forced to copy, you can&apos;t move with it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="511"/>
++        <location filename="../../copyEngine.cpp" line="521"/>
+         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options error</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../copyEngine.cpp" line="772"/>
++        <location filename="../../copyEngine.cpp" line="795"/>
+         <source>Options engine is not loaded, can&apos;t access to the filters</source>
+         <translation type="unfinished"></translation>
+     </message>
+@@ -719,6 +725,11 @@
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
++        <location filename="../../options.ui" line="255"/>
++        <source>Rsync (only in copy mode)</source>
++        <translation type="unfinished"></translation>
++    </message>
++    <message>
+         <location filename="../../options.ui" line="43"/>
+         <location filename="../../options.ui" line="198"/>
+         <source>KB</source>
+@@ -770,24 +781,24 @@
+ <context>
+     <name>scanFileOrFolder</name>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
++        <location filename="../../scanFileOrFolder.cpp" line="219"/>
++        <location filename="../../scanFileOrFolder.cpp" line="283"/>
+         <source>%1 - copy</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
+-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
++        <location filename="../../scanFileOrFolder.cpp" line="229"/>
++        <location filename="../../scanFileOrFolder.cpp" line="293"/>
+         <source>%1 - copy (%2)</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
++        <location filename="../../scanFileOrFolder.cpp" line="327"/>
+         <source>The folder not exists</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
++        <location filename="../../scanFileOrFolder.cpp" line="329"/>
+         <source>The folder is not readable</source>
+         <translation type="unfinished"></translation>
+     </message>
+diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
+--- Ultracopier/ListThread.cpp	2012-07-23 12:28:59.222969988 +0200
++++ Rsync/ListThread.cpp	2012-07-23 13:30:58.000000000 +0200
 @@ -28,6 +28,7 @@
  	numberOfInodeOperation		= 0;
  	maxSpeed			= 0;
@@ -31,21 +3541,15 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.cpp Rsync/ListThread.cpp
  //set check destination folder
  void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
  {
-@@ -327,11 +343,13 @@
- 	#endif
- 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(newFolderListing(QString)),					this,SIGNAL(newFolderListing(QString)));
- 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToRmPath(QString,int)),					this,SLOT(addToRmPath(QString,int)),				Qt::QueuedConnection);
-+	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToRmForRsync(QString)),					this,SLOT(addToRmForRsync(QString)),				Qt::QueuedConnection);
- 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(addToMkPath(QString)),					this,SLOT(addToMkPath(QString)),				Qt::QueuedConnection);
- 
- 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(errorOnFolder(QFileInfo,QString)),				this,SLOT(errorOnFolder(QFileInfo,QString)),			Qt::QueuedConnection);
- 	connect(scanFileOrFolderThreadsPool.last(),SIGNAL(folderAlreadyExists(QFileInfo,QFileInfo,bool)),		this,SLOT(folderAlreadyExists(QFileInfo,QFileInfo,bool)),	Qt::QueuedConnection);
+@@ -332,6 +348,7 @@
+ 	connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,		Qt::QueuedConnection);
+ 	connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
  
 +	scanFileOrFolderThreadsPool.last()->setRsync(rsync);
  	scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
  	scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
  	if(scanFileOrFolderThreadsPool.size()==1)
-@@ -761,6 +779,18 @@
+@@ -766,6 +783,18 @@
  		actionToDoListInode_afterTheTransfer << temp;
  }
  
@@ -64,7 +3568,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.cpp Rsync/ListThread.cpp
  //send action done
  void ListThread::sendActionDone()
  {
-@@ -1526,7 +1556,7 @@
+@@ -1531,7 +1560,7 @@
  	loop_size=actionToDoListInode.size();
  	while(int_for_loop<loop_size)
  	{
@@ -73,26 +3577,17 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.cpp Rsync/ListThread.cpp
  		{
  			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
  			actionToDoListInode.removeAt(int_for_loop);
-@@ -1658,6 +1688,7 @@
+@@ -1663,6 +1692,7 @@
  	last->set_osBuffer(osBuffer);
  	last->set_osBufferLimited(osBufferLimited);
  	last->set_osBufferLimit(osBufferLimit);
 +	last->setRsync(rsync);
  
  	#ifdef ULTRACOPIER_PLUGIN_DEBUG
- 	connect(last,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),	Qt::QueuedConnection);
-@@ -1669,7 +1700,7 @@
- 	connect(last,SIGNAL(preOperationStopped()),					this,SLOT(doNewActions_start_transfer()),				Qt::QueuedConnection);
- 	connect(last,SIGNAL(postOperationStopped()),					this,SLOT(transferInodeIsClosed()),					Qt::QueuedConnection);
- 	connect(last,SIGNAL(checkIfItCanBeResumed()),					this,SLOT(restartTransferIfItCan()),					Qt::QueuedConnection);
--	connect(last,SIGNAL(pushStat(TransferStat,quint64)),				this,SLOT(newTransferStat(TransferStat,quint64)),	Qt::QueuedConnection);
-+	connect(last,SIGNAL(pushStat(TransferStat,quint64)),				this,SLOT(newTransferStat(TransferStat,quint64)),			Qt::QueuedConnection);
- 
- 	connect(this,SIGNAL(send_sendNewRenamingRules(QString,QString)),		last,SLOT(setRenamingRules(QString,QString)),				Qt::QueuedConnection);
- 
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.h Rsync/ListThread.h
---- Ultracopier-0.3/ListThread.h	2012-06-25 16:46:19.931261209 +0200
-+++ Rsync/ListThread.h	2012-06-29 21:53:37.495762350 +0200
+ 	connect(last,&TransferThread::debugInformation,			this,&ListThread::debugInformation,		Qt::QueuedConnection);
+diff -U 3 -H -d -r -N -- Ultracopier/ListThread.h Rsync/ListThread.h
+--- Ultracopier/ListThread.h	2012-07-23 11:19:29.052896213 +0200
++++ Rsync/ListThread.h	2012-07-23 13:26:45.000000000 +0200
 @@ -77,7 +77,8 @@
  	enum ActionType
  	{
@@ -120,7 +3615,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.h Rsync/ListThread.h
  	bool				putInPause;
  	QList<returnActionOnCopyList>	actionDone;///< to action to send to the interface
  	quint64				idIncrementNumber;///< to store the last id returned
-@@ -302,6 +306,8 @@
+@@ -303,6 +307,8 @@
  	quint64 addToMkPath(const QString& folder);
  	//add rm path to do
  	void addToRmPath(const QString& folder,const int& inodeToRemove);
@@ -129,9 +3624,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread.h Rsync/ListThread.h
  	//send the progression, after full reset of the interface (then all is empty)
  	void syncTransferList_internal();
  signals:
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread_InodeAction.cpp Rsync/ListThread_InodeAction.cpp
---- Ultracopier-0.3/ListThread_InodeAction.cpp	2012-06-29 21:57:47.000000000 +0200
-+++ Rsync/ListThread_InodeAction.cpp	2012-06-29 22:19:11.515735854 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/ListThread_InodeAction.cpp Rsync/ListThread_InodeAction.cpp
+--- Ultracopier/ListThread_InodeAction.cpp	2012-06-29 21:57:47.000000000 +0200
++++ Rsync/ListThread_InodeAction.cpp	2012-06-29 22:19:11.000000000 +0200
 @@ -19,6 +19,14 @@
  	if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
  		return;
@@ -156,9 +3651,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/ListThread_InodeAction.cpp Rsync/ListTh
  		currentActionToDoInode.isRunning=true;
  		numberOfInodeOperation++;
  		if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/RmPath.cpp Rsync/RmPath.cpp
---- Ultracopier-0.3/RmPath.cpp	2012-06-29 22:37:41.715716675 +0200
-+++ Rsync/RmPath.cpp	2012-06-29 22:42:25.105711780 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/RmPath.cpp Rsync/RmPath.cpp
+--- Ultracopier/RmPath.cpp	2012-07-23 11:30:55.702908359 +0200
++++ Rsync/RmPath.cpp	2012-07-23 13:32:04.000000000 +0200
 @@ -16,12 +16,12 @@
  	wait();
  }
@@ -174,15 +3669,6 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/RmPath.cpp Rsync/RmPath.cpp
  }
  
  void RmPath::skip()
-@@ -38,7 +38,7 @@
- 
- void RmPath::run()
- {
--	connect(this,SIGNAL(internalStartAddPath(QString)),this,SLOT(internalAddPath(QString)),Qt::QueuedConnection);
-+	connect(this,SIGNAL(internalStartAddPath(QString,bool)),this,SLOT(internalAddPath(QString,bool)),Qt::QueuedConnection);
- 	connect(this,SIGNAL(internalStartDoThisPath()),this,SLOT(internalDoThisPath()),Qt::QueuedConnection);
- 	connect(this,SIGNAL(internalStartSkip()),this,SLOT(internalSkip()),Qt::QueuedConnection);
- 	connect(this,SIGNAL(internalStartRetry()),this,SLOT(internalRetry()),Qt::QueuedConnection);
 @@ -50,23 +50,63 @@
  	if(waitAction || pathList.isEmpty())
  		return;
@@ -300,9 +3786,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/RmPath.cpp Rsync/RmPath.cpp
  	if(!waitAction)
  		checkIfCanDoTheNext();
  }
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/RmPath.h Rsync/RmPath.h
---- Ultracopier-0.3/RmPath.h	2012-03-19 17:34:43.572371290 +0100
-+++ Rsync/RmPath.h	2012-06-29 22:36:02.135718395 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/RmPath.h Rsync/RmPath.h
+--- Ultracopier/RmPath.h	2012-03-19 17:34:43.572371290 +0100
++++ Rsync/RmPath.h	2012-06-29 22:36:02.000000000 +0200
 @@ -24,11 +24,11 @@
  	explicit RmPath();
  	~RmPath();
@@ -334,9 +3820,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/RmPath.h Rsync/RmPath.h
  	void internalSkip();
  	void internalRetry();
  };
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/TransferThread.cpp Rsync/TransferThread.cpp
---- Ultracopier-0.3/TransferThread.cpp	2012-06-29 15:58:31.546130402 +0200
-+++ Rsync/TransferThread.cpp	2012-06-29 18:58:24.095943961 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.cpp Rsync/TransferThread.cpp
+--- Ultracopier/TransferThread.cpp	2012-07-23 12:29:25.542970455 +0200
++++ Rsync/TransferThread.cpp	2012-07-23 13:26:45.000000000 +0200
 @@ -26,6 +26,7 @@
  	alwaysDoFileExistsAction= FileExists_NotSet;
  	readError		= false;
@@ -367,9 +3853,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/TransferThread.cpp Rsync/TransferThread
  void TransferThread::set_osBufferLimit(unsigned int osBufferLimit)
  {
  	this->osBufferLimit=osBufferLimit;
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/TransferThread.h Rsync/TransferThread.h
---- Ultracopier-0.3/TransferThread.h	2012-06-26 11:10:54.541994070 +0200
-+++ Rsync/TransferThread.h	2012-06-29 15:54:29.286134585 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.h Rsync/TransferThread.h
+--- Ultracopier/TransferThread.h	2012-06-26 11:10:54.541994070 +0200
++++ Rsync/TransferThread.h	2012-06-29 15:54:29.000000000 +0200
 @@ -113,6 +113,8 @@
  	qint64 copiedSize();
  	/// \brief put the current file at bottom
@@ -387,18 +3873,17 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/TransferThread.h Rsync/TransferThread.h
  	QByteArray		sourceChecksum,destinationChecksum;
  	volatile bool		stopIt;
  	volatile bool		canStartTransfer;
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.cpp Rsync/copyEngine.cpp
---- Ultracopier-0.3/copyEngine.cpp	2012-06-26 14:14:40.892116001 +0200
-+++ Rsync/copyEngine.cpp	2012-06-29 21:22:50.945794251 +0200
-@@ -186,6 +186,7 @@
- 	connect(ui->keepDate,		SIGNAL(toggled(bool)),		&threadOfTheTransfer,	SLOT(setKeepDate(bool)));
- 	connect(ui->blockSize,		SIGNAL(valueChanged(int)),	&threadOfTheTransfer,	SLOT(setBlockSize(int)));*/
- 	connect(ui->autoStart,		SIGNAL(toggled(bool)),		this,			SLOT(setAutoStart(bool)));
-+	connect(ui->rsync,		SIGNAL(toggled(bool)),		this,			SLOT(setRsync(bool)));
- 	connect(ui->checkBoxDestinationFolderExists,	SIGNAL(toggled(bool)),		this,			SLOT(setCheckDestinationFolderExists(bool)));
+diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.cpp Rsync/copyEngine.cpp
+--- Ultracopier/copyEngine.cpp	2012-07-23 13:34:59.603040052 +0200
++++ Rsync/copyEngine.cpp	2012-07-23 13:36:08.000000000 +0200
+@@ -176,12 +176,14 @@
+ 	connect(ui->blockSize,		&QCheckBox::valueChanged,	&threadOfTheTransfer,	&copyEngine::setBlockSize);*/
+ 	connect(ui->autoStart,		&QCheckBox::toggled,		this,			&copyEngine::setAutoStart);
+ 	connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,this,		&copyEngine::setCheckDestinationFolderExists);
++	connect(ui->rsync,		&QCheckBox::toggled,		this,			&copyEngine::setRsync);
  	uiIsInstalled=true;
  	setRightTransfer(doRightTransfer);
-@@ -193,6 +194,7 @@
+ 	setKeepDate(keepDate);
  	setSpeedLimitation(maxSpeed);
  	setBlockSize(blockSize);
  	setAutoStart(autoStart);
@@ -406,15 +3891,15 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.cpp Rsync/copyEngine.cpp
  	setCheckDestinationFolderExists(checkDestinationFolderExists);
  	set_doChecksum(doChecksum);
  	set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
-@@ -216,6 +218,7 @@
- 		connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
- 		connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
- 		connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
-+		connect(ui->rsync,			SIGNAL(toggled(bool)),		this,SLOT(setRsync(bool)));
- 		connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
- 		connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
- 		connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
-@@ -505,6 +508,13 @@
+@@ -211,6 +213,7 @@
+ 		connect(ui->osBuffer,			&QCheckBox::toggled,		this,&copyEngine::osBuffer_toggled);
+ 		connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&copyEngine::osBufferLimited_toggled);
+ 		connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&copyEngine::osBufferLimit_editingFinished);
++		connect(ui->rsync,			&QCheckBox::toggled,		this,&copyEngine::setRsync);
+ 
+ 		connect(filters,&Filters::haveNewFilters,this,&copyEngine::sendNewFilters);
+ 		connect(ui->filters,&QPushButton::clicked,this,&copyEngine::showFilterDialog);
+@@ -494,6 +497,13 @@
  /** \brief give the forced mode, to export/import transfer list */
  void copyEngine::forceMode(const CopyMode &mode)
  {
@@ -428,7 +3913,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.cpp Rsync/copyEngine.cpp
  	if(forcedMode)
  	{
  		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Mode forced previously"));
-@@ -617,6 +627,19 @@
+@@ -606,6 +616,19 @@
  	listThread->setAutoStart(autoStart);
  }
  
@@ -448,9 +3933,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.cpp Rsync/copyEngine.cpp
  //set check destination folder
  void copyEngine::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
  {
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.h Rsync/copyEngine.h
---- Ultracopier-0.3/copyEngine.h	2012-06-25 16:50:12.191263770 +0200
-+++ Rsync/copyEngine.h	2012-06-29 15:49:45.856139485 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.h Rsync/copyEngine.h
+--- Ultracopier/copyEngine.h	2012-07-21 15:14:39.500088802 +0200
++++ Rsync/copyEngine.h	2012-07-23 13:26:45.000000000 +0200
 @@ -60,6 +60,7 @@
  	bool				keepDate;
  	int				blockSize;
@@ -459,7 +3944,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.h Rsync/copyEngine.h
  	bool				checkDestinationFolderExists;
  	FileExistsAction		alwaysDoThisActionForFileExists;
  	FileErrorAction			alwaysDoThisActionForFileError;
-@@ -273,6 +274,8 @@
+@@ -290,6 +291,8 @@
  	void setBlockSize(const int blockSize);
  	/// \brief set auto start
  	void setAutoStart(const bool autoStart);
@@ -468,18 +3953,31 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/copyEngine.h Rsync/copyEngine.h
  	/// \brief set if need check if the destination folder exists
  	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
  	/// \brief reset widget
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/factory.cpp Rsync/factory.cpp
---- Ultracopier-0.3/factory.cpp	2012-06-26 14:10:39.972113336 +0200
-+++ Rsync/factory.cpp	2012-06-29 15:40:43.606148853 +0200
-@@ -35,6 +35,7 @@
- 	connect(ui->keepDate,			SIGNAL(toggled(bool)),		this,SLOT(setKeepDate(bool)));
- 	connect(ui->blockSize,			SIGNAL(valueChanged(int)),	this,SLOT(setBlockSize(int)));
- 	connect(ui->autoStart,			SIGNAL(toggled(bool)),		this,SLOT(setAutoStart(bool)));
-+	connect(ui->rsync,			SIGNAL(toggled(bool)),		this,SLOT(setRsync(bool)));
- 	connect(ui->doChecksum,			SIGNAL(toggled(bool)),		this,SLOT(doChecksum_toggled(bool)));
- 	connect(ui->checksumIgnoreIfImpossible,	SIGNAL(toggled(bool)),		this,SLOT(checksumIgnoreIfImpossible_toggled(bool)));
- 	connect(ui->checksumOnlyOnError,	SIGNAL(toggled(bool)),		this,SLOT(checksumOnlyOnError_toggled(bool)));
-@@ -71,6 +72,7 @@
+diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
+--- Ultracopier/documentation.dox	2012-03-06 14:01:13.229670446 +0100
++++ Rsync/documentation.dox	2012-07-01 14:34:43.000000000 +0200
+@@ -10,7 +10,8 @@
+ 
+   \section mainpage_overview Overview
+ 
+-  The default copy engine for Ultracopier 0.3. Support file/folder, copy/move, ...\n
++  The rsync copy engine for Ultracopier 0.3. Support file/folder, copy/move, ...\n
++  Thanks to this engine, Ultracopier is transformed into GUI + rsync.
+   More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>. Is part of Ultracopier 0.3 project.
+ 
+   \section mainpage_platforms Platforms
+diff -U 3 -H -d -r -N -- Ultracopier/factory.cpp Rsync/factory.cpp
+--- Ultracopier/factory.cpp	2012-07-23 12:28:04.652969023 +0200
++++ Rsync/factory.cpp	2012-07-23 13:37:42.000000000 +0200
+@@ -53,6 +53,7 @@
+ 	connect(ui->osBuffer,			&QCheckBox::toggled,		this,&Factory::osBuffer_toggled);
+ 	connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&Factory::osBufferLimited_toggled);
+ 	connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&Factory::osBufferLimit_editingFinished);
++	connect(ui->rsync,			&QCheckBox::toggled,		this,&Factory::setRsync);
+ 
+ 	connect(filters,&Filters::sendNewFilters,this,&Factory::sendNewFilters);
+ 	connect(ui->filters,&QPushButton::clicked,this,&Factory::showFilterDialog);
+@@ -83,6 +84,7 @@
  	realObject->setKeepDate(		optionsEngine->getOptionValue("keepDate").toBool());
  	realObject->setBlockSize(		optionsEngine->getOptionValue("blockSize").toInt());
  	realObject->setAutoStart(		optionsEngine->getOptionValue("autoStart").toBool());
@@ -487,7 +3985,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/factory.cpp Rsync/factory.cpp
  	realObject->on_comboBoxFolderColision_currentIndexChanged(ui->comboBoxFolderColision->currentIndex());
  	realObject->on_comboBoxFolderError_currentIndexChanged(ui->comboBoxFolderError->currentIndex());
  	realObject->setCheckDestinationFolderExists(	optionsEngine->getOptionValue("checkDestinationFolder").toBool());
-@@ -123,6 +125,7 @@
+@@ -135,6 +137,7 @@
  		KeysList.append(qMakePair(QString("keepDate"),QVariant(true)));
  		KeysList.append(qMakePair(QString("blockSize"),QVariant(1024)));//1024KB as default
  		KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
@@ -495,7 +3993,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/factory.cpp Rsync/factory.cpp
  		KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
  		KeysList.append(qMakePair(QString("folderColision"),QVariant(0)));
  		KeysList.append(qMakePair(QString("checkDestinationFolder"),QVariant(true)));
-@@ -151,6 +154,7 @@
+@@ -163,6 +166,7 @@
  		ui->keepDate->setChecked(optionsEngine->getOptionValue("keepDate").toBool());
  		ui->blockSize->setValue(optionsEngine->getOptionValue("blockSize").toUInt());
  		ui->autoStart->setChecked(optionsEngine->getOptionValue("autoStart").toBool());
@@ -503,7 +4001,7 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/factory.cpp Rsync/factory.cpp
  		ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toUInt());
  		ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
  		ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
-@@ -287,6 +291,15 @@
+@@ -299,6 +303,15 @@
  	else
  		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
  }
@@ -519,20 +4017,31 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/factory.cpp Rsync/factory.cpp
  
  void Factory::newLanguageLoaded()
  {
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/factory.h Rsync/factory.h
---- Ultracopier-0.3/factory.h	2012-05-19 15:44:05.354039716 +0200
-+++ Rsync/factory.h	2012-06-29 15:40:20.016149261 +0200
-@@ -71,6 +71,7 @@
+diff -U 3 -H -d -r -N -- Ultracopier/factory.h Rsync/factory.h
+--- Ultracopier/factory.h	2012-07-21 17:25:09.010227315 +0200
++++ Rsync/factory.h	2012-07-23 13:39:34.000000000 +0200
+@@ -72,6 +72,7 @@
  	void setKeepDate(bool keepDate);
  	void setBlockSize(int blockSize);
  	void setAutoStart(bool autoStart);
 +	void setRsync(bool rsync);
  	void showFilterDialog();
- 	void sendNewFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+ 	void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions);
  	void doChecksum_toggled(bool);
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/informations.xml Rsync/informations.xml
---- Ultracopier-0.3/informations.xml	2012-06-25 17:31:49.331291383 +0200
-+++ Rsync/informations.xml	2012-06-29 15:11:53.696178734 +0200
+@@ -87,6 +88,10 @@
+ 	void newLanguageLoaded();
+ signals:
+ 	void reloadLanguage();
++	#ifdef ULTRACOPIER_PLUGIN_DEBUG
++	/// \brief To debug source
++	void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
++	#endif
+ };
+ 
+ #endif // FACTORY_H
+diff -U 3 -H -d -r -N -- Ultracopier/informations.xml Rsync/informations.xml
+--- Ultracopier/informations.xml	2012-07-23 13:41:31.643046989 +0200
++++ Rsync/informations.xml	2012-07-23 13:48:06.000000000 +0200
 @@ -1,7 +1,7 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <package>
@@ -552,16 +4061,16 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/informations.xml Rsync/informations.xml
 +	<description xml:lang="en"><![CDATA[Rsync copy engine, variant of the official copy engine to provide simple way to do backups]]></description>
 +	<description xml:lang="fr"><![CDATA[Moteur de copie rsync, variante du moteur de copie officiel pour fournir une maniére simple de faire des backups]]></description>
  	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
- 	<version>0.3.0.10</version>
+ 	<version>0.4.0.0</version>
  	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
--	<name>Ultracopier-0.3</name>
+-	<name>Ultracopier</name>
 +	<name>Rsync</name>
  	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
  	<dependencies><![CDATA[
- 	>=ultracopier-0.3.0.10
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/options.ui Rsync/options.ui
---- Ultracopier-0.3/options.ui	2012-06-20 14:56:21.509908805 +0200
-+++ Rsync/options.ui	2012-06-29 22:15:47.595739375 +0200
+ 	=ultracopier-0.4
+diff -U 3 -H -d -r -N -- Ultracopier/options.ui Rsync/options.ui
+--- Ultracopier/options.ui	2012-06-20 14:56:21.509908805 +0200
++++ Rsync/options.ui	2012-06-29 22:15:47.000000000 +0200
 @@ -6,8 +6,8 @@
     <rect>
      <x>0</x>
@@ -657,9 +4166,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/options.ui Rsync/options.ui
    </layout>
   </widget>
   <resources/>
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/scanFileOrFolder.cpp Rsync/scanFileOrFolder.cpp
---- Ultracopier-0.3/scanFileOrFolder.cpp	2012-05-23 11:06:25.001037392 +0200
-+++ Rsync/scanFileOrFolder.cpp	2012-06-29 21:54:15.555761695 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/scanFileOrFolder.cpp Rsync/scanFileOrFolder.cpp
+--- Ultracopier/scanFileOrFolder.cpp	2012-07-23 12:29:19.442970344 +0200
++++ Rsync/scanFileOrFolder.cpp	2012-07-23 13:26:54.000000000 +0200
 @@ -1,9 +1,10 @@
  #include "scanFileOrFolder.h"
  
@@ -746,9 +4255,9 @@ diff -U 3 -H -d -r -N -- Ultracopier-0.3/scanFileOrFolder.cpp Rsync/scanFileOrFo
 +{
 +	this->rsync=rsync;
 +}
-diff -U 3 -H -d -r -N -- Ultracopier-0.3/scanFileOrFolder.h Rsync/scanFileOrFolder.h
---- Ultracopier-0.3/scanFileOrFolder.h	2012-05-20 20:32:43.695874620 +0200
-+++ Rsync/scanFileOrFolder.h	2012-06-29 21:51:45.235764294 +0200
+diff -U 3 -H -d -r -N -- Ultracopier/scanFileOrFolder.h Rsync/scanFileOrFolder.h
+--- Ultracopier/scanFileOrFolder.h	2012-07-23 12:29:51.312970910 +0200
++++ Rsync/scanFileOrFolder.h	2012-07-23 13:26:54.000000000 +0200
 @@ -38,6 +38,8 @@
  	/// \brief set if need check if the destination exists
  	void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);

@@ -1,7 +1,7 @@
 #include "FilterRules.h"
 #include "ui_FilterRules.h"
 
-#include <QMessageBox>
+#include <QRegularExpression>
 
 FilterRules::FilterRules(QWidget *parent) :
         QDialog(parent),
@@ -110,20 +110,20 @@ void FilterRules::on_search_textChanged(const QString &arg1)
 
 void FilterRules::updateChecking()
 {
-	QRegExp regex;
+	QRegularExpression regex;
 	isValid=!ui->search->text().isEmpty();
 	if(isValid)
 	{
 		QString tempString;
 		if(ui->search_type->currentIndex()==0)
 		{
-			tempString=QRegExp::escape(ui->search->text());
+			tempString=QRegularExpression::escape(ui->search->text());
 			if(tempString.contains('/') || tempString.contains('\\'))
 				isValid=false;
 		}
 		else if(ui->search_type->currentIndex()==1)
 		{
-			tempString=QRegExp::escape(ui->search->text());
+			tempString=QRegularExpression::escape(ui->search->text());
 			tempString.replace("\\*","[^\\\\/]*");
 		}
 		else if(ui->search_type->currentIndex()==2)
@@ -132,8 +132,8 @@ void FilterRules::updateChecking()
 			if(tempString.startsWith('^') && tempString.endsWith('$'))
 			{
 				ui->need_match_all->setChecked(true);
-				tempString.remove(QRegExp("^\\^"));
-				tempString.remove(QRegExp("\\$$"));
+				tempString.remove(QRegularExpression("^\\^"));
+				tempString.remove(QRegularExpression("\\$$"));
 				ui->search->setText(tempString);
 			}
 		}
@@ -141,8 +141,8 @@ void FilterRules::updateChecking()
 		{
 			if(ui->need_match_all->isChecked())
 				tempString="^"+tempString+"$";
-			regex=QRegExp(tempString);
-			isValid=regex.isValid() && !regex.isEmpty();
+			regex=QRegularExpression(tempString);
+			isValid=regex.isValid();
 		}
 	}
 

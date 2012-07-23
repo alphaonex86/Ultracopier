@@ -32,10 +32,6 @@ class ServerCatchcopy : public QObject
 		const QString errorStringServer();
 		/// \brief get the general error string
 		const QString errorString();
-		/// \brief set if automatic reply is used 
-		void setAutoReply(bool value);
-		/// \brief get if autoReply is set
-		bool getAutoReply();
 		/// \brief set the name of the server
 		void setName(const QString & name);
 		/// \brief get the name
@@ -66,97 +62,80 @@ class ServerCatchcopy : public QObject
 		};
 		QList<LinkGlobalToLocalClient> LinkGlobalToLocalClientList;
 		enum inputReturnType{Ok,Replied,ExtensionWrong,WrongArgument,WrongArgumentListSize,UnknowOrder};
-		inputReturnType parseInputCurrentProtocol(quint32 client,quint32 orderId,QStringList returnList);
-		bool autoReply;
-		bool clientIdFound(quint32 id);
+		inputReturnType parseInputCurrentProtocol(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
+		bool clientIdFound(const quint32 &id);
 		quint32 nextOrderId;
 		QList<quint32> orderList;
 		quint32 incrementOrderId();
-		void emitNewCopy(quint32 client,quint32 orderId,QStringList sources);
-		void emitNewCopy(quint32 client,quint32 orderId,QStringList sources,QString destination);
-		void emitNewMove(quint32 client,quint32 orderId,QStringList sources);
-		void emitNewMove(quint32 client,quint32 orderId,QStringList sources,QString destination);
-		bool checkDataIntegrity(QByteArray data);
+		void emitNewCopyWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources);
+		void emitNewCopy(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination);
+		void emitNewMoveWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources);
+		void emitNewMove(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination);
+		bool checkDataIntegrity(const QByteArray &data);
 	protected:
-		void parseInput(quint32 client,quint32 orderId,QStringList returnList);
+		void parseInput(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
 	private slots:
 		void newConnection();
-		void connectionError(QLocalSocket::LocalSocketError error);
+		void connectionError(const QLocalSocket::LocalSocketError &error);
 		void disconnected();
 		void readyRead();
 		void checkTimeOut();
 	public slots:
 		/// \brief disconnect one client
-		void disconnectClient(quint32 id);
+		void disconnectClient(const quint32 &id);
 		/// \brief reply to a client with QStringList
-		void reply(quint32 client,quint32 orderId,quint32 returnCode,QStringList returnList);
+		void reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QStringList &returnList);
 		/// \brief reply to a client
-		void reply(quint32 client,quint32 orderId,quint32 returnCode,QString returnString);
+		void reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QString &returnString);
 		//reply
 		/// \brief send if the protocol is supported
-		void protocolSupported(quint32 client,quint32 orderId,bool value);
+		void protocolSupported(const quint32 &client,const quint32 &orderId,const bool &value);
 		/// \brief send incorrect arguement list size
-		void incorrectArgumentListSize(quint32 client,quint32 orderId);
+		void incorrectArgumentListSize(const quint32 &client,const quint32 &orderId);
 		/// \brief send incorrect arguement
-		void incorrectArgument(quint32 client,quint32 orderId);
-		/// \brief send if protocol extension is supported
-		void protocolExtensionSupported(quint32 client,quint32 orderId,bool value);
+		void incorrectArgument(const quint32 &client,const quint32 &orderId);
 		/// \brief the client is registred
-		void clientRegistered(quint32 client,quint32 orderId);
+		void clientRegistered(const quint32 &client,const quint32 &orderId);
 		/// \brief send the server name
-		void serverName(quint32 client,quint32 orderId,QString name);
+		void serverName(const quint32 &client,const quint32 &orderId,const QString &name);
 		/// \brief send the copy is finished
-		void copyFinished(quint32 client,quint32 orderId,bool withError);
+		void copyFinished(const quint32 &client,const quint32 &orderId,const bool &withError);
 		/// \brief send the copy is canceled
-		void copyCanceled(quint32 client,quint32 orderId);
+		void copyCanceled(const quint32 &client,const quint32 &orderId);
 		/// \brief send the copy is finished by global is order
-		void copyFinished(quint32 globalOrderId,bool withError);
+		void copyFinished(const quint32 &globalOrderId,const bool &withError);
 		/// \brief send copy cancel by global is order
-		void copyCanceled(quint32 globalOrderId);
+		void copyCanceled(const quint32 &globalOrderId);
 		/// \brief send the unknow order
-		void unknowOrder(quint32 client,quint32 orderId);
+		void unknowOrder(const quint32 &client,const quint32 &orderId);
 	signals:
 		/// \brief send connected client
-		void connectedClient(quint32 id);
+		void connectedClient(const quint32 &id);
 		/// \brief send disconnect client
-		void disconnectedClient(quint32 id);
+		void disconnectedClient(const quint32 &id);
 		/// \brief have new query
-		void newQuery(quint32 client,quint32 orderId,QStringList returnList);
-		/// \brief send new data as string list
-		void dataSend(quint32 client,quint32 orderId,quint32 returnCode,QStringList returnList);
-		/// \brief send new data as raw data
-		void dataSend(quint32 client,quint32 orderId,quint32 returnCode,QByteArray block);
+		void newQuery(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
 		/// \brief have new error
-		void error(QString error);
+		void error(const QString &error);
 		//query
 		/// \brief ask the protocol compatility
-		void askProtocolCompatibility(quint32 client,quint32 orderId,QString version);
+		void askProtocolCompatibility(const quint32 &client,const quint32 &orderId,const QString &version);
 		/// \brief ask protocol extension
-		void askProtocolExtension(quint32 client,quint32 orderId,QString extension);
+		void askProtocolExtension(const quint32 &client,const quint32 &orderId,const QString &extension);
 		/// \brief ask protocol extension with version
-		void askProtocolExtension(quint32 client,quint32 orderId,QString extension,QString version);
-		/// \brief send the client name, with query id
-		void clientName(quint32 client,quint32 orderId,QString name);
+		void askProtocolExtension(const quint32 &client,const quint32 &orderId,const QString &extension,const QString &version);
 		/// \brief send the client name, without query id
-		void clientName(quint32 client,QString name);
+		void clientName(const quint32 &client,const QString &name);
 		/// \brief send the client have ask the server name
-		void askServerName(quint32 client,quint32 orderId);
-		/// \brief copy is send, without destination
-		void newCopy(quint32 client,quint32 orderId,QStringList sources);
-		/// \brief copy is send, with destination
-		void newCopy(quint32 client,quint32 orderId,QStringList sources,QString destination);
-		/// \brief move is send, without destination
-		void newMove(quint32 client,quint32 orderId,QStringList sources);
-		/// \brief move is send, with destination
-		void newMove(quint32 client,quint32 orderId,QStringList sources,QString destination);
+		void askServerName(const quint32 &client,const quint32 &orderId);
 		/// \brief copy is send, by globalOrderId, without destination
-		void newCopy(quint32 globalOrderId,QStringList sources);
+		void newCopyWithoutDestination(const quint32 &globalOrderId,const QStringList &sources);
 		/// \brief copy is send, by globalOrderId, with destination
-		void newCopy(quint32 globalOrderId,QStringList sources,QString destination);
+		void newCopy(const quint32 &globalOrderId,const QStringList &sources,const QString &destination);
 		/// \brief move is send, by globalOrderId, without destination
-		void newMove(quint32 globalOrderId,QStringList sources);
+		void newMoveWithoutDestination(const quint32 &globalOrderId,const QStringList &sources);
 		/// \brief move is send, by globalOrderId, with destination
-		void newMove(quint32 globalOrderId,QStringList sources,QString destination);
+		void newMove(const quint32 &globalOrderId,const QStringList &sources,const QString &destination);
 };
 
 #endif // SERVERCATCHCOPY_H

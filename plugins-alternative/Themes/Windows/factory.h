@@ -20,6 +20,7 @@ class Factory : public PluginInterface_ThemesFactory
 	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_ThemesFactory)
 	public:
+		Factory();
 		/// \brief to return the instance of the copy engine
 		PluginInterface_Themes * getInstance();
 		/// \brief set the resources, to store options, to have facilityInterface
@@ -28,6 +29,9 @@ class Factory : public PluginInterface_ThemesFactory
 		QWidget * options();
 		/// \brief to get a resource icon
 		QIcon getIcon(const QString &fileName);
+		//regex
+		static QRegularExpression slashEnd;
+		static QRegularExpression isolateName;
 	signals:
 		void reloadLanguage();
 	public slots:

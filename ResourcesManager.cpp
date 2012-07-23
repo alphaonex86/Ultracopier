@@ -13,10 +13,15 @@
 
 #include "ResourcesManager.h"
 
+QRegularExpression ResourcesManager::slashEnd;
+
 /// \brief Create the manager and load the defaults variables
 ResourcesManager::ResourcesManager()
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+
+	slashEnd=QRegularExpression("[/\\\\]$");
+
 	//load the internal path
 	searchPath<<QString(":/");
 	//load the user path but only if exists and writable
@@ -144,7 +149,7 @@ bool ResourcesManager::checkFolderContent(const QString &path,const QStringList 
 /// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
 QString ResourcesManager::AddSlashIfNeeded(const QString &path)
 {
-	if(path.contains(QRegExp("[/\\\\]$")))
+	if(path.contains(slashEnd))
 		return path;
 	else
 		return path+QDir::separator();

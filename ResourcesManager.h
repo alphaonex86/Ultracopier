@@ -11,6 +11,7 @@
 #include <QStringList>
 #include <QString>
 #include <QObject>
+#include <QRegularExpression>
 
 #include "Environment.h"
 #include "Singleton.h"
@@ -52,6 +53,8 @@ class ResourcesManager : public QObject, public Singleton<ResourcesManager>
 		QString writablePath;
 		//temp variable
 		int index,loop_size;
+		/// \brief match with slash end
+		static QRegularExpression slashEnd;
 };
 
 #endif // RESOURCES_MANAGER_H

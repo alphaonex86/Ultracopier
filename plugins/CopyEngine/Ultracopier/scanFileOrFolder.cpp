@@ -8,7 +8,7 @@ scanFileOrFolder::scanFileOrFolder(CopyMode mode)
 	stopIt	= false;
 	this->mode=mode;
 	setObjectName("ScanFileOrFolder");
-	folder_isolation=QRegExp("^(.*/)?([^/]+)/$");
+	folder_isolation=QRegularExpression("^(.*/)?([^/]+)/$");
 }
 
 scanFileOrFolder::~scanFileOrFolder()
@@ -40,7 +40,7 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 
 QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
 {
-	QRegExp splitFolder("[/\\\\]");
+	QRegularExpression splitFolder("[/\\\\]");
 	QStringList returnList;
 	int index=0;
 	while(index<sources.size())
@@ -59,7 +59,7 @@ QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
 					if(toParseFirst=="")
 						toParseFirst+="/";
 					QList<QStringList> newRecomposedSource;
-					QRegExp toResolv=QRegExp(toParseFirst.replace('*',"[^/\\\\]*"));
+					QRegularExpression toResolv=QRegularExpression(toParseFirst.replace('*',"[^/\\\\]*"));
 					int index_recomposedSource=0;
 					while(index_recomposedSource<recomposedSource.size())//parse each url part
 					{

@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QLocalSocket>
+#include <QRegularExpression>
 
 #include "Variable.h"
 #include "DebugEngine.h"
@@ -250,7 +251,7 @@ void DebugEngine::addDebugNote(const QString& text)
 void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QString& function,const QString& text,QString file,const int& ligne,const QString& location)
 {
 	//Remove the compiler extra patch generated
-	file=file.remove(QRegExp("\\.\\.?[/\\\\]([^/]+[/\\\\])?"));
+	file=file.remove(QRegularExpression("\\.\\.?[/\\\\]([^/]+[/\\\\])?"));
 	QString addDebugInformation_lignestring=QString::number(ligne);
 	QString addDebugInformation_fileString=file;
 	if(ligne!=-1)

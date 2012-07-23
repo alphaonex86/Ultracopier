@@ -7,6 +7,8 @@
 
 #include "CopyListener.h"
 
+#include <QRegularExpression>
+
 CopyListener::CopyListener(OptionDialog *optionDialog)
 {
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
@@ -211,7 +213,7 @@ QStringList CopyListener::stripSeparator(QStringList sources)
 	int index=0;
 	while(index<sources.size())
 	{
-		sources[index].remove(QRegExp("[\\\\/]+$"));
+		sources[index].remove(QRegularExpression("[\\\\/]+$"));
 		index++;
 	}
 	return sources;

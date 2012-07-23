@@ -19,7 +19,7 @@ ReadThread::ReadThread()
 ReadThread::~ReadThread()
 {
 	stopIt=true;
-	disconnect(this);
+	//disconnect(this);//-> do into ~TransferThread()
 	waitNewClockForSpeed.release();
 	isOpen.acquire();
 	exit();
@@ -28,12 +28,12 @@ ReadThread::~ReadThread()
 
 void ReadThread::run()
 {
-	connect(this,SIGNAL(internalStartOpen()),	this,SLOT(internalOpen()),	Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartReopen()),	this,SLOT(internalReopen()),	Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartRead()),	this,SLOT(internalRead()),	Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartClose()),	this,SLOT(internalClose()),	Qt::QueuedConnection);
-	connect(this,SIGNAL(checkIfIsWait()),		this,SLOT(isInWait()),		Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartChecksum()),	this,SLOT(checkSum()),		Qt::QueuedConnection);
+	connect(this,&ReadThread::internalStartOpen,		this,&ReadThread::internalOpenSlot,	Qt::QueuedConnection);
+	connect(this,&ReadThread::internalStartReopen,		this,&ReadThread::internalReopen,	Qt::QueuedConnection);
+	connect(this,&ReadThread::internalStartRead,		this,&ReadThread::internalRead,		Qt::QueuedConnection);
+	connect(this,&ReadThread::internalStartClose,		this,&ReadThread::internalCloseSlot,	Qt::QueuedConnection);
+	connect(this,&ReadThread::checkIfIsWait,		this,&ReadThread::isInWait,		Qt::QueuedConnection);
+	connect(this,&ReadThread::internalStartChecksum,	this,&ReadThread::checkSum,		Qt::QueuedConnection);
 	exec();
 }
 
@@ -206,6 +206,11 @@ void ReadThread::checkSum()
 	}
 	emit checksumFinish(hash.result());
 	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"["+QString::number(id)+"] stop the read");
+}
+
+bool ReadThread::internalOpenSlot()
+{
+	return internalOpen();
 }
 
 bool ReadThread::internalOpen(bool resetLastGoodPosition)
@@ -403,6 +408,11 @@ void ReadThread::startRead()
                 tryStartRead=true;
 		emit internalStartRead();
         }
+}
+
+void ReadThread::internalCloseSlot()
+{
+	internalClose();
 }
 
 void ReadThread::internalClose(bool callByTheDestructor)

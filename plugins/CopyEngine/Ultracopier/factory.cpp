@@ -227,13 +227,13 @@ void Factory::finished(int exitCode, QProcess::ExitStatus exitStatus)
 	else if(errorFound)
 		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"have finished with error and no text");
 	{
-		QStringList tempList=StandardOutput.split(QRegExp("[\n\r]+"));
+		QStringList tempList=StandardOutput.split(QRegularExpression("[\n\r]+"));
 		int index=0;
 		while(index<tempList.size())
 		{
 			QString newString=tempList.at(index);
-			newString=newString.remove(QRegExp("^.* on "));
-			newString=newString.remove(QRegExp(" type .*$"));
+			newString=newString.remove(QRegularExpression("^.* on "));
+			newString=newString.remove(QRegularExpression(" type .*$"));
 			if(!newString.endsWith(QDir::separator()))
 				newString+=QDir::separator();
 			mountSysPoint<<newString;

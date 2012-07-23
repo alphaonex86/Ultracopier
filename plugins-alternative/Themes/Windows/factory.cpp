@@ -8,6 +8,15 @@
 
 #include "factory.h"
 
+QRegularExpression Factory::slashEnd;
+QRegularExpression Factory::isolateName;
+
+Factory::Factory()
+{
+	slashEnd=QRegularExpression("/$");
+	isolateName=QRegularExpression("^.*/([^/]+)$");
+}
+
 PluginInterface_Themes * Factory::getInstance()
 {
 	PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);

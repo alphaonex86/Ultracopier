@@ -135,9 +135,11 @@ private:
         bool seek(qint64 position);/// \todo search if is use full
 private slots:
 	bool internalOpen(bool resetLastGoodPosition=true);
+	bool internalOpenSlot();
 	bool internalReopen();
 	void internalRead();
 	void internalClose(bool callByTheDestructor=false);
+	void internalCloseSlot();
 	void isInWait();
 };
 

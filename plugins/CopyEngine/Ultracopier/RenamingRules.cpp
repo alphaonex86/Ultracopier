@@ -46,14 +46,14 @@ void RenamingRules::setRenamingRules(QString firstRenamingRule,QString otherRena
 
 void RenamingRules::connectUI()
 {
-	connect(ui->firstRenamingRule,SIGNAL(editingFinished()),this,SLOT(firstRenamingRule_haveChanged()));
-	connect(ui->otherRenamingRule,SIGNAL(editingFinished()),this,SLOT(otherRenamingRule_haveChanged()));
+	connect(ui->firstRenamingRule,&QLineEdit::editingFinished,this,&RenamingRules::firstRenamingRule_haveChanged);
+	connect(ui->otherRenamingRule,&QLineEdit::editingFinished,this,&RenamingRules::otherRenamingRule_haveChanged);
 }
 
 void RenamingRules::disconnectUI()
 {
-	disconnect(ui->firstRenamingRule,SIGNAL(editingFinished()),this,SLOT(firstRenamingRule_haveChanged()));
-	disconnect(ui->otherRenamingRule,SIGNAL(editingFinished()),this,SLOT(otherRenamingRule_haveChanged()));
+	disconnect(ui->firstRenamingRule,&QLineEdit::editingFinished,this,&RenamingRules::firstRenamingRule_haveChanged);
+	disconnect(ui->otherRenamingRule,&QLineEdit::editingFinished,this,&RenamingRules::otherRenamingRule_haveChanged);
 }
 
 void RenamingRules::firstRenamingRule_haveChanged()

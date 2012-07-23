@@ -65,7 +65,7 @@ private:
 	FileErrorAction		fileErrorAction;
 	volatile bool		checkDestinationExists;
 	QString			newName;
-	QRegExp			folder_isolation;
+	QRegularExpression	folder_isolation;
 	QString			prefix;
 	QString			suffix;
 	CopyMode		mode;

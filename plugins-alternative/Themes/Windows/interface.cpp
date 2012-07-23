@@ -7,6 +7,7 @@
 #include <QtCore>
 
 #include "interface.h"
+#include "factory.h"
 #include "ui_interface.h"
 
 InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
@@ -409,12 +410,12 @@ void InterfacePlugin::updateInformations()
 		{
 			QString simplifiedFrom=transfertItem.from;
 			QString simplifiedTo=transfertItem.to;
-			simplifiedFrom.remove(QRegExp("/$"));
-			simplifiedTo.remove(QRegExp("/$"));
+			simplifiedFrom.remove(Factory::slashEnd);
+			simplifiedTo.remove(Factory::slashEnd);
 			simplifiedFrom.replace('\\','/');
 			simplifiedTo.replace('\\','/');
-			simplifiedFrom.replace(QRegExp("^.*/([^/]+)$"), "\\1");
-			simplifiedTo.replace(QRegExp("^.*/([^/]+)$"), "\\1");
+			simplifiedFrom.replace(Factory::isolateName, "\\1");
+			simplifiedTo.replace(Factory::isolateName, "\\1");
 			ui->label_file->setText(transfertItem.current_file);
 			ui->label_from->setText(QString("<b>%1</b> (%2)").arg(simplifiedFrom).arg(transfertItem.from));
 			ui->label_to->setText(QString("<b>%1</b> (%2)").arg(simplifiedTo).arg(transfertItem.to));
@@ -439,12 +440,12 @@ void InterfacePlugin::updateInformations()
 				remainingTime=facilityEngine->translateText(tr("Unknown remaining time"));
 			QString simplifiedFrom=transfertItem.from;
 			QString simplifiedTo=transfertItem.to;
-			simplifiedFrom.remove(QRegExp("/$"));
-			simplifiedTo.remove(QRegExp("/$"));
+			simplifiedFrom.remove(Factory::slashEnd);
+			simplifiedTo.remove(Factory::slashEnd);
 			simplifiedFrom.replace('\\','/');
 			simplifiedTo.replace('\\','/');
-			simplifiedFrom.replace(QRegExp("^.*/([^/]+)$"), "\\1");
-			simplifiedTo.replace(QRegExp("^.*/([^/]+)$"), "\\1");
+			simplifiedFrom.replace(Factory::isolateName, "\\1");
+			simplifiedTo.replace(Factory::isolateName, "\\1");
 			ui->text->setText(tr("from <b>%1</b> (%2) to <b>%3</b> (%4)<br />%5")
 					  .arg(simplifiedFrom)
 					  .arg(transfertItem.from)

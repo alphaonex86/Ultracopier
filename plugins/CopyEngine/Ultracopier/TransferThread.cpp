@@ -29,7 +29,7 @@ TransferThread::TransferThread()
 	this->mkpathTransfer	= mkpathTransfer;
 	readThread.setWriteThread(&writeThread);
 
-	connect(&clockForTheCopySpeed,	SIGNAL(timeout()),			this,	SLOT(timeOfTheBlockCopyFinished()));
+	connect(&clockForTheCopySpeed,	&QTimer::timeout,			this,	&TransferThread::timeOfTheBlockCopyFinished);
 	maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 }
 
@@ -50,34 +50,34 @@ void TransferThread::run()
 	fileExistsAction	= FileExists_NotSet;
 	alwaysDoFileExistsAction= FileExists_NotSet;
 	//the error push
-	connect(&readThread,SIGNAL(error()),			this,					SLOT(getReadError()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(error()),			this,					SLOT(getWriteError()),		Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::error,			this,					&TransferThread::getReadError,		Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::error,			this,					&TransferThread::getWriteError,		Qt::QueuedConnection);
 	//the thread change operation
-	connect(this,SIGNAL(internalStartPreOperation()),	this,					SLOT(preOperation()),		Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartPostOperation()),	this,					SLOT(postOperation()),		Qt::QueuedConnection);
+	connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,		Qt::QueuedConnection);
+	connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,		Qt::QueuedConnection);
         //the state change operation
-	//connect(&readThread,SIGNAL(readIsStopped()),		&readThread,				SLOT(postOperation()),		Qt::QueuedConnection);//commented to do the checksum
-	connect(&readThread,SIGNAL(opened()),			this,					SLOT(readIsReady()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(opened()),			this,					SLOT(writeIsReady()),		Qt::QueuedConnection);
-	connect(&readThread,SIGNAL(readIsStopped()),		this,					SLOT(readIsStopped()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(writeIsStopped()),		this,					SLOT(writeIsStopped()),		Qt::QueuedConnection);
-	connect(&readThread,SIGNAL(readIsStopped()),		&writeThread,				SLOT(endIsDetected()),		Qt::QueuedConnection);
-	//connect(&writeThread,SIGNAL(writeIsStopped()),		&writeThread,				SLOT(postOperation()),		Qt::QueuedConnection);//commented to do the checksum
-	connect(&readThread,SIGNAL(closed()),			this,					SLOT(readIsClosed()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(closed()),			this,					SLOT(writeIsClosed()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(reopened()),		this,					SLOT(writeThreadIsReopened()),	Qt::QueuedConnection);
-	connect(&readThread,SIGNAL(checksumFinish(QByteArray)),	this,					SLOT(readChecksumFinish(QByteArray)),	Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(checksumFinish(QByteArray)),this,					SLOT(writeChecksumFinish(QByteArray)),	Qt::QueuedConnection);
+	//connect(&readThread,&ReadThread::readIsStopped,		&readThread,				&TransferThread::postOperation,		Qt::QueuedConnection);//commented to do the checksum
+	connect(&readThread,&ReadThread::opened,			this,					&TransferThread::readIsReady,		Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::opened,			this,					&TransferThread::writeIsReady,		Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::readIsStopped,		this,					&TransferThread::readIsStopped,		Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::writeIsStopped,		this,					&TransferThread::writeIsStopped,		Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::readIsStopped,		&writeThread,				&WriteThread::endIsDetected,		Qt::QueuedConnection);
+	//connect(&writeThread,&WriteThread::writeIsStopped,		&writeThread,				&WriteThread::postOperation,		Qt::QueuedConnection);//commented to do the checksum
+	connect(&readThread,&ReadThread::closed,			this,					&TransferThread::readIsClosed,		Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::closed,			this,					&TransferThread::writeIsClosed,		Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::reopened,		this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::checksumFinish,	this,					&TransferThread::readChecksumFinish,	Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::checksumFinish,this,					&TransferThread::writeChecksumFinish,	Qt::QueuedConnection);
         //error management
-	connect(&readThread,SIGNAL(isSeekToZeroAndWait()),	this,					SLOT(readThreadIsSeekToZeroAndWait()),	Qt::QueuedConnection);
-	connect(&readThread,SIGNAL(resumeAfterErrorByRestartAtTheLastPosition()),	this,		SLOT(readThreadResumeAfterError()),	Qt::QueuedConnection);
-	connect(&readThread,SIGNAL(resumeAfterErrorByRestartAll()),                     &writeThread,	SLOT(flushAndSeekToZero()),		Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(flushedAndSeekedToZero()),                          this,           SLOT(readThreadResumeAfterError()),	Qt::QueuedConnection);
-	connect(this,SIGNAL(internalTryStartTheTransfer()),	this,					SLOT(internalStartTheTransfer()),	Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::isSeekToZeroAndWait,	this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,	this,		&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,                     &writeThread,	&WriteThread::flushAndSeekToZero,		Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::flushedAndSeekedToZero,                          this,           &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
+	connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,	Qt::QueuedConnection);
 
 	#ifdef ULTRACOPIER_PLUGIN_DEBUG
-	connect(&readThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
-	connect(&writeThread,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),Qt::QueuedConnection);
+	connect(&readThread,&ReadThread::debugInformation,this,&TransferThread::debugInformation,Qt::QueuedConnection);
+	connect(&writeThread,&WriteThread::debugInformation,this,&TransferThread::debugInformation,Qt::QueuedConnection);
 	#endif
 
 	exec();
@@ -295,11 +295,11 @@ bool TransferThread::destinationExists()
 			QString suffix="";
 			QString newFileName;
 			//resolv the suffix
-			if(fileName.contains(QRegExp("^(.*)(\\.[a-z0-9]+)$")))
+			if(fileName.contains(QRegularExpression("^(.*)(\\.[a-z0-9]+)$")))
 			{
 				suffix=fileName;
-				suffix.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\2");
-				fileName.replace(QRegExp("^(.*)(\\.[a-z0-9]+)$"),"\\1");
+				suffix.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\2");
+				fileName.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\1");
 			}
 			//resolv the new name
 			int num=1;

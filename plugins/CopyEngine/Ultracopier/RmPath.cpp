@@ -38,10 +38,10 @@ void RmPath::retry()
 
 void RmPath::run()
 {
-	connect(this,SIGNAL(internalStartAddPath(QString)),this,SLOT(internalAddPath(QString)),Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartDoThisPath()),this,SLOT(internalDoThisPath()),Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartSkip()),this,SLOT(internalSkip()),Qt::QueuedConnection);
-	connect(this,SIGNAL(internalStartRetry()),this,SLOT(internalRetry()),Qt::QueuedConnection);
+	connect(this,&RmPath::internalStartAddPath,	this,&RmPath::internalAddPath,		Qt::QueuedConnection);
+	connect(this,&RmPath::internalStartDoThisPath,	this,&RmPath::internalDoThisPath,	Qt::QueuedConnection);
+	connect(this,&RmPath::internalStartSkip,	this,&RmPath::internalSkip,		Qt::QueuedConnection);
+	connect(this,&RmPath::internalStartRetry,	this,&RmPath::internalRetry,		Qt::QueuedConnection);
 	exec();
 }
 

@@ -129,6 +129,7 @@ private:
 private slots:
 	bool internalOpen();
 	void internalWrite();
+	void internalCloseSlot();
 	void internalClose(bool emitSignal=true);
 	void internalReopen();
 	void internalEndOfFile();

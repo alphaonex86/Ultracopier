@@ -267,6 +267,7 @@ private:
 
 	void realByteTransfered();
 private slots:
+	void scanThreadHaveFinishSlot();
 	void scanThreadHaveFinish(bool skipFirstRemove=false);
 	void updateTheStatus();
 	void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const CopyMode &mode);

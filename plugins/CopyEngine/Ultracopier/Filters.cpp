@@ -1,7 +1,7 @@
 #include "Filters.h"
 #include "ui_Filters.h"
 
-#include <QMessageBox>
+#include <QRegularExpression>
 
 Filters::Filters(QWidget *parent) :
         QDialog(parent),
@@ -264,17 +264,17 @@ bool Filters::convertToRegex(Filters_rules &item)
 	bool isValid=!item.search_text.isEmpty();
 	if(isValid)
 	{
-		QRegExp regex;
+		QRegularExpression regex;
 		QString tempString;
 		if(item.search_type==SearchType_rawText)
 		{
-			tempString=QRegExp::escape(item.search_text);
+			tempString=QRegularExpression::escape(item.search_text);
 			if(tempString.contains('/') || tempString.contains('\\'))
 				isValid=false;
 		}
 		else if(item.search_type==SearchType_simpleRegex)
 		{
-			tempString=QRegExp::escape(item.search_text);
+			tempString=QRegularExpression::escape(item.search_text);
 			tempString.replace("\\*","[^\\\\/]*");
 		}
 		else if(item.search_type==SearchType_perlRegex)
@@ -283,8 +283,8 @@ bool Filters::convertToRegex(Filters_rules &item)
 			if(tempString.startsWith('^') && tempString.endsWith('$'))
 			{
 				item.need_match_all=true;
-				tempString.remove(QRegExp("^\\^"));
-				tempString.remove(QRegExp("\\$$"));
+				tempString.remove(QRegularExpression("^\\^"));
+				tempString.remove(QRegularExpression("\\$$"));
 				item.search_text=tempString;
 			}
 		}
@@ -292,8 +292,8 @@ bool Filters::convertToRegex(Filters_rules &item)
 		{
 			if(item.need_match_all==true)
 				tempString="^"+tempString+"$";
-			regex=QRegExp(tempString);
-			isValid=regex.isValid() && !regex.isEmpty();
+			regex=QRegularExpression(tempString);
+			isValid=regex.isValid();
 			item.regex=regex;
 			return true;
 		}

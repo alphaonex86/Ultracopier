@@ -35,6 +35,7 @@ PluginsManager::PluginsManager()
 	connect(this,			&PluginsManager::newLanguageLoaded,		&pluginInformationWindows,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
 //	connect(this,			&PluginsManager::pluginListingIsfinish,		options,&OptionEngine::setInterfaceValue);
 	//load the plugins list
+
 	/// \bug bug when I put here: moveToThread(this);, due to the direction connection to remove the plugin
 	start();
 }
@@ -87,6 +88,18 @@ void PluginsManager::unlockPluginListEdition()
 
 void PluginsManager::run()
 {
+	regexp_to_clean_1=QRegularExpression("[\n\r]+");
+	regexp_to_clean_2=QRegularExpression("[ \t]+");
+	regexp_to_clean_3=QRegularExpression("(&&)+");
+	regexp_to_clean_4=QRegularExpression("^&&");
+	regexp_to_clean_5=QRegularExpression("&&$");
+	regexp_to_dep_1=QRegularExpression("(&&|\\|\\||\\(|\\))");
+	regexp_to_dep_2=QRegularExpression("^(<=|<|=|>|>=)[a-zA-Z0-9\\-]+-([0-9]+\\.)*[0-9]+$");
+	regexp_to_dep_3=QRegularExpression("(<=|<|=|>|>=)");
+	regexp_to_dep_4=QRegularExpression("-([0-9]+\\.)*[0-9]+");
+	regexp_to_dep_5=QRegularExpression("[a-zA-Z0-9\\-]+-");
+	regexp_to_dep_6=QRegularExpression("[a-zA-Z0-9\\-]+-([0-9]+\\.)*[0-9]+");
+
 	//load the path and plugins into the path
 	QStringList readPath;
 	readPath << resources->getReadPath();
@@ -457,18 +470,18 @@ void PluginsManager::checkDependencies()
 			if(pluginsList.at(index).informations.at(sub_index).size()==2 && pluginsList.at(index).informations.at(sub_index).at(0)=="dependencies")
 			{
 				QString dependencies=pluginsList.at(index).informations.at(sub_index).at(1);
-				dependencies=dependencies.replace(QRegExp("[\n\r]+"),"&&");
-				dependencies=dependencies.replace(QRegExp("[ \t]+"),"");
-				dependencies=dependencies.replace(QRegExp("(&&)+"),"&&");
-				dependencies=dependencies.replace(QRegExp("^&&"),"");
-				dependencies=dependencies.replace(QRegExp("&&$"),"");
-				QStringList dependenciesToResolv=dependencies.split(QRegExp("(&&|\\|\\||\\(|\\))"),QString::SkipEmptyParts);
+				dependencies=dependencies.replace(regexp_to_clean_1,"&&");
+				dependencies=dependencies.replace(regexp_to_clean_2,"");
+				dependencies=dependencies.replace(regexp_to_clean_3,"&&");
+				dependencies=dependencies.replace(regexp_to_clean_4,"");
+				dependencies=dependencies.replace(regexp_to_clean_5,"");
+				QStringList dependenciesToResolv=dependencies.split(regexp_to_dep_1,QString::SkipEmptyParts);
 				indexOfDependencies=0;
 				resolv_size=dependenciesToResolv.size();
 				while(indexOfDependencies<resolv_size)
 				{
 					QString dependenciesToParse=dependenciesToResolv.at(indexOfDependencies);
-					if(!dependenciesToParse.contains(QRegExp("^(<=|<|=|>|>=)[a-zA-Z0-9\\-]+-([0-9]+\\.)*[0-9]+$")))
+					if(!dependenciesToParse.contains(regexp_to_dep_2))
 					{
 						pluginsList[index].informations.clear();
 						pluginsList[index].errorString=tr("Dependencies part is wrong");
@@ -476,13 +489,13 @@ void PluginsManager::checkDependencies()
 						break;
 					}
 					QString partName=dependenciesToParse;
-					partName=partName.remove(QRegExp("(<=|<|=|>|>=)"));
-					partName=partName.remove(QRegExp("-([0-9]+\\.)*[0-9]+"));
+					partName=partName.remove(regexp_to_dep_3);
+					partName=partName.remove(regexp_to_dep_4);
 					QString partVersion=dependenciesToParse;
-					partVersion=partVersion.remove(QRegExp("(<=|<|=|>|>=)"));
-					partVersion=partVersion.remove(QRegExp("[a-zA-Z0-9\\-]+-"));
+					partVersion=partVersion.remove(regexp_to_dep_3);
+					partVersion=partVersion.remove(regexp_to_dep_5);
 					QString partComp=dependenciesToParse;
-					partComp=partComp.remove(QRegExp("[a-zA-Z0-9\\-]+-([0-9]+\\.)*[0-9]+"));
+					partComp=partComp.remove(regexp_to_dep_6);
 					//current version soft
 					QString pluginVersion=getPluginVersion(partName);
 					depCheck=compareVersion(pluginVersion,partComp,partVersion);
@@ -715,11 +728,11 @@ void PluginsManager::decodingFinished()
 			{
 				QString basePluginArchive="";
 				/* block use less for tar?
-				if(fileList.at(0).contains(QRegExp("[\\/]")))
+				if(fileList.at(0).contains(QRegularExpression("[\\/]")))
 				{
 					bool folderFoundEveryWhere=true;
 					basePluginArchive=fileList.at(0);
-					basePluginArchive.remove(QRegExp("[\\/].*$"));
+					basePluginArchive.remove(QRegularExpression("[\\/].*$"));
 					for (int i = 0; i < list.size(); ++i)
 					{
 						if(!fileList.at(i).startsWith(basePluginArchive))
@@ -764,7 +777,7 @@ void PluginsManager::decodingFinished()
 								for (int i = 0; i < fileList.size(); ++i)
 								{
 									ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"file "+QString::number(i)+": "+finalPluginPath+fileList.at(i));
-									fileList[i].remove(QRegExp("^(..?[\\/])+"));
+									fileList[i].remove(QRegularExpression("^(..?[\\/])+"));
 									QFile currentFile(finalPluginPath+fileList.at(i));
 									QFileInfo info(currentFile);
 									if(!dir.exists(info.absolutePath()))

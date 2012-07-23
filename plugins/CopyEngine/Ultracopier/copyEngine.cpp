@@ -168,12 +168,12 @@ void copyEngine::updateTheDebugInfo(QStringList newList,QStringList newList2,int
 bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 {
 	this->tempWidget=tempWidget;
-	connect(tempWidget,		&QWidget::destroyed,		this,			&copyEngine::resetTempWidget);
 	ui->setupUi(tempWidget);
+	connect(tempWidget,		&QWidget::destroyed,		this,			&copyEngine::resetTempWidget);
 	//conect the ui widget
-/*	connect(ui->doRightTransfer,	&QCheckBox::toggled,		&threadOfTheTransfer,	SLOT(setRightTransfer(bool)));
-	connect(ui->keepDate,		&QCheckBox::toggled,		&threadOfTheTransfer,	SLOT(setKeepDate(bool)));
-	connect(ui->blockSize,		&QCheckBox::valueChanged,	&threadOfTheTransfer,	SLOT(setBlockSize(int)));*/
+/*	connect(ui->doRightTransfer,	&QCheckBox::toggled,		&threadOfTheTransfer,	&copyEngine::setRightTransfer);
+	connect(ui->keepDate,		&QCheckBox::toggled,		&threadOfTheTransfer,	&copyEngine::setKeepDate);
+	connect(ui->blockSize,		&QCheckBox::valueChanged,	&threadOfTheTransfer,	&copyEngine::setBlockSize);*/
 	connect(ui->autoStart,		&QCheckBox::toggled,		this,			&copyEngine::setAutoStart);
 	connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,this,		&copyEngine::setCheckDestinationFolderExists);
 	uiIsInstalled=true;
