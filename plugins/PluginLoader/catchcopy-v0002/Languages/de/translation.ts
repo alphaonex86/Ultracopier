@@ -6,7 +6,8 @@
     <message>
         <location filename="../../OptionsWidget.ui" line="17"/>
         <source>All the dlls are importants</source>
-        <translation>Alle DLLs sind importants</translation>
+        <translatorcomment>fix english</translatorcomment>
+        <translation>Alle DLLs sind wichtig</translation>
     </message>
 </context>
 </TS>

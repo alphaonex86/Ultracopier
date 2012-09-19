@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="184"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation>Die Datei %1/%2, Größe:%3/%4</translation>
+        <translation>Datei %1/%2, Größe:%3/%4</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="737"/>
@@ -24,12 +24,13 @@
     <message>
         <location filename="../../interface.ui" line="69"/>
         <source>To:</source>
-        <translation>Auf:</translation>
+        <translation>An:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="133"/>
         <source>Shutdown when is finish</source>
-        <translation>Shutdown wird, wenn fertig</translation>
+        <translatorcomment>fix english</translatorcomment>
+        <translation>Herunterfahren, sobald fertig</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="196"/>
@@ -39,28 +40,28 @@
     <message>
         <location filename="../../interface.ui" line="216"/>
         <source>&amp;More</source>
-        <translation>Mehr</translation>
+        <translation>&amp;Mehr</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="236"/>
         <source>&amp;Pause</source>
-        <translation>Pause</translation>
+        <translation>&amp;Pause</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="250"/>
         <source>&amp;Skip</source>
-        <translation>überspringen</translation>
+        <translation>Über&amp;springen</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="261"/>
         <source>&amp;Cancel</source>
-        <translation>Stornieren</translation>
+        <translation>Abbrechen (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="276"/>
         <location filename="../../interface.ui" line="748"/>
         <source>Limit copy speed at:</source>
-        <translation>Begrenzen Sie Kopiergeschwindigkeit bei:</translation>
+        <translation>Kopiergeschwindigkeit begrenzen bei:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="293"/>
@@ -189,11 +190,13 @@
     <message>
         <location filename="../../options.ui" line="20"/>
         <source>Show speed as main informations</source>
-        <translation>Zeige Geschwindigkeit als Haupt-Informationen</translation>
+        <translatorcomment>fix english</translatorcomment>
+        <translation>Zeige Geschwindigkeitslimit als Information im Hauptfenster</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="33"/>
         <source>Start with more button pushed</source>
+        <translatorcomment>fix english. German translation doesn&apos;t make any sense. Context unclear.</translatorcomment>
         <translation>Beginnen Sie mit mehr-Taste gedrückt</translation>
     </message>
 </context>
