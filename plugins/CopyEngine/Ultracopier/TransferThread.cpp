@@ -742,7 +742,8 @@ bool TransferThread::doFilePostOperation()
 	{
 		//set the time if no write thread used
 		if(keepDate)
-			changeFileDateTime(destination,source);//can't do that's after move because after move the source not exist
+            //source,destination
+            changeFileDateTime(source,destination);//can't do that's after move because after move the source not exist
 			/*
 			  ignore it, because need correct management, mainly with move
 			if(!)
