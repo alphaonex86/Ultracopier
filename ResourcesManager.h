@@ -1,8 +1,6 @@
 /** \file ResourcesManager.h
 \brief Define the class to manage and load the resources linked with the themes
 \author alpha_one_x86
-\version 0.3
-\date 2010
 \licence GPL3, see the file COPYING */ 
 
 #ifndef RESOURCES_MANAGER_H

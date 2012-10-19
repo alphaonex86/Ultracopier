@@ -4,7 +4,6 @@
 \version 0.3
 \date 2010 */
 
-#include <QtCore>
 #include <QFile>
 #include <QDir>
 

@@ -4,50 +4,121 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="145"/>
-        <source>%1/%2 files, %3/%4</source>
-        <translation></translation>
+        <location filename="../../interface.cpp" line="201"/>
+        <location filename="../../interface.cpp" line="439"/>
+        <source>Unknown remaining time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="366"/>
+        <source>Transferring %1 items (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="368"/>
+        <source>Transferring %1 item (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="375"/>
+        <source>Copying %1 items (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="377"/>
+        <source>Copying %1 item (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="382"/>
+        <source>Moving %1 items (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="384"/>
+        <source>Moving %1 item (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="448"/>
+        <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="457"/>
+        <source>In waiting</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>interface</name>
     <message>
-        <location filename="../../interface.ui" line="32"/>
-        <source>Action:</source>
-        <translation>Azione:</translation>
+        <location filename="../../interface.ui" line="176"/>
+        <source>Name:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="44"/>
-        <source>In wait</source>
-        <translation>In attesa</translation>
+        <location filename="../../interface.ui" line="186"/>
+        <source>From:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="78"/>
+        <location filename="../../interface.ui" line="196"/>
+        <source>To:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="206"/>
+        <source>Time remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="216"/>
+        <source>Items remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="226"/>
+        <source>Speed:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="291"/>
+        <source>More information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="331"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="345"/>
         <source>Add file</source>
         <translation>Aggiungi file</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="87"/>
+        <location filename="../../interface.ui" line="354"/>
         <source>Add folder</source>
         <translation>Aggiungi cartella</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="96"/>
+        <location filename="../../interface.ui" line="363"/>
         <source>Move file(s)</source>
         <translation>Spostare file(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="105"/>
+        <location filename="../../interface.ui" line="372"/>
         <source>Move folder</source>
         <translation>Spostare la cartella</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="114"/>
+        <location filename="../../interface.ui" line="381"/>
         <source>Copy file(s)</source>
         <translation>Copiare il file (s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="123"/>
+        <location filename="../../interface.ui" line="390"/>
         <source>Copy folder</source>
         <translation>Copia la cartella</translation>
     </message>

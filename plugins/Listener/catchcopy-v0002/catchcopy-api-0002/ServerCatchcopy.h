@@ -1,8 +1,7 @@
 /** \file ServerCatchcopy.h
 \brief Define the server of catchcopy
 \author alpha_one_x86
-\version 0002
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef SERVERCATCHCOPY_H
 #define SERVERCATCHCOPY_H

@@ -1,8 +1,7 @@
 /** \file ListThread.h
 \brief Define the list thread, and management to the action to do
 \author alpha_one_x86
-\version 0.3
-\date 2011 */
+\licence GPL3, see the file COPYING */
 
 #ifndef LISTTHREAD_H
 #define LISTTHREAD_H

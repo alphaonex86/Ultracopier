@@ -1,8 +1,7 @@
 /** \file scanFileOrFolder.h
 \brief Thread changed to list recursively the folder
 \author alpha_one_x86
-\version 0.3
-\date 2011 */
+\licence GPL3, see the file COPYING */
 
 #include <QThread>
 #include <QStringList>

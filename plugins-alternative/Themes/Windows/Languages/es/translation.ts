@@ -4,52 +4,48 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="156"/>
-        <source>Unknow remaining time</source>
-        <translation>Tiempo restante desconocido</translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="371"/>
+        <location filename="../../interface.cpp" line="201"/>
+        <location filename="../../interface.cpp" line="439"/>
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="375"/>
+        <location filename="../../interface.cpp" line="366"/>
         <source>Transferring %1 items (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="377"/>
+        <location filename="../../interface.cpp" line="368"/>
         <source>Transferring %1 item (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="384"/>
+        <location filename="../../interface.cpp" line="375"/>
         <source>Copying %1 items (%2)</source>
         <translation>Copia de %1 items (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="386"/>
+        <location filename="../../interface.cpp" line="377"/>
         <source>Copying %1 item (%2)</source>
         <translation>Copia de %1 item (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="391"/>
+        <location filename="../../interface.cpp" line="382"/>
         <source>Moving %1 items (%2)</source>
         <translation>Movimiento de %1 items (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="393"/>
+        <location filename="../../interface.cpp" line="384"/>
         <source>Moving %1 item (%2)</source>
         <translation>Movimiento de %1 item (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="446"/>
+        <location filename="../../interface.cpp" line="448"/>
         <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
         <translation>desde &lt;b&gt;%1&lt;/b&gt; (%2) hasta &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="455"/>
+        <location filename="../../interface.cpp" line="457"/>
         <source>In waiting</source>
         <translation>En espera</translation>
     </message>
@@ -62,67 +58,67 @@
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="190"/>
+        <location filename="../../interface.ui" line="186"/>
         <source>From:</source>
         <translation>Desde:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="204"/>
+        <location filename="../../interface.ui" line="196"/>
         <source>To:</source>
         <translation>Hasta:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="218"/>
+        <location filename="../../interface.ui" line="206"/>
         <source>Time remaining:</source>
         <translation>Tiempo restante:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="232"/>
+        <location filename="../../interface.ui" line="216"/>
         <source>Items remaining:</source>
         <translation>Items restantes:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="246"/>
+        <location filename="../../interface.ui" line="226"/>
         <source>Speed:</source>
         <translation>Velocidad:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="315"/>
+        <location filename="../../interface.ui" line="291"/>
         <source>More information</source>
         <translation>Más información</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="355"/>
+        <location filename="../../interface.ui" line="331"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="369"/>
+        <location filename="../../interface.ui" line="345"/>
         <source>Add file</source>
         <translation>Añadir archivo</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="378"/>
+        <location filename="../../interface.ui" line="354"/>
         <source>Add folder</source>
         <translation>Añadir carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="387"/>
+        <location filename="../../interface.ui" line="363"/>
         <source>Move file(s)</source>
         <translation>Mover archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="396"/>
+        <location filename="../../interface.ui" line="372"/>
         <source>Move folder</source>
         <translation>Mueva la carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="405"/>
+        <location filename="../../interface.ui" line="381"/>
         <source>Copy file(s)</source>
         <translation>Copia el archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="414"/>
+        <location filename="../../interface.ui" line="390"/>
         <source>Copy folder</source>
         <translation>Copia la carpeta</translation>
     </message>

@@ -1,8 +1,7 @@
 /** \file WriteThread.h
 \brief Thread changed to open/close and write the destination file
 \author alpha_one_x86
-\version 0.3
-\date 2011 */
+\licence GPL3, see the file COPYING */
 
 #ifndef WRITETHREAD_H
 #define WRITETHREAD_H

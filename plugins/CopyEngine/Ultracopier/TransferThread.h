@@ -1,8 +1,7 @@
 /** \file TransferThread.h
 \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
 \author alpha_one_x86
-\version 0.3
-\date 2011 */
+\licence GPL3, see the file COPYING */
 
 #ifndef TRANSFERTHREAD_H
 #define TRANSFERTHREAD_H

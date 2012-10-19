@@ -1,8 +1,7 @@
 /** \file MkPath.h
 \brief Make the path given as queued mkpath
 \author alpha_one_x86
-\version 0.3
-\date 2011 */
+\licence GPL3, see the file COPYING */
 
 #ifndef MKPATH_H
 #define MKPATH_H

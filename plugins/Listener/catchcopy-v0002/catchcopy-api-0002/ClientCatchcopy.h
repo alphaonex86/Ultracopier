@@ -1,8 +1,7 @@
 /** \file ClientCatchcopy.h
 \brief Define the catchcopy client
 \author alpha_one_x86
-\version 0002
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef CLIENTCATCHCOPY_H
 #define CLIENTCATCHCOPY_H

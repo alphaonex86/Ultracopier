@@ -723,7 +723,7 @@
     <message>
         <location filename="../../options.ui" line="56"/>
         <source>Auto start the transfer</source>
-        <translation>Démmarer automatiquement le transfert</translation>
+        <translation>Démarrer automatiquement le transfert</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="87"/>

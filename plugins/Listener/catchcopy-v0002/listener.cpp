@@ -1,5 +1,3 @@
-#include <QtCore>
-
 #include "listener.h"
 
 CatchCopyPlugin::CatchCopyPlugin()

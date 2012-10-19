@@ -129,17 +129,10 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="1" column="1">
-       <widget class="QCheckBox" name="checksumOnlyOnError">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="QCheckBox" name="checksumOnlyOnError"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_9">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="text">
          <string>Only after error</string>
         </property>
@@ -147,23 +140,20 @@
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_10">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
         <property name="text">
          <string>Ignore if impossible</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QCheckBox" name="checksumIgnoreIfImpossible">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="QCheckBox" name="checksumIgnoreIfImpossible"/>
       </item>
       <item row="0" column="1">
-       <widget class="QCheckBox" name="doChecksum"/>
+       <widget class="QCheckBox" name="doChecksum">
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_11">

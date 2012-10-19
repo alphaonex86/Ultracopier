@@ -1,8 +1,7 @@
 /** \file FacilityInterface.h
 \brief Define the class of the facility engine
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef FACILITY_INTERFACE_H
 #define FACILITY_INTERFACE_H

@@ -4,8 +4,6 @@
 \version 0.3
 \date 2010 */
 
-#include <QtCore>
-
 #include "interface.h"
 #include "factory.h"
 #include "ui_interface.h"

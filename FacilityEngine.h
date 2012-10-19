@@ -2,8 +2,6 @@
 \brief To implement the facility engine, the interface is defined into FacilityInterface()
 \see FacilityInterface()
 \author alpha_one_x86
-\version 0.3
-\date 2010
 \licence GPL3, see the file COPYING */
 
 #ifndef FACILITYENGINE_H

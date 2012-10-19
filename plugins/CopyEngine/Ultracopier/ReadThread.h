@@ -1,8 +1,7 @@
 /** \file ReadThread.h
 \brief Thread changed to open/close and read the source file
 \author alpha_one_x86
-\version 0.3
-\date 2011 */
+\licence GPL3, see the file COPYING */
 
 #ifndef READTHREAD_H
 #define READTHREAD_H

@@ -1,8 +1,6 @@
 /** \file SessionLoader.h
 \brief Define the class to load the plugin and lunch it
 \author alpha_one_x86
-\version 0.3
-\date 2010
 \licence GPL3, see the file COPYING
 
 This class load ALL plugin compatible to listen and catch the copy/move

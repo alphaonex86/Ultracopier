@@ -1,8 +1,7 @@
 /** \file VariablesCatchcopy.h
 \brief Define the variable for catchcopy
 \author alpha_one_x86
-\version 0002
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef VARIABLECATCHCOPY_H
 #define VARIABLECATCHCOPY_H

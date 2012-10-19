@@ -4,8 +4,6 @@
 \version 0.3
 \date 2010 */
 
-#include <QtCore>
-
 #if defined (Q_OS_WIN32)
 #include <windows.h>
 #else

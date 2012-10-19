@@ -1,8 +1,7 @@
 /** \file sessionLoader.h
 \brief Define the session loader
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef SESSION_LOADER_H
 #define SESSION_LOADER_H

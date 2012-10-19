@@ -1,8 +1,7 @@
 /** \file PluginInterface_SessionLoader.h
 \brief Define the interface of the plugin of type: session loader
 \author alpha_one_x86
-\version 0.3
-\date 2010 */ 
+\licence GPL3, see the file COPYING */ 
 
 #ifndef PLUGININTERFACE_SESSIONLOADER_H
 #define PLUGININTERFACE_SESSIONLOADER_H

@@ -2,8 +2,6 @@
 \brief Define the singleton for class which should have unique object
 \author alpha_one_x86
 \note Big thanks to all people in the channel #qt-fr of freenode of irc
-\version 0.3
-\date 2010
 \licence GPL3, see the file COPYING */
 
 #include <QMutex>

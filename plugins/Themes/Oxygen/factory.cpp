@@ -4,8 +4,6 @@
 \version 0.3
 \date 2010 */
 
-#include <QtCore>
-
 #include "factory.h"
 
 Factory::Factory()

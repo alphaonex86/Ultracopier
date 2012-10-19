@@ -1,8 +1,6 @@
 /** \file DebugEngine.h
 \brief Define the class for the debug
 \author alpha_one_x86
-\version 0.3
-\date 2010
 \note This class don't need be thread safe because ultracopier is done with one thread, but I have implement some basic thread protection
 \licence GPL3, see the file COPYING */
 

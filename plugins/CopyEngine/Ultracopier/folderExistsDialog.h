@@ -1,8 +1,7 @@
 /** \file folderExistsDialog.h
 \brief Define the dialog when file exists
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef FOLDERISSAMEDIALOG_H
 #define FOLDERISSAMEDIALOG_H

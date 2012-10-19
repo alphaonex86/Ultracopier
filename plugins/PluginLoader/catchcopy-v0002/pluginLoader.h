@@ -1,14 +1,12 @@
 /** \file pluginLoader.h
 \brief Define the plugin loader
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+\licence GPL3, see the file COPYING */
 
 #ifndef PLUGIN_LOADER_TEST_H
 #define PLUGIN_LOADER_TEST_H
 
 #include <QObject>
-#include <QtCore>
 #include <QMessageBox>
 
 #include <QString>
