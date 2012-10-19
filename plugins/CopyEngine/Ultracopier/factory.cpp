@@ -57,8 +57,6 @@ Factory::Factory() :
     connect(ui->filters,&QPushButton::clicked,this,&Factory::showFilterDialog);
     connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&Factory::sendNewRenamingRules);
     connect(ui->renamingRules,&QPushButton::clicked,this,&Factory::showRenamingRules);
-
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 Factory::~Factory()
@@ -144,7 +142,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         KeysList.append(qMakePair(QString("doChecksum"),QVariant(false)));
         KeysList.append(qMakePair(QString("checksumIgnoreIfImpossible"),QVariant(true)));
         KeysList.append(qMakePair(QString("checksumOnlyOnError"),QVariant(true)));
-        KeysList.append(qMakePair(QString("osBuffer"),QVariant(true)));
+        KeysList.append(qMakePair(QString("osBuffer"),QVariant(false)));
         KeysList.append(qMakePair(QString("firstRenamingRule"),QVariant("")));
         KeysList.append(qMakePair(QString("otherRenamingRule"),QVariant("")));
         #ifdef 	Q_OS_WIN32
@@ -165,9 +163,11 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toUInt());
         ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
         ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
+
         ui->doChecksum->setChecked(optionsEngine->getOptionValue("doChecksum").toBool());
         ui->checksumIgnoreIfImpossible->setChecked(optionsEngine->getOptionValue("checksumIgnoreIfImpossible").toBool());
         ui->checksumOnlyOnError->setChecked(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
+
         ui->osBuffer->setChecked(optionsEngine->getOptionValue("osBuffer").toBool());
         ui->osBufferLimited->setChecked(optionsEngine->getOptionValue("osBufferLimited").toBool());
         ui->osBufferLimit->setValue(optionsEngine->getOptionValue("osBufferLimit").toUInt());
@@ -178,8 +178,13 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
             optionsEngine->getOptionValue("excludeOptions").toStringList()
         );
         renamingRules->setRenamingRules(optionsEngine->getOptionValue("firstRenamingRule").toString(),optionsEngine->getOptionValue("otherRenamingRule").toString());
+
         ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
         ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
+
+        connect(ui->osBufferLimited,SIGNAL(toggled(bool)),this,SLOT(updateBufferCheckbox()));
+        connect(ui->osBuffer,SIGNAL(toggled(bool)),this,SLOT(updateBufferCheckbox()));
+        updateBufferCheckbox();
     }
 }
 
@@ -407,6 +412,12 @@ void Factory::showRenamingRules()
         return;
     }
     renamingRules->exec();
+}
+
+void Factory::updateBufferCheckbox()
+{
+    ui->osBufferLimited->setEnabled(ui->osBuffer->isChecked());
+    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)

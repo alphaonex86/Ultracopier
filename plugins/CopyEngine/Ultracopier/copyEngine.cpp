@@ -352,7 +352,11 @@ void copyEngine::set_doChecksum(bool doChecksum)
 {
     listThread->set_doChecksum(doChecksum);
     if(uiIsInstalled)
+    {
         ui->doChecksum->setChecked(doChecksum);
+        ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
+        ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
+    }
     this->doChecksum=doChecksum;
 }
 
@@ -378,8 +382,7 @@ void copyEngine::set_osBuffer(bool osBuffer)
     if(uiIsInstalled)
     {
         ui->osBuffer->setChecked(osBuffer);
-        ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
-        ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
+        updateBufferCheckbox();
     }
     this->osBuffer=osBuffer;
 }
@@ -388,7 +391,10 @@ void copyEngine::set_osBufferLimited(bool osBufferLimited)
 {
     listThread->set_osBufferLimited(osBufferLimited);
     if(uiIsInstalled)
+    {
         ui->osBufferLimited->setChecked(osBufferLimited);
+        updateBufferCheckbox();
+    }
     this->osBufferLimited=osBufferLimited;
 }
 
@@ -398,6 +404,12 @@ void copyEngine::set_osBufferLimit(unsigned int osBufferLimit)
     if(uiIsInstalled)
         ui->osBufferLimit->setValue(osBufferLimit);
     this->osBufferLimit=osBufferLimit;
+}
+
+void copyEngine::updateBufferCheckbox()
+{
+    ui->osBufferLimited->setEnabled(ui->osBuffer->isChecked());
+    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void copyEngine::set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
@@ -723,13 +735,13 @@ void copyEngine::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossi
 void copyEngine::osBuffer_toggled(bool osBuffer)
 {
     listThread->set_osBuffer(osBuffer);
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
+    updateBufferCheckbox();
 }
 
 void copyEngine::osBufferLimited_toggled(bool osBufferLimited)
 {
     listThread->set_osBufferLimited(osBufferLimited);
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
+    updateBufferCheckbox();
 }
 
 void copyEngine::osBufferLimit_editingFinished()

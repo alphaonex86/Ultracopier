@@ -81,6 +81,7 @@ private slots:
     void checksumIgnoreIfImpossible_toggled(bool);
     void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
     void showRenamingRules();
+    void updateBufferCheckbox();
 public slots:
     void resetOptions();
     void newLanguageLoaded();
