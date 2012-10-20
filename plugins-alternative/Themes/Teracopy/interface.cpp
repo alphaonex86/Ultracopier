@@ -105,6 +105,11 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         case Ultracopier::Copying:
         case Ultracopier::CopyingAndListing:
             haveStarted=true;
+            ui->cancelButton->setText(facilityEngine->translateText("Quit"));
+            if(storeIsInPause)
+                ui->pauseButton->setText(facilityEngine->translateText("Start"));
+            else
+                ui->pauseButton->setText(facilityEngine->translateText("Pause"));
         break;
         case Ultracopier::Idle:
             ui->cancelButton->setText(facilityEngine->translateText("Quit"));

@@ -32,6 +32,7 @@ class Core : public QObject, public GlobalClass
     public:
         /// \brief Initate the core of one copy or move window, dispatch the event specific at this window
         Core(CopyEngineManager *copyEngineList);
+        ~Core();
     private:
         CopyEngineManager *copyEngineList;
         struct RunningTransfer

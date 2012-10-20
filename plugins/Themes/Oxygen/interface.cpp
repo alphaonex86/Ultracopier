@@ -232,6 +232,13 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             ui->pauseButton->setEnabled(true);
             haveStarted=true;
             ui->cancelButton->setText(facilityEngine->translateText("Quit"));
+            if(storeIsInPause)
+                ui->pauseButton->setText(facilityEngine->translateText("Start"));
+            else
+                ui->pauseButton->setText(facilityEngine->translateText("Pause"));
+        break;
+        case Ultracopier::Listing:
+            ui->pauseButton->setEnabled(false);
         break;
         case Ultracopier::Idle:
             ui->pauseButton->setEnabled(false);

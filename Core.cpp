@@ -31,6 +31,19 @@ Core::Core(CopyEngineManager *copyEngineList)
     qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<ProgressionItem>");
 }
 
+Core::~Core()
+{
+    int index=0;
+    while(index<copyList.size())
+    {
+        copyList[index].engine->cancel();
+        delete copyList[index].nextConditionalSync;
+        delete copyList[index].interface;
+        delete copyList[index].engine;
+        index++;
+    }
+}
+
 void Core::newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");

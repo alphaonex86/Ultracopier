@@ -159,6 +159,9 @@ font: 12pt &quot;Sans Serif&quot;;</string>
          <string notr="true">from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;
 %5</string>
         </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -178,7 +181,11 @@ font: 12pt &quot;Sans Serif&quot;;</string>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLabel" name="label_file"/>
+          <widget class="QLabel" name="label_file">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_5">
@@ -188,7 +195,11 @@ font: 12pt &quot;Sans Serif&quot;;</string>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLabel" name="label_from"/>
+          <widget class="QLabel" name="label_from">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_6">
@@ -198,7 +209,11 @@ font: 12pt &quot;Sans Serif&quot;;</string>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLabel" name="label_to"/>
+          <widget class="QLabel" name="label_to">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_7">
@@ -208,7 +223,11 @@ font: 12pt &quot;Sans Serif&quot;;</string>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QLabel" name="label_remaining_time"/>
+          <widget class="QLabel" name="label_remaining_time">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_8">
@@ -218,7 +237,11 @@ font: 12pt &quot;Sans Serif&quot;;</string>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QLabel" name="label_items"/>
+          <widget class="QLabel" name="label_items">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_9">
@@ -228,7 +251,11 @@ font: 12pt &quot;Sans Serif&quot;;</string>
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QLabel" name="label_speed"/>
+          <widget class="QLabel" name="label_speed">
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>

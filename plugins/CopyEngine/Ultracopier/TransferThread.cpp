@@ -516,7 +516,9 @@ bool TransferThread::setBlockSize(const unsigned int blockSize)
 //pause the copy
 void TransferThread::pause()
 {
-    if(transfer_stat==TransferStat_Idle)
+    //only pause/resume during the transfer of file data
+    //from transfer_stat!=TransferStat_Idle because it resume at wrong order
+    if(transfer_stat!=TransferStat_Transfer)
         return;
     readThread.pause();
 }
@@ -524,7 +526,9 @@ void TransferThread::pause()
 //resume the copy
 void TransferThread::resume()
 {
-    if(transfer_stat==TransferStat_Idle)
+    //only pause/resume during the transfer of file data
+    //from transfer_stat!=TransferStat_Idle because it resume at wrong order
+    if(transfer_stat!=TransferStat_Transfer)
         return;
     readThread.resume();
 }

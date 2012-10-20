@@ -170,6 +170,8 @@ void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &prog
             internalRunningOperation[progressionList.at(index_for_loop).id].currentProgression=progressionList.at(index_for_loop).current;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             progressionList.removeAt(index_for_loop);
+            index_for_loop--;
+            loop_size--;
             #endif
         }
         index_for_loop++;

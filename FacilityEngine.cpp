@@ -40,6 +40,7 @@ void FacilityEngine::retranslate()
     translations["Copy engine"]=tr("Copy engine");
     translations["Copy"]=tr("Copy");
     translations["Move"]=tr("Move");
+    translations["Start"]=tr("Start");
     translations["Pause"]=tr("Pause");
     translations["Resume"]=tr("Resume");
     translations["Skip"]=tr("Skip");
@@ -144,7 +145,7 @@ QString FacilityEngine::translateText(const QString &text)
         return translations[text];
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"text: "+text);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"translation not found: "+text);
         return text;
     }
 }
