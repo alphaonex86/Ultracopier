@@ -11,7 +11,7 @@
 
 AuthPlugin::AuthPlugin()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	//load the overall instance
 	stopIt=false;
 	//set sem to 1
@@ -21,7 +21,7 @@ AuthPlugin::AuthPlugin()
 
 AuthPlugin::~AuthPlugin()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	stop();
 }
 
@@ -41,7 +41,7 @@ QStringList AuthPlugin::getFileList(const QString &path)
 
 void AuthPlugin::run()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	sem.acquire();
 	stopIt=false;
 	foreach(QString basePath,readPath)
@@ -82,30 +82,30 @@ void AuthPlugin::run()
 									}
 									else
 									{
-										ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Error at open this file: "+fileToAddToCheckSum+", error string: "+fileDescriptor.errorString());
+										ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error at open this file: "+fileToAddToCheckSum+", error string: "+fileDescriptor.errorString());
 										errorFound=true;
 										break;
 									}
 								}
 							if(!errorFound)
 							{
-								ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"folder: \""+pluginBasePath+"\", hash: "+QString(folderHash.result().toHex()));
+								ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder: \""+pluginBasePath+"\", hash: "+QString(folderHash.result().toHex()));
 								QByteArray key=keyDescriptor.readAll();
 								if(key==folderHash.result())
 									emit authentifiedPath(pluginBasePath);
 								else
-									ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"This plugin have wrong authentification");
+									ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This plugin have wrong authentification");
 							}
 							keyDescriptor.close();
 						}
 						else
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file: \""+pluginBasePath+"sign.key\", unable to open the key file: "+keyDescriptor.errorString());
+							ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file: \""+pluginBasePath+"sign.key\", unable to open the key file: "+keyDescriptor.errorString());
 					}
 				}
 			}
 		}
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"stop()");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop()");
 	sem.release();
 }
 

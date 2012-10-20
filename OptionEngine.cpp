@@ -20,7 +20,7 @@
 /// \brief Initiate the option, load from backend
 OptionEngine::OptionEngine()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	//locate the settings
 	#ifdef ULTRACOPIER_VERSION_PORTABLE
 		resources=ResourcesManager::getInstance();
@@ -79,18 +79,18 @@ OptionEngine::OptionEngine()
 /// \brief Destroy the option
 OptionEngine::~OptionEngine()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	ResourcesManager::destroyInstanceAtTheLastCall();
 }
 
 /// \brief To add option group to options
 bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QString, QVariant> > &KeysList)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+groupName+"\",[...])");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+groupName+"\",[...])");
 	//search if previous with the same name exists
 	if(GroupKeysList.contains(groupName))
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"group already used previously");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"group already used previously");
 		return false;
 	}
 	//if the backend is file, enter into the group
@@ -119,7 +119,7 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 			}
 			if(settings->status()!=QSettings::NoError)
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Have writing error, switch to memory only options");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
 				#ifdef ULTRACOPIER_VERSION_PORTABLE
 				resources->disableWritablePath();
 				#endif // ULTRACOPIER_VERSION_PORTABLE
@@ -138,9 +138,9 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 /// \brief To remove option group to options, remove the widget need be do into the calling object
 bool OptionEngine::removeOptionGroup(const QString &groupName)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, groupName: "+groupName);
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, groupName: "+groupName);
 	if(GroupKeysList.remove(groupName)!=1)
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName);
 	return false;
 }
 
@@ -152,11 +152,11 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 		if(GroupKeysList[groupName].contains(variableName))
 			return GroupKeysList[groupName][variableName].currentValue;
 		QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
 		return QVariant();
 	}
 	QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
 	//return default value
 	return QVariant();
 }
@@ -164,7 +164,7 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 /// \brief To set option value
 void OptionEngine::setOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value.toString()+"\"");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value.toString()+"\"");
 
 	if(GroupKeysList.contains(groupName))
 	{
@@ -182,7 +182,7 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
 				settings->endGroup();
 				if(settings->status()!=QSettings::NoError)
 				{
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Have writing error, switch to memory only options");
+					ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
 					#ifdef ULTRACOPIER_VERSION_PORTABLE
 					resources->disableWritablePath();
 					#endif // ULTRACOPIER_VERSION_PORTABLE
@@ -193,17 +193,17 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
 			return;
 		}
 		QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
 		return;
 	}
 	QMessageBox::critical(NULL,"Internal error",tr("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,QString("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("Try get variable, but the variable is not found: %1 %2").arg(groupName).arg(variableName));
 }
 
 //the reset of right value of widget need be do into the calling object
 void OptionEngine::internal_resetToDefaultValue()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 
 	QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i = GroupKeysList.constBegin();
 	QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i_end = GroupKeysList.constEnd();

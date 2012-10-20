@@ -9,7 +9,7 @@
 
 LocalPluginOptions::LocalPluginOptions(const QString &group)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+group+"\",[...])");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
 	groupOptionAdded=false;
 	this->group=group;
 	options=OptionEngine::getInstance();
@@ -18,21 +18,21 @@ LocalPluginOptions::LocalPluginOptions(const QString &group)
 
 LocalPluginOptions::~LocalPluginOptions()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+group+"\",[...])");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
 	if(groupOptionAdded)
 		options->removeOptionGroup(group);
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"option not used");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"option not used");
 	OptionEngine::destroyInstanceAtTheLastCall();
 }
 
 /// \brief To add option group to options
 bool LocalPluginOptions::addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start(\""+group+"\",[...])");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
 	if(groupOptionAdded)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Group already added!");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Group already added!");
 		return false;
 	}
 	else

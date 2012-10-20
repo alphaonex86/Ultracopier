@@ -12,7 +12,7 @@ actionToDoInode& currentActionToDoInode=actionToDoListInode[int_for_internal_loo
 switch(currentActionToDoInode.type)
 {
 case ActionType_MkPath:
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("launch mkpath: %1").arg(currentActionToDoInode.folder.absoluteFilePath()));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch mkpath: %1").arg(currentActionToDoInode.folder.absoluteFilePath()));
 	mkPathQueue.addPath(currentActionToDoInode.folder.absoluteFilePath());
 	currentActionToDoInode.isRunning=true;
 	numberOfInodeOperation++;
@@ -32,8 +32,8 @@ case ActionType_RmPath:
 	if(true)//currentActionToDoInode.size==0
 	{
 		if(numberOfTranferRuning>0)
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("skipped because already inode = 0 and transfer is running: %1").arg(currentActionToDoInode.folder.absoluteFilePath()));
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("launch rmpath: %1").arg(currentActionToDoInode.folder.absoluteFilePath()));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("skipped because already inode = 0 and transfer is running: %1").arg(currentActionToDoInode.folder.absoluteFilePath()));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmpath: %1").arg(currentActionToDoInode.folder.absoluteFilePath()));
 		rmPathQueue.addPath(currentActionToDoInode.folder.absoluteFilePath());
 		currentActionToDoInode.isRunning=true;
 		numberOfInodeOperation++;
@@ -42,7 +42,7 @@ case ActionType_RmPath:
 	}
 	else //have not finish all the transfer into it, do it later
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"should never pass here");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"should never pass here");
 		/*actionToDoListInode.move(int_for_internal_loop,actionToDoListInode_count-1);
 		currentActionToDoInode.id=generateIdNumber();
 		number_rm_path_moved++;
@@ -51,7 +51,7 @@ case ActionType_RmPath:
 	}
 break;
 default:
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Wrong type at inode action"));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Wrong type at inode action"));
 	return;
 }
 

@@ -10,6 +10,7 @@
 #ifndef STRUCTDEF_H
 #define STRUCTDEF_H
 
+namespace Ultracopier {
 /// \brief Define the mode of the copy window/request, if need be copy or move
 enum CopyMode
 {
@@ -132,7 +133,7 @@ struct ActionOnCopyList
 };
 
 /// \brief action normal or due to interface query on copy list
-struct returnActionOnCopyList
+struct ReturnActionOnCopyList
 {
 	ActionTypeCopyList type;
 	///< used if type == AddingItem || type == PreOperation (for interface without transfer list) || type == CustomOperation
@@ -140,5 +141,6 @@ struct returnActionOnCopyList
 	///< used if type != AddingItem
 	ActionOnCopyList userAction;
 };
+}
 
 #endif // STRUCTDEF_H

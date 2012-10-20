@@ -58,100 +58,100 @@ void copyEngine::connectTheSignalsSlots()
     debugDialogWindow.show();
     #endif
     if(!connect(listThread,&ListThread::actionInProgess,	this,&copyEngine::actionInProgess,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect actionInProgess()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess()");
     if(!connect(listThread,&ListThread::actionInProgess,	this,&copyEngine::newActionInProgess,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect actionInProgess() to slot");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess() to slot");
     if(!connect(listThread,&ListThread::newFolderListing,			this,&copyEngine::newFolderListing,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newFolderListing()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newFolderListing()");
     if(!connect(listThread,&ListThread::newCollisionAction,			this,&copyEngine::newCollisionAction,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newCollisionAction()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newCollisionAction()");
     if(!connect(listThread,&ListThread::newErrorAction,			this,&copyEngine::newErrorAction,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newErrorAction()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newErrorAction()");
     if(!connect(listThread,&ListThread::isInPause,				this,&copyEngine::isInPause,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect isInPause()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect isInPause()");
     if(!connect(listThread,&ListThread::error,	this,&copyEngine::error,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect error()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect error()");
     if(!connect(listThread,&ListThread::rmPath,				this,&copyEngine::rmPath,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect rmPath()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect rmPath()");
     if(!connect(listThread,&ListThread::mkPath,				this,&copyEngine::mkPath,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect mkPath()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect mkPath()");
     if(!connect(listThread,&ListThread::newActionOnList,	this,&copyEngine::newActionOnList,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect newActionOnList()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newActionOnList()");
     if(!connect(listThread,&ListThread::pushFileProgression,		this,&copyEngine::pushFileProgression,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect pushFileProgression()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect pushFileProgression()");
     if(!connect(listThread,&ListThread::pushGeneralProgression,		this,&copyEngine::pushGeneralProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect pushGeneralProgression()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect pushGeneralProgression()");
     if(!connect(listThread,&ListThread::syncReady,						this,&copyEngine::syncReady,					Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect syncReady()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect syncReady()");
     if(!connect(listThread,&ListThread::canBeDeleted,						this,&copyEngine::canBeDeleted,					Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect canBeDeleted()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect canBeDeleted()");
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(listThread,&ListThread::debugInformation,			this,&copyEngine::debugInformation,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect debugInformation()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect debugInformation()");
     #endif
 
     if(!connect(listThread,&ListThread::send_fileAlreadyExists,		this,&copyEngine::fileAlreadyExistsSlot,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_fileAlreadyExists()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_fileAlreadyExists()");
     if(!connect(listThread,&ListThread::send_errorOnFile,			this,&copyEngine::errorOnFileSlot,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_errorOnFile()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_errorOnFile()");
     if(!connect(listThread,&ListThread::send_folderAlreadyExists,	this,&copyEngine::folderAlreadyExistsSlot,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_folderAlreadyExists()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_folderAlreadyExists()");
     if(!connect(listThread,&ListThread::send_errorOnFolder,			this,&copyEngine::errorOnFolderSlot,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_errorOnFolder()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_errorOnFolder()");
     if(!connect(listThread,&ListThread::updateTheDebugInfo,				this,&copyEngine::updateTheDebugInfo,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect updateTheDebugInfo()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect updateTheDebugInfo()");
     if(!connect(listThread,&ListThread::errorTransferList,							this,&copyEngine::errorTransferList,						Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect errorTransferList()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect errorTransferList()");
     if(!connect(listThread,&ListThread::warningTransferList,						this,&copyEngine::warningTransferList,					Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect warningTransferList()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect warningTransferList()");
     if(!connect(listThread,&ListThread::mkPathErrorOnFolder,					this,&copyEngine::mkPathErrorOnFolderSlot,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect mkPathErrorOnFolder()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect mkPathErrorOnFolder()");
     if(!connect(listThread,&ListThread::rmPathErrorOnFolder,					this,&copyEngine::rmPathErrorOnFolderSlot,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect rmPathErrorOnFolder()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect rmPathErrorOnFolder()");
     if(!connect(listThread,&ListThread::send_realBytesTransfered,					this,&copyEngine::get_realBytesTransfered,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
 
     if(!connect(this,&copyEngine::tryCancel,						listThread,&ListThread::tryCancel,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect tryCancel()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect tryCancel()");
     if(!connect(this,&copyEngine::signal_pause,						listThread,&ListThread::pause,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_pause()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_pause()");
     if(!connect(this,&copyEngine::signal_resume,						listThread,&ListThread::resume,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_resume()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_resume()");
     if(!connect(this,&copyEngine::signal_skip,					listThread,&ListThread::skip,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_skip()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_skip()");
     if(!connect(this,&copyEngine::signal_setCollisionAction,		listThread,&ListThread::setAlwaysFileExistsAction,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
     if(!connect(this,&copyEngine::signal_setFolderColision,		listThread,&ListThread::setFolderColision,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_setFolderColision()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setFolderColision()");
     if(!connect(this,&copyEngine::signal_removeItems,				listThread,&ListThread::removeItems,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_removeItems()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_removeItems()");
     if(!connect(this,&copyEngine::signal_moveItemsOnTop,				listThread,&ListThread::moveItemsOnTop,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsOnTop()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsOnTop()");
     if(!connect(this,&copyEngine::signal_moveItemsUp,				listThread,&ListThread::moveItemsUp,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsUp()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsUp()");
     if(!connect(this,&copyEngine::signal_moveItemsDown,				listThread,&ListThread::moveItemsDown,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsDown()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsDown()");
     if(!connect(this,&copyEngine::signal_moveItemsOnBottom,			listThread,&ListThread::moveItemsOnBottom,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_moveItemsOnBottom()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsOnBottom()");
     if(!connect(this,&copyEngine::signal_exportTransferList,			listThread,&ListThread::exportTransferList,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_exportTransferList()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_exportTransferList()");
     if(!connect(this,&copyEngine::signal_importTransferList,			listThread,&ListThread::importTransferList,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_importTransferList()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_importTransferList()");
     if(!connect(this,&copyEngine::signal_forceMode,				listThread,&ListThread::forceMode,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect signal_forceMode()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_forceMode()");
     if(!connect(this,&copyEngine::send_osBufferLimit,					listThread,&ListThread::set_osBufferLimit,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_osBufferLimit()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_osBufferLimit()");
     if(!connect(this,&copyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_setFilters()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setFilters()");
     if(!connect(this,&copyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect send_sendNewRenamingRules()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_sendNewRenamingRules()");
     if(!connect(&timerActionDone,&QTimer::timeout,							listThread,&ListThread::sendActionDone))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect timerActionDone");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerActionDone");
     if(!connect(&timerProgression,&QTimer::timeout,							listThread,&ListThread::sendProgression))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect timerProgression");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerProgression");
 
     if(!connect(this,&copyEngine::queryOneNewDialog,this,&copyEngine::showOneNewDialog,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect queryOneNewDialog()");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect queryOneNewDialog()");
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
@@ -215,9 +215,9 @@ void copyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->filters,&QPushButton::clicked,this,&copyEngine::showFilterDialog);
 
         if(!connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&copyEngine::sendNewRenamingRules))
-            ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
         if(!connect(ui->renamingRules,&QPushButton::clicked,this,&copyEngine::showRenamingRules))
-            ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to connect renamingRules.clicked()");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect renamingRules.clicked()");
     }
 
     filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
@@ -239,17 +239,17 @@ bool copyEngine::haveSameDestination(const QString &destination)
 
 bool copyEngine::newCopy(const QStringList &sources)
 {
-    if(forcedMode && mode!=Copy)
+    if(forcedMode && mode!=Ultracopier::Copy)
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
         QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to move, you can't copy with it"));
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(destination.isEmpty() || destination.isNull() || destination=="")
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Canceled by the user");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return false;
     }
     return listThread->newCopy(sources,destination);
@@ -257,9 +257,9 @@ bool copyEngine::newCopy(const QStringList &sources)
 
 bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
 {
-    if(forcedMode && mode!=Copy)
+    if(forcedMode && mode!=Ultracopier::Copy)
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
         QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to move, you can't copy with it"));
         return false;
     }
@@ -268,17 +268,17 @@ bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
 
 bool copyEngine::newMove(const QStringList &sources)
 {
-    if(forcedMode && mode!=Move)
+    if(forcedMode && mode!=Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
         QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to copy, you can't move with it"));
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(destination.isEmpty() || destination.isNull() || destination=="")
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Canceled by the user");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return false;
     }
     return listThread->newMove(sources,destination);
@@ -286,9 +286,9 @@ bool copyEngine::newMove(const QStringList &sources)
 
 bool copyEngine::newMove(const QStringList &sources,const QString &destination)
 {
-    if(forcedMode && mode!=Move)
+    if(forcedMode && mode!=Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
         QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to copy, you can't move with it"));
         return false;
     }
@@ -430,20 +430,20 @@ void copyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamin
     sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
-bool copyEngine::userAddFolder(const CopyMode &mode)
+bool copyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
 {
     QString source = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(source.isEmpty() || source.isNull() || source=="")
         return false;
-    if(mode==Copy)
+    if(mode==Ultracopier::Copy)
         return newCopy(QStringList() << source);
     else
         return newMove(QStringList() << source);
 }
 
-bool copyEngine::userAddFile(const CopyMode &mode)
+bool copyEngine::userAddFile(const Ultracopier::CopyMode &mode)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QStringList sources = QFileDialog::getOpenFileNames(
         interface,
         facilityEngine->translateText("Select one or more files to open"),
@@ -451,7 +451,7 @@ bool copyEngine::userAddFile(const CopyMode &mode)
         facilityEngine->translateText("All files")+" (*)");
     if(sources.isEmpty())
         return false;
-    if(mode==Copy)
+    if(mode==Ultracopier::Copy)
         return newCopy(sources);
     else
         return newMove(sources);
@@ -474,7 +474,7 @@ void copyEngine::skip(const quint64 &id)
 
 void copyEngine::cancel()
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     stopIt=true;
     timerProgression.stop();
     timerActionDone.stop();
@@ -507,18 +507,18 @@ void copyEngine::moveItemsOnBottom(const QList<int> &ids)
 }
 
 /** \brief give the forced mode, to export/import transfer list */
-void copyEngine::forceMode(const CopyMode &mode)
+void copyEngine::forceMode(const Ultracopier::CopyMode &mode)
 {
     if(forcedMode)
     {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Mode forced previously"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Mode forced previously"));
         QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The mode have been forced previously, it's internal error, please report it"));
         return;
     }
-    if(mode==Copy)
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Force mode to copy"));
+    if(mode==Ultracopier::Copy)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to copy"));
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("Force mode to move"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to move"));
     this->mode=mode;
     forcedMode=true;
     emit signal_forceMode(mode);
@@ -552,14 +552,14 @@ void copyEngine::errorTransferList(const QString &error)
 
 bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
     maxSpeed=speedLimitation;
     return listThread->setSpeedLimitation(speedLimitation);
 }
 
 void copyEngine::setCollisionAction(const QString &action)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"action: "+action);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action: "+action);
     if(action=="skip")
         alwaysDoThisActionForFileExists=FileExists_Skip;
     else if(action=="overwrite")
@@ -577,7 +577,7 @@ void copyEngine::setCollisionAction(const QString &action)
 
 void copyEngine::setErrorAction(const QString &action)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"action: "+action);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action: "+action);
     if(action=="skip")
         alwaysDoThisActionForFileError=FileError_Skip;
     else if(action=="putToEndOfTheList")
@@ -671,11 +671,11 @@ void copyEngine::on_comboBoxFolderError_currentIndexChanged(int index)
 //set the translate
 void copyEngine::newLanguageLoaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, retranslate the widget options");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, retranslate the widget options");
     if(tempWidget!=NULL)
         ui->retranslateUi(tempWidget);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"ui not loaded!");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"ui not loaded!");
 }
 
 void copyEngine::setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox)
@@ -763,7 +763,7 @@ void copyEngine::sendNewFilters()
 
 void copyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
@@ -774,7 +774,7 @@ void copyEngine::showRenamingRules()
     if(renamingRules==NULL)
     {
         QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"options not loaded");
         return;
     }
     renamingRules->exec();
@@ -785,9 +785,9 @@ void copyEngine::get_realBytesTransfered(quint64 realBytesTransfered)
     size_for_speed=realBytesTransfered;
 }
 
-void copyEngine::newActionInProgess(EngineActionInProgress action)
+void copyEngine::newActionInProgess(Ultracopier::EngineActionInProgress action)
 {
-    if(action==Idle)
+    if(action==Ultracopier::Idle)
     {
         timerProgression.stop();
         timerActionDone.stop();

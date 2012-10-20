@@ -39,9 +39,9 @@ public:
     void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
     //get mode allowed
     /// \brief define if can copy file, folder or both
-    CopyType getCopyType();
+    Ultracopier::CopyType getCopyType();
     /// \brief to return which kind of transfer list operation is supported
-    TransferListOperation getTransferListOperation();
+    Ultracopier::TransferListOperation getTransferListOperation();
     /// \brief define if can only copy, or copy and move
     bool canDoOnlyCopy();
     /// \brief to get the supported protocols for the source

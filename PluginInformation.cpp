@@ -55,7 +55,7 @@ QString PluginInformation::categoryToTranslation(PluginType category)
 			return tr("Themes");
 		break;
 		default:
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"cat translation not found");
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"cat translation not found");
 			return "Unknow";
 		break;
 	}
@@ -94,7 +94,7 @@ QString PluginInformation::getInformationText(PluginsAvailable plugin,QString in
 			return plugin.informations.at(index).last();
 		index++;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"information not found: "+informationName+", for: "+plugin.name+", cat: "+categoryToTranslation(plugin.category));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"information not found: "+informationName+", for: "+plugin.name+", cat: "+categoryToTranslation(plugin.category));
 	return "";
 }
 
@@ -120,7 +120,7 @@ QString PluginInformation::getTranslatedText(PluginsAvailable plugin,QString inf
 	}
 	#ifdef ULTRACOPIER_DEBUG
 	if(TextFound.isEmpty() || TextFound.isEmpty())
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"text is not found or empty for: "+informationName+", with the language: "+mainShortName+", for the plugin: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"text is not found or empty for: "+informationName+", with the language: "+mainShortName+", for the plugin: "+plugin.path);
 	#endif // ULTRACOPIER_DEBUG
 	return TextFound;
 }

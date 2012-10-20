@@ -14,7 +14,7 @@
 HelpDialog::HelpDialog() :
 	ui(new Ui::HelpDialog)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	ui->setupUi(this);
 	reloadTextValue();
 	#ifdef ULTRACOPIER_DEBUG
@@ -47,7 +47,7 @@ void HelpDialog::changeEvent(QEvent *e)
 	QDialog::changeEvent(e);
 	switch (e->type()) {
 	case QEvent::LanguageChange:
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 		ui->retranslateUi(this);
 		reloadTextValue();
 		break;
@@ -59,7 +59,7 @@ void HelpDialog::changeEvent(QEvent *e)
 /// \brief To reload the text value
 void HelpDialog::reloadTextValue()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	QString text=ui->label_ultracopier->text();
 	#ifdef ULTRACOPIER_VERSION_ULTIMATE
 	text=text.replace("%1",QString("Ultimate %1").arg(ULTRACOPIER_VERSION));

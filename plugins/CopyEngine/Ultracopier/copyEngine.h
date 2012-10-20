@@ -93,7 +93,7 @@ private:
     FolderExistsAction tempFolderExistsAction;
     FileExistsAction tempFileExistsAction;
     quint64 size_for_speed;//because direct access to list thread into the main thread can't be do
-    CopyMode			mode;
+    Ultracopier::CopyMode			mode;
     bool				forcedMode;
 
     bool doChecksum;
@@ -158,7 +158,7 @@ private slots:
     void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
     void showRenamingRules();
     void get_realBytesTransfered(quint64 realBytesTransfered);
-    void newActionInProgess(EngineActionInProgress);
+    void newActionInProgess(Ultracopier::EngineActionInProgress);
     void updateBufferCheckbox();
 public:
     /** \brief to send the options panel
@@ -233,10 +233,10 @@ public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface
      * Used by manual adding */
-    bool userAddFolder(const CopyMode &mode);
+    bool userAddFolder(const Ultracopier::CopyMode &mode);
     /** \brief add file called on the interface
      * Used by manual adding */
-    bool userAddFile(const CopyMode &mode);
+    bool userAddFile(const Ultracopier::CopyMode &mode);
     //action on the copy
     /// \brief put the transfer in pause
     void pause();
@@ -265,7 +265,7 @@ public slots:
     void moveItemsOnBottom(const QList<int> &ids);
 
     /** \brief give the forced mode, to export/import transfer list */
-    void forceMode(const CopyMode &mode);
+    void forceMode(const Ultracopier::CopyMode &mode);
     /// \brief export the transfer list into a file
     void exportTransferList();
     /// \brief import the transfer list into a file
@@ -337,7 +337,7 @@ signals:
     void signal_moveItemsDown(const QList<int> &ids);
     void signal_moveItemsOnBottom(const QList<int> &ids);
 
-    void signal_forceMode(const CopyMode &mode);
+    void signal_forceMode(const Ultracopier::CopyMode &mode);
     void signal_exportTransferList(const QString &fileName);
     void signal_importTransferList(const QString &fileName);
 
@@ -362,7 +362,7 @@ signals:
     void mkPath(const QString &path);*/
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source
-    void debugInformation(DebugLevel level,QString fonction,QString text,QString file,int ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
     #endif
 
     //other signals

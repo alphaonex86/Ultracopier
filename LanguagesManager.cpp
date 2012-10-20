@@ -13,7 +13,7 @@
 /// \brief Create the manager and load the defaults variables
 LanguagesManager::LanguagesManager()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	//load the overall instance
 	resources=ResourcesManager::getInstance();
 	options=OptionEngine::getInstance();
@@ -54,7 +54,7 @@ LanguagesManager::LanguagesManager()
 /// \brief Destroy the language manager
 LanguagesManager::~LanguagesManager()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	PluginsManager::destroyInstanceAtTheLastCall();
 	OptionEngine::destroyInstanceAtTheLastCall();
 	ResourcesManager::destroyInstanceAtTheLastCall();
@@ -63,17 +63,17 @@ LanguagesManager::~LanguagesManager()
 /// \brief load the language selected, return the main short code like en, fr, ..
 QString LanguagesManager::getTheRightLanguage()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	if(LanguagesAvailableList.size()==0)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"empty combobox list, failing back to english");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"empty combobox list, failing back to english");
 		return "en";
 	}
 	else
 	{
 		if(options->getOptionValue("Language","Language_autodetect").toBool())
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()));
 			QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));
 			if(tempLanguage!="")
 				return tempLanguage;
@@ -84,7 +84,7 @@ QString LanguagesManager::getTheRightLanguage()
 					return tempLanguage;
 				else
 				{
-					ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Autodetection of the language failed, QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language())+", QLocale::system().name(): "+QLocale::system().name()+", failing back to english");
+					ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Autodetection of the language failed, QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language())+", QLocale::system().name(): "+QLocale::system().name()+", failing back to english");
 					return options->getOptionValue("Language","Language").toString();
 				}
 			}
@@ -98,7 +98,7 @@ QString LanguagesManager::getTheRightLanguage()
 \param newLanguage Should be short name code found into informations.xml of language file */
 void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+newLanguage);
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+newLanguage);
 	//protection for re-set the same language
 	if(currentLanguage==newLanguage)
 		return;
@@ -151,12 +151,12 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 					int indexTranslationFile=0;
 					while(indexTranslationFile<fileToLoad.size())
 					{
-						ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Translation to load: "+fileToLoad.at(indexTranslationFile));
+						ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Translation to load: "+fileToLoad.at(indexTranslationFile));
 						temp=new QTranslator();
 						if(!temp->load(fileToLoad.at(indexTranslationFile)) || temp->isEmpty())
 						{
 							delete temp;
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to load the translation file: "+fileToLoad.at(indexTranslationFile));
+							ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: "+fileToLoad.at(indexTranslationFile));
 						}
 						else
 						{
@@ -175,7 +175,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 					{
 						if(!temp->load(LanguagesAvailableList.at(index).path+"qt.qm") || temp->isEmpty())
 						{
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to load the translation file: qt.qm, into: "+LanguagesAvailableList.at(index).path);
+							ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: qt.qm, into: "+LanguagesAvailableList.at(index).path);
 							delete temp;
 						}
 						else
@@ -186,20 +186,20 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 					}
 				}
 				currentLanguage=newLanguage;
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"emit newLanguageLoaded()");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newLanguageLoaded()");
 				emit newLanguageLoaded(currentLanguage);
 				return;
 			}
 			index++;
 		}
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"unable to found language: "+newLanguage+", LanguagesAvailableList.size(): "+QString::number(LanguagesAvailableList.size()));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to found language: "+newLanguage+", LanguagesAvailableList.size(): "+QString::number(LanguagesAvailableList.size()));
 	}
 }
 
 /// \brief check if short name is found into language
 QString LanguagesManager::getMainShortName(const QString &shortName)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	int index=0;
 	while(index<LanguagesAvailableList.size())
 	{
@@ -213,7 +213,7 @@ QString LanguagesManager::getMainShortName(const QString &shortName)
 /// \brief load the language in languagePath
 void LanguagesManager::allPluginIsLoaded()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	setCurrentLanguage(getTheRightLanguage());
 }
 
@@ -226,7 +226,7 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 {
 	if(plugin.category!=PluginType_Languages)
 		return;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	QDomElement child = plugin.categorySpecific.firstChildElement("fullName");
 	LanguagesAvailable temp;
 	if(!child.isNull() && child.isElement())
@@ -244,17 +244,17 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 	}
 	temp.path=plugin.path;
 	if(temp.fullName.isEmpty())
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"fullName empty for: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"fullName empty for: "+plugin.path);
 	else if(temp.path.isEmpty())
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"path empty for: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"path empty for: "+plugin.path);
 	else if(temp.mainShortName.isEmpty())
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"mainShortName empty for: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"mainShortName empty for: "+plugin.path);
 	else if(temp.shortName.size()<=0)
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"temp.shortName.size()<=0 for: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"temp.shortName.size()<=0 for: "+plugin.path);
 	else if(!QFile::exists(temp.path+"flag.png"))
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"flag file not found for: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flag file not found for: "+plugin.path);
 	else if(!QFile::exists(temp.path+"translation.qm") && temp.mainShortName!="en")
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"translation not found for: "+plugin.path);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"translation not found for: "+plugin.path);
 	else
 		LanguagesAvailableList<<temp;
 	if(plugins->allPluginHaveBeenLoaded())
@@ -263,7 +263,7 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 
 void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	int index=0;
 	while(index<LanguagesAvailableList.size())
 	{
@@ -279,7 +279,7 @@ void LanguagesManager::newOptionValue(const QString &group)
 {
 	if(group=="Language")
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"group: "+group);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"group: "+group);
 		setCurrentLanguage(getTheRightLanguage());
 	}
 }

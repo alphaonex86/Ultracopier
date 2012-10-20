@@ -23,44 +23,44 @@ class LogThread : public QThread, public GlobalClass
 {
     Q_OBJECT
 public:
-	explicit LogThread();
-	 ~LogThread();
+    explicit LogThread();
+     ~LogThread();
 public slots:
-	/** method called when new transfer is started */
-	void newTransferStart(const ItemOfCopyList &item);
-	/** method called when transfer is stopped */
-	void newTransferStop(const quint64 &id);
-	/** method called when new error is occurred */
-	void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
-	/** method called when the log file need be created */
-	void openLogs();
-	/** method called when the log file need be closed */
-	void closeLogs();
-	/** method called when one folder is removed */
-	void rmPath(const QString &path);
-	/** method called when one folder is created */
-	void mkPath(const QString &path);
+    /** method called when new transfer is started */
+    void newTransferStart(const Ultracopier::ItemOfCopyList &item);
+    /** method called when transfer is stopped */
+    void newTransferStop(const quint64 &id);
+    /** method called when new error is occurred */
+    void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
+    /** method called when the log file need be created */
+    void openLogs();
+    /** method called when the log file need be closed */
+    void closeLogs();
+    /** method called when one folder is removed */
+    void rmPath(const QString &path);
+    /** method called when one folder is created */
+    void mkPath(const QString &path);
 private slots:
-	/** \to write the data into the file */
-	void realDataWrite(const QString &text);
-	/** \to update the options value */
-	void newOptionValue(const QString &group,const QString &name,const QVariant &value);
+    /** \to write the data into the file */
+    void realDataWrite(const QString &text);
+    /** \to update the options value */
+    void newOptionValue(const QString &group,const QString &name,const QVariant &value);
 signals:
-	void newData(const QString &text);
+    void newData(const QString &text);
 private:
-	QString data;
-	QString transfer_format;
-	QString error_format;
-	QString folder_format;
-	QFile log;
-	QString replaceBaseVar(QString text);
-	bool sync;
-	bool enabled;
-	bool log_enable_transfer;
-	bool log_enable_error;
-	bool log_enable_folder;
+    QString data;
+    QString transfer_format;
+    QString error_format;
+    QString folder_format;
+    QFile log;
+    QString replaceBaseVar(QString text);
+    bool sync;
+    bool enabled;
+    bool log_enable_transfer;
+    bool log_enable_error;
+    bool log_enable_folder;
 protected:
-	void run();
+    void run();
 };
 
 #endif // LOGTHREAD_H

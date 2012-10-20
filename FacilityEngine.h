@@ -21,49 +21,49 @@ This class is used into some plugin like copy engine plugin, to all into one pla
 */
 class FacilityEngine : public FacilityInterface
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit FacilityEngine();
-	/// \brief convert size in Byte to String
-	QString sizeToString(const double &size);
-	/// \brief convert size unit to String
-	QString sizeUnitToString(const SizeUnit &sizeUnit);
-	/// \brief translate the text
-	QString translateText(const QString &text);
-	/// \brief speed to string in byte per seconds
-	QString speedToString(const double &speed);
-	/// \brief Decompose the time in second
-	TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds);
-	/// \brief have the fonctionnality
-	bool haveFunctionality(const QString &fonctionnality);
-	/// \brief call the fonctionnality
-	QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
-	/// \brief Do the simplified time
-	QString simplifiedRemainingTime(const quint32 &seconds);
+    explicit FacilityEngine();
+    /// \brief convert size in Byte to String
+    QString sizeToString(const double &size);
+    /// \brief convert size unit to String
+    QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit);
+    /// \brief translate the text
+    QString translateText(const QString &text);
+    /// \brief speed to string in byte per seconds
+    QString speedToString(const double &speed);
+    /// \brief Decompose the time in second
+    Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds);
+    /// \brief have the fonctionnality
+    bool haveFunctionality(const QString &fonctionnality);
+    /// \brief call the fonctionnality
+    QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
+    /// \brief Do the simplified time
+    QString simplifiedRemainingTime(const quint32 &seconds);
 private:
-	//undirect translated string
-	QString Translation_perSecond;
-	QString Translation_tooBig;
-	QString Translation_B;
-	QString Translation_KB;
-	QString Translation_MB;
-	QString Translation_GB;
-	QString Translation_TB;
-	QString Translation_PB;
-	QString Translation_EB;
-	QString Translation_ZB;
-	QString Translation_YB;
-	//simplified remaining time
-	QString Translation_SimplifiedRemaningTime_LessThan10s;
-	QString Translation_SimplifiedRemaningTime_AboutSeconds;
-	QString Translation_SimplifiedRemaningTime_AboutMinutes;
-	QString Translation_SimplifiedRemaningTime_AboutHours;
-	//internal fonction
-	QString adaptString(const float &nb);
-	QHash<QString,QString> translations;
+    //undirect translated string
+    QString Translation_perSecond;
+    QString Translation_tooBig;
+    QString Translation_B;
+    QString Translation_KB;
+    QString Translation_MB;
+    QString Translation_GB;
+    QString Translation_TB;
+    QString Translation_PB;
+    QString Translation_EB;
+    QString Translation_ZB;
+    QString Translation_YB;
+    //simplified remaining time
+    QString Translation_SimplifiedRemaningTime_LessThan10s;
+    QString Translation_SimplifiedRemaningTime_AboutSeconds;
+    QString Translation_SimplifiedRemaningTime_AboutMinutes;
+    QString Translation_SimplifiedRemaningTime_AboutHours;
+    //internal fonction
+    QString adaptString(const float &nb);
+    QHash<QString,QString> translations;
 public slots:
-	/// \brief To force the text re-translation
-	void retranslate();
+    /// \brief To force the text re-translation
+    void retranslate();
 };
 
 #endif // FACILITYENGINE_H

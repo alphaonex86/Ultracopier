@@ -13,15 +13,15 @@ Factory::Factory() :
 {
     qRegisterMetaType<TransferThread *>("TransferThread *");
     qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
-    qRegisterMetaType<EngineActionInProgress>("EngineActionInProgress");
-    qRegisterMetaType<DebugLevel>("DebugLevel");
+    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
+    qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
     qRegisterMetaType<FileExistsAction>("FileExistsAction");
     qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
     qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
     qRegisterMetaType<QList<int> >("QList<int>");
-    qRegisterMetaType<CopyMode>("CopyMode");
-    qRegisterMetaType<QList<returnActionOnCopyList> >("QList<returnActionOnCopyList>");
-    qRegisterMetaType<QList<ProgressionItem> >("QList<ProgressionItem>");
+    qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
+    qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
+    qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<Ultracopier::ProgressionItem>");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
@@ -34,7 +34,7 @@ Factory::Factory() :
     for (int i = 0; i < temp.size(); ++i) {
         mountSysPoint<<temp.at(i).filePath();
     }
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
     #elif defined (Q_OS_LINUX)
     connect(&mount,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),				this,&Factory::error);
     connect(&mount,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),				this,&Factory::finished);
@@ -101,7 +101,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
 
 void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
     this->facilityEngine=facilityInterface;
     Q_UNUSED(portableVersion);
     #ifndef ULTRACOPIER_PLUGIN_DEBUG
@@ -109,19 +109,19 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         Q_UNUSED(pluginPath);
     #endif
     #if ! defined (Q_CC_GNU)
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"Unable to change date time of files, only gcc is supported");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Unable to change date time of files, only gcc is supported");
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,COMPILERINFO);
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"MAX BUFFER BLOCK: "+QString::number(ULTRACOPIER_PLUGIN_MAXBUFFERBLOCK));
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"MIN TIMER INTERVAL: "+QString::number(ULTRACOPIER_PLUGIN_MINTIMERINTERVAL));
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"MAX TIMER INTERVAL: "+QString::number(ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL));
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"NUM SEM SPEED MANAGEMENT: "+QString::number(ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT));
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"MAX PARALLEL INODE OPT: "+QString::number(ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT));
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"MAX PARALLEL TRANFER: "+QString::number(ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX BUFFER BLOCK: "+QString::number(ULTRACOPIER_PLUGIN_MAXBUFFERBLOCK));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MIN TIMER INTERVAL: "+QString::number(ULTRACOPIER_PLUGIN_MINTIMERINTERVAL));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX TIMER INTERVAL: "+QString::number(ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"NUM SEM SPEED MANAGEMENT: "+QString::number(ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX PARALLEL INODE OPT: "+QString::number(ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX PARALLEL TRANFER: "+QString::number(ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER));
     #if defined (ULTRACOPIER_PLUGIN_CHECKLISTTYPE)
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"CHECK LIST TYPE set");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE set");
     #else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"CHECK LIST TYPE not set");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE not set");
     #endif
     if(options!=NULL)
     {
@@ -198,14 +198,14 @@ QStringList Factory::supportedProtocolsForTheDestination()
     return QStringList() << "file";
 }
 
-CopyType Factory::getCopyType()
+Ultracopier::CopyType Factory::getCopyType()
 {
-    return FileAndFolder;
+    return Ultracopier::FileAndFolder;
 }
 
-TransferListOperation Factory::getTransferListOperation()
+Ultracopier::TransferListOperation Factory::getTransferListOperation()
 {
-    return TransferListOperation_ImportExport;
+    return Ultracopier::TransferListOperation_ImportExport;
 }
 
 bool Factory::canDoOnlyCopy()
@@ -219,20 +219,20 @@ void Factory::error(QProcess::ProcessError error)
         Q_UNUSED(error)
     #endif
     errorFound=true;
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"have detected error: "+QString::number(error));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"have detected error: "+QString::number(error));
 }
 
 void Factory::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"exitCode: "+QString::number(exitCode)+", exitStatus: "+QString::number(exitStatus));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"exitCode: "+QString::number(exitCode)+", exitStatus: "+QString::number(exitStatus));
     #ifndef ULTRACOPIER_PLUGIN_DEBUG
         Q_UNUSED(exitCode)
         Q_UNUSED(exitStatus)
     #endif
     if(!StandardError.isEmpty())
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"have finished with text on error output: "+StandardError);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"have finished with text on error output: "+StandardError);
     else if(errorFound)
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"have finished with error and no text");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"have finished with error and no text");
     {
         QStringList tempList=StandardOutput.split(QRegularExpression("[\n\r]+"));
         int index=0;
@@ -247,7 +247,7 @@ void Factory::finished(int exitCode, QProcess::ExitStatus exitStatus)
             index++;
         }
         mountSysPoint.removeDuplicates();
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
     }
 }
 
@@ -273,43 +273,43 @@ QWidget * Factory::options()
 
 void Factory::setDoRightTransfer(bool doRightTransfer)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("doRightTransfer",doRightTransfer);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::setKeepDate(bool keepDate)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("keepDate",keepDate);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::setBlockSize(int blockSize)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("blockSize",blockSize);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::setAutoStart(bool autoStart)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("autoStart",autoStart);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::newLanguageLoaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, retranslate the widget options");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, retranslate the widget options");
     ui->retranslateUi(tempWidget);
     if(optionsEngine!=NULL)
     {
@@ -321,49 +321,49 @@ void Factory::newLanguageLoaded()
 
 void Factory::doChecksum_toggled(bool doChecksum)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("doChecksum",doChecksum);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checksumOnlyOnError",checksumOnlyOnError);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::osBuffer_toggled(bool osBuffer)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBuffer",osBuffer);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void Factory::osBufferLimited_toggled(bool osBufferLimited)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBufferLimited",osBufferLimited);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void Factory::osBufferLimit_editingFinished()
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the spinbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBufferLimit",ui->osBufferLimit->value());
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::showFilterDialog()
@@ -371,7 +371,7 @@ void Factory::showFilterDialog()
     if(optionsEngine==NULL)
     {
         QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"options not loaded");
         return;
     }
     filters->exec();
@@ -379,7 +379,7 @@ void Factory::showFilterDialog()
 
 void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     if(optionsEngine!=NULL)
     {
         optionsEngine->setOptionValue("includeStrings",includeStrings);
@@ -388,19 +388,19 @@ void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList
         optionsEngine->setOptionValue("excludeOptions",excludeOptions);
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"new filter");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     if(optionsEngine!=NULL)
     {
         optionsEngine->setOptionValue("firstRenamingRule",firstRenamingRule);
         optionsEngine->setOptionValue("otherRenamingRule",otherRenamingRule);
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::showRenamingRules()
@@ -408,7 +408,7 @@ void Factory::showRenamingRules()
     if(optionsEngine==NULL)
     {
         QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"options not loaded");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"options not loaded");
         return;
     }
     renamingRules->exec();
@@ -422,9 +422,9 @@ void Factory::updateBufferCheckbox()
 
 void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checksumIgnoreIfImpossible",checksumIgnoreIfImpossible);
     else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

@@ -25,13 +25,13 @@ LocalListener::~LocalListener()
 	{
 		localServer.close();
 		if(!QLocalServer::removeServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable to remove the listening server"));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to remove the listening server"));
 	}
 }
 
 bool LocalListener::tryConnect()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	QStringList ultracopierArguments=QCoreApplication::arguments();
 	//remove excutable path because is useless (unsafe to use)
 	ultracopierArguments.removeFirst();
@@ -43,14 +43,14 @@ bool LocalListener::tryConnect()
 	{
 		if(!localSocket.isValid())
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"localSocket is not valid!");
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"localSocket is not valid!");
 			return false;
 		}
 		emit cli(ultracopierArguments,false,true);
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"connection succes, number arguments given: "+QString::number(ultracopierArguments.size()));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"connection succes, number arguments given: "+QString::number(ultracopierArguments.size()));
 		#ifdef ULTRACOPIER_DEBUG
 		for (int i = 0; i < ultracopierArguments.size(); ++i) {
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"argument["+QString::number(i)+"]: "+ultracopierArguments.at(i));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"argument["+QString::number(i)+"]: "+ultracopierArguments.at(i));
 		}
 		#endif // ULTRACOPIER_DEBUG
 		//cut string list and send it as block of 32KB
@@ -72,33 +72,33 @@ bool LocalListener::tryConnect()
 			byteWriten = localSocket.write(blockToSend);
 			#ifdef ULTRACOPIER_DEBUG
 			if(!localSocket.isValid())
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"localSocket is not valid!");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"localSocket is not valid!");
 			if(localSocket.errorString()!="Unknown error" && localSocket.errorString()!="")
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"localSocket->errorString(): "+localSocket.errorString());
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"localSocket->errorString(): "+localSocket.errorString());
 			if(blockToSend.size()!=byteWriten)
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"blockToSend("+QString::number(blockToSend.size())+")!=byteWriten("+QString::number(byteWriten)+")");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"blockToSend("+QString::number(blockToSend.size())+")!=byteWriten("+QString::number(byteWriten)+")");
 			#endif // ULTRACOPIER_DEBUG
 			if(localSocket.waitForBytesWritten(200))
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Block send correctly");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Block send correctly");
 			}
 			else
 			{
 				QMessageBox::critical(NULL,"Alert","No arguments send because timeout detected!");
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"Block not send correctly");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Block not send correctly");
 			}
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"blockToSend: "+QString(blockToSend.toHex()));
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"byteWriten: "+QString::number(byteWriten)+", size sending: "+QString::number(blockToSend.size()));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"blockToSend: "+QString(blockToSend.toHex()));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"byteWriten: "+QString::number(byteWriten)+", size sending: "+QString::number(blockToSend.size()));
 		}
 		while(block.size());
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"disconnect the socket");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"disconnect the socket");
 		localSocket.disconnectFromServer();
 		return true;
 	}
 	else
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"connection failed, continu...");
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"connection failed, continu...");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 		return false;
 	}
 }
@@ -107,11 +107,11 @@ bool LocalListener::tryConnect()
 void LocalListener::listenServer()
 {
 	if(!QLocalServer::removeServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Unable to remove the listening server"));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to remove the listening server"));
 	if(!localServer.listen(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
 	{
 		QMessageBox::critical(NULL,"Alert",QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
 	}
 	else
 		connect(&localServer, &QLocalServer::newConnection, this, &LocalListener::newConnexion);
@@ -120,27 +120,27 @@ void LocalListener::listenServer()
 //the time is done
 void LocalListener::timeoutDectected()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"start");
 	while(clientList.size()>0)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"clientList.first().size: "+QString::number(clientList.first().size));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"clientList.first().size: "+QString::number(clientList.first().size));
 		clientList.removeFirst();
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Timeout while recomposing data from connected clients");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Timeout while recomposing data from connected clients");
 	QMessageBox::warning(NULL,tr("Warning"),tr("Timeout while recomposing data from connected clients"));
 }
 
 /// \brief Data is incomming
 void LocalListener::dataIncomming()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start");
 	// 1 : we get packets from client
 
 	//Which client send the message (Search of the QLocalSocket of client)
 	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
 	if (socket == 0) // If not found
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"bad socket");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"bad socket");
 		return;
 	}
 
@@ -149,12 +149,12 @@ void LocalListener::dataIncomming()
 		if(clientList.at(i).socket==socket)
 			index=i;
 	}
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"socket->bytesAvailable() "+QString::number(socket->bytesAvailable()));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable() "+QString::number(socket->bytesAvailable()));
 	if(index!=-1)
 	{
 		if(!clientList.at(index).haveData)
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"tempComposed index found, but no have data, create new entry");
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed index found, but no have data, create new entry");
 			// If all is ok we get the message
 			QDataStream in(socket);
 			in.setVersion(QDataStream::Qt_4_4);
@@ -162,7 +162,7 @@ void LocalListener::dataIncomming()
 			if (socket->bytesAvailable() < (int)sizeof(quint32)*2) // We have not receveive all the message, ignore because first int is cuted!
 			{
 				/*socket->readAll();
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"wrong size for set the message size");*/
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"wrong size for set the message size");*/
 				return;
 			}
 			in >> clientList[index].size; // Store the size of the message
@@ -174,34 +174,34 @@ void LocalListener::dataIncomming()
 				clientList[index].haveData=true;
 				clientList[index].data.append(socket->readAll());
 				TimeOutQLocalSocket.start();
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Need wait to recomposite: "+QString::number(clientList.at(index).data.size())+", targeted: "+QString::number(clientList.at(index).size));
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"tempComposed.data: "+QString(clientList.at(index).data.toHex()));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+QString::number(clientList.at(index).data.size())+", targeted: "+QString::number(clientList.at(index).size));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed.data: "+QString(clientList.at(index).data.toHex()));
 			}
 			else if(socket->bytesAvailable() == clientList.at(index).size) //if the size match
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"socket->bytesAvailable(): "+QString::number(socket->bytesAvailable())+", for total of: "+QString::number(socket->bytesAvailable()+sizeof(quint32)));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+QString::number(socket->bytesAvailable())+", for total of: "+QString::number(socket->bytesAvailable()+sizeof(quint32)));
 				QStringList ultracopierArguments;
 				in >> ultracopierArguments;
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 				emit cli(ultracopierArguments,true,false);
 				clientList[index].data.clear();
 				clientList[index].haveData=false;
 			}
 			else
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"socket->bytesAvailable(): "+QString::number(socket->bytesAvailable())+" > clientList.at(index).size!: "+QString::number(clientList.at(index).size));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+QString::number(socket->bytesAvailable())+" > clientList.at(index).size!: "+QString::number(clientList.at(index).size));
 		}
 		else
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Query recomposed with this size: "+QString::number(clientList.at(index).data.size()));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Query recomposed with this size: "+QString::number(clientList.at(index).data.size()));
 			clientList[index].data.append(socket->readAll());
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Query recomposed with this size: "+QString::number(clientList.at(index).data.size()));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Query recomposed with this size: "+QString::number(clientList.at(index).data.size()));
 			if(clientList.at(index).data.size()==clientList.at(index).size)
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"QByteArray reconstruction finished");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"QByteArray reconstruction finished");
 				QDataStream in(clientList.at(index).data);
 				QStringList ultracopierArguments;
 				in >> ultracopierArguments;
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
 				emit cli(ultracopierArguments,true,false);
 				clientList[index].data.clear();
 				clientList[index].haveData=false;
@@ -209,20 +209,20 @@ void LocalListener::dataIncomming()
 			else
 			{
 				TimeOutQLocalSocket.start();
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"Need wait to recomposite: "+QString::number(clientList.at(index).data.size())+", targeted: "+QString::number(clientList.at(index).size));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+QString::number(clientList.at(index).data.size())+", targeted: "+QString::number(clientList.at(index).size));
 				return;
 			}
 		}
 	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Socket not found???");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Socket not found???");
 }
 
 /// \brief Deconnexion client
 /// \todo Remove the data in wait linker with this socket
 void LocalListener::deconnectClient()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 
 	// Wich client leave
 	QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
@@ -238,7 +238,7 @@ void LocalListener::deconnectClient()
 /// LocalListener New connexion
 void LocalListener::newConnexion()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start");
 	composedData newClient;
 	newClient.socket = localServer.nextPendingConnection();
 	#ifdef ULTRACOPIER_DEBUG
@@ -262,9 +262,9 @@ void LocalListener::error(QLocalSocket::LocalSocketError theErrorDefine)
 	{
 		QLocalSocket *client=qobject_cast<QLocalSocket *>(QObject::sender());
 		if(client!=NULL)
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Value:"+QString::number(theErrorDefine)+", Error message: "+client->errorString());
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Value:"+QString::number(theErrorDefine)+", Error message: "+client->errorString());
 		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Value:"+QString::number(theErrorDefine));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Value:"+QString::number(theErrorDefine));
 	}
 }
 #endif
@@ -272,7 +272,7 @@ void LocalListener::error(QLocalSocket::LocalSocketError theErrorDefine)
 /// \can now parse the cli
 void LocalListener::allPluginIsloaded()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	QStringList ultracopierArguments=QCoreApplication::arguments();
 	//remove excutable path because is useless (unsafe to use)
 	ultracopierArguments.removeFirst();

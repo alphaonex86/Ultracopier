@@ -18,7 +18,7 @@ MkPath::~MkPath()
 
 void MkPath::addPath(const QString &path)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path);
 	if(stopIt)
 		return;
 	emit internalStartAddPath(path);
@@ -26,13 +26,13 @@ void MkPath::addPath(const QString &path)
 
 void MkPath::skip()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	emit internalStartSkip();
 }
 
 void MkPath::retry()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	emit internalStartRetry();
 }
 
@@ -49,7 +49,7 @@ void MkPath::internalDoThisPath()
 {
 	if(waitAction || pathList.isEmpty())
 		return;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+pathList.first());
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pathList.first());
 	if(!dir.exists(pathList.first()))
 		if(!dir.mkpath(pathList.first()))
 		{
@@ -58,7 +58,7 @@ void MkPath::internalDoThisPath()
 				if(stopIt)
 					return;
 				waitAction=true;
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
 				emit errorOnFolder(pathList.first(),tr("Unable to create the folder"));
 				return;
 			}
@@ -70,7 +70,7 @@ void MkPath::internalDoThisPath()
 
 void MkPath::internalAddPath(const QString &path)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+path);
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path);
 	pathList << path;
 	if(!waitAction)
 		checkIfCanDoTheNext();
@@ -84,7 +84,7 @@ void MkPath::checkIfCanDoTheNext()
 
 void MkPath::internalSkip()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	waitAction=false;
 	pathList.removeFirst();
 	emit firstFolderFinish();
@@ -93,7 +93,7 @@ void MkPath::internalSkip()
 
 void MkPath::internalRetry()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	waitAction=false;
 	checkIfCanDoTheNext();
 }

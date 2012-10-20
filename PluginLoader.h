@@ -32,46 +32,46 @@ namespace Ui {
   */
 class PluginLoader : public QObject, GlobalClass
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit PluginLoader(OptionDialog *optionDialog);
-	~PluginLoader();
-	/** \brief to rended the state */
-	void resendState();
-	/** \brief should load plugin into file manager if needed */
-	void load();
-	/** \brief should unload plugin into file manager */
-	void unload();
+    explicit PluginLoader(OptionDialog *optionDialog);
+    ~PluginLoader();
+    /** \brief to rended the state */
+    void resendState();
+    /** \brief should load plugin into file manager if needed */
+    void load();
+    /** \brief should unload plugin into file manager */
+    void unload();
 private slots:
-	void onePluginAdded(const PluginsAvailable &plugin);
-	void onePluginWillBeRemoved(const PluginsAvailable &plugin);
-	#ifdef ULTRACOPIER_DEBUG
-	void debugInformation(DebugLevel level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
-	#endif // ULTRACOPIER_DEBUG
-	void allPluginIsloaded();
-	void newState(const CatchState &state);
+    void onePluginAdded(const PluginsAvailable &plugin);
+    void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+    #ifdef ULTRACOPIER_DEBUG
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
+    #endif // ULTRACOPIER_DEBUG
+    void allPluginIsloaded();
+    void newState(const Ultracopier::CatchState &state);
 private:
-	//variable
-	struct LocalPlugin
-	{
-		PluginInterface_PluginLoader * PluginLoaderInterface;
-		QPluginLoader * pluginLoader;
-		CatchState state;
-		QString path;
-		bool inWaitOfReply;
-		LocalPluginOptions *options;
-	};
-	QList<LocalPlugin> pluginList;
-	bool needEnable;
-	//temp variable
-	int index,loop_size;
-	CatchState last_state;
-	bool last_have_plugin,last_inWaitOfReply;
-	void sendState(bool force=false);
-	OptionDialog *optionDialog;
+    //variable
+    struct LocalPlugin
+    {
+        PluginInterface_PluginLoader * PluginLoaderInterface;
+        QPluginLoader * pluginLoader;
+        Ultracopier::CatchState state;
+        QString path;
+        bool inWaitOfReply;
+        LocalPluginOptions *options;
+    };
+    QList<LocalPlugin> pluginList;
+    bool needEnable;
+    //temp variable
+    int index,loop_size;
+    Ultracopier::CatchState last_state;
+    bool last_have_plugin,last_inWaitOfReply;
+    void sendState(bool force=false);
+    OptionDialog *optionDialog;
 signals:
-	void pluginLoaderReady(CatchState state,bool havePlugin,bool someAreInWaitOfReply);
-	void previouslyPluginAdded(PluginsAvailable);
+    void pluginLoaderReady(Ultracopier::CatchState state,bool havePlugin,bool someAreInWaitOfReply);
+    void previouslyPluginAdded(PluginsAvailable);
 };
 
 #endif // PluginLoader_H

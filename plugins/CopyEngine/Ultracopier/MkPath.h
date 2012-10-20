@@ -18,38 +18,38 @@
 /// \brief Make the path given as queued mkpath
 class MkPath : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit MkPath();
-	~MkPath();
-	/// \brief add path to make
-	void addPath(const QString &path);
+    explicit MkPath();
+    ~MkPath();
+    /// \brief add path to make
+    void addPath(const QString &path);
 signals:
-	void errorOnFolder(const QFileInfo &,const QString &);
-	void firstFolderFinish();
-	void internalStartAddPath(const QString &path);
-	void internalStartDoThisPath();
-	void internalStartSkip();
-	void internalStartRetry();
-	void debugInformation(const DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+    void errorOnFolder(const QFileInfo &,const QString &);
+    void firstFolderFinish();
+    void internalStartAddPath(const QString &path);
+    void internalStartDoThisPath();
+    void internalStartSkip();
+    void internalStartRetry();
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 public slots:
-	/// \brief skip after creation error
-	void skip();
-	/// \brief retry after creation error
-	void retry();
+    /// \brief skip after creation error
+    void skip();
+    /// \brief retry after creation error
+    void retry();
 private:
-	void run();
-	bool waitAction;
-	bool stopIt;
-	bool skipIt;
-	QStringList pathList;
-	void checkIfCanDoTheNext();
-	QDir dir;
+    void run();
+    bool waitAction;
+    bool stopIt;
+    bool skipIt;
+    QStringList pathList;
+    void checkIfCanDoTheNext();
+    QDir dir;
 private slots:
-	void internalDoThisPath();
-	void internalAddPath(const QString &path);
-	void internalSkip();
-	void internalRetry();
+    void internalDoThisPath();
+    void internalAddPath(const QString &path);
+    void internalSkip();
+    void internalRetry();
 };
 
 #endif // MKPATH_H
