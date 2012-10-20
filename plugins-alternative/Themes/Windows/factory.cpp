@@ -17,8 +17,8 @@ Factory::Factory()
 
 PluginInterface_Themes * Factory::getInstance()
 {
-    PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);
-    connect(this,SIGNAL(reloadLanguage()),newInterface,SLOT(newLanguageLoaded()));
+    Themes * newInterface=new Themes(facilityEngine);
+    connect(this,&Factory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
     return newInterface;
 }
 

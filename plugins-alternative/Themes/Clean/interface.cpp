@@ -22,12 +22,12 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
     ui->toolButton->setMenu(menu);
     updateModeAndType();
 
-    connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-    connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-    connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-    connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-    connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-    connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
+    connect(ui->actionAddFile,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFile);
+    connect(ui->actionAddFileToCopy,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFileToCopy);
+    connect(ui->actionAddFileToMove,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFileToMove);
+    connect(ui->actionAddFolderToCopy,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFolderToCopy);
+    connect(ui->actionAddFolderToMove,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFolderToMove);
+    connect(ui->actionAddFolder,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFolder);
 }
 
 InterfacePlugin::~InterfacePlugin()

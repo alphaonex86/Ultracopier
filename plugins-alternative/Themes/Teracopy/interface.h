@@ -22,7 +22,7 @@ namespace Ui {
 }
 
 /// \brief Define the interface
-class InterfacePlugin : public PluginInterface_Themes
+class Themes : public PluginInterface_Themes
 {
     Q_OBJECT
 private:
@@ -97,8 +97,8 @@ public:
     /** \brief the max speed used
      * in byte per seconds, -1 if not able, 0 if disabled */
     bool setSpeedLimitation(const qint64 &speedLimitation);
-    InterfacePlugin(FacilityInterface * facilityEngine);
-    ~InterfacePlugin();
+    Themes(FacilityInterface * facilityEngine);
+    ~Themes();
     //get information about the copy
     /// \brief show the general progression
     void setGeneralProgression(const quint64 &current,const quint64 &total);

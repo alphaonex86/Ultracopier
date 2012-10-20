@@ -113,6 +113,7 @@ private slots:
     void searchBoxShortcut();
     //hilight the search
     void hilightTheSearch(bool searchNext=false);
+    void hilightTheSearchSlot();
     //auto connect
     void on_pushButtonSearchPrev_clicked();
     void on_pushButtonSearchNext_clicked();

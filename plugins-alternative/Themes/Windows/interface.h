@@ -19,7 +19,7 @@ namespace Ui {
 }
 
 /// \brief Define the interface
-class InterfacePlugin : public PluginInterface_Themes
+class Themes : public PluginInterface_Themes
 {
     Q_OBJECT
 public slots:
@@ -124,8 +124,8 @@ signals:
     void newSpeedLimitation(qint64);*/
 public:
     //constructor and destructor
-    InterfacePlugin(FacilityInterface * facilityEngine);
-    ~InterfacePlugin();
+    Themes(FacilityInterface * facilityEngine);
+    ~Themes();
 private:
     Ui::interface *ui;
     TransferModel transferModel;

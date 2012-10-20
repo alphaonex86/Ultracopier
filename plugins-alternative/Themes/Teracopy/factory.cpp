@@ -9,9 +9,11 @@
 PluginInterface_Themes * Factory::getInstance()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);
-    connect(newInterface,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
-    connect(this,SIGNAL(reloadLanguage()),newInterface,SLOT(newLanguageLoaded()));
+    Themes * newInterface=new Themes(facilityEngine);
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation);
+    #endif
+    connect(this,&Factory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
     return newInterface;
 }
 

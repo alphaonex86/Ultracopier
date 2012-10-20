@@ -182,8 +182,8 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
         ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
 
-        connect(ui->osBufferLimited,SIGNAL(toggled(bool)),this,SLOT(updateBufferCheckbox()));
-        connect(ui->osBuffer,SIGNAL(toggled(bool)),this,SLOT(updateBufferCheckbox()));
+        connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
+        connect(ui->osBuffer,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
         updateBufferCheckbox();
     }
 }

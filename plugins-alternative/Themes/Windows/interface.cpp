@@ -8,7 +8,7 @@
 #include "factory.h"
 #include "ui_interface.h"
 
-InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
+Themes::Themes(FacilityInterface * facilityEngine) :
     ui(new Ui::interface())
 {
     ui->setupUi(this);
@@ -25,59 +25,59 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
     ui->toolButton->setMenu(menu);
     updateModeAndType();
 
-    connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-    connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-    connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-    connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-    connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-    connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
+    connect(ui->actionAddFile,&QAction::triggered,this,&Themes::forcedModeAddFile);
+    connect(ui->actionAddFileToCopy,&QAction::triggered,this,&Themes::forcedModeAddFileToCopy);
+    connect(ui->actionAddFileToMove,&QAction::triggered,this,&Themes::forcedModeAddFileToMove);
+    connect(ui->actionAddFolderToCopy,&QAction::triggered,this,&Themes::forcedModeAddFolderToCopy);
+    connect(ui->actionAddFolderToMove,&QAction::triggered,this,&Themes::forcedModeAddFolderToMove);
+    connect(ui->actionAddFolder,&QAction::triggered,this,&Themes::forcedModeAddFolder);
 
     updateDetails();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+    connect(&transferModel,&TransferModel::debugInformation,this,&Themes::debugInformation);
     #endif
     #ifndef Q_OS_WIN32
     ui->widget_bottom->setStyleSheet("background-color: rgb(237, 237, 237);");
     #endif
 }
 
-InterfacePlugin::~InterfacePlugin()
+Themes::~Themes()
 {
     delete menu;
 }
 
-void InterfacePlugin::forcedModeAddFile()
+void Themes::forcedModeAddFile()
 {
     emit userAddFile(mode);
 }
 
-void InterfacePlugin::forcedModeAddFolder()
+void Themes::forcedModeAddFolder()
 {
     emit userAddFolder(mode);
 }
 
-void InterfacePlugin::forcedModeAddFileToCopy()
+void Themes::forcedModeAddFileToCopy()
 {
     emit userAddFile(Ultracopier::Copy);
 }
 
-void InterfacePlugin::forcedModeAddFolderToCopy()
+void Themes::forcedModeAddFolderToCopy()
 {
     emit userAddFolder(Ultracopier::Copy);
 }
 
-void InterfacePlugin::forcedModeAddFileToMove()
+void Themes::forcedModeAddFileToMove()
 {
     emit userAddFile(Ultracopier::Move);
 }
 
-void InterfacePlugin::forcedModeAddFolderToMove()
+void Themes::forcedModeAddFolderToMove()
 {
     emit userAddFolder(Ultracopier::Move);
 }
 
-void InterfacePlugin::updateModeAndType()
+void Themes::updateModeAndType()
 {
     menu->clear();
     if(modeIsForced)
@@ -98,37 +98,37 @@ void InterfacePlugin::updateModeAndType()
     }
 }
 
-void InterfacePlugin::closeEvent(QCloseEvent *event)
+void Themes::closeEvent(QCloseEvent *event)
 {
     event->ignore();
     this->hide();
     emit cancel();
 }
 
-void InterfacePlugin::detectedSpeed(const quint64 &speed)
+void Themes::detectedSpeed(const quint64 &speed)
 {
     this->speed=speed;
     if(ui->more->isChecked())
         ui->label_speed->setText(facilityEngine->speedToString(speed));
 }
 
-QWidget * InterfacePlugin::getOptionsEngineWidget()
+QWidget * Themes::getOptionsEngineWidget()
 {
         return NULL;
 }
 
-void InterfacePlugin::getOptionsEngineEnabled(const bool &isEnabled)
+void Themes::getOptionsEngineEnabled(const bool &isEnabled)
 {
         Q_UNUSED(isEnabled)
 }
 
-void InterfacePlugin::setCopyType(const Ultracopier::CopyType &type)
+void Themes::setCopyType(const Ultracopier::CopyType &type)
 {
     this->type=type;
     updateModeAndType();
 }
 
-void InterfacePlugin::forceCopyMode(const Ultracopier::CopyMode &mode)
+void Themes::forceCopyMode(const Ultracopier::CopyMode &mode)
 {
     modeIsForced=true;
     this->mode=mode;
@@ -136,12 +136,12 @@ void InterfacePlugin::forceCopyMode(const Ultracopier::CopyMode &mode)
     updateInformations();
 }
 
-void InterfacePlugin::updateTitle()
+void Themes::updateTitle()
 {
     remainingTime(remainingSeconds);
 }
 
-void InterfacePlugin::actionInProgess(const Ultracopier::EngineActionInProgress &action)
+void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
 {
     this->action=action;
     switch(action)
@@ -173,23 +173,23 @@ void InterfacePlugin::actionInProgess(const Ultracopier::EngineActionInProgress 
     }
 }
 
-void InterfacePlugin::newTransferStart(const Ultracopier::ItemOfCopyList &item)
+void Themes::newTransferStart(const Ultracopier::ItemOfCopyList &item)
 {
     ui->text->setText(item.sourceFullPath);
 }
 
-void InterfacePlugin::newTransferStop(const quint64 &id)
+void Themes::newTransferStop(const quint64 &id)
 {
     Q_UNUSED(id)
 }
 
-void InterfacePlugin::newFolderListing(const QString &path)
+void Themes::newFolderListing(const QString &path)
 {
     if(action==Ultracopier::Listing)
         ui->text->setText(path);
 }
 
-void InterfacePlugin::remainingTime(const int &remainingSeconds)
+void Themes::remainingTime(const int &remainingSeconds)
 {
     this->remainingSeconds=remainingSeconds;
 
@@ -207,84 +207,84 @@ void InterfacePlugin::remainingTime(const int &remainingSeconds)
         updateInformations();
 }
 
-void InterfacePlugin::newCollisionAction(const QString &action)
+void Themes::newCollisionAction(const QString &action)
 {
     Q_UNUSED(action)
 }
 
-void InterfacePlugin::newErrorAction(const QString &action)
+void Themes::newErrorAction(const QString &action)
 {
     Q_UNUSED(action)
 }
 
-void InterfacePlugin::errorDetected()
+void Themes::errorDetected()
 {
 }
 
-void InterfacePlugin::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
+void Themes::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
 {
     Q_UNUSED(transferListOperation)
 }
 
 //speed limitation
-bool InterfacePlugin::setSpeedLimitation(const qint64 &speedLimitation)
+bool Themes::setSpeedLimitation(const qint64 &speedLimitation)
 {
     Q_UNUSED(speedLimitation)
         return false;
 }
 
 //get information about the copy
-void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64 &total)
+void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 {
     progression_current=current;
     progression_total=total;
     ui->progressBar->setValue(((double)current/total)*65535);
 }
 
-void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &list)
+void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)
 {
     Q_UNUSED(list)
 }
 
-void InterfacePlugin::setErrorAction(const QList<QPair<QString,QString> > &list)
+void Themes::setErrorAction(const QList<QPair<QString,QString> > &list)
 {
     Q_UNUSED(list)
 }
 
 //edit the transfer list
-void InterfacePlugin::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &returnActions)
+void Themes::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &returnActions)
 {
     transferModel.synchronizeItems(returnActions);
     updateInformations();
 }
 
-void InterfacePlugin::haveExternalOrder()
+void Themes::haveExternalOrder()
 {
     ui->toolButton->hide();
 }
 
-void InterfacePlugin::isInPause(const bool &isInPause)
+void Themes::isInPause(const bool &isInPause)
 {
     //resume in auto the pause
     if(isInPause)
         emit resume();
 }
 
-void InterfacePlugin::newLanguageLoaded()
+void Themes::newLanguageLoaded()
 {
     ui->retranslateUi(this);
     updateTitle();
     updateInformations();
 }
 
-void InterfacePlugin::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
+void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
 {
     QList<Ultracopier::ProgressionItem> progressionListBis=progressionList;
     transferModel.setFileProgression(progressionListBis);
     updateInformations();
 }
 
-InterfacePlugin::currentTransfertItem InterfacePlugin::getCurrentTransfertItem()
+Themes::currentTransfertItem Themes::getCurrentTransfertItem()
 {
     currentTransfertItem returnItem;
     returnItem.haveItem=InternalRunningOperation.size()>0;
@@ -324,14 +324,14 @@ InterfacePlugin::currentTransfertItem InterfacePlugin::getCurrentTransfertItem()
 }
 
 
-void InterfacePlugin::on_more_toggled(bool checked)
+void Themes::on_more_toggled(bool checked)
 {
     Q_UNUSED(checked);
     updateDetails();
     updateInformations();
 }
 
-void InterfacePlugin::updateDetails()
+void Themes::updateDetails()
 {
     ui->text->setHidden(ui->more->isChecked());
     ui->details->setHidden(!ui->more->isChecked());
@@ -356,7 +356,7 @@ void InterfacePlugin::updateDetails()
     updateInformations();
 }
 
-void InterfacePlugin::updateInformations()
+void Themes::updateInformations()
 {
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(!modeIsForced)

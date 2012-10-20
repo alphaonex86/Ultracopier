@@ -33,15 +33,15 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     isInPause(false);
     modeIsForced	= false;
     haveStarted	= false;
-    connect(ui->limitSpeed,		SIGNAL(valueChanged(int)),	this,	SLOT(uiUpdateSpeed()));
-    connect(ui->checkBox_limitSpeed,SIGNAL(toggled(bool)),		this,	SLOT(uiUpdateSpeed()));
+    connect(ui->limitSpeed,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uiUpdateSpeed);
+    connect(ui->checkBox_limitSpeed,&QAbstractButton::toggled,		this,	&Themes::uiUpdateSpeed);
 
-    connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-    connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-    connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-    connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-    connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-    connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
+    connect(ui->actionAddFile,&QAction::triggered,this,&Themes::forcedModeAddFile);
+    connect(ui->actionAddFileToCopy,&QAction::triggered,this,&Themes::forcedModeAddFileToCopy);
+    connect(ui->actionAddFileToMove,&QAction::triggered,this,&Themes::forcedModeAddFileToMove);
+    connect(ui->actionAddFolderToCopy,&QAction::triggered,this,&Themes::forcedModeAddFolderToCopy);
+    connect(ui->actionAddFolderToMove,&QAction::triggered,this,&Themes::forcedModeAddFolderToMove);
+    connect(ui->actionAddFolder,&QAction::triggered,this,&Themes::forcedModeAddFolder);
 
     //setup the search part
     closeTheSearchBox();
@@ -53,11 +53,11 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     searchShortcut3 = new QShortcut(QKeySequence("Escape"),this);//Qt::Key_Escape
 
     //connect the search part
-    connect(TimerForSearch,			SIGNAL(timeout()),	this,	SLOT(hilightTheSearch()));
-    connect(searchShortcut,			SIGNAL(activated()),	this,	SLOT(searchBoxShortcut()));
-    connect(searchShortcut2,		SIGNAL(activated()),	this,	SLOT(on_pushButtonSearchNext_clicked()));
-    connect(ui->pushButtonCloseSearch,	SIGNAL(clicked()),	this,	SLOT(closeTheSearchBox()));
-    connect(searchShortcut3,		SIGNAL(activated()),	this,	SLOT(closeTheSearchBox()));
+    connect(TimerForSearch,			&QTimer::timeout,	this,	&Themes::hilightTheSearchSlot);
+    connect(searchShortcut,			&QShortcut::activated,	this,	&Themes::searchBoxShortcut);
+    connect(searchShortcut2,		&QShortcut::activated,	this,	&Themes::on_pushButtonSearchNext_clicked);
+    connect(ui->pushButtonCloseSearch,	&QPushButton::clicked,	this,	&Themes::closeTheSearchBox);
+    connect(searchShortcut3,		&QShortcut::activated,	this,	&Themes::closeTheSearchBox);
 
     //reload directly untranslatable text
     newLanguageLoaded();
@@ -133,7 +133,7 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     selectionModel=ui->TransferList->selectionModel();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+    connect(&transferModel,&TransferModel::debugInformation,this,&Themes::debugInformation);
     #endif
 
     updateSpeed();
@@ -142,8 +142,8 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
 Themes::~Themes()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    disconnect(ui->actionAddFile);
-    disconnect(ui->actionAddFolder);
+    //disconnect(ui->actionAddFile);
+    //disconnect(ui->actionAddFolder);
     delete selectionModel;
     delete menu;
 }
@@ -793,6 +793,11 @@ void Themes::hilightTheSearch(bool searchNext)
             ui->TransferList->scrollTo(transferModel.index(result,0));
         }
     }
+}
+
+void Themes::hilightTheSearchSlot()
+{
+    hilightTheSearch();
 }
 
 void Themes::on_pushButtonSearchPrev_clicked()

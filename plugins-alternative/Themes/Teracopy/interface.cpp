@@ -9,7 +9,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
+Themes::Themes(FacilityInterface * facilityEngine) :
     ui(new Ui::interfaceCopy())
 {
     this->facilityEngine=facilityEngine;
@@ -29,40 +29,40 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
     speedString		= facilityEngine->speedToString(0);
     ui->toolButtonMenu->setMenu(&menu);
 
-    connect(ui->actionAddFile,SIGNAL(triggered()),this,SLOT(forcedModeAddFile()));
-    connect(ui->actionAddFileToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToCopy()));
-    connect(ui->actionAddFileToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFileToMove()));
-    connect(ui->actionAddFolderToCopy,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToCopy()));
-    connect(ui->actionAddFolderToMove,SIGNAL(triggered()),this,SLOT(forcedModeAddFolderToMove()));
-    connect(ui->actionAddFolder,SIGNAL(triggered()),this,SLOT(forcedModeAddFolder()));
+    connect(ui->actionAddFile,&QAction::triggered,this,&Themes::forcedModeAddFile);
+    connect(ui->actionAddFileToCopy,&QAction::triggered,this,&Themes::forcedModeAddFileToCopy);
+    connect(ui->actionAddFileToMove,&QAction::triggered,this,&Themes::forcedModeAddFileToMove);
+    connect(ui->actionAddFolderToCopy,&QAction::triggered,this,&Themes::forcedModeAddFolderToCopy);
+    connect(ui->actionAddFolderToMove,&QAction::triggered,this,&Themes::forcedModeAddFolderToMove);
+    connect(ui->actionAddFolder,&QAction::triggered,this,&Themes::forcedModeAddFolder);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(&transferModel,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)),this,SIGNAL(debugInformation(DebugLevel,QString,QString,QString,int)));
+    connect(&transferModel,&TransferModel::debugInformation,this,&Themes::debugInformation);
     #endif
 }
 
-InterfacePlugin::~InterfacePlugin()
+Themes::~Themes()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 }
 
-QWidget * InterfacePlugin::getOptionsEngineWidget()
+QWidget * Themes::getOptionsEngineWidget()
 {
     return &optionEngineWidget;
 }
 
-void InterfacePlugin::getOptionsEngineEnabled(const bool &isEnabled)
+void Themes::getOptionsEngineEnabled(const bool &isEnabled)
 {
     Q_UNUSED(isEnabled);
 }
 
 /// \brief set if transfer list is exportable/importable
-void InterfacePlugin::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
+void Themes::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
 {
     Q_UNUSED(transferListOperation);
 }
 
-void InterfacePlugin::closeEvent(QCloseEvent *event)
+void Themes::closeEvent(QCloseEvent *event)
 {
     event->ignore();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -70,13 +70,13 @@ void InterfacePlugin::closeEvent(QCloseEvent *event)
     emit cancel();
 }
 
-void InterfacePlugin::updateOverallInformation()
+void Themes::updateOverallInformation()
 {
     ui->overall->setText(tr("Total: %1 of %2").arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
     ui->labelNumberFile->setText(tr("%1 of %2").arg(currentFile).arg(totalFile));
 }
 
-void InterfacePlugin::actionInProgess(const Ultracopier::EngineActionInProgress &action)
+void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start: "+QString::number(action));
     this->action=action;
@@ -114,19 +114,19 @@ void InterfacePlugin::actionInProgess(const Ultracopier::EngineActionInProgress 
     }
 }
 
-void InterfacePlugin::newFolderListing(const QString &path)
+void Themes::newFolderListing(const QString &path)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(action==Ultracopier::Listing)
         ui->from->setText(path);
 }
 
-void InterfacePlugin::detectedSpeed(const quint64 &speed)//in byte per seconds
+void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
 {
     speedString=facilityEngine->speedToString(speed);
 }
 
-void InterfacePlugin::remainingTime(const int &remainingSeconds)
+void Themes::remainingTime(const int &remainingSeconds)
 {
     if(remainingSeconds==-1)
         ui->labelTimeRemaining->setText("<html><body>&#8734;</body></html>");
@@ -137,24 +137,24 @@ void InterfacePlugin::remainingTime(const int &remainingSeconds)
     }
 }
 
-void InterfacePlugin::newCollisionAction(const QString &action)
+void Themes::newCollisionAction(const QString &action)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(action);
 }
 
-void InterfacePlugin::newErrorAction(const QString &action)
+void Themes::newErrorAction(const QString &action)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(action);
 }
 
-void InterfacePlugin::errorDetected()
+void Themes::errorDetected()
 {
 }
 
 //speed limitation
-bool InterfacePlugin::setSpeedLimitation(const qint64 &speedLimitation)
+bool Themes::setSpeedLimitation(const qint64 &speedLimitation)
 {
     if(speedLimitation>0)
         emit newSpeedLimitation(0);
@@ -162,7 +162,7 @@ bool InterfacePlugin::setSpeedLimitation(const qint64 &speedLimitation)
 }
 
 //get information about the copy
-void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64 &total)
+void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
 {
     currentSize=current;
     totalSize=total;
@@ -175,24 +175,24 @@ void InterfacePlugin::setGeneralProgression(const quint64 &current,const quint64
         ui->progressBar_all->setValue(0);
 }
 
-void InterfacePlugin::setCollisionAction(const QList<QPair<QString,QString> > &list)
+void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)
 {
     Q_UNUSED(list);
 }
 
-void InterfacePlugin::setErrorAction(const QList<QPair<QString,QString> > &list)
+void Themes::setErrorAction(const QList<QPair<QString,QString> > &list)
 {
     Q_UNUSED(list);
 }
 
-void InterfacePlugin::setCopyType(const Ultracopier::CopyType &type)
+void Themes::setCopyType(const Ultracopier::CopyType &type)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->type=type;
     updateModeAndType();
 }
 
-void InterfacePlugin::forceCopyMode(const Ultracopier::CopyMode &mode)
+void Themes::forceCopyMode(const Ultracopier::CopyMode &mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     modeIsForced=true;
@@ -204,7 +204,7 @@ void InterfacePlugin::forceCopyMode(const Ultracopier::CopyMode &mode)
     updateModeAndType();
 }
 
-void InterfacePlugin::updateTitle()
+void Themes::updateTitle()
 {
     QString startString;
     if(action==Ultracopier::Copying || action==Ultracopier::CopyingAndListing)
@@ -218,13 +218,13 @@ void InterfacePlugin::updateTitle()
         this->setWindowTitle(startString+facilityEngine->translateText("Move")+" ("+speedString+")");
 }
 
-void InterfacePlugin::haveExternalOrder()
+void Themes::haveExternalOrder()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 //	ui->moreButton->toggle();
 }
 
-void InterfacePlugin::isInPause(const bool &isInPause)
+void Themes::isInPause(const bool &isInPause)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"isInPause: "+QString::number(isInPause));
     //resume in auto the pause
@@ -235,7 +235,7 @@ void InterfacePlugin::isInPause(const bool &isInPause)
         ui->pauseButton->setText(facilityEngine->translateText("Pause"));
 }
 
-void InterfacePlugin::updateCurrentFileInformation()
+void Themes::updateCurrentFileInformation()
 {
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(transfertItem.haveItem)
@@ -266,7 +266,7 @@ void InterfacePlugin::updateCurrentFileInformation()
 }
 
 
-void InterfacePlugin::on_cancelButton_clicked()
+void Themes::on_cancelButton_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->hide();
@@ -274,7 +274,7 @@ void InterfacePlugin::on_cancelButton_clicked()
 }
 
 
-void InterfacePlugin::on_pauseButton_clicked()
+void Themes::on_pauseButton_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(storeIsInPause)
@@ -283,7 +283,7 @@ void InterfacePlugin::on_pauseButton_clicked()
         emit pause();
 }
 
-void InterfacePlugin::on_skipButton_clicked()
+void Themes::on_skipButton_clicked()
 {
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(transfertItem.haveItem)
@@ -303,7 +303,7 @@ void InterfacePlugin::on_skipButton_clicked()
     }
 }
 
-void InterfacePlugin::updateModeAndType()
+void Themes::updateModeAndType()
 {
     menu.clear();
     if(modeIsForced)
@@ -324,44 +324,44 @@ void InterfacePlugin::updateModeAndType()
     }
 }
 
-void InterfacePlugin::forcedModeAddFile()
+void Themes::forcedModeAddFile()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit userAddFile(mode);
 }
 
-void InterfacePlugin::forcedModeAddFolder()
+void Themes::forcedModeAddFolder()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit userAddFolder(mode);
 }
 
-void InterfacePlugin::forcedModeAddFileToCopy()
+void Themes::forcedModeAddFileToCopy()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit userAddFile(Ultracopier::Copy);
 }
 
-void InterfacePlugin::forcedModeAddFolderToCopy()
+void Themes::forcedModeAddFolderToCopy()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit userAddFolder(Ultracopier::Copy);
 }
 
-void InterfacePlugin::forcedModeAddFileToMove()
+void Themes::forcedModeAddFileToMove()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit userAddFile(Ultracopier::Move);
 }
 
-void InterfacePlugin::forcedModeAddFolderToMove()
+void Themes::forcedModeAddFolderToMove()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit userAddFolder(Ultracopier::Move);
 }
 
 //set the translate
-void InterfacePlugin::newLanguageLoaded()
+void Themes::newLanguageLoaded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(modeIsForced)
@@ -377,7 +377,7 @@ void InterfacePlugin::newLanguageLoaded()
   Return[1]: totalSize
   Return[2]: currentFile
   */
-void InterfacePlugin::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>& returnActions)
+void Themes::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>& returnActions)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, returnActions.size(): "+QString::number(returnActions.size()));
     QList<quint64> returnValue=transferModel.synchronizeItems(returnActions);
@@ -397,14 +397,14 @@ void InterfacePlugin::getActionOnList(const QList<Ultracopier::ReturnActionOnCop
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferModel.rowCount(): "+QString::number(transferModel.rowCount()));
 }
 
-void InterfacePlugin::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
+void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
 {
     QList<Ultracopier::ProgressionItem> progressionListBis=progressionList;
     transferModel.setFileProgression(progressionListBis);
     updateCurrentFileInformation();
 }
 
-InterfacePlugin::currentTransfertItem InterfacePlugin::getCurrentTransfertItem()
+Themes::currentTransfertItem Themes::getCurrentTransfertItem()
 {
     currentTransfertItem returnItem;
     returnItem.haveItem=InternalRunningOperation.size()>0;

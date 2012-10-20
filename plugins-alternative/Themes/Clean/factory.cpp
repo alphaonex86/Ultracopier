@@ -8,8 +8,8 @@
 
 PluginInterface_Themes * Factory::getInstance()
 {
-    PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);
-    connect(this,SIGNAL(reloadLanguage()),newInterface,SLOT(newLanguageLoaded()));
+    InterfacePlugin * newInterface=new InterfacePlugin(facilityEngine);
+    connect(this,&PluginInterface_ThemesFactory::reloadLanguage,newInterface,&InterfacePlugin::newLanguageLoaded);
     return newInterface;
 }
 
