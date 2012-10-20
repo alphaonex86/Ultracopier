@@ -20,7 +20,7 @@ Factory::~Factory()
 
 PluginInterface_Themes * Factory::getInstance()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	PluginInterface_Themes * newInterface=new Themes(
 				optionsEngine->getOptionValue("checkBoxShowSpeed").toBool(),facilityEngine,optionsEngine->getOptionValue("moreButtonPushed").toBool()
 				);
@@ -34,7 +34,7 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
 	Q_UNUSED(portableVersion);
 	Q_UNUSED(writePath);
 	Q_UNUSED(pluginPath);
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath: "+pluginPath);
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath: "+pluginPath);
 	this->facilityEngine=facilityEngine;
 	if(optionsEngine!=NULL)
 	{
@@ -47,10 +47,10 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
 		connect(optionsEngine,SIGNAL(resetOptions()),this,SLOT(resetOptions()));
 	}
 	#ifndef __GNUC__
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"__GNUC__ is set");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is set");
 	#endif
 	#ifndef __GNUC__
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"__GNUC__ is set");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is set");
 	#endif
 }
 
@@ -62,10 +62,10 @@ QWidget * Factory::options()
 		ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue("moreButtonPushed").toBool());
 	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 	connect(ui->checkBoxShowSpeed,SIGNAL(toggled(bool)),this,SLOT(checkBoxShowSpeedHaveChanged(bool)));
 	connect(ui->checkBoxStartWithMoreButtonPushed,SIGNAL(toggled(bool)),this,SLOT(checkBoxStartWithMoreButtonPushedHaveChanged(bool)));
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"return the options");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"return the options");
 	return tempWidget;
 }
 
@@ -76,7 +76,7 @@ QIcon Factory::getIcon(const QString &fileName)
 		QIcon tempIcon=QIcon::fromTheme("application-exit");
 		if(!tempIcon.isNull())
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
 			return tempIcon;
 		}
 	}
@@ -85,7 +85,7 @@ QIcon Factory::getIcon(const QString &fileName)
 		QIcon tempIcon=QIcon::fromTheme("list-add");
 		if(!tempIcon.isNull())
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
 			return tempIcon;
 		}
 	}
@@ -94,7 +94,7 @@ QIcon Factory::getIcon(const QString &fileName)
 		QIcon tempIcon=QIcon::fromTheme("help-about");
 		if(!tempIcon.isNull())
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
 			return tempIcon;
 		}
 	}
@@ -103,7 +103,7 @@ QIcon Factory::getIcon(const QString &fileName)
 		QIcon tempIcon=QIcon::fromTheme("applications-system");
 		if(!tempIcon.isNull())
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("use substitution ionc for: %1").arg(fileName));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
 			return tempIcon;
 		}
 	}
@@ -118,20 +118,20 @@ void Factory::resetOptions()
 
 void Factory::checkBoxShowSpeedHaveChanged(bool toggled)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"the checkbox have changed");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
 	if(optionsEngine!=NULL)
 		optionsEngine->setOptionValue("checkBoxShowSpeed",toggled);
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"the checkbox have changed");
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
 	if(optionsEngine!=NULL)
 		optionsEngine->setOptionValue("moreButtonPushed",toggled);
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"internal error, crash prevented");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::newLanguageLoaded()

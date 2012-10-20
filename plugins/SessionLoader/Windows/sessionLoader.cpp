@@ -14,7 +14,7 @@
 
 void SessionLoader::setEnabled(bool newValue)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
 	//set value into the variable
 	HKEY    ultracopier_regkey;
 	//for autostart
@@ -32,7 +32,7 @@ void SessionLoader::setEnabled(bool newValue)
 
 bool SessionLoader::getEnabled()
 {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 	//return the value into the variable
 	HKEY    ultracopier_regkey;
 	bool temp=false;
@@ -41,7 +41,7 @@ bool SessionLoader::getEnabled()
 	if(RegQueryValueEx(ultracopier_regkey,TEXT("ultracopier"),NULL,NULL,(LPBYTE)0,&kSize) == ERROR_SUCCESS)
 		temp=true;
 	RegCloseKey(ultracopier_regkey);
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"return this value: "+QString::number(temp));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"return this value: "+QString::number(temp));
         return temp;
 }
 

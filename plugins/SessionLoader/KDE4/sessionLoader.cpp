@@ -10,12 +10,12 @@
 #include "sessionLoader.h"
 void SessionLoader::setEnabled(bool newValue)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
 	QFile link(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
 	if(!newValue)
 	{
 		if(link.exists() && !link.remove())
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to remove from the startup: "+link.errorString());
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to remove from the startup: "+link.errorString());
 	}
 	else
 	{
@@ -25,16 +25,16 @@ void SessionLoader::setEnabled(bool newValue)
 			link.write(QString(QCoreApplication::applicationFilePath()).toLocal8Bit());
 			link.close();
 			if(!link.setPermissions(QFile::ExeOwner|QFile::WriteOwner|QFile::ReadOwner))
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to set permissions: "+link.errorString());
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to set permissions: "+link.errorString());
 		}
 		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Critical,"unable to open in writing the file: "+link.errorString());
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to open in writing the file: "+link.errorString());
 	}
 }
 
 bool SessionLoader::getEnabled()
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start, return this value: "+QString::number(QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh")));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, return this value: "+QString::number(QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh")));
 	//return the value into the variable
 	return QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
 }

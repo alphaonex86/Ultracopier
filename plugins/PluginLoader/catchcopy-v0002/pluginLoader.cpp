@@ -47,7 +47,7 @@ PluginLoader::PluginLoader()
 
 PluginLoader::~PluginLoader()
 {
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"destructor");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destructor");
         setEnabled(false);
 }
 
@@ -55,20 +55,20 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 {
 	if(!checkExistsDll())
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("No dll exists"));
-		emit newState(Uncaught);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("No dll exists"));
+		emit newState(Ultracopier::Uncaught);
 		if(!needBeRegistred)
 			correctlyLoaded.clear();
 		return;
 	}
 	if(this->needBeRegistred==needBeRegistred)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("Double event dropped"));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Double event dropped"));
 		return;
 	}
 	this->needBeRegistred=needBeRegistred;
 	int index=0;
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("start, needBeRegistred: %1, allDllIsImportant: %2").arg(needBeRegistred).arg(allDllIsImportant));
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, needBeRegistred: %1, allDllIsImportant: %2").arg(needBeRegistred).arg(allDllIsImportant));
 
 	bool oneHaveFound=false;
 	index=0;
@@ -96,8 +96,8 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 	}
 	if(!oneHaveFound)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,QString("No dll have found"));
-		emit newState(Uncaught);
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("No dll have found"));
+		emit newState(Ultracopier::Uncaught);
 		if(!needBeRegistred)
 			correctlyLoaded.clear();
 		return;
@@ -116,7 +116,7 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 				setEnabled(needBeRegistred);
 				return;
 			}
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"the important dll have failed: "+importantDll.at(index));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the important dll have failed: "+importantDll.at(index));
 			importantDll_have_bug=true;
 		}
 		else
@@ -124,7 +124,7 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 			if(needBeRegistred)
 				correctlyLoaded << importantDll.at(index);
 			importantDll_is_loaded=true;
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the important dll have been loaded: "+importantDll.at(index));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the important dll have been loaded: "+importantDll.at(index));
 		}
 		importantDll_count++;
 		index++;
@@ -140,7 +140,7 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 			)
 		))
 		{
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"the second dll have failed: "+secondDll.at(index));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the second dll have failed: "+secondDll.at(index));
 			secondDll_have_bug=true;
 		}
 		else
@@ -148,7 +148,7 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 			if(needBeRegistred)
 				correctlyLoaded << secondDll.at(index);
 			secondDll_is_loaded=true;
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"the second dll have been loaded: "+secondDll.at(index));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the second dll have been loaded: "+secondDll.at(index));
 		}
 		secondDll_count++;
 		index++;
@@ -192,12 +192,12 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 			secondDll_state=Uncaught;
 	}
 
-	if((importantDll_state==Uncaught && secondDll_state==Uncaught) || !needBeRegistred || (importantDll_count==0 && secondDll_count==0))
-		emit newState(Uncaught);
-	else if(importantDll_state==Caught)
-		emit newState(Caught);
+	if((importantDll_state==Ultracopier::Uncaught && secondDll_state==Ultracopier::Uncaught) || !needBeRegistred || (importantDll_count==0 && secondDll_count==0))
+		emit newState(Ultracopier::Uncaught);
+	else if(importantDll_state==Ultracopier::Caught)
+		emit newState(Ultracopier::Caught);
 	else
-		emit newState(Semiuncaught);
+		emit newState(Ultracopier::Semiuncaught);
 	
 	if(!needBeRegistred)
 		correctlyLoaded.clear();
@@ -216,13 +216,13 @@ bool PluginLoader::checkExistsDll()
 
 	if(is64Bits)
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"64Bits is important");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"64Bits is important");
 		importantDll << CATCHCOPY_DLL_64;
 		secondDll << CATCHCOPY_DLL_32;
 	}
 	else
 	{
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Information,"32Bits is important");
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"32Bits is important");
 		importantDll << CATCHCOPY_DLL_32;
 		secondDll << CATCHCOPY_DLL_64;
 	}
@@ -234,7 +234,7 @@ bool PluginLoader::checkExistsDll()
 		{
 			if(!QFile::exists(pluginPath+importantDll.at(index)+SECOND_EXT))
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file not found, drop to the list: "+importantDll.at(index));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file not found, drop to the list: "+importantDll.at(index));
 				importantDll.removeAt(index);
 				index--;
 			}
@@ -252,7 +252,7 @@ bool PluginLoader::checkExistsDll()
 		{
 			if(!QFile::exists(pluginPath+secondDll.at(index)+SECOND_EXT))
 			{
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Warning,"file not found, drop to the list: "+secondDll.at(index));
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file not found, drop to the list: "+secondDll.at(index));
 				secondDll.removeAt(index);
 				index--;
 			}
@@ -333,10 +333,10 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 		if(SUCCEEDED(hResult) && SCODE_CODE(hResult) != ERROR_ACCESS_DENIED)
 			return true;
 		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("fail by LoadLibrary: %1, error code: %2").arg(dllPath).arg((quint32)hResult));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("fail by LoadLibrary: %1, error code: %2").arg(dllPath).arg((quint32)hResult));
 	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("fail by CoInitializeEx: %1, error code: %2").arg(dllPath).arg((quint32)hResult));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("fail by CoInitializeEx: %1, error code: %2").arg(dllPath).arg((quint32)hResult));
 	
 	////////////////////////////// Second way to load //////////////////////////////
 	QStringList arguments;
@@ -355,7 +355,7 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 			else
 				argumentsString+=' '+arguments.at(i);
 	}
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: regsvr32 "+argumentsString);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: regsvr32 "+argumentsString);
 	int result=QProcess::execute("regsvr32",arguments);
 	bool ok=false;
 	if(result==0)
@@ -376,7 +376,7 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 		if(!quiet || (!bRegister && correctlyLoaded.contains(dllPath)))
 		{
 			////////////////////////////// Last way to load //////////////////////////////
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"try it in win32");
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try it in win32");
 			// try with regsvr32, win32 because for admin dialog
 
 			size_lenght=argumentsString.toWCharArray(arrayArg);
@@ -388,16 +388,16 @@ bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quie
 			sei.fMask = SEE_MASK_UNICODE;
 			sei.lpVerb = TEXT("runas");
 			sei.lpFile = TEXT("regsvr32.exe");
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght));
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght));
 			sei.lpParameters = arrayArg;
 			sei.nShow = SW_SHOW;
 			ok=ShellExecuteEx(&sei);
 		}
 		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"not try because need be quiet: "+dllPath);
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"not try because need be quiet: "+dllPath);
 	}
 	else
-		ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,QString("regsvr32 terminated with: %1").arg(result));
+		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("regsvr32 terminated with: %1").arg(result));
 	correctlyLoaded.remove(dllPath);
 	if(!bRegister)
 		HardUnloadDLL(dllPath);
@@ -462,7 +462,7 @@ bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 
 void PluginLoader::HardUnloadDLL(QString myDllName)
 {
-	ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"start: "+myDllName);
+	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+myDllName);
 	HANDLE hSnapShot1;
 	PROCESSENTRY32 uProcess;
 	HANDLE hSnapShot2;
@@ -499,20 +499,20 @@ void PluginLoader::HardUnloadDLL(QString myDllName)
 						DllLoadedName=QString::fromWCharArray(me32.szModule);
 						if (DllLoaded == myDllName)
 						{
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"The path: "+DllLoaded);
-							ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
+							ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"The path: "+DllLoaded);
+							ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
 							DLLEjecteurW(uProcess.th32ProcessID,me32.szExePath);
 						}
 						bResult = Module32Next( hSnapShot2, &me32 );
 				}
 			}
 			else
-				ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"(int)hSnapShot2 != -1 for "+myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
+				ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"(int)hSnapShot2 != -1 for "+myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
 			if(hSnapShot2)
 				CloseHandle(hSnapShot2);
 		}
 		else
-			ULTRACOPIER_DEBUGCONSOLE(DebugLevel_Notice,"uProcess.th32ProcessID > 99999 for "+myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
+			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"uProcess.th32ProcessID > 99999 for "+myProcessName+" ("+QString::number(uProcess.th32ProcessID)+")");
 	}
 	CloseHandle(hSnapShot1);
 }

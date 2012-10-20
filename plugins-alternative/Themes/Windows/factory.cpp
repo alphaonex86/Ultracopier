@@ -11,24 +11,24 @@ QRegularExpression Factory::isolateName;
 
 Factory::Factory()
 {
-	slashEnd=QRegularExpression("/$");
-	isolateName=QRegularExpression("^.*/([^/]+)$");
+    slashEnd=QRegularExpression("/$");
+    isolateName=QRegularExpression("^.*/([^/]+)$");
 }
 
 PluginInterface_Themes * Factory::getInstance()
 {
-	PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);
-	connect(this,SIGNAL(reloadLanguage()),newInterface,SLOT(newLanguageLoaded()));
-	return newInterface;
+    PluginInterface_Themes * newInterface=new InterfacePlugin(facilityEngine);
+    connect(this,SIGNAL(reloadLanguage()),newInterface,SLOT(newLanguageLoaded()));
+    return newInterface;
 }
 
 void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
 {
-	Q_UNUSED(options)
-	Q_UNUSED(writePath)
-	Q_UNUSED(pluginPath)
-	this->facilityEngine=facilityEngine;
-	Q_UNUSED(portableVersion)
+    Q_UNUSED(options)
+    Q_UNUSED(writePath)
+    Q_UNUSED(pluginPath)
+    this->facilityEngine=facilityEngine;
+    Q_UNUSED(portableVersion)
 }
 
 QWidget * Factory::options()
@@ -38,31 +38,31 @@ QWidget * Factory::options()
 
 QIcon Factory::getIcon(const QString &fileName)
 {
-	if(fileName=="SystemTrayIcon/exit.png")
-	{
-		QIcon tempIcon=QIcon::fromTheme("application-exit");
-		if(!tempIcon.isNull())
-			return tempIcon;
-	}
-	if(fileName=="SystemTrayIcon/add.png")
-	{
-		QIcon tempIcon=QIcon::fromTheme("list-add");
-		if(!tempIcon.isNull())
-			return tempIcon;
-	}
-	if(fileName=="SystemTrayIcon/informations.png")
-	{
-		QIcon tempIcon=QIcon::fromTheme("help-about");
-		if(!tempIcon.isNull())
-			return tempIcon;
-	}
-	if(fileName=="SystemTrayIcon/options.png")
-	{
-		QIcon tempIcon=QIcon::fromTheme("applications-system");
-		if(!tempIcon.isNull())
-			return tempIcon;
-	}
-	return QIcon(":/resources/"+fileName);
+    if(fileName=="SystemTrayIcon/exit.png")
+    {
+        QIcon tempIcon=QIcon::fromTheme("application-exit");
+        if(!tempIcon.isNull())
+            return tempIcon;
+    }
+    if(fileName=="SystemTrayIcon/add.png")
+    {
+        QIcon tempIcon=QIcon::fromTheme("list-add");
+        if(!tempIcon.isNull())
+            return tempIcon;
+    }
+    if(fileName=="SystemTrayIcon/informations.png")
+    {
+        QIcon tempIcon=QIcon::fromTheme("help-about");
+        if(!tempIcon.isNull())
+            return tempIcon;
+    }
+    if(fileName=="SystemTrayIcon/options.png")
+    {
+        QIcon tempIcon=QIcon::fromTheme("applications-system");
+        if(!tempIcon.isNull())
+            return tempIcon;
+    }
+    return QIcon(":/resources/"+fileName);
 }
 
 void Factory::resetOptions()
@@ -71,5 +71,5 @@ void Factory::resetOptions()
 
 void Factory::newLanguageLoaded()
 {
-	emit reloadLanguage();
+    emit reloadLanguage();
 }
