@@ -9,7 +9,6 @@
 #include <QThread>
 #include <QByteArray>
 #include <QSemaphore>
-#include <QTimer>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QCryptographicHash>
@@ -47,7 +46,7 @@ public:
     /// \brief start the reading of the source file
     void startRead();
     /// \brief set the current max speed in KB/s
-    int setMaxSpeed(int maxSpeed);
+    void setMultiForBigSpeed(const int &multiForBigSpeed);
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
     /// \brief reopen after an error
@@ -115,11 +114,9 @@ private:
     Ultracopier::CopyMode	mode;
     qint64		lastGoodPosition;
     volatile int	blockSize;
-    volatile int	maxSpeed;		///< The max speed in KB/s, 0 for no limit
     QSemaphore	waitNewClockForSpeed;
     volatile int	numberOfBlockCopied;		///< Multiple for count the number of block copied
-    volatile int	multiplicatorForBigSpeed;	///< Multiple for count the number of block needed
-    volatile int	MultiForBigSpeed;
+    volatile int	multiForBigSpeed;           ///< Multiple for count the number of block needed
     WriteThread*	writeThread;
     int		id;
     QSemaphore	isOpen;

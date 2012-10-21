@@ -6,7 +6,7 @@ ReadThread::ReadThread()
     moveToThread(this);
     stopIt=false;
     putInPause=false;
-    blockSize=1024*1024;
+    blockSize=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     setObjectName("read");
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;
@@ -174,10 +174,10 @@ void ReadThread::checkSum()
             lastGoodPosition+=blockArray.size();
 
             //wait for limitation speed if stop not query
-            if(maxSpeed>0)
+            if(numberOfBlockCopied>0)
             {
                 numberOfBlockCopied++;
-                if(numberOfBlockCopied>=MultiForBigSpeed)
+                if(numberOfBlockCopied>=multiForBigSpeed)
                 {
                     numberOfBlockCopied=0;
                     waitNewClockForSpeed.acquire();
@@ -349,10 +349,10 @@ void ReadThread::internalRead()
             lastGoodPosition+=blockArray.size();
 
             //wait for limitation speed if stop not query
-            if(maxSpeed>0)
+            if(multiForBigSpeed>0)
             {
                 numberOfBlockCopied++;
-                if(numberOfBlockCopied>=MultiForBigSpeed)
+                if(numberOfBlockCopied>=multiForBigSpeed)
                 {
                     numberOfBlockCopied=0;
                     waitNewClockForSpeed.acquire();
@@ -438,7 +438,6 @@ bool ReadThread::setBlockSize(const int blockSize)
     {
         this->blockSize=blockSize*1024;
         //set the new max speed because the timer have changed
-        setMaxSpeed(maxSpeed);
         return true;
     }
     else
@@ -447,42 +446,24 @@ bool ReadThread::setBlockSize(const int blockSize)
 
 /*! \brief Set the max speed
 \param tempMaxSpeed Set the max speed in KB/s, 0 for no limit */
-int ReadThread::setMaxSpeed(const int maxSpeed)
+void ReadThread::setMultiForBigSpeed(const int &multiForBigSpeed)
 {
-    if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
-        waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());
-    this->maxSpeed=maxSpeed;
-    if(this->maxSpeed>0)
-    {
-        int NewInterval,newMultiForBigSpeed=0;
-        do
-        {
-            newMultiForBigSpeed++;
-            NewInterval=(blockSize*newMultiForBigSpeed)/(this->maxSpeed);
-        }
-        while (NewInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
-        if(NewInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
-        {
-            NewInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
-            newMultiForBigSpeed=1;
-            blockSize=this->maxSpeed*NewInterval;
-        }
-        MultiForBigSpeed=newMultiForBigSpeed;
-        return NewInterval;
-    }
-    else
-    {
-        waitNewClockForSpeed.release();
-        return 0;
-    }
+    this->multiForBigSpeed=multiForBigSpeed;
+    waitNewClockForSpeed.release();
 }
 
 /// \brief For give timer every X ms
 void ReadThread::timeOfTheBlockCopyFinished()
 {
-    if(waitNewClockForSpeed.available()<ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT)
+    /* this is the old way to limit the speed, it product blocking
+     *if(waitNewClockForSpeed.available()<ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT)
+        waitNewClockForSpeed.release();*/
+
+    //try this new way:
+    /* only if speed limited, else will accumulate waitNewClockForSpeed
+     * Disabled because: Stop call of this method when no speed limit
+    if(this->maxSpeed>0)*/
         waitNewClockForSpeed.release();
-    //why not just use waitNewClockForSpeed.release() ?
 }
 
 /// \brief do the fake open

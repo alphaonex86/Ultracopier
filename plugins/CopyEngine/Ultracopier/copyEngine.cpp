@@ -49,7 +49,7 @@ copyEngine::~copyEngine()
     */
     stopIt=true;
     delete listThread;
-        delete ui;
+    delete ui;
 }
 
 void copyEngine::connectTheSignalsSlots()
@@ -141,6 +141,10 @@ void copyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_forceMode()");
     if(!connect(this,&copyEngine::send_osBufferLimit,					listThread,&ListThread::set_osBufferLimit,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_osBufferLimit()");
+    if(!connect(this,&copyEngine::send_speedLimitation,					listThread,&ListThread::setSpeedLimitation,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_speedLimitation()");
+    if(!connect(this,&copyEngine::send_blockSize,					listThread,&ListThread::setBlockSize,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_blockSize()");
     if(!connect(this,&copyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setFilters()");
     if(!connect(this,&copyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
@@ -554,7 +558,8 @@ bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
     maxSpeed=speedLimitation;
-    return listThread->setSpeedLimitation(speedLimitation);
+    emit send_speedLimitation(speedLimitation);
+    return true;
 }
 
 void copyEngine::setCollisionAction(const QString &action)
@@ -609,7 +614,7 @@ void copyEngine::setBlockSize(const int blockSize)
     this->blockSize=blockSize;
     if(uiIsInstalled)
         ui->blockSize->setValue(blockSize);
-    listThread->setBlockSize(blockSize);
+    emit send_blockSize(blockSize);
 }
 
 //set auto start

@@ -368,6 +368,8 @@ signals:
     //other signals
     void queryOneNewDialog();
 
+    void send_speedLimitation(const qint64 &speedLimitation);
+    void send_blockSize(const int &blockSize);
     void send_osBufferLimit(const unsigned int &osBufferLimit);
     void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
     void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);

@@ -14,6 +14,7 @@
 #include <QSemaphore>
 #include <QTextStream>
 #include <QFile>
+#include <QTimer>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "scanFileOrFolder.h"
@@ -215,6 +216,11 @@ private:
     bool				forcedMode;
     QString				firstRenamingRule;
     QString				otherRenamingRule;
+    int multiForBigSpeed;
+    /* here to prevent:
+    QObject::killTimer: timers cannot be stopped from another thread
+    QObject::startTimer: timers cannot be started from another thread */
+    QTimer *clockForTheCopySpeed;	///< For the speed throttling
 
     //add file transfer to do
     quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode);

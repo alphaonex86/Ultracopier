@@ -130,7 +130,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         QList<QPair<QString, QVariant> > KeysList;
         KeysList.append(qMakePair(QString("doRightTransfer"),QVariant(false)));
         KeysList.append(qMakePair(QString("keepDate"),QVariant(false)));
-        KeysList.append(qMakePair(QString("blockSize"),QVariant(4)));//4KB as default
+        KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));//4KB as default
         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
         KeysList.append(qMakePair(QString("folderColision"),QVariant(0)));

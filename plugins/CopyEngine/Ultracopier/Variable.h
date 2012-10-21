@@ -18,6 +18,7 @@
 #define ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT		16
 #define ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER		1
 #define ULTRACOPIER_PLUGIN_MINIMALYEAR			1990
+#define ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE   4 //in KB
 
 //if set, check the inode type at scanFileOrFolder, deprecated into the new algorithm and not used
 #define ULTRACOPIER_PLUGIN_CHECKLISTTYPE

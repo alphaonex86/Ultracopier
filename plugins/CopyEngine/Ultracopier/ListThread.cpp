@@ -29,7 +29,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     maxSpeed			= 0;
     doRightTransfer			= false;
     keepDate			= false;
-    blockSize			= 1024;
+    blockSize			= ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     osBufferLimit			= 512;
     alwaysDoThisActionForFileExists = FileExists_NotSet;
     doChecksum			= false;
@@ -38,6 +38,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     osBuffer			= false;
     osBufferLimited			= false;
     forcedMode			= false;
+    clockForTheCopySpeed=NULL;
+    multiForBigSpeed=0;
 
     #if ! defined (Q_CC_GNU)
     ui->keepDate->setEnabled(false);
@@ -257,6 +259,7 @@ void ListThread::setBlockSize(const int blockSize)
         transferThreadList.at(index)->setBlockSize(blockSize);
         index++;
     }
+    setSpeedLimitation(maxSpeed);
 }
 
 //set auto start
@@ -653,6 +656,7 @@ bool ListThread::skipInternal(const quint64 &id)
     return false;
 }
 
+//executed in this thread
 void ListThread::cancel()
 {
     if(stopIt)
@@ -679,6 +683,13 @@ void ListThread::cancel()
         scanFileOrFolderThreadsPool[index]=NULL;
                 index++;
     }
+    if(clockForTheCopySpeed!=NULL)
+    {
+        clockForTheCopySpeed->stop();
+        delete clockForTheCopySpeed;
+        clockForTheCopySpeed=NULL;
+    }
+
     quit();
     waitCancel.release();
     emit canBeDeleted();
@@ -693,14 +704,62 @@ qint64 ListThread::getSpeedLimitation()
 bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
+
     maxSpeed=speedLimitation;
+
+    /*    if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
+            waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());*/
+    this->maxSpeed=maxSpeed;
+    int newMultiForBigSpeed=0;
+    if(this->maxSpeed>0)
+    {
+        int NewInterval;
+        do
+        {
+            newMultiForBigSpeed++;
+            NewInterval=(blockSize*newMultiForBigSpeed)/(this->maxSpeed);
+        }
+        while (NewInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
+        if(NewInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
+        {
+            NewInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
+            newMultiForBigSpeed=1;
+            int_for_loop=0;
+            loop_size=transferThreadList.size();
+            while(int_for_loop<loop_size)
+            {
+                transferThreadList.at(int_for_loop)->setBlockSize(this->maxSpeed*NewInterval);
+                int_for_loop++;
+            }
+        }
+        if(clockForTheCopySpeed!=NULL)
+            clockForTheCopySpeed->start();
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"clockForTheCopySpeed == NULL at this point");
+    }
+    else
+    {
+        if(clockForTheCopySpeed!=NULL)
+            clockForTheCopySpeed->stop();
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"clockForTheCopySpeed == NULL at this point");
+        int_for_loop=0;
+        loop_size=transferThreadList.size();
+        while(int_for_loop<loop_size)
+        {
+            transferThreadList.at(int_for_loop)->setBlockSize(blockSize);
+            int_for_loop++;
+        }
+    }
+    multiForBigSpeed=newMultiForBigSpeed;
     int_for_loop=0;
     loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
-        transferThreadList.at(int_for_loop)->setMaxSpeed(speedLimitation/ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER);
+        transferThreadList.at(int_for_loop)->setMultiForBigSpeed(newMultiForBigSpeed);
         int_for_loop++;
     }
+
     return true;
 }
 
@@ -1639,6 +1698,8 @@ void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorStr
 //to run the thread
 void ListThread::run()
 {
+    clockForTheCopySpeed=new QTimer();
+
     exec();
 }
 
@@ -1656,7 +1717,7 @@ void ListThread::createTransferThread()
     last->setBlockSize(blockSize);
     last->setDrive(drives);
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
-    last->setMaxSpeed(maxSpeed/ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER);
+    last->setMultiForBigSpeed(multiForBigSpeed);
     last->set_doChecksum(doChecksum);
     last->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
     last->set_checksumOnlyOnError(checksumOnlyOnError);
@@ -1675,6 +1736,9 @@ void ListThread::createTransferThread()
     connect(last,&TransferThread::postOperationStopped,		this,&ListThread::transferInodeIsClosed,	Qt::QueuedConnection);
     connect(last,&TransferThread::checkIfItCanBeResumed,		this,&ListThread::restartTransferIfItCan,	Qt::QueuedConnection);
     connect(last,&TransferThread::pushStat,				this,&ListThread::newTransferStat,		Qt::QueuedConnection);
+
+    //speed limitation
+    connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThread::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
 
     connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,		Qt::QueuedConnection);
 

@@ -29,16 +29,15 @@ TransferThread::TransferThread()
     this->mkpathTransfer	= mkpathTransfer;
     readThread.setWriteThread(&writeThread);
 
-    connect(&clockForTheCopySpeed,	&QTimer::timeout,			this,	&TransferThread::timeOfTheBlockCopyFinished);
     maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 }
 
 TransferThread::~TransferThread()
 {
     exit();
-    disconnect(&readThread);
-    disconnect(&writeThread);
-    disconnect(this);
+    //disconnect(&readThread);
+    //disconnect(&writeThread);
+    //disconnect(this);
     wait();
 }
 
@@ -489,21 +488,9 @@ void TransferThread::setKeepDate(const bool keepDate)
 }
 
 //set the current max speed in KB/s
-void TransferThread::setMaxSpeed(int maxSpeed)
+void TransferThread::setMultiForBigSpeed(const int &multiForBigSpeed)
 {
-    int interval=readThread.setMaxSpeed(maxSpeed);
-    writeThread.setMaxSpeed(maxSpeed);
-    if(maxSpeed>0)
-    {
-        clockForTheCopySpeed.setInterval(interval);
-        if(!clockForTheCopySpeed.isActive())//seam useless !this->isFinished()
-            clockForTheCopySpeed.start();
-    }
-    else
-    {
-        if(clockForTheCopySpeed.isActive())
-            clockForTheCopySpeed.stop();
-    }
+    readThread.setMultiForBigSpeed(multiForBigSpeed);
 }
 
 //set block size in KB

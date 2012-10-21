@@ -60,10 +60,6 @@ public:
     void fakeWriteIsStopped();
     /// do the checksum
     void startCheckSum();
-    /// \brief set the current max speed in KB/s
-    int setMaxSpeed(int maxSpeed);
-    /// \brief For give timer every X ms
-    void timeOfTheBlockCopyFinished();
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
 public slots:
@@ -104,7 +100,6 @@ private:
     AvancedQFile		file;
         volatile bool		stopIt;
     volatile int		blockSize;
-    volatile int		maxSpeed;		///< The max speed in KB/s, 0 for no limit
     QMutex			accessList;		///< For use the list
     QSemaphore		waitNewClockForSpeed;
     volatile int		numberOfBlockCopied;		///< Multiple for count the number of block copied

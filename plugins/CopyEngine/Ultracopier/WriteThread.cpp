@@ -17,7 +17,7 @@ WriteThread::WriteThread()
     buffer=false;
     putInPause=false;
     needRemoveTheFile=false;
-    blockSize=1024*1024;
+    blockSize=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
 }
 
 WriteThread::~WriteThread()
@@ -371,52 +371,10 @@ bool WriteThread::setBlockSize(const int blockSize)
     if(blockSize<1 || blockSize>16384)
     {
         this->blockSize=blockSize*1024;
-        //set the new max speed because the timer have changed
-        setMaxSpeed(maxSpeed);
         return true;
     }
     else
         return false;
-}
-
-/*! \brief Set the max speed
-\param tempMaxSpeed Set the max speed in KB/s, 0 for no limit */
-int WriteThread::setMaxSpeed(const int maxSpeed)
-{
-    if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
-        waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());
-    this->maxSpeed=maxSpeed;
-    if(this->maxSpeed>0)
-    {
-        int NewInterval,newMultiForBigSpeed=0;
-        do
-        {
-            newMultiForBigSpeed++;
-            NewInterval=(blockSize*newMultiForBigSpeed)/(this->maxSpeed);
-        }
-        while (NewInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
-        if(NewInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
-        {
-            NewInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
-            newMultiForBigSpeed=1;
-            blockSize=this->maxSpeed*NewInterval;
-        }
-        MultiForBigSpeed=newMultiForBigSpeed;
-        return NewInterval;
-    }
-    else
-    {
-        waitNewClockForSpeed.release();
-        return 0;
-    }
-}
-
-/// \brief For give timer every X ms
-void WriteThread::timeOfTheBlockCopyFinished()
-{
-    if(waitNewClockForSpeed.available()<ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT)
-        waitNewClockForSpeed.release();
-    //why not just use waitNewClockForSpeed.release() ?
 }
 
 void WriteThread::flushAndSeekToZero()
@@ -467,19 +425,6 @@ void WriteThread::checkSum()
                 break;
 
             lastGoodPosition+=blockArray.size();
-
-            //wait for limitation speed if stop not query
-            if(maxSpeed>0)
-            {
-                numberOfBlockCopied++;
-                if(numberOfBlockCopied>=MultiForBigSpeed)
-                {
-                    numberOfBlockCopied=0;
-                    waitNewClockForSpeed.acquire();
-                    if(stopIt)
-                        break;
-                }
-            }
         }
     }
     while(sizeReaden>0 && !stopIt);

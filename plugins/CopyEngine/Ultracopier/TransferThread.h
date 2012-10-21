@@ -95,7 +95,7 @@ public slots:
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
     /// \brief set the current max speed in KB/s
-    void setMaxSpeed(int maxSpeed);
+    void setMultiForBigSpeed(const int &maxSpeed);
     /// \brief set block size in KB
     bool setBlockSize(const unsigned int blockSize);
     /// \brief pause the copy
@@ -115,6 +115,8 @@ public slots:
 
     void set_osBufferLimit(unsigned int osBufferLimit);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    //speed limitation
+    void timeOfTheBlockCopyFinished();
 private slots:
     void preOperation();
     void readIsReady();
@@ -136,8 +138,6 @@ private slots:
         //to filter the emition of signal
     void readIsStopped();
     void writeIsStopped();
-    //speed limitation
-    void timeOfTheBlockCopyFinished();
     //force into the right thread
     void internalStartTheTransfer();
 private:
@@ -153,7 +153,6 @@ private:
     QString			source;
     QString			destination;
     Ultracopier::CopyMode		mode;
-    QTimer			clockForTheCopySpeed;	///< For the speed throttling
     bool			doRightTransfer;
     bool			keepDate;
     bool			readIsReadyVariable;
