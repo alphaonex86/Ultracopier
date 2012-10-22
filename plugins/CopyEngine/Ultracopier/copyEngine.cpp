@@ -313,7 +313,7 @@ quint64 copyEngine::realByteTransfered()
 //speed limitation
 qint64 copyEngine::getSpeedLimitation()
 {
-    return listThread->getSpeedLimitation();
+    return maxSpeed;
 }
 
 //get collision action

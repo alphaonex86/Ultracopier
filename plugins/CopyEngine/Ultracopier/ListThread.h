@@ -50,9 +50,6 @@ public:
      * \param destination the destination to move
      * \return true if the move have been accepted */
     bool newMove(const QStringList &sources,const QString &destination);
-    /** \brief get the speed limitation
-     * < -1 if not able, 0 if disabled */
-    qint64 getSpeedLimitation();
     /** \brief to set drives detected
      * specific to this copy engine */
     void setDrive(const QStringList &drives);

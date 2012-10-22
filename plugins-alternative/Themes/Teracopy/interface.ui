@@ -52,9 +52,6 @@
        <property name="text">
         <string notr="true">-</string>
        </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
      <item>

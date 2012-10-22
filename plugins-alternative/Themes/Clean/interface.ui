@@ -43,9 +43,6 @@
        <property name="text">
         <string>In wait</string>
        </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
     </layout>

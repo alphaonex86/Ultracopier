@@ -695,12 +695,6 @@ void ListThread::cancel()
     emit canBeDeleted();
 }
 
-//speed limitation
-qint64 ListThread::getSpeedLimitation()
-{
-    return maxSpeed;
-}
-
 bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
@@ -710,28 +704,45 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
     /*    if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
             waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());*/
     this->maxSpeed=maxSpeed;
-    int newMultiForBigSpeed=0;
+    multiForBigSpeed=0;
     if(this->maxSpeed>0)
     {
-        int NewInterval;
+        int tempBlockSize=blockSize;
+
+        //try resolv the interval
+        int newInterval;
         do
         {
-            newMultiForBigSpeed++;
-            NewInterval=(blockSize*newMultiForBigSpeed)/(this->maxSpeed);
+            multiForBigSpeed++;
+            newInterval=(blockSize*1024*multiForBigSpeed)/(this->maxSpeed);
         }
-        while (NewInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
-        if(NewInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
+        while (newInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
+
+        //wait time too big, then shrink the block size and set interval to max size
+        if(newInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
         {
-            NewInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
-            newMultiForBigSpeed=1;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"wait time too big, then shrink the block size and set interval to max size");
+            newInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
+            multiForBigSpeed=1;
             int_for_loop=0;
-            loop_size=transferThreadList.size();
-            while(int_for_loop<loop_size)
-            {
-                transferThreadList.at(int_for_loop)->setBlockSize(this->maxSpeed*NewInterval);
-                int_for_loop++;
-            }
+            tempBlockSize=this->maxSpeed*newInterval;
         }
+
+        //set the new block size into the thread
+        loop_size=transferThreadList.size();
+        while(int_for_loop<loop_size)
+        {
+            transferThreadList.at(int_for_loop)->setBlockSize(tempBlockSize);
+            int_for_loop++;
+        }
+
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("fixed speed with new block size and new interval in KB/s: %1").arg(
+                                     (float)tempBlockSize*multiForBigSpeed//block size
+                                     /
+                                     ((float)newInterval/(float)1000)//interval
+                                     ));
+
+        clockForTheCopySpeed->setInterval(newInterval);
         if(clockForTheCopySpeed!=NULL)
             clockForTheCopySpeed->start();
         else
@@ -751,12 +762,11 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
             int_for_loop++;
         }
     }
-    multiForBigSpeed=newMultiForBigSpeed;
     int_for_loop=0;
     loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
-        transferThreadList.at(int_for_loop)->setMultiForBigSpeed(newMultiForBigSpeed);
+        transferThreadList.at(int_for_loop)->setMultiForBigSpeed(multiForBigSpeed);
         int_for_loop++;
     }
 

@@ -41,9 +41,6 @@
        <property name="text">
         <string/>
        </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
      <item>
@@ -77,9 +74,6 @@
       <widget class="QLabel" name="to">
        <property name="text">
         <string/>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
