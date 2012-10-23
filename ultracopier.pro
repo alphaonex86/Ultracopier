@@ -30,6 +30,7 @@ FORMS += HelpDialog.ui \
 RESOURCES += resources/resources.qrc
 win32 {
     RESOURCES += resources/resources_windows.qrc
+    RESOURCES += resources/resources-windows-qt-plugin.qrc
 }
 !win32 {
     RESOURCES += resources/resources_unix.qrc
@@ -116,4 +117,3 @@ OTHER_FILES += \
     resources/resources-windows.rc \
     resources/ultracopier.exe.x86.manifest \
     resources/ultracopier.exe.amd64.manifest
-
