@@ -30,9 +30,9 @@ public:
         PluginLoader();
         ~PluginLoader();
 	/// \brief try enable/disable the catching
-	void setEnabled(bool);
+	void setEnabled(const bool &needBeRegistred);
 	/// \brief to set resources, writePath can be empty if read only mode
-	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
 	/// \brief to get the options widget, NULL if not have
 	QWidget * options();
 public slots:
@@ -42,12 +42,12 @@ private:
 	QString pluginPath;
 	QStringList importantDll,secondDll;
 	QSet<QString> correctlyLoaded;
-	bool RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet);
+	bool RegisterShellExtDll(const QString &dllPath, const bool &bRegister,const bool &quiet);
 	bool checkExistsDll();
 	bool dllChecked;
 	bool needBeRegistred;
 	bool WINAPI DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath);
-	void HardUnloadDLL(QString myDllName);
+	void HardUnloadDLL(const QString &myDllName);
 	OptionInterface * optionsEngine;
 	OptionsWidget optionsWidget;
 	bool allDllIsImportant,Debug;

@@ -1,11 +1,11 @@
 /** \file pluginLoader.cpp
 \brief Define the session plugin loader test
-\author alpha_one_x86
-\version 0.3
-\date 2010 */
+\author alpha_one_x86 */
 
 #include "pluginLoader.h"
 #include "PlatformMacro.h"
+
+#include <QFile>
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 	#define NORMAL_EXT "d.dll"
@@ -51,7 +51,7 @@ PluginLoader::~PluginLoader()
         setEnabled(false);
 }
 
-void PluginLoader::setEnabled(bool needBeRegistred)
+void PluginLoader::setEnabled(const bool &needBeRegistred)
 {
 	if(!checkExistsDll())
 	{
@@ -154,42 +154,42 @@ void PluginLoader::setEnabled(bool needBeRegistred)
 		index++;
 	}
 
-	CatchState importantDll_state,secondDll_state;
+	Ultracopier::CatchState importantDll_state,secondDll_state;
 	if(importantDll_count==0)
 	{
 		if(needBeRegistred)
-			importantDll_state=Caught;
+			importantDll_state=Ultracopier::Caught;
 		else
-			importantDll_state=Uncaught;
+			importantDll_state=Ultracopier::Uncaught;
 	}
 	else
 	{
 		if(importantDll_is_loaded)
 		{
 			if(!importantDll_have_bug)
-				importantDll_state=Caught;
+				importantDll_state=Ultracopier::Caught;
 			else
-				importantDll_state=Semiuncaught;
+				importantDll_state=Ultracopier::Semiuncaught;
 		}
 		else
-			importantDll_state=Uncaught;
+			importantDll_state=Ultracopier::Uncaught;
 	}
 	if(secondDll_count==0)
 		if(needBeRegistred)
-			secondDll_state=Caught;
+			secondDll_state=Ultracopier::Caught;
 		else
-			secondDll_state=Uncaught;
+			secondDll_state=Ultracopier::Uncaught;
 	else
 	{
 		if(secondDll_is_loaded)
 		{
 			if(!secondDll_have_bug)
-				secondDll_state=Caught;
+				secondDll_state=Ultracopier::Caught;
 			else
-				secondDll_state=Semiuncaught;
+				secondDll_state=Ultracopier::Semiuncaught;
 		}
 		else
-			secondDll_state=Uncaught;
+			secondDll_state=Ultracopier::Uncaught;
 	}
 
 	if((importantDll_state==Ultracopier::Uncaught && secondDll_state==Ultracopier::Uncaught) || !needBeRegistred || (importantDll_count==0 && secondDll_count==0))
@@ -269,9 +269,12 @@ bool PluginLoader::checkExistsDll()
 		return false;
 }
 
-void PluginLoader::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+void PluginLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
 {
 	Q_UNUSED(options);
+	Q_UNUSED(writePath);
+	Q_UNUSED(pluginPath);
+	Q_UNUSED(portableVersion);
         this->pluginPath=pluginPath;
 	this->optionsEngine=options;
 	if(optionsEngine!=NULL)
@@ -287,7 +290,7 @@ void PluginLoader::setResources(OptionInterface * options,QString writePath,QStr
 	}
 }
 
-bool PluginLoader::RegisterShellExtDll(QString dllPath, bool bRegister,bool quiet)
+bool PluginLoader::RegisterShellExtDll(const QString &dllPath, const bool &bRegister,const bool &quiet)
 {
 	if(Debug)
 	{
@@ -460,7 +463,7 @@ bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 	return true;
 }
 
-void PluginLoader::HardUnloadDLL(QString myDllName)
+void PluginLoader::HardUnloadDLL(const QString &myDllName)
 {
 	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+myDllName);
 	HANDLE hSnapShot1;
@@ -472,8 +475,6 @@ void PluginLoader::HardUnloadDLL(QString myDllName)
 	QString DllLoadedPath = "";
 	bool bResult;
 	bool r;
-	short NbProcess;
-	NbProcess=0;
 
 	hSnapShot1 = CreateToolhelp32Snapshot(TH32CS_SNAPALL,0);
 
