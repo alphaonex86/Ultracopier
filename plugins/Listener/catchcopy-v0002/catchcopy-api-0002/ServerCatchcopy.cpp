@@ -183,9 +183,9 @@ void ServerCatchcopy::disconnected()
 			ClientList.at(index).socket->abort();
 			ClientList.at(index).socket->disconnectFromServer();
 			ClientList.at(index).socket->deleteLater();
-			ClientList.removeAt(index);
 			delete ClientList.at(index).detectTimeOut;
 			delete ClientList.at(index).socket;
+			ClientList.removeAt(index);
 			return;
 		}
 		index++;
