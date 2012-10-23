@@ -1,24 +1,24 @@
 /** \file session-loader.cpp
 \brief Define the session plugin loader test
-\author alpha_one_x86
-\version 0.3
-\date 2010 */
+\author alpha_one_x86 */
 
-#if defined (Q_OS_WIN32)
+#include "sessionLoader.h"
+
+#include <QCoreApplication>
+
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #else
 #error "Not under windows, plugin will not work"
 #endif
 
-#include "sessionLoader.h"
-
-void SessionLoader::setEnabled(bool newValue)
+void SessionLoader::setEnabled(const bool &newValue)
 {
 	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
 	//set value into the variable
 	HKEY    ultracopier_regkey;
 	//for autostart
-	QString runStringApp = "\"" + QApplication::applicationFilePath() + "\"";
+	QString runStringApp = "\"" + QCoreApplication::applicationFilePath() + "\"";
 	runStringApp.replace( "/", "\\" );
 	wchar_t windowsString[255];
 	runStringApp.toWCharArray(windowsString);
@@ -45,7 +45,7 @@ bool SessionLoader::getEnabled()
         return temp;
 }
 
-void SessionLoader::setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion)
+void SessionLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
 {
 	Q_UNUSED(options);
 	Q_UNUSED(writePath);

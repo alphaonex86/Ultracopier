@@ -7,7 +7,6 @@
 #define SESSION_LOADER_H
 
 #include <QObject>
-#include <QApplication>
 #include "Environment.h"
 #include "../../../interface/PluginInterface_SessionLoader.h"
 
@@ -19,11 +18,11 @@ class SessionLoader : public PluginInterface_SessionLoader
 	Q_INTERFACES(PluginInterface_SessionLoader)
 public:
 	/// \brief to set if it's enabled or not
-	void setEnabled(bool);
+	void setEnabled(const bool &newValue);
 	/// \brief to get if is enabled
 	bool getEnabled();
 	/// \brief set the resources for the plugins
-	void setResources(OptionInterface * options,QString writePath,QString pluginPath,bool portableVersion);
+	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
 	/// \brief to get the options widget, NULL if not have
 	QWidget * options();
 public slots:
