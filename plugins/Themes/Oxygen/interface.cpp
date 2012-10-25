@@ -268,7 +268,7 @@ void Themes::remainingTime(const int &remainingSeconds)
     else
     {
         Ultracopier::TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(remainingSeconds);
-        labelTimeRemaining+=QString::number(time.hour)+":"+QString::number(time.minute)+":"+QString::number(time.second);
+        labelTimeRemaining+=QString::number(time.hour)+":"+QString::number(time.minute).rightJustified(2,'0')+":"+QString::number(time.second).rightJustified(2,'0');
     }
     labelTimeRemaining+="</body></html>";
     ui->labelTimeRemaining->setText(labelTimeRemaining);
