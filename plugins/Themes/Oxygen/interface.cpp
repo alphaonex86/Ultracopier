@@ -313,6 +313,7 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
     }
     else
         ui->progressBar_all->setValue(0);
+    updateOverallInformation();
 }
 
 void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
