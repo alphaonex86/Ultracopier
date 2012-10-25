@@ -37,7 +37,7 @@ QString PluginInformation::categoryToTranslation(PluginType category)
 	switch(category)
 	{
 		case PluginType_CopyEngine:
-			return tr("CopyEngine");
+			return tr("Copy engine");
 		break;
 		case PluginType_Languages:
 			return tr("Languages");
@@ -46,10 +46,10 @@ QString PluginInformation::categoryToTranslation(PluginType category)
 			return tr("Listener");
 		break;
 		case PluginType_PluginLoader:
-			return tr("PluginLoader");
+			return tr("Plugin loader");
 		break;
 		case PluginType_SessionLoader:
-			return tr("SessionLoader");
+			return tr("Session loader");
 		break;
 		case PluginType_Themes:
 			return tr("Themes");

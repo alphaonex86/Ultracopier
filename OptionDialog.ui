@@ -105,16 +105,16 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>8</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
-        <layout class="QVBoxLayout" name="verticalLayout_10">
+        <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
           <layout class="QFormLayout" name="formLayout_2">
            <item row="0" column="0">
-            <widget class="QLabel" name="labelLanguage">
+            <widget class="QCheckBox" name="Language_force">
              <property name="text">
-              <string>Language:</string>
+              <string>Force language:</string>
              </property>
             </widget>
            </item>
@@ -122,55 +122,41 @@
             <widget class="QComboBox" name="Language"/>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="labelLanguageAutodetect">
-             <property name="text">
-              <string>Autodetect the system language:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QCheckBox" name="Language_autodetect">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
             <widget class="QLabel" name="labelCatchCopyDefault">
              <property name="text">
               <string>Catch the copy/move as default:</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
+           <item row="1" column="1">
             <widget class="QCheckBox" name="CatchCopyAsDefault">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="labelLoadAtSession">
              <property name="text">
               <string>Load at the session loading:</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="2" column="1">
             <widget class="QCheckBox" name="LoadAtSessionStarting">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
               <string>When manual open:</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="3" column="1">
             <widget class="QComboBox" name="ActionOnManualOpen">
              <item>
               <property name="text">
@@ -189,7 +175,14 @@
              </item>
             </widget>
            </item>
-           <item row="5" column="1">
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Group the windows when:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
             <widget class="QComboBox" name="GroupWindowWhen">
              <item>
               <property name="text">
@@ -221,13 +214,6 @@
                <string notr="true">Always</string>
               </property>
              </item>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>Group the windows when:</string>
-             </property>
             </widget>
            </item>
           </layout>
@@ -796,22 +782,6 @@
   <include location="resources/resources.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>Language_autodetect</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>Language</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>449</x>
-     <y>42</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>502</x>
-     <y>10</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>checkBox_Log</sender>
    <signal>toggled(bool)</signal>
