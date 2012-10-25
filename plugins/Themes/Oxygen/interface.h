@@ -85,6 +85,8 @@ public:
     QWidget * getOptionsEngineWidget();
     /// \brief to set if the copy engine is found
     void getOptionsEngineEnabled(const bool &isEnabled);
+    enum status{status_never_started,status_started,status_stopped};
+    status stat;
 public slots:
     /// \brief set the translate
     void newLanguageLoaded();
@@ -181,6 +183,7 @@ private:
     void dragLeaveEvent(QDragLeaveEvent* event);
     //have functionality
     bool shutdown;
+    void updatePause();
 signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);

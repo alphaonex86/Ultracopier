@@ -24,6 +24,7 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     currentSize	= 0;
     totalSize	= 0;
     haveError	= false;
+    stat        = status_never_started;
     this->show();
     menu=new QMenu(this);
     ui->add->setMenu(menu);
@@ -219,6 +220,7 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                     default:
                     break;
                 }
+                stat = status_stopped;
             }
         break;
         default:
@@ -232,10 +234,7 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             ui->pauseButton->setEnabled(true);
             haveStarted=true;
             ui->cancelButton->setText(facilityEngine->translateText("Quit"));
-            if(storeIsInPause)
-                ui->pauseButton->setText(facilityEngine->translateText("Start"));
-            else
-                ui->pauseButton->setText(facilityEngine->translateText("Pause"));
+            updatePause();
         break;
         case Ultracopier::Listing:
             ui->pauseButton->setEnabled(false);
@@ -313,6 +312,8 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
     }
     else
         ui->progressBar_all->setValue(0);
+    if(current>0)
+        stat = status_started;
     updateOverallInformation();
 }
 
@@ -405,18 +406,23 @@ void Themes::isInPause(const bool &isInPause)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"isInPause: "+QString::number(isInPause));
     //resume in auto the pause
     storeIsInPause=isInPause;
-    if(isInPause)
+    updatePause();
+}
+
+void Themes::updatePause()
+{
+    if(storeIsInPause)
     {
         ui->pauseButton->setIcon(player_play);
-        ui->pauseButton->setText(facilityEngine->translateText("Resume"));
+        if(stat == status_started)
+            ui->pauseButton->setText(facilityEngine->translateText("Resume"));
+        else
+            ui->pauseButton->setText(facilityEngine->translateText("Start"));
     }
     else
     {
         ui->pauseButton->setIcon(player_pause);
-        if(haveStarted)
-            ui->pauseButton->setText(facilityEngine->translateText("Pause"));
-        else
-            ui->pauseButton->setText(facilityEngine->translateText("Start"));
+        ui->pauseButton->setText(facilityEngine->translateText("Pause"));
     }
 }
 
