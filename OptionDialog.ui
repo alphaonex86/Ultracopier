@@ -114,7 +114,7 @@
            <item row="0" column="0">
             <widget class="QCheckBox" name="Language_force">
              <property name="text">
-              <string>Force language:</string>
+              <string>Force the language:</string>
              </property>
             </widget>
            </item>

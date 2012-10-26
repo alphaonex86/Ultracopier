@@ -157,7 +157,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("pluginList.at(index).supportedProtocolsForTheDestination: %1").arg(pluginList.at(index).supportedProtocolsForTheDestination.join(";")));
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("protocolsUsedForTheDestination: %1").arg(protocolsUsedForTheDestination));
-                if(pluginList.at(index).supportedProtocolsForTheDestination.contains(protocolsUsedForTheDestination))
+                if(protocolsUsedForTheDestination.isEmpty() || pluginList.at(index).supportedProtocolsForTheDestination.contains(protocolsUsedForTheDestination))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("pluginList.at(index).supportedProtocolsForTheSource: %1").arg(pluginList.at(index).supportedProtocolsForTheSource.join(";")));
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("protocolsUsedForTheSources.at(indexProto): %1").arg(protocolsUsedForTheSources.join(";")));

@@ -93,8 +93,8 @@ class Core : public QObject, public GlobalClass
 
         void connectEngine(const int &index);
         void connectInterfaceAndSync(const int &index);
-        void disconnectEngine(const int &index);
-        void disconnectInterface(const int &index);
+        //void disconnectEngine(const int &index);
+        //void disconnectInterface(const int &index);
 
         /** \brief update at periodic interval, the synchronization between copy engine and interface, but for specific entry
         \see forUpateInformation */

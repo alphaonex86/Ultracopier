@@ -293,7 +293,7 @@ void Core::unloadInterface()
     {
         if(copyList.at(index).interface!=NULL)
         {
-            disconnectInterface(index);
+            //disconnectInterface(index);
             delete copyList.at(index).interface;
             copyList[index].interface=NULL;
             copyList[index].copyEngineIsSync=false;
@@ -584,7 +584,7 @@ int Core::indexCopySenderInterface()
 void Core::connectEngine(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
-    disconnectEngine(index);
+    //disconnectEngine(index);
 
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing,			this,&Core::newFolderListing,Qt::QueuedConnection))//to check to change
@@ -614,7 +614,7 @@ void Core::connectEngine(const int &index)
 void Core::connectInterfaceAndSync(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
-    disconnectInterface(index);
+    //disconnectInterface(index);
 
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::pause,					currentCopyInstance.engine,&PluginInterface_CopyEngine::pause))
@@ -689,11 +689,11 @@ void Core::connectInterfaceAndSync(const int &index)
     periodicSynchronizationWithIndex(index);
 }
 
-void Core::disconnectEngine(const int &index)
+/*void Core::disconnectEngine(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1").arg(index));
 //	CopyInstance& currentCopyInstance=copyList[index];
-/*	disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing(QString)),			this,&Core::newFolderListing(QString)));//to check to change
+    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing(QString)),			this,&Core::newFolderListing(QString)));//to check to change
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newCollisionAction(QString)),		this,&Core::newCollisionAction(QString)));
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newErrorAction(QString)),			this,&Core::newErrorAction(QString)));
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess(EngineActionInProgress)),	this,&Core::actionInProgess(EngineActionInProgress)));
@@ -701,7 +701,7 @@ void Core::disconnectEngine(const int &index)
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::cancelAll()),				this,&Core::copyInstanceCanceledByEngine()));
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::error(QString,quint64,QDateTime,QString)),	this,&Core::error(QString,quint64,QDateTime,QString)));
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::rmPath(QString)),				this,&Core::rmPath(QString)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath(QString)),				this,&Core::mkPath(QString)));*/
+    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath(QString)),				this,&Core::mkPath(QString)));
 
 }
 
@@ -709,7 +709,7 @@ void Core::disconnectInterface(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1").arg(index));
     Q_UNUSED(index);
-/*	CopyInstance& currentCopyInstance=copyList[index];
+    CopyInstance& currentCopyInstance=copyList[index];
     disconnect(currentCopyInstance.interface,&PluginInterface_Themes::pause()),				currentCopyInstance.engine,&PluginInterface_CopyEngine::pause()));
     disconnect(currentCopyInstance.interface,&PluginInterface_Themes::resume()),				currentCopyInstance.engine,&PluginInterface_CopyEngine::resume()));
     disconnect(currentCopyInstance.interface,&PluginInterface_Themes::skip(quint64)),				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip(quint64)));
@@ -732,8 +732,8 @@ void Core::disconnectInterface(const int &index)
 
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,&PluginInterface_Themes::getActionOnList(QList<returnActionOnCopyList>)));
     disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression(QList<ProgressionItem>)),	currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression(QList<ProgressionItem>)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression(quint64,quint64)));*/
-}
+    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression(quint64,quint64)));
+}*/
 
 void Core::periodicSynchronization()
 {
@@ -838,8 +838,8 @@ void Core::copyInstanceCanceledByInterface()
 void Core::copyInstanceCanceledByIndex(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, remove with the index: "+QString::number(index));
-    disconnectEngine(index);
-    disconnectInterface(index);
+    //disconnectEngine(index);
+    //disconnectInterface(index);
     CopyInstance& currentCopyInstance=copyList[index];
     currentCopyInstance.engine->cancel();
     delete currentCopyInstance.nextConditionalSync;
