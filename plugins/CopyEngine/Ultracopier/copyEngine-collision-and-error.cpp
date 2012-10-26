@@ -4,9 +4,6 @@
 \version 0.3
 \date 2010 */
 
-#include <QFileDialog>
-#include <QMessageBox>
-
 #include "copyEngine.h"
 #include "folderExistsDialog.h"
 

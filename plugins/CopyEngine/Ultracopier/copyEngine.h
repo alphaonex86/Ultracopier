@@ -305,26 +305,6 @@ private slots:
     void warningTransferList(const QString &warning);
     void errorTransferList(const QString &error);
 signals:
-    //send information about the copy
-    //void actionInProgess(EngineActionInProgress);	//should update interface information on this event
-
-    //void newActionOnList(const QList<returnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
-    //void syncReady();
-
-    /** \brief to get the progression for a specific file
-     * \param id the id of the transfer, id send during population the transfer list
-     * first = current transfered byte, second = byte to transfer */
-    //void pushFileProgression(const QList<ProgressionItem> &progressionList);
-    //get information about the copy
-    /** \brief to get the general progression
-     * first = current transfered byte, second = byte to transfer */
-    //void pushGeneralProgression(const quint64 &,const quint64 &);
-
-    /*void newFolderListing(const QString &path);
-    void newCollisionAction(const QString &action);
-    void newErrorAction(const QString &action);
-    void isInPause(bool);*/
-
     //action on the copy
     void signal_pause();
     void signal_resume();
@@ -346,20 +326,9 @@ signals:
     void signal_setComboBoxFolderColision(FolderExistsAction action);
     void signal_setFolderColision(FolderExistsAction action);
 
-    //when the cancel is clicked on copy engine dialog
-    void cancelAll();
-
     //internal cancel
     void tryCancel();
 
-    //when can be deleted
-    //void canBeDeleted();
-
-    //send error occurred
-    /*void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
-    //for the extra logging
-    void rmPath(const QString &path);
-    void mkPath(const QString &path);*/
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
