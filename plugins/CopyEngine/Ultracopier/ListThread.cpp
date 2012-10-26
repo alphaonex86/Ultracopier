@@ -115,7 +115,6 @@ void ListThread::transferInodeIsClosed()
             countLocalParse++;
             #endif
             isFound=true;
-            //emit newActionOnList();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+QString::number(numberOfTranferRuning));
             if(actionToDoListTransfer.size()==0)
             {
@@ -616,7 +615,6 @@ void ListThread::resume()
 void ListThread::skip(const quint64 &id)
 {
     skipInternal(id);
-//	emit newActionOnList();
 }
 
 bool ListThread::skipInternal(const quint64 &id)
@@ -995,7 +993,6 @@ void ListThread::removeItems(const QList<int> &ids)
 {
     for(int i=0;i<ids.size();i++)
         skipInternal(ids.at(i));
-//	emit newActionOnList();
 }
 
 //put on top
@@ -1025,12 +1022,10 @@ void ListThread::moveItemsOnTop(QList<int> ids)
             indexToMove++;
             if(ids.size()==0)
             {
-                //emit newActionOnList();
                 return;
             }
         }
     }
-//	emit newActionOnList();
 }
 
 //move up
@@ -1068,8 +1063,7 @@ void ListThread::moveItemsUp(QList<int> ids)
             ids.removeOne(actionToDoListTransfer.at(i).id);
             if(ids.size()==0)
             {
-/*				if(haveChanged)
-                    emit newActionOnList();*/
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
                 return;
             }
         }
@@ -1080,7 +1074,6 @@ void ListThread::moveItemsUp(QList<int> ids)
             haveGoodPosition=true;
         }
     }
-    //emit newActionOnList();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
@@ -1120,8 +1113,7 @@ void ListThread::moveItemsDown(QList<int> ids)
             ids.removeOne(actionToDoListTransfer.at(i).id);
             if(ids.size()==0)
             {
-/*				if(haveChanged)
-                    emit newActionOnList();*/
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
                 return;
             }
         }
@@ -1132,7 +1124,6 @@ void ListThread::moveItemsDown(QList<int> ids)
             haveGoodPosition=true;
         }
     }
-    //emit newActionOnList();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
@@ -1165,12 +1156,11 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
             lastGoodPositionExtern--;
             if(ids.size()==0)
             {
-//				emit newActionOnList();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
                 return;
             }
         }
     }
-//	emit newActionOnList();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
@@ -1290,6 +1280,14 @@ void ListThread::importTransferList(const QString &fileName)
             emit errorTransferList(tr("The transfer list is in move mode, but this instance is not in this mode"));
             return;
         }
+
+        updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+        if(updateTheStatus_copying)
+            updateTheStatus_action_in_progress=Ultracopier::CopyingAndListing;
+        else
+            updateTheStatus_action_in_progress=Ultracopier::Listing;
+        emit actionInProgess(updateTheStatus_action_in_progress);
+
         bool errorFound=false;
         QRegularExpression correctLine;
         if(transferListMixedMode)
@@ -1335,7 +1333,8 @@ void ListThread::importTransferList(const QString &fileName)
         transferFile.close();
         if(errorFound)
             emit warningTransferList(tr("Some error have been found during the line parsing"));
-//		emit newActionOnList();
+        sendActionDone();
+        updateTheStatus();
     }
     else
     {
