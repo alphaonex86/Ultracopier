@@ -187,28 +187,6 @@ private:
 signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
-/*
-    //set the transfer list
-    void removeItems(QList<int> ids);
-    void moveItemsOnTop(QList<int> ids);
-    void moveItemsUp(QList<int> ids);
-    void moveItemsDown(QList<int> ids);
-    void moveItemsOnBottom(QList<int> ids);
-    void exportTransferList();
-    void importTransferList();
-    //user ask ask to add folder (add it with interface ask source/destination)
-    void userAddFolder(CopyMode);
-    void userAddFile(CopyMode);
-    void urlDropped(QList<QUrl> urls);
-    //action on the copy
-    void pause();
-    void resume();
-    void skip(quint64 id);
-    void cancel();
-    //edit the action
-    void sendCollisionAction(QString action);
-    void sendErrorAction(QString action);
-    void newSpeedLimitation(qint64);*/
 };
 
 #endif // INTERFACE_H
