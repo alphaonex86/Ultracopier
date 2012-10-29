@@ -5,6 +5,7 @@
 \date 2010 */
 
 #include <QFileDialog>
+#include <QDebug>
 
 #include "factory.h"
 
@@ -29,19 +30,12 @@ Factory::Factory() :
     optionsEngine=NULL;
     filters=new Filters(tempWidget);
     renamingRules=new RenamingRules(tempWidget);
-    #if defined (Q_OS_WIN32)
-    QFileInfoList temp=QDir::drives();
+
+    QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
-        mountSysPoint<<temp.at(i).filePath();
+        mountSysPoint<<temp.at(i);
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
-    #elif defined (Q_OS_LINUX)
-    connect(&mount,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),				this,&Factory::error);
-    connect(&mount,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),				this,&Factory::finished);
-    connect(&mount,&QProcess::readyReadStandardOutput,		this,&Factory::readyReadStandardOutput);
-    connect(&mount,&QProcess::readyReadStandardError,		this,&Factory::readyReadStandardError);
-    mount.start("mount");
-    #endif
+
     connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&Factory::setDoRightTransfer);
     connect(ui->keepDate,			&QCheckBox::toggled,		this,&Factory::setKeepDate);
     connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&Factory::setBlockSize);
@@ -73,6 +67,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
     connect(realObject,&copyEngine::debugInformation,this,&Factory::debugInformation);
     #endif
     realObject->connectTheSignalsSlots();
+    connect(this,&Factory::haveDrive,realObject,&copyEngine::setDrive);
     realObject->setDrive(mountSysPoint);
     PluginInterface_CopyEngine * newTransferEngine=realObject;
     connect(this,&Factory::reloadLanguage,realObject,&copyEngine::newLanguageLoaded);
@@ -211,54 +206,6 @@ Ultracopier::TransferListOperation Factory::getTransferListOperation()
 bool Factory::canDoOnlyCopy()
 {
     return false;
-}
-
-void Factory::error(QProcess::ProcessError error)
-{
-    #ifndef ULTRACOPIER_PLUGIN_DEBUG
-        Q_UNUSED(error)
-    #endif
-    errorFound=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"have detected error: "+QString::number(error));
-}
-
-void Factory::finished(int exitCode, QProcess::ExitStatus exitStatus)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"exitCode: "+QString::number(exitCode)+", exitStatus: "+QString::number(exitStatus));
-    #ifndef ULTRACOPIER_PLUGIN_DEBUG
-        Q_UNUSED(exitCode)
-        Q_UNUSED(exitStatus)
-    #endif
-    if(!StandardError.isEmpty())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"have finished with text on error output: "+StandardError);
-    else if(errorFound)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"have finished with error and no text");
-    {
-        QStringList tempList=StandardOutput.split(QRegularExpression("[\n\r]+"));
-        int index=0;
-        while(index<tempList.size())
-        {
-            QString newString=tempList.at(index);
-            newString=newString.remove(QRegularExpression("^.* on "));
-            newString=newString.remove(QRegularExpression(" type .*$"));
-            if(!newString.endsWith(QDir::separator()))
-                newString+=QDir::separator();
-            mountSysPoint<<newString;
-            index++;
-        }
-        mountSysPoint.removeDuplicates();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint: "+mountSysPoint.join(";"));
-    }
-}
-
-void Factory::readyReadStandardError()
-{
-    StandardError+=mount.readAllStandardError();
-}
-
-void Factory::readyReadStandardOutput()
-{
-    StandardOutput+=mount.readAllStandardOutput();
 }
 
 void Factory::resetOptions()
@@ -427,4 +374,14 @@ void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible
         optionsEngine->setOptionValue("checksumIgnoreIfImpossible",checksumIgnoreIfImpossible);
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::logicalDriveChanged(const QString &,bool)
+{
+    QStringList temp=storageInfo.allLogicalDrives();
+    for (int i = 0; i < temp.size(); ++i) {
+        mountSysPoint<<temp.at(i);
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
+    emit haveDrive(mountSysPoint);
 }

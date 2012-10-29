@@ -22,9 +22,10 @@
 #include "MkPath.h"
 #include "RmPath.h"
 #include "Environment.h"
+#include "DriveManagement.h"
 
 /// \brief Define the list thread, and management to the action to do
-class ListThread : public QThread
+class ListThread : public QThread, public DriveManagement
 {
     Q_OBJECT
 public:
@@ -181,11 +182,14 @@ public slots:
     void sendProgression();
 private:
     QSemaphore mkpathTransfer;
+
     QString sourceDrive;
     bool sourceDriveMultiple;
-    bool stopIt;
     QString destinationDrive;
+    QStringList		mountSysPoint;
     bool destinationDriveMultiple;
+
+    bool stopIt;
     QList<scanFileOrFolder *> scanFileOrFolderThreadsPool;
     int numberOfTransferIntoToDoList;
     QList<TransferThread *>		transferThreadList;
@@ -368,6 +372,7 @@ signals:
     void errorTransferList(const QString &error);
     void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
     void send_realBytesTransfered(const quint64 &);
+    void send_setDrive(QStringList mountSysPoint);
 };
 
 #endif // LISTTHREAD_H

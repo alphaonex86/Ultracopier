@@ -17,10 +17,11 @@
 #include "ReadThread.h"
 #include "WriteThread.h"
 #include "Environment.h"
+#include "DriveManagement.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
-class TransferThread : public QThread
+class TransferThread : public QThread, public DriveManagement
 {
     Q_OBJECT
 public:
@@ -28,10 +29,6 @@ public:
     ~TransferThread();
     /// \brief get transfer stat
     TransferStat getStat();
-    /// \brief get drive of an file or folder
-    QString getDrive(QString fileOrFolder);
-    /// \brief set drive list, used in getDrive()
-    void setDrive(QStringList drives);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief to set the id
     void setId(int id);
@@ -113,6 +110,8 @@ public slots:
     /// \brief put the current file at bottom
     void putAtBottom();
 
+    void setDrive(QStringList mountSysPoint);
+
     void set_osBufferLimit(unsigned int osBufferLimit);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
     //speed limitation
@@ -171,7 +170,6 @@ private:
     bool			retry;
     QFileInfo		sourceInfo;
     QFileInfo		destinationInfo;
-    QStringList		mountSysPoint;
     qint64			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;

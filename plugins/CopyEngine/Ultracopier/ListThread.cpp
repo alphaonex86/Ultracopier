@@ -283,36 +283,54 @@ void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &d
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameSource(const QStringList &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(sourceDriveMultiple)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourceDriveMultiple");
         return false;
+    }
     if(sourceDrive.isEmpty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourceDrive.isEmpty()");
         return true;
+    }
     int index=0;
     while(index<sources.size())
     {
-//		if(threadOfTheTransfer.getDrive(sources.at(index))!=sourceDrive)
-//			return false;
+        if(getDrive(sources.at(index))!=sourceDrive)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources.at(index))!=sourceDrive");
+            return false;
+        }
         index++;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"seam have same source");
     return true;
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameDestination(const QString &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(destinationDriveMultiple)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDriveMultiple");
         return false;
+    }
     if(destinationDrive.isEmpty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDrive.isEmpty()");
         return true;
+    }
     int index=0;
     while(index<destination.size())
     {
-//		if(threadOfTheTransfer.getDrive(destination.at(index))!=destinationDrive)
-//			return false;
+        if(getDrive(destination.at(index))!=destinationDrive)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinations.at(index))!=destinationDrive");
+            return false;
+        }
         index++;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"seam have same destination");
     return true;
 }
 
@@ -425,37 +443,31 @@ bool ListThread::newMove(const QStringList &sources,const QString &destination)
     }
     scanFileOrFolderThread->addToList(sources,destination);
     scanThreadHaveFinish(true);
-/*	int index=0;
+    int index=0;
     while(index<sources.size() && !sourceDriveMultiple)
     {
-        QString tempDrive=threadOfTheTransfer.getDrive(sources.at(index));
+        QString tempDrive=getDrive(sources.at(index));
         if(sourceDrive=="")
             sourceDrive=tempDrive;
         if(tempDrive!=sourceDrive)
             sourceDriveMultiple=true;
         index++;
-    }*/
-/*	QString tempDrive=threadOfTheTransfer.getDrive(destination);
+    }
+    QString tempDrive=getDrive(destination);
     if(!destinationDriveMultiple)
     {
         if(tempDrive=="")
             destinationDrive=tempDrive;
         if(tempDrive!=destinationDrive)
             destinationDriveMultiple=true;
-    }*/
+    }
     return true;
 }
 
 void ListThread::setDrive(const QStringList &drives)
 {
-    this->drives=drives;
-    int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->setDrive(drives);
-        index++;
-    }
+    emit send_setDrive(mountSysPoint);
+    DriveManagement::setDrive(drives);
 }
 
 void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists)
@@ -1722,9 +1734,9 @@ void ListThread::createTransferThread()
     last->transferId=0;
     last->transferSize=0;
     last->setRightTransfer(doRightTransfer);
+    last->setDrive(mountSysPoint);
     last->setKeepDate(keepDate);
     last->setBlockSize(blockSize);
-    last->setDrive(drives);
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
     last->setMultiForBigSpeed(multiForBigSpeed);
     last->set_doChecksum(doChecksum);
@@ -1750,6 +1762,7 @@ void ListThread::createTransferThread()
     connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThread::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
 
     connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_setDrive,		last,&TransferThread::setDrive,		Qt::QueuedConnection);
 
     last->start();
     last->setObjectName(QString("transfer %1").arg(transferThreadList.size()-1));

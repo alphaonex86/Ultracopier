@@ -337,6 +337,7 @@ signals:
     //other signals
     void queryOneNewDialog();
 
+    void send_setDrive(const QStringList &drives);
     void send_speedLimitation(const qint64 &speedLimitation);
     void send_blockSize(const int &blockSize);
     void send_osBufferLimit(const unsigned int &osBufferLimit);

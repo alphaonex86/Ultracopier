@@ -1,8 +1,8 @@
-QT += widgets
+QT += widgets systeminfo
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = copyEngine.h \
-		StructEnumDefinition.h \
+                StructEnumDefinition.h \
     scanFileOrFolder.h \
     fileErrorDialog.h \
     fileExistsDialog.h \
@@ -25,7 +25,8 @@ HEADERS         = copyEngine.h \
     ../../../interface/FacilityInterface.h \
     Filters.h \
     FilterRules.h \
-    RenamingRules.h
+    RenamingRules.h \
+    DriveManagement.h
 SOURCES         = copyEngine.cpp \
     scanFileOrFolder.cpp \
     fileErrorDialog.cpp \
@@ -45,7 +46,8 @@ SOURCES         = copyEngine.cpp \
     Filters.cpp \
     FilterRules.cpp \
     RenamingRules.cpp \
-    ListThread_InodeAction.cpp
+    ListThread_InodeAction.cpp \
+    DriveManagement.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += Languages/fr/translation.ts \
     Languages/ar/translation.ts \

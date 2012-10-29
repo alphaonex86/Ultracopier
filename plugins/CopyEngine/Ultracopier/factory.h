@@ -8,6 +8,7 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QProcess>
+#include <QStorageInfo>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "StructEnumDefinition.h"
@@ -55,18 +56,12 @@ private:
     QWidget* tempWidget;
     OptionInterface * optionsEngine;
     QStringList mountSysPoint;
-    QProcess mount;
-    QString StandardError;
-    QString StandardOutput;
     bool errorFound;
     FacilityInterface * facilityEngine;
     Filters *filters;
     RenamingRules *renamingRules;
+    QStorageInfo storageInfo;
 private slots:
-    void error(QProcess::ProcessError error);
-    void finished(int exitCode, QProcess::ExitStatus exitStatus);
-    void readyReadStandardError();
-    void readyReadStandardOutput();
     void setDoRightTransfer(bool doRightTransfer);
     void setKeepDate(bool keepDate);
     void setBlockSize(int blockSize);
@@ -82,11 +77,13 @@ private slots:
     void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
     void showRenamingRules();
     void updateBufferCheckbox();
+    void logicalDriveChanged(const QString &, bool);
 public slots:
     void resetOptions();
     void newLanguageLoaded();
 signals:
     void reloadLanguage();
+    void haveDrive(const QStringList &drives);
 };
 
 #endif // FACTORY_H

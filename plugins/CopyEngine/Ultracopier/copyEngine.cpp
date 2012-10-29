@@ -149,6 +149,8 @@ void copyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setFilters()");
     if(!connect(this,&copyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_sendNewRenamingRules()");
+    if(!connect(this,&copyEngine::send_setDrive,listThread,&ListThread::setDrive,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setDrive()");
     if(!connect(&timerActionDone,&QTimer::timeout,							listThread,&ListThread::sendActionDone))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerActionDone");
     if(!connect(&timerProgression,&QTimer::timeout,							listThread,&ListThread::sendProgression))
@@ -342,7 +344,7 @@ QList<QPair<QString,QString> > copyEngine::getErrorAction()
 
 void copyEngine::setDrive(const QStringList &drives)
 {
-    listThread->setDrive(drives);
+    emit send_setDrive(drives);
 }
 
 /** \brief to sync the transfer list

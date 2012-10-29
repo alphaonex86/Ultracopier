@@ -402,16 +402,9 @@ void TransferThread::tryMoveDirectly()
 
 bool TransferThread::canBeMovedDirectly()
 {
-    //move if on same mount point
-    #if defined (Q_OS_LINUX) || defined (Q_OS_WIN32)
     if(mode!=Ultracopier::Move)
         return false;
-    if(mountSysPoint.size()==0)
-        return false;
-    if(getDrive(destinationInfo.fileName())==getDrive(sourceInfo.fileName()))
-        return true;
-    #endif
-    return false;
+    return isSameDrive(destinationInfo.fileName(),sourceInfo.fileName());
 }
 
 void TransferThread::readIsReady()
@@ -934,23 +927,6 @@ void TransferThread::timeOfTheBlockCopyFinished()
     readThread.timeOfTheBlockCopyFinished();
 }
 
-//get drive of an file or folder
-QString TransferThread::getDrive(QString fileOrFolder)
-{
-    for (int i = 0; i < mountSysPoint.size(); ++i) {
-        if(fileOrFolder.startsWith(mountSysPoint.at(i)))
-            return mountSysPoint.at(i);
-    }
-    //if unable to locate the right mount point
-    return "";
-}
-
-//set drive list, used in getDrive()
-void TransferThread::setDrive(QStringList drives)
-{
-    mountSysPoint=drives;
-}
-
 //fonction to edit the file date time
 bool TransferThread::changeFileDateTime(const QString &source,const QString &destination)
 {
@@ -1114,6 +1090,11 @@ qint64 TransferThread::copiedSize()
 void TransferThread::putAtBottom()
 {
     emit tryPutAtBottom();
+}
+
+void TransferThread::setDrive(QStringList mountSysPoint)
+{
+    DriveManagement::setDrive(mountSysPoint);
 }
 
 void TransferThread::set_osBufferLimit(unsigned int osBufferLimit)
