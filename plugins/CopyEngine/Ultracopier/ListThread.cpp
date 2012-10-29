@@ -320,15 +320,10 @@ bool ListThread::haveSameDestination(const QString &destination)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDrive.isEmpty()");
         return true;
     }
-    int index=0;
-    while(index<destination.size())
+    if(getDrive(destination)!=destinationDrive)
     {
-        if(getDrive(destination.at(index))!=destinationDrive)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinations.at(index))!=destinationDrive");
-            return false;
-        }
-        index++;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination!=destinationDrive");
+        return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"seam have same destination");
     return true;

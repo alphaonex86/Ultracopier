@@ -384,7 +384,7 @@ void Factory::logicalDriveChanged(const QString &,bool)
     #ifdef STORAGEINFO
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
-        mountSysPoint<<temp.at(i);
+        mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
     emit haveDrive(mountSysPoint);

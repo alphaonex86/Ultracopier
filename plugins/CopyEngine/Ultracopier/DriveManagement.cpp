@@ -6,17 +6,18 @@
 //get drive of an file or folder
 QString DriveManagement::getDrive(const QString &fileOrFolder)
 {
+    QString inode=QDir::toNativeSeparators(fileOrFolder);
     #ifdef Q_OS_WIN32
     QFileInfoList drives=QDir::drives();
     int size=drives.size();
     for (int i = 0; i < size; ++i) {
-        if(QDir::toNativeSeparators(fileOrFolder).startsWith(QDir::toNativeSeparators(drives.at(i).absoluteFilePath())))
+        if(inode.startsWith(QDir::toNativeSeparators(drives.at(i).absoluteFilePath())))
             return QDir::toNativeSeparators(drives.at(i).absoluteFilePath());
     }
     #else
     int size=mountSysPoint.size();
     for (int i = 0; i < size; ++i) {
-        if(QDir::toNativeSeparators(fileOrFolder).startsWith(QDir::toNativeSeparators(mountSysPoint.at(i))))
+        if(inode.startsWith(mountSysPoint.at(i)))
             return QDir::toNativeSeparators(mountSysPoint.at(i));
     }
     #endif
