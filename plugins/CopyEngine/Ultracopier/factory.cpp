@@ -31,10 +31,13 @@ Factory::Factory() :
     filters=new Filters(tempWidget);
     renamingRules=new RenamingRules(tempWidget);
 
+    #ifdef STORAGEINFO
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
         mountSysPoint<<temp.at(i);
     }
+    connect(&storageInfo,&QStorageInfo::logicalDriveChanged,this,&Factory::logicalDriveChanged);
+    #endif
 
     connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&Factory::setDoRightTransfer);
     connect(ui->keepDate,			&QCheckBox::toggled,		this,&Factory::setKeepDate);
@@ -378,10 +381,12 @@ void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible
 
 void Factory::logicalDriveChanged(const QString &,bool)
 {
+    #ifdef STORAGEINFO
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
         mountSysPoint<<temp.at(i);
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
     emit haveDrive(mountSysPoint);
+    #endif
 }

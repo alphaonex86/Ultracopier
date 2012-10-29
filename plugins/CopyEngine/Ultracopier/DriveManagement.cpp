@@ -1,25 +1,35 @@
 #include "DriveManagement.h"
 
-#include <QStorageInfo>
+#include <QDir>
+#include <QFileInfoList>
 
 //get drive of an file or folder
-QString DriveManagement::getDrive(QString fileOrFolder)
+QString DriveManagement::getDrive(const QString &fileOrFolder)
 {
+    #ifdef Q_OS_WIN32
+    QFileInfoList drives=QDir::drives();
+    int size=drives.size();
+    for (int i = 0; i < size; ++i) {
+        if(QDir::toNativeSeparators(fileOrFolder).startsWith(QDir::toNativeSeparators(drives.at(i).absoluteFilePath())))
+            return QDir::toNativeSeparators(drives.at(i).absoluteFilePath());
+    }
+    #else
     int size=mountSysPoint.size();
     for (int i = 0; i < size; ++i) {
-        if(fileOrFolder.startsWith(mountSysPoint.at(i)))
-            return mountSysPoint.at(i);
+        if(QDir::toNativeSeparators(fileOrFolder).startsWith(QDir::toNativeSeparators(mountSysPoint.at(i))))
+            return QDir::toNativeSeparators(mountSysPoint.at(i));
     }
+    #endif
     //if unable to locate the right mount point
     return "";
 }
 
-void DriveManagement::setDrive(QStringList mountSysPoint)
+void DriveManagement::setDrive(const QStringList &mountSysPoint)
 {
     this->mountSysPoint=mountSysPoint;
 }
 
-bool DriveManagement::isSameDrive(QString file1,QString file2)
+bool DriveManagement::isSameDrive(const QString &file1,const QString &file2)
 {
     #if defined (Q_OS_LINUX)
     if(mountSysPoint.size()==0)

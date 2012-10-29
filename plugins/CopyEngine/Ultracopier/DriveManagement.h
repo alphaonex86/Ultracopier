@@ -7,11 +7,11 @@
 class DriveManagement
 {
 public:
-    virtual void setDrive(QStringList mountSysPoint);
+    virtual void setDrive(const QStringList &mountSysPoint);
 protected:
     /// \brief get drive of an file or folder
-    QString getDrive(QString fileOrFolder);
-    bool isSameDrive(QString file1,QString file2);
+    QString getDrive(const QString &fileOrFolder);
+    bool isSameDrive(const QString &file1,const QString &file2);
     QStringList		mountSysPoint;
 };
 

@@ -425,9 +425,9 @@ bool ListThread::newCopy(const QStringList &sources,const QString &destination)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get new thread");
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing");
     scanFileOrFolderThread->addToList(sources,destination);
     scanThreadHaveFinish(true);
+    detectDrivesOfCurrentTransfer(sources,destination);
     return true;
 }
 
@@ -443,25 +443,43 @@ bool ListThread::newMove(const QStringList &sources,const QString &destination)
     }
     scanFileOrFolderThread->addToList(sources,destination);
     scanThreadHaveFinish(true);
-    int index=0;
-    while(index<sources.size() && !sourceDriveMultiple)
+    detectDrivesOfCurrentTransfer(sources,destination);
+    return true;
+}
+
+void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const QString &destination)
+{
+    /* code to detect volume/mount point to group by windows */
+    if(!sourceDriveMultiple)
     {
-        QString tempDrive=getDrive(sources.at(index));
-        if(sourceDrive=="")
-            sourceDrive=tempDrive;
-        if(tempDrive!=sourceDrive)
-            sourceDriveMultiple=true;
-        index++;
+        int index=0;
+        while(index<sources.size())
+        {
+            QString tempDrive=getDrive(sources.at(index));
+            //if have not already source, set the source
+            if(sourceDrive.isEmpty())
+                sourceDrive=tempDrive;
+            //if have previous source and the news source is not the same
+            if(sourceDrive!=tempDrive)
+            {
+                sourceDriveMultiple=true;
+                break;
+            }
+            index++;
+        }
     }
-    QString tempDrive=getDrive(destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source informations, sourceDrive: %1, sourceDriveMultiple: %2").arg(sourceDrive).arg(sourceDriveMultiple));
     if(!destinationDriveMultiple)
     {
-        if(tempDrive=="")
+        QString tempDrive=getDrive(destination);
+        //if have not already destination, set the destination
+        if(destinationDrive.isEmpty())
             destinationDrive=tempDrive;
-        if(tempDrive!=destinationDrive)
+        //if have previous destination and the news destination is not the same
+        if(destinationDrive!=tempDrive)
             destinationDriveMultiple=true;
     }
-    return true;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("destination informations, destinationDrive: %1, destinationDriveMultiple: %2").arg(destinationDrive).arg(destinationDriveMultiple));
 }
 
 void ListThread::setDrive(const QStringList &drives)

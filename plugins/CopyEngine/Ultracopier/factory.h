@@ -3,12 +3,16 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
+#include "StructEnumDefinition_CopyEngine.h"
+
 #include <QObject>
 #include <QList>
 #include <QStringList>
 #include <QFileInfo>
 #include <QProcess>
+#ifdef STORAGEINFO
 #include <QStorageInfo>
+#endif
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "StructEnumDefinition.h"
@@ -60,7 +64,9 @@ private:
     FacilityInterface * facilityEngine;
     Filters *filters;
     RenamingRules *renamingRules;
+    #ifdef STORAGEINFO
     QStorageInfo storageInfo;
+    #endif
 private slots:
     void setDoRightTransfer(bool doRightTransfer);
     void setKeepDate(bool keepDate);

@@ -6,6 +6,10 @@
 #include <QString>
 #include <QRegularExpression>
 
+#ifdef Q_OS_LINUX
+#define STORAGEINFO
+#endif
+
 #ifndef STRUCTDEF_COPYENGINE_H
 #define STRUCTDEF_COPYENGINE_H
 
