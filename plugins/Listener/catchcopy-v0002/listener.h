@@ -16,33 +16,37 @@
 /// \brief Define the server compatible with Ultracopier interface
 class CatchCopyPlugin : public PluginInterface_Listener
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.Listener/0.4.0.0" FILE "plugin.json")
-	Q_INTERFACES(PluginInterface_Listener)
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.Listener/0.4.0.0" FILE "plugin.json")
+    Q_INTERFACES(PluginInterface_Listener)
 public:
-	CatchCopyPlugin();
-	/// \brief try listen the copy/move
-	void listen();
-	/// \brief stop listen to copy/move
-	void close();
-	/// \brief return the error strong
-	const QString errorString();
-	/// \brief set resources for this plugins
-	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
-	/// \brief to get the options widget, NULL if not have
-	QWidget * options();
+    CatchCopyPlugin();
+    /// \brief try listen the copy/move
+    void listen();
+    /// \brief stop listen to copy/move
+    void close();
+    /// \brief return the error strong
+    const QString errorString();
+    /// \brief set resources for this plugins
+    void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
+    /// \brief to get the options widget, NULL if not have
+    QWidget * options();
 public slots:
-	/// \brief say to the client that's the copy/move is finished
-	void transferFinished(const quint32 &orderId,const bool &withError);
-	/// \brief say to the client that's the copy/move is finished
-	void transferCanceled(const quint32 &orderId);
-	/// \brief to reload the translation, because the new language have been loaded
-	void newLanguageLoaded();
+    /// \brief say to the client that's the copy/move is finished
+    void transferFinished(const quint32 &orderId,const bool &withError);
+    /// \brief say to the client that's the copy/move is finished
+    void transferCanceled(const quint32 &orderId);
+    /// \brief to reload the translation, because the new language have been loaded
+    void newLanguageLoaded();
 private:
-	ServerCatchcopy server;
+    ServerCatchcopy server;
 private slots:
-	void error(QString error);
-	void clientName(quint32 client,QString name);
+    void error(QString error);
+    void clientName(quint32 client,QString name);
+    void copyWithoutDestination(const quint32 &orderId,const QStringList &sources);
+    void copy(const quint32 &orderId,const QStringList &sources,const QString &destination);
+    void moveWithoutDestination(const quint32 &orderId,const QStringList &sources);
+    void move(const quint32 &orderId,const QStringList &sources,const QString &destination);
 };
 
 #endif // SERVER_H

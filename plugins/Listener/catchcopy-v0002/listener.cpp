@@ -3,12 +3,12 @@
 CatchCopyPlugin::CatchCopyPlugin()
 {
     server.setName(tr("Ultracopier"));
-    connect(&server,&ServerCatchcopy::newCopyWithoutDestination,		this,&CatchCopyPlugin::newCopyWithoutDestination);
-    connect(&server,&ServerCatchcopy::newCopy,				this,&CatchCopyPlugin::newCopy);
-    connect(&server,&ServerCatchcopy::newMoveWithoutDestination,		this,&CatchCopyPlugin::newMoveWithoutDestination);
-    connect(&server,&ServerCatchcopy::newMove,				this,&CatchCopyPlugin::newMove);
-    connect(&server,&ServerCatchcopy::error,				this,&CatchCopyPlugin::error);
-    connect(&server,&ServerCatchcopy::clientName,				this,&CatchCopyPlugin::clientName);
+    connect(&server,&ServerCatchcopy::newCopyWithoutDestination,		this,&CatchCopyPlugin::copyWithoutDestination);
+    connect(&server,&ServerCatchcopy::newCopy,                          this,&CatchCopyPlugin::copy);
+    connect(&server,&ServerCatchcopy::newMoveWithoutDestination,		this,&CatchCopyPlugin::moveWithoutDestination);
+    connect(&server,&ServerCatchcopy::newMove,                          this,&CatchCopyPlugin::move);
+    connect(&server,&ServerCatchcopy::error,                            this,&CatchCopyPlugin::error);
+    connect(&server,&ServerCatchcopy::clientName,                       this,&CatchCopyPlugin::clientName);
 }
 
 void CatchCopyPlugin::listen()
@@ -75,4 +75,28 @@ void CatchCopyPlugin::clientName(quint32 client,QString name)
     Q_UNUSED(client);
     Q_UNUSED(name);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("clientName: %1, for the id: %2").arg(name).arg(client));
+}
+
+void CatchCopyPlugin::copyWithoutDestination(const quint32 &orderId,const QStringList &sources)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("copyWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
+    emit newCopyWithoutDestination(orderId,sources);
+}
+
+void CatchCopyPlugin::copy(const quint32 &orderId,const QStringList &sources,const QString &destination)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("copy(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
+    emit newCopy(orderId,sources,destination);
+}
+
+void CatchCopyPlugin::moveWithoutDestination(const quint32 &orderId,const QStringList &sources)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("moveWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
+    emit newMoveWithoutDestination(orderId,sources);
+}
+
+void CatchCopyPlugin::move(const quint32 &orderId,const QStringList &sources,const QString &destination)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("move(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
+    emit newMove(orderId,sources,destination);
 }
