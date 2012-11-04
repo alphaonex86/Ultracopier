@@ -10,6 +10,7 @@
 
 #include <QDomElement>
 #include <QFileDialog>
+#include <QMessageBox>
 
 OptionDialog::OptionDialog() :
     ui(new Ui::OptionDialog)
@@ -39,6 +40,7 @@ OptionDialog::OptionDialog() :
     connect(plugins,	&PluginsManager::onePluginAdded,		this,	&OptionDialog::onePluginAdded);
     connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
     connect(plugins,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
+    connect(plugins,	&PluginsManager::manuallyAdded,		this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
     connect(options,	&OptionEngine::newOptionValue,			this,	&OptionDialog::newOptionValue);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
@@ -153,6 +155,21 @@ void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         index++;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"not found!");
+}
+
+void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
+{
+    if(plugin.category==PluginType_Themes)
+    {
+        if(QMessageBox::question(this,tr("Load"),tr("Load the themes?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)==QMessageBox::Yes)
+        {
+            int index=ui->Ultracopier_current_theme->findData(plugin.name);
+            if(index!=-1)
+                ui->Ultracopier_current_theme->setCurrentIndex(index);
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"theme plugin not found!");
+        }
+    }
 }
 
 void OptionDialog::addLanguage(PluginsAvailable plugin)

@@ -36,6 +36,7 @@ private slots:
     //plugin management
     void onePluginAdded(const PluginsAvailable &plugin);
     void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+    void manuallyAdded(const PluginsAvailable &plugin);
     void loadOption();
     void newOptionValue(const QString &group,const QString &name,const QVariant &value);
     void on_Ultracopier_current_theme_currentIndexChanged(int index);
