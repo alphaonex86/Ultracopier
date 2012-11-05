@@ -1,5 +1,4 @@
-QT += widgets
-linux-g++:QT += systeminfo
+QT += widgets systeminfo
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = copyEngine.h \
