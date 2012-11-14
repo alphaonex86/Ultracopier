@@ -21,14 +21,6 @@ Core::Core(CopyEngineManager *copyEngineList)
     connect(themes,			&ThemesManager::theThemeNeedBeUnloaded,				this,	&Core::unloadInterface);
     connect(themes,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface);
     connect(&forUpateInformation,	&QTimer::timeout,						this,	&Core::periodicSynchronization);
-
-    qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
-    qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<Ultracopier::ProgressionItem>");
-    qRegisterMetaType<QList<int> >("QList<int>");
-    qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
-    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
-    qRegisterMetaType<Ultracopier::CopyMode >("Ultracopier::CopyMode");
-    qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<ProgressionItem>");
 }
 
 Core::~Core()

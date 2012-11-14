@@ -21,8 +21,6 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     options->addOptionGroup("CopyListener",KeysList);
     plugins->lockPluginListEdition();
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
-    qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-    qRegisterMetaType<Ultracopier::ListeningState>("Ultracopier::ListeningState");
     connect(this,&CopyListener::previouslyPluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyListener::onePluginWillBeRemoved,Qt::DirectConnection);

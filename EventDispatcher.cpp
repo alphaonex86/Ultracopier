@@ -36,12 +36,6 @@ EventDispatcher::EventDispatcher()
     sessionloader=new SessionLoader(&optionDialog);
     copyEngineList=new CopyEngineManager(&optionDialog);
     core=new Core(copyEngineList);
-    qRegisterMetaType<Ultracopier::CatchState>("CatchState");
-    qRegisterMetaType<Ultracopier::ListeningState>("ListeningState");
-    qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
-    qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<ProgressionItem>");
-    qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
-    qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //show the ultracopier information
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
@@ -76,7 +70,7 @@ EventDispatcher::EventDispatcher()
         options->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
 
     KeysList.clear();
-    KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier-0.3")));
+    KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier")));
     options->addOptionGroup("CopyEngine",KeysList);
 
     connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);

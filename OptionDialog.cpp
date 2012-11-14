@@ -35,7 +35,6 @@ OptionDialog::OptionDialog() :
     //load the plugins
     plugins->lockPluginListEdition();
     QList<PluginsAvailable> list=plugins->getPlugins();
-    qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
     connect(this,&OptionDialog::previouslyPluginAdded,			this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,	&PluginsManager::onePluginAdded,		this,	&OptionDialog::onePluginAdded);
     connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);

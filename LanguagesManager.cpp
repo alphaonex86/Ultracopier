@@ -31,7 +31,6 @@ LanguagesManager::LanguagesManager()
     }
     //load the plugins
     plugins->lockPluginListEdition();
-    qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
     connect(this,&LanguagesManager::previouslyPluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);

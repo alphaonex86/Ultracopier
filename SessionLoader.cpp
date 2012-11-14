@@ -22,7 +22,6 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
     connect(options,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
     //load the plugin
     plugins->lockPluginListEdition();
-    qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
     connect(this,&SessionLoader::previouslyPluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);

@@ -15,8 +15,6 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
     plugins=PluginsManager::getInstance();
     //load the plugin
     plugins->lockPluginListEdition();
-    qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
-    qRegisterMetaType<Ultracopier::CatchState>("Ultracopier::CatchState");
     connect(this,&PluginLoader::previouslyPluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,this,&PluginLoader::onePluginWillBeRemoved,Qt::DirectConnection);

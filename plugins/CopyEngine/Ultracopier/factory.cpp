@@ -12,17 +12,10 @@
 Factory::Factory() :
     ui(new Ui::options())
 {
-    qRegisterMetaType<TransferThread *>("TransferThread *");
-    qRegisterMetaType<scanFileOrFolder *>("scanFileOrFolder *");
-    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
-    qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
-    qRegisterMetaType<FileExistsAction>("FileExistsAction");
     qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
+    qRegisterMetaType<FileExistsAction>("FileExistsAction");
     qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
-    qRegisterMetaType<QList<int> >("QList<int>");
-    qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
-    qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
-    qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<Ultracopier::ProgressionItem>");
+    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);

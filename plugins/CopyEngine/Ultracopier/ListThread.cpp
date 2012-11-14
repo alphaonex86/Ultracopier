@@ -2,13 +2,6 @@
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
-    qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
-    qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
-    qRegisterMetaType<QFileInfo>("QFileInfo");
-    qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
-    qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
-    qRegisterMetaType<TransferStat>("TransferStat");
-
     moveToThread(this);
     start(HighPriority);
     this->facilityInterface		= facilityInterface;
