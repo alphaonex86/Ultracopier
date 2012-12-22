@@ -9,7 +9,7 @@
 PluginInterface_Themes * Factory::getInstance()
 {
     InterfacePlugin * newInterface=new InterfacePlugin(facilityEngine);
-    connect(this,&PluginInterface_ThemesFactory::reloadLanguage,newInterface,&InterfacePlugin::newLanguageLoaded);
+    connect(this,&Factory::reloadLanguage,newInterface,&InterfacePlugin::newLanguageLoaded);
     return newInterface;
 }
 

@@ -98,8 +98,10 @@ void copyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_folderAlreadyExists()");
     if(!connect(listThread,&ListThread::send_errorOnFolder,			this,&copyEngine::errorOnFolderSlot,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_errorOnFolder()");
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(listThread,&ListThread::updateTheDebugInfo,				this,&copyEngine::updateTheDebugInfo,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect updateTheDebugInfo()");
+    #endif
     if(!connect(listThread,&ListThread::errorTransferList,							this,&copyEngine::errorTransferList,						Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect errorTransferList()");
     if(!connect(listThread,&ListThread::warningTransferList,						this,&copyEngine::warningTransferList,					Qt::QueuedConnection))

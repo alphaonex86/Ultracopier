@@ -6,6 +6,7 @@
 #include "PlatformMacro.h"
 
 #include <QFile>
+#include <QDir>
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 	#define NORMAL_EXT "d.dll"
