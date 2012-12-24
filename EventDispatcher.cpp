@@ -23,6 +23,9 @@
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
 {
+    qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
+    qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<Ultracopier::ProgressionItem>");
+
     copyServer=new CopyListener(&optionDialog);
     connect(&localListener,&LocalListener::cli,&cliParser,&CliParser::cli,Qt::QueuedConnection);
     connect(themes,		&ThemesManager::newThemeOptions,			&optionDialog,	&OptionDialog::newThemeOptions);
