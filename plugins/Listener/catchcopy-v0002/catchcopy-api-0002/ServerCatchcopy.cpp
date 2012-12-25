@@ -119,10 +119,10 @@ void ServerCatchcopy::newConnection()
 			newClient.detectTimeOut		= new QTimer(this);
 			newClient.detectTimeOut->setSingleShot(true);
 			newClient.detectTimeOut->setInterval(CATCHCOPY_COMMUNICATION_TIMEOUT);
-			connect(newClient.socket,	static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),	this, &ServerCatchcopy::connectionError);
-			connect(newClient.socket,	&QIODevice::readyRead,										this, &ServerCatchcopy::readyRead);
-			connect(newClient.socket,	&QLocalSocket::disconnected,				 					this, &ServerCatchcopy::disconnected);
-			connect(newClient.detectTimeOut,&QTimer::timeout,										this, &ServerCatchcopy::checkTimeOut);
+			connect(newClient.socket,	static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),	this, &ServerCatchcopy::connectionError,Qt::QueuedConnection);
+			connect(newClient.socket,	&QIODevice::readyRead,										this, &ServerCatchcopy::readyRead,Qt::QueuedConnection);
+			connect(newClient.socket,	&QLocalSocket::disconnected,				 					this, &ServerCatchcopy::disconnected,Qt::QueuedConnection);
+			connect(newClient.detectTimeOut,&QTimer::timeout,										this, &ServerCatchcopy::checkTimeOut,Qt::QueuedConnection);
 			ClientList << newClient;
 			emit connectedClient(newClient.id);
 		}
@@ -156,8 +156,10 @@ void ServerCatchcopy::connectionError(const QLocalSocket::LocalSocketError &erro
 		if(ClientList.at(index).socket==socket)
 		{
 			if(error!=QLocalSocket::PeerClosedError)
+			{
 				qWarning() << "error detected for the client: " << index << ", type: " << error;
-			ClientList.at(index).socket->disconnectFromServer();
+				ClientList.at(index).socket->disconnectFromServer();
+			}
 			return;
 		}
 		index++;
@@ -178,13 +180,9 @@ void ServerCatchcopy::disconnected()
 		if(ClientList.at(index).socket==socket)
 		{
 			emit disconnectedClient(ClientList.at(index).id);
-			//disconnect(ClientList.at(index).socket);
-			//disconnect(ClientList.at(index).detectTimeOut);
-			ClientList.at(index).socket->abort();
-			ClientList.at(index).socket->disconnectFromServer();
-			ClientList.at(index).socket->deleteLater();
+			//ClientList.at(index).socket->disconnectFromServer();//already disconnected
 			delete ClientList.at(index).detectTimeOut;
-			delete ClientList.at(index).socket;
+			ClientList.at(index).socket->deleteLater();
 			ClientList.removeAt(index);
 			return;
 		}
