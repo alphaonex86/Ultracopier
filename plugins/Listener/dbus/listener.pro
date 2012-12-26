@@ -1,6 +1,6 @@
 TEMPLATE        = lib
-CONFIG		+= plugin qdbus
-QT		+= network
+CONFIG		+= plugin
+QT		+= network dbus
 HEADERS         = listener.h \
     Environment.h \
     Variable.h \
