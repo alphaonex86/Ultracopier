@@ -52,6 +52,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&mkPathQueue,	&MkPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection);
     connect(&rmPathQueue,	&RmPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection);
+    connect(&driveManagement,&DriveManagement::debugInformation,			this,&ListThread::debugInformation,	Qt::QueuedConnection);
     #endif // ULTRACOPIER_PLUGIN_DEBUG
 
     emit askNewTransferThread();
@@ -289,7 +290,7 @@ bool ListThread::haveSameSource(const QStringList &sources)
     int index=0;
     while(index<sources.size())
     {
-        if(getDrive(sources.at(index))!=sourceDrive)
+        if(driveManagement.getDrive(sources.at(index))!=sourceDrive)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources.at(index))!=sourceDrive");
             return false;
@@ -313,7 +314,7 @@ bool ListThread::haveSameDestination(const QString &destination)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDrive.isEmpty()");
         return true;
     }
-    if(getDrive(destination)!=destinationDrive)
+    if(driveManagement.getDrive(destination)!=destinationDrive)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination!=destinationDrive");
         return false;
@@ -443,7 +444,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
         int index=0;
         while(index<sources.size())
         {
-            QString tempDrive=getDrive(sources.at(index));
+            QString tempDrive=driveManagement.getDrive(sources.at(index));
             //if have not already source, set the source
             if(sourceDrive.isEmpty())
                 sourceDrive=tempDrive;
@@ -459,7 +460,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source informations, sourceDrive: %1, sourceDriveMultiple: %2").arg(sourceDrive).arg(sourceDriveMultiple));
     if(!destinationDriveMultiple)
     {
-        QString tempDrive=getDrive(destination);
+        QString tempDrive=driveManagement.getDrive(destination);
         //if have not already destination, set the destination
         if(destinationDrive.isEmpty())
             destinationDrive=tempDrive;
@@ -472,8 +473,10 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
 
 void ListThread::setDrive(const QStringList &drives)
 {
+    mountSysPoint=drives;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("drives: %1").arg(drives.join(";")));
+    driveManagement.setDrive(mountSysPoint);
     emit send_setDrive(mountSysPoint);
-    DriveManagement::setDrive(drives);
 }
 
 void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists)

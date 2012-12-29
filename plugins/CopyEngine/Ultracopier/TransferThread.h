@@ -21,7 +21,7 @@
 #include "StructEnumDefinition_CopyEngine.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
-class TransferThread : public QThread, public DriveManagement
+class TransferThread : public QThread
 {
     Q_OBJECT
 public:
@@ -163,6 +163,7 @@ private:
     bool			readIsClosedVariable;
     bool			writeIsClosedVariable;
     bool			canBeMovedDirectlyVariable;
+    DriveManagement driveManagement;
     QByteArray		sourceChecksum,destinationChecksum;
     volatile bool		stopIt;
     volatile bool		canStartTransfer;

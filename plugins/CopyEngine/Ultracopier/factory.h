@@ -11,6 +11,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include <QStorageInfo>
+#include <QTimer>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "StructEnumDefinition.h"
@@ -63,7 +64,9 @@ private:
     Filters *filters;
     RenamingRules *renamingRules;
     QStorageInfo storageInfo;
+    QTimer lunchInitFunction;
 private slots:
+    void init();
     void setDoRightTransfer(bool doRightTransfer);
     void setKeepDate(bool keepDate);
     void setBlockSize(int blockSize);

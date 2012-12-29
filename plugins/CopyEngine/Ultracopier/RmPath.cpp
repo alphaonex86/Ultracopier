@@ -88,7 +88,7 @@ bool RmPath::rmpath(const QDir &dir)
 		}
 	}
 	if(!allHaveWork)
-		return allHaveWork;
+		return false;
 	allHaveWork=dir.rmdir(dir.absolutePath());
 	if(!allHaveWork)
 		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+dir.absolutePath());

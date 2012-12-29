@@ -77,6 +77,7 @@ void TransferThread::run()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&readThread,&ReadThread::debugInformation,this,&TransferThread::debugInformation,Qt::QueuedConnection);
     connect(&writeThread,&WriteThread::debugInformation,this,&TransferThread::debugInformation,Qt::QueuedConnection);
+    connect(&driveManagement,&DriveManagement::debugInformation,this,&TransferThread::debugInformation,	Qt::QueuedConnection);
     #endif
 
     exec();
@@ -403,8 +404,11 @@ void TransferThread::tryMoveDirectly()
 bool TransferThread::canBeMovedDirectly()
 {
     if(mode!=Ultracopier::Move)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("mode!=Ultracopier::Move"));
         return false;
-    return isSameDrive(destinationInfo.fileName(),sourceInfo.fileName());
+    }
+    return driveManagement.isSameDrive(destinationInfo.absoluteFilePath(),sourceInfo.absoluteFilePath());
 }
 
 void TransferThread::readIsReady()
@@ -437,7 +441,7 @@ void TransferThread::ifCanStartTransfer()
         }
         if(canStartTransfer)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stat=Transfer");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stat=Transfer, "+QString("canBeMovedDirectlyVariable: %1").arg(canBeMovedDirectlyVariable));
             transfer_stat=TransferStat_Transfer;
             if(!canBeMovedDirectlyVariable)
             {
@@ -1094,7 +1098,7 @@ void TransferThread::putAtBottom()
 
 void TransferThread::setDrive(QStringList mountSysPoint)
 {
-    DriveManagement::setDrive(mountSysPoint);
+    driveManagement.setDrive(mountSysPoint);
 }
 
 void TransferThread::set_osBufferLimit(unsigned int osBufferLimit)

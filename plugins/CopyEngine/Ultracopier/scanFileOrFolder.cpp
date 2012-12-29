@@ -1,7 +1,5 @@
 #include "scanFileOrFolder.h"
 
-#include <QMessageBox>
-
 scanFileOrFolder::scanFileOrFolder(Ultracopier::CopyMode mode)
 {
     stopped	= true;

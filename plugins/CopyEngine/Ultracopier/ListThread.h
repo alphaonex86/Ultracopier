@@ -25,7 +25,7 @@
 #include "DriveManagement.h"
 
 /// \brief Define the list thread, and management to the action to do
-class ListThread : public QThread, public DriveManagement
+class ListThread : public QThread
 {
     Q_OBJECT
 public:
@@ -188,6 +188,7 @@ private:
     QString destinationDrive;
     QStringList		mountSysPoint;
     bool destinationDriveMultiple;
+    DriveManagement driveManagement;
 
     bool stopIt;
     QList<scanFileOrFolder *> scanFileOrFolderThreadsPool;

@@ -26,7 +26,7 @@ Factory::Factory() :
 
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
-        mountSysPoint<<temp.at(i);
+        mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
     }
     connect(&storageInfo,&QStorageInfo::logicalDriveChanged,this,&Factory::logicalDriveChanged);
 
@@ -45,6 +45,11 @@ Factory::Factory() :
     connect(ui->filters,&QPushButton::clicked,this,&Factory::showFilterDialog);
     connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&Factory::sendNewRenamingRules);
     connect(ui->renamingRules,&QPushButton::clicked,this,&Factory::showRenamingRules);
+
+    lunchInitFunction.setInterval(0);
+    lunchInitFunction.setSingleShot(true);
+    connect(&lunchInitFunction,&QTimer::timeout,this,&Factory::init,Qt::QueuedConnection);
+    lunchInitFunction.start();
 }
 
 Factory::~Factory()
@@ -52,6 +57,25 @@ Factory::~Factory()
     delete renamingRules;
     delete filters;
     delete ui;
+}
+
+void Factory::init()
+{
+    if(mountSysPoint.empty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"no drive found with QtSystemInformation");
+        #ifdef Q_OS_WIN32
+        int index=0;
+        QFileInfoList drives=QDir::drives();
+        while(index<drives.size())
+        {
+            mountSysPoint<<drives.at(index).absoluteFilePath();
+            index++;
+        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("%1 added with QDir::drives()").arg(mountSysPoint.size()));
+        #endif
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
 }
 
 PluginInterface_CopyEngine * Factory::getInstance()
@@ -375,6 +399,20 @@ void Factory::logicalDriveChanged(const QString &,bool)
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
         mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
+    }
+    if(mountSysPoint.empty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"no drive found with QtSystemInformation");
+        #ifdef Q_OS_WIN32
+        int index=0;
+        QFileInfoList drives=QDir::drives();
+        while(index<drives.size())
+        {
+            mountSysPoint<<drives.at(index).absoluteFilePath();
+            index++;
+        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("%1 added with QDir::drives()").arg(mountSysPoint.size()));
+        #endif
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
     emit haveDrive(mountSysPoint);
