@@ -7,14 +7,6 @@
 QString DriveManagement::getDrive(const QString &fileOrFolder)
 {
     QString inode=QDir::toNativeSeparators(fileOrFolder);
-/*    #ifdef Q_OS_WIN32
-    QFileInfoList drives=QDir::drives();
-    int size=drives.size();
-    for (int i = 0; i < size; ++i) {
-        if(inode.startsWith(QDir::toNativeSeparators(drives.at(i).absoluteFilePath())))
-            return QDir::toNativeSeparators(drives.at(i).absoluteFilePath());
-    }
-    #else*/
     int size=mountSysPoint.size();
     for (int i = 0; i < size; ++i) {
         if(inode.startsWith(mountSysPoint.at(i)))
@@ -33,7 +25,7 @@ bool DriveManagement::isSameDrive(const QString &file1,const QString &file2)
 {
     if(mountSysPoint.size()==0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"under linux and not mpount point found");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"no mount point found");
         return false;
     }
     QString drive1=getDrive(file1);
