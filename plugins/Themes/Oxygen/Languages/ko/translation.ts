@@ -4,12 +4,12 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+184"/>
+        <location filename="../../interface.cpp" line="+185"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+553"/>
+        <location line="+566"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished">파일명, 0KB</translation>
     </message>
@@ -150,7 +150,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <source>Show speed as main informations</source>
+        <source>Show speed as main information</source>
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
     <message>
@@ -188,12 +188,12 @@
     <name>options</name>
     <message>
         <location filename="../../options.ui" line="+20"/>
-        <source>Show speed as main informations</source>
+        <source>Show speed as main information</source>
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
     <message>
         <location line="+13"/>
-        <source>Start with more button pushed</source>
+        <source>Start with the &quot;more button&quot; pushed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

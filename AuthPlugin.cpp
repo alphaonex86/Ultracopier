@@ -94,7 +94,7 @@ void AuthPlugin::run()
 								if(key==folderHash.result())
 									emit authentifiedPath(pluginBasePath);
 								else
-									ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This plugin have wrong authentification");
+									ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This plugin have wrong authentication");
 							}
 							keyDescriptor.close();
 						}

@@ -4,7 +4,7 @@
 <context>
     <name>InterfacePlugin</name>
     <message>
-        <location filename="../../interface.cpp" line="145"/>
+        <location filename="../../interface.cpp" line="142"/>
         <source>%1/%2 files, %3/%4</source>
         <translation>%1/%2 файлы, %3/%4</translation>
     </message>

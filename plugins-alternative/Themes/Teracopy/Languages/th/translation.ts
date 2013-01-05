@@ -2,19 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.0">
 <context>
-    <name>InterfacePlugin</name>
+    <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="76"/>
+        <location filename="../../interface.cpp" line="75"/>
         <source>Total: %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="77"/>
+        <location filename="../../interface.cpp" line="76"/>
         <source>%1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="212"/>
+        <location filename="../../interface.cpp" line="216"/>
         <source>%1% done</source>
         <translation type="unfinished"></translation>
     </message>

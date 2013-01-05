@@ -17,7 +17,7 @@
 	<description xml:lang="en"><![CDATA[Listener for catchcopy v0002. Allow to receive copy list from plugin/explorer compatible with catchcopy.]]></description>
 	<description xml:lang="fr"><![CDATA[Écouteur pour catchcopy v0002. Permet de recevoir un liste de copie venant d'un plugin/explorateur avec catchcopy.]]></description>
 	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
-	<version>0.4.0.0</version>
+	<version>0.4.0.1</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>catchcopy-v0002</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->

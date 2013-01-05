@@ -4,12 +4,12 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="184"/>
+        <location filename="../../interface.cpp" line="185"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Datei %1/%2, Größe:%3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="737"/>
+        <location filename="../../interface.cpp" line="751"/>
         <source>File Name, 0KB</source>
         <translation>Dateiname, 0KB</translation>
     </message>
@@ -151,7 +151,7 @@
     </message>
     <message>
         <location filename="../../interface.ui" line="939"/>
-        <source>Show speed as main informations</source>
+        <source>Show speed as main information</source>
         <translation>Zeige Geschwindigkeit als Haupt-Informationen</translation>
     </message>
     <message>
@@ -189,15 +189,14 @@
     <name>options</name>
     <message>
         <location filename="../../options.ui" line="20"/>
-        <source>Show speed as main informations</source>
+        <source>Show speed as main information</source>
         <translatorcomment>fix english</translatorcomment>
         <translation>Zeige Geschwindigkeitslimit als Information im Hauptfenster</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="33"/>
-        <source>Start with more button pushed</source>
-        <translatorcomment>fix english. German translation doesn&apos;t make any sense. Context unclear.</translatorcomment>
-        <translation>Beginnen Sie mit mehr-Taste gedrückt</translation>
+        <source>Start with the &quot;more button&quot; pushed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

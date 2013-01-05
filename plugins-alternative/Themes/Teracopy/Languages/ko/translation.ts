@@ -2,9 +2,9 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ko_KR">
 <context>
-    <name>InterfacePlugin</name>
+    <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+76"/>
+        <location filename="../../interface.cpp" line="+75"/>
         <source>Total: %1 of %2</source>
         <translation type="unfinished">전체: %3 / %2 {1 ?}</translation>
     </message>
@@ -14,7 +14,7 @@
         <translation type="unfinished">%1 / %2</translation>
     </message>
     <message>
-        <location line="+135"/>
+        <location line="+140"/>
         <source>%1% done</source>
         <translation type="unfinished">%1% 완료</translation>
     </message>

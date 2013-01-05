@@ -2,21 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru" sourcelanguage="et">
 <context>
-    <name>InterfacePlugin</name>
+    <name>Themes</name>
+    <message>
+        <location filename="../../interface.cpp" line="75"/>
+        <source>Total: %1 of %2</source>
+        <translation type="unfinished">Всего: %1 из %2</translation>
+    </message>
     <message>
         <location filename="../../interface.cpp" line="76"/>
-        <source>Total: %1 of %2</source>
-        <translation>Всего: %1 из %2</translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="77"/>
         <source>%1 of %2</source>
-        <translation>%1 из %2</translation>
+        <translation type="unfinished">%1 из %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="212"/>
+        <location filename="../../interface.cpp" line="216"/>
         <source>%1% done</source>
-        <translation>%1% сделанный</translation>
+        <translation type="unfinished">%1% сделанный</translation>
     </message>
 </context>
 <context>

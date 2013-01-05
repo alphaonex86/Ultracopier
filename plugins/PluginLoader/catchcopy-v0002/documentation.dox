@@ -10,13 +10,13 @@
 
   \section mainpage_overview Overview
 
-  Is the plugin to load the catchcopy plugin into the windows file manager.\n
+  Is the plugin to load the catchcopy plugin into the windows file manager. Mostly it use the command: regsvr32 /s catchcopy32.dll/catchcopy64.dll\n
   More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>. Is part of Ultracopier 0.3 project.
 
   \section mainpage_platforms Platforms
 
-  This plugin might be usable in all environments where you find Qt 4.\n
-  To be compatible with the official Ultracopier plugins, you need compil it with Gcc, Qt4.8, and same env as Ultracopier have been compiled, see the documentation.
+  Ultracopier might be usable in all environments where you find Qt 5.\n
+  Ultracopier requires Qt 5.0 or newer. Tested on Qt 5.0.
 
   \section mainpage_downloads Downloads
 
@@ -28,7 +28,7 @@
   In function if Ultracopier is compiled by portable version, try load the dll by other way.
 
   \section license GPL Version 3
-  The code source is under GPL3. The image is extacted from Oxygen icon pack of KDE4.
+  The code source is under GPL3.
 
 */
 

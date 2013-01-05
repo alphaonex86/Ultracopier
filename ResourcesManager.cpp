@@ -50,10 +50,12 @@ ResourcesManager::ResourcesManager()
             #define EXTRA_HOME_PATH "/.config/Ultracopier/"
         #endif
         #ifdef Q_OS_LINUX
-            if(QDir("/usr/share/ultracopier/").exists())
-                searchPath<<"/usr/share/ultracopier/";
-            if(QDir("/usr/lib/ultracopier/").exists())
-                searchPath<<"/usr/lib/ultracopier/";
+            QDir linuxArchIndepDir("/usr/share/ultracopier/");
+            if(linuxArchIndepDir.exists())
+                searchPath<<ResourcesManager::AddSlashIfNeeded(linuxArchIndepDir.absolutePath());
+            QDir linuxPluginsDir("/usr/lib/ultracopier/");
+            if(linuxPluginsDir.exists())
+                searchPath<<ResourcesManager::AddSlashIfNeeded(linuxPluginsDir.absolutePath());
         #endif
         //load the user path but only if exists and writable
         QDir dir(QDir::homePath()+EXTRA_HOME_PATH);

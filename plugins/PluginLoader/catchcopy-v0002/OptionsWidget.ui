@@ -13,6 +13,9 @@
   <layout class="QVBoxLayout">
    <item>
     <widget class="QCheckBox" name="allDllIsImportant">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In normal case, only the dll 64Bits is important with 64Bits OS, and 32Bits dll with 32Bits OS. When it's important, the UAC can be opened to load the dll.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
       <string>All the dlls are importants</string>
      </property>

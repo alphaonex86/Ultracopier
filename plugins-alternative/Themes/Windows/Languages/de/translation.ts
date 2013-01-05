@@ -2,50 +2,51 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="de" sourcelanguage="en">
 <context>
-    <name>InterfacePlugin</name>
+    <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="201"/>
-        <location filename="../../interface.cpp" line="439"/>
+        <location filename="../../interface.cpp" line="200"/>
+        <location filename="../../interface.cpp" line="438"/>
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="366"/>
+        <location filename="../../interface.cpp" line="365"/>
         <source>Transferring %1 items (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="368"/>
+        <location filename="../../interface.cpp" line="367"/>
         <source>Transferring %1 item (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="375"/>
+        <location filename="../../interface.cpp" line="374"/>
         <source>Copying %1 items (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="377"/>
+        <location filename="../../interface.cpp" line="376"/>
         <source>Copying %1 item (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="382"/>
+        <location filename="../../interface.cpp" line="381"/>
         <source>Moving %1 items (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="384"/>
+        <location filename="../../interface.cpp" line="383"/>
         <source>Moving %1 item (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="448"/>
+        <location filename="../../interface.cpp" line="449"/>
         <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
+        <extracomment>Sample: from &lt;b&gt;sources&lt;/b&gt; (e:<byte value="xc"/>oldersource) to &lt;b&gt;destination&lt;/b&gt; (d:desktopdestination)&lt;br /&gt;About 5 Hours remaining</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="457"/>
+        <location filename="../../interface.cpp" line="458"/>
         <source>In waiting</source>
         <translation type="unfinished"></translation>
     </message>

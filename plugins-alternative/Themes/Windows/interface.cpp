@@ -444,7 +444,9 @@ void Themes::updateInformations()
             simplifiedTo.replace('\\','/');
             simplifiedFrom.replace(Factory::isolateName, "\\1");
             simplifiedTo.replace(Factory::isolateName, "\\1");
-            ui->text->setText(tr("from <b>%1</b> (%2) to <b>%3</b> (%4)<br />%5")
+            ui->text->setText(
+			//: Sample: from <b>sources</b> (e:\folder\source) to <b>destination</b> (d:\desktop\destination)<br />About 5 Hours remaining
+			tr("from <b>%1</b> (%2) to <b>%3</b> (%4)<br />%5")
                       .arg(simplifiedFrom)
                       .arg(transfertItem.from)
                       .arg(simplifiedTo)

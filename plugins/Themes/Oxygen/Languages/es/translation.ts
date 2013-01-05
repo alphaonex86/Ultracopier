@@ -4,12 +4,12 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="184"/>
+        <location filename="../../interface.cpp" line="185"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="737"/>
+        <location filename="../../interface.cpp" line="751"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
@@ -140,7 +140,7 @@
     </message>
     <message>
         <location filename="../../interface.ui" line="939"/>
-        <source>Show speed as main informations</source>
+        <source>Show speed as main information</source>
         <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
     <message>
@@ -188,13 +188,13 @@
     <name>options</name>
     <message>
         <location filename="../../options.ui" line="20"/>
-        <source>Show speed as main informations</source>
+        <source>Show speed as main information</source>
         <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="33"/>
-        <source>Start with more button pushed</source>
-        <translation>Comience con más botón pulsado</translation>
+        <source>Start with the &quot;more button&quot; pushed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

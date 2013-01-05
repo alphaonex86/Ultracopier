@@ -24,14 +24,14 @@
 <context>
     <name>Factory</name>
     <message>
-        <location filename="../../factory.cpp" line="356"/>
-        <location filename="../../factory.cpp" line="393"/>
+        <location filename="../../factory.cpp" line="338"/>
+        <location filename="../../factory.cpp" line="375"/>
         <source>Options error</source>
         <translation>opzioni di errore</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="356"/>
-        <location filename="../../factory.cpp" line="393"/>
+        <location filename="../../factory.cpp" line="338"/>
+        <location filename="../../factory.cpp" line="375"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Opzioni del motore non viene caricato, non possono accedere ai filtri</translation>
     </message>
@@ -178,47 +178,47 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1162"/>
+        <location filename="../../ListThread.cpp" line="1247"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Impossibile fare per spostare o copiare elemento in male modo forzato: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1169"/>
+        <location filename="../../ListThread.cpp" line="1254"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Impossibile salvare la lista dei trasferimenti: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1185"/>
+        <location filename="../../ListThread.cpp" line="1270"/>
         <source>Problem at the reading, or file size is null</source>
         <translation>Problema alla lettura, o la dimensione del file è nullo</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1192"/>
+        <location filename="../../ListThread.cpp" line="1277"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Sbagliato intestazione: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1201"/>
+        <location filename="../../ListThread.cpp" line="1286"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>La lista di trasferimento è in modalità mista, ma questa istanza non è in questa modalità</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1210"/>
+        <location filename="../../ListThread.cpp" line="1295"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>La lista di trasferimento è in modalità di copia, ma questa istanza non è in questa modalità</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1216"/>
+        <location filename="../../ListThread.cpp" line="1301"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>La lista di trasferimento è in modalità di spostamento, ma questa istanza non è in questa modalità</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1263"/>
+        <location filename="../../ListThread.cpp" line="1356"/>
         <source>Some error have been found during the line parsing</source>
         <translation>Alcuni errori sono stati trovati durante l&apos;analisi linea</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1269"/>
+        <location filename="../../ListThread.cpp" line="1363"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Impossibile aprire la lista di trasferimento: %1</translation>
     </message>
@@ -235,13 +235,13 @@
     <name>ReadThread</name>
     <message>
         <location filename="../../ReadThread.cpp" line="154"/>
-        <location filename="../../ReadThread.cpp" line="316"/>
+        <location filename="../../ReadThread.cpp" line="321"/>
         <source>Unable to read the source file: </source>
         <translation>Impossibile leggere il file sorgente: </translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="193"/>
-        <location filename="../../ReadThread.cpp" line="373"/>
+        <location filename="../../ReadThread.cpp" line="378"/>
         <source>File truncated during the read, possible data change</source>
         <translation>File troncato durante la lettura, i possibili cambiamenti di dati</translation>
     </message>
@@ -321,7 +321,7 @@
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="626"/>
+        <location filename="../../TransferThread.cpp" line="614"/>
         <source>The checksums not match</source>
         <translation>Il checksum non corrisponde</translation>
     </message>
@@ -329,12 +329,12 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../WriteThread.cpp" line="443"/>
+        <location filename="../../WriteThread.cpp" line="408"/>
         <source>Unable to read the source file: </source>
         <translation>Impossibile leggere il file sorgente: </translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="481"/>
+        <location filename="../../WriteThread.cpp" line="433"/>
         <source>File truncated during the read, possible data change</source>
         <translation>File troncato durante la lettura, i possibili cambiamenti di dati</translation>
     </message>
@@ -342,29 +342,29 @@
 <context>
     <name>copyEngine</name>
     <message>
-        <location filename="../../copyEngine.cpp" line="257"/>
-        <location filename="../../copyEngine.cpp" line="275"/>
+        <location filename="../../copyEngine.cpp" line="253"/>
+        <location filename="../../copyEngine.cpp" line="271"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>Il motore è costretto a muoversi, non è possibile copiare con esso</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="286"/>
-        <location filename="../../copyEngine.cpp" line="304"/>
+        <location filename="../../copyEngine.cpp" line="282"/>
+        <location filename="../../copyEngine.cpp" line="300"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>Il motore è costretto a copiare, non è possibile spostare con esso</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="511"/>
+        <location filename="../../copyEngine.cpp" line="523"/>
         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
         <translation>La modalità sono stati costretti in precedenza, è un errore interno, si prega di segnalarlo</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="772"/>
+        <location filename="../../copyEngine.cpp" line="785"/>
         <source>Options error</source>
         <translation>opzioni di errore</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="772"/>
+        <location filename="../../copyEngine.cpp" line="785"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Opzioni del motore non viene caricato, non possono accedere ai filtri</translation>
     </message>
@@ -674,13 +674,13 @@
         <translation>Tenere la data del file</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="214"/>
+        <location filename="../../options.ui" line="204"/>
         <source>Block size</source>
         <translation>Dimensione del blocco</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="43"/>
-        <location filename="../../options.ui" line="198"/>
+        <location filename="../../options.ui" line="188"/>
         <source>KB</source>
         <translation></translation>
     </message>
@@ -732,37 +732,37 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="144"/>
+        <location filename="../../options.ui" line="137"/>
         <source>Only after error</source>
         <translation>Solo dopo l&apos;errore</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="154"/>
+        <location filename="../../options.ui" line="144"/>
         <source>Ignore if impossible</source>
         <translation>Ignora se impossibile</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="171"/>
+        <location filename="../../options.ui" line="161"/>
         <source>Do checksum</source>
         <translation>Fare checksum</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="181"/>
+        <location filename="../../options.ui" line="171"/>
         <source>Enable OS buffer</source>
         <translation>Abilita OS tampone</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="234"/>
+        <location filename="../../options.ui" line="224"/>
         <source>Filters</source>
         <translation>Filtri</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="241"/>
+        <location filename="../../options.ui" line="231"/>
         <source>Renaming rules</source>
         <translation>Rinominare le regole</translation>
     </message>
     <message>
-        <location filename="../../options.ui" line="191"/>
+        <location filename="../../options.ui" line="181"/>
         <source>OS buffer only if smaller than</source>
         <translation>OS tampone solo se inferiori</translation>
     </message>
@@ -770,24 +770,24 @@
 <context>
     <name>scanFileOrFolder</name>
     <message>
-        <location filename="../../scanFileOrFolder.cpp" line="218"/>
-        <location filename="../../scanFileOrFolder.cpp" line="282"/>
+        <location filename="../../scanFileOrFolder.cpp" line="216"/>
+        <location filename="../../scanFileOrFolder.cpp" line="280"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../scanFileOrFolder.cpp" line="228"/>
-        <location filename="../../scanFileOrFolder.cpp" line="292"/>
+        <location filename="../../scanFileOrFolder.cpp" line="226"/>
+        <location filename="../../scanFileOrFolder.cpp" line="290"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../scanFileOrFolder.cpp" line="326"/>
+        <location filename="../../scanFileOrFolder.cpp" line="324"/>
         <source>The folder not exists</source>
         <translation>La cartella non esiste</translation>
     </message>
     <message>
-        <location filename="../../scanFileOrFolder.cpp" line="328"/>
+        <location filename="../../scanFileOrFolder.cpp" line="326"/>
         <source>The folder is not readable</source>
         <translation>La cartella non è leggibile</translation>
     </message>

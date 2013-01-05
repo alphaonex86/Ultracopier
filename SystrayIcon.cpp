@@ -125,7 +125,7 @@ void SystrayIcon::updateSystrayIcon()
     QString icon;
     if(!haveListenerInfo || !havePluginLoaderInfo)
     {
-        toolTip=tr("Searching informations...");
+        toolTip=tr("Searching information...");
         icon="Uncaught";
     }
     else
