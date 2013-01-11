@@ -13,12 +13,12 @@
     <message>
         <location filename="../../AvancedQFile.cpp" line="42"/>
         <source>Last modified date is wrong</source>
-        <translation>Date de dernière modification du fichier fausse</translation>
+        <translation>Date de dernière modification du fichier incorrecte</translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="73"/>
         <source>Last access date is wrong</source>
-        <translation>Date du dernier accès au fichier fausse</translation>
+        <translation>Date du dernier accès au fichier incorrecte</translation>
     </message>
 </context>
 <context>
@@ -33,7 +33,7 @@
         <location filename="../../factory.cpp" line="338"/>
         <location filename="../../factory.cpp" line="375"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation>Moteur d&apos;options non chargé, impossible d&apos;accédrer aux filtres</translation>
+        <translation>Moteur d&apos;options non chargé, impossible d&apos;accéder aux filtres</translation>
     </message>
 </context>
 <context>
@@ -41,22 +41,22 @@
     <message>
         <location filename="../../FilterRules.ui" line="33"/>
         <source>Search:</source>
-        <translation>Recherche:</translation>
+        <translation>Recherche :</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="43"/>
         <source>Search type:</source>
-        <translation>Type de recherche:</translation>
+        <translation>Type de recherche :</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="51"/>
         <source>Raw text</source>
-        <translation>Texte brute</translation>
+        <translation>Texte brut</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="56"/>
         <source>Simplified regex</source>
-        <translation>Regex simplifié</translation>
+        <translation>Regex simplifiée</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="61"/>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../../FilterRules.ui" line="69"/>
         <source>Apply on:</source>
-        <translation>Appliquer sur:</translation>
+        <translation>Appliquer sur :</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="77"/>
@@ -96,7 +96,7 @@
     <message>
         <location filename="../../FilterRules.ui" line="115"/>
         <source>Test string:</source>
-        <translation>Chaine de teste:</translation>
+        <translation>Chaine de test :</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="17"/>
@@ -106,12 +106,12 @@
     <message>
         <location filename="../../FilterRules.ui" line="108"/>
         <source>The regex is valid</source>
-        <translation>La regex est valid</translation>
+        <translation>La regex est valide</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="125"/>
         <source>The test string match with the regex</source>
-        <translation>La chaine de teste corresponds avec la regex</translation>
+        <translation>La chaine de test correspond avec la regex</translation>
     </message>
 </context>
 <context>
@@ -124,12 +124,12 @@
     <message>
         <location filename="../../Filters.ui" line="30"/>
         <source>Exclusion filter</source>
-        <translation>Filtre d&apos;exclusion</translation>
+        <translation>Filtres d&apos;exclusion</translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="93"/>
         <source>Inclusion filter</source>
-        <translation>Filtre d&apos;inclusion</translation>
+        <translation>Filtres d&apos;inclusion</translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="105"/>
@@ -140,13 +140,13 @@
         <location filename="../../Filters.cpp" line="92"/>
         <location filename="../../Filters.cpp" line="130"/>
         <source>Raw text</source>
-        <translation>Texte brute</translation>
+        <translation>Texte brut</translation>
     </message>
     <message>
         <location filename="../../Filters.cpp" line="95"/>
         <location filename="../../Filters.cpp" line="133"/>
         <source>Simplified regex</source>
-        <translation>Regex simplifié</translation>
+        <translation>Regex simplifiée</translation>
     </message>
     <message>
         <location filename="../../Filters.cpp" line="98"/>
@@ -158,13 +158,13 @@
         <location filename="../../Filters.cpp" line="106"/>
         <location filename="../../Filters.cpp" line="144"/>
         <source>Only on file</source>
-        <translation>Appliquer sur fichier</translation>
+        <translation type="unfinished">Appliquer sur fichier</translation>
     </message>
     <message>
         <location filename="../../Filters.cpp" line="109"/>
         <location filename="../../Filters.cpp" line="147"/>
         <source>Only on folder</source>
-        <translation>Appliquer sur dossier</translation>
+        <translation type="unfinished">Appliquer sur dossier</translation>
     </message>
     <message>
         <location filename="../../Filters.cpp" line="115"/>
@@ -180,47 +180,47 @@
     <message>
         <location filename="../../ListThread.cpp" line="1247"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
-        <translation>Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
+        <translation type="unfinished">Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1254"/>
         <source>Unable to save the transfer list: %1</source>
-        <translation>Impossible de sauvegarde la liste de transfer: %1</translation>
+        <translation>Impossible de sauvegarde la liste de transfert : %1</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1270"/>
         <source>Problem at the reading, or file size is null</source>
-        <translation>Probléme à la lecture, ou fichier de taille nulle</translation>
+        <translation>Problème à la lecture, ou fichier de taille nulle</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1277"/>
         <source>Wrong header: &quot;%1&quot;</source>
-        <translation>Mauvaise en-tête: &quot;%1&quot;</translation>
+        <translation>Mauvais en-tête : &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1286"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
-        <translation>La list de transfer est en mode mixte, mais l&apos;instance n&apos;est pas dans ce mode</translation>
+        <translation>La liste de transfert est en mode mixte, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1295"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
-        <translation>La list de transfer est en mode copie, mais l&apos;instance n&apos;est pas dans ce mode</translation>
+        <translation>La liste de transfert est en mode copie, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1301"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
-        <translation>La list de transfer est en mode déplacement, mais l&apos;instance n&apos;est pas dans ce mode</translation>
+        <translation>La liste de transfert est en mode déplacement, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1356"/>
         <source>Some error have been found during the line parsing</source>
-        <translation>Quelque erreur ont été trouvé durrant l&apos;analise des lignes</translation>
+        <translation>Quelques erreurs ont été trouvées durant l&apos;analyse des lignes</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1363"/>
         <source>Unable to open the transfer list: %1</source>
-        <translation>Impossible d&apos;ouvrir la list de transfer: %1</translation>
+        <translation>Impossible d&apos;ouvrir la liste de transfert : %1</translation>
     </message>
 </context>
 <context>
@@ -237,13 +237,13 @@
         <location filename="../../ReadThread.cpp" line="154"/>
         <location filename="../../ReadThread.cpp" line="321"/>
         <source>Unable to read the source file: </source>
-        <translation>Impossible de lire le fichier source: </translation>
+        <translation>Impossible de lire le fichier source :</translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="193"/>
         <location filename="../../ReadThread.cpp" line="378"/>
         <source>File truncated during the read, possible data change</source>
-        <translation>Fichier diminué durrant la lecture, possible changement de données</translation>
+        <translation>La taille du fichier a diminué durant la lecture, possible changement de données</translation>
     </message>
 </context>
 <context>
@@ -265,12 +265,12 @@
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment> should not be translated</extracomment>
         <translatorcomment>variables need never be translated</translatorcomment>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom originel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables : &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom originel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="49"/>
         <source>Second renaming</source>
-        <translation>Seconds renommage</translation>
+        <translation>Second renommage</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="55"/>
@@ -284,7 +284,7 @@
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
         <translatorcomment>variables need never be translated</translatorcomment>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom originel&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; pour le nombre extra&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables : &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom originel&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; pour le nombre extra&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="39"/>
@@ -301,7 +301,7 @@
     <message>
         <location filename="../../RenamingRules.ui" line="14"/>
         <source>Renaming rules</source>
-        <translation>Régles de renommage</translation>
+        <translation>Règles de renommage</translation>
     </message>
 </context>
 <context>
@@ -327,7 +327,7 @@
     <message>
         <location filename="../../TransferThread.cpp" line="614"/>
         <source>The checksums not match</source>
-        <translation>Les checksums ne correspondent pas</translation>
+        <translation>Les sommes de contrôle ne correspondent pas</translation>
     </message>
 </context>
 <context>
@@ -335,12 +335,12 @@
     <message>
         <location filename="../../WriteThread.cpp" line="408"/>
         <source>Unable to read the source file: </source>
-        <translation>Impossible de lire le fichier source: </translation>
+        <translation>Impossible de lire le fichier source :</translation>
     </message>
     <message>
         <location filename="../../WriteThread.cpp" line="433"/>
         <source>File truncated during the read, possible data change</source>
-        <translation>Fichier diminué durrant la lecture, possible changement de données</translation>
+        <translation>La taille du fichier a diminué durant la lecture, possible changement de données</translation>
     </message>
 </context>
 <context>
@@ -360,7 +360,7 @@
     <message>
         <location filename="../../copyEngine.cpp" line="523"/>
         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
-        <translation>Le mode as été forcé précédement, c&apos;est une erreur interne, merci de le repporter</translation>
+        <translation>Le mode a été forcé précédement, c&apos;est une erreur interne, merci de la rapporter</translation>
     </message>
     <message>
         <location filename="../../copyEngine.cpp" line="785"/>
@@ -370,7 +370,7 @@
     <message>
         <location filename="../../copyEngine.cpp" line="785"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation>Moteur d&apos;options non chargé, impossible d&apos;accédrer aux filtres</translation>
+        <translation>Moteur d&apos;options non chargé, impossible d&apos;accéder aux filtres</translation>
     </message>
 </context>
 <context>
@@ -489,7 +489,7 @@
     <message>
         <location filename="../../fileExistsDialog.ui" line="281"/>
         <source>&amp;Overwrite</source>
-        <translation>&amp;Ecraser</translation>
+        <translation>&amp;Écraser</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="291"/>
@@ -504,12 +504,12 @@
     <message>
         <location filename="../../fileExistsDialog.ui" line="307"/>
         <source>Overwrite if newer</source>
-        <translation>Ecraser si plus récent</translation>
+        <translation>Écraser si plus récent</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="312"/>
         <source>Overwrite if not same modification date</source>
-        <translation>Ecraser si la date de modification est différente</translation>
+        <translation>Écraser si la date de modification est différente</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.cpp" line="102"/>
@@ -712,13 +712,13 @@
     <message>
         <location filename="../../options.ui" line="204"/>
         <source>Block size</source>
-        <translation>Taille de block</translation>
+        <translation>Taille de bloc</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="43"/>
         <location filename="../../options.ui" line="188"/>
         <source>KB</source>
-        <translation>Ko</translation>
+        <translation> Ko</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="56"/>
@@ -733,7 +733,7 @@
     <message>
         <location filename="../../options.ui" line="128"/>
         <source>Checksum</source>
-        <translation>Checksum</translation>
+        <translation>Somme de contrôle</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="137"/>
@@ -748,12 +748,12 @@
     <message>
         <location filename="../../options.ui" line="161"/>
         <source>Do checksum</source>
-        <translation>Faire un checksum</translation>
+        <translation>Vérifier les sommes de contrôle</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="171"/>
         <source>Enable OS buffer</source>
-        <translation>Activer le buffer de l&apos;OS</translation>
+        <translation>Activer le tampon de l&apos;OS</translation>
     </message>
     <message>
         <location filename="../../options.ui" line="224"/>
@@ -768,7 +768,7 @@
     <message>
         <location filename="../../options.ui" line="181"/>
         <source>OS buffer only if smaller than</source>
-        <translation>Buffer de l&apos;OS seulement si plus petit que</translation>
+        <translation>Tampon de l&apos;OS seulement si plus petit que</translation>
     </message>
 </context>
 <context>

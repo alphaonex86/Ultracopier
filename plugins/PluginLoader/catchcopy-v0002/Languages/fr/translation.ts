@@ -6,12 +6,12 @@
     <message>
         <location filename="../../OptionsWidget.ui" line="17"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;In normal case, only the dll 64Bits is important with 64Bits OS, and 32Bits dll with 32Bits OS. When it&apos;s important, the UAC can be opened to load the dll.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dans la plupart des cas, seule la DLL 64 bits est importante pour un OS 64 bits, et la DLL 32 bits pour un OS 32 bits. Lorsqu&apos;elle est importante,le chargement d&apos;une DLL peut nécessiter une confirmation (UAC).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../OptionsWidget.ui" line="20"/>
         <source>All the dlls are importants</source>
-        <translation>Toutes les dlls sont importantes</translation>
+        <translation>Toutes les DLLs sont importantes</translation>
     </message>
 </context>
 </TS>
