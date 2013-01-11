@@ -7,48 +7,48 @@
         <location filename="../../interface.cpp" line="200"/>
         <location filename="../../interface.cpp" line="438"/>
         <source>Unknown remaining time</source>
-        <translation type="unfinished">Temps restant inconnu</translation>
+        <translation>Temps restant inconnu</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="365"/>
         <source>Transferring %1 items (%2)</source>
-        <translation type="unfinished">Transfert de %1 items (%2)</translation>
+        <translation>Transfert de %1 éléments (%2)</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="367"/>
         <source>Transferring %1 item (%2)</source>
-        <translation type="unfinished">Transfert de %1 item (%2)</translation>
+        <translation>Transfert de %1 élément (%2)</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="374"/>
         <source>Copying %1 items (%2)</source>
-        <translation type="unfinished">Copie de %1 éléments (%2)</translation>
+        <translation>Copie de %1 éléments (%2)</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="376"/>
         <source>Copying %1 item (%2)</source>
-        <translation type="unfinished">Copie de %1 élément (%2)</translation>
+        <translation>Copie de %1 élément (%2)</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="381"/>
         <source>Moving %1 items (%2)</source>
-        <translation type="unfinished">Déplacement de %1 éléments (%2)</translation>
+        <translation>Déplacement de %1 éléments (%2)</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="383"/>
         <source>Moving %1 item (%2)</source>
-        <translation type="unfinished">Déplacement de %1 élément (%2)</translation>
+        <translation>Déplacement de %1 élément (%2)</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="449"/>
         <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
         <extracomment>Sample: from &lt;b&gt;sources&lt;/b&gt; (e:<byte value="xc"/>oldersource) to &lt;b&gt;destination&lt;/b&gt; (d:desktopdestination)&lt;br /&gt;About 5 Hours remaining</extracomment>
-        <translation type="unfinished">depuis &lt;b&gt;%1&lt;/b&gt; (%2) vers &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</translation>
+        <translation>depuis &lt;b&gt;%1&lt;/b&gt; (%2) vers &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="458"/>
         <source>In waiting</source>
-        <translation type="unfinished">En attente</translation>
+        <translation>En attente</translation>
     </message>
 </context>
 <context>
@@ -81,37 +81,37 @@
     <message>
         <location filename="../../interface.ui" line="176"/>
         <source>Name:</source>
-        <translation>Nom:</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="186"/>
         <source>From:</source>
-        <translation>Depuis:</translation>
+        <translation>Depuis :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="196"/>
         <source>To:</source>
-        <translation>Vers:</translation>
+        <translation>Vers :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="206"/>
         <source>Time remaining:</source>
-        <translation>Temps restant:</translation>
+        <translation>Temps restant :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="216"/>
         <source>Items remaining:</source>
-        <translation>Items restants:</translation>
+        <translation>Éléments restants :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="226"/>
         <source>Speed:</source>
-        <translation>Vitesse:</translation>
+        <translation>Vitesse :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="291"/>
         <source>More information</source>
-        <translation>Plus d&apos;information</translation>
+        <translation>Plus d&apos;informations</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="331"/>
