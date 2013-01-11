@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="+185"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation>Fichier %1/%2, taille: %3/%4</translation>
+        <translation>Fichier %1/%2, taille : %3/%4</translation>
     </message>
     <message>
         <location line="+566"/>
@@ -19,17 +19,17 @@
     <message>
         <location filename="../../interface.ui" line="+35"/>
         <source>From:</source>
-        <translation>Depuis:</translation>
+        <translation>Depuis :</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>To:</source>
-        <translation>Vers:</translation>
+        <translation>Vers :</translation>
     </message>
     <message>
         <location line="+127"/>
         <source>0KB/sec</source>
-        <translation>0Ko/s</translation>
+        <translation>0 Ko/s</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -55,7 +55,7 @@
         <location line="+15"/>
         <location line="+472"/>
         <source>Limit copy speed at:</source>
-        <translation>Limiter la vitesse de copie à:</translation>
+        <translation>Limiter la vitesse de copie à :</translation>
     </message>
     <message>
         <location line="-455"/>
@@ -65,12 +65,12 @@
     <message>
         <location line="+30"/>
         <source>Copy list</source>
-        <translation>Liste de copie</translation>
+        <translation>Liste des transferts</translation>
     </message>
     <message>
         <location line="+268"/>
         <source>Previous</source>
-        <translation>Précedent</translation>
+        <translation>Précédent</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -90,7 +90,7 @@
     <message>
         <location line="+21"/>
         <source>At the end of the copy: </source>
-        <translation>A la fin de la copie:</translation>
+        <translation>À la fin de la copie :</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -126,7 +126,7 @@
         <location line="+21"/>
         <location line="+60"/>
         <source>What to do: </source>
-        <translation>Opération à effectuer:</translation>
+        <translation>Opération à effectuer :</translation>
     </message>
     <message>
         <location line="-21"/>
@@ -141,7 +141,7 @@
     <message>
         <location line="+11"/>
         <source>Show speed as main information</source>
-        <translation>Montrer la vitesse comme une information principale</translation>
+        <translation>Toujours afficher le réglage de limitation de vitesse de transfert</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -156,7 +156,7 @@
     <message>
         <location line="+9"/>
         <source>Move file(s)</source>
-        <translation>Déplacer les fichier(s)</translation>
+        <translation>Déplacer le(s) fichier(s)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -166,7 +166,7 @@
     <message>
         <location line="+9"/>
         <source>Copy file(s)</source>
-        <translation>Copier les fichier(s)</translation>
+        <translation>Copier le(s) fichier(s)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -181,7 +181,7 @@
     <message>
         <location line="-354"/>
         <source>Shutdown when is finish</source>
-        <translation>Fermer quand est fini</translation>
+        <translation>Fermer à la fin des transferts</translation>
     </message>
 </context>
 <context>
@@ -189,12 +189,12 @@
     <message>
         <location filename="../../options.ui" line="+20"/>
         <source>Show speed as main information</source>
-        <translation>Montrer la vitesse comme une information principale</translation>
+        <translation>Toujours afficher le réglage de limitation de vitesse de transfert</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplier automatiquement les détails</translation>
     </message>
 </context>
 </TS>
