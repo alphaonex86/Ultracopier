@@ -362,25 +362,25 @@ void Themes::updateInformations()
     if(!modeIsForced)
     {
         if(transferModel.totalFile>1)
-            ui->label_main->setText(tr("Transferring %1 items (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+            ui->label_main->setText(tr("Transferring %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
         else
-            ui->label_main->setText(tr("Transferring %1 item (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+            ui->label_main->setText(tr("Transferring %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
     }
     else
     {
         if(mode==Ultracopier::Copy)
         {
             if(transferModel.totalFile>1)
-                ui->label_main->setText(tr("Copying %1 items (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+                ui->label_main->setText(tr("Copying %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
             else
-                ui->label_main->setText(tr("Copying %1 item (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+                ui->label_main->setText(tr("Copying %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
         }
         else
         {
             if(transferModel.totalFile>1)
-                ui->label_main->setText(tr("Moving %1 items (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+                ui->label_main->setText(tr("Moving %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
             else
-                ui->label_main->setText(tr("Moving %1 item (%2)").arg(transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
+                ui->label_main->setText(tr("Moving %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
         }
     }
 

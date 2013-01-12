@@ -6,17 +6,18 @@
     <message>
         <location filename="../../interface.cpp" line="75"/>
         <source>Total: %1 of %2</source>
-        <translation type="unfinished">Total: %1 sur %2</translation>
+        <translation>Total: %1 sur %2</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="76"/>
         <source>%1 of %2</source>
-        <translation type="unfinished">%1 sur %2</translation>
+        <translation>%1 sur %2</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="216"/>
         <source>%1% done</source>
-        <translation type="unfinished">%1% fait</translation>
+        <translatorcomment>Exemple: 90% fait</translatorcomment>
+        <translation>%1% fait</translation>
     </message>
 </context>
 <context>

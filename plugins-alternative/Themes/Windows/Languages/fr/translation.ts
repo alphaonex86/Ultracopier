@@ -7,48 +7,69 @@
         <location filename="../../interface.cpp" line="200"/>
         <location filename="../../interface.cpp" line="438"/>
         <source>Unknown remaining time</source>
-        <translation type="unfinished">Temps restant inconnu</translation>
+        <translation>Temps restant inconnu</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="365"/>
         <source>Transferring %1 items (%2)</source>
-        <translation type="unfinished">Transfert de %1 items (%2)</translation>
+        <translation type="obsolete">Transfert de %1 items (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="367"/>
         <source>Transferring %1 item (%2)</source>
-        <translation type="unfinished">Transfert de %1 item (%2)</translation>
+        <translation type="obsolete">Transfert de %1 item (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="374"/>
         <source>Copying %1 items (%2)</source>
-        <translation type="unfinished">Copie de %1 éléments (%2)</translation>
+        <translation type="obsolete">Copie de %1 éléments (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="376"/>
         <source>Copying %1 item (%2)</source>
-        <translation type="unfinished">Copie de %1 élément (%2)</translation>
+        <translation type="obsolete">Copie de %1 élément (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="381"/>
         <source>Moving %1 items (%2)</source>
-        <translation type="unfinished">Déplacement de %1 éléments (%2)</translation>
+        <translation type="obsolete">Déplacement de %1 éléments (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="383"/>
         <source>Moving %1 item (%2)</source>
-        <translation type="unfinished">Déplacement de %1 élément (%2)</translation>
+        <translation type="obsolete">Déplacement de %1 élément (%2)</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../interface.cpp" line="365"/>
+        <location filename="../../interface.cpp" line="367"/>
+        <source>Transferring %n item(s) (%2)</source>
+        <translation>
+            <numerusform>Transfert de %n élément (%2)</numerusform>
+            <numerusform>Transfert de %n éléments (%2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../interface.cpp" line="374"/>
+        <location filename="../../interface.cpp" line="376"/>
+        <source>Copying %n item(s) (%2)</source>
+        <translation>
+            <numerusform>Copie de %n élément (%2)</numerusform>
+            <numerusform>Copie de %n éléments (%2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../interface.cpp" line="381"/>
+        <location filename="../../interface.cpp" line="383"/>
+        <source>Moving %n item(s) (%2)</source>
+        <translation>
+            <numerusform>Déplacement de %n élément (%2)</numerusform>
+            <numerusform>Déplacement de %n éléments (%2)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="449"/>
         <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
         <extracomment>Sample: from &lt;b&gt;sources&lt;/b&gt; (e:<byte value="xc"/>oldersource) to &lt;b&gt;destination&lt;/b&gt; (d:desktopdestination)&lt;br /&gt;About 5 Hours remaining</extracomment>
-        <translation type="unfinished">depuis &lt;b&gt;%1&lt;/b&gt; (%2) vers &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</translation>
+        <translation>depuis &lt;b&gt;%1&lt;/b&gt; (%2) vers &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="458"/>
         <source>In waiting</source>
-        <translation type="unfinished">En attente</translation>
+        <translation>En attente</translation>
     </message>
 </context>
 <context>
@@ -101,7 +122,7 @@
     <message>
         <location filename="../../interface.ui" line="216"/>
         <source>Items remaining:</source>
-        <translation>Items restants:</translation>
+        <translation>Éléments restants:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="226"/>
