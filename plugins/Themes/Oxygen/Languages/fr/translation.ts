@@ -9,7 +9,17 @@
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+566"/>
+        <location line="+203"/>
+        <source>Copy list</source>
+        <translation>Liste de copies</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Move list</source>
+        <translation>Liste de déplacements</translation>
+    </message>
+    <message>
+        <location line="+364"/>
         <source>File Name, 0KB</source>
         <translation>Nom de fichier, 0Ko</translation>
     </message>
@@ -27,7 +37,12 @@
         <translation>Vers:</translation>
     </message>
     <message>
-        <location line="+127"/>
+        <location line="+64"/>
+        <source>Close at the end of the transfers</source>
+        <translation>Fermer à la fin des transferts</translation>
+    </message>
+    <message>
+        <location line="+63"/>
         <source>0KB/sec</source>
         <translation>0Ko/s</translation>
     </message>
@@ -53,24 +68,28 @@
     </message>
     <message>
         <location line="+15"/>
-        <location line="+472"/>
+        <location line="+464"/>
         <source>Limit copy speed at:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
     <message>
-        <location line="-455"/>
+        <location line="-447"/>
         <source>Unlimited</source>
         <translation>Illimité</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Copy list</source>
-        <translation>Liste de copie</translation>
+        <translation type="obsolete">Liste de copie</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Transfer list</source>
+        <translation>Liste de transferts</translation>
     </message>
     <message>
         <location line="+268"/>
         <source>Previous</source>
-        <translation>Précedent</translation>
+        <translation>Précédent</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -78,7 +97,7 @@
         <translation>Suivant</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+35"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
@@ -90,7 +109,7 @@
     <message>
         <location line="+21"/>
         <source>At the end of the copy: </source>
-        <translation>A la fin de la copie:</translation>
+        <translation>À la fin de la copie:</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -134,14 +153,14 @@
         <translation>Erreurs de copie</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+74"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Show speed as main information</source>
-        <translation>Montrer la vitesse comme une information principale</translation>
+        <translation>Afficher le réglage de limitation de vitesse de transfert</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -156,7 +175,7 @@
     <message>
         <location line="+9"/>
         <source>Move file(s)</source>
-        <translation>Déplacer les fichier(s)</translation>
+        <translation>Déplacer le(s) fichier(s)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -166,7 +185,7 @@
     <message>
         <location line="+9"/>
         <source>Copy file(s)</source>
-        <translation>Copier les fichier(s)</translation>
+        <translation>Copier le(s) fichier(s)</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -174,14 +193,13 @@
         <translation>Copier un répertoire</translation>
     </message>
     <message>
-        <location line="-534"/>
+        <location line="-526"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
     </message>
     <message>
-        <location line="-354"/>
         <source>Shutdown when is finish</source>
-        <translation>Fermer quand est fini</translation>
+        <translation type="obsolete">Fermer quand est fini</translation>
     </message>
 </context>
 <context>
@@ -194,7 +212,7 @@
     <message>
         <location line="+13"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplier automatiquement les détails</translation>
     </message>
 </context>
 </TS>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>717</width>
+    <width>779</width>
     <height>455</height>
    </rect>
   </property>
@@ -105,7 +105,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>8</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -124,7 +124,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="labelCatchCopyDefault">
              <property name="text">
-              <string>Catch the copy/move as default:</string>
+              <string>Replace the default copy and move system:</string>
              </property>
             </widget>
            </item>
@@ -650,7 +650,7 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</string>
+            <string>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</string>
            </property>
            <property name="text">
             <string>Synchronized log</string>

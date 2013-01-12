@@ -130,7 +130,7 @@ p, li { white-space: pre-wrap; }
         </size>
        </property>
        <property name="toolTip">
-        <string>Shutdown when is finish</string>
+        <string>Close at the end of the transfers</string>
        </property>
        <property name="icon">
         <iconset resource="resources.qrc">
@@ -315,12 +315,8 @@ p, li { white-space: pre-wrap; }
       <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
-      <attribute name="icon">
-       <iconset>
-        <normaloff>:/styles/kde3/player_playlist.png</normaloff>:/styles/kde3/player_playlist.png</iconset>
-      </attribute>
       <attribute name="title">
-       <string>Copy list</string>
+       <string>Transfer list</string>
       </attribute>
       <layout class="QHBoxLayout">
        <item>
@@ -629,10 +625,6 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
-      <attribute name="icon">
-       <iconset>
-        <normaloff>:/styles/kde3/tools.png</normaloff>:/styles/kde3/tools.png</iconset>
-      </attribute>
       <attribute name="title">
        <string>Options</string>
       </attribute>
@@ -920,10 +912,6 @@ p, li { white-space: pre-wrap; }
       </layout>
      </widget>
      <widget class="QWidget" name="tab_3">
-      <attribute name="icon">
-       <iconset>
-        <normaloff>:/styles/kde3/player_playlist.png</normaloff>:/styles/kde3/player_playlist.png</iconset>
-      </attribute>
       <attribute name="title">
        <string>Interface</string>
       </attribute>

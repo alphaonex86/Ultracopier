@@ -138,17 +138,17 @@ void SystrayIcon::updateSystrayIcon()
         {
             if(stateListener==Ultracopier::NotListening)
             {
-                toolTip=tr("Not catching the explorer copy/move");
+                toolTip=tr("Not replace the explorer copy/move");
                 icon="Uncaught";
             }
             else if(stateListener==Ultracopier::SemiListening)
             {
-                toolTip=tr("Semi catching the explorer copy/move");
+                toolTip=tr("Semi replace the explorer copy/move");
                 icon="Semiuncaught";
             }
             else
             {
-                toolTip=tr("Catching the explorer copy/move");
+                toolTip=tr("Replace the explorer copy/move");
                 icon="Caught";
             }
         }
@@ -166,13 +166,13 @@ void SystrayIcon::updateSystrayIcon()
             else
                 first_part="Unknow listening";
             if(statePluginLoader==Ultracopier::Uncaught)
-                second_part="No catching";
+                second_part="No replace";
             else if(statePluginLoader==Ultracopier::Semiuncaught)
-                second_part="Semi catching";
+                second_part="Semi replace";
             else if(statePluginLoader==Ultracopier::Caught)
-                second_part="Full catching";
+                second_part="Full replace";
             else
-                second_part="Unknow catching";
+                second_part="Unknow replace";
             toolTip=first_part+"/"+second_part;
         }
     }
@@ -302,11 +302,11 @@ void SystrayIcon::CatchAction(QSystemTrayIcon::ActivationReason reason)
         }
     }
     else if(reason==QSystemTrayIcon::Context)//do nothing on right click to show as auto the menu
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Action on the systray icon is unknown: %1").arg(reason));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("The action on the systray icon is unknown: %1").arg(reason));
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Action on the systray icon is unknown: %1").arg(reason));
-        QMessageBox::warning(NULL,tr("Warning"),tr("Action on the systray icon is unknown!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The action on the systray icon is unknown: %1").arg(reason));
+        QMessageBox::warning(NULL,tr("Warning"),tr("The action on the systray icon is unknown!"));
     }
 }
 

@@ -5,17 +5,17 @@
 	<!-- What kind of plugin this is -->
 	<category>Languages</category>
 	<!-- Who wrote this plugin -->
-	<author><![CDATA[BRULE Herman, alpha_one_x86 (alpha_one_x86@first-world.info)]]></author>
+	<author><![CDATA[BRULE Herman, alpha_one_x86 (alpha_one_x86@first-world.info), David Sferruzza (david.sferruzza@gmail.com)]]></author>
 	<!-- URL of page or site for this plugin (may provide additional information, bug reports, feature requests). -->
 	<website xml:lang="en"><![CDATA[http://ultracopier-fr.first-world.info/]]></website><!-- not required -->
 	<website xml:lang="fr"><![CDATA[http://ultracopier-fr.first-world.info/]]></website><!-- not required -->
 	<!-- the date-time format should be in timestamps format -->
 	<pubDate>1287496800</pubDate>
 	<!-- Detailed description -->
-	<description xml:lang="en"><![CDATA[Translation of Ultracopier to French. Done for version 0.3.0.0. For more details see the web site.]]></description>
-	<description xml:lang="fr"><![CDATA[Traduction d'ultracopier en Français. Fait pour la version 0.3.0.0. Pour plus de détails regardez le site web]]></description>
+	<description xml:lang="en"><![CDATA[Translation of Ultracopier to French. For more details see the web site.]]></description>
+	<description xml:lang="fr"><![CDATA[Traduction d'ultracopier en Français. Pour plus de détails regardez le site web]]></description>
 	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
-	<version>0.4.0.0</version>
+	<version>0.4.0.2</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>fr</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
