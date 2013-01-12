@@ -383,9 +383,15 @@ void Themes::forceCopyMode(const Ultracopier::CopyMode &mode)
     modeIsForced=true;
     this->mode=mode;
     if(mode==Ultracopier::Copy)
+    {
         this->setWindowTitle("Ultracopier - "+facilityEngine->translateText("Copy"));
+        ui->tabWidget->setTabText(0,tr("Copy list"));
+    }
     else
+    {
         this->setWindowTitle("Ultracopier - "+facilityEngine->translateText("Move"));
+        ui->tabWidget->setTabText(0,tr("Move list"));
+    }
     updateModeAndType();
 }
 

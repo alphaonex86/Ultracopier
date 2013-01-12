@@ -123,13 +123,21 @@
     </message>
     <message>
         <location filename="../../Filters.ui" line="30"/>
-        <source>Exclusion filter</source>
+        <source>Exclusion filters</source>
         <translation>Filtres d&apos;exclusion</translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="93"/>
-        <source>Inclusion filter</source>
+        <source>Inclusion filters</source>
         <translation>Filtres d&apos;inclusion</translation>
+    </message>
+    <message>
+        <source>Exclusion filter</source>
+        <translation type="obsolete">Filtre d&apos;exclusion</translation>
+    </message>
+    <message>
+        <source>Inclusion filter</source>
+        <translation type="obsolete">Filtre d&apos;inclusion</translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="105"/>
@@ -185,7 +193,7 @@
     <message>
         <location filename="../../ListThread.cpp" line="1254"/>
         <source>Unable to save the transfer list: %1</source>
-        <translation>Impossible de sauvegarde la liste de transfert : %1</translation>
+        <translation>Impossible de sauvegarder la liste de transfert : %1</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1270"/>
@@ -243,7 +251,8 @@
         <location filename="../../ReadThread.cpp" line="193"/>
         <location filename="../../ReadThread.cpp" line="378"/>
         <source>File truncated during the read, possible data change</source>
-        <translation>La taille du fichier a diminué durant la lecture, possible changement de données</translation>
+        <translatorcomment>La taille du fichier a diminué durant -&gt; changé le texte original</translatorcomment>
+        <translation>Fichier a diminué durant la lecture, possible changement de données</translation>
     </message>
 </context>
 <context>
@@ -340,7 +349,7 @@
     <message>
         <location filename="../../WriteThread.cpp" line="433"/>
         <source>File truncated during the read, possible data change</source>
-        <translation>La taille du fichier a diminué durant la lecture, possible changement de données</translation>
+        <translation>Fichier diminué durant la lecture, possible changement de données</translation>
     </message>
 </context>
 <context>

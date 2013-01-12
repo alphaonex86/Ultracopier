@@ -146,9 +146,9 @@ void CliParser::showHelp(const bool &incorrectArguments)
 	if(incorrectArguments)
 		qDebug() << "Incorrect arguments detected";
 	qDebug() << tr("The arguments possibles are:");
-	qDebug() << "--help : "+tr("To have this help");
+	qDebug() << "--help : "+tr("To display this help");
 	qDebug() << "quit : "+tr("To quit the other instance running (if have)");
-	qDebug() << "Transfer-list [transfer list file] : "+tr("Open transfer list to do");
+	qDebug() << "Transfer-list [transfer list file] : "+tr("Open transfer list");
 	qDebug() << "cp [source [source2]] [destination] : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user");
 	qDebug() << "mv [source [source2]] [destination] : "+tr("To move sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user");
 
@@ -156,9 +156,9 @@ void CliParser::showHelp(const bool &incorrectArguments)
 	if(incorrectArguments)
 		message+="<b>"+tr("Command line not understand")+"</b><br />\n";
 	message+=+"<b></b>"+tr("The arguments possibles are:")+"\n<ul>";
-	message+="<li><b>--help</b> : "+tr("To have this help")+"</li>\n";
+	message+="<li><b>--help</b> : "+tr("To display this help")+"</li>\n";
 	message+="<li><b>quit</b> : "+tr("To quit the other instance running (if have)")+"</li>\n";
-	message+="<li><b>Transfer-list [transfer list file]</b> : "+tr("Open transfer list to do")+"</li>\n";
+	message+="<li><b>Transfer-list [transfer list file]</b> : "+tr("Open transfer list")+"</li>\n";
 	message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
 	message+="<li><b>mv [source [source2]] [destination]</b> : "+tr("To move sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
 	message+=+"</ul>";

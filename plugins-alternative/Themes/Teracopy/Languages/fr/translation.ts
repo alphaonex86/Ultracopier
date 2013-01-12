@@ -16,8 +16,8 @@
     <message>
         <location filename="../../interface.cpp" line="216"/>
         <source>%1% done</source>
-        <translatorcomment>fait ou fait(s) ?</translatorcomment>
-        <translation type="unfinished">%1% fait</translation>
+        <translatorcomment>Exemple: 90% fait</translatorcomment>
+        <translation>%1% faits</translation>
     </message>
 </context>
 <context>

@@ -10,34 +10,55 @@
         <translation>Temps restant inconnu</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="365"/>
         <source>Transferring %1 items (%2)</source>
-        <translation>Transfert de %1 éléments (%2)</translation>
+        <translation type="obsolete">Transfert de %1 éléments (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="367"/>
         <source>Transferring %1 item (%2)</source>
-        <translation>Transfert de %1 élément (%2)</translation>
+        <translation type="obsolete">Transfert de %1 élément (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="374"/>
         <source>Copying %1 items (%2)</source>
-        <translation>Copie de %1 éléments (%2)</translation>
+        <translation type="obsolete">Copie de %1 éléments (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="376"/>
         <source>Copying %1 item (%2)</source>
-        <translation>Copie de %1 élément (%2)</translation>
+        <translation type="obsolete">Copie de %1 élément (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="381"/>
         <source>Moving %1 items (%2)</source>
-        <translation>Déplacement de %1 éléments (%2)</translation>
+        <translation type="obsolete">Déplacement de %1 éléments (%2)</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="383"/>
         <source>Moving %1 item (%2)</source>
-        <translation>Déplacement de %1 élément (%2)</translation>
+        <translation type="obsolete">Déplacement de %1 élément (%2)</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../interface.cpp" line="365"/>
+        <location filename="../../interface.cpp" line="367"/>
+        <source>Transferring %n item(s) (%2)</source>
+        <translation>
+            <numerusform>Transfert de %n élément (%2)</numerusform>
+            <numerusform>Transfert de %n éléments (%2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../interface.cpp" line="374"/>
+        <location filename="../../interface.cpp" line="376"/>
+        <source>Copying %n item(s) (%2)</source>
+        <translation>
+            <numerusform>Copie de %n élément (%2)</numerusform>
+            <numerusform>Copie de %n éléments (%2)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../interface.cpp" line="381"/>
+        <location filename="../../interface.cpp" line="383"/>
+        <source>Moving %n item(s) (%2)</source>
+        <translation>
+            <numerusform>Déplacement de %n élément (%2)</numerusform>
+            <numerusform>Déplacement de %n éléments (%2)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="449"/>

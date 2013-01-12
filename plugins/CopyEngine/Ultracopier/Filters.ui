@@ -27,7 +27,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Exclusion filter</string>
+      <string>Exclusion filters</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
@@ -90,7 +90,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Inclusion filter</string>
+      <string>Inclusion filters</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <property name="spacing">
