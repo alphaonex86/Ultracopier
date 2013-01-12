@@ -11,11 +11,11 @@
     </message>
     <message>
         <source>Transferring %1 items (%2)</source>
-        <translation type="obsolete">Transfert de %1 items (%2)</translation>
+        <translation type="obsolete">Transfert de %1 éléments (%2)</translation>
     </message>
     <message>
         <source>Transferring %1 item (%2)</source>
-        <translation type="obsolete">Transfert de %1 item (%2)</translation>
+        <translation type="obsolete">Transfert de %1 élément (%2)</translation>
     </message>
     <message>
         <source>Copying %1 items (%2)</source>
@@ -102,37 +102,37 @@
     <message>
         <location filename="../../interface.ui" line="176"/>
         <source>Name:</source>
-        <translation>Nom:</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="186"/>
         <source>From:</source>
-        <translation>Depuis:</translation>
+        <translation>Depuis :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="196"/>
         <source>To:</source>
-        <translation>Vers:</translation>
+        <translation>Vers :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="206"/>
         <source>Time remaining:</source>
-        <translation>Temps restant:</translation>
+        <translation>Temps restant :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="216"/>
         <source>Items remaining:</source>
-        <translation>Éléments restants:</translation>
+        <translation>Éléments restants :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="226"/>
         <source>Speed:</source>
-        <translation>Vitesse:</translation>
+        <translation>Vitesse :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="291"/>
         <source>More information</source>
-        <translation>Plus d&apos;information</translation>
+        <translation>Plus d&apos;informations</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="331"/>

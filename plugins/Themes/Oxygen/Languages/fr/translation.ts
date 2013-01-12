@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="+185"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation>Fichier %1/%2, taille: %3/%4</translation>
+        <translation>Fichier %1/%2, taille : %3/%4</translation>
     </message>
     <message>
         <location line="+203"/>
@@ -29,12 +29,12 @@
     <message>
         <location filename="../../interface.ui" line="+35"/>
         <source>From:</source>
-        <translation>Depuis:</translation>
+        <translation>Depuis :</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>To:</source>
-        <translation>Vers:</translation>
+        <translation>Vers :</translation>
     </message>
     <message>
         <location line="+64"/>
@@ -44,7 +44,7 @@
     <message>
         <location line="+63"/>
         <source>0KB/sec</source>
-        <translation>0Ko/s</translation>
+        <translation>0 Ko/s</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -70,7 +70,7 @@
         <location line="+15"/>
         <location line="+464"/>
         <source>Limit copy speed at:</source>
-        <translation>Limiter la vitesse de copie à:</translation>
+        <translation>Limiter la vitesse de copie à :</translation>
     </message>
     <message>
         <location line="-447"/>
@@ -109,7 +109,7 @@
     <message>
         <location line="+21"/>
         <source>At the end of the copy: </source>
-        <translation>À la fin de la copie:</translation>
+        <translation>À la fin de la copie :</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -145,7 +145,7 @@
         <location line="+21"/>
         <location line="+60"/>
         <source>What to do: </source>
-        <translation>Opération à effectuer:</translation>
+        <translation>Opération à effectuer :</translation>
     </message>
     <message>
         <location line="-21"/>
@@ -199,7 +199,7 @@
     </message>
     <message>
         <source>Shutdown when is finish</source>
-        <translation type="obsolete">Fermer quand est fini</translation>
+        <translation type="obsolete">Fermer à la fin des transferts</translation>
     </message>
 </context>
 <context>
@@ -207,7 +207,7 @@
     <message>
         <location filename="../../options.ui" line="+20"/>
         <source>Show speed as main information</source>
-        <translation>Montrer la vitesse comme une information principale</translation>
+        <translation>Toujours afficher le réglage de limitation de vitesse de transfert</translation>
     </message>
     <message>
         <location line="+13"/>

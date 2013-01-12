@@ -14,7 +14,7 @@
     <message>
         <location filename="../../interface.ui" line="32"/>
         <source>Action:</source>
-        <translation>Action:</translation>
+        <translation>Action :</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="44"/>
