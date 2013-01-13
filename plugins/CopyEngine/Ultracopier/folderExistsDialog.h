@@ -24,30 +24,30 @@ class folderExistsDialog : public QDialog
     Q_OBJECT
 
 public:
-	/// \brief create the object and pass all the informations to it
-	explicit folderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
-	~folderExistsDialog();
-	/// \brief return the the always checkbox is checked
-	bool getAlways();
-	/// \brief return the action clicked
-	FolderExistsAction getAction();
-	/// \brief return the new rename is case in manual renaming
-	QString getNewName();
+    /// \brief create the object and pass all the informations to it
+    explicit folderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
+    ~folderExistsDialog();
+    /// \brief return the the always checkbox is checked
+    bool getAlways();
+    /// \brief return the action clicked
+    FolderExistsAction getAction();
+    /// \brief return the new rename is case in manual renaming
+    QString getNewName();
 protected:
-	void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e);
 private slots:
-	void on_SuggestNewName_clicked();
-	void on_Rename_clicked();
-	void on_Skip_clicked();
-	void on_Cancel_clicked();
-	void on_Merge_clicked();
+    void on_SuggestNewName_clicked();
+    void on_Rename_clicked();
+    void on_Skip_clicked();
+    void on_Cancel_clicked();
+    void on_Merge_clicked();
 private:
-	Ui::folderExistsDialog *ui;
-	FolderExistsAction action;
-	QString oldName;
-	QString firstRenamingRule;
-	QString otherRenamingRule;
-	QFileInfo destinationInfo;
+    Ui::folderExistsDialog *ui;
+    FolderExistsAction action;
+    QString oldName;
+    QString firstRenamingRule;
+    QString otherRenamingRule;
+    QFileInfo destinationInfo;
 };
 
 #endif // FOLDERISSAMEDIALOG_H
