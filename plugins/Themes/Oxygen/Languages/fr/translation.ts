@@ -78,10 +78,6 @@
         <translation>Illimité</translation>
     </message>
     <message>
-        <source>Copy list</source>
-        <translation type="obsolete">Liste de copie</translation>
-    </message>
-    <message>
         <location line="+26"/>
         <source>Transfer list</source>
         <translation>Liste de transferts</translation>
@@ -196,10 +192,6 @@
         <location line="-526"/>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
-    </message>
-    <message>
-        <source>Shutdown when is finish</source>
-        <translation type="obsolete">Fermer quand est fini</translation>
     </message>
 </context>
 <context>

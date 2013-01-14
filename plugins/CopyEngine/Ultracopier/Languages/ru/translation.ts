@@ -123,13 +123,13 @@
     </message>
     <message>
         <location filename="../../Filters.ui" line="30"/>
-        <source>Exclusion filter</source>
-        <translation>Исключение фильтра</translation>
+        <source>Exclusion filters</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="93"/>
-        <source>Inclusion filter</source>
-        <translation>Включение фильтра</translation>
+        <source>Inclusion filters</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="105"/>
@@ -178,47 +178,47 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1247"/>
+        <location filename="../../ListThread.cpp" line="1246"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Невозможно сделать, чтобы скопировать или переместить элемент в неправильном форсированном режиме: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1254"/>
+        <location filename="../../ListThread.cpp" line="1253"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Невозможно сохранить трансфер: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1270"/>
+        <location filename="../../ListThread.cpp" line="1269"/>
         <source>Problem at the reading, or file size is null</source>
         <translation>Проблема при чтении или размер файла нулевой</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1277"/>
+        <location filename="../../ListThread.cpp" line="1276"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Неправильный заголовок: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1286"/>
+        <location filename="../../ListThread.cpp" line="1285"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Трансфер в смешанном режиме, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1295"/>
+        <location filename="../../ListThread.cpp" line="1294"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Передача списка в режиме копирования, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1301"/>
+        <location filename="../../ListThread.cpp" line="1300"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Трансфер в режим перемещения, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1356"/>
+        <location filename="../../ListThread.cpp" line="1355"/>
         <source>Some error have been found during the line parsing</source>
         <translation>Некоторые ошибки были обнаружены в ходе разбора линия</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1363"/>
+        <location filename="../../ListThread.cpp" line="1362"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Не удается открыть трансфер: %1</translation>
     </message>
@@ -311,17 +311,17 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="311"/>
+        <location filename="../../TransferThread.cpp" line="319"/>
         <source>%1 - copy</source>
         <translation>%1 - копия</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="321"/>
+        <location filename="../../TransferThread.cpp" line="329"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - копия (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="614"/>
+        <location filename="../../TransferThread.cpp" line="687"/>
         <source>The checksums not match</source>
         <translation>Контрольные суммы не совпадают</translation>
     </message>
@@ -646,17 +646,17 @@
         <translation>отменить</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="29"/>
+        <location filename="../../folderExistsDialog.cpp" line="30"/>
         <source>Folder already exists</source>
         <translation>Папка уже существует</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="85"/>
+        <location filename="../../folderExistsDialog.cpp" line="86"/>
         <source>%1 - copy</source>
         <translation>%1 - копия</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="95"/>
+        <location filename="../../folderExistsDialog.cpp" line="96"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - копия (%2)</translation>
     </message>

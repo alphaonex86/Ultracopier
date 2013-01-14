@@ -123,12 +123,12 @@
     </message>
     <message>
         <location filename="../../Filters.ui" line="30"/>
-        <source>Exclusion filter</source>
+        <source>Exclusion filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="93"/>
-        <source>Inclusion filter</source>
+        <source>Inclusion filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -178,47 +178,47 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1247"/>
+        <location filename="../../ListThread.cpp" line="1246"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1254"/>
+        <location filename="../../ListThread.cpp" line="1253"/>
         <source>Unable to save the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1270"/>
+        <location filename="../../ListThread.cpp" line="1269"/>
         <source>Problem at the reading, or file size is null</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1277"/>
+        <location filename="../../ListThread.cpp" line="1276"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1286"/>
+        <location filename="../../ListThread.cpp" line="1285"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1295"/>
+        <location filename="../../ListThread.cpp" line="1294"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1301"/>
+        <location filename="../../ListThread.cpp" line="1300"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1356"/>
+        <location filename="../../ListThread.cpp" line="1355"/>
         <source>Some error have been found during the line parsing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1363"/>
+        <location filename="../../ListThread.cpp" line="1362"/>
         <source>Unable to open the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,17 +311,17 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="311"/>
+        <location filename="../../TransferThread.cpp" line="319"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="321"/>
+        <location filename="../../TransferThread.cpp" line="329"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="614"/>
+        <location filename="../../TransferThread.cpp" line="687"/>
         <source>The checksums not match</source>
         <translation type="unfinished"></translation>
     </message>
@@ -646,17 +646,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="29"/>
+        <location filename="../../folderExistsDialog.cpp" line="30"/>
         <source>Folder already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="85"/>
+        <location filename="../../folderExistsDialog.cpp" line="86"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="95"/>
+        <location filename="../../folderExistsDialog.cpp" line="96"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>

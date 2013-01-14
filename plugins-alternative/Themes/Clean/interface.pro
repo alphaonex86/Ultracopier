@@ -14,6 +14,7 @@ include(../../../updateqm.pri)
 TRANSLATIONS += Languages/ar/translation.ts \
     Languages/de/translation.ts \
     Languages/el/translation.ts \
+    Languages/en/translation.ts \
     Languages/es/translation.ts \
     Languages/fr/translation.ts \
     Languages/hi/translation.ts \

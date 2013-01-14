@@ -43,9 +43,14 @@
     <message>
         <location filename="../../../CliParser.cpp" line="149"/>
         <location filename="../../../CliParser.cpp" line="159"/>
-        <source>To have this help</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation>Um diese Hilfe zu bekommen</translation>
+        <source>To display this help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="151"/>
+        <location filename="../../../CliParser.cpp" line="161"/>
+        <source>Open transfer list</source>
+        <translation type="unfinished">Transferliste öffnen</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="150"/>
@@ -53,12 +58,6 @@
         <source>To quit the other instance running (if have)</source>
         <translatorcomment>fix english</translatorcomment>
         <translation>Andere laufende Instanzen beenden (falls vorhanden)</translation>
-    </message>
-    <message>
-        <location filename="../../../CliParser.cpp" line="151"/>
-        <location filename="../../../CliParser.cpp" line="161"/>
-        <source>Open transfer list to do</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="152"/>
@@ -193,6 +192,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="42"/>
         <source>Move</source>
+        <extracomment>a copy</extracomment>
         <translation>Verschieben</translation>
     </message>
     <message>
@@ -304,6 +304,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="43"/>
         <source>Start</source>
+        <extracomment>a move</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -438,17 +439,15 @@
     <name>HelpDialog</name>
     <message>
         <location filename="../../../HelpDialog.ui" line="20"/>
-        <source>About ultracopier</source>
-        <translation>Über ultracopier</translation>
+        <source>About Ultracopier</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="70"/>
-        <source>Based on Qt. It provide advanced copier with more advanced feature. It&apos;s under GPL3.
+        <source>Based on Qt. Advanced utility to copy files under GPL3 license.
 This version is compiled as version: %1.</source>
         <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
-        <translatorcomment>fix english.</translatorcomment>
-        <translation>Basierend auf Qt. Es bietet ein Kopiertool mit erweiterten Funktionen. Es ist unter GPLv3 verfügbar.
-Diese Version ist als %1 kompiliert.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="88"/>
@@ -576,11 +575,6 @@ Diese Version ist als %1 kompiliert.</translation>
         <translation>Log</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="127"/>
-        <source>Catch the copy/move as default:</source>
-        <translation>Kopieren/Verschieben standardmäßig abfangen:</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="141"/>
         <source>Load at the session loading:</source>
         <translatorcomment>fix english</translatorcomment>
@@ -663,6 +657,11 @@ Diese Version ist als %1 kompiliert.</translation>
         <translation>Browse</translation>
     </message>
     <message>
+        <location filename="../../../OptionDialog.ui" line="653"/>
+        <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../OptionDialog.ui" line="673"/>
         <location filename="../../../OptionDialog.ui" line="686"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
@@ -688,6 +687,11 @@ Diese Version ist als %1 kompiliert.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="117"/>
         <source>Force the language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="127"/>
+        <source>Replace the default copy and move system:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -775,12 +779,6 @@ Diese Version ist als %1 kompiliert.</translation>
         <translation>Protokolle speichern als: </translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="653"/>
-        <source>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation>Schreibt die Datei direkt, sobald ein neuer Eintrag erhalten wird. Dies kann aber zu 50% Performanceverlust führen</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="656"/>
         <source>Synchronized log</source>
         <translation>Synchronisiertes Log</translation>
@@ -817,9 +815,8 @@ Diese Version ist als %1 kompiliert.</translation>
         <location filename="../../../OptionEngine.cpp" line="158"/>
         <location filename="../../../OptionEngine.cpp" line="195"/>
         <location filename="../../../OptionEngine.cpp" line="199"/>
-        <source>Try get variable, but the variable is not found: %1 %2</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation>Habe versucht, eine Variable zu erhalten, konnte sie aber nicht finden: %1 %2</translation>
+        <source>The variable was not found: %1 %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1117,18 +1114,18 @@ seit: %2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="141"/>
-        <source>Not catching the explorer copy/move</source>
-        <translation>Explorer kopieren/verschieben nicht abfangen</translation>
+        <source>Not replace the explorer copy/move</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="146"/>
-        <source>Semi catching the explorer copy/move</source>
-        <translation>Explorer kopieren/verschieben teilweise abfangen</translation>
+        <source>Semi replace the explorer copy/move</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="151"/>
-        <source>Catching the explorer copy/move</source>
-        <translation>Explorer kopieren/verschieben abfangen</translation>
+        <source>Replace the explorer copy/move</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="309"/>
@@ -1137,8 +1134,8 @@ seit: %2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="309"/>
-        <source>Action on the systray icon is unknown!</source>
-        <translation>Aktion auf dem Systray-Icon ist nicht bekannt!</translation>
+        <source>The action on the systray icon is unknown!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="357"/>

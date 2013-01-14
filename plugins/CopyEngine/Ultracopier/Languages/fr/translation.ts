@@ -132,14 +132,6 @@
         <translation>Filtres d&apos;inclusion</translation>
     </message>
     <message>
-        <source>Exclusion filter</source>
-        <translation type="obsolete">Filtre d&apos;exclusion</translation>
-    </message>
-    <message>
-        <source>Inclusion filter</source>
-        <translation type="obsolete">Filtre d&apos;inclusion</translation>
-    </message>
-    <message>
         <location filename="../../Filters.ui" line="105"/>
         <source>None = Include all</source>
         <translation>Aucun = tout inclure</translation>
@@ -186,47 +178,47 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1247"/>
+        <location filename="../../ListThread.cpp" line="1246"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1254"/>
+        <location filename="../../ListThread.cpp" line="1253"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Impossible de sauvegarder la liste de transfert: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1270"/>
+        <location filename="../../ListThread.cpp" line="1269"/>
         <source>Problem at the reading, or file size is null</source>
         <translation>Problème à la lecture, ou fichier de taille nulle</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1277"/>
+        <location filename="../../ListThread.cpp" line="1276"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Mauvais en-tête: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1286"/>
+        <location filename="../../ListThread.cpp" line="1285"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>La liste de transfert est en mode mixte, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1295"/>
+        <location filename="../../ListThread.cpp" line="1294"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>La liste de transfert est en mode copie, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1301"/>
+        <location filename="../../ListThread.cpp" line="1300"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>La liste de transfert est en mode déplacement, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1356"/>
+        <location filename="../../ListThread.cpp" line="1355"/>
         <source>Some error have been found during the line parsing</source>
         <translation>Quelques erreurs ont été trouvées durant l&apos;analyse des lignes</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1363"/>
+        <location filename="../../ListThread.cpp" line="1362"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Impossible d&apos;ouvrir la list de transfert: %1</translation>
     </message>
@@ -324,17 +316,17 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="311"/>
+        <location filename="../../TransferThread.cpp" line="319"/>
         <source>%1 - copy</source>
         <translation>%1 - copie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="321"/>
+        <location filename="../../TransferThread.cpp" line="329"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copie (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="614"/>
+        <location filename="../../TransferThread.cpp" line="687"/>
         <source>The checksums not match</source>
         <translation>Les sommes de contrôle ne correspondent pas</translation>
     </message>
@@ -659,17 +651,17 @@
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="29"/>
+        <location filename="../../folderExistsDialog.cpp" line="30"/>
         <source>Folder already exists</source>
         <translation>Dossier déjà existant</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="85"/>
+        <location filename="../../folderExistsDialog.cpp" line="86"/>
         <source>%1 - copy</source>
         <translation>%1 - copie</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="95"/>
+        <location filename="../../folderExistsDialog.cpp" line="96"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copie (%2)</translation>
     </message>

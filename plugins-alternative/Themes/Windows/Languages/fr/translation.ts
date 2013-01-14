@@ -9,30 +9,6 @@
         <source>Unknown remaining time</source>
         <translation>Temps restant inconnu</translation>
     </message>
-    <message>
-        <source>Transferring %1 items (%2)</source>
-        <translation type="obsolete">Transfert de %1 items (%2)</translation>
-    </message>
-    <message>
-        <source>Transferring %1 item (%2)</source>
-        <translation type="obsolete">Transfert de %1 item (%2)</translation>
-    </message>
-    <message>
-        <source>Copying %1 items (%2)</source>
-        <translation type="obsolete">Copie de %1 éléments (%2)</translation>
-    </message>
-    <message>
-        <source>Copying %1 item (%2)</source>
-        <translation type="obsolete">Copie de %1 élément (%2)</translation>
-    </message>
-    <message>
-        <source>Moving %1 items (%2)</source>
-        <translation type="obsolete">Déplacement de %1 éléments (%2)</translation>
-    </message>
-    <message>
-        <source>Moving %1 item (%2)</source>
-        <translation type="obsolete">Déplacement de %1 élément (%2)</translation>
-    </message>
     <message numerus="yes">
         <location filename="../../interface.cpp" line="365"/>
         <location filename="../../interface.cpp" line="367"/>

@@ -9,6 +9,7 @@
         <file>none-128x128.png</file>
         <file>Languages/en/flag.png</file>
         <file>Languages/en/informations.xml</file>
+	<file>Languages/en/translation.qm</file>
         <file>options.png</file>
     </qresource>
 </RCC>

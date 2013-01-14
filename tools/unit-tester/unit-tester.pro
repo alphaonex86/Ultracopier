@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     ../../plugins/CopyEngine/Ultracopier/MkPath.cpp \
     ../../plugins/CopyEngine/Ultracopier/scanFileOrFolder.cpp \
     ../../plugins/CopyEngine/Ultracopier/RmPath.cpp \
-    copyEngineUnitTester.cpp
+    copyEngineUnitTester.cpp \
+    copyEngine.cpp
 
 HEADERS += \
     ../../plugins/CopyEngine/Ultracopier/ReadThread.h \
@@ -37,4 +38,5 @@ HEADERS += \
     ../../plugins/CopyEngine/Ultracopier/MkPath.h \
     ../../plugins/CopyEngine/Ultracopier/scanFileOrFolder.h \
     ../../plugins/CopyEngine/Ultracopier/RmPath.h \
-    copyEngineUnitTester.h
+    copyEngineUnitTester.h \
+    copyEngine.h

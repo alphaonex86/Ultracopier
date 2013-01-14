@@ -51,10 +51,6 @@
         <translation>Ouvrir la liste de transfert</translation>
     </message>
     <message>
-        <source>To have this help</source>
-        <translation type="obsolete">Pour avoir cet aide</translation>
-    </message>
-    <message>
         <location filename="../../../CliParser.cpp" line="150"/>
         <location filename="../../../CliParser.cpp" line="160"/>
         <source>To quit the other instance running (if have)</source>
@@ -425,20 +421,9 @@
 <context>
     <name>HelpDialog</name>
     <message>
-        <source>About ultracopier</source>
-        <translation type="obsolete">À propos d&apos;Ultracopier</translation>
-    </message>
-    <message>
         <location filename="../../../HelpDialog.ui" line="20"/>
         <source>About Ultracopier</source>
         <translation>À propos d&apos;Ultracopier</translation>
-    </message>
-    <message>
-        <source>Based on Qt. It provide advanced copier with more advanced feature. It&apos;s under GPL3.
-This version is compiled as version: %1.</source>
-        <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
-        <translation type="obsolete">Basé sur Qt. Il fournit un copieur avec plus d&apos;options avancées. Qui est en GPL3.
-Cette version est compilée comme version: %1.</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="70"/>
@@ -571,10 +556,6 @@ Cette version est compilée comme version : %1.</translation>
         <location filename="../../../OptionDialog.ui" line="100"/>
         <source>Log</source>
         <translation>Logs</translation>
-    </message>
-    <message>
-        <source>Catch the copy/move as default:</source>
-        <translation type="obsolete">Capturer la copie/déplacement par défaut:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="141"/>
@@ -784,10 +765,6 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Sauvegarder les logs sous: </translation>
     </message>
     <message>
-        <source>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</source>
-        <translation type="obsolete">Le fichier est écrit directement quand il reçois une nouvelle entrée, mais il peu produire 50% de perte de performance</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="656"/>
         <source>Synchronized log</source>
         <translation>Log synchronisé</translation>
@@ -814,10 +791,6 @@ Cette version est compilée comme version : %1.</translation>
 </context>
 <context>
     <name>OptionEngine</name>
-    <message>
-        <source>Try get variable, but the variable is not found: %1 %2</source>
-        <translation type="obsolete">Essaie d&apos;obtention d&apos;une variable, mais la variable n&apos;as pas été trouvé: %1 %2</translation>
-    </message>
     <message>
         <location filename="../../../OptionEngine.cpp" line="154"/>
         <location filename="../../../OptionEngine.cpp" line="158"/>
@@ -1114,22 +1087,6 @@ depuis:%2</translation>
         <location filename="../../../SystrayIcon.cpp" line="128"/>
         <source>Searching information...</source>
         <translation>Recherche d&apos;informations...</translation>
-    </message>
-    <message>
-        <source>Not catching the explorer copy/move</source>
-        <translation type="obsolete">Ne pas capturer la copie/déplacement de l&apos;explorateur</translation>
-    </message>
-    <message>
-        <source>Semi catching the explorer copy/move</source>
-        <translation type="obsolete">Interception partielle des copies/déplacements de l&apos;explorateur</translation>
-    </message>
-    <message>
-        <source>Catching the explorer copy/move</source>
-        <translation type="obsolete">Interception des copies/déplacements de l&apos;explorateur</translation>
-    </message>
-    <message>
-        <source>Action on the systray icon is unknown!</source>
-        <translation type="obsolete">Action sur l&apos;icône du systray est inconnu!</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="309"/>

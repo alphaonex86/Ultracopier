@@ -9,35 +9,29 @@
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="-73"/>
-        <source>Transferring %1 items (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+2"/>
-        <source>Transferring %1 item (%2)</source>
-        <translation type="unfinished"></translation>
+        <source>Transferring %n item(s) (%2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="+7"/>
-        <source>Copying %1 items (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+2"/>
-        <source>Copying %1 item (%2)</source>
-        <translation type="unfinished"></translation>
+        <source>Copying %n item(s) (%2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location line="+5"/>
-        <source>Moving %1 items (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+2"/>
-        <source>Moving %1 item (%2)</source>
-        <translation type="unfinished"></translation>
+        <source>Moving %n item(s) (%2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location line="+66"/>

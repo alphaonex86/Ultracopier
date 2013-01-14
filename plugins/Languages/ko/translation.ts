@@ -41,7 +41,7 @@
     <message>
         <location filename="../../../CliParser.cpp" line="149"/>
         <location filename="../../../CliParser.cpp" line="159"/>
-        <source>To have this help</source>
+        <source>To display this help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -53,7 +53,7 @@
     <message>
         <location filename="../../../CliParser.cpp" line="151"/>
         <location filename="../../../CliParser.cpp" line="161"/>
-        <source>Open transfer list to do</source>
+        <source>Open transfer list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -184,6 +184,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="42"/>
         <source>Move</source>
+        <extracomment>a copy</extracomment>
         <translation>이동</translation>
     </message>
     <message>
@@ -285,6 +286,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="43"/>
         <source>Start</source>
+        <extracomment>a move</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -418,15 +420,15 @@
     <name>HelpDialog</name>
     <message>
         <location filename="../../../HelpDialog.ui" line="20"/>
-        <source>About ultracopier</source>
-        <translation>UltraCopier 정보</translation>
+        <source>About Ultracopier</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="70"/>
-        <source>Based on Qt. It provide advanced copier with more advanced feature. It&apos;s under GPL3.
+        <source>Based on Qt. Advanced utility to copy files under GPL3 license.
 This version is compiled as version: %1.</source>
         <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
-        <translation>Qt에 기반으로 더욱 고급 기능의 복사기를 제공합니다. UltraCopier는 GPL3 라이센스를 따릅니다. 이 버전은 %1(으)로 컴파일 되었습니다.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="78"/>
@@ -553,11 +555,6 @@ This version is compiled as version: %1.</source>
         <translation>로그</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="127"/>
-        <source>Catch the copy/move as default:</source>
-        <translation>기본으로 복사/이동 자동 감지:</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="141"/>
         <source>Load at the session loading:</source>
         <translation>세션 시작시 프로그램 실행:</translation>
@@ -663,6 +660,11 @@ This version is compiled as version: %1.</source>
         <translation>찾아보기</translation>
     </message>
     <message>
+        <location filename="../../../OptionDialog.ui" line="653"/>
+        <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../OptionDialog.ui" line="673"/>
         <location filename="../../../OptionDialog.ui" line="686"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
@@ -688,6 +690,11 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="117"/>
         <source>Force the language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="127"/>
+        <source>Replace the default copy and move system:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -774,11 +781,6 @@ This version is compiled as version: %1.</source>
         <translation>로그 따로 저장:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="653"/>
-        <source>This write directly the file when it receive the new entry, but it can produce 50% of lost of performance</source>
-        <translation>새로운 항목을 접수할 때 파일을 바로 작성합니다. 하지만 성능이 50% 정도 저하될 수 있습니다</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="656"/>
         <source>Synchronized log</source>
         <translation>로그 동기화됨</translation>
@@ -791,7 +793,7 @@ This version is compiled as version: %1.</source>
         <location filename="../../../OptionEngine.cpp" line="158"/>
         <location filename="../../../OptionEngine.cpp" line="195"/>
         <location filename="../../../OptionEngine.cpp" line="199"/>
-        <source>Try get variable, but the variable is not found: %1 %2</source>
+        <source>The variable was not found: %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1087,18 +1089,18 @@ since:%2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="141"/>
-        <source>Not catching the explorer copy/move</source>
-        <translation>탐색기 복사/이동 자동 감지 안함</translation>
+        <source>Not replace the explorer copy/move</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="146"/>
-        <source>Semi catching the explorer copy/move</source>
-        <translation>탐색기 복사/이동 부분 감지</translation>
+        <source>Semi replace the explorer copy/move</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="151"/>
-        <source>Catching the explorer copy/move</source>
-        <translation>탐색기 복사/이동 자동 감지</translation>
+        <source>Replace the explorer copy/move</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="309"/>
@@ -1107,8 +1109,8 @@ since:%2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="309"/>
-        <source>Action on the systray icon is unknown!</source>
-        <translation>트레이 아이콘에서 실행된 작동을 알 수가 없습니다!</translation>
+        <source>The action on the systray icon is unknown!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="357"/>

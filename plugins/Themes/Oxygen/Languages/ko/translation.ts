@@ -9,7 +9,17 @@
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+566"/>
+        <location line="+203"/>
+        <source>Copy list</source>
+        <translation type="unfinished">복사 목록</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Move list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+364"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished">파일명, 0KB</translation>
     </message>
@@ -27,12 +37,7 @@
         <translation type="unfinished">대상:</translation>
     </message>
     <message>
-        <location line="+64"/>
-        <source>Shutdown when is finish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+63"/>
+        <location line="+127"/>
         <source>0KB/sec</source>
         <translation type="unfinished">0KB/초</translation>
     </message>
@@ -58,19 +63,24 @@
     </message>
     <message>
         <location line="+15"/>
-        <location line="+472"/>
+        <location line="+464"/>
         <source>Limit copy speed at:</source>
         <translation type="unfinished">복사 속도 제한:</translation>
     </message>
     <message>
-        <location line="-455"/>
+        <location line="-447"/>
         <source>Unlimited</source>
         <translation type="unfinished">무제한</translation>
     </message>
     <message>
-        <location line="+30"/>
-        <source>Copy list</source>
-        <translation type="unfinished">복사 목록</translation>
+        <location line="-160"/>
+        <source>Close at the end of the transfers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+186"/>
+        <source>Transfer list</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+164"/>
@@ -88,7 +98,7 @@
         <translation type="unfinished">다음</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+35"/>
         <source>Options</source>
         <translation type="unfinished">옵션</translation>
     </message>
@@ -144,7 +154,7 @@
         <translation type="unfinished">오류 복사</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+74"/>
         <source>Interface</source>
         <translation type="unfinished">인터페이스</translation>
     </message>

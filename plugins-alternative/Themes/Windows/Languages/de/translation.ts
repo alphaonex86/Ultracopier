@@ -9,35 +9,32 @@
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../interface.cpp" line="365"/>
-        <source>Transferring %1 items (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.cpp" line="367"/>
-        <source>Transferring %1 item (%2)</source>
-        <translation type="unfinished"></translation>
+        <source>Transferring %n item(s) (%2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../interface.cpp" line="374"/>
-        <source>Copying %1 items (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.cpp" line="376"/>
-        <source>Copying %1 item (%2)</source>
-        <translation type="unfinished"></translation>
+        <source>Copying %n item(s) (%2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../interface.cpp" line="381"/>
-        <source>Moving %1 items (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.cpp" line="383"/>
-        <source>Moving %1 item (%2)</source>
-        <translation type="unfinished"></translation>
+        <source>Moving %n item(s) (%2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="449"/>

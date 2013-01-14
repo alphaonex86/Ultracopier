@@ -115,84 +115,79 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
         }
         installedTranslator.clear();
     }
-    if(newLanguage=="en")
+    int index=0;
+    while(index<LanguagesAvailableList.size())
     {
-        currentLanguage="en";
-        emit newLanguageLoaded(currentLanguage);
-    }
-    else
-    {
-        int index=0;
-        while(index<LanguagesAvailableList.size())
+        if(LanguagesAvailableList.at(index).mainShortName==newLanguage)
         {
-            if(LanguagesAvailableList.at(index).mainShortName==newLanguage)
+            //load the new language
+            if(newLanguage!="en")
             {
-                //load the new language
-                if(newLanguage!="en")
-                {
-                    QTranslator *temp;
-                    QStringList fileToLoad;
-                    //load the language main
+                QTranslator *temp;
+                QStringList fileToLoad;
+                //load the language main
+                if(newLanguage=="en")
+                    fileToLoad<<":/Languages/en/translation.qm";
+                else
                     fileToLoad<<LanguagesAvailableList.at(index).path+"translation.qm";
-                    //load the language plugin
-                    QList<PluginsAvailable> listLoadedPlugins=plugins->getPlugins();
-                    int indexPluginIndex=0;
-                    while(indexPluginIndex<listLoadedPlugins.size())
+                //load the language plugin
+                QList<PluginsAvailable> listLoadedPlugins=plugins->getPlugins();
+                int indexPluginIndex=0;
+                while(indexPluginIndex<listLoadedPlugins.size())
+                {
+                    if(listLoadedPlugins.at(indexPluginIndex).category!=PluginType_Languages)
                     {
-                        if(listLoadedPlugins.at(indexPluginIndex).category!=PluginType_Languages)
-                        {
-                            QString tempPath=listLoadedPlugins.at(indexPluginIndex).path+"Languages"+QDir::separator()+LanguagesAvailableList.at(index).mainShortName+QDir::separator()+"translation.qm";
-                            if(QFile::exists(tempPath))
-                                fileToLoad<<tempPath;
-                        }
-                        indexPluginIndex++;
+                        QString tempPath=listLoadedPlugins.at(indexPluginIndex).path+"Languages"+QDir::separator()+LanguagesAvailableList.at(index).mainShortName+QDir::separator()+"translation.qm";
+                        if(QFile::exists(tempPath))
+                            fileToLoad<<tempPath;
                     }
-                    int indexTranslationFile=0;
-                    while(indexTranslationFile<fileToLoad.size())
-                    {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Translation to load: "+fileToLoad.at(indexTranslationFile));
-                        temp=new QTranslator();
-                        if(!temp->load(fileToLoad.at(indexTranslationFile)) || temp->isEmpty())
-                        {
-                            delete temp;
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: "+fileToLoad.at(indexTranslationFile));
-                        }
-                        else
-                        {
-                            QCoreApplication::installTranslator(temp);
-                            installedTranslator<<temp;
-                        }
-                        indexTranslationFile++;
-                    }
+                    indexPluginIndex++;
+                }
+                int indexTranslationFile=0;
+                while(indexTranslationFile<fileToLoad.size())
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Translation to load: "+fileToLoad.at(indexTranslationFile));
                     temp=new QTranslator();
-                    if(temp->load(QString("qt_")+newLanguage, QLibraryInfo::location(QLibraryInfo::TranslationsPath)) && !temp->isEmpty())
+                    if(!temp->load(fileToLoad.at(indexTranslationFile)) || temp->isEmpty())
+                    {
+                        delete temp;
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: "+fileToLoad.at(indexTranslationFile));
+                    }
+                    else
                     {
                         QCoreApplication::installTranslator(temp);
                         installedTranslator<<temp;
                     }
+                    indexTranslationFile++;
+                }
+                temp=new QTranslator();
+                if(temp->load(QString("qt_")+newLanguage, QLibraryInfo::location(QLibraryInfo::TranslationsPath)) && !temp->isEmpty())
+                {
+                    QCoreApplication::installTranslator(temp);
+                    installedTranslator<<temp;
+                }
+                else
+                {
+                    if(!temp->load(LanguagesAvailableList.at(index).path+"qt.qm") || temp->isEmpty())
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: qt.qm, into: "+LanguagesAvailableList.at(index).path);
+                        delete temp;
+                    }
                     else
                     {
-                        if(!temp->load(LanguagesAvailableList.at(index).path+"qt.qm") || temp->isEmpty())
-                        {
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: qt.qm, into: "+LanguagesAvailableList.at(index).path);
-                            delete temp;
-                        }
-                        else
-                        {
-                            QCoreApplication::installTranslator(temp);
-                            installedTranslator<<temp;
-                        }
+                        QCoreApplication::installTranslator(temp);
+                        installedTranslator<<temp;
                     }
                 }
-                currentLanguage=newLanguage;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newLanguageLoaded()");
-                emit newLanguageLoaded(currentLanguage);
-                return;
             }
-            index++;
+            currentLanguage=newLanguage;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newLanguageLoaded()");
+            emit newLanguageLoaded(currentLanguage);
+            return;
         }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to found language: "+newLanguage+", LanguagesAvailableList.size(): "+QString::number(LanguagesAvailableList.size()));
+        index++;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to found language: "+newLanguage+", LanguagesAvailableList.size(): "+QString::number(LanguagesAvailableList.size()));
 }
 
 /// \brief check if short name is found into language
