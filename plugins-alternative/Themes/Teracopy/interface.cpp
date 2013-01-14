@@ -21,7 +21,6 @@ Themes::Themes(FacilityInterface * facilityEngine) :
     totalFile		= 0;
     currentSize		= 0;
     totalSize		= 0;
-    this->show();
     storeIsInPause		= false;
     isInPause(false);
     modeIsForced		= false;
@@ -39,6 +38,7 @@ Themes::Themes(FacilityInterface * facilityEngine) :
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&transferModel,&TransferModel::debugInformation,this,&Themes::debugInformation);
     #endif
+    show();
 }
 
 Themes::~Themes()

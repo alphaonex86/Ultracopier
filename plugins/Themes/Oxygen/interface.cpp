@@ -25,7 +25,6 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     totalSize	= 0;
     haveError	= false;
     stat        = status_never_started;
-    this->show();
     menu=new QMenu(this);
     ui->add->setMenu(menu);
     on_checkBoxShowSpeed_toggled(ui->checkBoxShowSpeed->isChecked());
@@ -138,6 +137,7 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     #endif
 
     updateSpeed();
+    show();
 }
 
 Themes::~Themes()

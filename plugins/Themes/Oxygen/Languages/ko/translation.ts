@@ -27,7 +27,7 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+35"/>
+        <location filename="../../interface.ui" line="+33"/>
         <source>From:</source>
         <translation type="unfinished">원본:</translation>
     </message>
@@ -197,7 +197,7 @@
 <context>
     <name>options</name>
     <message>
-        <location filename="../../options.ui" line="+20"/>
+        <location filename="../../options.ui" line="+18"/>
         <source>Show speed as main information</source>
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>

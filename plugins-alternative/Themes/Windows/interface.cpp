@@ -20,7 +20,6 @@ Themes::Themes(FacilityInterface * facilityEngine) :
     haveStarted	= false;
     this->facilityEngine	= facilityEngine;
     transferModel.setFacilityEngine(facilityEngine);
-    this->show();
     menu=new QMenu(this);
     ui->toolButton->setMenu(menu);
     updateModeAndType();
@@ -40,6 +39,7 @@ Themes::Themes(FacilityInterface * facilityEngine) :
     #ifndef Q_OS_WIN32
     ui->widget_bottom->setStyleSheet("background-color: rgb(237, 237, 237);");
     #endif
+    show();
 }
 
 Themes::~Themes()

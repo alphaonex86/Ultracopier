@@ -17,7 +17,6 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
     modeIsForced	= false;
     haveStarted	= false;
     this->facilityEngine	= facilityEngine;
-    this->show();
     menu=new QMenu(this);
     ui->toolButton->setMenu(menu);
     updateModeAndType();
@@ -28,6 +27,7 @@ InterfacePlugin::InterfacePlugin(FacilityInterface * facilityEngine) :
     connect(ui->actionAddFolderToCopy,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFolderToCopy);
     connect(ui->actionAddFolderToMove,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFolderToMove);
     connect(ui->actionAddFolder,&QAction::triggered,this,&InterfacePlugin::forcedModeAddFolder);
+    show();
 }
 
 InterfacePlugin::~InterfacePlugin()

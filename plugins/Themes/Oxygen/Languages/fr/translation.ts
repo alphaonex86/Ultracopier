@@ -27,7 +27,7 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+35"/>
+        <location filename="../../interface.ui" line="+33"/>
         <source>From:</source>
         <translation>Depuis:</translation>
     </message>
@@ -197,7 +197,7 @@
 <context>
     <name>options</name>
     <message>
-        <location filename="../../options.ui" line="+20"/>
+        <location filename="../../options.ui" line="+18"/>
         <source>Show speed as main information</source>
         <translation>Montrer la vitesse comme une information principale</translation>
     </message>
