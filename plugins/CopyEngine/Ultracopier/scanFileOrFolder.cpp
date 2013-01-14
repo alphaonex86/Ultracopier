@@ -26,7 +26,7 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
     stopIt=false;
     this->sources=parseWildcardSources(sources);
         this->destination=destination;
-    if(sources.size()>1 || QFileInfo(destination).isDir())
+    if(sources.size()>1 || (QFileInfo(destination).isDir() && !QFileInfo(destination).isSymLink()))
         /* Disabled because the separator transformation product bug
          * if(!destination.endsWith(QDir::separator()))
             this->destination+=QDir::separator();*/
@@ -62,7 +62,7 @@ QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
                     while(index_recomposedSource<recomposedSource.size())//parse each url part
                     {
                         QFileInfo info(recomposedSource.at(index_recomposedSource).join("/"));
-                        if(info.isDir())
+                        if(info.isDir() && !info.isSymLink())
                         {
                             QDir folder(info.absoluteFilePath());
                             QFileInfoList fileFile=folder.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//QStringList() << toResolv
@@ -159,7 +159,7 @@ void scanFileOrFolder::run()
             return;
         }
         QFileInfo source=sources.at(sourceIndex);
-        if(source.isDir())
+        if(source.isDir() && !source.isSymLink())
         {
             /* Bad way; when you copy c:\source\folder into d:\destination, you wait it create the folder d:\destination\folder
             //listFolder(source.absoluteFilePath()+QDir::separator(),destination);
@@ -180,11 +180,11 @@ void scanFileOrFolder::run()
 
 void scanFileOrFolder::listFolder(const QString& source,const QString& destination,const QString& sourceSuffixPath,QString destinationSuffixPath)
 {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination+", sourceSuffixPath: "+sourceSuffixPath+", destinationSuffixPath: "+destinationSuffixPath);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination+", sourceSuffixPath: "+sourceSuffixPath+", destinationSuffixPath: "+destinationSuffixPath);
     if(stopIt)
         return;
-        QString newSource	= source+sourceSuffixPath;
-        QString finalDest	= destination+destinationSuffixPath;
+    QString newSource	= source+sourceSuffixPath;
+    QString finalDest	= destination+destinationSuffixPath;
     //if is same
     if(newSource==finalDest)
     {
@@ -350,7 +350,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
                 this->exclude=this->exclude_send;
             }
             QString fileName=fileInfo.fileName();
-            if(fileInfo.isDir())
+            if(fileInfo.isDir() && !fileInfo.isSymLink())
             {
                 bool excluded=false,included=(include.size()==0);
                 int filters_index=0;
@@ -431,7 +431,7 @@ void scanFileOrFolder::listFolder(const QString& source,const QString& destinati
         }
         else
         {
-            if(fileInfo.isDir())//possible wait time here
+            if(fileInfo.isDir() && !fileInfo.isSymLink())//possible wait time here
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
                 listFolder(source,destination,sourceSuffixPath+fileInfo.fileName()+"/",destinationSuffixPath+fileInfo.fileName()+"/");//put unix separator because it's transformed into that's under windows too
             else

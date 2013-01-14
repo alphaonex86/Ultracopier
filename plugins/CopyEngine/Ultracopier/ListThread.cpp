@@ -976,10 +976,13 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
 {
     //add to transfer list
     numberOfTransferIntoToDoList++;
-    bytesToTransfer+= source.size();
+    quint64 size=0;
+    if(!source.isSymLink())
+        size=source.size();
+    bytesToTransfer+= size;
     actionToDoTransfer temp;
     temp.id		= generateIdNumber();
-    temp.size	= source.size();
+    temp.size	= size;
     temp.source	= source;
     temp.destination= destination;
     temp.mode	= mode;
@@ -1062,7 +1065,6 @@ void ListThread::moveItemsUp(QList<int> ids)
     int lastGoodPositionExtern=0;
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
-    bool haveChanged=false;
     loop_size=actionToDoListTransfer.size();
     for (int i=0; i<loop_size; ++i) {
         if(ids.contains(actionToDoListTransfer.at(i).id))
@@ -1077,7 +1079,6 @@ void ListThread::moveItemsUp(QList<int> ids)
                 newAction.userAction.position=i;
                 actionDone << newAction;
                 actionToDoListTransfer.swap(i,lastGoodPositionReal);
-                haveChanged=true;
             }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Try move up false, item ")+QString::number(i));
@@ -1111,7 +1112,6 @@ void ListThread::moveItemsDown(QList<int> ids)
     int lastGoodPositionExtern=numberOfTransferIntoToDoList;
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
-    bool haveChanged=false;
     for (int i=actionToDoListTransfer.size()-1; i>=0; --i) {
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
@@ -1125,7 +1125,6 @@ void ListThread::moveItemsDown(QList<int> ids)
                 newAction.userAction.position=i;
                 actionDone << newAction;
                 actionToDoListTransfer.swap(i,lastGoodPositionReal);
-                haveChanged=true;
             }
             else
             {

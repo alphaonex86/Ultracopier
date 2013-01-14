@@ -149,6 +149,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
     canStartTransfer		= false;
     sended_state_preOperationStopped= false;
     canBeMovedDirectlyVariable	= false;
+    canBeCopiedDirectlyVariable = false;
     fileContentError		= false;
     resetExtraVariable();
     emit internalStartPreOperation();
@@ -241,6 +242,13 @@ void TransferThread::preOperation()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] need moved directly: "+source);
         canBeMovedDirectlyVariable=true;
+        readThread.fakeOpen();
+        writeThread.fakeOpen();
+        return;
+    }
+    if(canBeCopiedDirectly())
+    {
+        canBeCopiedDirectlyVariable=true;
         readThread.fakeOpen();
         writeThread.fakeOpen();
         return;
@@ -386,8 +394,8 @@ void TransferThread::tryMoveDirectly()
     }
     if(!sourceFile.rename(destinationFile.fileName()))
     {
-        if(sourceFile.exists())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("file not not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+        if(!sourceFile.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
         else if(!dir.exists())
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
         else
@@ -401,6 +409,64 @@ void TransferThread::tryMoveDirectly()
     writeThread.fakeWriteIsStopped();
 }
 
+void TransferThread::tryCopyDirectly()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start copy directly");
+
+    //move if on same mount point
+    QFile sourceFile(sourceInfo.absoluteFilePath());
+    QFile destinationFile(destinationInfo.absoluteFilePath());
+    if(destinationFile.exists() && !destinationFile.remove())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
+        emit errorOnFile(destinationInfo,destinationFile.errorString());
+        return;
+    }
+    QDir dir(destinationInfo.absolutePath());
+    {
+        mkpathTransfer->acquire();
+        if(!dir.exists())
+            dir.mkpath(destinationInfo.absolutePath());
+        mkpathTransfer->release();
+    }
+    /** on windows, symLink is normal file, can be copied
+     * on unix not, should be created **/
+    #ifdef Q_OS_WIN32
+    if(!sourceFile.copy(destinationFile.fileName()))
+    {
+        if(!sourceFile.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        else if(destinationFile.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        else if(!dir.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        emit errorOnFile(sourceFile,sourceFile.errorString());
+        return;
+    }
+    #else
+    if(!QFile::link(sourceFile.symLinkTarget(),destinationFile.fileName()))
+    {
+        if(!sourceFile.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        else if(destinationFile.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        else if(!dir.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+        emit errorOnFile(destinationFile,destinationFile.errorString());
+        return;
+    }
+    #endif
+
+    readThread.fakeReadIsStarted();
+    writeThread.fakeWriteIsStarted();
+    readThread.fakeReadIsStopped();
+    writeThread.fakeWriteIsStopped();
+}
+
 bool TransferThread::canBeMovedDirectly()
 {
     if(mode!=Ultracopier::Move)
@@ -408,7 +474,12 @@ bool TransferThread::canBeMovedDirectly()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("mode!=Ultracopier::Move"));
         return false;
     }
-    return driveManagement.isSameDrive(destinationInfo.absoluteFilePath(),sourceInfo.absoluteFilePath());
+    return sourceInfo.isSymLink() || driveManagement.isSameDrive(destinationInfo.absoluteFilePath(),sourceInfo.absoluteFilePath());
+}
+
+bool TransferThread::canBeCopiedDirectly()
+{
+    return sourceInfo.isSymLink();
 }
 
 void TransferThread::readIsReady()
@@ -441,15 +512,17 @@ void TransferThread::ifCanStartTransfer()
         }
         if(canStartTransfer)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stat=Transfer, "+QString("canBeMovedDirectlyVariable: %1").arg(canBeMovedDirectlyVariable));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stat=Transfer, "+QString("canBeMovedDirectlyVariable: %1, canBeCopiedDirectlyVariable: %2").arg(canBeMovedDirectlyVariable).arg(canBeCopiedDirectlyVariable));
             transfer_stat=TransferStat_Transfer;
-            if(!canBeMovedDirectlyVariable)
+            if(canBeMovedDirectlyVariable)
+                tryMoveDirectly();
+            else if(canBeCopiedDirectlyVariable)
+                tryCopyDirectly();
+            else
             {
                 needRemove=true;
                 readThread.startRead();
             }
-            else
-                tryMoveDirectly();
             emit pushStat(transfer_stat,transferId);
         }
         //else
@@ -802,6 +875,12 @@ void TransferThread::retryAfterError()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] retry the system move");
         tryMoveDirectly();
+        return;
+    }
+    if(canBeCopiedDirectlyVariable)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] retry the copy directly");
+        tryCopyDirectly();
         return;
     }
     if(transfer_stat==TransferStat_Checksum)

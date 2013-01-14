@@ -8,9 +8,9 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
 	ui->setupUi(this);
 	action=FileError_Cancel;
 	ui->label_error->setText(errorString);
-	ui->label_content_file_name->setText(fileInfo.fileName());
 	if(fileInfo.exists())
 	{
+        ui->label_content_file_name->setText(fileInfo.fileName());
 		ui->label_content_size->setText(QString::number(fileInfo.size()));
 		QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 		if(maxTime<fileInfo.lastModified())
@@ -34,6 +34,7 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
 	}
 	else
 	{
+        ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
 		ui->label_size->hide();
 		ui->label_content_size->hide();
 		ui->label_modified->hide();

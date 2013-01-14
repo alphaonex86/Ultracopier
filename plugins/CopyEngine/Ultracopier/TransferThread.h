@@ -162,7 +162,7 @@ private:
     bool			writeIsFinishVariable;
     bool			readIsClosedVariable;
     bool			writeIsClosedVariable;
-    bool			canBeMovedDirectlyVariable;
+    bool			canBeMovedDirectlyVariable,canBeCopiedDirectlyVariable;
     DriveManagement driveManagement;
     QByteArray		sourceChecksum,destinationChecksum;
     volatile bool		stopIt;
@@ -194,7 +194,9 @@ private:
     bool isSame();
     bool destinationExists();
     bool canBeMovedDirectly();
+    bool canBeCopiedDirectly();
     void tryMoveDirectly();
+    void tryCopyDirectly();
     void ifCanStartTransfer();
     //fonction to edit the file date time
     bool changeFileDateTime(const QString &source,const QString &destination);
