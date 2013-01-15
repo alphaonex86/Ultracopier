@@ -10,6 +10,10 @@
 
 #include "SystrayIcon.h"
 
+#ifdef Q_OS_MAC
+//extern void qt_mac_set_dock_menu(QMenu *menu);
+#endif
+
 /// \brief Initiate and show the icon in the systray
 SystrayIcon::SystrayIcon()
 {
@@ -61,6 +65,10 @@ SystrayIcon::SystrayIcon()
     //impossible with Qt on systray
     /// \note important for drag and drop, \see dropEvent()
     systrayMenu->setAcceptDrops(true);
+
+    #ifdef Q_OS_MAC
+    //qt_mac_set_dock_menu(systrayMenu);
+    #endif
 }
 
 /// \brief Hide and destroy the icon in the systray
