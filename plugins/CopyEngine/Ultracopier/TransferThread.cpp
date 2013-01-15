@@ -166,7 +166,11 @@ void TransferThread::setFileExistsAction(const FileExistsAction &action)
     if(action!=FileExists_Rename)
         fileExistsAction	= action;
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] rename at the wrong part, source: "+source+", destination: "+destination);
+    {
+        //always rename pass here
+        fileExistsAction	= action;
+        alwaysDoFileExistsAction=action;
+    }
     if(action==FileExists_Skip)
     {
         skip();
@@ -276,6 +280,16 @@ bool TransferThread::isSame()
     //check if source and destination is not the same
     if(sourceInfo==destinationInfo)
     {
+        if(fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_Skip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is same but skip");
+            transfer_stat=TransferStat_Idle;
+            emit postOperationStopped();
+            //quit
+            return true;
+        }
+        if(checkAlwaysRename())
+            return false;
         emit fileAlreadyExists(sourceInfo,destinationInfo,true);
         return true;
     }
@@ -294,53 +308,11 @@ bool TransferThread::destinationExists()
         {
             transfer_stat=TransferStat_Idle;
             emit postOperationStopped();
+            //quit
             return true;
         }
-        if(alwaysDoFileExistsAction==FileExists_Rename)
-        {
-            QString absolutePath=destinationInfo.absolutePath();
-            QString fileName=destinationInfo.fileName();
-            QString suffix="";
-            QString newFileName;
-            //resolv the suffix
-            if(fileName.contains(QRegularExpression("^(.*)(\\.[a-z0-9]+)$")))
-            {
-                suffix=fileName;
-                suffix.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\2");
-                fileName.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\1");
-            }
-            //resolv the new name
-            int num=1;
-            do
-            {
-                if(num==1)
-                {
-                    if(firstRenamingRule=="")
-                        newFileName=tr("%1 - copy").arg(fileName);
-                    else
-                    {
-                        newFileName=firstRenamingRule;
-                        newFileName.replace("%name%",fileName);
-                    }
-                }
-                else
-                {
-                    if(otherRenamingRule=="")
-                        newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
-                    else
-                    {
-                        newFileName=otherRenamingRule;
-                        newFileName.replace("%name%",fileName);
-                        newFileName.replace("%number%",QString::number(num));
-                    }
-                }
-                destination=absolutePath+QDir::separator()+newFileName+suffix;
-                destinationInfo.setFile(destination);
-                num++;
-            }
-            while(destinationInfo.exists());
+        if(checkAlwaysRename())
             return false;
-        }
         if(fileExistsAction==FileExists_OverwriteIfNewer || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNewer))
         {
             if(destinationInfo.lastModified()<sourceInfo.lastModified())
@@ -368,6 +340,57 @@ bool TransferThread::destinationExists()
             emit fileAlreadyExists(sourceInfo,destinationInfo,false);
             return true;
         }
+    }
+    return false;
+}
+
+//return true if has been renamed
+bool TransferThread::checkAlwaysRename()
+{
+    if(alwaysDoFileExistsAction==FileExists_Rename)
+    {
+        QString absolutePath=destinationInfo.absolutePath();
+        QString fileName=destinationInfo.fileName();
+        QString suffix="";
+        QString newFileName;
+        //resolv the suffix
+        if(fileName.contains(QRegularExpression("^(.*)(\\.[a-z0-9]+)$")))
+        {
+            suffix=fileName;
+            suffix.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\2");
+            fileName.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\1");
+        }
+        //resolv the new name
+        int num=1;
+        do
+        {
+            if(num==1)
+            {
+                if(firstRenamingRule=="")
+                    newFileName=tr("%1 - copy").arg(fileName);
+                else
+                {
+                    newFileName=firstRenamingRule;
+                    newFileName.replace("%name%",fileName);
+                }
+            }
+            else
+            {
+                if(otherRenamingRule=="")
+                    newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
+                else
+                {
+                    newFileName=otherRenamingRule;
+                    newFileName.replace("%name%",fileName);
+                    newFileName.replace("%number%",QString::number(num));
+                }
+            }
+            destination=absolutePath+QDir::separator()+newFileName+suffix;
+            destinationInfo.setFile(destination);
+            num++;
+        }
+        while(destinationInfo.exists());
+        return true;
     }
     return false;
 }

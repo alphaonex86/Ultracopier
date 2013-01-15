@@ -193,6 +193,7 @@ private:
     //different pre-operation
     bool isSame();
     bool destinationExists();
+    bool checkAlwaysRename();///< return true if has been renamed
     bool canBeMovedDirectly();
     bool canBeCopiedDirectly();
     void tryMoveDirectly();

@@ -34,6 +34,7 @@ folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isS
     }
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
+    on_SuggestNewName_clicked();
 }
 
 folderExistsDialog::~folderExistsDialog()
