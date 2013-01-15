@@ -25,6 +25,7 @@ EventDispatcher::EventDispatcher()
 {
     qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
     qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<Ultracopier::ProgressionItem>");
+    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
 
     copyServer=new CopyListener(&optionDialog);
     connect(&localListener,&LocalListener::cli,&cliParser,&CliParser::cli,Qt::QueuedConnection);
