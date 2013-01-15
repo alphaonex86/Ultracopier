@@ -1453,12 +1453,16 @@ void ListThread::doNewActions_inode_manipulation()
                 {
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
-                    currentTransferThread->setFiles(
+                    if(!currentTransferThread->setFiles(
                         currentActionToDoTransfer.source.absoluteFilePath(),
                         currentActionToDoTransfer.size,
                         currentActionToDoTransfer.destination.absoluteFilePath(),
                         currentActionToDoTransfer.mode
-                        );
+                        ))
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] id: %2 is idle, but seam busy at set name: %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
+                        break;
+                    }
                     currentActionToDoTransfer.isRunning=true;
 
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] id: %2 is idle, use it for %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
@@ -1530,6 +1534,7 @@ void ListThread::restartTransferIfItCan()
 /// \brief update the transfer stat
 void ListThread::newTransferStat(const TransferStat &stat,const quint64 &id)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("TransferStat: %1").arg(stat));
     Ultracopier::ReturnActionOnCopyList newAction;
     switch(stat)
     {

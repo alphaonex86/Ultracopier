@@ -130,12 +130,12 @@ void TransferThread::internalStartTheTransfer()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start the transfer as delayed");
 }
 
-void TransferThread::setFiles(const QString &source,const qint64 &size,const QString &destination,const Ultracopier::CopyMode &mode)
+bool TransferThread::setFiles(const QString &source,const qint64 &size,const QString &destination,const Ultracopier::CopyMode &mode)
 {
     if(transfer_stat!=TransferStat_Idle)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
-        return;
+        return false;
     }
     //to prevent multiple file alocation into ListThread::doNewActions_inode_manipulation()
     transfer_stat			= TransferStat_PreOperation;
@@ -153,6 +153,7 @@ void TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
     fileContentError		= false;
     resetExtraVariable();
     emit internalStartPreOperation();
+    return true;
 }
 
 void TransferThread::setFileExistsAction(const FileExistsAction &action)
@@ -720,7 +721,7 @@ void TransferThread::readIsClosed()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     readIsClosedVariable=true;
-    checkIfAllIsClosed();
+    checkIfAllIsClosedAndDoOperations();
 }
 
 void TransferThread::writeIsClosed()
@@ -732,17 +733,18 @@ void TransferThread::writeIsClosed()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     writeIsClosedVariable=true;
-    checkIfAllIsClosed();
+    checkIfAllIsClosedAndDoOperations();
 }
 
-bool TransferThread::checkIfAllIsClosed()
+// return true if all is closed, and do some operations, don't use into condition to check if is closed!
+bool TransferThread::checkIfAllIsClosedAndDoOperations()
 {
     if((readError || writeError) && !needSkip)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] resolve error before progress");
         return false;
     }
-    if((!readIsReadyVariable || readIsClosedVariable) && (!writeIsReadyVariable || writeIsClosedVariable))
+    if((!readIsOpenVariable || readIsClosedVariable) && (!writeIsOpenVariable || writeIsClosedVariable))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit internalStartPostOperation() to do the real post operation");
         transfer_stat=TransferStat_PostOperation;
@@ -1134,36 +1136,51 @@ void TransferThread::skip()
     {
     case TransferStat_PreOperation:
     case TransferStat_WaitForTheTransfer:
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
+            return;
+        }
         needSkip=true;
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] case WaitForTheTransfer or PreOperation, readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
         //check if all is source and destination is closed
-        if(!checkIfAllIsClosed())
+        if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
         {
-            if(readIsReadyVariable && !readIsClosedVariable)
+            if(readIsOpenVariable && !readIsClosedVariable)
                 readThread.stop();
-            if(writeIsReadyVariable && !writeIsClosedVariable)
+            if(writeIsOpenVariable && !writeIsClosedVariable)
                 writeThread.stop();
         }
         break;
     case TransferStat_Transfer:
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
+            return;
+        }
         needSkip=true;
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] case Transfer, readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
-        if(!checkIfAllIsClosed())
+        if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
         {
-            if(readIsReadyVariable && !readIsClosedVariable)
+            if(readIsOpenVariable && !readIsClosedVariable)
                 readThread.stop();
-            if(writeIsReadyVariable && !writeIsClosedVariable)
+            if(writeIsOpenVariable && !writeIsClosedVariable)
                 writeThread.stop();
         }
         break;
     case TransferStat_Checksum:
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
+            return;
+        }
         needSkip=true;
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] case Transfer, readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
-        if(!checkIfAllIsClosed())
+        if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
         {
-            if(readIsReadyVariable && !readIsClosedVariable)
+            if(readIsOpenVariable && !readIsClosedVariable)
                 readThread.stop();
-            if(writeIsReadyVariable && !writeIsClosedVariable)
+            if(writeIsOpenVariable && !writeIsClosedVariable)
                 writeThread.stop();
         }
         break;

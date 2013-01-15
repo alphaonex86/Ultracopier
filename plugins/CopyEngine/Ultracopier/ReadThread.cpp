@@ -223,7 +223,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     #endif
         if(file.isOpen())
         {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already open! source: "+name);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] this file is already open: "+file.fileName());
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG
                 stat=Idle;
                 #endif

@@ -98,7 +98,8 @@ private:
     QString			name;
     QString			errorString_internal;
     AvancedQFile		file;
-        volatile bool		stopIt;
+    volatile bool		stopIt;
+    volatile bool       postOperationRequested;
     volatile int		blockSize;
     QMutex			accessList;		///< For use the list
     QSemaphore		waitNewClockForSpeed;

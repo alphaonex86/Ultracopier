@@ -119,6 +119,7 @@ bool WriteThread::internalOpen()
         #endif
         isOpen.acquire();
         needRemoveTheFile=false;
+        postOperationRequested=false;
         return true;
     }
     else
@@ -269,6 +270,12 @@ void WriteThread::internalWrite()
 
 void WriteThread::postOperation()
 {
+    if(postOperationRequested)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] double event dropped");
+        return;
+    }
+    postOperationRequested=true;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     emit internalStartClose();
 }

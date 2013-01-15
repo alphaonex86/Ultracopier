@@ -80,7 +80,7 @@ public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
     /// \brief to set files to transfer
-    void setFiles(const QString &source,const qint64 &size,const QString &destination,const Ultracopier::CopyMode &mode);
+    bool setFiles(const QString &source,const qint64 &size,const QString &destination,const Ultracopier::CopyMode &mode);
     /// \brief to set file exists action to do
     void setFileExistsAction(const FileExistsAction &action);
     /// \brief to set the new name of the destination
@@ -154,8 +154,10 @@ private:
     Ultracopier::CopyMode		mode;
     bool			doRightTransfer;
     bool			keepDate;
+    //ready = open + ready to operation (no error to resolv)
     bool			readIsReadyVariable;
     bool			writeIsReadyVariable;
+    //can be open but with error
     bool			readIsOpenVariable;
     bool			writeIsOpenVariable;
     bool			readIsFinishVariable;
@@ -209,7 +211,7 @@ private:
         bool sended_state_readStopped;
     bool sended_state_writeStopped;
     //different post-operation
-    bool checkIfAllIsClosed();
+    bool checkIfAllIsClosedAndDoOperations();// return true if all is closed, and do some operations, don't use into condition to check if is closed!
     bool doFilePostOperation();
     //different pre-operation
     void tryOpen();

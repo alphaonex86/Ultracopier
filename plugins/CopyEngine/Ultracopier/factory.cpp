@@ -15,7 +15,7 @@ Factory::Factory() :
     qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
     qRegisterMetaType<FileExistsAction>("FileExistsAction");
     qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
-    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
+    qRegisterMetaType<TransferStat>("TransferStat");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
