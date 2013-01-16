@@ -400,6 +400,7 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
         returnItem.from=itemTransfer.generalData.sourceFullPath;
         returnItem.to=itemTransfer.generalData.destinationFullPath;
         returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
+        returnItem.id=itemTransfer.generalData.id;
         switch(itemTransfer.actionType)
         {
             case Ultracopier::CustomOperation:
