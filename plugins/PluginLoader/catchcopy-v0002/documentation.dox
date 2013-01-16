@@ -11,7 +11,7 @@
   \section mainpage_overview Overview
 
   Is the plugin to load the catchcopy plugin into the windows file manager. Mostly it use the command: regsvr32 /s catchcopy32.dll/catchcopy64.dll\n
-  More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>. Is part of Ultracopier 0.3 project.
+  More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>.
 
   \section mainpage_platforms Platforms
 

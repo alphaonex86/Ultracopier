@@ -631,7 +631,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
 -  The default copy engine for Ultracopier. Support file/folder, copy/move, ...\n
 +  The rsync copy engine for Ultracopier. Support file/folder, copy/move, ...\n
 +  Thanks to this engine, Ultracopier is transformed into GUI + rsync.
-   More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>. Is part of Ultracopier 0.3 project.
+   More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>.
  
    \section mainpage_platforms Platforms
 diff -U 3 -H -d -r -N -- Ultracopier/factory.cpp Rsync/factory.cpp
