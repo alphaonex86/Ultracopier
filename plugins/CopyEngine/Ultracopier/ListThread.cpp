@@ -709,6 +709,12 @@ void ListThread::cancel()
         clockForTheCopySpeed=NULL;
     }
 
+    actionToDoListTransfer.clear();
+    actionToDoListInode.clear();
+    actionToDoListInode_afterTheTransfer.clear();
+    actionDone.clear();
+    progressionList.clear();
+    returnListItemOfCopyListToCopyEngine.clear();
     quit();
     waitCancel.release();
     emit canBeDeleted();

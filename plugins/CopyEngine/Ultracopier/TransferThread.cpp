@@ -647,7 +647,8 @@ void TransferThread::readIsFinish()
     else
     {
         transfer_stat=TransferStat_PostTransfer;
-        readThread.postOperation();
+        if(needSkip)//if skip, stop call, then readIsClosed() already call
+            readThread.postOperation();
     }
     emit pushStat(transfer_stat,transferId);
 }
@@ -668,7 +669,7 @@ void TransferThread::writeIsFinish()
         transfer_stat=TransferStat_Checksum;
         writeThread.startCheckSum();
     }
-    else
+    else if(needSkip)//if skip, stop call, then writeIsClosed() already call
         writeThread.postOperation();
 }
 
@@ -851,33 +852,35 @@ bool TransferThread::doFilePostOperation()
 
 void TransferThread::getWriteError()
 {
-        if(writeError)
-        {
+    if(writeError)
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already in write error!");
-                return;
-        }
+        return;
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     fileContentError		= true;
     writeError			= true;
     writeIsReadyVariable		= false;
     writeError_source_seeked	= false;
     writeError_destination_reopened	= false;
-    emit errorOnFile(destinationInfo,writeThread.errorString());
+    if(!readError)//already display error for the read
+        emit errorOnFile(destinationInfo,writeThread.errorString());
 }
 
 void TransferThread::getReadError()
 {
-        if(readError)
-        {
+    if(readError)
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already in read error!");
-                return;
-        }
+        return;
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     fileContentError	= true;
     readError		= true;
     writeIsReadyVariable	= false;
     readIsReadyVariable	= false;
-    emit errorOnFile(sourceInfo,readThread.errorString());
+    if(!writeError)//already display error for the write
+        emit errorOnFile(sourceInfo,readThread.errorString());
 }
 
 //retry after error
@@ -928,18 +931,22 @@ void TransferThread::retryAfterError()
         }
         return;
     }
+    //can have error on source and destination at the same time
     if(writeError)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start and resume the write error");
-        readThread.seekToZeroAndWait();
+        if(readError)
+            readThread.reopen();
+        else
+            readThread.seekToZeroAndWait();
         writeThread.reopen();
     }
-    else if(readError)
+    if(readError)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start and resume the read error");
         readThread.reopen();
     }
-    else
+    if(!writeError && !readError)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unknow error resume");
 }
 
@@ -1151,6 +1158,11 @@ void TransferThread::skip()
             if(writeIsOpenVariable && !writeIsClosedVariable)
                 writeThread.stop();
         }
+        else // wait nothing, just quit
+        {
+            transfer_stat=TransferStat_PostOperation;
+            emit internalStartPostOperation();
+        }
         break;
     case TransferStat_Transfer:
         if(needSkip)
@@ -1167,6 +1179,11 @@ void TransferThread::skip()
             if(writeIsOpenVariable && !writeIsClosedVariable)
                 writeThread.stop();
         }
+        else // wait nothing, just quit
+        {
+            transfer_stat=TransferStat_PostOperation;
+            emit internalStartPostOperation();
+        }
         break;
     case TransferStat_Checksum:
         if(needSkip)
@@ -1182,6 +1199,11 @@ void TransferThread::skip()
                 readThread.stop();
             if(writeIsOpenVariable && !writeIsClosedVariable)
                 writeThread.stop();
+        }
+        else // wait nothing, just quit
+        {
+            transfer_stat=TransferStat_PostOperation;
+            emit internalStartPostOperation();
         }
         break;
     case TransferStat_PostOperation:

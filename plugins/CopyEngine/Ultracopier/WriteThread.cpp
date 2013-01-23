@@ -306,12 +306,13 @@ void WriteThread::internalClose(bool emitSignal)
         }
         needRemoveTheFile=false;
         flushBuffer();
+        //here and not after, because the transferThread don't need try close if not open
+        if(emitSignal)
+            emit closed();
     }
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;
     #endif
-    if(emitSignal)
-        emit closed();
 
     /// \note always the last of this function
     if(!fakeMode)
