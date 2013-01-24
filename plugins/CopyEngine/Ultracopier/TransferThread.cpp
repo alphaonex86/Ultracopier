@@ -647,8 +647,10 @@ void TransferThread::readIsFinish()
     else
     {
         transfer_stat=TransferStat_PostTransfer;
-        if(needSkip)//if skip, stop call, then readIsClosed() already call
+        if(!needSkip)//if skip, stop call, then readIsClosed() already call
             readThread.postOperation();
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] in skip, don't start postOperation");
     }
     emit pushStat(transfer_stat,transferId);
 }
@@ -669,8 +671,13 @@ void TransferThread::writeIsFinish()
         transfer_stat=TransferStat_Checksum;
         writeThread.startCheckSum();
     }
-    else if(needSkip)//if skip, stop call, then writeIsClosed() already call
-        writeThread.postOperation();
+    else
+    {
+        if(!needSkip)//if skip, stop call, then writeIsClosed() already call
+            writeThread.postOperation();
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] in skip, don't start postOperation");
+    }
 }
 
 void TransferThread::readChecksumFinish(const QByteArray& checksum)
