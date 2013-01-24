@@ -522,6 +522,44 @@ Cette version est compilée comme version : %1.</translation>
     </message>
 </context>
 <context>
+    <name>OSSpecific</name>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="14"/>
+        <source>Warning</source>
+        <translation>Avertissement</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="31"/>
+        <source>Don&apos;t show again</source>
+        <translation>Ne plus afficher</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="53"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="11"/>
+        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
+        <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier (Dolphin, Nautilus, ...).&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="13"/>
+        <source>Don&apos;t forget to reboot if previously was installed other similar software&lt;br /&gt;(like: Supercopier, Ultracopier in previous version, ...)</source>
+        <translation>N &apos;oubliez pas de redémarrer si vous avez précédement installé un logiciel similaire&lt;br /&gt;(Comme: Supercopier, Ultracopier dans les précédentes version, ...)</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="15"/>
+        <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
+        <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté et bloqué par le finder de Mac OS X.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement en cliquant sur l&apos;icone du systray à coté de l&apos;heure (pas l&apos;icone du dock).</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="17"/>
+        <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
+        <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier.&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
+    </message>
+</context>
+<context>
     <name>OptionDialog</name>
     <message>
         <location filename="../../../OptionDialog.ui" line="14"/>
@@ -541,14 +579,14 @@ Cette version est compilée comme version : %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
-        <location filename="../../../OptionDialog.ui" line="261"/>
+        <location filename="../../../OptionDialog.ui" line="271"/>
         <location filename="../../../OptionDialog.cpp" line="232"/>
         <source>Copy engine</source>
         <translation>Moteurs de copie</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="95"/>
-        <location filename="../../../OptionDialog.ui" line="289"/>
+        <location filename="../../../OptionDialog.ui" line="299"/>
         <source>Themes</source>
         <translation>Thèmes</translation>
     </message>
@@ -563,94 +601,99 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Lancer à l&apos;ouverture de la session:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="251"/>
+        <location filename="../../../OptionDialog.ui" line="222"/>
+        <source>Display the OS warning:</source>
+        <translation>Afficher les avertissements de l&apos;OS:</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="261"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="256"/>
+        <location filename="../../../OptionDialog.ui" line="266"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="266"/>
+        <location filename="../../../OptionDialog.ui" line="276"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
-        <location filename="../../../OptionDialog.ui" line="274"/>
+        <location filename="../../../OptionDialog.ui" line="284"/>
         <location filename="../../../OptionDialog.cpp" line="233"/>
         <source>Listener</source>
         <translation>Écouteur</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="79"/>
-        <location filename="../../../OptionDialog.ui" line="279"/>
+        <location filename="../../../OptionDialog.ui" line="289"/>
         <location filename="../../../OptionDialog.cpp" line="234"/>
         <source>Plugin loader</source>
         <translation>Chargeur de plugin</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="87"/>
-        <location filename="../../../OptionDialog.ui" line="284"/>
+        <location filename="../../../OptionDialog.ui" line="294"/>
         <location filename="../../../OptionDialog.cpp" line="235"/>
         <source>Session loader</source>
         <translation>Chargeur de session</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="297"/>
+        <location filename="../../../OptionDialog.ui" line="307"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="316"/>
+        <location filename="../../../OptionDialog.ui" line="326"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="329"/>
+        <location filename="../../../OptionDialog.ui" line="339"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="339"/>
+        <location filename="../../../OptionDialog.ui" line="349"/>
         <source>Information</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="366"/>
+        <location filename="../../../OptionDialog.ui" line="376"/>
         <source>Copy engine by order of preference:</source>
         <translation>Moteurs de copie par ordre de préférence:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="479"/>
+        <location filename="../../../OptionDialog.ui" line="489"/>
         <source>Themes:</source>
         <translation>Thèmes:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="541"/>
+        <location filename="../../../OptionDialog.ui" line="551"/>
         <source>Unable to load the themes plugin</source>
         <translation>Impossible de charger le plugin des thèmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="591"/>
+        <location filename="../../../OptionDialog.ui" line="601"/>
         <source>No option for this plugin</source>
         <translation>Pas d&apos;options pour ce plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="641"/>
+        <location filename="../../../OptionDialog.ui" line="651"/>
         <source>Browse</source>
         <translation>Parcourir</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="653"/>
+        <location filename="../../../OptionDialog.ui" line="663"/>
         <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation>Écrire directement le fichier quand il reçoit une nouvelle entrée (peut entrainer 50% de perte de performances)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="673"/>
-        <location filename="../../../OptionDialog.ui" line="686"/>
+        <location filename="../../../OptionDialog.ui" line="683"/>
+        <location filename="../../../OptionDialog.ui" line="696"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated
 ----------
@@ -658,8 +701,8 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Les variables sont %time%, %source%, %size%, %destination%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="703"/>
-        <location filename="../../../OptionDialog.ui" line="716"/>
+        <location filename="../../../OptionDialog.ui" line="713"/>
+        <location filename="../../../OptionDialog.ui" line="726"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated
 ----------
@@ -667,7 +710,7 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Les variables sont %time%, %path%, %size%, %mtime%, %error%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="622"/>
+        <location filename="../../../OptionDialog.ui" line="632"/>
         <source>Write the log file into:</source>
         <translation>Écrire le fichier journal dans:</translation>
     </message>
@@ -682,17 +725,17 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Remplacer le système de copie/déplacement par défaut:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="666"/>
+        <location filename="../../../OptionDialog.ui" line="676"/>
         <source>Write the transfers:</source>
         <translation>Écrire les transfers:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="696"/>
+        <location filename="../../../OptionDialog.ui" line="706"/>
         <source>Write the errors:</source>
         <translation>Écrire les erreurs:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="726"/>
+        <location filename="../../../OptionDialog.ui" line="736"/>
         <source>Write the folder operations:</source>
         <translation>Écrire les opérations dossier:</translation>
     </message>
@@ -709,8 +752,8 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OptionDialog.cpp" line="236"/>
         <location filename="../../../OptionDialog.cpp" line="237"/>
-        <location filename="../../../OptionDialog.cpp" line="367"/>
         <location filename="../../../OptionDialog.cpp" line="368"/>
+        <location filename="../../../OptionDialog.cpp" line="369"/>
         <source>Disabled because you have any SessionLoader plugin</source>
         <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
@@ -760,12 +803,12 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Toujours</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="839"/>
+        <location filename="../../../OptionDialog.cpp" line="844"/>
         <source>Save logs as: </source>
         <translation>Sauvegarder les logs sous: </translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="656"/>
+        <location filename="../../../OptionDialog.ui" line="666"/>
         <source>Synchronized log</source>
         <translation>Log synchronisé</translation>
     </message>
@@ -780,8 +823,8 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Grouper les fenêtres quand:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="736"/>
-        <location filename="../../../OptionDialog.ui" line="749"/>
+        <location filename="../../../OptionDialog.ui" line="746"/>
+        <location filename="../../../OptionDialog.ui" line="759"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated
 ----------
@@ -1079,85 +1122,85 @@ depuis:%2</translation>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="111"/>
+        <location filename="../../../SystrayIcon.cpp" line="121"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation>Pas d&apos;écouteur trouvé. Effectuez la copie manuellement par clic droit sur l&apos;icône dans la zone de notification (près de l&apos;horloge).</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="128"/>
+        <location filename="../../../SystrayIcon.cpp" line="138"/>
         <source>Searching information...</source>
         <translation>Recherche d&apos;informations...</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="309"/>
+        <location filename="../../../SystrayIcon.cpp" line="319"/>
         <source>The action on the systray icon is unknown!</source>
         <translation>L&apos;action sur l&apos;icône de la zone de notifications est inconnue!</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="357"/>
+        <location filename="../../../SystrayIcon.cpp" line="367"/>
         <source>&amp;About/Debug report</source>
         <translation>&amp;À propos d&apos;ultracopier/Debug</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="359"/>
+        <location filename="../../../SystrayIcon.cpp" line="369"/>
         <source>&amp;About</source>
         <translation>&amp;À propos d&apos;ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="361"/>
+        <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="362"/>
+        <location filename="../../../SystrayIcon.cpp" line="372"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="408"/>
-        <location filename="../../../SystrayIcon.cpp" line="430"/>
+        <location filename="../../../SystrayIcon.cpp" line="418"/>
+        <location filename="../../../SystrayIcon.cpp" line="440"/>
         <source>Add &amp;copy</source>
         <translation>Ajouter une &amp;copie</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="414"/>
-        <location filename="../../../SystrayIcon.cpp" line="436"/>
+        <location filename="../../../SystrayIcon.cpp" line="424"/>
+        <location filename="../../../SystrayIcon.cpp" line="446"/>
         <source>Add &amp;transfer</source>
         <translation>Ajouter un &amp;transfert</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="418"/>
-        <location filename="../../../SystrayIcon.cpp" line="440"/>
+        <location filename="../../../SystrayIcon.cpp" line="428"/>
+        <location filename="../../../SystrayIcon.cpp" line="450"/>
         <source>Add &amp;move</source>
         <translation>Ajouter un &amp;déplacement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="363"/>
+        <location filename="../../../SystrayIcon.cpp" line="373"/>
         <source>A&amp;dd copy/moving</source>
         <translation>&amp;Ajouter une copie/déplacement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="141"/>
+        <location filename="../../../SystrayIcon.cpp" line="151"/>
         <source>Not replace the explorer copy/move</source>
         <translation>Ne remplace pas la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="146"/>
+        <location filename="../../../SystrayIcon.cpp" line="156"/>
         <source>Semi replace the explorer copy/move</source>
         <translation>Remplace partiellement la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="151"/>
+        <location filename="../../../SystrayIcon.cpp" line="161"/>
         <source>Replace the explorer copy/move</source>
         <translation>Remplace la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="309"/>
+        <location filename="../../../SystrayIcon.cpp" line="319"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="117"/>
+        <location filename="../../../SystrayIcon.cpp" line="127"/>
         <source>Information</source>
         <translation>Informations</translation>
     </message>
