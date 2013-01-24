@@ -105,7 +105,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>8</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -215,6 +215,16 @@
               </property>
              </item>
             </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Display OS warning at startup:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QCheckBox" name="DisplayOSWarning"/>
            </item>
           </layout>
          </item>

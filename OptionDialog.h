@@ -64,6 +64,8 @@ private slots:
 
     void on_GroupWindowWhen_currentIndexChanged(int index);
 
+    void on_DisplayOSWarning_clicked();
+
 private:
     Ui::OptionDialog *ui;
     struct pluginStore

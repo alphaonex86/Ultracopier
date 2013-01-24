@@ -335,6 +335,7 @@ void OptionDialog::loadOption()
     newOptionValue("Themes",	"Ultracopier_current_theme",	options->getOptionValue("Themes","Ultracopier_current_theme"));
     newOptionValue("Ultracopier",	"ActionOnManualOpen",		options->getOptionValue("Ultracopier","ActionOnManualOpen"));
     newOptionValue("Ultracopier",	"GroupWindowWhen",		options->getOptionValue("Ultracopier","GroupWindowWhen"));
+    newOptionValue("Ultracopier",	"displayOSSpecific",		options->getOptionValue("Ultracopier","displayOSSpecific"));
     newOptionValue("Language",	"Language",			options->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",		options->getOptionValue("Language","Language_force"));
     newOptionValue("SessionLoader",	"LoadAtSessionStarting",	options->getOptionValue("SessionLoader","LoadAtSessionStarting"));
@@ -497,6 +498,10 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
         if(name=="GroupWindowWhen")
         {
             ui->GroupWindowWhen->setCurrentIndex(value.toInt());
+        }
+        if(name=="displayOSSpecific")
+        {
+            ui->DisplayOSWarning->setChecked(value.toBool());
         }
     }
 }
@@ -868,5 +873,14 @@ void OptionDialog::on_GroupWindowWhen_currentIndexChanged(int index)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->GroupWindowWhen->itemData(index).toString()+", string value: "+ui->GroupWindowWhen->itemText(index)+", index: "+QString::number(index));
         options->setOptionValue("Ultracopier","GroupWindowWhen",index);
+    }
+}
+
+void OptionDialog::on_DisplayOSWarning_clicked()
+{
+    if(allPluginsIsLoaded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+        options->setOptionValue("Ultracopier","displayOSSpecific",ui->DisplayOSWarning->isChecked());
     }
 }
