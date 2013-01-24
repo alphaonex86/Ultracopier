@@ -33,6 +33,10 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
             ui->label_content_size->hide();
             ui->label_file_name->setText(tr("Folder name"));
         }
+        ui->label_file_destination->setVisible(fileInfo.isSymLink());
+        ui->label_content_file_destination->setVisible(fileInfo.isSymLink());
+        if(fileInfo.isSymLink())
+            ui->label_content_file_destination->setText(fileInfo.symLinkTarget());
     }
     else
     {
