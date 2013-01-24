@@ -12,6 +12,7 @@
 #include "EventDispatcher.h"
 #include "ExtraSocket.h"
 #include "CompilerInfo.h"
+#include "OSSpecific.h"
 
 #ifdef Q_OS_UNIX
     #include <unistd.h>
@@ -60,6 +61,7 @@ EventDispatcher::EventDispatcher()
     KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
     KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
     KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
+    KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
     options->addOptionGroup("Ultracopier",KeysList);
     if(options->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && options->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
     {
@@ -162,5 +164,13 @@ void EventDispatcher::initFunction()
     connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit);
     //connect the slot for the help dialog
     connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show);
+
+    if(options->getOptionValue("Ultracopier","displayOSSpecific").toBool())
+    {
+        OSSpecific oSSpecific;
+        oSSpecific.exec();
+        if(oSSpecific.dontShowAgain())
+            options->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
+    }
 }
 
