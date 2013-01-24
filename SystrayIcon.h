@@ -26,7 +26,7 @@ class SystrayIcon : public QSystemTrayIcon, public GlobalClass
     Q_OBJECT
     public:
         /// \brief Initiate and show the icon in the systray
-        SystrayIcon();
+        SystrayIcon(QObject * parent = 0);
         /// \brief Hide and destroy the icon in the systray
         ~SystrayIcon();
     public slots:

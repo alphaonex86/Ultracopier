@@ -1698,7 +1698,7 @@ void ListThread::timedUpdateDebugDialog()
             .arg(actionToDoListTransfer.at(index).source.absoluteFilePath())
             .arg(actionToDoListTransfer.at(index).size)
             .arg(actionToDoListTransfer.at(index).destination.absoluteFilePath());
-        if(index>(actionToDoListTransfer.size()+2))
+        if(index>((ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
         {
             newList2 << QString("...");
             break;

@@ -8,12 +8,13 @@
 
 /// \brief Un-comment this next line to put ultracopier in debug mode
 #define ULTRACOPIER_DEBUG
-/// \brief Max number of ligne show on the GUI
-#define ULTRACOPIER_DEBUG_MAX_GUI_LINE 5000
+#define ULTRACOPIER_DEBUG_MAX_GUI_LINE 5000 ///< \brief Max number of ligne show on the GUI
+#define ULTRACOPIER_DEBUG_MAX_ALL_SIZE 32 ///< \brief Max size (in MB) after the console/file output is dropped
+#define ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE 64 ///< \brief Max size (in MB) after the console/file important output is dropped
 /// \brief the version
-#define ULTRACOPIER_VERSION		"0.4.0.3"
+#define ULTRACOPIER_VERSION		"0.4.0.5"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	0,4,0,3
+#define ULTRACOPIER_WINDOWS_VERSION	0,4,0,5
 // define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS

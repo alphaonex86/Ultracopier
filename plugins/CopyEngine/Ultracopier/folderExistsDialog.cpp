@@ -26,7 +26,7 @@ folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isS
     }
     else
     {
-        this->destinationInfo=destinationInfo;
+        this->destinationInfo=destination;
         this->setWindowTitle(tr("Folder already exists"));
         ui->label_message->hide();
         ui->label_content_destination_modified->setText(destination.lastModified().toString());

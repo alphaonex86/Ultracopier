@@ -15,13 +15,14 @@
 #endif
 
 /// \brief Initiate and show the icon in the systray
-SystrayIcon::SystrayIcon()
+SystrayIcon::SystrayIcon(QObject * parent) :
+    QSystemTrayIcon(parent)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //setup the systray icon
     haveListenerInfo	= false;
     havePluginLoaderInfo	= false;
-    systrayMenu		= new QMenu();
+    systrayMenu         = new QMenu();
     actionMenuAbout		= new QAction(this);
     actionMenuQuit		= new QAction(this);
     actionOptions		= new QAction(this);
@@ -38,7 +39,6 @@ SystrayIcon::SystrayIcon()
     #else
     setIcon(QIcon(":/systray_Uncaught_Unix.png"));
     #endif
-    show();
     //connect the action
     connect(&timerCheckSetTooltip,	&QTimer::timeout,					this,	&SystrayIcon::checkSetTooltip);
     connect(actionMenuQuit,		&QAction::triggered,					this,	&SystrayIcon::quit);
@@ -69,6 +69,8 @@ SystrayIcon::SystrayIcon()
     #ifdef Q_OS_MAC
     //qt_mac_set_dock_menu(systrayMenu);
     #endif
+
+    show();
 }
 
 /// \brief Hide and destroy the icon in the systray

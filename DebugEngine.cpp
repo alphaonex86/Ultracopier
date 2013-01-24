@@ -259,6 +259,7 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
     //Load the time from start
     QString addDebugInformation_time = QString::number(startTime.elapsed());
     QString addDebugInformation_htmlFormat;
+    bool important=true;
     switch(level)
     {
         case DebugLevel_custom_Information:
@@ -271,7 +272,10 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
             addDebugInformation_htmlFormat="<tr class=\"Warning\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
         break;
         case DebugLevel_custom_Notice:
+        {
             addDebugInformation_htmlFormat="<tr class=\"Notice\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+            important=false;
+        }
         break;
         case DebugLevel_custom_UserNote:
             addDebugInformation_htmlFormat="<tr class=\"Note\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
@@ -285,21 +289,22 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
         if(file!="" && ligne!=-1)
             addDebugInformation_textFormat += file+":"+addDebugInformation_lignestring+":";
         addDebugInformation_textFormat += function+"(), (location: "+location+"): "+text;
-        puts(qPrintable(addDebugInformation_textFormat));
         QMutexLocker lock_mutex(&mutex);
         if(currentBackend==File)
         {
-            if(logFile.size()>64*1024*1024) // greater than 64MB
-                puts("File log greater than 64MB, stop to record it!");
-            else
+            if(logFile.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && logFile.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
+            {
+                puts(qPrintable(addDebugInformation_textFormat));
                 logFile.write(addDebugInformation_htmlFormat.toUtf8());
+            }
         }
         else
         {
-            if(debugHtmlContent.size()<64*1024*1024)
+            if(debugHtmlContent.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && debugHtmlContent.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
+            {
+                puts(qPrintable(addDebugInformation_textFormat));
                 debugHtmlContent+=addDebugInformation_htmlFormat;
-            else
-                puts("String greater than 64MB, stop to record it!");
+            }
         }
         ItemOfDebug newItem;
         newItem.time=addDebugInformation_time;
