@@ -401,7 +401,10 @@ void copyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOr
                 return;
             }
             if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
+            {
                 setComboBoxFolderError(newAction);
+                alwaysDoThisActionForFolderError=newAction;
+            }
             dialogIsOpen=false;
             thread->setFolderErrorAction(newAction);
             if(!isCalledByShowOneNewDialog)
