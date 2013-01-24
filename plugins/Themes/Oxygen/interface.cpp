@@ -338,7 +338,7 @@ void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)
 
 void Themes::setErrorAction(const QList<QPair<QString,QString> > &list)
 {
-    ui->comboBox_fileCollisions->clear();
+    ui->comboBox_copyErrors->clear();
     index=0;
     loop_size=list.size();
     while(index<loop_size)
