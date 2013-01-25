@@ -108,6 +108,7 @@ void LocalListener::listenServer()
 {
 	if(!QLocalServer::removeServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
 		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to remove the listening server"));
+	localServer.setSocketOptions(QLocalServer::UserAccessOption);
 	if(!localServer.listen(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
 	{
 		QMessageBox::critical(NULL,"Alert",QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
