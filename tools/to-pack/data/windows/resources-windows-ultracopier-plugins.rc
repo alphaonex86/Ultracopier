@@ -1,0 +1,27 @@
+#include <windows.h>
+
+1 VERSIONINFO
+FILEVERSION ULTRACOPIER_PLUGIN_WINDOWS_VERSION
+PRODUCTVERSION ULTRACOPIER_PLUGIN_WINDOWS_VERSION
+{
+	BLOCK "StringFileInfo"
+	{
+		BLOCK "040904E4"
+		{
+			VALUE "CompanyName", "ultracopier.first-world.info"
+			VALUE "FileVersion", "ULTRACOPIER_PLUGIN_VERSION"
+			VALUE "FileDescription", "ULTRACOPIER_PLUGIN_NAME for Ultracopier under GPL3"
+			VALUE "InternalName", "ULTRACOPIER_PLUGIN_FILENAME"
+			VALUE "LegalCopyright", "GPL3"
+			VALUE "LegalTrademarks", "ULTRACOPIER_PLUGIN_NAME for Ultracopier under GPL3"
+			VALUE "OriginalFilename", "ULTRACOPIER_PLUGIN_FILENAME"
+			VALUE "ProductName", "ULTRACOPIER_PLUGIN_NAME for Ultracopier"
+			VALUE "ProductVersion", "ULTRACOPIER_PLUGIN_VERSION"
+		}
+	}
+	BLOCK "VarFileInfo"
+	{
+		VALUE "Translation", 0x0409, 1252
+	}
+}
+

@@ -30,7 +30,7 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
 	}
 	if(ultracopierArguments.size()==2)
 	{
-		if(ultracopierArguments.last()=="quit" && external)
+		if(ultracopierArguments.last()=="quit")
 		{
 			if(onlyCheck)
 				return;
