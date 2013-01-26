@@ -112,6 +112,9 @@ Section Uninstall
 
   NotLaunched:
 
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll"'
+
   DeleteRegKey HKCU "Software\Ultracopier"
   DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "ultracopier"
   Delete "$SMPROGRAMS\Ultracopier\Uninstall.lnk"
