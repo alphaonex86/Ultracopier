@@ -18,7 +18,7 @@ MYSQL_PASS="FzdFbpvp4Uq6ZMjz"
 echo "Move some elements..."
 if [ -d ${TEMP_PATH}/doc/ ]
 then
-	rsync -art ${TEMP_PATH}/doc/ /home/first-world.info/doc-ultracopier/
+	rsync -artu ${TEMP_PATH}/doc/ /home/first-world.info/doc-ultracopier/
 	if [ $? -ne 0 ]
 	then
 		echo 'rsync failed'
@@ -28,7 +28,7 @@ then
 fi
 if [ -d ${TEMP_PATH}/plugins/ ]
 then
-	rsync -art ${TEMP_PATH}/plugins/ /home/first-world.info/files/ultracopier/plugins/
+	rsync -artu ${TEMP_PATH}/plugins/ /home/first-world.info/files/ultracopier/plugins/
 	if [ $? -ne 0 ]
 	then
 	        echo 'rsync failed'
