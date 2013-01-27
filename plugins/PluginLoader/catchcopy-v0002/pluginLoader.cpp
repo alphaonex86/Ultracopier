@@ -110,7 +110,13 @@ void PluginLoader::setEnabled(const bool &needBeRegistred)
 	int importantDll_count=0,secondDll_count=0;
 	while(index<importantDll.size())
 	{
-		if(!RegisterShellExtDll(pluginPath+importantDll.at(index),needBeRegistred,false))
+		if(!RegisterShellExtDll(pluginPath+importantDll.at(index),needBeRegistred,
+			!(
+				(needBeRegistred)
+				||
+				(!needBeRegistred && correctlyLoaded.contains(importantDll.at(index)))
+			)
+		))
 		{
 			if(changeOfArchDetected)
 			{
