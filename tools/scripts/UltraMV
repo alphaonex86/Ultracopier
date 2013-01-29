@@ -1,0 +1,28 @@
+#!/bin/bash
+"""
+Type: Nautilus Script
+Title: UltraMV
+Version: 1.0
+Info: déplace des fichiers ou répertoires sélectionnés avec UltraCopier.
+      move selected files and directories with UltraCopier.
+Author: © Copyright (C) 2013, Airelle - http://rlwpx.free.fr/WPFF/nautilus.htm
+License: GNU General Public License, version 3 or later - http://www.gnu.org/licenses/gpl.html
+Usage : copier ce fichier dans le répertoire des scripts Nautilus de votre dossier personnel
+        (~/.gnome2/nautilus-scripts/) et vérifier que le script est exécutable (x).
+        Ultracopier doit être installé (http://ultracopier.first-world.info/)
+        copy this file to the directory of Nautilus-scripts of your home
+        (~/.gnome2/nautilus-scripts/) and be sure that the script is executable (x).
+        Ultracopier must be installed (http://ultracopier.first-world.info/)
+"""
+
+IFS='
+'
+
+vers=`zenity --file-selection --directory --title="Vers..." --filename="/home/media/" --text="Choisir le dossier de destination"`
+
+for file in $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS ;
+do
+ ultracopier mv "${file}" ${vers}
+done
+
+# EOF
