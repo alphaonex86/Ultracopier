@@ -109,6 +109,10 @@ function assemble {
 		rsync -art ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		cd ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		sed -i -r "s/X.X.X.X/${ULTRACOPIER_VERSION}/g" *.nsi > /dev/null 2>&1
+		if [ "${ARCHITECTURE}" != "x86" ]
+		then
+			sed -i -r "s/PROGRAMFILES/PROGRAMFILES64/g" *.nsi > /dev/null 2>&1
+		fi
 		DISPLAY="na" WINEPREFIX="${WINEBASEPATH}/ultracopier-general/" /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine "${WINEBASEPATH}/ultracopier-general/drive_c/Program Files (x86)/NSIS/makensis.exe" *.nsi > /dev/null 2>&1
 		if [ ! -e *setup.exe ]; then
 			echo "${TEMP_PATH}/${FINAL_ARCHIVE} not exists!";
