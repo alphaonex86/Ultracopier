@@ -55,7 +55,9 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     systrayMenu->addAction(actionOptions);
     systrayMenu->addAction(actionMenuAbout);
     systrayMenu->addAction(actionMenuQuit);
+    #ifndef Q_OS_MAC
     systrayMenu->insertSeparator(actionOptions);
+    #endif
     retranslateTheUI();
     updateSystrayIcon();
 

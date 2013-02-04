@@ -12,9 +12,9 @@
 #define ULTRACOPIER_DEBUG_MAX_ALL_SIZE 32 ///< \brief Max size (in MB) after the console/file output is dropped
 #define ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE 64 ///< \brief Max size (in MB) after the console/file important output is dropped
 /// \brief the version
-#define ULTRACOPIER_VERSION		"0.4.0.7"
+#define ULTRACOPIER_VERSION		"0.4.0.9"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	0,4,0,7
+#define ULTRACOPIER_WINDOWS_VERSION	0,4,0,9
 // define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
@@ -29,7 +29,7 @@
 #define ULTRACOPIER_MAXVALUESPEEDSTORED 5
 
 /// \brief the socket name, to have unique instance of ultracopier, and pass arguments between the instance
-#define ULTRACOPIER_SOCKETNAME "ultracopier-0.3"
+#define ULTRACOPIER_SOCKETNAME "ultracopier"
 
 /// \brief to have internet support, to communicate with the web site for update and plugins
 #define ULTRACOPIER_INTERNET_SUPPORT
