@@ -203,6 +203,25 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
+void copyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    if(!needPutAtBottom)
+    {
+        alwaysDoThisActionForFileError=FileError_NotSet;
+        emit newErrorAction("ask");
+        errorQueueItem newItem;
+        newItem.errorString=errorString;
+        newItem.inode=fileInfo;
+        newItem.mkPath=false;
+        newItem.rmPath=false;
+        newItem.scan=NULL;
+        newItem.transfer=thread;
+        errorQueue << newItem;
+        showOneNewDialog();
+    }
+}
+
 /// \note Can be call without queue because all call will be serialized
 void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,bool isCalledByShowOneNewDialog)
 {
@@ -225,8 +244,7 @@ void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
             thread->retryAfterError();
         return;
         case FileError_PutToEndOfTheList:
-            /// \todo do the read transfer locator and put at the end
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"todo list item not found");
+            emit getNeedPutAtBottom(fileInfo,errorString,thread);
         return;
         default:
             if(dialogIsOpen)
@@ -279,8 +297,6 @@ void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
                 break;
                 case FileError_PutToEndOfTheList:
                     thread->putAtBottom();
-                    /// \todo do the read transfer locator and put at the end
-                                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"todo");
                 break;
                 default:
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file error action wrong");

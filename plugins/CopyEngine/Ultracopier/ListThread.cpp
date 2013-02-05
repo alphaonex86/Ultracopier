@@ -4,35 +4,36 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
 {
     moveToThread(this);
     start(HighPriority);
-    this->facilityInterface		= facilityInterface;
-    putInPause			= false;
-    sourceDrive			= "";
-    sourceDriveMultiple		= false;
-    destinationDrive		= "";
-    destinationDriveMultiple	= false;
-    stopIt				= false;
-    bytesToTransfer			= 0;
-    bytesTransfered			= 0;
-    idIncrementNumber		= 1;
-    actualRealByteTransfered	= 0;
-    preOperationNumber		= 0;
-    numberOfTranferRuning		= 0;
-    numberOfTransferIntoToDoList	= 0;
-    numberOfInodeOperation		= 0;
-    maxSpeed			= 0;
-    doRightTransfer			= false;
-    keepDate			= false;
-    blockSize			= ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
-    osBufferLimit			= 512;
+    this->facilityInterface         = facilityInterface;
+    putInPause                      = false;
+    sourceDrive                     = "";
+    sourceDriveMultiple             = false;
+    destinationDrive                = "";
+    destinationDriveMultiple        = false;
+    stopIt                          = false;
+    bytesToTransfer                 = 0;
+    bytesTransfered                 = 0;
+    idIncrementNumber               = 1;
+    actualRealByteTransfered        = 0;
+    preOperationNumber              = 0;
+    numberOfTranferRuning           = 0;
+    numberOfTransferIntoToDoList    = 0;
+    numberOfInodeOperation          = 0;
+    putAtBottom                     = 0;
+    maxSpeed                        = 0;
+    doRightTransfer                 = false;
+    keepDate                        = false;
+    blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
+    osBufferLimit                   = 512;
     alwaysDoThisActionForFileExists = FileExists_NotSet;
-    doChecksum			= false;
-    checksumIgnoreIfImpossible	= true;
-    checksumOnlyOnError		= true;
-    osBuffer			= false;
-    osBufferLimited			= false;
-    forcedMode			= false;
-    clockForTheCopySpeed=NULL;
-    multiForBigSpeed=0;
+    doChecksum                      = false;
+    checksumIgnoreIfImpossible      = true;
+    checksumOnlyOnError             = true;
+    osBuffer                        = false;
+    osBufferLimited                 = false;
+    forcedMode                      = false;
+    clockForTheCopySpeed            = NULL;
+    multiForBigSpeed                = 0;
 
     #if ! defined (Q_CC_GNU)
     ui->keepDate->setEnabled(false);
@@ -171,7 +172,6 @@ void ListThread::transferPutAtBottom()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
         return;
     }
-    transfer->skip();
     bool isFound=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     int countLocalParse=0;
@@ -181,6 +181,7 @@ void ListThread::transferPutAtBottom()
     {
         if(actionToDoListTransfer.at(indexAction).id==transfer->transferId)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Put at the end: %1").arg(transfer->transferId));
             //push for interface at the end
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
@@ -213,6 +214,7 @@ void ListThread::transferPutAtBottom()
     if(countLocalParse!=1)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("countLocalParse != 1"));
     #endif
+    transfer->skip();
 }
 
 //set the copy info and options before runing
@@ -1741,6 +1743,33 @@ void ListThread::run()
     clockForTheCopySpeed=new QTimer();
 
     exec();
+}
+
+void ListThread::getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread)
+{
+    if(actionToDoListTransfer.empty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"can't try put at bottom if empty");
+        this->alwaysDoThisActionForFileExists=FileExists_NotSet;
+        putAtBottom=0;
+        emit haveNeedPutAtBottom(false,fileInfo,errorString,thread);
+        return;
+    }
+    bool needPutAtBottom=(putAtBottom<(quint32)actionToDoListTransfer.size());
+    if(!needPutAtBottom)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Reset put at bottom");
+        this->alwaysDoThisActionForFileExists=FileExists_NotSet;
+        putAtBottom=0;
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Put at bottom for later try");
+        thread->putAtBottom();
+        putAtBottom++;
+        return;
+    }
+    emit haveNeedPutAtBottom(needPutAtBottom,fileInfo,errorString,thread);
 }
 
 /// \to create transfer thread

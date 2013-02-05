@@ -110,6 +110,7 @@ private:
     QTimer timerActionDone;
     //send progression timer
     QTimer timerProgression;
+    int putAtBottom;//to keep how many automatic put at bottom have been used
 private slots:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     void updateTheDebugInfo(QStringList,QStringList,int);
@@ -160,6 +161,7 @@ private slots:
     void get_realBytesTransfered(quint64 realBytesTransfered);
     void newActionInProgess(Ultracopier::EngineActionInProgress);
     void updateBufferCheckbox();
+    void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread);
 public:
     /** \brief to send the options panel
      * \return return false if have not the options
@@ -328,6 +330,7 @@ signals:
 
     //internal cancel
     void tryCancel();
+    void getNeedPutAtBottom(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source

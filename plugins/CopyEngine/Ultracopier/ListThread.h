@@ -168,6 +168,7 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
+    void getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
@@ -212,6 +213,7 @@ private:
     bool				checksumOnlyOnError;
     bool				osBuffer;
     bool				osBufferLimited;
+    unsigned int putAtBottom;
     unsigned int			osBufferLimit;
     QList<Filters_rules>		include,exclude;
     Ultracopier::CopyMode			mode;
@@ -336,6 +338,7 @@ signals:
 
     //when can be deleted
     void canBeDeleted();
+    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
 
         //send error occurred
     void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);

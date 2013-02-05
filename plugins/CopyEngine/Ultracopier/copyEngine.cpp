@@ -29,6 +29,7 @@ copyEngine::copyEngine(FacilityInterface * facilityEngine) :
     checkDestinationFolderExists	= false;
     stopIt				= false;
     size_for_speed			= 0;
+    putAtBottom=0;
     forcedMode			= false;
 
     //implement the SingleShot in this class
@@ -115,6 +116,12 @@ void copyEngine::connectTheSignalsSlots()
 
     if(!connect(this,&copyEngine::tryCancel,						listThread,&ListThread::tryCancel,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect tryCancel()");
+    if(!connect(this,&copyEngine::getNeedPutAtBottom,						listThread,&ListThread::getNeedPutAtBottom,				Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect getNeedPutAtBottom()");
+    if(!connect(listThread,&ListThread::haveNeedPutAtBottom,		this,&copyEngine::haveNeedPutAtBottom,				Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect haveNeedPutAtBottom()");
+
+
     if(!connect(this,&copyEngine::signal_pause,						listThread,&ListThread::pause,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_pause()");
     if(!connect(this,&copyEngine::signal_resume,						listThread,&ListThread::resume,				Qt::QueuedConnection))
