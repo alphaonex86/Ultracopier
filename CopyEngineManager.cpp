@@ -35,6 +35,11 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
         return;
     //setFileName
     QString pluginPath=plugin.path+PluginsManager::getResolvedPluginName("copyEngine");
+    if(!QFile(pluginPath).exists())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The plugin binary is missing: "+pluginPath);
+        return;
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pluginPath);
     //search into loaded session
     int index=0;
