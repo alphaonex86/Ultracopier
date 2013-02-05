@@ -35,6 +35,9 @@ Factory::Factory() :
     connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&Factory::setBlockSize);
     connect(ui->autoStart,			&QCheckBox::toggled,		this,&Factory::setAutoStart);
     connect(ui->doChecksum,			&QCheckBox::toggled,		this,&Factory::doChecksum_toggled);
+    connect(ui->comboBoxFolderError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderError);
+    connect(ui->comboBoxFolderColision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderColision);
+    connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&Factory::setCheckDestinationFolder);
     connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&Factory::checksumIgnoreIfImpossible_toggled);
     connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&Factory::checksumOnlyOnError_toggled);
     connect(ui->osBuffer,			&QCheckBox::toggled,		this,&Factory::osBuffer_toggled);
@@ -138,7 +141,6 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
     #endif
     if(options!=NULL)
     {
-        optionsEngine=options;
         //load the options
         QList<QPair<QString, QVariant> > KeysList;
         KeysList.append(qMakePair(QString("doRightTransfer"),QVariant(false)));
@@ -164,33 +166,33 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(false)));
         #endif
         KeysList.append(qMakePair(QString("osBufferLimit"),QVariant(512)));
-        optionsEngine->addOptionGroup(KeysList);
+        options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)
         ui->keepDate->setEnabled(false);
         ui->keepDate->setToolTip("Not supported with this compiler");
         #endif
-        ui->doRightTransfer->setChecked(optionsEngine->getOptionValue("doRightTransfer").toBool());
-        ui->keepDate->setChecked(optionsEngine->getOptionValue("keepDate").toBool());
-        ui->blockSize->setValue(optionsEngine->getOptionValue("blockSize").toUInt());
-        ui->autoStart->setChecked(optionsEngine->getOptionValue("autoStart").toBool());
-        ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toUInt());
-        ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
-        ui->checkBoxDestinationFolderExists->setChecked(optionsEngine->getOptionValue("checkDestinationFolder").toBool());
+        ui->doRightTransfer->setChecked(options->getOptionValue("doRightTransfer").toBool());
+        ui->keepDate->setChecked(options->getOptionValue("keepDate").toBool());
+        ui->blockSize->setValue(options->getOptionValue("blockSize").toUInt());
+        ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());
+        ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue("folderError").toUInt());
+        ui->comboBoxFolderColision->setCurrentIndex(options->getOptionValue("folderColision").toUInt());
+        ui->checkBoxDestinationFolderExists->setChecked(options->getOptionValue("checkDestinationFolder").toBool());
 
-        ui->doChecksum->setChecked(optionsEngine->getOptionValue("doChecksum").toBool());
-        ui->checksumIgnoreIfImpossible->setChecked(optionsEngine->getOptionValue("checksumIgnoreIfImpossible").toBool());
-        ui->checksumOnlyOnError->setChecked(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
+        ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
+        ui->checksumIgnoreIfImpossible->setChecked(options->getOptionValue("checksumIgnoreIfImpossible").toBool());
+        ui->checksumOnlyOnError->setChecked(options->getOptionValue("checksumOnlyOnError").toBool());
 
-        ui->osBuffer->setChecked(optionsEngine->getOptionValue("osBuffer").toBool());
-        ui->osBufferLimited->setChecked(optionsEngine->getOptionValue("osBufferLimited").toBool());
-        ui->osBufferLimit->setValue(optionsEngine->getOptionValue("osBufferLimit").toUInt());
-        //ui->autoStart->setChecked(optionsEngine->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
-        filters->setFilters(optionsEngine->getOptionValue("includeStrings").toStringList(),
-            optionsEngine->getOptionValue("includeOptions").toStringList(),
-            optionsEngine->getOptionValue("excludeStrings").toStringList(),
-            optionsEngine->getOptionValue("excludeOptions").toStringList()
+        ui->osBuffer->setChecked(options->getOptionValue("osBuffer").toBool());
+        ui->osBufferLimited->setChecked(options->getOptionValue("osBufferLimited").toBool());
+        ui->osBufferLimit->setValue(options->getOptionValue("osBufferLimit").toUInt());
+        //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
+        filters->setFilters(options->getOptionValue("includeStrings").toStringList(),
+            options->getOptionValue("includeOptions").toStringList(),
+            options->getOptionValue("excludeStrings").toStringList(),
+            options->getOptionValue("excludeOptions").toStringList()
         );
-        renamingRules->setRenamingRules(optionsEngine->getOptionValue("firstRenamingRule").toString(),optionsEngine->getOptionValue("otherRenamingRule").toString());
+        renamingRules->setRenamingRules(options->getOptionValue("firstRenamingRule").toString(),options->getOptionValue("otherRenamingRule").toString());
 
         ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
         ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
@@ -198,6 +200,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
         connect(ui->osBuffer,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
         updateBufferCheckbox();
+        optionsEngine=options;
     }
 }
 
@@ -232,93 +235,102 @@ void Factory::resetOptions()
 
 QWidget * Factory::options()
 {
-
     return tempWidget;
 }
 
 void Factory::setDoRightTransfer(bool doRightTransfer)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("doRightTransfer",doRightTransfer);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::setKeepDate(bool keepDate)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("keepDate",keepDate);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::setBlockSize(int blockSize)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("blockSize",blockSize);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::setAutoStart(bool autoStart)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("autoStart",autoStart);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::setFolderColision(int index)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("folderColision",index);
+}
+
+void Factory::setFolderError(int index)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("folderError",index);
+}
+
+void Factory::setCheckDestinationFolder()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("checkDestinationFolder",ui->checkBoxDestinationFolderExists->isChecked());
 }
 
 void Factory::newLanguageLoaded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, retranslate the widget options");
+    OptionInterface * optionsEngine=this->optionsEngine;
+    this->optionsEngine=NULL;
     ui->retranslateUi(tempWidget);
+    ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toUInt());
+    ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
     if(optionsEngine!=NULL)
     {
         filters->newLanguageLoaded();
         renamingRules->newLanguageLoaded();
     }
     emit reloadLanguage();
+    this->optionsEngine=optionsEngine;
 }
 
 void Factory::doChecksum_toggled(bool doChecksum)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("doChecksum",doChecksum);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checksumOnlyOnError",checksumOnlyOnError);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::osBuffer_toggled(bool osBuffer)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBuffer",osBuffer);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void Factory::osBufferLimited_toggled(bool osBufferLimited)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBufferLimited",osBufferLimited);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
@@ -327,8 +339,6 @@ void Factory::osBufferLimit_editingFinished()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBufferLimit",ui->osBufferLimit->value());
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::showFilterDialog()
@@ -352,8 +362,6 @@ void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList
         optionsEngine->setOptionValue("excludeStrings",excludeStrings);
         optionsEngine->setOptionValue("excludeOptions",excludeOptions);
     }
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
@@ -364,8 +372,6 @@ void Factory::sendNewRenamingRules(QString firstRenamingRule,QString otherRenami
         optionsEngine->setOptionValue("firstRenamingRule",firstRenamingRule);
         optionsEngine->setOptionValue("otherRenamingRule",otherRenamingRule);
     }
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::showRenamingRules()
@@ -387,11 +393,9 @@ void Factory::updateBufferCheckbox()
 
 void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the checkbox have changed");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checksumIgnoreIfImpossible",checksumIgnoreIfImpossible);
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::logicalDriveChanged(const QString &,bool)

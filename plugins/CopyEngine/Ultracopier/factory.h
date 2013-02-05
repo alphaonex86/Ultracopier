@@ -71,6 +71,9 @@ private slots:
     void setKeepDate(bool keepDate);
     void setBlockSize(int blockSize);
     void setAutoStart(bool autoStart);
+    void setFolderColision(int index);
+    void setFolderError(int index);
+    void setCheckDestinationFolder();
     void showFilterDialog();
     void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions);
     void doChecksum_toggled(bool);

@@ -1,5 +1,5 @@
 TEMPLATE = app
-QT += network xml widgets
+QT += network xml widgets systeminfo
 include(updateqm.pri)
 TRANSLATIONS += plugins/Languages/ar/translation.ts \
     plugins/Languages/de/translation.ts \

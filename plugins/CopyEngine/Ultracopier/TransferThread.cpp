@@ -427,6 +427,7 @@ void TransferThread::tryMoveDirectly()
         emit errorOnFile(sourceFile,sourceFile.errorString());
         return;
     }
+    resetExtraVariable();
     readThread.fakeReadIsStarted();
     writeThread.fakeWriteIsStarted();
     readThread.fakeReadIsStopped();
