@@ -400,6 +400,7 @@ void TransferThread::tryMoveDirectly()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start the system move");
 
+    resetExtraVariable();
     //move if on same mount point
     QFile sourceFile(sourceInfo.absoluteFilePath());
     QFile destinationFile(destinationInfo.absoluteFilePath());
@@ -427,7 +428,6 @@ void TransferThread::tryMoveDirectly()
         emit errorOnFile(sourceFile,sourceFile.errorString());
         return;
     }
-    resetExtraVariable();
     readThread.fakeReadIsStarted();
     writeThread.fakeWriteIsStarted();
     readThread.fakeReadIsStopped();
@@ -438,6 +438,7 @@ void TransferThread::tryCopyDirectly()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start copy directly");
 
+    resetExtraVariable();
     //move if on same mount point
     QFile sourceFile(sourceInfo.absoluteFilePath());
     QFile destinationFile(destinationInfo.absoluteFilePath());
