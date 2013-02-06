@@ -291,25 +291,35 @@ void WriteThread::internalClose(bool emitSignal)
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Close;
     #endif
-    if(!fakeMode && file.isOpen())
+    if(!fakeMode)
     {
-        if(!needRemoveTheFile)
+        if(file.isOpen())
         {
-            if(startSize!=CurentCopiedSize)
-                file.resize(CurentCopiedSize);
+            if(!needRemoveTheFile)
+            {
+                if(startSize!=CurentCopiedSize)
+                    file.resize(CurentCopiedSize);
+            }
+            file.close();
+            if(needRemoveTheFile)
+            {
+                if(file.remove())
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
+            }
+            needRemoveTheFile=false;
+            flushBuffer();
+            //here and not after, because the transferThread don't need try close if not open
+            if(emitSignal)
+                emit closed();
         }
-        file.close();
-        if(needRemoveTheFile)
-        {
-            if(file.remove())
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
-        }
-        needRemoveTheFile=false;
-        flushBuffer();
+    }
+    else
+    {
         //here and not after, because the transferThread don't need try close if not open
         if(emitSignal)
             emit closed();
     }
+
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;
     #endif
@@ -350,6 +360,7 @@ void WriteThread::setId(int id)
 void WriteThread::fakeOpen()
 {
     fakeMode=true;
+    postOperationRequested=false;
     emit opened();
 }
 
