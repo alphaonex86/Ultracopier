@@ -77,6 +77,9 @@ class EventDispatcher : public QObject, public GlobalClass
         CopyEngineManager *copyEngineList;
         LocalListener localListener;
         CliParser cliParser;
+        #ifdef Q_OS_WIN32
+		QString GetOSDisplayString();
+		#endif
     private slots:
         /// \brief Called when event loop is setup
         void initFunction();
