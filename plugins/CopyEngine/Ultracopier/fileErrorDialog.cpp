@@ -40,6 +40,8 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
     }
     else
     {
+        ui->label_file_destination->hide();
+        ui->label_content_file_destination->hide();
         ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
         ui->label_size->hide();
         ui->label_content_size->hide();

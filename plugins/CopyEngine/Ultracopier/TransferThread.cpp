@@ -3,16 +3,12 @@
 
 #include "TransferThread.h"
 
-#ifdef Q_CC_GNU
-//this next header is needed to change file time/date under gcc
-#include <utime.h>
-#include <time.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#endif
-
 #ifndef Q_OS_UNIX
-#include <windows.h>
+    #ifdef Q_OS_WIN32
+        #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+            #include <windows.h>
+        #endif
+    #endif
 #endif
 
 TransferThread::TransferThread()
@@ -229,13 +225,13 @@ void TransferThread::preOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source+", destination: "+destination);
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start: source: "+source+", destination: "+destination);
     needRemove=false;
     sourceInfo.setFile(source);
     destinationInfo.setFile(destination);
     if(isSame())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is same"+source);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is same "+source+" than "+destination);
         return;
     }
     if(destinationExists())
@@ -243,6 +239,14 @@ void TransferThread::preOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] destination exists: "+source);
         return;
     }
+    if(keepDate)
+    {
+        doTheDateTransfer=readFileDateTime(source);
+        if(!doTheDateTransfer)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source);
+    }
+    else
+        doTheDateTransfer=false;
     if(canBeMovedDirectly())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] need moved directly: "+source);
@@ -253,6 +257,7 @@ void TransferThread::preOperation()
     }
     if(canBeCopiedDirectly())
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] need copied directly: "+source);
         canBeCopiedDirectlyVariable=true;
         readThread.fakeOpen();
         writeThread.fakeOpen();
@@ -279,8 +284,16 @@ void TransferThread::tryOpen()
 bool TransferThread::isSame()
 {
     //check if source and destination is not the same
-    if(sourceInfo==destinationInfo)
+    if(sourceInfo==destinationInfo && source==destination)
     {
+        #ifdef ULTRACOPIER_PLUGIN_DEBUG
+        if(!sourceInfo.exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start source: "+source+" not exists");
+        if(!sourceInfo.isSymLink())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start source: "+source+" isSymLink");
+        if(!destinationInfo.isSymLink())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start source: "+destination+" isSymLink");
+        #endif
         if(fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_Skip)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is same but skip");
@@ -853,21 +866,17 @@ void TransferThread::postOperation()
 bool TransferThread::doFilePostOperation()
 {
     //do operation needed by copy
-    if(!canBeMovedDirectlyVariable)
-    {
-        //set the time if no write thread used
-        if(keepDate)
-            //source,destination
-            changeFileDateTime(source,destination);//can't do that's after move because after move the source not exist
-            /*
-              ignore it, because need correct management, mainly with move
-            if(!)
-            {
-                emit errorOnFile(destinationInfo,tr("Unable to change the date"));//destination.errorString()
-                return false;
-            }*/
-    }
-
+    //set the time if no write thread used
+    if(doTheDateTransfer)
+        //source,destination
+        writeFileDateTime(destination);//can't do that's after move because after move the source not exist
+        /*
+          ignore it, because need correct management, mainly with move
+        if(!)
+        {
+            emit errorOnFile(destinationInfo,tr("Unable to change the date"));//destination.errorString()
+            return false;
+        }*/
     if(stopIt)
         return false;
 
@@ -1077,9 +1086,9 @@ void TransferThread::timeOfTheBlockCopyFinished()
 }
 
 //fonction to edit the file date time
-bool TransferThread::changeFileDateTime(const QString &source,const QString &destination)
+bool TransferThread::readFileDateTime(const QString &source)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] changeFileDateTime("+source+","+destination+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] readFileDateTime("+source+")");
     if(maxTime>=sourceInfo.lastModified())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the sources is older to copy the time: "+source+": "+sourceInfo.lastModified().toString());
@@ -1089,17 +1098,16 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
             struct stat info;
-            stat(source.toLatin1().data(),&info);
+            if(stat(source.toLatin1().data(),&info)!=0)
+                return false;
             time_t ctime=info.st_ctim.tv_sec;
             time_t actime=info.st_atim.tv_sec;
             time_t modtime=info.st_mtim.tv_sec;
             //this function avalaible on unix and mingw
-            utimbuf butime;
             butime.actime=actime;
             butime.modtime=modtime;
-            //creation time not exists into unix world
-            Q_UNUSED(ctime)
-            return utime(destination.toLatin1().data(),&butime)==0;
+            Q_UNUSED(ctime);
+            return true;
         #else //mainly for mac
             QFileInfo fileInfo(destination);
             time_t ctime=fileInfo.created().toTime_t();
@@ -1109,58 +1117,91 @@ bool TransferThread::changeFileDateTime(const QString &source,const QString &des
             utimbuf butime;
             butime.actime=actime;
             butime.modtime=modtime;
-            //creation time not exists into unix world
-            Q_UNUSED(ctime)
-            return utime(destination.toLatin1().data(),&butime)==0;
+            Q_UNUSED(ctime);
+            return true;
         #endif
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                struct __stat64 info;
-                _stat64(source.toLatin1().data(),&info);
-                time_t ctime=info.st_ctime;
-                time_t actime=info.st_atime;
-                time_t modtime=info.st_mtime;
+                struct stat info;
+                if(stat(source.toLatin1().data(),&info)!=0)
+                    return false;
+                time_t ctime=info.st_ctim.tv_sec;
+                time_t actime=info.st_atim.tv_sec;
+                time_t modtime=info.st_mtim.tv_sec;
                 //this function avalaible on unix and mingw
-                utimbuf butime;
                 butime.actime=actime;
                 butime.modtime=modtime;
-                //creation time not exists into unix world
-                Q_UNUSED(ctime)
-                return utime(destination.toLatin1().data(),&butime)==0;
+                Q_UNUSED(ctime);
+                return true;
             #else
                 wchar_t filePath[65535];
-                source.toWCharArray(filePath);
+                filePath[source.toWCharArray(filePath)]=L'\0';
                 HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] open failed to read: "+source);
-                    return false;
-                }
-                destination.toWCharArray(filePath);
-                HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-                if(hFileDestination == INVALID_HANDLE_VALUE)
-                {
-                    CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] open failed to write: "+destination);
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] open failed to read: "+QString::fromWCharArray(filePath)+", error: "+QString::number(GetLastError()));
                     return false;
                 }
                 FILETIME ftCreate, ftAccess, ftWrite;
                 if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
                 {
                     CloseHandle(hFileSouce);
-                    CloseHandle(hFileDestination);
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] unable to get the file time");
                     return false;
                 }
+                this->ftCreateL=ftCreate.dwLowDateTime;
+                this->ftCreateH=ftCreate.dwHighDateTime;
+                this->ftAccessL=ftAccess.dwLowDateTime;
+                this->ftAccessH=ftAccess.dwHighDateTime;
+                this->ftWriteL=ftWrite.dwLowDateTime;
+                this->ftWriteH=ftWrite.dwHighDateTime;
+                CloseHandle(hFileSouce);
+                return true;
+            #endif
+        #else
+            return false;
+        #endif
+    #endif
+    return false;
+}
+
+bool TransferThread::writeFileDateTime(const QString &destination)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeFileDateTime("+destination+")");
+    /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
+    #ifdef Q_OS_UNIX
+        #ifdef Q_OS_LINUX
+            return utime(destination.toLatin1().data(),&butime)==0;
+        #else //mainly for mac
+            return utime(destination.toLatin1().data(),&butime)==0;
+        #endif
+    #else
+        #ifdef Q_OS_WIN32
+            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+                return utime(destination.toLatin1().data(),&butime)==0;
+            #else
+                wchar_t filePath[65535];
+                filePath[destination.toWCharArray(filePath)]=L'\0';
+                HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+                if(hFileDestination == INVALID_HANDLE_VALUE)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] open failed to write: "+QString::fromWCharArray(filePath)+", error: "+QString::number(GetLastError()));
+                    return false;
+                }
+                FILETIME ftCreate, ftAccess, ftWrite;
+                ftCreate.dwLowDateTime=this->ftCreateL;
+                ftCreate.dwHighDateTime=this->ftCreateH;
+                ftAccess.dwLowDateTime=this->ftAccessL;
+                ftAccess.dwHighDateTime=this->ftAccessH;
+                ftWrite.dwLowDateTime=this->ftWriteL;
+                ftWrite.dwHighDateTime=this->ftWriteH;
                 if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
                 {
-                    CloseHandle(hFileSouce);
                     CloseHandle(hFileDestination);
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] unable to set the file time");
                     return false;
                 }
-                CloseHandle(hFileSouce);
                 CloseHandle(hFileDestination);
                 return true;
             #endif

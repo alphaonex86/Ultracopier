@@ -14,6 +14,22 @@
 #include <QDateTime>
 #include <QDir>
 
+#ifdef Q_OS_UNIX
+    #include <utime.h>
+    #include <time.h>
+    #include <unistd.h>
+    #include <sys/stat.h>
+#else
+    #ifdef Q_OS_WIN32
+        #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+            #include <utime.h>
+            #include <time.h>
+            #include <unistd.h>
+            #include <sys/stat.h>
+        #endif
+    #endif
+#endif
+
 #include "ReadThread.h"
 #include "WriteThread.h"
 #include "Environment.h"
@@ -133,8 +149,8 @@ private slots:
     //void syncAfterErrorAndReadFinish();
     void readThreadIsSeekToZeroAndWait();
     void writeThreadIsReopened();
-        void readThreadResumeAfterError();
-        //to filter the emition of signal
+    void readThreadResumeAfterError();
+    //to filter the emition of signal
     void readIsStopped();
     void writeIsStopped();
     //force into the right thread
@@ -192,6 +208,19 @@ private:
     bool			writeError,writeError_source_seeked,writeError_destination_reopened;
     bool			readError;
     bool			fileContentError;
+    bool            doTheDateTransfer;
+    #ifdef Q_OS_UNIX
+            utimbuf butime;
+    #else
+        #ifdef Q_OS_WIN32
+            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+                utimbuf butime;
+            #else
+                quint32 ftCreateL, ftAccessL, ftWriteL;
+                quint32 ftCreateH, ftAccessH, ftWriteH;
+            #endif
+        #endif
+    #endif
     //different pre-operation
     bool isSame();
     bool destinationExists();
@@ -202,13 +231,14 @@ private:
     void tryCopyDirectly();
     void ifCanStartTransfer();
     //fonction to edit the file date time
-    bool changeFileDateTime(const QString &source,const QString &destination);
+    bool readFileDateTime(const QString &source);
+    bool writeFileDateTime(const QString &destination);
     void resetExtraVariable();
     //error management function
     void resumeTransferAfterWriteError();
     //to send state
     bool sended_state_preOperationStopped;
-        bool sended_state_readStopped;
+    bool sended_state_readStopped;
     bool sended_state_writeStopped;
     //different post-operation
     bool checkIfAllIsClosedAndDoOperations();// return true if all is closed, and do some operations, don't use into condition to check if is closed!
