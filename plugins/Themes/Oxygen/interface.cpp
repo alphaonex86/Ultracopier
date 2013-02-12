@@ -892,9 +892,11 @@ void dragLeaveEvent(QDragLeaveEvent* event);
 */
 void Themes::dropEvent(QDropEvent *event)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     const QMimeData* mimeData = event->mimeData();
     if(mimeData->hasUrls())
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"hasUrls");
         emit urlDropped(mimeData->urls());
         event->acceptProposedAction();
     }
@@ -902,18 +904,27 @@ void Themes::dropEvent(QDropEvent *event)
 
 void Themes::dragEnterEvent(QDragEnterEvent* event)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     // if some actions should not be usable, like move, this code must be adopted
-    event->acceptProposedAction();
+    const QMimeData* mimeData = event->mimeData();
+    if(mimeData->hasUrls())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"hasUrls");
+        event->acceptProposedAction();
+    }
 }
 
 void Themes::dragMoveEvent(QDragMoveEvent* event)
 {
     // if some actions should not be usable, like move, this code must be adopted
-    event->acceptProposedAction();
+    const QMimeData* mimeData = event->mimeData();
+    if(mimeData->hasUrls())
+        event->acceptProposedAction();
 }
 
 void Themes::dragLeaveEvent(QDragLeaveEvent* event)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     event->accept();
 }
 

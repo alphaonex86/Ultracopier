@@ -49,8 +49,8 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     //display the icon
     updateCurrentTheme();
     //if theme/language change, update graphic part
-    connect(themes,			&ThemesManager::theThemeIsReloaded,			this,	&SystrayIcon::updateCurrentTheme);
-    connect(languages,		&LanguagesManager::newLanguageLoaded,			this,	&SystrayIcon::retranslateTheUI);
+    connect(themes,			&ThemesManager::theThemeIsReloaded,			this,	&SystrayIcon::updateCurrentTheme, Qt::QueuedConnection);
+    connect(languages,		&LanguagesManager::newLanguageLoaded,			this,	&SystrayIcon::retranslateTheUI, Qt::QueuedConnection);
     systrayMenu->addMenu(copyMenu);
     systrayMenu->addAction(actionOptions);
     systrayMenu->addAction(actionMenuAbout);

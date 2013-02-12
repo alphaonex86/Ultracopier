@@ -34,6 +34,7 @@ ThemesManager::ThemesManager()
     connect(this,&ThemesManager::previouslyPluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(plugins,&PluginsManager::onePluginWillBeUnloaded,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
     connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&ThemesManager::allPluginIsLoaded,Qt::QueuedConnection);
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Themes);
     foreach(PluginsAvailable currentPlugin,list)
@@ -152,6 +153,11 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
             if(index<currentPluginIndex)
                 currentPluginIndex--;
             pluginList.removeAt(index);
+            if(currentPluginIndex>=pluginList.size())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"plugin is out of inder!");
+                currentPluginIndex=-1;
+            }
             return;
         }
         index++;
@@ -166,6 +172,11 @@ QIcon ThemesManager::loadIcon(const QString &fileName)
 {
     if(currentPluginIndex==-1)
         return QIcon();
+    if(pluginList.at(currentPluginIndex).factory==NULL)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Try get icon when the factory is not loaded");
+        return QIcon();
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Send interface pixmap: "+fileName);
     return pluginList.at(currentPluginIndex).factory->getIcon(fileName);
 }
@@ -203,6 +214,16 @@ PluginInterface_Themes * ThemesManager::getThemesInstance()
         return NULL;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Send interface: "+pluginList.at(currentPluginIndex).plugin.name);
+    if(currentPluginIndex>=pluginList.size())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the interface, internal selection bug");
+        return NULL;
+    }
+    if(pluginList.at(currentPluginIndex).factory==NULL)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No plugin factory loaded to get an instance");
+        return NULL;
+    }
     return pluginList.at(currentPluginIndex).factory->getInstance();
 }
 

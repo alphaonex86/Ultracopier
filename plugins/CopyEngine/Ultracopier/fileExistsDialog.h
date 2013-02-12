@@ -15,43 +15,45 @@
 #define FILEEXISTSDIALOG_H
 
 namespace Ui {
-	class fileExistsDialog;
+    class fileExistsDialog;
 }
 
 /// \brief to show file exists dialog, and ask what do
 class fileExistsDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	/// \brief create the object and pass all the informations to it
-	explicit fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
-	~fileExistsDialog();
-	/// \brief return the the always checkbox is checked
-	bool getAlways();
-	/// \brief return the action clicked
-	FileExistsAction getAction();
-	/// \brief return the new rename is case in manual renaming
-	QString getNewName();
+    /// \brief create the object and pass all the informations to it
+    explicit fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
+    ~fileExistsDialog();
+    /// \brief return the the always checkbox is checked
+    bool getAlways();
+    /// \brief return the action clicked
+    FileExistsAction getAction();
+    /// \brief return the new rename is case in manual renaming
+    QString getNewName();
 protected:
-	void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e);
 private slots:
-	void on_SuggestNewName_clicked();
-	void on_Rename_clicked();
-	void on_Overwrite_clicked();
-	void on_Skip_clicked();
-	void on_Cancel_clicked();
-	void on_actionOverwrite_if_newer_triggered();
-	void on_actionOverwrite_if_not_same_modification_date_triggered();
-	void updateRenameButton();
-	void on_checkBoxAlways_toggled(bool checked);
-	void on_lineEditNewName_textChanged(const QString &arg1);
+    void on_SuggestNewName_clicked();
+    void on_Rename_clicked();
+    void on_Overwrite_clicked();
+    void on_Skip_clicked();
+    void on_Cancel_clicked();
+    void on_actionOverwrite_if_newer_triggered();
+    void on_actionOverwrite_if_not_same_modification_date_triggered();
+    void updateRenameButton();
+    void on_checkBoxAlways_toggled(bool checked);
+    void on_lineEditNewName_textChanged(const QString &arg1);
+    void on_lineEditNewName_returnPressed();
+
 private:
-	Ui::fileExistsDialog *ui;
-	FileExistsAction action;
-	QString oldName;
-	QFileInfo destinationInfo;
-	QString firstRenamingRule;
-	QString otherRenamingRule;
+    Ui::fileExistsDialog *ui;
+    FileExistsAction action;
+    QString oldName;
+    QFileInfo destinationInfo;
+    QString firstRenamingRule;
+    QString otherRenamingRule;
 };
 
 #endif // FILEEXISTSDIALOG_H

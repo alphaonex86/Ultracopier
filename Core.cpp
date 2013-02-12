@@ -19,7 +19,7 @@ Core::Core(CopyEngineManager *copyEngineList)
     loadInterface();
     //connect(&copyEngineList,	&CopyEngineManager::newCanDoOnlyCopy,				this,	&Core::newCanDoOnlyCopy);
     connect(themes,			&ThemesManager::theThemeNeedBeUnloaded,				this,	&Core::unloadInterface);
-    connect(themes,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface);
+    connect(themes,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface, Qt::QueuedConnection);
     connect(&forUpateInformation,	&QTimer::timeout,						this,	&Core::periodicSynchronization);
 }
 
@@ -680,52 +680,6 @@ void Core::connectInterfaceAndSync(const int &index)
     //force the updating, without wait the timer
     periodicSynchronizationWithIndex(index);
 }
-
-/*void Core::disconnectEngine(const int &index)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1").arg(index));
-//	CopyInstance& currentCopyInstance=copyList[index];
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing(QString)),			this,&Core::newFolderListing(QString)));//to check to change
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newCollisionAction(QString)),		this,&Core::newCollisionAction(QString)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newErrorAction(QString)),			this,&Core::newErrorAction(QString)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess(EngineActionInProgress)),	this,&Core::actionInProgess(EngineActionInProgress)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::isInPause(bool)),				this,&Core::isInPause(bool)));//to check to change
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::cancelAll()),				this,&Core::copyInstanceCanceledByEngine()));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::error(QString,quint64,QDateTime,QString)),	this,&Core::error(QString,quint64,QDateTime,QString)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::rmPath(QString)),				this,&Core::rmPath(QString)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath(QString)),				this,&Core::mkPath(QString)));
-
-}
-
-void Core::disconnectInterface(const int &index)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1").arg(index));
-    Q_UNUSED(index);
-    CopyInstance& currentCopyInstance=copyList[index];
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::pause()),				currentCopyInstance.engine,&PluginInterface_CopyEngine::pause()));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::resume()),				currentCopyInstance.engine,&PluginInterface_CopyEngine::resume()));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::skip(quint64)),				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip(quint64)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::sendErrorAction(QString)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::setErrorAction(QString)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation(qint64)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::setSpeedLimitation(qint64)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::sendCollisionAction(QString)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::setCollisionAction(QString)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFolder(CopyMode)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFolder(CopyMode)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile(CopyMode)),			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile(CopyMode)));
-
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::removeItems(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::removeItems(QList<int>)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnTop(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnTop(QList<int>)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsUp(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsUp(QList<int>)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsDown(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsDown(QList<int>)));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnBottom(QList<int>)),		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnBottom(QList<int>)));
-
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation(qint64)),		this,&Core::resetSpeedDetectedInterface()));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::resume()),				this,&Core::resetSpeedDetectedInterface()));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::cancel()),				this,&Core::copyInstanceCanceledByInterface()));
-    disconnect(currentCopyInstance.interface,&PluginInterface_Themes::urlDropped(QList<QUrl>)),		this,&Core::urlDropped(QList<QUrl>)));
-
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList(QList<returnActionOnCopyList>)),	currentCopyInstance.interface,&PluginInterface_Themes::getActionOnList(QList<returnActionOnCopyList>)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression(QList<ProgressionItem>)),	currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression(QList<ProgressionItem>)));
-    disconnect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression(quint64,quint64)),		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression(quint64,quint64)));
-}*/
 
 void Core::periodicSynchronization()
 {

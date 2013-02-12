@@ -188,3 +188,9 @@ void fileExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
     Q_UNUSED(arg1);
     updateRenameButton();
 }
+
+void fileExistsDialog::on_lineEditNewName_returnPressed()
+{
+    if(ui->Rename->isEnabled())
+        on_Rename_clicked();
+}

@@ -649,6 +649,7 @@ void copyEngine::setCheckDestinationFolderExists(const bool checkDestinationFold
 //reset widget
 void copyEngine::resetTempWidget()
 {
+    uiIsInstalled=false;
     tempWidget=NULL;
 }
 
