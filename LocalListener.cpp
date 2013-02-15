@@ -114,7 +114,7 @@ void LocalListener::listenServer()
     if(!localServer.listen(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
     {
         #ifndef Q_OS_MAC
-        QMessageBox::critical(NULL,"Alert",QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
+        //QMessageBox::critical(NULL,"Alert",QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Ultracopier have not able to lock unique instance: %1, error code: %2").arg(localServer.errorString()).arg((qint32)localServer.serverError()));
     }
