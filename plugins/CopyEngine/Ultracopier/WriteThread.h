@@ -100,7 +100,7 @@ private:
     AvancedQFile		file;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
-    volatile int		blockSize;
+    volatile int		blockSize;//in Bytes
     QMutex			accessList;		///< For use the list
     QSemaphore		waitNewClockForSpeed;
     volatile int		numberOfBlockCopied;		///< Multiple for count the number of block copied

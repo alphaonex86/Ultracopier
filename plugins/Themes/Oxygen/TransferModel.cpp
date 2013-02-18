@@ -219,6 +219,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 currentFile++;
                 startId.remove(action.addAction.id);
                 stopId.remove(action.addAction.id);
+                internalRunningOperation.remove(action.addAction.id);
             }
             break;
             case Ultracopier::PreOperation:
@@ -248,7 +249,6 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 if(!stopId.contains(action.addAction.id))
                     stopId << action.addAction.id;
                 startId.remove(action.addAction.id);
-                internalRunningOperation.remove(action.addAction.id);
             }
             break;
             case Ultracopier::CustomOperation:
@@ -436,7 +436,56 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
                 break;
         }
     }
-/*	else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("No have running item"));*/
+    else
+    {
+        returnItem.haveItem=stopId.size()>0;
+        if(returnItem.haveItem)
+        {
+            if(!internalRunningOperation.contains(*stopId.constBegin()))
+            {
+                returnItem.haveItem=false;
+                return returnItem;
+            }
+            const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation[*stopId.constBegin()];
+            returnItem.from=itemTransfer.generalData.sourceFullPath;
+            returnItem.to=itemTransfer.generalData.destinationFullPath;
+            returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
+            returnItem.id=itemTransfer.generalData.id;
+            switch(itemTransfer.actionType)
+            {
+                case Ultracopier::CustomOperation:
+                if(!itemTransfer.custom_with_progression)
+                    returnItem.progressBar_file=-1;
+                else
+                {
+                    if(itemTransfer.generalData.size>0)
+                        returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+                    else
+                        returnItem.progressBar_file=-1;
+                }
+                break;
+                //should never pass here
+                case Ultracopier::Transfer:
+                if(itemTransfer.generalData.size>0)
+                    returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
+                else
+                    returnItem.progressBar_file=0;
+                break;
+                case Ultracopier::PostOperation:
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    returnItem.progressBar_file=65535;
+                break;
+                //should never pass here
+                case Ultracopier::PreOperation:
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    returnItem.progressBar_file=0;
+                break;
+                default:
+                    returnItem.progressBar_file=65535;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    break;
+            }
+        }
+    }
     return returnItem;
 }

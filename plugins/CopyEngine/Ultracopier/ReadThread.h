@@ -113,7 +113,7 @@ private:
     volatile bool	stopIt;
     Ultracopier::CopyMode	mode;
     qint64		lastGoodPosition;
-    volatile int	blockSize;
+    volatile int	blockSize;//in Bytes
     QSemaphore	waitNewClockForSpeed;
     volatile int	numberOfBlockCopied;		///< Multiple for count the number of block copied
     volatile int	multiForBigSpeed;           ///< Multiple for count the number of block needed

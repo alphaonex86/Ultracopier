@@ -185,7 +185,6 @@ private:
     QByteArray		sourceChecksum,destinationChecksum;
     volatile bool		stopIt;
     volatile bool		canStartTransfer;
-    int			blockSize;
     bool			retry;
     QFileInfo		sourceInfo;
     QFileInfo		destinationInfo;

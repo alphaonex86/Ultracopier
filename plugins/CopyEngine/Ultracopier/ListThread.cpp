@@ -24,6 +24,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     doRightTransfer                 = false;
     keepDate                        = false;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
+    blockSizeAfterSpeedLimitation   = blockSize;
     osBufferLimit                   = 512;
     alwaysDoThisActionForFileExists = FileExists_NotSet;
     doChecksum                      = false;
@@ -246,12 +247,13 @@ void ListThread::setKeepDate(const bool keepDate)
 //set block size in KB
 void ListThread::setBlockSize(const int blockSize)
 {
-    this->blockSize=blockSize;
+    this->blockSize=blockSize*1024;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(this->blockSize));
     int index=0;
     loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
-        transferThreadList.at(index)->setBlockSize(blockSize);
+        transferThreadList.at(index)->setBlockSize(this->blockSize);
         index++;
     }
     setSpeedLimitation(maxSpeed);
@@ -722,52 +724,79 @@ void ListThread::cancel()
     emit canBeDeleted();
 }
 
+//speedLimitation in KB/s
 bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed in KB/s: "+QString::number(speedLimitation));
 
+    if(speedLimitation>1024*1024)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"speedLimitation out of range");
+        return false;
+    }
     maxSpeed=speedLimitation;
 
     /*    if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
             waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());*/
-    this->maxSpeed=maxSpeed;
     multiForBigSpeed=0;
-    if(this->maxSpeed>0)
+    if(maxSpeed>0)
     {
-        int tempBlockSize=blockSize;
+        blockSizeAfterSpeedLimitation=blockSize;
 
         //try resolv the interval
-        int newInterval;
+        int newInterval;//in ms
         do
         {
             multiForBigSpeed++;
-            newInterval=(blockSize*1024*multiForBigSpeed)/(this->maxSpeed);
+            //at max speed, is out of range for int, it's why quint64 is used
+            newInterval=(((quint64)blockSize*(quint64)multiForBigSpeed)/((quint64)maxSpeed*(quint64)1024));
+            if(newInterval<0)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"calculated newInterval wrong");
+                return false;
+            }
         }
-        while (newInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
+        while(newInterval<ULTRACOPIER_PLUGIN_MINTIMERINTERVAL);
 
+        if(newInterval<=0)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"calculated newInterval wrong");
+            return false;
+        }
         //wait time too big, then shrink the block size and set interval to max size
         if(newInterval>ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"wait time too big, then shrink the block size and set interval to max size");
             newInterval=ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL;
             multiForBigSpeed=1;
+            blockSizeAfterSpeedLimitation=(this->maxSpeed*1024*newInterval)/1000;
+
+            if(blockSizeAfterSpeedLimitation<10)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"calculated block size wrong");
+                return false;
+            }
+
+            //set the new block size into the thread
+            loop_size=transferThreadList.size();
             int_for_loop=0;
-            tempBlockSize=this->maxSpeed*newInterval;
+            while(int_for_loop<loop_size)
+            {
+                if(!transferThreadList.at(int_for_loop)->setBlockSize(blockSizeAfterSpeedLimitation))
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the block size");
+                int_for_loop++;
+            }
         }
 
-        //set the new block size into the thread
-        loop_size=transferThreadList.size();
-        while(int_for_loop<loop_size)
-        {
-            transferThreadList.at(int_for_loop)->setBlockSize(tempBlockSize);
-            int_for_loop++;
-        }
-
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("fixed speed with new block size and new interval in KB/s: %1").arg(
-                                     (float)tempBlockSize*multiForBigSpeed//block size
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("fixed speed with new block size and new interval in Bytes/s: %1, new BlockSize: %2, multiForBigSpeed: %3, newInterval: %4").arg(
+                                     (float)blockSizeAfterSpeedLimitation*multiForBigSpeed//block size
                                      /
                                      ((float)newInterval/(float)1000)//interval
-                                     ));
+                                     )
+                                 .arg(blockSizeAfterSpeedLimitation)
+                                 .arg(multiForBigSpeed)
+                                 .arg(newInterval)
+                                 );
 
         clockForTheCopySpeed->setInterval(newInterval);
         if(clockForTheCopySpeed!=NULL)
@@ -1784,7 +1813,8 @@ void ListThread::createTransferThread()
     last->setRightTransfer(doRightTransfer);
     last->setDrive(mountSysPoint);
     last->setKeepDate(keepDate);
-    last->setBlockSize(blockSize);
+    if(!last->setBlockSize(blockSizeAfterSpeedLimitation))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the block size: "+QString::number(blockSizeAfterSpeedLimitation));
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
     last->setMultiForBigSpeed(multiForBigSpeed);
     last->set_doChecksum(doChecksum);

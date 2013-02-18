@@ -15,13 +15,13 @@ TransferThread::TransferThread()
 {
     start();
     moveToThread(this);
-    needSkip		= false;
+    needSkip                = false;
     transfer_stat			= TransferStat_Idle;
-    stopIt			= false;
-    fileExistsAction	= FileExists_NotSet;
+    stopIt                  = false;
+    fileExistsAction        = FileExists_NotSet;
     alwaysDoFileExistsAction= FileExists_NotSet;
-    readError		= false;
-    writeError		= false;
+    readError               = false;
+    writeError              = false;
     this->mkpathTransfer	= mkpathTransfer;
     readThread.setWriteThread(&writeThread);
 
@@ -137,16 +137,23 @@ bool TransferThread::setFiles(const QString &source,const qint64 &size,const QSt
     transfer_stat			= TransferStat_PreOperation;
     //emit pushStat(stat,transferId);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start, source: "+source+", destination: "+destination);
-    this->source			= source;
-    this->destination		= destination;
-    this->mode			= mode;
-    this->size			= size;
-    fileExistsAction		= FileExists_NotSet;
-    canStartTransfer		= false;
+    this->source                    = source;
+    this->destination               = destination;
+    this->mode                      = mode;
+    this->size                      = size;
+    stopIt                          = false;
+    fileExistsAction                = FileExists_NotSet;
+    canStartTransfer                = false;
     sended_state_preOperationStopped= false;
-    canBeMovedDirectlyVariable	= false;
-    canBeCopiedDirectlyVariable = false;
-    fileContentError		= false;
+    canBeMovedDirectlyVariable      = false;
+    canBeCopiedDirectlyVariable     = false;
+    fileContentError                = false;
+    real_doChecksum                 = false;
+    writeError                      = false;
+    writeError_source_seeked        = false;
+    writeError_destination_reopened = false;
+    readError                       = false;
+    fileContentError                = false;
     resetExtraVariable();
     emit internalStartPreOperation();
     return true;
@@ -202,20 +209,22 @@ void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
 
 void TransferThread::resetExtraVariable()
 {
+    sended_state_preOperationStopped=false;
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
-    writeError			= false;
-    readError			= false;
-    readIsReadyVariable		= false;
+    writeError                  = false;
+    readError                   = false;
+    readIsReadyVariable         = false;
     writeIsReadyVariable		= false;
     readIsFinishVariable		= false;
     writeIsFinishVariable		= false;
     readIsClosedVariable		= false;
     writeIsClosedVariable		= false;
-    needSkip			= false;
-    retry				= false;
-    readIsOpenVariable		= false;
-    writeIsOpenVariable		= false;
+    needRemove                  = false;
+    needSkip                    = false;
+    retry                       = false;
+    readIsOpenVariable          = false;
+    writeIsOpenVariable         = false;
 }
 
 void TransferThread::preOperation()
@@ -621,10 +630,10 @@ void TransferThread::setMultiForBigSpeed(const int &multiForBigSpeed)
     readThread.setMultiForBigSpeed(multiForBigSpeed);
 }
 
-//set block size in KB
+//set block size in Bytes
 bool TransferThread::setBlockSize(const unsigned int blockSize)
 {
-    this->blockSize=blockSize;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(blockSize));
     return readThread.setBlockSize(blockSize) && writeThread.setBlockSize(blockSize);
 }
 
@@ -858,8 +867,8 @@ void TransferThread::postOperation()
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try remove destination but not exists!");
     }
-    transfer_stat=TransferStat_Idle;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit postOperationStopped()");
+    transfer_stat=TransferStat_Idle;
     emit postOperationStopped();
 }
 

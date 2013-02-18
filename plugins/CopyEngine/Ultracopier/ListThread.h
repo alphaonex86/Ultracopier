@@ -265,7 +265,7 @@ private:
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
-    int blockSize;
+    int blockSize,blockSizeAfterSpeedLimitation;//in Bytes
     QStringList drives;
     FileExistsAction alwaysDoThisActionForFileExists;
     //to return value to the copyEngine

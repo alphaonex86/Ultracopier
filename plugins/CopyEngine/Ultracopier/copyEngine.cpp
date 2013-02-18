@@ -193,7 +193,8 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
     uiIsInstalled=true;
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
-    setSpeedLimitation(maxSpeed);
+    if(!setSpeedLimitation(maxSpeed))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the speed limitation");
     setBlockSize(blockSize);
     setAutoStart(autoStart);
     setCheckDestinationFolderExists(checkDestinationFolderExists);

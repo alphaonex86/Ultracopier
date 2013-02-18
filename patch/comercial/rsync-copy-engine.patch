@@ -1,6 +1,6 @@
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
---- Ultracopier/ListThread.cpp	2013-02-05 16:55:53.000000000 +0100
-+++ Rsync/ListThread.cpp	2013-02-05 17:04:54.238429189 +0100
+--- Ultracopier/ListThread.cpp	2013-02-18 17:25:54.000000000 +0100
++++ Rsync/ListThread.cpp	2013-02-18 20:03:42.930417413 +0100
 @@ -22,6 +22,7 @@
      putAtBottom                     = 0;
      maxSpeed                        = 0;
@@ -8,8 +8,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
 +    rsync                           = false;
      keepDate                        = false;
      blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
-     osBufferLimit                   = 512;
-@@ -263,6 +264,21 @@
+     blockSizeAfterSpeedLimitation   = blockSize;
+@@ -265,6 +266,21 @@
      this->autoStart=autoStart;
  }
  
@@ -31,7 +31,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
  //set check destination folder
  void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
  {
-@@ -862,6 +878,18 @@
+@@ -891,6 +907,18 @@
          actionToDoListInode_afterTheTransfer << temp;
  }
  
@@ -50,7 +50,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
  //send action done
  void ListThread::sendActionDone()
  {
-@@ -1632,7 +1660,7 @@
+@@ -1661,7 +1689,7 @@
      loop_size=actionToDoListInode.size();
      while(int_for_loop<loop_size)
      {
@@ -59,7 +59,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
          {
              ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
              actionToDoListInode.removeAt(int_for_loop);
-@@ -1793,6 +1821,7 @@
+@@ -1823,6 +1851,7 @@
      last->set_osBuffer(osBuffer);
      last->set_osBufferLimited(osBufferLimited);
      last->set_osBufferLimit(osBufferLimit);
@@ -68,8 +68,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
      #ifdef ULTRACOPIER_PLUGIN_DEBUG
      connect(last,&TransferThread::debugInformation,			this,&ListThread::debugInformation,		Qt::QueuedConnection);
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread.h Rsync/ListThread.h
---- Ultracopier/ListThread.h	2013-02-05 16:52:24.000000000 +0100
-+++ Rsync/ListThread.h	2013-02-05 17:04:00.627431384 +0100
+--- Ultracopier/ListThread.h	2013-02-18 17:09:02.000000000 +0100
++++ Rsync/ListThread.h	2013-02-18 20:03:42.931417413 +0100
 @@ -75,7 +75,8 @@
      enum ActionType
      {
@@ -108,7 +108,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.h Rsync/ListThread.h
  signals:
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread_InodeAction.cpp Rsync/ListThread_InodeAction.cpp
 --- Ultracopier/ListThread_InodeAction.cpp	2012-10-20 01:04:17.000000000 +0200
-+++ Rsync/ListThread_InodeAction.cpp	2013-02-05 17:04:00.627431384 +0100
++++ Rsync/ListThread_InodeAction.cpp	2013-02-18 20:03:42.931417413 +0100
 @@ -12,47 +12,55 @@
  switch(currentActionToDoInode.type)
  {
@@ -203,7 +203,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread_InodeAction.cpp Rsync/ListThread
  #endif
 diff -U 3 -H -d -r -N -- Ultracopier/RmPath.cpp Rsync/RmPath.cpp
 --- Ultracopier/RmPath.cpp	2012-12-27 12:48:06.000000000 +0100
-+++ Rsync/RmPath.cpp	2013-02-05 17:04:00.628431384 +0100
++++ Rsync/RmPath.cpp	2013-02-18 20:03:42.932417413 +0100
 @@ -2,126 +2,180 @@
  
  RmPath::RmPath()
@@ -465,7 +465,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/RmPath.cpp Rsync/RmPath.cpp
  
 diff -U 3 -H -d -r -N -- Ultracopier/RmPath.h Rsync/RmPath.h
 --- Ultracopier/RmPath.h	2012-10-20 01:25:55.000000000 +0200
-+++ Rsync/RmPath.h	2013-02-05 17:04:00.628431384 +0100
++++ Rsync/RmPath.h	2013-02-18 20:03:42.932417413 +0100
 @@ -23,11 +23,11 @@
      explicit RmPath();
      ~RmPath();
@@ -498,17 +498,17 @@ diff -U 3 -H -d -r -N -- Ultracopier/RmPath.h Rsync/RmPath.h
      void internalRetry();
  };
 diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.cpp Rsync/TransferThread.cpp
---- Ultracopier/TransferThread.cpp	2013-02-05 13:52:46.000000000 +0100
-+++ Rsync/TransferThread.cpp	2013-02-05 17:04:00.629431384 +0100
-@@ -26,6 +26,7 @@
+--- Ultracopier/TransferThread.cpp	2013-02-18 17:37:16.000000000 +0100
++++ Rsync/TransferThread.cpp	2013-02-18 20:05:30.147419199 +0100
+@@ -22,6 +22,7 @@
      alwaysDoFileExistsAction= FileExists_NotSet;
-     readError		= false;
-     writeError		= false;
-+    rsync           = false;
+     readError               = false;
+     writeError              = false;
++    rsync                   = false;
      this->mkpathTransfer	= mkpathTransfer;
      readThread.setWriteThread(&writeThread);
  
-@@ -301,7 +302,7 @@
+@@ -323,7 +324,7 @@
  {
      //check if destination exists
      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] overwrite: "+QString::number(fileExistsAction)+", always action: "+QString::number(alwaysDoFileExistsAction));
@@ -517,7 +517,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.cpp Rsync/TransferThread.cpp
          return false;
      if(destinationInfo.exists())
      {
-@@ -1250,6 +1251,12 @@
+@@ -1336,6 +1337,12 @@
      driveManagement.setDrive(mountSysPoint);
  }
  
@@ -531,9 +531,9 @@ diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.cpp Rsync/TransferThread.cpp
  {
      this->osBufferLimit=osBufferLimit;
 diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.h Rsync/TransferThread.h
---- Ultracopier/TransferThread.h	2013-01-15 10:36:29.000000000 +0100
-+++ Rsync/TransferThread.h	2013-02-05 17:04:00.629431384 +0100
-@@ -111,6 +111,7 @@
+--- Ultracopier/TransferThread.h	2013-02-18 16:05:13.000000000 +0100
++++ Rsync/TransferThread.h	2013-02-18 20:03:42.933417413 +0100
+@@ -127,6 +127,7 @@
      void putAtBottom();
  
      void setDrive(QStringList mountSysPoint);
@@ -541,7 +541,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.h Rsync/TransferThread.h
  
      void set_osBufferLimit(unsigned int osBufferLimit);
      void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
-@@ -153,6 +154,7 @@
+@@ -169,6 +170,7 @@
      QString			destination;
      Ultracopier::CopyMode		mode;
      bool			doRightTransfer;
@@ -550,9 +550,9 @@ diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.h Rsync/TransferThread.h
      //ready = open + ready to operation (no error to resolv)
      bool			readIsReadyVariable;
 diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.cpp Rsync/copyEngine.cpp
---- Ultracopier/copyEngine.cpp	2013-02-05 16:33:31.000000000 +0100
-+++ Rsync/copyEngine.cpp	2013-02-05 17:04:00.630431384 +0100
-@@ -190,12 +190,14 @@
+--- Ultracopier/copyEngine.cpp	2013-02-18 16:40:49.000000000 +0100
++++ Rsync/copyEngine.cpp	2013-02-18 20:06:54.536420606 +0100
+@@ -190,6 +190,7 @@
      connect(ui->blockSize,		&QCheckBox::valueChanged,	&threadOfTheTransfer,	&copyEngine::setBlockSize);*/
      connect(ui->autoStart,		&QCheckBox::toggled,		this,			&copyEngine::setAutoStart);
      connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,this,		&copyEngine::setCheckDestinationFolderExists);
@@ -560,14 +560,15 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.cpp Rsync/copyEngine.cpp
      uiIsInstalled=true;
      setRightTransfer(doRightTransfer);
      setKeepDate(keepDate);
-     setSpeedLimitation(maxSpeed);
+@@ -197,6 +198,7 @@
+         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the speed limitation");
      setBlockSize(blockSize);
      setAutoStart(autoStart);
 +    setRsync(rsync);
      setCheckDestinationFolderExists(checkDestinationFolderExists);
      set_doChecksum(doChecksum);
      set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
-@@ -524,6 +526,13 @@
+@@ -525,6 +527,13 @@
  /** \brief give the forced mode, to export/import transfer list */
  void copyEngine::forceMode(const Ultracopier::CopyMode &mode)
  {
@@ -581,7 +582,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.cpp Rsync/copyEngine.cpp
      if(forcedMode)
      {
          ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Mode forced previously"));
-@@ -637,6 +646,19 @@
+@@ -638,6 +647,19 @@
      listThread->setAutoStart(autoStart);
  }
  
@@ -602,8 +603,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.cpp Rsync/copyEngine.cpp
  void copyEngine::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
  {
 diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.h Rsync/copyEngine.h
---- Ultracopier/copyEngine.h	2013-02-05 16:52:35.000000000 +0100
-+++ Rsync/copyEngine.h	2013-02-05 17:04:00.630431384 +0100
+--- Ultracopier/copyEngine.h	2013-02-12 12:27:32.000000000 +0100
++++ Rsync/copyEngine.h	2013-02-18 20:03:42.934417413 +0100
 @@ -59,6 +59,7 @@
      bool				keepDate;
      int				blockSize;
@@ -623,7 +624,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngine.h Rsync/copyEngine.h
      /// \brief reset widget
 diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
 --- Ultracopier/documentation.dox	2013-01-16 10:30:03.000000000 +0100
-+++ Rsync/documentation.dox	2013-02-05 17:04:00.631431384 +0100
++++ Rsync/documentation.dox	2013-02-18 20:03:42.934417413 +0100
 @@ -10,7 +10,8 @@
  
    \section mainpage_overview Overview
@@ -636,7 +637,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
    \section mainpage_platforms Platforms
 diff -U 3 -H -d -r -N -- Ultracopier/factory.cpp Rsync/factory.cpp
 --- Ultracopier/factory.cpp	2013-02-05 13:56:40.000000000 +0100
-+++ Rsync/factory.cpp	2013-02-05 17:04:00.631431384 +0100
++++ Rsync/factory.cpp	2013-02-18 20:03:42.934417413 +0100
 @@ -43,6 +43,7 @@
      connect(ui->osBuffer,			&QCheckBox::toggled,		this,&Factory::osBuffer_toggled);
      connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&Factory::osBufferLimited_toggled);
@@ -685,7 +686,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/factory.cpp Rsync/factory.cpp
      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
 diff -U 3 -H -d -r -N -- Ultracopier/factory.h Rsync/factory.h
 --- Ultracopier/factory.h	2013-02-05 10:45:49.000000000 +0100
-+++ Rsync/factory.h	2013-02-05 17:04:00.631431384 +0100
++++ Rsync/factory.h	2013-02-18 20:03:42.934417413 +0100
 @@ -71,6 +71,7 @@
      void setKeepDate(bool keepDate);
      void setBlockSize(int blockSize);
@@ -695,8 +696,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/factory.h Rsync/factory.h
      void setFolderError(int index);
      void setCheckDestinationFolder();
 diff -U 3 -H -d -r -N -- Ultracopier/informations.xml Rsync/informations.xml
---- Ultracopier/informations.xml	2013-02-05 14:25:45.000000000 +0100
-+++ Rsync/informations.xml	2013-02-05 17:04:00.632431384 +0100
+--- Ultracopier/informations.xml	2013-02-18 13:13:13.000000000 +0100
++++ Rsync/informations.xml	2013-02-18 20:03:07.205416817 +0100
 @@ -1,7 +1,7 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <package>
@@ -716,7 +717,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/informations.xml Rsync/informations.xml
 +	<description xml:lang="en"><![CDATA[Rsync copy engine, variant of the official copy engine to provide simple way to do backups]]></description>
 +	<description xml:lang="fr"><![CDATA[Moteur de copie rsync, variante du moteur de copie officiel pour fournir une maniére simple de faire des backups]]></description>
  	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
- 	<version>0.4.0.10</version>
+ 	<version>0.4.0.14</version>
  	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 -	<name>Ultracopier</name>
 +	<name>Rsync</name>
@@ -725,7 +726,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/informations.xml Rsync/informations.xml
  	=ultracopier-0.4
 diff -U 3 -H -d -r -N -- Ultracopier/options.ui Rsync/options.ui
 --- Ultracopier/options.ui	2012-10-19 12:22:26.000000000 +0200
-+++ Rsync/options.ui	2013-02-05 17:04:00.632431384 +0100
++++ Rsync/options.ui	2013-02-18 20:03:47.816417494 +0100
 @@ -6,8 +6,8 @@
     <rect>
      <x>0</x>
@@ -823,7 +824,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/options.ui Rsync/options.ui
   <resources/>
 diff -U 3 -H -d -r -N -- Ultracopier/scanFileOrFolder.cpp Rsync/scanFileOrFolder.cpp
 --- Ultracopier/scanFileOrFolder.cpp	2013-01-14 10:22:17.000000000 +0100
-+++ Rsync/scanFileOrFolder.cpp	2013-02-05 17:04:00.633431384 +0100
++++ Rsync/scanFileOrFolder.cpp	2013-02-18 20:03:47.816417494 +0100
 @@ -1,7 +1,10 @@
  #include "scanFileOrFolder.h"
  
@@ -909,7 +910,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/scanFileOrFolder.cpp Rsync/scanFileOrFolder
 +}
 diff -U 3 -H -d -r -N -- Ultracopier/scanFileOrFolder.h Rsync/scanFileOrFolder.h
 --- Ultracopier/scanFileOrFolder.h	2012-10-20 01:25:05.000000000 +0200
-+++ Rsync/scanFileOrFolder.h	2013-02-05 17:04:00.633431384 +0100
++++ Rsync/scanFileOrFolder.h	2013-02-18 20:03:47.817417494 +0100
 @@ -37,6 +37,7 @@
      /// \brief set if need check if the destination exists
      void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);

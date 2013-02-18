@@ -383,17 +383,21 @@ void WriteThread::startCheckSum()
 }
 
 /** \brief set block size
-\param block the new block size in KB
+\param block the new block size in B
 \return Return true if succes */
 bool WriteThread::setBlockSize(const int blockSize)
 {
-    if(blockSize<1 || blockSize>16384)
+    if(blockSize>1 && blockSize<16384*1024)
     {
-        this->blockSize=blockSize*1024;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(blockSize));
+        this->blockSize=blockSize;
         return true;
     }
     else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"block size out of range: "+QString::number(blockSize));
         return false;
+    }
 }
 
 void WriteThread::flushAndSeekToZero()
