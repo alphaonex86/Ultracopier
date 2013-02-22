@@ -44,13 +44,13 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog);
     timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
     #endif
-    connect(this,		&ListThread::tryCancel,							this,&ListThread::cancel,							Qt::QueuedConnection);
-    connect(this,		&ListThread::askNewTransferThread,					this,&ListThread::createTransferThread,					Qt::QueuedConnection);
+    connect(this,           &ListThread::tryCancel,							this,&ListThread::cancel,							Qt::QueuedConnection);
+    connect(this,           &ListThread::askNewTransferThread,					this,&ListThread::createTransferThread,					Qt::QueuedConnection);
     connect(&mkPathQueue,	&MkPath::firstFolderFinish,						this,&ListThread::mkPathFirstFolderFinish,					Qt::QueuedConnection);
     connect(&rmPathQueue,	&RmPath::firstFolderFinish,						this,&ListThread::rmPathFirstFolderFinish,					Qt::QueuedConnection);
     connect(&mkPathQueue,	&MkPath::errorOnFolder,							this,&ListThread::mkPathErrorOnFolder,			Qt::QueuedConnection);
     connect(&rmPathQueue,	&RmPath::errorOnFolder,							this,&ListThread::rmPathErrorOnFolder,			Qt::QueuedConnection);
-    connect(this,		&ListThread::send_syncTransferList,					this,&ListThread::syncTransferList_internal,					Qt::QueuedConnection);
+    connect(this,           &ListThread::send_syncTransferList,					this,&ListThread::syncTransferList_internal,					Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&mkPathQueue,	&MkPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection);
     connect(&rmPathQueue,	&RmPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection);
@@ -388,18 +388,21 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"The listing thread is already running");
     }
     else
+        autoStartIfNeeded();
+}
+
+void ListThread::autoStartIfNeeded()
+{
+    if(autoStart)
     {
-        if(autoStart)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
-            startGeneralTransfer();
-        }
-        else
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Put the copy engine in pause");
-            putInPause=true;
-            emit isInPause(true);
-        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
+        startGeneralTransfer();
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Put the copy engine in pause");
+        putInPause=true;
+        emit isInPause(true);
     }
 }
 
@@ -1392,6 +1395,7 @@ void ListThread::importTransferList(const QString &fileName)
             emit warningTransferList(tr("Some error have been found during the line parsing"));
         sendActionDone();
         updateTheStatus();
+        autoStartIfNeeded();
     }
     else
     {

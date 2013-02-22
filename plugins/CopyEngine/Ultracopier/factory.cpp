@@ -19,6 +19,7 @@ Factory::Factory() :
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
+    ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     errorFound=false;
     optionsEngine=NULL;
     filters=new Filters(tempWidget);

@@ -6,7 +6,6 @@ WriteThread::WriteThread()
 {
     stopIt=false;
     isOpen.release();
-    start();
     moveToThread(this);
     setObjectName("write");
     this->mkpathTransfer	= mkpathTransfer;
@@ -18,6 +17,7 @@ WriteThread::WriteThread()
     putInPause=false;
     needRemoveTheFile=false;
     blockSize=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
+    start();
 }
 
 WriteThread::~WriteThread()
@@ -50,7 +50,10 @@ bool WriteThread::internalOpen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen destination: "+name);
     if(stopIt)
+    {
+        emit closed();
         return false;
+    }
     if(file.isOpen())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already open! destination: "+file.fileName());
@@ -61,7 +64,7 @@ bool WriteThread::internalOpen()
         freeBlock.release();
     if(freeBlock.available()>ULTRACOPIER_PLUGIN_MAXBUFFERBLOCK)
         freeBlock.acquire(freeBlock.available()-ULTRACOPIER_PLUGIN_MAXBUFFERBLOCK);
-        stopIt=false;
+    stopIt=false;
     CurentCopiedSize=0;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -97,7 +100,10 @@ bool WriteThread::internalOpen()
         mkpathTransfer->release();
     }
     if(stopIt)
+    {
+        emit closed();
         return false;
+    }
     //try open it
     QIODevice::OpenMode flags=QIODevice::ReadWrite;
     if(!buffer)
@@ -106,13 +112,45 @@ bool WriteThread::internalOpen()
     {
         flushBuffer();
         if(stopIt)
+        {
+            file.close();
+            emit closed();
             return false;
-        file.seek(0);
+        }
+        if(!file.seek(0))
+        {
+            file.close();
+            errorString_internal=file.errorString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+            emit error();
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG
+            stat=Idle;
+            #endif
+            return false;
+        }
         if(stopIt)
+        {
+            file.close();
+            emit closed();
             return false;
-        file.resize(startSize);
+        }
+        if(!file.resize(startSize))
+        {
+            file.close();
+            errorString_internal=file.errorString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+            emit error();
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG
+            stat=Idle;
+            #endif
+            return false;
+        }
         if(stopIt)
+        {
+            file.close();
+            emit closed();
             return false;
+        }
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -125,7 +163,10 @@ bool WriteThread::internalOpen()
     else
     {
         if(stopIt)
+        {
+            emit closed();
             return false;
+        }
         errorString_internal=file.errorString();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to open: %1, error: %2").arg(name).arg(errorString_internal));
         emit error();
@@ -138,9 +179,14 @@ bool WriteThread::internalOpen()
 
 void WriteThread::open(const QString &name,const quint64 &startSize,const bool &buffer)
 {
+    if(!isRunning())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the thread not running to open destination: "+name);
+        errorString_internal=tr("Internal error, please report it!");
+        emit error();
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+name);
-    if(stopIt)
-        return;
+    stopIt=false;
     fakeMode=false;
     this->name=name;
     this->startSize=startSize;
@@ -169,10 +215,10 @@ QString WriteThread::errorString()
 bool WriteThread::write(const QByteArray &data)
 {
     if(stopIt)
-                return false;
+        return false;
     freeBlock.acquire();
     if(stopIt)
-                return false;
+        return false;
     {
         QMutexLocker lock_mutex(&accessList);
         theBlockList.append(data);
@@ -204,6 +250,7 @@ void WriteThread::flushBuffer()
         QMutexLocker lock_mutex(&accessList);
         theBlockList.clear();
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stop");
 }
 
 void WriteThread::internalEndOfFile()
@@ -298,13 +345,24 @@ void WriteThread::internalClose(bool emitSignal)
             if(!needRemoveTheFile)
             {
                 if(startSize!=CurentCopiedSize)
-                    file.resize(CurentCopiedSize);
+                    if(!file.resize(CurentCopiedSize))
+                    {
+                        if(emitSignal)
+                        {
+                            errorString_internal=file.errorString();
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+                            emit error();
+                        }
+                        else
+                            needRemoveTheFile=true;
+                    }
             }
             file.close();
             if(needRemoveTheFile)
             {
-                if(file.remove())
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
+                if(!file.remove())
+                    if(emitSignal)
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
             }
             needRemoveTheFile=false;
             flushBuffer();
@@ -387,7 +445,8 @@ void WriteThread::startCheckSum()
 \return Return true if succes */
 bool WriteThread::setBlockSize(const int blockSize)
 {
-    if(blockSize>1 && blockSize<16384*1024)
+    //can be smaller than min block size to do correct speed limitation
+    if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(blockSize));
         this->blockSize=blockSize;
@@ -413,7 +472,13 @@ void WriteThread::checkSum()
     QCryptographicHash hash(QCryptographicHash::Sha1);
     endDetected=false;
     lastGoodPosition=0;
-    file.seek(0);
+    if(!file.seek(0))
+    {
+        errorString_internal=file.errorString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+        emit error();
+        return;
+    }
     int sizeReaden=0;
     do
     {
@@ -471,10 +536,16 @@ void WriteThread::checkSum()
 
 void WriteThread::internalFlushAndSeekToZero()
 {
-        flushBuffer();
-    file.seek(0);
-        stopIt=false;
-        emit flushedAndSeekedToZero();
+    flushBuffer();
+    if(!file.seek(0))
+    {
+        errorString_internal=file.errorString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+        emit error();
+        return;
+    }
+    stopIt=false;
+    emit flushedAndSeekedToZero();
 }
 
 void WriteThread::setMkpathTransfer(QSemaphore *mkpathTransfer)

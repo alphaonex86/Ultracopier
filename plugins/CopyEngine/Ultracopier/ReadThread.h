@@ -97,38 +97,38 @@ signals:
     void resumeAfterErrorByRestartAll();
     void resumeAfterErrorByRestartAtTheLastPosition();
     void checksumFinish(const QByteArray&);
-        // internal signals
+    // internal signals
     void internalStartOpen();
     void internalStartChecksum();
-        void internalStartReopen();
-        void internalStartRead();
-        void internalStartClose();
+    void internalStartReopen();
+    void internalStartRead();
+    void internalStartClose();
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
 
 private:
-    QString		name;
-    QString		errorString_internal;
+    QString         name;
+    QString         errorString_internal;
     AvancedQFile	file;
     volatile bool	stopIt;
     Ultracopier::CopyMode	mode;
-    qint64		lastGoodPosition;
+    qint64          lastGoodPosition;
     volatile int	blockSize;//in Bytes
-    QSemaphore	waitNewClockForSpeed;
+    QSemaphore      waitNewClockForSpeed;
     volatile int	numberOfBlockCopied;		///< Multiple for count the number of block copied
     volatile int	multiForBigSpeed;           ///< Multiple for count the number of block needed
     WriteThread*	writeThread;
     int		id;
-    QSemaphore	isOpen;
+    QSemaphore      isOpen;
     volatile bool	putInPause;
     volatile bool	isInReadLoop;
     volatile bool	seekToZero;
-        volatile bool	tryStartRead;
-        qint64		size_at_open;
-    QDateTime	mtime_at_open;
-    bool		fakeMode;
-        //internal function
-        bool seek(qint64 position);/// \todo search if is use full
+    volatile bool	tryStartRead;
+    qint64          size_at_open;
+    QDateTime       mtime_at_open;
+    bool            fakeMode;
+    //internal function
+    bool seek(qint64 position);/// \todo search if is use full
 private slots:
     bool internalOpen(bool resetLastGoodPosition=true);
     bool internalOpenSlot();

@@ -143,6 +143,7 @@ DebugEngine::DebugEngine()
             }
             else
             {
+                logFile.resize(0);
                 currentBackend=File;
                 logFile.write(debugHtmlContent.toUtf8());
             }

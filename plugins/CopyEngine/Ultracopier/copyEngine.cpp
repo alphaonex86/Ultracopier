@@ -15,22 +15,22 @@ copyEngine::copyEngine(FacilityInterface * facilityEngine) :
     ui(new Ui::options())
 {
     listThread=new ListThread(facilityEngine);
-    this->facilityEngine=facilityEngine;
-    filters=NULL;
-    renamingRules=NULL;
+    this->facilityEngine            = facilityEngine;
+    filters                         = NULL;
+    renamingRules                   = NULL;
 
-    interface			= NULL;
-    tempWidget			= NULL;
-    uiIsInstalled			= false;
-    dialogIsOpen			= false;
-    maxSpeed			= 0;
+    interface                       = NULL;
+    tempWidget                      = NULL;
+    uiIsInstalled                   = false;
+    dialogIsOpen                    = false;
+    maxSpeed                        = 0;
     alwaysDoThisActionForFileExists	= FileExists_NotSet;
     alwaysDoThisActionForFileError	= FileError_NotSet;
     checkDestinationFolderExists	= false;
-    stopIt				= false;
-    size_for_speed			= 0;
-    putAtBottom=0;
-    forcedMode			= false;
+    stopIt                          = false;
+    size_for_speed                  = 0;
+    putAtBottom                     = 0;
+    forcedMode                      = false;
 
     //implement the SingleShot in this class
     //timerActionDone.setSingleShot(true);
@@ -183,6 +183,7 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 {
     this->tempWidget=tempWidget;
     ui->setupUi(tempWidget);
+    ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     connect(tempWidget,		&QWidget::destroyed,		this,			&copyEngine::resetTempWidget);
     //conect the ui widget
 /*	connect(ui->doRightTransfer,	&QCheckBox::toggled,		&threadOfTheTransfer,	&copyEngine::setRightTransfer);

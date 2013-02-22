@@ -279,6 +279,7 @@ private:
 private slots:
     void scanThreadHaveFinishSlot();
     void scanThreadHaveFinish(bool skipFirstRemove=false);
+    void autoStartIfNeeded();
     void updateTheStatus();
     void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode);
     //mkpath event

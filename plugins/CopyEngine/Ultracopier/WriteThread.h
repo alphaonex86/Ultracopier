@@ -81,11 +81,11 @@ signals:
     void reopened();
     void writeIsStarted();
     void writeIsStopped();
-        void flushedAndSeekedToZero();
+    void flushedAndSeekedToZero();
     void closed();
     void checksumFinish(const QByteArray&);
-        //internal signals
-        void internalStartOpen();
+    //internal signals
+    void internalStartOpen();
     void internalStartChecksum();
     void internalStartReopen();
     void internalStartWrite();
@@ -128,7 +128,7 @@ private slots:
     void internalClose(bool emitSignal=true);
     void internalReopen();
     void internalEndOfFile();
-        void internalFlushAndSeekToZero();
+    void internalFlushAndSeekToZero();
 };
 
 #endif // WRITETHREAD_H
