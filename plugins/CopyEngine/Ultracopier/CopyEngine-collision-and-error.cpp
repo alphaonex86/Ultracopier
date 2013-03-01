@@ -4,49 +4,49 @@
 \version 0.3
 \date 2010 */
 
-#include "copyEngine.h"
-#include "folderExistsDialog.h"
+#include "CopyEngine.h"
+#include "FolderExistsDialog.h"
 
 //dialog message
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread)
+void CopyEngine::fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread)
 {
     fileAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread)
+void CopyEngine::errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread)
 {
     errorOnFile(fileInfo,errorString,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread)
+void CopyEngine::folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread)
 {
     folderAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::errorOnFolderSlot(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread)
+void CopyEngine::errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread)
 {
     errorOnFolder(fileInfo,errorString,thread);
 }
 
 //mkpath event
-void copyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error)
+void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error)
 {
     mkPathErrorOnFolder(folder,error);
 }
 
 //rmpath event
-void copyEngine::rmPathErrorOnFolderSlot(QFileInfo folder,QString error)
+void CopyEngine::rmPathErrorOnFolderSlot(QFileInfo folder,QString error)
 {
     rmPathErrorOnFolder(folder,error);
 }
 
 
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -60,7 +60,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source.absoluteFilePath());
         tempFileExistsAction=alwaysDoThisActionForFileExists;
-        if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSameModificationDate)
+        if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
         switch(tempFileExistsAction)
         {
@@ -82,7 +82,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                 }
                 dialogIsOpen=true;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-                fileIsSameDialog dialog(interface,source,firstRenamingRule,otherRenamingRule);
+                FileIsSameDialog dialog(interface,source,firstRenamingRule,otherRenamingRule);
                 emit isInPause(true);
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
@@ -101,10 +101,10 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                     {
                         default:
                         case FileExists_Skip:
-                            emit newCollisionAction("skip");
+                            ui->comboBoxFileCollision->setCurrentIndex(1);
                         break;
                         case FileExists_Rename:
-                            emit newCollisionAction("rename");
+                            ui->comboBoxFileCollision->setCurrentIndex(6);
                         break;
                     }
                 }
@@ -129,7 +129,8 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
             case FileExists_Rename:
             case FileExists_Overwrite:
             case FileExists_OverwriteIfNewer:
-            case FileExists_OverwriteIfNotSameModificationDate:
+            case FileExists_OverwriteIfOlder:
+            case FileExists_OverwriteIfNotSame:
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"always do this action: "+QString::number(tempFileExistsAction));
                 thread->setFileExistsAction(tempFileExistsAction);
             break;
@@ -151,7 +152,7 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                 }
                 dialogIsOpen=true;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-                fileExistsDialog dialog(interface,source,destination,firstRenamingRule,otherRenamingRule);
+                FileExistsDialog dialog(interface,source,destination,firstRenamingRule,otherRenamingRule);
                 emit isInPause(true);
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
@@ -170,19 +171,22 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                     {
                         default:
                         case FileExists_Skip:
-                            emit newCollisionAction("skip");
+                            ui->comboBoxFileCollision->setCurrentIndex(1);
                         break;
                         case FileExists_Rename:
-                            emit newCollisionAction("rename");
+                            ui->comboBoxFileCollision->setCurrentIndex(6);
                         break;
                         case FileExists_Overwrite:
-                            emit newCollisionAction("overwrite");
+                            ui->comboBoxFileCollision->setCurrentIndex(2);
+                        break;
+                        case FileExists_OverwriteIfNotSame:
+                            ui->comboBoxFileCollision->setCurrentIndex(3);
                         break;
                         case FileExists_OverwriteIfNewer:
-                            emit newCollisionAction("overwriteIfNewer");
+                            ui->comboBoxFileCollision->setCurrentIndex(4);
                         break;
-                        case FileExists_OverwriteIfNotSameModificationDate:
-                            emit newCollisionAction("overwriteIfNotSameModificationDate");
+                        case FileExists_OverwriteIfOlder:
+                            ui->comboBoxFileCollision->setCurrentIndex(5);
                         break;
                     }
                 }
@@ -203,13 +207,13 @@ void copyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void copyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
     {
         alwaysDoThisActionForFileError=FileError_NotSet;
-        emit newErrorAction("ask");
+        ui->comboBoxFileError->setCurrentIndex(0);
         errorQueueItem newItem;
         newItem.errorString=errorString;
         newItem.inode=fileInfo;
@@ -223,7 +227,7 @@ void copyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &file
 }
 
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -262,7 +266,7 @@ void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
-            fileErrorDialog dialog(interface,fileInfo,errorString);
+            FileErrorDialog dialog(interface,fileInfo,errorString);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -280,10 +284,10 @@ void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
                 {
                     default:
                     case FileError_Skip:
-                        emit newErrorAction("skip");
+                        ui->comboBoxFileError->setCurrentIndex(1);
                     break;
                     case FileError_PutToEndOfTheList:
-                        emit newErrorAction("putToEndOfTheList");
+                        ui->comboBoxFileError->setCurrentIndex(2);
                     break;
                 }
             }
@@ -314,7 +318,7 @@ void copyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
 }
 
 /// \note Can be call without queue because all call will be serialized
-void copyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -347,7 +351,7 @@ void copyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            folderExistsDialog dialog(interface,source,isSame,destination,firstRenamingRule,otherRenamingRule);
+            FolderExistsDialog dialog(interface,source,isSame,destination,firstRenamingRule,otherRenamingRule);
             dialog.exec();/// \bug crash when external close
             FolderExistsAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -372,7 +376,7 @@ void copyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void copyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -407,7 +411,7 @@ void copyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOr
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
-            fileErrorDialog dialog(interface,fileInfo,errorString);
+            FileErrorDialog dialog(interface,fileInfo,errorString);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -434,7 +438,7 @@ void copyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOr
 // -----------------------------------------------------
 
 //mkpath event
-void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool isCalledByShowOneNewDialog)
+void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -466,7 +470,7 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
-            fileErrorDialog dialog(interface,folder,errorString,false);
+            FileErrorDialog dialog(interface,folder,errorString,false);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -502,7 +506,7 @@ void copyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 }
 
 //rmpath event
-void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool isCalledByShowOneNewDialog)
+void CopyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -534,7 +538,7 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
-            fileErrorDialog dialog(interface,folder,errorString,false);
+            FileErrorDialog dialog(interface,folder,errorString,false);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -571,7 +575,7 @@ void copyEngine::rmPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
 }
 
 //show one new dialog if needed
-void copyEngine::showOneNewDialog()
+void CopyEngine::showOneNewDialog()
 {
     if(stopIt)
         return;

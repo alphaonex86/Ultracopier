@@ -17,7 +17,7 @@
 #include <QTimer>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
-#include "scanFileOrFolder.h"
+#include "ScanFileOrFolder.h"
 #include "TransferThread.h"
 #include "MkPath.h"
 #include "RmPath.h"
@@ -192,10 +192,10 @@ private:
     DriveManagement driveManagement;
 
     bool stopIt;
-    QList<scanFileOrFolder *> scanFileOrFolderThreadsPool;
+    QList<ScanFileOrFolder *> scanFileOrFolderThreadsPool;
     int numberOfTransferIntoToDoList;
     QList<TransferThread *>		transferThreadList;
-    scanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
+    ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
     quint64				bytesToTransfer;
     quint64				bytesTransfered;
     bool				autoStart;
@@ -333,8 +333,6 @@ signals:
     void pushGeneralProgression(const quint64 &,const quint64 &);
 
     void newFolderListing(const QString &path);
-    void newCollisionAction(const QString &action);
-    void newErrorAction(const QString &action);
     void isInPause(const bool &);
 
     //when can be deleted
@@ -360,9 +358,9 @@ signals:
     /// \note Can be call without queue because all call will be serialized
     void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
     /// \note Can be call without queue because all call will be serialized
-    void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,scanFileOrFolder * thread);
+    void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,scanFileOrFolder * thread);
+    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,ScanFileOrFolder * thread);
     //send the progression
     void send_syncTransferList();
     //mkpath error event

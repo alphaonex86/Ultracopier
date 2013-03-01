@@ -1,7 +1,7 @@
-#include "fileErrorDialog.h"
+#include "FileErrorDialog.h"
 #include "ui_fileErrorDialog.h"
 
-fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString,bool havePutAtTheEndButton) :
+FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString,bool havePutAtTheEndButton) :
     QDialog(parent),
     ui(new Ui::fileErrorDialog)
 {
@@ -52,12 +52,12 @@ fileErrorDialog::fileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
         ui->PutToBottom->hide();
 }
 
-fileErrorDialog::~fileErrorDialog()
+FileErrorDialog::~FileErrorDialog()
 {
     delete ui;
 }
 
-void fileErrorDialog::changeEvent(QEvent *e)
+void FileErrorDialog::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -69,36 +69,36 @@ void fileErrorDialog::changeEvent(QEvent *e)
     }
 }
 
-void fileErrorDialog::on_PutToBottom_clicked()
+void FileErrorDialog::on_PutToBottom_clicked()
 {
     action=FileError_PutToEndOfTheList;
     this->close();
 }
 
-void fileErrorDialog::on_Retry_clicked()
+void FileErrorDialog::on_Retry_clicked()
 {
     action=FileError_Retry;
     this->close();
 }
 
-void fileErrorDialog::on_Skip_clicked()
+void FileErrorDialog::on_Skip_clicked()
 {
     action=FileError_Skip;
     this->close();
 }
 
-void fileErrorDialog::on_Cancel_clicked()
+void FileErrorDialog::on_Cancel_clicked()
 {
     action=FileError_Cancel;
     this->close();
 }
 
-bool fileErrorDialog::getAlways()
+bool FileErrorDialog::getAlways()
 {
     return ui->checkBoxAlways->isChecked();
 }
 
-FileErrorAction fileErrorDialog::getAction()
+FileErrorAction FileErrorDialog::getAction()
 {
     return action;
 }

@@ -1,9 +1,9 @@
-#include "fileIsSameDialog.h"
+#include "FileIsSameDialog.h"
 #include "ui_fileIsSameDialog.h"
 
 #include <QDebug>
 
-fileIsSameDialog::fileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule) :
+FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::fileIsSameDialog)
 {
@@ -33,12 +33,12 @@ fileIsSameDialog::fileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString fi
     this->otherRenamingRule=otherRenamingRule;
 }
 
-fileIsSameDialog::~fileIsSameDialog()
+FileIsSameDialog::~FileIsSameDialog()
 {
     delete ui;
 }
 
-void fileIsSameDialog::changeEvent(QEvent *e)
+void FileIsSameDialog::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -50,7 +50,7 @@ void fileIsSameDialog::changeEvent(QEvent *e)
     }
 }
 
-QString fileIsSameDialog::getNewName()
+QString FileIsSameDialog::getNewName()
 {
     if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
         qDebug() << "fileIsSameDialog, return the old name: "+oldName;
@@ -62,7 +62,7 @@ QString fileIsSameDialog::getNewName()
         return ui->lineEditNewName->text();
 }
 
-void fileIsSameDialog::on_SuggestNewName_clicked()
+void FileIsSameDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
@@ -110,52 +110,52 @@ void fileIsSameDialog::on_SuggestNewName_clicked()
     ui->lineEditNewName->setText(newFileName+suffix);
 }
 
-void fileIsSameDialog::on_Rename_clicked()
+void FileIsSameDialog::on_Rename_clicked()
 {
     action=FileExists_Rename;
     this->close();
 }
 
-void fileIsSameDialog::on_Skip_clicked()
+void FileIsSameDialog::on_Skip_clicked()
 {
     action=FileExists_Skip;
     this->close();
 }
 
-void fileIsSameDialog::on_Cancel_clicked()
+void FileIsSameDialog::on_Cancel_clicked()
 {
     action=FileExists_Cancel;
     this->close();
 }
 
-FileExistsAction fileIsSameDialog::getAction()
+FileExistsAction FileIsSameDialog::getAction()
 {
     return action;
 }
 
-bool fileIsSameDialog::getAlways()
+bool FileIsSameDialog::getAlways()
 {
     return ui->checkBoxAlways->isChecked();
 }
 
-void fileIsSameDialog::updateRenameButton()
+void FileIsSameDialog::updateRenameButton()
 {
     ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
 }
 
-void fileIsSameDialog::on_lineEditNewName_textChanged(const QString &arg1)
+void FileIsSameDialog::on_lineEditNewName_textChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
     updateRenameButton();
 }
 
-void fileIsSameDialog::on_checkBoxAlways_toggled(bool checked)
+void FileIsSameDialog::on_checkBoxAlways_toggled(bool checked)
 {
     Q_UNUSED(checked);
     updateRenameButton();
 }
 
-void fileIsSameDialog::on_lineEditNewName_returnPressed()
+void FileIsSameDialog::on_lineEditNewName_returnPressed()
 {
     if(ui->Rename->isEnabled())
         on_Rename_clicked();

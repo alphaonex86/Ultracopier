@@ -20,12 +20,12 @@
 #define SCANFILEORFOLDER_H
 
 /// \brief Thread changed to list recursively the folder
-class scanFileOrFolder : public QThread
+class ScanFileOrFolder : public QThread
 {
     Q_OBJECT
 public:
-    explicit scanFileOrFolder(Ultracopier::CopyMode mode);
-    ~scanFileOrFolder();
+    explicit ScanFileOrFolder(Ultracopier::CopyMode mode);
+    ~ScanFileOrFolder();
     /// \brief to the a folder listing
     void stop();
     /// \brief to get if is finished

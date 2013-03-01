@@ -312,6 +312,14 @@
     <string>Overwrite if not same modification date</string>
    </property>
   </action>
+  <action name="actionOverwrite_if_older">
+   <property name="text">
+    <string>Overwrite if older</string>
+   </property>
+   <property name="toolTip">
+    <string>Overwrite if older</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>

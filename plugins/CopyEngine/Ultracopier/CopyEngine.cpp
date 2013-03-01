@@ -7,11 +7,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "copyEngine.h"
-#include "folderExistsDialog.h"
+#include "CopyEngine.h"
+#include "FolderExistsDialog.h"
 #include "../../../interface/PluginInterface_CopyEngine.h"
 
-copyEngine::copyEngine(FacilityInterface * facilityEngine) :
+CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     ui(new Ui::options())
 {
     listThread=new ListThread(facilityEngine);
@@ -40,7 +40,7 @@ copyEngine::copyEngine(FacilityInterface * facilityEngine) :
 
 }
 
-copyEngine::~copyEngine()
+CopyEngine::~CopyEngine()
 {
     /*if(filters!=NULL)
         delete filters;
@@ -53,124 +53,120 @@ copyEngine::~copyEngine()
     delete ui;
 }
 
-void copyEngine::connectTheSignalsSlots()
+void CopyEngine::connectTheSignalsSlots()
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     debugDialogWindow.show();
     #endif
-    if(!connect(listThread,&ListThread::actionInProgess,	this,&copyEngine::actionInProgess,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::actionInProgess,	this,&CopyEngine::actionInProgess,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess()");
-    if(!connect(listThread,&ListThread::actionInProgess,	this,&copyEngine::newActionInProgess,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::actionInProgess,	this,&CopyEngine::newActionInProgess,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess() to slot");
-    if(!connect(listThread,&ListThread::newFolderListing,			this,&copyEngine::newFolderListing,			Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::newFolderListing,			this,&CopyEngine::newFolderListing,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newFolderListing()");
-    if(!connect(listThread,&ListThread::newCollisionAction,			this,&copyEngine::newCollisionAction,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newCollisionAction()");
-    if(!connect(listThread,&ListThread::newErrorAction,			this,&copyEngine::newErrorAction,			Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newErrorAction()");
-    if(!connect(listThread,&ListThread::isInPause,				this,&copyEngine::isInPause,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::isInPause,				this,&CopyEngine::isInPause,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect isInPause()");
-    if(!connect(listThread,&ListThread::error,	this,&copyEngine::error,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::error,	this,&CopyEngine::error,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect error()");
-    if(!connect(listThread,&ListThread::rmPath,				this,&copyEngine::rmPath,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::rmPath,				this,&CopyEngine::rmPath,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect rmPath()");
-    if(!connect(listThread,&ListThread::mkPath,				this,&copyEngine::mkPath,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::mkPath,				this,&CopyEngine::mkPath,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect mkPath()");
-    if(!connect(listThread,&ListThread::newActionOnList,	this,&copyEngine::newActionOnList,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::newActionOnList,	this,&CopyEngine::newActionOnList,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newActionOnList()");
-    if(!connect(listThread,&ListThread::pushFileProgression,		this,&copyEngine::pushFileProgression,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::pushFileProgression,		this,&CopyEngine::pushFileProgression,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect pushFileProgression()");
-    if(!connect(listThread,&ListThread::pushGeneralProgression,		this,&copyEngine::pushGeneralProgression,		Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::pushGeneralProgression,		this,&CopyEngine::pushGeneralProgression,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect pushGeneralProgression()");
-    if(!connect(listThread,&ListThread::syncReady,						this,&copyEngine::syncReady,					Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::syncReady,						this,&CopyEngine::syncReady,					Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect syncReady()");
-    if(!connect(listThread,&ListThread::canBeDeleted,						this,&copyEngine::canBeDeleted,					Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::canBeDeleted,						this,&CopyEngine::canBeDeleted,					Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect canBeDeleted()");
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    if(!connect(listThread,&ListThread::debugInformation,			this,&copyEngine::debugInformation,		Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::debugInformation,			this,&CopyEngine::debugInformation,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect debugInformation()");
     #endif
 
-    if(!connect(listThread,&ListThread::send_fileAlreadyExists,		this,&copyEngine::fileAlreadyExistsSlot,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::send_fileAlreadyExists,		this,&CopyEngine::fileAlreadyExistsSlot,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_fileAlreadyExists()");
-    if(!connect(listThread,&ListThread::send_errorOnFile,			this,&copyEngine::errorOnFileSlot,			Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::send_errorOnFile,			this,&CopyEngine::errorOnFileSlot,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_errorOnFile()");
-    if(!connect(listThread,&ListThread::send_folderAlreadyExists,	this,&copyEngine::folderAlreadyExistsSlot,	Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::send_folderAlreadyExists,	this,&CopyEngine::folderAlreadyExistsSlot,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_folderAlreadyExists()");
-    if(!connect(listThread,&ListThread::send_errorOnFolder,			this,&copyEngine::errorOnFolderSlot,			Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::send_errorOnFolder,			this,&CopyEngine::errorOnFolderSlot,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_errorOnFolder()");
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    if(!connect(listThread,&ListThread::updateTheDebugInfo,				this,&copyEngine::updateTheDebugInfo,			Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::updateTheDebugInfo,				this,&CopyEngine::updateTheDebugInfo,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect updateTheDebugInfo()");
     #endif
-    if(!connect(listThread,&ListThread::errorTransferList,							this,&copyEngine::errorTransferList,						Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::errorTransferList,							this,&CopyEngine::errorTransferList,						Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect errorTransferList()");
-    if(!connect(listThread,&ListThread::warningTransferList,						this,&copyEngine::warningTransferList,					Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::warningTransferList,						this,&CopyEngine::warningTransferList,					Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect warningTransferList()");
-    if(!connect(listThread,&ListThread::mkPathErrorOnFolder,					this,&copyEngine::mkPathErrorOnFolderSlot,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::mkPathErrorOnFolder,					this,&CopyEngine::mkPathErrorOnFolderSlot,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect mkPathErrorOnFolder()");
-    if(!connect(listThread,&ListThread::rmPathErrorOnFolder,					this,&copyEngine::rmPathErrorOnFolderSlot,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::rmPathErrorOnFolder,					this,&CopyEngine::rmPathErrorOnFolderSlot,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect rmPathErrorOnFolder()");
-    if(!connect(listThread,&ListThread::send_realBytesTransfered,					this,&copyEngine::get_realBytesTransfered,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::send_realBytesTransfered,					this,&CopyEngine::get_realBytesTransfered,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
 
-    if(!connect(this,&copyEngine::tryCancel,						listThread,&ListThread::tryCancel,				Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::tryCancel,						listThread,&ListThread::tryCancel,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect tryCancel()");
-    if(!connect(this,&copyEngine::getNeedPutAtBottom,						listThread,&ListThread::getNeedPutAtBottom,				Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::getNeedPutAtBottom,						listThread,&ListThread::getNeedPutAtBottom,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect getNeedPutAtBottom()");
-    if(!connect(listThread,&ListThread::haveNeedPutAtBottom,		this,&copyEngine::haveNeedPutAtBottom,				Qt::QueuedConnection))
+    if(!connect(listThread,&ListThread::haveNeedPutAtBottom,		this,&CopyEngine::haveNeedPutAtBottom,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect haveNeedPutAtBottom()");
 
 
-    if(!connect(this,&copyEngine::signal_pause,						listThread,&ListThread::pause,				Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_pause,						listThread,&ListThread::pause,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_pause()");
-    if(!connect(this,&copyEngine::signal_resume,						listThread,&ListThread::resume,				Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_resume,						listThread,&ListThread::resume,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_resume()");
-    if(!connect(this,&copyEngine::signal_skip,					listThread,&ListThread::skip,				Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_skip,					listThread,&ListThread::skip,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_skip()");
-    if(!connect(this,&copyEngine::signal_setCollisionAction,		listThread,&ListThread::setAlwaysFileExistsAction,	Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_setCollisionAction,		listThread,&ListThread::setAlwaysFileExistsAction,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
-    if(!connect(this,&copyEngine::signal_setFolderCollision,		listThread,&ListThread::setFolderCollision,	Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_setFolderCollision,		listThread,&ListThread::setFolderCollision,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setFolderCollision()");
-    if(!connect(this,&copyEngine::signal_removeItems,				listThread,&ListThread::removeItems,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_removeItems,				listThread,&ListThread::removeItems,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_removeItems()");
-    if(!connect(this,&copyEngine::signal_moveItemsOnTop,				listThread,&ListThread::moveItemsOnTop,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_moveItemsOnTop,				listThread,&ListThread::moveItemsOnTop,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsOnTop()");
-    if(!connect(this,&copyEngine::signal_moveItemsUp,				listThread,&ListThread::moveItemsUp,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_moveItemsUp,				listThread,&ListThread::moveItemsUp,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsUp()");
-    if(!connect(this,&copyEngine::signal_moveItemsDown,				listThread,&ListThread::moveItemsDown,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_moveItemsDown,				listThread,&ListThread::moveItemsDown,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsDown()");
-    if(!connect(this,&copyEngine::signal_moveItemsOnBottom,			listThread,&ListThread::moveItemsOnBottom,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_moveItemsOnBottom,			listThread,&ListThread::moveItemsOnBottom,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_moveItemsOnBottom()");
-    if(!connect(this,&copyEngine::signal_exportTransferList,			listThread,&ListThread::exportTransferList,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_exportTransferList,			listThread,&ListThread::exportTransferList,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_exportTransferList()");
-    if(!connect(this,&copyEngine::signal_importTransferList,			listThread,&ListThread::importTransferList,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_importTransferList,			listThread,&ListThread::importTransferList,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_importTransferList()");
-    if(!connect(this,&copyEngine::signal_forceMode,				listThread,&ListThread::forceMode,			Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::signal_forceMode,				listThread,&ListThread::forceMode,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_forceMode()");
-    if(!connect(this,&copyEngine::send_osBufferLimit,					listThread,&ListThread::set_osBufferLimit,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::send_osBufferLimit,					listThread,&ListThread::set_osBufferLimit,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_osBufferLimit()");
-    if(!connect(this,&copyEngine::send_speedLimitation,					listThread,&ListThread::setSpeedLimitation,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::send_speedLimitation,					listThread,&ListThread::setSpeedLimitation,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_speedLimitation()");
-    if(!connect(this,&copyEngine::send_blockSize,					listThread,&ListThread::setBlockSize,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::send_blockSize,					listThread,&ListThread::setBlockSize,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_blockSize()");
-    if(!connect(this,&copyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setFilters()");
-    if(!connect(this,&copyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_sendNewRenamingRules()");
-    if(!connect(this,&copyEngine::send_setDrive,listThread,&ListThread::setDrive,		Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::send_setDrive,listThread,&ListThread::setDrive,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setDrive()");
     if(!connect(&timerActionDone,&QTimer::timeout,							listThread,&ListThread::sendActionDone))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerActionDone");
     if(!connect(&timerProgression,&QTimer::timeout,							listThread,&ListThread::sendProgression))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerProgression");
 
-    if(!connect(this,&copyEngine::queryOneNewDialog,this,&copyEngine::showOneNewDialog,Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::queryOneNewDialog,this,&CopyEngine::showOneNewDialog,Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect queryOneNewDialog()");
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-void copyEngine::updateTheDebugInfo(QStringList newList,QStringList newList2,int numberOfInodeOperation)
+void CopyEngine::updateTheDebugInfo(QStringList newList,QStringList newList2,int numberOfInodeOperation)
 {
     debugDialogWindow.setTransferThreadList(newList);
     debugDialogWindow.setTransferList(newList2);
@@ -179,18 +175,18 @@ void copyEngine::updateTheDebugInfo(QStringList newList,QStringList newList2,int
 #endif
 
 //to send the options panel
-bool copyEngine::getOptionsEngine(QWidget * tempWidget)
+bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
 {
     this->tempWidget=tempWidget;
     ui->setupUi(tempWidget);
     ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
-    connect(tempWidget,		&QWidget::destroyed,		this,			&copyEngine::resetTempWidget);
+    connect(tempWidget,		&QWidget::destroyed,		this,			&CopyEngine::resetTempWidget);
     //conect the ui widget
-/*	connect(ui->doRightTransfer,	&QCheckBox::toggled,		&threadOfTheTransfer,	&copyEngine::setRightTransfer);
-    connect(ui->keepDate,		&QCheckBox::toggled,		&threadOfTheTransfer,	&copyEngine::setKeepDate);
-    connect(ui->blockSize,		&QCheckBox::valueChanged,	&threadOfTheTransfer,	&copyEngine::setBlockSize);*/
-    connect(ui->autoStart,		&QCheckBox::toggled,		this,			&copyEngine::setAutoStart);
-    connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,this,		&copyEngine::setCheckDestinationFolderExists);
+/*	connect(ui->doRightTransfer,	&QCheckBox::toggled,		&threadOfTheTransfer,	&CopyEngine::setRightTransfer);
+    connect(ui->keepDate,		&QCheckBox::toggled,		&threadOfTheTransfer,	&CopyEngine::setKeepDate);
+    connect(ui->blockSize,		&QCheckBox::valueChanged,	&threadOfTheTransfer,	&CopyEngine::setBlockSize);*/
+    connect(ui->autoStart,		&QCheckBox::toggled,		this,			&CopyEngine::setAutoStart);
+    connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,this,		&CopyEngine::setCheckDestinationFolderExists);
     uiIsInstalled=true;
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
@@ -209,7 +205,7 @@ bool copyEngine::getOptionsEngine(QWidget * tempWidget)
 }
 
 //to have interface widget to do modal dialog
-void copyEngine::setInterfacePointer(QWidget * interface)
+void CopyEngine::setInterfacePointer(QWidget * interface)
 {
     this->interface=interface;
     filters=new Filters(tempWidget);
@@ -217,23 +213,23 @@ void copyEngine::setInterfacePointer(QWidget * interface)
 
     if(uiIsInstalled)
     {
-        connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&copyEngine::setRightTransfer);
-        connect(ui->keepDate,			&QCheckBox::toggled,		this,&copyEngine::setKeepDate);
-        connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&copyEngine::setBlockSize);
-        connect(ui->autoStart,			&QCheckBox::toggled,		this,&copyEngine::setAutoStart);
-        connect(ui->doChecksum,			&QCheckBox::toggled,		this,&copyEngine::doChecksum_toggled);
-        connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&copyEngine::checksumIgnoreIfImpossible_toggled);
-        connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&copyEngine::checksumOnlyOnError_toggled);
-        connect(ui->osBuffer,			&QCheckBox::toggled,		this,&copyEngine::osBuffer_toggled);
-        connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&copyEngine::osBufferLimited_toggled);
-        connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&copyEngine::osBufferLimit_editingFinished);
+        connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&CopyEngine::setRightTransfer);
+        connect(ui->keepDate,			&QCheckBox::toggled,		this,&CopyEngine::setKeepDate);
+        connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setBlockSize);
+        connect(ui->autoStart,			&QCheckBox::toggled,		this,&CopyEngine::setAutoStart);
+        connect(ui->doChecksum,			&QCheckBox::toggled,		this,&CopyEngine::doChecksum_toggled);
+        connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&CopyEngine::checksumIgnoreIfImpossible_toggled);
+        connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&CopyEngine::checksumOnlyOnError_toggled);
+        connect(ui->osBuffer,			&QCheckBox::toggled,		this,&CopyEngine::osBuffer_toggled);
+        connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&CopyEngine::osBufferLimited_toggled);
+        connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&CopyEngine::osBufferLimit_editingFinished);
 
-        connect(filters,&Filters::haveNewFilters,this,&copyEngine::sendNewFilters);
-        connect(ui->filters,&QPushButton::clicked,this,&copyEngine::showFilterDialog);
+        connect(filters,&Filters::haveNewFilters,this,&CopyEngine::sendNewFilters);
+        connect(ui->filters,&QPushButton::clicked,this,&CopyEngine::showFilterDialog);
 
-        if(!connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&copyEngine::sendNewRenamingRules))
+        if(!connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&CopyEngine::sendNewRenamingRules))
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
-        if(!connect(ui->renamingRules,&QPushButton::clicked,this,&copyEngine::showRenamingRules))
+        if(!connect(ui->renamingRules,&QPushButton::clicked,this,&CopyEngine::showRenamingRules))
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect renamingRules.clicked()");
     }
 
@@ -244,17 +240,17 @@ void copyEngine::setInterfacePointer(QWidget * interface)
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
-bool copyEngine::haveSameSource(const QStringList &sources)
+bool CopyEngine::haveSameSource(const QStringList &sources)
 {
     return listThread->haveSameSource(sources);
 }
 
-bool copyEngine::haveSameDestination(const QString &destination)
+bool CopyEngine::haveSameDestination(const QString &destination)
 {
     return listThread->haveSameDestination(destination);
 }
 
-bool copyEngine::newCopy(const QStringList &sources)
+bool CopyEngine::newCopy(const QStringList &sources)
 {
     if(forcedMode && mode!=Ultracopier::Copy)
     {
@@ -272,7 +268,7 @@ bool copyEngine::newCopy(const QStringList &sources)
     return listThread->newCopy(sources,destination);
 }
 
-bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
+bool CopyEngine::newCopy(const QStringList &sources,const QString &destination)
 {
     if(forcedMode && mode!=Ultracopier::Copy)
     {
@@ -283,7 +279,7 @@ bool copyEngine::newCopy(const QStringList &sources,const QString &destination)
     return listThread->newCopy(sources,destination);
 }
 
-bool copyEngine::newMove(const QStringList &sources)
+bool CopyEngine::newMove(const QStringList &sources)
 {
     if(forcedMode && mode!=Ultracopier::Move)
     {
@@ -301,7 +297,7 @@ bool copyEngine::newMove(const QStringList &sources)
     return listThread->newMove(sources,destination);
 }
 
-bool copyEngine::newMove(const QStringList &sources,const QString &destination)
+bool CopyEngine::newMove(const QStringList &sources,const QString &destination)
 {
     if(forcedMode && mode!=Ultracopier::Move)
     {
@@ -312,36 +308,36 @@ bool copyEngine::newMove(const QStringList &sources,const QString &destination)
     return listThread->newMove(sources,destination);
 }
 
-void copyEngine::newTransferList(const QString &file)
+void CopyEngine::newTransferList(const QString &file)
 {
     emit signal_importTransferList(file);
 }
 
 //because direct access to list thread into the main thread can't be do
-quint64 copyEngine::realByteTransfered()
+quint64 CopyEngine::realByteTransfered()
 {
     return size_for_speed;
 }
 
 //speed limitation
-bool copyEngine::supportSpeedLimitation()
+bool CopyEngine::supportSpeedLimitation()
 {
     return true;
 }
 
-void copyEngine::setDrive(const QStringList &drives)
+void CopyEngine::setDrive(const QStringList &drives)
 {
     emit send_setDrive(drives);
 }
 
 /** \brief to sync the transfer list
  * Used when the interface is changed, useful to minimize the memory size */
-void copyEngine::syncTransferList()
+void CopyEngine::syncTransferList()
 {
     listThread->syncTransferList();
 }
 
-void copyEngine::set_doChecksum(bool doChecksum)
+void CopyEngine::set_doChecksum(bool doChecksum)
 {
     listThread->set_doChecksum(doChecksum);
     if(uiIsInstalled)
@@ -353,7 +349,7 @@ void copyEngine::set_doChecksum(bool doChecksum)
     this->doChecksum=doChecksum;
 }
 
-void copyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
+void CopyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
 {
     listThread->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
     if(uiIsInstalled)
@@ -361,7 +357,7 @@ void copyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
     this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
 }
 
-void copyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
+void CopyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
 {
     listThread->set_checksumOnlyOnError(checksumOnlyOnError);
     if(uiIsInstalled)
@@ -369,7 +365,7 @@ void copyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
     this->checksumOnlyOnError=checksumOnlyOnError;
 }
 
-void copyEngine::set_osBuffer(bool osBuffer)
+void CopyEngine::set_osBuffer(bool osBuffer)
 {
     listThread->set_osBuffer(osBuffer);
     if(uiIsInstalled)
@@ -380,7 +376,7 @@ void copyEngine::set_osBuffer(bool osBuffer)
     this->osBuffer=osBuffer;
 }
 
-void copyEngine::set_osBufferLimited(bool osBufferLimited)
+void CopyEngine::set_osBufferLimited(bool osBufferLimited)
 {
     listThread->set_osBufferLimited(osBufferLimited);
     if(uiIsInstalled)
@@ -391,7 +387,7 @@ void copyEngine::set_osBufferLimited(bool osBufferLimited)
     this->osBufferLimited=osBufferLimited;
 }
 
-void copyEngine::set_osBufferLimit(unsigned int osBufferLimit)
+void CopyEngine::set_osBufferLimit(unsigned int osBufferLimit)
 {
     emit send_osBufferLimit(osBufferLimit);
     if(uiIsInstalled)
@@ -399,13 +395,13 @@ void copyEngine::set_osBufferLimit(unsigned int osBufferLimit)
     this->osBufferLimit=osBufferLimit;
 }
 
-void copyEngine::updateBufferCheckbox()
+void CopyEngine::updateBufferCheckbox()
 {
     ui->osBufferLimited->setEnabled(ui->osBuffer->isChecked());
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void copyEngine::set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+void CopyEngine::set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
 {
     if(filters!=NULL)
     {
@@ -418,12 +414,12 @@ void copyEngine::set_setFilters(QStringList includeStrings,QStringList includeOp
     this->excludeOptions=excludeOptions;
 }
 
-void copyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void CopyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
     sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
-bool copyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
+bool CopyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
 {
     QString source = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(source.isEmpty() || source.isNull() || source=="")
@@ -434,7 +430,7 @@ bool copyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
         return newMove(QStringList() << source);
 }
 
-bool copyEngine::userAddFile(const Ultracopier::CopyMode &mode)
+bool CopyEngine::userAddFile(const Ultracopier::CopyMode &mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QStringList sources = QFileDialog::getOpenFileNames(
@@ -450,22 +446,22 @@ bool copyEngine::userAddFile(const Ultracopier::CopyMode &mode)
         return newMove(sources);
 }
 
-void copyEngine::pause()
+void CopyEngine::pause()
 {
     emit signal_pause();
 }
 
-void copyEngine::resume()
+void CopyEngine::resume()
 {
     emit signal_resume();
 }
 
-void copyEngine::skip(const quint64 &id)
+void CopyEngine::skip(const quint64 &id)
 {
     emit signal_skip(id);
 }
 
-void copyEngine::cancel()
+void CopyEngine::cancel()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     stopIt=true;
@@ -474,33 +470,33 @@ void copyEngine::cancel()
     emit tryCancel();
 }
 
-void copyEngine::removeItems(const QList<int> &ids)
+void CopyEngine::removeItems(const QList<int> &ids)
 {
     emit signal_removeItems(ids);
 }
 
-void copyEngine::moveItemsOnTop(const QList<int> &ids)
+void CopyEngine::moveItemsOnTop(const QList<int> &ids)
 {
     emit signal_moveItemsOnTop(ids);
 }
 
-void copyEngine::moveItemsUp(const QList<int> &ids)
+void CopyEngine::moveItemsUp(const QList<int> &ids)
 {
     emit signal_moveItemsUp(ids);
 }
 
-void copyEngine::moveItemsDown(const QList<int> &ids)
+void CopyEngine::moveItemsDown(const QList<int> &ids)
 {
     emit signal_moveItemsDown(ids);
 }
 
-void copyEngine::moveItemsOnBottom(const QList<int> &ids)
+void CopyEngine::moveItemsOnBottom(const QList<int> &ids)
 {
     emit signal_moveItemsOnBottom(ids);
 }
 
 /** \brief give the forced mode, to export/import transfer list */
-void copyEngine::forceMode(const Ultracopier::CopyMode &mode)
+void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
 {
     if(forcedMode)
     {
@@ -517,7 +513,7 @@ void copyEngine::forceMode(const Ultracopier::CopyMode &mode)
     emit signal_forceMode(mode);
 }
 
-void copyEngine::exportTransferList()
+void CopyEngine::exportTransferList()
 {
     QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
     if(fileName.isEmpty())
@@ -525,7 +521,7 @@ void copyEngine::exportTransferList()
     emit signal_exportTransferList(fileName);
 }
 
-void copyEngine::importTransferList()
+void CopyEngine::importTransferList()
 {
     QString fileName = QFileDialog::getOpenFileName(interface,facilityEngine->translateText("Open transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
     if(fileName.isEmpty())
@@ -533,17 +529,17 @@ void copyEngine::importTransferList()
     emit signal_importTransferList(fileName);
 }
 
-void copyEngine::warningTransferList(const QString &warning)
+void CopyEngine::warningTransferList(const QString &warning)
 {
     QMessageBox::warning(interface,facilityEngine->translateText("Error"),warning);
 }
 
-void copyEngine::errorTransferList(const QString &error)
+void CopyEngine::errorTransferList(const QString &error)
 {
     QMessageBox::critical(interface,facilityEngine->translateText("Error"),error);
 }
 
-bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)
+bool CopyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
     maxSpeed=speedLimitation;
@@ -551,36 +547,63 @@ bool copyEngine::setSpeedLimitation(const qint64 &speedLimitation)
     return true;
 }
 
-void copyEngine::setCollisionAction(const QString &action)
+void CopyEngine::on_comboBoxFileCollision_currentIndexChanged(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action: "+action);
-    if(action=="skip")
-        alwaysDoThisActionForFileExists=FileExists_Skip;
-    else if(action=="overwrite")
-        alwaysDoThisActionForFileExists=FileExists_Overwrite;
-    else if(action=="overwriteIfNewer")
-        alwaysDoThisActionForFileExists=FileExists_OverwriteIfNewer;
-    else if(action=="overwriteIfNotSameModificationDate")
-        alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameModificationDate;
-    else if(action=="rename")
-        alwaysDoThisActionForFileExists=FileExists_Rename;
-    else
-        alwaysDoThisActionForFileExists=FileExists_NotSet;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    switch(index)
+    {
+        case 0:
+            alwaysDoThisActionForFileExists=FileExists_NotSet;
+        break;
+        case 1:
+            alwaysDoThisActionForFileExists=FileExists_Skip;
+        break;
+        case 2:
+            alwaysDoThisActionForFileExists=FileExists_Overwrite;
+        break;
+        case 3:
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSame;
+        break;
+        case 4:
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNewer;
+        break;
+        case 5:
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfOlder;
+        break;
+        case 6:
+            alwaysDoThisActionForFileExists=FileExists_Rename;
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            alwaysDoThisActionForFileExists=FileExists_NotSet;
+        break;
+    }
     emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
-void copyEngine::setErrorAction(const QString &action)
+void CopyEngine::on_comboBoxFileError_currentIndexChanged(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action: "+action);
-    if(action=="skip")
-        alwaysDoThisActionForFileError=FileError_Skip;
-    else if(action=="putToEndOfTheList")
-        alwaysDoThisActionForFileError=FileError_PutToEndOfTheList;
-    else
-        alwaysDoThisActionForFileError=FileError_NotSet;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    switch(index)
+    {
+        case 0:
+            alwaysDoThisActionForFileError=FileError_NotSet;
+        break;
+        case 1:
+            alwaysDoThisActionForFileError=FileError_Skip;
+        break;
+        case 2:
+            alwaysDoThisActionForFileError=FileError_PutToEndOfTheList;
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            alwaysDoThisActionForFileError=FileError_NotSet;
+        break;
+    }
+    emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
-void copyEngine::setRightTransfer(const bool doRightTransfer)
+void CopyEngine::setRightTransfer(const bool doRightTransfer)
 {
     this->doRightTransfer=doRightTransfer;
     if(uiIsInstalled)
@@ -589,7 +612,7 @@ void copyEngine::setRightTransfer(const bool doRightTransfer)
 }
 
 //set keep date
-void copyEngine::setKeepDate(const bool keepDate)
+void CopyEngine::setKeepDate(const bool keepDate)
 {
     this->keepDate=keepDate;
     if(uiIsInstalled)
@@ -598,7 +621,7 @@ void copyEngine::setKeepDate(const bool keepDate)
 }
 
 //set block size in KB
-void copyEngine::setBlockSize(const int blockSize)
+void CopyEngine::setBlockSize(const int blockSize)
 {
     this->blockSize=blockSize;
     if(uiIsInstalled)
@@ -607,7 +630,7 @@ void copyEngine::setBlockSize(const int blockSize)
 }
 
 //set auto start
-void copyEngine::setAutoStart(const bool autoStart)
+void CopyEngine::setAutoStart(const bool autoStart)
 {
     this->autoStart=autoStart;
     if(uiIsInstalled)
@@ -616,7 +639,7 @@ void copyEngine::setAutoStart(const bool autoStart)
 }
 
 //set check destination folder
-void copyEngine::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
+void CopyEngine::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
 {
     this->checkDestinationFolderExists=checkDestinationFolderExists;
     if(uiIsInstalled)
@@ -625,13 +648,13 @@ void copyEngine::setCheckDestinationFolderExists(const bool checkDestinationFold
 }
 
 //reset widget
-void copyEngine::resetTempWidget()
+void CopyEngine::resetTempWidget()
 {
     uiIsInstalled=false;
     tempWidget=NULL;
 }
 
-void copyEngine::on_comboBoxFolderCollision_currentIndexChanged(int index)
+void CopyEngine::on_comboBoxFolderCollision_currentIndexChanged(int index)
 {
     switch(index)
     {
@@ -650,7 +673,7 @@ void copyEngine::on_comboBoxFolderCollision_currentIndexChanged(int index)
     }
 }
 
-void copyEngine::on_comboBoxFolderError_currentIndexChanged(int index)
+void CopyEngine::on_comboBoxFolderError_currentIndexChanged(int index)
 {
     switch(index)
     {
@@ -664,7 +687,7 @@ void copyEngine::on_comboBoxFolderError_currentIndexChanged(int index)
 }
 
 //set the translate
-void copyEngine::newLanguageLoaded()
+void CopyEngine::newLanguageLoaded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, retranslate the widget options");
     if(tempWidget!=NULL)
@@ -694,7 +717,7 @@ void copyEngine::newLanguageLoaded()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"ui not loaded!");
 }
 
-void copyEngine::setComboBoxFolderCollision(FolderExistsAction action,bool changeComboBox)
+void CopyEngine::setComboBoxFolderCollision(FolderExistsAction action,bool changeComboBox)
 {
     alwaysDoThisActionForFolderExists=action;
     emit signal_setFolderCollision(alwaysDoThisActionForFolderExists);
@@ -717,7 +740,7 @@ void copyEngine::setComboBoxFolderCollision(FolderExistsAction action,bool chang
     }
 }
 
-void copyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboBox)
+void CopyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboBox)
 {
     alwaysDoThisActionForFileError=action;
     if(!changeComboBox || !uiIsInstalled)
@@ -733,51 +756,51 @@ void copyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboB
     }
 }
 
-void copyEngine::doChecksum_toggled(bool doChecksum)
+void CopyEngine::doChecksum_toggled(bool doChecksum)
 {
     listThread->set_doChecksum(doChecksum);
 }
 
-void copyEngine::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
+void CopyEngine::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
     listThread->set_checksumOnlyOnError(checksumOnlyOnError);
 }
 
-void copyEngine::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
+void CopyEngine::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
 {
     listThread->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
 }
 
-void copyEngine::osBuffer_toggled(bool osBuffer)
+void CopyEngine::osBuffer_toggled(bool osBuffer)
 {
     listThread->set_osBuffer(osBuffer);
     updateBufferCheckbox();
 }
 
-void copyEngine::osBufferLimited_toggled(bool osBufferLimited)
+void CopyEngine::osBufferLimited_toggled(bool osBufferLimited)
 {
     listThread->set_osBufferLimited(osBufferLimited);
     updateBufferCheckbox();
 }
 
-void copyEngine::osBufferLimit_editingFinished()
+void CopyEngine::osBufferLimit_editingFinished()
 {
     emit send_osBufferLimit(ui->osBufferLimit->value());
 }
 
-void copyEngine::showFilterDialog()
+void CopyEngine::showFilterDialog()
 {
     if(filters!=NULL)
         filters->exec();
 }
 
-void copyEngine::sendNewFilters()
+void CopyEngine::sendNewFilters()
 {
     if(filters!=NULL)
         emit send_setFilters(filters->getInclude(),filters->getExclude());
 }
 
-void copyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void CopyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->firstRenamingRule=firstRenamingRule;
@@ -785,7 +808,7 @@ void copyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRen
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
-void copyEngine::showRenamingRules()
+void CopyEngine::showRenamingRules()
 {
     if(renamingRules==NULL)
     {
@@ -796,12 +819,12 @@ void copyEngine::showRenamingRules()
     renamingRules->exec();
 }
 
-void copyEngine::get_realBytesTransfered(quint64 realBytesTransfered)
+void CopyEngine::get_realBytesTransfered(quint64 realBytesTransfered)
 {
     size_for_speed=realBytesTransfered;
 }
 
-void copyEngine::newActionInProgess(Ultracopier::EngineActionInProgress action)
+void CopyEngine::newActionInProgess(Ultracopier::EngineActionInProgress action)
 {
     if(action==Ultracopier::Idle)
     {

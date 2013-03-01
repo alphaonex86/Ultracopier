@@ -336,22 +336,45 @@ bool TransferThread::destinationExists()
         }
         if(checkAlwaysRename())
             return false;
-        if(fileExistsAction==FileExists_OverwriteIfNewer || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNewer))
+        if(sourceInfo.exists())
         {
-            if(destinationInfo.lastModified()<sourceInfo.lastModified())
-                return false;
-            else
+            if(fileExistsAction==FileExists_OverwriteIfNewer || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNewer))
             {
-                transfer_stat=TransferStat_Idle;
-                emit postOperationStopped();
-                return true;
+                if(destinationInfo.lastModified()<sourceInfo.lastModified())
+                    return false;
+                else
+                {
+                    transfer_stat=TransferStat_Idle;
+                    emit postOperationStopped();
+                    return true;
+                }
+            }
+            if(fileExistsAction==FileExists_OverwriteIfOlder || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfOlder))
+            {
+                if(destinationInfo.lastModified()>sourceInfo.lastModified())
+                    return false;
+                else
+                {
+                    transfer_stat=TransferStat_Idle;
+                    emit postOperationStopped();
+                    return true;
+                }
+            }
+            if(fileExistsAction==FileExists_OverwriteIfNotSame || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
+            {
+                if(destinationInfo.lastModified()!=sourceInfo.lastModified() || destinationInfo.size()!=sourceInfo.size())
+                    return false;
+                else
+                {
+                    transfer_stat=TransferStat_Idle;
+                    emit postOperationStopped();
+                    return true;
+                }
             }
         }
-        if(fileExistsAction==FileExists_OverwriteIfNotSameModificationDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameModificationDate))
+        else
         {
-            if(destinationInfo.lastModified()!=sourceInfo.lastModified())
-                return false;
-            else
+            if(fileExistsAction!=FileExists_NotSet)
             {
                 transfer_stat=TransferStat_Idle;
                 emit postOperationStopped();

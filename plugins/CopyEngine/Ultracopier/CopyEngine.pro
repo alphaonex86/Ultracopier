@@ -1,23 +1,16 @@
 QT += widgets systeminfo
 TEMPLATE        = lib
 CONFIG         += plugin
-HEADERS         = copyEngine.h \
+HEADERS         = \
                 StructEnumDefinition.h \
-    scanFileOrFolder.h \
-    fileErrorDialog.h \
-    fileExistsDialog.h \
-    fileIsSameDialog.h \
-    factory.h \
     StructEnumDefinition_CopyEngine.h \
     DebugEngineMacro.h \
     Variable.h \
-    debugDialog.h \
     TransferThread.h \
     ReadThread.h \
     WriteThread.h \
     RmPath.h \
     MkPath.h \
-    folderExistsDialog.h \
     AvancedQFile.h \
     ListThread.h \
     ../../../interface/PluginInterface_CopyEngine.h \
@@ -26,28 +19,37 @@ HEADERS         = copyEngine.h \
     Filters.h \
     FilterRules.h \
     RenamingRules.h \
-    DriveManagement.h
-SOURCES         = copyEngine.cpp \
-    scanFileOrFolder.cpp \
-    fileErrorDialog.cpp \
-    fileExistsDialog.cpp \
-    fileIsSameDialog.cpp \
-    factory.cpp \
-    debugDialog.cpp \
+    DriveManagement.h \
+    CopyEngine.h \
+    DebugDialog.h \
+    Factory.h \
+    FileErrorDialog.h \
+    FileExistsDialog.h \
+    FileIsSameDialog.h \
+    FolderExistsDialog.h \
+    ScanFileOrFolder.h
+SOURCES         = \
     TransferThread.cpp \
     ReadThread.cpp \
     WriteThread.cpp \
     RmPath.cpp \
     MkPath.cpp \
-    folderExistsDialog.cpp \
     AvancedQFile.cpp \
-    copyEngine-collision-and-error.cpp \
     ListThread.cpp \
     Filters.cpp \
     FilterRules.cpp \
     RenamingRules.cpp \
     ListThread_InodeAction.cpp \
-    DriveManagement.cpp
+    DriveManagement.cpp \
+    CopyEngine-collision-and-error.cpp \
+    CopyEngine.cpp \
+    DebugDialog.cpp \
+    Factory.cpp \
+    FileErrorDialog.cpp \
+    FileExistsDialog.cpp \
+    FileIsSameDialog.cpp \
+    FolderExistsDialog.cpp \
+    ScanFileOrFolder.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 include(../../../updateqm.pri)
 TRANSLATIONS += Languages/ar/translation.ts \

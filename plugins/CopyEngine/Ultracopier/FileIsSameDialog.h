@@ -1,5 +1,5 @@
-/** \file fileExistsDialog.h
-\brief Define the dialog when file already exists
+/** \file fileIsSameDialog.h
+\brief Define the dialog when file is same
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
@@ -11,21 +11,21 @@
 #include <QDir>
 #include "Environment.h"
 
-#ifndef FILEEXISTSDIALOG_H
-#define FILEEXISTSDIALOG_H
+#ifndef FILEISSAMEDIALOG_H
+#define FILEISSAMEDIALOG_H
 
 namespace Ui {
-    class fileExistsDialog;
+    class fileIsSameDialog;
 }
 
-/// \brief to show file exists dialog, and ask what do
-class fileExistsDialog : public QDialog
+/// \brief to show file is same dialog, and ask what do
+class FileIsSameDialog : public QDialog
 {
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
-    ~fileExistsDialog();
+    explicit FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule);
+    ~FileIsSameDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();
     /// \brief return the action clicked
@@ -37,23 +37,21 @@ protected:
 private slots:
     void on_SuggestNewName_clicked();
     void on_Rename_clicked();
-    void on_Overwrite_clicked();
     void on_Skip_clicked();
     void on_Cancel_clicked();
-    void on_actionOverwrite_if_newer_triggered();
-    void on_actionOverwrite_if_not_same_modification_date_triggered();
     void updateRenameButton();
-    void on_checkBoxAlways_toggled(bool checked);
     void on_lineEditNewName_textChanged(const QString &arg1);
+    void on_checkBoxAlways_toggled(bool checked);
     void on_lineEditNewName_returnPressed();
 
 private:
-    Ui::fileExistsDialog *ui;
+    Ui::fileIsSameDialog *ui;
     FileExistsAction action;
     QString oldName;
     QFileInfo destinationInfo;
     QString firstRenamingRule;
     QString otherRenamingRule;
+
 };
 
-#endif // FILEEXISTSDIALOG_H
+#endif // FILEISSAMEDIALOG_H

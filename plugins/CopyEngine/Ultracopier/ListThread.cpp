@@ -327,23 +327,23 @@ bool ListThread::haveSameDestination(const QString &destination)
     return true;
 }
 
-scanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
+ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with: "+QString::number(mode));
 
     //create new thread because is auto-detroyed
-    scanFileOrFolderThreadsPool << new scanFileOrFolder(mode);
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::fileTransfer,					this,&ListThread::fileTransfer,			Qt::QueuedConnection);
+    scanFileOrFolderThreadsPool << new ScanFileOrFolder(mode);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::fileTransfer,					this,&ListThread::fileTransfer,			Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,		Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,		Qt::QueuedConnection);
     #endif
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing);
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::addToRmPath,					this,&ListThread::addToRmPath,			Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::addToMkPath,					this,&ListThread::addToMkPath,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRmPath,					this,&ListThread::addToRmPath,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,					this,&ListThread::addToMkPath,			Qt::QueuedConnection);
 
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,		Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&scanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,		Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
 
     scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
@@ -363,7 +363,7 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"listing thread have finish, skipFirstRemove: "+QString::number(skipFirstRemove));
     if(!skipFirstRemove)
     {
-        scanFileOrFolder * senderThread = qobject_cast<scanFileOrFolder *>(QObject::sender());
+        ScanFileOrFolder * senderThread = qobject_cast<ScanFileOrFolder *>(QObject::sender());
         if(senderThread==NULL)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"sender pointer null (plugin copy engine)");
         else
@@ -415,7 +415,7 @@ void ListThread::startGeneralTransfer()
 bool ListThread::newCopy(const QStringList &sources,const QString &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", destination: "+destination);
-    scanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Copy);
+    ScanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Copy);
     if(scanFileOrFolderThread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get new thread");
@@ -431,7 +431,7 @@ bool ListThread::newCopy(const QStringList &sources,const QString &destination)
 bool ListThread::newMove(const QStringList &sources,const QString &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    scanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Move);
+    ScanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Move);
     if(scanFileOrFolderThread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get new thread");
@@ -1760,14 +1760,14 @@ void ListThread::errorOnFile(const QFileInfo &fileInfo,const QString &errorStrin
 /// \note Can be call without queue because all call will be serialized
 void ListThread::folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame)
 {
-    emit send_folderAlreadyExists(source,destination,isSame,qobject_cast<scanFileOrFolder *>(sender()));
+    emit send_folderAlreadyExists(source,destination,isSame,qobject_cast<ScanFileOrFolder *>(sender()));
 }
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
 void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorString)
 {
-    emit send_errorOnFolder(fileInfo,errorString,qobject_cast<scanFileOrFolder *>(sender()));
+    emit send_errorOnFolder(fileInfo,errorString,qobject_cast<ScanFileOrFolder *>(sender()));
 }
 
 //to run the thread

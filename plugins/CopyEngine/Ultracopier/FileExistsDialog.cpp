@@ -1,9 +1,9 @@
-#include "fileExistsDialog.h"
+#include "FileExistsDialog.h"
 #include "ui_fileExistsDialog.h"
 
 #include <QDebug>
 
-fileExistsDialog::fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
+FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::fileExistsDialog)
 {
@@ -49,12 +49,12 @@ fileExistsDialog::fileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
     on_SuggestNewName_clicked();
 }
 
-fileExistsDialog::~fileExistsDialog()
+FileExistsDialog::~FileExistsDialog()
 {
     delete ui;
 }
 
-void fileExistsDialog::changeEvent(QEvent *e)
+void FileExistsDialog::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -66,7 +66,7 @@ void fileExistsDialog::changeEvent(QEvent *e)
     }
 }
 
-QString fileExistsDialog::getNewName()
+QString FileExistsDialog::getNewName()
 {
     if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
         qDebug() << "return the old name: "+oldName;
@@ -78,7 +78,7 @@ QString fileExistsDialog::getNewName()
         return ui->lineEditNewName->text();
 }
 
-void fileExistsDialog::on_SuggestNewName_clicked()
+void FileExistsDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
@@ -126,71 +126,77 @@ void fileExistsDialog::on_SuggestNewName_clicked()
     ui->lineEditNewName->setText(newFileName+suffix);
 }
 
-void fileExistsDialog::on_Rename_clicked()
+void FileExistsDialog::on_Rename_clicked()
 {
     action=FileExists_Rename;
     this->close();
 }
 
-void fileExistsDialog::on_Overwrite_clicked()
+void FileExistsDialog::on_Overwrite_clicked()
 {
     action=FileExists_Overwrite;
     this->close();
 }
 
-void fileExistsDialog::on_Skip_clicked()
+void FileExistsDialog::on_Skip_clicked()
 {
     action=FileExists_Skip;
     this->close();
 }
 
-void fileExistsDialog::on_Cancel_clicked()
+void FileExistsDialog::on_Cancel_clicked()
 {
     action=FileExists_Cancel;
     this->close();
 }
 
-void fileExistsDialog::on_actionOverwrite_if_newer_triggered()
+void FileExistsDialog::on_actionOverwrite_if_newer_triggered()
 {
     action=FileExists_OverwriteIfNewer;
     this->close();
 }
 
-void fileExistsDialog::on_actionOverwrite_if_not_same_modification_date_triggered()
+void FileExistsDialog::on_actionOverwrite_if_not_same_modification_date_triggered()
 {
-    action=FileExists_OverwriteIfNotSameModificationDate;
+    action=FileExists_OverwriteIfNotSame;
     this->close();
 }
 
-FileExistsAction fileExistsDialog::getAction()
+FileExistsAction FileExistsDialog::getAction()
 {
     return action;
 }
 
-bool fileExistsDialog::getAlways()
+bool FileExistsDialog::getAlways()
 {
     return ui->checkBoxAlways->isChecked();
 }
 
-void fileExistsDialog::updateRenameButton()
+void FileExistsDialog::updateRenameButton()
 {
     ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
 }
 
-void fileExistsDialog::on_checkBoxAlways_toggled(bool checked)
+void FileExistsDialog::on_checkBoxAlways_toggled(bool checked)
 {
     Q_UNUSED(checked);
     updateRenameButton();
 }
 
-void fileExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
+void FileExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
     updateRenameButton();
 }
 
-void fileExistsDialog::on_lineEditNewName_returnPressed()
+void FileExistsDialog::on_lineEditNewName_returnPressed()
 {
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
+}
+
+void FileExistsDialog::on_actionOverwrite_if_older_triggered()
+{
+    action=FileExists_OverwriteIfOlder;
+    this->close();
 }

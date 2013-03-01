@@ -12,10 +12,10 @@
 #include <QMessageBox>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
-#include "fileErrorDialog.h"
-#include "fileExistsDialog.h"
-#include "folderExistsDialog.h"
-#include "fileIsSameDialog.h"
+#include "FileErrorDialog.h"
+#include "FileExistsDialog.h"
+#include "FolderExistsDialog.h"
+#include "FileIsSameDialog.h"
 #include "ui_options.h"
 #include "Environment.h"
 #include "ListThread.h"
@@ -23,7 +23,7 @@
 #include "RenamingRules.h"
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-#include "debugDialog.h"
+#include "DebugDialog.h"
 #include <QTimer>
 #endif
 
@@ -35,17 +35,17 @@ namespace Ui {
 }
 
 /// \brief the implementation of copy engine plugin, manage directly few stuff, else pass to ListThread class.
-class copyEngine : public PluginInterface_CopyEngine
+class CopyEngine : public PluginInterface_CopyEngine
 {
         Q_OBJECT
 public:
-    copyEngine(FacilityInterface * facilityEngine);
-    ~copyEngine();
+    CopyEngine(FacilityInterface * facilityEngine);
+    ~CopyEngine();
     void connectTheSignalsSlots();
 private:
     ListThread *listThread;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    debugDialog debugDialogWindow;
+    DebugDialog debugDialogWindow;
     #endif
     QWidget *			tempWidget;
     Ui::options *			ui;
@@ -70,7 +70,7 @@ private:
     struct errorQueueItem
     {
         TransferThread * transfer;	///< NULL if send by scan thread
-        scanFileOrFolder * scan;	///< NULL if send by transfer thread
+        ScanFileOrFolder * scan;	///< NULL if send by transfer thread
         bool mkPath;
         bool rmPath;
         QFileInfo inode;
@@ -81,7 +81,7 @@ private:
     struct alreadyExistsQueueItem
     {
         TransferThread * transfer;	///< NULL if send by scan thread
-        scanFileOrFolder * scan;	///< NULL if send by transfer thread
+        ScanFileOrFolder * scan;	///< NULL if send by transfer thread
         QFileInfo source;
         QFileInfo destination;
         bool isSame;
@@ -123,9 +123,9 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread);
+    void folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolderSlot(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread);
+    void errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread);
     //mkpath event
     void mkPathErrorOnFolderSlot(QFileInfo,QString);
     //rmpath event
@@ -137,9 +137,9 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,scanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
+    void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(QFileInfo fileInfo,QString errorString,scanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
+    void errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
     //mkpath event
     void mkPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
     //rmpath event
@@ -287,6 +287,8 @@ public slots:
     //autoconnect
     void on_comboBoxFolderCollision_currentIndexChanged(int index);
     void on_comboBoxFolderError_currentIndexChanged(int index);
+    void on_comboBoxFileCollision_currentIndexChanged(int index);
+    void on_comboBoxFileError_currentIndexChanged(int index);
     /// \brief need retranslate the insterface
     void newLanguageLoaded();
 private slots:

@@ -1,9 +1,9 @@
-#include "folderExistsDialog.h"
+#include "FolderExistsDialog.h"
 #include "ui_folderExistsDialog.h"
 
 #include <QMessageBox>
 
-folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
+FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::folderExistsDialog)
 {
@@ -37,12 +37,12 @@ folderExistsDialog::folderExistsDialog(QWidget *parent,QFileInfo source,bool isS
     on_SuggestNewName_clicked();
 }
 
-folderExistsDialog::~folderExistsDialog()
+FolderExistsDialog::~FolderExistsDialog()
 {
     delete ui;
 }
 
-void folderExistsDialog::changeEvent(QEvent *e)
+void FolderExistsDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -54,7 +54,7 @@ void folderExistsDialog::changeEvent(QEvent *e)
     }
 }
 
-QString folderExistsDialog::getNewName()
+QString FolderExistsDialog::getNewName()
 {
     if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
         return "";
@@ -62,7 +62,7 @@ QString folderExistsDialog::getNewName()
         return ui->lineEditNewName->text();
 }
 
-void folderExistsDialog::on_SuggestNewName_clicked()
+void FolderExistsDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
@@ -110,35 +110,35 @@ void folderExistsDialog::on_SuggestNewName_clicked()
     ui->lineEditNewName->setText(newFileName+suffix);
 }
 
-void folderExistsDialog::on_Rename_clicked()
+void FolderExistsDialog::on_Rename_clicked()
 {
     action=FolderExists_Rename;
     this->close();
 }
 
-void folderExistsDialog::on_Skip_clicked()
+void FolderExistsDialog::on_Skip_clicked()
 {
     action=FolderExists_Skip;
     this->close();
 }
 
-void folderExistsDialog::on_Cancel_clicked()
+void FolderExistsDialog::on_Cancel_clicked()
 {
     action=FolderExists_Cancel;
     this->close();
 }
 
-FolderExistsAction folderExistsDialog::getAction()
+FolderExistsAction FolderExistsDialog::getAction()
 {
     return action;
 }
 
-bool folderExistsDialog::getAlways()
+bool FolderExistsDialog::getAlways()
 {
     return ui->checkBoxAlways->isChecked();
 }
 
-void folderExistsDialog::on_Merge_clicked()
+void FolderExistsDialog::on_Merge_clicked()
 {
     action=FolderExists_Merge;
     this->close();

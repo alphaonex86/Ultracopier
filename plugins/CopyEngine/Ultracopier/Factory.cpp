@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QDebug>
 
-#include "factory.h"
+#include "Factory.h"
 
 Factory::Factory() :
     ui(new Ui::options())
@@ -38,12 +38,16 @@ Factory::Factory() :
     connect(ui->doChecksum,			&QCheckBox::toggled,		this,&Factory::doChecksum_toggled);
     connect(ui->comboBoxFolderError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderError);
     connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderCollision);
+    connect(ui->comboBoxFileError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFileError);
+    connect(ui->comboBoxFileCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFileCollision);
     connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&Factory::setCheckDestinationFolder);
     connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&Factory::checksumIgnoreIfImpossible_toggled);
     connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&Factory::checksumOnlyOnError_toggled);
     connect(ui->osBuffer,			&QCheckBox::toggled,		this,&Factory::osBuffer_toggled);
     connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&Factory::osBufferLimited_toggled);
     connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&Factory::osBufferLimit_editingFinished);
+    connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
+    connect(ui->osBuffer,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
 
     connect(filters,&Filters::sendNewFilters,this,&Factory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&Factory::showFilterDialog);
@@ -84,21 +88,23 @@ void Factory::init()
 
 PluginInterface_CopyEngine * Factory::getInstance()
 {
-    copyEngine *realObject=new copyEngine(facilityEngine);
+    CopyEngine *realObject=new CopyEngine(facilityEngine);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(realObject,&copyEngine::debugInformation,this,&Factory::debugInformation);
+    connect(realObject,&CopyEngine::debugInformation,this,&Factory::debugInformation);
     #endif
     realObject->connectTheSignalsSlots();
-    connect(this,&Factory::haveDrive,realObject,&copyEngine::setDrive);
+    connect(this,&Factory::haveDrive,realObject,&CopyEngine::setDrive);
     realObject->setDrive(mountSysPoint);
     PluginInterface_CopyEngine * newTransferEngine=realObject;
-    connect(this,&Factory::reloadLanguage,realObject,&copyEngine::newLanguageLoaded);
+    connect(this,&Factory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(		optionsEngine->getOptionValue("doRightTransfer").toBool());
     realObject->setKeepDate(		optionsEngine->getOptionValue("keepDate").toBool());
     realObject->setBlockSize(		optionsEngine->getOptionValue("blockSize").toInt());
     realObject->setAutoStart(		optionsEngine->getOptionValue("autoStart").toBool());
     realObject->on_comboBoxFolderCollision_currentIndexChanged(ui->comboBoxFolderCollision->currentIndex());
     realObject->on_comboBoxFolderError_currentIndexChanged(ui->comboBoxFolderError->currentIndex());
+    realObject->on_comboBoxFileCollision_currentIndexChanged(ui->comboBoxFileCollision->currentIndex());
+    realObject->on_comboBoxFileError_currentIndexChanged(ui->comboBoxFileError->currentIndex());
     realObject->setCheckDestinationFolderExists(	optionsEngine->getOptionValue("checkDestinationFolder").toBool());
 
     realObject->set_doChecksum(optionsEngine->getOptionValue("doChecksum").toBool());
@@ -178,6 +184,8 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());
         ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue("folderError").toUInt());
         ui->comboBoxFolderCollision->setCurrentIndex(options->getOptionValue("folderCollision").toUInt());
+        ui->comboBoxFileError->setCurrentIndex(options->getOptionValue("fileError").toUInt());
+        ui->comboBoxFileCollision->setCurrentIndex(options->getOptionValue("fileCollision").toUInt());
         ui->checkBoxDestinationFolderExists->setChecked(options->getOptionValue("checkDestinationFolder").toBool());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
@@ -198,8 +206,6 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
         ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
 
-        connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
-        connect(ui->osBuffer,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
         updateBufferCheckbox();
         optionsEngine=options;
     }
@@ -438,4 +444,44 @@ void Factory::logicalDriveChanged(const QString &,bool)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
     emit haveDrive(mountSysPoint);
+}
+
+void Factory::setFileCollision(int index)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    if(optionsEngine==NULL)
+        return;
+    switch(index)
+    {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+            optionsEngine->setOptionValue("fileCollision",index);
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+        break;
+    }
+}
+
+void Factory::setFileError(int index)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    if(optionsEngine==NULL)
+        return;
+    switch(index)
+    {
+        case 0:
+        case 1:
+        case 2:
+            optionsEngine->setOptionValue("fileError",index);
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+        break;
+    }
 }

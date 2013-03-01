@@ -16,7 +16,7 @@
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "StructEnumDefinition.h"
 #include "ui_options.h"
-#include "copyEngine.h"
+#include "CopyEngine.h"
 #include "Environment.h"
 #include "Filters.h"
 #include "RenamingRules.h"
@@ -86,6 +86,8 @@ private slots:
     void showRenamingRules();
     void updateBufferCheckbox();
     void logicalDriveChanged(const QString &, bool);
+    void setFileCollision(int index);
+    void setFileError(int index);
 public slots:
     void resetOptions();
     void newLanguageLoaded();

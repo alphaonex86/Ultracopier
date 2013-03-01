@@ -19,14 +19,14 @@ namespace Ui {
 }
 
 /// \brief to show file exists dialog, and ask what do
-class folderExistsDialog : public QDialog
+class FolderExistsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     /// \brief create the object and pass all the informations to it
-    explicit folderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
-    ~folderExistsDialog();
+    explicit FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
+    ~FolderExistsDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();
     /// \brief return the action clicked

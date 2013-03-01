@@ -1,6 +1,6 @@
-#include "scanFileOrFolder.h"
+#include "ScanFileOrFolder.h"
 
-scanFileOrFolder::scanFileOrFolder(Ultracopier::CopyMode mode)
+ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
 {
     stopped	= true;
     stopIt	= false;
@@ -9,19 +9,19 @@ scanFileOrFolder::scanFileOrFolder(Ultracopier::CopyMode mode)
     folder_isolation=QRegularExpression("^(.*/)?([^/]+)/$");
 }
 
-scanFileOrFolder::~scanFileOrFolder()
+ScanFileOrFolder::~ScanFileOrFolder()
 {
     stop();
     quit();
     wait();
 }
 
-bool scanFileOrFolder::isFinished()
+bool ScanFileOrFolder::isFinished()
 {
     return stopped;
 }
 
-void scanFileOrFolder::addToList(const QStringList& sources,const QString& destination)
+void ScanFileOrFolder::addToList(const QStringList& sources,const QString& destination)
 {
     stopIt=false;
     this->sources=parseWildcardSources(sources);
@@ -36,7 +36,7 @@ void scanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 }
 
 
-QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
+QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
 {
     QRegularExpression splitFolder("[/\\\\]");
     QStringList returnList;
@@ -112,7 +112,7 @@ QStringList scanFileOrFolder::parseWildcardSources(const QStringList &sources)
     return returnList;
 }
 
-void scanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
+void ScanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QMutexLocker lock(&filtersMutex);
@@ -124,7 +124,7 @@ void scanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rul
 }
 
 //set action if Folder are same or exists
-void scanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString newName)
+void ScanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString newName)
 {
     this->newName=newName;
     folderExistsAction=action;
@@ -132,19 +132,19 @@ void scanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString n
 }
 
 //set action if error
-void scanFileOrFolder::setFolderErrorAction(FileErrorAction action)
+void ScanFileOrFolder::setFolderErrorAction(FileErrorAction action)
 {
     fileErrorAction=action;
     waitOneAction.release();
 }
 
-void scanFileOrFolder::stop()
+void ScanFileOrFolder::stop()
 {
     stopIt=true;
     waitOneAction.release();
 }
 
-void scanFileOrFolder::run()
+void ScanFileOrFolder::run()
 {
     stopped=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+QString::number(mode));
@@ -178,7 +178,7 @@ void scanFileOrFolder::run()
     emit finishedTheListing();
 }
 
-void scanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
+void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
     if(stopIt)
@@ -461,12 +461,12 @@ void scanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
 }
 
 //set if need check if the destination exists
-void scanFileOrFolder::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
+void ScanFileOrFolder::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
 {
     this->checkDestinationExists=checkDestinationFolderExists;
 }
 
-void scanFileOrFolder::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void ScanFileOrFolder::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
