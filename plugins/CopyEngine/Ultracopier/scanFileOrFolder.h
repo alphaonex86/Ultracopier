@@ -57,7 +57,7 @@ private:
     QStringList		sources;
     QString			destination;
     volatile bool		stopIt;
-        void			listFolder(const QString& source,const QString& destination,const QString& sourceSuffixPath,QString destinationSuffixPath);
+    void			listFolder(QFileInfo source, QFileInfo destination);
     volatile bool		stopped;
     QSemaphore		waitOneAction;
     FolderExistsAction	folderExistsAction;
@@ -65,8 +65,6 @@ private:
     volatile bool		checkDestinationExists;
     QString			newName;
     QRegularExpression	folder_isolation;
-    QString			prefix;
-    QString			suffix;
     Ultracopier::CopyMode		mode;
     QList<Filters_rules>	include,exclude;
     QList<Filters_rules>	include_send,exclude_send;

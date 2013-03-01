@@ -659,7 +659,7 @@ void Core::connectInterfaceAndSync(const int &index)
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		this,&Core::pushGeneralProgression,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
 
-    currentCopyInstance.interface->setSpeedLimitation(currentCopyInstance.engine->getSpeedLimitation());
+    currentCopyInstance.interface->setSupportSpeedLimitation(currentCopyInstance.engine->supportSpeedLimitation());
     currentCopyInstance.interface->setErrorAction(currentCopyInstance.engine->getErrorAction());
     currentCopyInstance.interface->setCollisionAction(currentCopyInstance.engine->getCollisionAction());
     currentCopyInstance.interface->setCopyType(currentCopyInstance.type);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>356</width>
-    <height>376</height>
+    <width>353</width>
+    <height>426</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -17,6 +17,13 @@
    <property name="spacing">
     <number>2</number>
    </property>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>When file error</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -60,69 +67,69 @@
    <item row="3" column="2">
     <widget class="QCheckBox" name="autoStart"/>
    </item>
-   <item row="4" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
       <string>When folder error</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
+   <item row="6" column="2">
     <widget class="QComboBox" name="comboBoxFolderError">
      <item>
       <property name="text">
-       <string>Ask</string>
+       <string notr="true">Ask</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Skip</string>
+       <string notr="true">Skip</string>
       </property>
      </item>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>When folder collision</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
-    <widget class="QComboBox" name="comboBoxFolderColision">
+   <item row="7" column="2">
+    <widget class="QComboBox" name="comboBoxFolderCollision">
      <item>
       <property name="text">
-       <string>Ask</string>
+       <string notr="true">Ask</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Merge</string>
+       <string notr="true">Merge</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Skip</string>
+       <string notr="true">Skip</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Rename</string>
+       <string notr="true">Rename</string>
       </property>
      </item>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="9" column="0" colspan="2">
     <widget class="QLabel" name="label_8">
      <property name="text">
       <string>Check if destination folder exists</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="2">
+   <item row="9" column="2">
     <widget class="QCheckBox" name="checkBoxDestinationFolderExists"/>
    </item>
-   <item row="7" column="0" colspan="3">
+   <item row="10" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Checksum</string>
@@ -165,24 +172,24 @@
      </layout>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="11" column="1">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Enable OS buffer</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="2">
+   <item row="11" column="2">
     <widget class="QCheckBox" name="osBuffer"/>
    </item>
-   <item row="9" column="0" colspan="2">
+   <item row="12" column="0" colspan="2">
     <widget class="QCheckBox" name="osBufferLimited">
      <property name="text">
       <string>OS buffer only if smaller than</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="2">
+   <item row="12" column="2">
     <widget class="QSpinBox" name="osBufferLimit">
      <property name="suffix">
       <string>KB</string>
@@ -205,7 +212,7 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="15" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -218,18 +225,83 @@
      </property>
     </spacer>
    </item>
-   <item row="11" column="1">
+   <item row="14" column="1">
     <widget class="QPushButton" name="filters">
      <property name="text">
       <string>Filters</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="13" column="1">
     <widget class="QPushButton" name="renamingRules">
      <property name="text">
       <string>Renaming rules</string>
      </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_13">
+     <property name="text">
+      <string>When file collision</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QComboBox" name="comboBoxFileError">
+     <item>
+      <property name="text">
+       <string notr="true">Ask</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Skip</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Put at the end</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QComboBox" name="comboBoxFileCollision">
+     <item>
+      <property name="text">
+       <string notr="true">Ask</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Skip</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Overwrite</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Overwrite if different</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Overwrite if newer</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Overwrite if older</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string notr="true">Rename</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

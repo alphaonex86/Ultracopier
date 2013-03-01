@@ -28,6 +28,7 @@
 
 namespace Ui {
     class interfaceCopy;
+    class options;
 }
 
 /// \brief Define the interface
@@ -35,7 +36,7 @@ class Themes : public PluginInterface_Themes
 {
     Q_OBJECT
 public:
-    Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool moreButtonPushed);
+    Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
@@ -54,10 +55,8 @@ public:
     void newErrorAction(const QString &action);
     /// \brief set one error is detected
     void errorDetected();
-    //speed limitation
-    /** \brief the max speed used
-     * in byte per seconds, -1 if not able, 0 if disabled */
-    bool setSpeedLimitation(const qint64 &speedLimitation);
+    /** \brief support speed limitation */
+    void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
     //get information about the copy
     /// \brief show the general progression
     void setGeneralProgression(const quint64 &current,const quint64 &total);
@@ -129,6 +128,7 @@ private slots:
     void on_importTransferList_clicked();
 private:
     Ui::interfaceCopy *ui;
+    Ui::options *uiOptions;
     quint64 currentFile;
     quint64 totalFile;
     quint64 currentSize;
@@ -138,7 +138,7 @@ private:
     QMenu *menu;
     Ultracopier::EngineActionInProgress action;
     void closeEvent(QCloseEvent *event);
-    qint64 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
+    qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
     void updateSpeed();
     bool storeIsInPause;
     bool modeIsForced;

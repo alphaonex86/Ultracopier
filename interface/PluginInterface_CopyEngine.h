@@ -79,17 +79,8 @@ class PluginInterface_CopyEngine : public QObject
         virtual quint64 realByteTransfered() = 0;
 
 
-        /** \brief get the speed limitation
-         * < -1 if not able, 0 if disabled */
-        virtual qint64 getSpeedLimitation() = 0;
-
-
-        //get user action
-        /** \brief get the collision action list */
-        virtual QList<QPair<QString,QString> > getCollisionAction() = 0;
-        /** \brief get the collision error list */
-        virtual QList<QPair<QString,QString> > getErrorAction() = 0;
-
+        /** \brief support speed limitation */
+        virtual bool supportSpeedLimitation() = 0;
 
         //transfer list
         /** \brief to sync the transfer list
@@ -146,13 +137,6 @@ class PluginInterface_CopyEngine : public QObject
         /** \brief to set the speed limitation
          * -1 if not able, 0 if disabled */
         virtual bool setSpeedLimitation(const qint64 &speedLimitation) = 0;
-
-
-        //action
-        /// \brief to set the collision action
-        virtual void setCollisionAction(const QString &action) = 0;
-        /// \brief to set the error action
-        virtual void setErrorAction(const QString &action) = 0;
     // signal to implement
     signals:
         //send information about the copy
@@ -220,6 +204,6 @@ class PluginInterface_CopyEngineFactory : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.4.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.0.0");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

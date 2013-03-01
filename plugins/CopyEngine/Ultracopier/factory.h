@@ -71,7 +71,7 @@ private slots:
     void setKeepDate(bool keepDate);
     void setBlockSize(int blockSize);
     void setAutoStart(bool autoStart);
-    void setFolderColision(int index);
+    void setFolderCollision(int index);
     void setFolderError(int index);
     void setCheckDestinationFolder();
     void showFilterDialog();

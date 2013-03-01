@@ -45,7 +45,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         /// \brief to get plugins of type specific
         QList<PluginsAvailable> getPluginsByCategory(const PluginType &type);
         /** \brief to get plugins */
-        QList<PluginsAvailable> getPlugins();
+        QList<PluginsAvailable> getPlugins(bool withError=false);
         /// \brief get translated text
         //QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
         //QString getTranslatedText(PluginsAvailable plugin,QString informationName);
@@ -82,8 +82,8 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         QMultiMap<PluginType,PluginsAvailable> pluginsListIndexed;
         /// \brief to load the multi-language balise
         void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
-        /// \brief check the dependencies
-        void checkDependencies();
+        /// \brief check the dependencies, return number of error
+        quint32 checkDependencies();
         /// \brief get the version
         QString getPluginVersion(const QString &pluginName);
         /// \brief To compare version
@@ -129,6 +129,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
     signals:
         void pluginListingIsfinish();
         void onePluginAdded(const PluginsAvailable&);
+        void onePluginInErrorAdded(const PluginsAvailable&);
         void onePluginWillBeRemoved(const PluginsAvailable&); // when will be really removed
         void onePluginWillBeUnloaded(const PluginsAvailable&);//just unload to quit the application
         void needLangToRefreshPluginList();

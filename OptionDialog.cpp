@@ -34,13 +34,14 @@ OptionDialog::OptionDialog() :
 
     //load the plugins
     plugins->lockPluginListEdition();
-    QList<PluginsAvailable> list=plugins->getPlugins();
     connect(this,&OptionDialog::previouslyPluginAdded,			this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,	&PluginsManager::onePluginAdded,		this,	&OptionDialog::onePluginAdded);
+    connect(plugins,	&PluginsManager::onePluginInErrorAdded,	this,	&OptionDialog::onePluginAdded);
     connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
     connect(plugins,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
     connect(plugins,	&PluginsManager::manuallyAdded,		this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
     connect(options,	&OptionEngine::newOptionValue,			this,	&OptionDialog::newOptionValue);
+    QList<PluginsAvailable> list=plugins->getPlugins(true);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     plugins->unlockPluginListEdition();

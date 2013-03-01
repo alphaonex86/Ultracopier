@@ -54,7 +54,7 @@ private:
     Filters *			filters;
     RenamingRules *			renamingRules;
     FacilityInterface *		facilityEngine;
-    int				maxSpeed;
+    quint32				maxSpeed;
     bool				doRightTransfer;
     bool				keepDate;
     int				blockSize;
@@ -205,15 +205,8 @@ public:
     /** \brief to get byte read, use by Ultracopier for the speed calculation
      * real size transfered to right speed calculation */
     quint64 realByteTransfered();
-    //speed limitation
-    /** \brief get the speed limitation
-     * < -1 if not able, 0 if disabled */
-    qint64 getSpeedLimitation();
-    //get collision action
-    /** \brief get the collision action list */
-    QList<QPair<QString,QString> > getCollisionAction();
-    /** \brief get the collision error list */
-    QList<QPair<QString,QString> > getErrorAction();
+    /** \brief support speed limitation */
+    bool supportSpeedLimitation();
 
     /** \brief to set drives detected
      * specific to this copy engine */
@@ -276,11 +269,6 @@ public slots:
     /** \brief to set the speed limitation
      * -1 if not able, 0 if disabled */
     bool setSpeedLimitation(const qint64 &speedLimitation);
-    //action
-    /// \brief to set the collision action
-    void setCollisionAction(const QString &action);
-    /// \brief to set the error action
-    void setErrorAction(const QString &action);
 
     // specific to this copy engine
 
@@ -297,12 +285,12 @@ public slots:
     /// \brief reset widget
     void resetTempWidget();
     //autoconnect
-    void on_comboBoxFolderColision_currentIndexChanged(int index);
+    void on_comboBoxFolderCollision_currentIndexChanged(int index);
     void on_comboBoxFolderError_currentIndexChanged(int index);
     /// \brief need retranslate the insterface
     void newLanguageLoaded();
 private slots:
-    void setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox=true);
+    void setComboBoxFolderCollision(FolderExistsAction action,bool changeComboBox=true);
     void setComboBoxFolderError(FileErrorAction action,bool changeComboBox=true);
     void warningTransferList(const QString &warning);
     void errorTransferList(const QString &error);
@@ -325,8 +313,8 @@ signals:
 
     //action
     void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
-    void signal_setComboBoxFolderColision(FolderExistsAction action);
-    void signal_setFolderColision(FolderExistsAction action);
+    void signal_setComboBoxFolderCollision(FolderExistsAction action);
+    void signal_setFolderCollision(FolderExistsAction action);
 
     //internal cancel
     void tryCancel();

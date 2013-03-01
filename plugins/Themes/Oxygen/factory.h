@@ -19,39 +19,44 @@
 #include "Environment.h"
 
 namespace Ui {
-	class options;
+    class options;
 }
 
 /// \brief Define the factory, to create instance of the interface
 class Factory : public PluginInterface_ThemesFactory
 {
-	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
-	Q_INTERFACES(PluginInterface_ThemesFactory)
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
+    Q_INTERFACES(PluginInterface_ThemesFactory)
 public:
-	Factory();
-	~Factory();
-	/// \brief to return the instance of the copy engine
-	PluginInterface_Themes * getInstance();
-	/// \brief set the resources, to store options, to have facilityInterface
-	void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion);
-	/// \brief to get the default options widget
-	QWidget * options();
-	/// \brief to get a resource icon
-	QIcon getIcon(const QString &fileName);
+    Factory();
+    ~Factory();
+    /// \brief to return the instance of the copy engine
+    PluginInterface_Themes * getInstance();
+    /// \brief set the resources, to store options, to have facilityInterface
+    void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion);
+    /// \brief to get the default options widget
+    QWidget * options();
+    /// \brief to get a resource icon
+    QIcon getIcon(const QString &fileName);
 private slots:
-	void checkBoxShowSpeedHaveChanged(bool toggled);
-	void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
+    void checkBoxShowSpeedHaveChanged(bool toggled);
+    void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
+    void on_checkBoxShowSpeed_toggled(bool checked);
+    void on_SliderSpeed_valueChanged(int value);
+    void uiUpdateSpeed();
+    void updateSpeed();
 public slots:
-	void resetOptions();
-	void newLanguageLoaded();
+    void resetOptions();
+    void newLanguageLoaded();
 private:
-	OptionInterface * optionsEngine;
-	Ui::options *ui;
-	QWidget *tempWidget;
-	FacilityInterface * facilityEngine;
+    OptionInterface * optionsEngine;
+    Ui::options *ui;
+    QWidget *tempWidget;
+    FacilityInterface * facilityEngine;
+    qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
 signals:
-	void reloadLanguage();
+    void reloadLanguage();
 };
 
 #endif // FACTORY_H

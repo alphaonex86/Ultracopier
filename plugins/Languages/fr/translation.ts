@@ -82,30 +82,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="192"/>
         <location filename="../../../CopyEngineManager.cpp" line="197"/>
-        <location filename="../../../CopyEngineManager.cpp" line="218"/>
-        <location filename="../../../CopyEngineManager.cpp" line="232"/>
+        <location filename="../../../CopyEngineManager.cpp" line="202"/>
+        <location filename="../../../CopyEngineManager.cpp" line="223"/>
+        <location filename="../../../CopyEngineManager.cpp" line="237"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="192"/>
+        <location filename="../../../CopyEngineManager.cpp" line="197"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>Impossible de trouver un moteur de copie avec le support des déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="197"/>
+        <location filename="../../../CopyEngineManager.cpp" line="202"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Impossible de trouver un moteur de copie compatible!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="218"/>
+        <location filename="../../../CopyEngineManager.cpp" line="223"/>
         <source>This copy engine does not support motions</source>
         <translation>Ce moteur de copie ne supporte pas les déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="232"/>
+        <location filename="../../../CopyEngineManager.cpp" line="237"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Impossible de trouver un moteur portant ce nom: %1</translation>
     </message>
@@ -159,12 +159,12 @@
         <translation>Impossible de charger le moteur de copie, copie annulée</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="957"/>
+        <location filename="../../../Core.cpp" line="911"/>
         <source>Transfer mode</source>
         <translation>Mode de transfert</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="957"/>
+        <location filename="../../../Core.cpp" line="911"/>
         <source>Do you want do as a copy? Else if you reply no, it will be moved.</source>
         <translation>Voulez-vous le faire comme une copie? Si-non, cela sera fait comme un déplacement.</translation>
     </message>
@@ -490,12 +490,12 @@ Cette version est compilée comme version : %1.</translation>
 <context>
     <name>LocalListener</name>
     <message>
-        <location filename="../../../LocalListener.cpp" line="130"/>
+        <location filename="../../../LocalListener.cpp" line="135"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../LocalListener.cpp" line="130"/>
+        <location filename="../../../LocalListener.cpp" line="135"/>
         <source>Timeout while recomposing data from connected clients</source>
         <translation>Timeout pendant la recompossition des données des clients connectés</translation>
     </message>
@@ -539,22 +539,22 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="11"/>
+        <location filename="../../../OSSpecific.cpp" line="10"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier (Dolphin, Nautilus, ...).&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="13"/>
+        <location filename="../../../OSSpecific.cpp" line="12"/>
         <source>Don&apos;t forget to reboot if previously was installed other similar software&lt;br /&gt;(like: Supercopier, Ultracopier in previous version, ...)</source>
         <translation>N &apos;oubliez pas de redémarrer si vous avez précédement installé un logiciel similaire&lt;br /&gt;(Comme: Supercopier, Ultracopier dans les précédentes version, ...)</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="15"/>
+        <location filename="../../../OSSpecific.cpp" line="14"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
         <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté et bloqué par le finder de Mac OS X.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement en cliquant sur l&apos;icone du systray à coté de l&apos;heure (pas l&apos;icone du dock).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="17"/>
+        <location filename="../../../OSSpecific.cpp" line="16"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier.&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
     </message>
@@ -835,10 +835,10 @@ Cette version est compilée comme version : %1.</translation>
 <context>
     <name>OptionEngine</name>
     <message>
-        <location filename="../../../OptionEngine.cpp" line="154"/>
-        <location filename="../../../OptionEngine.cpp" line="158"/>
-        <location filename="../../../OptionEngine.cpp" line="195"/>
-        <location filename="../../../OptionEngine.cpp" line="199"/>
+        <location filename="../../../OptionEngine.cpp" line="160"/>
+        <location filename="../../../OptionEngine.cpp" line="164"/>
+        <location filename="../../../OptionEngine.cpp" line="201"/>
+        <location filename="../../../OptionEngine.cpp" line="205"/>
         <source>The variable was not found: %1 %2</source>
         <translation>La variable n&apos;a pas été trouvée: %1 %2</translation>
     </message>
@@ -1122,85 +1122,85 @@ depuis:%2</translation>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="121"/>
+        <location filename="../../../SystrayIcon.cpp" line="123"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation>Pas d&apos;écouteur trouvé. Effectuez la copie manuellement par clic droit sur l&apos;icône dans la zone de notification (près de l&apos;horloge).</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="138"/>
+        <location filename="../../../SystrayIcon.cpp" line="140"/>
         <source>Searching information...</source>
         <translation>Recherche d&apos;informations...</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="319"/>
+        <location filename="../../../SystrayIcon.cpp" line="321"/>
         <source>The action on the systray icon is unknown!</source>
         <translation>L&apos;action sur l&apos;icône de la zone de notifications est inconnue!</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="367"/>
+        <location filename="../../../SystrayIcon.cpp" line="369"/>
         <source>&amp;About/Debug report</source>
         <translation>&amp;À propos d&apos;ultracopier/Debug</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="369"/>
+        <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>&amp;About</source>
         <translation>&amp;À propos d&apos;ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="371"/>
+        <location filename="../../../SystrayIcon.cpp" line="373"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="372"/>
+        <location filename="../../../SystrayIcon.cpp" line="374"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="418"/>
-        <location filename="../../../SystrayIcon.cpp" line="440"/>
+        <location filename="../../../SystrayIcon.cpp" line="420"/>
+        <location filename="../../../SystrayIcon.cpp" line="442"/>
         <source>Add &amp;copy</source>
         <translation>Ajouter une &amp;copie</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="424"/>
-        <location filename="../../../SystrayIcon.cpp" line="446"/>
+        <location filename="../../../SystrayIcon.cpp" line="426"/>
+        <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>Add &amp;transfer</source>
         <translation>Ajouter un &amp;transfert</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="428"/>
-        <location filename="../../../SystrayIcon.cpp" line="450"/>
+        <location filename="../../../SystrayIcon.cpp" line="430"/>
+        <location filename="../../../SystrayIcon.cpp" line="452"/>
         <source>Add &amp;move</source>
         <translation>Ajouter un &amp;déplacement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="373"/>
+        <location filename="../../../SystrayIcon.cpp" line="375"/>
         <source>A&amp;dd copy/moving</source>
         <translation>&amp;Ajouter une copie/déplacement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="151"/>
+        <location filename="../../../SystrayIcon.cpp" line="153"/>
         <source>Not replace the explorer copy/move</source>
         <translation>Ne remplace pas la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="156"/>
+        <location filename="../../../SystrayIcon.cpp" line="158"/>
         <source>Semi replace the explorer copy/move</source>
         <translation>Remplace partiellement la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="161"/>
+        <location filename="../../../SystrayIcon.cpp" line="163"/>
         <source>Replace the explorer copy/move</source>
         <translation>Remplace la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="319"/>
+        <location filename="../../../SystrayIcon.cpp" line="321"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="127"/>
+        <location filename="../../../SystrayIcon.cpp" line="129"/>
         <source>Information</source>
         <translation>Informations</translation>
     </message>

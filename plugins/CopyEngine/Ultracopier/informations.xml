@@ -17,11 +17,11 @@
 	<description xml:lang="en"><![CDATA[Copy engine of Ultracopier, do in Qt for all platform, and copy by stream]]></description>
 	<description xml:lang="fr"><![CDATA[Moteur de copie d'ultracopier, fait en Qt pour toutes les plateformes, et copie par stream]]></description>
 	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
-	<version>0.4.0.15</version>
+	<version>1.0.0.0</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>Ultracopier</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
 	<dependencies><![CDATA[
-	=ultracopier-0.4
+	=ultracopier-1.0
 	]]></dependencies>
 </package>

@@ -506,8 +506,8 @@ void ListThread::syncTransferList()
     emit send_syncTransferList();
 }
 
-//set the folder local colision
-void ListThread::setFolderColision(const FolderExistsAction &alwaysDoThisActionForFolderExists)
+//set the folder local collision
+void ListThread::setFolderCollision(const FolderExistsAction &alwaysDoThisActionForFolderExists)
 {
     this->alwaysDoThisActionForFolderExists=alwaysDoThisActionForFolderExists;
 }

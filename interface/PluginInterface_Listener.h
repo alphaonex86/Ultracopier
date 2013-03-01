@@ -48,6 +48,6 @@ class PluginInterface_Listener : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/0.4.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/1.0.0.0");
 
 #endif // PLUGININTERFACE_LISTENER_H

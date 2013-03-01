@@ -138,7 +138,15 @@ void PluginsManager::run()
     checkPluginThread->loadSearchPath(readPath,englishPluginType);
     checkPluginThread->stop();
     checkPluginThread->start();
-    checkDependencies();
+    while(checkDependencies()!=0){};
+    QList<PluginsAvailable> list;
+    index=0;
+    while(index<pluginsList.size())
+    {
+        if(pluginsList.at(index).errorString.isEmpty())
+            emit onePluginAdded(pluginsList.at(index));
+        index++;
+    }
 }
 
 QString PluginsManager::categoryToString(const PluginType &category)
@@ -233,12 +241,10 @@ bool PluginsManager::loadPluginInformation(const QString &path)
         pluginsListIndexed.insert(tempPlugin.category,tempPlugin);
     editionSemList.release();
     if(tempPlugin.errorString=="")
-    {
-        emit onePluginAdded(tempPlugin);
         return true;
-    }
     else
     {
+        emit onePluginInErrorAdded(tempPlugin);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error detected, the not loaded: "+tempPlugin.errorString+", for path: "+tempPlugin.path);
         return false;
     }
@@ -454,9 +460,10 @@ QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &na
 }
 
 /// \brief check the dependencies
-void PluginsManager::checkDependencies()
+quint32 PluginsManager::checkDependencies()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    quint32 errors=0;
     int index=0;
     int loop_size=pluginsList.size();
     int sub_index,loop_sub_size,resolv_size,indexOfDependencies;
@@ -486,6 +493,8 @@ void PluginsManager::checkDependencies()
                         pluginsList[index].informations.clear();
                         pluginsList[index].errorString=tr("Dependencies part is wrong");
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Dependencies part is wrong: %1").arg(dependenciesToParse));
+                        emit onePluginInErrorAdded(pluginsList.at(index));
+                        errors++;
                         break;
                     }
                     QString partName=dependenciesToParse;
@@ -505,6 +514,9 @@ void PluginsManager::checkDependencies()
                         pluginsList[index].informations.clear();
                         pluginsList[index].errorString=tr("Dependencies %1 are not satisfied, for plugin: %2").arg(dependenciesToParse).arg(pluginsList[index].path);
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Dependencies %1 are not satisfied, for plugin: %2").arg(dependenciesToParse).arg(pluginsList[index].path));
+                        pluginsListIndexed.remove(pluginsList.at(index).category,pluginsList.at(index));
+                        emit onePluginInErrorAdded(pluginsList.at(index));
+                        errors++;
                         break;
                     }
                     indexOfDependencies++;
@@ -514,6 +526,7 @@ void PluginsManager::checkDependencies()
         }
         index++;
     }
+    return errors;
 }
 
 /// \brief get the version
@@ -597,13 +610,13 @@ QList<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginType &c
     return pluginsListIndexed.values(category);
 }
 
-QList<PluginsAvailable> PluginsManager::getPlugins()
+QList<PluginsAvailable> PluginsManager::getPlugins(bool withError)
 {
     QList<PluginsAvailable> list;
     int index=0;
     while(index<pluginsList.size())
     {
-        if(pluginsList.at(index).errorString=="")
+        if(withError || pluginsList.at(index).errorString.isEmpty())
             list<<pluginsList.at(index);
         index++;
     }
@@ -659,7 +672,7 @@ void PluginsManager::removeThePluginSelected(const QString &path)
                 }
                 pluginsListIndexed.remove(pluginsList.at(index).category,pluginsList.at(index));
                 pluginsList.removeAt(index);
-                checkDependencies();
+                while(checkDependencies()!=0){};
             }
             return;
         }
@@ -808,7 +821,7 @@ void PluginsManager::decodingFinished()
                                     if(loadPluginInformation(finalPluginPath))
                                     {
                                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"push the new plugin into the real list");
-                                        checkDependencies();
+                                        while(checkDependencies()!=0){};
                                         emit needLangToRefreshPluginList();
                                         emit manuallyAdded(tempPlugin);
                                     }

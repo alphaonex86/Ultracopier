@@ -140,8 +140,8 @@ public slots:
     /// \brief import the transfer list into a file
     void importTransferList(const QString &fileName);
 
-    /// \brief set the folder local colision
-    void setFolderColision(const FolderExistsAction &alwaysDoThisActionForFolderExists);
+    /// \brief set the folder local collision
+    void setFolderCollision(const FolderExistsAction &alwaysDoThisActionForFolderExists);
     /** \brief to set the speed limitation
      * -1 if not able, 0 if disabled */
     bool setSpeedLimitation(const qint64 &speedLimitation);

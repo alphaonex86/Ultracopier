@@ -10,15 +10,27 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool moreButtonPushed) :
+Themes::Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed) :
     ui(new Ui::interfaceCopy())
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
+
+    this->currentSpeed=currentSpeed;
+    uiOptions=new Ui::options();
+    uiOptions->setupUi(ui->tabWidget->widget(2));
+    uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
+    uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
+    uiOptions->label_Slider_speed->setVisible(false);
+    uiOptions->SliderSpeed->setVisible(false);
+    uiOptions->label_SpeedMaxValue->setVisible(false);
+    uiOptions->checkBox_limitSpeed->setVisible(false);
+    uiOptions->limitSpeed->setVisible(false);
+
     ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
     ui->tabWidget->setCurrentIndex(0);
-    ui->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
+    uiOptions->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
     currentFile	= 0;
     totalFile	= 0;
     currentSize	= 0;
@@ -27,8 +39,11 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     stat        = status_never_started;
     menu=new QMenu(this);
     ui->add->setMenu(menu);
-    on_checkBoxShowSpeed_toggled(ui->checkBoxShowSpeed->isChecked());
-    currentSpeed	= 0;
+
+    //connect the options
+    on_checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
+    connect(uiOptions->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Themes::on_checkBoxShowSpeed_toggled);
+
     storeIsInPause	= false;
     isInPause(false);
     modeIsForced	= false;
@@ -48,9 +63,9 @@ Themes::Themes(bool checkBoxShowSpeed,FacilityInterface * facilityEngine,bool mo
     TimerForSearch  = new QTimer(this);
     TimerForSearch->setInterval(500);
     TimerForSearch->setSingleShot(true);
-    searchShortcut  = new QShortcut(QKeySequence("Ctrl+F"),this);
-    searchShortcut2 = new QShortcut(QKeySequence("F3"),this);
-    searchShortcut3 = new QShortcut(QKeySequence("Escape"),this);//Qt::Key_Escape
+    searchShortcut  = new QShortcut(QKeySequence(QKeySequence::Find),this);
+    searchShortcut2 = new QShortcut(QKeySequence(QKeySequence::FindNext),this);
+    searchShortcut3 = new QShortcut(QKeySequence(Qt::Key_Escape),this);
 
     //connect the search part
     connect(TimerForSearch,			&QTimer::timeout,	this,	&Themes::hilightTheSearchSlot);
@@ -149,18 +164,6 @@ Themes::~Themes()
     delete menu;
 }
 
-void Themes::uiUpdateSpeed()
-{
-    if(ui->checkBoxShowSpeed->isChecked())
-        return;
-    if(!ui->checkBox_limitSpeed->isChecked())
-        currentSpeed=0;
-    else
-        currentSpeed=ui->limitSpeed->value();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("emit newSpeedLimitation(%1)").arg(currentSpeed));
-    emit newSpeedLimitation(currentSpeed);
-}
-
 QWidget * Themes::getOptionsEngineWidget()
 {
     return &optionEngineWidget;
@@ -208,7 +211,7 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                     facilityEngine->callFunctionality("shutdown");
                     return;
                 }
-                switch(ui->comboBox_copyEnd->currentIndex())
+                switch(uiOptions->comboBox_copyEnd->currentIndex())
                 {
                     case 2:
                         emit cancel();
@@ -292,12 +295,20 @@ void Themes::errorDetected()
     haveError=true;
 }
 
-//speed limitation
-bool Themes::setSpeedLimitation(const qint64 &speedLimitation)
+/** \brief support speed limitation */
+void Themes::setSupportSpeedLimitation(const bool &supportSpeedLimitationBool)
 {
-    currentSpeed=speedLimitation;
-    updateSpeed();
-    return true;
+    if(!supportSpeedLimitationBool)
+    {
+        ui->groupBoxSpeedLimit->setVisible(false);
+        ui->label_Slider_speed->setVisible(false);
+        ui->SliderSpeed->setVisible(false);
+        ui->label_SpeedMaxValue->setVisible(false);
+        uiOptions->labelShowSpeedAsMain->setVisible(false);
+        uiOptions->checkBoxShowSpeed->setVisible(false);
+    }
+    else
+        emit newSpeedLimitation(currentSpeed);
 }
 
 //get information about the copy
@@ -550,13 +561,14 @@ void Themes::on_cancelButton_clicked()
 
 void Themes::on_checkBoxShowSpeed_toggled(bool checked)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(checked);
     updateSpeed();
 }
 
 void Themes::on_SliderSpeed_valueChanged(int value)
 {
-    if(!ui->checkBoxShowSpeed->isChecked())
+    if(!uiOptions->checkBoxShowSpeed->isChecked())
         return;
     switch(value)
     {
@@ -584,16 +596,30 @@ void Themes::on_SliderSpeed_valueChanged(int value)
     updateSpeed();
 }
 
+void Themes::uiUpdateSpeed()
+{
+    if(uiOptions->checkBoxShowSpeed->isChecked())
+        return;
+    if(!ui->checkBox_limitSpeed->isChecked())
+        currentSpeed=0;
+    else
+        currentSpeed=ui->limitSpeed->value();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("emit newSpeedLimitation(%1)").arg(currentSpeed));
+    emit newSpeedLimitation(currentSpeed);
+}
+
 void Themes::updateSpeed()
 {
-    ui->groupBoxSpeedLimit->setVisible(!ui->checkBoxShowSpeed->isChecked());
-    ui->label_Slider_speed->setVisible(ui->checkBoxShowSpeed->isChecked());
-    ui->SliderSpeed->setVisible(ui->checkBoxShowSpeed->isChecked());
-    ui->label_SpeedMaxValue->setVisible(ui->checkBoxShowSpeed->isChecked());
+    ui->groupBoxSpeedLimit->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
+    ui->label_Slider_speed->setVisible(uiOptions->checkBoxShowSpeed->isChecked());
+    ui->SliderSpeed->setVisible(uiOptions->checkBoxShowSpeed->isChecked());
+    ui->label_SpeedMaxValue->setVisible(uiOptions->checkBoxShowSpeed->isChecked());
+    ui->limitSpeed->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
+    ui->checkBox_limitSpeed->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
 
-    if(ui->checkBoxShowSpeed->isChecked())
+    if(uiOptions->checkBoxShowSpeed->isChecked())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"checked");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("checked, currentSpeed: %1").arg(currentSpeed));
         ui->limitSpeed->setEnabled(false);
         if(currentSpeed==0)
         {

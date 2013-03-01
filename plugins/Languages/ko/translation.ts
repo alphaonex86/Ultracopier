@@ -82,30 +82,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="192"/>
         <location filename="../../../CopyEngineManager.cpp" line="197"/>
-        <location filename="../../../CopyEngineManager.cpp" line="218"/>
-        <location filename="../../../CopyEngineManager.cpp" line="232"/>
+        <location filename="../../../CopyEngineManager.cpp" line="202"/>
+        <location filename="../../../CopyEngineManager.cpp" line="223"/>
+        <location filename="../../../CopyEngineManager.cpp" line="237"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="192"/>
+        <location filename="../../../CopyEngineManager.cpp" line="197"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>동작 감지를 지원하는 복사 엔진을 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="197"/>
+        <location filename="../../../CopyEngineManager.cpp" line="202"/>
         <source>Cannot find any compatible engine!</source>
         <translation>호환되는 엔진을 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="218"/>
+        <location filename="../../../CopyEngineManager.cpp" line="223"/>
         <source>This copy engine does not support motions</source>
         <translation>이 복사 엔진은 동작 감지를 지원하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="232"/>
+        <location filename="../../../CopyEngineManager.cpp" line="237"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -159,12 +159,12 @@
         <translation>복사 엔진을 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="957"/>
+        <location filename="../../../Core.cpp" line="911"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="957"/>
+        <location filename="../../../Core.cpp" line="911"/>
         <source>Do you want do as a copy? Else if you reply no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -487,12 +487,12 @@ This version is compiled as version: %1.</source>
 <context>
     <name>LocalListener</name>
     <message>
-        <location filename="../../../LocalListener.cpp" line="130"/>
+        <location filename="../../../LocalListener.cpp" line="135"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../LocalListener.cpp" line="130"/>
+        <location filename="../../../LocalListener.cpp" line="135"/>
         <source>Timeout while recomposing data from connected clients</source>
         <translation>연결된 클라이언트로부터 데이터를 재구성하는 동안에 시간이 초과되었습니다</translation>
     </message>
@@ -519,6 +519,44 @@ This version is compiled as version: %1.</source>
     </message>
 </context>
 <context>
+    <name>OSSpecific</name>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="14"/>
+        <source>Warning</source>
+        <translation type="unfinished">알림</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="31"/>
+        <source>Don&apos;t show again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="53"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="10"/>
+        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="12"/>
+        <source>Don&apos;t forget to reboot if previously was installed other similar software&lt;br /&gt;(like: Supercopier, Ultracopier in previous version, ...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="14"/>
+        <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="16"/>
+        <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>OptionDialog</name>
     <message>
         <location filename="../../../OptionDialog.ui" line="14"/>
@@ -538,14 +576,14 @@ This version is compiled as version: %1.</source>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
-        <location filename="../../../OptionDialog.ui" line="261"/>
+        <location filename="../../../OptionDialog.ui" line="271"/>
         <location filename="../../../OptionDialog.cpp" line="232"/>
         <source>Copy engine</source>
         <translation>복사 엔진</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="95"/>
-        <location filename="../../../OptionDialog.ui" line="289"/>
+        <location filename="../../../OptionDialog.ui" line="299"/>
         <source>Themes</source>
         <translation>테마</translation>
     </message>
@@ -570,23 +608,28 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="251"/>
+        <location filename="../../../OptionDialog.ui" line="222"/>
+        <source>Display the OS warning:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="261"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="256"/>
+        <location filename="../../../OptionDialog.ui" line="266"/>
         <source>Version</source>
         <translation>버전</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="266"/>
+        <location filename="../../../OptionDialog.ui" line="276"/>
         <source>Language</source>
         <translation>언어</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="736"/>
-        <location filename="../../../OptionDialog.ui" line="749"/>
+        <location filename="../../../OptionDialog.ui" line="746"/>
+        <location filename="../../../OptionDialog.ui" line="759"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated
 ----------
@@ -595,78 +638,78 @@ This version is compiled as version: %1.</source>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
-        <location filename="../../../OptionDialog.ui" line="274"/>
+        <location filename="../../../OptionDialog.ui" line="284"/>
         <location filename="../../../OptionDialog.cpp" line="233"/>
         <source>Listener</source>
         <translation>리스너</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="79"/>
-        <location filename="../../../OptionDialog.ui" line="279"/>
+        <location filename="../../../OptionDialog.ui" line="289"/>
         <location filename="../../../OptionDialog.cpp" line="234"/>
         <source>Plugin loader</source>
         <translation>플러그인 로더</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="87"/>
-        <location filename="../../../OptionDialog.ui" line="284"/>
+        <location filename="../../../OptionDialog.ui" line="294"/>
         <location filename="../../../OptionDialog.cpp" line="235"/>
         <source>Session loader</source>
         <translation>섹션 로더</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="297"/>
+        <location filename="../../../OptionDialog.ui" line="307"/>
         <source>Plugin</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="316"/>
+        <location filename="../../../OptionDialog.ui" line="326"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="329"/>
+        <location filename="../../../OptionDialog.ui" line="339"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="339"/>
+        <location filename="../../../OptionDialog.ui" line="349"/>
         <source>Information</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="366"/>
+        <location filename="../../../OptionDialog.ui" line="376"/>
         <source>Copy engine by order of preference:</source>
         <translation>복사 엔진 순서 환경 설정:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="479"/>
+        <location filename="../../../OptionDialog.ui" line="489"/>
         <source>Themes:</source>
         <translation>테마:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="541"/>
+        <location filename="../../../OptionDialog.ui" line="551"/>
         <source>Unable to load the themes plugin</source>
         <translation>테마 플러그인을 불러올 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="591"/>
+        <location filename="../../../OptionDialog.ui" line="601"/>
         <source>No option for this plugin</source>
         <translation>이 플러그인에 대한 옵션이 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="641"/>
+        <location filename="../../../OptionDialog.ui" line="651"/>
         <source>Browse</source>
         <translation>찾아보기</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="653"/>
+        <location filename="../../../OptionDialog.ui" line="663"/>
         <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="673"/>
-        <location filename="../../../OptionDialog.ui" line="686"/>
+        <location filename="../../../OptionDialog.ui" line="683"/>
+        <location filename="../../../OptionDialog.ui" line="696"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated
 ----------
@@ -674,8 +717,8 @@ This version is compiled as version: %1.</source>
         <translation>변수는 %time%, %source%, %size%, %destination% 입니다</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="703"/>
-        <location filename="../../../OptionDialog.ui" line="716"/>
+        <location filename="../../../OptionDialog.ui" line="713"/>
+        <location filename="../../../OptionDialog.ui" line="726"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated
 ----------
@@ -683,7 +726,7 @@ This version is compiled as version: %1.</source>
         <translation>변수는 %time%, %path%, %size%, %mtime%, %error% 입니다</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="622"/>
+        <location filename="../../../OptionDialog.ui" line="632"/>
         <source>Write the log file into:</source>
         <translation>로그 파일 작성:</translation>
     </message>
@@ -698,17 +741,17 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="666"/>
+        <location filename="../../../OptionDialog.ui" line="676"/>
         <source>Write the transfers:</source>
         <translation>전송 내역 작성:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="696"/>
+        <location filename="../../../OptionDialog.ui" line="706"/>
         <source>Write the errors:</source>
         <translation>오류 내역 작성:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="726"/>
+        <location filename="../../../OptionDialog.ui" line="736"/>
         <source>Write the folder operations:</source>
         <translation>폴더 작업 작성:</translation>
     </message>
@@ -725,8 +768,8 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.cpp" line="236"/>
         <location filename="../../../OptionDialog.cpp" line="237"/>
-        <location filename="../../../OptionDialog.cpp" line="367"/>
         <location filename="../../../OptionDialog.cpp" line="368"/>
+        <location filename="../../../OptionDialog.cpp" line="369"/>
         <source>Disabled because you have any SessionLoader plugin</source>
         <translation>어떤 세션로더 플러그인을 보유중이므로 비활성화되었습니다</translation>
     </message>
@@ -776,12 +819,12 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="839"/>
+        <location filename="../../../OptionDialog.cpp" line="844"/>
         <source>Save logs as: </source>
         <translation>로그 따로 저장:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="656"/>
+        <location filename="../../../OptionDialog.ui" line="666"/>
         <source>Synchronized log</source>
         <translation>로그 동기화됨</translation>
     </message>
@@ -789,10 +832,10 @@ This version is compiled as version: %1.</source>
 <context>
     <name>OptionEngine</name>
     <message>
-        <location filename="../../../OptionEngine.cpp" line="154"/>
-        <location filename="../../../OptionEngine.cpp" line="158"/>
-        <location filename="../../../OptionEngine.cpp" line="195"/>
-        <location filename="../../../OptionEngine.cpp" line="199"/>
+        <location filename="../../../OptionEngine.cpp" line="160"/>
+        <location filename="../../../OptionEngine.cpp" line="164"/>
+        <location filename="../../../OptionEngine.cpp" line="201"/>
+        <location filename="../../../OptionEngine.cpp" line="205"/>
         <source>The variable was not found: %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1073,85 +1116,85 @@ since:%2</translation>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="111"/>
+        <location filename="../../../SystrayIcon.cpp" line="123"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation>복사 리스너를 찾을 수 없습니다. 트레이 아이콘에서 우클릭하여 수동으로 복사하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="117"/>
+        <location filename="../../../SystrayIcon.cpp" line="129"/>
         <source>Information</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="128"/>
+        <location filename="../../../SystrayIcon.cpp" line="140"/>
         <source>Searching information...</source>
         <translation>정보 검색중...</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="141"/>
+        <location filename="../../../SystrayIcon.cpp" line="153"/>
         <source>Not replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="146"/>
+        <location filename="../../../SystrayIcon.cpp" line="158"/>
         <source>Semi replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="151"/>
+        <location filename="../../../SystrayIcon.cpp" line="163"/>
         <source>Replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="309"/>
+        <location filename="../../../SystrayIcon.cpp" line="321"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="309"/>
+        <location filename="../../../SystrayIcon.cpp" line="321"/>
         <source>The action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="357"/>
+        <location filename="../../../SystrayIcon.cpp" line="369"/>
         <source>&amp;About/Debug report</source>
         <translation>&amp;정보/디버그 보고서</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="359"/>
+        <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>&amp;About</source>
         <translation>&amp;정보</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="361"/>
+        <location filename="../../../SystrayIcon.cpp" line="373"/>
         <source>&amp;Quit</source>
         <translation>&amp;끝내기</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="362"/>
+        <location filename="../../../SystrayIcon.cpp" line="374"/>
         <source>&amp;Options</source>
         <translation>&amp;옵션</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="363"/>
+        <location filename="../../../SystrayIcon.cpp" line="375"/>
         <source>A&amp;dd copy/moving</source>
         <translation>복사/이동 &amp;추가</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="408"/>
-        <location filename="../../../SystrayIcon.cpp" line="430"/>
+        <location filename="../../../SystrayIcon.cpp" line="420"/>
+        <location filename="../../../SystrayIcon.cpp" line="442"/>
         <source>Add &amp;copy</source>
         <translation>&amp;복사 추가</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="414"/>
-        <location filename="../../../SystrayIcon.cpp" line="436"/>
+        <location filename="../../../SystrayIcon.cpp" line="426"/>
+        <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>Add &amp;transfer</source>
         <translation>&amp;전송 추가</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="418"/>
-        <location filename="../../../SystrayIcon.cpp" line="440"/>
+        <location filename="../../../SystrayIcon.cpp" line="430"/>
+        <location filename="../../../SystrayIcon.cpp" line="452"/>
         <source>Add &amp;move</source>
         <translation>&amp;이동 추가</translation>
     </message>

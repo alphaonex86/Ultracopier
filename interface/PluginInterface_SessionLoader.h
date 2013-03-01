@@ -34,6 +34,6 @@ class PluginInterface_SessionLoader : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/0.4.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/1.0.0.0");
 
 #endif // PLUGININTERFACE_SESSIONLOADER_H

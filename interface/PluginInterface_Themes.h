@@ -43,9 +43,8 @@ class PluginInterface_Themes : public QWidget
         virtual void newErrorAction(const QString &action) = 0;
         /// \brief set one error is detected
         virtual void errorDetected() = 0;
-        /** \brief the max speed used
-         * in byte per seconds, -1 if not able, 0 if disabled */
-        virtual bool setSpeedLimitation(const qint64 &speedLimitation) = 0;
+        /** \brief support speed limitation */
+        virtual void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool) = 0;
         /// \brief get action on the transfer list (add/move/remove)
         virtual void getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &returnActions) = 0;
         /// \brief show the general progression
@@ -57,10 +56,6 @@ class PluginInterface_Themes : public QWidget
         virtual QWidget * getOptionsEngineWidget() = 0;
         /// \brief to set if the copy engine is found
         virtual void getOptionsEngineEnabled(const bool &isEnabled) = 0;
-        /// \brief set collision action
-        virtual void setCollisionAction(const QList<QPair<QString,QString> > &collisionActionList) = 0;
-        /// \brief set error action
-        virtual void setErrorAction(const QList<QPair<QString,QString> > &errorActionList) = 0;
         /// \brief set the copyType -> file or folder
         virtual void setCopyType(const Ultracopier::CopyType&) = 0;
         /// \brief set the copyMove -> copy or move, to force in copy or move, else support both
@@ -92,8 +87,6 @@ class PluginInterface_Themes : public QWidget
         void skip(const quint64 &id);
         void cancel();
         //edit the action
-        void sendCollisionAction(const QString &action);
-        void sendErrorAction(const QString &action);
         void newSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
 };
 
@@ -120,6 +113,6 @@ class PluginInterface_ThemesFactory : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.0.0");
 
 #endif // PLUGININTERFACE_THEMES_H

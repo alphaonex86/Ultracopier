@@ -37,7 +37,7 @@ Factory::Factory() :
     connect(ui->autoStart,			&QCheckBox::toggled,		this,&Factory::setAutoStart);
     connect(ui->doChecksum,			&QCheckBox::toggled,		this,&Factory::doChecksum_toggled);
     connect(ui->comboBoxFolderError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderError);
-    connect(ui->comboBoxFolderColision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderColision);
+    connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderCollision);
     connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&Factory::setCheckDestinationFolder);
     connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&Factory::checksumIgnoreIfImpossible_toggled);
     connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&Factory::checksumOnlyOnError_toggled);
@@ -97,7 +97,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
     realObject->setKeepDate(		optionsEngine->getOptionValue("keepDate").toBool());
     realObject->setBlockSize(		optionsEngine->getOptionValue("blockSize").toInt());
     realObject->setAutoStart(		optionsEngine->getOptionValue("autoStart").toBool());
-    realObject->on_comboBoxFolderColision_currentIndexChanged(ui->comboBoxFolderColision->currentIndex());
+    realObject->on_comboBoxFolderCollision_currentIndexChanged(ui->comboBoxFolderCollision->currentIndex());
     realObject->on_comboBoxFolderError_currentIndexChanged(ui->comboBoxFolderError->currentIndex());
     realObject->setCheckDestinationFolderExists(	optionsEngine->getOptionValue("checkDestinationFolder").toBool());
 
@@ -149,7 +149,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));//4KB as default
         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
-        KeysList.append(qMakePair(QString("folderColision"),QVariant(0)));
+        KeysList.append(qMakePair(QString("folderCollision"),QVariant(0)));
         KeysList.append(qMakePair(QString("checkDestinationFolder"),QVariant(true)));
         KeysList.append(qMakePair(QString("includeStrings"),QVariant(QStringList())));
         KeysList.append(qMakePair(QString("includeOptions"),QVariant(QStringList())));
@@ -177,7 +177,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         ui->blockSize->setValue(options->getOptionValue("blockSize").toUInt());
         ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());
         ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue("folderError").toUInt());
-        ui->comboBoxFolderColision->setCurrentIndex(options->getOptionValue("folderColision").toUInt());
+        ui->comboBoxFolderCollision->setCurrentIndex(options->getOptionValue("folderCollision").toUInt());
         ui->checkBoxDestinationFolderExists->setChecked(options->getOptionValue("checkDestinationFolder").toBool());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
@@ -267,11 +267,11 @@ void Factory::setAutoStart(bool autoStart)
         optionsEngine->setOptionValue("autoStart",autoStart);
 }
 
-void Factory::setFolderColision(int index)
+void Factory::setFolderCollision(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("folderColision",index);
+        optionsEngine->setOptionValue("folderCollision",index);
 }
 
 void Factory::setFolderError(int index)
@@ -294,8 +294,25 @@ void Factory::newLanguageLoaded()
     OptionInterface * optionsEngine=this->optionsEngine;
     this->optionsEngine=NULL;
     ui->retranslateUi(tempWidget);
-    ui->comboBoxFolderError->setCurrentIndex(optionsEngine->getOptionValue("folderError").toUInt());
-    ui->comboBoxFolderColision->setCurrentIndex(optionsEngine->getOptionValue("folderColision").toUInt());
+    ui->comboBoxFolderError->setItemText(0,tr("Ask"));
+    ui->comboBoxFolderError->setItemText(1,tr("Skip"));
+
+    ui->comboBoxFolderCollision->setItemText(0,tr("Ask"));
+    ui->comboBoxFolderCollision->setItemText(1,tr("Merge"));
+    ui->comboBoxFolderCollision->setItemText(2,tr("Skip"));
+    ui->comboBoxFolderCollision->setItemText(3,tr("Rename"));
+
+    ui->comboBoxFileError->setItemText(0,tr("Ask"));
+    ui->comboBoxFileError->setItemText(1,tr("Skip"));
+    ui->comboBoxFileError->setItemText(2,tr("Put at the end"));
+
+    ui->comboBoxFileCollision->setItemText(0,tr("Ask"));
+    ui->comboBoxFileCollision->setItemText(1,tr("Skip"));
+    ui->comboBoxFileCollision->setItemText(2,tr("Overwrite"));
+    ui->comboBoxFileCollision->setItemText(3,tr("Overwrite if different"));
+    ui->comboBoxFileCollision->setItemText(4,tr("Overwrite if newer"));
+    ui->comboBoxFileCollision->setItemText(5,tr("Overwrite if older"));
+    ui->comboBoxFileCollision->setItemText(6,tr("Rename"));
     if(optionsEngine!=NULL)
     {
         filters->newLanguageLoaded();

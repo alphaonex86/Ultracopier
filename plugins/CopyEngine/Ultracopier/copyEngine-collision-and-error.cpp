@@ -357,7 +357,7 @@ void copyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
                 return;
             }
             if(dialog.getAlways() && newAction!=alwaysDoThisActionForFolderExists)
-                setComboBoxFolderColision(newAction);
+                setComboBoxFolderCollision(newAction);
             if(!dialog.getAlways() && newAction==FolderExists_Rename)
                 thread->setFolderExistsAction(newAction,dialog.getNewName());
             else

@@ -130,8 +130,8 @@ void copyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_skip()");
     if(!connect(this,&copyEngine::signal_setCollisionAction,		listThread,&ListThread::setAlwaysFileExistsAction,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
-    if(!connect(this,&copyEngine::signal_setFolderColision,		listThread,&ListThread::setFolderColision,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setFolderColision()");
+    if(!connect(this,&copyEngine::signal_setFolderCollision,		listThread,&ListThread::setFolderCollision,	Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setFolderCollision()");
     if(!connect(this,&copyEngine::signal_removeItems,				listThread,&ListThread::removeItems,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_removeItems()");
     if(!connect(this,&copyEngine::signal_moveItemsOnTop,				listThread,&ListThread::moveItemsOnTop,		Qt::QueuedConnection))
@@ -324,33 +324,9 @@ quint64 copyEngine::realByteTransfered()
 }
 
 //speed limitation
-qint64 copyEngine::getSpeedLimitation()
+bool copyEngine::supportSpeedLimitation()
 {
-    return maxSpeed;
-}
-
-//get collision action
-QList<QPair<QString,QString> > copyEngine::getCollisionAction()
-{
-    QPair<QString,QString> tempItem;
-    QList<QPair<QString,QString> > list;
-    tempItem.first=facilityEngine->translateText("Ask");tempItem.second="ask";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Skip");tempItem.second="skip";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Overwrite");tempItem.second="overwrite";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Overwrite if newer");tempItem.second="overwriteIfNewer";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Overwrite if the last modification dates are different");tempItem.second="overwriteIfNotSameModificationDate";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Rename");tempItem.second="rename";list << tempItem;
-    return list;
-}
-
-QList<QPair<QString,QString> > copyEngine::getErrorAction()
-{
-    QPair<QString,QString> tempItem;
-    QList<QPair<QString,QString> > list;
-    tempItem.first=facilityEngine->translateText("Ask");tempItem.second="ask";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Skip");tempItem.second="skip";list << tempItem;
-    tempItem.first=facilityEngine->translateText("Put to end of the list");tempItem.second="putToEndOfTheList";list << tempItem;
-    return list;
+    return true;
 }
 
 void copyEngine::setDrive(const QStringList &drives)
@@ -543,7 +519,7 @@ void copyEngine::forceMode(const Ultracopier::CopyMode &mode)
 
 void copyEngine::exportTransferList()
 {
-    QString fileName = QFileDialog::getSaveFileName(NULL,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
+    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
     if(fileName.isEmpty())
         return;
     emit signal_exportTransferList(fileName);
@@ -551,7 +527,7 @@ void copyEngine::exportTransferList()
 
 void copyEngine::importTransferList()
 {
-    QString fileName = QFileDialog::getOpenFileName(NULL,facilityEngine->translateText("Open transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
+    QString fileName = QFileDialog::getOpenFileName(interface,facilityEngine->translateText("Open transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
     if(fileName.isEmpty())
         return;
     emit signal_importTransferList(fileName);
@@ -655,21 +631,21 @@ void copyEngine::resetTempWidget()
     tempWidget=NULL;
 }
 
-void copyEngine::on_comboBoxFolderColision_currentIndexChanged(int index)
+void copyEngine::on_comboBoxFolderCollision_currentIndexChanged(int index)
 {
     switch(index)
     {
         case 0:
-            setComboBoxFolderColision(FolderExists_NotSet,false);
+            setComboBoxFolderCollision(FolderExists_NotSet,false);
         break;
         case 1:
-            setComboBoxFolderColision(FolderExists_Merge,false);
+            setComboBoxFolderCollision(FolderExists_Merge,false);
         break;
         case 2:
-            setComboBoxFolderColision(FolderExists_Skip,false);
+            setComboBoxFolderCollision(FolderExists_Skip,false);
         break;
         case 3:
-            setComboBoxFolderColision(FolderExists_Rename,false);
+            setComboBoxFolderCollision(FolderExists_Rename,false);
         break;
     }
 }
@@ -692,30 +668,51 @@ void copyEngine::newLanguageLoaded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, retranslate the widget options");
     if(tempWidget!=NULL)
+    {
         ui->retranslateUi(tempWidget);
+        ui->comboBoxFolderError->setItemText(0,tr("Ask"));
+        ui->comboBoxFolderError->setItemText(1,tr("Skip"));
+
+        ui->comboBoxFolderCollision->setItemText(0,tr("Ask"));
+        ui->comboBoxFolderCollision->setItemText(1,tr("Merge"));
+        ui->comboBoxFolderCollision->setItemText(2,tr("Skip"));
+        ui->comboBoxFolderCollision->setItemText(3,tr("Rename"));
+
+        ui->comboBoxFileError->setItemText(0,tr("Ask"));
+        ui->comboBoxFileError->setItemText(1,tr("Skip"));
+        ui->comboBoxFileError->setItemText(2,tr("Put at the end"));
+
+        ui->comboBoxFileCollision->setItemText(0,tr("Ask"));
+        ui->comboBoxFileCollision->setItemText(1,tr("Skip"));
+        ui->comboBoxFileCollision->setItemText(2,tr("Overwrite"));
+        ui->comboBoxFileCollision->setItemText(3,tr("Overwrite if different"));
+        ui->comboBoxFileCollision->setItemText(4,tr("Overwrite if newer"));
+        ui->comboBoxFileCollision->setItemText(5,tr("Overwrite if older"));
+        ui->comboBoxFileCollision->setItemText(6,tr("Rename"));
+    }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"ui not loaded!");
 }
 
-void copyEngine::setComboBoxFolderColision(FolderExistsAction action,bool changeComboBox)
+void copyEngine::setComboBoxFolderCollision(FolderExistsAction action,bool changeComboBox)
 {
     alwaysDoThisActionForFolderExists=action;
-    emit signal_setFolderColision(alwaysDoThisActionForFolderExists);
+    emit signal_setFolderCollision(alwaysDoThisActionForFolderExists);
     if(!changeComboBox || !uiIsInstalled)
         return;
     switch(action)
     {
         case FolderExists_Merge:
-            ui->comboBoxFolderColision->setCurrentIndex(1);
+            ui->comboBoxFolderCollision->setCurrentIndex(1);
         break;
         case FolderExists_Skip:
-            ui->comboBoxFolderColision->setCurrentIndex(2);
+            ui->comboBoxFolderCollision->setCurrentIndex(2);
         break;
         case FolderExists_Rename:
-            ui->comboBoxFolderColision->setCurrentIndex(3);
+            ui->comboBoxFolderCollision->setCurrentIndex(3);
         break;
         default:
-            ui->comboBoxFolderColision->setCurrentIndex(0);
+            ui->comboBoxFolderCollision->setCurrentIndex(0);
         break;
     }
 }
