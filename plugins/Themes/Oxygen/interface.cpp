@@ -6,26 +6,26 @@
 
 #include <QMessageBox>
 #include <QMimeData>
+#include <QScrollArea>
 
 #include "interface.h"
 #include "ui_interface.h"
 
 Themes::Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed) :
-    ui(new Ui::interfaceCopy())
+    ui(new Ui::interfaceCopy()),
+    uiOptions(new Ui::options())
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
 
     this->currentSpeed=currentSpeed;
-    uiOptions=new Ui::options();
-    uiOptions->setupUi(ui->tabWidget->widget(2));
+    uiOptions->setupUi(ui->tabWidget->widget(1));
+    //uiOptions->setupUi(ui->tabWidget->widget(1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
     uiOptions->label_Slider_speed->setVisible(false);
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
-    uiOptions->checkBox_limitSpeed->setVisible(false);
-    uiOptions->limitSpeed->setVisible(false);
 
     ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
@@ -48,8 +48,8 @@ Themes::Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,Facility
     isInPause(false);
     modeIsForced	= false;
     haveStarted	= false;
-    connect(ui->limitSpeed,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uiUpdateSpeed);
-    connect(ui->checkBox_limitSpeed,&QAbstractButton::toggled,		this,	&Themes::uiUpdateSpeed);
+    connect(uiOptions->limitSpeed,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uiUpdateSpeed);
+    connect(uiOptions->checkBox_limitSpeed,&QAbstractButton::toggled,		this,	&Themes::uiUpdateSpeed);
 
     connect(ui->actionAddFile,&QAction::triggered,this,&Themes::forcedModeAddFile);
     connect(ui->actionAddFileToCopy,&QAction::triggered,this,&Themes::forcedModeAddFileToCopy);
@@ -172,7 +172,12 @@ QWidget * Themes::getOptionsEngineWidget()
 void Themes::getOptionsEngineEnabled(const bool &isEnabled)
 {
     if(isEnabled)
-        ui->tabWidget->addTab(&optionEngineWidget,facilityEngine->translateText("Copy engine"));
+    {
+        QScrollArea *scrollArea=new QScrollArea(ui->tabWidget);
+        scrollArea->setWidgetResizable(true);
+        scrollArea->setWidget(&optionEngineWidget);
+        ui->tabWidget->addTab(scrollArea,facilityEngine->translateText("Copy engine"));
+    }
 }
 
 void Themes::closeEvent(QCloseEvent *event)
@@ -276,20 +281,6 @@ void Themes::remainingTime(const int &remainingSeconds)
     ui->labelTimeRemaining->setText(labelTimeRemaining);
 }
 
-void Themes::newCollisionAction(const QString &action)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    if(ui->comboBox_fileCollisions->findData(action)!=-1)
-        ui->comboBox_fileCollisions->setCurrentIndex(ui->comboBox_fileCollisions->findData(action));
-}
-
-void Themes::newErrorAction(const QString &action)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    if(ui->comboBox_copyErrors->findData(action)!=-1)
-        ui->comboBox_copyErrors->setCurrentIndex(ui->comboBox_copyErrors->findData(action));
-}
-
 void Themes::errorDetected()
 {
     haveError=true;
@@ -300,7 +291,6 @@ void Themes::setSupportSpeedLimitation(const bool &supportSpeedLimitationBool)
 {
     if(!supportSpeedLimitationBool)
     {
-        ui->groupBoxSpeedLimit->setVisible(false);
         ui->label_Slider_speed->setVisible(false);
         ui->SliderSpeed->setVisible(false);
         ui->label_SpeedMaxValue->setVisible(false);
@@ -333,30 +323,6 @@ void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progr
     QList<Ultracopier::ProgressionItem> progressionListBis=progressionList;
     transferModel.setFileProgression(progressionListBis);
     updateCurrentFileInformation();
-}
-
-void Themes::setCollisionAction(const QList<QPair<QString,QString> > &list)
-{
-    ui->comboBox_fileCollisions->clear();
-    index=0;
-    loop_size=list.size();
-    while(index<loop_size)
-    {
-        ui->comboBox_fileCollisions->addItem(list.at(index).first,list.at(index).second);
-        index++;
-    }
-}
-
-void Themes::setErrorAction(const QList<QPair<QString,QString> > &list)
-{
-    ui->comboBox_copyErrors->clear();
-    index=0;
-    loop_size=list.size();
-    while(index<loop_size)
-    {
-        ui->comboBox_copyErrors->addItem(list.at(index).first,list.at(index).second);
-        index++;
-    }
 }
 
 //edit the transfer list
@@ -600,27 +566,26 @@ void Themes::uiUpdateSpeed()
 {
     if(uiOptions->checkBoxShowSpeed->isChecked())
         return;
-    if(!ui->checkBox_limitSpeed->isChecked())
+    if(!uiOptions->checkBox_limitSpeed->isChecked())
         currentSpeed=0;
     else
-        currentSpeed=ui->limitSpeed->value();
+        currentSpeed=uiOptions->limitSpeed->value();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("emit newSpeedLimitation(%1)").arg(currentSpeed));
     emit newSpeedLimitation(currentSpeed);
 }
 
 void Themes::updateSpeed()
 {
-    ui->groupBoxSpeedLimit->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
     ui->label_Slider_speed->setVisible(uiOptions->checkBoxShowSpeed->isChecked());
     ui->SliderSpeed->setVisible(uiOptions->checkBoxShowSpeed->isChecked());
     ui->label_SpeedMaxValue->setVisible(uiOptions->checkBoxShowSpeed->isChecked());
-    ui->limitSpeed->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
-    ui->checkBox_limitSpeed->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
+    uiOptions->limitSpeed->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
+    uiOptions->checkBox_limitSpeed->setVisible(!uiOptions->checkBoxShowSpeed->isChecked());
 
     if(uiOptions->checkBoxShowSpeed->isChecked())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("checked, currentSpeed: %1").arg(currentSpeed));
-        ui->limitSpeed->setEnabled(false);
+        uiOptions->limitSpeed->setEnabled(false);
         if(currentSpeed==0)
         {
             ui->SliderSpeed->setValue(0);
@@ -679,11 +644,11 @@ void Themes::updateSpeed()
     }
     else
     {
-        ui->checkBox_limitSpeed->setChecked(currentSpeed>0);
+        uiOptions->checkBox_limitSpeed->setChecked(currentSpeed>0);
         if(currentSpeed>0)
-            ui->limitSpeed->setValue(currentSpeed);
-        ui->checkBox_limitSpeed->setEnabled(currentSpeed!=-1);
-        ui->limitSpeed->setEnabled(ui->checkBox_limitSpeed->isChecked());
+            uiOptions->limitSpeed->setValue(currentSpeed);
+        uiOptions->checkBox_limitSpeed->setEnabled(currentSpeed!=-1);
+        uiOptions->limitSpeed->setEnabled(uiOptions->checkBox_limitSpeed->isChecked());
     }
 }
 
@@ -785,7 +750,8 @@ void Themes::newLanguageLoaded()
         updateCurrentFileInformation();
     updateOverallInformation();
     updateSpeed();
-    ui->tabWidget->setTabText(4,facilityEngine->translateText("Copy engine"));
+    if(ui->tabWidget->count()>=3)
+        ui->tabWidget->setTabText(2,facilityEngine->translateText("Copy engine"));
     on_moreButton_toggled(ui->moreButton->isChecked());
 }
 
@@ -894,18 +860,6 @@ void Themes::on_moreButton_toggled(bool checked)
     this->updateGeometry();
     this->update();
     this->adjustSize();
-}
-
-void Themes::on_comboBox_copyErrors_currentIndexChanged(int index)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    emit sendErrorAction(ui->comboBox_copyErrors->itemData(index).toString());
-}
-
-void Themes::on_comboBox_fileCollisions_currentIndexChanged(int index)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    emit sendCollisionAction(ui->comboBox_fileCollisions->itemData(index).toString());
 }
 
 /* drag event processing

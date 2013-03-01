@@ -97,28 +97,23 @@ PluginInterface_CopyEngine * Factory::getInstance()
     realObject->setDrive(mountSysPoint);
     PluginInterface_CopyEngine * newTransferEngine=realObject;
     connect(this,&Factory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
-    realObject->setRightTransfer(		optionsEngine->getOptionValue("doRightTransfer").toBool());
-    realObject->setKeepDate(		optionsEngine->getOptionValue("keepDate").toBool());
-    realObject->setBlockSize(		optionsEngine->getOptionValue("blockSize").toInt());
-    realObject->setAutoStart(		optionsEngine->getOptionValue("autoStart").toBool());
+    realObject->setRightTransfer(ui->doRightTransfer->isChecked());
+    realObject->setKeepDate(ui->keepDate->isChecked());
+    realObject->setBlockSize(ui->blockSize->value());
+    realObject->setAutoStart(ui->autoStart->isChecked());
     realObject->on_comboBoxFolderCollision_currentIndexChanged(ui->comboBoxFolderCollision->currentIndex());
     realObject->on_comboBoxFolderError_currentIndexChanged(ui->comboBoxFolderError->currentIndex());
     realObject->on_comboBoxFileCollision_currentIndexChanged(ui->comboBoxFileCollision->currentIndex());
     realObject->on_comboBoxFileError_currentIndexChanged(ui->comboBoxFileError->currentIndex());
-    realObject->setCheckDestinationFolderExists(	optionsEngine->getOptionValue("checkDestinationFolder").toBool());
-
-    realObject->set_doChecksum(optionsEngine->getOptionValue("doChecksum").toBool());
-    realObject->set_checksumIgnoreIfImpossible(optionsEngine->getOptionValue("checksumIgnoreIfImpossible").toBool());
-    realObject->set_checksumOnlyOnError(optionsEngine->getOptionValue("checksumOnlyOnError").toBool());
-    realObject->set_osBuffer(optionsEngine->getOptionValue("osBuffer").toBool());
-    realObject->set_osBufferLimited(optionsEngine->getOptionValue("osBufferLimited").toBool());
-    realObject->set_osBufferLimit(optionsEngine->getOptionValue("osBufferLimit").toUInt());
-    realObject->set_setFilters(optionsEngine->getOptionValue("includeStrings").toStringList(),
-        optionsEngine->getOptionValue("includeOptions").toStringList(),
-        optionsEngine->getOptionValue("excludeStrings").toStringList(),
-        optionsEngine->getOptionValue("excludeOptions").toStringList()
-    );
-    realObject->setRenamingRules(optionsEngine->getOptionValue("firstRenamingRule").toString(),optionsEngine->getOptionValue("otherRenamingRule").toString());
+    realObject->setCheckDestinationFolderExists(ui->checkBoxDestinationFolderExists->isChecked());
+    realObject->set_doChecksum(ui->doChecksum->isChecked());
+    realObject->set_checksumIgnoreIfImpossible(ui->checksumIgnoreIfImpossible->isChecked());
+    realObject->set_checksumOnlyOnError(ui->checksumOnlyOnError->isChecked());
+    realObject->set_osBuffer(ui->osBuffer->isChecked());
+    realObject->set_osBufferLimited(ui->osBufferLimited->isChecked());
+    realObject->set_osBufferLimit(ui->osBufferLimit->value());
+    realObject->set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+    realObject->setRenamingRules(firstRenamingRule,otherRenamingRule);
     return newTransferEngine;
 }
 
@@ -156,6 +151,8 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
         KeysList.append(qMakePair(QString("folderCollision"),QVariant(0)));
+        KeysList.append(qMakePair(QString("fileError"),QVariant(0)));
+        KeysList.append(qMakePair(QString("fileCollision"),QVariant(0)));
         KeysList.append(qMakePair(QString("checkDestinationFolder"),QVariant(true)));
         KeysList.append(qMakePair(QString("includeStrings"),QVariant(QStringList())));
         KeysList.append(qMakePair(QString("includeOptions"),QVariant(QStringList())));
@@ -196,12 +193,14 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         ui->osBufferLimited->setChecked(options->getOptionValue("osBufferLimited").toBool());
         ui->osBufferLimit->setValue(options->getOptionValue("osBufferLimit").toUInt());
         //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
-        filters->setFilters(options->getOptionValue("includeStrings").toStringList(),
-            options->getOptionValue("includeOptions").toStringList(),
-            options->getOptionValue("excludeStrings").toStringList(),
-            options->getOptionValue("excludeOptions").toStringList()
-        );
-        renamingRules->setRenamingRules(options->getOptionValue("firstRenamingRule").toString(),options->getOptionValue("otherRenamingRule").toString());
+        includeStrings=options->getOptionValue("includeStrings").toStringList();
+        includeOptions=options->getOptionValue("includeOptions").toStringList();
+        excludeStrings=options->getOptionValue("excludeStrings").toStringList();
+        excludeOptions=options->getOptionValue("excludeOptions").toStringList();
+        filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+        firstRenamingRule=options->getOptionValue("firstRenamingRule").toString();
+        otherRenamingRule=options->getOptionValue("otherRenamingRule").toString();
+        renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
 
         ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
         ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
@@ -379,6 +378,10 @@ void Factory::showFilterDialog()
 void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
+    this->includeStrings=includeStrings;
+    this->includeOptions=includeOptions;
+    this->excludeStrings=excludeStrings;
+    this->excludeOptions=excludeOptions;
     if(optionsEngine!=NULL)
     {
         optionsEngine->setOptionValue("includeStrings",includeStrings);
@@ -388,9 +391,11 @@ void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList
     }
 }
 
-void Factory::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void Factory::sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
+    this->firstRenamingRule=firstRenamingRule;
+    this->otherRenamingRule=otherRenamingRule;
     if(optionsEngine!=NULL)
     {
         optionsEngine->setOptionValue("firstRenamingRule",firstRenamingRule);

@@ -37,10 +37,6 @@ class PluginInterface_Themes : public QWidget
         /** \brief show the remaining time
          * time in seconds */
         virtual void remainingTime(const int &remainingSeconds) = 0;
-        /// \brief set the current collision action
-        virtual void newCollisionAction(const QString &action) = 0;
-        /// \brief set the current error action
-        virtual void newErrorAction(const QString &action) = 0;
         /// \brief set one error is detected
         virtual void errorDetected() = 0;
         /** \brief support speed limitation */

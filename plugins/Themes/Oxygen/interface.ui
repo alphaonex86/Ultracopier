@@ -333,6 +333,9 @@ p, li { white-space: pre-wrap; }
              <height>22</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Move the selected items to the top</string>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/putOnTop.png</normaloff>:/resources/putOnTop.png</iconset>
@@ -355,6 +358,9 @@ p, li { white-space: pre-wrap; }
              <width>22</width>
              <height>22</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Move up the selected items</string>
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
@@ -379,6 +385,9 @@ p, li { white-space: pre-wrap; }
              <height>22</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Move down the selected items</string>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/moveDown.png</normaloff>:/resources/moveDown.png</iconset>
@@ -402,6 +411,9 @@ p, li { white-space: pre-wrap; }
              <height>22</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Move the selected items to the bottom</string>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/putOnBottom.png</normaloff>:/resources/putOnBottom.png</iconset>
@@ -424,6 +436,9 @@ p, li { white-space: pre-wrap; }
              <width>22</width>
              <height>22</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Add file/folder</string>
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
@@ -451,6 +466,9 @@ p, li { white-space: pre-wrap; }
              <height>22</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Delete select items</string>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/remove.png</normaloff>:/resources/remove.png</iconset>
@@ -475,7 +493,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="toolTip">
-            <string>Ctrl+F</string>
+            <string>Search</string>
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
@@ -503,6 +521,9 @@ p, li { white-space: pre-wrap; }
              <height>22</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Export transfer list</string>
+           </property>
            <property name="icon">
             <iconset resource="resources.qrc">
              <normaloff>:/resources/export-transfer-list.png</normaloff>:/resources/export-transfer-list.png</iconset>
@@ -525,6 +546,9 @@ p, li { white-space: pre-wrap; }
              <width>22</width>
              <height>22</height>
             </size>
+           </property>
+           <property name="toolTip">
+            <string>Import transfer list</string>
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">

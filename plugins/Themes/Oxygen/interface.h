@@ -62,10 +62,6 @@ public:
     void setGeneralProgression(const quint64 &current,const quint64 &total);
     /// \brief show the file progression
     void setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList);
-    /// \brief set collision action
-    void setCollisionAction(const QList<QPair<QString,QString> > &);
-    /// \brief set error action
-    void setErrorAction(const QList<QPair<QString,QString> > &);
     /// \brief set the copyType -> file or folder
     void setCopyType(const Ultracopier::CopyType &);
     /// \brief set the copyMove -> copy or move, to force in copy or move, else support both
@@ -121,8 +117,6 @@ private slots:
     void on_lineEditSearch_returnPressed();
     void on_lineEditSearch_textChanged(QString text);
     void on_moreButton_toggled(bool checked);
-    void on_comboBox_copyErrors_currentIndexChanged(int index);
-    void on_comboBox_fileCollisions_currentIndexChanged(int index);
     void on_searchButton_toggled(bool checked);
     void on_exportTransferList_clicked();
     void on_importTransferList_clicked();

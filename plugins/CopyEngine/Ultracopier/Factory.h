@@ -65,6 +65,8 @@ private:
     RenamingRules *renamingRules;
     QStorageInfo storageInfo;
     QTimer lunchInitFunction;
+    QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
+    QString firstRenamingRule,otherRenamingRule;
 private slots:
     void init();
     void setDoRightTransfer(bool doRightTransfer);
@@ -82,7 +84,7 @@ private slots:
     void osBufferLimited_toggled(bool);
     void osBufferLimit_editingFinished();
     void checksumIgnoreIfImpossible_toggled(bool);
-    void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void sendNewRenamingRules(const QString &firstRenamingRule, const QString &otherRenamingRule);
     void showRenamingRules();
     void updateBufferCheckbox();
     void logicalDriveChanged(const QString &, bool);

@@ -151,8 +151,6 @@ class Core : public QObject, public GlobalClass
         // some stat update
         void actionInProgess(const Ultracopier::EngineActionInProgress &action);
         void newFolderListing(const QString &path);
-        void newCollisionAction(const QString &action);
-        void newErrorAction(const QString &action);
         void isInPause(const bool&);
 
         /** \brief update at periodic interval, the synchronization between copy engine and interface

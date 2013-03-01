@@ -143,8 +143,6 @@ class PluginInterface_CopyEngine : public QObject
         void actionInProgess(const Ultracopier::EngineActionInProgress &engineActionInProgress);	//should update interface information on this event
 
         void newFolderListing(const QString &path);
-        void newCollisionAction(const QString &action);
-        void newErrorAction(const QString &action);
         void isInPause(const bool &isInPause);
 
         void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>&);///very important, need be temporized to group the modification to do and not flood the interface

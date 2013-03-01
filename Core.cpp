@@ -480,26 +480,6 @@ void Core::newFolderListing(const QString &path)
     }
 }
 
-void Core::newCollisionAction(const QString &action)
-{
-    int index=indexCopySenderCopyEngine();
-    if(index!=-1)
-    {
-        copyList[index].collisionAction=action;
-        copyList.at(index).interface->newCollisionAction(action);
-    }
-}
-
-void Core::newErrorAction(const QString &action)
-{
-    int index=indexCopySenderCopyEngine();
-    if(index!=-1)
-    {
-        copyList[index].errorAction=action;
-        copyList.at(index).interface->newErrorAction(action);
-    }
-}
-
 void Core::isInPause(const bool &isPaused)
 {
     int index=indexCopySenderCopyEngine();
@@ -581,10 +561,6 @@ void Core::connectEngine(const int &index)
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing,			this,&Core::newFolderListing,Qt::QueuedConnection))//to check to change
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newFolderListing()").arg(index).arg((quint64)sender()));
-    if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newCollisionAction,			this,&Core::newCollisionAction,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newCollisionAction()").arg(index).arg((quint64)sender()));
-    if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newErrorAction,			this,&Core::newErrorAction,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newErrorAction()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess,	this,&Core::actionInProgess,Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for actionInProgess()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::isInPause,				this,&Core::isInPause,Qt::QueuedConnection))//to check to change
@@ -615,12 +591,8 @@ void Core::connectInterfaceAndSync(const int &index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::skip,				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for skip()").arg(index).arg((quint64)sender()));
-    if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::sendErrorAction,			currentCopyInstance.engine,&PluginInterface_CopyEngine::setErrorAction))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for sendErrorAction()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		currentCopyInstance.engine,&PluginInterface_CopyEngine::setSpeedLimitation))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
-    if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::sendCollisionAction,		currentCopyInstance.engine,&PluginInterface_CopyEngine::setCollisionAction))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for sendCollisionAction()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFolder,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFolder))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for userAddFolder()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile))
@@ -660,8 +632,6 @@ void Core::connectInterfaceAndSync(const int &index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
 
     currentCopyInstance.interface->setSupportSpeedLimitation(currentCopyInstance.engine->supportSpeedLimitation());
-    currentCopyInstance.interface->setErrorAction(currentCopyInstance.engine->getErrorAction());
-    currentCopyInstance.interface->setCollisionAction(currentCopyInstance.engine->getCollisionAction());
     currentCopyInstance.interface->setCopyType(currentCopyInstance.type);
     currentCopyInstance.interface->setTransferListOperation(currentCopyInstance.transferListOperation);
     currentCopyInstance.interface->actionInProgess(currentCopyInstance.action);
