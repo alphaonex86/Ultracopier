@@ -201,6 +201,82 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     set_osBuffer(osBuffer);
     set_osBufferLimited(osBufferLimited);
     set_osBufferLimit(osBufferLimit);
+    switch(alwaysDoThisActionForFileExists)
+    {
+        case FileExists_NotSet:
+            ui->comboBoxFileCollision->setCurrentIndex(0);
+        break;
+        case FileExists_Skip:
+            ui->comboBoxFileCollision->setCurrentIndex(1);
+        break;
+        case FileExists_Overwrite:
+            ui->comboBoxFileCollision->setCurrentIndex(2);
+        break;
+        case FileExists_OverwriteIfNotSame:
+            ui->comboBoxFileCollision->setCurrentIndex(3);
+        break;
+        case FileExists_OverwriteIfNewer:
+            ui->comboBoxFileCollision->setCurrentIndex(4);
+        break;
+        case FileExists_OverwriteIfOlder:
+            ui->comboBoxFileCollision->setCurrentIndex(5);
+        break;
+        case FileExists_Rename:
+            ui->comboBoxFileCollision->setCurrentIndex(6);
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ui->comboBoxFileCollision->setCurrentIndex(0);
+        break;
+    }
+    switch(alwaysDoThisActionForFileError)
+    {
+        case FileError_NotSet:
+            ui->comboBoxFileError->setCurrentIndex(0);
+        break;
+        case FileError_Skip:
+            ui->comboBoxFileError->setCurrentIndex(1);
+        break;
+        case FileError_PutToEndOfTheList:
+            ui->comboBoxFileError->setCurrentIndex(2);
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ui->comboBoxFileError->setCurrentIndex(0);
+        break;
+    }
+    switch(alwaysDoThisActionForFolderExists)
+    {
+        case FolderExists_NotSet:
+            ui->comboBoxFolderCollision->setCurrentIndex(0);
+        break;
+        case FolderExists_Merge:
+            ui->comboBoxFolderCollision->setCurrentIndex(1);
+        break;
+        case FolderExists_Skip:
+            ui->comboBoxFolderCollision->setCurrentIndex(2);
+        break;
+        case FolderExists_Rename:
+            ui->comboBoxFolderCollision->setCurrentIndex(3);
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ui->comboBoxFolderCollision->setCurrentIndex(0);
+        break;
+    }
+    switch(alwaysDoThisActionForFileError)
+    {
+        case FileError_NotSet:
+            ui->comboBoxFolderError->setCurrentIndex(0);
+        break;
+        case FileError_Skip:
+            ui->comboBoxFolderError->setCurrentIndex(1);
+        break;
+        default:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ui->comboBoxFolderError->setCurrentIndex(0);
+        break;
+    }
     return true;
 }
 
@@ -550,6 +626,9 @@ bool CopyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 void CopyEngine::on_comboBoxFileCollision_currentIndexChanged(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    if(uiIsInstalled)
+        if(index!=ui->comboBoxFileCollision->currentIndex())
+            ui->comboBoxFileCollision->setCurrentIndex(index);
     switch(index)
     {
         case 0:
@@ -584,6 +663,9 @@ void CopyEngine::on_comboBoxFileCollision_currentIndexChanged(int index)
 void CopyEngine::on_comboBoxFileError_currentIndexChanged(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    if(uiIsInstalled)
+        if(index!=ui->comboBoxFileError->currentIndex())
+            ui->comboBoxFileError->setCurrentIndex(index);
     switch(index)
     {
         case 0:
