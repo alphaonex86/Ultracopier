@@ -181,6 +181,12 @@ p, li { white-space: pre-wrap; }
      </property>
      <item>
       <widget class="QLabel" name="currentSpeed">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -188,22 +194,28 @@ p, li { white-space: pre-wrap; }
         </size>
        </property>
        <property name="text">
-        <string>0KB/sec</string>
+        <string notr="true">0KB/sec</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
+      <widget class="QProgressBar" name="progressBarCurrentSpeed">
+       <property name="maximumSize">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>16777215</width>
+         <height>16</height>
         </size>
        </property>
-      </spacer>
+       <property name="maximum">
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="format">
+        <string notr="true">0KB/sec</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="moreButton">

@@ -42,6 +42,8 @@ public:
 private slots:
     void checkBoxShowSpeedHaveChanged(bool toggled);
     void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
+    void comboBox_copyEnd(int value);
+    void speedWithProgressBar(bool toggled);
     void on_checkBoxShowSpeed_toggled(bool checked);
     void on_SliderSpeed_valueChanged(int value);
     void uiUpdateSpeed();

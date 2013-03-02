@@ -36,7 +36,7 @@ class Themes : public PluginInterface_Themes
 {
     Q_OBJECT
 public:
-    Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed);
+    Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
@@ -92,6 +92,7 @@ private slots:
     void on_putOnBottom_clicked();
     void on_del_clicked();
     void on_cancelButton_clicked();
+    void on_speedWithProgressBar_toggled(bool checked);
     void on_checkBoxShowSpeed_toggled(bool checked);
     void on_SliderSpeed_valueChanged(int value);
     void on_pauseButton_clicked();

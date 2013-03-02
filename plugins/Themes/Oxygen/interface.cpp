@@ -11,7 +11,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-Themes::Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed) :
+Themes::Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed) :
     ui(new Ui::interfaceCopy()),
     uiOptions(new Ui::options())
 {
@@ -20,12 +20,15 @@ Themes::Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,Facility
 
     this->currentSpeed=currentSpeed;
     uiOptions->setupUi(ui->tabWidget->widget(1));
+    uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     //uiOptions->setupUi(ui->tabWidget->widget(1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
     uiOptions->label_Slider_speed->setVisible(false);
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
+    uiOptions->comboBox_copyEnd->setCurrentIndex(comboBox_copyEnd);
+    on_speedWithProgressBar_toggled(uiOptions->speedWithProgressBar->isChecked());
 
     ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
@@ -43,6 +46,7 @@ Themes::Themes(const qint32 &currentSpeed,const bool &checkBoxShowSpeed,Facility
     //connect the options
     on_checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
     connect(uiOptions->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Themes::on_checkBoxShowSpeed_toggled);
+    connect(uiOptions->speedWithProgressBar,&QCheckBox::stateChanged,this,&Themes::on_speedWithProgressBar_toggled);
 
     storeIsInPause	= false;
     isInPause(false);
@@ -264,7 +268,21 @@ void Themes::newFolderListing(const QString &path)
 
 void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
 {
-    ui->currentSpeed->setText(facilityEngine->speedToString(speed));
+    if(uiOptions->speedWithProgressBar->isChecked())
+    {
+        quint64 tempSpeed=speed/1024;
+        if(tempSpeed>999999999)
+            tempSpeed=999999999;
+        if(tempSpeed>(quint64)ui->progressBarCurrentSpeed->maximum())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("set max speed to: %1").arg(tempSpeed));
+            ui->progressBarCurrentSpeed->setMaximum(tempSpeed);
+        }
+        ui->progressBarCurrentSpeed->setValue(tempSpeed);
+        ui->progressBarCurrentSpeed->setFormat(facilityEngine->speedToString(speed));
+    }
+    else
+        ui->currentSpeed->setText(facilityEngine->speedToString(speed));
 }
 
 void Themes::remainingTime(const int &remainingSeconds)
@@ -525,6 +543,14 @@ void Themes::on_cancelButton_clicked()
     emit cancel();
 }
 
+
+void Themes::on_speedWithProgressBar_toggled(bool checked)
+{
+    ui->progressBarCurrentSpeed->setVisible(checked);
+    ui->currentSpeed->setVisible(!checked);
+}
+
+
 void Themes::on_checkBoxShowSpeed_toggled(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -744,6 +770,10 @@ void Themes::newLanguageLoaded()
     if(modeIsForced)
         forceCopyMode(mode);
     ui->retranslateUi(this);
+    uiOptions->retranslateUi(this);
+    uiOptions->comboBox_copyEnd->setItemText(0,tr("Don't close if errors are found"));
+    uiOptions->comboBox_copyEnd->setItemText(1,tr("Never close"));
+    uiOptions->comboBox_copyEnd->setItemText(2,tr("Always close"));
     if(!haveStarted)
         ui->current_file->setText(tr("File Name, 0KB"));
     else

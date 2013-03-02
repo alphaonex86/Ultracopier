@@ -25,7 +25,12 @@ PluginInterface_Themes * Factory::getInstance()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, currentSpeed: %1").arg(currentSpeed));
 
     Themes * newInterface=new Themes(
-                currentSpeed,optionsEngine->getOptionValue("checkBoxShowSpeed").toBool(),facilityEngine,optionsEngine->getOptionValue("moreButtonPushed").toBool()
+                ui->comboBox_copyEnd->currentIndex(),
+                ui->speedWithProgressBar->isChecked(),
+                currentSpeed,
+                ui->checkBoxShowSpeed->isChecked(),
+                facilityEngine,
+                ui->checkBoxStartWithMoreButtonPushed->isChecked()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation);
@@ -48,13 +53,11 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
         QList<QPair<QString, QVariant> > KeysList;
         KeysList.append(qMakePair(QString("checkBoxShowSpeed"),QVariant(false)));
         KeysList.append(qMakePair(QString("moreButtonPushed"),QVariant(false)));
+        KeysList.append(qMakePair(QString("speedWithProgressBar"),QVariant(true)));
         KeysList.append(qMakePair(QString("currentSpeed"),QVariant(0)));
+        KeysList.append(qMakePair(QString("comboBox_copyEnd"),QVariant(0)));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&Factory::resetOptions);
-        bool ok;
-        currentSpeed=optionsEngine->getOptionValue("currentSpeed").toUInt(&ok);
-        if(!ok)
-            currentSpeed=0;
         updateSpeed();
         connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Factory::on_checkBoxShowSpeed_toggled);
         connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&Factory::uiUpdateSpeed);
@@ -62,6 +65,8 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
         connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Factory::uiUpdateSpeed);
         connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&Factory::checkBoxShowSpeedHaveChanged);
         connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&Factory::checkBoxStartWithMoreButtonPushedHaveChanged);
+        connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&Factory::speedWithProgressBar);
+        connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::comboBox_copyEnd);
     }
     #ifndef __GNUC__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is not set");
@@ -78,6 +83,8 @@ QWidget * Factory::options()
         currentSpeed=0;
     if(optionsEngine!=NULL)
     {
+        ui->comboBox_copyEnd->setCurrentIndex(optionsEngine->getOptionValue("comboBox_copyEnd").toUInt());
+        ui->speedWithProgressBar->setChecked(optionsEngine->getOptionValue("speedWithProgressBar").toBool());
         ui->checkBoxShowSpeed->setChecked(optionsEngine->getOptionValue("checkBoxShowSpeed").toBool());
         ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue("moreButtonPushed").toBool());
         updateSpeed();
@@ -154,9 +161,30 @@ void Factory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
+void Factory::comboBox_copyEnd(int value)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("comboBox_copyEnd",value);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::speedWithProgressBar(bool toggled)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("speedWithProgressBar",toggled);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
 void Factory::newLanguageLoaded()
 {
     ui->retranslateUi(tempWidget);
+    ui->comboBox_copyEnd->setItemText(0,tr("Don't close if errors are found"));
+    ui->comboBox_copyEnd->setItemText(1,tr("Never close"));
+    ui->comboBox_copyEnd->setItemText(2,tr("Always close"));
     emit reloadLanguage();
 }
 
