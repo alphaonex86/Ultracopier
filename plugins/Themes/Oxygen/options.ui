@@ -116,6 +116,9 @@
    </item>
    <item row="5" column="1">
     <widget class="QSpinBox" name="limitSpeed">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="suffix">
       <string> KB/s</string>
      </property>
@@ -140,5 +143,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>checkBox_limitSpeed</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>limitSpeed</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
