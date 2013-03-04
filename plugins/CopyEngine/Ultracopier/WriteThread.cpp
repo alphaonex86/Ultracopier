@@ -459,6 +459,12 @@ bool WriteThread::setBlockSize(const int blockSize)
     }
 }
 
+/// \brief get the last good position
+qint64 WriteThread::getLastGoodPosition()
+{
+    return lastGoodPosition;
+}
+
 void WriteThread::flushAndSeekToZero()
 {
         stopIt=true;

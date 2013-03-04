@@ -1463,14 +1463,43 @@ quint64 TransferThread::realByteTransfered()
     switch(transfer_stat)
     {
     case TransferStat_Transfer:
-    case TransferStat_PostOperation:
     case TransferStat_Checksum:
         return readThread.getLastGoodPosition();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] transferSize: "+QString::number(transferSize));
+    case TransferStat_PostTransfer:
+    case TransferStat_PostOperation:
         return transferSize;
     default:
         return 0;
     }
+}
+
+//first is read, second is write
+QPair<quint64,quint64> TransferThread::progression()
+{
+    QPair<quint64,quint64> returnVar;
+    switch(transfer_stat)
+    {
+    case TransferStat_Transfer:
+        returnVar.first=readThread.getLastGoodPosition();
+        returnVar.second=writeThread.getLastGoodPosition();
+    break;
+    case TransferStat_Checksum:
+        returnVar.first=readThread.getLastGoodPosition();
+        returnVar.second=writeThread.getLastGoodPosition();
+    break;
+    case TransferStat_PostTransfer:
+        returnVar.first=transferSize;
+        returnVar.second=writeThread.getLastGoodPosition();
+    break;
+    case TransferStat_PostOperation:
+        returnVar.first=transferSize;
+        returnVar.second=transferSize;
+    break;
+    default:
+        returnVar.first=0;
+        returnVar.second=0;
+    }
+    return returnVar;
 }
 
 void TransferThread::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)

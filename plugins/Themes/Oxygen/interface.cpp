@@ -7,20 +7,45 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QScrollArea>
+#include <QColorDialog>
+#include <math.h>
 
 #include "interface.h"
 #include "ui_interface.h"
 
-Themes::Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed) :
+Themes::Themes(const QColor &progressColorWrite,
+               const QColor &progressColorRead,
+               const QColor &progressColorRemaining,
+               const bool &showDualProgression,
+               const quint8 &comboBox_copyEnd,
+               const bool &speedWithProgressBar,
+               const qint32 &currentSpeed,
+               const bool &checkBoxShowSpeed,
+               FacilityInterface * facilityEngine,
+               const bool &moreButtonPushed) :
     ui(new Ui::interfaceCopy()),
     uiOptions(new Ui::options())
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
-
-    this->currentSpeed=currentSpeed;
     uiOptions->setupUi(ui->tabWidget->widget(1));
+
+    currentFile	= 0;
+    totalFile	= 0;
+    currentSize	= 0;
+    totalSize	= 0;
+    haveError	= false;
+    stat        = status_never_started;
+    modeIsForced	= false;
+    haveStarted	= false;
+    storeIsInPause	= false;
+
+    this->progressColorWrite=progressColorWrite;
+    this->progressColorRead=progressColorRead;
+    this->progressColorRemaining=progressColorRemaining;
+    this->currentSpeed=currentSpeed;
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
+    uiOptions->showDualProgression->setChecked(showDualProgression);
     //uiOptions->setupUi(ui->tabWidget->widget(1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
@@ -28,18 +53,20 @@ Themes::Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,c
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
     uiOptions->comboBox_copyEnd->setCurrentIndex(comboBox_copyEnd);
-    on_speedWithProgressBar_toggled(uiOptions->speedWithProgressBar->isChecked());
+    on_speedWithProgressBar_toggled(speedWithProgressBar);
+    on_showDualProgression_toggled(showDualProgression);
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorWrite);
+    uiOptions->progressColorWrite->setIcon(pixmap);
+    pixmap.fill(progressColorRead);
+    uiOptions->progressColorRead->setIcon(pixmap);
+    pixmap.fill(progressColorRemaining);
+    uiOptions->progressColorRemaining->setIcon(pixmap);
 
     ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
     ui->tabWidget->setCurrentIndex(0);
     uiOptions->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
-    currentFile	= 0;
-    totalFile	= 0;
-    currentSize	= 0;
-    totalSize	= 0;
-    haveError	= false;
-    stat        = status_never_started;
     menu=new QMenu(this);
     ui->add->setMenu(menu);
 
@@ -47,11 +74,13 @@ Themes::Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,c
     on_checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
     connect(uiOptions->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Themes::on_checkBoxShowSpeed_toggled);
     connect(uiOptions->speedWithProgressBar,&QCheckBox::stateChanged,this,&Themes::on_speedWithProgressBar_toggled);
+    connect(uiOptions->showDualProgression,&QCheckBox::stateChanged,this,&Themes::on_showDualProgression_toggled);
+    connect(uiOptions->progressColorWrite,&QAbstractButton::clicked,this,&Themes::progressColorWrite_clicked);
+    connect(uiOptions->progressColorRead,	&QAbstractButton::clicked,this,&Themes::progressColorRead_clicked);
+    connect(uiOptions->progressColorRemaining,&QAbstractButton::clicked,this,&Themes::progressColorRemaining_clicked);
 
-    storeIsInPause	= false;
     isInPause(false);
-    modeIsForced	= false;
-    haveStarted	= false;
+
     connect(uiOptions->limitSpeed,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uiUpdateSpeed);
     connect(uiOptions->checkBox_limitSpeed,&QAbstractButton::toggled,		this,	&Themes::uiUpdateSpeed);
 
@@ -83,7 +112,7 @@ Themes::Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,c
 
     //unpush the more button
     ui->moreButton->setChecked(moreButtonPushed);
-    on_moreButton_toggled(false);
+    on_moreButton_toggled(moreButtonPushed);
 
     /// \note important for drag and drop, \see dropEvent()
     setAcceptDrops(true);
@@ -435,10 +464,32 @@ void Themes::updateCurrentFileInformation()
         ui->from->setText(transfertItem.from);
         ui->to->setText(transfertItem.to);
         ui->current_file->setText(transfertItem.current_file);
-        if(transfertItem.progressBar_file!=-1)
+        if(transfertItem.progressBar_read!=-1)
         {
             ui->progressBar_file->setRange(0,65535);
-            ui->progressBar_file->setValue(transfertItem.progressBar_file);
+            if(uiOptions->showDualProgression->isChecked())
+            {
+                if(transfertItem.progressBar_read!=transfertItem.progressBar_write)
+                {
+                    float permilleread=round((float)transfertItem.progressBar_read/65535*1000)/1000;
+                    float permillewrite=permilleread-0.001;
+                    ui->progressBar_file->setStyleSheet(QString("QProgressBar{border: 1px solid grey;text-align: center;background-color: qlineargradient(spread:pad, x1:%1, y1:0, x2:%2, y2:0, stop:0 %3, stop:1 %4);}QProgressBar::chunk{background-color:%5;}")
+                        .arg(permilleread)
+                        .arg(permillewrite)
+                        .arg(progressColorRemaining.name())
+                        .arg(progressColorRead.name())
+                        .arg(progressColorWrite.name())
+                        );
+                }
+                else
+                    ui->progressBar_file->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                        .arg(progressColorRemaining.name())
+                        .arg(progressColorWrite.name())
+                        );
+                ui->progressBar_file->setValue(transfertItem.progressBar_write);
+            }
+            else
+                ui->progressBar_file->setValue((transfertItem.progressBar_read+transfertItem.progressBar_write)/2);
         }
         else
             ui->progressBar_file->setRange(0,0);
@@ -546,10 +597,17 @@ void Themes::on_cancelButton_clicked()
 
 void Themes::on_speedWithProgressBar_toggled(bool checked)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     ui->progressBarCurrentSpeed->setVisible(checked);
     ui->currentSpeed->setVisible(!checked);
 }
 
+void Themes::on_showDualProgression_toggled(bool checked)
+{
+    Q_UNUSED(checked);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    updateProgressionColorBar();
+}
 
 void Themes::on_checkBoxShowSpeed_toggled(bool checked)
 {
@@ -954,4 +1012,70 @@ void Themes::on_exportTransferList_clicked()
 void Themes::on_importTransferList_clicked()
 {
     emit importTransferList();
+}
+
+void Themes::progressColorWrite_clicked()
+{
+    QColor color=QColorDialog::getColor(progressColorWrite,this,tr("Select a color"));
+    if(!color.isValid())
+        return;
+    progressColorWrite=color;
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorWrite);
+    uiOptions->progressColorWrite->setIcon(pixmap);
+    updateProgressionColorBar();
+}
+
+void Themes::progressColorRead_clicked()
+{
+    QColor color=QColorDialog::getColor(progressColorRead,this,tr("Select a color"));
+    if(!color.isValid())
+        return;
+    progressColorRead=color;
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorRead);
+    uiOptions->progressColorRead->setIcon(pixmap);
+    updateProgressionColorBar();
+}
+
+void Themes::progressColorRemaining_clicked()
+{
+    QColor color=QColorDialog::getColor(progressColorRemaining,this,tr("Select a color"));
+    if(!color.isValid())
+        return;
+    progressColorRemaining=color;
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorRemaining);
+    uiOptions->progressColorRemaining->setIcon(pixmap);
+    updateProgressionColorBar();
+}
+
+void Themes::updateProgressionColorBar()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    uiOptions->labelProgressionColor->setVisible(uiOptions->showDualProgression->isChecked());
+    uiOptions->frameProgressionColor->setVisible(uiOptions->showDualProgression->isChecked());
+    if(!uiOptions->showDualProgression->isChecked())
+    {
+        ui->progressBar_all->setStyleSheet("");
+        ui->progressBar_file->setStyleSheet("");
+        ui->progressBarCurrentSpeed->setStyleSheet("");
+    }
+    else
+    {
+        ui->progressBar_all->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                                           .arg(progressColorRemaining.name())
+                                           .arg(progressColorWrite.name())
+                                           );
+        ui->progressBar_file->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                                            .arg(progressColorRemaining.name())
+                                            .arg(progressColorWrite.name())
+                                            );
+        ui->progressBarCurrentSpeed->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                                           .arg(progressColorRemaining.name())
+                                           .arg(progressColorWrite.name())
+                                           );
+    }
+    if(stat==status_never_started)
+        updateCurrentFileInformation();
 }

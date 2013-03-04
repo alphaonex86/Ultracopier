@@ -62,6 +62,8 @@ public:
     void startCheckSum();
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
+    /// \brief get the last good position
+    qint64 getLastGoodPosition();
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -72,7 +74,7 @@ public slots:
     /// \brief reopen the file
     void reopen();
     /// \brief flush and seek to zero
-        void flushAndSeekToZero();
+    void flushAndSeekToZero();
     /// do the checksum
     void checkSum();
 signals:

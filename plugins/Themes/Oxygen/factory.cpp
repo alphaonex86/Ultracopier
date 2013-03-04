@@ -4,6 +4,8 @@
 \version 0.3
 \date 2010 */
 
+#include <QColorDialog>
+
 #include "factory.h"
 
 Factory::Factory()
@@ -25,6 +27,8 @@ PluginInterface_Themes * Factory::getInstance()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, currentSpeed: %1").arg(currentSpeed));
 
     Themes * newInterface=new Themes(
+                progressColorWrite,progressColorRead,progressColorRemaining,
+                ui->showDualProgression->isChecked(),
                 ui->comboBox_copyEnd->currentIndex(),
                 ui->speedWithProgressBar->isChecked(),
                 currentSpeed,
@@ -56,10 +60,14 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
         KeysList.append(qMakePair(QString("speedWithProgressBar"),QVariant(true)));
         KeysList.append(qMakePair(QString("currentSpeed"),QVariant(0)));
         KeysList.append(qMakePair(QString("comboBox_copyEnd"),QVariant(0)));
+        KeysList.append(qMakePair(QString("showDualProgression"),QVariant(false)));
+        KeysList.append(qMakePair(QString("progressColorWrite"),QVariant(QApplication::palette().color(QPalette::Highlight))));
+        KeysList.append(qMakePair(QString("progressColorRead"),QVariant(QApplication::palette().color(QPalette::AlternateBase))));
+        KeysList.append(qMakePair(QString("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&Factory::resetOptions);
         updateSpeed();
-        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Factory::on_checkBoxShowSpeed_toggled);
+        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Factory::checkBoxShowSpeed);
         connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&Factory::uiUpdateSpeed);
         connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&Factory::on_SliderSpeed_valueChanged);
         connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Factory::uiUpdateSpeed);
@@ -67,6 +75,11 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
         connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&Factory::checkBoxStartWithMoreButtonPushedHaveChanged);
         connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&Factory::speedWithProgressBar);
         connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::comboBox_copyEnd);
+        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&Factory::showDualProgression);
+        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&Factory::updateProgressionColorBar);
+        connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&Factory::progressColorWrite_clicked);
+        connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&Factory::progressColorRead_clicked);
+        connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&Factory::progressColorRemaining_clicked);
     }
     #ifndef __GNUC__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is not set");
@@ -87,7 +100,20 @@ QWidget * Factory::options()
         ui->speedWithProgressBar->setChecked(optionsEngine->getOptionValue("speedWithProgressBar").toBool());
         ui->checkBoxShowSpeed->setChecked(optionsEngine->getOptionValue("checkBoxShowSpeed").toBool());
         ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue("moreButtonPushed").toBool());
+
+        progressColorWrite=optionsEngine->getOptionValue("progressColorWrite").value<QColor>();
+        progressColorRead=optionsEngine->getOptionValue("progressColorRead").value<QColor>();
+        progressColorRemaining=optionsEngine->getOptionValue("progressColorRemaining").value<QColor>();
+
+        QPixmap pixmap(75,20);
+        pixmap.fill(progressColorWrite);
+        ui->progressColorWrite->setIcon(pixmap);
+        pixmap.fill(progressColorRead);
+        ui->progressColorRead->setIcon(pixmap);
+        pixmap.fill(progressColorRemaining);
+        ui->progressColorRemaining->setIcon(pixmap);
         updateSpeed();
+        updateProgressionColorBar();
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
@@ -188,11 +214,20 @@ void Factory::newLanguageLoaded()
     emit reloadLanguage();
 }
 
-void Factory::on_checkBoxShowSpeed_toggled(bool checked)
+void Factory::checkBoxShowSpeed(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(checked);
     updateSpeed();
+}
+
+void Factory::showDualProgression(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("showDualProgression",checked);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void Factory::on_SliderSpeed_valueChanged(int value)
@@ -334,4 +369,55 @@ void Factory::updateSpeed()
         ui->checkBox_limitSpeed->setEnabled(currentSpeed!=-1);
         ui->limitSpeed->setEnabled(ui->checkBox_limitSpeed->isChecked());
     }
+}
+
+void Factory::progressColorWrite_clicked()
+{
+    QColor color=QColorDialog::getColor(progressColorWrite,NULL,tr("Select a color"));
+    if(!color.isValid())
+        return;
+    progressColorWrite=color;
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorWrite);
+    ui->progressColorWrite->setIcon(pixmap);
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("progressColorWrite",progressColorWrite);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::progressColorRead_clicked()
+{
+    QColor color=QColorDialog::getColor(progressColorRead,NULL,tr("Select a color"));
+    if(!color.isValid())
+        return;
+    progressColorRead=color;
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorRead);
+    ui->progressColorRead->setIcon(pixmap);
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("progressColorRead",progressColorRead);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::progressColorRemaining_clicked()
+{
+    QColor color=QColorDialog::getColor(progressColorRemaining,NULL,tr("Select a color"));
+    if(!color.isValid())
+        return;
+    progressColorRemaining=color;
+    QPixmap pixmap(75,20);
+    pixmap.fill(progressColorRemaining);
+    ui->progressColorRemaining->setIcon(pixmap);
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("progressColorRemaining",progressColorRemaining);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void Factory::updateProgressionColorBar()
+{
+    ui->labelProgressionColor->setVisible(ui->showDualProgression->isChecked());
+    ui->frameProgressionColor->setVisible(ui->showDualProgression->isChecked());
 }

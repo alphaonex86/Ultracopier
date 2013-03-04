@@ -932,10 +932,9 @@ void ListThread::sendProgression()
 
             //the current size copied
             totalSize=temp_transfer_thread->transferSize+localOverSize;
-            if(temp_transfer_thread->getStat()==TransferStat_Checksum)
-                tempItem.current=temp_transfer_thread->realByteTransfered();
-            else
-                tempItem.current=copiedSize;
+            QPair<quint64,quint64> progression=temp_transfer_thread->progression();
+            tempItem.currentRead=progression.first;
+            tempItem.currentWrite=progression.second;
             tempItem.id=temp_transfer_thread->transferId;
             tempItem.total=totalSize;
             progressionList << tempItem;

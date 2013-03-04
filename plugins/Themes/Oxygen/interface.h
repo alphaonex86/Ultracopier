@@ -36,7 +36,16 @@ class Themes : public PluginInterface_Themes
 {
     Q_OBJECT
 public:
-    Themes(const quint8 &comboBox_copyEnd,const bool &speedWithProgressBar,const qint32 &currentSpeed,const bool &checkBoxShowSpeed,FacilityInterface * facilityEngine,const bool &moreButtonPushed);
+    Themes(const QColor &progressColorWrite,
+           const QColor &progressColorRead,
+           const QColor &progressColorRemaining,
+           const bool &showDualProgression,
+           const quint8 &comboBox_copyEnd,
+           const bool &speedWithProgressBar,
+           const qint32 &currentSpeed,
+           const bool &checkBoxShowSpeed,
+           FacilityInterface * facilityEngine,
+           const bool &moreButtonPushed);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
@@ -93,6 +102,7 @@ private slots:
     void on_del_clicked();
     void on_cancelButton_clicked();
     void on_speedWithProgressBar_toggled(bool checked);
+    void on_showDualProgression_toggled(bool checked);
     void on_checkBoxShowSpeed_toggled(bool checked);
     void on_SliderSpeed_valueChanged(int value);
     void on_pauseButton_clicked();
@@ -121,7 +131,12 @@ private slots:
     void on_searchButton_toggled(bool checked);
     void on_exportTransferList_clicked();
     void on_importTransferList_clicked();
+    void progressColorWrite_clicked();
+    void progressColorRead_clicked();
+    void progressColorRemaining_clicked();
+    void updateProgressionColorBar();
 private:
+    QColor progressColorWrite,progressColorRead,progressColorRemaining;
     Ui::interfaceCopy *ui;
     Ui::options *uiOptions;
     quint64 currentFile;

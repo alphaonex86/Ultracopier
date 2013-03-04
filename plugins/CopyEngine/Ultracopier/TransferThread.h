@@ -13,6 +13,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QDir>
+#include <QPair>
 
 #ifdef Q_OS_UNIX
     #include <utime.h>
@@ -68,6 +69,7 @@ public:
 
     //not copied size, because that's count to the checksum, ...
     quint64 realByteTransfered();
+    QPair<quint64,quint64> progression();
 protected:
     void run();
 signals:

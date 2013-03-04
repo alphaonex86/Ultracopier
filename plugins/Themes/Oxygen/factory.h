@@ -12,6 +12,7 @@
 #include <QCloseEvent>
 #include <QFile>
 #include <QIcon>
+#include <QColor>
 
 #include "../../../interface/PluginInterface_Themes.h"
 #include "ui_options.h"
@@ -44,10 +45,15 @@ private slots:
     void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
     void comboBox_copyEnd(int value);
     void speedWithProgressBar(bool toggled);
-    void on_checkBoxShowSpeed_toggled(bool checked);
+    void checkBoxShowSpeed(bool checked);
+    void showDualProgression(bool checked);
     void on_SliderSpeed_valueChanged(int value);
     void uiUpdateSpeed();
     void updateSpeed();
+    void progressColorWrite_clicked();
+    void progressColorRead_clicked();
+    void progressColorRemaining_clicked();
+    void updateProgressionColorBar();
 public slots:
     void resetOptions();
     void newLanguageLoaded();
@@ -57,6 +63,7 @@ private:
     QWidget *tempWidget;
     FacilityInterface * facilityEngine;
     qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
+    QColor progressColorWrite,progressColorRead,progressColorRemaining;
 signals:
     void reloadLanguage();
 };

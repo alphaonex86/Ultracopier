@@ -106,7 +106,8 @@ enum ActionTypeCopyList
 struct ProgressionItem
 {
 	quint64 id;
-	quint64 current;
+	quint64 currentRead;
+	quint64 currentWrite;
 	quint64 total;
 };
 
