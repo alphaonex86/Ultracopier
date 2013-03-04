@@ -917,30 +917,39 @@ void ListThread::sendProgression()
     while(int_for_loop<loop_size)
     {
         temp_transfer_thread=transferThreadList.at(int_for_loop);
-        if(temp_transfer_thread->getStat()==TransferStat_Transfer || temp_transfer_thread->getStat()==TransferStat_Checksum)
+        switch(temp_transfer_thread->getStat())
         {
-            copiedSize=temp_transfer_thread->copiedSize();
+            case TransferStat_Transfer:
+            case TransferStat_PostTransfer:
+            case TransferStat_Checksum:
+            case TransferStat_PostOperation:
+            {
+                copiedSize=temp_transfer_thread->copiedSize();
 
-            //for the general progression
-            currentProgression+=copiedSize;
+                //for the general progression
+                currentProgression+=copiedSize;
 
-            //the oversize (when the file is bigger after/during the copy then what was during the listing)
-            if(copiedSize>(qint64)temp_transfer_thread->transferSize)
-                localOverSize=copiedSize-temp_transfer_thread->transferSize;
-            else
-                localOverSize=0;
+                //the oversize (when the file is bigger after/during the copy then what was during the listing)
+                if(copiedSize>(qint64)temp_transfer_thread->transferSize)
+                    localOverSize=copiedSize-temp_transfer_thread->transferSize;
+                else
+                    localOverSize=0;
 
-            //the current size copied
-            totalSize=temp_transfer_thread->transferSize+localOverSize;
-            QPair<quint64,quint64> progression=temp_transfer_thread->progression();
-            tempItem.currentRead=progression.first;
-            tempItem.currentWrite=progression.second;
-            tempItem.id=temp_transfer_thread->transferId;
-            tempItem.total=totalSize;
-            progressionList << tempItem;
+                //the current size copied
+                totalSize=temp_transfer_thread->transferSize+localOverSize;
+                QPair<quint64,quint64> progression=temp_transfer_thread->progression();
+                tempItem.currentRead=progression.first;
+                tempItem.currentWrite=progression.second;
+                tempItem.id=temp_transfer_thread->transferId;
+                tempItem.total=totalSize;
+                progressionList << tempItem;
 
-            //add the oversize to the general progression
-            oversize+=localOverSize;
+                //add the oversize to the general progression
+                oversize+=localOverSize;
+            }
+            break;
+            default:
+            break;
         }
         int_for_loop++;
     }
@@ -996,7 +1005,10 @@ void ListThread::syncTransferList_internal()
                         case TransferStat_Transfer:
                             newAction.type=Ultracopier::Transfer;
                         break;
-                        case TransferStat_PostTransfer:
+                        /*case TransferStat_PostTransfer:
+                            newAction.type=Ultracopier::PostOperation;
+                        break;*/
+                        case TransferStat_PostOperation:
                             newAction.type=Ultracopier::PostOperation;
                         break;
                         default:

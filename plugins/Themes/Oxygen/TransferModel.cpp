@@ -391,6 +391,8 @@ void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &prog
 TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
 {
     currentTransfertItem returnItem;
+    returnItem.progressBar_read=-1;
+    returnItem.progressBar_write=0;
     returnItem.haveItem=startId.size()>0;
     if(returnItem.haveItem)
     {
@@ -489,8 +491,10 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
                     returnItem.progressBar_write=((double)itemTransfer.currentWriteProgression/itemTransfer.generalData.size)*65535;
                 }
                 else
+                {
                     returnItem.progressBar_read=0;
                     returnItem.progressBar_write=0;
+                }
                 break;
                 case Ultracopier::PostOperation:
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
@@ -511,7 +515,7 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
             }
         }
     }
-    if(returnItem.progressBar_read!=-1 && returnItem.progressBar_write>returnItem.progressBar_read)
+    if(returnItem.haveItem && returnItem.progressBar_read!=-1 && returnItem.progressBar_write>returnItem.progressBar_read)
     {
         int tempVar=returnItem.progressBar_write;
         returnItem.progressBar_write=returnItem.progressBar_read;
