@@ -16,6 +16,7 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString fi
     ui->label_content_size->setText(QString::number(fileInfo.size()));
     ui->label_content_modified->setText(fileInfo.lastModified().toString());
     ui->label_content_file_name->setText(fileInfo.fileName());
+    ui->label_content_folder->setText(fileInfo.absolutePath());
     updateRenameButton();
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     if(maxTime<fileInfo.lastModified())
@@ -29,8 +30,16 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString fi
         ui->label_modified->setVisible(false);
         ui->label_content_modified->setVisible(false);
     }
+    if(!fileInfo.exists())
+    {
+        ui->label_content_size->setVisible(false);
+        ui->label_size->setVisible(false);
+        ui->label_modified->setVisible(false);
+        ui->label_content_modified->setVisible(false);
+    }
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
+    on_SuggestNewName_clicked();
 }
 
 FileIsSameDialog::~FileIsSameDialog()

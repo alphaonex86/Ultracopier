@@ -293,7 +293,8 @@ void TransferThread::tryOpen()
 bool TransferThread::isSame()
 {
     //check if source and destination is not the same
-    if(sourceInfo==destinationInfo && source==destination)
+    //sourceInfo.absoluteFilePath()==destinationInfo.absoluteFilePath() not work is source don't exists
+    if(sourceInfo.absoluteFilePath()==destinationInfo.absoluteFilePath())
     {
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         if(!sourceInfo.exists())
@@ -474,9 +475,17 @@ void TransferThread::tryMoveDirectly()
     {
         readError=true;
         if(!sourceFile.exists())
+        {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+            emit errorOnFile(sourceFile,tr("File not found"));
+            return;
+        }
         else if(!dir.exists())
+        {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+            emit errorOnFile(destinationInfo.absolutePath(),tr("Unable to do the folder"));
+            return;
+        }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do real move %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
         emit errorOnFile(sourceFile,sourceFile.errorString());
@@ -521,36 +530,34 @@ void TransferThread::tryCopyDirectly()
      * on unix not, should be created **/
     #ifdef Q_OS_WIN32
     if(!sourceFile.copy(destinationFile.fileName()))
+    #else
+    if(!QFile::link(sourceFile.symLinkTarget(),destinationFile.fileName()))
+    #endif
     {
         readError=true;
         if(!sourceFile.exists())
+        {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+            emit errorOnFile(sourceFile,tr("The source file don't exists"));
+            return;
+        }
         else if(destinationFile.exists())
+        {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+            emit errorOnFile(sourceFile,tr("Another file exists at same place"));
+            return;
+        }
         else if(!dir.exists())
+        {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
+            emit errorOnFile(sourceFile,tr("Unable to do the folder"));
+            return;
+        }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
         emit errorOnFile(sourceFile,sourceFile.errorString());
         return;
     }
-    #else
-    if(!QFile::link(sourceFile.symLinkTarget(),destinationFile.fileName()))
-    {
-        readError=true;
-        if(!sourceFile.exists())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-        else if(destinationFile.exists())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-        else if(!dir.exists())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-        emit errorOnFile(destinationFile,destinationFile.errorString());
-        return;
-    }
-    #endif
-
     readThread.fakeReadIsStarted();
     writeThread.fakeWriteIsStarted();
     readThread.fakeReadIsStopped();

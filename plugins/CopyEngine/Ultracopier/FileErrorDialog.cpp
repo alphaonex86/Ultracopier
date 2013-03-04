@@ -12,7 +12,13 @@ FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
     {
         ui->label_content_file_name->setText(fileInfo.fileName());
         if(ui->label_content_file_name->text().isEmpty())
+        {
             ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
+            ui->label_folder->setVisible(false);
+            ui->label_content_folder->setVisible(false);
+        }
+        else
+            ui->label_content_folder->setText(fileInfo.absolutePath());
         ui->label_content_size->setText(QString::number(fileInfo.size()));
         QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
         if(maxTime<fileInfo.lastModified())
@@ -40,9 +46,18 @@ FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
     }
     else
     {
+        ui->label_content_file_name->setText(fileInfo.fileName());
+        if(ui->label_content_file_name->text().isEmpty())
+        {
+            ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
+            ui->label_folder->setVisible(false);
+            ui->label_content_folder->setVisible(false);
+        }
+        else
+            ui->label_content_folder->setText(fileInfo.absolutePath());
+
         ui->label_file_destination->hide();
         ui->label_content_file_destination->hide();
-        ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
         ui->label_size->hide();
         ui->label_content_size->hide();
         ui->label_modified->hide();

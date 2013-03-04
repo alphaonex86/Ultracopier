@@ -18,9 +18,11 @@ FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
     ui->label_content_source_size->setText(QString::number(source.size()));
     ui->label_content_source_modified->setText(source.lastModified().toString());
     ui->label_content_source_file_name->setText(source.fileName());
+    ui->label_content_source_folder->setText(source.absolutePath());
     ui->label_content_destination_size->setText(QString::number(destination.size()));
     ui->label_content_destination_modified->setText(destination.lastModified().toString());
     ui->label_content_destination_file_name->setText(destination.fileName());
+    ui->label_content_destination_folder->setText(destination.absolutePath());
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     if(maxTime<source.lastModified())
     {
@@ -41,6 +43,20 @@ FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
     }
     else
     {
+        ui->label_destination_modified->setVisible(false);
+        ui->label_content_destination_modified->setVisible(false);
+    }
+    if(!source.exists())
+    {
+        ui->label_content_source_size->setVisible(false);
+        ui->label_source_size->setVisible(false);
+        ui->label_source_modified->setVisible(false);
+        ui->label_content_source_modified->setVisible(false);
+    }
+    if(!destination.exists())
+    {
+        ui->label_content_destination_size->setVisible(false);
+        ui->label_destination_size->setVisible(false);
         ui->label_destination_modified->setVisible(false);
         ui->label_content_destination_modified->setVisible(false);
     }
