@@ -981,17 +981,31 @@ void TransferThread::getReadError()
 //retry after error
 void TransferThread::retryAfterError()
 {
+    if(transfer_stat==TransferStat_Idle)
+    {
+        if(transferId==0)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] seam have bug, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
+            return;
+        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] restart all, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
+        resetExtraVariable();
+        emit internalStartPreOperation();
+        return;
+    }
     //opening error
     if(transfer_stat==TransferStat_PreOperation)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is not idle, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath()+", stat: "+QString::number(transfer_stat));
-        tryOpen();
+        resetExtraVariable();
+        emit internalStartPreOperation();
+        //tryOpen();-> recheck all, because can be an error into isSame(), rename(), ...
         return;
     }
     //data streaming error
     if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_Checksum)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] is not idle, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath()+", stat: "+QString::number(transfer_stat));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] is not in right stat, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath()+", stat: "+QString::number(transfer_stat));
         return;
     }
     if(canBeMovedDirectlyVariable)
