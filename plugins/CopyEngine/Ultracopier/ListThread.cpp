@@ -695,7 +695,6 @@ void ListThread::cancel()
         return;
     }
     stopIt=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("stop"));
     int index=0;
     loop_size=transferThreadList.size();
     while(index<loop_size)

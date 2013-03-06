@@ -33,16 +33,12 @@ void ScanFileOrFolder::addToList(const QStringList& sources,const QString& desti
             this->destination+=QDir::separator();*/
         if(!destination.endsWith("/") && !destination.endsWith("\\"))
             this->destination+="/";//put unix separator because it's transformed into that's under windows too
-    this->destination.replace(QRegularExpression("[/\\\\]{2,}"),"/");
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
 }
 
 
 QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
 {
-    QRegularExpression doubleSlashes("[/\\\\]+");
-    if(!doubleSlashes.isValid())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"doubleSlashes expression not valid");
     QRegularExpression splitFolder("[/\\\\]");
     QStringList returnList;
     int index=0;
@@ -112,8 +108,6 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
         }
         else
             returnList << sources.at(index);
-        if(doubleSlashes.isValid())
-            returnList.last().replace(doubleSlashes,"/");
         index++;
     }
     return returnList;

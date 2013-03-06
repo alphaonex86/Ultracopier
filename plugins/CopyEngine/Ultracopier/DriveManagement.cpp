@@ -12,6 +12,14 @@ QString DriveManagement::getDrive(const QString &fileOrFolder)
         if(inode.startsWith(mountSysPoint.at(i)))
             return QDir::toNativeSeparators(mountSysPoint.at(i));
     }
+    #ifdef Q_OS_WIN32
+    if(fileOrFolder.contains(QRegularExpression("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+")))
+    {
+        QString returnString=fileOrFolder;
+        returnString.replace(QRegularExpression("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$"),"\\1");
+        return returnString;
+    }
+    #endif
     //if unable to locate the right mount point
     return "";
 }
