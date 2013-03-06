@@ -100,7 +100,25 @@ void LogThread::newTransferStart(const Ultracopier::ItemOfCopyList &item)
 {
     if(!log_enable_transfer)
         return;
-    QString text=transfer_format+"\n";
+    QString text;
+    if(item.mode==Ultracopier::Copy)
+        text="[Copy] "+transfer_format+"\n";
+    else
+        text="[Move] "+transfer_format+"\n";
+    text=replaceBaseVar(text);
+    //Variable is %source%, %size%, %destination%
+    text=text.replace("%source%",item.sourceFullPath);
+    text=text.replace("%size%",QString::number(item.size));
+    text=text.replace("%destination%",item.destinationFullPath);
+    emit newData(text);
+}
+
+/** method called when new transfer is started */
+void LogThread::transferSkip(const Ultracopier::ItemOfCopyList &item)
+{
+    if(!log_enable_transfer)
+        return;
+    QString text="[Skip] "+transfer_format+"\n";
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
     text=text.replace("%source%",item.sourceFullPath);
@@ -120,7 +138,7 @@ void LogThread::error(const QString &path,const quint64 &size,const QDateTime &m
 {
     if(!log_enable_error)
         return;
-    QString text=error_format+"\n";
+    QString text="[Error] "+error_format+"\n";
     text=replaceBaseVar(text);
     //Variable is %path%, %size%, %mtime%, %error%
     text=text.replace("%path%",path);
@@ -201,7 +219,7 @@ void LogThread::rmPath(const QString &path)
 {
     if(!log_enable_folder)
         return;
-    QString text=folder_format+"\n";
+    QString text="[RmPath] "+folder_format+"\n";
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
     text=text.replace("%path%",path);
@@ -213,7 +231,7 @@ void LogThread::mkPath(const QString &path)
 {
     if(!log_enable_folder)
         return;
-    QString text=folder_format+"\n";
+    QString text="[MkPath] "+folder_format+"\n";
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
     text=text.replace("%path%",path);

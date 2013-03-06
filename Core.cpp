@@ -759,7 +759,6 @@ void Core::copyInstanceCanceledByIndex(const int &index)
     CopyInstance& currentCopyInstance=copyList[index];
     currentCopyInstance.engine->cancel();
     delete currentCopyInstance.nextConditionalSync;
-    currentCopyInstance.engine->cancel();
     delete currentCopyInstance.interface;
     index_sub_loop=0;
     loop_size=currentCopyInstance.orderId.size();

@@ -70,6 +70,7 @@ public:
     //not copied size, because that's count to the checksum, ...
     quint64 realByteTransfered();
     QPair<quint64,quint64> progression();
+    static QString resolvedName(const QFileInfo &inode);
 protected:
     void run();
 signals:

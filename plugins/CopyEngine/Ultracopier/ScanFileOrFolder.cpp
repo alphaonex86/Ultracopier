@@ -1,4 +1,5 @@
 #include "ScanFileOrFolder.h"
+#include "TransferThread.h"
 
 ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
 {
@@ -32,12 +33,16 @@ void ScanFileOrFolder::addToList(const QStringList& sources,const QString& desti
             this->destination+=QDir::separator();*/
         if(!destination.endsWith("/") && !destination.endsWith("\\"))
             this->destination+="/";//put unix separator because it's transformed into that's under windows too
+    this->destination.replace(QRegularExpression("[/\\\\]{2,}"),"/");
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
 }
 
 
 QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
 {
+    QRegularExpression doubleSlashes("[/\\\\]+");
+    if(!doubleSlashes.isValid())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"doubleSlashes expression not valid");
     QRegularExpression splitFolder("[/\\\\]");
     QStringList returnList;
     int index=0;
@@ -55,7 +60,7 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
                 {
                     QString toParseFirst=toParse.first();
                     if(toParseFirst=="")
-                        toParseFirst+="/";
+                        toParseFirst="/";
                     QList<QStringList> newRecomposedSource;
                     QRegularExpression toResolv=QRegularExpression(toParseFirst.replace('*',"[^/\\\\]*"));
                     int index_recomposedSource=0;
@@ -107,6 +112,8 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
         }
         else
             returnList << sources.at(index);
+        if(doubleSlashes.isValid())
+            returnList.last().replace(doubleSlashes,"/");
         index++;
     }
     return returnList;
@@ -166,7 +173,11 @@ void ScanFileOrFolder::run()
             listFolder(source.absoluteFilePath()+"/",destination);//put unix separator because it's transformed into that's under windows too
             */
             //put unix separator because it's transformed into that's under windows too
-            listFolder(source.absoluteFilePath(),QFileInfo(destination).absoluteFilePath()+"/"+source.fileName());
+            QString tempString=QFileInfo(destination).absoluteFilePath();
+            if(!tempString.endsWith("/") && !tempString.endsWith("\\"))
+                tempString+="/";
+            tempString+=TransferThread::resolvedName(source);
+            listFolder(source.absoluteFilePath(),tempString);
         }
         else
             emit fileTransfer(source,destination+source.fileName(),mode);
@@ -343,8 +354,12 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
         }
     } while(fileErrorAction==FileError_Retry);
+    if(stopIt)
+        return;
     /// \todo check here if the folder is not readable or not exists
     QFileInfoList entryList=QDir(source.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst|QDir::Name|QDir::IgnoreCase);//possible wait time here
+    if(stopIt)
+        return;
     int sizeEntryList=entryList.size();
     emit newFolderListing(source.absoluteFilePath());
     if(sizeEntryList==0)

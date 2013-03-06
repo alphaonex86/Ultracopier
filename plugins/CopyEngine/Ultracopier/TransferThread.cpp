@@ -391,13 +391,33 @@ bool TransferThread::destinationExists()
     return false;
 }
 
+QString TransferThread::resolvedName(const QFileInfo &inode)
+{
+    QString fileName=inode.fileName();
+    #ifdef Q_OS_WIN32
+    if(fileName.isEmpty())
+    {
+        fileName=inode.absolutePath();
+        fileName.replace(QRegularExpression("^([a-zA-Z]+):.*$"),"\\1");
+        if(inode.absolutePath().contains(QRegularExpression("^[a-zA-Z]+:[/\\\\]?$")))
+            fileName=tr("Drive %1").arg(fileName);
+        else
+            fileName=tr("Unknow folder");
+    }
+    #else
+    if(fileName.isEmpty())
+        fileName=tr("root");
+    #endif
+    return fileName;
+}
+
 //return true if has been renamed
 bool TransferThread::checkAlwaysRename()
 {
     if(alwaysDoFileExistsAction==FileExists_Rename)
     {
         QString absolutePath=destinationInfo.absolutePath();
-        QString fileName=destinationInfo.fileName();
+        QString fileName=resolvedName(destinationInfo);
         QString suffix="";
         QString newFileName;
         //resolv the suffix

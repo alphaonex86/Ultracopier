@@ -101,9 +101,9 @@ private slots:
     void on_putOnBottom_clicked();
     void on_del_clicked();
     void on_cancelButton_clicked();
-    void on_speedWithProgressBar_toggled(bool checked);
-    void on_showDualProgression_toggled(bool checked);
-    void on_checkBoxShowSpeed_toggled(bool checked);
+    void speedWithProgressBar_toggled(bool checked);
+    void showDualProgression_toggled(bool checked);
+    void checkBoxShowSpeed_toggled(bool checked);
     void on_SliderSpeed_valueChanged(int value);
     void on_pauseButton_clicked();
     void on_skipButton_clicked();

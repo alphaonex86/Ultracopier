@@ -53,8 +53,8 @@ Themes::Themes(const QColor &progressColorWrite,
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
     uiOptions->comboBox_copyEnd->setCurrentIndex(comboBox_copyEnd);
-    on_speedWithProgressBar_toggled(speedWithProgressBar);
-    on_showDualProgression_toggled(showDualProgression);
+    speedWithProgressBar_toggled(speedWithProgressBar);
+    showDualProgression_toggled(showDualProgression);
     QPixmap pixmap(75,20);
     pixmap.fill(progressColorWrite);
     uiOptions->progressColorWrite->setIcon(pixmap);
@@ -71,10 +71,10 @@ Themes::Themes(const QColor &progressColorWrite,
     ui->add->setMenu(menu);
 
     //connect the options
-    on_checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
-    connect(uiOptions->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Themes::on_checkBoxShowSpeed_toggled);
-    connect(uiOptions->speedWithProgressBar,&QCheckBox::stateChanged,this,&Themes::on_speedWithProgressBar_toggled);
-    connect(uiOptions->showDualProgression,&QCheckBox::stateChanged,this,&Themes::on_showDualProgression_toggled);
+    checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
+    connect(uiOptions->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Themes::checkBoxShowSpeed_toggled);
+    connect(uiOptions->speedWithProgressBar,&QCheckBox::stateChanged,this,&Themes::speedWithProgressBar_toggled);
+    connect(uiOptions->showDualProgression,&QCheckBox::stateChanged,this,&Themes::showDualProgression_toggled);
     connect(uiOptions->progressColorWrite,&QAbstractButton::clicked,this,&Themes::progressColorWrite_clicked);
     connect(uiOptions->progressColorRead,	&QAbstractButton::clicked,this,&Themes::progressColorRead_clicked);
     connect(uiOptions->progressColorRemaining,&QAbstractButton::clicked,this,&Themes::progressColorRemaining_clicked);
@@ -595,21 +595,21 @@ void Themes::on_cancelButton_clicked()
 }
 
 
-void Themes::on_speedWithProgressBar_toggled(bool checked)
+void Themes::speedWithProgressBar_toggled(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     ui->progressBarCurrentSpeed->setVisible(checked);
     ui->currentSpeed->setVisible(!checked);
 }
 
-void Themes::on_showDualProgression_toggled(bool checked)
+void Themes::showDualProgression_toggled(bool checked)
 {
     Q_UNUSED(checked);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     updateProgressionColorBar();
 }
 
-void Themes::on_checkBoxShowSpeed_toggled(bool checked)
+void Themes::checkBoxShowSpeed_toggled(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(checked);

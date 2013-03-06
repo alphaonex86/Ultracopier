@@ -1,5 +1,6 @@
 #include "FileErrorDialog.h"
 #include "ui_fileErrorDialog.h"
+#include "TransferThread.h"
 
 FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString,bool havePutAtTheEndButton) :
     QDialog(parent),
@@ -10,7 +11,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
     ui->label_error->setText(errorString);
     if(fileInfo.exists())
     {
-        ui->label_content_file_name->setText(fileInfo.fileName());
+        ui->label_content_file_name->setText(TransferThread::resolvedName(fileInfo));
         if(ui->label_content_file_name->text().isEmpty())
         {
             ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
@@ -46,7 +47,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
     }
     else
     {
-        ui->label_content_file_name->setText(fileInfo.fileName());
+        ui->label_content_file_name->setText(TransferThread::resolvedName(fileInfo));
         if(ui->label_content_file_name->text().isEmpty())
         {
             ui->label_content_file_name->setText(fileInfo.absoluteFilePath());

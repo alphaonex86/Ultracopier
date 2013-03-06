@@ -1,5 +1,6 @@
 #include "FileIsSameDialog.h"
 #include "ui_fileIsSameDialog.h"
+#include "TransferThread.h"
 
 #include <QDebug>
 
@@ -9,13 +10,13 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString fi
 {
     ui->setupUi(this);
     action=FileExists_Cancel;
-    oldName=fileInfo.fileName();
+    oldName=TransferThread::resolvedName(fileInfo);
     destinationInfo=fileInfo;
     ui->lineEditNewName->setText(oldName);
     ui->lineEditNewName->setPlaceholderText(oldName);
     ui->label_content_size->setText(QString::number(fileInfo.size()));
     ui->label_content_modified->setText(fileInfo.lastModified().toString());
-    ui->label_content_file_name->setText(fileInfo.fileName());
+    ui->label_content_file_name->setText(TransferThread::resolvedName(fileInfo));
     ui->label_content_folder->setText(fileInfo.absolutePath());
     updateRenameButton();
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
@@ -75,7 +76,7 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
-    QString fileName=destinationInfo.fileName();
+    QString fileName=TransferThread::resolvedName(destinationInfo);
     QString suffix="";
     QString destination;
     QString newFileName;

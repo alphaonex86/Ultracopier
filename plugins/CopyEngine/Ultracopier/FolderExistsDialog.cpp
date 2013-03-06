@@ -1,5 +1,6 @@
 #include "FolderExistsDialog.h"
 #include "ui_folderExistsDialog.h"
+#include "TransferThread.h"
 
 #include <QMessageBox>
 
@@ -9,11 +10,17 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
 {
     ui->setupUi(this);
     action=FolderExists_Cancel;
-    oldName=source.fileName();
+    oldName=TransferThread::resolvedName(destination);
     ui->lineEditNewName->setText(oldName);
     ui->lineEditNewName->setPlaceholderText(oldName);
     ui->label_content_source_modified->setText(source.lastModified().toString());
     ui->label_content_source_folder_name->setText(source.fileName());
+    ui->label_content_source_folder->setText(source.absolutePath());
+    if(ui->label_content_source_folder_name->text().isEmpty())
+    {
+        ui->label_source_folder_name->hide();
+        ui->label_content_source_folder_name->hide();
+    }
     if(isSame)
     {
         this->destinationInfo=source;
@@ -21,8 +28,10 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
         ui->label_destination->hide();
         ui->label_destination_modified->hide();
         ui->label_destination_folder_name->hide();
+        ui->label_destination_folder->hide();
         ui->label_content_destination_modified->hide();
         ui->label_content_destination_folder_name->hide();
+        ui->label_content_destination_folder->hide();
     }
     else
     {
@@ -31,6 +40,12 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
         ui->label_message->hide();
         ui->label_content_destination_modified->setText(destination.lastModified().toString());
         ui->label_content_destination_folder_name->setText(destination.fileName());
+        ui->label_content_destination_folder->setText(destination.absolutePath());
+        if(ui->label_content_destination_folder_name->text().isEmpty())
+        {
+            ui->label_destination_folder_name->hide();
+            ui->label_content_destination_folder_name->hide();
+        }
     }
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
@@ -66,7 +81,7 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
-    QString fileName=destinationInfo.fileName();
+    QString fileName=TransferThread::resolvedName(destinationInfo);
     QString suffix="";
     QString destination;
     QString newFileName;

@@ -1,5 +1,6 @@
 #include "FileExistsDialog.h"
 #include "ui_fileExistsDialog.h"
+#include "TransferThread.h"
 
 #include <QDebug>
 
@@ -10,18 +11,18 @@ FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
     ui->setupUi(this);
     action=FileExists_Cancel;
     destinationInfo=destination;
-    oldName=destination.fileName();
+    oldName=TransferThread::resolvedName(destination);
     ui->lineEditNewName->setText(oldName);
     ui->lineEditNewName->setPlaceholderText(oldName);
     ui->Overwrite->addAction(ui->actionOverwrite_if_newer);
     ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_modification_date);
     ui->label_content_source_size->setText(QString::number(source.size()));
     ui->label_content_source_modified->setText(source.lastModified().toString());
-    ui->label_content_source_file_name->setText(source.fileName());
+    ui->label_content_source_file_name->setText(TransferThread::resolvedName(source));
     ui->label_content_source_folder->setText(source.absolutePath());
     ui->label_content_destination_size->setText(QString::number(destination.size()));
     ui->label_content_destination_modified->setText(destination.lastModified().toString());
-    ui->label_content_destination_file_name->setText(destination.fileName());
+    ui->label_content_destination_file_name->setText(TransferThread::resolvedName(destination));
     ui->label_content_destination_folder->setText(destination.absolutePath());
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     if(maxTime<source.lastModified())
@@ -98,7 +99,7 @@ void FileExistsDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
-    QString fileName=destinationInfo.fileName();
+    QString fileName=TransferThread::resolvedName(destinationInfo);
     QString suffix="";
     QString destination;
     QString newFileName;

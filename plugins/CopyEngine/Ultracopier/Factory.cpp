@@ -164,11 +164,7 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
         KeysList.append(qMakePair(QString("osBuffer"),QVariant(false)));
         KeysList.append(qMakePair(QString("firstRenamingRule"),QVariant("")));
         KeysList.append(qMakePair(QString("otherRenamingRule"),QVariant("")));
-        #ifdef 	Q_OS_WIN32
-        KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(true)));
-        #else
         KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(false)));
-        #endif
         KeysList.append(qMakePair(QString("osBufferLimit"),QVariant(512)));
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)

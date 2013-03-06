@@ -97,6 +97,7 @@ void ListThread::transferInodeIsClosed()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] have finish, put at idle; for id: %2").arg(int_for_internal_loop).arg(temp_transfer_thread->transferId));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
+            newAction.addAction.size=0;
             newAction.addAction.id=temp_transfer_thread->transferId;
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
@@ -275,6 +276,8 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
 
 void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode)
 {
+    if(stopIt)
+        return;
     addToTransfer(sourceFileInfo,destinationFileInfo,mode);
 }
 
@@ -668,6 +671,7 @@ bool ListThread::skipInternal(const quint64 &id)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
+            newAction.addAction.size=1;
             newAction.addAction.id=id;
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
@@ -691,24 +695,26 @@ void ListThread::cancel()
         return;
     }
     stopIt=true;
-        int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("stop"));
+    int index=0;
     loop_size=transferThreadList.size();
     while(index<loop_size)
-        {
+    {
         transferThreadList.at(index)->stop();
         delete transferThreadList.at(index);//->deleteLayer();
         transferThreadList[index]=NULL;
-                index++;
+        index++;
     }
-        index=0;
+    index=0;
     loop_size=scanFileOrFolderThreadsPool.size();
     while(index<loop_size)
-        {
+    {
         scanFileOrFolderThreadsPool.at(index)->stop();
         delete scanFileOrFolderThreadsPool.at(index);//->deleteLayer();
         scanFileOrFolderThreadsPool[index]=NULL;
-                index++;
+        index++;
     }
+    scanFileOrFolderThreadsPool.clear();
     if(clockForTheCopySpeed!=NULL)
     {
         clockForTheCopySpeed->stop();
@@ -868,6 +874,8 @@ void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisA
 //mk path to do
 quint64 ListThread::addToMkPath(const QString& folder)
 {
+    if(stopIt)
+        return 0;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder: "+folder);
     actionToDoInode temp;
     temp.type	= ActionType_MkPath;
@@ -881,6 +889,8 @@ quint64 ListThread::addToMkPath(const QString& folder)
 //add rm path to do
 void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
 {
+    if(stopIt)
+        return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder: "+folder+",inodeToRemove: "+QString::number(inodeToRemove));
     actionToDoInode temp;
     temp.type	= ActionType_RmPath;
@@ -1025,6 +1035,8 @@ void ListThread::syncTransferList_internal()
 //add file transfer to do
 quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode)
 {
+    if(stopIt)
+        return 0;
     //add to transfer list
     numberOfTransferIntoToDoList++;
     quint64 size=0;
@@ -1101,6 +1113,8 @@ void ListThread::moveItemsOnTop(QList<int> ids)
             }
         }
     }
+    sendActionDone();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
 //move up
@@ -1113,7 +1127,6 @@ void ListThread::moveItemsUp(QList<int> ids)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
-    int lastGoodPositionExtern=0;
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
     loop_size=actionToDoListTransfer.size();
@@ -1126,7 +1139,7 @@ void ListThread::moveItemsUp(QList<int> ids)
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type=Ultracopier::MoveItem;
                 newAction.addAction.id=actionToDoListTransfer.at(i).id;
-                newAction.userAction.moveAt=lastGoodPositionExtern;
+                newAction.userAction.moveAt=lastGoodPositionReal;
                 newAction.userAction.position=i;
                 actionDone << newAction;
                 actionToDoListTransfer.swap(i,lastGoodPositionReal);
@@ -1142,11 +1155,11 @@ void ListThread::moveItemsUp(QList<int> ids)
         }
         else
         {
-            lastGoodPositionExtern++;
             lastGoodPositionReal=i;
             haveGoodPosition=true;
         }
     }
+    sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
@@ -1160,7 +1173,6 @@ void ListThread::moveItemsDown(QList<int> ids)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
-    int lastGoodPositionExtern=numberOfTransferIntoToDoList;
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
     for (int i=actionToDoListTransfer.size()-1; i>=0; --i) {
@@ -1190,11 +1202,11 @@ void ListThread::moveItemsDown(QList<int> ids)
         }
         else
         {
-            lastGoodPositionExtern--;
             lastGoodPositionReal=i;
             haveGoodPosition=true;
         }
     }
+    sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
@@ -1208,7 +1220,6 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
-    int lastGoodPositionExtern=numberOfTransferIntoToDoList;
     int lastGoodPositionReal=actionToDoListTransfer.size()-1;
     for (int i=lastGoodPositionReal; i>=0; --i) {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Check action on item ")+QString::number(i));
@@ -1219,12 +1230,11 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
             newAction.addAction.id=actionToDoListTransfer.at(i).id;
-            newAction.userAction.moveAt=lastGoodPositionExtern;
+            newAction.userAction.moveAt=lastGoodPositionReal;
             newAction.userAction.position=i;
             actionDone << newAction;
             actionToDoListTransfer.move(i,lastGoodPositionReal);
             lastGoodPositionReal--;
-            lastGoodPositionExtern--;
             if(ids.size()==0)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
@@ -1232,6 +1242,7 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
             }
         }
     }
+    sendActionDone();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>443</width>
-    <height>146</height>
+    <height>158</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,6 +114,23 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_source_folder">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Folder</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_content_source_folder">
+         <property name="text">
+          <string notr="true">/source/</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -162,6 +179,23 @@
         <widget class="QLabel" name="label_content_destination_folder_name">
          <property name="text">
           <string notr="true">folder</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_destination_folder">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Folder</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_content_destination_folder">
+         <property name="text">
+          <string notr="true">/destination/</string>
          </property>
         </widget>
        </item>

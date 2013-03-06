@@ -30,6 +30,8 @@ public slots:
     void newTransferStart(const Ultracopier::ItemOfCopyList &item);
     /** method called when transfer is stopped */
     void newTransferStop(const quint64 &id);
+    /** method called when new transfer is started */
+    void transferSkip(const Ultracopier::ItemOfCopyList &item);
     /** method called when new error is occurred */
     void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
     /** method called when the log file need be created */

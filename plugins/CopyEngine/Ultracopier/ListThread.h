@@ -317,7 +317,7 @@ private slots:
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
 signals:
-        //send information about the copy
+    //send information about the copy
     void actionInProgess(const Ultracopier::EngineActionInProgress &);	//should update interface information on this event
 
     void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
@@ -339,12 +339,12 @@ signals:
     void canBeDeleted();
     void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
 
-        //send error occurred
+    //send error occurred
     void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
-        //for the extra logging
+    //for the extra logging
     void rmPath(const QString &path);
     void mkPath(const QString &path);
-        /// \brief To debug source
+    /// \brief To debug source
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
     #endif

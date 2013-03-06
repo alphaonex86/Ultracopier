@@ -25,7 +25,7 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
     if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
         return QVariant();
 
-    const transfertItem& item = transfertItemList[row];
+    const TransfertItem& item = transfertItemList[row];
     if(role==Qt::UserRole)
         return item.id;
     else if(role==Qt::DisplayRole)
@@ -112,7 +112,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
     if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
         return false;
 
-    transfertItem& item = transfertItemList[row];
+    TransfertItem& item = transfertItemList[row];
     if(role==Qt::UserRole)
     {
         item.id=value.toULongLong();
@@ -151,6 +151,8 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
   */
 QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnActionOnCopyList>& returnActions)
 {
+    const QModelIndexList oldIndexes = persistentIndexList();
+    QModelIndexList newIndexes=oldIndexes;
     loop_size=returnActions.size();
     index_for_loop=0;
     totalFile=0;
@@ -164,7 +166,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
         {
             case Ultracopier::AddingItem:
             {
-                transfertItem newItem;
+                TransfertItem newItem;
                 newItem.id=action.addAction.id;
                 newItem.source=action.addAction.sourceFullPath;
                 newItem.size=facilityEngine->sizeToString(action.addAction.size);
@@ -172,7 +174,6 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 transfertItemList<<newItem;
                 totalFile++;
                 totalSize+=action.addAction.size;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, size: %2, name: %3").arg(action.addAction.id).arg(action.addAction.size).arg(action.addAction.sourceFullPath));
             }
             break;
             case Ultracopier::MoveItem:
@@ -180,25 +181,31 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 //bool current_entry=
                 if(action.userAction.position<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.position>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.moveAt<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.moveAt>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
+                    break;
+                }
+                if(action.userAction.position==action.userAction.moveAt)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("id: %1, move at same position: %2").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 transfertItemList.move(action.userAction.position,action.userAction.moveAt);
+                //newIndexes.move(action.userAction.position,action.userAction.moveAt);
             }
             break;
             case Ultracopier::RemoveItem:
@@ -220,6 +227,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 startId.remove(action.addAction.id);
                 stopId.remove(action.addAction.id);
                 internalRunningOperation.remove(action.addAction.id);
+                //newIndexes.remove(action.userAction.moveAt);
             }
             break;
             case Ultracopier::PreOperation:
@@ -230,12 +238,10 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 tempItem.generalData=action.addAction;
                 tempItem.actionType=action.type;
                 internalRunningOperation[action.addAction.id]=tempItem;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("set for file %1: actionType: PreOperation").arg(action.addAction.id));
             }
             break;
             case Ultracopier::Transfer:
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("found entry for file %1: actionType: Transfer").arg(action.addAction.id));
                 if(!startId.contains(action.addAction.id))
                     startId << action.addAction.id;
                 stopId.remove(action.addAction.id);
@@ -258,7 +264,6 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 //without progression
                 if(custom_with_progression)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("switch the file: %1 to custom operation with progression").arg(action.addAction.id));
                     if(startId.remove(action.addAction.id))
                         if(!stopId.contains(action.addAction.id))
                             stopId << action.addAction.id;
@@ -266,7 +271,6 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 //with progression
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("switch the file: %1 to custom operation without progression").arg(action.addAction.id));
                     stopId.remove(action.addAction.id);
                     if(!startId.contains(action.addAction.id))
                         startId << action.addAction.id;
@@ -287,6 +291,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
         }
         index_for_loop++;
     }
+    //changePersistentIndexList( oldIndexes, newIndexes );
     emit layoutChanged();
     return QList<quint64>() << totalFile << totalSize << currentFile;
 }

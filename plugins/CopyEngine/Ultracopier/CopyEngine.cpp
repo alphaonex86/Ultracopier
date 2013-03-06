@@ -110,7 +110,7 @@ void CopyEngine::connectTheSignalsSlots()
     if(!connect(listThread,&ListThread::send_realBytesTransfered,					this,&CopyEngine::get_realBytesTransfered,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
 
-    if(!connect(this,&CopyEngine::tryCancel,						listThread,&ListThread::tryCancel,				Qt::QueuedConnection))
+    if(!connect(this,&CopyEngine::tryCancel,						listThread,&ListThread::cancel,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect tryCancel()");
     if(!connect(this,&CopyEngine::getNeedPutAtBottom,						listThread,&ListThread::getNeedPutAtBottom,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect getNeedPutAtBottom()");

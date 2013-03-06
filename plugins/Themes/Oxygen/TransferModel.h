@@ -2,6 +2,7 @@
 #define TRANSFERMODEL_H
 
 #include <QAbstractTableModel>
+#include <QItemSelectionModel>
 #include <QModelIndex>
 #include <QVariant>
 #include <QList>
@@ -20,7 +21,7 @@ class TransferModel : public QAbstractTableModel
     Q_OBJECT
 public:
     /// \brief the transfer item displayed
-    struct transfertItem
+    struct TransfertItem
     {
         quint64 id;
         QString source;
@@ -66,7 +67,7 @@ public:
 
     quint64 firstId();
 protected:
-    QList<transfertItem> transfertItemList;///< To have a transfer list for the user
+    QList<TransfertItem> transfertItemList;///< To have a transfer list for the user
     QSet<quint64> startId,stopId;///< To show what is started, what is stopped
     QHash<quint64,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
     QIcon start,stop;
