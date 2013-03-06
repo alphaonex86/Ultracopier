@@ -191,9 +191,10 @@ void TransferThread::setFileRename(const QString &nameForRename)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] already used, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
         return;
     }
-    if(nameForRename.contains(QRegularExpression("[/\\\\]")))
+    if(nameForRename.contains(QRegularExpression("[/\\\\\\*]")))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't use this kind of name, internal error");
+        emit errorOnFile(destination,tr("Try rename with unauthorized charateres"));
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] nameForRename: "+nameForRename);

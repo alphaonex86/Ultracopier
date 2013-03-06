@@ -2,7 +2,9 @@
 #include "ui_fileIsSameDialog.h"
 #include "TransferThread.h"
 
-#include <QDebug>
+#include <QRegularExpression>
+#include <QFileInfo>
+#include <QMessageBox>
 
 FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule) :
     QDialog(parent),
@@ -62,10 +64,6 @@ void FileIsSameDialog::changeEvent(QEvent *e)
 
 QString FileIsSameDialog::getNewName()
 {
-    if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
-        qDebug() << "fileIsSameDialog, return the old name: "+oldName;
-    else
-        qDebug() << "fileIsSameDialog, return the new name: "+ui->lineEditNewName->text();
     if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
         return oldName;
     else
@@ -150,7 +148,7 @@ bool FileIsSameDialog::getAlways()
 
 void FileIsSameDialog::updateRenameButton()
 {
-    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
+    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
 }
 
 void FileIsSameDialog::on_lineEditNewName_textChanged(const QString &arg1)
@@ -167,6 +165,14 @@ void FileIsSameDialog::on_checkBoxAlways_toggled(bool checked)
 
 void FileIsSameDialog::on_lineEditNewName_returnPressed()
 {
+    updateRenameButton();
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
+    else
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized charateres"));
+}
+
+void FileIsSameDialog::on_lineEditNewName_editingFinished()
+{
+    updateRenameButton();
 }

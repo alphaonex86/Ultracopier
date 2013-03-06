@@ -2,7 +2,9 @@
 #include "ui_fileExistsDialog.h"
 #include "TransferThread.h"
 
-#include <QDebug>
+#include <QRegularExpression>
+#include <QFileInfo>
+#include <QMessageBox>
 
 FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
     QDialog(parent),
@@ -85,10 +87,6 @@ void FileExistsDialog::changeEvent(QEvent *e)
 
 QString FileExistsDialog::getNewName()
 {
-    if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
-        qDebug() << "return the old name: "+oldName;
-    else
-        qDebug() << "return the new name: "+ui->lineEditNewName->text();
     if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
         return oldName;
     else
@@ -191,7 +189,7 @@ bool FileExistsDialog::getAlways()
 
 void FileExistsDialog::updateRenameButton()
 {
-    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
+    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
 }
 
 void FileExistsDialog::on_checkBoxAlways_toggled(bool checked)
@@ -208,12 +206,20 @@ void FileExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
 
 void FileExistsDialog::on_lineEditNewName_returnPressed()
 {
+    updateRenameButton();
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
+    else
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized charateres"));
 }
 
 void FileExistsDialog::on_actionOverwrite_if_older_triggered()
 {
     action=FileExists_OverwriteIfOlder;
     this->close();
+}
+
+void FileExistsDialog::on_lineEditNewName_editingFinished()
+{
+    updateRenameButton();
 }

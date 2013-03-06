@@ -36,11 +36,15 @@ public:
 protected:
     void changeEvent(QEvent *e);
 private slots:
+    void updateRenameButton();
     void on_SuggestNewName_clicked();
     void on_Rename_clicked();
     void on_Skip_clicked();
     void on_Cancel_clicked();
     void on_Merge_clicked();
+    void on_lineEditNewName_editingFinished();
+    void on_lineEditNewName_returnPressed();
+    void on_lineEditNewName_textChanged(const QString &arg1);
 private:
     Ui::folderExistsDialog *ui;
     FolderExistsAction action;

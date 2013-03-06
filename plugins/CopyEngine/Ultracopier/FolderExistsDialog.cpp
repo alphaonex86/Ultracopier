@@ -3,6 +3,8 @@
 #include "TransferThread.h"
 
 #include <QMessageBox>
+#include <QFileInfo>
+#include <QMessageBox>
 
 FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
     QDialog(parent),
@@ -157,4 +159,29 @@ void FolderExistsDialog::on_Merge_clicked()
 {
     action=FolderExists_Merge;
     this->close();
+}
+
+void FolderExistsDialog::on_lineEditNewName_editingFinished()
+{
+    updateRenameButton();
+}
+
+void FolderExistsDialog::on_lineEditNewName_returnPressed()
+{
+    updateRenameButton();
+    if(ui->Rename->isEnabled())
+        on_Rename_clicked();
+    else
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized charateres"));
+}
+
+void FolderExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
+{
+    Q_UNUSED(arg1);
+    updateRenameButton();
+}
+
+void FolderExistsDialog::updateRenameButton()
+{
+    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
 }

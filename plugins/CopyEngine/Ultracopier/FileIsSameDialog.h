@@ -43,7 +43,7 @@ private slots:
     void on_lineEditNewName_textChanged(const QString &arg1);
     void on_checkBoxAlways_toggled(bool checked);
     void on_lineEditNewName_returnPressed();
-
+    void on_lineEditNewName_editingFinished();
 private:
     Ui::fileIsSameDialog *ui;
     FileExistsAction action;

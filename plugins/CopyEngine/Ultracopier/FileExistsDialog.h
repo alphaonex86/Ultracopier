@@ -47,6 +47,7 @@ private slots:
     void on_lineEditNewName_textChanged(const QString &arg1);
     void on_lineEditNewName_returnPressed();
     void on_actionOverwrite_if_older_triggered();
+    void on_lineEditNewName_editingFinished();
 private:
     Ui::fileExistsDialog *ui;
     FileExistsAction action;
