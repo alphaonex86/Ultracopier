@@ -25,11 +25,12 @@ class LogThread : public QThread, public GlobalClass
 public:
     explicit LogThread();
      ~LogThread();
+    bool logTransfer();
 public slots:
     /** method called when new transfer is started */
     void newTransferStart(const Ultracopier::ItemOfCopyList &item);
     /** method called when transfer is stopped */
-    void newTransferStop(const quint64 &id);
+    void newTransferStop(const Ultracopier::ItemOfCopyList &item);
     /** method called when new transfer is started */
     void transferSkip(const Ultracopier::ItemOfCopyList &item);
     /** method called when new error is occurred */

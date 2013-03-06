@@ -121,7 +121,6 @@ struct ItemOfCopyList
     QString destinationFullPath;///< full path with file name: /foo/foo.txt
     QString destinationFileName;///< full path with file name: foo.txt
     // if type == CustomOperation, then 0 = without progression, 1 = with progression
-    // if type == RemoveItem, then 0 = normal remove, 1 = skip
     quint64 size;
     CopyMode mode;
 };
@@ -130,7 +129,8 @@ struct ItemOfCopyList
 struct ActionOnCopyList
 {
     int position;
-    ///< if type == MoveItem
+    // if type == MoveItem
+    // if type == RemoveItem, then 0 = normal remove, 1 = skip
     int moveAt;
 };
 

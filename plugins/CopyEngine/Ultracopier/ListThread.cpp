@@ -97,8 +97,8 @@ void ListThread::transferInodeIsClosed()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] have finish, put at idle; for id: %2").arg(int_for_internal_loop).arg(temp_transfer_thread->transferId));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
-            newAction.addAction.size=0;
-            newAction.addAction.id=temp_transfer_thread->transferId;
+            newAction.userAction.moveAt=0;
+            newAction.addAction=actionToDoTransferToItemOfCopyList(actionToDoListTransfer.at(int_for_internal_loop));
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             /// \todo check if item is at the right thread
@@ -671,8 +671,8 @@ bool ListThread::skipInternal(const quint64 &id)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
-            newAction.addAction.size=1;
-            newAction.addAction.id=id;
+            newAction.userAction.moveAt=1;
+            newAction.addAction=actionToDoTransferToItemOfCopyList(actionToDoListTransfer.at(int_for_internal_loop));
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
@@ -981,7 +981,7 @@ void ListThread::syncTransferList_internal()
     loop_sub_size=transferThreadList.size();
     //this loop to have at max ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT, not ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*transferThreadList.size()
     for(int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
-        const actionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
+        const ActionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
         Ultracopier::ReturnActionOnCopyList newAction;
         newAction.type				= Ultracopier::PreOperation;
         newAction.addAction.id			= item.id;
@@ -1043,7 +1043,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     if(!source.isSymLink())
         size=source.size();
     bytesToTransfer+= size;
-    actionToDoTransfer temp;
+    ActionToDoTransfer temp;
     temp.id		= generateIdNumber();
     temp.size	= size;
     temp.source	= source;
@@ -1054,16 +1054,23 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     //push the new transfer to interface
     Ultracopier::ReturnActionOnCopyList newAction;
     newAction.type				= Ultracopier::AddingItem;
-    newAction.addAction.id			= temp.id;
-    newAction.addAction.sourceFullPath	= source.absoluteFilePath();
-    newAction.addAction.sourceFileName	= source.fileName();
-    newAction.addAction.destinationFullPath	= destination.absoluteFilePath();
-    newAction.addAction.destinationFileName	= destination.fileName();
-    newAction.addAction.size		= temp.size;
-    newAction.addAction.mode		= mode;
+    newAction.addAction=actionToDoTransferToItemOfCopyList(temp);
     actionDone << newAction;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, add entry: %3, size: %4, size2: %5").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(newAction.addAction.size));
     return temp.id;
+}
+
+Ultracopier::ItemOfCopyList ListThread::actionToDoTransferToItemOfCopyList(const ListThread::ActionToDoTransfer &actionToDoTransfer)
+{
+    Ultracopier::ItemOfCopyList itemOfCopyList;
+    itemOfCopyList.id			= actionToDoTransfer.id;
+    itemOfCopyList.sourceFullPath	= actionToDoTransfer.source.absoluteFilePath();
+    itemOfCopyList.sourceFileName	= actionToDoTransfer.source.fileName();
+    itemOfCopyList.destinationFullPath	= actionToDoTransfer.destination.absoluteFilePath();
+    itemOfCopyList.destinationFileName	= actionToDoTransfer.destination.fileName();
+    itemOfCopyList.size		= actionToDoTransfer.size;
+    itemOfCopyList.mode		= actionToDoTransfer.mode;
+    return itemOfCopyList;
 }
 
 //generate id number
@@ -1502,7 +1509,7 @@ void ListThread::doNewActions_inode_manipulation()
                 }
                 int_for_internal_loop++;
             }
-            actionToDoTransfer& currentActionToDoTransfer=actionToDoListTransfer[int_for_loop];
+            ActionToDoTransfer& currentActionToDoTransfer=actionToDoListTransfer[int_for_loop];
             //do the tranfer action
             while(int_for_transfer_thread_search<loop_sub_size_transfer_thread_search)
             {
@@ -1668,6 +1675,8 @@ void ListThread::mkPathFirstFolderFinish()
     {
         if(actionToDoListInode.at(int_for_loop).type==ActionType_MkPath)
         {
+            //to send to the log
+            emit mkPath(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath());
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
             actionToDoListInode.removeAt(int_for_loop);
             if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
@@ -1689,6 +1698,8 @@ void ListThread::rmPathFirstFolderFinish()
     {
         if(actionToDoListInode.at(int_for_loop).type==ActionType_RmPath)
         {
+            //to send to the log
+            emit rmPath(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath());
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
             actionToDoListInode.removeAt(int_for_loop);
             if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)

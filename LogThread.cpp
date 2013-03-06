@@ -56,6 +56,11 @@ LogThread::~LogThread()
     wait();
 }
 
+bool LogThread::logTransfer()
+{
+    return enabled && log_enable_transfer;
+}
+
 void LogThread::openLogs()
 {
     if(options->getOptionValue("Write_log","enabled").toBool()==false)
@@ -127,11 +132,17 @@ void LogThread::transferSkip(const Ultracopier::ItemOfCopyList &item)
     emit newData(text);
 }
 
-void LogThread::newTransferStop(const quint64 &id)
+void LogThread::newTransferStop(const Ultracopier::ItemOfCopyList &item)
 {
     if(!log_enable_transfer)
         return;
-    Q_UNUSED(id)
+    QString text="[Stop] "+transfer_format+"\n";
+    text=replaceBaseVar(text);
+    //Variable is %source%, %size%, %destination%
+    text=text.replace("%source%",item.sourceFullPath);
+    text=text.replace("%size%",QString::number(item.size));
+    text=text.replace("%destination%",item.destinationFullPath);
+    emit newData(text);
 }
 
 void LogThread::error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error)

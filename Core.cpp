@@ -831,9 +831,35 @@ void Core::syncReady()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
-void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> & actionList)
+void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &actionList)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    //log to thje file
+    if(log.logTransfer())
+    {
+        int index=0;
+        int size=actionList.size();
+        while(index<size)
+        {
+            const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+            switch(returnAction.type)
+            {
+                case Ultracopier::PreOperation:
+                    log.newTransferStart(returnAction.addAction);
+                break;
+                case Ultracopier::RemoveItem:
+                    if(returnAction.userAction.moveAt==0)
+                        log.newTransferStop(returnAction.addAction);
+                    else
+                        log.transferSkip(returnAction.addAction);
+                break;
+                default:
+                break;
+            }
+            index++;
+        }
+    }
+    //send the the interface
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {

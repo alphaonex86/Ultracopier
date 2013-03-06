@@ -60,7 +60,7 @@ public:
      * Used when the interface is changed, useful to minimize the memory size */
     void syncTransferList();
     /// \brief to store one action to do
-    struct actionToDoTransfer
+    struct ActionToDoTransfer
     {
         quint64 id;
         qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
@@ -70,7 +70,7 @@ public:
         bool isRunning;///< store if the action si running
         //TransferThread * transfer; // -> see transferThreadList
     };
-    QList<actionToDoTransfer> actionToDoListTransfer;
+    QList<ActionToDoTransfer> actionToDoListTransfer;
     /// \brief get action type
     enum ActionType
     {
@@ -226,6 +226,7 @@ private:
     QObject::startTimer: timers cannot be started from another thread */
     QTimer *clockForTheCopySpeed;	///< For the speed throttling
 
+    inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
     quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode);
     //generate id number
