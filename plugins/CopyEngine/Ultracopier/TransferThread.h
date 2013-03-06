@@ -99,7 +99,7 @@ public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
     /// \brief to set files to transfer
-    bool setFiles(const QString &source,const qint64 &size,const QString &destination,const Ultracopier::CopyMode &mode);
+    bool setFiles(const QFileInfo& source,const qint64 &size,const QFileInfo& destination,const Ultracopier::CopyMode &mode);
     /// \brief to set file exists action to do
     void setFileExistsAction(const FileExistsAction &action);
     /// \brief to set the new name of the destination
@@ -168,8 +168,8 @@ private:
     TransferStat		transfer_stat;
     ReadThread		readThread;
     WriteThread		writeThread;
-    QString			source;
-    QString			destination;
+    /*QString			source;
+    QString			destination;*/
     Ultracopier::CopyMode		mode;
     bool			doRightTransfer;
     bool			keepDate;
@@ -189,8 +189,8 @@ private:
     volatile bool		stopIt;
     volatile bool		canStartTransfer;
     bool			retry;
-    QFileInfo		sourceInfo;
-    QFileInfo		destinationInfo;
+    QFileInfo		source;
+    QFileInfo		destination;
     qint64			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
@@ -233,8 +233,8 @@ private:
     void tryCopyDirectly();
     void ifCanStartTransfer();
     //fonction to edit the file date time
-    bool readFileDateTime(const QString &source);
-    bool writeFileDateTime(const QString &destination);
+    bool readFileDateTime(const QFileInfo &source);
+    bool writeFileDateTime(const QFileInfo &destination);
     void resetExtraVariable();
     //error management function
     void resumeTransferAfterWriteError();

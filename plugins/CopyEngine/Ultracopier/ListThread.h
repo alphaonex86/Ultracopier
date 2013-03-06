@@ -78,16 +78,17 @@ public:
         ActionType_RmPath=2
     };
     /// \brief to store one action to do
-    struct actionToDoInode
+    struct ActionToDoInode
     {
         ActionType type;///< \see ActionType
         quint64 id;
         qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
-        QFileInfo folder;///< Used to set: source for transfer, folder to create, folder to drop
+        QFileInfo source;///< Keep to copy the right/date, to remove (for move)
+        QFileInfo destination;///< Used to set: folder to create, folder to drop
         bool isRunning;///< store if the action si running
     };
-    QList<actionToDoInode> actionToDoListInode;
-    QList<actionToDoInode> actionToDoListInode_afterTheTransfer;
+    QList<ActionToDoInode> actionToDoListInode;
+    QList<ActionToDoInode> actionToDoListInode_afterTheTransfer;
     int numberOfInodeOperation;
     //dir operation thread queue
     MkPath mkPathQueue;
@@ -203,10 +204,10 @@ private:
     QList<Ultracopier::ReturnActionOnCopyList>	actionDone;///< to action to send to the interface
     quint64				idIncrementNumber;///< to store the last id returned
     qint64				actualRealByteTransfered;
-    int				preOperationNumber;
-    int				numberOfTranferRuning;
-    int				maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
-    FolderExistsAction		alwaysDoThisActionForFolderExists;
+    int                 preOperationNumber;
+    int                 numberOfTranferRuning;
+    int                 maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
+    FolderExistsAction	alwaysDoThisActionForFolderExists;
     bool				checkDestinationFolderExists;
     bool				doChecksum;
     bool				checksumIgnoreIfImpossible;
@@ -312,9 +313,9 @@ private slots:
     /// \to create transfer thread
     void createTransferThread();
     //mk path to do
-    quint64 addToMkPath(const QString& folder);
+    quint64 addToMkPath(const QFileInfo& source,const QFileInfo& destination);
     //add rm path to do
-    void addToRmPath(const QString& folder,const int& inodeToRemove);
+    void addToRmPath(const QFileInfo& folder, const int& inodeToRemove);
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
 signals:

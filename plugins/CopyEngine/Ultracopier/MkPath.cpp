@@ -16,12 +16,12 @@ MkPath::~MkPath()
     wait();
 }
 
-void MkPath::addPath(const QString &path)
+void MkPath::addPath(const QFileInfo& source,const QFileInfo& destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
     if(stopIt)
         return;
-    emit internalStartAddPath(path);
+    emit internalStartAddPath(source,destination);
 }
 
 void MkPath::skip()
@@ -49,17 +49,17 @@ void MkPath::internalDoThisPath()
 {
     if(waitAction || pathList.isEmpty())
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pathList.first());
-    if(!dir.exists(pathList.first()))
-        if(!dir.mkpath(pathList.first()))
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pathList.first().second.absoluteFilePath());
+    if(!dir.exists(pathList.first().second.absoluteFilePath()))
+        if(!dir.mkpath(pathList.first().second.absoluteFilePath()))
         {
-            if(!dir.exists(pathList.first()))
+            if(!dir.exists(pathList.first().second.absoluteFilePath()))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first());
-                emit errorOnFolder(pathList.first(),tr("Unable to create the folder"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().second.absoluteFilePath());
+                emit errorOnFolder(pathList.first().second,tr("Unable to create the folder"));
                 return;
             }
         }
@@ -68,10 +68,13 @@ void MkPath::internalDoThisPath()
     checkIfCanDoTheNext();
 }
 
-void MkPath::internalAddPath(const QString &path)
+void MkPath::internalAddPath(const QFileInfo& source,const QFileInfo& destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path);
-    pathList << path;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    QPair<QFileInfo,QFileInfo> tempPath;
+    tempPath.first=source;
+    tempPath.second=destination;
+    pathList << tempPath;
     if(!waitAction)
         checkIfCanDoTheNext();
 }

@@ -23,11 +23,11 @@ public:
     explicit MkPath();
     ~MkPath();
     /// \brief add path to make
-    void addPath(const QString &path);
+    void addPath(const QFileInfo& source,const QFileInfo& destination);
 signals:
     void errorOnFolder(const QFileInfo &,const QString &);
     void firstFolderFinish();
-    void internalStartAddPath(const QString &path);
+    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination);
     void internalStartDoThisPath();
     void internalStartSkip();
     void internalStartRetry();
@@ -42,12 +42,12 @@ private:
     bool waitAction;
     bool stopIt;
     bool skipIt;
-    QStringList pathList;
+    QList<QPair<QFileInfo,QFileInfo> > pathList;
     void checkIfCanDoTheNext();
     QDir dir;
 private slots:
     void internalDoThisPath();
-    void internalAddPath(const QString &path);
+    void internalAddPath(const QFileInfo& source,const QFileInfo& destination);
     void internalSkip();
     void internalRetry();
 };

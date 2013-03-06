@@ -357,7 +357,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
     int sizeEntryList=entryList.size();
     emit newFolderListing(source.absoluteFilePath());
     if(sizeEntryList==0)
-        emit addToMkPath(destination.absoluteFilePath());
+        emit addToMkPath(source,destination);
     for (int index=0;index<sizeEntryList;++index)
     {
         QFileInfo fileInfo=entryList.at(index);

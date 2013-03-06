@@ -23,11 +23,11 @@ public:
     explicit RmPath();
     ~RmPath();
     /// \brief add new path to remove
-    void addPath(const QString &path);
+    void addPath(const QFileInfo &path);
 signals:
     void errorOnFolder(const QFileInfo &,const QString &);
     void firstFolderFinish();
-    void internalStartAddPath(const QString &path);
+    void internalStartAddPath(const QFileInfo &path);
     void internalStartDoThisPath();
     void internalStartSkip();
     void internalStartRetry();
@@ -40,13 +40,13 @@ private:
     bool waitAction;
     bool stopIt;
     bool skipIt;
-    QStringList pathList;
+    QList<QFileInfo> pathList;
     void checkIfCanDoTheNext();
     QDir dir;
     bool rmpath(const QDir &dir);
 private slots:
     void internalDoThisPath();
-    void internalAddPath(const QString &path);
+    void internalAddPath(const QFileInfo &path);
     void internalSkip();
     void internalRetry();
 };

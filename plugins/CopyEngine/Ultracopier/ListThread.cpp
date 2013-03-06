@@ -871,31 +871,32 @@ void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisA
 }
 
 //mk path to do
-quint64 ListThread::addToMkPath(const QString& folder)
+quint64 ListThread::addToMkPath(const QFileInfo& source,const QFileInfo& destination)
 {
     if(stopIt)
         return 0;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder: "+folder);
-    actionToDoInode temp;
-    temp.type	= ActionType_MkPath;
-    temp.id		= generateIdNumber();
-    temp.folder.setFile(folder);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ActionToDoInode temp;
+    temp.type       = ActionType_MkPath;
+    temp.id         = generateIdNumber();
+    temp.source     = source;
+    temp.destination= destination;
     temp.isRunning	= false;
     actionToDoListInode << temp;
     return temp.id;
 }
 
 //add rm path to do
-void ListThread::addToRmPath(const QString& folder,const int& inodeToRemove)
+void ListThread::addToRmPath(const QFileInfo& folder,const int& inodeToRemove)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder: "+folder+",inodeToRemove: "+QString::number(inodeToRemove));
-    actionToDoInode temp;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder: "+folder.absoluteFilePath()+",inodeToRemove: "+QString::number(inodeToRemove));
+    ActionToDoInode temp;
     temp.type	= ActionType_RmPath;
     temp.id		= generateIdNumber();
     temp.size	= inodeToRemove;
-    temp.folder.setFile(folder);
+    temp.source = folder;
     temp.isRunning	= false;
     if(inodeToRemove==0)
         actionToDoListInode << temp;
@@ -1523,9 +1524,9 @@ void ListThread::doNewActions_inode_manipulation()
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
                     if(!currentTransferThread->setFiles(
-                        currentActionToDoTransfer.source.absoluteFilePath(),
+                        currentActionToDoTransfer.source,
                         currentActionToDoTransfer.size,
-                        currentActionToDoTransfer.destination.absoluteFilePath(),
+                        currentActionToDoTransfer.destination,
                         currentActionToDoTransfer.mode
                         ))
                     {
@@ -1675,8 +1676,8 @@ void ListThread::mkPathFirstFolderFinish()
         if(actionToDoListInode.at(int_for_loop).type==ActionType_MkPath)
         {
             //to send to the log
-            emit mkPath(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath());
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
+            emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
             actionToDoListInode.removeAt(int_for_loop);
             if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
                 updateTheStatus();
@@ -1698,8 +1699,8 @@ void ListThread::rmPathFirstFolderFinish()
         if(actionToDoListInode.at(int_for_loop).type==ActionType_RmPath)
         {
             //to send to the log
-            emit rmPath(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath());
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).folder.absoluteFilePath()));
+            emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop rmpath: %1").arg(actionToDoListInode.at(int_for_loop).source.absoluteFilePath()));
             actionToDoListInode.removeAt(int_for_loop);
             if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
                 updateTheStatus();

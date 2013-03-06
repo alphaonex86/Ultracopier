@@ -2,126 +2,126 @@
 
 RmPath::RmPath()
 {
-	stopIt=false;
-	waitAction=false;
-	setObjectName("RmPath");
-	moveToThread(this);
-	start();
+    stopIt=false;
+    waitAction=false;
+    setObjectName("RmPath");
+    moveToThread(this);
+    start();
 }
 
 RmPath::~RmPath()
 {
-	stopIt=true;
-	quit();
-	wait();
+    stopIt=true;
+    quit();
+    wait();
 }
 
-void RmPath::addPath(const QString &path)
+void RmPath::addPath(const QFileInfo &path)
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path);
-	if(stopIt)
-		return;
-	emit internalStartAddPath(path);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path.absoluteFilePath());
+    if(stopIt)
+        return;
+    emit internalStartAddPath(path);
 }
 
 void RmPath::skip()
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-	emit internalStartSkip();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    emit internalStartSkip();
 }
 
 void RmPath::retry()
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-	emit internalStartRetry();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    emit internalStartRetry();
 }
 
 void RmPath::run()
 {
-	connect(this,&RmPath::internalStartAddPath,	this,&RmPath::internalAddPath,		Qt::QueuedConnection);
-	connect(this,&RmPath::internalStartDoThisPath,	this,&RmPath::internalDoThisPath,	Qt::QueuedConnection);
-	connect(this,&RmPath::internalStartSkip,	this,&RmPath::internalSkip,		Qt::QueuedConnection);
-	connect(this,&RmPath::internalStartRetry,	this,&RmPath::internalRetry,		Qt::QueuedConnection);
-	exec();
+    connect(this,&RmPath::internalStartAddPath,	this,&RmPath::internalAddPath,		Qt::QueuedConnection);
+    connect(this,&RmPath::internalStartDoThisPath,	this,&RmPath::internalDoThisPath,	Qt::QueuedConnection);
+    connect(this,&RmPath::internalStartSkip,	this,&RmPath::internalSkip,		Qt::QueuedConnection);
+    connect(this,&RmPath::internalStartRetry,	this,&RmPath::internalRetry,		Qt::QueuedConnection);
+    exec();
 }
 
 void RmPath::internalDoThisPath()
 {
-	if(waitAction || pathList.isEmpty())
-		return;
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pathList.first());
-	if(!rmpath(pathList.first()))
-	{
-		if(stopIt)
-			return;
-		waitAction=true;
-		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the folder: "+pathList.first());
-		emit errorOnFolder(pathList.first(),tr("Unable to remove the folder"));
-		return;
-	}
-	pathList.removeFirst();
-	emit firstFolderFinish();
-	checkIfCanDoTheNext();
+    if(waitAction || pathList.isEmpty())
+        return;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pathList.first().absoluteFilePath());
+    if(!rmpath(pathList.first().absoluteFilePath()))
+    {
+        if(stopIt)
+            return;
+        waitAction=true;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the folder: "+pathList.first().absoluteFilePath());
+        emit errorOnFolder(pathList.first(),tr("Unable to remove the folder"));
+        return;
+    }
+    pathList.removeFirst();
+    emit firstFolderFinish();
+    checkIfCanDoTheNext();
 }
 
 /** remplace QDir::rmpath() because it return false if the folder not exists
   and seam bug with parent folder */
 bool RmPath::rmpath(const QDir &dir)
 {
-	if(!dir.exists())
-		return true;
-	bool allHaveWork=true;
-	QFileInfoList list = dir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);
-	for (int i = 0; i < list.size(); ++i)
-	{
-		QFileInfo fileInfo(list.at(i));
-		if(!fileInfo.isDir())
-		{
-			ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
-			allHaveWork=false;
-		}
-		else
-		{
-			//return the fonction for scan the new folder
-			if(!rmpath(dir.absolutePath()+'/'+fileInfo.fileName()+'/'))
-				allHaveWork=false;
-		}
-	}
-	if(!allHaveWork)
-		return false;
-	allHaveWork=dir.rmdir(dir.absolutePath());
-	if(!allHaveWork)
-		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+dir.absolutePath());
-	return allHaveWork;
+    if(!dir.exists())
+        return true;
+    bool allHaveWork=true;
+    QFileInfoList list = dir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);
+    for (int i = 0; i < list.size(); ++i)
+    {
+        QFileInfo fileInfo(list.at(i));
+        if(!fileInfo.isDir())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
+            allHaveWork=false;
+        }
+        else
+        {
+            //return the fonction for scan the new folder
+            if(!rmpath(dir.absolutePath()+'/'+fileInfo.fileName()+'/'))
+                allHaveWork=false;
+        }
+    }
+    if(!allHaveWork)
+        return false;
+    allHaveWork=dir.rmdir(dir.absolutePath());
+    if(!allHaveWork)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+dir.absolutePath());
+    return allHaveWork;
 }
 
-void RmPath::internalAddPath(const QString &path)
+void RmPath::internalAddPath(const QFileInfo &path)
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path);
-	pathList << path;
-	if(!waitAction)
-		checkIfCanDoTheNext();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+path.absoluteFilePath());
+    pathList << path;
+    if(!waitAction)
+        checkIfCanDoTheNext();
 }
 
 void RmPath::checkIfCanDoTheNext()
 {
-	if(!waitAction && !stopIt && pathList.size()>0)
-		emit internalStartDoThisPath();
+    if(!waitAction && !stopIt && pathList.size()>0)
+        emit internalStartDoThisPath();
 }
 
 void RmPath::internalSkip()
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-	waitAction=false;
-	pathList.removeFirst();
-	emit firstFolderFinish();
-	checkIfCanDoTheNext();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    waitAction=false;
+    pathList.removeFirst();
+    emit firstFolderFinish();
+    checkIfCanDoTheNext();
 }
 
 void RmPath::internalRetry()
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-	waitAction=false;
-	checkIfCanDoTheNext();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    waitAction=false;
+    checkIfCanDoTheNext();
 }
 
