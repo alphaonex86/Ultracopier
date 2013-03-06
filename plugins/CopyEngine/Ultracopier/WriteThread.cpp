@@ -48,7 +48,7 @@ void WriteThread::run()
 
 bool WriteThread::internalOpen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen destination: "+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen destination: "+file.fileName());
     if(stopIt)
     {
         emit closed();
@@ -70,7 +70,6 @@ bool WriteThread::internalOpen()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=InodeOperation;
     #endif
-    file.setFileName(name);
     //mkpath check if exists and return true if already exists
     QFileInfo destinationInfo(file);
     QDir destinationFolder;
@@ -121,7 +120,7 @@ bool WriteThread::internalOpen()
         {
             file.close();
             errorString_internal=file.errorString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -138,7 +137,7 @@ bool WriteThread::internalOpen()
         {
             file.close();
             errorString_internal=file.errorString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -168,7 +167,7 @@ bool WriteThread::internalOpen()
             return false;
         }
         errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to open: %1, error: %2").arg(name).arg(errorString_internal));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -177,18 +176,24 @@ bool WriteThread::internalOpen()
     }
 }
 
-void WriteThread::open(const QString &name,const quint64 &startSize,const bool &buffer)
+void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool &buffer)
 {
     if(!isRunning())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the thread not running to open destination: "+name);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the thread not running to open destination: "+file.absoluteFilePath());
         errorString_internal=tr("Internal error, please report it!");
         emit error();
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+name);
+    if(this->file.isOpen())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already open! destination: "+file.fileName());
+        errorString_internal=tr("Internal error, please report it!");
+        emit error();
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+file.absoluteFilePath());
     stopIt=false;
     fakeMode=false;
-    this->name=name;
+    this->file.setFileName(file.absoluteFilePath());
     this->startSize=startSize;
     this->buffer=buffer;
     endDetected=false;
@@ -350,7 +355,7 @@ void WriteThread::internalClose(bool emitSignal)
                         if(emitSignal)
                         {
                             errorString_internal=file.errorString();
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
                             emit error();
                         }
                         else
@@ -481,7 +486,7 @@ void WriteThread::checkSum()
     if(!file.seek(0))
     {
         errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
         emit error();
         return;
     }
@@ -546,7 +551,7 @@ void WriteThread::internalFlushAndSeekToZero()
     if(!file.seek(0))
     {
         errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
         emit error();
         return;
     }

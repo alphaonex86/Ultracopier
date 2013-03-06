@@ -29,7 +29,7 @@ protected:
     void run();
 public:
     /// \brief open with the name and copy mode
-    void open(const QString &name,const Ultracopier::CopyMode &mode);
+    void open(const QFileInfo &file, const Ultracopier::CopyMode &mode);
     /// \brief return the error string
     QString errorString();
     //QByteArray read(qint64 position,qint64 maxSize);
@@ -107,7 +107,6 @@ signals:
     void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
 
 private:
-    QString         name;
     QString         errorString_internal;
     AvancedQFile	file;
     volatile bool	stopIt;

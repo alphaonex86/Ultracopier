@@ -30,7 +30,7 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const QString &name,const quint64 &startSize,const bool &buffer);
+    void open(const QFileInfo &file,const quint64 &startSize,const bool &buffer);
     /// \brief to return the error string
     QString errorString();
     /// \brief to stop all
@@ -97,7 +97,6 @@ signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 private:
-    QString			name;
     QString			errorString_internal;
     AvancedQFile		file;
     volatile bool		stopIt;

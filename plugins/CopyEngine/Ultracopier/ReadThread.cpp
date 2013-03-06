@@ -37,34 +37,34 @@ void ReadThread::run()
     exec();
 }
 
-void ReadThread::open(const QString &name,const Ultracopier::CopyMode &mode)
+void ReadThread::open(const QFileInfo &file,const Ultracopier::CopyMode &mode)
 {
     if(!isRunning())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the thread not running to open destination: "+name);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the thread not running to open destination: "+file.absoluteFilePath());
         errorString_internal=tr("Internal error, please report it!");
         emit error();
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open source: "+name);
-    if(file.isOpen())
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open source: "+file.absoluteFilePath());
+    if(this->file.isOpen())
     {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already open: "+file.fileName()+", try open: "+this->name);
-            return;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already open: "+file.absoluteFilePath());
+        return;
     }
     if(isInReadLoop)
     {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already readding: "+file.fileName()+", try open: "+this->name);
-            return;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already readding: "+file.absoluteFilePath());
+        return;
     }
     if(tryStartRead)
     {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already try read: "+file.fileName()+", try open: "+this->name);
-            return;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already try read: "+file.absoluteFilePath());
+        return;
     }
     stopIt=false;
     fakeMode=false;
-    this->name=name;
-        this->mode=mode;
+    this->file.setFileName(file.absoluteFilePath());
+    this->mode=mode;
     emit internalStartOpen();
 }
 
@@ -232,7 +232,7 @@ bool ReadThread::internalOpenSlot()
 
 bool ReadThread::internalOpen(bool resetLastGoodPosition)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen source: "+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen source: "+file.fileName());
     if(stopIt)
     {
         emit closed();
@@ -251,7 +251,6 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         emit closed();
         return false;
     }
-    file.setFileName(name);
     QIODevice::OpenMode openMode=QIODevice::ReadOnly;
     if(mode==Ultracopier::Move)
         openMode=QIODevice::ReadWrite;
@@ -273,7 +272,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         {
             file.close();
             errorString_internal=file.errorString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(name).arg(errorString_internal));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -290,7 +289,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     else
     {
         errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to open: %1, error: %2").arg(name).arg(errorString_internal));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
