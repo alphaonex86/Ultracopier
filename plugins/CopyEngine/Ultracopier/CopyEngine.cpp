@@ -105,8 +105,6 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect warningTransferList()");
     if(!connect(listThread,&ListThread::mkPathErrorOnFolder,					this,&CopyEngine::mkPathErrorOnFolderSlot,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect mkPathErrorOnFolder()");
-    if(!connect(listThread,&ListThread::rmPathErrorOnFolder,					this,&CopyEngine::rmPathErrorOnFolderSlot,				Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect rmPathErrorOnFolder()");
     if(!connect(listThread,&ListThread::send_realBytesTransfered,					this,&CopyEngine::get_realBytesTransfered,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_realBytesTransfered()");
 

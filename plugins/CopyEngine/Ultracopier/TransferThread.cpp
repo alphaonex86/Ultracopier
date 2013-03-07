@@ -251,7 +251,7 @@ void TransferThread::preOperation()
     }
     if(keepDate)
     {
-        doTheDateTransfer=readFileDateTime(source.absoluteFilePath());
+        doTheDateTransfer=readFileDateTime(source);
         if(!doTheDateTransfer)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source.absoluteFilePath());
     }
@@ -927,7 +927,7 @@ bool TransferThread::doFilePostOperation()
     //set the time if no write thread used
     if(doTheDateTransfer)
         //source,destination
-        writeFileDateTime(destination.absoluteFilePath());//can't do that's after move because after move the source not exist
+        writeFileDateTime(destination);//can't do that's after move because after move the source not exist
         /*
           ignore it, because need correct management, mainly with move
         if(!)

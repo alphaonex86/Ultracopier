@@ -47,7 +47,7 @@ signals:
 
     void newFolderListing(const QString &path);
     void addToMkPath(const QFileInfo& source,const QFileInfo& destination);
-    void addToRmPath(const QFileInfo& folder,const int& inodeToRemove);
+    void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
 public slots:
     void addToList(const QStringList& sources,const QString& destination);
     void setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);

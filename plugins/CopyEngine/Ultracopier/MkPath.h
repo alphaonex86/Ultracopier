@@ -12,8 +12,25 @@
 #include <QSemaphore>
 #include <QStringList>
 #include <QDir>
+#include <QDateTime>
 
 #include "Environment.h"
+
+#ifdef Q_OS_UNIX
+    #include <utime.h>
+    #include <time.h>
+    #include <unistd.h>
+    #include <sys/stat.h>
+#else
+    #ifdef Q_OS_WIN32
+        #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+            #include <utime.h>
+            #include <time.h>
+            #include <unistd.h>
+            #include <sys/stat.h>
+        #endif
+    #endif
+#endif
 
 /// \brief Make the path given as queued mkpath
 class MkPath : public QThread
@@ -23,11 +40,13 @@ public:
     explicit MkPath();
     ~MkPath();
     /// \brief add path to make
-    void addPath(const QFileInfo& source,const QFileInfo& destination);
+    void addPath(const QFileInfo& source,const QFileInfo& destination,bool const &move);
+    void setRightTransfer(const bool doRightTransfer);
+    void setKeepDate(const bool keepDate);
 signals:
     void errorOnFolder(const QFileInfo &,const QString &);
     void firstFolderFinish();
-    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination);
+    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const bool &move);
     void internalStartDoThisPath();
     void internalStartSkip();
     void internalStartRetry();
@@ -42,14 +61,40 @@ private:
     bool waitAction;
     bool stopIt;
     bool skipIt;
-    QList<QPair<QFileInfo,QFileInfo> > pathList;
+    QDateTime		maxTime;
+    struct Item
+    {
+        QFileInfo source;
+        QFileInfo destination;
+        bool move;
+    };
+    QList<Item> pathList;
     void checkIfCanDoTheNext();
     QDir dir;
+    bool doRightTransfer;
+    bool keepDate;
+    bool doTheDateTransfer;
+    #ifdef Q_OS_UNIX
+            utimbuf butime;
+    #else
+        #ifdef Q_OS_WIN32
+            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+                utimbuf butime;
+            #else
+                quint32 ftCreateL, ftAccessL, ftWriteL;
+                quint32 ftCreateH, ftAccessH, ftWriteH;
+            #endif
+        #endif
+    #endif
+    //fonction to edit the file date time
+    bool readFileDateTime(const QFileInfo &source);
+    bool writeFileDateTime(const QFileInfo &destination);
 private slots:
     void internalDoThisPath();
-    void internalAddPath(const QFileInfo& source,const QFileInfo& destination);
+    void internalAddPath(const QFileInfo& source, const QFileInfo& destination,bool const &move);
     void internalSkip();
     void internalRetry();
+    bool rmpath(const QDir &dir);
 };
 
 #endif // MKPATH_H

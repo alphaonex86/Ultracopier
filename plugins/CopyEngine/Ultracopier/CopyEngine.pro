@@ -9,7 +9,6 @@ HEADERS         = \
     TransferThread.h \
     ReadThread.h \
     WriteThread.h \
-    RmPath.h \
     MkPath.h \
     AvancedQFile.h \
     ListThread.h \
@@ -32,7 +31,6 @@ SOURCES         = \
     TransferThread.cpp \
     ReadThread.cpp \
     WriteThread.cpp \
-    RmPath.cpp \
     MkPath.cpp \
     AvancedQFile.cpp \
     ListThread.cpp \

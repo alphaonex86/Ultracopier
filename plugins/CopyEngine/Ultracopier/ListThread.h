@@ -20,7 +20,6 @@
 #include "ScanFileOrFolder.h"
 #include "TransferThread.h"
 #include "MkPath.h"
-#include "RmPath.h"
 #include "Environment.h"
 #include "DriveManagement.h"
 
@@ -75,7 +74,7 @@ public:
     enum ActionType
     {
         ActionType_MkPath=1,
-        ActionType_RmPath=2
+        ActionType_MovePath=2
     };
     /// \brief to store one action to do
     struct ActionToDoInode
@@ -92,7 +91,6 @@ public:
     int numberOfInodeOperation;
     //dir operation thread queue
     MkPath mkPathQueue;
-    RmPath rmPathQueue;
     //to get the return value from copyEngine
     bool getReturnBoolToCopyEngine();
     QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine();
@@ -251,7 +249,7 @@ private:
     void detectDrivesOfCurrentTransfer(const QStringList &sources,const QString &destination);
     FacilityInterface * facilityInterface;
     //temp variable for not always alocate the memory
-    int int_for_loop,int_for_internal_loop,int_for_transfer_thread_search,loop_size,loop_sub_size,loop_sub_size_transfer_thread_search,number_rm_path_moved;
+    int int_for_loop,int_for_internal_loop,int_for_transfer_thread_search,loop_size,loop_sub_size,loop_sub_size_transfer_thread_search;
     TransferThread *temp_transfer_thread;
     bool isFound;
     bool updateTheStatus_listing,updateTheStatus_copying;
@@ -315,7 +313,7 @@ private slots:
     //mk path to do
     quint64 addToMkPath(const QFileInfo& source,const QFileInfo& destination);
     //add rm path to do
-    void addToRmPath(const QFileInfo& folder, const int& inodeToRemove);
+    void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
 signals:
@@ -367,8 +365,6 @@ signals:
     void send_syncTransferList();
     //mkpath error event
     void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
-    //rmpath error event
-    void rmPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
     //to close
     void tryCancel();
     //to ask new transfer thread

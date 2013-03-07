@@ -356,7 +356,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         return;
     int sizeEntryList=entryList.size();
     emit newFolderListing(source.absoluteFilePath());
-    if(sizeEntryList==0)
+    if(sizeEntryList==0 && mode!=Ultracopier::Move)
         emit addToMkPath(source,destination);
     for (int index=0;index<sizeEntryList;++index)
     {
@@ -465,7 +465,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
     if(mode==Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath()+", sizeEntryList: "+QString::number(sizeEntryList));
-        emit addToRmPath(source.absoluteFilePath(),sizeEntryList);
+        emit addToMovePath(source,destination,sizeEntryList);
     }
 }
 
