@@ -7,6 +7,9 @@
 
 #include <QFile>
 #include <QDir>
+#ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+#include <QCoreApplication>
+#endif
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #define NORMAL_EXT "d.dll"
@@ -278,7 +281,11 @@ void PluginLoader::setResources(OptionInterface * options,const QString &writePa
     Q_UNUSED(writePath);
     Q_UNUSED(pluginPath);
     Q_UNUSED(portableVersion);
-        this->pluginPath=pluginPath;
+    #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+    this->pluginPath=QCoreApplication::applicationDirPath()+"/";
+    #else
+    this->pluginPath=pluginPath;
+    #endif
     this->optionsEngine=options;
     if(optionsEngine!=NULL)
     {

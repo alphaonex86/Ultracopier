@@ -128,8 +128,6 @@ private slots:
     void errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread);
     //mkpath event
     void mkPathErrorOnFolderSlot(QFileInfo,QString);
-    //rmpath event
-    void rmPathErrorOnFolderSlot(QFileInfo,QString);
 
     //dialog message
     /// \note Can be call without queue because all call will be serialized
@@ -142,8 +140,6 @@ private slots:
     void errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
     //mkpath event
     void mkPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
-    //rmpath event
-    void rmPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
 
     //show one new dialog if needed
     void showOneNewDialog();

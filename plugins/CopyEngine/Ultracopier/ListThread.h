@@ -284,8 +284,6 @@ private slots:
     void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode);
     //mkpath event
     void mkPathFirstFolderFinish();
-    //rmpath event
-    void rmPathFirstFolderFinish();
     //transfer is finished
     void transferIsFinished();
     /** \brief put the current file at bottom in case of error

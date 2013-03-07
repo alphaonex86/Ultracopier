@@ -38,13 +38,6 @@ void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error)
     mkPathErrorOnFolder(folder,error);
 }
 
-//rmpath event
-void CopyEngine::rmPathErrorOnFolderSlot(QFileInfo folder,QString error)
-{
-    rmPathErrorOnFolder(folder,error);
-}
-
-
 /// \note Can be call without queue because all call will be serialized
 void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
 {
@@ -543,8 +536,6 @@ void CopyEngine::showOneNewDialog()
             errorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().scan,true);
         else if(errorQueue.first().mkPath)
             mkPathErrorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,true);
-        else if(errorQueue.first().rmPath)
-            rmPathErrorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,true);
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
         errorQueue.removeFirst();
