@@ -1,6 +1,6 @@
 QT += widgets
 TEMPLATE        = lib
-CONFIG         += plugin static
+CONFIG         += plugin
 HEADERS         = interface.h \
                 StructEnumDefinition.h \
     factory.h \
@@ -51,10 +51,12 @@ win32 {
     RESOURCES +=
 }
 
+!CONFIG(static) {
 RESOURCES	+= \
     interfaceResources.qrc \
     interfaceResources_unix.qrc \
     interfaceResources_windows.qrc
+}
 
 FORMS += \
     interface.ui \

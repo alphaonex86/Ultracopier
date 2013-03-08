@@ -1,5 +1,5 @@
 TEMPLATE        = lib
-CONFIG		+= plugin static
+CONFIG		+= plugin
 QT		+= network
 HEADERS         = listener.h \
     catchcopy-api-0002/VariablesCatchcopy.h \

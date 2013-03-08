@@ -8,11 +8,12 @@ RESOURCES += plugins/static-plugins.qrc \
     plugins/Themes/Oxygen/interfaceResources_unix.qrc \
     plugins/Themes/Oxygen/interfaceResources.qrc
 
-LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt5SystemInfo
+win32:RESOURCES += plugins/static-plugins-windows.qrc
 
+LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt5SystemInfo
 win32:LIBS += -lpluginLoader -lsessionLoader
 
-if(!debug_and_release|build_pass):CONFIG(debug, debug|release) {
-   mac:LIBS = $$member(LIBS, 0) $$member(LIBS, 1)_debug
-   win32:LIBS = $$member(LIBS, 0) $$member(LIBS, 1)d
+debug {
+LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd -lQt5SystemInfod
+win32:LIBS += -lpluginLoaderd -lsessionLoaderd
 }

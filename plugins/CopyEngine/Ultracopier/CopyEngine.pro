@@ -1,6 +1,6 @@
 QT += widgets systeminfo
 TEMPLATE        = lib
-CONFIG         += plugin static
+CONFIG         += plugin
 HEADERS         = \
                 StructEnumDefinition.h \
     StructEnumDefinition_CopyEngine.h \
@@ -91,5 +91,7 @@ FORMS += \
 
 OTHER_FILES += informations.xml
 
+!CONFIG(static) {
 RESOURCES += \
     copyEngineResources.qrc
+}

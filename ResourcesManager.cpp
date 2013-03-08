@@ -74,6 +74,9 @@ ResourcesManager::ResourcesManager()
             //load the ultracopier path
             searchPath<<ResourcesManager::AddSlashIfNeeded(QApplication::applicationDirPath());
         #endif
+    #else
+    QDir dir(QApplication::applicationDirPath());
+    writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
     #endif
     searchPath.removeDuplicates();
     #ifdef ULTRACOPIER_DEBUG

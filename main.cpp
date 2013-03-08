@@ -14,8 +14,8 @@ Q_IMPORT_PLUGIN(CopyEngineFactory)
 Q_IMPORT_PLUGIN(ThemesFactory)
 Q_IMPORT_PLUGIN(Listener)
 #ifdef Q_OS_WIN32
-Q_IMPORT_PLUGIN(PluginLoader)
-Q_IMPORT_PLUGIN(SessionLoader)
+Q_IMPORT_PLUGIN(WindowsExplorerLoader)
+Q_IMPORT_PLUGIN(WindowsSessionLoader)
 #endif
 #endif
 

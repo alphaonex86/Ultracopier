@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>PluginLoader/catchcopy-v0002/informations.xml</file>
+        <file>SessionLoader/Windows/informations.xml</file>
+    </qresource>
+</RCC>

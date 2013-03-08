@@ -51,15 +51,13 @@ WindowsExplorerLoader::WindowsExplorerLoader()
 
 WindowsExplorerLoader::~WindowsExplorerLoader()
 {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destructor");
-        setEnabled(false);
+    setEnabled(false);
 }
 
 void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
 {
     if(!checkExistsDll())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("No dll exists"));
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         if(needBeRegistred)
                 emit newState(Ultracopier::Caught);
@@ -68,7 +66,7 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
         #else
         emit newState(Ultracopier::Uncaught);
         #endif
-    if(!needBeRegistred)
+        if(!needBeRegistred)
             correctlyLoaded.clear();
         return;
     }
