@@ -83,7 +83,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     QObject *pluginInstance = pluginOfPluginLoader->instance();
     if(!pluginInstance)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+pluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+pluginOfPluginLoader->errorString());
         return;
     }
     PluginInterface_Listener *listen = qobject_cast<PluginInterface_Listener *>(pluginInstance);

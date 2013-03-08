@@ -54,7 +54,7 @@ private:
     //variable
     struct LocalPlugin
     {
-        PluginInterface_PluginLoader * PluginLoaderInterface;
+        PluginInterface_PluginLoader * pluginLoaderInterface;
         QPluginLoader * pluginLoader;
         Ultracopier::CatchState state;
         QString path;
