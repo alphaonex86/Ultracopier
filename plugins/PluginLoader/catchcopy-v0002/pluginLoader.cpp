@@ -21,7 +21,7 @@
 #define CATCHCOPY_DLL_32 "catchcopy32"
 #define CATCHCOPY_DLL_64 "catchcopy64"
 
-PluginLoader::PluginLoader()
+WindowsExplorerLoader::WindowsExplorerLoader()
 {
     //set the startup value into the variable
     dllChecked=false;
@@ -31,8 +31,8 @@ PluginLoader::PluginLoader()
     needBeRegistred=false;
     changeOfArchDetected=false;
     is64Bits=false;
-    connect(&optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&PluginLoader::setAllDllIsImportant);
-    connect(&optionsWidget,&OptionsWidget::sendDebug,this,&PluginLoader::setDebug);
+    connect(&optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&WindowsExplorerLoader::setAllDllIsImportant);
+    connect(&optionsWidget,&OptionsWidget::sendDebug,this,&WindowsExplorerLoader::setDebug);
 
 #if defined(_M_X64)//64Bits
     is64Bits=true;
@@ -49,13 +49,13 @@ PluginLoader::PluginLoader()
 #endif
 }
 
-PluginLoader::~PluginLoader()
+WindowsExplorerLoader::~WindowsExplorerLoader()
 {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destructor");
         setEnabled(false);
 }
 
-void PluginLoader::setEnabled(const bool &needBeRegistred)
+void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
 {
     if(!checkExistsDll())
     {
@@ -68,7 +68,7 @@ void PluginLoader::setEnabled(const bool &needBeRegistred)
         #else
         emit newState(Ultracopier::Uncaught);
         #endif
-	if(!needBeRegistred)
+    if(!needBeRegistred)
             correctlyLoaded.clear();
         return;
     }
@@ -216,7 +216,7 @@ void PluginLoader::setEnabled(const bool &needBeRegistred)
         correctlyLoaded.clear();
 }
 
-bool PluginLoader::checkExistsDll()
+bool WindowsExplorerLoader::checkExistsDll()
 {
     if(dllChecked)
     {
@@ -282,7 +282,7 @@ bool PluginLoader::checkExistsDll()
         return false;
 }
 
-void PluginLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
+void WindowsExplorerLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
 {
     Q_UNUSED(options);
     Q_UNUSED(writePath);
@@ -307,7 +307,7 @@ void PluginLoader::setResources(OptionInterface * options,const QString &writePa
     }
 }
 
-bool PluginLoader::RegisterShellExtDll(const QString &dllPath, const bool &bRegister,const bool &quiet)
+bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bool &bRegister,const bool &quiet)
 {
     if(Debug)
     {
@@ -431,7 +431,7 @@ bool PluginLoader::RegisterShellExtDll(const QString &dllPath, const bool &bRegi
     return ok;
 }
 
-bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
+bool WINAPI WindowsExplorerLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
 {
     /* Search address of module */
     MODULEENTRY32W meModule;
@@ -487,7 +487,7 @@ bool WINAPI PluginLoader::DLLEjecteurW(DWORD dwPid,PWSTR szDLLPath)
     return true;
 }
 
-void PluginLoader::HardUnloadDLL(const QString &myDllName)
+void WindowsExplorerLoader::HardUnloadDLL(const QString &myDllName)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+myDllName);
     HANDLE hSnapShot1;
@@ -543,23 +543,23 @@ void PluginLoader::HardUnloadDLL(const QString &myDllName)
 }
 
 /// \brief to get the options widget, NULL if not have
-QWidget * PluginLoader::options()
+QWidget * WindowsExplorerLoader::options()
 {
     return &optionsWidget;
 }
 
-void PluginLoader::newLanguageLoaded()
+void WindowsExplorerLoader::newLanguageLoaded()
 {
     optionsWidget.retranslate();
 }
 
-void PluginLoader::setAllDllIsImportant(bool allDllIsImportant)
+void WindowsExplorerLoader::setAllDllIsImportant(bool allDllIsImportant)
 {
     this->allDllIsImportant=allDllIsImportant;
     optionsEngine->setOptionValue("allDllIsImportant",allDllIsImportant);
 }
 
-void PluginLoader::setDebug(bool Debug)
+void WindowsExplorerLoader::setDebug(bool Debug)
 {
     this->Debug=Debug;
     optionsEngine->setOptionValue("Debug",Debug);

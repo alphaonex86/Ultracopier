@@ -9,7 +9,7 @@
 #include <QCoreApplication>
 
 #include "sessionLoader.h"
-void SessionLoader::setEnabled(const bool &enabled)
+void KDESessionLoader::setEnabled(const bool &enabled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, enabled: "+QString::number(enabled));
     QFile link(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
@@ -33,14 +33,14 @@ void SessionLoader::setEnabled(const bool &enabled)
     }
 }
 
-bool SessionLoader::getEnabled()
+bool KDESessionLoader::getEnabled()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, return this value: "+QString::number(QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh")));
     //return the value into the variable
     return QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
 }
 
-void SessionLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
+void KDESessionLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
 {
     Q_UNUSED(options);
     Q_UNUSED(writePath);
@@ -49,12 +49,12 @@ void SessionLoader::setResources(OptionInterface * options,const QString &writeP
 }
 
 /// \brief to get the options widget, NULL if not have
-QWidget * SessionLoader::options()
+QWidget * KDESessionLoader::options()
 {
     return NULL;
 }
 
 /// \brief to reload the translation, because the new language have been loaded
-void SessionLoader::newLanguageLoaded()
+void KDESessionLoader::newLanguageLoaded()
 {
 }

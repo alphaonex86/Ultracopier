@@ -11,7 +11,7 @@
 #include "../../../interface/PluginInterface_SessionLoader.h"
 
 /// \brief Define the session loader
-class SessionLoader : public PluginInterface_SessionLoader
+class WindowsSessionLoader : public PluginInterface_SessionLoader
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.SessionLoader/1.0.0.0" FILE "plugin.json")

@@ -21,14 +21,14 @@
 #include "OptionsWidget.h"
 
 /// \brief \brief Define the plugin loader
-class PluginLoader : public PluginInterface_PluginLoader
+class WindowsExplorerLoader : public PluginInterface_PluginLoader
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.PluginLoader/1.0.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_PluginLoader)
 public:
-        PluginLoader();
-        ~PluginLoader();
+        WindowsExplorerLoader();
+        ~WindowsExplorerLoader();
 	/// \brief try enable/disable the catching
 	void setEnabled(const bool &needBeRegistred);
 	/// \brief to set resources, writePath can be empty if read only mode
