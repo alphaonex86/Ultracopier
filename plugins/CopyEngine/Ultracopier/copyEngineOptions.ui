@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>options</class>
- <widget class="QWidget" name="options">
+ <class>copyEngineOptions</class>
+ <widget class="QWidget" name="copyEngineOptions">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>353</width>
+    <width>428</width>
     <height>426</height>
    </rect>
   </property>

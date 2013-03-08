@@ -17,7 +17,7 @@
 #include "../../../interface/PluginInterface_Themes.h"
 
 #include "ui_interface.h"
-#include "ui_options.h"
+#include "ui_themesOptions.h"
 #include "Environment.h"
 #include "TransferModel.h"
 

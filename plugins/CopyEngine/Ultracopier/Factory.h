@@ -15,7 +15,7 @@
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "StructEnumDefinition.h"
-#include "ui_options.h"
+#include "ui_copyEngineOptions.h"
 #include "CopyEngine.h"
 #include "Environment.h"
 #include "Filters.h"

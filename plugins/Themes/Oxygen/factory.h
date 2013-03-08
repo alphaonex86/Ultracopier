@@ -15,7 +15,7 @@
 #include <QColor>
 
 #include "../../../interface/PluginInterface_Themes.h"
-#include "ui_options.h"
+#include "ui_themesOptions.h"
 #include "interface.h"
 #include "Environment.h"
 

@@ -27,22 +27,22 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+33"/>
+        <location filename="../../interface.ui" line="+35"/>
         <source>From:</source>
         <translation>Depuis:</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+30"/>
         <source>To:</source>
         <translation>Vers:</translation>
     </message>
     <message>
-        <location line="+64"/>
+        <location line="+60"/>
         <source>Close at the end of the transfers</source>
         <translation>Fermer à la fin des transferts</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+66"/>
         <source>0KB/sec</source>
         <translation>0Ko/s</translation>
     </message>

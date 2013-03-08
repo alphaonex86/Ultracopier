@@ -16,7 +16,7 @@
 #include "FileExistsDialog.h"
 #include "FolderExistsDialog.h"
 #include "FileIsSameDialog.h"
-#include "ui_options.h"
+#include "ui_copyEngineOptions.h"
 #include "Environment.h"
 #include "ListThread.h"
 #include "Filters.h"

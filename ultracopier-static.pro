@@ -8,7 +8,7 @@ RESOURCES += plugins/static-plugins.qrc \
     plugins/Themes/Oxygen/interfaceResources_unix.qrc \
     plugins/Themes/Oxygen/interfaceResources.qrc
 
-LIBS           = -Lplugins -lcopyEngine -linterface -llistener
+LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt5SystemInfo
 
 win32:LIBS += -lpluginLoader -lsessionLoader
 

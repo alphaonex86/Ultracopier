@@ -60,8 +60,15 @@ void PluginLoader::setEnabled(const bool &needBeRegistred)
     if(!checkExistsDll())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("No dll exists"));
+        #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+        if(needBeRegistred)
+                emit newState(Ultracopier::Caught);
+        else
+                emit newState(Ultracopier::Uncaught);
+        #else
         emit newState(Ultracopier::Uncaught);
-        if(!needBeRegistred)
+        #endif
+	if(!needBeRegistred)
             correctlyLoaded.clear();
         return;
     }

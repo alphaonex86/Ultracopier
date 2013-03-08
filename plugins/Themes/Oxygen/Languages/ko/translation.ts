@@ -27,17 +27,17 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+33"/>
+        <location filename="../../interface.ui" line="+35"/>
         <source>From:</source>
         <translation type="unfinished">원본:</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+30"/>
         <source>To:</source>
         <translation type="unfinished">대상:</translation>
     </message>
     <message>
-        <location line="+127"/>
+        <location line="+126"/>
         <source>0KB/sec</source>
         <translation type="unfinished">0KB/초</translation>
     </message>
@@ -73,12 +73,12 @@
         <translation type="unfinished">무제한</translation>
     </message>
     <message>
-        <location line="-160"/>
+        <location line="-163"/>
         <source>Close at the end of the transfers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+186"/>
+        <location line="+189"/>
         <source>Transfer list</source>
         <translation type="unfinished"></translation>
     </message>

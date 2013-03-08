@@ -24,14 +24,14 @@
 <context>
     <name>Factory</name>
     <message>
-        <location filename="../../factory.cpp" line="338"/>
-        <location filename="../../factory.cpp" line="375"/>
+        <location filename="../../factory.cpp" line="349"/>
+        <location filename="../../factory.cpp" line="382"/>
         <source>Options error</source>
         <translation>Опции ошибке</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="338"/>
-        <location filename="../../factory.cpp" line="375"/>
+        <location filename="../../factory.cpp" line="349"/>
+        <location filename="../../factory.cpp" line="382"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Параметры двигателя не загружается, не может получить доступ к фильтрам</translation>
     </message>
@@ -178,47 +178,47 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1246"/>
+        <location filename="../../ListThread.cpp" line="1286"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Невозможно сделать, чтобы скопировать или переместить элемент в неправильном форсированном режиме: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1253"/>
+        <location filename="../../ListThread.cpp" line="1293"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Невозможно сохранить трансфер: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1269"/>
+        <location filename="../../ListThread.cpp" line="1309"/>
         <source>Problem at the reading, or file size is null</source>
         <translation>Проблема при чтении или размер файла нулевой</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1276"/>
+        <location filename="../../ListThread.cpp" line="1316"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Неправильный заголовок: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1285"/>
+        <location filename="../../ListThread.cpp" line="1325"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Трансфер в смешанном режиме, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1294"/>
+        <location filename="../../ListThread.cpp" line="1334"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Передача списка в режиме копирования, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1300"/>
+        <location filename="../../ListThread.cpp" line="1340"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Трансфер в режим перемещения, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1355"/>
+        <location filename="../../ListThread.cpp" line="1395"/>
         <source>Some error have been found during the line parsing</source>
         <translation>Некоторые ошибки были обнаружены в ходе разбора линия</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1362"/>
+        <location filename="../../ListThread.cpp" line="1403"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Не удается открыть трансфер: %1</translation>
     </message>
@@ -234,14 +234,24 @@
 <context>
     <name>ReadThread</name>
     <message>
-        <location filename="../../ReadThread.cpp" line="154"/>
-        <location filename="../../ReadThread.cpp" line="321"/>
+        <location filename="../../ReadThread.cpp" line="45"/>
+        <source>Internal error, please report it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ReadThread.cpp" line="163"/>
+        <source>Internal error to read the source file: block size out of range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ReadThread.cpp" line="171"/>
+        <location filename="../../ReadThread.cpp" line="347"/>
         <source>Unable to read the source file: </source>
         <translation>Невозможно прочитать исходный файл: </translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="193"/>
-        <location filename="../../ReadThread.cpp" line="378"/>
+        <location filename="../../ReadThread.cpp" line="210"/>
+        <location filename="../../ReadThread.cpp" line="404"/>
         <source>File truncated during the read, possible data change</source>
         <translation>Файл усечены во время чтения, возможность изменения данных</translation>
     </message>
@@ -311,17 +321,17 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="319"/>
+        <location filename="../../TransferThread.cpp" line="393"/>
         <source>%1 - copy</source>
         <translation>%1 - копия</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="329"/>
+        <location filename="../../TransferThread.cpp" line="403"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - копия (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="687"/>
+        <location filename="../../TransferThread.cpp" line="762"/>
         <source>The checksums not match</source>
         <translation>Контрольные суммы не совпадают</translation>
     </message>
@@ -329,12 +339,17 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../WriteThread.cpp" line="408"/>
+        <location filename="../../WriteThread.cpp" line="185"/>
+        <source>Internal error, please report it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../WriteThread.cpp" line="496"/>
         <source>Unable to read the source file: </source>
         <translation>Невозможно прочитать исходный файл: </translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="433"/>
+        <location filename="../../WriteThread.cpp" line="521"/>
         <source>File truncated during the read, possible data change</source>
         <translation>Файл усечены во время чтения, возможность изменения данных</translation>
     </message>
@@ -342,29 +357,29 @@
 <context>
     <name>copyEngine</name>
     <message>
-        <location filename="../../copyEngine.cpp" line="253"/>
-        <location filename="../../copyEngine.cpp" line="271"/>
+        <location filename="../../copyEngine.cpp" line="262"/>
+        <location filename="../../copyEngine.cpp" line="280"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>Двигатель вынуждены покинуть свои дома, вы не можете скопировать с ним</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="282"/>
-        <location filename="../../copyEngine.cpp" line="300"/>
+        <location filename="../../copyEngine.cpp" line="291"/>
+        <location filename="../../copyEngine.cpp" line="309"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>Двигатель вынужден копии, вы не можете двигаться вместе с ним</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="523"/>
+        <location filename="../../copyEngine.cpp" line="532"/>
         <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
         <translation>Режим был вынужден ранее, это внутренняя ошибка, пожалуйста, сообщите об этом</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="785"/>
+        <location filename="../../copyEngine.cpp" line="795"/>
         <source>Options error</source>
         <translation>Опции ошибке</translation>
     </message>
     <message>
-        <location filename="../../copyEngine.cpp" line="785"/>
+        <location filename="../../copyEngine.cpp" line="795"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Параметры двигателя не загружается, не может получить доступ к фильтрам</translation>
     </message>
@@ -382,52 +397,57 @@
         <translation>ошибка</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="56"/>
+        <location filename="../../fileErrorDialog.ui" line="59"/>
         <source>Size</source>
         <translation>размер</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="73"/>
+        <location filename="../../fileErrorDialog.ui" line="76"/>
         <source>Modified</source>
         <translation>модифицированный</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="90"/>
+        <location filename="../../fileErrorDialog.ui" line="93"/>
         <source>File name</source>
         <translation>имя файла</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="136"/>
+        <location filename="../../fileErrorDialog.ui" line="110"/>
+        <source>Destination</source>
+        <translation type="unfinished">назначение</translation>
+    </message>
+    <message>
+        <location filename="../../fileErrorDialog.ui" line="156"/>
         <source>&amp;Always do this action</source>
         <translation>Всегда делайте это действие</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="156"/>
+        <location filename="../../fileErrorDialog.ui" line="176"/>
         <source>Put to bottom</source>
         <translation>Положить в нижней</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="163"/>
+        <location filename="../../fileErrorDialog.ui" line="183"/>
         <source>Retry</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="170"/>
+        <location filename="../../fileErrorDialog.ui" line="190"/>
         <source>&amp;Skip</source>
         <translation>пропускать</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.ui" line="177"/>
+        <location filename="../../fileErrorDialog.ui" line="197"/>
         <source>&amp;Cancel</source>
         <translation>отменить</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.cpp" line="29"/>
+        <location filename="../../fileErrorDialog.cpp" line="31"/>
         <source>Error on folder</source>
         <translation>Ошибка в папку</translation>
     </message>
     <message>
-        <location filename="../../fileErrorDialog.cpp" line="32"/>
+        <location filename="../../fileErrorDialog.cpp" line="34"/>
         <source>Folder name</source>
         <translation>имя папки</translation>
     </message>
@@ -508,12 +528,12 @@
         <translation>Заменить, если не ту же дату модификации</translation>
     </message>
     <message>
-        <location filename="../../fileExistsDialog.cpp" line="102"/>
+        <location filename="../../fileExistsDialog.cpp" line="103"/>
         <source>%1 - copy</source>
         <translation>%1 - копия</translation>
     </message>
     <message>
-        <location filename="../../fileExistsDialog.cpp" line="112"/>
+        <location filename="../../fileExistsDialog.cpp" line="113"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - копия (%2)</translation>
     </message>
@@ -651,12 +671,12 @@
         <translation>Папка уже существует</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="86"/>
+        <location filename="../../folderExistsDialog.cpp" line="87"/>
         <source>%1 - copy</source>
         <translation>%1 - копия</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.cpp" line="96"/>
+        <location filename="../../folderExistsDialog.cpp" line="97"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - копия (%2)</translation>
     </message>
