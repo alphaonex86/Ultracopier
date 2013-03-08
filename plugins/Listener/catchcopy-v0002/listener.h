@@ -14,13 +14,13 @@
 #include "catchcopy-api-0002/ServerCatchcopy.h"
 
 /// \brief Define the server compatible with Ultracopier interface
-class CatchCopyPlugin : public PluginInterface_Listener
+class Listener : public PluginInterface_Listener
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.Listener/0.4.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.Listener/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_Listener)
 public:
-    CatchCopyPlugin();
+    Listener();
     /// \brief try listen the copy/move
     void listen();
     /// \brief stop listen to copy/move

@@ -1,6 +1,6 @@
 QT += widgets systeminfo
 TEMPLATE        = lib
-CONFIG         += plugin
+CONFIG         += plugin static
 HEADERS         = \
                 StructEnumDefinition.h \
     StructEnumDefinition_CopyEngine.h \
@@ -79,7 +79,6 @@ infos.path       = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
 INSTALLS       += target translations infos
 
 FORMS += \
-    options.ui \
     fileErrorDialog.ui \
     fileExistsDialog.ui \
     fileIsSameDialog.ui \
@@ -87,9 +86,10 @@ FORMS += \
     folderExistsDialog.ui \
     Filters.ui \
     FilterRules.ui \
-    RenamingRules.ui
+    RenamingRules.ui \
+    copyEngineOptions.ui
 
 OTHER_FILES += informations.xml
 
 RESOURCES += \
-    resources.qrc
+    copyEngineResources.qrc

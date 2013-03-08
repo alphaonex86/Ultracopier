@@ -14,7 +14,7 @@
 class SessionLoader : public PluginInterface_SessionLoader
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.SessionLoader/0.4.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.SessionLoader/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_SessionLoader)
 public:
     /// \brief to set if it's enabled or not

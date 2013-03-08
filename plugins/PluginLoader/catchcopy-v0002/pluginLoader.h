@@ -24,7 +24,7 @@
 class PluginLoader : public PluginInterface_PluginLoader
 {
 	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.PluginLoader/0.4.0.0" FILE "plugin.json")
+	Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.PluginLoader/1.0.0.0" FILE "plugin.json")
 	Q_INTERFACES(PluginInterface_PluginLoader)
 public:
         PluginLoader();

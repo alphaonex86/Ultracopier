@@ -60,6 +60,16 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Local socket: ")+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
+    #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Version as all in one"));
+    QObjectList objectList=QPluginLoader::staticInstances();
+    int index=0;
+    while(index<objectList.size())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("static plugin: %1").arg(objectList.at(index)->metaObject()->className()));
+        index++;
+    }
+    #endif
     //To lunch some initialization after QApplication::exec() to quit eventually
     lunchInitFunction.setInterval(0);
     lunchInitFunction.setSingleShot(true);

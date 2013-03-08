@@ -1,8 +1,8 @@
 QT += widgets
 TEMPLATE        = lib
-CONFIG         += plugin
+CONFIG         += plugin static
 HEADERS         = interface.h \
-		StructEnumDefinition.h \
+                StructEnumDefinition.h \
     factory.h \
     DebugEngineMacro.h \
     Environment.h \
@@ -45,14 +45,17 @@ infos.path       = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
 INSTALLS       += target translations infos
 
 win32 {
-    RESOURCES += resources_windows.qrc
+    RESOURCES +=
 }
 !win32 {
-    RESOURCES += resources_unix.qrc
+    RESOURCES +=
 }
 
-RESOURCES	+= resources.qrc
+RESOURCES	+= \
+    interfaceResources.qrc \
+    interfaceResources_unix.qrc \
+    interfaceResources_windows.qrc
 
 FORMS += \
     interface.ui \
-    options.ui
+    themesOptions.ui

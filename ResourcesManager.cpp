@@ -22,56 +22,58 @@ ResourcesManager::ResourcesManager()
 
     //load the internal path
     searchPath<<QString(":/");
-    //load the user path but only if exists and writable
-    //load the ultracopier path
-    #ifdef ULTRACOPIER_VERSION_PORTABLE
-        #ifdef ULTRACOPIER_VERSION_PORTABLEAPPS
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled with the flag: ULTRACOPIER_VERSION_PORTABLEAPPS");
-            //load the data folder path
-            QDir dir(QApplication::applicationDirPath());
-            dir.cdUp();
-            dir.cdUp();
-            dir.cd("Data");
-            searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-            writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-        #else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled with the flag: ULTRACOPIER_VERSION_PORTABLE");
-            //load the ultracopier path
-            QDir dir(QApplication::applicationDirPath());
-            dir.cd("Data");
-            searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-            writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-        #endif
-    #else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled as user privacy mode");
-        #ifdef Q_OS_WIN32
-            #define EXTRA_HOME_PATH "\\ultracopier\\"
-        #else
-            #define EXTRA_HOME_PATH "/.config/Ultracopier/"
-        #endif
-        #ifdef Q_OS_LINUX
-            QDir linuxArchIndepDir("/usr/share/ultracopier/");
-            if(linuxArchIndepDir.exists())
-                searchPath<<ResourcesManager::AddSlashIfNeeded(linuxArchIndepDir.absolutePath());
-            QDir linuxPluginsDir("/usr/lib/ultracopier/");
-            if(linuxPluginsDir.exists())
-                searchPath<<ResourcesManager::AddSlashIfNeeded(linuxPluginsDir.absolutePath());
-        #endif
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         //load the user path but only if exists and writable
-        QDir dir(QDir::homePath()+EXTRA_HOME_PATH);
-        if(dir.exists())
-        {
-            writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-            searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-        } //if not exists try to create it
-        else if(dir.mkpath(dir.absolutePath()))
-        {
-            //if created, then have write permissions
-            writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-            searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-        }
         //load the ultracopier path
-        searchPath<<ResourcesManager::AddSlashIfNeeded(QApplication::applicationDirPath());
+        #ifdef ULTRACOPIER_VERSION_PORTABLE
+            #ifdef ULTRACOPIER_VERSION_PORTABLEAPPS
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled with the flag: ULTRACOPIER_VERSION_PORTABLEAPPS");
+                //load the data folder path
+                QDir dir(QApplication::applicationDirPath());
+                dir.cdUp();
+                dir.cdUp();
+                dir.cd("Data");
+                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+            #else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled with the flag: ULTRACOPIER_VERSION_PORTABLE");
+                //load the ultracopier path
+                QDir dir(QApplication::applicationDirPath());
+                dir.cd("Data");
+                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+            #endif
+        #else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled as user privacy mode");
+            #ifdef Q_OS_WIN32
+                #define EXTRA_HOME_PATH "\\ultracopier\\"
+            #else
+                #define EXTRA_HOME_PATH "/.config/Ultracopier/"
+            #endif
+            #ifdef Q_OS_LINUX
+                QDir linuxArchIndepDir("/usr/share/ultracopier/");
+                if(linuxArchIndepDir.exists())
+                    searchPath<<ResourcesManager::AddSlashIfNeeded(linuxArchIndepDir.absolutePath());
+                QDir linuxPluginsDir("/usr/lib/ultracopier/");
+                if(linuxPluginsDir.exists())
+                    searchPath<<ResourcesManager::AddSlashIfNeeded(linuxPluginsDir.absolutePath());
+            #endif
+            //load the user path but only if exists and writable
+            QDir dir(QDir::homePath()+EXTRA_HOME_PATH);
+            if(dir.exists())
+            {
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+            } //if not exists try to create it
+            else if(dir.mkpath(dir.absolutePath()))
+            {
+                //if created, then have write permissions
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+            }
+            //load the ultracopier path
+            searchPath<<ResourcesManager::AddSlashIfNeeded(QApplication::applicationDirPath());
+        #endif
     #endif
     searchPath.removeDuplicates();
     #ifdef ULTRACOPIER_DEBUG

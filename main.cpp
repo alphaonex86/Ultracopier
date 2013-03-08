@@ -4,9 +4,20 @@
 \licence GPL3, see the file COPYING */
 
 #include <QApplication>
+#include <QtPlugin>
 
 #include "Environment.h"
 #include "EventDispatcher.h"
+
+#ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+Q_IMPORT_PLUGIN(CopyEngineFactory)
+Q_IMPORT_PLUGIN(ThemesFactory)
+Q_IMPORT_PLUGIN(Listener)
+#ifdef Q_OS_WIN32
+Q_IMPORT_PLUGIN(PluginLoader)
+Q_IMPORT_PLUGIN(SessionLoader)
+#endif
+#endif
 
 /// \brief Define the main() for the point entry
 int main(int argc, char *argv[])

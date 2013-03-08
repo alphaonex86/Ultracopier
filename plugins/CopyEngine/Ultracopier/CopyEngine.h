@@ -31,7 +31,7 @@
 #define COPY_ENGINE_H
 
 namespace Ui {
-    class options;
+    class copyEngineOptions;
 }
 
 /// \brief the implementation of copy engine plugin, manage directly few stuff, else pass to ListThread class.
@@ -48,7 +48,7 @@ private:
     DebugDialog debugDialogWindow;
     #endif
     QWidget *			tempWidget;
-    Ui::options *			ui;
+    Ui::copyEngineOptions *			ui;
     bool				uiIsInstalled;
     QWidget *			interface;
     Filters *			filters;

@@ -25,18 +25,18 @@
 #define FACTORY_H
 
 namespace Ui {
-    class options;
+    class copyEngineOptions;
 }
 
 /** \brief to generate copy engine instance */
-class Factory : public PluginInterface_CopyEngineFactory
+class CopyEngineFactory : public PluginInterface_CopyEngineFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.CopyEngineFactory/0.4.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_CopyEngineFactory)
 public:
-    Factory();
-    ~Factory();
+    CopyEngineFactory();
+    ~CopyEngineFactory();
     /// \brief to return the instance of the copy engine
     PluginInterface_CopyEngine * getInstance();
     /// \brief set the resources, to store options, to have facilityInterface
@@ -55,7 +55,7 @@ public:
     /// \brief to get the options of the copy engine
     QWidget * options();
 private:
-    Ui::options *ui;
+    Ui::copyEngineOptions *ui;
     QWidget* tempWidget;
     OptionInterface * optionsEngine;
     QStringList mountSysPoint;

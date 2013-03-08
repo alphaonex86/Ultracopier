@@ -20,18 +20,18 @@
 #include "Environment.h"
 
 namespace Ui {
-    class options;
+    class themesOptions;
 }
 
 /// \brief Define the factory, to create instance of the interface
-class Factory : public PluginInterface_ThemesFactory
+class ThemesFactory : public PluginInterface_ThemesFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_ThemesFactory)
 public:
-    Factory();
-    ~Factory();
+    ThemesFactory();
+    ~ThemesFactory();
     /// \brief to return the instance of the copy engine
     PluginInterface_Themes * getInstance();
     /// \brief set the resources, to store options, to have facilityInterface
@@ -59,7 +59,7 @@ public slots:
     void newLanguageLoaded();
 private:
     OptionInterface * optionsEngine;
-    Ui::options *ui;
+    Ui::themesOptions *ui;
     QWidget *tempWidget;
     FacilityInterface * facilityEngine;
     qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where

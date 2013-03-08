@@ -35,11 +35,13 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
         return;
     //setFileName
     QString pluginPath=plugin.path+PluginsManager::getResolvedPluginName("copyEngine");
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     if(!QFile(pluginPath).exists())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The plugin binary is missing: "+pluginPath);
         return;
     }
+    #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pluginPath);
     //search into loaded session
     int index=0;
@@ -57,6 +59,24 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     newItem.path=plugin.path;
     newItem.name=plugin.name;
     newItem.pointer=new QPluginLoader(newItem.pluginPath);
+    #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+    QObjectList objectList=QPluginLoader::staticInstances();
+    index=0;
+    QObject *pluginObject;
+    while(index<objectList.size())
+    {
+        pluginObject=objectList.at(index);
+        newItem.factory = qobject_cast<PluginInterface_CopyEngineFactory *>(pluginObject);
+        if(newItem.factory!=NULL)
+            break;
+        index++;
+    }
+    if(index==objectList.size())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("static copy engine not found"));
+        return;
+    }
+    #else
     QObject *pluginObject = newItem.pointer->instance();
     if(pluginObject==NULL)
     {
@@ -84,6 +104,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
         newItem.pointer->unload();
         return;
     }
+    #endif
     #ifdef ULTRACOPIER_DEBUG
     connect(newItem.factory,&PluginInterface_CopyEngineFactory::debugInformation,this,&CopyEngineManager::debugInformation,Qt::QueuedConnection);
     #endif // ULTRACOPIER_DEBUG

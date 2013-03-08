@@ -212,6 +212,8 @@ void SystrayIcon::updateSystrayIcon()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"icon: systray_"+icon+"_Unix.png");
         #endif
     }
+    if(theNewSystrayIcon.isNull())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"All the icon include the default icon remain null");
     setIcon(theNewSystrayIcon);
     setToolTip("Ultracopier - "+toolTip);
 }

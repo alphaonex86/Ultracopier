@@ -12,7 +12,7 @@
 #include "../../../interface/PluginInterface_CopyEngine.h"
 
 CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
-    ui(new Ui::options())
+    ui(new Ui::copyEngineOptions())
 {
     listThread=new ListThread(facilityEngine);
     this->facilityEngine            = facilityEngine;

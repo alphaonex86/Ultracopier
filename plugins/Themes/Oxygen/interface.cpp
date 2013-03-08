@@ -24,7 +24,7 @@ Themes::Themes(const QColor &progressColorWrite,
                FacilityInterface * facilityEngine,
                const bool &moreButtonPushed) :
     ui(new Ui::interfaceCopy()),
-    uiOptions(new Ui::options())
+    uiOptions(new Ui::themesOptions())
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);

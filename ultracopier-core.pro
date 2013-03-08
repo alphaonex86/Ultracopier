@@ -34,13 +34,16 @@ FORMS += HelpDialog.ui \
     PluginInformation.ui \
     OptionDialog.ui \
     OSSpecific.ui
-RESOURCES += resources/resources.qrc
+RESOURCES += \
+    resources/ultracopier-resources.qrc \
+    resources/ultracopier-resources_unix.qrc \
+    resources/ultracopier-resources_windows.qrc
 win32 {
-    RESOURCES += resources/resources_windows.qrc
+    RESOURCES +=
     RESOURCES += resources/resources-windows-qt-plugin.qrc
 }
 !win32 {
-    RESOURCES += resources/resources_unix.qrc
+    RESOURCES +=
 }
 
 HEADERS += ResourcesManager.h \

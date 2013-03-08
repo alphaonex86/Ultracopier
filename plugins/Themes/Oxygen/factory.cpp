@@ -8,21 +8,21 @@
 
 #include "factory.h"
 
-Factory::Factory()
+ThemesFactory::ThemesFactory()
 {
     optionsEngine=NULL;
     tempWidget=new QWidget();
-    ui=new Ui::options();
+    ui=new Ui::themesOptions();
     ui->setupUi(tempWidget);
     currentSpeed	= 0;
     updateSpeed();
 }
 
-Factory::~Factory()
+ThemesFactory::~ThemesFactory()
 {
 }
 
-PluginInterface_Themes * Factory::getInstance()
+PluginInterface_Themes * ThemesFactory::getInstance()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, currentSpeed: %1").arg(currentSpeed));
 
@@ -39,11 +39,11 @@ PluginInterface_Themes * Factory::getInstance()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation);
     #endif
-    connect(this,&Factory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
+    connect(this,&ThemesFactory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
     return newInterface;
 }
 
-void Factory::setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
+void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
 {
     Q_UNUSED(portableVersion);
     Q_UNUSED(writePath);
@@ -65,21 +65,21 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
         KeysList.append(qMakePair(QString("progressColorRead"),QVariant(QApplication::palette().color(QPalette::AlternateBase))));
         KeysList.append(qMakePair(QString("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
         optionsEngine->addOptionGroup(KeysList);
-        connect(optionsEngine,&OptionInterface::resetOptions,this,&Factory::resetOptions);
+        connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
-        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Factory::checkBoxShowSpeed);
-        connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&Factory::uiUpdateSpeed);
-        connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&Factory::on_SliderSpeed_valueChanged);
-        connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Factory::uiUpdateSpeed);
-        connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&Factory::checkBoxShowSpeedHaveChanged);
-        connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&Factory::checkBoxStartWithMoreButtonPushedHaveChanged);
-        connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&Factory::speedWithProgressBar);
-        connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::comboBox_copyEnd);
-        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&Factory::showDualProgression);
-        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&Factory::updateProgressionColorBar);
-        connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&Factory::progressColorWrite_clicked);
-        connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&Factory::progressColorRead_clicked);
-        connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&Factory::progressColorRemaining_clicked);
+        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed);
+        connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed);
+        connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged);
+        connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uiUpdateSpeed);
+        connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxShowSpeedHaveChanged);
+        connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged);
+        connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&ThemesFactory::speedWithProgressBar);
+        connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&ThemesFactory::comboBox_copyEnd);
+        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::showDualProgression);
+        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::updateProgressionColorBar);
+        connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked);
+        connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked);
+        connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked);
     }
     #ifndef __GNUC__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is not set");
@@ -88,7 +88,7 @@ void Factory::setResources(OptionInterface * optionsEngine,const QString &writeP
     #endif
 }
 
-QWidget * Factory::options()
+QWidget * ThemesFactory::options()
 {
     bool ok;
     currentSpeed=optionsEngine->getOptionValue("currentSpeed").toUInt(&ok);
@@ -122,7 +122,7 @@ QWidget * Factory::options()
     return tempWidget;
 }
 
-QIcon Factory::getIcon(const QString &fileName)
+QIcon ThemesFactory::getIcon(const QString &fileName)
 {
     if(fileName=="SystemTrayIcon/exit.png")
     {
@@ -163,13 +163,13 @@ QIcon Factory::getIcon(const QString &fileName)
     return QIcon(":/resources/"+fileName);
 }
 
-void Factory::resetOptions()
+void ThemesFactory::resetOptions()
 {
     ui->checkBoxShowSpeed->setChecked(true);
     ui->checkBoxStartWithMoreButtonPushed->setChecked(false);
 }
 
-void Factory::checkBoxShowSpeedHaveChanged(bool toggled)
+void ThemesFactory::checkBoxShowSpeedHaveChanged(bool toggled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
@@ -178,7 +178,7 @@ void Factory::checkBoxShowSpeedHaveChanged(bool toggled)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
+void ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
@@ -187,7 +187,7 @@ void Factory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::comboBox_copyEnd(int value)
+void ThemesFactory::comboBox_copyEnd(int value)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
@@ -196,7 +196,7 @@ void Factory::comboBox_copyEnd(int value)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::speedWithProgressBar(bool toggled)
+void ThemesFactory::speedWithProgressBar(bool toggled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
@@ -205,7 +205,7 @@ void Factory::speedWithProgressBar(bool toggled)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::newLanguageLoaded()
+void ThemesFactory::newLanguageLoaded()
 {
     ui->retranslateUi(tempWidget);
     ui->comboBox_copyEnd->setItemText(0,tr("Don't close if errors are found"));
@@ -214,14 +214,14 @@ void Factory::newLanguageLoaded()
     emit reloadLanguage();
 }
 
-void Factory::checkBoxShowSpeed(bool checked)
+void ThemesFactory::checkBoxShowSpeed(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(checked);
     updateSpeed();
 }
 
-void Factory::showDualProgression(bool checked)
+void ThemesFactory::showDualProgression(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
@@ -230,7 +230,7 @@ void Factory::showDualProgression(bool checked)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::on_SliderSpeed_valueChanged(int value)
+void ThemesFactory::on_SliderSpeed_valueChanged(int value)
 {
     if(!ui->checkBoxShowSpeed->isChecked())
         return;
@@ -263,7 +263,7 @@ void Factory::on_SliderSpeed_valueChanged(int value)
     updateSpeed();
 }
 
-void Factory::uiUpdateSpeed()
+void ThemesFactory::uiUpdateSpeed()
 {
     if(ui->checkBoxShowSpeed->isChecked())
         return;
@@ -278,7 +278,7 @@ void Factory::uiUpdateSpeed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::updateSpeed()
+void ThemesFactory::updateSpeed()
 {
     ui->label_Slider_speed->setVisible(ui->checkBoxShowSpeed->isChecked());
     ui->SliderSpeed->setVisible(ui->checkBoxShowSpeed->isChecked());
@@ -371,7 +371,7 @@ void Factory::updateSpeed()
     }
 }
 
-void Factory::progressColorWrite_clicked()
+void ThemesFactory::progressColorWrite_clicked()
 {
     QColor color=QColorDialog::getColor(progressColorWrite,NULL,tr("Select a color"));
     if(!color.isValid())
@@ -386,7 +386,7 @@ void Factory::progressColorWrite_clicked()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::progressColorRead_clicked()
+void ThemesFactory::progressColorRead_clicked()
 {
     QColor color=QColorDialog::getColor(progressColorRead,NULL,tr("Select a color"));
     if(!color.isValid())
@@ -401,7 +401,7 @@ void Factory::progressColorRead_clicked()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::progressColorRemaining_clicked()
+void ThemesFactory::progressColorRemaining_clicked()
 {
     QColor color=QColorDialog::getColor(progressColorRemaining,NULL,tr("Select a color"));
     if(!color.isValid())
@@ -416,7 +416,7 @@ void Factory::progressColorRemaining_clicked()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void Factory::updateProgressionColorBar()
+void ThemesFactory::updateProgressionColorBar()
 {
     ui->labelProgressionColor->setVisible(ui->showDualProgression->isChecked());
     ui->frameProgressionColor->setVisible(ui->showDualProgression->isChecked());

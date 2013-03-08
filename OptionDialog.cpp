@@ -47,8 +47,8 @@ OptionDialog::OptionDialog() :
     plugins->unlockPluginListEdition();
     defaultImportBackend=PluginsManager::ImportBackend_File;
     #ifndef ULTRACOPIER_PLUGIN_SUPPORT
-    ui->pluginAdd->show();
-    ui->pluginRemove->show();
+    ui->pluginAdd->hide();
+    ui->pluginRemove->hide();
     #endif
 }
 

@@ -28,7 +28,7 @@
 
 namespace Ui {
     class interfaceCopy;
-    class options;
+    class themesOptions;
 }
 
 /// \brief Define the interface
@@ -138,7 +138,7 @@ private slots:
 private:
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
     Ui::interfaceCopy *ui;
-    Ui::options *uiOptions;
+    Ui::themesOptions *uiOptions;
     quint64 currentFile;
     quint64 totalFile;
     quint64 currentSize;

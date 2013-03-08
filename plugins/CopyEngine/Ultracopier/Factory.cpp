@@ -9,8 +9,8 @@
 
 #include "Factory.h"
 
-Factory::Factory() :
-    ui(new Ui::options())
+CopyEngineFactory::CopyEngineFactory() :
+    ui(new Ui::copyEngineOptions())
 {
     qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
     qRegisterMetaType<FileExistsAction>("FileExistsAction");
@@ -29,45 +29,45 @@ Factory::Factory() :
     for (int i = 0; i < temp.size(); ++i) {
         mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
     }
-    connect(&storageInfo,&QStorageInfo::logicalDriveChanged,this,&Factory::logicalDriveChanged);
+    connect(&storageInfo,&QStorageInfo::logicalDriveChanged,this,&CopyEngineFactory::logicalDriveChanged);
 
-    connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&Factory::setDoRightTransfer);
-    connect(ui->keepDate,			&QCheckBox::toggled,		this,&Factory::setKeepDate);
-    connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&Factory::setBlockSize);
-    connect(ui->autoStart,			&QCheckBox::toggled,		this,&Factory::setAutoStart);
-    connect(ui->doChecksum,			&QCheckBox::toggled,		this,&Factory::doChecksum_toggled);
-    connect(ui->comboBoxFolderError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderError);
-    connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFolderCollision);
-    connect(ui->comboBoxFileError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFileError);
-    connect(ui->comboBoxFileCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&Factory::setFileCollision);
-    connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&Factory::setCheckDestinationFolder);
-    connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&Factory::checksumIgnoreIfImpossible_toggled);
-    connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&Factory::checksumOnlyOnError_toggled);
-    connect(ui->osBuffer,			&QCheckBox::toggled,		this,&Factory::osBuffer_toggled);
-    connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&Factory::osBufferLimited_toggled);
-    connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&Factory::osBufferLimit_editingFinished);
-    connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
-    connect(ui->osBuffer,&QAbstractButton::toggled,this,&Factory::updateBufferCheckbox);
+    connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&CopyEngineFactory::setDoRightTransfer);
+    connect(ui->keepDate,			&QCheckBox::toggled,		this,&CopyEngineFactory::setKeepDate);
+    connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setBlockSize);
+    connect(ui->autoStart,			&QCheckBox::toggled,		this,&CopyEngineFactory::setAutoStart);
+    connect(ui->doChecksum,			&QCheckBox::toggled,		this,&CopyEngineFactory::doChecksum_toggled);
+    connect(ui->comboBoxFolderError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
+    connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderCollision);
+    connect(ui->comboBoxFileError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileError);
+    connect(ui->comboBoxFileCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileCollision);
+    connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&CopyEngineFactory::setCheckDestinationFolder);
+    connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&CopyEngineFactory::checksumIgnoreIfImpossible_toggled);
+    connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&CopyEngineFactory::checksumOnlyOnError_toggled);
+    connect(ui->osBuffer,			&QCheckBox::toggled,		this,&CopyEngineFactory::osBuffer_toggled);
+    connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&CopyEngineFactory::osBufferLimited_toggled);
+    connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&CopyEngineFactory::osBufferLimit_editingFinished);
+    connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&CopyEngineFactory::updateBufferCheckbox);
+    connect(ui->osBuffer,&QAbstractButton::toggled,this,&CopyEngineFactory::updateBufferCheckbox);
 
-    connect(filters,&Filters::sendNewFilters,this,&Factory::sendNewFilters);
-    connect(ui->filters,&QPushButton::clicked,this,&Factory::showFilterDialog);
-    connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&Factory::sendNewRenamingRules);
-    connect(ui->renamingRules,&QPushButton::clicked,this,&Factory::showRenamingRules);
+    connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
+    connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
+    connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&CopyEngineFactory::sendNewRenamingRules);
+    connect(ui->renamingRules,&QPushButton::clicked,this,&CopyEngineFactory::showRenamingRules);
 
     lunchInitFunction.setInterval(0);
     lunchInitFunction.setSingleShot(true);
-    connect(&lunchInitFunction,&QTimer::timeout,this,&Factory::init,Qt::QueuedConnection);
+    connect(&lunchInitFunction,&QTimer::timeout,this,&CopyEngineFactory::init,Qt::QueuedConnection);
     lunchInitFunction.start();
 }
 
-Factory::~Factory()
+CopyEngineFactory::~CopyEngineFactory()
 {
     delete renamingRules;
     delete filters;
     delete ui;
 }
 
-void Factory::init()
+void CopyEngineFactory::init()
 {
     if(mountSysPoint.empty())
     {
@@ -86,17 +86,17 @@ void Factory::init()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
 }
 
-PluginInterface_CopyEngine * Factory::getInstance()
+PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
 {
     CopyEngine *realObject=new CopyEngine(facilityEngine);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(realObject,&CopyEngine::debugInformation,this,&Factory::debugInformation);
+    connect(realObject,&CopyEngine::debugInformation,this,&CopyEngineFactory::debugInformation);
     #endif
     realObject->connectTheSignalsSlots();
-    connect(this,&Factory::haveDrive,realObject,&CopyEngine::setDrive);
+    connect(this,&CopyEngineFactory::haveDrive,realObject,&CopyEngine::setDrive);
     realObject->setDrive(mountSysPoint);
     PluginInterface_CopyEngine * newTransferEngine=realObject;
-    connect(this,&Factory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
+    connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
     realObject->setKeepDate(ui->keepDate->isChecked());
     realObject->setBlockSize(ui->blockSize->value());
@@ -117,7 +117,7 @@ PluginInterface_CopyEngine * Factory::getInstance()
     return newTransferEngine;
 }
 
-void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
+void CopyEngineFactory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
     this->facilityEngine=facilityInterface;
@@ -206,90 +206,90 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
     }
 }
 
-QStringList Factory::supportedProtocolsForTheSource()
+QStringList CopyEngineFactory::supportedProtocolsForTheSource()
 {
     return QStringList() << "file";
 }
 
-QStringList Factory::supportedProtocolsForTheDestination()
+QStringList CopyEngineFactory::supportedProtocolsForTheDestination()
 {
     return QStringList() << "file";
 }
 
-Ultracopier::CopyType Factory::getCopyType()
+Ultracopier::CopyType CopyEngineFactory::getCopyType()
 {
     return Ultracopier::FileAndFolder;
 }
 
-Ultracopier::TransferListOperation Factory::getTransferListOperation()
+Ultracopier::TransferListOperation CopyEngineFactory::getTransferListOperation()
 {
     return Ultracopier::TransferListOperation_ImportExport;
 }
 
-bool Factory::canDoOnlyCopy()
+bool CopyEngineFactory::canDoOnlyCopy()
 {
     return false;
 }
 
-void Factory::resetOptions()
+void CopyEngineFactory::resetOptions()
 {
 }
 
-QWidget * Factory::options()
+QWidget * CopyEngineFactory::options()
 {
     return tempWidget;
 }
 
-void Factory::setDoRightTransfer(bool doRightTransfer)
+void CopyEngineFactory::setDoRightTransfer(bool doRightTransfer)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("doRightTransfer",doRightTransfer);
 }
 
-void Factory::setKeepDate(bool keepDate)
+void CopyEngineFactory::setKeepDate(bool keepDate)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("keepDate",keepDate);
 }
 
-void Factory::setBlockSize(int blockSize)
+void CopyEngineFactory::setBlockSize(int blockSize)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("blockSize",blockSize);
 }
 
-void Factory::setAutoStart(bool autoStart)
+void CopyEngineFactory::setAutoStart(bool autoStart)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("autoStart",autoStart);
 }
 
-void Factory::setFolderCollision(int index)
+void CopyEngineFactory::setFolderCollision(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("folderCollision",index);
 }
 
-void Factory::setFolderError(int index)
+void CopyEngineFactory::setFolderError(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("folderError",index);
 }
 
-void Factory::setCheckDestinationFolder()
+void CopyEngineFactory::setCheckDestinationFolder()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checkDestinationFolder",ui->checkBoxDestinationFolderExists->isChecked());
 }
 
-void Factory::newLanguageLoaded()
+void CopyEngineFactory::newLanguageLoaded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, retranslate the widget options");
     OptionInterface * optionsEngine=this->optionsEngine;
@@ -323,21 +323,21 @@ void Factory::newLanguageLoaded()
     this->optionsEngine=optionsEngine;
 }
 
-void Factory::doChecksum_toggled(bool doChecksum)
+void CopyEngineFactory::doChecksum_toggled(bool doChecksum)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("doChecksum",doChecksum);
 }
 
-void Factory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
+void CopyEngineFactory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checksumOnlyOnError",checksumOnlyOnError);
 }
 
-void Factory::osBuffer_toggled(bool osBuffer)
+void CopyEngineFactory::osBuffer_toggled(bool osBuffer)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
@@ -345,7 +345,7 @@ void Factory::osBuffer_toggled(bool osBuffer)
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void Factory::osBufferLimited_toggled(bool osBufferLimited)
+void CopyEngineFactory::osBufferLimited_toggled(bool osBufferLimited)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
@@ -353,14 +353,14 @@ void Factory::osBufferLimited_toggled(bool osBufferLimited)
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void Factory::osBufferLimit_editingFinished()
+void CopyEngineFactory::osBufferLimit_editingFinished()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("osBufferLimit",ui->osBufferLimit->value());
 }
 
-void Factory::showFilterDialog()
+void CopyEngineFactory::showFilterDialog()
 {
     if(optionsEngine==NULL)
     {
@@ -371,7 +371,7 @@ void Factory::showFilterDialog()
     filters->exec();
 }
 
-void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions)
+void CopyEngineFactory::sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->includeStrings=includeStrings;
@@ -387,7 +387,7 @@ void Factory::sendNewFilters(const QStringList &includeStrings,const QStringList
     }
 }
 
-void Factory::sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
+void CopyEngineFactory::sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->firstRenamingRule=firstRenamingRule;
@@ -399,7 +399,7 @@ void Factory::sendNewRenamingRules(const QString &firstRenamingRule,const QStrin
     }
 }
 
-void Factory::showRenamingRules()
+void CopyEngineFactory::showRenamingRules()
 {
     if(optionsEngine==NULL)
     {
@@ -410,20 +410,20 @@ void Factory::showRenamingRules()
     renamingRules->exec();
 }
 
-void Factory::updateBufferCheckbox()
+void CopyEngineFactory::updateBufferCheckbox()
 {
     ui->osBufferLimited->setEnabled(ui->osBuffer->isChecked());
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void Factory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
+void CopyEngineFactory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checksumIgnoreIfImpossible",checksumIgnoreIfImpossible);
 }
 
-void Factory::logicalDriveChanged(const QString &,bool)
+void CopyEngineFactory::logicalDriveChanged(const QString &,bool)
 {
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
@@ -447,7 +447,7 @@ void Factory::logicalDriveChanged(const QString &,bool)
     emit haveDrive(mountSysPoint);
 }
 
-void Factory::setFileCollision(int index)
+void CopyEngineFactory::setFileCollision(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
     if(optionsEngine==NULL)
@@ -469,7 +469,7 @@ void Factory::setFileCollision(int index)
     }
 }
 
-void Factory::setFileError(int index)
+void CopyEngineFactory::setFileError(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
     if(optionsEngine==NULL)
