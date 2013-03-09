@@ -26,8 +26,10 @@
 #include "OptionEngine.h"
 #include "ResourcesManager.h"
 #include "PluginInformation.h"
+#ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 #include "QXzDecodeThread.h"
 #include "QTarDecode.h"
+#endif
 #include "AuthPlugin.h"
 
 namespace Ui {
@@ -82,8 +84,6 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         QMultiMap<PluginType,PluginsAvailable> pluginsListIndexed;
         /// \brief to load the multi-language balise
         void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
-        /// \brief check the dependencies, return number of error
-        quint32 checkDependencies();
         /// \brief get the version
         QString getPluginVersion(const QString &pluginName);
         /// \brief To compare version
@@ -98,19 +98,25 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         QString mainShortName;
         /// \brief load the plugin list
         void loadPluginList();
+        #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
         QAction *backendMenuFile;		///< Pointer on the file backend menu
         bool importingPlugin;
         void lunchDecodeThread(const QByteArray &data);
         QXzDecodeThread decodeThread;
-        void loadPluginXml(PluginsAvailable * thePlugin,const QByteArray &xml);
+        void excuteTheFileBackendLoader();
+        #endif
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         AuthPlugin *checkPluginThread;
+        /// \brief check the dependencies, return number of error
+        quint32 checkDependencies();
+        #endif
+        void loadPluginXml(PluginsAvailable * thePlugin,const QByteArray &xml);
         QStringList readPluginPath;
         bool loadPluginInformation(const QString &path);
         QSemaphore editionSemList;
         bool stopIt;
         bool pluginLoaded;
         QString language;
-        void excuteTheFileBackendLoader();
         QString categoryToString(const PluginType &category);
         QString categoryToTranslation(const PluginType &category);
         //temp variable
@@ -120,8 +126,12 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
     private slots:
         /// \brief show the information
         void showInformationDoubleClick();
+        #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
         void decodingFinished();
+        #endif
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void newAuthPath(const QString &path);
+        #endif
         void post_operation();
 /*	public slots:
         /// \brief to refresh the plugin list
@@ -134,13 +144,17 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         void onePluginWillBeUnloaded(const PluginsAvailable&);//just unload to quit the application
         void needLangToRefreshPluginList();
         void newLanguageLoaded();
+        #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
         void manuallyAdded(const PluginsAvailable&);
+        #endif
     protected:
         void run();
     public slots: //do gui action
         void showInformation(const QString &path);
+        #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
         void removeThePluginSelected(const QString &path);
         void addPlugin(const ImportBackend &backend);
+        #endif
 };
 
 /// \brief to do structure comparaison

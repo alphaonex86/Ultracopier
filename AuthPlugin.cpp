@@ -9,6 +9,7 @@
 
 #include "AuthPlugin.h"
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 AuthPlugin::AuthPlugin()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -120,3 +121,4 @@ void AuthPlugin::stop()
     sem.acquire();
     sem.release();
 }
+#endif

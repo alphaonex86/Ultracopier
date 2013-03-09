@@ -17,3 +17,18 @@ build_pass:CONFIG(debug, debug|release) {
 LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd -lQt5SystemInfod
 win32:LIBS += -lpluginLoaderd -lsessionLoaderd
 }
+
+HEADERS -= lib/qt-tar-xz/xz.h \
+    lib/qt-tar-xz/QXzDecodeThread.h \
+    lib/qt-tar-xz/QXzDecode.h \
+    lib/qt-tar-xz/QTarDecode.h \
+    AuthPlugin.h
+SOURCES -= lib/qt-tar-xz/QXzDecodeThread.cpp \
+    lib/qt-tar-xz/QXzDecode.cpp \
+    lib/qt-tar-xz/QTarDecode.cpp \
+    lib/qt-tar-xz/xz_crc32.c \
+    lib/qt-tar-xz/xz_dec_stream.c \
+    lib/qt-tar-xz/xz_dec_lzma2.c \
+    lib/qt-tar-xz/xz_dec_bcj.c \
+    AuthPlugin.cpp
+INCLUDEPATH -= lib/qt-tar-xz/

@@ -15,30 +15,32 @@
 
 #include "Environment.h"
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 /** \brief allow authentify the plugin */
 class AuthPlugin : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	AuthPlugin();
-	~AuthPlugin();
-	/** \brief stop all action to close ultracopier */
-	void stop();
-	/** \brief add path to check
-	  \param readPath list of read place
-	  \param searchPathPlugin list of plugin place
-	  */
-	void loadSearchPath(const QStringList &readPath,const QStringList &searchPathPlugin);
+    AuthPlugin();
+    ~AuthPlugin();
+    /** \brief stop all action to close ultracopier */
+    void stop();
+    /** \brief add path to check
+      \param readPath list of read place
+      \param searchPathPlugin list of plugin place
+      */
+    void loadSearchPath(const QStringList &readPath,const QStringList &searchPathPlugin);
 protected:
-	void run();
+    void run();
 private:
-	bool stopIt;
-	QSemaphore sem;
-	QStringList readPath;
-	QStringList searchPathPlugin;
-	static QStringList getFileList(const QString &path);
+    bool stopIt;
+    QSemaphore sem;
+    QStringList readPath;
+    QStringList searchPathPlugin;
+    static QStringList getFileList(const QString &path);
 signals:
-	void authentifiedPath(QString);
+    void authentifiedPath(QString);
 };
+#endif
 
 #endif // AUTHPLUGIN_H

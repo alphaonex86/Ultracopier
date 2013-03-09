@@ -14,7 +14,7 @@
    <string>Options</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources/resources.qrc">
+   <iconset resource="resources/ultracopier-resources.qrc">
     <normaloff>:/options.png</normaloff>:/options.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -105,7 +105,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>8</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -397,7 +397,7 @@
                 <bool>false</bool>
                </property>
                <property name="icon">
-                <iconset resource="resources/resources.qrc">
+                <iconset resource="resources/ultracopier-resources.qrc">
                  <normaloff>:/moveUp.png</normaloff>:/moveUp.png</iconset>
                </property>
               </widget>
@@ -408,7 +408,7 @@
                 <bool>false</bool>
                </property>
                <property name="icon">
-                <iconset resource="resources/resources.qrc">
+                <iconset resource="resources/ultracopier-resources.qrc">
                  <normaloff>:/moveDown.png</normaloff>:/moveDown.png</iconset>
                </property>
               </widget>
@@ -531,7 +531,7 @@
              <item>
               <widget class="QLabel" name="label_3">
                <property name="pixmap">
-                <pixmap resource="resources/resources.qrc">:/bug-128x128.png</pixmap>
+                <pixmap resource="resources/ultracopier-resources.qrc">:/bug-128x128.png</pixmap>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -588,7 +588,7 @@
              <item>
               <widget class="QLabel" name="label_4">
                <property name="pixmap">
-                <pixmap resource="resources/resources.qrc">:/none-128x128.png</pixmap>
+                <pixmap resource="resources/ultracopier-resources.qrc">:/none-128x128.png</pixmap>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -643,7 +643,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="logBrowse">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -789,7 +789,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources/resources.qrc"/>
+  <include location="resources/ultracopier-resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -811,7 +811,7 @@
   <connection>
    <sender>checkBox_Log</sender>
    <signal>toggled(bool)</signal>
-   <receiver>pushButton</receiver>
+   <receiver>logBrowse</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

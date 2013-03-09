@@ -35,7 +35,7 @@
 /// \brief to have internet support, to communicate with the web site for update and plugins
 #define ULTRACOPIER_INTERNET_SUPPORT
 
-/// \brief to disable plugin support to do all in one version with static Qt for the protable version
-#define ULTRACOPIER_PLUGIN_SUPPORT
+/// \brief to disable plugin support, import and remove
+#define ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 
 #endif // VARIABLE_H

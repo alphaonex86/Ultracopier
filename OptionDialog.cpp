@@ -40,14 +40,16 @@ OptionDialog::OptionDialog() :
     connect(plugins,	&PluginsManager::onePluginInErrorAdded,	this,	&OptionDialog::onePluginAdded);
     connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
     connect(plugins,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
+    #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     connect(plugins,	&PluginsManager::manuallyAdded,		this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
+    #endif
     connect(options,	&OptionEngine::newOptionValue,			this,	&OptionDialog::newOptionValue);
     QList<PluginsAvailable> list=plugins->getPlugins(true);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     plugins->unlockPluginListEdition();
     defaultImportBackend=PluginsManager::ImportBackend_File;
-    #ifndef ULTRACOPIER_PLUGIN_SUPPORT
+    #ifndef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     ui->pluginAdd->hide();
     ui->pluginRemove->hide();
     #endif
@@ -158,6 +160,7 @@ void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"not found!");
 }
 
+#ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
 {
     if(plugin.category==PluginType_Themes)
@@ -196,6 +199,7 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
         }
     }
 }
+#endif
 
 void OptionDialog::addLanguage(PluginsAvailable plugin)
 {
@@ -780,22 +784,6 @@ void OptionDialog::on_pluginList_itemSelectionChanged()
     }
 }
 
-void OptionDialog::on_pluginRemove_clicked()
-{
-    treeWidgetItem=ui->pluginList->selectedItems().first();
-    index=0;
-    loop_size=pluginLink.size();
-    while(index<loop_size)
-    {
-        if(pluginLink.at(index).item==treeWidgetItem)
-        {
-            plugins->removeThePluginSelected(pluginLink.at(index).path);
-            return;
-        }
-        index++;
-    }
-}
-
 void OptionDialog::on_pluginInformation_clicked()
 {
     treeWidgetItem=ui->pluginList->selectedItems().first();
@@ -812,10 +800,28 @@ void OptionDialog::on_pluginInformation_clicked()
     }
 }
 
+#ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
+void OptionDialog::on_pluginRemove_clicked()
+{
+    treeWidgetItem=ui->pluginList->selectedItems().first();
+    index=0;
+    loop_size=pluginLink.size();
+    while(index<loop_size)
+    {
+        if(pluginLink.at(index).item==treeWidgetItem)
+        {
+            plugins->removeThePluginSelected(pluginLink.at(index).path);
+            return;
+        }
+        index++;
+    }
+}
+
 void OptionDialog::on_pluginAdd_clicked()
 {
     plugins->addPlugin(defaultImportBackend);
 }
+#endif
 
 void OptionDialog::on_checkBox_Log_clicked()
 {
@@ -883,7 +889,7 @@ void OptionDialog::on_checkBoxLog_folder_clicked()
     }
 }
 
-void OptionDialog::on_pushButton_clicked()
+void OptionDialog::on_logBrowse_clicked()
 {
     QString file=QFileDialog::getSaveFileName(this,tr("Save logs as: "),resources->getWritablePath());
     if(file!="")

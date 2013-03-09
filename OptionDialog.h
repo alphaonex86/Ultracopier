@@ -36,7 +36,9 @@ private slots:
     //plugin management
     void onePluginAdded(const PluginsAvailable &plugin);
     void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+    #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     void manuallyAdded(const PluginsAvailable &plugin);
+    #endif
     void loadOption();
     void newOptionValue(const QString &group,const QString &name,const QVariant &value);
     void on_Ultracopier_current_theme_currentIndexChanged(int index);
@@ -48,24 +50,23 @@ private slots:
     void on_toolButtonDown_clicked();
     void on_toolButtonUp_clicked();
     void on_pluginList_itemSelectionChanged();
+    #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     void on_pluginRemove_clicked();
-    void on_pluginInformation_clicked();
     void on_pluginAdd_clicked();
+    #endif
+    void on_pluginInformation_clicked();
     void on_checkBox_Log_clicked();
     void on_lineEditLog_File_editingFinished();
     void on_lineEditLog_transfer_format_editingFinished();
     void on_lineEditLog_error_format_editingFinished();
     void on_checkBoxLog_transfer_clicked();
     void on_checkBoxLog_error_clicked();
-    void on_pushButton_clicked();
+    void on_logBrowse_clicked();
     void on_checkBoxLog_folder_clicked();
     void on_checkBoxLog_sync_clicked();
     void on_ActionOnManualOpen_currentIndexChanged(int index);
-
     void on_GroupWindowWhen_currentIndexChanged(int index);
-
     void on_DisplayOSWarning_clicked();
-
 private:
     Ui::OptionDialog *ui;
     struct pluginStore

@@ -25,12 +25,18 @@ PluginsManager::PluginsManager()
     language="en";
     stopIt=false;
     editionSemList.release();
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     checkPluginThread=new AuthPlugin();
+    #endif
     englishPluginType << "CopyEngine" << "Languages" << "Listener" << "PluginLoader" << "SessionLoader" << "Themes";
     //catPlugin << tr("CopyEngine") << tr("Languages") << tr("Listener") << tr("PluginLoader") << tr("SessionLoader") << tr("Themes");
+    #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     importingPlugin=false;
     connect(&decodeThread,		&QXzDecodeThread::decodedIsFinish,		this,				&PluginsManager::decodingFinished,Qt::QueuedConnection);
+    #endif
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(checkPluginThread,	&AuthPlugin::authentifiedPath,			this,				&PluginsManager::newAuthPath,Qt::QueuedConnection);
+    #endif
     connect(this,			&PluginsManager::finished,			this,				&PluginsManager::post_operation,Qt::QueuedConnection);
     connect(this,			&PluginsManager::newLanguageLoaded,		&pluginInformationWindows,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
 //	connect(this,			&PluginsManager::pluginListingIsfinish,		options,&OptionEngine::setInterfaceValue);
@@ -53,7 +59,9 @@ PluginsManager::~PluginsManager()
     stopIt=true;
     if(this->isRunning())
         this->wait(0);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     delete checkPluginThread;
+    #endif
     OptionEngine::destroyInstanceAtTheLastCall();
     ResourcesManager::destroyInstanceAtTheLastCall();
 }
@@ -134,10 +142,12 @@ void PluginsManager::run()
         index++;
     }
     #endif
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     checkPluginThread->loadSearchPath(readPath,englishPluginType);
     checkPluginThread->stop();
     checkPluginThread->start();
     while(checkDependencies()!=0){};
+    #endif
     QList<PluginsAvailable> list;
     index=0;
     while(index<pluginsList.size())
@@ -309,14 +319,14 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
                 {
                     if(thePlugin->category!=PluginType_Languages)
                     {
+                        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
                         loadBalise(root,"architecture",&(thePlugin->informations),&(thePlugin->errorString),true,false);
                         if(thePlugin->errorString=="")
                         {
-                            #ifndef ULTRACOPIER_VERSION_PORTABLE
                             if(thePlugin->informations.last().last()!=ULTRACOPIER_PLATFORM_CODE)
                                 thePlugin->errorString="Wrong platform code: "+thePlugin->informations.last().last();
-                            #endif
                         }
+                        #endif
                     }
                 }
             }
@@ -458,6 +468,7 @@ QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &na
     return QString();
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 /// \brief check the dependencies
 quint32 PluginsManager::checkDependencies()
 {
@@ -527,6 +538,7 @@ quint32 PluginsManager::checkDependencies()
     }
     return errors;
 }
+#endif
 
 /// \brief get the version
 QString PluginsManager::getPluginVersion(const QString &pluginName)
@@ -646,6 +658,7 @@ void PluginsManager::showInformationDoubleClick()
 //	showInformation(false);
 }
 
+#ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 void PluginsManager::removeThePluginSelected(const QString &path)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -864,7 +877,9 @@ void PluginsManager::decodingFinished()
     }
     importingPlugin=false;
 }
+#endif
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void PluginsManager::newAuthPath(const QString &path)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -880,6 +895,7 @@ void PluginsManager::newAuthPath(const QString &path)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"plugin not located");
 }
+#endif
 
 /// \brief transfor short plugin name into file name
 QString PluginsManager::getResolvedPluginName(const QString &name)

@@ -25,7 +25,7 @@ void OptionsWidget::setDebug(bool Debug)
 
 void OptionsWidget::on_allDllIsImportant_toggled(bool checked)
 {
-	emit sendAllDllIsImportant(ui->allDllIsImportant->isChecked());
+	emit sendAllDllIsImportant(checked);
 }
 
 void OptionsWidget::retranslate()
@@ -35,5 +35,5 @@ void OptionsWidget::retranslate()
 
 void OptionsWidget::on_Debug_toggled(bool checked)
 {
-	emit sendDebug(ui->Debug->isChecked());
+	emit sendDebug(checked);
 }
