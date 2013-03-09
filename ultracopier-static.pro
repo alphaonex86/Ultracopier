@@ -32,3 +32,5 @@ SOURCES -= lib/qt-tar-xz/QXzDecodeThread.cpp \
     lib/qt-tar-xz/xz_dec_bcj.c \
     AuthPlugin.cpp
 INCLUDEPATH -= lib/qt-tar-xz/
+
+RESOURCES -= resources/resources-windows-qt-plugin.qrc

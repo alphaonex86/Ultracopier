@@ -39,11 +39,7 @@ RESOURCES += \
     resources/ultracopier-resources_unix.qrc \
     resources/ultracopier-resources_windows.qrc
 win32 {
-    RESOURCES +=
     RESOURCES += resources/resources-windows-qt-plugin.qrc
-}
-!win32 {
-    RESOURCES +=
 }
 
 HEADERS += ResourcesManager.h \
