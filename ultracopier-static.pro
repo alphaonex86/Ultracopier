@@ -13,7 +13,7 @@ win32:RESOURCES += plugins/static-plugins-windows.qrc
 LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt5SystemInfo
 win32:LIBS += -lpluginLoader -lsessionLoader
 
-debug {
+build_pass:CONFIG(debug, debug|release) {
 LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd -lQt5SystemInfod
 win32:LIBS += -lpluginLoaderd -lsessionLoaderd
 }
