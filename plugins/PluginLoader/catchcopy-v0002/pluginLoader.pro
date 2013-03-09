@@ -48,7 +48,7 @@ LIBS += -lole32
 FORMS += \
     OptionsWidget.ui
 
-CONFIG(static) {
+CONFIG(static, static|shared) {
 DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
 }
 
