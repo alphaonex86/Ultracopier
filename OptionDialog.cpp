@@ -165,9 +165,33 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
         {
             int index=ui->Ultracopier_current_theme->findData(plugin.name);
             if(index!=-1)
+            {
                 ui->Ultracopier_current_theme->setCurrentIndex(index);
+                on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
+            }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"theme plugin not found!");
+        }
+    }
+    else if(plugin.category==PluginType_Languages)
+    {
+        if(QMessageBox::question(this,tr("Load"),tr("Load the language?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)==QMessageBox::Yes)
+        {
+            QList<QPair<QString,QString> > listChildAttribute;
+            QPair<QString,QString> temp;
+            temp.first = "mainCode";
+            temp.second = "true";
+            listChildAttribute << temp;
+            int index=ui->Language->findData(plugins->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+            if(index!=-1)
+            {
+                ui->Language->setCurrentIndex(index);
+                ui->Language_force->setChecked(true);
+                on_Language_currentIndexChanged(index);
+                on_Language_force_toggled(true);
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"language plugin not found!");
         }
     }
 }
