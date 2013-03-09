@@ -210,10 +210,20 @@ void LanguagesManager::allPluginIsLoaded()
     setCurrentLanguage(getTheRightLanguage());
 }
 
-/*QString LanguagesManager::getMainShortName()
+const QString LanguagesManager::autodetectedLanguage()
 {
-    return currentLanguage;
-}*/
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()));
+    QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));
+    if(tempLanguage!="")
+        return tempLanguage;
+    else
+    {
+        tempLanguage=getMainShortName(QLocale::system().name());
+        if(tempLanguage!="")
+            return tempLanguage;
+    }
+    return "";
+}
 
 void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 {

@@ -7,6 +7,7 @@
 
 #include "OptionDialog.h"
 #include "ui_OptionDialog.h"
+#include "OSSpecific.h"
 
 #include <QDomElement>
 #include <QFileDialog>
@@ -397,6 +398,14 @@ void OptionDialog::loadOption()
     }
     allPluginsIsLoaded=true;
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
+
+    if(options->getOptionValue("Ultracopier","displayOSSpecific").toBool())
+    {
+        OSSpecific oSSpecific;
+        oSSpecific.exec();
+        if(oSSpecific.dontShowAgain())
+            options->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
+    }
 }
 
 void OptionDialog::newOptionValue(const QString &group,const QString &name,const QVariant &value)
@@ -440,6 +449,16 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
         {
             ui->Language_force->setChecked(value.toBool());
             ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
+            if(!ui->Language_force->isChecked())
+            {
+                QString lang=languages->autodetectedLanguage();
+                if(!lang.isEmpty())
+                {
+                    int index=ui->Language->findData(lang);
+                    if(index!=-1)
+                        ui->Language->setCurrentIndex(index);
+                }
+            }
         }
     }
     else if(group=="SessionLoader")

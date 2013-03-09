@@ -12,7 +12,6 @@
 #include "EventDispatcher.h"
 #include "ExtraSocket.h"
 #include "CompilerInfo.h"
-#include "OSSpecific.h"
 
 #ifdef Q_OS_UNIX
     #include <unistd.h>
@@ -183,14 +182,6 @@ void EventDispatcher::initFunction()
     connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit);
     //connect the slot for the help dialog
     connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show);
-
-    if(options->getOptionValue("Ultracopier","displayOSSpecific").toBool())
-    {
-        OSSpecific oSSpecific;
-        oSSpecific.exec();
-        if(oSSpecific.dontShowAgain())
-            options->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
-    }
 }
 
 #ifdef Q_OS_WIN32
