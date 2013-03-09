@@ -9,55 +9,52 @@
 
 LocalPluginOptions::LocalPluginOptions(const QString &group)
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
-	groupOptionAdded=false;
-	this->group=group;
-	options=OptionEngine::getInstance();
-	connect(options,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
+    groupOptionAdded=false;
+    this->group=group;
+    options=OptionEngine::getInstance();
+    connect(options,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
 }
 
 LocalPluginOptions::~LocalPluginOptions()
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
-	if(groupOptionAdded)
-		options->removeOptionGroup(group);
-	else
-		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"option not used");
-	OptionEngine::destroyInstanceAtTheLastCall();
+    if(groupOptionAdded)
+        options->removeOptionGroup(group);
+    OptionEngine::destroyInstanceAtTheLastCall();
 }
 
 /// \brief To add option group to options
 bool LocalPluginOptions::addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList)
 {
-	ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
-	if(groupOptionAdded)
-	{
-		ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Group already added!");
-		return false;
-	}
-	else
-	{
-		groupOptionAdded=true;
-		return options->addOptionGroup(group,KeysList);
-	}
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
+    if(groupOptionAdded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Group already added!");
+        return false;
+    }
+    else
+    {
+        groupOptionAdded=true;
+        return options->addOptionGroup(group,KeysList);
+    }
 }
 
 /// \brief To get option value
 QVariant LocalPluginOptions::getOptionValue(const QString &variableName)
 {
-	return options->getOptionValue(group,variableName);
+    return options->getOptionValue(group,variableName);
 }
 
 /// \brief To set option value
 void LocalPluginOptions::setOptionValue(const QString &variableName,const QVariant &value)
 {
-	options->setOptionValue(group,variableName,value);
+    options->setOptionValue(group,variableName,value);
 }
 
 /*-> disabled because the value will not externaly changed, then useless notification
 void LocalPluginOptions::newOptionValue(QString group,QString variable,QVariant value)
 {
-	if(group==this->group)
-		emit newOptionValue(variable,value);
+    if(group==this->group)
+        emit newOptionValue(variable,value);
 }*/
 

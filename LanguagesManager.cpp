@@ -53,7 +53,6 @@ LanguagesManager::LanguagesManager()
 /// \brief Destroy the language manager
 LanguagesManager::~LanguagesManager()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     PluginsManager::destroyInstanceAtTheLastCall();
     OptionEngine::destroyInstanceAtTheLastCall();
     ResourcesManager::destroyInstanceAtTheLastCall();

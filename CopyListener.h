@@ -108,6 +108,7 @@ class CopyListener : public QObject, public GlobalClass
         void sendState(bool force=false);
         QStringList stripSeparator(QStringList sources);
         OptionDialog *optionDialog;
+        bool stopIt;
 };
 
 #endif // COPYLISTENER_H

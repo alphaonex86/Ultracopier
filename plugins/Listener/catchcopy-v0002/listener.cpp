@@ -22,7 +22,6 @@ void Listener::listen()
 
 void Listener::close()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     server.close();
     emit newState(Ultracopier::NotListening);
 }

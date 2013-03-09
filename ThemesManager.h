@@ -69,6 +69,7 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
         QList<PluginsAvailableThemes> pluginList;
         int currentPluginIndex;
         FacilityEngine facilityEngine;
+        bool stopIt;
     signals:
         /// \brief send this signal when the themes have changed
         void theThemeNeedBeUnloaded();

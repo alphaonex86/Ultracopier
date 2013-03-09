@@ -11,7 +11,7 @@
 
 CopyListener::CopyListener(OptionDialog *optionDialog)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    stopIt=false;
     this->optionDialog=optionDialog;
     pluginLoader=new PluginLoader(optionDialog);
     //load the options
@@ -36,7 +36,7 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
 
 CopyListener::~CopyListener()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    stopIt=true;
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
@@ -148,7 +148,6 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_Listener)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unload the current plugin");
     int indexPlugin=0;
     while(indexPlugin<pluginList.size())
     {
@@ -182,6 +181,8 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 
 void CopyListener::newState(const Ultracopier::ListeningState &state)
 {
+    if(stopIt)
+        return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     PluginInterface_Listener *temp=qobject_cast<PluginInterface_Listener *>(QObject::sender());
     if(temp==NULL)
@@ -376,6 +377,8 @@ void CopyListener::allPluginIsloaded()
 
 void CopyListener::sendState(bool force)
 {
+    if(stopIt)
+        return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, pluginList.size(): %1, force: %2").arg(pluginList.size()).arg(force));
     Ultracopier::ListeningState current_state=Ultracopier::NotListening;
     bool found_not_listen=false,found_listen=false,found_inWaitOfReply=false;

@@ -34,7 +34,6 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
 
 SessionLoader::~SessionLoader()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);

@@ -31,7 +31,6 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
 
 PluginLoader::~PluginLoader()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_PluginLoader);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);

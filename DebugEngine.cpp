@@ -158,7 +158,6 @@ DebugEngine::DebugEngine()
 /// \brief Destroy the ultracopier event dispatcher
 DebugEngine::~DebugEngine()
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Notice,"start");
     if(currentBackend==File)
     {
         removeTheLockFile();

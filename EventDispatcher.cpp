@@ -106,7 +106,6 @@ EventDispatcher::EventDispatcher()
 /// \brief Destroy the ultracopier event dispatcher
 EventDispatcher::~EventDispatcher()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(core!=NULL)
         delete core;
     if(copyEngineList!=NULL)

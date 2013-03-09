@@ -43,7 +43,6 @@ PluginsManager::PluginsManager()
 /// \brief Destroy the manager
 PluginsManager::~PluginsManager()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     int loop_size=pluginsList.size();
     while(index<loop_size)

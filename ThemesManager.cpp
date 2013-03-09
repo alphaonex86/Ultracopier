@@ -20,7 +20,7 @@
 ThemesManager::ThemesManager()
 {
     //load the debug engine as external part because ThemesManager is base class
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    stopIt=false;
     currentPluginIndex=-1;
 
     //load the overall instance
@@ -57,7 +57,7 @@ ThemesManager::ThemesManager()
 /// \brief Destroy the themes manager
 ThemesManager::~ThemesManager()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    stopIt=true;
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Themes);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
@@ -155,6 +155,8 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
 
 void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
+    if(stopIt)
+        return;
     if(plugin.category!=PluginType_Themes)
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+plugin.name);
