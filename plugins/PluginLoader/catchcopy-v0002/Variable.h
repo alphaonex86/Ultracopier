@@ -8,7 +8,9 @@
 
 //Un-comment this next line to put ultracopier plugin in debug mode
 #define ULTRACOPIER_PLUGIN_DEBUG
-//#define ULTRACOPIER_PLUGIN_ALL_IN_ONE
+#if define(STATIC_BUILD)
+#define ULTRACOPIER_PLUGIN_ALL_IN_ONE
+#endif
 
 #endif // VARIABLE_H
 
