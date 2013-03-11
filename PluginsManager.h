@@ -140,8 +140,10 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         void pluginListingIsfinish();
         void onePluginAdded(const PluginsAvailable&);
         void onePluginInErrorAdded(const PluginsAvailable&);
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable&); // when will be really removed
         void onePluginWillBeUnloaded(const PluginsAvailable&);//just unload to quit the application
+        #endif
         void needLangToRefreshPluginList();
         void newLanguageLoaded();
         #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT

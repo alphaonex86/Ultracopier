@@ -32,8 +32,10 @@ LanguagesManager::LanguagesManager()
     //load the plugins
     plugins->lockPluginListEdition();
     connect(this,&LanguagesManager::previouslyPluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+    connect(plugins,&PluginsManager::onePluginAdded,            this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     connect(plugins,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Languages);
     foreach(PluginsAvailable currentPlugin,list)
@@ -264,6 +266,7 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
         setCurrentLanguage(getTheRightLanguage());
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -277,6 +280,7 @@ void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         index++;
     }
 }
+#endif
 
 void LanguagesManager::newOptionValue(const QString &group)
 {

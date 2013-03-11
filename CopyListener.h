@@ -34,7 +34,9 @@ class CopyListener : public QObject, public GlobalClass
         void newPluginMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
         void newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
         void onePluginAdded(const PluginsAvailable &plugin);
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+        #endif
         void newState(const Ultracopier::ListeningState &state);
         #ifdef ULTRACOPIER_DEBUG
         void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);

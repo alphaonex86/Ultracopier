@@ -18,8 +18,10 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
     //setup the ui layout
     plugins->lockPluginListEdition();
     connect(this,&CopyEngineManager::previouslyPluginAdded,			this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginAdded,			this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
+    connect(plugins,&PluginsManager::onePluginAdded,                this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyEngineManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&CopyEngineManager::allPluginIsloaded,Qt::QueuedConnection);
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_CopyEngine);
     foreach(PluginsAvailable currentPlugin,list)
@@ -127,6 +129,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
         emit addCopyEngine(newItem.name,newItem.canDoOnlyCopy);
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void CopyEngineManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     int index=0;
@@ -164,6 +167,7 @@ void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
         index++;
     }
 }
+#endif
 
 CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultracopier::CopyMode &mode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {

@@ -61,8 +61,10 @@ public:
     bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination);
 private slots:
     void onePluginAdded(const PluginsAvailable &plugin);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     void onePluginWillBeRemoved(const PluginsAvailable &plugin);
     void onePluginWillBeUnloaded(const PluginsAvailable &plugin);
+    #endif
     #ifdef ULTRACOPIER_DEBUG
     void debugInformation(const Ultracopier::DebugLevel &level, const QString& fonction, const QString& text, const QString& file, const int& ligne);
     #endif // ULTRACOPIER_DEBUG

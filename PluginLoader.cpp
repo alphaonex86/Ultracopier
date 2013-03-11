@@ -17,7 +17,9 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
     plugins->lockPluginListEdition();
     connect(this,&PluginLoader::previouslyPluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,this,&PluginLoader::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     connect(plugins,&PluginsManager::pluginListingIsfinish,	this,&PluginLoader::allPluginIsloaded,Qt::QueuedConnection);
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_PluginLoader);
     foreach(PluginsAvailable currentPlugin,list)
@@ -31,9 +33,11 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
 
 PluginLoader::~PluginLoader()
 {
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_PluginLoader);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
+    #endif
     PluginsManager::destroyInstanceAtTheLastCall();
 }
 
@@ -118,6 +122,7 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     }
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_PluginLoader)
@@ -144,6 +149,7 @@ void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         index++;
     }
 }
+#endif
 
 void PluginLoader::load()
 {

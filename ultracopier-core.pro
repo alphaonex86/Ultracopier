@@ -121,7 +121,4 @@ SOURCES += ThemesManager.cpp \
     OSSpecific.cpp
 INCLUDEPATH += lib/qt-tar-xz/
 
-OTHER_FILES += \
-    resources/resources-windows.rc \
-    resources/ultracopier.exe.x86.manifest \
-    resources/ultracopier.exe.amd64.manifest
+OTHER_FILES += resources/resources-windows.rc

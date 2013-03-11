@@ -79,7 +79,9 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
     private slots:
         /// \brief reload the themes
         void onePluginAdded(const PluginsAvailable &plugin);
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+        #endif
         void allPluginIsLoaded();
         void newOptionValue(const QString &group,const QString &name,const QVariant &value);
         #ifdef ULTRACOPIER_DEBUG

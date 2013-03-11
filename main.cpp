@@ -10,13 +10,15 @@
 #include "EventDispatcher.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-Q_IMPORT_PLUGIN(CopyEngineFactory)
-Q_IMPORT_PLUGIN(ThemesFactory)
-Q_IMPORT_PLUGIN(Listener)
-#ifdef Q_OS_WIN32
-Q_IMPORT_PLUGIN(WindowsExplorerLoader)
-Q_IMPORT_PLUGIN(WindowsSessionLoader)
-#endif
+    Q_IMPORT_PLUGIN(CopyEngineFactory)
+    Q_IMPORT_PLUGIN(ThemesFactory)
+    Q_IMPORT_PLUGIN(Listener)
+    #ifdef Q_OS_WIN32
+        Q_IMPORT_PLUGIN(WindowsExplorerLoader)
+        #if !defined(ULTRACOPIER_VERSION_PORTABLE)
+        Q_IMPORT_PLUGIN(WindowsSessionLoader)
+        #endif
+    #endif
 #endif
 
 /// \brief Define the main() for the point entry

@@ -33,8 +33,10 @@ ThemesManager::ThemesManager()
     plugins->lockPluginListEdition();
     connect(this,&ThemesManager::previouslyPluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
     connect(plugins,&PluginsManager::onePluginWillBeUnloaded,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&ThemesManager::allPluginIsLoaded,Qt::QueuedConnection);
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Themes);
     foreach(PluginsAvailable currentPlugin,list)
@@ -59,8 +61,10 @@ ThemesManager::~ThemesManager()
 {
     stopIt=true;
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Themes);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
+    #endif
     LanguagesManager::destroyInstanceAtTheLastCall();
     OptionEngine::destroyInstanceAtTheLastCall();
     PluginsManager::destroyInstanceAtTheLastCall();
@@ -153,6 +157,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     return;
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(stopIt)
@@ -188,6 +193,7 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"plugin not found");
 }
+#endif
 
 /** \brief To get image into the current themes, or default if not found
 \param filePath The file path to search, like toto.png resolved with the root of the current themes

@@ -71,7 +71,9 @@ class LanguagesManager : public QObject, public Singleton<LanguagesManager>
         void allPluginIsLoaded();
         //plugin management
         void onePluginAdded(const PluginsAvailable &plugin);
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+        #endif
         void newOptionValue(const QString &group);
     signals:
         //send the language is loaded or the new language is loaded

@@ -7,6 +7,7 @@
 
 #include "SessionLoader.h"
 
+#if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
 SessionLoader::SessionLoader(OptionDialog *optionDialog)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -24,7 +25,9 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
     plugins->lockPluginListEdition();
     connect(this,&SessionLoader::previouslyPluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+    connect(plugins,&PluginsManager::onePluginWillBeRemoved,	this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
@@ -34,9 +37,11 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
 
 SessionLoader::~SessionLoader()
 {
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
+    #endif
 }
 
 void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
@@ -107,6 +112,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
     pluginList << newEntry;
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_SessionLoader)
@@ -130,6 +136,7 @@ void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         index++;
     }
 }
+#endif
 
 void SessionLoader::newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
@@ -152,4 +159,4 @@ void SessionLoader::debugInformation(const Ultracopier::DebugLevel &level,const 
     DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Session loader plugin");
 }
 #endif // ULTRACOPIER_DEBUG
-
+#endif // !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)

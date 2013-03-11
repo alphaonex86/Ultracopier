@@ -38,7 +38,9 @@ OptionDialog::OptionDialog() :
     connect(this,&OptionDialog::previouslyPluginAdded,			this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,	&PluginsManager::onePluginAdded,		this,	&OptionDialog::onePluginAdded);
     connect(plugins,	&PluginsManager::onePluginInErrorAdded,	this,	&OptionDialog::onePluginAdded);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     connect(plugins,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     connect(plugins,	&PluginsManager::manuallyAdded,		this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
@@ -99,6 +101,7 @@ void OptionDialog::onePluginAdded(const PluginsAvailable &plugin)
     }
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -159,6 +162,7 @@ void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"not found!");
 }
+#endif
 
 #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)

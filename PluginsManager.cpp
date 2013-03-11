@@ -49,6 +49,7 @@ PluginsManager::PluginsManager()
 /// \brief Destroy the manager
 PluginsManager::~PluginsManager()
 {
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     int index=0;
     int loop_size=pluginsList.size();
     while(index<loop_size)
@@ -56,6 +57,7 @@ PluginsManager::~PluginsManager()
         emit onePluginWillBeUnloaded(pluginsList.at(index));
         index++;
     }
+    #endif
     stopIt=true;
     if(this->isRunning())
         this->wait(0);

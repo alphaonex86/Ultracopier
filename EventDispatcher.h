@@ -68,8 +68,10 @@ class EventDispatcher : public QObject, public GlobalClass
         QTimer lunchInitFunction;
         /// \brief the help dialog
         HelpDialog theHelp;
+        #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
         /// \brief the session loader
         SessionLoader *sessionloader;
+        #endif
         bool stopIt;
         CopyListener *copyServer;
         Core *core;
@@ -78,8 +80,8 @@ class EventDispatcher : public QObject, public GlobalClass
         LocalListener localListener;
         CliParser cliParser;
         #ifdef Q_OS_WIN32
-		QString GetOSDisplayString();
-		#endif
+        QString GetOSDisplayString();
+        #endif
     private slots:
         /// \brief Called when event loop is setup
         void initFunction();

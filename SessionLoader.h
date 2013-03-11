@@ -20,6 +20,7 @@ This class load ALL plugin compatible to listen and catch the copy/move
 #include "GlobalClass.h"
 #include "OptionDialog.h"
 
+#if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
 /** \brief manage all SessionLoader plugin */
 class SessionLoader : public QObject, GlobalClass
 {
@@ -29,7 +30,9 @@ class SessionLoader : public QObject, GlobalClass
         ~SessionLoader();
     private slots:
         void onePluginAdded(const PluginsAvailable &plugin);
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+        #endif
         void newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
         #ifdef ULTRACOPIER_DEBUG
         void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
@@ -49,5 +52,6 @@ class SessionLoader : public QObject, GlobalClass
     signals:
         void previouslyPluginAdded(PluginsAvailable);
 };
+#endif
 
 #endif // SESSIONLOADER_H

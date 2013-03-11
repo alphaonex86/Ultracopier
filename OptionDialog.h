@@ -35,7 +35,9 @@ private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
     //plugin management
     void onePluginAdded(const PluginsAvailable &plugin);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     void onePluginWillBeRemoved(const PluginsAvailable &plugin);
+    #endif
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     void manuallyAdded(const PluginsAvailable &plugin);
     #endif

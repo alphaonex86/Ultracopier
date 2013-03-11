@@ -23,7 +23,9 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
     connect(this,&CopyListener::previouslyPluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
     connect(plugins,&PluginsManager::onePluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyListener::onePluginWillBeRemoved,Qt::DirectConnection);
+    #endif
     connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&CopyListener::allPluginIsloaded,Qt::QueuedConnection);
     connect(pluginLoader,&PluginLoader::pluginLoaderReady,			this,&CopyListener::pluginLoaderReady);
     foreach(PluginsAvailable currentPlugin,list)
@@ -37,9 +39,11 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
 CopyListener::~CopyListener()
 {
     stopIt=true;
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
+    #endif
     delete pluginLoader;
 }
 
@@ -144,6 +148,7 @@ bool CopyListener::oneListenerIsLoaded()
     return (pluginList.size()>0);
 }
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_Listener)
@@ -178,6 +183,7 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"not found");
 }
+#endif
 
 void CopyListener::newState(const Ultracopier::ListeningState &state)
 {
