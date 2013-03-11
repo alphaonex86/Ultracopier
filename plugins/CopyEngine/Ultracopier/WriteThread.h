@@ -30,7 +30,7 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const QFileInfo &file,const quint64 &startSize,const bool &buffer);
+    void open(const QFileInfo &file,const quint64 &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential);
     /// \brief to return the error string
     QString errorString();
     /// \brief to stop all
@@ -97,31 +97,34 @@ signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 private:
-    QString			errorString_internal;
+    QString             errorString_internal;
     AvancedQFile		file;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
     volatile int		blockSize;//in Bytes
-    QMutex			accessList;		///< For use the list
-    QSemaphore		waitNewClockForSpeed;
+    int                 numberOfBlock;
+    QMutex              accessList;		///< For use the list
+    QSemaphore          waitNewClockForSpeed;
     volatile int		numberOfBlockCopied;		///< Multiple for count the number of block copied
     volatile int		multiplicatorForBigSpeed;	///< Multiple for count the number of block needed
     volatile int		MultiForBigSpeed;
-    QSemaphore		freeBlock;
-    QSemaphore		isOpen;
+    QSemaphore          freeBlock;
+    QSemaphore          sequentialLock;
+    QSemaphore          isOpen;
     volatile bool		putInPause;
     QList<QByteArray>	theBlockList;		///< Store the block list
-    quint64			CurentCopiedSize;
-    QByteArray		blockArray;		///< temp data for block writing, the data
-    qint64			bytesWriten;		///< temp data for block writing, the bytes writen
-    qint64			lastGoodPosition;
-    int			id;
-    bool			endDetected;
-    quint64			startSize;
-    QSemaphore		*mkpathTransfer;
-    bool			fakeMode;
-    bool			buffer;
-    bool			needRemoveTheFile;
+    quint64             curentCopiedSize;
+    QByteArray          blockArray;		///< temp data for block writing, the data
+    qint64              bytesWriten;		///< temp data for block writing, the bytes writen
+    qint64              lastGoodPosition;
+    int                 id;
+    bool                endDetected;
+    quint64             startSize;
+    QSemaphore          *mkpathTransfer;
+    bool                fakeMode;
+    bool                buffer;
+    bool                needRemoveTheFile;
+    volatile bool       sequential;
 private slots:
     bool internalOpen();
     void internalWrite();

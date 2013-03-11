@@ -24,9 +24,18 @@ QString DriveManagement::getDrive(const QString &fileOrFolder)
     return "";
 }
 
-void DriveManagement::setDrive(const QStringList &mountSysPoint)
+QStorageInfo::DriveType DriveManagement::getDriveType(const QString &drive)
+{
+    int index=mountSysPoint.indexOf(drive);
+    if(index!=-1)
+        return driveType.at(index);
+    return QStorageInfo::UnknownDrive;
+}
+
+void DriveManagement::setDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType)
 {
     this->mountSysPoint=mountSysPoint;
+    this->driveType=driveType;
 }
 
 bool DriveManagement::isSameDrive(const QString &file1,const QString &file2)

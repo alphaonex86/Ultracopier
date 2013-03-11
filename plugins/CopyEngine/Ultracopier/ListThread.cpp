@@ -24,6 +24,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     doRightTransfer                 = false;
     keepDate                        = false;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
+    sequentialBuffer                = ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
+    parallelBuffer                  = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     blockSizeAfterSpeedLimitation   = blockSize;
     osBufferLimit                   = 512;
     alwaysDoThisActionForFileExists = FileExists_NotSet;
@@ -248,7 +250,7 @@ void ListThread::setKeepDate(const bool keepDate)
 void ListThread::setBlockSize(const int blockSize)
 {
     this->blockSize=blockSize*1024;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(this->blockSize));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in KBytes: "+QString::number(this->blockSize));
     int index=0;
     loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
@@ -480,12 +482,13 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("destination informations, destinationDrive: %1, destinationDriveMultiple: %2").arg(destinationDrive).arg(destinationDriveMultiple));
 }
 
-void ListThread::setDrive(const QStringList &drives)
+void ListThread::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
 {
-    mountSysPoint=drives;
+    this->mountSysPoint=mountSysPoint;
+    this->driveType=driveType;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("drives: %1").arg(drives.join(";")));
-    driveManagement.setDrive(mountSysPoint);
-    emit send_setDrive(mountSysPoint);
+    driveManagement.setDrive(mountSysPoint,driveType);
+    emit send_setDrive(mountSysPoint,driveType);
 }
 
 void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists)
@@ -1836,10 +1839,14 @@ void ListThread::createTransferThread()
     last->transferId=0;
     last->transferSize=0;
     last->setRightTransfer(doRightTransfer);
-    last->setDrive(mountSysPoint);
+    last->setDrive(mountSysPoint,driveType);
     last->setKeepDate(keepDate);
     if(!last->setBlockSize(blockSizeAfterSpeedLimitation))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the block size: "+QString::number(blockSizeAfterSpeedLimitation));
+    if(!last->setSequentialBuffer(sequentialBuffer))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the sequentialBuffer: "+QString::number(sequentialBuffer));
+    if(!last->setBlockSize(parallelBuffer))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the parallelBuffer: "+QString::number(parallelBuffer));
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
     last->setMultiForBigSpeed(multiForBigSpeed);
     last->set_doChecksum(doChecksum);
@@ -1850,22 +1857,27 @@ void ListThread::createTransferThread()
     last->set_osBufferLimit(osBufferLimit);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(last,&TransferThread::debugInformation,			this,&ListThread::debugInformation,		Qt::QueuedConnection);
+    connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,		Qt::QueuedConnection);
     #endif // ULTRACOPIER_PLUGIN_DEBUG
-    connect(last,&TransferThread::errorOnFile,			this,&ListThread::errorOnFile,			Qt::QueuedConnection);
-    connect(last,&TransferThread::fileAlreadyExists,		this,&ListThread::fileAlreadyExists,		Qt::QueuedConnection);
-    connect(last,&TransferThread::tryPutAtBottom,			this,&ListThread::transferPutAtBottom,		Qt::QueuedConnection);
-    connect(last,&TransferThread::readStopped,			this,&ListThread::transferIsFinished,		Qt::QueuedConnection);
-    connect(last,&TransferThread::preOperationStopped,		this,&ListThread::doNewActions_start_transfer,	Qt::QueuedConnection);
-    connect(last,&TransferThread::postOperationStopped,		this,&ListThread::transferInodeIsClosed,	Qt::QueuedConnection);
+    connect(last,&TransferThread::errorOnFile,                  this,&ListThread::errorOnFile,			Qt::QueuedConnection);
+    connect(last,&TransferThread::fileAlreadyExists,            this,&ListThread::fileAlreadyExists,		Qt::QueuedConnection);
+    connect(last,&TransferThread::tryPutAtBottom,               this,&ListThread::transferPutAtBottom,		Qt::QueuedConnection);
+    connect(last,&TransferThread::readStopped,                  this,&ListThread::transferIsFinished,		Qt::QueuedConnection);
+    connect(last,&TransferThread::preOperationStopped,          this,&ListThread::doNewActions_start_transfer,	Qt::QueuedConnection);
+    connect(last,&TransferThread::postOperationStopped,         this,&ListThread::transferInodeIsClosed,	Qt::QueuedConnection);
     connect(last,&TransferThread::checkIfItCanBeResumed,		this,&ListThread::restartTransferIfItCan,	Qt::QueuedConnection);
-    connect(last,&TransferThread::pushStat,				this,&ListThread::newTransferStat,		Qt::QueuedConnection);
+    connect(last,&TransferThread::pushStat,                     this,&ListThread::newTransferStat,		Qt::QueuedConnection);
+    connect(last,&TransferThread::readStopped,                  this,&ListThread::transferIsFinished,		Qt::QueuedConnection);
 
     //speed limitation
     connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThread::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
 
     connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,		Qt::QueuedConnection);
-    connect(this,&ListThread::send_setDrive,		last,&TransferThread::setDrive,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_setDrive,                    last,&TransferThread::setDrive,		Qt::QueuedConnection);
+
+    connect(this,&ListThread::send_setTransferAlgorithm,		last,&TransferThread::setTransferAlgorithm,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_parallelBuffer,              last,&TransferThread::setParallelBuffer,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_sequentialBuffer,            last,&TransferThread::setSequentialBuffer,		Qt::QueuedConnection);
 
     last->start();
     last->setObjectName(QString("transfer %1").arg(transferThreadList.size()-1));
@@ -1880,4 +1892,38 @@ void ListThread::createTransferThread()
         return;
     doNewActions_inode_manipulation();
     emit askNewTransferThread();
+}
+
+void ListThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
+{
+    emit send_setTransferAlgorithm(transferAlgorithm);
+}
+
+void ListThread::setParallelBuffer(int parallelBuffer)
+{
+    if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"wrong number of block: "+QString::number(parallelBuffer));
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in number of block: "+QString::number(parallelBuffer));
+    this->parallelBuffer=parallelBuffer;
+    emit send_parallelBuffer(parallelBuffer);
+}
+
+void ListThread::setSequentialBuffer(int sequentialBuffer)
+{
+    if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"wrong number of block: "+QString::number(sequentialBuffer));
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in number of block: "+QString::number(sequentialBuffer));
+    this->sequentialBuffer=sequentialBuffer;
+    emit send_sequentialBuffer(sequentialBuffer);
+}
+
+void ListThread::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
+{
+    this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
 }

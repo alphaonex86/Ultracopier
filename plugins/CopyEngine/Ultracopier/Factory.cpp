@@ -6,6 +6,7 @@
 
 #include <QFileDialog>
 #include <QDebug>
+#include <math.h>
 
 #include "Factory.h"
 
@@ -25,29 +26,29 @@ CopyEngineFactory::CopyEngineFactory() :
     filters=new Filters(tempWidget);
     renamingRules=new RenamingRules(tempWidget);
 
-    QStringList temp=storageInfo.allLogicalDrives();
-    for (int i = 0; i < temp.size(); ++i) {
-        mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
-    }
     connect(&storageInfo,&QStorageInfo::logicalDriveChanged,this,&CopyEngineFactory::logicalDriveChanged);
 
-    connect(ui->doRightTransfer,		&QCheckBox::toggled,		this,&CopyEngineFactory::setDoRightTransfer);
-    connect(ui->keepDate,			&QCheckBox::toggled,		this,&CopyEngineFactory::setKeepDate);
-    connect(ui->blockSize,			static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setBlockSize);
-    connect(ui->autoStart,			&QCheckBox::toggled,		this,&CopyEngineFactory::setAutoStart);
-    connect(ui->doChecksum,			&QCheckBox::toggled,		this,&CopyEngineFactory::doChecksum_toggled);
-    connect(ui->comboBoxFolderError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
+    connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
+    connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
+    connect(ui->blockSize,                  static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setBlockSize);
+    connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setSequentialBuffer);
+    connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setParallelBuffer);
+    connect(ui->parallelizeIfSmallerThan,	static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setParallelizeIfSmallerThan);
+    connect(ui->autoStart,                  &QCheckBox::toggled,                                            this,&CopyEngineFactory::setAutoStart);
+    connect(ui->doChecksum,                 &QCheckBox::toggled,                                            this,&CopyEngineFactory::doChecksum_toggled);
+    connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
     connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderCollision);
-    connect(ui->comboBoxFileError,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileError);
-    connect(ui->comboBoxFileCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileCollision);
+    connect(ui->comboBoxFileError,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileError);
+    connect(ui->comboBoxFileCollision,      static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileCollision);
+    connect(ui->transferAlgorithm,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setTransferAlgorithm);
     connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&CopyEngineFactory::setCheckDestinationFolder);
-    connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,		this,&CopyEngineFactory::checksumIgnoreIfImpossible_toggled);
-    connect(ui->checksumOnlyOnError,	&QCheckBox::toggled,		this,&CopyEngineFactory::checksumOnlyOnError_toggled);
-    connect(ui->osBuffer,			&QCheckBox::toggled,		this,&CopyEngineFactory::osBuffer_toggled);
-    connect(ui->osBufferLimited,		&QCheckBox::toggled,		this,&CopyEngineFactory::osBufferLimited_toggled);
-    connect(ui->osBufferLimit,		&QSpinBox::editingFinished,	this,&CopyEngineFactory::osBufferLimit_editingFinished);
-    connect(ui->osBufferLimited,&QAbstractButton::toggled,this,&CopyEngineFactory::updateBufferCheckbox);
-    connect(ui->osBuffer,&QAbstractButton::toggled,this,&CopyEngineFactory::updateBufferCheckbox);
+    connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,                this,&CopyEngineFactory::checksumIgnoreIfImpossible_toggled);
+    connect(ui->checksumOnlyOnError,        &QCheckBox::toggled,                this,&CopyEngineFactory::checksumOnlyOnError_toggled);
+    connect(ui->osBuffer,                   &QCheckBox::toggled,                this,&CopyEngineFactory::osBuffer_toggled);
+    connect(ui->osBufferLimited,            &QCheckBox::toggled,                this,&CopyEngineFactory::osBufferLimited_toggled);
+    connect(ui->osBufferLimit,              &QSpinBox::editingFinished,         this,&CopyEngineFactory::osBufferLimit_editingFinished);
+    connect(ui->osBufferLimited,            &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
+    connect(ui->osBuffer,                   &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
 
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
@@ -69,21 +70,9 @@ CopyEngineFactory::~CopyEngineFactory()
 
 void CopyEngineFactory::init()
 {
+    logicalDriveChanged(QString(),true);
     if(mountSysPoint.empty())
-    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"no drive found with QtSystemInformation");
-        #ifdef Q_OS_WIN32
-        int index=0;
-        QFileInfoList drives=QDir::drives();
-        while(index<drives.size())
-        {
-            mountSysPoint<<drives.at(index).absoluteFilePath();
-            index++;
-        }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("%1 added with QDir::drives()").arg(mountSysPoint.size()));
-        #endif
-    }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
 }
 
 PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
@@ -94,17 +83,18 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     #endif
     realObject->connectTheSignalsSlots();
     connect(this,&CopyEngineFactory::haveDrive,realObject,&CopyEngine::setDrive);
-    realObject->setDrive(mountSysPoint);
+    realObject->setDrive(mountSysPoint,driveType);
     PluginInterface_CopyEngine * newTransferEngine=realObject;
     connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
     realObject->setKeepDate(ui->keepDate->isChecked());
     realObject->setBlockSize(ui->blockSize->value());
     realObject->setAutoStart(ui->autoStart->isChecked());
-    realObject->on_comboBoxFolderCollision_currentIndexChanged(ui->comboBoxFolderCollision->currentIndex());
-    realObject->on_comboBoxFolderError_currentIndexChanged(ui->comboBoxFolderError->currentIndex());
-    realObject->on_comboBoxFileCollision_currentIndexChanged(ui->comboBoxFileCollision->currentIndex());
-    realObject->on_comboBoxFileError_currentIndexChanged(ui->comboBoxFileError->currentIndex());
+    realObject->setFolderCollision(ui->comboBoxFolderCollision->currentIndex());
+    realObject->setFolderError(ui->comboBoxFolderError->currentIndex());
+    realObject->setFolderCollision(ui->comboBoxFileCollision->currentIndex());
+    realObject->setFileError(ui->comboBoxFileError->currentIndex());
+    realObject->setTransferAlgorithm(ui->transferAlgorithm->currentIndex());
     realObject->setCheckDestinationFolderExists(ui->checkBoxDestinationFolderExists->isChecked());
     realObject->set_doChecksum(ui->doChecksum->isChecked());
     realObject->set_checksumIgnoreIfImpossible(ui->checksumIgnoreIfImpossible->isChecked());
@@ -114,6 +104,9 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->set_osBufferLimit(ui->osBufferLimit->value());
     realObject->set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
     realObject->setRenamingRules(firstRenamingRule,otherRenamingRule);
+    realObject->setSequentialBuffer(ui->sequentialBuffer->value());
+    realObject->setParallelBuffer(ui->parallelBuffer->value());
+    realObject->setParallelizeIfSmallerThan(ui->parallelizeIfSmallerThan->value());
     return newTransferEngine;
 }
 
@@ -130,12 +123,6 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Unable to change date time of files, only gcc is supported");
     #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX BUFFER BLOCK: "+QString::number(ULTRACOPIER_PLUGIN_MAXBUFFERBLOCK));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MIN TIMER INTERVAL: "+QString::number(ULTRACOPIER_PLUGIN_MINTIMERINTERVAL));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX TIMER INTERVAL: "+QString::number(ULTRACOPIER_PLUGIN_MAXTIMERINTERVAL));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"NUM SEM SPEED MANAGEMENT: "+QString::number(ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX PARALLEL INODE OPT: "+QString::number(ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"MAX PARALLEL TRANFER: "+QString::number(ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER));
     #if defined (ULTRACOPIER_PLUGIN_CHECKLISTTYPE)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE set");
     #else
@@ -147,12 +134,16 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         QList<QPair<QString, QVariant> > KeysList;
         KeysList.append(qMakePair(QString("doRightTransfer"),QVariant(false)));
         KeysList.append(qMakePair(QString("keepDate"),QVariant(false)));
-        KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));//4KB as default
+        KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));
+        KeysList.append(qMakePair(QString("sequentialBuffer"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK)));
+        KeysList.append(qMakePair(QString("parallelBuffer"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK)));
+        KeysList.append(qMakePair(QString("parallelizeIfSmallerThan"),QVariant(0)));
         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
         KeysList.append(qMakePair(QString("folderCollision"),QVariant(0)));
         KeysList.append(qMakePair(QString("fileError"),QVariant(0)));
         KeysList.append(qMakePair(QString("fileCollision"),QVariant(0)));
+        KeysList.append(qMakePair(QString("transferAlgorithm"),QVariant(0)));
         KeysList.append(qMakePair(QString("checkDestinationFolder"),QVariant(true)));
         KeysList.append(qMakePair(QString("includeStrings"),QVariant(QStringList())));
         KeysList.append(qMakePair(QString("includeOptions"),QVariant(QStringList())));
@@ -173,13 +164,19 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         #endif
         ui->doRightTransfer->setChecked(options->getOptionValue("doRightTransfer").toBool());
         ui->keepDate->setChecked(options->getOptionValue("keepDate").toBool());
-        ui->blockSize->setValue(options->getOptionValue("blockSize").toUInt());
+        ui->blockSize->setValue(options->getOptionValue("blockSize").toUInt());//keep before sequentialBuffer and parallelBuffer
         ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());
         ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue("folderError").toUInt());
         ui->comboBoxFolderCollision->setCurrentIndex(options->getOptionValue("folderCollision").toUInt());
         ui->comboBoxFileError->setCurrentIndex(options->getOptionValue("fileError").toUInt());
         ui->comboBoxFileCollision->setCurrentIndex(options->getOptionValue("fileCollision").toUInt());
+        ui->transferAlgorithm->setCurrentIndex(options->getOptionValue("transferAlgorithm").toUInt());
         ui->checkBoxDestinationFolderExists->setChecked(options->getOptionValue("checkDestinationFolder").toBool());
+        ui->parallelizeIfSmallerThan->setValue(options->getOptionValue("parallelizeIfSmallerThan").toUInt());
+        ui->sequentialBuffer->setValue(options->getOptionValue("sequentialBuffer").toUInt());
+        ui->parallelBuffer->setValue(options->getOptionValue("parallelBuffer").toUInt());
+        ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
+        ui->parallelBuffer->setSingleStep(ui->blockSize->value());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
         ui->checksumIgnoreIfImpossible->setChecked(options->getOptionValue("checksumIgnoreIfImpossible").toBool());
@@ -203,6 +200,8 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
 
         updateBufferCheckbox();
         optionsEngine=options;
+
+        updatedBlockSize();
     }
 }
 
@@ -259,6 +258,38 @@ void CopyEngineFactory::setBlockSize(int blockSize)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("blockSize",blockSize);
+    updatedBlockSize();
+}
+
+void CopyEngineFactory::setParallelBuffer(int parallelBuffer)
+{
+    if(optionsEngine!=NULL)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+        parallelBuffer=round((float)parallelBuffer/(float)ui->blockSize->value())*ui->blockSize->value();
+        ui->parallelBuffer->setValue(parallelBuffer);
+        optionsEngine->setOptionValue("parallelBuffer",parallelBuffer);
+    }
+}
+
+void CopyEngineFactory::setSequentialBuffer(int sequentialBuffer)
+{
+    if(optionsEngine!=NULL)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+        sequentialBuffer=round((float)sequentialBuffer/(float)ui->blockSize->value())*ui->blockSize->value();
+        ui->sequentialBuffer->setValue(sequentialBuffer);
+        optionsEngine->setOptionValue("sequentialBuffer",sequentialBuffer);
+    }
+}
+
+void CopyEngineFactory::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
+{
+    if(optionsEngine!=NULL)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+        optionsEngine->setOptionValue("parallelizeIfSmallerThan",parallelizeIfSmallerThan);
+    }
 }
 
 void CopyEngineFactory::setAutoStart(bool autoStart)
@@ -280,6 +311,13 @@ void CopyEngineFactory::setFolderError(int index)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("folderError",index);
+}
+
+void CopyEngineFactory::setTransferAlgorithm(int index)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("setTransferAlgorithm",index);
 }
 
 void CopyEngineFactory::setCheckDestinationFolder()
@@ -314,6 +352,10 @@ void CopyEngineFactory::newLanguageLoaded()
     ui->comboBoxFileCollision->setItemText(4,tr("Overwrite if newer"));
     ui->comboBoxFileCollision->setItemText(5,tr("Overwrite if older"));
     ui->comboBoxFileCollision->setItemText(6,tr("Rename"));
+
+    ui->transferAlgorithm->setItemText(0,tr("Automatic"));
+    ui->transferAlgorithm->setItemText(1,tr("Sequential"));
+    ui->transferAlgorithm->setItemText(2,tr("Parallel"));
     if(optionsEngine!=NULL)
     {
         filters->newLanguageLoaded();
@@ -425,26 +467,20 @@ void CopyEngineFactory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIf
 
 void CopyEngineFactory::logicalDriveChanged(const QString &,bool)
 {
+    mountSysPoint.clear();
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {
         mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
     }
     if(mountSysPoint.empty())
-    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"no drive found with QtSystemInformation");
-        #ifdef Q_OS_WIN32
-        int index=0;
-        QFileInfoList drives=QDir::drives();
-        while(index<drives.size())
-        {
-            mountSysPoint<<drives.at(index).absoluteFilePath();
-            index++;
-        }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("%1 added with QDir::drives()").arg(mountSysPoint.size()));
-        #endif
+    mountSysPoint.removeDuplicates();
+    driveType.clear();
+    for (int i = 0; i < mountSysPoint.size(); ++i) {
+        driveType<<storageInfo.driveType(mountSysPoint.at(i));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("mountSysPoint: %1 (type: %2)").arg(mountSysPoint.at(i)).arg(driveType.last()));
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mountSysPoint with Qt: "+mountSysPoint.join(";"));
-    emit haveDrive(mountSysPoint);
+    emit haveDrive(mountSysPoint,driveType);
 }
 
 void CopyEngineFactory::setFileCollision(int index)
@@ -485,4 +521,16 @@ void CopyEngineFactory::setFileError(int index)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
         break;
     }
+}
+
+void CopyEngineFactory::updatedBlockSize()
+{
+    ui->sequentialBuffer->setMinimum(ui->blockSize->value());
+    ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
+    ui->sequentialBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK);
+    ui->parallelBuffer->setMinimum(ui->blockSize->value());
+    ui->parallelBuffer->setSingleStep(ui->blockSize->value());
+    ui->parallelBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK);
+    setParallelBuffer(ui->parallelBuffer->value());
+    setSequentialBuffer(ui->sequentialBuffer->value());
 }

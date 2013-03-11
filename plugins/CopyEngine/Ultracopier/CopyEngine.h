@@ -43,28 +43,32 @@ public:
     ~CopyEngine();
     void connectTheSignalsSlots();
 private:
-    ListThread *listThread;
+    ListThread *            listThread;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    DebugDialog debugDialogWindow;
+    DebugDialog             debugDialogWindow;
     #endif
-    QWidget *			tempWidget;
-    Ui::copyEngineOptions *			ui;
-    bool				uiIsInstalled;
-    QWidget *			interface;
-    Filters *			filters;
+    QWidget *               tempWidget;
+    Ui::copyEngineOptions *	ui;
+    bool                    uiIsInstalled;
+    QWidget *               interface;
+    Filters *               filters;
     RenamingRules *			renamingRules;
     FacilityInterface *		facilityEngine;
-    quint32				maxSpeed;
-    bool				doRightTransfer;
-    bool				keepDate;
-    int				blockSize;
-    bool				autoStart;
-    bool				checkDestinationFolderExists;
+    quint32                 maxSpeed;
+    bool                    doRightTransfer;
+    bool                    keepDate;
+    int                     blockSize;
+    int                     parallelBuffer;
+    int                     sequentialBuffer;
+    int                     parallelizeIfSmallerThan;
+    bool                    autoStart;
+    bool                    checkDestinationFolderExists;
     FileExistsAction		alwaysDoThisActionForFileExists;
     FileErrorAction			alwaysDoThisActionForFileError;
     FileErrorAction			alwaysDoThisActionForFolderError;
     FolderExistsAction		alwaysDoThisActionForFolderExists;
-    bool				dialogIsOpen;
+    TransferAlgorithm       transferAlgorithm;
+    bool                    dialogIsOpen;
     volatile bool			stopIt;
     /// \brief error queue
     struct errorQueueItem
@@ -156,6 +160,7 @@ private slots:
     void showRenamingRules();
     void get_realBytesTransfered(quint64 realBytesTransfered);
     void newActionInProgess(Ultracopier::EngineActionInProgress);
+    void updatedBlockSize();
     void updateBufferCheckbox();
     void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread);
 public:
@@ -206,7 +211,7 @@ public:
 
     /** \brief to set drives detected
      * specific to this copy engine */
-    void setDrive(const QStringList &drives);
+    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
 
     /** \brief to sync the transfer list
      * Used when the interface is changed, useful to minimize the memory size */
@@ -274,6 +279,11 @@ public slots:
     void setKeepDate(const bool keepDate);
     /// \brief set block size in KB
     void setBlockSize(const int blockSize);
+
+    void setParallelBuffer(int parallelBuffer);
+    void setSequentialBuffer(int sequentialBuffer);
+    void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
+
     /// \brief set auto start
     void setAutoStart(const bool autoStart);
     /// \brief set if need check if the destination folder exists
@@ -281,10 +291,11 @@ public slots:
     /// \brief reset widget
     void resetTempWidget();
     //autoconnect
-    void on_comboBoxFolderCollision_currentIndexChanged(int index);
-    void on_comboBoxFolderError_currentIndexChanged(int index);
-    void on_comboBoxFileCollision_currentIndexChanged(int index);
-    void on_comboBoxFileError_currentIndexChanged(int index);
+    void setFolderCollision(int index);
+    void setFolderError(int index);
+    void setFileCollision(int index);
+    void setFileError(int index);
+    void setTransferAlgorithm(int index);
     /// \brief need retranslate the insterface
     void newLanguageLoaded();
 private slots:
@@ -310,6 +321,7 @@ signals:
     void signal_importTransferList(const QString &fileName);
 
     //action
+    void signal_setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
     void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
     void signal_setComboBoxFolderCollision(FolderExistsAction action);
     void signal_setFolderCollision(FolderExistsAction action);
@@ -326,12 +338,15 @@ signals:
     //other signals
     void queryOneNewDialog();
 
-    void send_setDrive(const QStringList &drives);
+    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
     void send_speedLimitation(const qint64 &speedLimitation);
     void send_blockSize(const int &blockSize);
     void send_osBufferLimit(const unsigned int &osBufferLimit);
     void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
     void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void send_parallelBuffer(const int &parallelBuffer);
+    void send_sequentialBuffer(const int &sequentialBuffer);
+    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
 };
 
 #endif // COPY_ENGINE_H

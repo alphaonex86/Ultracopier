@@ -59,6 +59,7 @@ private:
     QWidget* tempWidget;
     OptionInterface * optionsEngine;
     QStringList mountSysPoint;
+    QList<QStorageInfo::DriveType> driveType;
     bool errorFound;
     FacilityInterface * facilityEngine;
     Filters *filters;
@@ -72,9 +73,13 @@ private slots:
     void setDoRightTransfer(bool doRightTransfer);
     void setKeepDate(bool keepDate);
     void setBlockSize(int blockSize);
+    void setParallelBuffer(int parallelBuffer);
+    void setSequentialBuffer(int sequentialBuffer);
+    void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
     void setAutoStart(bool autoStart);
     void setFolderCollision(int index);
     void setFolderError(int index);
+    void setTransferAlgorithm(int index);
     void setCheckDestinationFolder();
     void showFilterDialog();
     void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions);
@@ -90,12 +95,13 @@ private slots:
     void logicalDriveChanged(const QString &, bool);
     void setFileCollision(int index);
     void setFileError(int index);
+    void updatedBlockSize();
 public slots:
     void resetOptions();
     void newLanguageLoaded();
 signals:
     void reloadLanguage();
-    void haveDrive(const QStringList &drives);
+    void haveDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType);
 };
 
 #endif // FACTORY_H

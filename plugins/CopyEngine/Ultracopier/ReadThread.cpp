@@ -37,7 +37,7 @@ void ReadThread::run()
     exec();
 }
 
-void ReadThread::open(const QFileInfo &file,const Ultracopier::CopyMode &mode)
+void ReadThread::open(const QFileInfo &file, const Ultracopier::CopyMode &mode)
 {
     if(!isRunning())
     {

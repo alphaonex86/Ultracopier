@@ -129,12 +129,16 @@ public slots:
     /// \brief put the current file at bottom
     void putAtBottom();
 
-    void setDrive(QStringList mountSysPoint);
+    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
 
     void set_osBufferLimit(unsigned int osBufferLimit);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
     //speed limitation
     void timeOfTheBlockCopyFinished();
+
+    bool setParallelBuffer(int parallelBuffer);
+    bool setSequentialBuffer(int sequentialBuffer);
+    void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
 private slots:
     void preOperation();
     void readIsReady();
@@ -165,7 +169,7 @@ private:
         MoveReturn_moved=1,
         MoveReturn_error=2
     };
-    TransferStat		transfer_stat;
+    TransferStat	transfer_stat;
     ReadThread		readThread;
     WriteThread		writeThread;
     /*QString			source;
@@ -186,8 +190,8 @@ private:
     bool			canBeMovedDirectlyVariable,canBeCopiedDirectlyVariable;
     DriveManagement driveManagement;
     QByteArray		sourceChecksum,destinationChecksum;
-    volatile bool		stopIt;
-    volatile bool		canStartTransfer;
+    volatile bool	stopIt;
+    volatile bool	canStartTransfer;
     bool			retry;
     QFileInfo		source;
     QFileInfo		destination;
@@ -196,14 +200,14 @@ private:
     FileExistsAction	alwaysDoFileExistsAction;
     bool			needSkip,needRemove;
     QDateTime		maxTime;
-    int			id;
+    int             id;
     QSemaphore		*mkpathTransfer;
     bool			doChecksum,real_doChecksum;
     bool			checksumIgnoreIfImpossible;
     bool			checksumOnlyOnError;
     bool			osBuffer;
     bool			osBufferLimited;
-    unsigned int		osBufferLimit;
+    unsigned int	osBufferLimit;
     QString			firstRenamingRule;
     QString			otherRenamingRule;
     //error management
@@ -211,6 +215,10 @@ private:
     bool			readError;
     bool			fileContentError;
     bool            doTheDateTransfer;
+    int             parallelBuffer;
+    int             sequentialBuffer;
+    int             parallelizeIfSmallerThan;
+    TransferAlgorithm transferAlgorithm;
     #ifdef Q_OS_UNIX
             utimbuf butime;
     #else

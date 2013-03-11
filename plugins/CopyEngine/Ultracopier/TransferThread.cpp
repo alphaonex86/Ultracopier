@@ -279,6 +279,20 @@ void TransferThread::preOperation()
 void TransferThread::tryOpen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start source and destination: "+source.absoluteFilePath()+" and "+destination.absoluteFilePath());
+    TransferAlgorithm transferAlgorithm=this->transferAlgorithm;
+    if(transferAlgorithm==TransferAlgorithm_Automatic)
+    {
+        if(driveManagement.isSameDrive(destination.absoluteFilePath(),source.absoluteFilePath()))
+        {
+            QStorageInfo::DriveType type=driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath()));
+            if(type==QStorageInfo::RemoteDrive || type==QStorageInfo::RamDrive)
+                transferAlgorithm=TransferAlgorithm_Parallel;
+            else
+                transferAlgorithm=TransferAlgorithm_Sequential;
+        }
+        else
+            transferAlgorithm=TransferAlgorithm_Parallel;
+    }
     if(!readIsOpenVariable)
     {
         readError=false;
@@ -286,8 +300,15 @@ void TransferThread::tryOpen()
     }
     if(!writeIsOpenVariable)
     {
+        if(transferAlgorithm==TransferAlgorithm_Sequential)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] transferAlgorithm==TransferAlgorithm_Sequential");
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
         writeError=false;
-        writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)));
+        if(transferAlgorithm==TransferAlgorithm_Sequential)
+            writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),sequentialBuffer,true);
+        else
+            writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),parallelBuffer,false);
     }
 }
 
@@ -1157,6 +1178,41 @@ void TransferThread::timeOfTheBlockCopyFinished()
     readThread.timeOfTheBlockCopyFinished();
 }
 
+bool TransferThread::setParallelBuffer(int parallelBuffer)
+{
+    if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] wrong parallelBuffer: "+QString::number(parallelBuffer));
+        return false;
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] parallelBuffer: "+QString::number(parallelBuffer));
+        this->parallelBuffer=parallelBuffer;
+        return true;
+    }
+}
+
+bool TransferThread::setSequentialBuffer(int sequentialBuffer)
+{
+    if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] wrong sequentialBuffer: "+QString::number(sequentialBuffer));
+        return false;
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] sequentialBuffer: "+QString::number(sequentialBuffer));
+        this->sequentialBuffer=sequentialBuffer;
+        return true;
+    }
+}
+
+void TransferThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
+{
+    this->transferAlgorithm=transferAlgorithm;
+}
+
 //fonction to edit the file date time
 bool TransferThread::readFileDateTime(const QFileInfo &source)
 {
@@ -1394,9 +1450,9 @@ void TransferThread::putAtBottom()
     emit tryPutAtBottom();
 }
 
-void TransferThread::setDrive(QStringList mountSysPoint)
+void TransferThread::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
 {
-    driveManagement.setDrive(mountSysPoint);
+    driveManagement.setDrive(mountSysPoint,driveType);
 }
 
 void TransferThread::set_osBufferLimit(unsigned int osBufferLimit)

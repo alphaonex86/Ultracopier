@@ -52,7 +52,7 @@ public:
     bool newMove(const QStringList &sources,const QString &destination);
     /** \brief to set drives detected
      * specific to this copy engine */
-    void setDrive(const QStringList &drives);
+    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
     /// \brief to set the collision action
     void setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists);
     /** \brief to sync the transfer list
@@ -180,19 +180,24 @@ public slots:
     void sendActionDone();
     //send progression
     void sendProgression();
+
+    void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
+    void setParallelBuffer(int parallelBuffer);
+    void setSequentialBuffer(int sequentialBuffer);
+    void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
 private:
-    QSemaphore mkpathTransfer;
+    QSemaphore          mkpathTransfer;
+    QString             sourceDrive;
+    bool                sourceDriveMultiple;
+    QString             destinationDrive;
+    QStringList         mountSysPoint;
+    QList<QStorageInfo::DriveType> driveType;
+    bool                destinationDriveMultiple;
+    DriveManagement     driveManagement;
 
-    QString sourceDrive;
-    bool sourceDriveMultiple;
-    QString destinationDrive;
-    QStringList		mountSysPoint;
-    bool destinationDriveMultiple;
-    DriveManagement driveManagement;
-
-    bool stopIt;
+    bool                stopIt;
     QList<ScanFileOrFolder *> scanFileOrFolderThreadsPool;
-    int numberOfTransferIntoToDoList;
+    int                 numberOfTransferIntoToDoList;
     QList<TransferThread *>		transferThreadList;
     ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
     quint64				bytesToTransfer;
@@ -212,14 +217,17 @@ private:
     bool				checksumOnlyOnError;
     bool				osBuffer;
     bool				osBufferLimited;
-    unsigned int putAtBottom;
-    unsigned int			osBufferLimit;
+    int                 parallelizeIfSmallerThan;
+    int                 sequentialBuffer;
+    int                 parallelBuffer;
+    unsigned int        putAtBottom;
+    unsigned int		osBufferLimit;
     QList<Filters_rules>		include,exclude;
-    Ultracopier::CopyMode			mode;
+    Ultracopier::CopyMode		mode;
     bool				forcedMode;
     QString				firstRenamingRule;
     QString				otherRenamingRule;
-    int multiForBigSpeed;
+    int                 multiForBigSpeed;
     /* here to prevent:
     QObject::killTimer: timers cannot be stopped from another thread
     QObject::startTimer: timers cannot be started from another thread */
@@ -372,7 +380,12 @@ signals:
     void errorTransferList(const QString &error);
     void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
     void send_realBytesTransfered(const quint64 &);
-    void send_setDrive(QStringList mountSysPoint);
+    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
+
+    void send_setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
+    void send_parallelBuffer(const int &parallelBuffer);
+    void send_sequentialBuffer(const int &sequentialBuffer);
+    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
 };
 
 #endif // LISTTHREAD_H
