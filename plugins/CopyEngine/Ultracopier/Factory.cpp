@@ -17,6 +17,8 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<FileExistsAction>("FileExistsAction");
     qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
     qRegisterMetaType<TransferStat>("TransferStat");
+    qRegisterMetaType<QList<QStorageInfo::DriveType> >("QList<QStorageInfo::DriveType>");
+    qRegisterMetaType<TransferAlgorithm>("TransferAlgorithm");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
@@ -317,7 +319,7 @@ void CopyEngineFactory::setTransferAlgorithm(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("setTransferAlgorithm",index);
+        optionsEngine->setOptionValue("transferAlgorithm",index);
 }
 
 void CopyEngineFactory::setCheckDestinationFolder()

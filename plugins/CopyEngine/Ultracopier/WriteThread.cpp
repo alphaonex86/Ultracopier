@@ -4,6 +4,7 @@
 
 WriteThread::WriteThread()
 {
+    lastGoodPosition=0;
     stopIt=false;
     isOpen.release();
     moveToThread(this);
@@ -12,7 +13,6 @@ WriteThread::WriteThread()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;
     #endif
-    curentCopiedSize=0;
     numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     buffer=false;
     putInPause=false;
@@ -68,7 +68,6 @@ bool WriteThread::internalOpen()
         freeBlock.acquire(freeBlock.available()-numberOfBlock);
     sequentialLock.acquire(sequentialLock.available());
     stopIt=false;
-    curentCopiedSize=0;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=InodeOperation;
@@ -112,7 +111,15 @@ bool WriteThread::internalOpen()
         flags|=QIODevice::Unbuffered;
     if(file.open(flags))
     {
-        flushBuffer();
+        {
+            QMutexLocker lock_mutex(&accessList);
+            if(!theBlockList.isEmpty())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("General file corruption detected"));
+                stopIt=true;
+                return false;
+            }
+        }
         if(stopIt)
         {
             file.close();
@@ -203,6 +210,7 @@ void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+file.absoluteFilePath());
     stopIt=false;
     fakeMode=false;
+    lastGoodPosition=0;
     this->file.setFileName(file.absoluteFilePath());
     this->startSize=startSize;
     this->buffer=buffer;
@@ -333,12 +341,11 @@ void WriteThread::internalWrite()
         stat=Idle;
         #endif
         //mutex for stream this data
-        if(curentCopiedSize==0)
+        if(lastGoodPosition==0)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit writeIsStarted()");
             emit writeIsStarted();
         }
-        curentCopiedSize+=bytesWriten;
         if(stopIt)
             return;
         if(file.error()!=QFile::NoError)
@@ -390,8 +397,8 @@ void WriteThread::internalClose(bool emitSignal)
         {
             if(!needRemoveTheFile)
             {
-                if(startSize!=curentCopiedSize)
-                    if(!file.resize(curentCopiedSize))
+                if(startSize!=lastGoodPosition)
+                    if(!file.resize(lastGoodPosition))
                     {
                         if(emitSignal)
                         {
@@ -403,15 +410,16 @@ void WriteThread::internalClose(bool emitSignal)
                             needRemoveTheFile=true;
                     }
             }
+            if(emitSignal)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Size writen:%1").arg(lastGoodPosition));
             file.close();
-            if(needRemoveTheFile)
+            if(needRemoveTheFile || stopIt)
             {
                 if(!file.remove())
                     if(emitSignal)
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
             }
             needRemoveTheFile=false;
-            flushBuffer();
             //here and not after, because the transferThread don't need try close if not open
             if(emitSignal)
                 emit closed();
@@ -439,7 +447,7 @@ void WriteThread::internalReopen()
     internalClose(false);
     flushBuffer();
     stopIt=false;
-    curentCopiedSize=0;
+    lastGoodPosition=0;
     if(internalOpen())
         emit reopened();
 }
@@ -494,7 +502,6 @@ bool WriteThread::setBlockSize(const int blockSize)
     //can be smaller than min block size to do correct speed limitation
     if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(blockSize));
         this->blockSize=blockSize;
         return true;
     }
@@ -513,8 +520,9 @@ qint64 WriteThread::getLastGoodPosition()
 
 void WriteThread::flushAndSeekToZero()
 {
-        stopIt=true;
-        emit internalStartFlushAndSeekToZero();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flushAndSeekToZero: "+QString::number(blockSize));
+    stopIt=true;
+    emit internalStartFlushAndSeekToZero();
 }
 
 
@@ -568,7 +576,7 @@ void WriteThread::checkSum()
         }
     }
     while(sizeReaden>0 && !stopIt);
-    if(lastGoodPosition>file.size())
+    if(lastGoodPosition>(quint64)file.size())
     {
         errorString_internal=tr("File truncated during the read, possible data change");
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())));

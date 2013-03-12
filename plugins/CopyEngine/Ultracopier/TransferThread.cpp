@@ -50,7 +50,7 @@ void TransferThread::run()
     //the thread change operation
     connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,		Qt::QueuedConnection);
     connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,		Qt::QueuedConnection);
-        //the state change operation
+    //the state change operation
     //connect(&readThread,&ReadThread::readIsStopped,		&readThread,				&TransferThread::postOperation,		Qt::QueuedConnection);//commented to do the checksum
     connect(&readThread,&ReadThread::opened,			this,					&TransferThread::readIsReady,		Qt::QueuedConnection);
     connect(&writeThread,&WriteThread::opened,			this,					&TransferThread::writeIsReady,		Qt::QueuedConnection);
@@ -63,7 +63,7 @@ void TransferThread::run()
     connect(&writeThread,&WriteThread::reopened,		this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection);
     connect(&readThread,&ReadThread::checksumFinish,	this,					&TransferThread::readChecksumFinish,	Qt::QueuedConnection);
     connect(&writeThread,&WriteThread::checksumFinish,this,					&TransferThread::writeChecksumFinish,	Qt::QueuedConnection);
-        //error management
+    //error management
     connect(&readThread,&ReadThread::isSeekToZeroAndWait,	this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection);
     connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,	this,		&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
     connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,                     &writeThread,	&WriteThread::flushAndSeekToZero,		Qt::QueuedConnection);
@@ -703,7 +703,6 @@ void TransferThread::setMultiForBigSpeed(const int &multiForBigSpeed)
 //set block size in Bytes
 bool TransferThread::setBlockSize(const unsigned int blockSize)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(blockSize));
     return readThread.setBlockSize(blockSize) && writeThread.setBlockSize(blockSize);
 }
 
@@ -902,6 +901,27 @@ void TransferThread::postOperation()
         return;
     }
 
+    if(!writeIsClosedVariable)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't pass in post operation if write is not closed");
+        emit errorOnFile(destination,tr("Internal error: The destination is not closed"));
+        needSkip=false;
+        needRemove=true;
+        writeError=true;
+        return;
+    }
+    if(readThread.getLastGoodPosition()!=writeThread.getLastGoodPosition())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] readThread.getLastGoodPosition(%1)!=writeThread.getLastGoodPosition(%2)")
+                                 .arg(readThread.getLastGoodPosition())
+                                 .arg(writeThread.getLastGoodPosition())
+                                 );
+        emit errorOnFile(destination,tr("Internal error: The size transfered don't match"));
+        needSkip=false;
+        needRemove=true;
+        writeError=true;
+        return;
+    }
     if(!needSkip)
     {
         if(!doFilePostOperation())
@@ -915,6 +935,8 @@ void TransferThread::postOperation()
                 QFile sourceFile(source.absoluteFilePath());
                 if(!sourceFile.remove())
                 {
+                    needSkip=false;
+                    readError=true;
                     emit errorOnFile(source,sourceFile.errorString());
                     return;
                 }
@@ -937,6 +959,7 @@ void TransferThread::postOperation()
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try remove destination but not exists!");
     }
+    needSkip=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit postOperationStopped()");
     transfer_stat=TransferStat_Idle;
     emit postOperationStopped();
@@ -1027,6 +1050,13 @@ void TransferThread::retryAfterError()
     if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_Checksum)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] is not in right stat, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath()+", stat: "+QString::number(transfer_stat));
+        return;
+    }
+    if(transfer_stat==TransferStat_PostOperation)
+    {
+        readError=false;
+        writeError=false;
+        emit internalStartPostOperation();
         return;
     }
     if(canBeMovedDirectlyVariable)
@@ -1211,6 +1241,12 @@ bool TransferThread::setSequentialBuffer(int sequentialBuffer)
 void TransferThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
 {
     this->transferAlgorithm=transferAlgorithm;
+    if(transferAlgorithm==TransferAlgorithm_Sequential)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"]transferAlgorithm==TransferAlgorithm_Sequential");
+    else if(transferAlgorithm==TransferAlgorithm_Automatic)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"]transferAlgorithm==TransferAlgorithm_Automatic");
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"]transferAlgorithm==TransferAlgorithm_Parallel");
 }
 
 //fonction to edit the file date time
@@ -1420,8 +1456,13 @@ void TransferThread::skip()
         }
         break;
     case TransferStat_PostOperation:
-        //do nothing because here is closing...
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] is already in post op");
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
+            return;
+        }
+        needSkip=true;
+        emit internalStartPostOperation();
         break;
     default:
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] can skip in this state!");
@@ -1578,6 +1619,8 @@ QPair<quint64,quint64> TransferThread::progression()
     case TransferStat_Transfer:
         returnVar.first=readThread.getLastGoodPosition();
         returnVar.second=writeThread.getLastGoodPosition();
+        if(returnVar.first<returnVar.second)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read is smaller than write");
     break;
     case TransferStat_Checksum:
         returnVar.first=readThread.getLastGoodPosition();
@@ -1586,6 +1629,8 @@ QPair<quint64,quint64> TransferThread::progression()
     case TransferStat_PostTransfer:
         returnVar.first=transferSize;
         returnVar.second=writeThread.getLastGoodPosition();
+        if(returnVar.first<returnVar.second)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read is smaller than write");
     break;
     case TransferStat_PostOperation:
         returnVar.first=transferSize;

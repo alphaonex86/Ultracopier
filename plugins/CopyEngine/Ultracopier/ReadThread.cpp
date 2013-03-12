@@ -398,6 +398,7 @@ void ReadThread::internalRead()
         */
     }
     while(sizeReaden>0 && !stopIt);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Size read:%1").arg(lastGoodPosition));
     if(lastGoodPosition>file.size())
     {
         errorString_internal=tr("File truncated during the read, possible data change");
@@ -463,7 +464,6 @@ bool ReadThread::setBlockSize(const int blockSize)
     if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
         this->blockSize=blockSize;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in Bytes: "+QString::number(blockSize));
         //set the new max speed because the timer have changed
         return true;
     }

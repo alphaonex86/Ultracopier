@@ -100,6 +100,7 @@ QWidget * ThemesFactory::options()
         ui->speedWithProgressBar->setChecked(optionsEngine->getOptionValue("speedWithProgressBar").toBool());
         ui->checkBoxShowSpeed->setChecked(optionsEngine->getOptionValue("checkBoxShowSpeed").toBool());
         ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue("moreButtonPushed").toBool());
+        ui->showDualProgression->setChecked(optionsEngine->getOptionValue("showDualProgression").toBool());
 
         progressColorWrite=optionsEngine->getOptionValue("progressColorWrite").value<QColor>();
         progressColorRead=optionsEngine->getOptionValue("progressColorRead").value<QColor>();

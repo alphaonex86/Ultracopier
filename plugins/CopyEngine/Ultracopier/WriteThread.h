@@ -113,10 +113,9 @@ private:
     QSemaphore          isOpen;
     volatile bool		putInPause;
     QList<QByteArray>	theBlockList;		///< Store the block list
-    quint64             curentCopiedSize;
+    quint64             lastGoodPosition;
     QByteArray          blockArray;		///< temp data for block writing, the data
     qint64              bytesWriten;		///< temp data for block writing, the bytes writen
-    qint64              lastGoodPosition;
     int                 id;
     bool                endDetected;
     quint64             startSize;

@@ -250,7 +250,6 @@ void ListThread::setKeepDate(const bool keepDate)
 void ListThread::setBlockSize(const int blockSize)
 {
     this->blockSize=blockSize*1024;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in KBytes: "+QString::number(this->blockSize));
     int index=0;
     loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
@@ -1896,6 +1895,12 @@ void ListThread::createTransferThread()
 
 void ListThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
 {
+    if(transferAlgorithm==TransferAlgorithm_Sequential)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Sequential");
+    else if(transferAlgorithm==TransferAlgorithm_Automatic)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Automatic");
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Parallel");
     emit send_setTransferAlgorithm(transferAlgorithm);
 }
 

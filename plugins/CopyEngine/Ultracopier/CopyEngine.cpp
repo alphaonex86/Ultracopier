@@ -739,7 +739,13 @@ void CopyEngine::setTransferAlgorithm(int index)
             transferAlgorithm=TransferAlgorithm_Automatic;
         break;
     }
-    emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
+    if(transferAlgorithm==TransferAlgorithm_Sequential)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Sequential");
+    else if(transferAlgorithm==TransferAlgorithm_Automatic)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Automatic");
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Parallel");
+    emit signal_setTransferAlgorithm(transferAlgorithm);
 }
 
 void CopyEngine::setRightTransfer(const bool doRightTransfer)
