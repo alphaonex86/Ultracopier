@@ -105,6 +105,16 @@ void ListThread::transferInodeIsClosed()
             if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
                 updateTheStatus();
 
+            //add the current size of file, to general size because it's finish
+            copiedSize=temp_transfer_thread->copiedSize();
+            if(copiedSize>(qint64)temp_transfer_thread->transferSize)
+            {
+                oversize=copiedSize-temp_transfer_thread->transferSize;
+                bytesToTransfer+=oversize;
+                bytesTransfered+=oversize;
+            }
+            bytesTransfered+=temp_transfer_thread->transferSize;
+
             temp_transfer_thread->transferId=0;
             temp_transfer_thread->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -146,17 +156,6 @@ void ListThread::transferIsFinished()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
         return;
     }
-
-    //add the current size of file, to general size because it's finish
-    copiedSize=temp_transfer_thread->copiedSize();
-    if(copiedSize>(qint64)temp_transfer_thread->transferSize)
-    {
-        oversize=copiedSize-temp_transfer_thread->transferSize;
-        bytesToTransfer+=oversize;
-        bytesTransfered+=oversize;
-    }
-    bytesTransfered+=temp_transfer_thread->transferSize;
-
 //	emit newTransferStop(temp_transfer_thread->transferId);
     numberOfTranferRuning--;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start transferIsFinished(), numberOfTranferRuning: "+QString::number(numberOfTranferRuning));

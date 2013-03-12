@@ -732,8 +732,16 @@ void TransferThread::stop()
     stopIt=true;
     if(transfer_stat==TransferStat_Idle)
         return;
-    readThread.stop();
-    writeThread.stop();
+    if(!(readIsOpenVariable && !readIsClosedVariable) && !(writeIsOpenVariable && !writeIsClosedVariable))
+    {
+        if(needRemove)
+            QFile(destination.absoluteFilePath()).remove();
+        emit internalStartPostOperation();
+    }
+    if(readIsOpenVariable && !readIsClosedVariable)
+        readThread.stop();
+    if(writeIsOpenVariable && !writeIsClosedVariable)
+        writeThread.stop();
 }
 
 void TransferThread::readIsFinish()
@@ -912,11 +920,22 @@ void TransferThread::postOperation()
     }
     if(readThread.getLastGoodPosition()!=writeThread.getLastGoodPosition())
     {
+        writeThread.flushBuffer();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] readThread.getLastGoodPosition(%1)!=writeThread.getLastGoodPosition(%2)")
                                  .arg(readThread.getLastGoodPosition())
                                  .arg(writeThread.getLastGoodPosition())
                                  );
         emit errorOnFile(destination,tr("Internal error: The size transfered don't match"));
+        needSkip=false;
+        needRemove=true;
+        writeError=true;
+        return;
+    }
+    if(!writeThread.bufferIsEmpty())
+    {
+        writeThread.flushBuffer();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] buffer is not empty"));
+        emit errorOnFile(destination,tr("Internal error: Buffer is not empty"));
         needSkip=false;
         needRemove=true;
         writeError=true;
@@ -936,7 +955,6 @@ void TransferThread::postOperation()
                 if(!sourceFile.remove())
                 {
                     needSkip=false;
-                    readError=true;
                     emit errorOnFile(source,sourceFile.errorString());
                     return;
                 }
@@ -959,6 +977,8 @@ void TransferThread::postOperation()
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try remove destination but not exists!");
     }
+    //don't need remove because have correctly finish (it's not in: have started)
+    needRemove=false;
     needSkip=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit postOperationStopped()");
     transfer_stat=TransferStat_Idle;
@@ -970,15 +990,11 @@ bool TransferThread::doFilePostOperation()
     //do operation needed by copy
     //set the time if no write thread used
     if(doTheDateTransfer)
-        //source,destination
-        writeFileDateTime(destination);//can't do that's after move because after move the source not exist
-        /*
-          ignore it, because need correct management, mainly with move
-        if(!)
+        if(!writeFileDateTime(destination))
         {
-            emit errorOnFile(destination,tr("Unable to change the date"));//destination.errorString()
+            emit errorOnFile(destination,tr("Unable to change the date"));
             return false;
-        }*/
+        }
     if(stopIt)
         return false;
 
@@ -1054,8 +1070,15 @@ void TransferThread::retryAfterError()
     }
     if(transfer_stat==TransferStat_PostOperation)
     {
-        readError=false;
-        writeError=false;
+        if(readError || writeError)
+        {
+            /// \todo restart from all
+            writeThread.flushBuffer();
+            transfer_stat=TransferStat_PreOperation;
+            resetExtraVariable();
+            emit internalStartPreOperation();
+            return;
+        }
         emit internalStartPostOperation();
         return;
     }
@@ -1161,9 +1184,9 @@ useless because already do at open event
 void TransferThread::readThreadResumeAfterError()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
-        readError=false;
-        writeIsReady();
-        readIsReady();
+    readError=false;
+    writeIsReady();
+    readIsReady();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -1477,7 +1500,7 @@ qint64 TransferThread::copiedSize()
     {
     case TransferStat_Transfer:
     case TransferStat_PostOperation:
-        return readThread.getLastGoodPosition();
+        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_Checksum:
         return transferSize;
     default:
@@ -1601,7 +1624,7 @@ quint64 TransferThread::realByteTransfered()
     {
     case TransferStat_Transfer:
     case TransferStat_Checksum:
-        return readThread.getLastGoodPosition();
+        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_PostTransfer:
     case TransferStat_PostOperation:
         return transferSize;

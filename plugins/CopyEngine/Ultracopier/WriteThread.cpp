@@ -298,6 +298,17 @@ void WriteThread::flushBuffer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stop");
 }
 
+/// \brief buffer is empty
+bool WriteThread::bufferIsEmpty()
+{
+    bool returnVal;
+    {
+        QMutexLocker lock_mutex(&accessList);
+        returnVal=theBlockList.isEmpty();
+    }
+    return returnVal;
+}
+
 void WriteThread::internalEndOfFile()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeIsStopped");
@@ -410,8 +421,6 @@ void WriteThread::internalClose(bool emitSignal)
                             needRemoveTheFile=true;
                     }
             }
-            if(emitSignal)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Size writen:%1").arg(lastGoodPosition));
             file.close();
             if(needRemoveTheFile || stopIt)
             {

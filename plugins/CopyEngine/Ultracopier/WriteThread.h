@@ -64,6 +64,8 @@ public:
     bool setBlockSize(const int blockSize);
     /// \brief get the last good position
     qint64 getLastGoodPosition();
+    /// \brief buffer is empty
+    bool bufferIsEmpty();
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -93,7 +95,7 @@ signals:
     void internalStartWrite();
     void internalStartClose();
     void internalStartEndOfFile();
-        void internalStartFlushAndSeekToZero();
+    void internalStartFlushAndSeekToZero();
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 private:
