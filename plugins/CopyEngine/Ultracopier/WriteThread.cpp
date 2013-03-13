@@ -352,19 +352,15 @@ void WriteThread::internalWrite()
         }
         if(!haveBlock)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] !haveBlock");
             if(sequential)
             {
-                sequentialLock.release();
+                if(endDetected)
+                    internalEndOfFile();
+                else
+                    sequentialLock.release();
                 return;
             }
-            if(endDetected && sequential)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] End detected of the file for sequential");
-                internalEndOfFile();
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] End detected of the file");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] End detected of the file");
             return;
         }
         //write one block
