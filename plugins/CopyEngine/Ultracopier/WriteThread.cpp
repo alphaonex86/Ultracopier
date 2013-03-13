@@ -38,13 +38,13 @@ WriteThread::~WriteThread()
 
 void WriteThread::run()
 {
-    connect(this,&WriteThread::internalStartOpen,			this,&WriteThread::internalOpen,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartReopen,			this,&WriteThread::internalReopen,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartWrite,			this,&WriteThread::internalWrite,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartClose,			this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartEndOfFile,		this,&WriteThread::internalEndOfFile,		Qt::QueuedConnection);
+    connect(this,&WriteThread::internalStartOpen,               this,&WriteThread::internalOpen,		Qt::QueuedConnection);
+    connect(this,&WriteThread::internalStartReopen,             this,&WriteThread::internalReopen,		Qt::QueuedConnection);
+    connect(this,&WriteThread::internalStartWrite,              this,&WriteThread::internalWrite,		Qt::QueuedConnection);
+    connect(this,&WriteThread::internalStartClose,              this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection);
+    connect(this,&WriteThread::internalStartEndOfFile,          this,&WriteThread::internalEndOfFile,		Qt::QueuedConnection);
     connect(this,&WriteThread::internalStartFlushAndSeekToZero,	this,&WriteThread::internalFlushAndSeekToZero,	Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartChecksum,		this,&WriteThread::checkSum,			Qt::QueuedConnection);
+    connect(this,&WriteThread::internalStartChecksum,           this,&WriteThread::checkSum,			Qt::QueuedConnection);
     exec();
 }
 
@@ -311,32 +311,61 @@ bool WriteThread::bufferIsEmpty()
 
 void WriteThread::internalEndOfFile()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeIsStopped");
-    emit writeIsStopped();
+    if(!bufferIsEmpty())
+    {
+        if(sequential)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start the write");
+            emit internalStartWrite();
+        }
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] buffer is not empty!");
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeIsStopped");
+        emit writeIsStopped();
+    }
 }
 
 void WriteThread::internalWrite()
 {
+    bool haveBlock;
     do
     {
         if(stopIt)
-            return;
-        //read one block
-        if(theBlockList.size()<=0)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt");
+            return;
+        }
+        //read one block
+        {
+            QMutexLocker lock_mutex(&accessList);
+            if(theBlockList.isEmpty())
+                haveBlock=false;
+            else
+            {
+                blockArray=theBlockList.first();
+                theBlockList.removeFirst();
+                haveBlock=true;
+            }
+        }
+        if(!haveBlock)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] !haveBlock");
             if(sequential)
             {
                 sequentialLock.release();
                 return;
             }
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] End detected of the file");
+            if(endDetected && sequential)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] End detected of the file for sequential");
+                internalEndOfFile();
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] End detected of the file");
             return;
-        }
-        else
-        {
-            QMutexLocker lock_mutex(&accessList);
-            blockArray=theBlockList.first();
-            theBlockList.removeFirst();
         }
         //write one block
         if(!sequential)

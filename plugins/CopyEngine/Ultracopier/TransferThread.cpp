@@ -45,35 +45,33 @@ void TransferThread::run()
     fileExistsAction	= FileExists_NotSet;
     alwaysDoFileExistsAction= FileExists_NotSet;
     //the error push
-    connect(&readThread,&ReadThread::error,			this,					&TransferThread::getReadError,		Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::error,			this,					&TransferThread::getWriteError,		Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::error,                     this,					&TransferThread::getReadError,      	Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::error,                   this,					&TransferThread::getWriteError,         Qt::QueuedConnection);
     //the thread change operation
-    connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,		Qt::QueuedConnection);
-    connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,		Qt::QueuedConnection);
+    connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,          Qt::QueuedConnection);
+    connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,         Qt::QueuedConnection);
     //the state change operation
-    //connect(&readThread,&ReadThread::readIsStopped,		&readThread,				&TransferThread::postOperation,		Qt::QueuedConnection);//commented to do the checksum
-    connect(&readThread,&ReadThread::opened,			this,					&TransferThread::readIsReady,		Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::opened,			this,					&TransferThread::writeIsReady,		Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::readIsStopped,		this,					&TransferThread::readIsStopped,		Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::writeIsStopped,		this,					&TransferThread::writeIsStopped,		Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::readIsStopped,		&writeThread,				&WriteThread::endIsDetected,		Qt::QueuedConnection);
-    //connect(&writeThread,&WriteThread::writeIsStopped,		&writeThread,				&WriteThread::postOperation,		Qt::QueuedConnection);//commented to do the checksum
-    connect(&readThread,&ReadThread::closed,			this,					&TransferThread::readIsClosed,		Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::closed,			this,					&TransferThread::writeIsClosed,		Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::reopened,		this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::checksumFinish,	this,					&TransferThread::readChecksumFinish,	Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::checksumFinish,this,					&TransferThread::writeChecksumFinish,	Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::opened,                    this,					&TransferThread::readIsReady,           Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::opened,                  this,					&TransferThread::writeIsReady,          Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::readIsStopped,             this,					&TransferThread::readIsStopped,         Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::writeIsStopped,          this,                   &TransferThread::writeIsStopped,		Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::readIsStopped,             &writeThread,			&WriteThread::endIsDetected,            Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::closed,                    this,					&TransferThread::readIsClosed,          Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::closed,                  this,					&TransferThread::writeIsClosed,         Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::reopened,                this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::checksumFinish,            this,					&TransferThread::readChecksumFinish,	Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::checksumFinish,          this,					&TransferThread::writeChecksumFinish,	Qt::QueuedConnection);
     //error management
-    connect(&readThread,&ReadThread::isSeekToZeroAndWait,	this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,	this,		&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,                     &writeThread,	&WriteThread::flushAndSeekToZero,		Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::flushedAndSeekedToZero,                          this,           &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
-    connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,	Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::isSeekToZeroAndWait,       this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,this,	&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,&writeThread,         &WriteThread::flushAndSeekToZero,               Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::flushedAndSeekedToZero,  this,                   &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
+    connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,      Qt::QueuedConnection);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(&readThread,&ReadThread::debugInformation,this,&TransferThread::debugInformation,Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::debugInformation,this,&TransferThread::debugInformation,Qt::QueuedConnection);
-    connect(&driveManagement,&DriveManagement::debugInformation,this,&TransferThread::debugInformation,	Qt::QueuedConnection);
+    connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThread::debugInformation,  Qt::QueuedConnection);
+    connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThread::debugInformation,  Qt::QueuedConnection);
+    connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThread::debugInformation,	Qt::QueuedConnection);
     #endif
 
     exec();

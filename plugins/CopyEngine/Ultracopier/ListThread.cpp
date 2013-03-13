@@ -46,11 +46,11 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog);
     timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
     #endif
-    connect(this,           &ListThread::tryCancel,							this,&ListThread::cancel,							Qt::QueuedConnection);
-    connect(this,           &ListThread::askNewTransferThread,					this,&ListThread::createTransferThread,					Qt::QueuedConnection);
-    connect(&mkPathQueue,	&MkPath::firstFolderFinish,						this,&ListThread::mkPathFirstFolderFinish,					Qt::QueuedConnection);
-    connect(&mkPathQueue,	&MkPath::errorOnFolder,							this,&ListThread::mkPathErrorOnFolder,			Qt::QueuedConnection);
-    connect(this,           &ListThread::send_syncTransferList,					this,&ListThread::syncTransferList_internal,					Qt::QueuedConnection);
+    connect(this,           &ListThread::tryCancel,							this,&ListThread::cancel,                               Qt::QueuedConnection);
+    connect(this,           &ListThread::askNewTransferThread,				this,&ListThread::createTransferThread,					Qt::QueuedConnection);
+    connect(&mkPathQueue,	&MkPath::firstFolderFinish,						this,&ListThread::mkPathFirstFolderFinish,				Qt::QueuedConnection);
+    connect(&mkPathQueue,	&MkPath::errorOnFolder,							this,&ListThread::mkPathErrorOnFolder,                  Qt::QueuedConnection);
+    connect(this,           &ListThread::send_syncTransferList,				this,&ListThread::syncTransferList_internal,			Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&mkPathQueue,	&MkPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection);
     connect(&driveManagement,&DriveManagement::debugInformation,			this,&ListThread::debugInformation,	Qt::QueuedConnection);
