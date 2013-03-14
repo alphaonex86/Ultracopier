@@ -8,6 +8,7 @@
 #include "CopyListener.h"
 
 #include <QRegularExpression>
+#include <QMessageBox>
 
 CopyListener::CopyListener(OptionDialog *optionDialog)
 {
@@ -114,10 +115,11 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     #ifdef ULTRACOPIER_DEBUG
     connect(listen,&PluginInterface_Listener::debugInformation,this,&CopyListener::debugInformation);
     #endif // ULTRACOPIER_DEBUG
+    connect(listen,&PluginInterface_Listener::error,this,&CopyListener::error);
     connect(listen,&PluginInterface_Listener::newCopyWithoutDestination,		this,&CopyListener::newPluginCopyWithoutDestination);
-    connect(listen,&PluginInterface_Listener::newCopy,				this,&CopyListener::newPluginCopy);
+    connect(listen,&PluginInterface_Listener::newCopy,                          this,&CopyListener::newPluginCopy);
     connect(listen,&PluginInterface_Listener::newMoveWithoutDestination,		this,&CopyListener::newPluginMoveWithoutDestination);
-    connect(listen,&PluginInterface_Listener::newMove,				this,&CopyListener::newPluginMove);
+    connect(listen,&PluginInterface_Listener::newMove,                          this,&CopyListener::newPluginMove);
     newPluginListener.listenInterface	= listen;
 
     newPluginListener.path			= plugin.path+PluginsManager::getResolvedPluginName("listener");
@@ -142,6 +144,11 @@ void CopyListener::debugInformation(const Ultracopier::DebugLevel &level, const 
     DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Listener plugin");
 }
 #endif // ULTRACOPIER_DEBUG
+
+void CopyListener::error(const QString &error)
+{
+    QMessageBox::critical(NULL,tr("Error"),tr("Error during the reception of the copy/move list\n%1").arg(error));
+}
 
 bool CopyListener::oneListenerIsLoaded()
 {

@@ -1,5 +1,7 @@
 #include "listener.h"
 
+
+
 Listener::Listener()
 {
     server.setName(tr("Ultracopier"));
@@ -7,7 +9,8 @@ Listener::Listener()
     connect(&server,&ServerCatchcopy::newCopy,                          this,&Listener::copy);
     connect(&server,&ServerCatchcopy::newMoveWithoutDestination,		this,&Listener::moveWithoutDestination);
     connect(&server,&ServerCatchcopy::newMove,                          this,&Listener::move);
-    connect(&server,&ServerCatchcopy::error,                            this,&Listener::error);
+    connect(&server,&ServerCatchcopy::error,                            this,&Listener::errorInternal);
+    connect(&server,&ServerCatchcopy::communicationError,               this,&Listener::communicationErrorInternal);
     connect(&server,&ServerCatchcopy::clientName,                       this,&Listener::clientName);
 }
 
@@ -63,10 +66,16 @@ void Listener::newLanguageLoaded()
 {
 }
 
-void Listener::error(QString error)
+void Listener::errorInternal(const QString &string)
 {
-    Q_UNUSED(error);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"warning emited from Catchcopy lib: "+error);
+    Q_UNUSED(string);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"warning emited from Catchcopy lib: "+string);
+}
+
+void Listener::communicationErrorInternal(const QString &string)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"warning emited from Catchcopy lib: "+string);
+    emit error(string);
 }
 
 void Listener::clientName(quint32 client,QString name)

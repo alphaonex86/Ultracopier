@@ -41,7 +41,8 @@ public slots:
 private:
     ServerCatchcopy server;
 private slots:
-    void error(QString error);
+    void errorInternal(const QString &string);
+    void communicationErrorInternal(const QString &string);
     void clientName(quint32 client,QString name);
     void copyWithoutDestination(const quint32 &orderId,const QStringList &sources);
     void copy(const quint32 &orderId,const QStringList &sources,const QString &destination);

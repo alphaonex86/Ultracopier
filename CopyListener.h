@@ -41,6 +41,7 @@ class CopyListener : public QObject, public GlobalClass
         #ifdef ULTRACOPIER_DEBUG
         void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
         #endif // ULTRACOPIER_DEBUG
+        void error(const QString &error);
         void allPluginIsloaded();
     public slots:
         /** \brief the copy is finished
