@@ -148,7 +148,7 @@ void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForThe
                     if(copyEngineList->protocolsSupportedByTheCopyEngine(copyList.at(index).engine,protocolsUsedForTheSources,protocolsUsedForTheDestination))
                     {
                         copyList[index].orderId<<orderId;
-                        copyList.at(index).engine->newCopy(sources,destination);
+                        copyList.at(index).engine->newMove(sources,destination);
                         copyList.at(index).interface->haveExternalOrder();
                         return;
                     }
