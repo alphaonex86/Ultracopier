@@ -1070,7 +1070,7 @@ void TransferThread::retryAfterError()
     {
         if(readError || writeError)
         {
-            /// \todo restart from all
+            resumeTransferAfterWriteError();
             writeThread.flushBuffer();
             transfer_stat=TransferStat_PreOperation;
             resetExtraVariable();

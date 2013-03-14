@@ -184,7 +184,7 @@ public slots:
     void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
     void setParallelBuffer(int parallelBuffer);
     void setSequentialBuffer(int sequentialBuffer);
-    void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
+    void setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan);
 private:
     QSemaphore          mkpathTransfer;
     QString             sourceDrive;
@@ -207,8 +207,6 @@ private:
     QList<Ultracopier::ReturnActionOnCopyList>	actionDone;///< to action to send to the interface
     quint64				idIncrementNumber;///< to store the last id returned
     qint64				actualRealByteTransfered;
-    int                 preOperationNumber;
-    int                 numberOfTranferRuning;
     int                 maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
     FolderExistsAction	alwaysDoThisActionForFolderExists;
     bool				checkDestinationFolderExists;
@@ -217,7 +215,7 @@ private:
     bool				checksumOnlyOnError;
     bool				osBuffer;
     bool				osBufferLimited;
-    int                 parallelizeIfSmallerThan;
+    unsigned int        parallelizeIfSmallerThan;
     int                 sequentialBuffer;
     int                 parallelBuffer;
     unsigned int        putAtBottom;
@@ -284,6 +282,7 @@ private:
     Ultracopier::ProgressionItem tempItem;
 
     void realByteTransfered();
+    int getNumberOfTranferRuning() const;
 private slots:
     void scanThreadHaveFinishSlot();
     void scanThreadHaveFinish(bool skipFirstRemove=false);
@@ -292,8 +291,6 @@ private slots:
     void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode);
     //mkpath event
     void mkPathFirstFolderFinish();
-    //transfer is finished
-    void transferIsFinished();
     /** \brief put the current file at bottom in case of error
     \note ONLY IN CASE OF ERROR */
     void transferPutAtBottom();

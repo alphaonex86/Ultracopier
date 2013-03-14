@@ -15,8 +15,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     bytesTransfered                 = 0;
     idIncrementNumber               = 1;
     actualRealByteTransfered        = 0;
-    preOperationNumber              = 0;
-    numberOfTranferRuning           = 0;
     numberOfTransferIntoToDoList    = 0;
     numberOfInodeOperation          = 0;
     putAtBottom                     = 0;
@@ -121,7 +119,6 @@ void ListThread::transferInodeIsClosed()
             countLocalParse++;
             #endif
             isFound=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+QString::number(numberOfTranferRuning));
             if(actionToDoListTransfer.size()==0)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning==0");
@@ -145,21 +142,6 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("countLocalParse != 1"));
     #endif
     doNewActions_inode_manipulation();
-}
-
-//transfer is finished
-void ListThread::transferIsFinished()
-{
-    temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
-    if(temp_transfer_thread==NULL)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
-        return;
-    }
-//	emit newTransferStop(temp_transfer_thread->transferId);
-    numberOfTranferRuning--;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start transferIsFinished(), numberOfTranferRuning: "+QString::number(numberOfTranferRuning));
-    doNewActions_start_transfer();
 }
 
 /** \brief put the current file at bottom in case of error
@@ -1432,32 +1414,63 @@ void ListThread::importTransferList(const QString &fileName)
     }
 }
 
+int ListThread::getNumberOfTranferRuning() const
+{
+    int numberOfTranferRuning=0;
+    int loop_size=transferThreadList.size();
+    //lunch the transfer in WaitForTheTransfer
+    int int_for_loop=0;
+    while(int_for_loop<loop_size)
+    {
+        if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_Transfer && transferThreadList.at(int_for_loop)->transferId!=0 && transferThreadList.at(int_for_loop)->transferSize>=parallelizeIfSmallerThan)
+            numberOfTranferRuning++;
+        int_for_loop++;
+    }
+    return numberOfTranferRuning;
+}
+
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()).arg(numberOfTranferRuning));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()));
     if(stopIt || putInPause)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    int numberOfTranferRuning=getNumberOfTranferRuning();
+    loop_size=transferThreadList.size();
     //lunch the transfer in WaitForTheTransfer
     int_for_loop=0;
-    loop_size=transferThreadList.size();
-    while(int_for_loop<loop_size && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
+    while(int_for_loop<loop_size)
     {
         if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_WaitForTheTransfer)
         {
-            transferThreadList.at(int_for_loop)->startTheTransfer();
-            numberOfTranferRuning++;
+            if(transferThreadList.at(int_for_loop)->transferSize>=parallelizeIfSmallerThan)
+            {
+                if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
+                {
+                    transferThreadList.at(int_for_loop)->startTheTransfer();
+                    numberOfTranferRuning++;
+                }
+            }
+            else
+                transferThreadList.at(int_for_loop)->startTheTransfer();
         }
         int_for_loop++;
     }
     int_for_loop=0;
-    while(int_for_loop<loop_size && numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
+    while(int_for_loop<loop_size)
     {
         if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_PreOperation)
         {
-            transferThreadList.at(int_for_loop)->startTheTransfer();
-            numberOfTranferRuning++;
+            if(transferThreadList.at(int_for_loop)->transferSize>=parallelizeIfSmallerThan)
+            {
+                if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
+                {
+                    transferThreadList.at(int_for_loop)->startTheTransfer();
+                    numberOfTranferRuning++;
+                }
+            }
+            else
+                transferThreadList.at(int_for_loop)->startTheTransfer();
         }
         int_for_loop++;
     }
@@ -1590,11 +1603,9 @@ void ListThread::restartTransferIfItCan()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
         return;
     }
+    int numberOfTranferRuning=getNumberOfTranferRuning();
     if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER && transfer->getStat()==TransferStat_WaitForTheTransfer)
-    {
         transfer->startTheTransfer();
-        numberOfTranferRuning++;
-    }
     doNewActions_start_transfer();
 }
 
@@ -1855,17 +1866,16 @@ void ListThread::createTransferThread()
     last->set_osBufferLimit(osBufferLimit);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,		Qt::QueuedConnection);
+    connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection);
     #endif // ULTRACOPIER_PLUGIN_DEBUG
-    connect(last,&TransferThread::errorOnFile,                  this,&ListThread::errorOnFile,			Qt::QueuedConnection);
-    connect(last,&TransferThread::fileAlreadyExists,            this,&ListThread::fileAlreadyExists,		Qt::QueuedConnection);
-    connect(last,&TransferThread::tryPutAtBottom,               this,&ListThread::transferPutAtBottom,		Qt::QueuedConnection);
-    connect(last,&TransferThread::readStopped,                  this,&ListThread::transferIsFinished,		Qt::QueuedConnection);
+    connect(last,&TransferThread::errorOnFile,                  this,&ListThread::errorOnFile,                  Qt::QueuedConnection);
+    connect(last,&TransferThread::fileAlreadyExists,            this,&ListThread::fileAlreadyExists,            Qt::QueuedConnection);
+    connect(last,&TransferThread::tryPutAtBottom,               this,&ListThread::transferPutAtBottom,          Qt::QueuedConnection);
+    connect(last,&TransferThread::readStopped,                  this,&ListThread::doNewActions_start_transfer,  Qt::QueuedConnection);
     connect(last,&TransferThread::preOperationStopped,          this,&ListThread::doNewActions_start_transfer,	Qt::QueuedConnection);
-    connect(last,&TransferThread::postOperationStopped,         this,&ListThread::transferInodeIsClosed,	Qt::QueuedConnection);
-    connect(last,&TransferThread::checkIfItCanBeResumed,		this,&ListThread::restartTransferIfItCan,	Qt::QueuedConnection);
-    connect(last,&TransferThread::pushStat,                     this,&ListThread::newTransferStat,		Qt::QueuedConnection);
-    connect(last,&TransferThread::readStopped,                  this,&ListThread::transferIsFinished,		Qt::QueuedConnection);
+    connect(last,&TransferThread::postOperationStopped,         this,&ListThread::transferInodeIsClosed,        Qt::QueuedConnection);
+    connect(last,&TransferThread::checkIfItCanBeResumed,		this,&ListThread::restartTransferIfItCan,       Qt::QueuedConnection);
+    connect(last,&TransferThread::pushStat,                     this,&ListThread::newTransferStat,              Qt::QueuedConnection);
 
     //speed limitation
     connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThread::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
@@ -1927,7 +1937,8 @@ void ListThread::setSequentialBuffer(int sequentialBuffer)
     emit send_sequentialBuffer(sequentialBuffer);
 }
 
-void ListThread::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
+void ListThread::setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"parallelizeIfSmallerThan in Bytes: "+QString::number(parallelizeIfSmallerThan));
     this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
 }

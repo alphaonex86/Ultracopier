@@ -23,8 +23,6 @@ switch(currentActionToDoInode.type)
         //then empty (no file), can try remove it
         if(currentActionToDoInode.size==0)
         {
-            if(numberOfTranferRuning>0)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("skipped because already inode = 0 and transfer is running: %1").arg(currentActionToDoInode.source.absoluteFilePath()));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmpath: %1").arg(currentActionToDoInode.source.absoluteFilePath()));
             mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),true);
             currentActionToDoInode.isRunning=true;

@@ -139,7 +139,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));
         KeysList.append(qMakePair(QString("sequentialBuffer"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK)));
         KeysList.append(qMakePair(QString("parallelBuffer"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK)));
-        KeysList.append(qMakePair(QString("parallelizeIfSmallerThan"),QVariant(0)));
+        KeysList.append(qMakePair(QString("parallelizeIfSmallerThan"),QVariant(1)));
         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
         KeysList.append(qMakePair(QString("folderCollision"),QVariant(0)));

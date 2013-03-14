@@ -193,10 +193,9 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     connect(tempWidget,		&QWidget::destroyed,		this,			&CopyEngine::resetTempWidget);
     //conect the ui widget
     uiIsInstalled=true;
-    setRightTransfer(doRightTransfer);
-    setKeepDate(keepDate);
     if(!setSpeedLimitation(maxSpeed))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the speed limitation");
+
     setBlockSize(blockSize);
     setSequentialBuffer(sequentialBuffer);
     setParallelBuffer(parallelBuffer);
@@ -208,6 +207,10 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     set_osBuffer(osBuffer);
     set_osBufferLimited(osBufferLimited);
     set_osBufferLimit(osBufferLimit);
+    setRightTransfer(doRightTransfer);
+    setKeepDate(keepDate);
+    setParallelizeIfSmallerThan(parallelizeIfSmallerThan);
+
     switch(alwaysDoThisActionForFileExists)
     {
         case FileExists_NotSet:
@@ -322,13 +325,13 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->osBuffer,                           &QCheckBox::toggled,		this,&CopyEngine::osBuffer_toggled);
         connect(ui->osBufferLimited,                    &QCheckBox::toggled,		this,&CopyEngine::osBufferLimited_toggled);
         connect(ui->osBufferLimit,                      &QSpinBox::editingFinished,	this,&CopyEngine::osBufferLimit_editingFinished);
-        connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,this,		&CopyEngine::setCheckDestinationFolderExists);
-        connect(filters,&Filters::haveNewFilters,this,  &CopyEngine::sendNewFilters);
-        connect(ui->filters,&QPushButton::clicked,this, &CopyEngine::showFilterDialog);
+        connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
+        connect(filters,                                &Filters::haveNewFilters,   this,&CopyEngine::sendNewFilters);
+        connect(ui->filters,                            &QPushButton::clicked,      this,&CopyEngine::showFilterDialog);
 
-        connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setSequentialBuffer);
-        connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setParallelBuffer);
-        connect(ui->parallelizeIfSmallerThan,	static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setParallelizeIfSmallerThan);
+        connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setSequentialBuffer);
+        connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setParallelBuffer);
+        connect(ui->parallelizeIfSmallerThan,	static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setParallelizeIfSmallerThan);
         connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFolderError);
         connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFolderCollision);
         connect(ui->comboBoxFileError,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFileError);
@@ -802,7 +805,7 @@ void CopyEngine::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
     this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
     if(uiIsInstalled)
         ui->parallelizeIfSmallerThan->setValue(parallelizeIfSmallerThan);
-    emit send_parallelizeIfSmallerThan(parallelizeIfSmallerThan);
+    emit send_parallelizeIfSmallerThan(parallelizeIfSmallerThan*1024);
 }
 
 //set auto start
