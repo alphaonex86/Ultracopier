@@ -45,9 +45,9 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
     friend class Singleton<PluginsManager>;
     public:
         /// \brief to get plugins of type specific
-        QList<PluginsAvailable> getPluginsByCategory(const PluginType &type);
+        QList<PluginsAvailable> getPluginsByCategory(const PluginType &type) const;
         /** \brief to get plugins */
-        QList<PluginsAvailable> getPlugins(bool withError=false);
+        QList<PluginsAvailable> getPlugins(bool withError=false) const;
         /// \brief get translated text
         //QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
         //QString getTranslatedText(PluginsAvailable plugin,QString informationName);
@@ -56,10 +56,10 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         static bool isSamePlugin(const PluginsAvailable &pluginA,const PluginsAvailable &pluginB);
         void lockPluginListEdition();
         void unlockPluginListEdition();
-        bool allPluginHaveBeenLoaded();
+        bool allPluginHaveBeenLoaded() const;
         /// \brief to load the get dom specific
-        QString getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute);
-        QString getDomSpecific(const QDomElement &root,const QString &name);
+        QString getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute) const;
+        QString getDomSpecific(const QDomElement &root,const QString &name) const;
         /// \brief set current language
         void setLanguage(const QString &language);
         /// \brief Enumeration of plugin add backend
@@ -85,7 +85,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         /// \brief to load the multi-language balise
         void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
         /// \brief get the version
-        QString getPluginVersion(const QString &pluginName);
+        QString getPluginVersion(const QString &pluginName) const;
         /// \brief To compare version
         bool compareVersion(const QString &versionA,const QString &sign,const QString &versionB);
         /// \brief plugin information windows
@@ -117,8 +117,8 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         bool stopIt;
         bool pluginLoaded;
         QString language;
-        QString categoryToString(const PluginType &category);
-        QString categoryToTranslation(const PluginType &category);
+        QString categoryToString(const PluginType &category) const;
+        QString categoryToTranslation(const PluginType &category) const;
         //temp variable
         int index,loop_size,sub_index,loop_sub_size;
         QRegularExpression regexp_to_clean_1,regexp_to_clean_2,regexp_to_clean_3,regexp_to_clean_4,regexp_to_clean_5;

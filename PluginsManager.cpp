@@ -80,7 +80,7 @@ void PluginsManager::post_operation()
     emit pluginListingIsfinish();
 }
 
-bool PluginsManager::allPluginHaveBeenLoaded()
+bool PluginsManager::allPluginHaveBeenLoaded() const
 {
     return pluginLoaded;
 }
@@ -160,7 +160,7 @@ void PluginsManager::run()
     }
 }
 
-QString PluginsManager::categoryToString(const PluginType &category)
+QString PluginsManager::categoryToString(const PluginType &category) const
 {
     switch(category)
     {
@@ -189,7 +189,7 @@ QString PluginsManager::categoryToString(const PluginType &category)
     }
 }
 
-QString PluginsManager::categoryToTranslation(const PluginType &category)
+QString PluginsManager::categoryToTranslation(const PluginType &category) const
 {
     return pluginInformationWindows.categoryToTranslation(category);
 }
@@ -424,7 +424,7 @@ void PluginsManager::loadBalise(const QDomElement &root,const QString &name,QLis
 }
 
 /// \brief to load the get dom specific
-QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute)
+QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute) const
 {
     QDomElement child = root.firstChildElement(name);
     int index,loop_size;
@@ -456,7 +456,7 @@ QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &na
 }
 
 /// \brief to load the get dom specific
-QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &name)
+QString PluginsManager::getDomSpecific(const QDomElement &root,const QString &name) const
 {
     QDomElement child = root.firstChildElement(name);
     while(!child.isNull())
@@ -543,7 +543,7 @@ quint32 PluginsManager::checkDependencies()
 #endif
 
 /// \brief get the version
-QString PluginsManager::getPluginVersion(const QString &pluginName)
+QString PluginsManager::getPluginVersion(const QString &pluginName) const
 {
     if(pluginName=="ultracopier")
         return ULTRACOPIER_VERSION;
@@ -618,12 +618,12 @@ bool PluginsManager::compareVersion(const QString &versionA,const QString &sign,
     return defaultReturnValue;
 }
 
-QList<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginType &category)
+QList<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginType &category) const
 {
     return pluginsListIndexed.values(category);
 }
 
-QList<PluginsAvailable> PluginsManager::getPlugins(bool withError)
+QList<PluginsAvailable> PluginsManager::getPlugins(bool withError) const
 {
     QList<PluginsAvailable> list;
     int index=0;

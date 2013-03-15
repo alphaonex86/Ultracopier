@@ -22,19 +22,19 @@ class ServerCatchcopy : public QObject
         ServerCatchcopy();
         ~ServerCatchcopy();
         /// \brief return if is listening
-        bool isListening();
+        bool isListening() const;
         /// \brief try listen
         bool listen();
         /// \brief try close the server
         void close();
         /// \brief get the error string on the QLocalServer
-        const QString errorStringServer();
+        const QString errorStringServer() const;
         /// \brief get the general error string
-        const QString errorString();
+        const QString errorString() const;
         /// \brief set the name of the server
         void setName(const QString & name);
         /// \brief get the name
-        QString getName();
+        QString getName() const;
     private:
         QString pathSocket;
         QString name;
@@ -62,7 +62,7 @@ class ServerCatchcopy : public QObject
         QList<LinkGlobalToLocalClient> LinkGlobalToLocalClientList;
         enum inputReturnType{Ok,Replied,ExtensionWrong,WrongArgument,WrongArgumentListSize,UnknowOrder};
         inputReturnType parseInputCurrentProtocol(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
-        bool clientIdFound(const quint32 &id);
+        bool clientIdFound(const quint32 &id) const;
         quint32 nextOrderId;
         QList<quint32> orderList;
         quint32 incrementOrderId();

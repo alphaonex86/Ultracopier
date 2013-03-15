@@ -76,7 +76,7 @@ void FacilityEngine::retranslate()
 }
 
 /// \brief convert size in Byte to String
-QString FacilityEngine::sizeToString(const double &size)
+QString FacilityEngine::sizeToString(const double &size) const
 {
     double size_temp=size;
     if(size_temp<1024)
@@ -100,7 +100,7 @@ QString FacilityEngine::sizeToString(const double &size)
     return Translation_tooBig;
 }
 
-QString FacilityEngine::adaptString(const float &size)
+QString FacilityEngine::adaptString(const float &size) const
 {
     if(size>=100)
         return QString::number(size,'f',0);
@@ -110,7 +110,7 @@ QString FacilityEngine::adaptString(const float &size)
 
 
 /// \brief convert size unit to String
-QString FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit)
+QString FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const
 {
     switch(sizeUnit)
     {
@@ -139,7 +139,7 @@ QString FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit)
 }
 
 /// \brief translate the text
-QString FacilityEngine::translateText(const QString &text)
+QString FacilityEngine::translateText(const QString &text) const
 {
     if(translations.contains(text))
         return translations[text];
@@ -151,12 +151,12 @@ QString FacilityEngine::translateText(const QString &text)
 }
 
 /// \brief speed to string in byte per seconds
-QString FacilityEngine::speedToString(const double &speed)
+QString FacilityEngine::speedToString(const double &speed) const
 {
     return sizeToString(speed)+Translation_perSecond;
 }
 /// \brief Decompose the time in second
-Ultracopier::TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const quint32 &seconds)
+Ultracopier::TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const quint32 &seconds) const
 {
     quint32 seconds_temp=seconds;
     Ultracopier::TimeDecomposition returnValue;
@@ -171,7 +171,7 @@ Ultracopier::TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const 
 }
 
 /// \brief have the functionality
-bool FacilityEngine::haveFunctionality(const QString &fonctionnality)
+bool FacilityEngine::haveFunctionality(const QString &fonctionnality) const
 {
     #if defined (Q_OS_WIN32)
     if(fonctionnality=="shutdown")
@@ -194,7 +194,7 @@ QVariant FacilityEngine::callFunctionality(const QString &fonctionnality,const Q
 }
 
 /// \brief Do the simplified time
-QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds)
+QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds) const
 {
     if(seconds<50)
     {

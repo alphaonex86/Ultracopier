@@ -26,7 +26,7 @@ public:
     /// \brief stop listen to copy/move
     void close();
     /// \brief return the error strong
-    const QString errorString();
+    const QString errorString() const;
     /// \brief set resources for this plugins
     void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
     /// \brief to get the options widget, NULL if not have

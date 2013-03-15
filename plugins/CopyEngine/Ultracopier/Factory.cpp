@@ -208,12 +208,12 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
     }
 }
 
-QStringList CopyEngineFactory::supportedProtocolsForTheSource()
+QStringList CopyEngineFactory::supportedProtocolsForTheSource() const
 {
     return QStringList() << "file";
 }
 
-QStringList CopyEngineFactory::supportedProtocolsForTheDestination()
+QStringList CopyEngineFactory::supportedProtocolsForTheDestination() const
 {
     return QStringList() << "file";
 }
@@ -228,7 +228,7 @@ Ultracopier::TransferListOperation CopyEngineFactory::getTransferListOperation()
     return Ultracopier::TransferListOperation_ImportExport;
 }
 
-bool CopyEngineFactory::canDoOnlyCopy()
+bool CopyEngineFactory::canDoOnlyCopy() const
 {
     return false;
 }

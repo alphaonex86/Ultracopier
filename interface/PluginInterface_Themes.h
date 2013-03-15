@@ -98,7 +98,7 @@ class PluginInterface_ThemesFactory : public QObject
         /// \brief to get the default options widget
         virtual QWidget * options() = 0;
         /// \brief to get a resource icon
-        virtual QIcon getIcon(const QString &fileName) = 0;
+        virtual QIcon getIcon(const QString &fileName) const = 0;
     public slots:
         /// \brief to reset as default the local options
         virtual void resetOptions() = 0;

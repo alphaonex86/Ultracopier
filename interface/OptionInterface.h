@@ -18,19 +18,19 @@
  * **/
 class OptionInterface : public QObject
 {
-	Q_OBJECT
-	public:
-		/// \brief To add option group to options
-		virtual bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList) = 0;
-		/*/// \brief To remove option group to options, removed to the load plugin
-		virtual bool removeOptionGroup() = 0;*/
-		/// \brief To get option value
-		virtual QVariant getOptionValue(const QString &variableName) = 0;
-		/// \brief To set option value
-		virtual void setOptionValue(const QString &variableName,const QVariant &value) = 0;
-	signals:
-		//void newOptionValue(QString,QVariant);-> disabled because the value will not externally changed, then useless notification
-		void resetOptions();
+    Q_OBJECT
+    public:
+        /// \brief To add option group to options
+        virtual bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList) = 0;
+        /*/// \brief To remove option group to options, removed to the load plugin
+        virtual bool removeOptionGroup() = 0;*/
+        /// \brief To get option value
+        virtual QVariant getOptionValue(const QString &variableName) const = 0;
+        /// \brief To set option value
+        virtual void setOptionValue(const QString &variableName,const QVariant &value) = 0;
+    signals:
+        //void newOptionValue(QString,QVariant);-> disabled because the value will not externally changed, then useless notification
+        void resetOptions();
 };
 
 #endif // OPTION_INTERFACE_H

@@ -20,21 +20,21 @@ class FacilityInterface : public QObject
         /// \brief To force the text re-translation
         virtual void retranslate() = 0;
         /// \brief convert size in Byte to String
-        virtual QString sizeToString(const double &size) = 0;
+        virtual QString sizeToString(const double &size) const = 0;
         /// \brief convert size unit to String
-        virtual QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) = 0;
+        virtual QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const = 0;
         /// \brief translate the text
-        virtual QString translateText(const QString &text) = 0;
+        virtual QString translateText(const QString &text) const = 0;
         /// \brief speed to string in byte per seconds
-        virtual QString speedToString(const double &speed) = 0;
+        virtual QString speedToString(const double &speed) const = 0;
         /// \brief Decompose the time in second
-        virtual Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) = 0;
+        virtual Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) const = 0;
         /// \brief have the fonctionnality
-        virtual bool haveFunctionality(const QString &fonctionnality) = 0;
+        virtual bool haveFunctionality(const QString &fonctionnality) const = 0;
         /// \brief call the fonctionnality
         virtual QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList()) = 0;
         /// \brief Do the simplified time
-        virtual QString simplifiedRemainingTime(const quint32 &seconds) = 0;
+        virtual QString simplifiedRemainingTime(const quint32 &seconds) const = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

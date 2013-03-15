@@ -151,7 +151,7 @@ bool OptionEngine::removeOptionGroup(const QString &groupName)
 }
 
 /// \brief To get option value
-QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &variableName)
+QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &variableName) const
 {
     if(GroupKeysList.contains(groupName))
     {

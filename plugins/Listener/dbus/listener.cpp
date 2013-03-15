@@ -38,9 +38,8 @@ void Listener::close()
     emit newState(Ultracopier::NotListening);
 }
 
-const QString Listener::errorString()
+const QString Listener::errorString() const
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     return "Unknow error";
 }
 

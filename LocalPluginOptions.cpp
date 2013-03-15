@@ -40,7 +40,7 @@ bool LocalPluginOptions::addOptionGroup(const QList<QPair<QString, QVariant> > &
 }
 
 /// \brief To get option value
-QVariant LocalPluginOptions::getOptionValue(const QString &variableName)
+QVariant LocalPluginOptions::getOptionValue(const QString &variableName) const
 {
     return options->getOptionValue(group,variableName);
 }

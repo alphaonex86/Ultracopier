@@ -207,7 +207,7 @@ public:
      * real size transfered to right speed calculation */
     quint64 realByteTransfered();
     /** \brief support speed limitation */
-    bool supportSpeedLimitation();
+    bool supportSpeedLimitation() const;
 
     /** \brief to set drives detected
      * specific to this copy engine */

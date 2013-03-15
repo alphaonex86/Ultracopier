@@ -33,9 +33,8 @@ void KDESessionLoader::setEnabled(const bool &enabled)
     }
 }
 
-bool KDESessionLoader::getEnabled()
+bool KDESessionLoader::getEnabled() const
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, return this value: "+QString::number(QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh")));
     //return the value into the variable
     return QFile::exists(QDir::homePath()+"/.kde4/Autostart/ultracopier.sh");
 }

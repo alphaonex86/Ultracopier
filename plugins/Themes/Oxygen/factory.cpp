@@ -123,43 +123,31 @@ QWidget * ThemesFactory::options()
     return tempWidget;
 }
 
-QIcon ThemesFactory::getIcon(const QString &fileName)
+QIcon ThemesFactory::getIcon(const QString &fileName) const
 {
     if(fileName=="SystemTrayIcon/exit.png")
     {
         QIcon tempIcon=QIcon::fromTheme("application-exit");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     if(fileName=="SystemTrayIcon/add.png")
     {
         QIcon tempIcon=QIcon::fromTheme("list-add");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     if(fileName=="SystemTrayIcon/informations.png")
     {
         QIcon tempIcon=QIcon::fromTheme("help-about");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     if(fileName=="SystemTrayIcon/options.png")
     {
         QIcon tempIcon=QIcon::fromTheme("applications-system");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     return QIcon(":/resources/"+fileName);
 }

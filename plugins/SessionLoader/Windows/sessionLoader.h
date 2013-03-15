@@ -20,7 +20,7 @@ public:
 	/// \brief to set if it's enabled or not
 	void setEnabled(const bool &newValue);
 	/// \brief to get if is enabled
-	bool getEnabled();
+	bool getEnabled() const;
 	/// \brief set the resources for the plugins
 	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
 	/// \brief to get the options widget, NULL if not have

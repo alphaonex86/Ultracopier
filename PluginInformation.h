@@ -18,25 +18,25 @@ namespace Ui {
 /** \brief to show the plugin information */
 class PluginInformation : public QDialog
 {
-	Q_OBJECT
-	public:
-		explicit PluginInformation();
-		~PluginInformation();
-		/** \brief get translated categorie */
-		QString categoryToTranslation(PluginType category);
-		/** \brief to get the new plugin informations */
-		void setPlugin(PluginsAvailable plugin);
-		/** \brief to set the language */
-		void setLanguage(QString language);
-	public slots:
-		void retranslateInformation();
-	private:
-		bool pluginIsLoaded;
-		PluginsAvailable plugin;
-		Ui::PluginInformation *ui;
-		QString language;
-		QString getInformationText(PluginsAvailable plugin,QString informationName);
-		QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
+    Q_OBJECT
+    public:
+        explicit PluginInformation();
+        ~PluginInformation();
+        /** \brief get translated categorie */
+        QString categoryToTranslation(PluginType category) const;
+        /** \brief to get the new plugin informations */
+        void setPlugin(PluginsAvailable plugin);
+        /** \brief to set the language */
+        void setLanguage(QString language);
+    public slots:
+        void retranslateInformation();
+    private:
+        bool pluginIsLoaded;
+        PluginsAvailable plugin;
+        Ui::PluginInformation *ui;
+        QString language;
+        QString getInformationText(PluginsAvailable plugin,QString informationName);
+        QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
 };
 
 #endif // PLUGININFORMATION_H

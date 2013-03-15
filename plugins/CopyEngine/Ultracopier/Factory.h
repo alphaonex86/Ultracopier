@@ -47,11 +47,11 @@ public:
     /// \brief to return which kind of transfer list operation is supported
     Ultracopier::TransferListOperation getTransferListOperation();
     /// \brief define if can only copy, or copy and move
-    bool canDoOnlyCopy();
+    bool canDoOnlyCopy() const;
     /// \brief to get the supported protocols for the source
-    QStringList supportedProtocolsForTheSource();
+    QStringList supportedProtocolsForTheSource() const;
     /// \brief to get the supported protocols for the destination
-    QStringList supportedProtocolsForTheDestination();
+    QStringList supportedProtocolsForTheDestination() const;
     /// \brief to get the options of the copy engine
     QWidget * options();
 private:

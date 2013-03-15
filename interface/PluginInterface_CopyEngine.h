@@ -80,7 +80,7 @@ class PluginInterface_CopyEngine : public QObject
 
 
         /** \brief support speed limitation */
-        virtual bool supportSpeedLimitation() = 0;
+        virtual bool supportSpeedLimitation() const = 0;
 
         //transfer list
         /** \brief to sync the transfer list
@@ -185,11 +185,11 @@ class PluginInterface_CopyEngineFactory : public QObject
         /// \brief define if can import/export or nothing
         virtual Ultracopier::TransferListOperation getTransferListOperation() = 0;
         /// \brief define if can only copy, or copy and move
-        virtual bool canDoOnlyCopy() = 0;
+        virtual bool canDoOnlyCopy() const = 0;
         /// \brief to get the supported protocols for the source
-        virtual QStringList supportedProtocolsForTheSource() = 0;
+        virtual QStringList supportedProtocolsForTheSource() const = 0;
         /// \brief to get the supported protocols for the destination
-        virtual QStringList supportedProtocolsForTheDestination() = 0;
+        virtual QStringList supportedProtocolsForTheDestination() const = 0;
         /// \brief to get the options of the copy engine
         virtual QWidget * options() = 0;
     public slots:

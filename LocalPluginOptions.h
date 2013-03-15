@@ -19,25 +19,25 @@
 */
 class LocalPluginOptions : public OptionInterface
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit LocalPluginOptions(const QString &group);
-	~LocalPluginOptions();
-	/// \brief To add option group to options
-	bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList);
-	/*/// \brief To remove option group to options, removed to the load plugin
-	bool removeOptionGroup();*/
-	/// \brief To get option value
-	QVariant getOptionValue(const QString &variableName);
-	/// \brief To set option value
-	void setOptionValue(const QString &variableName,const QVariant &value);
+    explicit LocalPluginOptions(const QString &group);
+    ~LocalPluginOptions();
+    /// \brief To add option group to options
+    bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList);
+    /*/// \brief To remove option group to options, removed to the load plugin
+    bool removeOptionGroup();*/
+    /// \brief To get option value
+    QVariant getOptionValue(const QString &variableName) const;
+    /// \brief To set option value
+    void setOptionValue(const QString &variableName,const QVariant &value);
 protected:
-	//for the options
-	OptionEngine *options;
-	QString group;
-	bool groupOptionAdded;
+    //for the options
+    OptionEngine *options;
+    QString group;
+    bool groupOptionAdded;
 /*public slots:-> disabled because the value will not externaly changed, then useless notification
-	void newOptionValue(QString group,QString variable,QVariant value);*/
+    void newOptionValue(QString group,QString variable,QVariant value);*/
 };
 
 #endif // LOCALPLUGINOPTIONS_H

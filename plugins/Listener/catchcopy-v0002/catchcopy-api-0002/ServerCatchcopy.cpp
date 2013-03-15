@@ -23,7 +23,7 @@ ServerCatchcopy::~ServerCatchcopy()
     close();
 }
 
-bool ServerCatchcopy::isListening()
+bool ServerCatchcopy::isListening() const
 {
     return server.isListening();
 }
@@ -33,7 +33,7 @@ void ServerCatchcopy::setName(const QString & name)
     this->name=name;
 }
 
-QString ServerCatchcopy::getName()
+QString ServerCatchcopy::getName() const
 {
     return name;
 }
@@ -87,12 +87,12 @@ void ServerCatchcopy::close()
     }
 }
 
-const QString ServerCatchcopy::errorStringServer()
+const QString ServerCatchcopy::errorStringServer() const
 {
     return server.errorString();
 }
 
-const QString ServerCatchcopy::errorString()
+const QString ServerCatchcopy::errorString() const
 {
     return error_string;
 }
@@ -129,7 +129,7 @@ void ServerCatchcopy::newConnection()
     }
 }
 
-bool ServerCatchcopy::clientIdFound(const quint32 &id)
+bool ServerCatchcopy::clientIdFound(const quint32 &id) const
 {
     int index=0;
     while(index<ClientList.size())

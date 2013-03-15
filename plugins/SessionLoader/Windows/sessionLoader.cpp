@@ -30,9 +30,8 @@ void WindowsSessionLoader::setEnabled(const bool &newValue)
         RegCloseKey(ultracopier_regkey);
 }
 
-bool WindowsSessionLoader::getEnabled()
+bool WindowsSessionLoader::getEnabled() const
 {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //return the value into the variable
     HKEY    ultracopier_regkey;
     bool temp=false;
@@ -41,8 +40,7 @@ bool WindowsSessionLoader::getEnabled()
     if(RegQueryValueEx(ultracopier_regkey,TEXT("ultracopier"),NULL,NULL,(LPBYTE)0,&kSize) == ERROR_SUCCESS)
         temp=true;
     RegCloseKey(ultracopier_regkey);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"return this value: "+QString::number(temp));
-        return temp;
+    return temp;
 }
 
 void WindowsSessionLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)

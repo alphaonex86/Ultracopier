@@ -25,21 +25,21 @@ class FacilityEngine : public FacilityInterface
 public:
     explicit FacilityEngine();
     /// \brief convert size in Byte to String
-    QString sizeToString(const double &size);
+    QString sizeToString(const double &size) const;
     /// \brief convert size unit to String
-    QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit);
+    QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const;
     /// \brief translate the text
-    QString translateText(const QString &text);
+    QString translateText(const QString &text) const;
     /// \brief speed to string in byte per seconds
-    QString speedToString(const double &speed);
+    QString speedToString(const double &speed) const;
     /// \brief Decompose the time in second
-    Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds);
+    Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) const;
     /// \brief have the fonctionnality
-    bool haveFunctionality(const QString &fonctionnality);
+    bool haveFunctionality(const QString &fonctionnality) const;
     /// \brief call the fonctionnality
     QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
     /// \brief Do the simplified time
-    QString simplifiedRemainingTime(const quint32 &seconds);
+    QString simplifiedRemainingTime(const quint32 &seconds) const;
 private:
     //undirect translated string
     QString Translation_perSecond;
@@ -59,7 +59,7 @@ private:
     QString Translation_SimplifiedRemaningTime_AboutMinutes;
     QString Translation_SimplifiedRemaningTime_AboutHours;
     //internal fonction
-    QString adaptString(const float &nb);
+    inline QString adaptString(const float &nb) const;
     QHash<QString,QString> translations;
 public slots:
     /// \brief To force the text re-translation

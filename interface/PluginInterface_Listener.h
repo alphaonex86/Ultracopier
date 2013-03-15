@@ -25,7 +25,7 @@ class PluginInterface_Listener : public QObject
         /// \brief put close the listen
         virtual void close() = 0;
         /// \brief to get the error string
-        virtual const QString errorString() = 0;
+        virtual const QString errorString() const = 0;
         /// \brief set the resources for the plugin
         virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion) = 0;
         /// \brief to get the options widget, NULL if not have
@@ -43,6 +43,7 @@ class PluginInterface_Listener : public QObject
         void newCopy(const quint32 &orderId,const QStringList &sources,const QString &destination);
         void newMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
         void newMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
+        void error(const QString &error);
     signals:
         /// \brief To debug source
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);

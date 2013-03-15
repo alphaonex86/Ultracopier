@@ -21,7 +21,7 @@ class PluginInterface_SessionLoader : public QObject
         /// \brief set enabled/disabled
         virtual void setEnabled(const bool &enabled) = 0;
         /// \brief get if is enabled
-        virtual bool getEnabled() = 0;
+        virtual bool getEnabled() const = 0;
         /// \brief set the resources
         virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion) = 0;
         /// \brief to get the options widget, NULL if not have

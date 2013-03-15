@@ -432,7 +432,7 @@ quint64 CopyEngine::realByteTransfered()
 }
 
 //speed limitation
-bool CopyEngine::supportSpeedLimitation()
+bool CopyEngine::supportSpeedLimitation() const
 {
     return true;
 }
