@@ -237,7 +237,7 @@ void ServerCatchcopy::readyRead()
                     if(ClientList.at(index).dataSize>64*1024*1024) // 64MB
                     {
                         error_string="Reply size is >64MB, seam corrupted";
-                        emit error(error_string);
+                        emit communicationError(error_string);
                         disconnectClient(ClientList.at(index).id);
                         return;
                     }
@@ -247,7 +247,7 @@ void ServerCatchcopy::readyRead()
                                 ))
                     {
                         error_string="Reply size is too small to have correct code";
-                        emit error(error_string);
+                        emit communicationError(error_string);
                         disconnectClient(ClientList.at(index).id);
                         return;
                     }
@@ -261,7 +261,7 @@ void ServerCatchcopy::readyRead()
                 {
                     if(!checkDataIntegrity(ClientList.at(index).data))
                     {
-                        emit error("Data integrity wrong: "+QString(ClientList.at(index).data.toHex()));
+                        emit communicationError("Data integrity wrong: "+QString(ClientList.at(index).data.toHex()));
                         ClientList[index].data.clear();
                         ClientList[index].haveData=false;
                         qWarning() << "Data integrity wrong";
