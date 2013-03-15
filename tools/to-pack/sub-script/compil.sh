@@ -10,6 +10,7 @@ function compil {
 	CFLAGSCUSTOM="$7"
 	ULTIMATE=$8
 	FORPLUGIN=$9
+	STATIC=${10}
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
 	if [ $FORPLUGIN -eq 1 ]
@@ -54,46 +55,40 @@ function compil {
 	else
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 	fi
-	if [ ${BITS} -eq 32 ]
+
+	if [ ${STATIC} -eq 1 ]
 	then
-		find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-x86<\/architecture>/g" {} \; > /dev/null 2>&1
-		REAL_WINEPREFIX="${WINEBASEPATH}/qt-5.0-32Bits-for-ultracopier/"
-	fi
-        if [ ${DEBUG_REAL} -eq 1 ]
-        then
-                COMPIL_SUFFIX="debug"
-                COMPIL_FOLDER="debug"
-        else
-                COMPIL_SUFFIX="release"
-                COMPIL_FOLDER="release"
-        fi
-	if [ ${BITS} -eq 64 ]
-	then
-		find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-x86_64<\/architecture>/g" {} \; > /dev/null 2>&1
-		REAL_WINEPREFIX="${WINEBASEPATH}/qt-5.0-64Bits-for-ultracopier/"
-	fi
-	cd ${TEMP_PATH}/${TARGET}/
-	if [ ! -f ultracopier.exe ]
-	then
-		echo "${TARGET} application..."
-		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
-		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
-		if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
-		then
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
-			echo "application not created"
-			exit
-		fi
-		if [ "${COMPIL_FOLDER}" != "./" ]
-		then
-			mv ${COMPIL_FOLDER}/ultracopier.exe ./
-		fi
 		if [ ${BITS} -eq 32 ]
 		then
-			upx --lzma -9 ultracopier.exe > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-x86<\/architecture>/g" {} \; > /dev/null 2>&1
+			REAL_WINEPREFIX="${WINEBASEPATH}/qt-5.0-32Bits-static-for-ultracopier/"
+		fi
+	        if [ ${BITS} -eq 64 ]
+	        then
+	                find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-x86_64<\/architecture>/g" {} \; > /dev/null 2>&1
+	                REAL_WINEPREFIX="${WINEBASEPATH}/qt-5.0-64Bits-static-for-ultracopier/"
+	        fi
+	else
+		if [ ${BITS} -eq 32 ]
+		then
+			find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-x86<\/architecture>/g" {} \; > /dev/null 2>&1
+			REAL_WINEPREFIX="${WINEBASEPATH}/qt-5.0-32Bits-for-ultracopier/"
+		fi
+		if [ ${BITS} -eq 64 ]
+		then
+			find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-x86_64<\/architecture>/g" {} \; > /dev/null 2>&1
+			REAL_WINEPREFIX="${WINEBASEPATH}/qt-5.0-64Bits-for-ultracopier/"
 		fi
 	fi
+	if [ ${DEBUG_REAL} -eq 1 ]
+	then
+		COMPIL_SUFFIX="debug"
+		COMPIL_FOLDER="debug"
+	else
+		COMPIL_SUFFIX="release"
+		COMPIL_FOLDER="release"
+	fi
+	cd ${TEMP_PATH}/${TARGET}/
 	PLUGIN_FOLDER="${TEMP_PATH}/${TARGET}/plugins/"
 	cd ${PLUGIN_FOLDER}
 	for plugins_cat in `ls -1`
@@ -195,7 +190,33 @@ function compil {
 	else
 		rm -Rf ${TEMP_PATH}/${TARGET}/plugins-alternative/
 	fi
-	/usr/bin/find ${TEMP_PATH}/${TARGET}/ -type f -not \( -name "*.xml" -or -name "*.dll" -or -name "*.exe" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
+	if [ ${STATIC} -eq 1 ]
+	then
+		cp ${TEMP_PATH}/${TARGET}/*/*/*/*/*.a ${TEMP_PATH}/${TARGET}/plugins/
+	fi
+	cd ${TEMP_PATH}/${TARGET}/
+	if [ ! -f ultracopier.exe ]
+	then
+		echo "${TARGET} application..."
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
+		if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
+		then
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
+			echo "application not created"
+			exit
+		fi
+		if [ "${COMPIL_FOLDER}" != "./" ]
+		then
+			mv ${COMPIL_FOLDER}/ultracopier.exe ./
+		fi
+		if [ ${BITS} -eq 32 ]
+		then
+			upx --lzma -9 ultracopier.exe > /dev/null 2>&1
+		fi
+	fi
+	/usr/bin/find ${TEMP_PATH}/${TARGET}/ -type f -not \( -name "*.xml" -or -name "*.dll" -or -name "*.a" -or -name "*.exe" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
 	rm -Rf ${TEMP_PATH}/${TARGET}/resources/ ${PLUGIN_FOLDER}/SessionLoader/KDE4/
 	rm -Rf ${TEMP_PATH}/${TARGET}/resources/ ${PLUGIN_FOLDER}/Listener/dbus/
 	find ${TEMP_PATH}/${TARGET}/ -type d -empty -delete > /dev/null 2>&1

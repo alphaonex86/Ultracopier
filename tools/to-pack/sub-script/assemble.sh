@@ -7,6 +7,7 @@ function assemble {
 	DEBUG_REAL=$4
 	PORTABLE=$5
 	ULTIMATE=$6
+	STATIC=${7}
 	cd ${TEMP_PATH}/
 	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION}.zip"
 	if [ ! -d ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ]
@@ -21,59 +22,78 @@ function assemble {
         fi
 	if [ ! -e ${FINAL_ARCHIVE} ]; then
 		echo "creating the archive ${TARGET}..."
-		mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/
-		mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
-		mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/
-		mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
-		mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/
-		mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/
-
-		if [ -e ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ]
+		if [ ${STATIC} -ne 1 ]
 		then
-			if [ ${ULTIMATE} -eq 1 ]
-			then
-				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-			else
-				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-			fi
-		fi
-		rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/
+			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/
 
-		cp ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/informations.xml
-		cp ${ULTRACOPIERSOURCESPATH}/plugins/Listener/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/informations.xml
-		cp ${ULTRACOPIERSOURCESPATH}/plugins/PluginLoader/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/informations.xml
-		cp ${ULTRACOPIERSOURCESPATH}/plugins/SessionLoader/Windows/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/informations.xml
-		cp ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/informations.xml
-		rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
-		rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
-		rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+			if [ -e ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ]
+			then
+				if [ ${ULTIMATE} -eq 1 ]
+				then
+					rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+					rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+				else
+					rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+				fi
+			fi
+			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
+
+			cp ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/informations.xml
+			cp ${ULTRACOPIERSOURCESPATH}/plugins/Listener/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/informations.xml
+			cp ${ULTRACOPIERSOURCESPATH}/plugins/PluginLoader/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/informations.xml
+			cp ${ULTRACOPIERSOURCESPATH}/plugins/SessionLoader/Windows/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/informations.xml
+			cp ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/informations.xml
+			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
+			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
+			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt
 		if [ "${ARCHITECTURE}" == "x86" ]
 		then
 			upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier.exe > /dev/null 2>&1
 		fi
-		if [ ${DEBUG_REAL} -eq 1 ]
+		if [ ${STATIC} -ne 1 ]
 		then
-			cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt-debug/* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-		else
-			cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt/* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+			if [ ${DEBUG_REAL} -eq 1 ]
+			then
+				cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt-debug/* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+			else
+				cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt/* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+			fi
 		fi
-		if [ ${DEBUG} -eq 1 ]
+		if [ ${STATIC} -eq 1 ]
 		then
-			cp -Rf ${BASE_PWD}/data/windows/catchcopy32d.dll ${BASE_PWD}/data/windows/catchcopy64d.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
+			if [ ${DEBUG} -eq 1 ]
+			then
+				cp -Rf ${BASE_PWD}/data/windows/catchcopy32d.dll ${BASE_PWD}/data/windows/catchcopy64d.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+			else
+				cp -Rf ${BASE_PWD}/data/windows/catchcopy32.dll ${BASE_PWD}/data/windows/catchcopy64.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
+			fi
 		else
-			cp -Rf ${BASE_PWD}/data/windows/catchcopy32.dll ${BASE_PWD}/data/windows/catchcopy64.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
+			if [ ${DEBUG} -eq 1 ]
+			then
+				cp -Rf ${BASE_PWD}/data/windows/catchcopy32d.dll ${BASE_PWD}/data/windows/catchcopy64d.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
+			else
+				cp -Rf ${BASE_PWD}/data/windows/catchcopy32.dll ${BASE_PWD}/data/windows/catchcopy64.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
+			fi
 		fi
-		cp -f ${BASE_PWD}/data/qm-translation/fr.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/fr/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/ar.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ar/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/es.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/es/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/ja.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ja/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/ko.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ko/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/pl.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/pl/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/pt.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/pt/qt.qm
-		cp -f ${BASE_PWD}/data/qm-translation/ru.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ru/qt.qm
+		if [ ${STATIC} -ne 1 ]
+		then
+			cp -f ${BASE_PWD}/data/qm-translation/fr.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/fr/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/ar.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ar/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/es.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/es/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/ja.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ja/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/ko.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ko/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/pl.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/pl/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/pt.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/pt/qt.qm
+			cp -f ${BASE_PWD}/data/qm-translation/ru.qm ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ru/qt.qm
+		fi
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -iname "*.ts" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-${ARCHITECTURE}<\/architecture>/g" {} \; > /dev/null 2>&1
 
@@ -123,5 +143,6 @@ function assemble {
                 cd ${TEMP_PATH}/
 		echo "creating the installer ${TARGET}... done"
 	fi
+	rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
 } 
  
