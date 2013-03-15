@@ -62,7 +62,6 @@ HEADERS += ResourcesManager.h \
     lib/qt-tar-xz/QXzDecodeThread.h \
     lib/qt-tar-xz/QXzDecode.h \
     lib/qt-tar-xz/QTarDecode.h \
-    AuthPlugin.h \
     SessionLoader.h \
     ExtraSocket.h \
     CopyListener.h \
@@ -105,7 +104,6 @@ SOURCES += ThemesManager.cpp \
     lib/qt-tar-xz/xz_dec_stream.c \
     lib/qt-tar-xz/xz_dec_lzma2.c \
     lib/qt-tar-xz/xz_dec_bcj.c \
-    AuthPlugin.cpp \
     SessionLoader.cpp \
     ExtraSocket.cpp \
     CopyListener.cpp \

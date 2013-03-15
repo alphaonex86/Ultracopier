@@ -30,7 +30,6 @@
 #include "QXzDecodeThread.h"
 #include "QTarDecode.h"
 #endif
-#include "AuthPlugin.h"
 
 namespace Ui {
     class PluginOptions;
@@ -106,7 +105,6 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         void executeTheFileBackendLoader();
         #endif
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-        AuthPlugin *checkPluginThread;
         /// \brief check the dependencies, return number of error
         quint32 checkDependencies();
         #endif

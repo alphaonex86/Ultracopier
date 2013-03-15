@@ -26,16 +26,12 @@ PluginsManager::PluginsManager()
     stopIt=false;
     editionSemList.release();
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    checkPluginThread=new AuthPlugin();
     #endif
     englishPluginType << "CopyEngine" << "Languages" << "Listener" << "PluginLoader" << "SessionLoader" << "Themes";
     //catPlugin << tr("CopyEngine") << tr("Languages") << tr("Listener") << tr("PluginLoader") << tr("SessionLoader") << tr("Themes");
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     importingPlugin=false;
     connect(&decodeThread,		&QXzDecodeThread::decodedIsFinish,		this,				&PluginsManager::decodingFinished,Qt::QueuedConnection);
-    #endif
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(checkPluginThread,	&AuthPlugin::authentifiedPath,			this,				&PluginsManager::newAuthPath,Qt::QueuedConnection);
     #endif
     connect(this,			&PluginsManager::finished,			this,				&PluginsManager::post_operation,Qt::QueuedConnection);
     connect(this,			&PluginsManager::newLanguageLoaded,		&pluginInformationWindows,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
@@ -61,9 +57,6 @@ PluginsManager::~PluginsManager()
     stopIt=true;
     if(this->isRunning())
         this->wait(0);
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    delete checkPluginThread;
-    #endif
     OptionEngine::destroyInstanceAtTheLastCall();
     ResourcesManager::destroyInstanceAtTheLastCall();
 }
@@ -145,9 +138,6 @@ void PluginsManager::run()
     }
     #endif
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    checkPluginThread->loadSearchPath(readPath,englishPluginType);
-    checkPluginThread->stop();
-    checkPluginThread->start();
     while(checkDependencies()!=0){};
     #endif
     QList<PluginsAvailable> list;
