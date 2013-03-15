@@ -52,6 +52,9 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->osBufferLimit,              &QSpinBox::editingFinished,         this,&CopyEngineFactory::osBufferLimit_editingFinished);
     connect(ui->osBufferLimited,            &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
     connect(ui->osBuffer,                   &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
+    connect(ui->moveTheWholeFolder,         &QCheckBox::toggled,                this,&CopyEngineFactory::moveTheWholeFolder);
+    connect(ui->followTheStrictOrder,       &QCheckBox::toggled,                this,&CopyEngineFactory::followTheStrictOrder);
+    connect(ui->deletePartiallyTransferredFiles,&QCheckBox::toggled,            this,&CopyEngineFactory::deletePartiallyTransferredFiles);
 
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
@@ -110,6 +113,9 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setSequentialBuffer(ui->sequentialBuffer->value());
     realObject->setParallelBuffer(ui->parallelBuffer->value());
     realObject->setParallelizeIfSmallerThan(ui->parallelizeIfSmallerThan->value());
+    realObject->setMoveTheWholeFolder(ui->moveTheWholeFolder->isChecked());
+    realObject->setFollowTheStrictOrder(ui->followTheStrictOrder->isChecked());
+    realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
     return newTransferEngine;
 }
 
@@ -160,6 +166,9 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("otherRenamingRule"),QVariant("")));
         KeysList.append(qMakePair(QString("osBufferLimited"),QVariant(false)));
         KeysList.append(qMakePair(QString("osBufferLimit"),QVariant(512)));
+        KeysList.append(qMakePair(QString("deletePartiallyTransferredFiles"),QVariant(true)));
+        KeysList.append(qMakePair(QString("moveTheWholeFolder"),QVariant(true)));
+        KeysList.append(qMakePair(QString("followTheStrictOrder"),QVariant(false)));
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)
         ui->keepDate->setEnabled(false);
@@ -180,6 +189,9 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ui->parallelBuffer->setValue(options->getOptionValue("parallelBuffer").toUInt());
         ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
         ui->parallelBuffer->setSingleStep(ui->blockSize->value());
+        ui->deletePartiallyTransferredFiles->setChecked(options->getOptionValue("deletePartiallyTransferredFiles").toBool());
+        ui->moveTheWholeFolder->setChecked(options->getOptionValue("moveTheWholeFolder").toBool());
+        ui->followTheStrictOrder->setChecked(options->getOptionValue("followTheStrictOrder").toBool());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
         ui->checksumIgnoreIfImpossible->setChecked(options->getOptionValue("checksumIgnoreIfImpossible").toBool());
@@ -536,4 +548,25 @@ void CopyEngineFactory::updatedBlockSize()
     ui->parallelBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK);
     setParallelBuffer(ui->parallelBuffer->value());
     setSequentialBuffer(ui->sequentialBuffer->value());
+}
+
+void CopyEngineFactory::deletePartiallyTransferredFiles(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("deletePartiallyTransferredFiles",checked);
+}
+
+void CopyEngineFactory::followTheStrictOrder(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("followTheStrictOrder",checked);
+}
+
+void CopyEngineFactory::moveTheWholeFolder(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("moveTheWholeFolder",checked);
 }

@@ -70,12 +70,6 @@ public:
         //TransferThread * transfer; // -> see transferThreadList
     };
     QList<ActionToDoTransfer> actionToDoListTransfer;
-    /// \brief get action type
-    enum ActionType
-    {
-        ActionType_MkPath=1,
-        ActionType_MovePath=2
-    };
     /// \brief to store one action to do
     struct ActionToDoInode
     {
@@ -185,6 +179,9 @@ public slots:
     void setParallelBuffer(int parallelBuffer);
     void setSequentialBuffer(int sequentialBuffer);
     void setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan);
+    void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
+    void setFollowTheStrictOrder(const bool &followTheStrictOrder);
+    void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
 private:
     QSemaphore          mkpathTransfer;
     QString             sourceDrive;
@@ -216,6 +213,9 @@ private:
     bool				osBuffer;
     bool				osBufferLimited;
     unsigned int        parallelizeIfSmallerThan;
+    bool                moveTheWholeFolder;
+    bool                followTheStrictOrder;
+    bool                deletePartiallyTransferredFiles;
     int                 sequentialBuffer;
     int                 parallelBuffer;
     unsigned int        putAtBottom;
@@ -317,6 +317,8 @@ private slots:
     quint64 addToMkPath(const QFileInfo& source,const QFileInfo& destination);
     //add rm path to do
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
+    //add to real move
+    void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
 signals:

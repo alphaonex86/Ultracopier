@@ -4,20 +4,21 @@
 
 WriteThread::WriteThread()
 {
-    lastGoodPosition=0;
-    stopIt=false;
+    deletePartiallyTransferredFiles = true;
+    lastGoodPosition                = 0;
+    stopIt                          = false;
     isOpen.release();
     moveToThread(this);
     setObjectName("write");
-    this->mkpathTransfer	= mkpathTransfer;
+    this->mkpathTransfer            = mkpathTransfer;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    stat=Idle;
+    stat                            = Idle;
     #endif
-    numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
-    buffer=false;
-    putInPause=false;
-    needRemoveTheFile=false;
-    blockSize=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
+    numberOfBlock                   = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
+    buffer                          = false;
+    putInPause                      = false;
+    needRemoveTheFile               = false;
+    blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     start();
 }
 
@@ -449,9 +450,12 @@ void WriteThread::internalClose(bool emitSignal)
             file.close();
             if(needRemoveTheFile || stopIt)
             {
-                if(!file.remove())
-                    if(emitSignal)
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
+                if(deletePartiallyTransferredFiles)
+                {
+                    if(!file.remove())
+                        if(emitSignal)
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
+                }
             }
             needRemoveTheFile=false;
             //here and not after, because the transferThread don't need try close if not open
@@ -645,4 +649,9 @@ void WriteThread::internalFlushAndSeekToZero()
 void WriteThread::setMkpathTransfer(QSemaphore *mkpathTransfer)
 {
     this->mkpathTransfer=mkpathTransfer;
+}
+
+void WriteThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
+{
+    this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
 }

@@ -40,13 +40,13 @@ public:
     explicit MkPath();
     ~MkPath();
     /// \brief add path to make
-    void addPath(const QFileInfo& source,const QFileInfo& destination,bool const &move);
+    void addPath(const QFileInfo& source,const QFileInfo& destination,const ActionType &actionType);
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
 signals:
     void errorOnFolder(const QFileInfo &,const QString &);
     void firstFolderFinish();
-    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const bool &move);
+    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const ActionType &actionType);
     void internalStartDoThisPath();
     void internalStartSkip();
     void internalStartRetry();
@@ -66,7 +66,7 @@ private:
     {
         QFileInfo source;
         QFileInfo destination;
-        bool move;
+        ActionType actionType;
     };
     QList<Item> pathList;
     void checkIfCanDoTheNext();
@@ -91,7 +91,7 @@ private:
     bool writeFileDateTime(const QFileInfo &destination);
 private slots:
     void internalDoThisPath();
-    void internalAddPath(const QFileInfo& source, const QFileInfo& destination,bool const &move);
+    void internalAddPath(const QFileInfo& source, const QFileInfo& destination,const ActionType &actionType);
     void internalSkip();
     void internalRetry();
     bool rmpath(const QDir &dir);

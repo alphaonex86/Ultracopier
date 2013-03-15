@@ -37,6 +37,7 @@ public:
     /// \brief set if need check if the destination exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
 signals:
     void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const Ultracopier::CopyMode &mode);
     /// \brief To debug source
@@ -48,24 +49,26 @@ signals:
     void newFolderListing(const QString &path);
     void addToMkPath(const QFileInfo& source,const QFileInfo& destination);
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
+    void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
 public slots:
     void addToList(const QStringList& sources,const QString& destination);
     void setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
 protected:
     void run();
 private:
-    QStringList		sources;
-    QString			destination;
+    bool                moveTheWholeFolder;
+    QStringList         sources;
+    QString             destination;
     volatile bool		stopIt;
-    void			listFolder(QFileInfo source, QFileInfo destination);
+    void                listFolder(QFileInfo source, QFileInfo destination);
     volatile bool		stopped;
-    QSemaphore		waitOneAction;
+    QSemaphore          waitOneAction;
     FolderExistsAction	folderExistsAction;
     FileErrorAction		fileErrorAction;
     volatile bool		checkDestinationExists;
-    QString			newName;
+    QString             newName;
     QRegularExpression	folder_isolation;
-    Ultracopier::CopyMode		mode;
+    Ultracopier::CopyMode	mode;
     QList<Filters_rules>	include,exclude;
     QList<Filters_rules>	include_send,exclude_send;
     bool			reloadTheNewFilters;

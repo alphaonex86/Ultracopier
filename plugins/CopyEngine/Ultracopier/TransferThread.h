@@ -139,6 +139,7 @@ public slots:
     bool setParallelBuffer(int parallelBuffer);
     bool setSequentialBuffer(int sequentialBuffer);
     void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
+    void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
 private slots:
     void preOperation();
     void readIsReady();
@@ -205,6 +206,7 @@ private:
     bool			doChecksum,real_doChecksum;
     bool			checksumIgnoreIfImpossible;
     bool			checksumOnlyOnError;
+    bool            deletePartiallyTransferredFiles;
     bool			osBuffer;
     bool			osBufferLimited;
     unsigned int	osBufferLimit;

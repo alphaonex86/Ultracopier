@@ -35,6 +35,9 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     size_for_speed                  = 0;
     putAtBottom                     = 0;
     forcedMode                      = false;
+    followTheStrictOrder            = false;
+    deletePartiallyTransferredFiles = true;
+    moveTheWholeFolder              = true;
 
     //implement the SingleShot in this class
     //timerActionDone.setSingleShot(true);
@@ -160,6 +163,12 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setSequentialBuffer()");
     if(!connect(this,&CopyEngine::send_parallelizeIfSmallerThan,					listThread,&ListThread::setParallelizeIfSmallerThan,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setParallelizeIfSmallerThan()");
+    if(!connect(this,&CopyEngine::send_moveTheWholeFolder,					listThread,&ListThread::setMoveTheWholeFolder,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect moveTheWholeFolder()");
+    if(!connect(this,&CopyEngine::send_deletePartiallyTransferredFiles,					listThread,&ListThread::setDeletePartiallyTransferredFiles,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect deletePartiallyTransferredFiles()");
+    if(!connect(this,&CopyEngine::send_followTheStrictOrder,					listThread,&ListThread::setFollowTheStrictOrder,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect followTheStrictOrder()");
     if(!connect(this,&CopyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_setFilters()");
     if(!connect(this,&CopyEngine::send_sendNewRenamingRules,listThread,&ListThread::set_sendNewRenamingRules,		Qt::QueuedConnection))
@@ -211,6 +220,9 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
     setParallelizeIfSmallerThan(parallelizeIfSmallerThan);
+    setFollowTheStrictOrder(followTheStrictOrder);
+    setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
+    setMoveTheWholeFolder(moveTheWholeFolder);
 
     switch(alwaysDoThisActionForFileExists)
     {
@@ -326,6 +338,9 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->osBuffer,                           &QCheckBox::toggled,		this,&CopyEngine::osBuffer_toggled);
         connect(ui->osBufferLimited,                    &QCheckBox::toggled,		this,&CopyEngine::osBufferLimited_toggled);
         connect(ui->osBufferLimit,                      &QSpinBox::editingFinished,	this,&CopyEngine::osBufferLimit_editingFinished);
+        connect(ui->moveTheWholeFolder,                 &QCheckBox::toggled,		this,&CopyEngine::setMoveTheWholeFolder);
+        connect(ui->deletePartiallyTransferredFiles,    &QCheckBox::toggled,		this,&CopyEngine::setDeletePartiallyTransferredFiles);
+        connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
         connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
         connect(filters,                                &Filters::haveNewFilters,   this,&CopyEngine::sendNewFilters);
         connect(ui->filters,                            &QPushButton::clicked,      this,&CopyEngine::showFilterDialog);
@@ -807,6 +822,30 @@ void CopyEngine::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
     if(uiIsInstalled)
         ui->parallelizeIfSmallerThan->setValue(parallelizeIfSmallerThan);
     emit send_parallelizeIfSmallerThan(parallelizeIfSmallerThan*1024);
+}
+
+void CopyEngine::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
+{
+    this->moveTheWholeFolder=moveTheWholeFolder;
+    if(uiIsInstalled)
+        ui->moveTheWholeFolder->setChecked(moveTheWholeFolder);
+    emit send_moveTheWholeFolder(moveTheWholeFolder);
+}
+
+void CopyEngine::setFollowTheStrictOrder(const bool &followTheStrictOrder)
+{
+    this->followTheStrictOrder=followTheStrictOrder;
+    if(uiIsInstalled)
+        ui->followTheStrictOrder->setChecked(followTheStrictOrder);
+    emit send_followTheStrictOrder(followTheStrictOrder);
+}
+
+void CopyEngine::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
+{
+    this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
+    if(uiIsInstalled)
+        ui->deletePartiallyTransferredFiles->setChecked(deletePartiallyTransferredFiles);
+    emit send_deletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
 }
 
 //set auto start

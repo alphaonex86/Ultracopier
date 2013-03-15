@@ -20,7 +20,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -35,6 +35,16 @@
        <string>Transfer</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
+       <item row="3" column="2">
+        <widget class="QCheckBox" name="moveTheWholeFolder"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Move the whole folder</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -65,7 +75,7 @@
        <item row="2" column="2">
         <widget class="QCheckBox" name="autoStart"/>
        </item>
-       <item row="3" column="1">
+       <item row="5" column="1">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -77,6 +87,16 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Follow the strict order</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="followTheStrictOrder"/>
        </item>
       </layout>
      </widget>
@@ -93,6 +113,9 @@
        <string>Error and collision</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="checkBoxDestinationFolderExists"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_12">
          <property name="text">
@@ -224,17 +247,14 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QCheckBox" name="checkBoxDestinationFolderExists"/>
-       </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <widget class="QPushButton" name="renamingRules">
          <property name="text">
           <string>Renaming rules</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="7" column="1">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -246,6 +266,16 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_20">
+         <property name="text">
+          <string>Delete partially transferred files</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="deletePartiallyTransferredFiles"/>
        </item>
       </layout>
       <zorder>label_12</zorder>
@@ -259,6 +289,8 @@
       <zorder>comboBoxFolderCollision</zorder>
       <zorder>checkBoxDestinationFolderExists</zorder>
       <zorder>renamingRules</zorder>
+      <zorder>label_20</zorder>
+      <zorder>deletePartiallyTransferredFiles</zorder>
      </widget>
      <widget class="QWidget" name="page_control">
       <property name="geometry">
@@ -582,12 +614,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>212</y>
+     <x>583</x>
+     <y>136</y>
     </hint>
     <hint type="destinationlabel">
-     <x>100</x>
-     <y>223</y>
+     <x>109</x>
+     <y>161</y>
     </hint>
    </hints>
   </connection>
@@ -598,12 +630,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>198</x>
-     <y>212</y>
+     <x>594</x>
+     <y>136</y>
     </hint>
     <hint type="destinationlabel">
-     <x>190</x>
-     <y>226</y>
+     <x>586</x>
+     <y>161</y>
     </hint>
    </hints>
   </connection>
@@ -614,12 +646,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>210</y>
+     <x>641</x>
+     <y>136</y>
     </hint>
     <hint type="destinationlabel">
-     <x>123</x>
-     <y>251</y>
+     <x>132</x>
+     <y>186</y>
     </hint>
    </hints>
   </connection>
@@ -630,12 +662,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>269</x>
-     <y>209</y>
+     <x>665</x>
+     <y>136</y>
     </hint>
     <hint type="destinationlabel">
-     <x>213</x>
-     <y>247</y>
+     <x>609</x>
+     <y>186</y>
     </hint>
    </hints>
   </connection>

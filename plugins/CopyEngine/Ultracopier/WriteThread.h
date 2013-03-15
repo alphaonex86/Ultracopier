@@ -79,6 +79,7 @@ public slots:
     void flushAndSeekToZero();
     /// do the checksum
     void checkSum();
+    void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
 signals:
     void error();
     void opened();
@@ -126,6 +127,7 @@ private:
     bool                buffer;
     bool                needRemoveTheFile;
     volatile bool       sequential;
+    bool                deletePartiallyTransferredFiles;
 private slots:
     bool internalOpen();
     void internalWrite();

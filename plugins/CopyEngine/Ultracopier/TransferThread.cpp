@@ -15,14 +15,15 @@ TransferThread::TransferThread()
 {
     start();
     moveToThread(this);
-    needSkip                = false;
-    transfer_stat			= TransferStat_Idle;
-    stopIt                  = false;
-    fileExistsAction        = FileExists_NotSet;
-    alwaysDoFileExistsAction= FileExists_NotSet;
-    readError               = false;
-    writeError              = false;
-    this->mkpathTransfer	= mkpathTransfer;
+    deletePartiallyTransferredFiles = true;
+    needSkip                        = false;
+    transfer_stat                   = TransferStat_Idle;
+    stopIt                          = false;
+    fileExistsAction                = FileExists_NotSet;
+    alwaysDoFileExistsAction        = FileExists_NotSet;
+    readError                       = false;
+    writeError                      = false;
+    this->mkpathTransfer            = mkpathTransfer;
     readThread.setWriteThread(&writeThread);
 
     maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
@@ -655,7 +656,7 @@ void TransferThread::ifCanStartTransfer()
                 tryCopyDirectly();
             else
             {
-                needRemove=true;
+                needRemove=deletePartiallyTransferredFiles;
                 readThread.startRead();
             }
             emit pushStat(transfer_stat,transferId);
@@ -912,7 +913,8 @@ void TransferThread::postOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't pass in post operation if write is not closed");
         emit errorOnFile(destination,tr("Internal error: The destination is not closed"));
         needSkip=false;
-        needRemove=true;
+        if(deletePartiallyTransferredFiles)
+            needRemove=true;
         writeError=true;
         return;
     }
@@ -925,7 +927,8 @@ void TransferThread::postOperation()
                                  );
         emit errorOnFile(destination,tr("Internal error: The size transfered don't match"));
         needSkip=false;
-        needRemove=true;
+        if(deletePartiallyTransferredFiles)
+            needRemove=true;
         writeError=true;
         return;
     }
@@ -935,7 +938,8 @@ void TransferThread::postOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] buffer is not empty"));
         emit errorOnFile(destination,tr("Internal error: Buffer is not empty"));
         needSkip=false;
-        needRemove=true;
+        if(deletePartiallyTransferredFiles)
+            needRemove=true;
         writeError=true;
         return;
     }
@@ -1412,6 +1416,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
+        needRemove=true;
         needSkip=true;
         //check if all is source and destination is closed
         if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
@@ -1433,6 +1438,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
+        needRemove=true;
         needSkip=true;
         if(canBeMovedDirectlyVariable || canBeCopiedDirectlyVariable)
         {
@@ -1462,6 +1468,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
+        needRemove=true;
         needSkip=true;
         if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
         {
@@ -1482,6 +1489,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
+        needRemove=true;
         needSkip=true;
         emit internalStartPostOperation();
         break;
@@ -1668,4 +1676,9 @@ void TransferThread::setRenamingRules(QString firstRenamingRule,QString otherRen
 {
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
+}
+
+void TransferThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
+{
+    this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
 }

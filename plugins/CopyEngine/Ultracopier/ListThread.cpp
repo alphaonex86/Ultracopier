@@ -318,13 +318,14 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
     //create new thread because is auto-detroyed
     scanFileOrFolderThreadsPool << new ScanFileOrFolder(mode);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::fileTransfer,					this,&ListThread::fileTransfer,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,			Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,		Qt::QueuedConnection);
     #endif
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,					this,&ListThread::addToMkPath,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,			Qt::QueuedConnection);
 
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,		Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
@@ -878,6 +879,21 @@ void ListThread::addToMovePath(const QFileInfo& source, const QFileInfo &destina
     temp.type	= ActionType_MovePath;
     temp.id		= generateIdNumber();
     temp.size	= inodeToRemove;
+    temp.source     = source;
+    temp.destination= destination;
+    temp.isRunning	= false;
+    actionToDoListInode << temp;
+}
+
+void ListThread::addToRealMove(const QFileInfo& source,const QFileInfo& destination)
+{
+    if(stopIt)
+        return;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ActionToDoInode temp;
+    temp.type	= ActionType_RealMove;
+    temp.id		= generateIdNumber();
+    temp.size	= 0;
     temp.source     = source;
     temp.destination= destination;
     temp.isRunning	= false;
@@ -1572,6 +1588,8 @@ void ListThread::doNewActions_inode_manipulation()
             numberOfInodeOperation++;
             if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
                 return;
+            if(followTheStrictOrder)
+                break;
         }
         int_for_loop++;
     }
@@ -1941,4 +1959,19 @@ void ListThread::setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSm
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"parallelizeIfSmallerThan in Bytes: "+QString::number(parallelizeIfSmallerThan));
     this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
+}
+
+void ListThread::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
+{
+    this->moveTheWholeFolder=moveTheWholeFolder;
+}
+
+void ListThread::setFollowTheStrictOrder(const bool &followTheStrictOrder)
+{
+    this->followTheStrictOrder=followTheStrictOrder;
+}
+
+void ListThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
+{
+    this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
 }

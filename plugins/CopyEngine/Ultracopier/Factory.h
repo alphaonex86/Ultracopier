@@ -96,6 +96,9 @@ private slots:
     void setFileCollision(int index);
     void setFileError(int index);
     void updatedBlockSize();
+    void deletePartiallyTransferredFiles(bool checked);
+    void followTheStrictOrder(bool checked);
+    void moveTheWholeFolder(bool checked);
 public slots:
     void resetOptions();
     void newLanguageLoaded();

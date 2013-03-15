@@ -3,11 +3,12 @@
 
 ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
 {
-    stopped	= true;
-    stopIt	= false;
-    this->mode=mode;
+    moveTheWholeFolder  = true;
+    stopped             = true;
+    stopIt              = false;
+    this->mode          = mode;
+    folder_isolation    = QRegularExpression("^(.*/)?([^/]+)/$");
     setObjectName("ScanFileOrFolder");
-    folder_isolation=QRegularExpression("^(.*/)?([^/]+)/$");
 }
 
 ScanFileOrFolder::~ScanFileOrFolder()
@@ -171,7 +172,10 @@ void ScanFileOrFolder::run()
             if(!tempString.endsWith("/") && !tempString.endsWith("\\"))
                 tempString+="/";
             tempString+=TransferThread::resolvedName(source);
-            listFolder(source.absoluteFilePath(),tempString);
+            if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(tempString).exists())
+                emit addToRealMove(source.absoluteFilePath(),tempString);
+            else
+                listFolder(source.absoluteFilePath(),tempString);
         }
         else
             emit fileTransfer(source,destination+source.fileName(),mode);
@@ -479,4 +483,9 @@ void ScanFileOrFolder::setRenamingRules(QString firstRenamingRule,QString otherR
 {
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
+}
+
+void ScanFileOrFolder::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
+{
+    this->moveTheWholeFolder=moveTheWholeFolder;
 }

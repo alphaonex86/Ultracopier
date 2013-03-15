@@ -61,6 +61,9 @@ private:
     int                     parallelBuffer;
     int                     sequentialBuffer;
     int                     parallelizeIfSmallerThan;
+    bool                    followTheStrictOrder;
+    bool                    deletePartiallyTransferredFiles;
+    bool                    moveTheWholeFolder;
     bool                    autoStart;
     bool                    checkDestinationFolderExists;
     FileExistsAction		alwaysDoThisActionForFileExists;
@@ -283,6 +286,9 @@ public slots:
     void setParallelBuffer(int parallelBuffer);
     void setSequentialBuffer(int sequentialBuffer);
     void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
+    void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
+    void setFollowTheStrictOrder(const bool &followTheStrictOrder);
+    void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
 
     /// \brief set auto start
     void setAutoStart(const bool autoStart);
@@ -347,6 +353,9 @@ signals:
     void send_parallelBuffer(const int &parallelBuffer);
     void send_sequentialBuffer(const int &sequentialBuffer);
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
+    void send_followTheStrictOrder(const bool &followTheStrictOrder);
+    void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
+    void send_moveTheWholeFolder(const bool &moveTheWholeFolder);
 };
 
 #endif // COPY_ENGINE_H

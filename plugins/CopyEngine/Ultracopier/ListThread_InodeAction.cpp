@@ -11,9 +11,17 @@
 ActionToDoInode& currentActionToDoInode=actionToDoListInode[int_for_internal_loop];
 switch(currentActionToDoInode.type)
 {
+    case ActionType_RealMove:
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch real move, source: %1, destination: %2").arg(currentActionToDoInode.source.absoluteFilePath()).arg(currentActionToDoInode.destination.absoluteFilePath()));
+        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_RealMove);
+        currentActionToDoInode.isRunning=true;
+        numberOfInodeOperation++;
+        if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+            return;
+    break;
     case ActionType_MkPath:
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch mkpath, source: %1, destination: %2").arg(currentActionToDoInode.source.absoluteFilePath()).arg(currentActionToDoInode.destination.absoluteFilePath()));
-        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),false);
+        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_MkPath);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
@@ -24,7 +32,7 @@ switch(currentActionToDoInode.type)
         if(currentActionToDoInode.size==0)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmpath: %1").arg(currentActionToDoInode.source.absoluteFilePath()));
-            mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),true);
+            mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_MovePath);
             currentActionToDoInode.isRunning=true;
             numberOfInodeOperation++;
             if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)

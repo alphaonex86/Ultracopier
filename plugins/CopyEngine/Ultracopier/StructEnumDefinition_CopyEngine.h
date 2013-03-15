@@ -94,4 +94,12 @@ struct Filters_rules
     QRegularExpression regex;
 };
 
+/// \brief get action type
+enum ActionType
+{
+    ActionType_MkPath=1,
+    ActionType_MovePath=2,
+    ActionType_RealMove=3
+};
+
 #endif // STRUCTDEF_COPYENGINE_H
