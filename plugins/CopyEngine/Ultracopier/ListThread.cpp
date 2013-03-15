@@ -1882,6 +1882,7 @@ void ListThread::createTransferThread()
     last->set_osBuffer(osBuffer);
     last->set_osBufferLimited(osBufferLimited);
     last->set_osBufferLimit(osBufferLimit);
+    last->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection);
@@ -1963,6 +1964,8 @@ void ListThread::setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSm
 
 void ListThread::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
 {
+    for(int i=0;i<scanFileOrFolderThreadsPool.size();i++)
+        scanFileOrFolderThreadsPool.at(i)->setMoveTheWholeFolder(moveTheWholeFolder);
     this->moveTheWholeFolder=moveTheWholeFolder;
 }
 
@@ -1974,4 +1977,11 @@ void ListThread::setFollowTheStrictOrder(const bool &followTheStrictOrder)
 void ListThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
 {
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
+    int index=0;
+    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    while(index<loop_sub_size_transfer_thread_search)
+    {
+        transferThreadList.at(index)->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
+        index++;
+    }
 }
