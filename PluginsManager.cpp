@@ -698,10 +698,10 @@ void PluginsManager::removeThePluginSelected(const QString &path)
 void PluginsManager::addPlugin(const ImportBackend &backend)
 {
     if(backend==ImportBackend_File)
-        excuteTheFileBackendLoader();
+        executeTheFileBackendLoader();
 }
 
-void PluginsManager::excuteTheFileBackendLoader()
+void PluginsManager::executeTheFileBackendLoader()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(importingPlugin)
@@ -711,19 +711,22 @@ void PluginsManager::excuteTheFileBackendLoader()
     }
     QString fileName = QFileDialog::getOpenFileName(NULL,tr("Open Ultracopier plugin"),QString(),tr("Ultracopier plugin (*.urc)"));
     if(fileName!="")
+        tryLoadPlugin(fileName);
+}
+
+void PluginsManager::tryLoadPlugin(const QString &file)
+{
+    QFile temp(file);
+    if(temp.open(QIODevice::ReadOnly))
     {
-        QFile temp(fileName);
-        if(temp.open(QIODevice::ReadOnly))
-        {
-            importingPlugin=true;
-            lunchDecodeThread(temp.readAll());
-            temp.close();
-        }
-        else
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to open the file: "+temp.errorString());
-            QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to open the plugin: %1").arg(temp.errorString()));
-        }
+        importingPlugin=true;
+        lunchDecodeThread(temp.readAll());
+        temp.close();
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to open the file: "+temp.errorString());
+        QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to open the plugin: %1").arg(temp.errorString()));
     }
 }
 

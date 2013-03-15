@@ -103,7 +103,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         bool importingPlugin;
         void lunchDecodeThread(const QByteArray &data);
         QXzDecodeThread decodeThread;
-        void excuteTheFileBackendLoader();
+        void executeTheFileBackendLoader();
         #endif
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         AuthPlugin *checkPluginThread;
@@ -156,6 +156,7 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
         void removeThePluginSelected(const QString &path);
         void addPlugin(const ImportBackend &backend);
+        void tryLoadPlugin(const QString &file);
         #endif
 };
 

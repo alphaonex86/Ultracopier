@@ -36,12 +36,15 @@ EventDispatcher::EventDispatcher()
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
 
     copyServer=new CopyListener(&optionDialog);
-    connect(&localListener,&LocalListener::cli,&cliParser,&CliParser::cli,Qt::QueuedConnection);
-    connect(themes,		&ThemesManager::newThemeOptions,			&optionDialog,	&OptionDialog::newThemeOptions);
-    connect(&cliParser,	&CliParser::newCopyWithoutDestination,			copyServer,	&CopyListener::copyWithoutDestination);
-    connect(&cliParser,	&CliParser::newCopy,					copyServer,	&CopyListener::copy);
-    connect(&cliParser,	&CliParser::newMoveWithoutDestination,			copyServer,	&CopyListener::moveWithoutDestination);
-    connect(&cliParser,	&CliParser::newMove,					copyServer,	&CopyListener::move);
+    connect(&localListener, &LocalListener::cli,                    &cliParser,     &CliParser::cli,Qt::QueuedConnection);
+    connect(themes,         &ThemesManager::newThemeOptions,		&optionDialog,	&OptionDialog::newThemeOptions);
+    connect(&cliParser,     &CliParser::newCopyWithoutDestination,	copyServer,     &CopyListener::copyWithoutDestination);
+    connect(&cliParser,     &CliParser::newCopy,					copyServer,     &CopyListener::copy);
+    connect(&cliParser,     &CliParser::newMoveWithoutDestination,	copyServer,     &CopyListener::moveWithoutDestination);
+    connect(&cliParser,     &CliParser::newMove,					copyServer,     &CopyListener::move);
+    #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
+    connect(&cliParser,     &CliParser::tryLoadPlugin,				plugins,        &PluginsManager::tryLoadPlugin);
+    #endif
     copyMoveEventIdIndex=0;
     backgroundIcon=NULL;
     stopIt=false;
