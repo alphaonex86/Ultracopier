@@ -22,6 +22,7 @@ CopyEngineFactory::CopyEngineFactory() :
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
+    ui->toolBox->setCurrentIndex(0);
     ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     errorFound=false;
     optionsEngine=NULL;

@@ -189,6 +189,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
 {
     this->tempWidget=tempWidget;
     ui->setupUi(tempWidget);
+    ui->toolBox->setCurrentIndex(0);
     ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     connect(tempWidget,		&QWidget::destroyed,		this,			&CopyEngine::resetTempWidget);
     //conect the ui widget
