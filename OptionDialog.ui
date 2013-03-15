@@ -688,12 +688,12 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="labelLogTransfer">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
-            <string extracomment="%time%, %source%, %size%, %destination% should not be translated">The variables are %time%, %source%, %size%, %destination%</string>
+            <string notr="true" extracomment="%time%, %source%, %size%, %destination% should not be translated">The variables are %time%, %source%, %size%, %destination%</string>
            </property>
           </widget>
          </item>
@@ -718,12 +718,12 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="labelLogError">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
-            <string extracomment="%time%, %path%, %size%, %mtime%, %error% should not be translated">The variables are %time%, %path%, %size%, %mtime%, %error%</string>
+            <string notr="true" extracomment="%time%, %path%, %size%, %mtime%, %error% should not be translated">The variables are %time%, %path%, %size%, %mtime%, %error%</string>
            </property>
           </widget>
          </item>
@@ -751,12 +751,12 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="labelLogFolder">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
-            <string extracomment="%path%, %operation% should not be translated">The variables are %path%, %operation%</string>
+            <string notr="true" extracomment="%path%, %operation% should not be translated">The variables are %path%, %operation%</string>
            </property>
           </widget>
          </item>

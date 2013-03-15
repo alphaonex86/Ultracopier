@@ -14,19 +14,13 @@ QString ExtraSocket::pathSocket(const QString &name)
 #else
 	QString userName;
 	DWORD size=0;
-	if(GetUserNameW(NULL,&size) || (GetLastError()!=ERROR_INSUFFICIENT_BUFFER))
+	WCHAR * userNameW=new WCHAR[size];
+	if(GetUserNameW(userNameW,&size))
 	{
+		userName.fromWCharArray(userNameW,size*2);
+		userName=QString(QByteArray((char*)userNameW,size*2-2).toHex());
 	}
-	else
-	{
-		WCHAR * userNameW=new WCHAR[size];
-		if(GetUserNameW(userNameW,&size))
-		{
-			userName.fromWCharArray(userNameW,size*2);
-			userName=QString(QByteArray((char*)userNameW,size*2-2).toHex());
-		}
-		delete userNameW;
-	}
+	delete userNameW;
 	return name+"-"+userName;
 #endif
 }

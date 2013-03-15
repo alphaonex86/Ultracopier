@@ -30,6 +30,7 @@ public:
     void addPluginOptionWidget(const PluginType &category,const QString &name,QWidget * options);
 protected:
     void changeEvent(QEvent *e);
+    void loadLogVariableLabel();
 private slots:
     void on_treeWidget_itemSelectionChanged();
     void on_buttonBox_clicked(QAbstractButton *button);

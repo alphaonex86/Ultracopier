@@ -361,7 +361,8 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try it in win32");
             // try with regsvr32, win32 because for admin dialog
 
-            size_lenght=arguments.join(" ").toWCharArray(arrayArg);
+	    wchar_t arrayArg[65535];
+            int size_lenght=arguments.join(" ").toWCharArray(arrayArg);
             //size_lenght*sizeof(wchar_t)
             wcscpy(arrayArg+size_lenght*sizeof(wchar_t),TEXT("\0"));
             SHELLEXECUTEINFO sei;
@@ -384,8 +385,6 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("regsvr32 terminated with: %1").arg(result));
     if(!bRegister)
         correctlyLoaded.remove(dllPath);
-    if(!bRegister)
-        HardUnloadDLL(dllPath);
     return ok;
 }
 

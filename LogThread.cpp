@@ -6,6 +6,9 @@
 \licence GPL3, see the file COPYING */
 
 #include "LogThread.h"
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 #include <QMessageBox>
 
@@ -47,6 +50,22 @@ LogThread::LogThread()
     newOptionValue("Write_log",	"folder_format",		options->getOptionValue("Write_log","folder_format"));
     newOptionValue("Write_log",	"sync",				options->getOptionValue("Write_log","sync"));
     newOptionValue("Write_log",	"enabled",			options->getOptionValue("Write_log","enabled"));
+    #ifdef Q_OS_WIN32
+    DWORD size=0;
+    WCHAR * computerNameW=new WCHAR[size];
+    if(GetComputerNameW(computerNameW,&size))
+        computer.fromWCharArray(computerNameW,size*2);
+    else
+        computer="Unknown computer";
+    delete computerNameW;
+
+    WCHAR * userNameW=new WCHAR[size];
+    if(GetUserNameW(userNameW,&size))
+        user.fromWCharArray(userNameW,size*2);
+    else
+        user="Unknown user";
+    delete userNameW;
+    #endif
 }
 
 LogThread::~LogThread()
@@ -223,6 +242,10 @@ void LogThread::newOptionValue(const QString &group,const QString &name,const QV
 QString LogThread::replaceBaseVar(QString text)
 {
     text=text.replace("%time%",QDateTime::currentDateTime().toString("dd.MM.yyyy h:m:s"));
+    #ifdef Q_OS_WIN32
+    text=text.replace("%computer%",computer);
+    text=text.replace("%user%",user);
+    #endif
     return text;
 }
 

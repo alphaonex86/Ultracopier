@@ -55,6 +55,7 @@ OptionDialog::OptionDialog() :
     ui->pluginAdd->hide();
     ui->pluginRemove->hide();
     #endif
+    loadLogVariableLabel();
 }
 
 OptionDialog::~OptionDialog()
@@ -278,10 +279,22 @@ void OptionDialog::changeEvent(QEvent *e)
         ui->GroupWindowWhen->setItemText(3,tr("When source and destination are same"));
         ui->GroupWindowWhen->setItemText(4,tr("When source or destination are same"));
         ui->GroupWindowWhen->setItemText(5,tr("Always"));
+        loadLogVariableLabel();
         break;
     default:
         break;
     }
+}
+
+void OptionDialog::loadLogVariableLabel()
+{
+    QString append=" %time%";
+    #ifdef Q_OS_WIN32
+    append+=", %computer%, %user%";
+    #endif
+    ui->labelLogTransfer->setText(tr("The variables are %1").arg("%source%, %size%, %destination%"+append));
+    ui->labelLogError->setText(tr("The variables are %1").arg("%path%, %size%, %mtime%, %error%"+append));
+    ui->labelLogFolder->setText(tr("The variables are %1").arg("%path%, %operation%"+append));
 }
 
 void OptionDialog::on_treeWidget_itemSelectionChanged()

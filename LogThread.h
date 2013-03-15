@@ -57,6 +57,10 @@ private:
     QString folder_format;
     QFile log;
     QString replaceBaseVar(QString text);
+    #ifdef Q_OS_WIN32
+    QString computer;
+    QString user;
+    #endif
     bool sync;
     bool enabled;
     bool log_enable_transfer;
