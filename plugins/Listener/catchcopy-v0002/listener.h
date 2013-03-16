@@ -31,6 +31,8 @@ public:
     void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
     /// \brief to get the options widget, NULL if not have
     QWidget * options();
+    /// \brief to get a client list
+    QStringList clientsList() const;
 public slots:
     /// \brief say to the client that's the copy/move is finished
     void transferFinished(const quint32 &orderId,const bool &withError);

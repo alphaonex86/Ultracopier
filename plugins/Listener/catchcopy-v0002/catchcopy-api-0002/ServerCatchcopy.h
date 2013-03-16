@@ -35,6 +35,8 @@ class ServerCatchcopy : public QObject
         void setName(const QString & name);
         /// \brief get the name
         QString getName() const;
+        /// \brief to get a client list
+        QStringList clientsList() const;
     private:
         QString pathSocket;
         QString name;
@@ -51,8 +53,9 @@ class ServerCatchcopy : public QObject
             bool firstProtocolReplied;
             QList<quint32> queryNoReplied;
             QTimer *detectTimeOut;
+            QString name;
         };
-        QList<Client> ClientList;
+        QList<Client> clientList;
         struct LinkGlobalToLocalClient
         {
             quint32 idClient;

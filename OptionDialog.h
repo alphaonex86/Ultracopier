@@ -101,6 +101,7 @@ private:
     bool allPluginsIsLoaded;
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
+    void newClientList(const QStringList &clientsList);
 signals:
     void previouslyPluginAdded(const PluginsAvailable &plugin);
 };

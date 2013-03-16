@@ -38,6 +38,20 @@ QString ServerCatchcopy::getName() const
     return name;
 }
 
+/// \brief to get a client list
+QStringList ServerCatchcopy::clientsList() const
+{
+    QStringList clients;
+    int index=0;
+    int size=clientList.size();
+    while(index<size)
+    {
+        clients << clientList[index].name;
+        index++;
+    }
+    return clients;
+}
+
 bool ServerCatchcopy::listen()
 {
     QLocalSocket socketTestConnection;
@@ -73,9 +87,9 @@ void ServerCatchcopy::close()
     if(server.isListening())
     {
         int index=0;
-        while(index<ClientList.size())
+        while(index<clientList.size())
         {
-            ClientList.at(index).socket->disconnectFromServer();
+            clientList.at(index).socket->disconnectFromServer();
             index++;
         }
         server.close();
@@ -119,11 +133,12 @@ void ServerCatchcopy::newConnection()
             newClient.detectTimeOut		= new QTimer(this);
             newClient.detectTimeOut->setSingleShot(true);
             newClient.detectTimeOut->setInterval(CATCHCOPY_COMMUNICATION_TIMEOUT);
+            newClient.name="Unknown";
             connect(newClient.socket,	static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),	this, &ServerCatchcopy::connectionError,Qt::QueuedConnection);
             connect(newClient.socket,	&QIODevice::readyRead,										this, &ServerCatchcopy::readyRead,Qt::QueuedConnection);
             connect(newClient.socket,	&QLocalSocket::disconnected,				 					this, &ServerCatchcopy::disconnected,Qt::QueuedConnection);
             connect(newClient.detectTimeOut,&QTimer::timeout,										this, &ServerCatchcopy::checkTimeOut,Qt::QueuedConnection);
-            ClientList << newClient;
+            clientList << newClient;
             emit connectedClient(newClient.id);
         }
     }
@@ -132,9 +147,9 @@ void ServerCatchcopy::newConnection()
 bool ServerCatchcopy::clientIdFound(const quint32 &id) const
 {
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).id==id)
+        if(clientList.at(index).id==id)
             return true;
         index++;
     }
@@ -151,14 +166,14 @@ void ServerCatchcopy::connectionError(const QLocalSocket::LocalSocketError &erro
         return;
     }
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).socket==socket)
+        if(clientList.at(index).socket==socket)
         {
             if(error!=QLocalSocket::PeerClosedError)
             {
                 qWarning() << "error detected for the client: " << index << ", type: " << error;
-                ClientList.at(index).socket->disconnectFromServer();
+                clientList.at(index).socket->disconnectFromServer();
             }
             return;
         }
@@ -175,15 +190,16 @@ void ServerCatchcopy::disconnected()
         return;
     }
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).socket==socket)
+        if(clientList.at(index).socket==socket)
         {
-            emit disconnectedClient(ClientList.at(index).id);
+            const quint32 &id=clientList.at(index).id;
             //ClientList.at(index).socket->disconnectFromServer();//already disconnected
-            delete ClientList.at(index).detectTimeOut;
-            ClientList.at(index).socket->deleteLater();
-            ClientList.removeAt(index);
+            delete clientList.at(index).detectTimeOut;
+            clientList.at(index).socket->deleteLater();
+            clientList.removeAt(index);
+            emit disconnectedClient(id);
             return;
         }
         index++;
@@ -194,11 +210,11 @@ void ServerCatchcopy::disconnected()
 void ServerCatchcopy::disconnectClient(const quint32 &id)
 {
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).id==id)
+        if(clientList.at(index).id==id)
         {
-            ClientList.at(index).socket->disconnectFromServer();
+            clientList.at(index).socket->disconnectFromServer();
             return;
         }
         index++;
@@ -215,13 +231,13 @@ void ServerCatchcopy::readyRead()
         return;
     }
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).socket==socket)
+        if(clientList.at(index).socket==socket)
         {
             while(socket->bytesAvailable()>0)
             {
-                if(!ClientList.at(index).haveData)
+                if(!clientList.at(index).haveData)
                 {
                     if(socket->bytesAvailable()<(int)sizeof(int))//ignore because first int is cuted!
                     {
@@ -232,69 +248,69 @@ void ServerCatchcopy::readyRead()
                     }
                     QDataStream in(socket);
                     in.setVersion(QDataStream::Qt_4_4);
-                    in >> ClientList[index].dataSize;
-                    ClientList[index].dataSize-=sizeof(int);
-                    if(ClientList.at(index).dataSize>64*1024*1024) // 64MB
+                    in >> clientList[index].dataSize;
+                    clientList[index].dataSize-=sizeof(int);
+                    if(clientList.at(index).dataSize>64*1024*1024) // 64MB
                     {
                         error_string="Reply size is >64MB, seam corrupted";
                         emit communicationError(error_string);
-                        disconnectClient(ClientList.at(index).id);
+                        disconnectClient(clientList.at(index).id);
                         return;
                     }
-                    if(ClientList.at(index).dataSize<(int)(sizeof(int) //orderId
+                    if(clientList.at(index).dataSize<(int)(sizeof(int) //orderId
                              + sizeof(quint32) //returnCode
                              + sizeof(quint32) //string list size
                                 ))
                     {
                         error_string="Reply size is too small to have correct code";
                         emit communicationError(error_string);
-                        disconnectClient(ClientList.at(index).id);
+                        disconnectClient(clientList.at(index).id);
                         return;
                     }
-                    ClientList[index].haveData=true;
+                    clientList[index].haveData=true;
                 }
-                if(ClientList.at(index).dataSize<(ClientList.at(index).data.size()+socket->bytesAvailable()))
-                    ClientList[index].data.append(socket->read(ClientList.at(index).dataSize-ClientList.at(index).data.size()));
+                if(clientList.at(index).dataSize<(clientList.at(index).data.size()+socket->bytesAvailable()))
+                    clientList[index].data.append(socket->read(clientList.at(index).dataSize-clientList.at(index).data.size()));
                 else
-                    ClientList[index].data.append(socket->readAll());
-                if(ClientList.at(index).dataSize==(quint32)ClientList.at(index).data.size())
+                    clientList[index].data.append(socket->readAll());
+                if(clientList.at(index).dataSize==(quint32)clientList.at(index).data.size())
                 {
-                    if(!checkDataIntegrity(ClientList.at(index).data))
+                    if(!checkDataIntegrity(clientList.at(index).data))
                     {
-                        emit communicationError("Data integrity wrong: "+QString(ClientList.at(index).data.toHex()));
-                        ClientList[index].data.clear();
-                        ClientList[index].haveData=false;
+                        emit communicationError("Data integrity wrong: "+QString(clientList.at(index).data.toHex()));
+                        clientList[index].data.clear();
+                        clientList[index].haveData=false;
                         qWarning() << "Data integrity wrong";
                         return;
                     }
                     QStringList returnList;
                     quint32 orderId;
-                    QDataStream in(ClientList.at(index).data);
+                    QDataStream in(clientList.at(index).data);
                     in.setVersion(QDataStream::Qt_4_4);
                     in >> orderId;
                     in >> returnList;
-                    ClientList[index].data.clear();
-                    ClientList[index].haveData=false;
-                    if(ClientList.at(index).queryNoReplied.contains(orderId))
+                    clientList[index].data.clear();
+                    clientList[index].haveData=false;
+                    if(clientList.at(index).queryNoReplied.contains(orderId))
                     {
                         emit communicationError("Duplicate query id");
                         qWarning() << "Duplicate query id";
                         return;
                     }
-                    ClientList[index].queryNoReplied << orderId;
-                    if(!ClientList.at(index).firstProtocolReplied && returnList.size()==2 && returnList.first()=="protocol")
+                    clientList[index].queryNoReplied << orderId;
+                    if(!clientList.at(index).firstProtocolReplied && returnList.size()==2 && returnList.first()=="protocol")
                     {
-                        ClientList[index].firstProtocolReplied=true;
-                        protocolSupported(ClientList.at(index).id,orderId,(returnList.last()==CATCHCOPY_PROTOCOL_VERSION));
+                        clientList[index].firstProtocolReplied=true;
+                        protocolSupported(clientList.at(index).id,orderId,(returnList.last()==CATCHCOPY_PROTOCOL_VERSION));
                     }
                     else
-                        parseInput(ClientList.at(index).id,orderId,returnList);
+                        parseInput(clientList.at(index).id,orderId,returnList);
                 }
             }
-            if(ClientList.at(index).haveData)
-                ClientList.at(index).detectTimeOut->start();
+            if(clientList.at(index).haveData)
+                clientList.at(index).detectTimeOut->start();
             else
-                ClientList.at(index).detectTimeOut->stop();
+                clientList.at(index).detectTimeOut->stop();
             return;
         }
         index++;
@@ -392,6 +408,17 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
     {
         if(returnList.size()!=2)
             return WrongArgumentListSize;
+        int index=0;
+        int size=clientList.size();
+        while(index<size)
+        {
+            if(clientList.at(index).id==client)
+            {
+                clientList[index].name=returnList.last();
+                break;
+            }
+            index++;
+        }
         emit clientName(client,returnList.last());
         clientRegistered(client,orderId);
         return Replied;
@@ -527,18 +554,18 @@ void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const q
 void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QStringList &returnList)
 {
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).id==client)
+        if(clientList.at(index).id==client)
         {
-            if(ClientList.at(index).socket->isValid() && ClientList.at(index).socket->state()==QLocalSocket::ConnectedState)
+            if(clientList.at(index).socket->isValid() && clientList.at(index).socket->state()==QLocalSocket::ConnectedState)
             {
-                if(!ClientList.at(index).queryNoReplied.contains(orderId))
+                if(!clientList.at(index).queryNoReplied.contains(orderId))
                 {
                     qWarning() << "Reply to missing query or previously replied";
                     return;
                 }
-                ClientList[index].queryNoReplied.removeOne(orderId);
+                clientList[index].queryNoReplied.removeOne(orderId);
                 //cut string list and send it as block of 32KB
                 QByteArray block;
                 QDataStream out(&block, QIODevice::WriteOnly);
@@ -555,16 +582,16 @@ void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const q
                     int byteWriten;
                     blockToSend=block.left(32*1024);//32KB
                     block.remove(0,blockToSend.size());
-                    byteWriten = ClientList[index].socket->write(blockToSend);
-                    if(!ClientList[index].socket->isValid())
+                    byteWriten = clientList[index].socket->write(blockToSend);
+                    if(!clientList[index].socket->isValid())
                     {
                         error_string="Socket is not valid";
                         emit error(error_string);
                         return;
                     }
-                    if(ClientList[index].socket->error()!=QLocalSocket::UnknownSocketError && ClientList[index].socket->error()!=QLocalSocket::PeerClosedError)
+                    if(clientList[index].socket->error()!=QLocalSocket::UnknownSocketError && clientList[index].socket->error()!=QLocalSocket::PeerClosedError)
                     {
-                        error_string="Error with socket: "+ClientList[index].socket->errorString();
+                        error_string="Error with socket: "+clientList[index].socket->errorString();
                         emit error(error_string);
                         return;
                     }
@@ -644,17 +671,17 @@ void ServerCatchcopy::checkTimeOut()
         return;
     }
     int index=0;
-    while(index<ClientList.size())
+    while(index<clientList.size())
     {
-        if(ClientList.at(index).detectTimeOut==timer)
+        if(clientList.at(index).detectTimeOut==timer)
         {
-            ClientList.at(index).detectTimeOut->stop();
-            if(ClientList.at(index).haveData)
+            clientList.at(index).detectTimeOut->stop();
+            if(clientList.at(index).haveData)
             {
-                error_string="The client is too long to send the next part of the reply: "+ClientList.at(index).data;
-                ClientList[index].haveData=false;
-                ClientList[index].data.clear();
-                ClientList.at(index).socket->disconnectFromServer();
+                error_string="The client is too long to send the next part of the reply: "+clientList.at(index).data;
+                clientList[index].haveData=false;
+                clientList[index].data.clear();
+                clientList.at(index).socket->disconnectFromServer();
                 emit error(error_string);
             }
             return;

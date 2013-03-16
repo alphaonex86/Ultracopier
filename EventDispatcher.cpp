@@ -42,6 +42,7 @@ EventDispatcher::EventDispatcher()
     connect(&cliParser,     &CliParser::newCopy,					copyServer,     &CopyListener::copy);
     connect(&cliParser,     &CliParser::newMoveWithoutDestination,	copyServer,     &CopyListener::moveWithoutDestination);
     connect(&cliParser,     &CliParser::newMove,					copyServer,     &CopyListener::move);
+    connect(copyServer,     &CopyListener::newClientList,			&optionDialog,  &OptionDialog::newClientList);
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     connect(&cliParser,     &CliParser::tryLoadPlugin,				plugins,        &PluginsManager::tryLoadPlugin);
     #endif

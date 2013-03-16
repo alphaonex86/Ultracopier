@@ -115,11 +115,12 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     #ifdef ULTRACOPIER_DEBUG
     connect(listen,&PluginInterface_Listener::debugInformation,this,&CopyListener::debugInformation);
     #endif // ULTRACOPIER_DEBUG
-    connect(listen,&PluginInterface_Listener::error,this,&CopyListener::error);
+    connect(listen,&PluginInterface_Listener::error,                            this,&CopyListener::error);
     connect(listen,&PluginInterface_Listener::newCopyWithoutDestination,		this,&CopyListener::newPluginCopyWithoutDestination);
     connect(listen,&PluginInterface_Listener::newCopy,                          this,&CopyListener::newPluginCopy);
     connect(listen,&PluginInterface_Listener::newMoveWithoutDestination,		this,&CopyListener::newPluginMoveWithoutDestination);
     connect(listen,&PluginInterface_Listener::newMove,                          this,&CopyListener::newPluginMove);
+    connect(listen,&PluginInterface_Listener::newClientList,                    this,&CopyListener::reloadClientList);
     newPluginListener.listenInterface	= listen;
 
     newPluginListener.path			= plugin.path+PluginsManager::getResolvedPluginName("listener");
@@ -386,6 +387,25 @@ void CopyListener::allPluginIsloaded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"with value: "+QString::number(pluginList.size()>0));
     sendState(true);
+    reloadClientList();
+}
+
+void CopyListener::reloadClientList()
+{
+    if(!plugins->allPluginHaveBeenLoaded())
+        return;
+    QStringList clients;
+    int indexPlugin=0;
+    while(indexPlugin<pluginList.size())
+    {
+        if(pluginList.at(indexPlugin).listenInterface!=NULL)
+        {
+            clients << pluginList[indexPlugin].listenInterface->clientsList();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ask client to: "+pluginList[indexPlugin].path);
+        }
+        indexPlugin++;
+    }
+    emit newClientList(clients);
 }
 
 void CopyListener::sendState(bool force)

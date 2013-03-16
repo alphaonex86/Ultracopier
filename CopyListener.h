@@ -43,6 +43,7 @@ class CopyListener : public QObject, public GlobalClass
         #endif // ULTRACOPIER_DEBUG
         void error(const QString &error);
         void allPluginIsloaded();
+        void reloadClientList();
     public slots:
         /** \brief the copy is finished
          \param orderId id used when it have send the copy
@@ -81,6 +82,7 @@ class CopyListener : public QObject, public GlobalClass
         void listenerReady(const Ultracopier::ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
         void pluginLoaderReady(const Ultracopier::CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
         void previouslyPluginAdded(const PluginsAvailable &);
+        void newClientList(const QStringList &clientsList);
     private:
         struct PluginListener
         {

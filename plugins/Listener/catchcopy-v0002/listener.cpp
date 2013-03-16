@@ -12,6 +12,10 @@ Listener::Listener()
     connect(&server,&ServerCatchcopy::error,                            this,&Listener::errorInternal);
     connect(&server,&ServerCatchcopy::communicationError,               this,&Listener::communicationErrorInternal);
     connect(&server,&ServerCatchcopy::clientName,                       this,&Listener::clientName);
+    connect(&server,&ServerCatchcopy::clientName,                       this,&Listener::newClientList);
+    connect(&server,&ServerCatchcopy::connectedClient,                  this,&Listener::newClientList);
+    connect(&server,&ServerCatchcopy::disconnectedClient,               this,&Listener::newClientList);
+
 }
 
 void Listener::listen()
@@ -46,6 +50,12 @@ void Listener::setResources(OptionInterface * options,const QString &writePath,c
 QWidget * Listener::options()
 {
     return NULL;
+}
+
+/// \brief to get a client list
+QStringList Listener::clientsList() const
+{
+    return server.clientsList();
 }
 
 void Listener::transferFinished(const quint32 &orderId,const bool &withError)

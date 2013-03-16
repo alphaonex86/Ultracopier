@@ -21,7 +21,6 @@ OptionDialog::OptionDialog() :
     allPluginsIsLoaded=false;
     ui->setupUi(this);
     ui->treeWidget->topLevelItem(0)->setSelected(true);
-    ui->treeWidget->topLevelItem(3)->setTextColor(0,QColor(150, 150, 150, 255));
     ui->treeWidget->topLevelItem(4)->setTextColor(0,QColor(150, 150, 150, 255));
     ui->treeWidget->topLevelItem(5)->setTextColor(0,QColor(150, 150, 150, 255));
     ui->treeWidget->expandAll();
@@ -35,17 +34,17 @@ OptionDialog::OptionDialog() :
 
     //load the plugins
     plugins->lockPluginListEdition();
-    connect(this,&OptionDialog::previouslyPluginAdded,			this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,	&PluginsManager::onePluginAdded,		this,	&OptionDialog::onePluginAdded);
-    connect(plugins,	&PluginsManager::onePluginInErrorAdded,	this,	&OptionDialog::onePluginAdded);
+    connect(this,       &OptionDialog::previouslyPluginAdded,       this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
+    connect(plugins,	&PluginsManager::onePluginAdded,            this,	&OptionDialog::onePluginAdded);
+    connect(plugins,	&PluginsManager::onePluginInErrorAdded,     this,	&OptionDialog::onePluginAdded);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(plugins,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
     connect(plugins,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
-    connect(plugins,	&PluginsManager::manuallyAdded,		this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
+    connect(plugins,	&PluginsManager::manuallyAdded,             this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
     #endif
-    connect(options,	&OptionEngine::newOptionValue,			this,	&OptionDialog::newOptionValue);
+    connect(options,	&OptionEngine::newOptionValue,              this,	&OptionDialog::newOptionValue);
     QList<PluginsAvailable> list=plugins->getPlugins(true);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
@@ -305,31 +304,32 @@ void OptionDialog::on_treeWidget_itemSelectionChanged()
     QTreeWidgetItem * selectedItem=listSelectedItem.first();
     //general
     if(selectedItem==ui->treeWidget->topLevelItem(0))
-        ui->stackedWidget->setCurrentIndex(0);
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidgetGeneral);
     //plugins
     else if(selectedItem==ui->treeWidget->topLevelItem(1))
-        ui->stackedWidget->setCurrentIndex(1);
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidgetPlugins);
     //Copy engine
     else if(selectedItem==ui->treeWidget->topLevelItem(2))
-        ui->stackedWidget->setCurrentIndex(2);
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidgetCopyEngine);
     //Listener
-        //do nothing
+    else if(selectedItem==ui->treeWidget->topLevelItem(3))
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidgetListener);
     //PluginLoader
         //do nothing
     //SessionLoader
         //do nothing
     //Themes
     else if(selectedItem==ui->treeWidget->topLevelItem(6))
-        ui->stackedWidget->setCurrentIndex(7);
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidgetThemes);
     //log
     else if(selectedItem==ui->treeWidget->topLevelItem(7))
-        ui->stackedWidget->setCurrentIndex(8);
+        ui->stackedWidget->setCurrentWidget(ui->stackedWidgetLog);
     else
     {
         int index;
         if(selectedItem->parent()==ui->treeWidget->topLevelItem(2))
         {
-            ui->stackedWidget->setCurrentIndex(3);
+            ui->stackedWidget->setCurrentWidget(ui->stackedWidgetCopyEngineOptions);
             index=selectedItem->parent()->indexOfChild(selectedItem);
             if(index!=-1)
                 ui->stackedOptionsCopyEngine->setCurrentIndex(index);
@@ -338,7 +338,7 @@ void OptionDialog::on_treeWidget_itemSelectionChanged()
         }
         else if(selectedItem->parent()==ui->treeWidget->topLevelItem(3))
         {
-            ui->stackedWidget->setCurrentIndex(4);
+            ui->stackedWidget->setCurrentWidget(ui->stackedWidgetListenerOptions);
             index=selectedItem->parent()->indexOfChild(selectedItem);
             if(index!=-1)
                 ui->stackedOptionsListener->setCurrentIndex(index);
@@ -347,7 +347,7 @@ void OptionDialog::on_treeWidget_itemSelectionChanged()
         }
         else if(selectedItem->parent()==ui->treeWidget->topLevelItem(4))
         {
-            ui->stackedWidget->setCurrentIndex(5);
+            ui->stackedWidget->setCurrentWidget(ui->stackedWidgetPluginLoaderOptions);
             index=selectedItem->parent()->indexOfChild(selectedItem);
             if(index!=-1)
                 ui->stackedOptionsPluginLoader->setCurrentIndex(index);
@@ -356,7 +356,7 @@ void OptionDialog::on_treeWidget_itemSelectionChanged()
         }
         else if(selectedItem->parent()==ui->treeWidget->topLevelItem(5))
         {
-            ui->stackedWidget->setCurrentIndex(6);
+            ui->stackedWidget->setCurrentWidget(ui->stackedWidgetSessionLoaderOptions);
             index=selectedItem->parent()->indexOfChild(selectedItem);
             if(index!=-1)
                 ui->stackedOptionsSessionLoader->setCurrentIndex(index);
@@ -584,14 +584,14 @@ void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(int index)
             if(pluginOptionsWidgetList.at(index_loop).name==ui->Ultracopier_current_theme->itemData(index).toString())
             {
                 if(pluginOptionsWidgetList.at(index_loop).options==NULL)
-                    ui->stackedWidgetThemes->setCurrentIndex(1);
+                    ui->stackedWidgetThemesOptions->setCurrentWidget(ui->pageThemeNoOptions);
                 else
-                    ui->stackedWidgetThemes->setCurrentWidget(pluginOptionsWidgetList.at(index_loop).options);
+                    ui->stackedWidgetThemesOptions->setCurrentWidget(pluginOptionsWidgetList.at(index_loop).options);
                 return;
             }
             index_loop++;
         }
-        ui->stackedWidgetThemes->setCurrentIndex(0);
+        ui->stackedWidgetThemesOptions->setCurrentWidget(ui->pageUnableToLoadThemePlugin);
     }
 }
 
@@ -705,7 +705,7 @@ void OptionDialog::newThemeOptions(QString name,QWidget* theNewOptionsWidget,boo
     pluginOptionsWidgetList << tempItem;
     if(theNewOptionsWidget!=NULL)
     {
-        ui->stackedWidgetThemes->addWidget(theNewOptionsWidget);
+        ui->stackedWidgetThemesOptions->addWidget(theNewOptionsWidget);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set the last page");
     }
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
@@ -950,4 +950,10 @@ void OptionDialog::on_DisplayOSWarning_clicked()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
         options->setOptionValue("Ultracopier","displayOSSpecific",ui->DisplayOSWarning->isChecked());
     }
+}
+
+void OptionDialog::newClientList(const QStringList &clientsList)
+{
+    ui->clientConnected->clear();
+    ui->clientConnected->addItems(clientsList);
 }

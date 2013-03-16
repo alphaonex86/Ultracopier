@@ -70,9 +70,6 @@
         <property name="text">
          <string>Listener</string>
         </property>
-        <property name="flags">
-         <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-        </property>
        </item>
        <item>
         <property name="text">
@@ -432,7 +429,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="stackedWidgetCopyEngine_2">
+       <widget class="QWidget" name="stackedWidgetCopyEngineOptions">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="QStackedWidget" name="stackedOptionsCopyEngine"/>
@@ -440,27 +437,41 @@
         </layout>
        </widget>
        <widget class="QWidget" name="stackedWidgetListener">
+        <layout class="QVBoxLayout" name="verticalLayout_10">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Client connected</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="clientConnected"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="stackedWidgetListenerOptions">
         <layout class="QVBoxLayout" name="verticalLayout_11">
          <item>
           <widget class="QStackedWidget" name="stackedOptionsListener"/>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="stackedWidgetPluginLoader">
+       <widget class="QWidget" name="stackedWidgetPluginLoaderOptions">
         <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
           <widget class="QStackedWidget" name="stackedOptionsPluginLoader"/>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="stackedWidgetSessionLoader">
+       <widget class="QWidget" name="stackedWidgetSessionLoaderOptions">
         <layout class="QVBoxLayout" name="verticalLayout_13">
          <item>
           <widget class="QStackedWidget" name="stackedOptionsSessionLoader"/>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="stackedWidgetThemes_2">
+       <widget class="QWidget" name="stackedWidgetThemes">
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -509,11 +520,11 @@
           </layout>
          </item>
          <item>
-          <widget class="QStackedWidget" name="stackedWidgetThemes">
+          <widget class="QStackedWidget" name="stackedWidgetThemesOptions">
            <property name="currentIndex">
             <number>1</number>
            </property>
-           <widget class="QWidget" name="page_2">
+           <widget class="QWidget" name="pageUnableToLoadThemePlugin">
             <layout class="QVBoxLayout" name="verticalLayout_7">
              <item>
               <spacer name="verticalSpacer_2">
@@ -570,7 +581,7 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="page_3">
+           <widget class="QWidget" name="pageThemeNoOptions">
             <layout class="QVBoxLayout" name="verticalLayout_8">
              <item>
               <spacer name="verticalSpacer_4">
