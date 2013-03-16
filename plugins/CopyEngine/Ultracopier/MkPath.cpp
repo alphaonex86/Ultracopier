@@ -48,10 +48,10 @@ void MkPath::retry()
 
 void MkPath::run()
 {
-    connect(this,&MkPath::internalStartAddPath,	this,&MkPath::internalAddPath,Qt::QueuedConnection);
+    connect(this,&MkPath::internalStartAddPath,     this,&MkPath::internalAddPath,Qt::QueuedConnection);
     connect(this,&MkPath::internalStartDoThisPath,	this,&MkPath::internalDoThisPath,Qt::QueuedConnection);
-    connect(this,&MkPath::internalStartSkip,	this,&MkPath::internalSkip,Qt::QueuedConnection);
-    connect(this,&MkPath::internalStartRetry,	this,&MkPath::internalRetry,Qt::QueuedConnection);
+    connect(this,&MkPath::internalStartSkip,        this,&MkPath::internalSkip,Qt::QueuedConnection);
+    connect(this,&MkPath::internalStartRetry,       this,&MkPath::internalRetry,Qt::QueuedConnection);
     exec();
 }
 

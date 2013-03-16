@@ -121,7 +121,7 @@ void ListThread::transferInodeIsClosed()
             isFound=true;
             if(actionToDoListTransfer.size()==0)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning==0");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionToDoListTransfer==0");
                 actionToDoListInode << actionToDoListInode_afterTheTransfer;
                 actionToDoListInode_afterTheTransfer.clear();
                 doNewActions_inode_manipulation();
@@ -1448,7 +1448,7 @@ int ListThread::getNumberOfTranferRuning() const
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()));
     if(stopIt || putInPause)
         return;
     int numberOfTranferRuning=getNumberOfTranferRuning();
@@ -1713,10 +1713,11 @@ void ListThread::mkPathFirstFolderFinish()
                 doNewActions_inode_manipulation();
                 return;
             }
-            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath)
+            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath || actionToDoListInode.at(int_for_loop).type==ActionType_RealMove)
             {
                 //to send to the log
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
+                emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
                 if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)

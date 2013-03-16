@@ -30,20 +30,20 @@ Themes::Themes(const QColor &progressColorWrite,
     ui->setupUi(this);
     uiOptions->setupUi(ui->tabWidget->widget(1));
 
-    currentFile	= 0;
-    totalFile	= 0;
-    currentSize	= 0;
-    totalSize	= 0;
-    haveError	= false;
-    stat        = status_never_started;
+    currentFile     = 0;
+    totalFile       = 0;
+    currentSize     = 0;
+    totalSize       = 0;
+    haveError       = false;
+    stat            = status_never_started;
     modeIsForced	= false;
-    haveStarted	= false;
+    haveStarted     = false;
     storeIsInPause	= false;
 
-    this->progressColorWrite=progressColorWrite;
-    this->progressColorRead=progressColorRead;
-    this->progressColorRemaining=progressColorRemaining;
-    this->currentSpeed=currentSpeed;
+    this->progressColorWrite    = progressColorWrite;
+    this->progressColorRead     = progressColorRead;
+    this->progressColorRemaining= progressColorRemaining;
+    this->currentSpeed          = currentSpeed;
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
     //uiOptions->setupUi(ui->tabWidget->widget(1));

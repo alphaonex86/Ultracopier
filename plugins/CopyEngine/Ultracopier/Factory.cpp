@@ -19,6 +19,7 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<TransferStat>("TransferStat");
     qRegisterMetaType<QList<QStorageInfo::DriveType> >("QList<QStorageInfo::DriveType>");
     qRegisterMetaType<TransferAlgorithm>("TransferAlgorithm");
+    qRegisterMetaType<ActionType>("ActionType");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);

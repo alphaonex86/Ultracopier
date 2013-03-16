@@ -150,7 +150,6 @@ void ScanFileOrFolder::run()
 {
     stopped=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+QString::number(mode));
-        QDir destinationFolder(destination);
     int sourceIndex=0;
     while(sourceIndex<sources.size())
     {
@@ -173,7 +172,10 @@ void ScanFileOrFolder::run()
                 tempString+="/";
             tempString+=TransferThread::resolvedName(source);
             if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(tempString).exists())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("do real move: %1 to %2").arg(source.absoluteFilePath()).arg(tempString));
                 emit addToRealMove(source.absoluteFilePath(),tempString);
+            }
             else
                 listFolder(source.absoluteFilePath(),tempString);
         }
