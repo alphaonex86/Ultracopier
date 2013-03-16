@@ -20,7 +20,7 @@
    <string>About Ultracopier</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources/resources.qrc">
+   <iconset resource="resources/ultracopier-resources.qrc">
     <normaloff>:/ultracopier-16x16.png</normaloff>:/ultracopier-16x16.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -44,7 +44,7 @@
         </size>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources/resources.qrc">:/ultracopier-128x128.png</pixmap>
+        <pixmap resource="resources/ultracopier-resources.qrc">:/ultracopier-128x128.png</pixmap>
        </property>
       </widget>
      </item>
@@ -107,38 +107,13 @@ This version is compiled as version: %1.</string>
     </widget>
    </item>
    <item>
-    <widget class="QTreeWidget" name="debugView">
+    <widget class="QTreeView" name="debugView">
      <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
      <property name="uniformRowHeights">
       <bool>true</bool>
      </property>
-     <column>
-      <property name="text">
-       <string notr="true">Time</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">File</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">Function</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">Location</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">Text</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
@@ -196,7 +171,7 @@ This version is compiled as version: %1.</string>
   <tabstop>pushButtonClose</tabstop>
  </tabstops>
  <resources>
-  <include location="resources/resources.qrc"/>
+  <include location="resources/ultracopier-resources.qrc"/>
  </resources>
  <connections>
   <connection>

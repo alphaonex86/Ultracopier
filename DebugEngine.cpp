@@ -306,35 +306,13 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
                 debugHtmlContent+=addDebugInformation_htmlFormat;
             }
         }
-        ItemOfDebug newItem;
-        newItem.time=addDebugInformation_time;
-        newItem.level=level;
-        newItem.function=function;
-        if(addDebugInformation_lignestring!="-1")
-            newItem.file=file+":"+addDebugInformation_lignestring;
-        else
-            newItem.file=file;
-        newItem.location=location;
-        newItem.text=text;
-        listItemOfDebug << newItem;
+        //Send the new line
+        if(addDebugInformationCallNumber<ULTRACOPIER_DEBUG_MAX_GUI_LINE)
+        {
+            addDebugInformationCallNumber++;
+            DebugModel::debugModel.addDebugInformation(startTime.elapsed(),level,function,text,file,ligne,location);
+        }
     }
-    //Send the new line
-    if(addDebugInformationCallNumber<ULTRACOPIER_DEBUG_MAX_GUI_LINE)
-    {
-        addDebugInformationCallNumber++;
-        emit newDebugInformation();
-    }
-}
-
-QList<DebugEngine::ItemOfDebug> DebugEngine::getItemList()
-{
-    QList<DebugEngine::ItemOfDebug> returnedList;
-    {
-        QMutexLocker lock_mutex(&mutexList);
-        returnedList=listItemOfDebug;
-        listItemOfDebug.clear();
-    }
-    return returnedList;
 }
 
 /// \brief Get the html text info for re-show it

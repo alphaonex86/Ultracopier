@@ -116,7 +116,8 @@ SOURCES += ThemesManager.cpp \
     CliParser.cpp \
     FacilityEngine.cpp \
     LogThread.cpp \
-    OSSpecific.cpp
+    OSSpecific.cpp \
+    DebugModel.cpp
 INCLUDEPATH += lib/qt-tar-xz/
 
 OTHER_FILES += resources/resources-windows.rc

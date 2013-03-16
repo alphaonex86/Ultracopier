@@ -189,6 +189,7 @@ void EventDispatcher::initFunction()
     connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit);
     //connect the slot for the help dialog
     connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show);
+    DebugModel::debugModel.setupTheTimer();
 }
 
 #ifdef Q_OS_WIN32

@@ -18,7 +18,7 @@ HelpDialog::HelpDialog() :
     ui->setupUi(this);
     reloadTextValue();
     #ifdef ULTRACOPIER_DEBUG
-    connect(debug_engine_instance,&DebugEngine::newDebugInformation,this,&HelpDialog::addDebugText);
+    ui->debugView->setModel(&DebugModel::debugModel);
     connect(ui->pushButtonSaveBugReport,&QPushButton::clicked,debug_engine_instance,&DebugEngine::saveBugReport);
     #else // ULTRACOPIER_DEBUG
     ui->lineEditInsertDebug->hide();
@@ -95,80 +95,12 @@ void HelpDialog::reloadTextValue()
 }
 
 #ifdef ULTRACOPIER_DEBUG
-/// \brief Add debug text
-void HelpDialog::addDebugText()
-{
-    QList<DebugEngine::ItemOfDebug> returnedList=debug_engine_instance->getItemList();
-    QTreeWidgetItem * item;
-    QBrush brush;
-    QFont functionFont;
-    functionFont.setItalic(true);
-    functionFont.setUnderline(true);
-    QFont timeFont;
-    timeFont.setBold(true);
-    QFont noteFont;
-    noteFont.setBold(true);
-    noteFont.setPointSize(15);
-    int index=0;
-    int loop_size=returnedList.size();
-    while(index<loop_size)
-    {
-        item=new QTreeWidgetItem(ui->debugView,QStringList()
-                                << returnedList.at(index).time
-                                << returnedList.at(index).file
-                                << returnedList.at(index).function
-                                << returnedList.at(index).location
-                                << returnedList.at(index).text);
-        switch(returnedList.at(index).level)
-        {
-            case DebugLevel_custom_Information:
-                brush=QBrush(QColor(94,165,255));
-            break;
-            case DebugLevel_custom_Critical:
-                brush=QBrush(QColor(255,0,0));
-            break;
-            case DebugLevel_custom_Warning:
-                brush=QBrush(QColor(255,178,0));
-            break;
-            case DebugLevel_custom_Notice:
-                brush=QBrush(QColor(128,128,128));
-            break;
-            case DebugLevel_custom_UserNote:
-                brush=QBrush(QColor(0,0,0));
-            break;
-        }
-        item->setForeground(0,brush);
-        item->setFont(0,timeFont);
-        item->setForeground(1,brush);
-        item->setForeground(2,brush);
-        item->setFont(2,functionFont);
-        item->setForeground(3,brush);
-        item->setForeground(4,brush);
-        if(returnedList.at(index).level==DebugLevel_custom_UserNote)
-        {
-            item->setFont(0,noteFont);
-            item->setFont(1,noteFont);
-            item->setFont(2,noteFont);
-            item->setFont(3,noteFont);
-            item->setFont(4,noteFont);
-        }
-        ui->debugView->insertTopLevelItem(ui->debugView->columnCount(),item);
-        index++;
-    }
-    if(loop_size==ULTRACOPIER_DEBUG_MAX_GUI_LINE)
-    {
-        item=new QTreeWidgetItem(ui->debugView,QStringList() << "...");
-        ui->debugView->insertTopLevelItem(ui->debugView->columnCount(),item);
-    }
-}
-
 void HelpDialog::on_lineEditInsertDebug_returnPressed()
 {
     DebugEngine::addDebugNote(ui->lineEditInsertDebug->text());
     ui->lineEditInsertDebug->clear();
     ui->debugView->scrollToBottom();
 }
-
 #endif // ULTRACOPIER_DEBUG
 
 void HelpDialog::on_pushButtonAboutQt_clicked()

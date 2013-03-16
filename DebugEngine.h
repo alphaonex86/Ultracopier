@@ -12,8 +12,10 @@
 #include <QFile>
 #include <QMutex>
 #include <QTime>
+#include <QTimer>
 #include <QList>
 #include <QCoreApplication>
+#include <QAbstractTableModel>
 
 #include "Variable.h"
 #include "PlatformMacro.h"
@@ -22,6 +24,42 @@
 #include "Singleton.h"
 
 #ifdef ULTRACOPIER_DEBUG
+
+class DebugModel : public QAbstractTableModel
+{
+    Q_OBJECT
+public:
+    /// \brief the transfer item displayed
+    struct DebugItem
+    {
+        int time;
+        DebugLevel_custom level;
+        QString function;
+        QString text;
+        QString file;
+        QString location;
+    };
+
+    static DebugModel debugModel;
+    DebugModel();
+    ~DebugModel();
+
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex&, const QVariant&, int = Qt::EditRole);
+
+    void addDebugInformation(const int &time, const DebugLevel_custom &level, const QString& function, const QString& text, const QString &file="", const int& ligne=-1, const QString& location="Core");
+    void setupTheTimer();
+    QTimer *updateDisplayTimer;
+    bool displayed;
+    bool inWaitOfDisplay;
+private:
+    QList<DebugItem> list;
+private slots:
+    void updateDisplay();
+};
 
 /** \brief Define the class for the debug
 
@@ -48,23 +86,10 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
         \note This function is reentrant */
         static void addDebugInformationStatic(const Ultracopier::DebugLevel &level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
         static void addDebugNote(const QString& text);
-        /** \brief structure for one debug item */
-        struct ItemOfDebug
-        {
-            DebugLevel_custom level;
-            QString time;
-            QString file;
-            QString function;
-            QString location;
-            QString text;
-        };
-        QList<ItemOfDebug> listItemOfDebug;
-        QList<ItemOfDebug> getItemList();
     public slots:
         /** \brief ask to the user where save the bug report
         \warning This function can be only call by the graphical thread */
         void saveBugReport();
-
         void addDebugInformation(const DebugLevel_custom &level,const QString& fonction,const QString& text,QString file="",const int& ligne=-1,const QString& location="Core");
     private:
         /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
@@ -102,9 +127,6 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
         QString addDebugInformation_htmlFormat;
         QString addDebugInformation_textFormat;*/
         quint32 addDebugInformationCallNumber;
-    signals:
-        /// \brief Send that's when new debug info is added
-        void newDebugInformation();
 };
 
 #endif // ULTRACOPIER_DEBUG
