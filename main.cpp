@@ -57,6 +57,14 @@ int main(int argc, char *argv[])
             returnCode=0;
         else
             returnCode=ultracopierApplication.exec();
+
+        delete ThemesManager::themesManager;
+        delete LanguagesManager::languagesManager;
+        delete PluginsManager::pluginsManager;
+        delete OptionEngine::optionEngine;
+        delete ResourcesManager::resourcesManager;
+        delete DebugEngine::debugEngine;
+        delete DebugModel::debugModel;
     }
     return returnCode;
 }

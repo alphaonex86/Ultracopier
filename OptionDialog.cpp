@@ -383,6 +383,7 @@ void OptionDialog::loadOption()
     newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
     newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
+    newOptionValue("Ultracopier",	"confirmToGroupWindows",          OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
     newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
@@ -519,56 +520,34 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
     else if(group=="Write_log")
     {
         if(name=="enabled")
-        {
             ui->checkBox_Log->setChecked(value.toBool());
-        }
         else if(name=="file")
-        {
             ui->lineEditLog_File->setText(value.toString());
-        }
         else if(name=="transfer")
-        {
             ui->checkBoxLog_transfer->setChecked(value.toBool());
-        }
         else if(name=="sync")
-        {
             ui->checkBoxLog_sync->setChecked(value.toBool());
-        }
         else if(name=="error")
-        {
             ui->checkBoxLog_error->setChecked(value.toBool());
-        }
         else if(name=="folder")
-        {
             ui->checkBoxLog_folder->setChecked(value.toBool());
-        }
         else if(name=="transfer_format")
-        {
             ui->lineEditLog_transfer_format->setText(value.toString());
-        }
         else if(name=="error_format")
-        {
             ui->lineEditLog_error_format->setText(value.toString());
-        }
         else if(name=="folder_format")
-        {
             ui->lineEditLog_folder_format->setText(value.toString());
-        }
     }
     else if(group=="Ultracopier")
     {
         if(name=="ActionOnManualOpen")
-        {
             ui->ActionOnManualOpen->setCurrentIndex(value.toInt());
-        }
-        if(name=="GroupWindowWhen")
-        {
+        else if(name=="GroupWindowWhen")
             ui->GroupWindowWhen->setCurrentIndex(value.toInt());
-        }
-        if(name=="displayOSSpecific")
-        {
+        else if(name=="confirmToGroupWindows")
+            ui->confirmToGroupWindows->setChecked(value.toBool());
+        else if(name=="displayOSSpecific")
             ui->DisplayOSWarning->setChecked(value.toBool());
-        }
     }
 }
 

@@ -120,9 +120,9 @@ DebugEngine::DebugEngine()
             if(removeTheLockFile())
             {
                 //Ask to the user
-                /*QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report","Ultracopier seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report","Ultracopier seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                 if(reply==QMessageBox::Yes)
-                    saveBugReport();*/
+                    saveBugReport();
             }
             else
                 puts(qPrintable(logFile.fileName()+" unable to open it as read"));

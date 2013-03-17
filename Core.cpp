@@ -59,6 +59,7 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
     bool haveSameSource=false,haveSameDestination=false;
     if(GroupWindowWhen!=0)
     {
+        bool needConfirmation=OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows").toInt();
         int index=0;
         while(index<copyList.size())
         {
@@ -82,10 +83,19 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
                     /*protocols are same*/
                     if(copyEngineList->protocolsSupportedByTheCopyEngine(copyList.at(index).engine,protocolsUsedForTheSources,protocolsUsedForTheDestination))
                     {
-                        copyList[index].orderId<<orderId;
-                        copyList.at(index).engine->newCopy(sources,destination);
-                        copyList.at(index).interface->haveExternalOrder();
-                        return;
+                        bool confirmed=true;
+                        if(needConfirmation)
+                        {
+                            QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Group window","Do you want group the transfer with another actual running transfer?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                            confirmed=(reply==QMessageBox::Yes);
+                        }
+                        if(confirmed)
+                        {
+                            copyList[index].orderId<<orderId;
+                            copyList.at(index).engine->newCopy(sources,destination);
+                            copyList.at(index).interface->haveExternalOrder();
+                            return;
+                        }
                     }
                 }
             }

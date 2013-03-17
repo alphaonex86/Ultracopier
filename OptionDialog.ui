@@ -102,12 +102,15 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>8</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
           <layout class="QFormLayout" name="formLayout_2">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::ExpandingFieldsGrow</enum>
+           </property>
            <item row="0" column="0">
             <widget class="QCheckBox" name="Language_force">
              <property name="text">
@@ -214,14 +217,24 @@
             </widget>
            </item>
            <item row="5" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Confirm to group windows</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
             <widget class="QLabel" name="label_11">
              <property name="text">
               <string>Display the OS warning:</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
+           <item row="6" column="1">
             <widget class="QCheckBox" name="DisplayOSWarning"/>
+           </item>
+           <item row="5" column="1">
+            <widget class="QCheckBox" name="confirmToGroupWindows"/>
            </item>
           </layout>
          </item>
