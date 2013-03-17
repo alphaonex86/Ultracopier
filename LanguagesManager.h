@@ -31,12 +31,12 @@ class LanguagesManager : public QObject
     //	QString getMainShortName();
     public:
         const QString autodetectedLanguage();
-        static LanguagesManager languagesManager;
-    private:
+        static LanguagesManager *languagesManager;
         /// \brief Create the manager and load the defaults variables
         LanguagesManager();
         /// \brief Destroy the language manager
         ~LanguagesManager();
+    private:
         /** \brief To set the current language
         \param newLanguage Should be short name code found into informations.xml of language file */
         void setCurrentLanguage(const QString &newLanguage);

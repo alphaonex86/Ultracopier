@@ -19,8 +19,8 @@ Core::Core(CopyEngineManager *copyEngineList)
     forUpateInformation.setInterval(ULTRACOPIER_TIME_INTERFACE_UPDATE);
     loadInterface();
     //connect(&copyEngineList,	&CopyEngineManager::newCanDoOnlyCopy,				this,	&Core::newCanDoOnlyCopy);
-    connect(&ThemesManager::themesManager,			&ThemesManager::theThemeNeedBeUnloaded,				this,	&Core::unloadInterface);
-    connect(&ThemesManager::themesManager,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface, Qt::QueuedConnection);
+    connect(ThemesManager::themesManager,			&ThemesManager::theThemeNeedBeUnloaded,				this,	&Core::unloadInterface);
+    connect(ThemesManager::themesManager,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface, Qt::QueuedConnection);
     connect(&forUpateInformation,	&QTimer::timeout,						this,	&Core::periodicSynchronization);
 }
 
@@ -55,7 +55,7 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination);
     //search to group the window
-    int GroupWindowWhen=OptionEngine::optionEngine.getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+    int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
     bool haveSameSource=false,haveSameDestination=false;
     if(GroupWindowWhen!=0)
     {
@@ -121,7 +121,7 @@ void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForThe
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination);
     //search to group the window
-    int GroupWindowWhen=OptionEngine::optionEngine.getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+    int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
     bool haveSameSource=false,haveSameDestination=false;
     if(GroupWindowWhen!=0)
     {
@@ -180,7 +180,7 @@ void Core::addWindowCopyMove(const Ultracopier::CopyMode &mode,const QString &na
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
         return;
     }
-    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)OptionEngine::optionEngine.getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
+    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
     if(ActionOnManualOpen_value!=ActionOnManualOpen_Nothing)
     {
         if(ActionOnManualOpen_value==ActionOnManualOpen_Folder)
@@ -253,7 +253,7 @@ void Core::loadInterface()
         loop_size=copyList.size();
         while(index<loop_size)
         {
-            copyList[index].interface=ThemesManager::themesManager.getThemesInstance();
+            copyList[index].interface=ThemesManager::themesManager->getThemesInstance();
             if(copyList[index].interface==NULL)
             {
                 copyInstanceCanceledByIndex(index);
@@ -348,7 +348,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
     newItem.engine=returnInformations.engine;
     if(newItem.engine!=NULL)
     {
-        PluginInterface_Themes *theme=ThemesManager::themesManager.getThemesInstance();
+        PluginInterface_Themes *theme=ThemesManager::themesManager->getThemesInstance();
         if(theme!=NULL)
         {
             newItem.id=incrementId();

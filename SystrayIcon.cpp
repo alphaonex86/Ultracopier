@@ -48,12 +48,12 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     connect(actionMenuAbout,	&QAction::triggered,					this,	&SystrayIcon::showHelp);
     connect(actionOptions,		&QAction::triggered,					this,	&SystrayIcon::showOptions);
     connect(this,			&SystrayIcon::activated,                    this,	&SystrayIcon::CatchAction);
-    connect(&PluginsManager::pluginsManager,		&PluginsManager::pluginListingIsfinish,			this,	&SystrayIcon::reloadEngineList);
+    connect(PluginsManager::pluginsManager,		&PluginsManager::pluginListingIsfinish,			this,	&SystrayIcon::reloadEngineList);
     //display the icon
     updateCurrentTheme();
     //if theme/language change, update graphic part
-    connect(&ThemesManager::themesManager,			&ThemesManager::theThemeIsReloaded,             this,	&SystrayIcon::updateCurrentTheme, Qt::QueuedConnection);
-    connect(&LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,			this,	&SystrayIcon::retranslateTheUI, Qt::QueuedConnection);
+    connect(ThemesManager::themesManager,			&ThemesManager::theThemeIsReloaded,             this,	&SystrayIcon::updateCurrentTheme, Qt::QueuedConnection);
+    connect(LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,			this,	&SystrayIcon::retranslateTheUI, Qt::QueuedConnection);
     systrayMenu->addMenu(copyMenu);
     systrayMenu->addAction(actionOptions);
     systrayMenu->addAction(actionMenuAbout);
@@ -193,9 +193,9 @@ void SystrayIcon::updateSystrayIcon()
     }
     QIcon theNewSystrayIcon;
     #ifdef Q_OS_WIN32
-    theNewSystrayIcon=ThemesManager::themesManager.loadIcon("SystemTrayIcon/systray_"+icon+"_Windows.png");
+    theNewSystrayIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/systray_"+icon+"_Windows.png");
     #else
-    theNewSystrayIcon=ThemesManager::themesManager.loadIcon("SystemTrayIcon/systray_"+icon+"_Unix.png");
+    theNewSystrayIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/systray_"+icon+"_Unix.png");
     #endif
     if(theNewSystrayIcon.isNull())
     {
@@ -266,28 +266,28 @@ void SystrayIcon::updateCurrentTheme()
     //load the systray menu item
     QIcon tempIcon;
 
-    tempIcon=ThemesManager::themesManager.loadIcon("SystemTrayIcon/exit.png");
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/exit.png");
     if(!tempIcon.isNull())
         IconQuit=QIcon(tempIcon);
     else
         IconQuit=QIcon("");
     actionMenuQuit->setIcon(IconQuit);
 
-    tempIcon=ThemesManager::themesManager.loadIcon("SystemTrayIcon/informations.png");
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/informations.png");
     if(!tempIcon.isNull())
         IconInfo=QIcon(tempIcon);
     else
         IconInfo=QIcon("");
     actionMenuAbout->setIcon(IconInfo);
 
-    tempIcon=ThemesManager::themesManager.loadIcon("SystemTrayIcon/options.png");
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/options.png");
     if(!tempIcon.isNull())
         IconOptions=QIcon(tempIcon);
     else
         IconOptions=QIcon("");
     actionOptions->setIcon(IconOptions);
 
-    tempIcon=ThemesManager::themesManager.loadIcon("SystemTrayIcon/add.png");
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/add.png");
     if(!tempIcon.isNull())
         IconAdd=QIcon(tempIcon);
     else
@@ -389,7 +389,7 @@ void SystrayIcon::addCopyEngine(const QString &name,const bool &canDoOnlyCopy)
     entry.name=name;
     entry.canDoOnlyCopy=canDoOnlyCopy;
     engineEntryList << entry;
-    if(PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
+    if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         reloadEngineList();
 }
 

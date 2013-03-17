@@ -12,13 +12,13 @@ LocalPluginOptions::LocalPluginOptions(const QString &group)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
     groupOptionAdded=false;
     this->group=group;
-    connect(&OptionEngine::optionEngine,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
+    connect(OptionEngine::optionEngine,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
 }
 
 LocalPluginOptions::~LocalPluginOptions()
 {
     if(groupOptionAdded)
-        OptionEngine::optionEngine.removeOptionGroup(group);
+        OptionEngine::optionEngine->removeOptionGroup(group);
 }
 
 /// \brief To add option group to options
@@ -33,20 +33,20 @@ bool LocalPluginOptions::addOptionGroup(const QList<QPair<QString, QVariant> > &
     else
     {
         groupOptionAdded=true;
-        return OptionEngine::optionEngine.addOptionGroup(group,KeysList);
+        return OptionEngine::optionEngine->addOptionGroup(group,KeysList);
     }
 }
 
 /// \brief To get option value
 QVariant LocalPluginOptions::getOptionValue(const QString &variableName) const
 {
-    return OptionEngine::optionEngine.getOptionValue(group,variableName);
+    return OptionEngine::optionEngine->getOptionValue(group,variableName);
 }
 
 /// \brief To set option value
 void LocalPluginOptions::setOptionValue(const QString &variableName,const QVariant &value)
 {
-    OptionEngine::optionEngine.setOptionValue(group,variableName,value);
+    OptionEngine::optionEngine->setOptionValue(group,variableName,value);
 }
 
 /*-> disabled because the value will not externaly changed, then useless notification

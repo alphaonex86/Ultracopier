@@ -39,14 +39,14 @@ EventDispatcher::EventDispatcher()
 
     copyServer=new CopyListener(&optionDialog);
     connect(&localListener, &LocalListener::cli,                    &cliParser,     &CliParser::cli,Qt::QueuedConnection);
-    connect(&ThemesManager::themesManager,         &ThemesManager::newThemeOptions,		&optionDialog,	&OptionDialog::newThemeOptions);
+    connect(ThemesManager::themesManager,         &ThemesManager::newThemeOptions,		&optionDialog,	&OptionDialog::newThemeOptions);
     connect(&cliParser,     &CliParser::newCopyWithoutDestination,	copyServer,     &CopyListener::copyWithoutDestination);
     connect(&cliParser,     &CliParser::newCopy,					copyServer,     &CopyListener::copy);
     connect(&cliParser,     &CliParser::newMoveWithoutDestination,	copyServer,     &CopyListener::moveWithoutDestination);
     connect(&cliParser,     &CliParser::newMove,					copyServer,     &CopyListener::move);
     connect(copyServer,     &CopyListener::newClientList,			&optionDialog,  &OptionDialog::newClientList);
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
-    connect(&cliParser,     &CliParser::tryLoadPlugin,				&PluginsManager::pluginsManager,        &PluginsManager::tryLoadPlugin);
+    connect(&cliParser,     &CliParser::tryLoadPlugin,				PluginsManager::pluginsManager,        &PluginsManager::tryLoadPlugin);
     #endif
     copyMoveEventIdIndex=0;
     backgroundIcon=NULL;
@@ -90,22 +90,22 @@ EventDispatcher::EventDispatcher()
     KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
     KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
     KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
-    OptionEngine::optionEngine.addOptionGroup("Ultracopier",KeysList);
-    if(OptionEngine::optionEngine.getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && OptionEngine::optionEngine.getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
+    OptionEngine::optionEngine->addOptionGroup("Ultracopier",KeysList);
+    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
     {
         //then ultracopier have been updated
     }
-    OptionEngine::optionEngine.setOptionValue("Ultracopier","Last_version_used",QVariant(ULTRACOPIER_VERSION));
-    int a=OptionEngine::optionEngine.getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","Last_version_used",QVariant(ULTRACOPIER_VERSION));
+    int a=OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
     if(a<0 || a>2)
-        OptionEngine::optionEngine.setOptionValue("Ultracopier","ActionOnManualOpen",QVariant(1));
-    a=OptionEngine::optionEngine.getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen",QVariant(1));
+    a=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
     if(a<0 || a>5)
-        OptionEngine::optionEngine.setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
 
     KeysList.clear();
     KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier")));
-    OptionEngine::optionEngine.addOptionGroup("CopyEngine",KeysList);
+    OptionEngine::optionEngine->addOptionGroup("CopyEngine",KeysList);
 
     connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);
 }
@@ -176,7 +176,7 @@ void EventDispatcher::initFunction()
         connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady);
         connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen);
         connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,					copyServer,	&CopyListener::close);
-        if(OptionEngine::optionEngine.getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
+        if(OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
             copyServer->listen();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
         //backgroundIcon->readyToListen(copyServer.oneListenerIsLoaded());
@@ -192,7 +192,7 @@ void EventDispatcher::initFunction()
     connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit);
     //connect the slot for the help dialog
     connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show);
-    DebugModel::debugModel.setupTheTimer();
+    DebugModel::debugModel->setupTheTimer();
 }
 
 #ifdef Q_OS_WIN32

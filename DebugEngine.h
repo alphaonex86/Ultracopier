@@ -39,7 +39,7 @@ public:
         QString location;
     };
 
-    static DebugModel debugModel;
+    static DebugModel *debugModel;
     DebugModel();
     ~DebugModel();
 
@@ -67,6 +67,11 @@ class DebugEngine : public QObject
 {
     Q_OBJECT
     public:
+        /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
+        DebugEngine();
+        /** \brief Destroy the ultracopier event dispatcher
+        \note This function is thread safe */
+        ~DebugEngine();
         /** \brief Get the html text info for re-show it
         \note This function is thread safe */
         QString getTheDebugHtml();
@@ -84,18 +89,13 @@ class DebugEngine : public QObject
         \note This function is reentrant */
         static void addDebugInformationStatic(const Ultracopier::DebugLevel &level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
         static void addDebugNote(const QString& text);
-        static DebugEngine debugEngine;
+        static DebugEngine *debugEngine;
     public slots:
         /** \brief ask to the user where save the bug report
         \warning This function can be only call by the graphical thread */
         void saveBugReport();
         void addDebugInformation(const DebugLevel_custom &level,const QString& fonction,const QString& text,QString file="",const int& ligne=-1,const QString& location="Core");
     private:
-        /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
-        DebugEngine();
-        /** \brief Destroy the ultracopier event dispatcher
-        \note This function is thread safe */
-        ~DebugEngine();
         /// \brief Path for log file
         QFile logFile;
         /// \brief Path for lock file

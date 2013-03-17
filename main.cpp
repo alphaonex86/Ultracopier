@@ -23,13 +23,13 @@
     #endif
 #endif
 
-DebugModel DebugModel::debugModel;
-DebugEngine DebugEngine::debugEngine;
-ResourcesManager ResourcesManager::resourcesManager;
-OptionEngine OptionEngine::optionEngine;
-PluginsManager PluginsManager::pluginsManager;
-LanguagesManager LanguagesManager::languagesManager;
-ThemesManager ThemesManager::themesManager;
+DebugModel *DebugModel::debugModel=NULL;
+DebugEngine *DebugEngine::debugEngine=NULL;
+ResourcesManager *ResourcesManager::resourcesManager=NULL;
+OptionEngine *OptionEngine::optionEngine=NULL;
+PluginsManager *PluginsManager::pluginsManager=NULL;
+LanguagesManager *LanguagesManager::languagesManager=NULL;
+ThemesManager *ThemesManager::themesManager=NULL;
 
 /// \brief Define the main() for the point entry
 int main(int argc, char *argv[])
@@ -44,6 +44,14 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
     //the main code, event loop of Qt and event dispatcher of ultracopier
     {
+        DebugModel::debugModel=new DebugModel();
+        DebugEngine::debugEngine=new DebugEngine();
+        ResourcesManager::resourcesManager=new ResourcesManager();
+        OptionEngine::optionEngine=new OptionEngine();
+        PluginsManager::pluginsManager=new PluginsManager();
+        LanguagesManager::languagesManager=new LanguagesManager();
+        ThemesManager::themesManager=new ThemesManager();
+
         EventDispatcher backgroundRunningInstance;
         if(backgroundRunningInstance.shouldBeClosed())
             returnCode=0;

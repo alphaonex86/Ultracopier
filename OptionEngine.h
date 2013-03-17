@@ -36,6 +36,10 @@ class OptionEngine : public QObject
     Q_OBJECT
     //class OptionEngine : public OptionInterface, public QDialog, public Singleton<OptionEngine>
     public:
+        /// \brief Initiate the option, load from backend
+        OptionEngine();
+        /// \brief Destroy the option
+        ~OptionEngine();
         /// \brief To add option group to options
         bool addOptionGroup(const QString &groupName,const QList<QPair<QString, QVariant> > &KeysList);
         /// \brief To remove option group to options, remove the widget need be do into the calling object
@@ -49,11 +53,6 @@ class OptionEngine : public QObject
         /// \brief get query reset options
         void queryResetOptions();
     private:
-        /// \brief Initiate the option, load from backend
-        OptionEngine();
-        /// \brief Destroy the option
-        ~OptionEngine();
-
         /// \brief OptionEngineGroupKey then: Group -> Key
         struct OptionEngineGroupKey
         {
@@ -83,7 +82,7 @@ class OptionEngine : public QObject
         void newOptionValue(const QString&,const QString&,const QVariant&);
         void resetOptions();
     public:
-        static OptionEngine optionEngine;
+        static OptionEngine *optionEngine;
 };
 
 #endif // OPTION_ENGINE_H

@@ -65,12 +65,12 @@ class PluginsManager : public QThread
             ImportBackend_File,		//import plugin from local file
             ImportBackend_Internet	//import plugin form internet
         };
-        static PluginsManager pluginsManager;
-    private:
+        static PluginsManager *pluginsManager;
         /// \brief Create the manager and load the defaults variables
         PluginsManager();
         /// \brief Destroy the language manager
         ~PluginsManager();
+    private:
         /// \brief List of plugins
         QList<PluginsAvailable> pluginsList;
         QMultiMap<PluginType,PluginsAvailable> pluginsListIndexed;
@@ -107,11 +107,12 @@ class PluginsManager : public QThread
         bool pluginLoaded;
         QString language;
         QString categoryToString(const PluginType &category) const;
-        QString categoryToTranslation(const PluginType &category) const;
+        QString categoryToTranslation(const PluginType &category);
         //temp variable
         int index,loop_size,sub_index,loop_sub_size;
         QRegularExpression regexp_to_clean_1,regexp_to_clean_2,regexp_to_clean_3,regexp_to_clean_4,regexp_to_clean_5;
         QRegularExpression regexp_to_dep_1,regexp_to_dep_2,regexp_to_dep_3,regexp_to_dep_4,regexp_to_dep_5,regexp_to_dep_6;
+        PluginInformation *pluginInformation;
     private slots:
         /// \brief show the information
         void showInformationDoubleClick();

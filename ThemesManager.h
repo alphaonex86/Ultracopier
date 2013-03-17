@@ -40,12 +40,12 @@ class ThemesManager : public QObject
         \see Core() */
         PluginInterface_Themes * getThemesInstance();
 
-        static ThemesManager themesManager;
-    private:
+        static ThemesManager *themesManager;
         /// \brief Create the manager and load the defaults variables
         ThemesManager();
         /// \brief Destroy the themes manager
         ~ThemesManager();
+    private:
         /// \brief The default themes path where it has theme's files
         QString defaultStylePath;
         /// \brief The current themes path loaded by ultracopier

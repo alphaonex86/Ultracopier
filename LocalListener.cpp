@@ -18,7 +18,7 @@ LocalListener::LocalListener(QObject *parent) :
     TimeOutQLocalSocket.setInterval(500);
     TimeOutQLocalSocket.setSingleShot(true);
     connect(&TimeOutQLocalSocket, &QTimer::timeout, this, &LocalListener::timeoutDectected);
-    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,this, &LocalListener::allPluginIsloaded,Qt::QueuedConnection);
+    connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,this, &LocalListener::allPluginIsloaded,Qt::QueuedConnection);
 }
 
 LocalListener::~LocalListener()

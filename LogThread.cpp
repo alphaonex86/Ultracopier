@@ -20,8 +20,8 @@ LogThread::LogThread()
 
     //load the GUI option
     QString defaultLogFile="";
-    if(ResourcesManager::resourcesManager.getWritablePath()!="")
-        defaultLogFile=ResourcesManager::resourcesManager.getWritablePath()+"ultracopier-files.log";
+    if(ResourcesManager::resourcesManager->getWritablePath()!="")
+        defaultLogFile=ResourcesManager::resourcesManager->getWritablePath()+"ultracopier-files.log";
     QList<QPair<QString, QVariant> > KeysList;
     KeysList.append(qMakePair(QString("enabled"),QVariant(false)));
     KeysList.append(qMakePair(QString("file"),QVariant(defaultLogFile)));
@@ -32,9 +32,9 @@ LogThread::LogThread()
     KeysList.append(qMakePair(QString("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
     KeysList.append(qMakePair(QString("error_format"),QVariant("[%time%] %path%, %error%")));
     KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
-    OptionEngine::optionEngine.addOptionGroup("Write_log",KeysList);
+    OptionEngine::optionEngine->addOptionGroup("Write_log",KeysList);
 
-    connect(&OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&LogThread::newOptionValue);
+    connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&LogThread::newOptionValue);
 
     enabled=false;
 
@@ -43,15 +43,15 @@ LogThread::LogThread()
 
     connect(this,	&LogThread::newData,		this,&LogThread::realDataWrite,Qt::QueuedConnection);
 
-    newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine.getOptionValue("Write_log","transfer"));
-    newOptionValue("Write_log",	"error",			OptionEngine::optionEngine.getOptionValue("Write_log","error"));
-    newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine.getOptionValue("Write_log","folder"));
-    newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine.getOptionValue("Write_log","sync"));
-    newOptionValue("Write_log",	"transfer_format",		OptionEngine::optionEngine.getOptionValue("Write_log","transfer_format"));
-    newOptionValue("Write_log",	"error_format",			OptionEngine::optionEngine.getOptionValue("Write_log","error_format"));
-    newOptionValue("Write_log",	"folder_format",		OptionEngine::optionEngine.getOptionValue("Write_log","folder_format"));
-    newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine.getOptionValue("Write_log","sync"));
-    newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine.getOptionValue("Write_log","enabled"));
+    newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine->getOptionValue("Write_log","transfer"));
+    newOptionValue("Write_log",	"error",			OptionEngine::optionEngine->getOptionValue("Write_log","error"));
+    newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine->getOptionValue("Write_log","folder"));
+    newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
+    newOptionValue("Write_log",	"transfer_format",		OptionEngine::optionEngine->getOptionValue("Write_log","transfer_format"));
+    newOptionValue("Write_log",	"error_format",			OptionEngine::optionEngine->getOptionValue("Write_log","error_format"));
+    newOptionValue("Write_log",	"folder_format",		OptionEngine::optionEngine->getOptionValue("Write_log","folder_format"));
+    newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
+    newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine->getOptionValue("Write_log","enabled"));
     #ifdef Q_OS_WIN32
     DWORD size=0;
     WCHAR * computerNameW=new WCHAR[size];
@@ -84,7 +84,7 @@ bool LogThread::logTransfer()
 
 void LogThread::openLogs()
 {
-    if(OptionEngine::optionEngine.getOptionValue("Write_log","enabled").toBool()==false)
+    if(OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool()==false)
         return;
     if(log.isOpen())
     {
@@ -92,7 +92,7 @@ void LogThread::openLogs()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("log file already open, error: %1").arg(log.errorString()));
         return;
     }
-    log.setFileName(OptionEngine::optionEngine.getOptionValue("Write_log","file").toString());
+    log.setFileName(OptionEngine::optionEngine->getOptionValue("Write_log","file").toString());
     if(sync)
     {
         if(!log.open(QIODevice::WriteOnly|QIODevice::Unbuffered))
@@ -101,7 +101,7 @@ void LogThread::openLogs()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine.getOptionValue("Write_log","file").toString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine->getOptionValue("Write_log","file").toString());
     }
     else
     {
@@ -111,7 +111,7 @@ void LogThread::openLogs()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine.getOptionValue("Write_log","file").toString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine->getOptionValue("Write_log","file").toString());
     }
 }
 
@@ -226,11 +226,11 @@ void LogThread::newOptionValue(const QString &group,const QString &name,const QV
         }
     }
     else if(name=="transfer")
-        log_enable_transfer=OptionEngine::optionEngine.getOptionValue("Write_log","enabled").toBool() && value.toBool();
+        log_enable_transfer=OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool() && value.toBool();
     else if(name=="error")
-        log_enable_error=OptionEngine::optionEngine.getOptionValue("Write_log","enabled").toBool() && value.toBool();
+        log_enable_error=OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool() && value.toBool();
     else if(name=="folder")
-        log_enable_folder=OptionEngine::optionEngine.getOptionValue("Write_log","enabled").toBool() && value.toBool();
+        log_enable_folder=OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool() && value.toBool();
     if(name=="enabled")
     {
         enabled=value.toBool();

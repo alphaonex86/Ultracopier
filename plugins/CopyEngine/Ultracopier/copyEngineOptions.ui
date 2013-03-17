@@ -20,7 +20,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -90,13 +90,20 @@
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_19">
+         <property name="toolTip">
+          <string>Less performance if checked</string>
+         </property>
          <property name="text">
           <string>Follow the strict order</string>
          </property>
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="QCheckBox" name="followTheStrictOrder"/>
+        <widget class="QCheckBox" name="followTheStrictOrder">
+         <property name="toolTip">
+          <string>Less performance if checked</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -297,8 +304,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>172</width>
+        <height>119</height>
        </rect>
       </property>
       <attribute name="label">
@@ -368,8 +375,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>332</width>
+        <height>190</height>
        </rect>
       </property>
       <attribute name="label">
@@ -532,8 +539,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>94</width>
+        <height>39</height>
        </rect>
       </property>
       <attribute name="label">

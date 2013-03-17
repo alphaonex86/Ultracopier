@@ -19,13 +19,12 @@ This class provide a core load and manage the resources */
 class ResourcesManager : public QObject
 {
     Q_OBJECT
-    private:
+    public:
         /// \brief Create the manager and load the default variable
         ResourcesManager();
         /// \brief Destroy the resource manager
         ~ResourcesManager();
-    public:
-        static ResourcesManager resourcesManager;
+        static ResourcesManager *resourcesManager;
         /** \brief Get folder presence and the path
         \return Empty QString if not found */
         QString getFolderReadPath(const QString &path);

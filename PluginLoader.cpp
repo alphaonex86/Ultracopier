@@ -14,17 +14,17 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
     this->optionDialog=optionDialog;
     //load the overall instance
     //load the plugin
-    PluginsManager::pluginsManager.lockPluginListEdition();
+    PluginsManager::pluginsManager->lockPluginListEdition();
     connect(this,&PluginLoader::previouslyPluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
-    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
+    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,	this,&PluginLoader::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,this,&PluginLoader::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,this,&PluginLoader::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,	this,&PluginLoader::allPluginIsloaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_PluginLoader);
+    connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,	this,&PluginLoader::allPluginIsloaded,Qt::QueuedConnection);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_PluginLoader);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    PluginsManager::pluginsManager.unlockPluginListEdition();
+    PluginsManager::pluginsManager->unlockPluginListEdition();
     needEnable=false;
     last_state=Ultracopier::Uncaught;
     last_have_plugin=false;
@@ -34,7 +34,7 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
 PluginLoader::~PluginLoader()
 {
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_PluginLoader);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_PluginLoader);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
     #endif
@@ -113,7 +113,7 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     pluginLoaderInstance->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.pluginLoaderInterface->options());
     connect(pluginList.last().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoader::newState);
-    connect(&LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded);
+    connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded);
     if(needEnable)
     {
         pluginList.last().inWaitOfReply=true;

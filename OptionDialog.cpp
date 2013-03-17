@@ -34,22 +34,22 @@ OptionDialog::OptionDialog() :
 
 
     //load the plugins
-    PluginsManager::pluginsManager.lockPluginListEdition();
+    PluginsManager::pluginsManager->lockPluginListEdition();
     connect(this,       &OptionDialog::previouslyPluginAdded,       this,	&OptionDialog::onePluginAdded,Qt::QueuedConnection);
-    connect(&PluginsManager::pluginsManager,	&PluginsManager::onePluginAdded,            this,	&OptionDialog::onePluginAdded);
-    connect(&PluginsManager::pluginsManager,	&PluginsManager::onePluginInErrorAdded,     this,	&OptionDialog::onePluginAdded);
+    connect(PluginsManager::pluginsManager,	&PluginsManager::onePluginAdded,            this,	&OptionDialog::onePluginAdded);
+    connect(PluginsManager::pluginsManager,	&PluginsManager::onePluginInErrorAdded,     this,	&OptionDialog::onePluginAdded);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(&PluginsManager::pluginsManager,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(PluginsManager::pluginsManager,	&PluginsManager::onePluginWillBeRemoved,	this,	&OptionDialog::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    connect(&PluginsManager::pluginsManager,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
+    connect(PluginsManager::pluginsManager,	&PluginsManager::pluginListingIsfinish,		this,	&OptionDialog::loadOption,Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
-    connect(&PluginsManager::pluginsManager,	&PluginsManager::manuallyAdded,             this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
+    connect(PluginsManager::pluginsManager,	&PluginsManager::manuallyAdded,             this,	&OptionDialog::manuallyAdded,Qt::QueuedConnection);
     #endif
-    connect(&OptionEngine::optionEngine,	&OptionEngine::newOptionValue,              this,	&OptionDialog::newOptionValue);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPlugins(true);
+    connect(OptionEngine::optionEngine,	&OptionEngine::newOptionValue,              this,	&OptionDialog::newOptionValue);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPlugins(true);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    PluginsManager::pluginsManager.unlockPluginListEdition();
+    PluginsManager::pluginsManager->unlockPluginListEdition();
     defaultImportBackend=PluginsManager::ImportBackend_File;
     #ifndef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
     ui->pluginAdd->hide();
@@ -191,7 +191,7 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
             temp.first = "mainCode";
             temp.second = "true";
             listChildAttribute << temp;
-            int index=ui->Language->findData(PluginsManager::pluginsManager.getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+            int index=ui->Language->findData(PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
             if(index!=-1)
             {
                 ui->Language->setCurrentIndex(index);
@@ -213,7 +213,7 @@ void OptionDialog::addLanguage(PluginsAvailable plugin)
     temp.first = "mainCode";
     temp.second = "true";
     listChildAttribute << temp;
-    ui->Language->addItem(QIcon(plugin.path+"flag.png"),PluginsManager::pluginsManager.getDomSpecific(plugin.categorySpecific,"fullName"),PluginsManager::pluginsManager.getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+    ui->Language->addItem(QIcon(plugin.path+"flag.png"),PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"fullName"),PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
     ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
     ui->Language_force->setEnabled(ui->Language->count());
 }
@@ -225,7 +225,7 @@ void OptionDialog::removeLanguage(PluginsAvailable plugin)
     temp.first = "mainCode";
     temp.second = "true";
     listChildAttribute << temp;
-    int index=ui->Language->findData(PluginsManager::pluginsManager.getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+    int index=ui->Language->findData(PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
     if(index!=-1)
         ui->Language->removeItem(index);
     ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
@@ -372,7 +372,7 @@ void OptionDialog::on_treeWidget_itemSelectionChanged()
 void OptionDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
     if(ui->buttonBox->buttonRole(button)==QDialogButtonBox::ResetRole)
-        OptionEngine::optionEngine.queryResetOptions();
+        OptionEngine::optionEngine->queryResetOptions();
     else
         this->close();
 }
@@ -380,31 +380,31 @@ void OptionDialog::on_buttonBox_clicked(QAbstractButton *button)
 void OptionDialog::loadOption()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine.getOptionValue("Themes","Ultracopier_current_theme"));
-    newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine.getOptionValue("Ultracopier","ActionOnManualOpen"));
-    newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine.getOptionValue("Ultracopier","GroupWindowWhen"));
-    newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine.getOptionValue("Ultracopier","displayOSSpecific"));
-    newOptionValue("Language",	"Language",                     OptionEngine::optionEngine.getOptionValue("Language","Language"));
-    newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine.getOptionValue("Language","Language_force"));
-    newOptionValue("SessionLoader",	"LoadAtSessionStarting",	OptionEngine::optionEngine.getOptionValue("SessionLoader","LoadAtSessionStarting"));
-    newOptionValue("CopyListener",	"CatchCopyAsDefault",		OptionEngine::optionEngine.getOptionValue("CopyListener","CatchCopyAsDefault"));
-    newOptionValue("CopyEngine",	"List",                     OptionEngine::optionEngine.getOptionValue("CopyEngine","List"));
-    if(ResourcesManager::resourcesManager.getWritablePath()=="")
+    newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
+    newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
+    newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
+    newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
+    newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
+    newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
+    newOptionValue("SessionLoader",	"LoadAtSessionStarting",	OptionEngine::optionEngine->getOptionValue("SessionLoader","LoadAtSessionStarting"));
+    newOptionValue("CopyListener",	"CatchCopyAsDefault",		OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault"));
+    newOptionValue("CopyEngine",	"List",                     OptionEngine::optionEngine->getOptionValue("CopyEngine","List"));
+    if(ResourcesManager::resourcesManager->getWritablePath()=="")
         ui->checkBox_Log->setEnabled(false);
     else
     {
-        newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine.getOptionValue("Write_log","enabled"));
-        newOptionValue("Write_log",	"file",				OptionEngine::optionEngine.getOptionValue("Write_log","file"));
-        newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine.getOptionValue("Write_log","transfer"));
-        newOptionValue("Write_log",	"error",			OptionEngine::optionEngine.getOptionValue("Write_log","error"));
-        newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine.getOptionValue("Write_log","folder"));
-        newOptionValue("Write_log",	"transfer_format",	OptionEngine::optionEngine.getOptionValue("Write_log","transfer_format"));
-        newOptionValue("Write_log",	"error_format",		OptionEngine::optionEngine.getOptionValue("Write_log","error_format"));
-        newOptionValue("Write_log",	"folder_format",	OptionEngine::optionEngine.getOptionValue("Write_log","folder_format"));
-        newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine.getOptionValue("Write_log","sync"));
+        newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine->getOptionValue("Write_log","enabled"));
+        newOptionValue("Write_log",	"file",				OptionEngine::optionEngine->getOptionValue("Write_log","file"));
+        newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine->getOptionValue("Write_log","transfer"));
+        newOptionValue("Write_log",	"error",			OptionEngine::optionEngine->getOptionValue("Write_log","error"));
+        newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine->getOptionValue("Write_log","folder"));
+        newOptionValue("Write_log",	"transfer_format",	OptionEngine::optionEngine->getOptionValue("Write_log","transfer_format"));
+        newOptionValue("Write_log",	"error_format",		OptionEngine::optionEngine->getOptionValue("Write_log","error_format"));
+        newOptionValue("Write_log",	"folder_format",	OptionEngine::optionEngine->getOptionValue("Write_log","folder_format"));
+        newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
     }
     on_checkBox_Log_clicked();
-    if(PluginsManager::pluginsManager.getPluginsByCategory(PluginType_SessionLoader).size()>0)
+    if(PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader).size()>0)
     {
         ui->labelLoadAtSession->setToolTip("");
         ui->LoadAtSessionStarting->setToolTip("");
@@ -421,12 +421,12 @@ void OptionDialog::loadOption()
     allPluginsIsLoaded=true;
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 
-    if(OptionEngine::optionEngine.getOptionValue("Ultracopier","displayOSSpecific").toBool())
+    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific").toBool())
     {
         OSSpecific oSSpecific;
         oSSpecific.exec();
         if(oSSpecific.dontShowAgain())
-            OptionEngine::optionEngine.setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
+            OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
     }
 }
 
@@ -447,7 +447,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
                 if(ui->Ultracopier_current_theme->count()>0)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Default to the current value: "+ui->Ultracopier_current_theme->itemData(ui->Ultracopier_current_theme->currentIndex()).toString());
-                    OptionEngine::optionEngine.setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(ui->Ultracopier_current_theme->currentIndex()));
+                    OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(ui->Ultracopier_current_theme->currentIndex()));
                 }
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No themes: "+value.toString());
@@ -464,7 +464,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             else if(ui->Language->count()>0)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Language in settings: "+value.toString());
-                OptionEngine::optionEngine.setOptionValue("Language","Language",ui->Language->itemData(ui->Language->currentIndex()));
+                OptionEngine::optionEngine->setOptionValue("Language","Language",ui->Language->itemData(ui->Language->currentIndex()));
             }
         }
         else if(name=="Language_force")
@@ -473,7 +473,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
             if(!ui->Language_force->isChecked())
             {
-                QString lang=LanguagesManager::languagesManager.autodetectedLanguage();
+                QString lang=LanguagesManager::languagesManager->autodetectedLanguage();
                 if(!lang.isEmpty())
                 {
                     int index=ui->Language->findData(lang);
@@ -577,7 +577,7 @@ void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(int index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Ultracopier_current_theme->itemData(index).toString()+", string value: "+ui->Ultracopier_current_theme->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine.setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(index));
+        OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(index));
         int index_loop=0;
         loop_size=pluginOptionsWidgetList.size();
         while(index_loop<loop_size)
@@ -601,7 +601,7 @@ void OptionDialog::on_Language_currentIndexChanged(int index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Language->itemData(index).toString()+", string value: "+ui->Language->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine.setOptionValue("Language","Language",ui->Language->itemData(index));
+        OptionEngine::optionEngine->setOptionValue("Language","Language",ui->Language->itemData(index));
     }
 }
 
@@ -610,7 +610,7 @@ void OptionDialog::on_Language_force_toggled(bool checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Language","Language_force",checked);
+        OptionEngine::optionEngine->setOptionValue("Language","Language_force",checked);
         ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
     }
 }
@@ -620,7 +620,7 @@ void OptionDialog::on_CatchCopyAsDefault_toggled(bool checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("CopyListener","CatchCopyAsDefault",checked);
+        OptionEngine::optionEngine->setOptionValue("CopyListener","CatchCopyAsDefault",checked);
     }
 }
 
@@ -629,7 +629,7 @@ void OptionDialog::on_LoadAtSessionStarting_toggled(bool checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("SessionLoader","LoadAtSessionStarting",checked);
+        OptionEngine::optionEngine->setOptionValue("SessionLoader","LoadAtSessionStarting",checked);
     }
 }
 
@@ -659,7 +659,7 @@ void OptionDialog::on_toolButtonDown_clicked()
         ui->CopyEngineList->insertItem(position+1,text);
         ui->CopyEngineList->item(position+1)->setSelected(true);
         ignoreCopyEngineListEdition=true;
-        OptionEngine::optionEngine.setOptionValue("CopyEngine","List",copyEngineStringList());
+        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",copyEngineStringList());
         ignoreCopyEngineListEdition=false;
     }
 }
@@ -676,7 +676,7 @@ void OptionDialog::on_toolButtonUp_clicked()
         ui->CopyEngineList->insertItem(position-1,text);
         ui->CopyEngineList->item(position-1)->setSelected(true);
         ignoreCopyEngineListEdition=true;
-        OptionEngine::optionEngine.setOptionValue("CopyEngine","List",copyEngineStringList());
+        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",copyEngineStringList());
         ignoreCopyEngineListEdition=false;
     }
 }
@@ -811,7 +811,7 @@ void OptionDialog::on_pluginInformation_clicked()
     {
         if(pluginLink.at(index).item==treeWidgetItem)
         {
-            PluginsManager::pluginsManager.showInformation(pluginLink.at(index).path);
+            PluginsManager::pluginsManager->showInformation(pluginLink.at(index).path);
             return;
         }
         index++;
@@ -828,7 +828,7 @@ void OptionDialog::on_pluginRemove_clicked()
     {
         if(pluginLink.at(index).item==treeWidgetItem)
         {
-            PluginsManager::pluginsManager.removeThePluginSelected(pluginLink.at(index).path);
+            PluginsManager::pluginsManager->removeThePluginSelected(pluginLink.at(index).path);
             return;
         }
         index++;
@@ -837,7 +837,7 @@ void OptionDialog::on_pluginRemove_clicked()
 
 void OptionDialog::on_pluginAdd_clicked()
 {
-    PluginsManager::pluginsManager.addPlugin(defaultImportBackend);
+    PluginsManager::pluginsManager->addPlugin(defaultImportBackend);
 }
 #endif
 
@@ -846,7 +846,7 @@ void OptionDialog::on_checkBox_Log_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","enabled",ui->checkBox_Log->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","enabled",ui->checkBox_Log->isChecked());
     }
     ui->lineEditLog_transfer_format->setEnabled(ui->checkBoxLog_transfer->isChecked() && ui->checkBox_Log->isChecked());
     ui->lineEditLog_error_format->setEnabled(ui->checkBoxLog_error->isChecked() && ui->checkBox_Log->isChecked());
@@ -858,7 +858,7 @@ void OptionDialog::on_lineEditLog_File_editingFinished()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","file",ui->lineEditLog_File->text());
+        OptionEngine::optionEngine->setOptionValue("Write_log","file",ui->lineEditLog_File->text());
     }
 }
 
@@ -867,7 +867,7 @@ void OptionDialog::on_lineEditLog_transfer_format_editingFinished()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","transfer_format",ui->lineEditLog_transfer_format->text());
+        OptionEngine::optionEngine->setOptionValue("Write_log","transfer_format",ui->lineEditLog_transfer_format->text());
     }
 }
 
@@ -876,7 +876,7 @@ void OptionDialog::on_lineEditLog_error_format_editingFinished()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","error_format",ui->lineEditLog_error_format->text());
+        OptionEngine::optionEngine->setOptionValue("Write_log","error_format",ui->lineEditLog_error_format->text());
     }
 }
 
@@ -885,7 +885,7 @@ void OptionDialog::on_checkBoxLog_transfer_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","transfer",ui->checkBoxLog_transfer->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","transfer",ui->checkBoxLog_transfer->isChecked());
     }
 }
 
@@ -894,7 +894,7 @@ void OptionDialog::on_checkBoxLog_error_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","error",ui->checkBoxLog_error->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","error",ui->checkBoxLog_error->isChecked());
     }
 }
 
@@ -903,13 +903,13 @@ void OptionDialog::on_checkBoxLog_folder_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","folder",ui->checkBoxLog_folder->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","folder",ui->checkBoxLog_folder->isChecked());
     }
 }
 
 void OptionDialog::on_logBrowse_clicked()
 {
-    QString file=QFileDialog::getSaveFileName(this,tr("Save logs as: "),ResourcesManager::resourcesManager.getWritablePath());
+    QString file=QFileDialog::getSaveFileName(this,tr("Save logs as: "),ResourcesManager::resourcesManager->getWritablePath());
     if(file!="")
     {
         ui->lineEditLog_File->setText(file);
@@ -922,7 +922,7 @@ void OptionDialog::on_checkBoxLog_sync_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Write_log","sync",ui->checkBoxLog_sync->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","sync",ui->checkBoxLog_sync->isChecked());
     }
 }
 
@@ -931,7 +931,7 @@ void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(int index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->ActionOnManualOpen->itemData(index).toString()+", string value: "+ui->ActionOnManualOpen->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine.setOptionValue("Ultracopier","ActionOnManualOpen",index);
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen",index);
     }
 }
 
@@ -940,7 +940,7 @@ void OptionDialog::on_GroupWindowWhen_currentIndexChanged(int index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->GroupWindowWhen->itemData(index).toString()+", string value: "+ui->GroupWindowWhen->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine.setOptionValue("Ultracopier","GroupWindowWhen",index);
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",index);
     }
 }
 
@@ -949,7 +949,7 @@ void OptionDialog::on_DisplayOSWarning_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine.setOptionValue("Ultracopier","displayOSSpecific",ui->DisplayOSWarning->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",ui->DisplayOSWarning->isChecked());
     }
 }
 

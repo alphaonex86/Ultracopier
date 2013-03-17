@@ -235,12 +235,12 @@ void DebugEngine::addDebugInformationStatic(const Ultracopier::DebugLevel &level
         default:
             tempLevel=DebugLevel_custom_Notice;
     }
-    DebugEngine::debugEngine.addDebugInformation(tempLevel,function,text,file,ligne,location);
+    DebugEngine::debugEngine->addDebugInformation(tempLevel,function,text,file,ligne,location);
 }
 
 void DebugEngine::addDebugNote(const QString& text)
 {
-    DebugEngine::debugEngine.addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
+    DebugEngine::debugEngine->addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
 }
 
 /// \brief For add message info, this function is thread safe
@@ -306,7 +306,7 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
         if(addDebugInformationCallNumber<ULTRACOPIER_DEBUG_MAX_GUI_LINE)
         {
             addDebugInformationCallNumber++;
-            DebugModel::debugModel.addDebugInformation(startTime.elapsed(),level,function,text,file,ligne,location);
+            DebugModel::debugModel->addDebugInformation(startTime.elapsed(),level,function,text,file,ligne,location);
         }
     }
 }

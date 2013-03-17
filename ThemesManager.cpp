@@ -26,37 +26,37 @@ ThemesManager::ThemesManager()
     currentPluginIndex=-1;
 
     //connect the plugin management
-    PluginsManager::pluginsManager.lockPluginListEdition();
+    PluginsManager::pluginsManager->lockPluginListEdition();
     connect(this,   &ThemesManager::previouslyPluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
-    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
+    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,			this,&ThemesManager::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
-    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeUnloaded,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeUnloaded,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&ThemesManager::allPluginIsLoaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_Themes);
+    connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&ThemesManager::allPluginIsLoaded,Qt::QueuedConnection);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Themes);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    PluginsManager::pluginsManager.unlockPluginListEdition();
+    PluginsManager::pluginsManager->unlockPluginListEdition();
 
     //do the options
     QList<QPair<QString, QVariant> > KeysList;
     KeysList.append(qMakePair(QString("Ultracopier_current_theme"),QVariant(ULTRACOPIER_DEFAULT_STYLE)));
-    OptionEngine::optionEngine.addOptionGroup("Themes",KeysList);
+    OptionEngine::optionEngine->addOptionGroup("Themes",KeysList);
 
     //load the default and current themes path
     defaultStylePath=":/Themes/"+QString(ULTRACOPIER_DEFAULT_STYLE)+"/";
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Default style: "+defaultStylePath);
     currentStylePath=defaultStylePath;
-    connect(&OptionEngine::optionEngine,            &OptionEngine::newOptionValue,	this,		&ThemesManager::newOptionValue,Qt::QueuedConnection);
-    connect(&LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,		&facilityEngine,&FacilityEngine::retranslate,Qt::QueuedConnection);
+    connect(OptionEngine::optionEngine,            &OptionEngine::newOptionValue,	this,		&ThemesManager::newOptionValue,Qt::QueuedConnection);
+    connect(LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,		&facilityEngine,&FacilityEngine::retranslate,Qt::QueuedConnection);
 }
 
 /// \brief Destroy the themes manager
 ThemesManager::~ThemesManager()
 {
     stopIt=true;
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_Themes);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Themes);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
@@ -92,11 +92,11 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     }
     newPlugin.pluginLoader=NULL;
     #else
-    QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager.getResolvedPluginName("interface"));
+    QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"));
     QObject *pluginInstance = pluginLoader->instance();
     if(pluginInstance==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager.getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
         pluginLoader->unload();
         emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
         emit theThemeIsReloaded();
@@ -118,8 +118,8 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
         if(pluginList.at(indexTemp).factory==factory)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Plugin already found, current: %1, conflit plugin: %2, name: %3")
-            .arg(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager.getResolvedPluginName("interface"))
-            .arg(pluginList.at(indexTemp).plugin.path+QDir::separator()+PluginsManager::pluginsManager.getResolvedPluginName("interface"))
+            .arg(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
+            .arg(pluginList.at(indexTemp).plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
             .arg(newPlugin.plugin.name)
             );
             pluginLoader->unload();
@@ -135,14 +135,14 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     #ifdef ULTRACOPIER_DEBUG
     connect(factory,&PluginInterface_ThemesFactory::debugInformation,this,&ThemesManager::debugInformation,Qt::QueuedConnection);
     #endif // ULTRACOPIER_DEBUG
-    connect(&LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,factory,&PluginInterface_ThemesFactory::newLanguageLoaded);
+    connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,factory,&PluginInterface_ThemesFactory::newLanguageLoaded);
     newPlugin.factory=factory;
 
     newPlugin.options=new LocalPluginOptions("Themes-"+newPlugin.plugin.name);
     newPlugin.factory->setResources(newPlugin.options,newPlugin.plugin.writablePath,newPlugin.plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     currentStylePath=newPlugin.plugin.path;
     pluginList << newPlugin;
-    if(PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
+    if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         allPluginIsLoaded();
     emit newThemeOptions(newPlugin.plugin.name,newPlugin.factory->options(),true,true);
     emit theThemeIsReloaded();
@@ -211,7 +211,7 @@ void ThemesManager::allPluginIsLoaded()
         emit theThemeIsReloaded();
         return;
     }
-    QString name=OptionEngine::optionEngine.getOptionValue("Themes","Ultracopier_current_theme").toString();
+    QString name=OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme").toString();
     int index=0;
     while(index<pluginList.size())
     {
@@ -260,7 +260,7 @@ void ThemesManager::newOptionValue(const QString &group,const QString &name,cons
 {
     if(group=="Themes" && name=="Ultracopier_current_theme")
     {
-        if(!PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
+        if(!PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
             return;
         if(currentPluginIndex!=-1 && value.toString()!=pluginList.at(currentPluginIndex).plugin.name)
         {
