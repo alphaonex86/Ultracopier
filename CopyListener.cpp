@@ -41,11 +41,6 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
 CopyListener::~CopyListener()
 {
     stopIt=true;
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Listener);
-    foreach(PluginsAvailable currentPlugin,list)
-        onePluginWillBeRemoved(currentPlugin);
-    #endif
     delete pluginLoader;
 }
 
