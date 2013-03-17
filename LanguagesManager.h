@@ -17,7 +17,6 @@
 #include <QDir>
 
 #include "Environment.h"
-#include "Singleton.h"
 #include "OptionEngine.h"
 #include "ResourcesManager.h"
 #include "PluginsManager.h"
@@ -25,21 +24,19 @@
 /** \brief Define the class to manage and load the resources linked with the themes
 
 This class provide a core load and manage the resources */
-class LanguagesManager : public QObject, public Singleton<LanguagesManager>
+class LanguagesManager : public QObject
 {
     Q_OBJECT
-    friend class Singleton<LanguagesManager>;
     //public:
     //	QString getMainShortName();
     public:
-    const QString autodetectedLanguage();
+        const QString autodetectedLanguage();
+        static LanguagesManager languagesManager;
     private:
         /// \brief Create the manager and load the defaults variables
         LanguagesManager();
         /// \brief Destroy the language manager
         ~LanguagesManager();
-        //for the options
-        OptionEngine *options;
         /** \brief To set the current language
         \param newLanguage Should be short name code found into informations.xml of language file */
         void setCurrentLanguage(const QString &newLanguage);
@@ -57,10 +54,6 @@ class LanguagesManager : public QObject, public Singleton<LanguagesManager>
         QList<LanguagesAvailable> LanguagesAvailableList;
         /// \brief check if short name is found into language
         QString getMainShortName(const QString &shortName);
-        /// \brief Store the object of resources manager
-        ResourcesManager *resources;
-        /// \brief Store the object of plugin manager
-        PluginsManager *plugins;
         /// \brief list of installed translator
         QList<QTranslator *> installedTranslator;
         QString currentLanguage;

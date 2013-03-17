@@ -6,6 +6,7 @@
 \licence GPL3, see the file COPYING */
 
 #include "SessionLoader.h"
+#include "LanguagesManager.h"
 
 #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
 SessionLoader::SessionLoader(OptionDialog *optionDialog)
@@ -19,26 +20,26 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
     #else
     KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
     #endif
-    options->addOptionGroup("SessionLoader",KeysList);
-    connect(options,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
+    OptionEngine::optionEngine.addOptionGroup("SessionLoader",KeysList);
+    connect(&OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
     //load the plugin
-    plugins->lockPluginListEdition();
+    PluginsManager::pluginsManager.lockPluginListEdition();
     connect(this,&SessionLoader::previouslyPluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,			this,&SessionLoader::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(plugins,&PluginsManager::onePluginWillBeRemoved,	this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,	this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_SessionLoader);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    plugins->unlockPluginListEdition();
-    shouldEnabled=options->getOptionValue("SessionLoader","LoadAtSessionStarting").toBool();
+    PluginsManager::pluginsManager.unlockPluginListEdition();
+    shouldEnabled=OptionEngine::optionEngine.getOptionValue("SessionLoader","LoadAtSessionStarting").toBool();
 }
 
 SessionLoader::~SessionLoader()
 {
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_SessionLoader);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_SessionLoader);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
     #endif
@@ -108,7 +109,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
     newEntry.sessionLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     newEntry.sessionLoaderInterface->setEnabled(shouldEnabled);
     optionDialog->addPluginOptionWidget(PluginType_SessionLoader,plugin.name,newEntry.sessionLoaderInterface->options());
-    connect(languages,&LanguagesManager::newLanguageLoaded,newEntry.sessionLoaderInterface,&PluginInterface_SessionLoader::newLanguageLoaded);
+    connect(&LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.sessionLoaderInterface,&PluginInterface_SessionLoader::newLanguageLoaded);
     pluginList << newEntry;
 }
 

@@ -11,7 +11,6 @@
 #include <QDateTime>
 #include <QVariant>
 
-#include "GlobalClass.h"
 #include "Environment.h"
 #include "StructEnumDefinition.h"
 
@@ -19,7 +18,7 @@
 
 It use thread based storage to prevent gui thread freeze on log file writing when is out of the disk buffer. That's allow to async the event.
 */
-class LogThread : public QThread, public GlobalClass
+class LogThread : public QThread
 {
     Q_OBJECT
 public:

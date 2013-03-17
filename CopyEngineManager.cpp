@@ -9,24 +9,25 @@
 #include <QMessageBox>
 
 #include "CopyEngineManager.h"
+#include "LanguagesManager.h"
 
 CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    connect(languages,	&LanguagesManager::newLanguageLoaded,			&facilityEngine,&FacilityEngine::retranslate,Qt::DirectConnection);
+    connect(&LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,			&facilityEngine,&FacilityEngine::retranslate,Qt::DirectConnection);
     this->optionDialog=optionDialog;
     //setup the ui layout
-    plugins->lockPluginListEdition();
+    PluginsManager::pluginsManager.lockPluginListEdition();
     connect(this,&CopyEngineManager::previouslyPluginAdded,			this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginAdded,                this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,                this,&CopyEngineManager::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyEngineManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,		this,&CopyEngineManager::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&CopyEngineManager::allPluginIsloaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_CopyEngine);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&CopyEngineManager::allPluginIsloaded,Qt::QueuedConnection);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_CopyEngine);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    plugins->unlockPluginListEdition();
+    PluginsManager::pluginsManager.unlockPluginListEdition();
     //load the options
     isConnected=false;
 }
@@ -122,8 +123,8 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"plugin: "+newItem.name+" loaded, send options");
     //emit newCopyEngineOptions(plugin.path,newItem.name,newItem.optionsWidget);
     pluginList << newItem;
-    connect(languages,&LanguagesManager::newLanguageLoaded,newItem.factory,&PluginInterface_CopyEngineFactory::newLanguageLoaded);
-    if(plugins->allPluginHaveBeenLoaded())
+    connect(&LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newItem.factory,&PluginInterface_CopyEngineFactory::newLanguageLoaded);
+    if(PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
         allPluginIsloaded();
     if(isConnected)
         emit addCopyEngine(newItem.name,newItem.canDoOnlyCopy);
@@ -308,7 +309,7 @@ void CopyEngineManager::allPluginIsloaded()
         actualList << pluginList.at(index).name;
         index++;
     }
-    QStringList preferedList=options->getOptionValue("CopyEngine","List").toStringList();
+    QStringList preferedList=OptionEngine::optionEngine.getOptionValue("CopyEngine","List").toStringList();
     preferedList.removeDuplicates();
     actualList.removeDuplicates();
     index=0;
@@ -328,7 +329,7 @@ void CopyEngineManager::allPluginIsloaded()
             preferedList << actualList.at(index);
         index++;
     }
-    options->setOptionValue("CopyEngine","List",preferedList);
+    OptionEngine::optionEngine.setOptionValue("CopyEngine","List",preferedList);
     QList<CopyEnginePlugin> newPluginList;
     index=0;
     while(index<preferedList.size())

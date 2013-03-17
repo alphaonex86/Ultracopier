@@ -19,7 +19,7 @@ HelpDialog::HelpDialog() :
     reloadTextValue();
     #ifdef ULTRACOPIER_DEBUG
     ui->debugView->setModel(&DebugModel::debugModel);
-    connect(ui->pushButtonSaveBugReport,&QPushButton::clicked,debug_engine_instance,&DebugEngine::saveBugReport);
+    connect(ui->pushButtonSaveBugReport,&QPushButton::clicked,&DebugEngine::debugEngine,&DebugEngine::saveBugReport);
     #else // ULTRACOPIER_DEBUG
     ui->lineEditInsertDebug->hide();
     ui->debugView->hide();

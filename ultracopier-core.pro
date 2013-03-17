@@ -46,12 +46,10 @@ HEADERS += ResourcesManager.h \
     ThemesManager.h \
     SystrayIcon.h \
     StructEnumDefinition.h \
-    Singleton.h \
     EventDispatcher.h \
     Environment.h \
     DebugEngine.h \
     Core.h \
-    GlobalClass.h \
     OptionEngine.h \
     HelpDialog.h \
     PluginsManager.h \
@@ -90,7 +88,6 @@ SOURCES += ThemesManager.cpp \
     main.cpp \
     EventDispatcher.cpp \
     SystrayIcon.cpp \
-    GlobalClass.cpp \
     DebugEngine.cpp \
     OptionEngine.cpp \
     HelpDialog.cpp \

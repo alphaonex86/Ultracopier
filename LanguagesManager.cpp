@@ -14,12 +14,8 @@
 LanguagesManager::LanguagesManager()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    //load the overall instance
-    resources=ResourcesManager::getInstance();
-    options=OptionEngine::getInstance();
-    plugins=PluginsManager::getInstance();
     //load the rest
-    QStringList resourcesPaths=resources->getReadPath();
+    QStringList resourcesPaths=ResourcesManager::resourcesManager.getReadPath();
     int index=0;
     while(index<resourcesPaths.size())
     {
@@ -30,34 +26,31 @@ LanguagesManager::LanguagesManager()
         index++;
     }
     //load the plugins
-    plugins->lockPluginListEdition();
+    PluginsManager::pluginsManager.lockPluginListEdition();
     connect(this,&LanguagesManager::previouslyPluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginAdded,            this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(plugins,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    connect(plugins,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Languages);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_Languages);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    plugins->unlockPluginListEdition();
+    PluginsManager::pluginsManager.unlockPluginListEdition();
     //load the GUI option
     QList<QPair<QString, QVariant> > KeysList;
     KeysList.append(qMakePair(QString("Language"),QVariant("en")));
     KeysList.append(qMakePair(QString("Language_force"),QVariant(false)));
-    options->addOptionGroup("Language",KeysList);
+    OptionEngine::optionEngine.addOptionGroup("Language",KeysList);
 //	connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::refreshPluginList);
 //	connect(this,	&LanguagesManager::newLanguageLoaded,			this,&LanguagesManager::retranslateTheUI);
-    connect(options,&OptionEngine::newOptionValue,				this,	&LanguagesManager::newOptionValue,Qt::QueuedConnection);
-    connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::newLanguageLoaded,Qt::QueuedConnection);
+    connect(&OptionEngine::optionEngine,&OptionEngine::newOptionValue,				this,	&LanguagesManager::newOptionValue,Qt::QueuedConnection);
+    connect(this,	&LanguagesManager::newLanguageLoaded,			&PluginsManager::pluginsManager,&PluginsManager::newLanguageLoaded,Qt::QueuedConnection);
 }
 
 /// \brief Destroy the language manager
 LanguagesManager::~LanguagesManager()
 {
-    PluginsManager::destroyInstanceAtTheLastCall();
-    OptionEngine::destroyInstanceAtTheLastCall();
-    ResourcesManager::destroyInstanceAtTheLastCall();
 }
 
 /// \brief load the language selected, return the main short code like en, fr, ..
@@ -71,7 +64,7 @@ QString LanguagesManager::getTheRightLanguage()
     }
     else
     {
-        if(!options->getOptionValue("Language","Language_force").toBool())
+        if(!OptionEngine::optionEngine.getOptionValue("Language","Language_force").toBool())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()));
             QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));
@@ -85,12 +78,12 @@ QString LanguagesManager::getTheRightLanguage()
                 else
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Autodetection of the language failed, QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language())+", QLocale::system().name(): "+QLocale::system().name()+", failing back to english");
-                    return options->getOptionValue("Language","Language").toString();
+                    return OptionEngine::optionEngine.getOptionValue("Language","Language").toString();
                 }
             }
         }
         else
-            return options->getOptionValue("Language","Language").toString();
+            return OptionEngine::optionEngine.getOptionValue("Language","Language").toString();
     }
 }
 
@@ -103,7 +96,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
     if(currentLanguage==newLanguage)
         return;
     //store the language
-    plugins->setLanguage(newLanguage);
+    PluginsManager::pluginsManager.setLanguage(newLanguage);
     //unload the old language
     if(currentLanguage!="en")
     {
@@ -132,7 +125,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
                 else
                     fileToLoad<<LanguagesAvailableList.at(index).path+"translation.qm";
                 //load the language plugin
-                QList<PluginsAvailable> listLoadedPlugins=plugins->getPlugins();
+                QList<PluginsAvailable> listLoadedPlugins=PluginsManager::pluginsManager.getPlugins();
                 int indexPluginIndex=0;
                 while(indexPluginIndex<listLoadedPlugins.size())
                 {
@@ -262,7 +255,7 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"translation not found for: "+plugin.path);
     else
         LanguagesAvailableList<<temp;
-    if(plugins->allPluginHaveBeenLoaded())
+    if(PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
         setCurrentLanguage(getTheRightLanguage());
 }
 

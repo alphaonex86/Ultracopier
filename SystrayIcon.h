@@ -16,12 +16,11 @@
 #include <QUrl>
 
 #include "Environment.h"
-#include "GlobalClass.h"
 
 /** \brief The systray icon
 
 This class provide a systray icon and its functions */
-class SystrayIcon : public QSystemTrayIcon, public GlobalClass
+class SystrayIcon : public QSystemTrayIcon
 {
     Q_OBJECT
     public:

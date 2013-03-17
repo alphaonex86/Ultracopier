@@ -17,8 +17,8 @@ This class load ALL plugin compatible to listen and catch the copy/move
 
 #include "interface/PluginInterface_PluginLoader.h"
 #include "PluginsManager.h"
-#include "GlobalClass.h"
 #include "OptionDialog.h"
+#include "LocalPluginOptions.h"
 
 namespace Ui {
     class PluginLoaderOptions;
@@ -30,7 +30,7 @@ namespace Ui {
 
   \see ResourcesManager::ResourcesManager()
   */
-class PluginLoader : public QObject, GlobalClass
+class PluginLoader : public QObject
 {
     Q_OBJECT
 public:

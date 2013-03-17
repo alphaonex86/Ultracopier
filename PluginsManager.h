@@ -22,7 +22,6 @@
 #include <QRegularExpression>
 
 #include "Environment.h"
-#include "Singleton.h"
 #include "OptionEngine.h"
 #include "ResourcesManager.h"
 #include "PluginInformation.h"
@@ -38,10 +37,9 @@ namespace Ui {
 /** \brief Define the class to manage and load the resources linked with the themes
 
 This class provide a core load and manage the resources */
-class PluginsManager : public QThread, public Singleton<PluginsManager>
+class PluginsManager : public QThread
 {
     Q_OBJECT
-    friend class Singleton<PluginsManager>;
     public:
         /// \brief to get plugins of type specific
         QList<PluginsAvailable> getPluginsByCategory(const PluginType &type) const;
@@ -67,17 +65,12 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
             ImportBackend_File,		//import plugin from local file
             ImportBackend_Internet	//import plugin form internet
         };
+        static PluginsManager pluginsManager;
     private:
         /// \brief Create the manager and load the defaults variables
         PluginsManager();
         /// \brief Destroy the language manager
         ~PluginsManager();
-        /// \brief get informations text
-        //QString getInformationText(PluginsAvailable plugin,QString informationName);
-        //for the options
-        OptionEngine *options;
-        /// \brief Store the object of resources manager
-        ResourcesManager *resources;
         /// \brief List of plugins
         QList<PluginsAvailable> pluginsList;
         QMultiMap<PluginType,PluginsAvailable> pluginsListIndexed;
@@ -87,8 +80,6 @@ class PluginsManager : public QThread, public Singleton<PluginsManager>
         QString getPluginVersion(const QString &pluginName) const;
         /// \brief To compare version
         bool compareVersion(const QString &versionA,const QString &sign,const QString &versionB);
-        /// \brief plugin information windows
-        PluginInformation pluginInformationWindows;
         /// \brief list of cat plugin type
         //QStringList catPlugin;
         QStringList englishPluginType;

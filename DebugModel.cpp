@@ -6,8 +6,6 @@
 
 // Model
 
-DebugModel DebugModel::debugModel;
-
 DebugModel::DebugModel()
 {
     displayed           = false;

@@ -12,12 +12,11 @@
 
 #include "interface/PluginInterface_Listener.h"
 #include "Environment.h"
-#include "GlobalClass.h"
 #include "PluginLoader.h"
 #include "OptionDialog.h"
 
 /** \brief to load all the listener and parse all event */
-class CopyListener : public QObject, public GlobalClass
+class CopyListener : public QObject
 {
     Q_OBJECT
     public:

@@ -13,7 +13,6 @@
 #include <QString>
 
 #include "Environment.h"
-#include "GlobalClass.h"
 #include "LocalPluginOptions.h"
 #include "OptionDialog.h"
 #include "interface/PluginInterface_CopyEngine.h"
@@ -24,7 +23,7 @@ namespace Ui {
 }
 
 /** \brief Manage copy engine plugins and their instance */
-class CopyEngineManager : public QObject, public GlobalClass
+class CopyEngineManager : public QObject
 {
     Q_OBJECT
 public:

@@ -18,7 +18,6 @@
 #include "Environment.h"
 #include "StructEnumDefinition.h"
 #include "CopyEngineManager.h"
-#include "GlobalClass.h"
 #include "LogThread.h"
 #include "interface/PluginInterface_CopyEngine.h"
 #include "interface/PluginInterface_Themes.h"
@@ -26,7 +25,7 @@
 /** \brief Define the class definition for core, the Copy of each copy/move window
 
 This class provide a core for dispatch the event of signal/slot, it checks too if not other instance is running */
-class Core : public QObject, public GlobalClass
+class Core : public QObject
 {
     Q_OBJECT
     public:

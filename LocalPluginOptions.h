@@ -33,7 +33,6 @@ public:
     void setOptionValue(const QString &variableName,const QVariant &value);
 protected:
     //for the options
-    OptionEngine *options;
     QString group;
     bool groupOptionAdded;
 /*public slots:-> disabled because the value will not externaly changed, then useless notification

@@ -19,9 +19,6 @@ PluginsManager::PluginsManager()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //load the overall instance
     pluginLoaded=false;
-    resources=ResourcesManager::getInstance();
-    options=OptionEngine::getInstance();
-
     language="en";
     stopIt=false;
     editionSemList.release();
@@ -34,7 +31,6 @@ PluginsManager::PluginsManager()
     connect(&decodeThread,		&QXzDecodeThread::decodedIsFinish,		this,				&PluginsManager::decodingFinished,Qt::QueuedConnection);
     #endif
     connect(this,			&PluginsManager::finished,			this,				&PluginsManager::post_operation,Qt::QueuedConnection);
-    connect(this,			&PluginsManager::newLanguageLoaded,		&pluginInformationWindows,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
 //	connect(this,			&PluginsManager::pluginListingIsfinish,		options,&OptionEngine::setInterfaceValue);
     //load the plugins list
 
@@ -57,8 +53,6 @@ PluginsManager::~PluginsManager()
     stopIt=true;
     if(this->isRunning())
         this->wait(0);
-    OptionEngine::destroyInstanceAtTheLastCall();
-    ResourcesManager::destroyInstanceAtTheLastCall();
 }
 
 /// \brief set current language
@@ -104,7 +98,7 @@ void PluginsManager::run()
 
     //load the path and plugins into the path
     QStringList readPath;
-    readPath << resources->getReadPath();
+    readPath << ResourcesManager::resourcesManager.getReadPath();
     pluginsList.clear();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pluginsList.size(): "+QString::number(pluginsList.size()));
     foreach(QString basePath,readPath)
@@ -181,7 +175,7 @@ QString PluginsManager::categoryToString(const PluginType &category) const
 
 QString PluginsManager::categoryToTranslation(const PluginType &category) const
 {
-    return pluginInformationWindows.categoryToTranslation(category);
+    //return pluginInformationWindows.categoryToTranslation(category);
 }
 
 bool PluginsManager::isSamePlugin(const PluginsAvailable &pluginA,const PluginsAvailable &pluginB)
@@ -212,8 +206,8 @@ bool PluginsManager::loadPluginInformation(const QString &path)
     tempPlugin.category	= PluginType_Unknow;
     QDir pluginPath(path);
     if(pluginPath.cdUp() && pluginPath.cdUp() &&
-            resources->getWritablePath()!="" &&
-            pluginPath==QDir(resources->getWritablePath()))
+            ResourcesManager::resourcesManager.getWritablePath()!="" &&
+            pluginPath==QDir(ResourcesManager::resourcesManager.getWritablePath()))
         tempPlugin.isWritable=true;
     else
         tempPlugin.isWritable=false;
@@ -635,9 +629,9 @@ void PluginsManager::showInformation(const QString &path)
     {
         if(pluginsList.at(index).path==path)
         {
-            pluginInformationWindows.setLanguage(mainShortName);
+            /*pluginInformationWindows.setLanguage(mainShortName);
             pluginInformationWindows.setPlugin(pluginsList.at(index));
-            pluginInformationWindows.show();
+            pluginInformationWindows.show();*/
             return;
         }
         index++;
@@ -782,7 +776,7 @@ void PluginsManager::decodingFinished()
                     categoryFinal=categoryToString(tempPlugin.category);
                     if(categoryFinal!="")
                     {
-                        QString writablePath=resources->getWritablePath();
+                        QString writablePath=ResourcesManager::resourcesManager.getWritablePath();
                         if(writablePath!="")
                         {
                             QDir dir;
@@ -803,7 +797,7 @@ void PluginsManager::decodingFinished()
                                     if(!dir.exists(info.absolutePath()))
                                         if(!dir.mkpath(info.absolutePath()))
                                         {
-                                            resources->disableWritablePath();
+                                            ResourcesManager::resourcesManager.disableWritablePath();
                                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the path: "+info.absolutePath());
                                             QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to create a folder to install the plugin:\n%1").arg(info.absolutePath()));
                                             errorFound=true;
@@ -816,7 +810,7 @@ void PluginsManager::decodingFinished()
                                     }
                                     else
                                     {
-                                        resources->disableWritablePath();
+                                        ResourcesManager::resourcesManager.disableWritablePath();
                                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the file: "+info.absolutePath()+", error:"+currentFile.errorString());
                                         QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to create a file to install the plugin:\n%1\nsince:%2").arg(info.absolutePath()).arg(currentFile.errorString()));
                                         errorFound=true;

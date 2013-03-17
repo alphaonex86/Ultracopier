@@ -21,7 +21,6 @@
 #include "PlatformMacro.h"
 #include "StructEnumDefinition.h"
 #include "StructEnumDefinition_UltracopierSpecific.h"
-#include "Singleton.h"
 
 #ifdef ULTRACOPIER_DEBUG
 
@@ -64,10 +63,9 @@ private slots:
 /** \brief Define the class for the debug
 
 This class provide all needed for the debug mode of ultracopier */
-class DebugEngine : public QObject, public Singleton<DebugEngine>
+class DebugEngine : public QObject
 {
     Q_OBJECT
-    friend class Singleton<DebugEngine>;
     public:
         /** \brief Get the html text info for re-show it
         \note This function is thread safe */
@@ -86,6 +84,7 @@ class DebugEngine : public QObject, public Singleton<DebugEngine>
         \note This function is reentrant */
         static void addDebugInformationStatic(const Ultracopier::DebugLevel &level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
         static void addDebugNote(const QString& text);
+        static DebugEngine debugEngine;
     public slots:
         /** \brief ask to the user where save the bug report
         \warning This function can be only call by the graphical thread */

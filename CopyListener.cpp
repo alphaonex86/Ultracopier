@@ -6,6 +6,7 @@
 \licence GPL3, see the file COPYING */
 
 #include "CopyListener.h"
+#include "LanguagesManager.h"
 
 #include <QRegularExpression>
 #include <QMessageBox>
@@ -19,19 +20,19 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     tryListen=false;
     QList<QPair<QString, QVariant> > KeysList;
         KeysList.append(qMakePair(QString("CatchCopyAsDefault"),QVariant(true)));
-    options->addOptionGroup("CopyListener",KeysList);
-    plugins->lockPluginListEdition();
-    QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
+    OptionEngine::optionEngine.addOptionGroup("CopyListener",KeysList);
+    PluginsManager::pluginsManager.lockPluginListEdition();
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_Listener);
     connect(this,&CopyListener::previouslyPluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
-    connect(plugins,&PluginsManager::onePluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(plugins,&PluginsManager::onePluginWillBeRemoved,		this,&CopyListener::onePluginWillBeRemoved,Qt::DirectConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,		this,&CopyListener::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    connect(plugins,&PluginsManager::pluginListingIsfinish,			this,&CopyListener::allPluginIsloaded,Qt::QueuedConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&CopyListener::allPluginIsloaded,Qt::QueuedConnection);
     connect(pluginLoader,&PluginLoader::pluginLoaderReady,			this,&CopyListener::pluginLoaderReady);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
-    plugins->unlockPluginListEdition();
+    PluginsManager::pluginsManager.unlockPluginListEdition();
     last_state=Ultracopier::NotListening;
     last_have_plugin=false;
     last_inWaitOfReply=false;
@@ -41,7 +42,7 @@ CopyListener::~CopyListener()
 {
     stopIt=true;
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    QList<PluginsAvailable> list=plugins->getPluginsByCategory(PluginType_Listener);
+    QList<PluginsAvailable> list=PluginsManager::pluginsManager.getPluginsByCategory(PluginType_Listener);
     foreach(PluginsAvailable currentPlugin,list)
         onePluginWillBeRemoved(currentPlugin);
     #endif
@@ -50,7 +51,7 @@ CopyListener::~CopyListener()
 
 void CopyListener::resendState()
 {
-    if(plugins->allPluginHaveBeenLoaded())
+    if(PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
     {
         sendState(true);
         pluginLoader->resendState();
@@ -129,7 +130,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     newPluginListener.options=new LocalPluginOptions("Listener-"+plugin.name);
     newPluginListener.listenInterface->setResources(newPluginListener.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_Listener,plugin.name,newPluginListener.listenInterface->options());
-    connect(languages,&LanguagesManager::newLanguageLoaded,newPluginListener.listenInterface,&PluginInterface_Listener::newLanguageLoaded);
+    connect(&LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newPluginListener.listenInterface,&PluginInterface_Listener::newLanguageLoaded);
     pluginList << newPluginListener;
     connect(pluginList.last().listenInterface,&PluginInterface_Listener::newState,this,&CopyListener::newState);
     if(tryListen)
@@ -392,7 +393,7 @@ void CopyListener::allPluginIsloaded()
 
 void CopyListener::reloadClientList()
 {
-    if(!plugins->allPluginHaveBeenLoaded())
+    if(!PluginsManager::pluginsManager.allPluginHaveBeenLoaded())
         return;
     QStringList clients;
     int indexPlugin=0;

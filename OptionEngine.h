@@ -24,7 +24,6 @@
 #include "interface/OptionInterface.h"
 
 #include "Environment.h"
-#include "Singleton.h"
 #include "ResourcesManager.h"
 
 /** \brief To store the options
@@ -32,11 +31,10 @@
   That's allow to have mutualised way to store the options. Then the plugins just keep Ultracopier manage it, the portable version will store on the disk near the application, and the normal version will keep at the normal location.
   That's allow to have cache and buffer to not slow down Ultracopier when it's doing heavy copy/move.
 */
-class OptionEngine : public QObject, public Singleton<OptionEngine>
+class OptionEngine : public QObject
 {
     Q_OBJECT
     //class OptionEngine : public OptionInterface, public QDialog, public Singleton<OptionEngine>
-    friend class Singleton<OptionEngine>;
     public:
         /// \brief To add option group to options
         bool addOptionGroup(const QString &groupName,const QList<QPair<QString, QVariant> > &KeysList);
@@ -77,9 +75,6 @@ class OptionEngine : public QObject, public Singleton<OptionEngine>
         Backend currentBackend;
         /// \brief To store QSettings for the backend
         QSettings *settings;
-        #ifdef ULTRACOPIER_VERSION_PORTABLE
-        ResourcesManager *resources;
-        #endif // ULTRACOPIER_VERSION_PORTABLE
         //the reset of right value of widget need be do into the calling object
         void internal_resetToDefaultValue();
         //temp variable
@@ -87,6 +82,8 @@ class OptionEngine : public QObject, public Singleton<OptionEngine>
     signals:
         void newOptionValue(const QString&,const QString&,const QVariant&);
         void resetOptions();
+    public:
+        static OptionEngine optionEngine;
 };
 
 #endif // OPTION_ENGINE_H

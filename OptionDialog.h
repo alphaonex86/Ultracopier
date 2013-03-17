@@ -8,8 +8,9 @@
 
 #include <QDialog>
 #include <QAbstractButton>
+#include <QTreeWidgetItem>
 
-#include "GlobalClass.h"
+#include "PluginsManager.h"
 
 namespace Ui {
     class OptionDialog;
@@ -20,7 +21,7 @@ namespace Ui {
   It's need manage the ultracopier options, plugins selection, plugin prority.
   It's need manage too the plugin options and plugins informations.
   */
-class OptionDialog : public QDialog, public GlobalClass
+class OptionDialog : public QDialog
 {
     Q_OBJECT
 public:

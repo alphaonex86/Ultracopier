@@ -6,8 +6,10 @@
 \licence GPL3, see the file COPYING */
 
 #include "LocalListener.h"
+#include "PluginsManager.h"
 
 #include <QLocalSocket>
+#include <QDir>
 
 LocalListener::LocalListener(QObject *parent) :
     QObject(parent)
@@ -16,7 +18,7 @@ LocalListener::LocalListener(QObject *parent) :
     TimeOutQLocalSocket.setInterval(500);
     TimeOutQLocalSocket.setSingleShot(true);
     connect(&TimeOutQLocalSocket, &QTimer::timeout, this, &LocalListener::timeoutDectected);
-    connect(plugins,&PluginsManager::pluginListingIsfinish,this, &LocalListener::allPluginIsloaded,Qt::QueuedConnection);
+    connect(&PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,this, &LocalListener::allPluginIsloaded,Qt::QueuedConnection);
 }
 
 LocalListener::~LocalListener()

@@ -8,6 +8,8 @@
 
 #include "Environment.h"
 #include "EventDispatcher.h"
+#include "LanguagesManager.h"
+#include "ThemesManager.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     Q_IMPORT_PLUGIN(CopyEngineFactory)
@@ -21,6 +23,14 @@
     #endif
 #endif
 
+DebugModel DebugModel::debugModel;
+DebugEngine DebugEngine::debugEngine;
+ResourcesManager ResourcesManager::resourcesManager;
+OptionEngine OptionEngine::optionEngine;
+PluginsManager PluginsManager::pluginsManager;
+LanguagesManager LanguagesManager::languagesManager;
+ThemesManager ThemesManager::themesManager;
+
 /// \brief Define the main() for the point entry
 int main(int argc, char *argv[])
 {
@@ -32,9 +42,6 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
-    #ifdef ULTRACOPIER_DEBUG
-    DebugEngine::getInstance();
-    #endif // ULTRACOPIER_DEBUG
     //the main code, event loop of Qt and event dispatcher of ultracopier
     {
         EventDispatcher backgroundRunningInstance;
@@ -43,9 +50,6 @@ int main(int argc, char *argv[])
         else
             returnCode=ultracopierApplication.exec();
     }
-    #ifdef ULTRACOPIER_DEBUG
-    DebugEngine::destroyInstanceAtTheLastCall();
-    #endif // ULTRACOPIER_DEBUG
     return returnCode;
 }
 

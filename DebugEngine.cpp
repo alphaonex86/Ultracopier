@@ -120,9 +120,9 @@ DebugEngine::DebugEngine()
             if(removeTheLockFile())
             {
                 //Ask to the user
-                QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report","Ultracopier seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                /*QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report","Ultracopier seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                 if(reply==QMessageBox::Yes)
-                    saveBugReport();
+                    saveBugReport();*/
             }
             else
                 puts(qPrintable(logFile.fileName()+" unable to open it as read"));
@@ -217,7 +217,6 @@ bool DebugEngine::removeTheLockFile()
 
 void DebugEngine::addDebugInformationStatic(const Ultracopier::DebugLevel &level,const QString& function,const QString& text,const QString& file,const int& ligne,const QString& location)
 {
-    DebugEngine *debug_engine_instance=DebugEngine::getInstance();
     DebugLevel_custom tempLevel=DebugLevel_custom_Information;
     switch(level)
     {
@@ -236,15 +235,12 @@ void DebugEngine::addDebugInformationStatic(const Ultracopier::DebugLevel &level
         default:
             tempLevel=DebugLevel_custom_Notice;
     }
-    debug_engine_instance->addDebugInformation(tempLevel,function,text,file,ligne,location);
-    DebugEngine::destroyInstanceAtTheLastCall();
+    DebugEngine::debugEngine.addDebugInformation(tempLevel,function,text,file,ligne,location);
 }
 
 void DebugEngine::addDebugNote(const QString& text)
 {
-    DebugEngine *debug_engine_instance=DebugEngine::getInstance();
-    debug_engine_instance->addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
-    DebugEngine::destroyInstanceAtTheLastCall();
+    DebugEngine::debugEngine.addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
 }
 
 /// \brief For add message info, this function is thread safe

@@ -17,12 +17,12 @@ This class load ALL plugin compatible to listen and catch the copy/move
 
 #include "interface/PluginInterface_SessionLoader.h"
 #include "PluginsManager.h"
-#include "GlobalClass.h"
 #include "OptionDialog.h"
+#include "LocalPluginOptions.h"
 
 #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
 /** \brief manage all SessionLoader plugin */
-class SessionLoader : public QObject, GlobalClass
+class SessionLoader : public QObject
 {
     Q_OBJECT
     public:

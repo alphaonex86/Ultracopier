@@ -14,7 +14,6 @@
 
 #include "Environment.h"
 #include "ResourcesManager.h"
-#include "Singleton.h"
 #include "OptionEngine.h"
 #include "PluginsManager.h"
 #include "LanguagesManager.h"
@@ -26,10 +25,9 @@
 /** \brief Define the class to manage and load the themes
 
 This class provide a core load and manage the themes */
-class ThemesManager : public QObject, public Singleton<ThemesManager>
+class ThemesManager : public QObject
 {
     Q_OBJECT
-    friend class Singleton<ThemesManager>;
     //public slots:
         /*/// \brief To change the current themes selected
         bool changeCurrentTheme(QString theNewThemeToLoad);*/
@@ -41,6 +39,8 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
         /** \brief To get if one themes instance
         \see Core() */
         PluginInterface_Themes * getThemesInstance();
+
+        static ThemesManager themesManager;
     private:
         /// \brief Create the manager and load the defaults variables
         ThemesManager();
@@ -50,14 +50,6 @@ class ThemesManager : public QObject, public Singleton<ThemesManager>
         QString defaultStylePath;
         /// \brief The current themes path loaded by ultracopier
         QString currentStylePath;
-        /// \brief Store the object of resources manager
-        ResourcesManager *resources;
-        //for the options
-        OptionEngine *options;
-        /// \brief Store the object of languages manager
-        LanguagesManager *languages;
-        /// \brief Store the object of plugin manager
-        PluginsManager *plugins;
         /// \brief OptionEngineGroupKey then: Group -> Key
         struct PluginsAvailableThemes
         {

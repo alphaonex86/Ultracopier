@@ -15,7 +15,6 @@
 
 #include "Environment.h"
 #include "Core.h"
-#include "GlobalClass.h"
 #include "SystrayIcon.h"
 #include "OptionEngine.h"
 #include "HelpDialog.h"
@@ -29,7 +28,7 @@
 /** \brief Define the class of the event dispatcher
 
 This class provide a core for dispatch the event of signal/slot, it checks too if not other instance is running */
-class EventDispatcher : public QObject, public GlobalClass
+class EventDispatcher : public QObject
 {
     Q_OBJECT
     public:

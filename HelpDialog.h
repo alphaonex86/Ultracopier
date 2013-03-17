@@ -14,14 +14,13 @@
 
 #include "ui_HelpDialog.h"
 #include "Environment.h"
-#include "GlobalClass.h"
 
 namespace Ui {
     class HelpDialog;
 }
 
 /** \brief Help dialog, and some user oriented repport/debug function */
-class HelpDialog : public QDialog, public GlobalClass {
+class HelpDialog : public QDialog {
     Q_OBJECT
     public:
         /// \brief Construct the object

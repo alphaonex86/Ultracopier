@@ -79,8 +79,6 @@ OptionEngine::OptionEngine()
 /// \brief Destroy the option
 OptionEngine::~OptionEngine()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    ResourcesManager::destroyInstanceAtTheLastCall();
 }
 
 /// \brief To add option group to options
