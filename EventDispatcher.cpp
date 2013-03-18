@@ -150,9 +150,9 @@ void EventDispatcher::initFunction()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Initialize the variable of event loop");
-    connect(copyServer,	&CopyListener::newCopyWithoutDestination,			core,		&Core::newCopyWithoutDestination);
+    connect(copyServer,	&CopyListener::newCopyWithoutDestination,	core,		&Core::newCopyWithoutDestination);
     connect(copyServer,	&CopyListener::newCopy,						core,		&Core::newCopy);
-    connect(copyServer,	&CopyListener::newMoveWithoutDestination,			core,		&Core::newMoveWithoutDestination);
+    connect(copyServer,	&CopyListener::newMoveWithoutDestination,	core,		&Core::newMoveWithoutDestination);
     connect(copyServer,	&CopyListener::newMove,						core,		&Core::newMove);
     connect(core,		&Core::copyFinished,						copyServer,	&CopyListener::copyFinished);
     connect(core,		&Core::copyCanceled,						copyServer,	&CopyListener::copyCanceled);

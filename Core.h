@@ -68,6 +68,7 @@ class Core : public QObject
             QTime lastConditionalSync;
             QTimer *nextConditionalSync;
             bool copyEngineIsSync;
+            bool canceled;//to not try groun when is in canceling
         };
         QList<CopyInstance> copyList;
         /** open with specific source/destination
@@ -125,6 +126,7 @@ class Core : public QObject
     public slots:
         /** \brief do copy with sources, but ask the destination */
         void newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
+        void newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
         /** \brief do copy with sources and destination */
         void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
         /** \brief do move with sources, but ask the destination */

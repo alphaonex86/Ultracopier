@@ -51,9 +51,9 @@ void Core::newCopyWithoutDestination(const quint32 &orderId,const QStringList &p
     copyList.last().interface->haveExternalOrder();
 }
 
-void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
+void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination+", mode: "+QString::number(mode));
     //search to group the window
     int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
     bool haveSameSource=false,haveSameDestination=false;
@@ -63,7 +63,12 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
         int index=0;
         while(index<copyList.size())
         {
-            if(!copyList.at(index).ignoreMode && copyList.at(index).mode==Ultracopier::Copy)
+            bool rightMode=false;
+            if(mode==Ultracopier::Copy)
+                rightMode=copyList.at(index).mode==Ultracopier::Copy;
+            else
+                rightMode=copyList.at(index).mode==Ultracopier::Move;
+            if(!copyList.at(index).ignoreMode && rightMode && !copyList.at(index).canceled)
             {
                 if(GroupWindowWhen!=5)
                 {
@@ -92,7 +97,10 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
                         if(confirmed)
                         {
                             copyList[index].orderId<<orderId;
-                            copyList.at(index).engine->newCopy(sources,destination);
+                            if(mode==Ultracopier::Copy)
+                                copyList.at(index).engine->newCopy(sources,destination);
+                            else
+                                copyList.at(index).engine->newMove(sources,destination);
                             copyList.at(index).interface->haveExternalOrder();
                             return;
                         }
@@ -103,15 +111,28 @@ void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForThe
         }
     }
     //else open new windows
-    if(openNewCopyEngineInstance(Ultracopier::Copy,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
+    if(openNewCopyEngineInstance(mode,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
-        QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a engine instance");
+        QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a engine instance"));
         return;
     }
     copyList.last().orderId<<orderId;
-    copyList.last().engine->newCopy(sources,destination);
+    if(mode==Ultracopier::Copy)
+        copyList.last().engine->newCopy(sources,destination);
+    else
+        copyList.last().engine->newMove(sources,destination);
     copyList.last().interface->haveExternalOrder();
+}
+
+void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
+{
+    newTransfer(Ultracopier::Copy,orderId,protocolsUsedForTheSources,sources,protocolsUsedForTheDestination,destination);
+}
+
+void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
+{
+    newTransfer(Ultracopier::Move,orderId,protocolsUsedForTheSources,sources,protocolsUsedForTheDestination,destination);
 }
 
 void Core::newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
@@ -124,59 +145,6 @@ void Core::newMoveWithoutDestination(const quint32 &orderId,const QStringList &p
     }
     copyList.last().orderId<<orderId;
     copyList.last().engine->newMove(sources);
-    copyList.last().interface->haveExternalOrder();
-}
-
-void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination);
-    //search to group the window
-    int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
-    bool haveSameSource=false,haveSameDestination=false;
-    if(GroupWindowWhen!=0)
-    {
-        int index=0;
-        while(index<copyList.size())
-        {
-            if(!copyList.at(index).ignoreMode && copyList.at(index).mode==Ultracopier::Move)
-            {
-                if(GroupWindowWhen!=5)
-                {
-                    if(GroupWindowWhen!=2)
-                        haveSameSource=copyList.at(index).engine->haveSameSource(sources);
-                    if(GroupWindowWhen!=1)
-                        haveSameDestination=copyList.at(index).engine->haveSameDestination(destination);
-                }
-                if(
-                    GroupWindowWhen==5 ||
-                    (GroupWindowWhen==1 && haveSameSource) ||
-                    (GroupWindowWhen==2 && haveSameDestination) ||
-                    (GroupWindowWhen==3 && (haveSameSource && haveSameDestination)) ||
-                    (GroupWindowWhen==4 && (haveSameSource || haveSameDestination))
-                    )
-                {
-                    /*protocols are same*/
-                    if(copyEngineList->protocolsSupportedByTheCopyEngine(copyList.at(index).engine,protocolsUsedForTheSources,protocolsUsedForTheDestination))
-                    {
-                        copyList[index].orderId<<orderId;
-                        copyList.at(index).engine->newMove(sources,destination);
-                        copyList.at(index).interface->haveExternalOrder();
-                        return;
-                    }
-                }
-            }
-            index++;
-        }
-    }
-    //else open new windows
-    if(openNewCopyEngineInstance(Ultracopier::Move,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
-        QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
-        return;
-    }
-    copyList.last().orderId<<orderId;
-    copyList.last().engine->newMove(sources,destination);
     copyList.last().interface->haveExternalOrder();
 }
 
@@ -383,6 +351,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.nextConditionalSync=new QTimer();
             newItem.nextConditionalSync->setSingleShot(true);
             newItem.copyEngineIsSync=true;
+            newItem.canceled=false;
 
             if(!ignoreMode)
             {
@@ -767,6 +736,7 @@ void Core::copyInstanceCanceledByIndex(const int &index)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, remove with the index: "+QString::number(index));
     //disconnectEngine(index);
     //disconnectInterface(index);
+    copyList[index].canceled=true;
     CopyInstance& currentCopyInstance=copyList[index];
     currentCopyInstance.engine->cancel();
     delete currentCopyInstance.nextConditionalSync;
