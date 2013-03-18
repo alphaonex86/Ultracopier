@@ -10,6 +10,10 @@
 #include "EventDispatcher.h"
 #include "LanguagesManager.h"
 #include "ThemesManager.h"
+#include "DebugEngine.h"
+#include "ResourcesManager.h"
+#include "OptionEngine.h"
+#include "PluginsManager.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     Q_IMPORT_PLUGIN(CopyEngineFactory)
@@ -23,8 +27,10 @@
     #endif
 #endif
 
+#ifdef ULTRACOPIER_DEBUG
 DebugModel *DebugModel::debugModel=NULL;
 DebugEngine *DebugEngine::debugEngine=NULL;
+#endif
 ResourcesManager *ResourcesManager::resourcesManager=NULL;
 OptionEngine *OptionEngine::optionEngine=NULL;
 PluginsManager *PluginsManager::pluginsManager=NULL;
@@ -42,30 +48,43 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
+
+    #ifdef ULTRACOPIER_DEBUG
+    DebugModel::debugModel=new DebugModel();
+    DebugEngine::debugEngine=new DebugEngine();
+    #endif
+    ResourcesManager::resourcesManager=new ResourcesManager();
+    OptionEngine::optionEngine=new OptionEngine();
+    PluginsManager::pluginsManager=new PluginsManager();
+    LanguagesManager::languagesManager=new LanguagesManager();
+    ThemesManager::themesManager=new ThemesManager();
+
     //the main code, event loop of Qt and event dispatcher of ultracopier
     {
-        DebugModel::debugModel=new DebugModel();
-        DebugEngine::debugEngine=new DebugEngine();
-        ResourcesManager::resourcesManager=new ResourcesManager();
-        OptionEngine::optionEngine=new OptionEngine();
-        PluginsManager::pluginsManager=new PluginsManager();
-        LanguagesManager::languagesManager=new LanguagesManager();
-        ThemesManager::themesManager=new ThemesManager();
-
         EventDispatcher backgroundRunningInstance;
         if(backgroundRunningInstance.shouldBeClosed())
             returnCode=0;
         else
             returnCode=ultracopierApplication.exec();
-
-        delete ThemesManager::themesManager;
-        delete LanguagesManager::languagesManager;
-        delete PluginsManager::pluginsManager;
-        delete OptionEngine::optionEngine;
-        delete ResourcesManager::resourcesManager;
-        delete DebugEngine::debugEngine;
-        delete DebugModel::debugModel;
     }
+
+    delete ThemesManager::themesManager;
+    ThemesManager::themesManager=NULL;
+    delete LanguagesManager::languagesManager;
+    LanguagesManager::languagesManager=NULL;
+    delete PluginsManager::pluginsManager;
+    PluginsManager::pluginsManager=NULL;
+    delete OptionEngine::optionEngine;
+    OptionEngine::optionEngine=NULL;
+    delete ResourcesManager::resourcesManager;
+    ResourcesManager::resourcesManager=NULL;
+    #ifdef ULTRACOPIER_DEBUG
+    delete DebugEngine::debugEngine;
+    DebugEngine::debugEngine=NULL;
+    delete DebugModel::debugModel;
+    DebugModel::debugModel=NULL;
+    #endif
+
     return returnCode;
 }
 

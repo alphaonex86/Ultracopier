@@ -333,7 +333,12 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
         arguments.append("/u");
     arguments.append(dllPath);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: regsvr32 "+arguments.join(" "));
-    int result=QProcess::execute("regsvr32",arguments);
+    int result;
+    #ifdef Q_OS_WIN32
+    result=QProcess::execute("regsvr32",arguments);
+    #else
+    result=0;
+    #endif
     bool ok=false;
     if(result==0)
     {
@@ -361,7 +366,8 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try it in win32");
             // try with regsvr32, win32 because for admin dialog
 
-	    wchar_t arrayArg[65535];
+            #ifdef Q_OS_WIN32
+            wchar_t arrayArg[65535];
             int size_lenght=arguments.join(" ").toWCharArray(arrayArg);
             //size_lenght*sizeof(wchar_t)
             wcscpy(arrayArg+size_lenght*sizeof(wchar_t),TEXT("\0"));
@@ -375,6 +381,9 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
             sei.lpParameters = arrayArg;
             sei.nShow = SW_SHOW;
             ok=ShellExecuteEx(&sei);
+            #else
+            ok=true;
+            #endif
             if(ok && bRegister)
                 correctlyLoaded << dllPath;
         }

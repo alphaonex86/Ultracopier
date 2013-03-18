@@ -109,14 +109,14 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Plugin correctly loaded");
     #ifdef ULTRACOPIER_DEBUG
-    connect(listen,&PluginInterface_Listener::debugInformation,this,&CopyListener::debugInformation);
+    connect(listen,&PluginInterface_Listener::debugInformation,this,&CopyListener::debugInformation,Qt::DirectConnection);
     #endif // ULTRACOPIER_DEBUG
-    connect(listen,&PluginInterface_Listener::error,                            this,&CopyListener::error);
-    connect(listen,&PluginInterface_Listener::newCopyWithoutDestination,		this,&CopyListener::newPluginCopyWithoutDestination);
-    connect(listen,&PluginInterface_Listener::newCopy,                          this,&CopyListener::newPluginCopy);
-    connect(listen,&PluginInterface_Listener::newMoveWithoutDestination,		this,&CopyListener::newPluginMoveWithoutDestination);
-    connect(listen,&PluginInterface_Listener::newMove,                          this,&CopyListener::newPluginMove);
-    connect(listen,&PluginInterface_Listener::newClientList,                    this,&CopyListener::reloadClientList);
+    connect(listen,&PluginInterface_Listener::error,                            this,&CopyListener::error,Qt::DirectConnection);
+    connect(listen,&PluginInterface_Listener::newCopyWithoutDestination,		this,&CopyListener::newPluginCopyWithoutDestination,Qt::DirectConnection);
+    connect(listen,&PluginInterface_Listener::newCopy,                          this,&CopyListener::newPluginCopy,Qt::DirectConnection);
+    connect(listen,&PluginInterface_Listener::newMoveWithoutDestination,		this,&CopyListener::newPluginMoveWithoutDestination,Qt::DirectConnection);
+    connect(listen,&PluginInterface_Listener::newMove,                          this,&CopyListener::newPluginMove,Qt::DirectConnection);
+    connect(listen,&PluginInterface_Listener::newClientList,                    this,&CopyListener::reloadClientList,Qt::DirectConnection);
     newPluginListener.listenInterface	= listen;
 
     newPluginListener.path			= plugin.path+PluginsManager::getResolvedPluginName("listener");
@@ -125,9 +125,9 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     newPluginListener.options=new LocalPluginOptions("Listener-"+plugin.name);
     newPluginListener.listenInterface->setResources(newPluginListener.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_Listener,plugin.name,newPluginListener.listenInterface->options());
-    connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newPluginListener.listenInterface,&PluginInterface_Listener::newLanguageLoaded);
+    connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newPluginListener.listenInterface,&PluginInterface_Listener::newLanguageLoaded,Qt::DirectConnection);
     pluginList << newPluginListener;
-    connect(pluginList.last().listenInterface,&PluginInterface_Listener::newState,this,&CopyListener::newState);
+    connect(pluginList.last().listenInterface,&PluginInterface_Listener::newState,this,&CopyListener::newState,Qt::DirectConnection);
     if(tryListen)
     {
         pluginList.last().inWaitOfReply=true;

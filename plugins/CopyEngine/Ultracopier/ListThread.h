@@ -254,12 +254,6 @@ private:
     #endif
     void detectDrivesOfCurrentTransfer(const QStringList &sources,const QString &destination);
     FacilityInterface * facilityInterface;
-    //temp variable for not always alocate the memory
-    int int_for_loop,int_for_internal_loop,int_for_transfer_thread_search,loop_size,loop_sub_size,loop_sub_size_transfer_thread_search;
-    TransferThread *temp_transfer_thread;
-    bool isFound;
-    bool updateTheStatus_listing,updateTheStatus_copying;
-    Ultracopier::EngineActionInProgress updateTheStatus_action_in_progress;
     QSemaphore waitConstructor,waitCancel;
     int actionToDoListTransfer_count,actionToDoListInode_count;
     bool doTransfer,doInode;

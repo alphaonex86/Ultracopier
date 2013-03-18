@@ -511,9 +511,9 @@ void Themes::on_putOnTop_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    ids.clear();
-    index=0;
-    loop_size=selectedItems.size();
+    QList<int> ids;
+    int index=0;
+    int loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -527,9 +527,9 @@ void Themes::on_pushUp_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    ids.clear();
-    index=0;
-    loop_size=selectedItems.size();
+    QList<int> ids;
+    int index=0;
+    int loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -543,9 +543,9 @@ void Themes::on_pushDown_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    ids.clear();
-    index=0;
-    loop_size=selectedItems.size();
+    QList<int> ids;
+    int index=0;
+    int loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -559,9 +559,9 @@ void Themes::on_putOnBottom_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    ids.clear();
-    index=0;
-    loop_size=selectedItems.size();
+    QList<int> ids;
+    int index=0;
+    int loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -575,9 +575,9 @@ void Themes::on_del_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    ids.clear();
-    index=0;
-    loop_size=selectedItems.size();
+    QList<int> ids;
+    int index=0;
+    int loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();

@@ -118,14 +118,7 @@ class DebugEngine : public QObject
         Backend currentBackend;
         /// try connect to send to the current running instance the arguements
         bool tryConnect();
-        //temp variable
-        /* can't because multiple thread can access at this variable
-        QString addDebugInformation_lignestring;
-        QString addDebugInformation_fileString;
-        QString addDebugInformation_time;
-        QString addDebugInformation_htmlFormat;
-        QString addDebugInformation_textFormat;*/
-        quint32 addDebugInformationCallNumber;
+        int addDebugInformationCallNumber;
 };
 
 #endif // ULTRACOPIER_DEBUG

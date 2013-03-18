@@ -108,8 +108,6 @@ class PluginsManager : public QThread
         QString language;
         QString categoryToString(const PluginType &category) const;
         QString categoryToTranslation(const PluginType &category);
-        //temp variable
-        int index,loop_size,sub_index,loop_sub_size;
         QRegularExpression regexp_to_clean_1,regexp_to_clean_2,regexp_to_clean_3,regexp_to_clean_4,regexp_to_clean_5;
         QRegularExpression regexp_to_dep_1,regexp_to_dep_2,regexp_to_dep_3,regexp_to_dep_4,regexp_to_dep_5,regexp_to_dep_6;
         PluginInformation *pluginInformation;

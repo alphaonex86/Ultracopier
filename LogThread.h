@@ -10,6 +10,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QVariant>
+#include <QFile>
 
 #include "Environment.h"
 #include "StructEnumDefinition.h"

@@ -42,15 +42,6 @@ PluginsManager::PluginsManager()
 /// \brief Destroy the manager
 PluginsManager::~PluginsManager()
 {
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    int index=0;
-    int loop_size=pluginsList.size();
-    while(index<loop_size)
-    {
-        emit onePluginWillBeUnloaded(pluginsList.at(index));
-        index++;
-    }
-    #endif
     stopIt=true;
     if(pluginInformation!=NULL)
         delete pluginInformation;
@@ -179,7 +170,10 @@ QString PluginsManager::categoryToString(const PluginType &category) const
 QString PluginsManager::categoryToTranslation(const PluginType &category)
 {
     if(pluginInformation==NULL)
+    {
         pluginInformation=new PluginInformation();
+        connect(this,			&PluginsManager::newLanguageLoaded,		pluginInformation,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
+    }
     return pluginInformation->categoryToTranslation(category);
 }
 
@@ -635,7 +629,10 @@ void PluginsManager::showInformation(const QString &path)
         if(pluginsList.at(index).path==path)
         {
             if(pluginInformation==NULL)
+            {
                 pluginInformation=new PluginInformation();
+                connect(this,			&PluginsManager::newLanguageLoaded,		pluginInformation,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
+            }
             pluginInformation->setLanguage(mainShortName);
             pluginInformation->setPlugin(pluginsList.at(index));
             pluginInformation->show();

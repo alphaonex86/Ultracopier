@@ -12,7 +12,7 @@
 	<!-- the date-time format should be in timestamps format -->
 	<pubDate>1287496800</pubDate>
 	<!-- the architecture code of this plugin, found PlatformMacro.h into ultracopier source -->
-	<architecture>windows-x86</architecture>
+	<architecture>linux-x86_64-pc</architecture>
 	<!-- Detailed description -->
 	<description xml:lang="en"><![CDATA[Plugin loader for catchcopy v0002. Allow to receive copy list from plugin/explorer compatible with catchcopy.]]></description>
 	<description xml:lang="fr"><![CDATA[Chargeur de plugin pour catchcopy v0002. Permet de recevoir un liste de copie venant d'un plugin/explorateur avec catchcopy.]]></description>

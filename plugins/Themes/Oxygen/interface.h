@@ -167,10 +167,6 @@ private:
     QIcon player_play,player_pause;
     QItemSelectionModel *selectionModel;
     QModelIndexList selectedItems;
-    //temp variables
-    int loop_size,loop_sub_size,index,indexAction;
-    QList<int> ids;
-    quint64 baseRow,addRow,removeRow;
     /// \brief the custom transfer model
     TransferModel transferModel;
     /** \brief drag event processing

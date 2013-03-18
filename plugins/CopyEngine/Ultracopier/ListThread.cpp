@@ -70,13 +70,13 @@ ListThread::~ListThread()
 void ListThread::transferInodeIsClosed()
 {
     numberOfInodeOperation--;
-    temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
+    TransferThread *temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
     if(temp_transfer_thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
         return;
     }
-    isFound=false;
+    bool isFound=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     int countLocalParse=0;
     #endif
@@ -85,8 +85,8 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not idle!"));
         return;
     }
-    int_for_internal_loop=0;
-    loop_size=actionToDoListTransfer.size();
+    int int_for_internal_loop=0;
+    int loop_size=actionToDoListTransfer.size();
     while(int_for_internal_loop<loop_size)
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
@@ -132,7 +132,7 @@ void ListThread::transferInodeIsClosed()
     }
     if(!isFound)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_loop));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_internal_loop));
         temp_transfer_thread->transferId=0;
         temp_transfer_thread->transferSize=0;
     }
@@ -205,7 +205,7 @@ void ListThread::setRightTransfer(const bool doRightTransfer)
     mkPathQueue.setRightTransfer(doRightTransfer);
     this->doRightTransfer=doRightTransfer;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->setRightTransfer(doRightTransfer);
@@ -219,7 +219,7 @@ void ListThread::setKeepDate(const bool keepDate)
     mkPathQueue.setKeepDate(keepDate);
     this->keepDate=keepDate;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->setKeepDate(keepDate);
@@ -232,7 +232,7 @@ void ListThread::setBlockSize(const int blockSize)
 {
     this->blockSize=blockSize*1024;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->setBlockSize(this->blockSize);
@@ -480,7 +480,7 @@ void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionFo
 {
     this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
@@ -521,7 +521,7 @@ void ListThread::set_doChecksum(bool doChecksum)
 {
     this->doChecksum=doChecksum;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->set_doChecksum(doChecksum);
@@ -533,7 +533,7 @@ void ListThread::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
 {
     this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
@@ -545,7 +545,7 @@ void ListThread::set_checksumOnlyOnError(bool checksumOnlyOnError)
 {
     this->checksumOnlyOnError=checksumOnlyOnError;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->set_checksumOnlyOnError(checksumOnlyOnError);
@@ -557,7 +557,7 @@ void ListThread::set_osBuffer(bool osBuffer)
 {
     this->osBuffer=osBuffer;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->set_osBuffer(osBuffer);
@@ -569,7 +569,7 @@ void ListThread::set_osBufferLimited(bool osBufferLimited)
 {
     this->osBufferLimited=osBufferLimited;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->set_osBufferLimited(osBufferLimited);
@@ -581,7 +581,7 @@ void ListThread::realByteTransfered()
 {
     quint64 totalRealByteTransfered=0;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         totalRealByteTransfered+=transferThreadList.at(index)->realByteTransfered();
@@ -600,7 +600,7 @@ void ListThread::pause()
     }
     putInPause=true;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->pause();
@@ -621,7 +621,7 @@ void ListThread::resume()
     startGeneralTransfer();
     doNewActions_start_transfer();
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->resume();
@@ -638,7 +638,7 @@ void ListThread::skip(const quint64 &id)
 bool ListThread::skipInternal(const quint64 &id)
 {
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         if(transferThreadList.at(index)->transferId==id)
@@ -649,8 +649,8 @@ bool ListThread::skipInternal(const quint64 &id)
         }
         index++;
     }
-    int_for_internal_loop=0;
-    loop_size=actionToDoListTransfer.size();
+    int int_for_internal_loop=0;
+    int loop_size=actionToDoListTransfer.size();
     while(int_for_internal_loop<loop_size)
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==id)
@@ -683,7 +683,7 @@ void ListThread::cancel()
     }
     stopIt=true;
     int index=0;
-    loop_size=transferThreadList.size();
+    int loop_size=transferThreadList.size();
     while(index<loop_size)
     {
         transferThreadList.at(index)->stop();
@@ -773,8 +773,8 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
             }
 
             //set the new block size into the thread
-            loop_size=transferThreadList.size();
-            int_for_loop=0;
+            int loop_size=transferThreadList.size();
+            int int_for_loop=0;
             while(int_for_loop<loop_size)
             {
                 if(!transferThreadList.at(int_for_loop)->setBlockSize(blockSizeAfterSpeedLimitation))
@@ -805,16 +805,16 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
             clockForTheCopySpeed->stop();
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"clockForTheCopySpeed == NULL at this point");
-        int_for_loop=0;
-        loop_size=transferThreadList.size();
+        int int_for_loop=0;
+        int loop_size=transferThreadList.size();
         while(int_for_loop<loop_size)
         {
             transferThreadList.at(int_for_loop)->setBlockSize(blockSize);
             int_for_loop++;
         }
     }
-    int_for_loop=0;
-    loop_size=transferThreadList.size();
+    int int_for_loop=0;
+    int loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
         transferThreadList.at(int_for_loop)->setMultiForBigSpeed(multiForBigSpeed);
@@ -828,8 +828,9 @@ void ListThread::updateTheStatus()
 {
     /*if(threadOfTheTransfer.haveContent())
         copy=true;*/
-    updateTheStatus_listing=scanFileOrFolderThreadsPool.size()>0;
-    updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+    bool updateTheStatus_listing=scanFileOrFolderThreadsPool.size()>0;
+    bool updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+    Ultracopier::EngineActionInProgress updateTheStatus_action_in_progress;
     if(updateTheStatus_copying && updateTheStatus_listing)
         updateTheStatus_action_in_progress=Ultracopier::CopyingAndListing;
     else if(updateTheStatus_listing)
@@ -848,8 +849,8 @@ void ListThread::updateTheStatus()
 void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisActionForFileExists)
 {
     this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
-    int_for_loop=0;
-    loop_size=transferThreadList.size();
+    int int_for_loop=0;
+    int loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
         transferThreadList.at(int_for_loop)->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
@@ -922,11 +923,11 @@ void ListThread::sendProgression()
         return;
     oversize=0;
     currentProgression=0;
-    int_for_loop=0;
-    loop_size=transferThreadList.size();
+    int int_for_loop=0;
+    int loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
-        temp_transfer_thread=transferThreadList.at(int_for_loop);
+        TransferThread * temp_transfer_thread=transferThreadList.at(int_for_loop);
         switch(temp_transfer_thread->getStat())
         {
             case TransferStat_Transfer:
@@ -977,10 +978,11 @@ void ListThread::syncTransferList_internal()
     actionDone.clear();
     //do list operation
     TransferThread *transferThread;
-    loop_size=actionToDoListTransfer.size();
-    loop_sub_size=transferThreadList.size();
+    int loop_size=actionToDoListTransfer.size();
+    int loop_sub_size=transferThreadList.size();
     //this loop to have at max ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT, not ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*transferThreadList.size()
-    for(int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
+    int int_for_internal_loop;
+    for(int int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
         const ActionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
         Ultracopier::ReturnActionOnCopyList newAction;
         newAction.type				= Ultracopier::PreOperation;
@@ -1100,7 +1102,7 @@ void ListThread::moveItemsOnTop(QList<int> ids)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
     int indexToMove=0;
-    loop_size=actionToDoListTransfer.size();
+    int loop_size=actionToDoListTransfer.size();
     for (int i=0; i<loop_size; ++i) {
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
@@ -1136,7 +1138,7 @@ void ListThread::moveItemsUp(QList<int> ids)
     //do list operation
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
-    loop_size=actionToDoListTransfer.size();
+    int loop_size=actionToDoListTransfer.size();
     for (int i=0; i<loop_size; ++i) {
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
@@ -1370,7 +1372,8 @@ void ListThread::importTransferList(const QString &fileName)
             return;
         }
 
-        updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+        bool updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
+        Ultracopier::EngineActionInProgress updateTheStatus_action_in_progress;
         if(updateTheStatus_copying)
             updateTheStatus_action_in_progress=Ultracopier::CopyingAndListing;
         else
@@ -1456,9 +1459,9 @@ void ListThread::doNewActions_start_transfer()
     if(stopIt || putInPause)
         return;
     int numberOfTranferRuning=getNumberOfTranferRuning();
-    loop_size=transferThreadList.size();
+    int loop_size=transferThreadList.size();
     //lunch the transfer in WaitForTheTransfer
-    int_for_loop=0;
+    int int_for_loop=0;
     while(int_for_loop<loop_size)
     {
         if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_WaitForTheTransfer)
@@ -1510,12 +1513,12 @@ void ListThread::doNewActions_inode_manipulation()
         return;
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //lunch the pre-op or inode op
-    int_for_loop=0;
-    int_for_internal_loop=0;
-    int_for_transfer_thread_search=0;
+    int int_for_loop=0;
+    int int_for_internal_loop=0;
+    int int_for_transfer_thread_search=0;
     actionToDoListTransfer_count=actionToDoListTransfer.count();
     actionToDoListInode_count=actionToDoListInode.count();
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     //search the next transfer action to do
     while(int_for_loop<actionToDoListTransfer_count)
     {
@@ -1669,7 +1672,7 @@ void ListThread::set_osBufferLimit(const unsigned int &osBufferLimit)
 {
     this->osBufferLimit=osBufferLimit;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->set_osBufferLimit(osBufferLimit);
@@ -1699,8 +1702,8 @@ void ListThread::set_sendNewRenamingRules(const QString &firstRenamingRule,const
 
 void ListThread::mkPathFirstFolderFinish()
 {
-    int_for_loop=0;
-    loop_size=actionToDoListInode.size();
+    int int_for_loop=0;
+    int loop_size=actionToDoListInode.size();
     while(int_for_loop<loop_size)
     {
         if(actionToDoListInode.at(int_for_loop).isRunning)
@@ -1742,7 +1745,7 @@ void ListThread::timedUpdateDebugDialog()
 {
     QStringList newList;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         QString stat;
@@ -1782,7 +1785,7 @@ void ListThread::timedUpdateDebugDialog()
     }
     QStringList newList2;
     index=0;
-    loop_size=actionToDoListTransfer.size();
+    int loop_size=actionToDoListTransfer.size();
     while(index<loop_size)
     {
         newList2 << QString("%1 %2 %3")
@@ -1983,7 +1986,7 @@ void ListThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyT
 {
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
     int index=0;
-    loop_sub_size_transfer_thread_search=transferThreadList.size();
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
         transferThreadList.at(index)->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);

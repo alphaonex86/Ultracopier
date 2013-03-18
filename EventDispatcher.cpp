@@ -30,7 +30,6 @@
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
 {
-    //connect(this,			&PluginsManager::newLanguageLoaded,		&pluginInformationWindows,	&PluginInformation::retranslateInformation,Qt::QueuedConnection);
     qRegisterMetaType<QList<Ultracopier::ReturnActionOnCopyList> >("QList<Ultracopier::ReturnActionOnCopyList>");
     qRegisterMetaType<QList<Ultracopier::ProgressionItem> >("QList<Ultracopier::ProgressionItem>");
     qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
@@ -150,12 +149,12 @@ void EventDispatcher::initFunction()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Initialize the variable of event loop");
-    connect(copyServer,	&CopyListener::newCopyWithoutDestination,	core,		&Core::newCopyWithoutDestination);
-    connect(copyServer,	&CopyListener::newCopy,						core,		&Core::newCopy);
-    connect(copyServer,	&CopyListener::newMoveWithoutDestination,	core,		&Core::newMoveWithoutDestination);
-    connect(copyServer,	&CopyListener::newMove,						core,		&Core::newMove);
-    connect(core,		&Core::copyFinished,						copyServer,	&CopyListener::copyFinished);
-    connect(core,		&Core::copyCanceled,						copyServer,	&CopyListener::copyCanceled);
+    connect(copyServer,	&CopyListener::newCopyWithoutDestination,	core,		&Core::newCopyWithoutDestination,Qt::DirectConnection);
+    connect(copyServer,	&CopyListener::newCopy,						core,		&Core::newCopy,Qt::DirectConnection);
+    connect(copyServer,	&CopyListener::newMoveWithoutDestination,	core,		&Core::newMoveWithoutDestination,Qt::DirectConnection);
+    connect(copyServer,	&CopyListener::newMove,						core,		&Core::newMove,Qt::DirectConnection);
+    connect(core,		&Core::copyFinished,						copyServer,	&CopyListener::copyFinished,Qt::DirectConnection);
+    connect(core,		&Core::copyCanceled,						copyServer,	&CopyListener::copyCanceled,Qt::DirectConnection);
     if(localListener.tryConnect())
     {
         stopIt=true;
@@ -169,31 +168,33 @@ void EventDispatcher::initFunction()
         backgroundIcon=new SystrayIcon();
         //connect the slot
         //quit is for this object
-//		connect(core,		&Core::newCanDoOnlyCopy,					backgroundIcon,	&SystrayIcon::newCanDoOnlyCopy);
+//		connect(core,		&Core::newCanDoOnlyCopy,					backgroundIcon,	&SystrayIcon::newCanDoOnlyCopy,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::quit,this,&EventDispatcher::quit);
         //show option is for OptionEngine object
-        connect(backgroundIcon,	&SystrayIcon::showOptions,					&optionDialog,	&OptionDialog::show);
-        connect(copyServer,	&CopyListener::listenerReady,					backgroundIcon,	&SystrayIcon::listenerReady);
-        connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady);
-        connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen);
-        connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,					copyServer,	&CopyListener::close);
+        connect(backgroundIcon,	&SystrayIcon::showOptions,					&optionDialog,	&OptionDialog::show,Qt::DirectConnection);
+        connect(copyServer,	&CopyListener::listenerReady,					backgroundIcon,	&SystrayIcon::listenerReady,Qt::DirectConnection);
+        connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady,Qt::DirectConnection);
+        connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen,Qt::DirectConnection);
+        connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,					copyServer,	&CopyListener::close,Qt::DirectConnection);
         if(OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
             copyServer->listen();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
         //backgroundIcon->readyToListen(copyServer.oneListenerIsLoaded());
 
-        connect(backgroundIcon,	&SystrayIcon::addWindowCopyMove,				core,		&Core::addWindowCopyMove);
-        connect(backgroundIcon,	&SystrayIcon::addWindowTransfer,				core,		&Core::addWindowTransfer);
-        connect(copyEngineList,	&CopyEngineManager::addCopyEngine,				backgroundIcon,	&SystrayIcon::addCopyEngine);
-        connect(copyEngineList,	&CopyEngineManager::removeCopyEngine,				backgroundIcon,	&SystrayIcon::removeCopyEngine);
+        connect(backgroundIcon,	&SystrayIcon::addWindowCopyMove,				core,		&Core::addWindowCopyMove,Qt::DirectConnection);
+        connect(backgroundIcon,	&SystrayIcon::addWindowTransfer,				core,		&Core::addWindowTransfer,Qt::DirectConnection);
+        connect(copyEngineList,	&CopyEngineManager::addCopyEngine,				backgroundIcon,	&SystrayIcon::addCopyEngine,Qt::DirectConnection);
+        connect(copyEngineList,	&CopyEngineManager::removeCopyEngine,				backgroundIcon,	&SystrayIcon::removeCopyEngine,Qt::DirectConnection);
         copyEngineList->setIsConnected();
         copyServer->resendState();
     }
     //conntect the last chance signal before quit
-    connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit);
+    connect(QCoreApplication::instance(),&QCoreApplication::aboutToQuit,this,&EventDispatcher::quit,Qt::DirectConnection);
     //connect the slot for the help dialog
     connect(backgroundIcon,&SystrayIcon::showHelp,&theHelp,&HelpDialog::show);
+    #ifdef ULTRACOPIER_DEBUG
     DebugModel::debugModel->setupTheTimer();
+    #endif
 }
 
 #ifdef Q_OS_WIN32
@@ -213,8 +214,8 @@ QString EventDispatcher::GetOSDisplayString()
    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
    bOsVersionInfoEx = GetVersionEx((OSVERSIONINFO*) &osvi);
 
-   if(bOsVersionInfoEx == NULL )
-   return "Os detection blocked";
+   if(bOsVersionInfoEx == NULL)
+        return "Os detection blocked";
 
    // Call GetNativeSystemInfo if supported or GetSystemInfo otherwise.
 

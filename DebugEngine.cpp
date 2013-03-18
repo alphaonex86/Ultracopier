@@ -149,10 +149,6 @@ DebugEngine::DebugEngine()
             }
         }
     }
-    if(currentBackend==File)
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Notice,"currentBackend: File");
-    else
-        ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Notice,"currentBackend: Memory");
 }
 
 /// \brief Destroy the ultracopier event dispatcher
@@ -217,6 +213,11 @@ bool DebugEngine::removeTheLockFile()
 
 void DebugEngine::addDebugInformationStatic(const Ultracopier::DebugLevel &level,const QString& function,const QString& text,const QString& file,const int& ligne,const QString& location)
 {
+    if(DebugEngine::debugEngine==NULL)
+    {
+        qWarning() << "After close: " << function << file << ligne;
+        return;
+    }
     DebugLevel_custom tempLevel=DebugLevel_custom_Information;
     switch(level)
     {
@@ -240,12 +241,19 @@ void DebugEngine::addDebugInformationStatic(const Ultracopier::DebugLevel &level
 
 void DebugEngine::addDebugNote(const QString& text)
 {
+    if(DebugEngine::debugEngine==NULL)
+        return;
     DebugEngine::debugEngine->addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
 }
 
 /// \brief For add message info, this function is thread safe
 void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QString& function,const QString& text,QString file,const int& ligne,const QString& location)
 {
+    if(DebugEngine::debugEngine==NULL)
+    {
+        qWarning() << "After close: " << function << file << ligne;
+        return;
+    }
     //Remove the compiler extra patch generated
     file=file.remove(QRegularExpression("\\.\\.?[/\\\\]([^/]+[/\\\\])?"));
     QString addDebugInformation_lignestring=QString::number(ligne);
@@ -351,7 +359,6 @@ DebugEngine::Backend DebugEngine::getCurrentBackend()
 
 bool DebugEngine::tryConnect()
 {
-    ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Notice,"start");
     QLocalSocket localSocket;
     localSocket.connectToServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME),QIODevice::WriteOnly|QIODevice::Unbuffered);
     if(localSocket.waitForConnected(1000))

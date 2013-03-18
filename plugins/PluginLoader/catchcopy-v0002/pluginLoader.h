@@ -13,8 +13,10 @@
 #include <QStringList>
 #include <QProcess>
 #include <QSet>
+#ifdef Q_OS_WIN32
 #include <windows.h>
 #include <tlhelp32.h>
+#endif
 
 #include "../../../interface/PluginInterface_PluginLoader.h"
 #include "Environment.h"
@@ -27,8 +29,8 @@ class WindowsExplorerLoader : public PluginInterface_PluginLoader
     Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.PluginLoader/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_PluginLoader)
 public:
-        WindowsExplorerLoader();
-        ~WindowsExplorerLoader();
+    WindowsExplorerLoader();
+    ~WindowsExplorerLoader();
     /// \brief try enable/disable the catching
     void setEnabled(const bool &needBeRegistred);
     /// \brief to set resources, writePath can be empty if read only mode

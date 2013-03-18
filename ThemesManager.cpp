@@ -56,11 +56,6 @@ ThemesManager::ThemesManager()
 ThemesManager::~ThemesManager()
 {
     stopIt=true;
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Themes);
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    foreach(PluginsAvailable currentPlugin,list)
-        onePluginWillBeRemoved(currentPlugin);
-    #endif
 }
 
 void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)

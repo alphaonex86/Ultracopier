@@ -38,11 +38,20 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
 
 SessionLoader::~SessionLoader()
 {
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader);
-    foreach(PluginsAvailable currentPlugin,list)
-        onePluginWillBeRemoved(currentPlugin);
-    #endif
+    int index=0;
+    int loop_size=pluginList.size();
+    while(index<loop_size)
+    {
+        if(pluginList.at(index).pluginLoader!=NULL)
+        {
+            if(!pluginList.at(index).pluginLoader->isLoaded() || pluginList.at(index).pluginLoader->unload())
+            {
+                delete pluginList.at(index).options;
+                pluginList.removeAt(index);
+            }
+        }
+        index++;
+    }
 }
 
 void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)

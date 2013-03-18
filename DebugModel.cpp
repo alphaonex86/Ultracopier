@@ -2,6 +2,8 @@
 
 #include <QColor>
 
+#ifdef ULTRACOPIER_DEBUG
+
 #define COLUMN_COUNT 5
 
 // Model
@@ -153,3 +155,4 @@ void DebugModel::updateDisplay()
         emit layoutChanged();
     }
 }
+#endif

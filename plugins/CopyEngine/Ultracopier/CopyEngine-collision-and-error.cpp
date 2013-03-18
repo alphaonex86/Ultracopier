@@ -52,7 +52,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     if(isSame)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source.absoluteFilePath());
-        tempFileExistsAction=alwaysDoThisActionForFileExists;
+        FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
         switch(tempFileExistsAction)
@@ -115,7 +115,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
-        tempFileExistsAction=alwaysDoThisActionForFileExists;
+        FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         switch(tempFileExistsAction)
         {
             case FileExists_Skip:
@@ -231,7 +231,7 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
         return;
     }
     //load the action
-    tempFileErrorAction=alwaysDoThisActionForFileError;
+    FileErrorAction tempFileErrorAction=alwaysDoThisActionForFileError;
     switch(tempFileErrorAction)
     {
         case FileError_Skip:
@@ -322,7 +322,7 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
         return;
     }
     //load the always action
-    tempFolderExistsAction=alwaysDoThisActionForFolderExists;
+    FolderExistsAction tempFolderExistsAction=alwaysDoThisActionForFolderExists;
     switch(tempFolderExistsAction)
     {
         case FolderExists_Skip:
@@ -380,7 +380,7 @@ void CopyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOr
         return;
     }
     //load the always action
-    tempFileErrorAction=alwaysDoThisActionForFolderError;
+    FileErrorAction tempFileErrorAction=alwaysDoThisActionForFolderError;
     switch(tempFileErrorAction)
     {
         case FileError_Skip:
@@ -437,8 +437,7 @@ void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+folder.absoluteFilePath()+", error: "+errorString);
     //load the always action
-    tempFileErrorAction=alwaysDoThisActionForFolderError;
-    error_index=0;
+    FileErrorAction tempFileErrorAction=alwaysDoThisActionForFolderError;
     switch(tempFileErrorAction)
     {
         case FileError_Skip:
@@ -505,7 +504,7 @@ void CopyEngine::showOneNewDialog()
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"alreadyExistsQueue.size(): "+QString::number(alreadyExistsQueue.size()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"errorQueue.size(): "+QString::number(errorQueue.size()));
-    loop_size=alreadyExistsQueue.size();
+    int loop_size=alreadyExistsQueue.size();
     while(loop_size>0)
     {
         if(alreadyExistsQueue.first().transfer!=NULL)

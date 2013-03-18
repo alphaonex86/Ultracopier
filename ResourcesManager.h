@@ -47,8 +47,6 @@ class ResourcesManager : public QObject
         QStringList searchPath;
         /// \brief The writable path, empty if not found
         QString writablePath;
-        //temp variable
-        int index,loop_size;
         /// \brief match with slash end
         static QRegularExpression slashEnd;
 };

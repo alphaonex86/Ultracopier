@@ -23,8 +23,7 @@ OptionEngine::OptionEngine()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //locate the settings
     #ifdef ULTRACOPIER_VERSION_PORTABLE
-        resources=ResourcesManager::getInstance();
-        QString settingsFilePath=resources->getWritablePath();
+        QString settingsFilePath=ResourcesManager::resourcesManager->getWritablePath();
         if(settingsFilePath!="")
             settings = new QSettings(settingsFilePath+"Ultracopier.conf",QSettings::IniFormat);
         else
@@ -68,7 +67,7 @@ OptionEngine::OptionEngine()
     if(settings==NULL)
     {
         #ifdef ULTRACOPIER_VERSION_PORTABLE
-        resources->disableWritablePath();
+        ResourcesManager::resourcesManager->disableWritablePath();
         #endif // ULTRACOPIER_VERSION_PORTABLE
         currentBackend=Memory;
     }
@@ -95,9 +94,9 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
     if(currentBackend==File)
         settings->beginGroup(groupName);
     //browse all key, and append it to the key
-    index=0;
+    int index=0;
     QList<OptionEngineGroupKey> KeyListTemp;
-    loop_size=KeysList.size();
+    int loop_size=KeysList.size();
     while(index<loop_size)
     {
         OptionEngineGroupKey theCurrentKey;
@@ -125,7 +124,7 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
                 #ifdef ULTRACOPIER_VERSION_PORTABLE
-                resources->disableWritablePath();
+                ResourcesManager::resourcesManager->disableWritablePath();
                 #endif // ULTRACOPIER_VERSION_PORTABLE
                 currentBackend=Memory;
             }
@@ -188,7 +187,7 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
                     #ifdef ULTRACOPIER_VERSION_PORTABLE
-                    resources->disableWritablePath();
+                    ResourcesManager::resourcesManager->disableWritablePath();
                     #endif // ULTRACOPIER_VERSION_PORTABLE
                     currentBackend=Memory;
                 }

@@ -65,12 +65,11 @@ private:
     };
     QList<LocalPlugin> pluginList;
     bool needEnable;
-    //temp variable
-    int index,loop_size;
     Ultracopier::CatchState last_state;
     bool last_have_plugin,last_inWaitOfReply;
     void sendState(bool force=false);
     OptionDialog *optionDialog;
+    bool stopIt;
 signals:
     void pluginLoaderReady(Ultracopier::CatchState state,bool havePlugin,bool someAreInWaitOfReply);
     void previouslyPluginAdded(PluginsAvailable);

@@ -80,8 +80,8 @@ ResourcesManager::ResourcesManager()
     #endif
     searchPath.removeDuplicates();
     #ifdef ULTRACOPIER_DEBUG
-    index=0;
-    loop_size=searchPath.size();
+    int index=0;
+    int loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"searchPath.at("+QString::number(index)+"): "+searchPath.at(index));
@@ -99,8 +99,8 @@ ResourcesManager::~ResourcesManager()
 /// \brief Get folder presence and the path
 QString ResourcesManager::getFolderReadPath(const QString &path)
 {
-    index=0;
-    loop_size=searchPath.size();
+    int index=0;
+    int loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
         QDir dir(searchPath.at(index)+path);
@@ -114,8 +114,8 @@ QString ResourcesManager::getFolderReadPath(const QString &path)
 /// \brief Get folder presence, the path and check in the folder and sub-folder the file presence
 QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck)
 {
-    index=0;
-    loop_size=searchPath.size();
+    int index=0;
+    int loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
         QDir dir(searchPath.at(index)+path);
@@ -132,8 +132,8 @@ bool ResourcesManager::checkFolderContent(const QString &path,const QStringList 
     if(dir.exists()) // if the path have been found, then return the full path
     {
         bool allFileToCheckIsFound=true;
-        index=0;
-        loop_size=fileToCheck.size();
+        int index=0;
+        int loop_size=fileToCheck.size();
         QString partialPath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
         while(index<loop_size) //look at each val
         {

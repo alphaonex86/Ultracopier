@@ -94,11 +94,6 @@ private:
         bool isSame;
     };
     QList<alreadyExistsQueueItem> alreadyExistsQueue;
-    //temp variable
-    int error_index,loop_size;
-    FileErrorAction tempFileErrorAction;
-    FolderExistsAction tempFolderExistsAction;
-    FileExistsAction tempFileExistsAction;
     quint64 size_for_speed;//because direct access to list thread into the main thread can't be do
     Ultracopier::CopyMode			mode;
     bool				forcedMode;
