@@ -99,7 +99,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setAutoStart(ui->autoStart->isChecked());
     realObject->setFolderCollision(ui->comboBoxFolderCollision->currentIndex());
     realObject->setFolderError(ui->comboBoxFolderError->currentIndex());
-    realObject->setFolderCollision(ui->comboBoxFileCollision->currentIndex());
+    realObject->setFileCollision(ui->comboBoxFileCollision->currentIndex());
     realObject->setFileError(ui->comboBoxFileError->currentIndex());
     realObject->setTransferAlgorithm(ui->transferAlgorithm->currentIndex());
     realObject->setCheckDestinationFolderExists(ui->checkBoxDestinationFolderExists->isChecked());

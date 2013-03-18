@@ -245,7 +245,7 @@ void TransferThread::preOperation()
     }
     if(destinationExists())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] destination exists: "+source.absoluteFilePath());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] destination exists: "+destination.absoluteFilePath());
         return;
     }
     if(keepDate)
@@ -344,10 +344,19 @@ bool TransferThread::isSame()
 bool TransferThread::destinationExists()
 {
     //check if destination exists
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] overwrite: "+QString::number(fileExistsAction)+", always action: "+QString::number(alwaysDoFileExistsAction));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("overwrite: %1, alwaysDoFileExistsAction: %2, readError: %3, writeError: %4")
+                             .arg(fileExistsAction)
+                             .arg(alwaysDoFileExistsAction)
+                             .arg(readError)
+                             .arg(writeError)
+                             );
     if(alwaysDoFileExistsAction==FileExists_Overwrite || readError || writeError)
         return false;
-    if(destination.exists())
+    bool destinationExists;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] time to first FS access");
+    destinationExists=destination.exists();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] finish first FS access");
+    if(destinationExists)
     {
         if(fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_Skip)
         {
