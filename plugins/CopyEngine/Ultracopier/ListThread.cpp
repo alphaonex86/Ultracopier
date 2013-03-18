@@ -265,6 +265,8 @@ void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &d
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameSource(const QStringList &sources)
 {
+    if(stopIt)
+        return false;
     if(sourceDriveMultiple)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourceDriveMultiple");
@@ -292,6 +294,8 @@ bool ListThread::haveSameSource(const QStringList &sources)
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameDestination(const QString &destination)
 {
+    if(stopIt)
+        return false;
     if(destinationDriveMultiple)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDriveMultiple");
