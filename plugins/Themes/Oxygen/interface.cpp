@@ -242,7 +242,9 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             ui->progressBar_all->setMinimum(0);
         break;
         case Ultracopier::Idle:
-            if(haveStarted)
+            ui->progressBar_all->setMaximum(65535);
+            ui->progressBar_all->setMinimum(0);
+            if(haveStarted && transferModel.rowCount()<=0)
             {
                 if(shutdown && ui->shutdown->isChecked())
                 {
@@ -279,6 +281,7 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         break;
         case Ultracopier::Listing:
             ui->pauseButton->setEnabled(false);
+            haveStarted=true;//to close if skip at root folder collision
         break;
         case Ultracopier::Idle:
             ui->pauseButton->setEnabled(false);
