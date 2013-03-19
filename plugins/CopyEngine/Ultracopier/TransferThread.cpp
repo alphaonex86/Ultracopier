@@ -917,7 +917,7 @@ void TransferThread::postOperation()
         return;
     }
 
-    if(!writeIsClosedVariable)
+    if(writeIsOpenVariable && !writeIsClosedVariable)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't pass in post operation if write is not closed");
         emit errorOnFile(destination,tr("Internal error: The destination is not closed"));
