@@ -1279,7 +1279,7 @@ void ListThread::exportTransferList(const QString &fileName)
     QFile transferFile(fileName);
     if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
     {
-        transferFile.write(QString("Ultracopier-0.3;Transfer-list;").toUtf8());
+        transferFile.write(QString("Ultracopier;Transfer-list;").toUtf8());
         if(!forcedMode)
             transferFile.write(QString("Transfer;").toUtf8());
         else
@@ -1289,7 +1289,7 @@ void ListThread::exportTransferList(const QString &fileName)
             else
                 transferFile.write(QString("Move;").toUtf8());
         }
-        transferFile.write(QString("Ultracopier-0.3\n").toUtf8());
+        transferFile.write(QString("Ultracopier\n").toUtf8());
         bool haveError=false;
         int size=actionToDoListTransfer.size();
         for (int index=0;index<size;++index) {
@@ -1348,14 +1348,14 @@ void ListThread::importTransferList(const QString &fileName)
             return;
         }
         content=QString::fromUtf8(data);
-        if(content!="Ultracopier-0.3;Transfer-list;Transfer;Ultracopier-0.3\n" && content!="Ultracopier-0.3;Transfer-list;Copy;Ultracopier-0.3\n" && content!="Ultracopier-0.3;Transfer-list;Move;Ultracopier-0.3\n")
+        if(content!="Ultracopier;Transfer-list;Transfer;Ultracopier\n" && content!="Ultracopier;Transfer-list;Copy;Ultracopier\n" && content!="Ultracopier;Transfer-list;Move;Ultracopier\n")
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Wrong header: \"%1\"").arg(content));
             emit errorTransferList(tr("Wrong header: \"%1\"").arg(content));
             return;
         }
         bool transferListMixedMode=false;
-        if(content=="Ultracopier-0.3;Transfer-list;Transfer;Ultracopier-0.3\n")
+        if(content=="Ultracopier;Transfer-list;Transfer;Ultracopier\n")
         {
             if(forcedMode)
             {
@@ -1366,13 +1366,13 @@ void ListThread::importTransferList(const QString &fileName)
             else
                 transferListMixedMode=true;
         }
-        if(content=="Ultracopier-0.3;Transfer-list;Copy;Ultracopier-0.3\n" && (forcedMode && mode==Ultracopier::Move))
+        if(content=="Ultracopier;Transfer-list;Copy;Ultracopier\n" && (forcedMode && mode==Ultracopier::Move))
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in copy mode, but this instance is not in this mode: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
             emit errorTransferList(tr("The transfer list is in copy mode, but this instance is not in this mode"));
             return;
         }
-        if(content=="Ultracopier-0.3;Transfer-list;Move;Ultracopier-0.3\n" && (forcedMode && mode==Ultracopier::Copy))
+        if(content=="Ultracopier;Transfer-list;Move;Ultracopier\n" && (forcedMode && mode==Ultracopier::Copy))
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in move mode, but this instance is not in this mode: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
             emit errorTransferList(tr("The transfer list is in move mode, but this instance is not in this mode"));

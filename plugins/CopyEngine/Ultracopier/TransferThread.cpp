@@ -252,7 +252,10 @@ void TransferThread::preOperation()
     {
         doTheDateTransfer=readFileDateTime(source);
         if(!doTheDateTransfer)
+        {
+            //will have the real error at source open
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source.absoluteFilePath());
+        }
     }
     else
         doTheDateTransfer=false;
