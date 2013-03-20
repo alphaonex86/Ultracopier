@@ -116,20 +116,20 @@ void PluginsManager::run()
         }
     }
     #ifdef ULTRACOPIER_DEBUG
-    int index=0;
+    int index_debug=0;
     int loop_size=pluginsList.size();
-    while(index<loop_size)
+    while(index_debug<loop_size)
     {
-        QString category=categoryToString(pluginsList.at(index).category);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Plugin "+QString::number(index)+" loaded ("+category+"): "+pluginsList.at(index).path);
-        index++;
+        QString category=categoryToString(pluginsList.at(index_debug).category);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Plugin "+QString::number(index_debug)+" loaded ("+category+"): "+pluginsList.at(index_debug).path);
+        index_debug++;
     }
     #endif
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     while(checkDependencies()!=0){};
     #endif
     QList<PluginsAvailable> list;
-    index=0;
+    int index=0;
     while(index<pluginsList.size())
     {
         if(pluginsList.at(index).errorString.isEmpty())

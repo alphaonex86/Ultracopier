@@ -442,7 +442,10 @@ void WriteThread::internalWrite()
     do
     {
         if(putInPause)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] write put in pause");
             pauseMutex.acquire();
+        }
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt");
@@ -527,7 +530,7 @@ void WriteThread::internalWrite()
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("speed limitation, numberOfBlockCopied: %1, multiForBigSpeed: %2, waitNewClockForSpeed.available: %3, block size: %4")
                 .arg(numberOfBlockCopied).arg(multiForBigSpeed).arg(waitNewClockForSpeed.available()).arg(blockArray.size()));
-                if(numberOfBlockCopied>=(multiForBigSpeed*1))
+                if(numberOfBlockCopied>=(multiForBigSpeed*2))
                 {
                     numberOfBlockCopied=0;
                     waitNewClockForSpeed.acquire();
@@ -763,6 +766,11 @@ void WriteThread::checkSum()
     int sizeReaden=0;
     do
     {
+        if(putInPause)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] write put in pause");
+            pauseMutex.acquire();
+        }
         //read one block
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Read;

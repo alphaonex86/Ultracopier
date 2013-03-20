@@ -122,9 +122,9 @@ void DebugModel::addDebugInformation(const int &time,const DebugLevel_custom &le
     DebugItem item;
     item.time=time;
     item.level=level;
-    item.function=QString("%1:%2").arg(function).arg(ligne);
+    item.function=function;
     item.text=text;
-    item.file=file;
+    item.file=QString("%1:%2").arg(file).arg(ligne);
     item.location=location;
     list << item;
     if(!displayed)

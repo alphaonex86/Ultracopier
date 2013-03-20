@@ -724,8 +724,11 @@ void TransferThread::pause()
 {
     //only pause/resume during the transfer of file data
     //from transfer_stat!=TransferStat_Idle because it resume at wrong order
-    if(transfer_stat!=TransferStat_Transfer || transfer_stat!=TransferStat_Checksum)
+    if(transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] wrong stat to put in pause");
         return;
+    }
     readThread.pause();
     writeThread.pause();
 }
@@ -735,8 +738,11 @@ void TransferThread::resume()
 {
     //only pause/resume during the transfer of file data
     //from transfer_stat!=TransferStat_Idle because it resume at wrong order
-    if(transfer_stat!=TransferStat_Transfer || transfer_stat!=TransferStat_Checksum)
+    if(transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] wrong stat to put in pause");
         return;
+    }
     readThread.resume();
     writeThread.resume();
 }
