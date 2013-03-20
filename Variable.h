@@ -28,6 +28,7 @@
  * 5*ULTRACOPIER_TIME_INTERFACE_UPDATE = 5*500 to get 2.5s
  * */
 #define ULTRACOPIER_MAXVALUESPEEDSTORED 5
+#define ULTRACOPIER_MINVALUESPEED 3
 
 /// \brief the socket name, to have unique instance of ultracopier, and pass arguments between the instance
 #define ULTRACOPIER_SOCKETNAME "ultracopier"

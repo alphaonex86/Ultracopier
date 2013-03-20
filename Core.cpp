@@ -673,7 +673,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
         //remaining time: (total byte - lastProgression)/byte per ms since the start
         if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
             currentCopyInstance.interface->remainingTime(-1);
-        else
+        else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
             currentCopyInstance.interface->remainingTime(transferAddedTime*((double)currentCopyInstance.totalProgression/(double)currentCopyInstance.currentProgression-1)/1000);
 
         //do the speed calculation
@@ -701,7 +701,8 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                     index_sub_loop++;
                 }
                 totTime/=1000;
-                currentCopyInstance.interface->detectedSpeed(totSpeed/totTime);
+                if(loop_size>=ULTRACOPIER_MINVALUESPEED)
+                    currentCopyInstance.interface->detectedSpeed(totSpeed/totTime);
             }
             lastProgressionTime.restart();
         }
