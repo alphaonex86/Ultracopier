@@ -70,6 +70,8 @@ public:
     /// \brief set the current max speed in KB/s
     void setMultiForBigSpeed(const int &multiForBigSpeed);
     #endif
+    void pause();
+    void resume();
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -119,8 +121,9 @@ private:
     volatile int		multiplicatorForBigSpeed;	///< Multiple for count the number of block needed
     volatile int		MultiForBigSpeed;
     #endif
-    QSemaphore          freeBlock,usedBlock;
+    QSemaphore          writeFull;
     QSemaphore          isOpen;
+    QSemaphore          pauseMutex;
     volatile bool		putInPause;
     QList<QByteArray>	theBlockList;		///< Store the block list
     quint64             lastGoodPosition;

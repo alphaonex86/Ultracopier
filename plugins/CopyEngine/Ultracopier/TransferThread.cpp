@@ -724,9 +724,10 @@ void TransferThread::pause()
 {
     //only pause/resume during the transfer of file data
     //from transfer_stat!=TransferStat_Idle because it resume at wrong order
-    if(transfer_stat!=TransferStat_Transfer)
+    if(transfer_stat!=TransferStat_Transfer || transfer_stat!=TransferStat_Checksum)
         return;
     readThread.pause();
+    writeThread.pause();
 }
 
 //resume the copy
@@ -734,9 +735,10 @@ void TransferThread::resume()
 {
     //only pause/resume during the transfer of file data
     //from transfer_stat!=TransferStat_Idle because it resume at wrong order
-    if(transfer_stat!=TransferStat_Transfer)
+    if(transfer_stat!=TransferStat_Transfer || transfer_stat!=TransferStat_Checksum)
         return;
     readThread.resume();
+    writeThread.resume();
 }
 
 //stop the current copy

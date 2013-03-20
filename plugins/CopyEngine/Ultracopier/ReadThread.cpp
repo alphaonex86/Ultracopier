@@ -79,17 +79,17 @@ void ReadThread::stop()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stop()");
     stopIt=true;
+    pauseMutex.release();
     if(isOpen.available()>0)
         return;
     emit internalStartClose();
 }
 
-bool ReadThread::pause()
+void ReadThread::pause()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try put read thread in pause");
     putInPause=true;
-    stopIt=true;
-    return isInReadLoop;
+    pauseMutex.tryAcquire(pauseMutex.available());
 }
 
 void ReadThread::resume()
@@ -102,12 +102,6 @@ void ReadThread::resume()
     }
     else
         return;
-    if(tryStartRead)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] already in try start");
-        return;
-    }
-        tryStartRead=true;
     if(isInReadLoop)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] is in read loop");
@@ -118,7 +112,7 @@ void ReadThread::resume()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] file is not open");
         return;
     }
-    emit internalStartRead();
+    pauseMutex.release();
 }
 
 bool ReadThread::seek(qint64 position)
@@ -156,6 +150,8 @@ void ReadThread::checkSum()
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Read;
         #endif
+        if(putInPause)
+            pauseMutex.acquire();
         blockArray=file.read(blockSize);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -222,8 +218,6 @@ void ReadThread::checkSum()
     isInReadLoop=false;
     if(stopIt)
     {
-        if(putInPause)
-            emit isInPause();
         stopIt=false;
         return;
     }
@@ -269,6 +263,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             emit closed();
             return false;
         }
+        pauseMutex.tryAcquire(pauseMutex.available());
         size_at_open=file.size();
         mtime_at_open=QFileInfo(file).lastModified();
         putInPause=false;
@@ -345,6 +340,8 @@ void ReadThread::internalRead()
         stat=Read;
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"block size: "+QString::number(blockSize));
+        if(putInPause)
+            pauseMutex.acquire();
         blockArray=file.read(blockSize);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -405,8 +402,6 @@ void ReadThread::internalRead()
     isInReadLoop=false;
     if(stopIt)
     {
-        if(putInPause)
-            emit isInPause();
         stopIt=false;
         return;
     }
@@ -417,18 +412,18 @@ void ReadThread::internalRead()
 void ReadThread::startRead()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
-        if(tryStartRead)
-        {
+    if(tryStartRead)
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] already in try start");
-                return;
-        }
+        return;
+    }
     if(isInReadLoop)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] double event dropped");
     else
-        {
-                tryStartRead=true;
+    {
+        tryStartRead=true;
         emit internalStartRead();
-        }
+    }
 }
 
 void ReadThread::internalCloseSlot()

@@ -26,13 +26,13 @@ WriteThread::~WriteThread()
 {
     stopIt=true;
     needRemoveTheFile=true;
-    freeBlock.release();
+    writeFull.release();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
     waitNewClockForSpeed2.release();
     #endif
-    freeBlock.release();
-    usedBlock.release();
+    writeFull.release();
+    pauseMutex.release();
     // useless because stopIt will close all thread, but if thread not runing run it
     //endIsDetected();
     emit internalStartClose();
@@ -70,22 +70,18 @@ bool WriteThread::internalOpen()
     //set to LISTBLOCKSIZE
     if(sequential)
     {
-        while(freeBlock.available()<1)
-            freeBlock.release();
-        if(freeBlock.available()>1)
-            freeBlock.acquire(freeBlock.available()-1);
+        while(writeFull.available()<1)
+            writeFull.release();
+        if(writeFull.available()>1)
+            writeFull.acquire(writeFull.available()-1);
     }
     else
     {
-        while(freeBlock.available()<numberOfBlock)
-            freeBlock.release();
-        if(freeBlock.available()>numberOfBlock)
-            freeBlock.acquire(freeBlock.available()-numberOfBlock);
+        while(writeFull.available()<numberOfBlock)
+            writeFull.release();
+        if(writeFull.available()>numberOfBlock)
+            writeFull.acquire(writeFull.available()-numberOfBlock);
     }
-    while(usedBlock.available()<1)
-        usedBlock.release();
-    if(usedBlock.available()>0)
-        usedBlock.acquire(usedBlock.available());
     stopIt=false;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -139,6 +135,7 @@ bool WriteThread::internalOpen()
                 return false;
             }
         }
+        pauseMutex.tryAcquire(pauseMutex.available());
         if(stopIt)
         {
             file.close();
@@ -249,7 +246,7 @@ void WriteThread::endIsDetected()
         return;
     }
     endDetected=true;
-    usedBlock.release();
+    pauseMutex.release();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     emit internalStartEndOfFile();
 }
@@ -263,35 +260,32 @@ bool WriteThread::write(const QByteArray &data)
 {
     if(stopIt)
         return false;
+    bool atMax;
     if(sequential)
     {
         if(stopIt)
             return false;
-        bool atMax;
         {
             QMutexLocker lock_mutex(&accessList);
             theBlockList.append(data);
             atMax=(theBlockList.size()>=numberOfBlock);
         }
         if(atMax)
-        {
             emit internalStartWrite();
-            freeBlock.acquire();
-            usedBlock.release();
-        }
     }
     else
     {
-        freeBlock.acquire();
-        usedBlock.release();
         if(stopIt)
             return false;
         {
             QMutexLocker lock_mutex(&accessList);
             theBlockList.append(data);
+            atMax=(theBlockList.size()>=numberOfBlock);
         }
         emit internalStartWrite();
     }
+    if(atMax)
+        writeFull.acquire();
     if(stopIt)
         return false;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
@@ -330,8 +324,8 @@ void WriteThread::stop()
     stopIt=true;
     if(isOpen.available()>0)
         return;
-    freeBlock.release();
-    usedBlock.release();
+    writeFull.release();
+    pauseMutex.release();
     waitNewClockForSpeed.release();
     waitNewClockForSpeed2.release();
     // useless because stopIt will close all thread, but if thread not runing run it
@@ -343,9 +337,9 @@ void WriteThread::stop()
 void WriteThread::flushBuffer()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
-    freeBlock.release();
-    freeBlock.acquire();
-    usedBlock.release();
+    writeFull.release();
+    writeFull.acquire();
+    pauseMutex.release();
     {
         QMutexLocker lock_mutex(&accessList);
         theBlockList.clear();
@@ -412,40 +406,105 @@ void WriteThread::timeOfTheBlockCopyFinished()
 }
 #endif
 
+void WriteThread::pause()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try put read thread in pause");
+    putInPause=true;
+    pauseMutex.tryAcquire(pauseMutex.available());
+    return;
+}
+
+void WriteThread::resume()
+{
+    if(putInPause)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
+        putInPause=false;
+        stopIt=false;
+    }
+    else
+        return;
+    if(!file.isOpen())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] file is not open");
+        return;
+    }
+    pauseMutex.release();
+}
+
 void WriteThread::internalWrite()
 {
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(sequential)
         multiForBigSpeed=0;
     #endif
-    if(sequential && !endDetected)
-        usedBlock.acquire();
     bool haveBlock;
     do
     {
+        if(putInPause)
+            pauseMutex.acquire();
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt");
             return;
         }
-        if(!sequential)
-            usedBlock.release();
         if(stopIt)
             return;
         //read one block
         {
-            need free mutex only if at max
-                    need change the block size to match with the current blocxk size fixed
             QMutexLocker lock_mutex(&accessList);
             if(theBlockList.isEmpty())
                 haveBlock=false;
             else
             {
                 blockArray=theBlockList.first();
-                theBlockList.removeFirst();
+                if(multiForBigSpeed>0)
+                {
+                    if(blockArray.size()==blockSize)
+                    {
+                        theBlockList.removeFirst();
+                        //if remove one block
+                        if(!sequential)
+                            writeFull.release();
+                    }
+                    else
+                    {
+                        blockArray.clear();
+                        while(blockArray.size()!=blockSize)
+                        {
+                            //if larger
+                            if(theBlockList.first().size()>blockSize)
+                            {
+                                blockArray+=theBlockList.first().mid(0,blockSize);
+                                theBlockList.first().remove(0,blockSize);
+                                break;
+                            }
+                            //if smaller
+                            else
+                            {
+                                blockArray+=theBlockList.first();
+                                theBlockList.removeFirst();
+                                //if remove one block
+                                if(!sequential)
+                                    writeFull.release();
+                                if(theBlockList.isEmpty())
+                                    break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    theBlockList.removeFirst();
+                    //if remove one block
+                    if(!sequential)
+                        writeFull.release();
+                }
                 haveBlock=true;
             }
         }
+        if(stopIt)
+            return;
         if(!haveBlock)
         {
             if(sequential)
@@ -453,7 +512,7 @@ void WriteThread::internalWrite()
                 if(endDetected)
                     internalEndOfFile();
                 else
-                    freeBlock.release();
+                    writeFull.release();
                 return;
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] End detected of the file");
@@ -490,12 +549,6 @@ void WriteThread::internalWrite()
         #endif
         if(stopIt)
             return;
-        //write one block
-        if(!sequential)
-            freeBlock.release();
-
-        if(stopIt)
-            return;
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Write;
         #endif
@@ -529,8 +582,6 @@ void WriteThread::internalWrite()
         }
         lastGoodPosition+=bytesWriten;
     } while(sequential);
-    if(sequential)
-        freeBlock.release();
 }
 
 void WriteThread::postOperation()

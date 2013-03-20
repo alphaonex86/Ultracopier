@@ -36,7 +36,7 @@ public:
     /// \brief stop the copy
     void stop();
     /// \brief put the copy in pause
-    bool pause();
+    void pause();
     /// \brief resume the copy
     void resume();
     /// \brief get the size of the source file
@@ -91,7 +91,6 @@ public slots:
     void checkSum();
 signals:
     void error();
-    void isInPause();
     void opened();
     void readIsStarted();
     void readIsStopped();
@@ -125,6 +124,7 @@ private:
     WriteThread*	writeThread;
     int		id;
     QSemaphore      isOpen;
+    QSemaphore      pauseMutex;
     volatile bool	putInPause;
     volatile bool	isInReadLoop;
     volatile bool	seekToZero;
