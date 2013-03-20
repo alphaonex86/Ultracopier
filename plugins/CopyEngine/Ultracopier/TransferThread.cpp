@@ -258,7 +258,7 @@ void TransferThread::preOperation()
         doTheDateTransfer=false;
     if(canBeMovedDirectly())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] need moved directly: "+source.absoluteFilePath());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("need moved directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
         canBeMovedDirectlyVariable=true;
         readThread.fakeOpen();
         writeThread.fakeOpen();
@@ -266,7 +266,7 @@ void TransferThread::preOperation()
     }
     if(canBeCopiedDirectly())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] need copied directly: "+source.absoluteFilePath());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("need copied directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
         canBeCopiedDirectlyVariable=true;
         readThread.fakeOpen();
         writeThread.fakeOpen();
@@ -492,7 +492,7 @@ bool TransferThread::checkAlwaysRename()
 
 void TransferThread::tryMoveDirectly()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start the system move");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("need moved directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
 
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
@@ -524,7 +524,7 @@ void TransferThread::tryMoveDirectly()
         readError=true;
         if(!sourceFile.exists())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1: destination: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
             emit errorOnFile(sourceFile,tr("File not found"));
             return;
         }
@@ -547,7 +547,7 @@ void TransferThread::tryMoveDirectly()
 
 void TransferThread::tryCopyDirectly()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start copy directly");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("need copied directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
 
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
@@ -930,43 +930,47 @@ void TransferThread::postOperation()
         return;
     }
 
-    if(writeIsOpenVariable && !writeIsClosedVariable)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't pass in post operation if write is not closed");
-        emit errorOnFile(destination,tr("Internal error: The destination is not closed"));
-        needSkip=false;
-        if(deletePartiallyTransferredFiles)
-            needRemove=true;
-        writeError=true;
-        return;
-    }
-    if(readThread.getLastGoodPosition()!=writeThread.getLastGoodPosition())
-    {
-        writeThread.flushBuffer();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] readThread.getLastGoodPosition(%1)!=writeThread.getLastGoodPosition(%2)")
-                                 .arg(readThread.getLastGoodPosition())
-                                 .arg(writeThread.getLastGoodPosition())
-                                 );
-        emit errorOnFile(destination,tr("Internal error: The size transfered don't match"));
-        needSkip=false;
-        if(deletePartiallyTransferredFiles)
-            needRemove=true;
-        writeError=true;
-        return;
-    }
-    if(!writeThread.bufferIsEmpty())
-    {
-        writeThread.flushBuffer();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] buffer is not empty"));
-        emit errorOnFile(destination,tr("Internal error: Buffer is not empty"));
-        needSkip=false;
-        if(deletePartiallyTransferredFiles)
-            needRemove=true;
-        writeError=true;
-        return;
-    }
     if(!needSkip)
     {
+        if(!canBeCopiedDirectlyVariable && !canBeMovedDirectlyVariable)
+        {
+            if(writeIsOpenVariable && !writeIsClosedVariable)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't pass in post operation if write is not closed");
+                emit errorOnFile(destination,tr("Internal error: The destination is not closed"));
+                needSkip=false;
+                if(deletePartiallyTransferredFiles)
+                    needRemove=true;
+                writeError=true;
+                return;
+            }
+            if(readThread.getLastGoodPosition()!=writeThread.getLastGoodPosition())
+            {
+                writeThread.flushBuffer();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] readThread.getLastGoodPosition(%1)!=writeThread.getLastGoodPosition(%2)")
+                                         .arg(readThread.getLastGoodPosition())
+                                         .arg(writeThread.getLastGoodPosition())
+                                         );
+                emit errorOnFile(destination,tr("Internal error: The size transfered don't match"));
+                needSkip=false;
+                if(deletePartiallyTransferredFiles)
+                    needRemove=true;
+                writeError=true;
+                return;
+            }
+            if(!writeThread.bufferIsEmpty())
+            {
+                writeThread.flushBuffer();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] buffer is not empty"));
+                emit errorOnFile(destination,tr("Internal error: Buffer is not empty"));
+                needSkip=false;
+                if(deletePartiallyTransferredFiles)
+                    needRemove=true;
+                writeError=true;
+                return;
+            }
+        }
+
         if(!doFilePostOperation())
             return;
 

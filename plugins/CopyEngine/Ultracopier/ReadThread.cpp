@@ -13,6 +13,7 @@ ReadThread::ReadThread()
     #endif
     isInReadLoop=false;
     tryStartRead=false;
+    lastGoodPosition=0;
     isOpen.release();
 }
 
@@ -65,6 +66,7 @@ void ReadThread::open(const QFileInfo &file, const Ultracopier::CopyMode &mode)
     }
     stopIt=false;
     fakeMode=false;
+    lastGoodPosition=0;
     this->file.setFileName(file.absoluteFilePath());
     this->mode=mode;
     emit internalStartOpen();
