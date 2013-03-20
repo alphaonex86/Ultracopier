@@ -122,6 +122,7 @@ private:
     volatile int		MultiForBigSpeed;
     #endif
     QSemaphore          writeFull;
+    volatile bool       writeFullBlocked;
     QSemaphore          isOpen;
     QSemaphore          pauseMutex;
     volatile bool		putInPause;
