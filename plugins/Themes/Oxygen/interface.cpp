@@ -302,7 +302,7 @@ void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
 {
     if(uiOptions->speedWithProgressBar->isChecked())
     {
-        quint64 tempSpeed=speed/1024;
+        quint64 tempSpeed=speed;
         if(tempSpeed>999999999)
             tempSpeed=999999999;
         if(tempSpeed>(quint64)ui->progressBarCurrentSpeed->maximum())
