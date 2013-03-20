@@ -67,19 +67,6 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
-        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed);
-        connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed);
-        connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged);
-        connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uiUpdateSpeed);
-        connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxShowSpeedHaveChanged);
-        connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged);
-        connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&ThemesFactory::speedWithProgressBar);
-        connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&ThemesFactory::comboBox_copyEnd);
-        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::showDualProgression);
-        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::updateProgressionColorBar);
-        connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked);
-        connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked);
-        connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked);
     }
     #ifndef __GNUC__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is not set");
@@ -90,12 +77,12 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
 
 QWidget * ThemesFactory::options()
 {
-    bool ok;
-    currentSpeed=optionsEngine->getOptionValue("currentSpeed").toUInt(&ok);
-    if(!ok)
-        currentSpeed=0;
     if(optionsEngine!=NULL)
     {
+        bool ok;
+        currentSpeed=optionsEngine->getOptionValue("currentSpeed").toUInt(&ok);
+        if(!ok)
+            currentSpeed=0;
         ui->comboBox_copyEnd->setCurrentIndex(optionsEngine->getOptionValue("comboBox_copyEnd").toUInt());
         ui->speedWithProgressBar->setChecked(optionsEngine->getOptionValue("speedWithProgressBar").toBool());
         ui->checkBoxShowSpeed->setChecked(optionsEngine->getOptionValue("checkBoxShowSpeed").toBool());
@@ -115,10 +102,23 @@ QWidget * ThemesFactory::options()
         ui->progressColorRemaining->setIcon(pixmap);
         updateSpeed();
         updateProgressionColorBar();
+
+        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed);
+        connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed);
+        connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged);
+        connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uiUpdateSpeed);
+        connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxShowSpeedHaveChanged);
+        connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged);
+        connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&ThemesFactory::speedWithProgressBar);
+        connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&ThemesFactory::comboBox_copyEnd);
+        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::showDualProgression);
+        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::updateProgressionColorBar);
+        connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked);
+        connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked);
+        connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked);
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
-    updateSpeed();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"return the options");
     return tempWidget;
 }
@@ -221,6 +221,8 @@ void ThemesFactory::showDualProgression(bool checked)
 
 void ThemesFactory::on_SliderSpeed_valueChanged(int value)
 {
+    if(optionsEngine==NULL)
+        return;
     if(!ui->checkBoxShowSpeed->isChecked())
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("value: %1").arg(value));
@@ -254,6 +256,8 @@ void ThemesFactory::on_SliderSpeed_valueChanged(int value)
 
 void ThemesFactory::uiUpdateSpeed()
 {
+    if(optionsEngine==NULL)
+        return;
     if(ui->checkBoxShowSpeed->isChecked())
         return;
     if(!ui->checkBox_limitSpeed->isChecked())
@@ -269,6 +273,8 @@ void ThemesFactory::uiUpdateSpeed()
 
 void ThemesFactory::updateSpeed()
 {
+    if(optionsEngine==NULL)
+        return;
     ui->label_Slider_speed->setVisible(ui->checkBoxShowSpeed->isChecked());
     ui->SliderSpeed->setVisible(ui->checkBoxShowSpeed->isChecked());
     ui->label_SpeedMaxValue->setVisible(ui->checkBoxShowSpeed->isChecked());

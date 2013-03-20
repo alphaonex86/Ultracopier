@@ -12,7 +12,7 @@ ReadThread::ReadThread()
     stat=Idle;
     #endif
     isInReadLoop=false;
-        tryStartRead=false;
+    tryStartRead=false;
     isOpen.release();
 }
 
@@ -20,7 +20,9 @@ ReadThread::~ReadThread()
 {
     stopIt=true;
     //disconnect(this);//-> do into ~TransferThread()
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
+    #endif
     isOpen.acquire();
     exit();
     wait();
@@ -143,7 +145,9 @@ void ReadThread::checkSum()
     QCryptographicHash hash(QCryptographicHash::Sha1);
     isInReadLoop=true;
     lastGoodPosition=0;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     numberOfBlockCopied=0;
+    #endif
     seek(0);
     int sizeReaden=0;
     do
@@ -190,6 +194,7 @@ void ReadThread::checkSum()
 
             lastGoodPosition+=blockArray.size();
 
+            #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
             //wait for limitation speed if stop not query
             if(multiForBigSpeed>0)
             {
@@ -202,6 +207,7 @@ void ReadThread::checkSum()
                         break;
                 }
             }
+            #endif
         }
     }
     while(sizeReaden>0 && !stopIt);
@@ -318,7 +324,9 @@ void ReadThread::internalRead()
         return;
     }
     QByteArray blockArray;
-    numberOfBlockCopied	= 0;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    numberOfBlockCopied=0;
+    #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start the copy");
     emit readIsStarted();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -336,6 +344,7 @@ void ReadThread::internalRead()
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Read;
         #endif
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"block size: "+QString::number(blockSize));
         blockArray=file.read(blockSize);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -355,7 +364,7 @@ void ReadThread::internalRead()
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=WaitWritePipe;
             #endif
-            if(!writeThread->write(blockArray))
+            if(!writeThread->write(blockArray))//speed limitation here
             {
                 if(!stopIt)
                 {
@@ -372,19 +381,6 @@ void ReadThread::internalRead()
                 break;
 
             lastGoodPosition+=blockArray.size();
-
-            //wait for limitation speed if stop not query
-            if(multiForBigSpeed>0)
-            {
-                numberOfBlockCopied++;
-                if(numberOfBlockCopied>=multiForBigSpeed)
-                {
-                    numberOfBlockCopied=0;
-                    waitNewClockForSpeed.acquire();
-                    if(stopIt)
-                        break;
-                }
-            }
         }
         /*
         if(lastGoodPosition>16*1024)
@@ -462,6 +458,7 @@ bool ReadThread::setBlockSize(const int blockSize)
     //can be smaller than min block size to do correct speed limitation
     if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"block size: "+QString::number(blockSize));
         this->blockSize=blockSize;
         //set the new max speed because the timer have changed
         return true;
@@ -473,6 +470,7 @@ bool ReadThread::setBlockSize(const int blockSize)
     }
 }
 
+#ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
 /*! \brief Set the max speed
 \param tempMaxSpeed Set the max speed in KB/s, 0 for no limit */
 void ReadThread::setMultiForBigSpeed(const int &multiForBigSpeed)
@@ -492,8 +490,10 @@ void ReadThread::timeOfTheBlockCopyFinished()
     /* only if speed limited, else will accumulate waitNewClockForSpeed
      * Disabled because: Stop call of this method when no speed limit
     if(this->maxSpeed>0)*/
-    waitNewClockForSpeed.release();
+    if(waitNewClockForSpeed.available()<=1)
+        waitNewClockForSpeed.release();
 }
+#endif
 
 /// \brief do the fake open
 void ReadThread::fakeOpen()

@@ -27,7 +27,12 @@ WriteThread::~WriteThread()
     stopIt=true;
     needRemoveTheFile=true;
     freeBlock.release();
-    sequentialLock.release();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    waitNewClockForSpeed.release();
+    waitNewClockForSpeed2.release();
+    #endif
+    freeBlock.release();
+    usedBlock.release();
     // useless because stopIt will close all thread, but if thread not runing run it
     //endIsDetected();
     emit internalStartClose();
@@ -63,11 +68,24 @@ bool WriteThread::internalOpen()
         return false;
     }
     //set to LISTBLOCKSIZE
-    while(freeBlock.available()<numberOfBlock)
-        freeBlock.release();
-    if(freeBlock.available()>numberOfBlock)
-        freeBlock.acquire(freeBlock.available()-numberOfBlock);
-    sequentialLock.acquire(sequentialLock.available());
+    if(sequential)
+    {
+        while(freeBlock.available()<1)
+            freeBlock.release();
+        if(freeBlock.available()>1)
+            freeBlock.acquire(freeBlock.available()-1);
+    }
+    else
+    {
+        while(freeBlock.available()<numberOfBlock)
+            freeBlock.release();
+        if(freeBlock.available()>numberOfBlock)
+            freeBlock.acquire(freeBlock.available()-numberOfBlock);
+    }
+    while(usedBlock.available()<1)
+        usedBlock.release();
+    if(usedBlock.available()>0)
+        usedBlock.acquire(usedBlock.available());
     stopIt=false;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -208,7 +226,7 @@ void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool
     }
     else
         this->numberOfBlock=numberOfBlock;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open destination: "+file.absoluteFilePath());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("open destination: %1, sequential: %2").arg(file.absoluteFilePath()).arg(sequential));
     stopIt=false;
     fakeMode=false;
     lastGoodPosition=0;
@@ -218,6 +236,9 @@ void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool
     this->sequential=sequential;
     endDetected=false;
     emit internalStartOpen();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    numberOfBlockCopied=0;
+    #endif
 }
 
 void WriteThread::endIsDetected()
@@ -228,6 +249,7 @@ void WriteThread::endIsDetected()
         return;
     }
     endDetected=true;
+    usedBlock.release();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     emit internalStartEndOfFile();
 }
@@ -254,12 +276,14 @@ bool WriteThread::write(const QByteArray &data)
         if(atMax)
         {
             emit internalStartWrite();
-            sequentialLock.acquire();
+            freeBlock.acquire();
+            usedBlock.release();
         }
     }
     else
     {
         freeBlock.acquire();
+        usedBlock.release();
         if(stopIt)
             return false;
         {
@@ -268,6 +292,34 @@ bool WriteThread::write(const QByteArray &data)
         }
         emit internalStartWrite();
     }
+    if(stopIt)
+        return false;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    //wait for limitation speed if stop not query
+    if(multiForBigSpeed>0)
+    {
+        if(sequential)
+        {
+            numberOfBlockCopied++;
+            if(numberOfBlockCopied>=(multiForBigSpeed*2))
+            {
+                numberOfBlockCopied=0;
+                waitNewClockForSpeed.acquire();
+            }
+        }
+        else
+        {
+            numberOfBlockCopied2++;
+            if(numberOfBlockCopied2>=multiForBigSpeed)
+            {
+                numberOfBlockCopied2=0;
+                waitNewClockForSpeed2.acquire();
+            }
+        }
+    }
+    #endif
+    if(stopIt)
+        return false;
     return true;
 }
 
@@ -279,7 +331,9 @@ void WriteThread::stop()
     if(isOpen.available()>0)
         return;
     freeBlock.release();
-    sequentialLock.release();
+    usedBlock.release();
+    waitNewClockForSpeed.release();
+    waitNewClockForSpeed2.release();
     // useless because stopIt will close all thread, but if thread not runing run it
     endIsDetected();
     //for the stop for skip: void TransferThread::skip()
@@ -291,7 +345,7 @@ void WriteThread::flushBuffer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     freeBlock.release();
     freeBlock.acquire();
-    sequentialLock.release();
+    usedBlock.release();
     {
         QMutexLocker lock_mutex(&accessList);
         theBlockList.clear();
@@ -329,8 +383,43 @@ void WriteThread::internalEndOfFile()
     }
 }
 
+#ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+/*! \brief Set the max speed
+\param tempMaxSpeed Set the max speed in KB/s, 0 for no limit */
+void WriteThread::setMultiForBigSpeed(const int &multiForBigSpeed)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] setMultiForBigSpeed");
+    this->multiForBigSpeed=multiForBigSpeed;
+    waitNewClockForSpeed.release();
+    waitNewClockForSpeed2.release();
+}
+
+/// \brief For give timer every X ms
+void WriteThread::timeOfTheBlockCopyFinished()
+{
+    /* this is the old way to limit the speed, it product blocking
+     *if(waitNewClockForSpeed.available()<ULTRACOPIER_PLUGIN_NUMSEMSPEEDMANAGEMENT)
+        waitNewClockForSpeed.release();*/
+
+    //try this new way:
+    /* only if speed limited, else will accumulate waitNewClockForSpeed
+     * Disabled because: Stop call of this method when no speed limit
+    if(this->maxSpeed>0)*/
+    if(waitNewClockForSpeed.available()<=1)
+        waitNewClockForSpeed.release();
+    if(waitNewClockForSpeed2.available()<=1)
+        waitNewClockForSpeed2.release();
+}
+#endif
+
 void WriteThread::internalWrite()
 {
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    if(sequential)
+        multiForBigSpeed=0;
+    #endif
+    if(sequential && !endDetected)
+        usedBlock.acquire();
     bool haveBlock;
     do
     {
@@ -339,8 +428,14 @@ void WriteThread::internalWrite()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt");
             return;
         }
+        if(!sequential)
+            usedBlock.release();
+        if(stopIt)
+            return;
         //read one block
         {
+            need free mutex only if at max
+                    need change the block size to match with the current blocxk size fixed
             QMutexLocker lock_mutex(&accessList);
             if(theBlockList.isEmpty())
                 haveBlock=false;
@@ -358,12 +453,43 @@ void WriteThread::internalWrite()
                 if(endDetected)
                     internalEndOfFile();
                 else
-                    sequentialLock.release();
+                    freeBlock.release();
                 return;
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] End detected of the file");
             return;
         }
+        #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+        //wait for limitation speed if stop not query
+        if(multiForBigSpeed>0)
+        {
+            numberOfBlockCopied++;
+            if(sequential)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("speed limitation, numberOfBlockCopied: %1, multiForBigSpeed: %2, waitNewClockForSpeed.available: %3, block size: %4")
+                .arg(numberOfBlockCopied).arg(multiForBigSpeed).arg(waitNewClockForSpeed.available()).arg(blockArray.size()));
+                if(numberOfBlockCopied>=(multiForBigSpeed*1))
+                {
+                    numberOfBlockCopied=0;
+                    waitNewClockForSpeed.acquire();
+                    if(stopIt)
+                        break;
+                }
+            }
+            else
+            {
+                if(numberOfBlockCopied>=multiForBigSpeed)
+                {
+                    numberOfBlockCopied=0;
+                    waitNewClockForSpeed.acquire();
+                    if(stopIt)
+                        break;
+                }
+            }
+        }
+        #endif
+        if(stopIt)
+            return;
         //write one block
         if(!sequential)
             freeBlock.release();
@@ -403,6 +529,8 @@ void WriteThread::internalWrite()
         }
         lastGoodPosition+=bytesWriten;
     } while(sequential);
+    if(sequential)
+        freeBlock.release();
 }
 
 void WriteThread::postOperation()
@@ -540,6 +668,7 @@ bool WriteThread::setBlockSize(const int blockSize)
     //can be smaller than min block size to do correct speed limitation
     if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"blockSize: "+QString::number(blockSize));
         this->blockSize=blockSize;
         return true;
     }
@@ -570,6 +699,9 @@ void WriteThread::checkSum()
     QCryptographicHash hash(QCryptographicHash::Sha1);
     endDetected=false;
     lastGoodPosition=0;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    numberOfBlockCopied=0;
+    #endif
     if(!file.seek(0))
     {
         errorString_internal=file.errorString();

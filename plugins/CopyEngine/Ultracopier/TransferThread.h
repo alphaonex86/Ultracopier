@@ -110,8 +110,10 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     /// \brief set the current max speed in KB/s
     void setMultiForBigSpeed(const int &maxSpeed);
+    #endif
     /// \brief set block size in KB
     bool setBlockSize(const unsigned int blockSize);
     /// \brief pause the copy
@@ -133,8 +135,10 @@ public slots:
 
     void set_osBufferLimit(unsigned int osBufferLimit);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     //speed limitation
     void timeOfTheBlockCopyFinished();
+    #endif
 
     bool setParallelBuffer(int parallelBuffer);
     bool setSequentialBuffer(int sequentialBuffer);

@@ -389,7 +389,7 @@ void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &prog
     }
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(progressionList.size()>0)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"progression remaning items");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"progression remaning items");
     #endif
 }
 

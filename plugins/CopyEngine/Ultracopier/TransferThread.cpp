@@ -702,16 +702,21 @@ void TransferThread::setKeepDate(const bool keepDate)
     this->keepDate=keepDate;
 }
 
+#ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
 //set the current max speed in KB/s
 void TransferThread::setMultiForBigSpeed(const int &multiForBigSpeed)
 {
     readThread.setMultiForBigSpeed(multiForBigSpeed);
+    writeThread.setMultiForBigSpeed(multiForBigSpeed);
 }
+#endif
 
 //set block size in Bytes
 bool TransferThread::setBlockSize(const unsigned int blockSize)
 {
-    return readThread.setBlockSize(blockSize) && writeThread.setBlockSize(blockSize);
+    bool read=readThread.setBlockSize(blockSize);
+    bool write=writeThread.setBlockSize(blockSize);
+    return (read && write);
 }
 
 //pause the copy
@@ -1237,10 +1242,13 @@ void TransferThread::writeIsStopped()
     writeIsFinish();
 }
 
+#ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
 void TransferThread::timeOfTheBlockCopyFinished()
 {
     readThread.timeOfTheBlockCopyFinished();
+    writeThread.timeOfTheBlockCopyFinished();
 }
+#endif
 
 bool TransferThread::setParallelBuffer(int parallelBuffer)
 {

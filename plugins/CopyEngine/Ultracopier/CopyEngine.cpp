@@ -153,8 +153,10 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_forceMode()");
     if(!connect(this,&CopyEngine::send_osBufferLimit,					listThread,&ListThread::set_osBufferLimit,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_osBufferLimit()");
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(!connect(this,&CopyEngine::send_speedLimitation,					listThread,&ListThread::setSpeedLimitation,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_speedLimitation()");
+    #endif
     if(!connect(this,&CopyEngine::send_blockSize,					listThread,&ListThread::setBlockSize,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_blockSize()");
     if(!connect(this,&CopyEngine::send_parallelBuffer,					listThread,&ListThread::setParallelBuffer,		Qt::QueuedConnection))
@@ -203,8 +205,10 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     connect(tempWidget,		&QWidget::destroyed,		this,			&CopyEngine::resetTempWidget);
     //conect the ui widget
     uiIsInstalled=true;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(!setSpeedLimitation(maxSpeed))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the speed limitation");
+    #endif
 
     setBlockSize(blockSize);
     setSequentialBuffer(sequentialBuffer);
@@ -449,7 +453,11 @@ quint64 CopyEngine::realByteTransfered()
 //speed limitation
 bool CopyEngine::supportSpeedLimitation() const
 {
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     return true;
+    #else
+    return false;
+    #endif
 }
 
 void CopyEngine::setDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType)

@@ -45,12 +45,14 @@ public:
     qint64 getLastGoodPosition();
     /// \brief start the reading of the source file
     void startRead();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     /// \brief set the current max speed in KB/s
     void setMultiForBigSpeed(const int &multiForBigSpeed);
+    #endif
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
     /// \brief reopen after an error
-        void reopen();
+    void reopen();
     /// \brief set the write thread
     void setWriteThread(WriteThread * writeThread);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -68,9 +70,11 @@ public:
     ReadStat stat;
     #endif
     /// \brief return if it's reading
-        bool isReading();
+    bool isReading();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     /// \brief executed at regular interval to do a speed throling
     void timeOfTheBlockCopyFinished();
+    #endif
     /// \brief do the fake open
     void fakeOpen();
     /// \brief do the fake readIsStarted
@@ -113,9 +117,11 @@ private:
     Ultracopier::CopyMode	mode;
     qint64          lastGoodPosition;
     volatile int	blockSize;//in Bytes
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     QSemaphore      waitNewClockForSpeed;
     volatile int	numberOfBlockCopied;		///< Multiple for count the number of block copied
     volatile int	multiForBigSpeed;           ///< Multiple for count the number of block needed
+    #endif
     WriteThread*	writeThread;
     int		id;
     QSemaphore      isOpen;

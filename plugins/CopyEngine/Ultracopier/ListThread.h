@@ -225,11 +225,15 @@ private:
     bool				forcedMode;
     QString				firstRenamingRule;
     QString				otherRenamingRule;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     int                 multiForBigSpeed;
+    #endif
     /* here to prevent:
     QObject::killTimer: timers cannot be stopped from another thread
     QObject::startTimer: timers cannot be started from another thread */
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     QTimer *clockForTheCopySpeed;	///< For the speed throttling
+    #endif
 
     inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
@@ -265,7 +269,10 @@ private:
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
-    int blockSize,blockSizeAfterSpeedLimitation;//in Bytes
+    int blockSize;//in Bytes
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    int blockSizeAfterSpeedLimitation;//in Bytes
+    #endif
     QStringList drives;
     FileExistsAction alwaysDoThisActionForFileExists;
     //to return value to the copyEngine

@@ -66,6 +66,10 @@ public:
     qint64 getLastGoodPosition();
     /// \brief buffer is empty
     bool bufferIsEmpty();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    /// \brief set the current max speed in KB/s
+    void setMultiForBigSpeed(const int &multiForBigSpeed);
+    #endif
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -80,6 +84,8 @@ public slots:
     /// do the checksum
     void checkSum();
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
+    /// \brief executed at regular interval to do a speed throling
+    void timeOfTheBlockCopyFinished();
 signals:
     void error();
     void opened();
@@ -104,15 +110,16 @@ private:
     AvancedQFile		file;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
-    volatile int		blockSize;//in Bytes
+    volatile int		blockSize;//only used in checksum
     int                 numberOfBlock;
     QMutex              accessList;		///< For use the list
-    QSemaphore          waitNewClockForSpeed;
-    volatile int		numberOfBlockCopied;		///< Multiple for count the number of block copied
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    QSemaphore          waitNewClockForSpeed,waitNewClockForSpeed2;
+    volatile int		numberOfBlockCopied,numberOfBlockCopied2;		///< Multiple for count the number of block copied
     volatile int		multiplicatorForBigSpeed;	///< Multiple for count the number of block needed
     volatile int		MultiForBigSpeed;
-    QSemaphore          freeBlock;
-    QSemaphore          sequentialLock;
+    #endif
+    QSemaphore          freeBlock,usedBlock;
     QSemaphore          isOpen;
     volatile bool		putInPause;
     QList<QByteArray>	theBlockList;		///< Store the block list
@@ -120,7 +127,7 @@ private:
     QByteArray          blockArray;		///< temp data for block writing, the data
     qint64              bytesWriten;		///< temp data for block writing, the bytes writen
     int                 id;
-    bool                endDetected;
+    volatile bool       endDetected;
     quint64             startSize;
     QSemaphore          *mkpathTransfer;
     bool                fakeMode;
@@ -128,6 +135,9 @@ private:
     bool                needRemoveTheFile;
     volatile bool       sequential;
     bool                deletePartiallyTransferredFiles;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    volatile int        multiForBigSpeed;           ///< Multiple for count the number of block needed
+    #endif
 private slots:
     bool internalOpen();
     void internalWrite();
