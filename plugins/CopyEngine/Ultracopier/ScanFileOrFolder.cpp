@@ -179,7 +179,15 @@ void ScanFileOrFolder::run()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+QString::number(mode));
     destination=resolvDestination(destination).absoluteFilePath();
     if(stopIt)
+    {
+        stopped=true;
         return;
+    }
+    if(fileErrorAction==FileError_Skip)
+    {
+        stopped=true;
+        return;
+    }
     int sourceIndex=0;
     while(sourceIndex<sources.size())
     {
@@ -247,7 +255,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
         }
-    } while(fileErrorAction==FileError_Retry);
+    } while(fileErrorAction==FileError_Retry || fileErrorAction==FileError_PutToEndOfTheList);
     return newDestination;
 }
 
@@ -276,6 +284,8 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         return;
     destination=resolvDestination(destination);
     if(stopIt)
+        return;
+    if(fileErrorAction==FileError_Skip)
         return;
     //if is same
     if(source.absoluteFilePath()==destination.absoluteFilePath())
