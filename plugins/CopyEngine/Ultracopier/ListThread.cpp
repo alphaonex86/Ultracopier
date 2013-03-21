@@ -112,6 +112,7 @@ void ListThread::transferInodeIsClosed()
             if(copiedSize>(qint64)temp_transfer_thread->transferSize)
             {
                 oversize=copiedSize-temp_transfer_thread->transferSize;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("add oversize of: %1").arg(oversize));
                 bytesToTransfer+=oversize;
                 bytesTransfered+=oversize;
             }
@@ -1065,7 +1066,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     newAction.type				= Ultracopier::AddingItem;
     newAction.addAction=actionToDoTransferToItemOfCopyList(temp);
     actionDone << newAction;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, add entry: %3, size: %4, size2: %5").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(newAction.addAction.size));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, add entry: %3, size: %4, size2: %5, isSymLink: %6").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(size).arg(source.isSymLink()));
     return temp.id;
 }
 

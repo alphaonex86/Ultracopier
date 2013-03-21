@@ -20,10 +20,7 @@ const QString ExtraSocketCatchcopy::pathSocket()
 	{
 		WCHAR * userNameW=new WCHAR[size];
 		if(GetUserNameW(userNameW,&size))
-		{
-			userName.fromWCharArray(userNameW,size*2);
 			userName=QString(QByteArray((char*)userNameW,size*2-2).toHex());
-		}
 		delete userNameW;
 	}
 	return "advanced-copier-"+userName;

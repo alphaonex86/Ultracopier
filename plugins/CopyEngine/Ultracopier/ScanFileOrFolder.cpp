@@ -1,5 +1,10 @@
 #include "ScanFileOrFolder.h"
 #include "TransferThread.h"
+#include <QtGlobal>
+
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
 {
@@ -9,6 +14,17 @@ ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
     this->mode          = mode;
     folder_isolation    = QRegularExpression("^(.*/)?([^/]+)/$");
     setObjectName("ScanFileOrFolder");
+    #ifdef Q_OS_WIN32
+    QString userName;
+    DWORD size=255;
+    WCHAR * userNameW=new WCHAR[size];
+    if(GetUserNameW(userNameW,&size))
+    {
+        userName=QString::fromWCharArray(userNameW,size);
+        blackList << QFileInfo(QString("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath();
+    }
+    delete userNameW;
+    #endif
 }
 
 ScanFileOrFolder::~ScanFileOrFolder()
@@ -27,14 +43,25 @@ void ScanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 {
     stopIt=false;
     this->sources=parseWildcardSources(sources);
-        this->destination=destination;
-    if(sources.size()>1 || (QFileInfo(destination).isDir() && !QFileInfo(destination).isSymLink()))
+    this->destination=destination;
+    QFileInfo destinationInfo(this->destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("check symblink: %1").arg(destinationInfo.absoluteFilePath()));
+    while(destinationInfo.isSymLink())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("resolv destination to: %1").arg(destinationInfo.symLinkTarget()));
+        if(QFileInfo(destinationInfo.symLinkTarget()).isAbsolute())
+            this->destination=destinationInfo.symLinkTarget();
+        else
+            this->destination=destinationInfo.absolutePath()+"/"+destinationInfo.symLinkTarget();
+        destinationInfo.setFile(this->destination);
+    }
+    if(sources.size()>1 || QFileInfo(destination).isDir())
         /* Disabled because the separator transformation product bug
          * if(!destination.endsWith(QDir::separator()))
             this->destination+=QDir::separator();*/
         if(!destination.endsWith("/") && !destination.endsWith("\\"))
             this->destination+="/";//put unix separator because it's transformed into that's under windows too
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+sources.join(";")+","+destination+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+sources.join(";")+","+this->destination+")");
 }
 
 
@@ -150,6 +177,9 @@ void ScanFileOrFolder::run()
 {
     stopped=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+QString::number(mode));
+    destination=resolvDestination(destination).absoluteFilePath();
+    if(stopIt)
+        return;
     int sourceIndex=0;
     while(sourceIndex<sources.size())
     {
@@ -173,14 +203,21 @@ void ScanFileOrFolder::run()
             tempString+=TransferThread::resolvedName(source);
             if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(tempString).exists())
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("tempString: %1 move and not exists").arg(tempString));
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("do real move: %1 to %2").arg(source.absoluteFilePath()).arg(tempString));
                 emit addToRealMove(source.absoluteFilePath(),tempString);
             }
             else
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("tempString: %1 normal listing, blacklist size: %2").arg(tempString).arg(blackList.size()));
                 listFolder(source.absoluteFilePath(),tempString);
+            }
         }
         else
-            emit fileTransfer(source,destination+source.fileName(),mode);
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1 is file or symblink").arg(source.absoluteFilePath()));
+            emit fileTransfer(source,destination+"/"+source.fileName(),mode);
+        }
         sourceIndex++;
     }
     stopped=true;
@@ -189,9 +226,50 @@ void ScanFileOrFolder::run()
     emit finishedTheListing();
 }
 
+QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
+{
+    QFileInfo newDestination=destination;
+    while(newDestination.isSymLink())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("resolv destination to: %1").arg(newDestination.symLinkTarget()));
+        if(QFileInfo(newDestination.symLinkTarget()).isAbsolute())
+            newDestination.setFile(newDestination.symLinkTarget());
+        else
+            newDestination.setFile(newDestination.absolutePath()+"/"+newDestination.symLinkTarget());
+    }
+    do
+    {
+        fileErrorAction=FileError_NotSet;
+        if(isBlackListed(destination))
+        {
+            emit errorOnFolder(destination,tr("Black listed folder"));
+            waitOneAction.acquire();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
+        }
+    } while(fileErrorAction==FileError_Retry);
+    return newDestination;
+}
+
+bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
+{
+    int index=0;
+    int size=blackList.size();
+    while(index<size)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("check if %1 start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
+        if(destination.absoluteFilePath().startsWith(blackList.at(index)))
+            return true;
+        index++;
+    }
+    return false;
+}
+
 void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1 (%2), destination: %3 (%4)").arg(source.absoluteFilePath()).arg(source.isSymLink()).arg(destination.absoluteFilePath()).arg(destination.isSymLink()));
+    if(stopIt)
+        return;
+    destination=resolvDestination(destination);
     if(stopIt)
         return;
     //if is same

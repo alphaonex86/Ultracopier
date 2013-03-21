@@ -704,7 +704,7 @@ void WriteThread::internalWrite()
     {
         multiForBigSpeed=0;
         QMutexLocker lock_mutex(&accessList);
-        if(theBlockList.size()<numberOfBlock)
+        if(theBlockList.size()<numberOfBlock && !endDetected)
             return;
     }
     #endif

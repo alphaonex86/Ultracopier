@@ -758,7 +758,7 @@ void TransferThread::stop()
         return;
     if(!(readIsOpenVariable && !readIsClosedVariable) && !(writeIsOpenVariable && !writeIsClosedVariable))
     {
-        if(needRemove)
+        if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
             QFile(destination.absoluteFilePath()).remove();
         emit internalStartPostOperation();
     }
@@ -996,7 +996,7 @@ void TransferThread::postOperation()
     }
     else//do difference skip a file and skip this error case
     {
-        if(needRemove && destination.exists() && destination.isFile())
+        if(needRemove && destination.exists() && source.absoluteFilePath()!=destination.absoluteFilePath() && destination.isFile())
         {
             QFile destinationFile(destination.absoluteFilePath());
             if(!destinationFile.remove())
@@ -1441,14 +1441,14 @@ void TransferThread::skip()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeIsOpenVariable: "+QString::number(writeIsOpenVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsFinishVariable: "+QString::number(writeIsFinishVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
     switch(transfer_stat)
     {
-    case TransferStat_PreOperation:
     case TransferStat_WaitForTheTransfer:
+        needRemove=true;
+    case TransferStat_PreOperation:
         if(needSkip)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
-        needRemove=true;
         needSkip=true;
         //check if all is source and destination is closed
         if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
