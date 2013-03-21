@@ -20,7 +20,7 @@ ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
     WCHAR * userNameW=new WCHAR[size];
     if(GetUserNameW(userNameW,&size))
     {
-        userName=QString::fromWCharArray(userNameW,size);
+        userName=QString::fromWCharArray(userNameW,size-1);
         blackList << QFileInfo(QString("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath();
     }
     delete userNameW;
@@ -242,6 +242,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
         fileErrorAction=FileError_NotSet;
         if(isBlackListed(destination))
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("isBlackListed: %1").arg(destination.absoluteFilePath()));
             emit errorOnFolder(destination,tr("Black listed folder"));
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
@@ -256,9 +257,13 @@ bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
     int size=blackList.size();
     while(index<size)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("check if %1 start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
         if(destination.absoluteFilePath().startsWith(blackList.at(index)))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("%1 start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
             return true;
+        }
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("%1 not start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
         index++;
     }
     return false;
