@@ -19,6 +19,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     numberOfInodeOperation          = 0;
     putAtBottom                     = 0;
     maxSpeed                        = 0;
+    inodeThreads                    = 1;
     doRightTransfer                 = false;
     keepDate                        = false;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
@@ -104,7 +105,7 @@ void ListThread::transferInodeIsClosed()
             actionDone << newAction;
             /// \todo check if item is at the right thread
             actionToDoListTransfer.removeAt(int_for_internal_loop);
-            if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
+            if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
 
             //add the current size of file, to general size because it's finish
@@ -124,7 +125,7 @@ void ListThread::transferInodeIsClosed()
             countLocalParse++;
             #endif
             isFound=true;
-            if(actionToDoListTransfer.size()==0)
+            if(actionToDoListTransfer.isEmpty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionToDoListTransfer==0");
                 actionToDoListInode << actionToDoListInode_afterTheTransfer;
@@ -135,7 +136,9 @@ void ListThread::transferInodeIsClosed()
         }
         int_for_internal_loop++;
     }
-    if(!isFound)
+    if(isFound)
+        deleteTransferThread();
+    else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_internal_loop));
         temp_transfer_thread->transferId=0;
@@ -367,7 +370,7 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the next thread, scanFileOrFolderThreadsPool.size(): "+QString::number(scanFileOrFolderThreadsPool.size()));
             delete senderThread;
             scanFileOrFolderThreadsPool.removeOne(senderThread);
-            if(scanFileOrFolderThreadsPool.size()==0)
+            if(scanFileOrFolderThreadsPool.isEmpty())
                 updateTheStatus();
         }
     }
@@ -670,7 +673,7 @@ bool ListThread::skipInternal(const quint64 &id)
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
-            if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
+            if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
             return true;
         }
@@ -741,8 +744,6 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
     }
     maxSpeed=speedLimitation;
 
-    /*    if(this->maxSpeed==0 && maxSpeed==0 && waitNewClockForSpeed.available()>0)
-            waitNewClockForSpeed.tryAcquire(waitNewClockForSpeed.available());*/
     multiForBigSpeed=0;
     if(maxSpeed>0)
     {
@@ -927,7 +928,7 @@ void ListThread::sendActionDone()
 //send progression
 void ListThread::sendProgression()
 {
-    if(actionToDoListTransfer.size()==0)
+    if(actionToDoListTransfer.isEmpty())
         return;
     oversize=0;
     currentProgression=0;
@@ -988,7 +989,7 @@ void ListThread::syncTransferList_internal()
     TransferThread *transferThread;
     int loop_size=actionToDoListTransfer.size();
     int loop_sub_size=transferThreadList.size();
-    //this loop to have at max ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT, not ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT*transferThreadList.size()
+    //this loop to have at max inodeThreads*inodeThreads, not inodeThreads*transferThreadList.size()
     int int_for_internal_loop;
     for(int int_for_loop=0; int_for_loop<loop_size; ++int_for_loop) {
         const ActionToDoTransfer &item=actionToDoListTransfer.at(int_for_loop);
@@ -1124,10 +1125,8 @@ void ListThread::moveItemsOnTop(QList<int> ids)
             actionDone << newAction;
             actionToDoListTransfer.move(i,indexToMove);
             indexToMove++;
-            if(ids.size()==0)
-            {
+            if(ids.isEmpty())
                 return;
-            }
         }
     }
     sendActionDone();
@@ -1164,7 +1163,7 @@ void ListThread::moveItemsUp(QList<int> ids)
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Try move up false, item ")+QString::number(i));
             ids.removeOne(actionToDoListTransfer.at(i).id);
-            if(ids.size()==0)
+            if(ids.isEmpty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
                 return;
@@ -1211,7 +1210,7 @@ void ListThread::moveItemsDown(QList<int> ids)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Try move up false, item ")+QString::number(i));
             }
             ids.removeOne(actionToDoListTransfer.at(i).id);
-            if(ids.size()==0)
+            if(ids.isEmpty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
                 return;
@@ -1252,7 +1251,7 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
             actionDone << newAction;
             actionToDoListTransfer.move(i,lastGoodPositionReal);
             lastGoodPositionReal--;
-            if(ids.size()==0)
+            if(ids.isEmpty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop with return");
                 return;
@@ -1521,6 +1520,7 @@ void ListThread::doNewActions_inode_manipulation()
         return;
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //lunch the pre-op or inode op
+    TransferThread *currentTransferThread;
     int int_for_loop=0;
     int int_for_internal_loop=0;
     int int_for_transfer_thread_search=0;
@@ -1601,7 +1601,7 @@ void ListThread::doNewActions_inode_manipulation()
                 break;
             }
             numberOfInodeOperation++;
-            if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+            if(numberOfInodeOperation>=inodeThreads)
                 return;
             if(followTheStrictOrder)
                 break;
@@ -1619,9 +1619,9 @@ void ListThread::doNewActions_inode_manipulation()
         int_for_internal_loop++;
     }
     //error  checking
-    if((actionToDoListTransfer_count+actionToDoListInode_count)>ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+    if((actionToDoListTransfer_count+actionToDoListInode_count)>inodeThreads)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The index have been detected as out of max range: %1>%2").arg(actionToDoListTransfer_count+actionToDoListInode_count).arg(ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The index have been detected as out of max range: %1>%2").arg(actionToDoListTransfer_count+actionToDoListInode_count).arg(inodeThreads));
         return;
     }
 }
@@ -1722,7 +1722,7 @@ void ListThread::mkPathFirstFolderFinish()
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
-                if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
+                if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                     updateTheStatus();
                 numberOfInodeOperation--;
                 doNewActions_inode_manipulation();
@@ -1735,7 +1735,7 @@ void ListThread::mkPathFirstFolderFinish()
                 emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
-                if(actionToDoListTransfer.size()==0 && actionToDoListInode.size()==0 && actionToDoListInode_afterTheTransfer.size()==0)
+                if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                     updateTheStatus();
                 numberOfInodeOperation--;
                 doNewActions_inode_manipulation();
@@ -1800,7 +1800,7 @@ void ListThread::timedUpdateDebugDialog()
             .arg(actionToDoListTransfer.at(index).source.absoluteFilePath())
             .arg(actionToDoListTransfer.at(index).size)
             .arg(actionToDoListTransfer.at(index).destination.absoluteFilePath());
-        if(index>((ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
+        if(index>((inodeThreads+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
         {
             newList2 << QString("...");
             break;
@@ -1819,9 +1819,9 @@ void ListThread::fileAlreadyExists(const QFileInfo &source,const QFileInfo &dest
 }
 
 /// \note Can be call without queue because all call will be serialized
-void ListThread::errorOnFile(const QFileInfo &fileInfo,const QString &errorString)
+void ListThread::errorOnFile(const QFileInfo &fileInfo, const QString &errorString, const ErrorType &errorType)
 {
-    emit send_errorOnFile(fileInfo,errorString,qobject_cast<TransferThread *>(sender()));
+    emit send_errorOnFile(fileInfo,errorString,qobject_cast<TransferThread *>(sender()),errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
@@ -1832,9 +1832,9 @@ void ListThread::folderAlreadyExists(const QFileInfo &source,const QFileInfo &de
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorString)
+void ListThread::errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType)
 {
-    emit send_errorOnFolder(fileInfo,errorString,qobject_cast<ScanFileOrFolder *>(sender()));
+    emit send_errorOnFolder(fileInfo,errorString,qobject_cast<ScanFileOrFolder *>(sender()),errorType);
 }
 
 //to run the thread
@@ -1847,14 +1847,14 @@ void ListThread::run()
     exec();
 }
 
-void ListThread::getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread)
+void ListThread::getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread, const ErrorType &errorType)
 {
     if(actionToDoListTransfer.empty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"can't try put at bottom if empty");
         this->alwaysDoThisActionForFileExists=FileExists_NotSet;
         putAtBottom=0;
-        emit haveNeedPutAtBottom(false,fileInfo,errorString,thread);
+        emit haveNeedPutAtBottom(false,fileInfo,errorString,thread,errorType);
         return;
     }
     bool needPutAtBottom=(putAtBottom<(quint32)actionToDoListTransfer.size());
@@ -1871,13 +1871,15 @@ void ListThread::getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &er
         putAtBottom++;
         return;
     }
-    emit haveNeedPutAtBottom(needPutAtBottom,fileInfo,errorString,thread);
+    emit haveNeedPutAtBottom(needPutAtBottom,fileInfo,errorString,thread,errorType);
 }
 
 /// \to create transfer thread
 void ListThread::createTransferThread()
 {
     if(stopIt)
+        return;
+    if(transferThreadList.size()>=inodeThreads)
         return;
     transferThreadList << new TransferThread();
     TransferThread * last=transferThreadList.last();
@@ -1940,12 +1942,39 @@ void ListThread::createTransferThread()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     last->setId(transferThreadList.size()-1);
     #endif
-    if(transferThreadList.size()>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+    if(transferThreadList.size()>=inodeThreads)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"create the last of the "+QString::number(inodeThreads)+" transferThread");
         return;
+    }
     if(stopIt)
         return;
     doNewActions_inode_manipulation();
     emit askNewTransferThread();
+}
+
+void ListThread::deleteTransferThread()
+{
+    int loop_size=transferThreadList.size();
+    if(loop_size>inodeThreads)
+    {
+        int index=0;
+        while(index<loop_size && loop_size>inodeThreads)
+        {
+            if(transferThreadList.at(index)->getStat()==TransferStat_Idle && transferThreadList.at(index)->transferId==0)
+            {
+                transferThreadList.at(index)->stop();
+                delete transferThreadList.at(index);//->deleteLayer();
+                transferThreadList[index]=NULL;
+                transferThreadList.removeAt(index);
+                loop_size--;
+            }
+            else
+                index++;
+        }
+        if(loop_size==inodeThreads)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inodeThreads is lowered to the right value: "+QString::number(inodeThreads));
+    }
 }
 
 void ListThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
@@ -2011,4 +2040,17 @@ void ListThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyT
         transferThreadList.at(index)->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
         index++;
     }
+}
+
+void ListThread::setInodeThreads(const int &inodeThreads)
+{
+    if(inodeThreads<1 || inodeThreads>32)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"inodeThreads is out of ranges: "+QString::number(inodeThreads));
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inodeThreads: "+QString::number(inodeThreads));
+    this->inodeThreads=inodeThreads;
+    createTransferThread();
+    deleteTransferThread();
 }

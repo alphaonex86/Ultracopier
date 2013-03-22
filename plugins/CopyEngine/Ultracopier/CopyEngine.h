@@ -63,6 +63,7 @@ private:
     int                     parallelizeIfSmallerThan;
     bool                    followTheStrictOrder;
     bool                    deletePartiallyTransferredFiles;
+    int                     inodeThreads;
     bool                    moveTheWholeFolder;
     bool                    autoStart;
     bool                    checkDestinationFolderExists;
@@ -82,6 +83,7 @@ private:
         bool rmPath;
         QFileInfo inode;
         QString errorString;
+        ErrorType errorType;
     };
     QList<errorQueueItem> errorQueue;
     /// \brief already exists queue
@@ -123,25 +125,25 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread);
+    void errorOnFileSlot(QFileInfo fileInfo, QString errorString, TransferThread * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread);
+    void errorOnFolderSlot(QFileInfo fileInfo, QString errorString, ScanFileOrFolder * thread, ErrorType errorType);
     //mkpath event
-    void mkPathErrorOnFolderSlot(QFileInfo,QString);
+    void mkPathErrorOnFolderSlot(QFileInfo, QString, ErrorType errorType);
 
     //dialog message
     /// \note Can be call without queue because all call will be serialized
     void fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
+    void errorOnFile(QFileInfo fileInfo, QString errorString, TransferThread * thread, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
+    void errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread, ErrorType errorType,bool isCalledByShowOneNewDialog=false);
     //mkpath event
-    void mkPathErrorOnFolder(QFileInfo,QString,bool isCalledByShowOneNewDialog=false);
+    void mkPathErrorOnFolder(QFileInfo, QString, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
 
     //show one new dialog if needed
     void showOneNewDialog();
@@ -160,7 +162,7 @@ private slots:
     void newActionInProgess(Ultracopier::EngineActionInProgress);
     void updatedBlockSize();
     void updateBufferCheckbox();
-    void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread);
+    void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread, const ErrorType &errorType);
 public:
     /** \brief to send the options panel
      * \return return false if have not the options
@@ -284,6 +286,8 @@ public slots:
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
+    void setInodeThreads(const int &inodeThreads);
+    void inodeThreadsFinished();
 
     /// \brief set auto start
     void setAutoStart(const bool autoStart);
@@ -329,7 +333,7 @@ signals:
 
     //internal cancel
     void tryCancel();
-    void getNeedPutAtBottom(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
+    void getNeedPutAtBottom(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source
@@ -350,6 +354,7 @@ signals:
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
     void send_followTheStrictOrder(const bool &followTheStrictOrder);
     void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
+    void send_setInodeThreads(const int &inodeThreads);
     void send_moveTheWholeFolder(const bool &moveTheWholeFolder);
 };
 

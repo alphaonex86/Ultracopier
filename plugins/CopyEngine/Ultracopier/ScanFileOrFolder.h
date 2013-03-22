@@ -43,7 +43,7 @@ signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
     void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
-    void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
+    void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType=ErrorType_FolderWithRety);
     void finishedTheListing();
 
     void newFolderListing(const QString &path);

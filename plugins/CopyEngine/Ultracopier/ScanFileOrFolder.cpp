@@ -251,7 +251,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
         if(isBlackListed(destination))
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("isBlackListed: %1").arg(destination.absoluteFilePath()));
-            emit errorOnFolder(destination,tr("Black listed folder"));
+            emit errorOnFolder(destination,tr("Black listed folder"),ErrorType_Folder);
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
         }
@@ -429,7 +429,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
             if(!source.isDir())
                 emit errorOnFolder(source,tr("This is not a folder"));
             else if(!source.exists())
-                    emit errorOnFolder(source,tr("The folder not exists"));
+                emit errorOnFolder(source,tr("The folder not exists"));
             else
                 emit errorOnFolder(source,tr("The folder is not readable"));
             waitOneAction.acquire();

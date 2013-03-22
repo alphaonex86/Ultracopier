@@ -20,6 +20,7 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<QList<QStorageInfo::DriveType> >("QList<QStorageInfo::DriveType>");
     qRegisterMetaType<TransferAlgorithm>("TransferAlgorithm");
     qRegisterMetaType<ActionType>("ActionType");
+    qRegisterMetaType<ErrorType>("ErrorType");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
@@ -38,6 +39,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setSequentialBuffer);
     connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setParallelBuffer);
     connect(ui->parallelizeIfSmallerThan,	static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setParallelizeIfSmallerThan);
+    connect(ui->inodeThreads,               static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::on_inodeThreads_editingFinished);
     connect(ui->autoStart,                  &QCheckBox::toggled,                                            this,&CopyEngineFactory::setAutoStart);
     connect(ui->doChecksum,                 &QCheckBox::toggled,                                            this,&CopyEngineFactory::doChecksum_toggled);
     connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
@@ -51,6 +53,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->osBuffer,                   &QCheckBox::toggled,                this,&CopyEngineFactory::osBuffer_toggled);
     connect(ui->osBufferLimited,            &QCheckBox::toggled,                this,&CopyEngineFactory::osBufferLimited_toggled);
     connect(ui->osBufferLimit,              &QSpinBox::editingFinished,         this,&CopyEngineFactory::osBufferLimit_editingFinished);
+    connect(ui->inodeThreads,               &QSpinBox::editingFinished,         this,&CopyEngineFactory::on_inodeThreads_editingFinished);
     connect(ui->osBufferLimited,            &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
     connect(ui->osBuffer,                   &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
     connect(ui->moveTheWholeFolder,         &QCheckBox::toggled,                this,&CopyEngineFactory::moveTheWholeFolder);
@@ -117,6 +120,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setMoveTheWholeFolder(ui->moveTheWholeFolder->isChecked());
     realObject->setFollowTheStrictOrder(ui->followTheStrictOrder->isChecked());
     realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
+    realObject->setInodeThreads(ui->inodeThreads->value());
     return newTransferEngine;
 }
 
@@ -170,6 +174,11 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("deletePartiallyTransferredFiles"),QVariant(true)));
         KeysList.append(qMakePair(QString("moveTheWholeFolder"),QVariant(true)));
         KeysList.append(qMakePair(QString("followTheStrictOrder"),QVariant(false)));
+        #ifdef ULTRACOPIER_PLUGIN_DEBUG
+        KeysList.append(qMakePair(QString("inodeThreads"),QVariant(1)));
+        #else
+        KeysList.append(qMakePair(QString("inodeThreads"),QVariant(16)));
+        #endif
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)
         ui->keepDate->setEnabled(false);
@@ -193,6 +202,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ui->deletePartiallyTransferredFiles->setChecked(options->getOptionValue("deletePartiallyTransferredFiles").toBool());
         ui->moveTheWholeFolder->setChecked(options->getOptionValue("moveTheWholeFolder").toBool());
         ui->followTheStrictOrder->setChecked(options->getOptionValue("followTheStrictOrder").toBool());
+        ui->inodeThreads->setValue(options->getOptionValue("inodeThreads").toUInt());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
         ui->checksumIgnoreIfImpossible->setChecked(options->getOptionValue("checksumIgnoreIfImpossible").toBool());
@@ -570,4 +580,11 @@ void CopyEngineFactory::moveTheWholeFolder(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("moveTheWholeFolder",checked);
+}
+
+void CopyEngineFactory::on_inodeThreads_editingFinished()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("inodeThreads",ui->inodeThreads->value());
 }

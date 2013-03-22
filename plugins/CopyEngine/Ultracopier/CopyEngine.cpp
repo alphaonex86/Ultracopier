@@ -37,6 +37,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     forcedMode                      = false;
     followTheStrictOrder            = false;
     deletePartiallyTransferredFiles = true;
+    inodeThreads                    = 1;
     moveTheWholeFolder              = true;
 
     //implement the SingleShot in this class
@@ -169,6 +170,8 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect moveTheWholeFolder()");
     if(!connect(this,&CopyEngine::send_deletePartiallyTransferredFiles,					listThread,&ListThread::setDeletePartiallyTransferredFiles,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect deletePartiallyTransferredFiles()");
+    if(!connect(this,&CopyEngine::send_setInodeThreads,					listThread,&ListThread::setInodeThreads,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setInodeThreads()");
     if(!connect(this,&CopyEngine::send_followTheStrictOrder,					listThread,&ListThread::setFollowTheStrictOrder,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect followTheStrictOrder()");
     if(!connect(this,&CopyEngine::send_setFilters,listThread,&ListThread::set_setFilters,		Qt::QueuedConnection))
@@ -226,6 +229,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setParallelizeIfSmallerThan(parallelizeIfSmallerThan);
     setFollowTheStrictOrder(followTheStrictOrder);
     setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
+    setInodeThreads(inodeThreads);
     setMoveTheWholeFolder(moveTheWholeFolder);
 
     switch(alwaysDoThisActionForFileExists)
@@ -348,6 +352,8 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
         connect(filters,                                &Filters::haveNewFilters,   this,&CopyEngine::sendNewFilters);
         connect(ui->filters,                            &QPushButton::clicked,      this,&CopyEngine::showFilterDialog);
+        connect(ui->inodeThreads,                       &QSpinBox::editingFinished,	this,&CopyEngine::inodeThreadsFinished);
+        connect(ui->inodeThreads,                       static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setInodeThreads);
 
         connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setSequentialBuffer);
         connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setParallelBuffer);
@@ -854,6 +860,20 @@ void CopyEngine::setDeletePartiallyTransferredFiles(const bool &deletePartiallyT
     if(uiIsInstalled)
         ui->deletePartiallyTransferredFiles->setChecked(deletePartiallyTransferredFiles);
     emit send_deletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
+}
+
+void CopyEngine::setInodeThreads(const int &inodeThreads)
+{
+    this->inodeThreads=inodeThreads;
+    if(uiIsInstalled)
+        ui->inodeThreads->setValue(inodeThreads);
+    emit send_setInodeThreads(inodeThreads);
+}
+
+void CopyEngine::inodeThreadsFinished()
+{
+    this->inodeThreads=ui->inodeThreads->value();
+    emit send_setInodeThreads(inodeThreads);
 }
 
 //set auto start

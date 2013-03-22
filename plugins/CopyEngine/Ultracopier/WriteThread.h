@@ -72,6 +72,7 @@ public:
     #endif
     void pause();
     void resume();
+    void reemitStartOpen();
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -88,6 +89,8 @@ public slots:
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     /// \brief executed at regular interval to do a speed throling
     void timeOfTheBlockCopyFinished();
+
+    void resumeNotStarted();
 signals:
     void error();
     void opened();
@@ -115,6 +118,8 @@ private:
     volatile int		blockSize;//only used in checksum
     int                 numberOfBlock;
     QMutex              accessList;		///< For use the list
+    static QMultiHash<QString,WriteThread *> writeFileList;
+    static QMutex       writeFileListMutex;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     QSemaphore          waitNewClockForSpeed,waitNewClockForSpeed2;
     volatile int		numberOfBlockCopied,numberOfBlockCopied2;		///< Multiple for count the number of block copied

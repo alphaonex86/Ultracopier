@@ -2,6 +2,9 @@
 
 #include <QDir>
 
+QMultiHash<QString,WriteThread *> WriteThread::writeFileList;
+QMutex       WriteThread::writeFileListMutex;
+
 WriteThread::WriteThread()
 {
     deletePartiallyTransferredFiles = true;
@@ -124,6 +127,15 @@ bool WriteThread::internalOpen()
     QIODevice::OpenMode flags=QIODevice::ReadWrite;
     if(!buffer)
         flags|=QIODevice::Unbuffered;
+    {
+        QMutexLocker lock_mutex(&writeFileListMutex);
+        if(writeFileList.count(file.fileName(),this)==0)
+        {
+            writeFileList.insert(file.fileName(),this);
+            if(writeFileList.count(file.fileName())>1)
+                return false;
+        }
+    }
     if(file.open(flags))
     {
         {
@@ -346,6 +358,17 @@ void WriteThread::timeOfTheBlockCopyFinished()
 }
 #endif
 
+void WriteThread::resumeNotStarted()
+{
+    QMutexLocker lock_mutex(&writeFileListMutex);
+    writeFileList.remove(file.fileName(),this);
+    if(writeFileList.contains(file.fileName()))
+    {
+        writeFileList.values(file.fileName()).first()->reemitStartOpen();
+        return;
+    }
+}
+
 void WriteThread::pause()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try put read thread in pause");
@@ -370,6 +393,12 @@ void WriteThread::resume()
         return;
     }
     pauseMutex.release();
+}
+
+void WriteThread::reemitStartOpen()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] start");
+    emit internalStartOpen();
 }
 
 void WriteThread::postOperation()
@@ -436,6 +465,7 @@ void WriteThread::internalClose(bool emitSignal)
         if(emitSignal)
             emit closed();
     }
+    resumeNotStarted();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;

@@ -16,7 +16,7 @@ switch(currentActionToDoInode.type)
         mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_RealMove);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
-        if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+        if(numberOfInodeOperation>=inodeThreads)
             return;
     break;
     case ActionType_MkPath:
@@ -24,7 +24,7 @@ switch(currentActionToDoInode.type)
         mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_MkPath);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
-        if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+        if(numberOfInodeOperation>=inodeThreads)
             return;
     break;
     case ActionType_MovePath:
@@ -35,7 +35,7 @@ switch(currentActionToDoInode.type)
             mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_MovePath);
             currentActionToDoInode.isRunning=true;
             numberOfInodeOperation++;
-            if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+            if(numberOfInodeOperation>=inodeThreads)
                 return;
         }
         else //have do the destination, put the remove to after
@@ -45,7 +45,7 @@ switch(currentActionToDoInode.type)
             actionToDoListInode.removeAt(int_for_internal_loop);
             int_for_internal_loop--;
             actionToDoListInode_count--;
-            if(numberOfInodeOperation>=ULTRACOPIER_PLUGIN_MAXPARALLELINODEOPT)
+            if(numberOfInodeOperation>=inodeThreads)
                 return;
         }
     break;

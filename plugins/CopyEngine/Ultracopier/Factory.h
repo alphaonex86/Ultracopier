@@ -99,6 +99,7 @@ private slots:
     void deletePartiallyTransferredFiles(bool checked);
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
+    void on_inodeThreads_editingFinished();
 public slots:
     void resetOptions();
     void newLanguageLoaded();

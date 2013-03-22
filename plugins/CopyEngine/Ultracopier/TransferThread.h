@@ -83,7 +83,7 @@ signals:
     void postOperationStopped();
     //get dialog
     void fileAlreadyExists(QFileInfo,QFileInfo,bool isSame);
-    void errorOnFile(QFileInfo,QString);
+    void errorOnFile(QFileInfo,QString,ErrorType errorType=ErrorType_Normal);
     //internal signal
     void internalStartPostOperation();
     void internalStartPreOperation();

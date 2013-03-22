@@ -44,7 +44,7 @@ public:
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
 signals:
-    void errorOnFolder(const QFileInfo &,const QString &);
+    void errorOnFolder(const QFileInfo &,const QString &,const ErrorType &errorType=ErrorType_FolderWithRety);
     void firstFolderFinish();
     void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const ActionType &actionType);
     void internalStartDoThisPath();

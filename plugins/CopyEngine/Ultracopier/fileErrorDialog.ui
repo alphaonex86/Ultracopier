@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
+    <width>628</width>
     <height>185</height>
    </rect>
   </property>
@@ -186,6 +186,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Rights">
+       <property name="text">
+        <string>Try in administrator</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="PutToBottom">

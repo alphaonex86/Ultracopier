@@ -2,7 +2,9 @@
 #include "ui_fileErrorDialog.h"
 #include "TransferThread.h"
 
-FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString errorString,bool havePutAtTheEndButton) :
+bool FileErrorDialog::isInAdmin=false;
+
+FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, QString errorString, const ErrorType &errorType) :
     QDialog(parent),
     ui(new Ui::fileErrorDialog)
 {
@@ -64,8 +66,22 @@ FileErrorDialog::FileErrorDialog(QWidget *parent,QFileInfo fileInfo,QString erro
         ui->label_modified->hide();
         ui->label_content_modified->hide();
     }
-    if(!havePutAtTheEndButton)
+    if(errorType==ErrorType_Folder || errorType==ErrorType_FolderWithRety)
         ui->PutToBottom->hide();
+    if(errorType==ErrorType_Folder)
+        ui->Retry->hide();
+
+    #ifdef ULTRACOPIER_PLUGIN_RIGHTS
+    ui->Rights->hide();
+    if(isInAdmin)
+        ui->Rights->hide();
+    #ifdef Q_OS_WIN32
+    if(errorType!=ErrorType_Rights)
+        ui->Rights->hide();
+    #else
+    ui->Rights->hide();
+    #endif
+    #endif
 }
 
 FileErrorDialog::~FileErrorDialog()
@@ -118,3 +134,14 @@ FileErrorAction FileErrorDialog::getAction()
 {
     return action;
 }
+
+void FileErrorDialog::on_checkBoxAlways_clicked()
+{
+    ui->Rights->setEnabled(!ui->checkBoxAlways->isChecked());
+}
+
+#ifdef ULTRACOPIER_PLUGIN_RIGHTS
+void FileErrorDialog::on_Rights_clicked()
+{
+}
+#endif

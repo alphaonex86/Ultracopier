@@ -15,9 +15,9 @@ void CopyEngine::fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bo
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread)
+void CopyEngine::errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread,const ErrorType &errorType)
 {
-    errorOnFile(fileInfo,errorString,thread);
+    errorOnFile(fileInfo,errorString,thread,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
@@ -27,15 +27,15 @@ void CopyEngine::folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread)
+void CopyEngine::errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,ErrorType errorType)
 {
-    errorOnFolder(fileInfo,errorString,thread);
+    errorOnFolder(fileInfo,errorString,thread,errorType);
 }
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error)
+void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error,ErrorType errorType)
 {
-    mkPathErrorOnFolder(folder,error);
+    mkPathErrorOnFolder(folder,error,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
@@ -200,7 +200,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread,const ErrorType &errorType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
@@ -214,13 +214,14 @@ void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &file
         newItem.rmPath=false;
         newItem.scan=NULL;
         newItem.transfer=thread;
+        newItem.errorType=errorType;
         errorQueue << newItem;
         showOneNewDialog();
     }
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -241,7 +242,7 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
             thread->retryAfterError();
         return;
         case FileError_PutToEndOfTheList:
-            emit getNeedPutAtBottom(fileInfo,errorString,thread);
+            emit getNeedPutAtBottom(fileInfo,errorString,thread,errorType);
         return;
         default:
             if(dialogIsOpen)
@@ -253,13 +254,14 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
                 newItem.rmPath=false;
                 newItem.scan=NULL;
                 newItem.transfer=thread;
+                newItem.errorType=errorType;
                 errorQueue << newItem;
                 return;
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
-            FileErrorDialog dialog(interface,fileInfo,errorString);
+            FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -369,7 +371,7 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void CopyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFolder(QFileInfo fileInfo, QString errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -398,13 +400,14 @@ void CopyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOr
                 newItem.rmPath=false;
                 newItem.scan=thread;
                 newItem.transfer=NULL;
+                newItem.errorType=errorType;
                 errorQueue << newItem;
                 return;
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
-            FileErrorDialog dialog(interface,fileInfo,errorString);
+            FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -431,7 +434,7 @@ void CopyEngine::errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOr
 // -----------------------------------------------------
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool isCalledByShowOneNewDialog)
+void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -456,13 +459,14 @@ void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,bool i
                 newItem.rmPath=false;
                 newItem.scan=NULL;
                 newItem.transfer=NULL;
+                newItem.errorType=errorType;
                 errorQueue << newItem;
                 return;
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
-            FileErrorDialog dialog(interface,folder,errorString,false);
+            FileErrorDialog dialog(interface,folder,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
@@ -530,11 +534,11 @@ void CopyEngine::showOneNewDialog()
     while(errorQueue.size()>0)
     {
         if(errorQueue.first().transfer!=NULL)
-            errorOnFile(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().transfer,true);
+            errorOnFile(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().transfer,errorQueue.first().errorType,true);
         else if(errorQueue.first().scan!=NULL)
-            errorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().scan,true);
+            errorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().scan,errorQueue.first().errorType,true);
         else if(errorQueue.first().mkPath)
-            mkPathErrorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,true);
+            mkPathErrorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().errorType,true);
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
         errorQueue.removeFirst();

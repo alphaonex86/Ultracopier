@@ -70,6 +70,14 @@ enum FolderExistsAction
     FolderExists_Rename=4
 };
 
+enum ErrorType
+{
+    ErrorType_Normal=0,
+    ErrorType_Folder=1,
+    ErrorType_FolderWithRety=2,
+    ErrorType_Rights=3
+};
+
 enum SearchType
 {
     SearchType_rawText=0,

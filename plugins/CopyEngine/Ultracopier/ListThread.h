@@ -161,7 +161,7 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
-    void getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread);
+    void getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread,const ErrorType &errorType);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
@@ -182,6 +182,7 @@ public slots:
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
+    void setInodeThreads(const int &inodeThreads);
 private:
     QSemaphore          mkpathTransfer;
     QString             sourceDrive;
@@ -218,6 +219,7 @@ private:
     bool                deletePartiallyTransferredFiles;
     int                 sequentialBuffer;
     int                 parallelBuffer;
+    int                 inodeThreads;
     unsigned int        putAtBottom;
     unsigned int		osBufferLimit;
     QList<Filters_rules>		include,exclude;
@@ -265,7 +267,6 @@ private:
     qint64 currentProgression;
     qint64 copiedSize,totalSize,localOverSize;
     QList<Ultracopier::ProgressionItem> progressionList;
-    TransferThread* currentTransferThread;
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
@@ -305,15 +306,16 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(const QFileInfo &fileInfo,const QString &errorString);
+    void errorOnFile(const QFileInfo &fileInfo,const QString &errorString, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
+    void errorOnFolder(const QFileInfo &fileInfo, const QString &errorString, const ErrorType &errorType);
     //to run the thread
     void run();
     /// \to create transfer thread
     void createTransferThread();
+    void deleteTransferThread();
     //mk path to do
     quint64 addToMkPath(const QFileInfo& source,const QFileInfo& destination);
     //add rm path to do
@@ -343,7 +345,7 @@ signals:
 
     //when can be deleted
     void canBeDeleted();
-    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
+    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType);
 
     //send error occurred
     void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
@@ -362,15 +364,15 @@ signals:
     /// \note Can be call without queue because all call will be serialized
     void send_fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,TransferThread * thread);
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread);
+    void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,ScanFileOrFolder * thread);
+    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,ScanFileOrFolder * thread, const ErrorType &errorType);
     //send the progression
     void send_syncTransferList();
     //mkpath error event
-    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString);
+    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType);
     //to close
     void tryCancel();
     //to ask new transfer thread
