@@ -11,10 +11,6 @@ fi
 
 cd ${TEMP_PATH}/
 
-MYSQL_USER="ultracopier-shop"
-MYSQL_DB="other_ultracopier-shop"
-MYSQL_PASS="FzdFbpvp4Uq6ZMjz"
-
 echo "Move some elements..."
 if [ -d ${TEMP_PATH}/doc/ ]
 then
@@ -58,13 +54,6 @@ cd /home/first-world.info/files/ultracopier/plugins/Themes/Teracopy/ && nice -n 
 cd /home/first-world.info/files/ultracopier/plugins/CopyEngine/Rsync/ && nice -n 19 ionice -c 3 tar cpf - *x86_64.urc *x86.urc *mac-os-x.urc *linux-x86_64-pc.urc | nice -n 19 ionice -c 3 xz -z -9 -e > /home/first-world.info/ultracopier-shop/download/40fc6d58e5afd283b9169f91c5719c76e8d319d2
 cd /home/first-world.info/files/ultracopier/plugins/Themes/Windows/ && nice -n 19 ionice -c 3 tar cpf - *x86_64.urc *x86.urc *mac-os-x.urc *linux-x86_64-pc.urc | nice -n 19 ionice -c 3 xz -z -9 -e > /home/first-world.info/ultracopier-shop/download/9482a21d6a3e03fa5612f6a2b75cd109fd8bdec4
 
-echo "UPDATE product_download SET display_filename='ultracopier-ultimate-windows-x86-all-${ULTRACOPIER_VERSION}.zip' WHERE id_product_download=1;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
-echo "UPDATE product_download SET display_filename='ultracopier-ultimate-windows-x86_64-all-${ULTRACOPIER_VERSION}.zip' WHERE id_product_download=2;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
-echo "UPDATE product_download SET display_filename='ultracopier-ultimate-mac-${ULTRACOPIER_VERSION}.dmg' WHERE id_product_download=3;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
-echo "UPDATE product_download SET display_filename='Themes-Teracopy-${ULTRACOPIER_VERSION}.tar.xz' WHERE id_product_download=7;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
-echo "UPDATE product_download SET display_filename='CopyEngine-Rsync-${ULTRACOPIER_VERSION}.tar.xz' WHERE id_product_download=8;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
-echo "UPDATE product_download SET display_filename='Themes-Windows-${ULTRACOPIER_VERSION}.tar.xz' WHERE id_product_download=15;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
-echo "UPDATE product_download SET display_filename='ultracopier-ultimate-linux-x86_64-pc-${ULTRACOPIER_VERSION}.tar.xz' WHERE id_product_download=23;" | mysql -u ${MYSQL_USER} -p${MYSQL_PASS} ${MYSQL_DB}
 /usr/bin/php /home/first-world.info/ultracopier-shop/update_ultracopier_version.php ${ULTRACOPIER_VERSION}
 echo "Upload to the shop... done"
 

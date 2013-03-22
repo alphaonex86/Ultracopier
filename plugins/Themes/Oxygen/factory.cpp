@@ -26,7 +26,7 @@ PluginInterface_Themes * ThemesFactory::getInstance()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, currentSpeed: %1").arg(currentSpeed));
 
-    Themes * newInterface=new Themes(
+    Themes * newInterface=new Themes(ui->showProgressionInTheTitle->isChecked(),
                 progressColorWrite,progressColorRead,progressColorRemaining,
                 ui->showDualProgression->isChecked(),
                 ui->comboBox_copyEnd->currentIndex(),
@@ -61,6 +61,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
         KeysList.append(qMakePair(QString("currentSpeed"),QVariant(0)));
         KeysList.append(qMakePair(QString("comboBox_copyEnd"),QVariant(0)));
         KeysList.append(qMakePair(QString("showDualProgression"),QVariant(false)));
+        KeysList.append(qMakePair(QString("showProgressionInTheTitle"),QVariant(true)));
         KeysList.append(qMakePair(QString("progressColorWrite"),QVariant(QApplication::palette().color(QPalette::Highlight))));
         KeysList.append(qMakePair(QString("progressColorRead"),QVariant(QApplication::palette().color(QPalette::AlternateBase))));
         KeysList.append(qMakePair(QString("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
@@ -88,6 +89,7 @@ QWidget * ThemesFactory::options()
         ui->checkBoxShowSpeed->setChecked(optionsEngine->getOptionValue("checkBoxShowSpeed").toBool());
         ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue("moreButtonPushed").toBool());
         ui->showDualProgression->setChecked(optionsEngine->getOptionValue("showDualProgression").toBool());
+        ui->showProgressionInTheTitle->setChecked(optionsEngine->getOptionValue("showProgressionInTheTitle").toBool());
 
         progressColorWrite=optionsEngine->getOptionValue("progressColorWrite").value<QColor>();
         progressColorRead=optionsEngine->getOptionValue("progressColorRead").value<QColor>();
@@ -113,6 +115,7 @@ QWidget * ThemesFactory::options()
         connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&ThemesFactory::comboBox_copyEnd);
         connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::showDualProgression);
         connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::updateProgressionColorBar);
+        connect(ui->showProgressionInTheTitle,&QCheckBox::stateChanged,this,&ThemesFactory::setShowProgressionInTheTitle);
         connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked);
         connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked);
         connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked);
@@ -415,4 +418,12 @@ void ThemesFactory::updateProgressionColorBar()
 {
     ui->labelProgressionColor->setVisible(ui->showDualProgression->isChecked());
     ui->frameProgressionColor->setVisible(ui->showDualProgression->isChecked());
+}
+
+void ThemesFactory::setShowProgressionInTheTitle()
+{
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("showProgressionInTheTitle",ui->showProgressionInTheTitle->isChecked());
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

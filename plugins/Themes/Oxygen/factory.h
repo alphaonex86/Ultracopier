@@ -54,6 +54,7 @@ private slots:
     void progressColorRead_clicked();
     void progressColorRemaining_clicked();
     void updateProgressionColorBar();
+    void setShowProgressionInTheTitle();
 public slots:
     void resetOptions();
     void newLanguageLoaded();

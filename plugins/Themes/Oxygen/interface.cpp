@@ -13,7 +13,8 @@
 #include "interface.h"
 #include "ui_interface.h"
 
-Themes::Themes(const QColor &progressColorWrite,
+Themes::Themes(const bool &showProgressionInTheTitle,
+               const QColor &progressColorWrite,
                const QColor &progressColorRead,
                const QColor &progressColorRemaining,
                const bool &showDualProgression,
@@ -44,6 +45,7 @@ Themes::Themes(const QColor &progressColorWrite,
     this->progressColorRead     = progressColorRead;
     this->progressColorRemaining= progressColorRemaining;
     this->currentSpeed          = currentSpeed;
+    uiOptions->showProgressionInTheTitle->setChecked(showProgressionInTheTitle);
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
     //uiOptions->setupUi(ui->tabWidget->widget(1));
@@ -74,6 +76,7 @@ Themes::Themes(const QColor &progressColorWrite,
     checkBoxShowSpeed_toggled(uiOptions->checkBoxShowSpeed->isChecked());
     connect(uiOptions->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&Themes::checkBoxShowSpeed_toggled);
     connect(uiOptions->speedWithProgressBar,&QCheckBox::stateChanged,this,&Themes::speedWithProgressBar_toggled);
+    connect(uiOptions->showProgressionInTheTitle,&QCheckBox::stateChanged,this,&Themes::updateTitle);
     connect(uiOptions->showDualProgression,&QCheckBox::stateChanged,this,&Themes::showDualProgression_toggled);
     connect(uiOptions->progressColorWrite,&QAbstractButton::clicked,this,&Themes::progressColorWrite_clicked);
     connect(uiOptions->progressColorRead,	&QAbstractButton::clicked,this,&Themes::progressColorRead_clicked);
@@ -223,6 +226,8 @@ void Themes::closeEvent(QCloseEvent *event)
 
 void Themes::updateOverallInformation()
 {
+    if(uiOptions->showProgressionInTheTitle->isChecked())
+        updateTitle();
     ui->overall->setText(tr("File %1/%2, size: %3/%4").arg(currentFile).arg(totalFile).arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
 }
 
@@ -410,16 +415,11 @@ void Themes::forceCopyMode(const Ultracopier::CopyMode &mode)
     modeIsForced=true;
     this->mode=mode;
     if(mode==Ultracopier::Copy)
-    {
-        this->setWindowTitle("Ultracopier - "+facilityEngine->translateText("Copy"));
         ui->tabWidget->setTabText(0,tr("Copy list"));
-    }
     else
-    {
-        this->setWindowTitle("Ultracopier - "+facilityEngine->translateText("Move"));
         ui->tabWidget->setTabText(0,tr("Move list"));
-    }
     updateModeAndType();
+    updateTitle();
 }
 
 void Themes::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
@@ -1081,4 +1081,32 @@ void Themes::updateProgressionColorBar()
     }
     if(stat==status_never_started)
         updateCurrentFileInformation();
+}
+
+void Themes::updateTitle()
+{
+    if(uiOptions->showProgressionInTheTitle->isChecked() && totalSize>0)
+    {
+        if(!modeIsForced)
+            this->setWindowTitle(QString("%1 %2% of %3 - Ultracopier").arg(facilityEngine->translateText("Transfer")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize)));
+        else
+        {
+            if(mode==Ultracopier::Copy)
+                this->setWindowTitle(QString("%1 %2% of %3 - Ultracopier").arg(facilityEngine->translateText("Copy")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize)));
+            else
+                this->setWindowTitle(QString("%1 %2% of %3 - Ultracopier").arg(facilityEngine->translateText("Move")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize)));
+        }
+    }
+    else
+    {
+        if(!modeIsForced)
+            this->setWindowTitle(QString("%1 - Ultracopier").arg(facilityEngine->translateText("Transfer")));
+        else
+        {
+            if(mode==Ultracopier::Copy)
+                this->setWindowTitle(QString("%1 - Ultracopier").arg(facilityEngine->translateText("Copy")));
+            else
+                this->setWindowTitle(QString("%1 - Ultracopier").arg(facilityEngine->translateText("Move")));
+        }
+    }
 }

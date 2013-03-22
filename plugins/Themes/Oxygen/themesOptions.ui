@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>215</height>
+    <width>527</width>
+    <height>237</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -24,7 +24,7 @@
    <item row="3" column="2">
     <widget class="QCheckBox" name="showDualProgression"/>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <widget class="QSlider" name="SliderSpeed">
      <property name="maximum">
       <number>5</number>
@@ -54,21 +54,21 @@
    <item row="1" column="2">
     <widget class="QCheckBox" name="checkBoxStartWithMoreButtonPushed"/>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>At the end of the copy: </string>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="label_Slider_speed">
      <property name="text">
       <string>Limit copy speed at:</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -81,7 +81,7 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="2">
+   <item row="6" column="2">
     <widget class="QComboBox" name="comboBox_copyEnd">
      <item>
       <property name="text">
@@ -100,7 +100,7 @@
      </item>
     </widget>
    </item>
-   <item row="9" column="0">
+   <item row="10" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -113,21 +113,21 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="2">
+   <item row="8" column="2">
     <widget class="QLabel" name="label_SpeedMaxValue">
      <property name="text">
       <string notr="true">Unlimited</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QCheckBox" name="checkBox_limitSpeed">
      <property name="text">
       <string>Limit copy speed at:</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <widget class="QSpinBox" name="limitSpeed">
      <property name="enabled">
       <bool>false</bool>
@@ -150,7 +150,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
+   <item row="5" column="2">
     <widget class="QFrame" name="frameProgressionColor">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
@@ -250,12 +250,22 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="labelProgressionColor">
      <property name="text">
       <string>Progression color</string>
      </property>
     </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Show progression in the title</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QCheckBox" name="showProgressionInTheTitle"/>
    </item>
   </layout>
  </widget>

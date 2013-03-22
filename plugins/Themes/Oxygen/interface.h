@@ -36,7 +36,7 @@ class Themes : public PluginInterface_Themes
 {
     Q_OBJECT
 public:
-    Themes(const QColor &progressColorWrite,
+    Themes(const bool &showProgressionInTheTitle, const QColor &progressColorWrite,
            const QColor &progressColorRead,
            const QColor &progressColorRemaining,
            const bool &showDualProgression,
@@ -135,6 +135,7 @@ private slots:
     void progressColorRead_clicked();
     void progressColorRemaining_clicked();
     void updateProgressionColorBar();
+    void updateTitle();
 private:
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
     Ui::interfaceCopy *ui;
