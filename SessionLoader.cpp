@@ -8,18 +8,14 @@
 #include "SessionLoader.h"
 #include "LanguagesManager.h"
 
-#if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
+#ifndef ULTRACOPIER_VERSION_PORTABLE
 SessionLoader::SessionLoader(OptionDialog *optionDialog)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->optionDialog=optionDialog;
     //load the options
     QList<QPair<QString, QVariant> > KeysList;
-    #ifdef ULTRACOPIER_VERSION_PORTABLE
-    KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(false)));
-    #else
     KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
-    #endif
     OptionEngine::optionEngine->addOptionGroup("SessionLoader",KeysList);
     connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
     //load the plugin

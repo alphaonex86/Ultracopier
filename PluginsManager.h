@@ -20,6 +20,7 @@
 #include <QString>
 #include <QSemaphore>
 #include <QRegularExpression>
+#include <QThread>
 
 #include "Environment.h"
 #include "OptionEngine.h"

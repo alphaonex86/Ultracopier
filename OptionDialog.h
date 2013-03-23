@@ -49,7 +49,9 @@ private slots:
     void on_Language_currentIndexChanged(int index);
     void on_Language_force_toggled(bool checked);
     void on_CatchCopyAsDefault_toggled(bool checked);
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(bool checked);
+    #endif
     void on_CopyEngineList_itemSelectionChanged();
     void on_toolButtonDown_clicked();
     void on_toolButtonUp_clicked();

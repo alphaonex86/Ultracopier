@@ -51,6 +51,8 @@ function assemble {
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+		else
+			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -mindepth 1 -type d -exec rm -Rf {} \;
 		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt

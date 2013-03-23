@@ -39,6 +39,7 @@ void FacilityEngine::retranslate()
     //load the translations tab
     translations["Copy engine"]=tr("Copy engine");
     translations["Copy"]=tr("Copy");//: a copy
+    translations["Transfer"]=tr("Transfer");//: a transfer
     translations["Move"]=tr("Move");//: a move
     translations["Start"]=tr("Start");
     translations["Pause"]=tr("Pause");

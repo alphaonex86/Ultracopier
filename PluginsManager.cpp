@@ -22,10 +22,10 @@ PluginsManager::PluginsManager()
     language            = "en";
     stopIt              = false;
     pluginInformation   = NULL;
-    importingPlugin     = false;
-    editionSemList.release();
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+    importingPlugin     = false;
     #endif
+    editionSemList.release();
     englishPluginType << "CopyEngine" << "Languages" << "Listener" << "PluginLoader" << "SessionLoader" << "Themes";
     //catPlugin << tr("CopyEngine") << tr("Languages") << tr("Listener") << tr("PluginLoader") << tr("SessionLoader") << tr("Themes");
     #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT

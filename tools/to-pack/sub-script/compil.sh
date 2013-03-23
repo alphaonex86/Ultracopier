@@ -37,6 +37,13 @@ function compil {
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
 	fi
+        if [ $STATIC -eq 1 ]
+        then
+                find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+        else
+
+                find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+        fi
 	if [ $ULTIMATE -eq 1 ]
 	then
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
@@ -98,39 +105,53 @@ function compil {
 			cd ${PLUGIN_FOLDER}/${plugins_cat}/
 			for plugins_name in `ls -1`
 			do
-				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ ! -f ${plugins_name}/*.dll ]
+				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ]
 				then
 					echo "${TARGET} compilation of the plugin: ${plugins_cat}/${plugins_name}..."
 					cd ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
 
-					cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
-					echo '' >> *.pro
-					echo 'win32:RC_FILE += resources-windows-ultracopier-plugins.rc' >> *.pro
-					# replace ULTRACOPIER_PLUGIN_VERSION
-					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
-					sed -i "s/ULTRACOPIER_PLUGIN_VERSION/${ULTRACOPIER_PLUGIN_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
-					# replace ULTRACOPIER_PLUGIN_WINDOWS_VERSION
-					ULTRACOPIER_PLUGIN_WINDOWS_VERSION=`echo ${ULTRACOPIER_PLUGIN_VERSION} | sed "s/\./,/g"`
-					sed -i "s/ULTRACOPIER_PLUGIN_WINDOWS_VERSION/${ULTRACOPIER_PLUGIN_WINDOWS_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
-					# replace ULTRACOPIER_PLUGIN_NAME
-					sed -i "s/ULTRACOPIER_PLUGIN_NAME/${plugins_name}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
-					# replace ULTRACOPIER_PLUGIN_FILENAME
-					ULTRACOPIER_PLUGIN_FILENAME=`grep -F "qtLibraryTarget" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/*.pro | sed -r "s/^.*\((.*)\).*$/\1/g"`
-					sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+					if [ ${STATIC} -ne 1 ]
+					then
+						cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
+						echo '' >> *.pro
+						echo 'win32:RC_FILE += resources-windows-ultracopier-plugins.rc' >> *.pro
+						# replace ULTRACOPIER_PLUGIN_VERSION
+						ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
+						sed -i "s/ULTRACOPIER_PLUGIN_VERSION/${ULTRACOPIER_PLUGIN_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+						# replace ULTRACOPIER_PLUGIN_WINDOWS_VERSION
+						ULTRACOPIER_PLUGIN_WINDOWS_VERSION=`echo ${ULTRACOPIER_PLUGIN_VERSION} | sed "s/\./,/g"`
+						sed -i "s/ULTRACOPIER_PLUGIN_WINDOWS_VERSION/${ULTRACOPIER_PLUGIN_WINDOWS_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+						# replace ULTRACOPIER_PLUGIN_NAME
+						sed -i "s/ULTRACOPIER_PLUGIN_NAME/${plugins_name}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+						# replace ULTRACOPIER_PLUGIN_FILENAME
+						ULTRACOPIER_PLUGIN_FILENAME=`grep -F "qtLibraryTarget" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/*.pro | sed -r "s/^.*\((.*)\).*$/\1/g"`
+						sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+					fi
 
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
-					if [ ! -f ${COMPIL_FOLDER}/*.dll ]
+					if [ ! -f ${COMPIL_FOLDER}/*.dll ] && [ ! -f ${COMPIL_FOLDER}/*.a ]
 					then
 						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
 						echo "plugins not created"
 						exit
 					fi
-					if [ "${COMPIL_FOLDER}" != "./" ]
+					if [ ${STATIC} -eq 1 ]
 					then
-						mv ${COMPIL_FOLDER}/*.dll ./
+						if [ "${COMPIL_FOLDER}" != "./" ]
+						then
+							cp ${COMPIL_FOLDER}/*.a ./
+						fi
+					else
+                                                if [ "${COMPIL_FOLDER}" != "./" ]
+                                                then
+                                                        mv ${COMPIL_FOLDER}/*.dll ./
+                                                fi
 					fi
-					/usr/bin/find ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ -type f -name "*.png" -exec rm -f {} \;
+					if [ $STATIC -ne 1 ]
+					then
+						/usr/bin/find ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ -type f -name "*.png" -exec rm -f {} \;
+					fi
 				fi
 				cd ${PLUGIN_FOLDER}/${plugins_cat}/
 			done
@@ -148,39 +169,53 @@ function compil {
 				cd ${PLUGIN_FOLDER}/${plugins_cat}/
 				for plugins_name in `ls -1`
 				do
-					if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ ! -f ${plugins_name}/*.dll ]
+					if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ]
 					then
 						echo "${TARGET} compilation of the plugin: ${plugins_cat}/${plugins_name}..."
 						cd ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
 
-						cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
-						echo '' >> *.pro
-						echo 'win32:RC_FILE += resources-windows-ultracopier-plugins.rc' >> *.pro
-						# replace ULTRACOPIER_PLUGIN_VERSION
-						ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
-						sed -i "s/ULTRACOPIER_PLUGIN_VERSION/${ULTRACOPIER_PLUGIN_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
-						# replace ULTRACOPIER_PLUGIN_WINDOWS_VERSION
-						ULTRACOPIER_PLUGIN_WINDOWS_VERSION=`echo ${ULTRACOPIER_PLUGIN_VERSION} | sed "s/\./,/g"`
-						sed -i "s/ULTRACOPIER_PLUGIN_WINDOWS_VERSION/${ULTRACOPIER_PLUGIN_WINDOWS_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
-						# replace ULTRACOPIER_PLUGIN_NAME
-						sed -i "s/ULTRACOPIER_PLUGIN_NAME/${plugins_name}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
-						# replace ULTRACOPIER_PLUGIN_FILENAME
-						ULTRACOPIER_PLUGIN_FILENAME=`grep -F "qtLibraryTarget" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/*.pro | sed -r "s/^.*\((.*)\).*$/\1/g"`
-						sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+						if [ ${STATIC} -ne 1 ]
+						then
+							cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
+							echo '' >> *.pro
+							echo 'win32:RC_FILE += resources-windows-ultracopier-plugins.rc' >> *.pro
+							# replace ULTRACOPIER_PLUGIN_VERSION
+							ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
+							sed -i "s/ULTRACOPIER_PLUGIN_VERSION/${ULTRACOPIER_PLUGIN_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+							# replace ULTRACOPIER_PLUGIN_WINDOWS_VERSION
+							ULTRACOPIER_PLUGIN_WINDOWS_VERSION=`echo ${ULTRACOPIER_PLUGIN_VERSION} | sed "s/\./,/g"`
+							sed -i "s/ULTRACOPIER_PLUGIN_WINDOWS_VERSION/${ULTRACOPIER_PLUGIN_WINDOWS_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+							# replace ULTRACOPIER_PLUGIN_NAME
+							sed -i "s/ULTRACOPIER_PLUGIN_NAME/${plugins_name}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+							# replace ULTRACOPIER_PLUGIN_FILENAME
+							ULTRACOPIER_PLUGIN_FILENAME=`grep -F "qtLibraryTarget" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/*.pro | sed -r "s/^.*\((.*)\).*$/\1/g"`
+							sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
+						fi
 
 						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro > /dev/null 2>&1
 						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
-						if [ ! -f ${COMPIL_FOLDER}/*.dll ]
+						if [ ! -f ${COMPIL_FOLDER}/*.dll ] && [ ! -f ${COMPIL_FOLDER}/*.a ]
 						then
 							DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
 							echo "plugins not created: ${plugins_cat}/${plugins_name}"
 						else
-							if [ "${COMPIL_FOLDER}" != "./" ]
+							if [ ${STATIC} -eq 1 ]
 							then
-								mv ${COMPIL_FOLDER}/*.dll ./
+								if [ "${COMPIL_FOLDER}" != "./" ]
+								then
+									cp ${COMPIL_FOLDER}/*.a ./
+								fi
+							else
+								if [ "${COMPIL_FOLDER}" != "./" ]
+	                                                        then
+	                                                                mv ${COMPIL_FOLDER}/*.dll ./
+	                                                        fi
 							fi
 						fi
-						/usr/bin/find ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ -type f -name "*.png" -exec rm -f {} \;
+						if [ $STATIC -ne 1 ]
+						then
+							/usr/bin/find ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ -type f -name "*.png" -exec rm -f {} \;
+						fi
 					fi
 					cd ${PLUGIN_FOLDER}/${plugins_cat}/
 				done
@@ -192,17 +227,28 @@ function compil {
 	fi
 	if [ ${STATIC} -eq 1 ]
 	then
-		cp ${TEMP_PATH}/${TARGET}/*/*/*/*/*.a ${TEMP_PATH}/${TARGET}/plugins/
+		cp ${TEMP_PATH}/${TARGET}/*/*/*/*/*.a ${TEMP_PATH}/${TARGET}/plugins/ > /dev/null 2>&1
 	fi
 	cd ${TEMP_PATH}/${TARGET}/
 	if [ ! -f ultracopier.exe ]
 	then
-		echo "${TARGET} application..."
-		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
+		if [ ${STATIC} -eq 1 ]
+		then
+			echo "${TARGET} static application..."
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro > /dev/null 2>&1
+		else
+			echo "${TARGET} application..."
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
+		fi
 		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
 		if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
 		then
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
+        	        if [ ${STATIC} -eq 1 ]
+	                then
+        	                DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
+	                else
+        	                DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
+	                fi
 			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
 			echo "application not created"
 			exit

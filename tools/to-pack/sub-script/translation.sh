@@ -33,6 +33,7 @@ cd ../to-pack/
 
 find ${TEMP_PATH}/${TARGET}/ -name "*.qm" -exec rm {} \; > /dev/null 2>&1
 find ${TEMP_PATH}/${TARGET}/ -name "Test" -type d -exec rm -Rf {} \; > /dev/null 2>&1
+mv ${TEMP_PATH}/${TARGET}/resources/Languages/en/ ${TEMP_PATH}/${TARGET}/plugins/Languages/en/
 find ${TEMP_PATH}/${TARGET}/ -type d -empty -delete > /dev/null 2>&1
 find ${TEMP_PATH}/${TARGET}/ -type d -empty -delete > /dev/null 2>&1
 find ${TEMP_PATH}/${TARGET}/ -type d -empty -delete > /dev/null 2>&1

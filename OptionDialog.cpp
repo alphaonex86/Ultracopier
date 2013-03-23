@@ -56,6 +56,10 @@ OptionDialog::OptionDialog() :
     ui->pluginRemove->hide();
     #endif
     loadLogVariableLabel();
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
+    ui->labelLoadAtSession->hide();
+    ui->LoadAtSessionStarting->hide();
+    #endif
 }
 
 OptionDialog::~OptionDialog()
@@ -269,7 +273,9 @@ void OptionDialog::changeEvent(QEvent *e)
         ui->treeWidget->topLevelItem(4)->setText(0,tr("Plugin loader"));
         ui->treeWidget->topLevelItem(5)->setText(0,tr("Session loader"));
         ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+        #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
         ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+        #endif
         ui->ActionOnManualOpen->setItemText(0,tr("Do nothing"));
         ui->ActionOnManualOpen->setItemText(1,tr("Ask source as folder"));
         ui->ActionOnManualOpen->setItemText(2,tr("Ask sources as files"));
@@ -387,7 +393,9 @@ void OptionDialog::loadOption()
     newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
     newOptionValue("SessionLoader",	"LoadAtSessionStarting",	OptionEngine::optionEngine->getOptionValue("SessionLoader","LoadAtSessionStarting"));
+    #endif
     newOptionValue("CopyListener",	"CatchCopyAsDefault",		OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault"));
     newOptionValue("CopyEngine",	"List",                     OptionEngine::optionEngine->getOptionValue("CopyEngine","List"));
     if(ResourcesManager::resourcesManager->getWritablePath()=="")
@@ -405,6 +413,7 @@ void OptionDialog::loadOption()
         newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
     }
     on_checkBox_Log_clicked();
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
     if(PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader).size()>0)
     {
         ui->labelLoadAtSession->setToolTip("");
@@ -419,6 +428,7 @@ void OptionDialog::loadOption()
         ui->labelLoadAtSession->setEnabled(false);
         ui->LoadAtSessionStarting->setEnabled(false);
     }
+    #endif
     allPluginsIsLoaded=true;
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 
@@ -484,6 +494,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             }
         }
     }
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
     else if(group=="SessionLoader")
     {
         if(name=="LoadAtSessionStarting")
@@ -491,6 +502,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->LoadAtSessionStarting->setChecked(value.toBool());
         }
     }
+    #endif
     else if(group=="CopyListener")
     {
         if(name=="CatchCopyAsDefault")
@@ -603,6 +615,7 @@ void OptionDialog::on_CatchCopyAsDefault_toggled(bool checked)
     }
 }
 
+#ifndef ULTRACOPIER_VERSION_PORTABLE
 void OptionDialog::on_LoadAtSessionStarting_toggled(bool checked)
 {
     if(allPluginsIsLoaded)
@@ -611,6 +624,7 @@ void OptionDialog::on_LoadAtSessionStarting_toggled(bool checked)
         OptionEngine::optionEngine->setOptionValue("SessionLoader","LoadAtSessionStarting",checked);
     }
 }
+#endif
 
 void OptionDialog::on_CopyEngineList_itemSelectionChanged()
 {

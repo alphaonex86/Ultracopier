@@ -245,7 +245,7 @@ bool WindowsExplorerLoader::checkExistsDll()
         {
             if(!QFile::exists(pluginPath+importantDll.at(index)+SECOND_EXT))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file not found, drop to the list: "+importantDll.at(index));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("file not found, drop to the list: %1 and %2").arg(pluginPath+importantDll.at(index)+NORMAL_EXT).arg(pluginPath+importantDll.at(index)+SECOND_EXT));
                 importantDll.removeAt(index);
                 index--;
             }
@@ -263,7 +263,7 @@ bool WindowsExplorerLoader::checkExistsDll()
         {
             if(!QFile::exists(pluginPath+secondDll.at(index)+SECOND_EXT))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file not found, drop to the list: "+secondDll.at(index));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("file not found, drop to the list: %1 and %2").arg(pluginPath+secondDll.at(index)+NORMAL_EXT).arg(pluginPath+secondDll.at(index)+SECOND_EXT));
                 secondDll.removeAt(index);
                 index--;
             }

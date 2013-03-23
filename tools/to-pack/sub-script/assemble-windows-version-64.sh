@@ -18,29 +18,34 @@ source ${BASE_PWD}/sub-script/assemble.sh
 
 if [ ${COMPIL_DEBUGREAL} -eq 1 ]
 then
-        assemble "ultracopier-debug-real" "${ARCHITECTURE}" 1 1 0 0
+        assemble "ultracopier-debug-real" "${ARCHITECTURE}" 1 1 0 0 0
 fi
 if [ ${COMPIL_NORMAL} -eq 1 ]
 then
-	assemble "ultracopier-debug" "${ARCHITECTURE}" 1 0 0 0
-	assemble "ultracopier-debug-portable" "${ARCHITECTURE}" 1 0 1 0
-	assemble "ultracopier-portable" "${ARCHITECTURE}" 0 0 1 0
-	assemble "ultracopier" "${ARCHITECTURE}" 0 0 0 0
+	assemble "ultracopier-debug" "${ARCHITECTURE}" 1 0 0 0 0
+	assemble "ultracopier-debug-portable" "${ARCHITECTURE}" 1 0 1 0 0
+	assemble "ultracopier-portable" "${ARCHITECTURE}" 0 0 1 0 0
+	assemble "ultracopier" "${ARCHITECTURE}" 0 0 0 0 0
+
+	assemble "ultracopier-debug-static" "${ARCHITECTURE}" 1 0 0 0 1
+	assemble "ultracopier-debug-portable-static" "${ARCHITECTURE}" 1 0 1 0 1
+	assemble "ultracopier-portable-static" "${ARCHITECTURE}" 0 0 1 0 1
+	assemble "ultracopier-static" "${ARCHITECTURE}" 0 0 0 0 1
 fi
 
 if [ ${COMPIL_ULTIMATE} -eq 1 ]
 then
-	assemble "ultracopier-ultimate" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-sse2" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-sse3" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1
+	assemble "ultracopier-ultimate" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-sse2" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-sse3" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1 0
 
-	assemble "ultracopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-barcelona" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-bobcat" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-llano" "${ARCHITECTURE}" 0 0 0 1
-	assemble "ultracopier-ultimate-bulldozer" "${ARCHITECTURE}" 0 0 0 1
+	assemble "ultracopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-barcelona" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-bobcat" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-llano" "${ARCHITECTURE}" 0 0 0 1 0
+	assemble "ultracopier-ultimate-bulldozer" "${ARCHITECTURE}" 0 0 0 1 0
 fi
 
 if [ ${COMPIL_PLUGIN} -eq 1 ]
