@@ -183,6 +183,7 @@ public slots:
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
+    void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
 private:
     QSemaphore          mkpathTransfer;
     QString             sourceDrive;
@@ -220,6 +221,7 @@ private:
     int                 sequentialBuffer;
     int                 parallelBuffer;
     int                 inodeThreads;
+    bool                renameTheOriginalDestination;
     unsigned int        putAtBottom;
     unsigned int		osBufferLimit;
     QList<Filters_rules>		include,exclude;

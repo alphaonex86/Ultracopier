@@ -59,6 +59,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->moveTheWholeFolder,         &QCheckBox::toggled,                this,&CopyEngineFactory::moveTheWholeFolder);
     connect(ui->followTheStrictOrder,       &QCheckBox::toggled,                this,&CopyEngineFactory::followTheStrictOrder);
     connect(ui->deletePartiallyTransferredFiles,&QCheckBox::toggled,            this,&CopyEngineFactory::deletePartiallyTransferredFiles);
+    connect(ui->renameTheOriginalDestination,&QCheckBox::toggled,               this,&CopyEngineFactory::renameTheOriginalDestination);
 
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
@@ -121,6 +122,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setFollowTheStrictOrder(ui->followTheStrictOrder->isChecked());
     realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
     realObject->setInodeThreads(ui->inodeThreads->value());
+    realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
     return newTransferEngine;
 }
 
@@ -174,6 +176,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("deletePartiallyTransferredFiles"),QVariant(true)));
         KeysList.append(qMakePair(QString("moveTheWholeFolder"),QVariant(true)));
         KeysList.append(qMakePair(QString("followTheStrictOrder"),QVariant(false)));
+        KeysList.append(qMakePair(QString("renameTheOriginalDestination"),QVariant(false)));
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         KeysList.append(qMakePair(QString("inodeThreads"),QVariant(1)));
         #else
@@ -203,6 +206,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ui->moveTheWholeFolder->setChecked(options->getOptionValue("moveTheWholeFolder").toBool());
         ui->followTheStrictOrder->setChecked(options->getOptionValue("followTheStrictOrder").toBool());
         ui->inodeThreads->setValue(options->getOptionValue("inodeThreads").toUInt());
+        ui->renameTheOriginalDestination->setChecked(options->getOptionValue("renameTheOriginalDestination").toBool());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
         ui->checksumIgnoreIfImpossible->setChecked(options->getOptionValue("checksumIgnoreIfImpossible").toBool());
@@ -566,6 +570,13 @@ void CopyEngineFactory::deletePartiallyTransferredFiles(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("deletePartiallyTransferredFiles",checked);
+}
+
+void CopyEngineFactory::renameTheOriginalDestination(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("renameTheOriginalDestination",checked);
 }
 
 void CopyEngineFactory::followTheStrictOrder(bool checked)

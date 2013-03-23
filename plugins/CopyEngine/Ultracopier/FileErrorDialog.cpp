@@ -71,16 +71,18 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, QString er
     if(errorType==ErrorType_Folder)
         ui->Retry->hide();
 
+    ui->Rights->hide();
     #ifdef ULTRACOPIER_PLUGIN_RIGHTS
-    ui->Rights->hide();
-    if(isInAdmin)
+        if(isInAdmin)
+            ui->Rights->hide();
+        #ifdef Q_OS_WIN32
+        if(errorType!=ErrorType_Rights)
+            ui->Rights->hide();
+        #else
         ui->Rights->hide();
-    #ifdef Q_OS_WIN32
-    if(errorType!=ErrorType_Rights)
-        ui->Rights->hide();
+        #endif
     #else
-    ui->Rights->hide();
-    #endif
+        ui->Rights->hide();
     #endif
 }
 

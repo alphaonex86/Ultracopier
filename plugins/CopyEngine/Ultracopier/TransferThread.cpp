@@ -23,6 +23,8 @@ TransferThread::TransferThread()
     alwaysDoFileExistsAction        = FileExists_NotSet;
     readError                       = false;
     writeError                      = false;
+    renameTheOriginalDestination    = false;
+    needRemove                      = false;
     this->mkpathTransfer            = mkpathTransfer;
     readThread.setWriteThread(&writeThread);
 
@@ -197,7 +199,25 @@ void TransferThread::setFileRename(const QString &nameForRename)
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] nameForRename: "+nameForRename);
-    destination.setFile(destination.absolutePath()+QDir::separator()+nameForRename);
+    if(!renameTheOriginalDestination)
+        destination.setFile(destination.absolutePath()+QDir::separator()+nameForRename);
+    else
+    {
+        QFile destinationFile(destination.absoluteFilePath());
+        if(!destinationFile.rename(destination.absolutePath()+QDir::separator()+nameForRename))
+        {
+            if(!destinationFile.exists())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1: destination: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()));
+                emit errorOnFile(destinationFile,tr("File not found"));
+                return;
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do real move %1: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()));
+            emit errorOnFile(destinationFile,destinationFile.errorString());
+            return;
+        }
+    }
     fileExistsAction	= FileExists_NotSet;
     resetExtraVariable();
     emit internalStartPreOperation();
@@ -243,11 +263,25 @@ void TransferThread::preOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is same "+source.absoluteFilePath()+" than "+destination.absoluteFilePath());
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after is same");
+    if(readError)
+    {
+        readError=false;
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before destination exists");
     if(destinationExists())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] destination exists: "+destination.absoluteFilePath());
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after destination exists");
+    if(readError)
+    {
+        readError=false;
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before keep date");
     if(keepDate)
     {
         doTheDateTransfer=readFileDateTime(source);
@@ -449,7 +483,8 @@ bool TransferThread::checkAlwaysRename()
 {
     if(alwaysDoFileExistsAction==FileExists_Rename)
     {
-        QString fileName=resolvedName(destination);
+        QFileInfo newDestination=destination;
+        QString fileName=resolvedName(newDestination);
         QString suffix="";
         QString newFileName;
         //resolv the suffix
@@ -484,10 +519,31 @@ bool TransferThread::checkAlwaysRename()
                     newFileName.replace("%number%",QString::number(num));
                 }
             }
-            destination.setFile(destination.absolutePath()+QDir::separator()+newFileName+suffix);
+            newDestination.setFile(newDestination.absolutePath()+QDir::separator()+newFileName+suffix);
             num++;
         }
-        while(destination.exists());
+        while(newDestination.exists());
+        if(!renameTheOriginalDestination)
+            destination=newDestination;
+        else
+        {
+            QFile destinationFile(destination.absoluteFilePath());
+            if(!destinationFile.rename(newDestination.absoluteFilePath()))
+            {
+                if(!destinationFile.exists())
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1: destination: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()));
+                    emit errorOnFile(destinationFile,tr("File not found"));
+                    readError=true;
+                    return true;
+                }
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("unable to do real move %1: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()));
+                readError=true;
+                emit errorOnFile(destinationFile,destinationFile.errorString());
+                return true;
+            }
+        }
         return true;
     }
     return false;
@@ -1008,6 +1064,8 @@ void TransferThread::postOperation()
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try remove destination but not exists!");
     }
+    source.setFile("");
+    destination.setFile("");
     //don't need remove because have correctly finish (it's not in: have started)
     needRemove=false;
     needSkip=false;
@@ -1713,4 +1771,9 @@ void TransferThread::setRenamingRules(QString firstRenamingRule,QString otherRen
 void TransferThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
 {
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
+}
+
+void TransferThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDestination)
+{
+    this->renameTheOriginalDestination=renameTheOriginalDestination;
 }

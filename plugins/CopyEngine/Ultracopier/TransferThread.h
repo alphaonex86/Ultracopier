@@ -144,6 +144,7 @@ public slots:
     bool setSequentialBuffer(int sequentialBuffer);
     void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
+    void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
 private slots:
     void preOperation();
     void readIsReady();
@@ -219,6 +220,7 @@ private:
     //error management
     bool			writeError,writeError_source_seeked,writeError_destination_reopened;
     bool			readError;
+    bool            renameTheOriginalDestination;
     bool			fileContentError;
     bool            doTheDateTransfer;
     int             parallelBuffer;

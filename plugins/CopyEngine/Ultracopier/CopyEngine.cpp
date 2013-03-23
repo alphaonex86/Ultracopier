@@ -27,6 +27,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     tempWidget                      = NULL;
     uiIsInstalled                   = false;
     dialogIsOpen                    = false;
+    renameTheOriginalDestination    = false;
     maxSpeed                        = 0;
     alwaysDoThisActionForFileExists	= FileExists_NotSet;
     alwaysDoThisActionForFileError	= FileError_NotSet;
@@ -170,6 +171,8 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect moveTheWholeFolder()");
     if(!connect(this,&CopyEngine::send_deletePartiallyTransferredFiles,					listThread,&ListThread::setDeletePartiallyTransferredFiles,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect deletePartiallyTransferredFiles()");
+    if(!connect(this,&CopyEngine::send_setRenameTheOriginalDestination,					listThread,&ListThread::setRenameTheOriginalDestination,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setRenameTheOriginalDestination()");
     if(!connect(this,&CopyEngine::send_setInodeThreads,					listThread,&ListThread::setInodeThreads,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setInodeThreads()");
     if(!connect(this,&CopyEngine::send_followTheStrictOrder,					listThread,&ListThread::setFollowTheStrictOrder,		Qt::QueuedConnection))
@@ -230,6 +233,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setFollowTheStrictOrder(followTheStrictOrder);
     setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     setInodeThreads(inodeThreads);
+    setRenameTheOriginalDestination(renameTheOriginalDestination);
     setMoveTheWholeFolder(moveTheWholeFolder);
 
     switch(alwaysDoThisActionForFileExists)
@@ -350,6 +354,7 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->deletePartiallyTransferredFiles,    &QCheckBox::toggled,		this,&CopyEngine::setDeletePartiallyTransferredFiles);
         connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
         connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
+        connect(ui->renameTheOriginalDestination,       &QCheckBox::toggled,        this,&CopyEngine::setRenameTheOriginalDestination);
         connect(filters,                                &Filters::haveNewFilters,   this,&CopyEngine::sendNewFilters);
         connect(ui->filters,                            &QPushButton::clicked,      this,&CopyEngine::showFilterDialog);
         connect(ui->inodeThreads,                       &QSpinBox::editingFinished,	this,&CopyEngine::inodeThreadsFinished);
@@ -868,6 +873,14 @@ void CopyEngine::setInodeThreads(const int &inodeThreads)
     if(uiIsInstalled)
         ui->inodeThreads->setValue(inodeThreads);
     emit send_setInodeThreads(inodeThreads);
+}
+
+void CopyEngine::setRenameTheOriginalDestination(const bool &renameTheOriginalDestination)
+{
+    this->renameTheOriginalDestination=renameTheOriginalDestination;
+    if(uiIsInstalled)
+        ui->renameTheOriginalDestination->setChecked(renameTheOriginalDestination);
+    emit send_setRenameTheOriginalDestination(renameTheOriginalDestination);
 }
 
 void CopyEngine::inodeThreadsFinished()

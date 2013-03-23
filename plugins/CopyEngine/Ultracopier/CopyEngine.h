@@ -64,6 +64,7 @@ private:
     bool                    followTheStrictOrder;
     bool                    deletePartiallyTransferredFiles;
     int                     inodeThreads;
+    bool                    renameTheOriginalDestination;
     bool                    moveTheWholeFolder;
     bool                    autoStart;
     bool                    checkDestinationFolderExists;
@@ -287,6 +288,7 @@ public slots:
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
+    void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void inodeThreadsFinished();
 
     /// \brief set auto start
@@ -356,6 +358,7 @@ signals:
     void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void send_setInodeThreads(const int &inodeThreads);
     void send_moveTheWholeFolder(const bool &moveTheWholeFolder);
+    void send_setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
 };
 
 #endif // COPY_ENGINE_H

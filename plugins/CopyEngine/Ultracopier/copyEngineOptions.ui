@@ -20,15 +20,15 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>204</width>
+        <height>133</height>
        </rect>
       </property>
       <attribute name="label">
@@ -120,6 +120,13 @@
        <string>Error and collision</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>When folder error</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="2">
         <widget class="QCheckBox" name="checkBoxDestinationFolderExists"/>
        </item>
@@ -195,13 +202,6 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>When folder error</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="2">
         <widget class="QComboBox" name="comboBoxFolderError">
          <item>
@@ -254,14 +254,14 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="7" column="1">
         <widget class="QPushButton" name="renamingRules">
          <property name="text">
           <string>Renaming rules</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="8" column="1">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -284,6 +284,16 @@
        <item row="5" column="2">
         <widget class="QCheckBox" name="deletePartiallyTransferredFiles"/>
        </item>
+       <item row="6" column="2">
+        <widget class="QCheckBox" name="renameTheOriginalDestination"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>Rename the original distination</string>
+         </property>
+        </widget>
+       </item>
       </layout>
       <zorder>label_12</zorder>
       <zorder>label_13</zorder>
@@ -298,14 +308,16 @@
       <zorder>renamingRules</zorder>
       <zorder>label_20</zorder>
       <zorder>deletePartiallyTransferredFiles</zorder>
+      <zorder>renameTheOriginalDestination</zorder>
+      <zorder>label_22</zorder>
      </widget>
      <widget class="QWidget" name="page_control">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>172</width>
+        <height>119</height>
        </rect>
       </property>
       <attribute name="label">
@@ -559,8 +571,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>94</width>
+        <height>39</height>
        </rect>
       </property>
       <attribute name="label">

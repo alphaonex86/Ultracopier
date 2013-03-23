@@ -20,6 +20,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     putAtBottom                     = 0;
     maxSpeed                        = 0;
     inodeThreads                    = 1;
+    renameTheOriginalDestination    = false;
     doRightTransfer                 = false;
     keepDate                        = false;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
@@ -2053,4 +2054,17 @@ void ListThread::setInodeThreads(const int &inodeThreads)
     this->inodeThreads=inodeThreads;
     createTransferThread();
     deleteTransferThread();
+}
+
+void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDestination)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"renameTheOriginalDestination: "+QString::number(renameTheOriginalDestination));
+    this->renameTheOriginalDestination=renameTheOriginalDestination;
+    int index=0;
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
+    while(index<loop_sub_size_transfer_thread_search)
+    {
+        transferThreadList.at(index)->setRenameTheOriginalDestination(renameTheOriginalDestination);
+        index++;
+    }
 }

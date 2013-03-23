@@ -97,6 +97,7 @@ private slots:
     void setFileError(int index);
     void updatedBlockSize();
     void deletePartiallyTransferredFiles(bool checked);
+    void renameTheOriginalDestination(bool checked);
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
