@@ -227,8 +227,8 @@ void Core::loadInterface()
     if(copyList.size()>0)
     {
         bool error=false;
-        index=0;
-        loop_size=copyList.size();
+        int index=0;
+        int loop_size=copyList.size();
         while(index<loop_size)
         {
             copyList[index].interface=ThemesManager::themesManager->getThemesInstance();
@@ -258,8 +258,8 @@ void Core::loadInterface()
 void Core::unloadInterface()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    index=0;
-    loop_size=copyList.size();
+    int index=0;
+    int loop_size=copyList.size();
     while(index<loop_size)
     {
         if(copyList.at(index).interface!=NULL)
@@ -336,7 +336,6 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.mode=mode;
             newItem.type=returnInformations.type;
             newItem.transferListOperation=returnInformations.transferListOperation;
-            newItem.baseTime=0;
             newItem.numberOfFile=0;
             newItem.numberOfTransferedFile=0;
             newItem.currentProgression=0;
@@ -344,7 +343,6 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.action=Ultracopier::Idle;
             newItem.lastProgression=0;//store the real byte transfered, used in time remaining calculation
             newItem.isPaused=false;
-            newItem.baseTime=0;//stored in ms
             newItem.isRunning=false;
             newItem.haveError=false;
             newItem.lastConditionalSync.start();
@@ -394,14 +392,13 @@ void Core::resetSpeedDetectedInterface()
 void Core::resetSpeedDetected(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start on %1").arg(index));
-    copyList[index].runningTime.restart();
     copyList[index].lastSpeedDetected.clear();
     copyList[index].lastSpeedTime.clear();
 }
 
 void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
 {
-    index=indexCopySenderCopyEngine();
+    int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action: %1, from %2").arg(action).arg(index));
@@ -415,18 +412,12 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         if(action==Ultracopier::Copying || action==Ultracopier::CopyingAndListing)
         {
             if(!copyList.at(index).isRunning)
-            {
                 copyList[index].isRunning=true;
-                copyList[index].runningTime.restart();
-            }
         }
         else
         {
             if(copyList.at(index).isRunning)
-            {
                 copyList[index].isRunning=false;
-                copyList[index].baseTime+=copyList[index].runningTime.elapsed();
-            }
         }
         //do sync
         periodicSynchronizationWithIndex(index);
@@ -435,8 +426,8 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             copyList.at(index).interface->actionInProgess(action);
         if(action==Ultracopier::Idle)
         {
-            index_sub_loop=0;
-            loop_size=copyList.at(index).orderId.size();
+            int index_sub_loop=0;
+            int loop_size=copyList.at(index).orderId.size();
             while(index_sub_loop<loop_size)
             {
                 emit copyCanceled(copyList.at(index).orderId.at(index_sub_loop));
@@ -482,8 +473,8 @@ int Core::indexCopySenderCopyEngine()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Qt sender() NULL");
         return -1;
     }
-    index=0;
-    loop_size=copyList.size();
+    int index=0;
+    int loop_size=copyList.size();
     while(index<loop_size)
     {
         if(copyList.at(index).engine==senderObject)
@@ -505,8 +496,8 @@ int Core::indexCopySenderInterface()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Qt sender() NULL");
         return -1;
     }
-    index=0;
-    loop_size=copyList.size();
+    int index=0;
+    int loop_size=copyList.size();
     while(index<loop_size)
     {
         if(copyList.at(index).interface==senderObject)
@@ -633,8 +624,8 @@ void Core::connectInterfaceAndSync(const int &index)
 
 void Core::periodicSynchronization()
 {
-    index_sub_loop=0;
-    loop_size=copyList.size();
+    int index_sub_loop=0;
+    int loop_size=copyList.size();
     while(index_sub_loop<loop_size)
     {
         if(copyList.at(index_sub_loop).action==Ultracopier::Copying || copyList.at(index_sub_loop).action==Ultracopier::CopyingAndListing)
@@ -657,7 +648,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
     {
         //calcul the last difference of the transfere
         realByteTransfered=currentCopyInstance.engine->realByteTransfered();
-        diffCopiedSize=0;
+        quint64 diffCopiedSize=0;
         if(realByteTransfered>=currentCopyInstance.lastProgression)
             diffCopiedSize=realByteTransfered-currentCopyInstance.lastProgression;
         currentCopyInstance.lastProgression=realByteTransfered;
@@ -668,13 +659,11 @@ void Core::periodicSynchronizationWithIndex(const int &index)
         // algo 2 (not used):
         // remaining byte/current speed
 
-        transferAddedTime=currentCopyInstance.baseTime+currentCopyInstance.runningTime.elapsed();
-
         //remaining time: (total byte - lastProgression)/byte per ms since the start
-        if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
+        /*if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
             currentCopyInstance.interface->remainingTime(-1);
         else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
-            currentCopyInstance.interface->remainingTime(transferAddedTime*((double)currentCopyInstance.totalProgression/(double)currentCopyInstance.currentProgression-1)/1000);
+            currentCopyInstance.interface->remainingTime(transferAddedTime*((double)currentCopyInstance.totalProgression/(double)currentCopyInstance.currentProgression-1)/1000);*/
 
         //do the speed calculation
         if(lastProgressionTime.isNull())
@@ -690,10 +679,12 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                     currentCopyInstance.lastSpeedTime.removeFirst();
                     currentCopyInstance.lastSpeedDetected.removeFirst();
                 }
+                double totTime;
+                double totSpeed;
                 totTime=0;
                 totSpeed=0;
-                index_sub_loop=0;
-                loop_size=currentCopyInstance.lastSpeedDetected.size();
+                int index_sub_loop=0;
+                int loop_size=currentCopyInstance.lastSpeedDetected.size();
                 while(index_sub_loop<loop_size)
                 {
                     totTime+=currentCopyInstance.lastSpeedTime.at(index_sub_loop);
@@ -702,7 +693,14 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                 }
                 totTime/=1000;
                 if(loop_size>=ULTRACOPIER_MINVALUESPEED)
+                {
                     currentCopyInstance.interface->detectedSpeed(totSpeed/totTime);
+                    //remaining time: (total byte - lastProgression)/byte per ms since the start
+                    if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
+                        currentCopyInstance.interface->remainingTime(-1);
+                    else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
+                        currentCopyInstance.interface->remainingTime((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)/(totSpeed/totTime));
+                }
             }
             lastProgressionTime.restart();
         }
@@ -742,8 +740,8 @@ void Core::copyInstanceCanceledByIndex(const int &index)
     currentCopyInstance.engine->cancel();
     delete currentCopyInstance.nextConditionalSync;
     delete currentCopyInstance.interface;
-    index_sub_loop=0;
-    loop_size=currentCopyInstance.orderId.size();
+    int index_sub_loop=0;
+    int loop_size=currentCopyInstance.orderId.size();
     while(index_sub_loop<loop_size)
     {
         emit copyCanceled(currentCopyInstance.orderId.at(index_sub_loop));

@@ -59,8 +59,6 @@ class Core : public QObject
             QString collisionAction;
             QString errorAction;
             bool isPaused;
-            quint64 baseTime;//stored in ms
-            QTime runningTime;
             bool isRunning;
             Ultracopier::CopyType type;
             Ultracopier::TransferListOperation transferListOperation;
@@ -112,14 +110,7 @@ class Core : public QObject
         int connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
 
         LogThread log;///< To save the log like mkpath, rmpath, error, copy, ...
-        //temp variable
-        int index,index_sub_loop,loop_size,loop_sub_size;
-        double totTime;
-        double totSpeed;
         quint64 realByteTransfered;
-        quint64 transferSpeed;
-        quint64 transferAddedTime;
-        quint64 diffCopiedSize;
     signals:
         void copyFinished(const quint32 & orderId,bool withError);
         void copyCanceled(const quint32 & orderId);
