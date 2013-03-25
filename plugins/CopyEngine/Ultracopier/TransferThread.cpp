@@ -27,6 +27,8 @@ TransferThread::TransferThread()
     needRemove                      = false;
     this->mkpathTransfer            = mkpathTransfer;
     readThread.setWriteThread(&writeThread);
+    source.setCaching(false);
+    destination.setCaching(false);
 
     maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 }
@@ -564,12 +566,22 @@ void TransferThread::tryMoveDirectly()
     //move if on same mount point
     QFile sourceFile(source.absoluteFilePath());
     QFile destinationFile(destination.absoluteFilePath());
-    if(destinationFile.exists() && !destinationFile.remove())
+    if(destinationFile.exists())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
-        readError=true;
-        emit errorOnFile(destination,destinationFile.errorString());
-        return;
+        if(!sourceFile.exists())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", source not exists");
+            readError=true;
+            emit errorOnFile(destination,tr("The source don't exists"));
+            return;
+        }
+        else if(!destinationFile.remove())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
+            readError=true;
+            emit errorOnFile(destination,destinationFile.errorString());
+            return;
+        }
     }
     QDir dir(destination.absolutePath());
     {
@@ -619,12 +631,22 @@ void TransferThread::tryCopyDirectly()
     //move if on same mount point
     QFile sourceFile(source.absoluteFilePath());
     QFile destinationFile(destination.absoluteFilePath());
-    if(destinationFile.exists() && !destinationFile.remove())
+    if(destinationFile.exists())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
-        readError=true;
-        emit errorOnFile(destination,destinationFile.errorString());
-        return;
+        if(!sourceFile.exists())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", source not exists");
+            readError=true;
+            emit errorOnFile(destination,tr("The source don't exists"));
+            return;
+        }
+        else if(!destinationFile.remove())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", error: "+destinationFile.errorString());
+            readError=true;
+            emit errorOnFile(destination,destinationFile.errorString());
+            return;
+        }
     }
     QDir dir(destination.absolutePath());
     {
@@ -814,7 +836,7 @@ void TransferThread::stop()
         return;
     if(!(readIsOpenVariable && !readIsClosedVariable) && !(writeIsOpenVariable && !writeIsClosedVariable))
     {
-        if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
+        if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath() && source.exists())
             QFile(destination.absoluteFilePath()).remove();
         emit internalStartPostOperation();
     }
@@ -1052,7 +1074,7 @@ void TransferThread::postOperation()
     }
     else//do difference skip a file and skip this error case
     {
-        if(needRemove && destination.exists() && source.absoluteFilePath()!=destination.absoluteFilePath() && destination.isFile())
+        if(needRemove && destination.exists() && source.exists() && source.absoluteFilePath()!=destination.absoluteFilePath() && destination.isFile())
         {
             QFile destinationFile(destination.absoluteFilePath());
             if(!destinationFile.remove())
