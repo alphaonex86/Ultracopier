@@ -50,7 +50,7 @@ EventDispatcher::EventDispatcher()
     copyMoveEventIdIndex=0;
     backgroundIcon=NULL;
     stopIt=false;
-    #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
     sessionloader=new SessionLoader(&optionDialog);
     #endif
     copyEngineList=new CopyEngineManager(&optionDialog);
@@ -117,7 +117,7 @@ EventDispatcher::~EventDispatcher()
         delete core;
     if(copyEngineList!=NULL)
         delete copyEngineList;
-    #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
     if(sessionloader!=NULL)
         delete sessionloader;
     #endif

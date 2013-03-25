@@ -18,7 +18,9 @@
 #include "SystrayIcon.h"
 #include "OptionEngine.h"
 #include "HelpDialog.h"
+#ifndef ULTRACOPIER_VERSION_PORTABLE
 #include "SessionLoader.h"
+#endif
 #include "CopyListener.h"
 #include "OptionDialog.h"
 #include "CopyEngineManager.h"
@@ -67,7 +69,7 @@ class EventDispatcher : public QObject
         QTimer lunchInitFunction;
         /// \brief the help dialog
         HelpDialog theHelp;
-        #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
+        #ifndef ULTRACOPIER_VERSION_PORTABLE
         /// \brief the session loader
         SessionLoader *sessionloader;
         #endif
