@@ -453,7 +453,6 @@ void WriteThread::internalClose(bool emitSignal)
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to remove the destination file");
                 }
             }
-            needRemoveTheFile=false;
             //here and not after, because the transferThread don't need try close if not open
             if(emitSignal)
                 emit closed();
@@ -465,7 +464,9 @@ void WriteThread::internalClose(bool emitSignal)
         if(emitSignal)
             emit closed();
     }
+    needRemoveTheFile=false;
     resumeNotStarted();
+    file.setFileName("");
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;

@@ -1500,7 +1500,7 @@ void TransferThread::skip()
     switch(transfer_stat)
     {
     case TransferStat_WaitForTheTransfer:
-        needRemove=true;
+        //needRemove=true;never put that's here, can product destruction of the file
     case TransferStat_PreOperation:
         if(needSkip)
         {
@@ -1528,7 +1528,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
-        needRemove=true;
+        //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
         if(canBeMovedDirectlyVariable || canBeCopiedDirectlyVariable)
         {
@@ -1558,7 +1558,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
-        needRemove=true;
+        //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
         if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
         {
@@ -1579,7 +1579,7 @@ void TransferThread::skip()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
             return;
         }
-        needRemove=true;
+        //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
         emit internalStartPostOperation();
         break;
