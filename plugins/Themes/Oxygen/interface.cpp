@@ -1070,12 +1070,12 @@ void Themes::alwaysOnTop_clicked(bool reshow)
     if(uiOptions->alwaysOnTop->isChecked())
         flags=flags | Qt::X11BypassWindowManagerHint;
     else
-        flags=flags & (0xffffffff & !Qt::X11BypassWindowManagerHint);
+        flags=flags & ~Qt::X11BypassWindowManagerHint;
     #endif
     if(uiOptions->alwaysOnTop->isChecked())
-        flags=flags | (Qt::WindowStaysOnTopHint);
+        flags=flags | Qt::WindowStaysOnTopHint;
     else
-        flags=flags & (0xffffffff & !Qt::WindowStaysOnTopHint);
+        flags=flags & ~Qt::WindowStaysOnTopHint;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"uiOptions->alwaysOnTop->isChecked(): "+QString::number(uiOptions->alwaysOnTop->isChecked())+", flags: "+QString::number(flags));
     setWindowFlags(flags);
     if(reshow)
