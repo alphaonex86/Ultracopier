@@ -187,6 +187,8 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerActionDone");
     if(!connect(&timerProgression,&QTimer::timeout,							listThread,&ListThread::sendProgression))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerProgression");
+    if(!connect(listThread,&ListThread::missingDiskSpace,					this,&CopyEngine::missingDiskSpace,Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect timerProgression");
 
     if(!connect(this,&CopyEngine::queryOneNewDialog,this,&CopyEngine::showOneNewDialog,Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect queryOneNewDialog()");
@@ -235,6 +237,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setInodeThreads(inodeThreads);
     setRenameTheOriginalDestination(renameTheOriginalDestination);
     setMoveTheWholeFolder(moveTheWholeFolder);
+    setCheckDiskSpace(checkDiskSpace);
 
     switch(alwaysDoThisActionForFileExists)
     {
@@ -1115,4 +1118,12 @@ void CopyEngine::updatedBlockSize()
     }
     setParallelBuffer(parallelBuffer);
     setSequentialBuffer(sequentialBuffer);
+}
+
+void CopyEngine::setCheckDiskSpace(const bool &checkDiskSpace)
+{
+    this->checkDiskSpace=checkDiskSpace;
+    if(uiIsInstalled)
+        ui->checkDiskSpace->setChecked(checkDiskSpace);
+    listThread->setCheckDiskSpace(checkDiskSpace);
 }

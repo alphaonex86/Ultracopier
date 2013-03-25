@@ -455,7 +455,6 @@ bool ReadThread::setBlockSize(const int blockSize)
     //can be smaller than min block size to do correct speed limitation
     if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"block size: "+QString::number(blockSize));
         this->blockSize=blockSize;
         //set the new max speed because the timer have changed
         return true;
@@ -546,29 +545,29 @@ bool ReadThread::internalReopen()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     stopIt=false;
     file.close();
-        if(size_at_open!=file.size() && mtime_at_open!=QFileInfo(file).lastModified())
-        {
+    if(size_at_open!=file.size() && mtime_at_open!=QFileInfo(file).lastModified())
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] source file have changed since the last open, restart all");
-                //fix this function like the close function
+        //fix this function like the close function
         if(internalOpen(true))
-                {
-                        emit resumeAfterErrorByRestartAll();
-                        return true;
-                }
-                else
-                        return false;
-        }
-    else
         {
-                //fix this function like the close function
-                if(internalOpen(false))
-                {
-                        emit resumeAfterErrorByRestartAtTheLastPosition();
-                        return true;
-                }
-                else
-                        return false;
+            emit resumeAfterErrorByRestartAll();
+            return true;
         }
+        else
+            return false;
+    }
+    else
+    {
+        //fix this function like the close function
+        if(internalOpen(false))
+        {
+            emit resumeAfterErrorByRestartAtTheLastPosition();
+            return true;
+        }
+        else
+            return false;
+    }
 }
 
 //set the write thread

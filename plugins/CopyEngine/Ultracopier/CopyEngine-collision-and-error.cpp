@@ -6,6 +6,7 @@
 
 #include "CopyEngine.h"
 #include "FolderExistsDialog.h"
+#include "DiskSpace.h"
 
 //dialog message
 /// \note Can be call without queue because all call will be serialized
@@ -218,6 +219,21 @@ void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &file
         errorQueue << newItem;
         showOneNewDialog();
     }
+}
+
+void CopyEngine::missingDiskSpace(QList<Diskspace> list)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
+    DiskSpace dialog(facilityEngine,list,interface);
+    emit isInPause(true);
+    dialog.exec();/// \bug crash when external close
+    bool ok=dialog.getAction();
+    emit isInPause(false);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cancel: "+QString::number(ok));
+    if(!ok)
+        emit cancelAll();
+    else
+        listThread->autoStartIfNeeded();
 }
 
 /// \note Can be call without queue because all call will be serialized

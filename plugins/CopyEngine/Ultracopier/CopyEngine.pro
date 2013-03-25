@@ -26,7 +26,8 @@ HEADERS         = \
     FileExistsDialog.h \
     FileIsSameDialog.h \
     FolderExistsDialog.h \
-    ScanFileOrFolder.h
+    ScanFileOrFolder.h \
+    DiskSpace.h
 SOURCES         = \
     TransferThread.cpp \
     ReadThread.cpp \
@@ -47,7 +48,8 @@ SOURCES         = \
     FileExistsDialog.cpp \
     FileIsSameDialog.cpp \
     FolderExistsDialog.cpp \
-    ScanFileOrFolder.cpp
+    ScanFileOrFolder.cpp \
+    DiskSpace.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 include(../../../updateqm.pri)
 TRANSLATIONS += Languages/ar/translation.ts \
@@ -87,7 +89,8 @@ FORMS += \
     Filters.ui \
     FilterRules.ui \
     RenamingRules.ui \
-    copyEngineOptions.ui
+    copyEngineOptions.ui \
+    DiskSpace.ui
 
 OTHER_FILES += informations.xml
 

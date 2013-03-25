@@ -106,6 +106,7 @@ private:
     bool checksumOnlyOnError;
     bool osBuffer;
     bool osBufferLimited;
+    bool checkDiskSpace;
     unsigned int osBufferLimit;
     QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
     QString firstRenamingRule;
@@ -164,6 +165,7 @@ private slots:
     void updatedBlockSize();
     void updateBufferCheckbox();
     void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread, const ErrorType &errorType);
+    void missingDiskSpace(QList<Diskspace> list);
 public:
     /** \brief to send the options panel
      * \return return false if have not the options
@@ -226,6 +228,7 @@ public:
     void set_osBufferLimit(unsigned int osBufferLimit);
     void set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void setCheckDiskSpace(const bool &checkDiskSpace);
 public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface

@@ -1354,7 +1354,6 @@ bool TransferThread::setParallelBuffer(int parallelBuffer)
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] parallelBuffer: "+QString::number(parallelBuffer));
         this->parallelBuffer=parallelBuffer;
         return true;
     }
@@ -1369,7 +1368,6 @@ bool TransferThread::setSequentialBuffer(int sequentialBuffer)
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] sequentialBuffer: "+QString::number(sequentialBuffer));
         this->sequentialBuffer=sequentialBuffer;
         return true;
     }

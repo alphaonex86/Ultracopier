@@ -334,7 +334,6 @@ void WriteThread::internalEndOfFile()
 \param tempMaxSpeed Set the max speed in KB/s, 0 for no limit */
 void WriteThread::setMultiForBigSpeed(const int &multiForBigSpeed)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] setMultiForBigSpeed");
     this->multiForBigSpeed=multiForBigSpeed;
     waitNewClockForSpeed.release();
     waitNewClockForSpeed2.release();
@@ -538,7 +537,6 @@ bool WriteThread::setBlockSize(const int blockSize)
     //can be smaller than min block size to do correct speed limitation
     if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"blockSize: "+QString::number(blockSize));
         this->blockSize=blockSize;
         return true;
     }

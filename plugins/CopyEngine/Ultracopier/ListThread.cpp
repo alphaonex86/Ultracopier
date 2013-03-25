@@ -23,6 +23,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     renameTheOriginalDestination    = false;
     doRightTransfer                 = false;
     keepDate                        = false;
+    checkDiskSpace                  = true;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     sequentialBuffer                = ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
     parallelBuffer                  = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
@@ -105,6 +106,9 @@ void ListThread::transferInodeIsClosed()
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             /// \todo check if item is at the right thread
+            QString drive=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].destination.absoluteFilePath());
+            if(requiredSpace.contains(drive))
+                requiredSpace[drive]-=actionToDoListTransfer[int_for_internal_loop].size;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
             if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
@@ -388,7 +392,17 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"The listing thread is already running");
     }
     else
-        autoStartIfNeeded();
+        autoStartAndCheckSpace();
+}
+
+void ListThread::autoStartAndCheckSpace()
+{
+    if(needMoreSpace())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Need more space");
+        return;
+    }
+    autoStartIfNeeded();
 }
 
 void ListThread::autoStartIfNeeded()
@@ -1054,6 +1068,11 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     quint64 size=0;
     if(!source.isSymLink())
         size=source.size();
+    QString drive=driveManagement.getDrive(destination.absoluteFilePath());
+    if(requiredSpace.contains(drive))
+        requiredSpace[drive]+=size;
+    else
+        requiredSpace[drive]=size;
     bytesToTransfer+= size;
     ActionToDoTransfer temp;
     temp.id		= generateIdNumber();
@@ -1435,7 +1454,7 @@ void ListThread::importTransferList(const QString &fileName)
             emit warningTransferList(tr("Some error have been found during the line parsing"));
         sendActionDone();
         updateTheStatus();
-        autoStartIfNeeded();
+        autoStartAndCheckSpace();
     }
     else
     {
@@ -1458,6 +1477,31 @@ int ListThread::getNumberOfTranferRuning() const
         int_for_loop++;
     }
     return numberOfTranferRuning;
+}
+
+//return
+bool ListThread::needMoreSpace()
+{
+    if(!checkDiskSpace)
+        return false;
+    QStorageInfo storageInfo;
+    QList<Diskspace> diskspace_list;
+    QHashIterator<QString,quint64> i(requiredSpace);
+    while (i.hasNext()) {
+        i.next();
+        qlonglong availableSpace=storageInfo.availableDiskSpace(i.key());
+        if(i.value()>(quint64)availableSpace)
+        {
+            Diskspace diskspace;
+            diskspace.drive=i.key();
+            diskspace.freeSpace=availableSpace;
+            diskspace.requiredSpace=i.value();
+            diskspace_list << diskspace;
+        }
+    }
+    if(!diskspace_list.isEmpty())
+        emit missingDiskSpace(diskspace_list);
+    return ! diskspace_list.isEmpty();
 }
 
 //do new actions
@@ -2067,4 +2111,9 @@ void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
         transferThreadList.at(index)->setRenameTheOriginalDestination(renameTheOriginalDestination);
         index++;
     }
+}
+
+void ListThread::setCheckDiskSpace(const bool &checkDiskSpace)
+{
+    this->checkDiskSpace=checkDiskSpace;
 }

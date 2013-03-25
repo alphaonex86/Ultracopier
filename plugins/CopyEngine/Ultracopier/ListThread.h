@@ -95,6 +95,7 @@ public:
     void set_checksumOnlyOnError(bool checksumOnlyOnError);
     void set_osBuffer(bool osBuffer);
     void set_osBufferLimited(bool osBufferLimited);
+    void autoStartIfNeeded();
 public slots:
     //action on the copy
     /// \brief put the transfer in pause
@@ -184,6 +185,7 @@ public slots:
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
+    void setCheckDiskSpace(const bool &checkDiskSpace);
 private:
     QSemaphore          mkpathTransfer;
     QString             sourceDrive;
@@ -222,6 +224,8 @@ private:
     int                 parallelBuffer;
     int                 inodeThreads;
     bool                renameTheOriginalDestination;
+    bool                checkDiskSpace;
+    QHash<QString,quint64> requiredSpace;
     unsigned int        putAtBottom;
     unsigned int		osBufferLimit;
     QList<Filters_rules>		include,exclude;
@@ -287,10 +291,11 @@ private:
 
     void realByteTransfered();
     int getNumberOfTranferRuning() const;
+    bool needMoreSpace();
 private slots:
     void scanThreadHaveFinishSlot();
     void scanThreadHaveFinish(bool skipFirstRemove=false);
-    void autoStartIfNeeded();
+    void autoStartAndCheckSpace();
     void updateTheStatus();
     void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode);
     //mkpath event
@@ -390,6 +395,7 @@ signals:
     void send_parallelBuffer(const int &parallelBuffer);
     void send_sequentialBuffer(const int &sequentialBuffer);
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
+    void missingDiskSpace(QList<Diskspace> list);
 };
 
 #endif // LISTTHREAD_H

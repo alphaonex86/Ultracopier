@@ -110,4 +110,11 @@ enum ActionType
     ActionType_RealMove=3
 };
 
+struct Diskspace
+{
+    QString drive;
+    quint64 requiredSpace;
+    quint64 freeSpace;
+};
+
 #endif // STRUCTDEF_COPYENGINE_H
