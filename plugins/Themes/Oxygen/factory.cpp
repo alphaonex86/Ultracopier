@@ -26,7 +26,9 @@ PluginInterface_Themes * ThemesFactory::getInstance()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start, currentSpeed: %1").arg(currentSpeed));
 
-    Themes * newInterface=new Themes(ui->showProgressionInTheTitle->isChecked(),
+    Themes * newInterface=new Themes(
+                ui->alwaysOnTop->isChecked(),
+                ui->showProgressionInTheTitle->isChecked(),
                 progressColorWrite,progressColorRead,progressColorRemaining,
                 ui->showDualProgression->isChecked(),
                 ui->comboBox_copyEnd->currentIndex(),
@@ -65,6 +67,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
         KeysList.append(qMakePair(QString("progressColorWrite"),QVariant(QApplication::palette().color(QPalette::Highlight))));
         KeysList.append(qMakePair(QString("progressColorRead"),QVariant(QApplication::palette().color(QPalette::AlternateBase))));
         KeysList.append(qMakePair(QString("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
+        KeysList.append(qMakePair(QString("alwaysOnTop"),QVariant(false)));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -90,6 +93,7 @@ QWidget * ThemesFactory::options()
         ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue("moreButtonPushed").toBool());
         ui->showDualProgression->setChecked(optionsEngine->getOptionValue("showDualProgression").toBool());
         ui->showProgressionInTheTitle->setChecked(optionsEngine->getOptionValue("showProgressionInTheTitle").toBool());
+        ui->alwaysOnTop->setChecked(optionsEngine->getOptionValue("alwaysOnTop").toBool());
 
         progressColorWrite=optionsEngine->getOptionValue("progressColorWrite").value<QColor>();
         progressColorRead=optionsEngine->getOptionValue("progressColorRead").value<QColor>();
@@ -105,6 +109,7 @@ QWidget * ThemesFactory::options()
         updateSpeed();
         updateProgressionColorBar();
 
+        connect(ui->alwaysOnTop,&QCheckBox::stateChanged,this,&ThemesFactory::alwaysOnTop);
         connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed);
         connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed);
         connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged);
@@ -211,6 +216,15 @@ void ThemesFactory::checkBoxShowSpeed(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(checked);
     updateSpeed();
+}
+
+void ThemesFactory::alwaysOnTop(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("alwaysOnTop",checked);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
 void ThemesFactory::showDualProgression(bool checked)

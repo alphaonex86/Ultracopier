@@ -46,6 +46,7 @@ private slots:
     void comboBox_copyEnd(int value);
     void speedWithProgressBar(bool toggled);
     void checkBoxShowSpeed(bool checked);
+    void alwaysOnTop(bool checked);
     void showDualProgression(bool checked);
     void on_SliderSpeed_valueChanged(int value);
     void uiUpdateSpeed();

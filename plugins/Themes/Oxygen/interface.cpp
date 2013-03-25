@@ -9,11 +9,15 @@
 #include <QScrollArea>
 #include <QColorDialog>
 #include <math.h>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 #include "interface.h"
 #include "ui_interface.h"
 
-Themes::Themes(const bool &showProgressionInTheTitle,
+Themes::Themes(const bool &alwaysOnTop,
+               const bool &showProgressionInTheTitle,
                const QColor &progressColorWrite,
                const QColor &progressColorRead,
                const QColor &progressColorRemaining,
@@ -48,6 +52,7 @@ Themes::Themes(const bool &showProgressionInTheTitle,
     uiOptions->showProgressionInTheTitle->setChecked(showProgressionInTheTitle);
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
+    uiOptions->alwaysOnTop->setChecked(alwaysOnTop);
     //uiOptions->setupUi(ui->tabWidget->widget(1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
@@ -81,6 +86,7 @@ Themes::Themes(const bool &showProgressionInTheTitle,
     connect(uiOptions->progressColorWrite,&QAbstractButton::clicked,this,&Themes::progressColorWrite_clicked);
     connect(uiOptions->progressColorRead,	&QAbstractButton::clicked,this,&Themes::progressColorRead_clicked);
     connect(uiOptions->progressColorRemaining,&QAbstractButton::clicked,this,&Themes::progressColorRemaining_clicked);
+    connect(uiOptions->alwaysOnTop,&QAbstractButton::clicked,this,&Themes::alwaysOnTop_clickedSlot);
 
     isInPause(false);
 
@@ -188,6 +194,10 @@ Themes::Themes(const bool &showProgressionInTheTitle,
     #endif
 
     updateSpeed();
+    alwaysOnTop_clicked(false);
+    #ifdef Q_OS_WIN32
+    uiOptions->alwaysOnTop->hide();
+    #endif
     show();
 }
 
@@ -1051,6 +1061,30 @@ void Themes::progressColorRemaining_clicked()
     pixmap.fill(progressColorRemaining);
     uiOptions->progressColorRemaining->setIcon(pixmap);
     updateProgressionColorBar();
+}
+
+void Themes::alwaysOnTop_clicked(bool reshow)
+{
+    Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_LINUX
+    if(uiOptions->alwaysOnTop->isChecked())
+        flags=flags | Qt::X11BypassWindowManagerHint;
+    else
+        flags=flags & (0xffffffff & !Qt::X11BypassWindowManagerHint);
+    #endif
+    if(uiOptions->alwaysOnTop->isChecked())
+        flags=flags | (Qt::WindowStaysOnTopHint);
+    else
+        flags=flags & (0xffffffff & !Qt::WindowStaysOnTopHint);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"uiOptions->alwaysOnTop->isChecked(): "+QString::number(uiOptions->alwaysOnTop->isChecked())+", flags: "+QString::number(flags));
+    setWindowFlags(flags);
+    if(reshow)
+        show();
+}
+
+void Themes::alwaysOnTop_clickedSlot()
+{
+    alwaysOnTop_clicked(true);
 }
 
 void Themes::updateProgressionColorBar()
