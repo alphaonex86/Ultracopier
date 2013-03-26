@@ -238,6 +238,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setRenameTheOriginalDestination(renameTheOriginalDestination);
     setMoveTheWholeFolder(moveTheWholeFolder);
     setCheckDiskSpace(checkDiskSpace);
+    setDefaultDestinationFolder(defaultDestinationFolder);
 
     switch(alwaysDoThisActionForFileExists)
     {
@@ -362,6 +363,7 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->filters,                            &QPushButton::clicked,      this,&CopyEngine::showFilterDialog);
         connect(ui->inodeThreads,                       &QSpinBox::editingFinished,	this,&CopyEngine::inodeThreadsFinished);
         connect(ui->inodeThreads,                       static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setInodeThreads);
+        connect(ui->defaultDestinationFolderBrowse,     &QPushButton::clicked,      this,&CopyEngine::defaultDestinationFolderBrowse);
 
         connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setSequentialBuffer);
         connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setParallelBuffer);
@@ -404,8 +406,12 @@ bool CopyEngine::newCopy(const QStringList &sources)
         return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if(destination.isEmpty() || destination.isNull() || destination=="")
+    QString destination;
+    if(!ui->defaultDestinationFolder->text().isEmpty() && QDir(ui->defaultDestinationFolder->text()).exists())
+        destination = ui->defaultDestinationFolder->text();
+    else
+        destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if(destination.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return false;
@@ -433,8 +439,12 @@ bool CopyEngine::newMove(const QStringList &sources)
         return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if(destination.isEmpty() || destination.isNull() || destination=="")
+    QString destination;
+    if(!ui->defaultDestinationFolder->text().isEmpty() && QDir(ui->defaultDestinationFolder->text()).exists())
+        destination = ui->defaultDestinationFolder->text();
+    else
+        destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if(destination.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return false;
@@ -451,6 +461,19 @@ bool CopyEngine::newMove(const QStringList &sources,const QString &destination)
         return false;
     }
     return listThread->newMove(sources,destination);
+}
+
+void CopyEngine::defaultDestinationFolderBrowse()
+{
+    QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if(destination.isEmpty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(uiIsInstalled)
+        ui->defaultDestinationFolder->setText(destination);
 }
 
 void CopyEngine::newTransferList(const QString &file)
@@ -1127,3 +1150,11 @@ void CopyEngine::setCheckDiskSpace(const bool &checkDiskSpace)
         ui->checkDiskSpace->setChecked(checkDiskSpace);
     listThread->setCheckDiskSpace(checkDiskSpace);
 }
+
+void CopyEngine::setDefaultDestinationFolder(const QString &defaultDestinationFolder)
+{
+    this->defaultDestinationFolder=defaultDestinationFolder;
+    if(uiIsInstalled)
+        ui->defaultDestinationFolder->setText(defaultDestinationFolder);
+}
+

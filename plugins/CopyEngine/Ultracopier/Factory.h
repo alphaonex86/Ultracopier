@@ -99,6 +99,8 @@ private slots:
     void deletePartiallyTransferredFiles(bool checked);
     void renameTheOriginalDestination(bool checked);
     void checkDiskSpace(bool checked);
+    void defaultDestinationFolderBrowse();
+    void defaultDestinationFolder();
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();

@@ -75,6 +75,7 @@ private:
     TransferAlgorithm       transferAlgorithm;
     bool                    dialogIsOpen;
     volatile bool			stopIt;
+    QString                 defaultDestinationFolder;
     /// \brief error queue
     struct errorQueueItem
     {
@@ -229,6 +230,8 @@ public:
     void set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
     void setCheckDiskSpace(const bool &checkDiskSpace);
+    void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
+    void defaultDestinationFolderBrowse();
 public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface

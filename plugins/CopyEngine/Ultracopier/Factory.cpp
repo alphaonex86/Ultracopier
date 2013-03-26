@@ -63,7 +63,9 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->followTheStrictOrder,       &QCheckBox::toggled,                this,&CopyEngineFactory::followTheStrictOrder);
     connect(ui->deletePartiallyTransferredFiles,&QCheckBox::toggled,            this,&CopyEngineFactory::deletePartiallyTransferredFiles);
     connect(ui->renameTheOriginalDestination,&QCheckBox::toggled,               this,&CopyEngineFactory::renameTheOriginalDestination);
-    connect(ui->checkDiskSpace,             &QCheckBox::toggled,               this,&CopyEngineFactory::checkDiskSpace);
+    connect(ui->checkDiskSpace,             &QCheckBox::toggled,                this,&CopyEngineFactory::checkDiskSpace);
+    connect(ui->defaultDestinationFolderBrowse,&QPushButton::clicked,           this,&CopyEngineFactory::defaultDestinationFolderBrowse);
+    connect(ui->defaultDestinationFolder,&QLineEdit::editingFinished,           this,&CopyEngineFactory::defaultDestinationFolder);
 
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
@@ -128,6 +130,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setInodeThreads(ui->inodeThreads->value());
     realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
     realObject->setCheckDiskSpace(ui->checkDiskSpace->isChecked());
+    realObject->setDefaultDestinationFolder(ui->defaultDestinationFolder->text());
     return newTransferEngine;
 }
 
@@ -183,6 +186,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("followTheStrictOrder"),QVariant(false)));
         KeysList.append(qMakePair(QString("renameTheOriginalDestination"),QVariant(false)));
         KeysList.append(qMakePair(QString("checkDiskSpace"),QVariant(true)));
+        KeysList.append(qMakePair(QString("defaultDestinationFolder"),QVariant(QString())));
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         KeysList.append(qMakePair(QString("inodeThreads"),QVariant(1)));
         #else
@@ -214,6 +218,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ui->inodeThreads->setValue(options->getOptionValue("inodeThreads").toUInt());
         ui->renameTheOriginalDestination->setChecked(options->getOptionValue("renameTheOriginalDestination").toBool());
         ui->checkDiskSpace->setChecked(options->getOptionValue("checkDiskSpace").toBool());
+        ui->defaultDestinationFolder->setText(options->getOptionValue("defaultDestinationFolder").toString());
 
         ui->doChecksum->setChecked(options->getOptionValue("doChecksum").toBool());
         ui->checksumIgnoreIfImpossible->setChecked(options->getOptionValue("checksumIgnoreIfImpossible").toBool());
@@ -591,6 +596,27 @@ void CopyEngineFactory::checkDiskSpace(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("checkDiskSpace",checked);
+}
+
+void CopyEngineFactory::defaultDestinationFolderBrowse()
+{
+    QString destination = QFileDialog::getExistingDirectory(ui->defaultDestinationFolder,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if(destination.isEmpty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    ui->defaultDestinationFolder->setText(destination);
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("defaultDestinationFolder",destination);
+}
+
+void CopyEngineFactory::defaultDestinationFolder()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("defaultDestinationFolder",ui->defaultDestinationFolder->text());
 }
 
 void CopyEngineFactory::followTheStrictOrder(bool checked)

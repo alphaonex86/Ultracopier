@@ -316,8 +316,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>172</width>
-        <height>119</height>
+        <width>791</width>
+        <height>364</height>
        </rect>
       </property>
       <attribute name="label">
@@ -387,8 +387,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>332</width>
-        <height>216</height>
+        <width>791</width>
+        <height>364</height>
        </rect>
       </property>
       <attribute name="label">
@@ -586,7 +586,31 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="checkDiskSpace"/>
+       </item>
        <item row="1" column="0">
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>Use this folder when destination is empty</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLineEdit" name="defaultDestinationFolder"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="defaultDestinationFolderBrowse">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -599,14 +623,14 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="2">
+       <item row="2" column="1">
         <widget class="QPushButton" name="filters">
          <property name="text">
           <string>Filters</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
+       <item row="2" column="2">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -619,7 +643,7 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="2">
+       <item row="3" column="1">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -631,9 +655,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="0" column="3">
-        <widget class="QCheckBox" name="checkDiskSpace"/>
        </item>
       </layout>
      </widget>

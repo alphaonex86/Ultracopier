@@ -1410,9 +1410,9 @@ void ListThread::importTransferList(const QString &fileName)
         bool errorFound=false;
         QRegularExpression correctLine;
         if(transferListMixedMode)
-            correctLine=QRegularExpression("^(Copy|Move);[^;]+;[^;]+\n$");
+            correctLine=QRegularExpression("^(Copy|Move);[^;]+;[^;]+[\n\r]*$");
         else
-            correctLine=QRegularExpression("^[^;]+;[^;]+\n$");
+            correctLine=QRegularExpression("^[^;]+;[^;]+[\n\r]*$");
         QStringList args;
         Ultracopier::CopyMode tempMode;
         do
