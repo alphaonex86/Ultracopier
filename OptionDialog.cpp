@@ -60,6 +60,10 @@ OptionDialog::OptionDialog() :
     ui->labelLoadAtSession->hide();
     ui->LoadAtSessionStarting->hide();
     #endif
+    #ifndef ULTRACOPIER_INTERNET_SUPPORT
+    ui->label_checkTheUpdate->hide();
+    ui->checkTheUpdate->hide();
+    #endif
 }
 
 OptionDialog::~OptionDialog()
@@ -389,8 +393,9 @@ void OptionDialog::loadOption()
     newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
     newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
-    newOptionValue("Ultracopier",	"confirmToGroupWindows",          OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
+    newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
     newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
+    newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
     #ifndef ULTRACOPIER_VERSION_PORTABLE
@@ -560,6 +565,8 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->confirmToGroupWindows->setChecked(value.toBool());
         else if(name=="displayOSSpecific")
             ui->DisplayOSWarning->setChecked(value.toBool());
+        else if(name=="checkTheUpdate")
+            ui->checkTheUpdate->setChecked(value.toBool());
     }
 }
 
@@ -950,4 +957,10 @@ void OptionDialog::newClientList(const QStringList &clientsList)
 {
     ui->clientConnected->clear();
     ui->clientConnected->addItems(clientsList);
+}
+
+void OptionDialog::on_checkTheUpdate_clicked()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","checkTheUpdate",ui->checkTheUpdate->isChecked());
 }

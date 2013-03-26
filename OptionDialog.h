@@ -73,6 +73,7 @@ private slots:
     void on_ActionOnManualOpen_currentIndexChanged(int index);
     void on_GroupWindowWhen_currentIndexChanged(int index);
     void on_DisplayOSWarning_clicked();
+    void on_checkTheUpdate_clicked();
 private:
     Ui::OptionDialog *ui;
     struct pluginStore

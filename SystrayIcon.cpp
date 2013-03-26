@@ -406,8 +406,15 @@ void SystrayIcon::removeCopyEngine(const QString &name)
         }
         index++;
     }
-    void reloadEngineList();
+    reloadEngineList();
 }
+
+#ifdef ULTRACOPIER_INTERNET_SUPPORT
+void SystrayIcon::newUpdate(const QString &version)
+{
+    showSystrayMessage(tr("New version: %1").arg(version));
+}
+#endif
 
 void SystrayIcon::reloadEngineList()
 {

@@ -236,6 +236,16 @@
            <item row="5" column="1">
             <widget class="QCheckBox" name="confirmToGroupWindows"/>
            </item>
+           <item row="7" column="1">
+            <widget class="QCheckBox" name="checkTheUpdate"/>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_checkTheUpdate">
+             <property name="text">
+              <string>Check the update</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>

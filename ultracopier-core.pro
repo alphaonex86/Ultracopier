@@ -82,7 +82,8 @@ HEADERS += ResourcesManager.h \
     LogThread.h \
     CompilerInfo.h \
     StructEnumDefinition_UltracopierSpecific.h \
-    OSSpecific.h
+    OSSpecific.h \
+    InternetUpdater.h
 SOURCES += ThemesManager.cpp \
     ResourcesManager.cpp \
     main.cpp \
@@ -114,7 +115,8 @@ SOURCES += ThemesManager.cpp \
     FacilityEngine.cpp \
     LogThread.cpp \
     OSSpecific.cpp \
-    DebugModel.cpp
+    DebugModel.cpp \
+    InternetUpdater.cpp
 INCLUDEPATH += lib/qt-tar-xz/
 
 OTHER_FILES += resources/resources-windows.rc

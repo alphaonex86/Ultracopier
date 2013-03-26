@@ -38,7 +38,7 @@ EventDispatcher::EventDispatcher()
 
     copyServer=new CopyListener(&optionDialog);
     connect(&localListener, &LocalListener::cli,                    &cliParser,     &CliParser::cli,Qt::QueuedConnection);
-    connect(ThemesManager::themesManager,         &ThemesManager::newThemeOptions,		&optionDialog,	&OptionDialog::newThemeOptions);
+    connect(ThemesManager::themesManager,         &ThemesManager::newThemeOptions,	&optionDialog,	&OptionDialog::newThemeOptions);
     connect(&cliParser,     &CliParser::newCopyWithoutDestination,	copyServer,     &CopyListener::copyWithoutDestination);
     connect(&cliParser,     &CliParser::newCopy,					copyServer,     &CopyListener::copy);
     connect(&cliParser,     &CliParser::newMoveWithoutDestination,	copyServer,     &CopyListener::moveWithoutDestination);
@@ -90,6 +90,13 @@ EventDispatcher::EventDispatcher()
     KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
     KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
     KeysList.append(qMakePair(QString("confirmToGroupWindows"),QVariant(true)));
+    #ifdef ULTRACOPIER_INTERNET_SUPPORT
+    #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(true)));
+    #else
+    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(false)));
+    #endif
+    #endif
     OptionEngine::optionEngine->addOptionGroup("Ultracopier",KeysList);
     if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
     {
@@ -175,7 +182,7 @@ void EventDispatcher::initFunction()
         connect(copyServer,	&CopyListener::listenerReady,					backgroundIcon,	&SystrayIcon::listenerReady,Qt::DirectConnection);
         connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen,Qt::DirectConnection);
-        connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,					copyServer,	&CopyListener::close,Qt::DirectConnection);
+        connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,				copyServer,	&CopyListener::close,Qt::DirectConnection);
         if(OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
             copyServer->listen();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
@@ -184,7 +191,10 @@ void EventDispatcher::initFunction()
         connect(backgroundIcon,	&SystrayIcon::addWindowCopyMove,				core,		&Core::addWindowCopyMove,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::addWindowTransfer,				core,		&Core::addWindowTransfer,Qt::DirectConnection);
         connect(copyEngineList,	&CopyEngineManager::addCopyEngine,				backgroundIcon,	&SystrayIcon::addCopyEngine,Qt::DirectConnection);
-        connect(copyEngineList,	&CopyEngineManager::removeCopyEngine,				backgroundIcon,	&SystrayIcon::removeCopyEngine,Qt::DirectConnection);
+        connect(copyEngineList,	&CopyEngineManager::removeCopyEngine,			backgroundIcon,	&SystrayIcon::removeCopyEngine,Qt::DirectConnection);
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        connect(&internetUpdater,&InternetUpdater::newUpdate,                   backgroundIcon, &SystrayIcon::newUpdate);
+        #endif
         copyEngineList->setIsConnected();
         copyServer->resendState();
     }

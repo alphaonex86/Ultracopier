@@ -39,4 +39,6 @@
 /// \brief to disable plugin support, import and remove
 #define ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
 
+#define ULTRACOPIER_UPDATER_URL "http://ultracopier.first-world.info/updater.php"
+
 #endif // VARIABLE_H

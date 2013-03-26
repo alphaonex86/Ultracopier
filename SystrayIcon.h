@@ -40,6 +40,9 @@ class SystrayIcon : public QSystemTrayIcon
         void pluginLoaderReady(const Ultracopier::CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
         void addCopyEngine(const QString &name,const bool &canDoOnlyCopy);
         void removeCopyEngine(const QString &name);
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        void newUpdate(const QString &version);
+        #endif
     private:
         QMenu* systrayMenu;			///< Pointer on the menu
         QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)

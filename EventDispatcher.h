@@ -21,6 +21,9 @@
 #ifndef ULTRACOPIER_VERSION_PORTABLE
 #include "SessionLoader.h"
 #endif
+#ifdef ULTRACOPIER_INTERNET_SUPPORT
+#include "InternetUpdater.h"
+#endif
 #include "CopyListener.h"
 #include "OptionDialog.h"
 #include "CopyEngineManager.h"
@@ -77,6 +80,9 @@ class EventDispatcher : public QObject
         CopyListener *copyServer;
         Core *core;
         OptionDialog optionDialog;
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        InternetUpdater internetUpdater;
+        #endif
         CopyEngineManager *copyEngineList;
         LocalListener localListener;
         CliParser cliParser;

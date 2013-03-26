@@ -20,7 +20,6 @@
 /// \brief Initiate the option, load from backend
 OptionEngine::OptionEngine()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //locate the settings
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         QString settingsFilePath=ResourcesManager::resourcesManager->getWritablePath();
