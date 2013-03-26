@@ -15,17 +15,31 @@ class AvancedQFile : public QFile
 {
     Q_OBJECT
 public:
-	/// \brief set created date, not exists in unix world
-	bool setCreated(QDateTime time);
-	/// \brief set last modification date
-	bool setLastModified(QDateTime time);
-	/// \brief set last read date
-	bool setLastRead(QDateTime time);
-	
-/*	//fileName
-	void close();
-	bool	open ( FILE * fh, OpenMode mode )
-	bool	open ( int fd, OpenMode mode )*/
+    /// \brief set created date, not exists in unix world
+    bool setCreated(QDateTime time);
+    /// \brief set last modification date
+    bool setLastModified(QDateTime time);
+    /// \brief set last read date
+    bool setLastRead(QDateTime time);
+
+    #ifdef ULTRACOPIER_OVERLAPPED_FILE
+    explicit AvancedQFile();
+    ~AvancedQFile();
+    bool open(OpenMode mode);
+    void close();
+    bool seek(qint64 pos);
+    bool resize(qint64 size);
+    QString errorString() const;
+    bool isOpen() const;
+    qint64 write(const QByteArray &data);
+    QByteArray read(qint64 maxlen);
+    FileError error() const;
+    QString getLastWindowsError();
+private:
+    HANDLE handle;
+    FileError fileError;
+    QString fileErrorString;
+    #endif
 };
 
 #endif // AVANCEDQFILE_H
