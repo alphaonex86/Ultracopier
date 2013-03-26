@@ -1616,6 +1616,7 @@ qint64 TransferThread::copiedSize()
     {
     case TransferStat_Transfer:
     case TransferStat_PostOperation:
+    case TransferStat_PostTransfer:
         return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_Checksum:
         return transferSize;
@@ -1742,6 +1743,7 @@ quint64 TransferThread::realByteTransfered()
     case TransferStat_Checksum:
         return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_PostTransfer:
+        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_PostOperation:
         return transferSize;
     default:
