@@ -15,7 +15,7 @@
 
 #define ULTRACOPIER_DEFAULT_STYLE "Oxygen"
 
-/// \todo load each plugin to have their options
+/// \warning All plugin remain loaded
 /// \todo get the current themes instance
 
 /// \brief Create the manager and load the defaults variables
@@ -262,7 +262,8 @@ void ThemesManager::newOptionValue(const QString &group,const QString &name,cons
             int tempCurrentPluginIndex=currentPluginIndex;
             emit theThemeNeedBeUnloaded();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("unload the themes: %1 (%2)").arg(pluginList.at(tempCurrentPluginIndex).plugin.name).arg(tempCurrentPluginIndex));
-            if(pluginList.at(tempCurrentPluginIndex).options!=NULL)
+            /* Themes remain loaded for the options
+             *if(pluginList.at(tempCurrentPluginIndex).options!=NULL)
             {
                 delete pluginList.at(tempCurrentPluginIndex).options;
                 pluginList[tempCurrentPluginIndex].options=NULL;
@@ -277,7 +278,7 @@ void ThemesManager::newOptionValue(const QString &group,const QString &name,cons
                 pluginList.at(tempCurrentPluginIndex).pluginLoader->unload();
                 delete pluginList.at(tempCurrentPluginIndex).pluginLoader;
                 pluginList[tempCurrentPluginIndex].pluginLoader=NULL;
-            }
+            } */
         }
         allPluginIsLoaded();
         //emit theThemeIsReloaded(); -> do into allPluginIsLoaded(); now

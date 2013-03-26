@@ -228,14 +228,12 @@ void Core::loadInterface()
     {
         bool error=false;
         int index=0;
-        int loop_size=copyList.size();
-        while(index<loop_size)
+        while(index<copyList.size())
         {
             copyList[index].interface=ThemesManager::themesManager->getThemesInstance();
             if(copyList[index].interface==NULL)
             {
                 copyInstanceCanceledByIndex(index);
-                index--;
                 error=true;
             }
             else
@@ -244,8 +242,8 @@ void Core::loadInterface()
                     copyList.at(index).interface->forceCopyMode(copyList.at(index).mode);
                 connectInterfaceAndSync(copyList.count()-1);
                 copyList.at(index).engine->syncTransferList();
+                index++;
             }
-            index++;
         }
         if(error)
         {
