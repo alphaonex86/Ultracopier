@@ -20,7 +20,11 @@ void InternetUpdater::downloadFile()
 {
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate").toBool())
         return;
-    reply = qnam.get(QNetworkRequest(QString("%1?platform=%2").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE)));
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    reply = qnam.get(QNetworkRequest(QString("%1?platform=%2&ultimate=1").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE)));
+    #else
+    reply = qnam.get(QNetworkRequest(QString("%1?platform=%2&ultimate=0").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE)));
+    #endif
     connect(reply, &QNetworkReply::finished, this, &InternetUpdater::httpFinished);
 }
 
