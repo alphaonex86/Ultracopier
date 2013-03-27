@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="copyEngineResources.qrc">
-    <normaloff>:/resources/remove.png</normaloff>:/resources/remove.png</iconset>
+    <normaloff>:/CopyEngine/Ultracopier/resources/remove.png</normaloff>:/CopyEngine/Ultracopier/resources/remove.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

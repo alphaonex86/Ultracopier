@@ -6,9 +6,9 @@
 
 TransferModel::TransferModel()
 {
-    iconStart=QIcon(":/resources/player_play.png");
-    iconPause=QIcon(":/resources/player_pause.png");
-    iconStop=QIcon(":/resources/checkbox.png");
+    iconStart=QIcon(":/Themes/Windows/resources/player_play.png");
+    iconPause=QIcon(":/Themes/Windows/resources/player_pause.png");
+    iconStop=QIcon(":/Themes/Windows/resources/checkbox.png");
     currentIndexSearch=0;
     currentFile	= 0;
     totalFile	= 0;

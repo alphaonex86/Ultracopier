@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/resources/main.png</normaloff>:/resources/main.png</iconset>
+    <normaloff>:/Themes/Teracopy/resources/main.png</normaloff>:/Themes/Teracopy/resources/main.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -302,7 +302,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAddFile">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Teracopy/resources/add.png</normaloff>:/Themes/Teracopy/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAddFolder">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Teracopy/resources/add.png</normaloff>:/Themes/Teracopy/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add folder</string>
@@ -320,7 +320,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAddFileToMove">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Teracopy/resources/add.png</normaloff>:/Themes/Teracopy/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move file(s)</string>
@@ -329,7 +329,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAddFolderToMove">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Teracopy/resources/add.png</normaloff>:/Themes/Teracopy/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move folder</string>
@@ -338,7 +338,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAddFileToCopy">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Teracopy/resources/add.png</normaloff>:/Themes/Teracopy/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy file(s)</string>
@@ -347,7 +347,7 @@ p, li { white-space: pre-wrap; }
   <action name="actionAddFolderToCopy">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Teracopy/resources/add.png</normaloff>:/Themes/Teracopy/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy folder</string>

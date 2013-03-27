@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/Themes/Teracopy">
         <file>resources/SystemTrayIcon/systray_Caught_Windows.png</file>
         <file>resources/SystemTrayIcon/systray_Semiuncaught_Windows.png</file>
         <file>resources/SystemTrayIcon/systray_Uncaught_Windows.png</file>

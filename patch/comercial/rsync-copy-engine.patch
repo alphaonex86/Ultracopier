@@ -84,6 +84,18 @@ diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.h Rsync/CopyEngine.h
      void setCheckDiskSpace(const bool &checkDiskSpace);
      void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
      void defaultDestinationFolderBrowse();
+diff -U 3 -H -d -r -N -- Ultracopier/DiskSpace.ui Rsync/DiskSpace.ui
+--- Ultracopier/DiskSpace.ui	2013-03-27 12:00:44.000000000 +0100
++++ Rsync/DiskSpace.ui	2013-03-27 12:03:01.627870627 +0100
+@@ -15,7 +15,7 @@
+   </property>
+   <property name="windowIcon">
+    <iconset resource="copyEngineResources.qrc">
+-    <normaloff>:/CopyEngine/Ultracopier/resources/remove.png</normaloff>:/CopyEngine/Ultracopier/resources/remove.png</iconset>
++    <normaloff>:/CopyEngine/Ultracopier/Rsync/remove.png</normaloff>:/CopyEngine/Ultracopier/Rsync/remove.png</iconset>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
 diff -U 3 -H -d -r -N -- Ultracopier/Factory.cpp Rsync/Factory.cpp
 --- Ultracopier/Factory.cpp	2013-03-26 13:56:20.000000000 +0100
 +++ Rsync/Factory.cpp	2013-03-27 09:52:11.069192007 +0100
@@ -141,6 +153,84 @@ diff -U 3 -H -d -r -N -- Ultracopier/Factory.h Rsync/Factory.h
      void setFolderCollision(int index);
      void setFolderError(int index);
      void setTransferAlgorithm(int index);
+diff -U 3 -H -d -r -N -- Ultracopier/FilterRules.ui Rsync/FilterRules.ui
+--- Ultracopier/FilterRules.ui	2013-03-27 12:00:07.000000000 +0100
++++ Rsync/FilterRules.ui	2013-03-27 12:02:39.664871526 +0100
+@@ -18,7 +18,7 @@
+   </property>
+   <property name="windowIcon">
+    <iconset resource="resources.qrc">
+-    <normaloff>:/CopyEngine/Ultracopier/resources/filter.png</normaloff>:/CopyEngine/Ultracopier/resources/filter.png</iconset>
++    <normaloff>:/CopyEngine/Ultracopier/Rsync/filter.png</normaloff>:/CopyEngine/Ultracopier/Rsync/filter.png</iconset>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <property name="margin">
+diff -U 3 -H -d -r -N -- Ultracopier/Filters.ui Rsync/Filters.ui
+--- Ultracopier/Filters.ui	2013-03-27 11:59:50.000000000 +0100
++++ Rsync/Filters.ui	2013-03-27 12:02:27.298872032 +0100
+@@ -15,7 +15,7 @@
+   </property>
+   <property name="windowIcon">
+    <iconset resource="resources.qrc">
+-    <normaloff>:/CopyEngine/Ultracopier/resources/filter.png</normaloff>:/CopyEngine/Ultracopier/resources/filter.png</iconset>
++    <normaloff>:/CopyEngine/Ultracopier/Rsync/filter.png</normaloff>:/CopyEngine/Ultracopier/Rsync/filter.png</iconset>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+@@ -49,7 +49,7 @@
+          <widget class="QToolButton" name="add_exclusion">
+           <property name="icon">
+            <iconset resource="resources.qrc">
+-            <normaloff>:/CopyEngine/Ultracopier/resources/add.png</normaloff>:/CopyEngine/Ultracopier/resources/add.png</iconset>
++            <normaloff>:/CopyEngine/Ultracopier/Rsync/add.png</normaloff>:/CopyEngine/Ultracopier/Rsync/add.png</iconset>
+           </property>
+          </widget>
+         </item>
+@@ -57,7 +57,7 @@
+          <widget class="QToolButton" name="edit_exclusion">
+           <property name="icon">
+            <iconset resource="resources.qrc">
+-            <normaloff>:/CopyEngine/Ultracopier/resources/edit.png</normaloff>:/CopyEngine/Ultracopier/resources/edit.png</iconset>
++            <normaloff>:/CopyEngine/Ultracopier/Rsync/edit.png</normaloff>:/CopyEngine/Ultracopier/Rsync/edit.png</iconset>
+           </property>
+          </widget>
+         </item>
+@@ -65,7 +65,7 @@
+          <widget class="QToolButton" name="remove_exclusion">
+           <property name="icon">
+            <iconset resource="resources.qrc">
+-            <normaloff>:/CopyEngine/Ultracopier/resources/remove.png</normaloff>:/CopyEngine/Ultracopier/resources/remove.png</iconset>
++            <normaloff>:/CopyEngine/Ultracopier/Rsync/remove.png</normaloff>:/CopyEngine/Ultracopier/Rsync/remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+@@ -121,7 +121,7 @@
+            <widget class="QToolButton" name="add_inclusion">
+             <property name="icon">
+              <iconset resource="resources.qrc">
+-              <normaloff>:/CopyEngine/Ultracopier/resources/add.png</normaloff>:/CopyEngine/Ultracopier/resources/add.png</iconset>
++              <normaloff>:/CopyEngine/Ultracopier/Rsync/add.png</normaloff>:/CopyEngine/Ultracopier/Rsync/add.png</iconset>
+             </property>
+            </widget>
+           </item>
+@@ -129,7 +129,7 @@
+            <widget class="QToolButton" name="edit_inclusion">
+             <property name="icon">
+              <iconset resource="resources.qrc">
+-              <normaloff>:/CopyEngine/Ultracopier/resources/edit.png</normaloff>:/CopyEngine/Ultracopier/resources/edit.png</iconset>
++              <normaloff>:/CopyEngine/Ultracopier/Rsync/edit.png</normaloff>:/CopyEngine/Ultracopier/Rsync/edit.png</iconset>
+             </property>
+            </widget>
+           </item>
+@@ -137,7 +137,7 @@
+            <widget class="QToolButton" name="remove_inclusion">
+             <property name="icon">
+              <iconset resource="resources.qrc">
+-              <normaloff>:/CopyEngine/Ultracopier/resources/remove.png</normaloff>:/CopyEngine/Ultracopier/resources/remove.png</iconset>
++              <normaloff>:/CopyEngine/Ultracopier/Rsync/remove.png</normaloff>:/CopyEngine/Ultracopier/Rsync/remove.png</iconset>
+             </property>
+            </widget>
+           </item>
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
 --- Ultracopier/ListThread.cpp	2013-03-26 12:25:03.000000000 +0100
 +++ Rsync/ListThread.cpp	2013-03-27 10:05:18.831159758 +0100
@@ -759,6 +849,16 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui Rsync/copyEngineOption
         </rect>
        </property>
        <attribute name="label">
+diff -U 3 -H -d -r -N -- Ultracopier/copyEngineResources.qrc Rsync/copyEngineResources.qrc
+--- Ultracopier/copyEngineResources.qrc	2013-03-27 11:57:38.000000000 +0100
++++ Rsync/copyEngineResources.qrc	2013-03-27 12:01:48.468873622 +0100
+@@ -1,5 +1,5 @@
+ <RCC>
+-    <qresource prefix="/CopyEngine/Ultracopier">
++    <qresource prefix="/CopyEngine/Rsync">
+         <file>resources/add.png</file>
+         <file>resources/edit.png</file>
+         <file>resources/remove.png</file>
 diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
 --- Ultracopier/documentation.dox	2013-01-16 10:30:03.000000000 +0100
 +++ Rsync/documentation.dox	2013-03-27 09:13:24.715287241 +0100

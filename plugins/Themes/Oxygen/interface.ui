@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>483</width>
+    <width>508</width>
     <height>448</height>
    </rect>
   </property>
@@ -14,8 +14,8 @@
    <string notr="true">Ultracopier</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/resources/main.png</normaloff>:/resources/main.png</iconset>
+   <iconset resource="interfaceResources.qrc">
+    <normaloff>:/Themes/Oxygen/resources/main.png</normaloff>:/Themes/Oxygen/resources/main.png</iconset>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -125,8 +125,8 @@ p, li { white-space: pre-wrap; }
         <string>Close at the end of the transfers</string>
        </property>
        <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/SystemTrayIcon/exit.png</normaloff>:/resources/SystemTrayIcon/exit.png</iconset>
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -223,8 +223,8 @@ p, li { white-space: pre-wrap; }
         <string>&amp;More</string>
        </property>
        <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/moveDown.png</normaloff>:/resources/moveDown.png</iconset>
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -243,8 +243,8 @@ p, li { white-space: pre-wrap; }
         <string>&amp;Pause</string>
        </property>
        <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/player_pause.png</normaloff>:/resources/player_pause.png</iconset>
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/player_pause.png</normaloff>:/Themes/Oxygen/resources/player_pause.png</iconset>
        </property>
       </widget>
      </item>
@@ -257,8 +257,8 @@ p, li { white-space: pre-wrap; }
         <string>&amp;Skip</string>
        </property>
        <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/player_end.png</normaloff>:/resources/player_end.png</iconset>
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/player_end.png</normaloff>:/Themes/Oxygen/resources/player_end.png</iconset>
        </property>
       </widget>
      </item>
@@ -268,8 +268,8 @@ p, li { white-space: pre-wrap; }
         <string>&amp;Cancel</string>
        </property>
        <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/cancel.png</normaloff>:/resources/cancel.png</iconset>
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/cancel.png</normaloff>:/Themes/Oxygen/resources/cancel.png</iconset>
        </property>
       </widget>
      </item>
@@ -319,7 +319,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -349,8 +349,8 @@ p, li { white-space: pre-wrap; }
             <string>Move the selected items to the top</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/putOnTop.png</normaloff>:/resources/putOnTop.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/putOnTop.png</normaloff>:/Themes/Oxygen/resources/putOnTop.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -375,8 +375,8 @@ p, li { white-space: pre-wrap; }
             <string>Move up the selected items</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/moveUp.png</normaloff>:/resources/moveUp.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/moveUp.png</normaloff>:/Themes/Oxygen/resources/moveUp.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -401,8 +401,8 @@ p, li { white-space: pre-wrap; }
             <string>Move down the selected items</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/moveDown.png</normaloff>:/resources/moveDown.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -427,8 +427,8 @@ p, li { white-space: pre-wrap; }
             <string>Move the selected items to the bottom</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/putOnBottom.png</normaloff>:/resources/putOnBottom.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/putOnBottom.png</normaloff>:/Themes/Oxygen/resources/putOnBottom.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -453,8 +453,8 @@ p, li { white-space: pre-wrap; }
             <string>Add file/folder</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
            </property>
            <property name="popupMode">
             <enum>QToolButton::InstantPopup</enum>
@@ -482,8 +482,8 @@ p, li { white-space: pre-wrap; }
             <string>Delete select items</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/remove.png</normaloff>:/resources/remove.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/remove.png</normaloff>:/Themes/Oxygen/resources/remove.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -508,8 +508,8 @@ p, li { white-space: pre-wrap; }
             <string>Search</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/search.png</normaloff>:/resources/search.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/search.png</normaloff>:/Themes/Oxygen/resources/search.png</iconset>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -537,8 +537,8 @@ p, li { white-space: pre-wrap; }
             <string>Export transfer list</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/export-transfer-list.png</normaloff>:/resources/export-transfer-list.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -563,8 +563,8 @@ p, li { white-space: pre-wrap; }
             <string>Import transfer list</string>
            </property>
            <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/import-transfer-list.png</normaloff>:/resources/import-transfer-list.png</iconset>
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/import-transfer-list.png</normaloff>:/Themes/Oxygen/resources/import-transfer-list.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -641,8 +641,8 @@ p, li { white-space: pre-wrap; }
               </size>
              </property>
              <property name="icon">
-              <iconset resource="resources.qrc">
-               <normaloff>:/resources/remove.png</normaloff>:/resources/remove.png</iconset>
+              <iconset resource="interfaceResources.qrc">
+               <normaloff>:/Themes/Oxygen/resources/remove.png</normaloff>:/Themes/Oxygen/resources/remove.png</iconset>
              </property>
              <property name="flat">
               <bool>true</bool>
@@ -665,8 +665,8 @@ p, li { white-space: pre-wrap; }
   </layout>
   <action name="actionAddFile">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>
@@ -674,8 +674,8 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionAddFolder">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add folder</string>
@@ -683,8 +683,8 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionAddFileToMove">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move file(s)</string>
@@ -692,8 +692,8 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionAddFolderToMove">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move folder</string>
@@ -701,8 +701,8 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionAddFileToCopy">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy file(s)</string>
@@ -710,8 +710,8 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionAddFolderToCopy">
    <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy folder</string>
@@ -719,7 +719,7 @@ p, li { white-space: pre-wrap; }
   </action>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="interfaceResources.qrc"/>
  </resources>
  <connections>
   <connection>

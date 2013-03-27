@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/resources/icon.png</normaloff>:/resources/icon.png</iconset>
+    <normaloff>:/Themes/Windows/resources/icon.png</normaloff>:/Themes/Windows/resources/icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -101,7 +101,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
          <string notr="true">background-color: rgba(255, 0, 0, 0);</string>
         </property>
         <property name="pixmap">
-         <pixmap resource="resources.qrc">:/resources/icon-top.png</pixmap>
+         <pixmap resource="resources.qrc">:/Themes/Windows/resources/icon-top.png</pixmap>
         </property>
        </widget>
       </item>
@@ -292,7 +292,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
-          <normaloff>:/resources/arrow-down.png</normaloff>:/resources/arrow-down.png</iconset>
+          <normaloff>:/Themes/Windows/resources/arrow-down.png</normaloff>:/Themes/Windows/resources/arrow-down.png</iconset>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -339,7 +339,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
   <action name="actionAddFile">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Windows/resources/add.png</normaloff>:/Themes/Windows/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>
@@ -348,7 +348,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
   <action name="actionAddFolder">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Windows/resources/add.png</normaloff>:/Themes/Windows/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add folder</string>
@@ -357,7 +357,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
   <action name="actionAddFileToMove">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Windows/resources/add.png</normaloff>:/Themes/Windows/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move file(s)</string>
@@ -366,7 +366,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
   <action name="actionAddFolderToMove">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Windows/resources/add.png</normaloff>:/Themes/Windows/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move folder</string>
@@ -375,7 +375,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
   <action name="actionAddFileToCopy">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Windows/resources/add.png</normaloff>:/Themes/Windows/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy file(s)</string>
@@ -384,7 +384,7 @@ font: 12pt &quot;Sans Serif&quot;;</string>
   <action name="actionAddFolderToCopy">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Windows/resources/add.png</normaloff>:/Themes/Windows/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy folder</string>

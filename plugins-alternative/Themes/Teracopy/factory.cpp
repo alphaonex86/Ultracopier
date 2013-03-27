@@ -60,7 +60,7 @@ QIcon ThemesFactory::getIcon(const QString &fileName) const
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    return QIcon(":/resources/"+fileName);
+    return QIcon(":/Themes/Teracopy/resources/"+fileName);
 }
 
 void ThemesFactory::newLanguageLoaded()

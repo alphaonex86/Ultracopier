@@ -148,13 +148,13 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->pauseButton->setIcon(tempIcon);
     }
     else
-        player_pause=QIcon(":/resources/player_pause.png");
+        player_pause=QIcon(":/Themes/Oxygen/resources/player_pause.png");
 
     tempIcon=QIcon::fromTheme("media-playback-play");
     if(!tempIcon.isNull())
         player_play=tempIcon;
     else
-        player_play=QIcon(":/resources/player_play.png");
+        player_play=QIcon(":/Themes/Oxygen/resources/player_play.png");
 
     tempIcon=QIcon::fromTheme("media-skip-forward");
     if(!tempIcon.isNull())

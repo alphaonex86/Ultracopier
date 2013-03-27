@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/Themes/Clean">
         <file>resources/SystemTrayIcon/informations.png</file>
     </qresource>
 </RCC>

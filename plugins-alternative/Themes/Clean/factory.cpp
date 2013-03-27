@@ -53,7 +53,7 @@ QIcon ThemesFactory::getIcon(const QString &fileName)
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    return QIcon(":/resources/"+fileName);
+    return QIcon(":/Themes/Clean/resources/"+fileName);
 }
 
 void ThemesFactory::resetOptions()

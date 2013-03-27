@@ -72,7 +72,7 @@
   <action name="actionAddFile">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Clean/resources/add.png</normaloff>:/Themes/Clean/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>
@@ -81,7 +81,7 @@
   <action name="actionAddFolder">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Clean/resources/add.png</normaloff>:/Themes/Clean/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add folder</string>
@@ -90,7 +90,7 @@
   <action name="actionAddFileToMove">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Clean/resources/add.png</normaloff>:/Themes/Clean/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move file(s)</string>
@@ -99,7 +99,7 @@
   <action name="actionAddFolderToMove">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Clean/resources/add.png</normaloff>:/Themes/Clean/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move folder</string>
@@ -108,7 +108,7 @@
   <action name="actionAddFileToCopy">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Clean/resources/add.png</normaloff>:/Themes/Clean/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy file(s)</string>
@@ -117,7 +117,7 @@
   <action name="actionAddFolderToCopy">
    <property name="icon">
     <iconset>
-     <normaloff>:/resources/add.png</normaloff>:/resources/add.png</iconset>
+     <normaloff>:/Themes/Clean/resources/add.png</normaloff>:/Themes/Clean/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy folder</string>

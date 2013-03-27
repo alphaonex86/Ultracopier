@@ -6,9 +6,9 @@
 
 TransferModel::TransferModel()
 {
-    iconStart=QIcon(":/resources/player_play.png");
-    iconPause=QIcon(":/resources/player_pause.png");
-    iconStop=QIcon(":/resources/checkbox.png");
+    iconStart=QIcon(":/Themes/Teracopy/resources/player_play.png");
+    iconPause=QIcon(":/Themes/Teracopy/resources/player_pause.png");
+    iconStop=QIcon(":/Themes/Teracopy/resources/checkbox.png");
     currentIndexSearch=0;
     haveSearchItem=false;
 }

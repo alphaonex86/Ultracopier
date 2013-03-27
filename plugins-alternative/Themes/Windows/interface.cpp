@@ -344,13 +344,13 @@ void Themes::updateDetails()
     {
         this->setMinimumHeight(242);
         this->setMaximumHeight(242);
-        ui->more->setIcon(QIcon(":/resources/arrow-up.png"));
+        ui->more->setIcon(QIcon(":/Themes/Windows/resources/arrow-up.png"));
     }
     else
     {
         this->setMinimumHeight(168);
         this->setMaximumHeight(168);
-        ui->more->setIcon(QIcon(":/resources/arrow-down.png"));
+        ui->more->setIcon(QIcon(":/Themes/Windows/resources/arrow-down.png"));
     }
 
     // usefull under windows

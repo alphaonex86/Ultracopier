@@ -157,7 +157,7 @@ QIcon ThemesFactory::getIcon(const QString &fileName) const
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    return QIcon(":/resources/"+fileName);
+    return QIcon(":/Themes/Oxygen/resources/"+fileName);
 }
 
 void ThemesFactory::resetOptions()

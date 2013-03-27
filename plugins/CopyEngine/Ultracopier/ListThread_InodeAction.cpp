@@ -13,7 +13,7 @@ switch(currentActionToDoInode.type)
 {
     case ActionType_RealMove:
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch real move, source: %1, destination: %2").arg(currentActionToDoInode.source.absoluteFilePath()).arg(currentActionToDoInode.destination.absoluteFilePath()));
-        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_RealMove);
+        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=inodeThreads)
@@ -21,7 +21,7 @@ switch(currentActionToDoInode.type)
     break;
     case ActionType_MkPath:
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch mkpath, source: %1, destination: %2").arg(currentActionToDoInode.source.absoluteFilePath()).arg(currentActionToDoInode.destination.absoluteFilePath()));
-        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_MkPath);
+        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=inodeThreads)
@@ -32,7 +32,7 @@ switch(currentActionToDoInode.type)
         if(currentActionToDoInode.size==0)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmpath: %1").arg(currentActionToDoInode.source.absoluteFilePath()));
-            mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),ActionType_MovePath);
+            mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
             currentActionToDoInode.isRunning=true;
             numberOfInodeOperation++;
             if(numberOfInodeOperation>=inodeThreads)
