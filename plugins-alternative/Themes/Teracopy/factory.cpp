@@ -6,77 +6,64 @@
 
 #include "factory.h"
 
-PluginInterface_Themes * Factory::getInstance()
+PluginInterface_Themes * ThemesFactory::getInstance()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Themes * newInterface=new Themes(facilityEngine);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation);
     #endif
-    connect(this,&Factory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
+    connect(this,&ThemesFactory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
     return newInterface;
 }
 
-void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
+void ThemesFactory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
 {
-    this->facilityEngine=facilityEngine;
+    this->facilityEngine=facilityInterface;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath: "+pluginPath);
     Q_UNUSED(portableVersion);
     Q_UNUSED(options);
-    Q_UNUSED(facilityInterface);
 }
 
-QWidget * Factory::options()
+QWidget * ThemesFactory::options()
 {
     return NULL;
 }
 
-void Factory::resetOptions()
+void ThemesFactory::resetOptions()
 {
 }
 
-QIcon Factory::getIcon(const QString &fileName)
+QIcon ThemesFactory::getIcon(const QString &fileName) const
 {
     if(fileName=="SystemTrayIcon/exit.png")
     {
         QIcon tempIcon=QIcon::fromTheme("application-exit");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     if(fileName=="SystemTrayIcon/add.png")
     {
         QIcon tempIcon=QIcon::fromTheme("list-add");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     if(fileName=="SystemTrayIcon/informations.png")
     {
         QIcon tempIcon=QIcon::fromTheme("help-about");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     if(fileName=="SystemTrayIcon/options.png")
     {
         QIcon tempIcon=QIcon::fromTheme("applications-system");
         if(!tempIcon.isNull())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("use substitution icon for: %1").arg(fileName));
             return tempIcon;
-        }
     }
     return QIcon(":/resources/"+fileName);
 }
 
-void Factory::newLanguageLoaded()
+void ThemesFactory::newLanguageLoaded()
 {
     emit reloadLanguage();
 }

@@ -36,6 +36,8 @@ public slots:
     /** \brief show the detected speed
      * in byte per seconds */
     void detectedSpeed(const quint64 &speed);
+    /** \brief support speed limitation */
+    void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
     /** \brief show the remaining time
      * time in seconds */
     void remainingTime(const int &remainingSeconds);

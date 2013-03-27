@@ -13,10 +13,10 @@
 #include "../../../interface/PluginInterface_Themes.h"
 
 /// \brief Define the factory, to create instance of the interface
-class Factory : public PluginInterface_ThemesFactory
+class ThemesFactory : public PluginInterface_ThemesFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/0.4.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_ThemesFactory)
     public:
         /// \brief to return the instance of the copy engine

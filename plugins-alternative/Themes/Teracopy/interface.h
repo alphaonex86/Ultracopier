@@ -3,13 +3,14 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#ifndef INTERFACE_TEST_H
-#define INTERFACE_TEST_H
+#ifndef INTERFACE_H
+#define INTERFACE_H
 
 #include <QObject>
 #include <QWidget>
 #include <QCloseEvent>
 #include <QMenu>
+#include <QColor>
 
 #include "../../../interface/PluginInterface_Themes.h"
 
@@ -70,6 +71,9 @@ private:
     QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;///< to have progression and stat
     /// \brief the custom transfer model
     TransferModel transferModel;
+    QColor progressColorWrite;
+    QColor progressColorRead;
+    QColor progressColorRemaining;
 public:
     //send information about the copy
     /// \brief to set the action in progress
@@ -84,6 +88,8 @@ public:
     /** \brief show the detected speed
      * in byte per seconds */
     void detectedSpeed(const quint64 &speed);
+    /** \brief support speed limitation */
+    void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
     /** \brief show the remaining time
      * time in seconds */
     void remainingTime(const int &remainingSeconds);
@@ -165,4 +171,4 @@ public slots:
     void getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>& returnActions);
 };
 
-#endif // INTERFACE_TEST_H
+#endif // INTERFACE_H

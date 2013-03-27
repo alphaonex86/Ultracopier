@@ -30,7 +30,7 @@ public:
     /// \brief the transfer item with progression
     struct ItemOfCopyListWithMoreInformations
     {
-        quint64 currentProgression;
+        quint64 currentReadProgression,currentWriteProgression;
         Ultracopier::ItemOfCopyList generalData;
         Ultracopier::ActionTypeCopyList actionType;
         bool custom_with_progression;
@@ -43,7 +43,7 @@ public:
         QString from;
         QString to;
         QString current_file;
-        int progressBar_file;
+        int progressBar_read,progressBar_write;
     };
 
     TransferModel();

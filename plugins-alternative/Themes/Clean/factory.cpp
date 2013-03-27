@@ -6,14 +6,14 @@
 
 #include "factory.h"
 
-PluginInterface_Themes * Factory::getInstance()
+PluginInterface_Themes * ThemesFactory::getInstance()
 {
     InterfacePlugin * newInterface=new InterfacePlugin(facilityEngine);
-    connect(this,&Factory::reloadLanguage,newInterface,&InterfacePlugin::newLanguageLoaded);
+    connect(this,&ThemesFactory::reloadLanguage,newInterface,&InterfacePlugin::newLanguageLoaded);
     return newInterface;
 }
 
-void Factory::setResources(OptionInterface * options, const QString &writePath, const QString &pluginPath, FacilityInterface * facilityInterface, const bool &portableVersion)
+void ThemesFactory::setResources(OptionInterface * options, const QString &writePath, const QString &pluginPath, FacilityInterface * facilityInterface, const bool &portableVersion)
 {
     Q_UNUSED(options)
     Q_UNUSED(writePath)
@@ -22,12 +22,12 @@ void Factory::setResources(OptionInterface * options, const QString &writePath, 
     Q_UNUSED(portableVersion)
 }
 
-QWidget * Factory::options()
+QWidget * ThemesFactory::options()
 {
     return NULL;
 }
 
-QIcon Factory::getIcon(const QString &fileName)
+QIcon ThemesFactory::getIcon(const QString &fileName)
 {
     if(fileName=="SystemTrayIcon/exit.png")
     {
@@ -56,11 +56,11 @@ QIcon Factory::getIcon(const QString &fileName)
     return QIcon(":/resources/"+fileName);
 }
 
-void Factory::resetOptions()
+void ThemesFactory::resetOptions()
 {
 }
 
-void Factory::newLanguageLoaded()
+void ThemesFactory::newLanguageLoaded()
 {
     emit reloadLanguage();
 }

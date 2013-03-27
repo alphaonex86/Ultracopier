@@ -407,8 +407,8 @@ bool CopyEngine::newCopy(const QStringList &sources)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QString destination;
-    if(!ui->defaultDestinationFolder->text().isEmpty() && QDir(ui->defaultDestinationFolder->text()).exists())
-        destination = ui->defaultDestinationFolder->text();
+    if(!defaultDestinationFolder.isEmpty() && QDir(defaultDestinationFolder).exists())
+        destination = defaultDestinationFolder;
     else
         destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(destination.isEmpty())

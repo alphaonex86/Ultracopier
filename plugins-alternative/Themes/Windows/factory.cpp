@@ -6,23 +6,23 @@
 
 #include "factory.h"
 
-QRegularExpression Factory::slashEnd;
-QRegularExpression Factory::isolateName;
+QRegularExpression ThemesFactory::slashEnd;
+QRegularExpression ThemesFactory::isolateName;
 
-Factory::Factory()
+ThemesFactory::ThemesFactory()
 {
     slashEnd=QRegularExpression("/$");
     isolateName=QRegularExpression("^.*/([^/]+)$");
 }
 
-PluginInterface_Themes * Factory::getInstance()
+PluginInterface_Themes * ThemesFactory::getInstance()
 {
     Themes * newInterface=new Themes(facilityEngine);
-    connect(this,&Factory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
+    connect(this,&ThemesFactory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
     return newInterface;
 }
 
-void Factory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
+void ThemesFactory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
 {
     Q_UNUSED(options)
     Q_UNUSED(writePath)
@@ -31,12 +31,12 @@ void Factory::setResources(OptionInterface * options,const QString &writePath,co
     Q_UNUSED(portableVersion)
 }
 
-QWidget * Factory::options()
+QWidget * ThemesFactory::options()
 {
         return NULL;
 }
 
-QIcon Factory::getIcon(const QString &fileName)
+QIcon ThemesFactory::getIcon(const QString &fileName) const
 {
     if(fileName=="SystemTrayIcon/exit.png")
     {
@@ -65,11 +65,11 @@ QIcon Factory::getIcon(const QString &fileName)
     return QIcon(":/resources/"+fileName);
 }
 
-void Factory::resetOptions()
+void ThemesFactory::resetOptions()
 {
 }
 
-void Factory::newLanguageLoaded()
+void ThemesFactory::newLanguageLoaded()
 {
     emit reloadLanguage();
 }
