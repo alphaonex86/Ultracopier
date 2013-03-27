@@ -267,8 +267,11 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
 void Themes::newFolderListing(const QString &path)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    QString newPath=path;
+    if(newPath.size()>(64+3))
+        newPath=newPath.mid(0,32)+"..."+newPath.mid(newPath.size()-32,32);
     if(action==Ultracopier::Listing)
-        ui->from->setText(path);
+        ui->from->setText(newPath);
 }
 
 void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
@@ -432,8 +435,14 @@ void Themes::updateCurrentFileInformation()
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(transfertItem.haveItem)
     {
-        ui->from->setText(transfertItem.from);
-        ui->to->setText(transfertItem.to);
+        QString newPath=transfertItem.from;
+        if(newPath.size()>(64+3))
+            newPath=newPath.mid(0,32)+"..."+newPath.mid(newPath.size()-32,32);
+        ui->from->setText(newPath);
+        newPath=transfertItem.to;
+        if(newPath.size()>(64+3))
+            newPath=newPath.mid(0,32)+"..."+newPath.mid(newPath.size()-32,32);
+        ui->to->setText(newPath);
         ui->current_file->setText(transfertItem.current_file);
         if(transfertItem.progressBar_read!=-1)
         {
