@@ -25,9 +25,7 @@ int TransferModel::columnCount( const QModelIndex& parent ) const
 QVariant TransferModel::data( const QModelIndex& index, int role ) const
 {
     Q_UNUSED(role);
-    int row,column;
-    row=index.row();
-    column=index.column();
+    Q_UNUSED(index);
     return QVariant();
 }
 
@@ -84,6 +82,8 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
             break;
             case Ultracopier::RemoveItem:
                 internalRunningOperation.remove(action.addAction.id);
+                startId.remove(action.addAction.id);
+                stopId.remove(action.addAction.id);
                 this->currentFile++;
             break;
             case Ultracopier::PreOperation:
@@ -240,6 +240,8 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
             returnItem.haveItem=false;
             return returnItem;
         }
+        else
+            returnItem.haveItem=true;
         const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation[*stopId.constBegin()];
         returnItem.from=itemTransfer.generalData.sourceFullPath;
         returnItem.to=itemTransfer.generalData.destinationFullPath;
