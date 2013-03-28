@@ -10,7 +10,7 @@
 
   \section mainpage_overview Overview
 
-  It's the default interface for Ultracopier. The first version, it's greatly inspirated by Supercopier. But have well evolued.\n
+  It's interface like Supercopier, see Tal Sella http://www.virtualplastic.net/scrow/ (icons) for the icons and icon license.\n
   More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>.
 
   \section mainpage_platforms Platforms
@@ -24,6 +24,7 @@
 
   \section license GPL Version 3
   The code source is under GPL3. The image is extacted from Oxygen icon pack of KDE4.\n
+  See Tal Sella http://www.virtualplastic.net/scrow/ (icons) for the icons and icon license.\n
   resources/export-transfer-list.png and resources/import-transfer-list.png done by png manipulation of KDE's oxygen icon pack (16x16/actions/format-indent-more.png + 16x16/actions/format-list-unordered.png), document-save.png -> all SystemTrayIcon/systray_* (color alteration).\n
   From 16x16/actions/: list-add.png -> add.png and SystemTrayIcon/add.png, process-stop.png -> remove.png, document-save.png -> main.png and, arrow-down.png -> moveDown.png,  arrow-up.png -> moveUp.png, system-shutdown.png -> cancel.png and SystemTrayIcon/exit.png, arrow-down-double.png -> putOnBottom.png, arrow-up-double.png -> putOnTop.png, media-skip-forward.png -> player_end.png, media-playback-pause.png -> player_pause.png, media-playback-start.png -> player_play.png, document-preview.png -> search.png, help-about.png -> SystemTrayIcon/informations.png \n
   And 16x16/categories/applications-development.png -> SystemTrayIcon/options.png
