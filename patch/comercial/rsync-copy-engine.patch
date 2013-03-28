@@ -1,6 +1,6 @@
 diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.cpp Rsync/CopyEngine.cpp
 --- Ultracopier/CopyEngine.cpp	2013-03-27 01:39:20.000000000 +0100
-+++ Rsync/CopyEngine.cpp	2013-03-28 16:47:29.023634963 +0100
++++ Rsync/CopyEngine.cpp	2013-03-28 17:42:10.296500637 +0100
 @@ -222,6 +222,7 @@
      setSequentialBuffer(sequentialBuffer);
      setParallelBuffer(parallelBuffer);
@@ -68,7 +68,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.cpp Rsync/CopyEngine.cpp
  {
 diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.h Rsync/CopyEngine.h
 --- Ultracopier/CopyEngine.h	2013-03-26 13:57:31.000000000 +0100
-+++ Rsync/CopyEngine.h	2013-03-27 09:48:38.828200695 +0100
++++ Rsync/CopyEngine.h	2013-03-28 17:42:10.296500637 +0100
 @@ -67,6 +67,7 @@
      bool                    renameTheOriginalDestination;
      bool                    moveTheWholeFolder;
@@ -85,221 +85,9 @@ diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.h Rsync/CopyEngine.h
      void setCheckDiskSpace(const bool &checkDiskSpace);
      void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
      void defaultDestinationFolderBrowse();
-diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.pro.user Rsync/CopyEngine.pro.user
---- Ultracopier/CopyEngine.pro.user	1970-01-01 01:00:00.000000000 +0100
-+++ Rsync/CopyEngine.pro.user	2013-03-28 17:05:30.417590694 +0100
-@@ -0,0 +1,208 @@
-+<?xml version="1.0" encoding="UTF-8"?>
-+<!DOCTYPE QtCreatorProject>
-+<!-- Written by Qt Creator 2.6.2, 2013-03-28T17:05:30. -->
-+<qtcreator>
-+ <data>
-+  <variable>ProjectExplorer.Project.ActiveTarget</variable>
-+  <value type="int">0</value>
-+ </data>
-+ <data>
-+  <variable>ProjectExplorer.Project.EditorSettings</variable>
-+  <valuemap type="QVariantMap">
-+   <value type="bool" key="EditorConfiguration.AutoIndent">true</value>
-+   <value type="bool" key="EditorConfiguration.AutoSpacesForTabs">false</value>
-+   <value type="bool" key="EditorConfiguration.CamelCaseNavigation">true</value>
-+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.0">
-+    <value type="QString" key="language">Cpp</value>
-+    <valuemap type="QVariantMap" key="value">
-+     <value type="QString" key="CurrentPreferences">CppGlobal</value>
-+    </valuemap>
-+   </valuemap>
-+   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.1">
-+    <value type="QString" key="language">QmlJS</value>
-+    <valuemap type="QVariantMap" key="value">
-+     <value type="QString" key="CurrentPreferences">QmlJSGlobal</value>
-+    </valuemap>
-+   </valuemap>
-+   <value type="int" key="EditorConfiguration.CodeStyle.Count">2</value>
-+   <value type="QByteArray" key="EditorConfiguration.Codec">UTF-8</value>
-+   <value type="bool" key="EditorConfiguration.ConstrainTooltips">false</value>
-+   <value type="int" key="EditorConfiguration.IndentSize">4</value>
-+   <value type="bool" key="EditorConfiguration.KeyboardTooltips">false</value>
-+   <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
-+   <value type="int" key="EditorConfiguration.PaddingMode">1</value>
-+   <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
-+   <value type="int" key="EditorConfiguration.SmartBackspaceBehavior">0</value>
-+   <value type="bool" key="EditorConfiguration.SpacesForTabs">true</value>
-+   <value type="int" key="EditorConfiguration.TabKeyBehavior">0</value>
-+   <value type="int" key="EditorConfiguration.TabSize">8</value>
-+   <value type="bool" key="EditorConfiguration.UseGlobal">true</value>
-+   <value type="int" key="EditorConfiguration.Utf8BomBehavior">1</value>
-+   <value type="bool" key="EditorConfiguration.addFinalNewLine">true</value>
-+   <value type="bool" key="EditorConfiguration.cleanIndentation">true</value>
-+   <value type="bool" key="EditorConfiguration.cleanWhitespace">true</value>
-+   <value type="bool" key="EditorConfiguration.inEntireDocument">true</value>
-+  </valuemap>
-+ </data>
-+ <data>
-+  <variable>ProjectExplorer.Project.PluginSettings</variable>
-+  <valuemap type="QVariantMap"/>
-+ </data>
-+ <data>
-+  <variable>ProjectExplorer.Project.Target.0</variable>
-+  <valuemap type="QVariantMap">
-+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop-Qt 5.01 (qt5-linux)</value>
-+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop-Qt 5.01 (qt5-linux)</value>
-+   <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">{55d7d977-66a3-4d72-9331-2ae779c6252a}</value>
-+   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
-+   <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
-+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
-+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
-+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">qmake</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-+      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
-+      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">true</value>
-+      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
-+      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
-+     </valuemap>
-+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
-+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-+      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-+     </valuemap>
-+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
-+    </valuemap>
-+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
-+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-+      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-+     </valuemap>
-+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
-+    </valuemap>
-+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
-+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Debug</value>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
-+    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
-+    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/user/Desktop/ultracopier/sources/plugins-alternative/CopyEngine/CopyEngine-build-Desktop_Qt_5_01_qt5_linux-Debug</value>
-+    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
-+   </valuemap>
-+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
-+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">qmake</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-+      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
-+      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">true</value>
-+      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
-+      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
-+     </valuemap>
-+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
-+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-+      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-+     </valuemap>
-+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
-+    </valuemap>
-+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
-+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
-+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
-+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
-+      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-+      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
-+     </valuemap>
-+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
-+    </valuemap>
-+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
-+    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Release</value>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
-+    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">0</value>
-+    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/user/Desktop/ultracopier/sources/plugins-alternative/CopyEngine/CopyEngine-build-Desktop_Qt_5_01_qt5_linux-Release</value>
-+    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
-+   </valuemap>
-+   <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">2</value>
-+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
-+    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
-+     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">0</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy</value>
-+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Deploy</value>
-+    </valuemap>
-+    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy locally</value>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.DefaultDeployConfiguration</value>
-+   </valuemap>
-+   <value type="int" key="ProjectExplorer.Target.DeployConfigurationCount">1</value>
-+   <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.0">
-+    <value type="bool" key="Analyzer.Project.UseGlobal">true</value>
-+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
-+    <value type="int" key="ProjectExplorer.CustomExecutableRunConfiguration.BaseEnvironmentBase">2</value>
-+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable"></value>
-+    <value type="bool" key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal">false</value>
-+    <valuelist type="QVariantList" key="ProjectExplorer.CustomExecutableRunConfiguration.UserEnvironmentChanges"/>
-+    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory">%{buildDir}</value>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Executable</value>
-+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-+    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
-+    <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
-+    <value type="bool" key="RunConfiguration.UseCppDebugger">true</value>
-+    <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
-+    <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
-+    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-+   </valuemap>
-+   <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
-+  </valuemap>
-+ </data>
-+ <data>
-+  <variable>ProjectExplorer.Project.TargetCount</variable>
-+  <value type="int">1</value>
-+ </data>
-+ <data>
-+  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
-+  <value type="QString">{74ab603f-f657-4135-92cf-c93af71b2f91}</value>
-+ </data>
-+ <data>
-+  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
-+  <value type="int">12</value>
-+ </data>
-+</qtcreator>
 diff -U 3 -H -d -r -N -- Ultracopier/DiskSpace.ui Rsync/DiskSpace.ui
 --- Ultracopier/DiskSpace.ui	2013-03-27 12:00:44.000000000 +0100
-+++ Rsync/DiskSpace.ui	2013-03-27 12:03:01.627870627 +0100
++++ Rsync/DiskSpace.ui	2013-03-28 17:42:10.296500637 +0100
 @@ -15,7 +15,7 @@
    </property>
    <property name="windowIcon">
@@ -311,7 +99,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/DiskSpace.ui Rsync/DiskSpace.ui
     <item>
 diff -U 3 -H -d -r -N -- Ultracopier/Factory.cpp Rsync/Factory.cpp
 --- Ultracopier/Factory.cpp	2013-03-26 13:56:20.000000000 +0100
-+++ Rsync/Factory.cpp	2013-03-27 09:52:11.069192007 +0100
++++ Rsync/Factory.cpp	2013-03-28 17:42:10.298500637 +0100
 @@ -56,6 +56,7 @@
      connect(ui->osBuffer,                   &QCheckBox::toggled,                this,&CopyEngineFactory::osBuffer_toggled);
      connect(ui->osBufferLimited,            &QCheckBox::toggled,                this,&CopyEngineFactory::osBufferLimited_toggled);
@@ -357,7 +145,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/Factory.cpp Rsync/Factory.cpp
 +}
 diff -U 3 -H -d -r -N -- Ultracopier/Factory.h Rsync/Factory.h
 --- Ultracopier/Factory.h	2013-03-26 13:54:25.000000000 +0100
-+++ Rsync/Factory.h	2013-03-27 09:52:44.891190622 +0100
++++ Rsync/Factory.h	2013-03-28 17:42:10.298500637 +0100
 @@ -77,6 +77,7 @@
      void setSequentialBuffer(int sequentialBuffer);
      void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
@@ -368,7 +156,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/Factory.h Rsync/Factory.h
      void setTransferAlgorithm(int index);
 diff -U 3 -H -d -r -N -- Ultracopier/FilterRules.ui Rsync/FilterRules.ui
 --- Ultracopier/FilterRules.ui	2013-03-27 12:00:07.000000000 +0100
-+++ Rsync/FilterRules.ui	2013-03-27 12:02:39.664871526 +0100
++++ Rsync/FilterRules.ui	2013-03-28 17:42:10.298500637 +0100
 @@ -18,7 +18,7 @@
    </property>
    <property name="windowIcon">
@@ -380,7 +168,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/FilterRules.ui Rsync/FilterRules.ui
     <property name="margin">
 diff -U 3 -H -d -r -N -- Ultracopier/Filters.ui Rsync/Filters.ui
 --- Ultracopier/Filters.ui	2013-03-27 11:59:50.000000000 +0100
-+++ Rsync/Filters.ui	2013-03-27 12:02:27.298872032 +0100
++++ Rsync/Filters.ui	2013-03-28 17:42:10.299500637 +0100
 @@ -15,7 +15,7 @@
    </property>
    <property name="windowIcon">
@@ -446,7 +234,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/Filters.ui Rsync/Filters.ui
            </item>
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
 --- Ultracopier/ListThread.cpp	2013-03-28 16:52:18.000000000 +0100
-+++ Rsync/ListThread.cpp	2013-03-28 16:56:41.002612366 +0100
++++ Rsync/ListThread.cpp	2013-03-28 17:42:10.300500637 +0100
 @@ -22,6 +22,7 @@
      inodeThreads                    = 1;
      renameTheOriginalDestination    = false;
@@ -546,7 +334,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
      connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection);
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread.h Rsync/ListThread.h
 --- Ultracopier/ListThread.h	2013-03-25 18:33:30.000000000 +0100
-+++ Rsync/ListThread.h	2013-03-27 09:22:40.931264471 +0100
++++ Rsync/ListThread.h	2013-03-28 17:42:10.300500637 +0100
 @@ -147,6 +147,8 @@
      void setBlockSize(const int blockSize);
      /// \brief set auto start
@@ -575,7 +363,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.h Rsync/ListThread.h
  signals:
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread_InodeAction.cpp Rsync/ListThread_InodeAction.cpp
 --- Ultracopier/ListThread_InodeAction.cpp	2013-03-27 09:25:07.000000000 +0100
-+++ Rsync/ListThread_InodeAction.cpp	2013-03-27 09:28:26.115250340 +0100
++++ Rsync/ListThread_InodeAction.cpp	2013-03-28 17:42:10.300500637 +0100
 @@ -27,6 +27,14 @@
          if(numberOfInodeOperation>=inodeThreads)
              return;
@@ -593,7 +381,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread_InodeAction.cpp Rsync/ListThread
          if(currentActionToDoInode.size==0)
 diff -U 3 -H -d -r -N -- Ultracopier/MkPath.cpp Rsync/MkPath.cpp
 --- Ultracopier/MkPath.cpp	2013-03-22 13:34:36.000000000 +0100
-+++ Rsync/MkPath.cpp	2013-03-28 17:03:38.981595256 +0100
++++ Rsync/MkPath.cpp	2013-03-28 17:42:10.301500637 +0100
 @@ -60,82 +60,110 @@
      if(waitAction || pathList.isEmpty())
          return;
@@ -793,7 +581,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/MkPath.cpp Rsync/MkPath.cpp
          {
 diff -U 3 -H -d -r -N -- Ultracopier/MkPath.h Rsync/MkPath.h
 --- Ultracopier/MkPath.h	2013-03-22 13:28:53.000000000 +0100
-+++ Rsync/MkPath.h	2013-03-27 09:30:34.046245103 +0100
++++ Rsync/MkPath.h	2013-03-28 17:42:10.301500637 +0100
 @@ -94,7 +94,7 @@
      void internalAddPath(const QFileInfo& source, const QFileInfo& destination,const ActionType &actionType);
      void internalSkip();
@@ -805,7 +593,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/MkPath.h Rsync/MkPath.h
  #endif // MKPATH_H
 diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.cpp Rsync/ScanFileOrFolder.cpp
 --- Ultracopier/ScanFileOrFolder.cpp	2013-03-22 13:35:40.000000000 +0100
-+++ Rsync/ScanFileOrFolder.cpp	2013-03-28 16:58:39.014607535 +0100
++++ Rsync/ScanFileOrFolder.cpp	2013-03-28 17:42:10.301500637 +0100
 @@ -1,6 +1,7 @@
  #include "ScanFileOrFolder.h"
  #include "TransferThread.h"
@@ -898,7 +686,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.cpp Rsync/ScanFileOrFolder
 +}
 diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.h Rsync/ScanFileOrFolder.h
 --- Ultracopier/ScanFileOrFolder.h	2013-03-22 13:23:18.000000000 +0100
-+++ Rsync/ScanFileOrFolder.h	2013-03-27 09:58:42.356175989 +0100
++++ Rsync/ScanFileOrFolder.h	2013-03-28 17:42:10.301500637 +0100
 @@ -38,6 +38,7 @@
      void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
      void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
@@ -925,7 +713,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.h Rsync/ScanFileOrFolder.h
      QList<Filters_rules>	include_send,exclude_send;
 diff -U 3 -H -d -r -N -- Ultracopier/StructEnumDefinition_CopyEngine.h Rsync/StructEnumDefinition_CopyEngine.h
 --- Ultracopier/StructEnumDefinition_CopyEngine.h	2013-03-25 16:50:03.000000000 +0100
-+++ Rsync/StructEnumDefinition_CopyEngine.h	2013-03-27 09:20:20.155270234 +0100
++++ Rsync/StructEnumDefinition_CopyEngine.h	2013-03-28 17:42:10.301500637 +0100
 @@ -107,7 +107,8 @@
  {
      ActionType_MkPath=1,
@@ -937,8 +725,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/StructEnumDefinition_CopyEngine.h Rsync/Str
  
  struct Diskspace
 diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.cpp Rsync/TransferThread.cpp
---- Ultracopier/TransferThread.cpp	2013-03-26 18:38:59.000000000 +0100
-+++ Rsync/TransferThread.cpp	2013-03-27 10:04:53.727160786 +0100
+--- Ultracopier/TransferThread.cpp	2013-03-28 17:31:25.000000000 +0100
++++ Rsync/TransferThread.cpp	2013-03-28 17:42:10.303500637 +0100
 @@ -25,6 +25,7 @@
      writeError                      = false;
      renameTheOriginalDestination    = false;
@@ -971,7 +759,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.cpp Rsync/TransferThread.cpp
      this->osBufferLimit=osBufferLimit;
 diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.h Rsync/TransferThread.h
 --- Ultracopier/TransferThread.h	2013-03-23 21:59:47.000000000 +0100
-+++ Rsync/TransferThread.h	2013-03-27 09:38:05.451226624 +0100
++++ Rsync/TransferThread.h	2013-03-28 17:42:10.303500637 +0100
 @@ -132,6 +132,7 @@
      void putAtBottom();
  
@@ -989,17 +777,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/TransferThread.h Rsync/TransferThread.h
      //ready = open + ready to operation (no error to resolv)
      bool			readIsReadyVariable;
 diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui Rsync/copyEngineOptions.ui
---- Ultracopier/copyEngineOptions.ui	2013-03-26 13:37:09.000000000 +0100
-+++ Rsync/copyEngineOptions.ui	2013-03-27 10:05:46.174158639 +0100
-@@ -20,7 +20,7 @@
-    <item>
-     <widget class="QToolBox" name="toolBox">
-      <property name="currentIndex">
--      <number>4</number>
-+      <number>0</number>
-      </property>
-      <widget class="QWidget" name="page_trasnfer">
-       <property name="geometry">
+--- Ultracopier/copyEngineOptions.ui	2013-03-28 17:35:20.000000000 +0100
++++ Rsync/copyEngineOptions.ui	2013-03-28 17:42:10.304500637 +0100
 @@ -62,6 +62,9 @@
           </property>
          </widget>
@@ -1060,7 +839,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui Rsync/copyEngineOption
         </rect>
        </property>
        <attribute name="label">
-@@ -316,8 +326,8 @@
+@@ -387,8 +397,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
@@ -1071,7 +850,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui Rsync/copyEngineOption
         </rect>
        </property>
        <attribute name="label">
-@@ -387,8 +397,8 @@
+@@ -571,8 +581,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
@@ -1082,20 +861,771 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui Rsync/copyEngineOption
         </rect>
        </property>
        <attribute name="label">
-@@ -571,8 +581,8 @@
-        <rect>
-         <x>0</x>
-         <y>0</y>
--        <width>791</width>
--        <height>364</height>
-+        <width>445</width>
-+        <height>89</height>
-        </rect>
-       </property>
-       <attribute name="label">
+diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui.orig Rsync/copyEngineOptions.ui.orig
+--- Ultracopier/copyEngineOptions.ui.orig	1970-01-01 01:00:00.000000000 +0100
++++ Rsync/copyEngineOptions.ui.orig	2013-03-28 17:35:20.000000000 +0100
+@@ -0,0 +1,732 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<ui version="4.0">
++ <class>copyEngineOptions</class>
++ <widget class="QWidget" name="copyEngineOptions">
++  <property name="geometry">
++   <rect>
++    <x>0</x>
++    <y>0</y>
++    <width>801</width>
++    <height>504</height>
++   </rect>
++  </property>
++  <layout class="QVBoxLayout" name="verticalLayout">
++   <property name="spacing">
++    <number>0</number>
++   </property>
++   <property name="margin">
++    <number>0</number>
++   </property>
++   <item>
++    <widget class="QToolBox" name="toolBox">
++     <property name="currentIndex">
++      <number>1</number>
++     </property>
++     <widget class="QWidget" name="page_trasnfer">
++      <property name="geometry">
++       <rect>
++        <x>0</x>
++        <y>0</y>
++        <width>791</width>
++        <height>364</height>
++       </rect>
++      </property>
++      <attribute name="label">
++       <string>Transfer</string>
++      </attribute>
++      <layout class="QGridLayout" name="gridLayout_5">
++       <item row="3" column="2">
++        <widget class="QCheckBox" name="moveTheWholeFolder"/>
++       </item>
++       <item row="3" column="0">
++        <widget class="QLabel" name="label_18">
++         <property name="text">
++          <string>Move the whole folder</string>
++         </property>
++        </widget>
++       </item>
++       <item row="0" column="0">
++        <widget class="QLabel" name="label">
++         <property name="text">
++          <string>Transfer the file rights</string>
++         </property>
++        </widget>
++       </item>
++       <item row="0" column="2">
++        <widget class="QCheckBox" name="doRightTransfer"/>
++       </item>
++       <item row="1" column="0">
++        <widget class="QLabel" name="label_2">
++         <property name="text">
++          <string>Keep the file date</string>
++         </property>
++        </widget>
++       </item>
++       <item row="1" column="2">
++        <widget class="QCheckBox" name="keepDate"/>
++       </item>
++       <item row="2" column="0">
++        <widget class="QLabel" name="label_5">
++         <property name="text">
++          <string>Auto start the transfer</string>
++         </property>
++        </widget>
++       </item>
++       <item row="2" column="2">
++        <widget class="QCheckBox" name="autoStart"/>
++       </item>
++       <item row="5" column="1">
++        <spacer name="verticalSpacer_6">
++         <property name="orientation">
++          <enum>Qt::Vertical</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>20</width>
++           <height>278</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++       <item row="4" column="0">
++        <widget class="QLabel" name="label_19">
++         <property name="toolTip">
++          <string>Less performance if checked</string>
++         </property>
++         <property name="text">
++          <string>Follow the strict order</string>
++         </property>
++        </widget>
++       </item>
++       <item row="4" column="2">
++        <widget class="QCheckBox" name="followTheStrictOrder">
++         <property name="toolTip">
++          <string>Less performance if checked</string>
++         </property>
++        </widget>
++       </item>
++      </layout>
++     </widget>
++     <widget class="QWidget" name="page_error_collision">
++      <property name="geometry">
++       <rect>
++        <x>0</x>
++        <y>0</y>
++        <width>791</width>
++        <height>364</height>
++       </rect>
++      </property>
++      <attribute name="label">
++       <string>Error and collision</string>
++      </attribute>
++      <layout class="QGridLayout" name="gridLayout_4">
++       <item row="2" column="0">
++        <widget class="QLabel" name="label_6">
++         <property name="text">
++          <string>When folder error</string>
++         </property>
++        </widget>
++       </item>
++       <item row="4" column="2">
++        <widget class="QCheckBox" name="checkBoxDestinationFolderExists"/>
++       </item>
++       <item row="0" column="0">
++        <widget class="QLabel" name="label_12">
++         <property name="text">
++          <string>When file error</string>
++         </property>
++        </widget>
++       </item>
++       <item row="0" column="2">
++        <widget class="QComboBox" name="comboBoxFileError">
++         <item>
++          <property name="text">
++           <string notr="true">Ask</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Skip</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Put at the end</string>
++          </property>
++         </item>
++        </widget>
++       </item>
++       <item row="1" column="0">
++        <widget class="QLabel" name="label_13">
++         <property name="text">
++          <string>When file collision</string>
++         </property>
++        </widget>
++       </item>
++       <item row="1" column="2">
++        <widget class="QComboBox" name="comboBoxFileCollision">
++         <item>
++          <property name="text">
++           <string notr="true">Ask</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Skip</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Overwrite</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Overwrite if different</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Overwrite if newer</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Overwrite if older</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Rename</string>
++          </property>
++         </item>
++        </widget>
++       </item>
++       <item row="2" column="2">
++        <widget class="QComboBox" name="comboBoxFolderError">
++         <item>
++          <property name="text">
++           <string notr="true">Ask</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Skip</string>
++          </property>
++         </item>
++        </widget>
++       </item>
++       <item row="3" column="0">
++        <widget class="QLabel" name="label_7">
++         <property name="text">
++          <string>When folder collision</string>
++         </property>
++        </widget>
++       </item>
++       <item row="3" column="2">
++        <widget class="QComboBox" name="comboBoxFolderCollision">
++         <item>
++          <property name="text">
++           <string notr="true">Ask</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Merge</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Skip</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Rename</string>
++          </property>
++         </item>
++        </widget>
++       </item>
++       <item row="4" column="0">
++        <widget class="QLabel" name="label_8">
++         <property name="text">
++          <string>Check if destination folder exists</string>
++         </property>
++        </widget>
++       </item>
++       <item row="7" column="1">
++        <widget class="QPushButton" name="renamingRules">
++         <property name="text">
++          <string>Renaming rules</string>
++         </property>
++        </widget>
++       </item>
++       <item row="8" column="1">
++        <spacer name="verticalSpacer_5">
++         <property name="orientation">
++          <enum>Qt::Vertical</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>20</width>
++           <height>193</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++       <item row="5" column="0">
++        <widget class="QLabel" name="label_20">
++         <property name="text">
++          <string>Delete partially transferred files</string>
++         </property>
++        </widget>
++       </item>
++       <item row="5" column="2">
++        <widget class="QCheckBox" name="deletePartiallyTransferredFiles"/>
++       </item>
++       <item row="6" column="2">
++        <widget class="QCheckBox" name="renameTheOriginalDestination"/>
++       </item>
++       <item row="6" column="0">
++        <widget class="QLabel" name="label_22">
++         <property name="text">
++          <string>Rename the original destination</string>
++         </property>
++        </widget>
++       </item>
++      </layout>
++      <zorder>label_12</zorder>
++      <zorder>label_13</zorder>
++      <zorder>label_6</zorder>
++      <zorder>label_7</zorder>
++      <zorder>label_8</zorder>
++      <zorder>comboBoxFileError</zorder>
++      <zorder>comboBoxFileCollision</zorder>
++      <zorder>comboBoxFolderError</zorder>
++      <zorder>comboBoxFolderCollision</zorder>
++      <zorder>checkBoxDestinationFolderExists</zorder>
++      <zorder>renamingRules</zorder>
++      <zorder>label_20</zorder>
++      <zorder>deletePartiallyTransferredFiles</zorder>
++      <zorder>renameTheOriginalDestination</zorder>
++      <zorder>label_22</zorder>
++     </widget>
++     <widget class="QWidget" name="page_control">
++      <property name="geometry">
++       <rect>
++        <x>0</x>
++        <y>0</y>
++        <width>172</width>
++        <height>119</height>
++       </rect>
++      </property>
++      <attribute name="label">
++       <string>Control</string>
++      </attribute>
++      <layout class="QVBoxLayout" name="verticalLayout_2">
++       <item>
++        <widget class="QGroupBox" name="groupBox">
++         <property name="title">
++          <string>Checksum</string>
++         </property>
++         <layout class="QGridLayout" name="gridLayout_2">
++          <item row="1" column="1">
++           <widget class="QCheckBox" name="checksumOnlyOnError"/>
++          </item>
++          <item row="1" column="0">
++           <widget class="QLabel" name="label_9">
++            <property name="text">
++             <string>Only after error</string>
++            </property>
++           </widget>
++          </item>
++          <item row="2" column="0">
++           <widget class="QLabel" name="label_10">
++            <property name="text">
++             <string>Ignore if impossible</string>
++            </property>
++           </widget>
++          </item>
++          <item row="2" column="1">
++           <widget class="QCheckBox" name="checksumIgnoreIfImpossible"/>
++          </item>
++          <item row="0" column="1">
++           <widget class="QCheckBox" name="doChecksum">
++            <property name="checked">
++             <bool>true</bool>
++            </property>
++           </widget>
++          </item>
++          <item row="0" column="0">
++           <widget class="QLabel" name="label_11">
++            <property name="text">
++             <string>Do checksum</string>
++            </property>
++           </widget>
++          </item>
++         </layout>
++        </widget>
++       </item>
++       <item>
++        <spacer name="verticalSpacer_4">
++         <property name="orientation">
++          <enum>Qt::Vertical</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>20</width>
++           <height>242</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++      </layout>
++     </widget>
++     <widget class="QWidget" name="page_performance">
++      <property name="geometry">
++       <rect>
++        <x>0</x>
++        <y>0</y>
++        <width>791</width>
++        <height>364</height>
++       </rect>
++      </property>
++      <attribute name="label">
++       <string>Performance</string>
++      </attribute>
++      <layout class="QGridLayout" name="gridLayout">
++       <item row="5" column="0">
++        <widget class="QLabel" name="label_16">
++         <property name="text">
++          <string>Parallel buffer</string>
++         </property>
++        </widget>
++       </item>
++       <item row="4" column="1">
++        <widget class="QSpinBox" name="sequentialBuffer">
++         <property name="suffix">
++          <string>KB</string>
++         </property>
++         <property name="minimum">
++          <number>1</number>
++         </property>
++         <property name="maximum">
++          <number>999999999</number>
++         </property>
++        </widget>
++       </item>
++       <item row="0" column="1">
++        <widget class="QSpinBox" name="blockSize">
++         <property name="suffix">
++          <string>KB</string>
++         </property>
++         <property name="minimum">
++          <number>1</number>
++         </property>
++         <property name="maximum">
++          <number>65536</number>
++         </property>
++        </widget>
++       </item>
++       <item row="5" column="1">
++        <widget class="QSpinBox" name="parallelBuffer">
++         <property name="suffix">
++          <string>KB</string>
++         </property>
++         <property name="minimum">
++          <number>1</number>
++         </property>
++         <property name="maximum">
++          <number>999999999</number>
++         </property>
++        </widget>
++       </item>
++       <item row="1" column="1">
++        <widget class="QCheckBox" name="osBuffer"/>
++       </item>
++       <item row="0" column="0">
++        <widget class="QLabel" name="label_4">
++         <property name="text">
++          <string>Block size</string>
++         </property>
++        </widget>
++       </item>
++       <item row="4" column="0">
++        <widget class="QLabel" name="label_15">
++         <property name="text">
++          <string>Sequential buffer</string>
++         </property>
++        </widget>
++       </item>
++       <item row="1" column="0">
++        <widget class="QLabel" name="label_3">
++         <property name="text">
++          <string>Enable OS buffer</string>
++         </property>
++        </widget>
++       </item>
++       <item row="2" column="1">
++        <widget class="QSpinBox" name="osBufferLimit">
++         <property name="suffix">
++          <string>KB</string>
++         </property>
++         <property name="minimum">
++          <number>1</number>
++         </property>
++         <property name="maximum">
++          <number>2048</number>
++         </property>
++         <property name="value">
++          <number>512</number>
++         </property>
++        </widget>
++       </item>
++       <item row="2" column="0">
++        <widget class="QCheckBox" name="osBufferLimited">
++         <property name="text">
++          <string>OS buffer only if smaller than</string>
++         </property>
++        </widget>
++       </item>
++       <item row="3" column="0">
++        <widget class="QLabel" name="label_14">
++         <property name="text">
++          <string>Transfer algorithm</string>
++         </property>
++        </widget>
++       </item>
++       <item row="3" column="1">
++        <widget class="QComboBox" name="transferAlgorithm">
++         <item>
++          <property name="text">
++           <string notr="true">Automatic</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Sequential</string>
++          </property>
++         </item>
++         <item>
++          <property name="text">
++           <string notr="true">Parallel</string>
++          </property>
++         </item>
++        </widget>
++       </item>
++       <item row="9" column="1">
++        <spacer name="verticalSpacer">
++         <property name="orientation">
++          <enum>Qt::Vertical</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>20</width>
++           <height>197</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++       <item row="6" column="0">
++        <widget class="QLabel" name="label_17">
++         <property name="text">
++          <string>Parallelize if smaller than</string>
++         </property>
++        </widget>
++       </item>
++       <item row="6" column="1">
++        <widget class="QSpinBox" name="parallelizeIfSmallerThan">
++         <property name="suffix">
++          <string>KB</string>
++         </property>
++         <property name="maximum">
++          <number>1024</number>
++         </property>
++        </widget>
++       </item>
++       <item row="7" column="1">
++        <widget class="QSpinBox" name="inodeThreads">
++         <property name="minimum">
++          <number>1</number>
++         </property>
++         <property name="maximum">
++          <number>32</number>
++         </property>
++         <property name="value">
++          <number>16</number>
++         </property>
++        </widget>
++       </item>
++       <item row="7" column="0">
++        <widget class="QLabel" name="label_21">
++         <property name="text">
++          <string>Inode threads</string>
++         </property>
++        </widget>
++       </item>
++      </layout>
++     </widget>
++     <widget class="QWidget" name="page_misc">
++      <property name="geometry">
++       <rect>
++        <x>0</x>
++        <y>0</y>
++        <width>791</width>
++        <height>364</height>
++       </rect>
++      </property>
++      <attribute name="label">
++       <string>Misc</string>
++      </attribute>
++      <layout class="QGridLayout" name="gridLayout_3">
++       <item row="0" column="0">
++        <widget class="QLabel" name="label_23">
++         <property name="text">
++          <string>Check the disk space</string>
++         </property>
++        </widget>
++       </item>
++       <item row="0" column="2">
++        <widget class="QCheckBox" name="checkDiskSpace"/>
++       </item>
++       <item row="1" column="0">
++        <widget class="QLabel" name="label_24">
++         <property name="text">
++          <string>Use this folder when destination is empty</string>
++         </property>
++        </widget>
++       </item>
++       <item row="1" column="2">
++        <layout class="QHBoxLayout" name="horizontalLayout">
++         <item>
++          <widget class="QLineEdit" name="defaultDestinationFolder"/>
++         </item>
++         <item>
++          <widget class="QPushButton" name="defaultDestinationFolderBrowse">
++           <property name="text">
++            <string>Browse</string>
++           </property>
++          </widget>
++         </item>
++        </layout>
++       </item>
++       <item row="2" column="0">
++        <spacer name="horizontalSpacer">
++         <property name="orientation">
++          <enum>Qt::Horizontal</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>353</width>
++           <height>20</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++       <item row="2" column="1">
++        <widget class="QPushButton" name="filters">
++         <property name="text">
++          <string>Filters</string>
++         </property>
++        </widget>
++       </item>
++       <item row="2" column="2">
++        <spacer name="horizontalSpacer_2">
++         <property name="orientation">
++          <enum>Qt::Horizontal</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>352</width>
++           <height>20</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++       <item row="3" column="1">
++        <spacer name="verticalSpacer_2">
++         <property name="orientation">
++          <enum>Qt::Vertical</enum>
++         </property>
++         <property name="sizeHint" stdset="0">
++          <size>
++           <width>20</width>
++           <height>159</height>
++          </size>
++         </property>
++        </spacer>
++       </item>
++      </layout>
++     </widget>
++    </widget>
++   </item>
++  </layout>
++ </widget>
++ <resources/>
++ <connections>
++  <connection>
++   <sender>doChecksum</sender>
++   <signal>clicked(bool)</signal>
++   <receiver>label_9</receiver>
++   <slot>setEnabled(bool)</slot>
++   <hints>
++    <hint type="sourcelabel">
++     <x>583</x>
++     <y>136</y>
++    </hint>
++    <hint type="destinationlabel">
++     <x>109</x>
++     <y>161</y>
++    </hint>
++   </hints>
++  </connection>
++  <connection>
++   <sender>doChecksum</sender>
++   <signal>clicked(bool)</signal>
++   <receiver>checksumOnlyOnError</receiver>
++   <slot>setEnabled(bool)</slot>
++   <hints>
++    <hint type="sourcelabel">
++     <x>594</x>
++     <y>136</y>
++    </hint>
++    <hint type="destinationlabel">
++     <x>586</x>
++     <y>161</y>
++    </hint>
++   </hints>
++  </connection>
++  <connection>
++   <sender>doChecksum</sender>
++   <signal>clicked(bool)</signal>
++   <receiver>label_10</receiver>
++   <slot>setEnabled(bool)</slot>
++   <hints>
++    <hint type="sourcelabel">
++     <x>641</x>
++     <y>136</y>
++    </hint>
++    <hint type="destinationlabel">
++     <x>132</x>
++     <y>186</y>
++    </hint>
++   </hints>
++  </connection>
++  <connection>
++   <sender>doChecksum</sender>
++   <signal>clicked(bool)</signal>
++   <receiver>checksumIgnoreIfImpossible</receiver>
++   <slot>setEnabled(bool)</slot>
++   <hints>
++    <hint type="sourcelabel">
++     <x>665</x>
++     <y>136</y>
++    </hint>
++    <hint type="destinationlabel">
++     <x>609</x>
++     <y>186</y>
++    </hint>
++   </hints>
++  </connection>
++ </connections>
++</ui>
+diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui.rej Rsync/copyEngineOptions.ui.rej
+--- Ultracopier/copyEngineOptions.ui.rej	1970-01-01 01:00:00.000000000 +0100
++++ Rsync/copyEngineOptions.ui.rej	2013-03-28 17:42:10.304500637 +0100
+@@ -0,0 +1,22 @@
++--- copyEngineOptions.ui	2013-03-26 13:37:09.000000000 +0100
+++++ copyEngineOptions.ui	2013-03-27 10:05:46.174158639 +0100
++@@ -20,7 +20,7 @@
++    <item>
++     <widget class="QToolBox" name="toolBox">
++      <property name="currentIndex">
++-      <number>4</number>
+++      <number>0</number>
++      </property>
++      <widget class="QWidget" name="page_trasnfer">
++       <property name="geometry">
++@@ -581,8 +591,8 @@
++        <rect>
++         <x>0</x>
++         <y>0</y>
++-        <width>791</width>
++-        <height>364</height>
+++        <width>445</width>
+++        <height>89</height>
++        </rect>
++       </property>
++       <attribute name="label">
 diff -U 3 -H -d -r -N -- Ultracopier/copyEngineResources.qrc Rsync/copyEngineResources.qrc
 --- Ultracopier/copyEngineResources.qrc	2013-03-27 11:57:38.000000000 +0100
-+++ Rsync/copyEngineResources.qrc	2013-03-27 12:01:48.468873622 +0100
++++ Rsync/copyEngineResources.qrc	2013-03-28 17:42:10.304500637 +0100
 @@ -1,5 +1,5 @@
  <RCC>
 -    <qresource prefix="/CopyEngine/Ultracopier">
@@ -1105,7 +1635,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngineResources.qrc Rsync/copyEngineRes
          <file>resources/remove.png</file>
 diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
 --- Ultracopier/documentation.dox	2013-01-16 10:30:03.000000000 +0100
-+++ Rsync/documentation.dox	2013-03-27 09:13:24.715287241 +0100
++++ Rsync/documentation.dox	2013-03-28 17:42:10.304500637 +0100
 @@ -10,7 +10,8 @@
  
    \section mainpage_overview Overview
@@ -1118,7 +1648,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/documentation.dox Rsync/documentation.dox
    \section mainpage_platforms Platforms
 diff -U 3 -H -d -r -N -- Ultracopier/informations.xml Rsync/informations.xml
 --- Ultracopier/informations.xml	2013-02-28 12:56:19.000000000 +0100
-+++ Rsync/informations.xml	2013-03-27 10:03:15.911164790 +0100
++++ Rsync/informations.xml	2013-03-28 17:42:10.304500637 +0100
 @@ -1,7 +1,7 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <package>
