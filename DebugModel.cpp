@@ -97,15 +97,15 @@ QVariant DebugModel::headerData( int section, Qt::Orientation orientation, int r
     if ( role == Qt::DisplayRole && orientation == Qt::Horizontal && section >= 0 && section < COLUMN_COUNT ) {
         switch ( section ) {
             case 0:
-            return tr("Time");
+            return QString("Time");
             case 1:
-            return tr("File");
+            return QString("File");
             case 2:
-            return tr("Function");
+            return QString("Function");
             case 3:
-            return tr("Location");
+            return QString("Location");
             case 4:
-            return tr("Text");
+            return QString("Text");
         }
     }
 
