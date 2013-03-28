@@ -351,6 +351,7 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 
     scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
+    scanFileOrFolderThreadsPool.last()->setMoveTheWholeFolder(moveTheWholeFolder);
     if(scanFileOrFolderThreadsPool.size()==1)
         updateTheStatus();
     scanFileOrFolderThreadsPool.last()->setRenamingRules(firstRenamingRule,otherRenamingRule);

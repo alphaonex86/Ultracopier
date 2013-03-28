@@ -1,6 +1,6 @@
 diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.cpp Rsync/CopyEngine.cpp
 --- Ultracopier/CopyEngine.cpp	2013-03-27 01:39:20.000000000 +0100
-+++ Rsync/CopyEngine.cpp	2013-03-27 09:47:40.254203093 +0100
++++ Rsync/CopyEngine.cpp	2013-03-28 16:47:29.023634963 +0100
 @@ -222,6 +222,7 @@
      setSequentialBuffer(sequentialBuffer);
      setParallelBuffer(parallelBuffer);
@@ -45,13 +45,14 @@ diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.cpp Rsync/CopyEngine.cpp
      this->mode=mode;
      forcedMode=true;
      emit signal_forceMode(mode);
-@@ -924,6 +937,19 @@
+@@ -924,6 +937,20 @@
      listThread->setAutoStart(autoStart);
  }
  
 +/// \brief set rsync
 +void CopyEngine::setRsync(const bool rsync)
 +{
++    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
 +    this->rsync=rsync;
 +    if(uiIsInstalled)
 +    {
@@ -84,6 +85,218 @@ diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.h Rsync/CopyEngine.h
      void setCheckDiskSpace(const bool &checkDiskSpace);
      void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
      void defaultDestinationFolderBrowse();
+diff -U 3 -H -d -r -N -- Ultracopier/CopyEngine.pro.user Rsync/CopyEngine.pro.user
+--- Ultracopier/CopyEngine.pro.user	1970-01-01 01:00:00.000000000 +0100
++++ Rsync/CopyEngine.pro.user	2013-03-28 17:05:30.417590694 +0100
+@@ -0,0 +1,208 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE QtCreatorProject>
++<!-- Written by Qt Creator 2.6.2, 2013-03-28T17:05:30. -->
++<qtcreator>
++ <data>
++  <variable>ProjectExplorer.Project.ActiveTarget</variable>
++  <value type="int">0</value>
++ </data>
++ <data>
++  <variable>ProjectExplorer.Project.EditorSettings</variable>
++  <valuemap type="QVariantMap">
++   <value type="bool" key="EditorConfiguration.AutoIndent">true</value>
++   <value type="bool" key="EditorConfiguration.AutoSpacesForTabs">false</value>
++   <value type="bool" key="EditorConfiguration.CamelCaseNavigation">true</value>
++   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.0">
++    <value type="QString" key="language">Cpp</value>
++    <valuemap type="QVariantMap" key="value">
++     <value type="QString" key="CurrentPreferences">CppGlobal</value>
++    </valuemap>
++   </valuemap>
++   <valuemap type="QVariantMap" key="EditorConfiguration.CodeStyle.1">
++    <value type="QString" key="language">QmlJS</value>
++    <valuemap type="QVariantMap" key="value">
++     <value type="QString" key="CurrentPreferences">QmlJSGlobal</value>
++    </valuemap>
++   </valuemap>
++   <value type="int" key="EditorConfiguration.CodeStyle.Count">2</value>
++   <value type="QByteArray" key="EditorConfiguration.Codec">UTF-8</value>
++   <value type="bool" key="EditorConfiguration.ConstrainTooltips">false</value>
++   <value type="int" key="EditorConfiguration.IndentSize">4</value>
++   <value type="bool" key="EditorConfiguration.KeyboardTooltips">false</value>
++   <value type="bool" key="EditorConfiguration.MouseNavigation">true</value>
++   <value type="int" key="EditorConfiguration.PaddingMode">1</value>
++   <value type="bool" key="EditorConfiguration.ScrollWheelZooming">true</value>
++   <value type="int" key="EditorConfiguration.SmartBackspaceBehavior">0</value>
++   <value type="bool" key="EditorConfiguration.SpacesForTabs">true</value>
++   <value type="int" key="EditorConfiguration.TabKeyBehavior">0</value>
++   <value type="int" key="EditorConfiguration.TabSize">8</value>
++   <value type="bool" key="EditorConfiguration.UseGlobal">true</value>
++   <value type="int" key="EditorConfiguration.Utf8BomBehavior">1</value>
++   <value type="bool" key="EditorConfiguration.addFinalNewLine">true</value>
++   <value type="bool" key="EditorConfiguration.cleanIndentation">true</value>
++   <value type="bool" key="EditorConfiguration.cleanWhitespace">true</value>
++   <value type="bool" key="EditorConfiguration.inEntireDocument">true</value>
++  </valuemap>
++ </data>
++ <data>
++  <variable>ProjectExplorer.Project.PluginSettings</variable>
++  <valuemap type="QVariantMap"/>
++ </data>
++ <data>
++  <variable>ProjectExplorer.Project.Target.0</variable>
++  <valuemap type="QVariantMap">
++   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop-Qt 5.01 (qt5-linux)</value>
++   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop-Qt 5.01 (qt5-linux)</value>
++   <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">{55d7d977-66a3-4d72-9331-2ae779c6252a}</value>
++   <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
++   <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
++   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
++   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
++    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
++     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
++      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">qmake</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
++      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
++      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">true</value>
++      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
++      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
++     </valuemap>
++     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
++      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
++      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
++     </valuemap>
++     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
++    </valuemap>
++    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
++     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
++      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
++      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
++     </valuemap>
++     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
++    </valuemap>
++    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
++    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
++    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Debug</value>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
++    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
++    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/user/Desktop/ultracopier/sources/plugins-alternative/CopyEngine/CopyEngine-build-Desktop_Qt_5_01_qt5_linux-Debug</value>
++    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
++   </valuemap>
++   <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
++    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
++     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
++      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">qmake</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
++      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibrary">false</value>
++      <value type="bool" key="QtProjectManager.QMakeBuildStep.LinkQmlDebuggingLibraryAuto">true</value>
++      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
++      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
++     </valuemap>
++     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
++      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
++      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
++     </valuemap>
++     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
++    </valuemap>
++    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.1">
++     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
++      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Make</value>
++      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++      <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
++      <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
++      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
++     </valuemap>
++     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Clean</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Clean</value>
++    </valuemap>
++    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
++    <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
++    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Release</value>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
++    <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">0</value>
++    <value type="QString" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory">/home/user/Desktop/ultracopier/sources/plugins-alternative/CopyEngine/CopyEngine-build-Desktop_Qt_5_01_qt5_linux-Release</value>
++    <value type="bool" key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild">true</value>
++   </valuemap>
++   <value type="int" key="ProjectExplorer.Target.BuildConfigurationCount">2</value>
++   <valuemap type="QVariantMap" key="ProjectExplorer.Target.DeployConfiguration.0">
++    <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
++     <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">0</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy</value>
++     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++     <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Deploy</value>
++    </valuemap>
++    <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">1</value>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Deploy locally</value>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.DefaultDeployConfiguration</value>
++   </valuemap>
++   <value type="int" key="ProjectExplorer.Target.DeployConfigurationCount">1</value>
++   <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.0">
++    <value type="bool" key="Analyzer.Project.UseGlobal">true</value>
++    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
++    <value type="int" key="ProjectExplorer.CustomExecutableRunConfiguration.BaseEnvironmentBase">2</value>
++    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable"></value>
++    <value type="bool" key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal">false</value>
++    <valuelist type="QVariantList" key="ProjectExplorer.CustomExecutableRunConfiguration.UserEnvironmentChanges"/>
++    <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory">%{buildDir}</value>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Executable</value>
++    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
++    <value type="QByteArray" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.CustomExecutableRunConfiguration</value>
++    <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
++    <value type="bool" key="RunConfiguration.UseCppDebugger">true</value>
++    <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
++    <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
++    <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
++   </valuemap>
++   <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
++  </valuemap>
++ </data>
++ <data>
++  <variable>ProjectExplorer.Project.TargetCount</variable>
++  <value type="int">1</value>
++ </data>
++ <data>
++  <variable>ProjectExplorer.Project.Updater.EnvironmentId</variable>
++  <value type="QString">{74ab603f-f657-4135-92cf-c93af71b2f91}</value>
++ </data>
++ <data>
++  <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
++  <value type="int">12</value>
++ </data>
++</qtcreator>
 diff -U 3 -H -d -r -N -- Ultracopier/DiskSpace.ui Rsync/DiskSpace.ui
 --- Ultracopier/DiskSpace.ui	2013-03-27 12:00:44.000000000 +0100
 +++ Rsync/DiskSpace.ui	2013-03-27 12:03:01.627870627 +0100
@@ -232,8 +445,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/Filters.ui Rsync/Filters.ui
             </widget>
            </item>
 diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
---- Ultracopier/ListThread.cpp	2013-03-26 12:25:03.000000000 +0100
-+++ Rsync/ListThread.cpp	2013-03-27 10:05:18.831159758 +0100
+--- Ultracopier/ListThread.cpp	2013-03-28 16:52:18.000000000 +0100
++++ Rsync/ListThread.cpp	2013-03-28 16:56:41.002612366 +0100
 @@ -22,6 +22,7 @@
      inodeThreads                    = 1;
      renameTheOriginalDestination    = false;
@@ -242,13 +455,14 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
      keepDate                        = false;
      checkDiskSpace                  = true;
      blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
-@@ -262,6 +263,21 @@
+@@ -262,6 +263,22 @@
      this->autoStart=autoStart;
  }
  
 +/// \brief set rsync
 +void ListThread::setRsync(const bool rsync)
 +{
++    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
 +    this->rsync=rsync;
 +    int index=0;
 +    int loop_sub_size_transfer_thread_search=transferThreadList.size();
@@ -264,7 +478,23 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
  //set check destination folder
  void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
  {
-@@ -929,6 +945,18 @@
+@@ -345,6 +362,7 @@
+     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection);
+     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection);
+     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,			Qt::QueuedConnection);
++    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRmForRsync,                  this,&ListThread::addToRmForRsync,			Qt::QueuedConnection);
+ 
+     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,		Qt::QueuedConnection);
+     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
+@@ -352,6 +370,7 @@
+     scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
+     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
+     scanFileOrFolderThreadsPool.last()->setMoveTheWholeFolder(moveTheWholeFolder);
++    scanFileOrFolderThreadsPool.last()->setRsync(rsync);
+     if(scanFileOrFolderThreadsPool.size()==1)
+         updateTheStatus();
+     scanFileOrFolderThreadsPool.last()->setRenamingRules(firstRenamingRule,otherRenamingRule);
+@@ -930,6 +949,18 @@
      actionToDoListInode << temp;
  }
  
@@ -283,7 +513,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
  //send action done
  void ListThread::sendActionDone()
  {
-@@ -1285,6 +1313,8 @@
+@@ -1286,6 +1317,8 @@
  /** \brief give the forced mode, to export/import transfer list */
  void ListThread::forceMode(const Ultracopier::CopyMode &mode)
  {
@@ -292,7 +522,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
      if(mode==Ultracopier::Copy)
          ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to copy"));
      else
-@@ -1773,10 +1803,11 @@
+@@ -1774,10 +1807,11 @@
                  doNewActions_inode_manipulation();
                  return;
              }
@@ -306,7 +536,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread.cpp Rsync/ListThread.cpp
                  emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
                  ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                  actionToDoListInode.removeAt(int_for_loop);
-@@ -1955,6 +1986,7 @@
+@@ -1956,6 +1990,7 @@
      last->set_osBufferLimited(osBufferLimited);
      last->set_osBufferLimit(osBufferLimit);
      last->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
@@ -363,8 +593,8 @@ diff -U 3 -H -d -r -N -- Ultracopier/ListThread_InodeAction.cpp Rsync/ListThread
          if(currentActionToDoInode.size==0)
 diff -U 3 -H -d -r -N -- Ultracopier/MkPath.cpp Rsync/MkPath.cpp
 --- Ultracopier/MkPath.cpp	2013-03-22 13:34:36.000000000 +0100
-+++ Rsync/MkPath.cpp	2013-03-27 09:34:19.740235864 +0100
-@@ -60,82 +60,97 @@
++++ Rsync/MkPath.cpp	2013-03-28 17:03:38.981595256 +0100
+@@ -60,82 +60,110 @@
      if(waitAction || pathList.isEmpty())
          return;
      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, move: %3").arg(pathList.first().source.absoluteFilePath()).arg(pathList.first().destination.absoluteFilePath()).arg(pathList.first().actionType));
@@ -374,7 +604,20 @@ diff -U 3 -H -d -r -N -- Ultracopier/MkPath.cpp Rsync/MkPath.cpp
      {
 -        doTheDateTransfer=readFileDateTime(pathList.first().source);
 -        if(!doTheDateTransfer)
-+        if(!rmpath(pathList.first().destination.absoluteFilePath()))
++        if(pathList.first().destination.isFile())
++        {
++            QFile removedFile(pathList.first().destination.absoluteFilePath());
++            if(!removedFile.remove())
++            {
++                if(stopIt)
++                    return;
++                waitAction=true;
++                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath()+", error: "+removedFile.errorString());
++                emit errorOnFolder(pathList.first().destination,removedFile.errorString());
++                return;
++            }
++        }
++        else if(!rmpath(pathList.first().destination.absoluteFilePath()))
          {
              if(stopIt)
                  return;
@@ -516,7 +759,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/MkPath.cpp Rsync/MkPath.cpp
          }
      }
      pathList.removeFirst();
-@@ -187,7 +202,7 @@
+@@ -187,7 +215,7 @@
      this->keepDate=keepDate;
  }
  
@@ -525,7 +768,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/MkPath.cpp Rsync/MkPath.cpp
  {
      if(!dir.exists())
          return true;
-@@ -198,8 +213,20 @@
+@@ -198,8 +226,20 @@
          QFileInfo fileInfo(list.at(i));
          if(!fileInfo.isDir())
          {
@@ -562,7 +805,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/MkPath.h Rsync/MkPath.h
  #endif // MKPATH_H
 diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.cpp Rsync/ScanFileOrFolder.cpp
 --- Ultracopier/ScanFileOrFolder.cpp	2013-03-22 13:35:40.000000000 +0100
-+++ Rsync/ScanFileOrFolder.cpp	2013-03-27 10:08:52.237151022 +0100
++++ Rsync/ScanFileOrFolder.cpp	2013-03-28 16:58:39.014607535 +0100
 @@ -1,6 +1,7 @@
  #include "ScanFileOrFolder.h"
  #include "TransferThread.h"
@@ -642,7 +885,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.cpp Rsync/ScanFileOrFolder
      if(mode==Ultracopier::Move)
      {
          ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath()+", sizeEntryList: "+QString::number(sizeEntryList));
-@@ -584,3 +629,9 @@
+@@ -584,3 +629,10 @@
  {
      this->moveTheWholeFolder=moveTheWholeFolder;
  }
@@ -650,6 +893,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.cpp Rsync/ScanFileOrFolder
 +/// \brief set rsync
 +void ScanFileOrFolder::setRsync(const bool rsync)
 +{
++    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
 +    this->rsync=rsync;
 +}
 diff -U 3 -H -d -r -N -- Ultracopier/ScanFileOrFolder.h Rsync/ScanFileOrFolder.h
