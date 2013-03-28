@@ -38,9 +38,12 @@ void FacilityEngine::retranslate()
     Translation_SimplifiedRemaningTime_AboutHours=tr("About %1 hours remaining");
     //load the translations tab
     translations["Copy engine"]=tr("Copy engine");
-    translations["Copy"]=tr("Copy");//: a copy
-    translations["Transfer"]=tr("Transfer");//: a transfer
-    translations["Move"]=tr("Move");//: a move
+    //: a copy
+    translations["Copy"]=tr("Copy");
+    //: a transfer
+    translations["Transfer"]=tr("Transfer");
+    //: a move
+    translations["Move"]=tr("Move");
     translations["Start"]=tr("Start");
     translations["Pause"]=tr("Pause");
     translations["Resume"]=tr("Resume");
