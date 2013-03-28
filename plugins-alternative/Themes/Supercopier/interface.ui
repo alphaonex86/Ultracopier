@@ -479,7 +479,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="toolTip">
-            <string>Delete select items</string>
+            <string>Delete the selected items</string>
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
@@ -534,7 +534,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="toolTip">
-            <string>Export transfer list</string>
+            <string>Export the transfer list</string>
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
@@ -560,7 +560,7 @@ p, li { white-space: pre-wrap; }
             </size>
            </property>
            <property name="toolTip">
-            <string>Import transfer list</string>
+            <string>Import the transfer list</string>
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
