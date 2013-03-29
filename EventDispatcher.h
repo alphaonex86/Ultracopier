@@ -87,7 +87,7 @@ class EventDispatcher : public QObject
         LocalListener localListener;
         CliParser cliParser;
         #ifdef Q_OS_WIN32
-        QString GetOSDisplayString();
+        static QString GetOSDisplayString();
         #endif
     private slots:
         /// \brief Called when event loop is setup
