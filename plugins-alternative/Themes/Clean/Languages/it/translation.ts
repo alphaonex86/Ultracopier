@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="142"/>
         <source>%1/%2 files, %3/%4</source>
-        <translation></translation>
+        <translation>%1/%2 file, %3/%4</translation>
     </message>
 </context>
 <context>
@@ -34,17 +34,17 @@
     <message>
         <location filename="../../interface.ui" line="96"/>
         <source>Move file(s)</source>
-        <translation>Spostare file(s)</translation>
+        <translation>Sposta file</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="105"/>
         <source>Move folder</source>
-        <translation>Spostare la cartella</translation>
+        <translation>Sposta la cartella</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="114"/>
         <source>Copy file(s)</source>
-        <translation>Copiare il file (s)</translation>
+        <translation>Copia file</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="123"/>
