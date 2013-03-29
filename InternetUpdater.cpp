@@ -12,9 +12,9 @@ InternetUpdater::InternetUpdater(QObject *parent) :
 {
     connect(&newUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
     connect(&firstUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
-    newUpdateTimer.start(1000*30);
+    newUpdateTimer.start(1000*3600);
     firstUpdateTimer.setSingleShot(true);
-    firstUpdateTimer.start(1000*10);
+    firstUpdateTimer.start(1000*60);
 }
 
 void InternetUpdater::downloadFile()
