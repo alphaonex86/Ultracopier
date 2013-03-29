@@ -64,6 +64,10 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     retranslateTheUI();
     updateSystrayIcon();
 
+    #ifdef ULTRACOPIER_INTERNET_SUPPORT
+    lastVersion=ULTRACOPIER_VERSION;
+    #endif
+
     timerCheckSetTooltip.setSingleShot(true);
     timerCheckSetTooltip.start(1000);
 
@@ -412,6 +416,9 @@ void SystrayIcon::removeCopyEngine(const QString &name)
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 void SystrayIcon::newUpdate(const QString &version)
 {
+    if(version==lastVersion)
+        return;
+    lastVersion=version;
     showSystrayMessage(tr("New version: %1").arg(version));
 }
 #endif

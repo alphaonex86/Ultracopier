@@ -1,4 +1,5 @@
 #include "InternetUpdater.h"
+#include "EventDispatcher.h"
 #include "OptionEngine.h"
 
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
@@ -11,20 +12,27 @@ InternetUpdater::InternetUpdater(QObject *parent) :
 {
     connect(&newUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
     connect(&firstUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
-    newUpdateTimer.start(1000*3600);
+    newUpdateTimer.start(1000*30);
     firstUpdateTimer.setSingleShot(true);
-    firstUpdateTimer.start(1000*360);
+    firstUpdateTimer.start(1000*10);
 }
 
 void InternetUpdater::downloadFile()
 {
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate").toBool())
         return;
+    QString ultracopierVersion;
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    reply = qnam.get(QNetworkRequest(QString("%1?platform=%2&ultimate=1").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE)));
+    ultracopierVersion=QString("Ultracopier Ultimate/%1").arg(ULTRACOPIER_VERSION);
     #else
-    reply = qnam.get(QNetworkRequest(QString("%1?platform=%2&ultimate=0").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE)));
+    ultracopierVersion=QString("Ultracopier/%1").arg(ULTRACOPIER_VERSION);
     #endif
+    #ifdef Q_OS_WIN32
+    ultracopierVersion+=QString(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
+    #endif
+    QNetworkRequest networkRequest(QString("%1?platform=%2").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE));
+    networkRequest.setHeader(QNetworkRequest::UserAgentHeader,ultracopierVersion);
+    reply = qnam.get(networkRequest);
     connect(reply, &QNetworkReply::finished, this, &InternetUpdater::httpFinished);
 }
 

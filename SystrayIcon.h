@@ -44,6 +44,9 @@ class SystrayIcon : public QSystemTrayIcon
         void newUpdate(const QString &version);
         #endif
     private:
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        QString lastVersion;
+        #endif
         QMenu* systrayMenu;			///< Pointer on the menu
         QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)
         QAction* actionMenuQuit;		///< Pointer on the Quit action
