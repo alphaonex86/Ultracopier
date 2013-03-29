@@ -57,7 +57,7 @@ EventDispatcher::EventDispatcher()
     core=new Core(copyEngineList);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //show the ultracopier information
-    #ifdef Q_OS_WIN32
+    #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Windows version: %1").arg(GetOSDisplayString()));
     #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
@@ -421,17 +421,71 @@ QString EventDispatcher::GetOSDisplayString()
 #ifdef Q_OS_MAC
 QString EventDispatcher::GetOSDisplayString()
 {
-    NSDictionary *version = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
-    NSString *productVersion = [version objectForKey:@"ProductVersion"];
-    NSRange range;
-    range.location = 0;
-    range.length = [productVersion length];
-    QString result(range.length, QChar(0));
-
-    unichar *chars = new unichar[range.location];
-    [productVersion getCharacters:chars range:range];
-    QString result = QString::fromUtf16(chars, range.length);
-    delete  chars;
-    return "Mac OS X "+result;
+        QStringList key;
+    QStringList string;
+    QFile xmlFile("/System/Library/CoreServices/SystemVersion.plist");
+    if(xmlFile.open(QIODevice::ReadOnly))
+    {
+        QString content=xmlFile.readAll();
+        xmlFile.close();
+        QString errorStr;
+        int errorLine;
+        int errorColumn;
+        QDomDocument domDocument;
+        if (!domDocument.setContent(content, false, &errorStr,&errorLine,&errorColumn))
+            return "Mac OS X";
+        else
+        {
+            QDomElement root = domDocument.documentElement();
+            if(root.tagName()!="plist")
+                return "Mac OS X";
+            else
+            {
+                if(root.isElement())
+                {
+                    QDomElement SubChild=root.firstChildElement("dict");
+                    while(!SubChild.isNull())
+                    {
+                        if(SubChild.isElement())
+                        {
+                            QDomElement SubChild2=SubChild.firstChildElement("key");
+                            while(!SubChild2.isNull())
+                            {
+                                if(SubChild2.isElement())
+                                    key << SubChild2.text();
+                                else
+                                    return "Mac OS X";
+                                SubChild2 = SubChild2.nextSiblingElement("key");
+                            }
+                            SubChild2=SubChild.firstChildElement("string");
+                            while(!SubChild2.isNull())
+                            {
+                                if(SubChild2.isElement())
+                                    string << SubChild2.text();
+                                else
+                                    return "Mac OS X";
+                                SubChild2 = SubChild2.nextSiblingElement("string");
+                            }
+                        }
+                        else
+                            return "Mac OS X";
+                        SubChild = SubChild.nextSiblingElement("property");
+                    }
+                }
+                else
+                    return "Mac OS X";
+            }
+        }
+    }
+    if(key.size()!=string.size())
+        return "Mac OS X";
+    int index=0;
+    while(index<key.size())
+    {
+        if(key.at(index)=="ProductVersion")
+            return "Mac OS X "+string.at(index);
+        index++;
+    }
+    return "Mac OS X";
 }
 #endif
