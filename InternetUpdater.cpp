@@ -27,6 +27,17 @@ void InternetUpdater::downloadFile()
     #else
     ultracopierVersion=QString("Ultracopier/%1").arg(ULTRACOPIER_VERSION);
     #endif
+    #ifdef ULTRACOPIER_VERSION_PORTABLE
+        #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+             ultracopierVersion+=QString(" portable/all-in-one");
+        #else
+             ultracopierVersion+=QString(" portable");
+        #endif
+    #else
+        #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+            ultracopierVersion+=QString(" all-in-one");
+        #endif
+    #endif
     #ifdef Q_OS_WIN32
     ultracopierVersion+=QString(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
     #endif

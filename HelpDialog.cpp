@@ -73,7 +73,11 @@ void HelpDialog::reloadTextValue()
         #ifdef ULTRACOPIER_VERSION_PORTABLEAPPS
             text=text.replace("%1",tr("For http://portableapps.com/"));
         #else
-             text=text.replace("%1",tr("Portable version"));
+            #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+                text=text.replace("%1",tr("Portable and all in one version"));
+            #else
+                text=text.replace("%1",tr("Portable version"));
+            #endif
         #endif
     #else
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
