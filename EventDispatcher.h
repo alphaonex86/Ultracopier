@@ -43,6 +43,9 @@ class EventDispatcher : public QObject
         ~EventDispatcher();
         /// \brief return if need be close
         bool shouldBeClosed();
+        #ifdef Q_OS_WIN32
+        static QString GetOSDisplayString();
+        #endif
     public slots:
         /// \brief Quit ultracopier
         void quit();
@@ -86,9 +89,6 @@ class EventDispatcher : public QObject
         CopyEngineManager *copyEngineList;
         LocalListener localListener;
         CliParser cliParser;
-        #ifdef Q_OS_WIN32
-        static QString GetOSDisplayString();
-        #endif
     private slots:
         /// \brief Called when event loop is setup
         void initFunction();
