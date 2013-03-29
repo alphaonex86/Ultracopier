@@ -432,6 +432,6 @@ QString EventDispatcher::GetOSDisplayString()
     [productVersion getCharacters:chars range:range];
     QString result = QString::fromUtf16(chars, range.length);
     delete  chars;
-    return result;
+    return "Mac OS X "+result;
 }
 #endif
