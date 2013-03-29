@@ -38,7 +38,7 @@ void InternetUpdater::downloadFile()
             ultracopierVersion+=QString(" all-in-one");
         #endif
     #endif
-    #ifdef Q_OS_WIN32
+    #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     ultracopierVersion+=QString(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
     #endif
     QNetworkRequest networkRequest(QString("%1?platform=%2").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE));

@@ -43,7 +43,7 @@ class EventDispatcher : public QObject
         ~EventDispatcher();
         /// \brief return if need be close
         bool shouldBeClosed();
-        #ifdef Q_OS_WIN32
+        #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
         static QString GetOSDisplayString();
         #endif
     public slots:

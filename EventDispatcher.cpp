@@ -417,3 +417,21 @@ QString EventDispatcher::GetOSDisplayString()
       return "This sample does not support this version of Windows.\n";
 }
 #endif
+
+#ifdef Q_OS_MAC
+QString EventDispatcher::GetOSDisplayString()
+{
+    NSDictionary *version = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
+    NSString *productVersion = [version objectForKey:@"ProductVersion"];
+    NSRange range;
+    range.location = 0;
+    range.length = [productVersion length];
+    QString result(range.length, QChar(0));
+
+    unichar *chars = new unichar[range.location];
+    [productVersion getCharacters:chars range:range];
+    QString result = QString::fromUtf16(chars, range.length);
+    delete  chars;
+    return result;
+}
+#endif
