@@ -26,7 +26,7 @@ class ThemesFactory : public PluginInterface_ThemesFactory
         /// \brief to get the default options widget
         QWidget * options();
         /// \brief to get a resource icon
-        QIcon getIcon(const QString &fileName);
+        QIcon getIcon(const QString &fileName) const;
     signals:
         void reloadLanguage();
     public slots:

@@ -27,7 +27,7 @@ QWidget * ThemesFactory::options()
     return NULL;
 }
 
-QIcon ThemesFactory::getIcon(const QString &fileName)
+QIcon ThemesFactory::getIcon(const QString &fileName) const
 {
     if(fileName=="SystemTrayIcon/exit.png")
     {

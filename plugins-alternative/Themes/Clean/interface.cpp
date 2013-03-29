@@ -349,6 +349,12 @@ void InterfacePlugin::synchronizeItems(const QList<Ultracopier::ReturnActionOnCo
     }
 }
 
+/** \brief support speed limitation */
+void InterfacePlugin::setSupportSpeedLimitation(const bool &supportSpeedLimitationBool)
+{
+    Q_UNUSED(supportSpeedLimitationBool);
+}
+
 void InterfacePlugin::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
 {
     loop_size=InternalRunningOperation.size();

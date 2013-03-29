@@ -51,6 +51,8 @@ public slots:
     //set the translate
     void newLanguageLoaded();
     void synchronizeItems(const QList<Ultracopier::ReturnActionOnCopyList>& returnActions);
+    /** \brief support speed limitation */
+    void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
 public:
     /// \brief the transfer item with progression
     struct ItemOfCopyListWithMoreInformations

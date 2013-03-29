@@ -26,6 +26,12 @@
     typedef void (WINAPI *PGNSI) (LPSYSTEM_INFO);
     typedef BOOL (WINAPI *PGPI) (DWORD, DWORD, DWORD, DWORD, PDWORD);
 #endif
+#ifdef Q_OS_MAC
+#include <QStringList>
+#include <QFile>
+#include <QDomDocument>
+#include <QDomElement>
+#endif
 
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
