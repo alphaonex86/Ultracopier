@@ -115,13 +115,14 @@
     <message>
         <location filename="../../../CopyListener.cpp" line="147"/>
         <source>Error</source>
-        <translation type="unfinished">Errore</translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <location filename="../../../CopyListener.cpp" line="147"/>
         <source>Error during the reception of the copy/move list
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore durante la ricezione della lista di copia/spostamento
+%1</translation>
     </message>
 </context>
 <context>
@@ -156,7 +157,7 @@
     <message>
         <location filename="../../../Core.cpp" line="117"/>
         <source>Unable to get a engine instance</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile ottenere un&apos;istanza dal motore per la copia</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="217"/>
@@ -304,7 +305,7 @@
         <location filename="../../../FacilityEngine.cpp" line="44"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Trasferisci</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="47"/>
@@ -490,7 +491,7 @@ Compilata come versione: %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="77"/>
         <source>Portable and all in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione portatile e pluricomprensiva</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="79"/>
@@ -500,7 +501,7 @@ Compilata come versione: %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="84"/>
         <source>All in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione pluricomprensiva</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="86"/>
@@ -679,12 +680,12 @@ Compilata come versione: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="222"/>
         <source>Confirm to group the windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Confermare il raggruppamento delle finestre</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="245"/>
         <source>Check the update</source>
-        <translation type="unfinished"></translation>
+        <translation>Controllare aggiornamenti</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="327"/>
@@ -714,7 +715,7 @@ Compilata come versione: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="467"/>
         <source>Client connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Client connessi</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="523"/>
@@ -799,7 +800,7 @@ Compilata come versione: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.cpp" line="195"/>
         <source>Load the language?</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricare questa lingua?</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="279"/>
@@ -859,7 +860,7 @@ Compilata come versione: %1.</translation>
         <location filename="../../../OptionDialog.cpp" line="306"/>
         <location filename="../../../OptionDialog.cpp" line="307"/>
         <source>The variables are %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le variabili sono %1</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="912"/>
@@ -1244,7 +1245,7 @@ da: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="422"/>
         <source>New version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuova versione: %1</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="439"/>

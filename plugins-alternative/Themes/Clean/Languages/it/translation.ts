@@ -49,7 +49,7 @@
     <message>
         <location filename="../../interface.ui" line="123"/>
         <source>Copy folder</source>
-        <translation>Copia la cartella</translation>
+        <translation>Copia cartella</translation>
     </message>
 </context>
 </TS>

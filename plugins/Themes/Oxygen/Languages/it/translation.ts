@@ -21,17 +21,17 @@
     <message>
         <location filename="../../interface.cpp" line="854"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished">Non chiudere se vengono rilevati errori</translation>
+        <translation>Non chiudere se vengono rilevati errori</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="855"/>
         <source>Never close</source>
-        <translation type="unfinished">Non chiudere mai</translation>
+        <translation>Non chiudere mai</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="856"/>
         <source>Always close</source>
-        <translation type="unfinished">Chiudere sempre</translation>
+        <translation>Chiudere sempre</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="858"/>
@@ -43,7 +43,7 @@
         <location filename="../../interface.cpp" line="1053"/>
         <location filename="../../interface.cpp" line="1065"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegliere un colore</translation>
     </message>
 </context>
 <context>
@@ -51,24 +51,24 @@
     <message>
         <location filename="../../factory.cpp" line="208"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished">Non chiudere se vengono rilevati errori</translation>
+        <translation>Non chiudere se vengono rilevati errori</translation>
     </message>
     <message>
         <location filename="../../factory.cpp" line="209"/>
         <source>Never close</source>
-        <translation type="unfinished">Non chiudere mai</translation>
+        <translation>Non chiudere mai</translation>
     </message>
     <message>
         <location filename="../../factory.cpp" line="210"/>
         <source>Always close</source>
-        <translation type="unfinished">Chiudere sempre</translation>
+        <translation>Chiudere sempre</translation>
     </message>
     <message>
         <location filename="../../factory.cpp" line="388"/>
         <location filename="../../factory.cpp" line="403"/>
         <location filename="../../factory.cpp" line="418"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegliere un colore</translation>
     </message>
 </context>
 <context>
@@ -121,47 +121,47 @@
     <message>
         <location filename="../../interface.ui" line="349"/>
         <source>Move the selected items to the top</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta in cima gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="375"/>
         <source>Move up the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta sopra gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="401"/>
         <source>Move down the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta sotto gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="427"/>
         <source>Move the selected items to the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta in coda gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="453"/>
         <source>Add file/folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi file/cartelle</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="482"/>
         <source>Delete the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina gli elementi selezionati</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="508"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="537"/>
         <source>Export the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta la lista dei trasferimenti</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="563"/>
         <source>Import the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Importa la lista dei trasferimenti</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="618"/>
@@ -214,53 +214,53 @@
     <message>
         <location filename="../../themesOptions.ui" line="20"/>
         <source>Show dual progression</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrare la doppia progressione</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="40"/>
         <source>Show speed as main information</source>
-        <translation type="unfinished">Mostra la velocità come principale informazione</translation>
+        <translation>Mostrare la velocità come principale informazione</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="50"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished">Iniziare col pulsante &quot;Altro&quot; attivo</translation>
+        <translation>Iniziare col pulsante &quot;Altro&quot; attivo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="60"/>
         <source>At the end of the copy: </source>
-        <translation type="unfinished">Alla fine della copia: </translation>
+        <translation>Alla fine della copia: </translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
         <source>Limit copy speed at:</source>
-        <translation type="unfinished">Ridurre la velocità di copia a:</translation>
+        <translation>Ridurre la velocità di copia a:</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>
         <source> KB/s</source>
-        <translation type="unfinished"> KB/s</translation>
+        <translation> KB/s</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="149"/>
         <source>Speed with progress bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocità nella barra di progresso</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="256"/>
         <source>Progression color</source>
-        <translation type="unfinished"></translation>
+        <translation>Colore della progressione</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="263"/>
         <source>Show progression in the title</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrare la percentuale di progresso sul titolo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="276"/>
         <source>Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>Sempre in primo piano</translation>
     </message>
 </context>
 </TS>
