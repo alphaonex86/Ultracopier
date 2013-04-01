@@ -183,7 +183,7 @@
     <message>
         <location filename="../../../Core.cpp" line="892"/>
         <source>Do you want to copy? If you reply no, it will be moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous faire une copie? Si vous repondez nous alors il sera déplacé.</translation>
     </message>
 </context>
 <context>
@@ -490,7 +490,7 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="77"/>
         <source>Portable and all in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>Portable et tout en un</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="79"/>
@@ -578,7 +578,7 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OSSpecific.cpp" line="12"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
-        <translation type="unfinished"></translation>
+        <translation>Redémarrer le système si précédement vous avec installé un logiciel similaire (comme Teracopy, Supercopier ou un version prédente d&apos;Ultracopier).</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="14"/>
@@ -1211,7 +1211,8 @@ depuis:%2</translation>
         <location filename="../../../SystrayIcon.cpp" line="434"/>
         <source>New version: %1
 Site: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle version: %1
+Site: %2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="451"/>
