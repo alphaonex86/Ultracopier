@@ -90,12 +90,17 @@ void HelpDialog::reloadTextValue()
 
     text=ui->label_site->text();
     //: This site need be the official site of ultracopier, into the right languages, english if not exists
-    text=text.replace("%1",tr("http://ultracopier.first-world.info/"));
+    text=text.replace("%1",getWebSite());
     ui->label_site->setText(text);
 
     text=ui->label_platform->text();
     text=text.replace("%1",ULTRACOPIER_PLATFORM_NAME);
     ui->label_platform->setText(text);
+}
+
+QString HelpDialog::getWebSite()
+{
+    return tr("http://ultracopier.first-world.info/");
 }
 
 #ifdef ULTRACOPIER_DEBUG

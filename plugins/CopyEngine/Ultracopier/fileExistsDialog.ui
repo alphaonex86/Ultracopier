@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>469</width>
-    <height>150</height>
+    <height>162</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -285,7 +285,7 @@
      <item>
       <widget class="QCheckBox" name="checkBoxAlways">
        <property name="text">
-        <string>&amp;Always do this action</string>
+        <string>&amp;Always perform this action</string>
        </property>
       </widget>
      </item>
@@ -343,7 +343,10 @@
   </action>
   <action name="actionOverwrite_if_not_same_modification_date">
    <property name="text">
-    <string>Overwrite if not same modification date</string>
+    <string>Overwrite if modification date differs</string>
+   </property>
+   <property name="toolTip">
+    <string>Overwrite if modification date differs</string>
    </property>
   </action>
   <action name="actionOverwrite_if_older">

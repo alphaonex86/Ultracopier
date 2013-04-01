@@ -22,18 +22,18 @@
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="123"/>
-        <source>Unknow error: %1</source>
-        <translation>Errore sconosciuto: %1</translation>
+        <source>Unknown error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../AvancedQFile.cpp" line="189"/>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="135"/>
         <source>Path conversion error</source>
         <translation>Percorso dell&apos;errore di conversione</translation>
-    </message>
-    <message>
-        <location filename="../../AvancedQFile.cpp" line="189"/>
-        <source>Unknow error</source>
-        <translation>Errore sconosciuto</translation>
     </message>
 </context>
 <context>
@@ -52,8 +52,8 @@
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="676"/>
-        <source>The mode have been forced previously, it&apos;s internal error, please report it</source>
-        <translation>Modalità forzata in precedenza, errore interno, pregasi di segnalarlo</translation>
+        <source>The mode has been forced previously. This is an internal error, please report it</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="982"/>
@@ -129,8 +129,8 @@
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1105"/>
-        <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation>Le opzioni del motore per la copia non vengono caricate, impossibile accedere ai filtri</translation>
+        <source>Options engine is not loaded. Unable to access the filters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -210,6 +210,10 @@
     </message>
     <message>
         <location filename="../../Factory.cpp" line="451"/>
+        <source>Options engine is not loaded. Unable to access the filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../Factory.cpp" line="490"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Le opzioni del motore per la copia non vengono caricate, impossibile accedere ai filtri</translation>
@@ -224,8 +228,8 @@
     </message>
     <message>
         <location filename="../../DiskSpace.ui" line="24"/>
-        <source>You need more space on this drives to finish this transfer</source>
-        <translation>Spazio su disco insufficiente</translation>
+        <source>You need more space on this drive to finish this transfer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../DiskSpace.ui" line="49"/>
@@ -275,8 +279,8 @@
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="213"/>
-        <source>Try rename with unauthorized charateres</source>
-        <translation>Provare a rinominare con caratteri non consentiti</translation>
+        <source>Try rename with unauthorized characters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -298,8 +302,8 @@
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="172"/>
-        <source>Try rename with unauthorized charateres</source>
-        <translation>Provare a rinominare con caratteri non consentiti</translation>
+        <source>Try rename with unauthorized characters</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -350,10 +354,9 @@
         <translation>File e cartelle</translation>
     </message>
     <message>
-        <location filename="../../FilterRules.ui" line="95"/>
-        <source>All string need match</source>
-        <translatorcomment>Devono esserci tutte le parole nella ricerca</translatorcomment>
-        <translation>Prendere in considerazione tutte le parole</translation>
+        <location filename="../../FilterRules.ui" line="125"/>
+        <source>The test string matches with the regex</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="102"/>
@@ -371,14 +374,14 @@
         <translation>Finestra dei filtri</translation>
     </message>
     <message>
+        <location filename="../../FilterRules.ui" line="95"/>
+        <source>Whole string must match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../FilterRules.ui" line="108"/>
         <source>The regex is valid</source>
         <translation>La regex è valida</translation>
-    </message>
-    <message>
-        <location filename="../../FilterRules.ui" line="125"/>
-        <source>The test string match with the regex</source>
-        <translation>La stringa di verifica coincide con la regex</translation>
     </message>
 </context>
 <context>
@@ -453,71 +456,75 @@
         <translation>Cartella già presente</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="104"/>
+        <location filename="../../FolderExistsDialog.cpp" line="103"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="114"/>
+        <location filename="../../FolderExistsDialog.cpp" line="113"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="175"/>
+        <location filename="../../FolderExistsDialog.cpp" line="174"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="175"/>
+        <location filename="../../FolderExistsDialog.cpp" line="174"/>
+        <source>Try rename with unauthorized characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Try rename with unauthorized charateres</source>
-        <translation>Provare a rinominare con caratteri non consentiti</translation>
+        <translation type="obsolete">Provare a rinominare con caratteri non consentiti</translation>
     </message>
 </context>
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1345"/>
+        <location filename="../../ListThread.cpp" line="1347"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Impossibile spostare o copiare elementi in modalità forzata anomala: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1352"/>
+        <location filename="../../ListThread.cpp" line="1354"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Impossibile salvare la lista dei trasferimenti: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1368"/>
-        <source>Problem at the reading, or file size is null</source>
-        <translation>Problema di lettura, o dimensione del file nulla</translation>
+        <location filename="../../ListThread.cpp" line="1370"/>
+        <source>Problem reading file, or file-size is 0</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1375"/>
+        <location filename="../../ListThread.cpp" line="1377"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translatorcomment>Header si riferisce all&apos;intestazione?</translatorcomment>
         <translation>Intestazione sbagliata: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1384"/>
+        <location filename="../../ListThread.cpp" line="1386"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>La lista dei trasferimenti è in modalità mista, ma questa istanza non è in questa modalità</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1393"/>
+        <location filename="../../ListThread.cpp" line="1395"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>La lista dei trasferimenti è in modalità di copia, ma questa istanza non è in questa modalità</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1399"/>
+        <location filename="../../ListThread.cpp" line="1401"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>La lista dei trasferimenti è in modalità di spostamento, ma questa istanza non è in questa modalità</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1455"/>
-        <source>Some error have been found during the line parsing</source>
-        <translation>Trovati alcuni errori durante l&apos;analisi delle linee</translation>
+        <location filename="../../ListThread.cpp" line="1457"/>
+        <source>Some errors have been found during the line parsing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1463"/>
+        <location filename="../../ListThread.cpp" line="1465"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Impossibile aprire la lista dei trasferimenti: %1</translation>
     </message>
@@ -542,8 +549,8 @@
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="125"/>
-        <source>Unable to set the right</source>
-        <translation>Impossibile impostare le autorizzazioni</translation>
+        <source>Unable to set the access-right</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="137"/>
@@ -560,8 +567,8 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="163"/>
-        <source>Internal error to read the source file: block size out of range</source>
-        <translation>Errore interno sulla lettura del file di origine: dimensione del blocco fuori campo</translation>
+        <source>Internal error reading the source file:block size out of range</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="171"/>
@@ -640,8 +647,8 @@
     <name>ScanFileOrFolder</name>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="254"/>
-        <source>Black listed folder</source>
-        <translation>Lista nera delle cartelle</translation>
+        <source>Blacklisted folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="316"/>
@@ -679,11 +686,6 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="200"/>
-        <source>Try rename with unauthorized charateres</source>
-        <translation>Provare a rinominare con caratteri non consentiti</translation>
-    </message>
-    <message>
         <location filename="../../TransferThread.cpp" line="214"/>
         <location filename="../../TransferThread.cpp" line="538"/>
         <location filename="../../TransferThread.cpp" line="599"/>
@@ -696,9 +698,14 @@
         <translation>Unità %1</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="200"/>
+        <source>Try rename with unauthorized characters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../TransferThread.cpp" line="474"/>
-        <source>Unknow folder</source>
-        <translation>Cartella sconosciuta</translation>
+        <source>Unknown folder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="478"/>
@@ -716,10 +723,25 @@
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="575"/>
         <location filename="../../TransferThread.cpp" line="640"/>
-        <source>The source don&apos;t exists</source>
-        <translation>La cartella di origine non esiste</translation>
+        <source>The source doesn&apos;t exist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="575"/>
+        <location filename="../../TransferThread.cpp" line="670"/>
+        <source>The source file doesn&apos;t exist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="941"/>
+        <source>The checksums do not match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="1035"/>
+        <source>Internal error: The size transfered doesn&apos;t match</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="605"/>
@@ -728,29 +750,14 @@
         <translation>Impossibile creare la cartella</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="670"/>
-        <source>The source file don&apos;t exists</source>
-        <translation>Il file di origine non esiste</translation>
-    </message>
-    <message>
         <location filename="../../TransferThread.cpp" line="676"/>
         <source>Another file exists at same place</source>
         <translation>Nello stesso percorso è presente un altro file</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="941"/>
-        <source>The checksums not match</source>
-        <translation>Il codice di controllo (checksum) non corrisponde</translation>
-    </message>
-    <message>
         <location filename="../../TransferThread.cpp" line="1021"/>
         <source>Internal error: The destination is not closed</source>
         <translation>Errore interno: la cartella di destinazione non è chiusa</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1035"/>
-        <source>Internal error: The size transfered don&apos;t match</source>
-        <translation>Errore interno: la dimensione del trasferimento non corrisponde</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1046"/>
@@ -778,8 +785,8 @@
     </message>
     <message>
         <location filename="../../WriteThread.cpp" line="624"/>
-        <source>File truncated during the read, possible data change</source>
-        <translation>File troncato durante la lettura, possibili variazioni di dati</translation>
+        <source>File truncated during read, possible data change</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -806,8 +813,8 @@
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="71"/>
-        <source>Auto start the transfer</source>
-        <translation>Iniziare automaticamente il trasferimento</translation>
+        <source>Autostart the transfer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="94"/>
@@ -887,8 +894,8 @@
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="363"/>
-        <source>Do checksum</source>
-        <translation>Verificare il codice (checksum)</translation>
+        <source>Verify checksums</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="395"/>
@@ -974,8 +981,8 @@
     <name>fileErrorDialog</name>
     <message>
         <location filename="../../fileErrorDialog.ui" line="14"/>
-        <source>Error on file</source>
-        <translation>Errore su file</translation>
+        <source>Error with file</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="20"/>
@@ -1009,13 +1016,13 @@
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="173"/>
-        <source>&amp;Always do this action</source>
-        <translation>&amp;Eseguire sempre questa azione</translation>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="193"/>
-        <source>Try in administrator</source>
-        <translation>Provare con diritti di ammistratore</translation>
+        <source>Try in with elevated privileges</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="200"/>
@@ -1086,8 +1093,14 @@
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="288"/>
-        <source>&amp;Always do this action</source>
-        <translation>&amp;Eseguire sempre questa azione</translation>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileExistsDialog.ui" line="346"/>
+        <location filename="../../fileExistsDialog.ui" line="349"/>
+        <source>Overwrite if modification date differs</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="308"/>
@@ -1115,13 +1128,8 @@
         <translation>Sovrascrivi se più recente</translation>
     </message>
     <message>
-        <location filename="../../fileExistsDialog.ui" line="346"/>
-        <source>Overwrite if not same modification date</source>
-        <translation>Sovrascrivi se la data dell&apos;ultima modifica non coincide</translation>
-    </message>
-    <message>
-        <location filename="../../fileExistsDialog.ui" line="351"/>
         <location filename="../../fileExistsDialog.ui" line="354"/>
+        <location filename="../../fileExistsDialog.ui" line="357"/>
         <source>Overwrite if older</source>
         <translation>Sovrascrivi se meno recente</translation>
     </message>
@@ -1129,68 +1137,58 @@
 <context>
     <name>fileIsSameDialog</name>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="14"/>
-        <source>This files are the same file</source>
-        <translation>Questi file sono uguali</translation>
-    </message>
-    <message>
-        <location filename="../../fileIsSameDialog.ui" line="20"/>
-        <source>The source and destination is same</source>
-        <translation>La cartella di origine è uguale a quella di destinazione</translation>
-    </message>
-    <message>
-        <location filename="../../fileIsSameDialog.ui" line="47"/>
+        <location filename="../../fileIsSameDialog.ui" line="40"/>
         <source>Size</source>
         <translation>Dimensione</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="117"/>
+        <location filename="../../fileIsSameDialog.ui" line="110"/>
         <source>Modified</source>
         <translation>Modificato</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="77"/>
+        <location filename="../../fileIsSameDialog.ui" line="70"/>
         <source>File name</source>
         <translation>Nome del file</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="97"/>
+        <location filename="../../fileIsSameDialog.ui" line="14"/>
+        <source>The source and destination is identical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../fileIsSameDialog.ui" line="90"/>
         <source>Folder</source>
         <translation>Cartelle</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="166"/>
+        <location filename="../../fileIsSameDialog.ui" line="159"/>
         <source>Suggest new &amp;name</source>
         <translation>Suggerisci nuovo &amp;nome</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="177"/>
-        <source>&amp;Always do this action</source>
-        <translation>&amp;Eseguire sempre questa azione</translation>
+        <location filename="../../fileIsSameDialog.ui" line="170"/>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="197"/>
+        <location filename="../../fileIsSameDialog.ui" line="190"/>
         <source>&amp;Rename</source>
         <translation>&amp;Rinomina</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="204"/>
+        <location filename="../../fileIsSameDialog.ui" line="197"/>
         <source>&amp;Skip</source>
         <translation>&amp;Salta</translation>
     </message>
     <message>
-        <location filename="../../fileIsSameDialog.ui" line="211"/>
+        <location filename="../../fileIsSameDialog.ui" line="204"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Annulla</translation>
     </message>
 </context>
 <context>
     <name>folderExistsDialog</name>
-    <message>
-        <location filename="../../folderExistsDialog.ui" line="14"/>
-        <source>This folders are the same folder</source>
-        <translation>Queste cartelle sono uguali</translation>
-    </message>
     <message>
         <location filename="../../folderExistsDialog.ui" line="34"/>
         <source>Source</source>
@@ -1202,55 +1200,55 @@
         <translation>Cartella di destinazione</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="62"/>
-        <source>The source and destination is same</source>
-        <translation>La cartella di origine è uguale a quella di destinazione</translation>
+        <location filename="../../folderExistsDialog.ui" line="14"/>
+        <source>The source and destination is identical</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="89"/>
-        <location filename="../../folderExistsDialog.ui" line="157"/>
+        <location filename="../../folderExistsDialog.ui" line="82"/>
+        <location filename="../../folderExistsDialog.ui" line="150"/>
         <source>Modified</source>
         <translation>Modificato</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="106"/>
-        <location filename="../../folderExistsDialog.ui" line="167"/>
+        <location filename="../../folderExistsDialog.ui" line="99"/>
+        <location filename="../../folderExistsDialog.ui" line="160"/>
         <source>Folder name</source>
         <translation>Nome della cartella</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="123"/>
-        <location filename="../../folderExistsDialog.ui" line="191"/>
+        <location filename="../../folderExistsDialog.ui" line="116"/>
+        <location filename="../../folderExistsDialog.ui" line="184"/>
         <source>Folder</source>
         <translation>Cartelle</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="234"/>
+        <location filename="../../folderExistsDialog.ui" line="227"/>
         <source>Suggest new &amp;name</source>
         <translation>Suggerisci nuovo &amp;nome</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="245"/>
-        <source>&amp;Always do this action</source>
-        <translation>&amp;Eseguire sempre questa azione</translation>
+        <location filename="../../folderExistsDialog.ui" line="238"/>
+        <source>&amp;Always perform this action</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="252"/>
+        <location filename="../../folderExistsDialog.ui" line="245"/>
         <source>&amp;Rename</source>
         <translation>&amp;Rinomina</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="259"/>
+        <location filename="../../folderExistsDialog.ui" line="252"/>
         <source>Merge</source>
         <translation>Unisci</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="266"/>
+        <location filename="../../folderExistsDialog.ui" line="259"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../../folderExistsDialog.ui" line="273"/>
+        <location filename="../../folderExistsDialog.ui" line="266"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Annulla</translation>
     </message>

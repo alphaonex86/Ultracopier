@@ -160,8 +160,8 @@ void ReadThread::checkSum()
         //can be smaller than min block size to do correct speed limitation
         if(blockArray.size()>ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
         {
-            errorString_internal=tr("Internal error to read the source file: block size out of range");
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Internal error to read the source file: block size out of range"));
+            errorString_internal=tr("Internal error reading the source file:block size out of range");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Internal error reading the source file:block size out of range"));
             emit error();
             isInReadLoop=false;
             return;

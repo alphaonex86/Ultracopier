@@ -4,17 +4,17 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="75"/>
+        <location filename="../../interface.cpp" line="89"/>
         <source>Total: %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="76"/>
+        <location filename="../../interface.cpp" line="90"/>
         <source>%1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="216"/>
+        <location filename="../../interface.cpp" line="236"/>
         <source>%1% done</source>
         <translation type="unfinished"></translation>
     </message>

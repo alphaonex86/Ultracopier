@@ -197,7 +197,7 @@ void TransferThread::setFileRename(const QString &nameForRename)
     if(nameForRename.contains(QRegularExpression("[/\\\\\\*]")))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't use this kind of name, internal error");
-        emit errorOnFile(destination,tr("Try rename with unauthorized charateres"));
+        emit errorOnFile(destination,tr("Try rename with unauthorized characters"));
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] nameForRename: "+nameForRename);
@@ -471,7 +471,7 @@ QString TransferThread::resolvedName(const QFileInfo &inode)
         if(inode.absolutePath().contains(QRegularExpression("^[a-zA-Z]+:[/\\\\]?$")))
             fileName=tr("Drive %1").arg(fileName);
         else
-            fileName=tr("Unknow folder");
+            fileName=tr("Unknown folder");
     }
     #else
     if(fileName.isEmpty())
@@ -572,7 +572,7 @@ void TransferThread::tryMoveDirectly()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", source not exists");
             readError=true;
-            emit errorOnFile(destination,tr("The source don't exists"));
+            emit errorOnFile(destination,tr("The source file doesn't exist"));
             return;
         }
         else if(!destinationFile.remove())
@@ -637,7 +637,7 @@ void TransferThread::tryCopyDirectly()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+destinationFile.fileName()+", source not exists");
             readError=true;
-            emit errorOnFile(destination,tr("The source don't exists"));
+            emit errorOnFile(destination,tr("The source doesn't exist"));
             return;
         }
         else if(!destinationFile.remove())
@@ -667,7 +667,7 @@ void TransferThread::tryCopyDirectly()
         if(!sourceFile.exists())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-            emit errorOnFile(sourceFile,tr("The source file don't exists"));
+            emit errorOnFile(sourceFile,tr("The source file doesn't exist"));
             return;
         }
         else if(destinationFile.exists())
@@ -938,7 +938,7 @@ void TransferThread::compareChecksum()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] the checksum not match");
         //emit error here, and wait to resume
-        emit errorOnFile(destination,tr("The checksums not match"));
+        emit errorOnFile(destination,tr("The checksums do not match"));
     }
 }
 
@@ -1032,7 +1032,7 @@ void TransferThread::postOperation()
                                          .arg(readThread.getLastGoodPosition())
                                          .arg(writeThread.getLastGoodPosition())
                                          );
-                emit errorOnFile(destination,tr("Internal error: The size transfered don't match"));
+                emit errorOnFile(destination,tr("Internal error: The size transfered doesn't match"));
                 needSkip=false;
                 if(deletePartiallyTransferredFiles)
                     needRemove=true;
@@ -1043,7 +1043,7 @@ void TransferThread::postOperation()
             {
                 writeThread.flushBuffer();
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("["+QString::number(id)+"] buffer is not empty"));
-                emit errorOnFile(destination,tr("Internal error: Buffer is not empty"));
+                emit errorOnFile(destination,tr("Internal error: The buffer is not empty"));
                 needSkip=false;
                 if(deletePartiallyTransferredFiles)
                     needRemove=true;

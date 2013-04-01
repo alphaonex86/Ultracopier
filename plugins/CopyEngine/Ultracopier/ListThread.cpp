@@ -884,9 +884,11 @@ void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisA
 }
 
 //mk path to do
-quint64 ListThread::addToMkPath(const QFileInfo& source,const QFileInfo& destination)
+quint64 ListThread::addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode)
 {
     if(stopIt)
+        return 0;
+    if(inode!=0 && (!keepDate && !doRightTransfer))
         return 0;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
     ActionToDoInode temp;
@@ -1364,8 +1366,8 @@ void ListThread::importTransferList(const QString &fileName)
         QByteArray data=transferFile.readLine(64);
         if(data.size()<=0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Problem at the reading, or file size is null"));
-            emit errorTransferList(tr("Problem at the reading, or file size is null"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Problem reading file, or file-size is 0"));
+            emit errorTransferList(tr("Problem reading file, or file-size is 0"));
             return;
         }
         content=QString::fromUtf8(data);
@@ -1452,7 +1454,7 @@ void ListThread::importTransferList(const QString &fileName)
         while(data.size()>0);
         transferFile.close();
         if(errorFound)
-            emit warningTransferList(tr("Some error have been found during the line parsing"));
+            emit warningTransferList(tr("Some errors have been found during the line parsing"));
         sendActionDone();
         updateTheStatus();
         autoStartAndCheckSpace();

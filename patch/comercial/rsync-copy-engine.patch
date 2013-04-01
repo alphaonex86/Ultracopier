@@ -818,7 +818,7 @@ diff -U 3 -H -d -r -N -- Ultracopier/copyEngineOptions.ui Rsync/copyEngineOption
 +       <item row="5" column="0">
 +        <widget class="QLabel" name="label_rsync">
 +         <property name="text">
-+          <string>Rsync</string>
++          <string notr="true">Rsync</string>
           </property>
          </widget>
         </item>

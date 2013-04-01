@@ -368,7 +368,7 @@ void InterfacePlugin::setFileProgression(const QList<Ultracopier::ProgressionIte
             if(progressionList.at(sub_index_for_loop).id==InternalRunningOperation.at(index_for_loop).generalData.id)
             {
                 InternalRunningOperation[index_for_loop].generalData.size=progressionList.at(sub_index_for_loop).total;
-                InternalRunningOperation[index_for_loop].currentProgression=progressionList.at(sub_index_for_loop).current;
+                InternalRunningOperation[index_for_loop].currentProgression=(progressionList.at(sub_index_for_loop).currentRead+progressionList.at(sub_index_for_loop).currentWrite)/2;
                 break;
             }
             sub_index_for_loop++;

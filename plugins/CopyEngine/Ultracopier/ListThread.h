@@ -324,7 +324,7 @@ private slots:
     void createTransferThread();
     void deleteTransferThread();
     //mk path to do
-    quint64 addToMkPath(const QFileInfo& source,const QFileInfo& destination);
+    quint64 addToMkPath(const QFileInfo& source, const QFileInfo& destination, const int &inode);
     //add rm path to do
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
     //add to real move

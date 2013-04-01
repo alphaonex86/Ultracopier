@@ -9,7 +9,7 @@ OSSpecific::OSSpecific(QWidget *parent) :
     #if defined(Q_OS_LINUX)
     ui->label->setText(tr("The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).<br />Ask to the developer to support it.<br />You need do the copy/move manually."));
     #elif defined(Q_OS_WIN32)
-    ui->label->setText(tr("Don't forget to reboot if previously was installed other similar software<br />(like: Supercopier, Ultracopier in previous version, ...)"));
+    ui->label->setText(tr("Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier)."));
     #elif defined(Q_OS_MAC)
     ui->label->setText(tr("The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.<br />You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon)."));
     #else

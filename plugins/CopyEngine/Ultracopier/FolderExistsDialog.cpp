@@ -39,7 +39,6 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
     {
         this->destinationInfo=destination;
         this->setWindowTitle(tr("Folder already exists"));
-        ui->label_message->hide();
         ui->label_content_destination_modified->setText(destination.lastModified().toString());
         ui->label_content_destination_folder_name->setText(destination.fileName());
         ui->label_content_destination_folder->setText(destination.absolutePath());
@@ -172,7 +171,7 @@ void FolderExistsDialog::on_lineEditNewName_returnPressed()
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
     else
-        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized charateres"));
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized characters"));
 }
 
 void FolderExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)

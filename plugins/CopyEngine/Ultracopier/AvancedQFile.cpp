@@ -120,7 +120,7 @@ QString AvancedQFile::getLastWindowsError()
     ErrorStringW,
     0, NULL );
     if(size<0)
-        tr("Unknow error: %1").arg(dw);
+        tr("Unknown error: %1").arg(dw);
     return QString::fromWCharArray(ErrorStringW,size);
 }
 
@@ -186,7 +186,7 @@ bool AvancedQFile::resize(qint64 size)
 QString AvancedQFile::errorString() const
 {
     if(fileErrorString.isEmpty())
-        return tr("Unknow error");
+        return tr("Unknown error");
     return fileErrorString;
 }
 

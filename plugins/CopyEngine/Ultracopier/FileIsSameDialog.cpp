@@ -169,7 +169,7 @@ void FileIsSameDialog::on_lineEditNewName_returnPressed()
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
     else
-        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized charateres"));
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized characters"));
 }
 
 void FileIsSameDialog::on_lineEditNewName_editingFinished()

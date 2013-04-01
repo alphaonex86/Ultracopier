@@ -673,7 +673,7 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
     if(forcedMode)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Mode forced previously"));
-        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The mode have been forced previously, it's internal error, please report it"));
+        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The mode has been forced previously. This is an internal error, please report it"));
         return;
     }
     if(mode==Ultracopier::Copy)
@@ -1102,7 +1102,7 @@ void CopyEngine::showRenamingRules()
 {
     if(renamingRules==NULL)
     {
-        QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
+        QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded. Unable to access the filters"));
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"options not loaded");
         return;
     }

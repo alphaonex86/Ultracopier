@@ -20,7 +20,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>4</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -68,7 +68,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Auto start the transfer</string>
+          <string>Autostart the transfer</string>
          </property>
         </widget>
        </item>
@@ -112,8 +112,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>506</width>
+        <height>218</height>
        </rect>
       </property>
       <attribute name="label">
@@ -290,7 +290,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="label_22">
          <property name="text">
-          <string>Rename the original distination</string>
+          <string>Rename the original destination</string>
          </property>
         </widget>
        </item>
@@ -360,7 +360,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
-             <string>Do checksum</string>
+             <string>Verify checksums</string>
             </property>
            </widget>
           </item>
@@ -387,8 +387,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>332</width>
+        <height>216</height>
        </rect>
       </property>
       <attribute name="label">
@@ -571,8 +571,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>445</width>
+        <height>89</height>
        </rect>
       </property>
       <attribute name="label">

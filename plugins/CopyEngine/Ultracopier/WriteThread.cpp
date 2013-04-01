@@ -621,7 +621,7 @@ void WriteThread::checkSum()
     while(sizeReaden>0 && !stopIt);
     if(lastGoodPosition>(quint64)file.size())
     {
-        errorString_internal=tr("File truncated during the read, possible data change");
+        errorString_internal=tr("File truncated during read, possible data change");
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())));
         emit error();
         return;

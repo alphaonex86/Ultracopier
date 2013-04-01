@@ -69,7 +69,7 @@ void MkPath::internalDoThisPath()
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.first().destination.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.first().source.absoluteFilePath());
             emit errorOnFolder(pathList.first().source,tr("Unable to get time"));
             return;
         }
@@ -122,7 +122,7 @@ void MkPath::internalDoThisPath()
                 return;
             waitAction=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set the right: "+pathList.first().destination.absoluteFilePath());
-            emit errorOnFolder(pathList.first().source,tr("Unable to set the right"));
+            emit errorOnFolder(pathList.first().source,tr("Unable to set the access-right"));
             return;
         }
     }
@@ -240,7 +240,7 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
             Q_UNUSED(ctime);
             return true;
         #else //mainly for mac
-            QFileInfo fileInfo(destination);
+            QFileInfo fileInfo(source);
             time_t ctime=fileInfo.created().toTime_t();
             time_t actime=fileInfo.lastRead().toTime_t();
             time_t modtime=fileInfo.lastModified().toTime_t();
@@ -268,7 +268,7 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
             #else
                 wchar_t filePath[65535];
                 filePath[source.absoluteFilePath().toWCharArray(filePath)]=L'\0';
-                HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
+                HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to read: "+QString::fromWCharArray(filePath)+", error: "+QString::number(GetLastError()));
@@ -314,7 +314,7 @@ bool MkPath::writeFileDateTime(const QFileInfo &destination)
             #else
                 wchar_t filePath[65535];
                 filePath[destination.absoluteFilePath().toWCharArray(filePath)]=L'\0';
-                HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+                HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to write: "+QString::fromWCharArray(filePath)+", error: "+QString::number(GetLastError()));

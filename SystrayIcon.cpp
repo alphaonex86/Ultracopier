@@ -7,11 +7,13 @@
 
 #include <QMessageBox>
 #include <QMimeData>
+#include <QDesktopServices>
 
 #include "SystrayIcon.h"
 #include "PluginsManager.h"
 #include "ThemesManager.h"
 #include "LanguagesManager.h"
+#include "HelpDialog.h"
 
 #ifdef Q_OS_MAC
 //extern void qt_mac_set_dock_menu(QMenu *menu);
@@ -48,6 +50,9 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     connect(actionMenuAbout,	&QAction::triggered,					this,	&SystrayIcon::showHelp);
     connect(actionOptions,		&QAction::triggered,					this,	&SystrayIcon::showOptions);
     connect(this,			&SystrayIcon::activated,                    this,	&SystrayIcon::CatchAction);
+    #ifdef ULTRACOPIER_INTERNET_SUPPORT
+    connect(this,			&QSystemTrayIcon::messageClicked,           this,	&SystrayIcon::messageClicked);
+    #endif
     connect(PluginsManager::pluginsManager,		&PluginsManager::pluginListingIsfinish,			this,	&SystrayIcon::reloadEngineList);
     //display the icon
     updateCurrentTheme();
@@ -135,6 +140,13 @@ void SystrayIcon::showSystrayMessage(const QString& text)
 {
     showMessage(tr("Information"),text,QSystemTrayIcon::Information,0);
 }
+
+#ifdef ULTRACOPIER_INTERNET_SUPPORT
+void SystrayIcon::messageClicked()
+{
+    QDesktopServices::openUrl(HelpDialog::getWebSite());
+}
+#endif
 
 /// \brief To update the systray icon
 void SystrayIcon::updateSystrayIcon()
@@ -419,7 +431,7 @@ void SystrayIcon::newUpdate(const QString &version)
     if(version==lastVersion)
         return;
     lastVersion=version;
-    showSystrayMessage(tr("New version: %1").arg(version));
+    showSystrayMessage(tr("New version: %1\nSite: %2").arg(version).arg(HelpDialog::getWebSite()));
 }
 #endif
 

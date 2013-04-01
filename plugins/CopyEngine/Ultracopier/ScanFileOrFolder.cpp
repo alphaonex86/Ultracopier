@@ -251,7 +251,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
         if(isBlackListed(destination))
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("isBlackListed: %1").arg(destination.absoluteFilePath()));
-            emit errorOnFolder(destination,tr("Black listed folder"),ErrorType_Folder);
+            emit errorOnFolder(destination,tr("Blacklisted folder"),ErrorType_Folder);
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
         }
@@ -455,8 +455,8 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         return;
     int sizeEntryList=entryList.size();
     emit newFolderListing(source.absoluteFilePath());
-    if(sizeEntryList==0 && mode!=Ultracopier::Move)
-        emit addToMkPath(source,destination);
+    if(mode!=Ultracopier::Move)
+        emit addToMkPath(source,destination,sizeEntryList);
     for (int index=0;index<sizeEntryList;++index)
     {
         QFileInfo fileInfo=entryList.at(index);

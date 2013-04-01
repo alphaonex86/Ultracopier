@@ -18,6 +18,7 @@ TRANSLATIONS += Languages/ar/translation.ts \
     Languages/es/translation.ts \
     Languages/fr/translation.ts \
     Languages/hi/translation.ts \
+    Languages/hu/translation.ts \
     Languages/id/translation.ts \
     Languages/it/translation.ts \
     Languages/ja/translation.ts \

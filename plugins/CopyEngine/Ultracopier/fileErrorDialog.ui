@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
+    <width>723</width>
     <height>185</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Error on file</string>
+   <string>Error with file</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -131,7 +131,7 @@
        <item row="3" column="1">
         <widget class="QLabel" name="label_content_folder">
          <property name="text">
-          <string>TextLabel</string>
+          <string notr="true">/folder/</string>
          </property>
         </widget>
        </item>
@@ -170,7 +170,7 @@
      <item>
       <widget class="QCheckBox" name="checkBoxAlways">
        <property name="text">
-        <string>&amp;Always do this action</string>
+        <string>&amp;Always perform this action</string>
        </property>
       </widget>
      </item>
@@ -190,7 +190,7 @@
      <item>
       <widget class="QPushButton" name="Rights">
        <property name="text">
-        <string>Try in administrator</string>
+        <string>Try in with elevated privileges</string>
        </property>
       </widget>
      </item>

@@ -105,6 +105,9 @@ class SystrayIcon : public QSystemTrayIcon
         void retranslateTheUI();
         void reloadEngineList();
         void checkSetTooltip();
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        void messageClicked();
+        #endif
     signals:
         /// \brief Quit ultracopier
         void quit();

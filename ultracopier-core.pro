@@ -8,6 +8,7 @@ TRANSLATIONS += plugins/Languages/ar/translation.ts \
     plugins/Languages/es/translation.ts \
     plugins/Languages/fr/translation.ts \
     plugins/Languages/hi/translation.ts \
+    plugins/Languages/hu/translation.ts \
     plugins/Languages/id/translation.ts \
     plugins/Languages/it/translation.ts \
     plugins/Languages/ja/translation.ts \

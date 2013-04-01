@@ -6,21 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>160</height>
+    <width>411</width>
+    <height>142</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>This files are the same file</string>
+   <string>The source and destination is identical</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>The source and destination is same</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -174,7 +167,7 @@
      <item>
       <widget class="QCheckBox" name="checkBoxAlways">
        <property name="text">
-        <string>&amp;Always do this action</string>
+        <string>&amp;Always perform this action</string>
        </property>
       </widget>
      </item>

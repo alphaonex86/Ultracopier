@@ -21,7 +21,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>You need more space on this drives to finish this transfer</string>
+      <string>You need more space on this drive to finish this transfer</string>
      </property>
     </widget>
    </item>

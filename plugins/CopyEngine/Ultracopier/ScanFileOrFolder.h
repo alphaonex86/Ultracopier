@@ -47,7 +47,7 @@ signals:
     void finishedTheListing();
 
     void newFolderListing(const QString &path);
-    void addToMkPath(const QFileInfo& source,const QFileInfo& destination);
+    void addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode);
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
     void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
 public slots:

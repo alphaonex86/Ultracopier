@@ -448,7 +448,7 @@ void CopyEngineFactory::showFilterDialog()
 {
     if(optionsEngine==NULL)
     {
-        QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded, can't access to the filters"));
+        QMessageBox::critical(NULL,tr("Options error"),tr("Options engine is not loaded. Unable to access the filters"));
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"options not loaded");
         return;
     }
