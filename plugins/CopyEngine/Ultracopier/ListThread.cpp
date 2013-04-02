@@ -1382,7 +1382,7 @@ void ListThread::importTransferList(const QString &fileName)
         {
             if(forcedMode)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in mixed mode, but this instance is not in this mode"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in mixed mode, but this instance is not"));
                 emit errorTransferList(tr("The transfer list is in mixed mode, but this instance is not in this mode"));
                 return;
             }
@@ -1391,13 +1391,13 @@ void ListThread::importTransferList(const QString &fileName)
         }
         if(content=="Ultracopier;Transfer-list;Copy;Ultracopier\n" && (forcedMode && mode==Ultracopier::Move))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in copy mode, but this instance is not in this mode: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in copy mode, but this instance is not: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
             emit errorTransferList(tr("The transfer list is in copy mode, but this instance is not in this mode"));
             return;
         }
         if(content=="Ultracopier;Transfer-list;Move;Ultracopier\n" && (forcedMode && mode==Ultracopier::Copy))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in move mode, but this instance is not in this mode: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in move mode, but this instance is not: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
             emit errorTransferList(tr("The transfer list is in move mode, but this instance is not in this mode"));
             return;
         }

@@ -17,9 +17,13 @@
         <translation type="unfinished">실행:</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>In wait</source>
-        <translation type="unfinished">대기중</translation>
+        <translation type="obsolete">대기중</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+34"/>

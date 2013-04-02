@@ -104,17 +104,11 @@
         <translation type="unfinished">&amp;취소</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Limit copy speed at:</source>
-        <translation type="unfinished">복사 속도 제한:</translation>
+        <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
-        <location line="-158"/>
-        <source>Close at the end of the transfers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+201"/>
+        <location line="+58"/>
         <source>Transfer list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -154,7 +148,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="-224"/>
+        <source>Close on transfer completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+158"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+92"/>
         <source>Move up the selected items</source>
         <translation type="unfinished"></translation>
     </message>
@@ -232,10 +236,14 @@
         <translation type="unfinished">복사 종료시:</translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">복사 속도 제한:</translation>
+    </message>
+    <message>
         <location line="+7"/>
         <location line="+59"/>
-        <source>Limit copy speed at:</source>
-        <translation type="unfinished">복사 속도 제한:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+10"/>

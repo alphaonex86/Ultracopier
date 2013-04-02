@@ -84,12 +84,11 @@
         <translation>Vers:</translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Close at the end of the transfers</source>
-        <translation>Fermer à la fin des transferts</translation>
+        <translation type="obsolete">Fermer à la fin des transferts</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+158"/>
         <source>&amp;More</source>
         <translation>Pl&amp;us</translation>
     </message>
@@ -109,8 +108,17 @@
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Limit copy speed at:</source>
+        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
+    </message>
+    <message>
+        <location line="-143"/>
+        <source>Close on transfer completion</source>
+        <translation>Fermer à la fin des transferts</translation>
+    </message>
+    <message>
+        <location line="+158"/>
+        <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
     <message>
@@ -232,9 +240,13 @@
         <translation>À la fin de la copie:</translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
+    </message>
+    <message>
         <location line="+7"/>
         <location line="+59"/>
-        <source>Limit copy speed at:</source>
+        <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
     <message>

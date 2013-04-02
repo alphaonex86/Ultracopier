@@ -109,9 +109,13 @@
         <translation>&amp;Annulla</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Ridurre la velocità di copia a:</translation>
+        <translation type="obsolete">Ridurre la velocità di copia a:</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -222,9 +226,8 @@
         <translation>Mostrare la velocità come principale informazione</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="50"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation>Iniziare col pulsante &quot;Altro&quot; attivo</translation>
+        <translation type="obsolete">Iniziare col pulsante &quot;Altro&quot; attivo</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="60"/>
@@ -232,10 +235,19 @@
         <translation>Alla fine della copia: </translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Ridurre la velocità di copia a:</translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="50"/>
+        <source>Start with the &quot;more button&quot; pressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation>Ridurre la velocità di copia a:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

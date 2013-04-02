@@ -97,8 +97,8 @@ void LogThread::openLogs()
     {
         if(!log.open(QIODevice::WriteOnly|QIODevice::Unbuffered))
         {
-            QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+            QMessageBox::critical(NULL,tr("Error"),tr("Unable to open the log file, error: %1").arg(log.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open the log file, error: %1").arg(log.errorString()));
         }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine->getOptionValue("Write_log","file").toString());
@@ -107,8 +107,8 @@ void LogThread::openLogs()
     {
         if(!log.open(QIODevice::WriteOnly))
         {
-            QMessageBox::critical(NULL,tr("Error"),tr("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open file to keep the log file, error: %1").arg(log.errorString()));
+            QMessageBox::critical(NULL,tr("Error"),tr("Unable to open the log file, error: %1").arg(log.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open the log file, error: %1").arg(log.errorString()));
         }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine->getOptionValue("Write_log","file").toString());

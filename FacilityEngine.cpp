@@ -66,7 +66,7 @@ void FacilityEngine::retranslate()
     translations["Overwrite if newer"]=tr("Overwrite if newer");
     translations["Overwrite if the last modification dates are different"]=tr("Overwrite if the last modification dates are different");
     translations["Rename"]=tr("Rename");
-    translations["Put to end of the list"]=tr("Put to end of the list");
+    translations["Put to the end of the list"]=tr("Put to the end of the list");
     translations["Select source directory"]=tr("Select source directory");
     translations["Select destination directory"]=tr("Select destination directory");
     translations["Internal error"]=tr("Internal error");

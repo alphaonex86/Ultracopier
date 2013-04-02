@@ -17,9 +17,13 @@
         <translation>Azione:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="44"/>
         <source>In wait</source>
-        <translation>In attesa</translation>
+        <translation type="obsolete">In attesa</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="44"/>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="78"/>

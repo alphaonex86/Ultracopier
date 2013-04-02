@@ -171,7 +171,7 @@ void FolderExistsDialog::on_lineEditNewName_returnPressed()
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
     else
-        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized characters"));
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with using special characters"));
 }
 
 void FolderExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)

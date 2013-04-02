@@ -210,7 +210,7 @@ void FileExistsDialog::on_lineEditNewName_returnPressed()
     if(ui->Rename->isEnabled())
         on_Rename_clicked();
     else
-        QMessageBox::warning(this,tr("Error"),tr("Try rename with unauthorized characters"));
+        QMessageBox::warning(this,tr("Error"),tr("Try rename with using special characters"));
 }
 
 void FileExistsDialog::on_actionOverwrite_if_older_triggered()

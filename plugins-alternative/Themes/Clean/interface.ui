@@ -41,7 +41,7 @@
         </font>
        </property>
        <property name="text">
-        <string>In wait</string>
+        <string>Waiting</string>
        </property>
       </widget>
      </item>

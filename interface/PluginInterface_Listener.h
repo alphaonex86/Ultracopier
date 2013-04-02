@@ -30,6 +30,8 @@ class PluginInterface_Listener : public QObject
         virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion) = 0;
         /// \brief to get the options widget, NULL if not have
         virtual QWidget * options() = 0;
+        /// \brief to get a client list
+        virtual QStringList clientsList() const = 0;
     public slots:
         /// \brief send when copy is finished
         virtual void transferFinished(const quint32 &orderId,const bool &withError) = 0;
@@ -44,6 +46,7 @@ class PluginInterface_Listener : public QObject
         void newMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
         void newMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
         void error(const QString &error);
+        void newClientList();
     signals:
         /// \brief To debug source
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);

@@ -19,7 +19,36 @@
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="68"/>
-        <source>Problem at the reading, or file size is null</source>
+        <source>Problem reading file, or file size is 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="153"/>
+        <location filename="../../../CliParser.cpp" line="163"/>
+        <source>The arguments possible are:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="155"/>
+        <location filename="../../../CliParser.cpp" line="165"/>
+        <source>To quit the other instances (if running)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="157"/>
+        <location filename="../../../CliParser.cpp" line="167"/>
+        <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="158"/>
+        <location filename="../../../CliParser.cpp" line="168"/>
+        <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="162"/>
+        <source>Command not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -33,44 +62,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="153"/>
-        <location filename="../../../CliParser.cpp" line="163"/>
-        <source>The arguments possibles are:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../CliParser.cpp" line="154"/>
         <location filename="../../../CliParser.cpp" line="164"/>
         <source>To display this help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="155"/>
-        <location filename="../../../CliParser.cpp" line="165"/>
-        <source>To quit the other instance running (if have)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../CliParser.cpp" line="156"/>
         <location filename="../../../CliParser.cpp" line="166"/>
         <source>Open transfer list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../CliParser.cpp" line="157"/>
-        <location filename="../../../CliParser.cpp" line="167"/>
-        <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask it to the user</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../CliParser.cpp" line="158"/>
-        <location filename="../../../CliParser.cpp" line="168"/>
-        <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask it to the user</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../CliParser.cpp" line="162"/>
-        <source>Command line not understand</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -160,7 +160,12 @@
     </message>
     <message>
         <location filename="../../../Core.cpp" line="217"/>
-        <source>The argument for the mode is not understand</source>
+        <source>The argument for the mode is not valid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="892"/>
+        <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -177,11 +182,6 @@
     <message>
         <location filename="../../../Core.cpp" line="892"/>
         <source>Transfer mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../Core.cpp" line="892"/>
-        <source>Do you want to copy? If you reply no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -384,7 +384,7 @@
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="69"/>
-        <source>Put to end of the list</source>
+        <source>Put to the end of the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -545,8 +545,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../LogThread.cpp" line="100"/>
         <location filename="../../../LogThread.cpp" line="110"/>
+        <source>Unable to open the log file, error: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Unable to open file to keep the log file, error: %1</source>
-        <translation>로그 파일로 보존할 파일을 열 수 없습니다. 오류: %1</translation>
+        <translation type="obsolete">로그 파일로 보존할 파일을 열 수 없습니다. 오류: %1</translation>
     </message>
 </context>
 <context>
@@ -568,7 +572,7 @@ This version is compiled as version: %1.</source>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="10"/>
-        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
+        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -649,6 +653,11 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../OptionDialog.ui" line="245"/>
+        <source>Check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../OptionDialog.ui" line="281"/>
         <source>Name</source>
         <translation>이름</translation>
@@ -662,6 +671,11 @@ This version is compiled as version: %1.</source>
         <location filename="../../../OptionDialog.ui" line="296"/>
         <source>Language</source>
         <translation>언어</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="697"/>
+        <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="780"/>
@@ -689,11 +703,6 @@ This version is compiled as version: %1.</source>
         <location filename="../../../OptionDialog.cpp" line="278"/>
         <source>Session loader</source>
         <translation>섹션 로더</translation>
-    </message>
-    <message>
-        <location filename="../../../OptionDialog.ui" line="245"/>
-        <source>Check the update</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="327"/>
@@ -746,11 +755,6 @@ This version is compiled as version: %1.</source>
         <translation>찾아보기</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="697"/>
-        <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="717"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
@@ -800,7 +804,7 @@ This version is compiled as version: %1.</source>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="181"/>
-        <source>Load the themes?</source>
+        <source>Load the theme?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -809,12 +813,16 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Disabled because you have any SessionLoader plugin</source>
+        <translation type="obsolete">어떤 세션로더 플러그인을 보유중이므로 비활성화되었습니다</translation>
+    </message>
+    <message>
         <location filename="../../../OptionDialog.cpp" line="279"/>
         <location filename="../../../OptionDialog.cpp" line="281"/>
         <location filename="../../../OptionDialog.cpp" line="431"/>
         <location filename="../../../OptionDialog.cpp" line="432"/>
-        <source>Disabled because you have any SessionLoader plugin</source>
-        <translation>어떤 세션로더 플러그인을 보유중이므로 비활성화되었습니다</translation>
+        <source>Disabled because you do not have any SessionLoader plugin</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="283"/>
@@ -981,9 +989,8 @@ This version is compiled as version: %1.</source>
         <translation>informations.xml 파일에 연결할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="229"/>
         <source>informations.xml not found into the plugin</source>
-        <translation>플러그인에서 informations.xml 파일을 찾을 수 없습니다</translation>
+        <translation type="obsolete">플러그인에서 informations.xml 파일을 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="489"/>
@@ -1016,6 +1023,11 @@ This version is compiled as version: %1.</source>
         <translation>%1, %2 라인에서 문법 오류, %3 열: %4</translation>
     </message>
     <message>
+        <location filename="../../../PluginsManager.cpp" line="229"/>
+        <source>informations.xml not found for the plugin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../PluginsManager.cpp" line="263"/>
         <source>&quot;package&quot; root tag not found for the xml file</source>
         <translation>xml 파일을 위한 &quot;패키지&quot; 루트 태그를 찾을 수 없습니다</translation>
@@ -1026,9 +1038,13 @@ This version is compiled as version: %1.</source>
         <translation>중복된 플러그인 발견, 이미 호출되었습니다!</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="397"/>
         <source>English text missing into the informations.xml for the tag: %1</source>
-        <translation>태그 표시를 위한 informations.xml 파일에서 누락된 영문 텍스트: %1</translation>
+        <translation type="obsolete">태그 표시를 위한 informations.xml 파일에서 누락된 영문 텍스트: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../PluginsManager.cpp" line="397"/>
+        <source>English text missing in the informations.xml for the tag: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="405"/>
@@ -1182,7 +1198,7 @@ since:%2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="172"/>
-        <source>Not replace the explorer copy/move</source>
+        <source>Do not replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1238,18 +1254,30 @@ Site: %2</source>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="451"/>
+        <source>&amp;Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="457"/>
+        <source>&amp;Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="461"/>
+        <source>&amp;Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../SystrayIcon.cpp" line="473"/>
         <source>Add &amp;copy</source>
         <translation>&amp;복사 추가</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="457"/>
         <location filename="../../../SystrayIcon.cpp" line="479"/>
         <source>Add &amp;transfer</source>
         <translation>&amp;전송 추가</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="461"/>
         <location filename="../../../SystrayIcon.cpp" line="483"/>
         <source>Add &amp;move</source>
         <translation>&amp;이동 추가</translation>

@@ -84,9 +84,8 @@
         <translation>Para:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="125"/>
         <source>Close at the end of the transfers</source>
-        <translation>Cerca al final de las transferencias</translation>
+        <translation type="obsolete">Cerca al final de las transferencias</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="223"/>
@@ -109,9 +108,18 @@
         <translation>&amp;Cancelar</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Limitar la velocidad de copia en:</translation>
+        <translation type="obsolete">Limitar la velocidad de copia en:</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="125"/>
+        <source>Close on transfer completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -232,10 +240,14 @@
         <translation>Al final de la copia: </translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Limitar la velocidad de copia en:</translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation>Limitar la velocidad de copia en:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

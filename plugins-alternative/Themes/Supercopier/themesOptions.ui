@@ -47,7 +47,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="labelStartWithMoreButtonPushed">
      <property name="text">
-      <string>Start with the &quot;more button&quot; pushed</string>
+      <string>Start with the &quot;more button&quot; pressed</string>
      </property>
     </widget>
    </item>
@@ -64,7 +64,7 @@
    <item row="9" column="0">
     <widget class="QLabel" name="label_Slider_speed">
      <property name="text">
-      <string>Limit copy speed at:</string>
+      <string>Limit copy speed to:</string>
      </property>
     </widget>
    </item>
@@ -123,7 +123,7 @@
    <item row="10" column="0">
     <widget class="QCheckBox" name="checkBox_limitSpeed">
      <property name="text">
-      <string>Limit copy speed at:</string>
+      <string>Limit copy speed to:</string>
      </property>
     </widget>
    </item>

@@ -197,7 +197,7 @@ void TransferThread::setFileRename(const QString &nameForRename)
     if(nameForRename.contains(QRegularExpression("[/\\\\\\*]")))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] can't use this kind of name, internal error");
-        emit errorOnFile(destination,tr("Try rename with unauthorized characters"));
+        emit errorOnFile(destination,tr("Try rename with using special characters"));
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] nameForRename: "+nameForRename);

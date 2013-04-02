@@ -102,7 +102,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>9</number>
        </property>
        <widget class="QWidget" name="stackedWidgetGeneral">
         <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -694,7 +694,7 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</string>
+            <string>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</string>
            </property>
            <property name="text">
             <string>Synchronized log</string>

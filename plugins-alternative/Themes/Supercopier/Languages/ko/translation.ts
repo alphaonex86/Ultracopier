@@ -104,12 +104,11 @@
         <translation type="unfinished">&amp;취소</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Limit copy speed at:</source>
-        <translation type="unfinished">복사 속도 제한:</translation>
+        <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
-        <location line="-158"/>
+        <location line="-143"/>
         <source>Close at the end of the transfers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,7 +148,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="-66"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+92"/>
         <source>Move up the selected items</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,20 +226,24 @@
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
+        <location line="+20"/>
         <source>At the end of the copy: </source>
         <translation type="unfinished">복사 종료시:</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+59"/>
         <source>Limit copy speed at:</source>
-        <translation type="unfinished">복사 속도 제한:</translation>
+        <translation type="obsolete">복사 속도 제한:</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <source>Start with the &quot;more button&quot; pressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <location line="+59"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+10"/>

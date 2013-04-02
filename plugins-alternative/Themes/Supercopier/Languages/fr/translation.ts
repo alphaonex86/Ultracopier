@@ -109,8 +109,12 @@
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Limit copy speed at:</source>
+        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
     <message>
@@ -222,19 +226,27 @@
         <translation>Afficher la vitesse comme information principale</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation>Déplier automatiquement les détails</translation>
+        <translation type="obsolete">Déplier automatiquement les détails</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
         <source>At the end of the copy: </source>
         <translation>À la fin de la copie:</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+59"/>
         <source>Limit copy speed at:</source>
+        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <source>Start with the &quot;more button&quot; pressed</source>
+        <translation>Déplier automatiquement les détails</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <location line="+59"/>
+        <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
     <message>

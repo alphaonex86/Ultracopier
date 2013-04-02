@@ -276,9 +276,9 @@ void OptionDialog::changeEvent(QEvent *e)
         ui->treeWidget->topLevelItem(3)->setText(0,tr("Listener"));
         ui->treeWidget->topLevelItem(4)->setText(0,tr("Plugin loader"));
         ui->treeWidget->topLevelItem(5)->setText(0,tr("Session loader"));
-        ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+        ui->labelLoadAtSession->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
         #if !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
-        ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+        ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
         #endif
         ui->ActionOnManualOpen->setItemText(0,tr("Do nothing"));
         ui->ActionOnManualOpen->setItemText(1,tr("Ask source as folder"));
@@ -428,8 +428,8 @@ void OptionDialog::loadOption()
     }
     else
     {
-        ui->labelLoadAtSession->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
-        ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you have any SessionLoader plugin"));
+        ui->labelLoadAtSession->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
+        ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
         ui->labelLoadAtSession->setEnabled(false);
         ui->LoadAtSessionStarting->setEnabled(false);
     }

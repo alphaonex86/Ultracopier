@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>The source and destination is identical</string>
+   <string>The source and destination are same</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

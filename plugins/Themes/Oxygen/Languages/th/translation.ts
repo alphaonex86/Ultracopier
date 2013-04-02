@@ -84,11 +84,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="125"/>
-        <source>Close at the end of the transfers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="223"/>
         <source>&amp;More</source>
         <translation type="unfinished"></translation>
@@ -109,8 +104,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../interface.ui" line="125"/>
+        <source>Close on transfer completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../interface.ui" line="283"/>
-        <source>Limit copy speed at:</source>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -234,7 +234,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

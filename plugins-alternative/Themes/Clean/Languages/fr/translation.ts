@@ -17,9 +17,8 @@
         <translation>Action:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="44"/>
         <source>In wait</source>
-        <translation>En attente</translation>
+        <translation type="obsolete">En attente</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="96"/>
@@ -45,6 +44,11 @@
         <location filename="../../interface.ui" line="87"/>
         <source>Add folder</source>
         <translation>Ajouter un dossier</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="44"/>
+        <source>Waiting</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="78"/>

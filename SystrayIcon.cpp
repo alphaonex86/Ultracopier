@@ -169,7 +169,7 @@ void SystrayIcon::updateSystrayIcon()
         {
             if(stateListener==Ultracopier::NotListening)
             {
-                toolTip=tr("Not replace the explorer copy/move");
+                toolTip=tr("Do not replace the explorer copy/move");
                 icon="Uncaught";
             }
             else if(stateListener==Ultracopier::SemiListening)

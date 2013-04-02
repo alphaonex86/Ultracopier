@@ -84,9 +84,8 @@
         <translation>Cél:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="125"/>
         <source>Close at the end of the transfers</source>
-        <translation>Bezárás az átvitelek végeztével</translation>
+        <translation type="obsolete">Bezárás az átvitelek végeztével</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="223"/>
@@ -109,9 +108,8 @@
         <translation>&amp;Mégse</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Másolási sebesség korlátozása:</translation>
+        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -136,6 +134,16 @@
     <message>
         <location filename="../../interface.ui" line="349"/>
         <source>Move the selected items to the top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="125"/>
+        <source>Close on transfer completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -232,10 +240,14 @@
         <translation type="unfinished">A másolás végén:</translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation type="unfinished">Másolási sebesség korlátozása:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

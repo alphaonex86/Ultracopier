@@ -84,11 +84,6 @@
         <translation>к:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="125"/>
-        <source>Close at the end of the transfers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="223"/>
         <source>&amp;More</source>
         <translation>больше</translation>
@@ -109,9 +104,18 @@
         <translation>отменить</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Предельная скорость копирования по адресу:</translation>
+        <translation type="obsolete">Предельная скорость копирования по адресу:</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="125"/>
+        <source>Close on transfer completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -232,10 +236,14 @@
         <translation type="unfinished">В конце копии: </translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Предельная скорость копирования по адресу:</translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation type="unfinished">Предельная скорость копирования по адресу:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

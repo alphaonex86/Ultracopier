@@ -109,9 +109,8 @@
         <translation>&amp;Mégse</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Másolási sebesség korlátozása:</translation>
+        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -136,6 +135,11 @@
     <message>
         <location filename="../../interface.ui" line="349"/>
         <source>Move the selected items to the top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -222,9 +226,8 @@
         <translation type="unfinished">Sebesség mutatása, mint fő információ</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="50"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished">Indítás a &quot;több gomb&quot; lenyomásával</translation>
+        <translation type="obsolete">Indítás a &quot;több gomb&quot; lenyomásával</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="60"/>
@@ -232,10 +235,19 @@
         <translation type="unfinished">A másolás végén:</translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="50"/>
+        <source>Start with the &quot;more button&quot; pressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation type="unfinished">Másolási sebesség korlátozása:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

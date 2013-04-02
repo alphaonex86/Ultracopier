@@ -226,8 +226,8 @@ bool PluginsManager::loadPluginInformation(const QString &path)
     }
     else
     {
-        tempPlugin.errorString=tr("informations.xml not found into the plugin");
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"informations.xml not found into the plugin: "+path);
+        tempPlugin.errorString=tr("informations.xml not found for the plugin");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"informations.xml not found for the plugin: "+path);
     }
     editionSemList.acquire();
     pluginsList << tempPlugin;
@@ -394,7 +394,7 @@ void PluginsManager::loadBalise(const QDomElement &root,const QString &name,QLis
     if(multiLanguage && englishTextIsFoundForThisChild==false && englishNeedBeFound)
     {
         informations->clear();
-        *errorString=tr("English text missing into the informations.xml for the tag: %1").arg(name);
+        *errorString=tr("English text missing in the informations.xml for the tag: %1").arg(name);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("English text missing into the informations.xml for the tag: %1").arg(name));
         return;
     }

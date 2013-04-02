@@ -213,8 +213,8 @@ void Core::newTransferList(QString engine,QString mode,QString file)
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The argument for the mode is not understand");
-        QMessageBox::critical(NULL,tr("Error"),tr("The argument for the mode is not understand"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The argument for the mode is not valid");
+        QMessageBox::critical(NULL,tr("Error"),tr("The argument for the mode is not valid"));
         return;
     }
     copyList.last().engine->newTransferList(file);
@@ -889,7 +889,7 @@ void Core::urlDropped(const QList<QUrl> &urls)
         {
             if(copyList.at(index).ignoreMode)
             {
-                QMessageBox::StandardButton reply=QMessageBox::question(copyList.at(index).interface,tr("Transfer mode"),tr("Do you want to copy? If you reply no, it will be moved."),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Cancel);
+                QMessageBox::StandardButton reply=QMessageBox::question(copyList.at(index).interface,tr("Transfer mode"),tr("Do you want to copy? If no, it will be moved."),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Cancel);
                 if(reply==QMessageBox::Yes)
                     copyList.at(index).engine->newCopy(sources);
                 if(reply==QMessageBox::No)

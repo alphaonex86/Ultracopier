@@ -84,9 +84,8 @@
         <translation>a:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="125"/>
         <source>Close at the end of the transfers</source>
-        <translation>Chiudi alla fine dei trasferimenti</translation>
+        <translation type="obsolete">Chiudi alla fine dei trasferimenti</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="223"/>
@@ -109,9 +108,18 @@
         <translation>&amp;Annulla</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Ridurre la velocità di copia a:</translation>
+        <translation type="obsolete">Ridurre la velocità di copia a:</translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="125"/>
+        <source>Close on transfer completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -232,10 +240,14 @@
         <translation>Alla fine della copia: </translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Ridurre la velocità di copia a:</translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation>Ridurre la velocità di copia a:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

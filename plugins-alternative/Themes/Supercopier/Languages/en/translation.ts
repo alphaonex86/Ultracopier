@@ -109,11 +109,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
-        <source>Limit copy speed at:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="326"/>
         <source>Transfer list</source>
         <translation type="unfinished"></translation>
@@ -146,6 +141,11 @@
     <message>
         <location filename="../../interface.ui" line="349"/>
         <source>Move the selected items to the top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -222,19 +222,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="50"/>
-        <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../themesOptions.ui" line="60"/>
         <source>At the end of the copy: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../themesOptions.ui" line="50"/>
+        <source>Start with the &quot;more button&quot; pressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

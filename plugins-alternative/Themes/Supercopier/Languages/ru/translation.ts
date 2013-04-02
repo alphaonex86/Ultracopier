@@ -109,9 +109,8 @@
         <translation>отменить</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed at:</source>
-        <translation>Предельная скорость копирования по адресу:</translation>
+        <translation type="obsolete">Предельная скорость копирования по адресу:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="326"/>
@@ -156,6 +155,11 @@
     <message>
         <location filename="../../interface.ui" line="508"/>
         <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.ui" line="283"/>
+        <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -222,20 +226,24 @@
         <translation type="unfinished">Показать скорости в качестве основной информации</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="50"/>
-        <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../themesOptions.ui" line="60"/>
         <source>At the end of the copy: </source>
         <translation type="unfinished">В конце копии: </translation>
     </message>
     <message>
+        <source>Limit copy speed at:</source>
+        <translation type="obsolete">Предельная скорость копирования по адресу:</translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="50"/>
+        <source>Start with the &quot;more button&quot; pressed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
-        <source>Limit copy speed at:</source>
-        <translation type="unfinished">Предельная скорость копирования по адресу:</translation>
+        <source>Limit copy speed to:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>

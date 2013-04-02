@@ -429,7 +429,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
             if(!source.isDir())
                 emit errorOnFolder(source,tr("This is not a folder"));
             else if(!source.exists())
-                emit errorOnFolder(source,tr("The folder not exists"));
+                emit errorOnFolder(source,tr("The folder does exists"));
             else
                 emit errorOnFolder(source,tr("The folder is not readable"));
             waitOneAction.acquire();

@@ -64,8 +64,8 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
                 QByteArray data=transferFile.readLine(64);
                 if(data.size()<=0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Problem at the reading, or file size is null"));
-                    QMessageBox::warning(NULL,tr("Warning"),tr("Problem at the reading, or file size is null"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Problem reading file, or file size is 0"));
+                    QMessageBox::warning(NULL,tr("Warning"),tr("Problem reading file, or file size is 0"));
                     transferFile.close();
                     return;
                 }
@@ -150,22 +150,22 @@ void CliParser::showHelp(const bool &incorrectArguments)
 {
     if(incorrectArguments)
         qDebug() << "Incorrect arguments detected";
-    qDebug() << tr("The arguments possibles are:");
+    qDebug() << tr("The arguments possible are:");
     qDebug() << "--help : "+tr("To display this help");
-    qDebug() << "quit : "+tr("To quit the other instance running (if have)");
+    qDebug() << "quit : "+tr("To quit the other instances (if running)");
     qDebug() << "Transfer-list [transfer list file] : "+tr("Open transfer list");
-    qDebug() << "cp [source [source2]] [destination] : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user");
-    qDebug() << "mv [source [source2]] [destination] : "+tr("To move sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user");
+    qDebug() << "cp [source [source2]] [destination] : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask the user");
+    qDebug() << "mv [source [source2]] [destination] : "+tr("To move sources to destination, separated by space. If destination is \"?\", ultracopier will ask the user");
 
     QString message;
     if(incorrectArguments)
-        message+="<b>"+tr("Command line not understand")+"</b><br />\n";
-    message+=+"<b></b>"+tr("The arguments possibles are:")+"\n<ul>";
+        message+="<b>"+tr("Command not valid")+"</b><br />\n";
+    message+=+"<b></b>"+tr("The arguments possible are:")+"\n<ul>";
     message+="<li><b>--help</b> : "+tr("To display this help")+"</li>\n";
-    message+="<li><b>quit</b> : "+tr("To quit the other instance running (if have)")+"</li>\n";
+    message+="<li><b>quit</b> : "+tr("To quit the other instances (if running)")+"</li>\n";
     message+="<li><b>Transfer-list [transfer list file]</b> : "+tr("Open transfer list")+"</li>\n";
-    message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
-    message+="<li><b>mv [source [source2]] [destination]</b> : "+tr("To move sources to destination, separated by space. If destination is \"?\", ultracopier will ask it to the user")+"</li>\n";
+    message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask the user")+"</li>\n";
+    message+="<li><b>mv [source [source2]] [destination]</b> : "+tr("To move sources to destination, separated by space. If destination is \"?\", ultracopier will ask the user")+"</li>\n";
     message+=+"</ul>";
     if(incorrectArguments)
         QMessageBox::warning(NULL,tr("Warning"),message);
