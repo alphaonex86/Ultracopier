@@ -261,6 +261,13 @@ QString EventDispatcher::GetOSDisplayString()
             else Os+="Windows Server 2008 R2 ";
          }
 
+         if ( osvi.dwMinorVersion == 8 )
+         {
+            if( osvi.wProductType == VER_NT_WORKSTATION )
+                Os+="Windows 8 ";
+            else Os+="Windows Server 2012 ";
+         }
+
          pGPI = (PGPI) GetProcAddress(
             GetModuleHandle(TEXT("kernel32.dll")),
             "GetProductInfo");
