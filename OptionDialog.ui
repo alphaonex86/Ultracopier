@@ -242,7 +242,7 @@
            <item row="7" column="0">
             <widget class="QLabel" name="label_checkTheUpdate">
              <property name="text">
-              <string>Check the update</string>
+              <string>Check for updates</string>
              </property>
             </widget>
            </item>

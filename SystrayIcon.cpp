@@ -448,17 +448,17 @@ void SystrayIcon::reloadEngineList()
     copyMenu->setEnabled(true);
     if(engineEntryList.size()==1)
     {
-        QAction *copy=new QAction(IconAdd,tr("Add &copy"),copyMenu);
+        QAction *copy=new QAction(IconAdd,tr("&Copy"),copyMenu);
         connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
         copy->setData(engineEntryList.first().name);
         copyMenu->addAction(copy);
         if(!engineEntryList.first().canDoOnlyCopy)
         {
-            QAction *transfer=new QAction(IconAdd,tr("Add &transfer"),copyMenu);
+            QAction *transfer=new QAction(IconAdd,tr("&Transfer"),copyMenu);
             connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
             transfer->setData(engineEntryList.first().name);
             copyMenu->addAction(transfer);
-            QAction *move=new QAction(IconAdd,tr("Add &move"),copyMenu);
+            QAction *move=new QAction(IconAdd,tr("&Move"),copyMenu);
             connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
             move->setData(engineEntryList.first().name);
             copyMenu->addAction(move);

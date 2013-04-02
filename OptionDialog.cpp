@@ -56,7 +56,7 @@ OptionDialog::OptionDialog() :
     ui->pluginRemove->hide();
     #endif
     loadLogVariableLabel();
-    #ifndef ULTRACOPIER_VERSION_PORTABLE
+    #ifdef ULTRACOPIER_VERSION_PORTABLE
     ui->labelLoadAtSession->hide();
     ui->LoadAtSessionStarting->hide();
     #endif
@@ -178,7 +178,7 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
 {
     if(plugin.category==PluginType_Themes)
     {
-        if(QMessageBox::question(this,tr("Load"),tr("Load the themes?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)==QMessageBox::Yes)
+        if(QMessageBox::question(this,tr("Load"),tr("Load the theme?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::Yes)==QMessageBox::Yes)
         {
             int index=ui->Ultracopier_current_theme->findData(plugin.name);
             if(index!=-1)
