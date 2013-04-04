@@ -59,6 +59,7 @@ void WriteThread::run()
 
 bool WriteThread::internalOpen()
 {
+    //do a bug
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen destination: "+file.fileName());
     if(stopIt)
     {
@@ -112,6 +113,7 @@ bool WriteThread::internalOpen()
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
                     stat=Idle;
                     #endif
+                    mkpathTransfer->release();
                     return false;
                 }
             }

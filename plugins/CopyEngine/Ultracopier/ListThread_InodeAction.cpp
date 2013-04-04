@@ -29,7 +29,7 @@ switch(currentActionToDoInode.type)
     break;
     case ActionType_MovePath:
         //then empty (no file), can try remove it
-        if(currentActionToDoInode.size==0)
+        if(currentActionToDoInode.size==0 || actionToDoListTransfer.isEmpty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmpath: %1").arg(currentActionToDoInode.source.absoluteFilePath()));
             mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);

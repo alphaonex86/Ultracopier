@@ -63,15 +63,28 @@ void MkPath::internalDoThisPath()
     doTheDateTransfer=false;
     if(keepDate)
     {
-        doTheDateTransfer=readFileDateTime(pathList.first().source);
-        if(!doTheDateTransfer)
+        if(!pathList.first().source.exists())
         {
-            if(stopIt)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources not exists: "+pathList.first().source.absoluteFilePath());
+            doTheDateTransfer=false;
+        }
+        else if(maxTime>=pathList.first().source.lastModified())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+pathList.first().source.absoluteFilePath()+": "+maxTime.toString("dd.MM.yyyy hh:mm:ss.zzz")+">="+pathList.first().source.lastModified().toString("dd.MM.yyyy hh:mm:ss.zzz"));
+            doTheDateTransfer=false;
+        }
+        else
+        {
+            doTheDateTransfer=readFileDateTime(pathList.first().source);
+            if(!doTheDateTransfer)
+            {
+                if(stopIt)
+                    return;
+                waitAction=true;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.first().source.absoluteFilePath());
+                emit errorOnFolder(pathList.first().source,tr("Unable to get time"));
                 return;
-            waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.first().source.absoluteFilePath());
-            emit errorOnFolder(pathList.first().source,tr("Unable to get time"));
-            return;
+            }
         }
     }
     if(pathList.first().actionType!=ActionType_RealMove)
@@ -220,11 +233,6 @@ bool MkPath::rmpath(const QDir &dir)
 bool MkPath::readFileDateTime(const QFileInfo &source)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source.absoluteFilePath()+")");
-    if(maxTime>=source.lastModified())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+source.absoluteFilePath()+": "+source.lastModified().toString());
-        return false;
-    }
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX

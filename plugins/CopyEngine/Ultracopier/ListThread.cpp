@@ -77,6 +77,9 @@ ListThread::~ListThread()
 void ListThread::transferInodeIsClosed()
 {
     numberOfInodeOperation--;
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+    #endif
     TransferThread *temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
     if(temp_transfer_thread==NULL)
     {
@@ -110,6 +113,7 @@ void ListThread::transferInodeIsClosed()
             if(requiredSpace.contains(drive))
                 requiredSpace[drive]-=actionToDoListTransfer[int_for_internal_loop].size;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
             if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
 
@@ -337,21 +341,23 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
     //create new thread because is auto-detroyed
     scanFileOrFolderThreadsPool << new ScanFileOrFolder(mode);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,             Qt::QueuedConnection);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,		Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,         Qt::QueuedConnection);
     #endif
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,			Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection);
 
-    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,		Qt::QueuedConnection);
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_setDrive   ,scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::setDrive,             Qt::QueuedConnection);
 
     scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
     scanFileOrFolderThreadsPool.last()->setMoveTheWholeFolder(moveTheWholeFolder);
+    scanFileOrFolderThreadsPool.last()->setDrive(mountSysPoint,driveType);
     if(scanFileOrFolderThreadsPool.size()==1)
         updateTheStatus();
     scanFileOrFolderThreadsPool.last()->setRenamingRules(firstRenamingRule,otherRenamingRule);
@@ -689,6 +695,7 @@ bool ListThread::skipInternal(const quint64 &id)
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
             if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
             return true;
@@ -854,6 +861,7 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 
 void ListThread::updateTheStatus()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     sendActionDone();
     bool updateTheStatus_listing=scanFileOrFolderThreadsPool.size()>0;
     bool updateTheStatus_copying=actionToDoListTransfer.size()>0 || actionToDoListInode.size()>0 || actionToDoListInode_afterTheTransfer.size()>0;
@@ -1563,17 +1571,21 @@ void ListThread::doNewActions_start_transfer()
   */
 void ListThread::doNewActions_inode_manipulation()
 {
-    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoList.size()));
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoListTransfer.size()));
+    #endif
     if(stopIt || putInPause)
         return;
-    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    #endif
     //lunch the pre-op or inode op
     TransferThread *currentTransferThread;
     int int_for_loop=0;
     int int_for_internal_loop=0;
     int int_for_transfer_thread_search=0;
-    actionToDoListTransfer_count=actionToDoListTransfer.count();
-    actionToDoListInode_count=actionToDoListInode.count();
+    actionToDoListTransfer_count=actionToDoListTransfer.size();
+    actionToDoListInode_count=actionToDoListInode.size();
     int loop_sub_size_transfer_thread_search=transferThreadList.size();
     //search the next transfer action to do
     while(int_for_loop<actionToDoListTransfer_count)
@@ -1638,6 +1650,10 @@ void ListThread::doNewActions_inode_manipulation()
                     newAction.addAction.mode		= currentActionToDoTransfer.mode;
                     actionDone << newAction;
                     int_for_transfer_thread_search++;
+                    numberOfInodeOperation++;
+                    #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                    #endif
                     break;
                 }
                 int_for_transfer_thread_search++;
@@ -1645,18 +1661,23 @@ void ListThread::doNewActions_inode_manipulation()
             if(int_for_internal_loop==loop_sub_size_transfer_thread_search)
             {
                 /// \note Can be normal when all thread is not initialized
-                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to found free thread to do the transfer");
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to found free thread to do the transfer");
+                #endif
                 break;
             }
-            numberOfInodeOperation++;
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+            #endif
             if(numberOfInodeOperation>=inodeThreads)
-                return;
+                break;
             if(followTheStrictOrder)
                 break;
         }
         int_for_loop++;
     }
     //search the next inode action to do
+    int_for_internal_loop=0;
     while(int_for_internal_loop<actionToDoListInode_count)
     {
         if(!actionToDoListInode[int_for_internal_loop].isRunning)
@@ -1770,9 +1791,13 @@ void ListThread::mkPathFirstFolderFinish()
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
                 if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                     updateTheStatus();
                 numberOfInodeOperation--;
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                #endif
                 doNewActions_inode_manipulation();
                 return;
             }
@@ -1783,12 +1808,17 @@ void ListThread::mkPathFirstFolderFinish()
                 emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
                 if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                     updateTheStatus();
                 numberOfInodeOperation--;
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                #endif
                 doNewActions_inode_manipulation();
                 return;
             }
+
         }
         int_for_loop++;
     }
@@ -1977,7 +2007,7 @@ void ListThread::createTransferThread()
     #endif
 
     connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,		Qt::QueuedConnection);
-    connect(this,&ListThread::send_setDrive,                    last,&TransferThread::setDrive,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_setDrive,                    last,&TransferThread::setDrive,             Qt::QueuedConnection);
 
     connect(this,&ListThread::send_setTransferAlgorithm,		last,&TransferThread::setTransferAlgorithm,		Qt::QueuedConnection);
     connect(this,&ListThread::send_parallelBuffer,              last,&TransferThread::setParallelBuffer,		Qt::QueuedConnection);

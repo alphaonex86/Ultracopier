@@ -15,6 +15,7 @@
 #include <QMutexLocker>
 
 #include "Environment.h"
+#include "DriveManagement.h"
 
 #ifndef SCANFILEORFOLDER_H
 #define SCANFILEORFOLDER_H
@@ -53,9 +54,11 @@ signals:
 public slots:
     void addToList(const QStringList& sources,const QString& destination);
     void setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
+    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
 protected:
     void run();
 private:
+    DriveManagement     driveManagement;
     bool                moveTheWholeFolder;
     QStringList         sources;
     QString             destination;

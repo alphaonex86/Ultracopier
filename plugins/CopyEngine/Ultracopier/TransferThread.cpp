@@ -288,11 +288,19 @@ void TransferThread::preOperation()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before keep date");
     if(keepDate)
     {
-        doTheDateTransfer=readFileDateTime(source);
-        if(!doTheDateTransfer)
+        if(maxTime>=source.lastModified())
         {
-            //will have the real error at source open
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+source.absoluteFilePath()+": "+maxTime.toString("dd.MM.yyyy hh:mm:ss.zzz")+">="+source.lastModified().toString("dd.MM.yyyy hh:mm:ss.zzz"));
+            doTheDateTransfer=false;
+        }
+        else
+        {
+            doTheDateTransfer=readFileDateTime(source);
+            if(!doTheDateTransfer)
+            {
+                //will have the real error at source open
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source.absoluteFilePath());
+            }
         }
     }
     else

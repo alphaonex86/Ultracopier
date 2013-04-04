@@ -209,7 +209,7 @@ void ScanFileOrFolder::run()
             if(!tempString.endsWith("/") && !tempString.endsWith("\\"))
                 tempString+="/";
             tempString+=TransferThread::resolvedName(source);
-            if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(tempString).exists())
+            if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(tempString).exists() && driveManagement.isSameDrive(source.absoluteFilePath(),tempString))
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("tempString: %1 move and not exists").arg(tempString));
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("do real move: %1 to %2").arg(source.absoluteFilePath()).arg(tempString));
@@ -583,4 +583,9 @@ void ScanFileOrFolder::setRenamingRules(QString firstRenamingRule,QString otherR
 void ScanFileOrFolder::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
 {
     this->moveTheWholeFolder=moveTheWholeFolder;
+}
+
+void ScanFileOrFolder::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
+{
+    driveManagement.setDrive(mountSysPoint,driveType);
 }
