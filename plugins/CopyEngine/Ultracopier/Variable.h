@@ -8,7 +8,7 @@
 
 //Un-comment this next line to put ultracopier plugin in debug mode
 #define ULTRACOPIER_PLUGIN_DEBUG
-#define ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
+//#define ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
 #define ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 #define ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER		150
 

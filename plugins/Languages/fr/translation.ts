@@ -20,30 +20,30 @@
     <message>
         <location filename="../../../CliParser.cpp" line="68"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Problème à la lecture, ou taille de fichier nulle</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="153"/>
         <location filename="../../../CliParser.cpp" line="163"/>
         <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Les arguments possible sont:</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="157"/>
         <location filename="../../../CliParser.cpp" line="167"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="158"/>
         <location filename="../../../CliParser.cpp" line="168"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour copier les sources vers la destination, séparées par des espaces. Si la destination est &quot;?&quot;, Ultracopier demandera à l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="162"/>
         <source>Command not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne de commande invalide</translation>
     </message>
     <message>
         <source>Problem at the reading, or file size is null</source>
@@ -73,7 +73,7 @@
         <location filename="../../../CliParser.cpp" line="155"/>
         <location filename="../../../CliParser.cpp" line="165"/>
         <source>To quit the other instances (if running)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour quiter l&apos;autre instance en cour</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="156"/>
@@ -186,12 +186,12 @@
     <message>
         <location filename="../../../Core.cpp" line="217"/>
         <source>The argument for the mode is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;argument pour le mode n&apos;est pas valide</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="892"/>
         <source>Do you want to copy? If no, it will be moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous faire une copie? Si vous repondez non alors il sera déplacé.</translation>
     </message>
     <message>
         <source>The argument for the mode is not understand</source>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Put to the end of the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre à la fin</translation>
     </message>
     <message>
         <source>Put to end of the list</source>
@@ -586,7 +586,7 @@ Cette version est compilée comme version : %1.</translation>
         <location filename="../../../LogThread.cpp" line="100"/>
         <location filename="../../../LogThread.cpp" line="110"/>
         <source>Unable to open the log file, error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le fichier de log, erreur: %1</translation>
     </message>
     <message>
         <source>Unable to open file to keep the log file, error: %1</source>
@@ -617,12 +617,12 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OSSpecific.cpp" line="10"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier (Dolphin, Nautilus, ...).&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="12"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
-        <translation>Redémarrer le système si précédement vous avec installé un logiciel similaire (comme Teracopy, Supercopier ou un version prédente d&apos;Ultracopier).</translation>
+        <translation>Redémarrer le système si précédemment vous avez installé un logiciel similaire (comme Teracopy, Supercopier ou une version précédente d&apos;Ultracopier).</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="14"/>
@@ -689,7 +689,7 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="245"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifier les mise à jour</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="281"/>
@@ -815,7 +815,7 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="697"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
+        <translation>Écrire directement le fichier quand il reçoit une nouvelle entrée (peut entrainer 50% de perte de performances)</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="710"/>
@@ -862,7 +862,7 @@ Cette version est compilée comme version : %1.</translation>
         <location filename="../../../OptionDialog.cpp" line="431"/>
         <location filename="../../../OptionDialog.cpp" line="432"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="283"/>
@@ -1052,12 +1052,12 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../PluginsManager.cpp" line="229"/>
         <source>informations.xml not found for the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier informations.xml n&apos;a pas été trouvé dans le plugin</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="397"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte anglais manquant dans le informations.xml pour la balise: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="489"/>
@@ -1253,7 +1253,7 @@ depuis:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="172"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne remplace pas la copie/déplacement de l&apos;explorateur</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="342"/>
@@ -1290,17 +1290,17 @@ Site: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Copie</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="457"/>
         <source>&amp;Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Transfert</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="461"/>
         <source>&amp;Move</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Déplacer</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="473"/>

@@ -71,6 +71,13 @@ bool WriteThread::internalOpen()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already open! destination: "+file.fileName());
         return false;
     }
+    if(file.fileName().isEmpty())
+    {
+        errorString_internal=tr("Path resolution error (Empty path)");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+        emit error();
+        return false;
+    }
     //set to LISTBLOCKSIZE
     if(sequential)
     {
@@ -223,12 +230,14 @@ void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the thread not running to open destination: "+file.absoluteFilePath()+", numberOfBlock: "+QString::number(numberOfBlock));
         errorString_internal=tr("Internal error, please report it!");
         emit error();
+        return;
     }
     if(this->file.isOpen())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already open! destination: "+file.fileName());
         errorString_internal=tr("Internal error, please report it!");
         emit error();
+        return;
     }
     if(numberOfBlock<1 || (numberOfBlock>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK && numberOfBlock>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK))
     {
