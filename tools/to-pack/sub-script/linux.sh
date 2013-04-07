@@ -5,7 +5,7 @@ then
 	exit;
 fi
 
-QMAKE="/usr/local/Qt-5.0.0/bin/qmake"
+QMAKE="/usr/local/Qt-5.0.1/bin/qmake"
 
 mkdir -p ${TEMP_PATH}
 cd ${TEMP_PATH}/
@@ -24,7 +24,7 @@ function compil {
 		/usr/bin/rsync -art --delete ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${FINAL_ARCHIVE}/ --exclude='*build*' --exclude='*Qt_5*' --exclude='*qt5*' --exclude='*.pro.user'
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/ultracopier-0\.4\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 		if [ ${DEBUG} -eq 1 ]
@@ -183,6 +183,7 @@ function compil_plugin {
 			do
 				if [ -f ${plugins_name}/informations.xml ]
 				then
+					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 					if [ -d ${plugins_name} ] && [ ! -f ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-linux-x86_64-pc.urc ]
 					then
@@ -192,7 +193,6 @@ function compil_plugin {
 						find ${plugins_name}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/ultracopier-0\.4\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 						if [ ${DEBUG} -eq 1 ]

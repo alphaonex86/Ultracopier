@@ -16,7 +16,7 @@ if [ ! -e ${FINAL_ARCHIVE} ]; then
 	find ${TEMP_PATH}/ultracopier-src/ -name "*-build-desktop*" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/ultracopier-src/ -name "*Qt_in_*" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/ultracopier-src/ -name "informations.xml" -exec sed -i "s/linux-x86_64-pc/windows-x86/g" {} \; > /dev/null 2>&1
-	find ${TEMP_PATH}/ultracopier-src/ -name "informations.xml" -exec sed -i -r "s/ultracopier-0\.3\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+	find ${TEMP_PATH}/ultracopier-src/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/ultracopier-src/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/ultracopier-src/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/ultracopier-src/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
@@ -42,6 +42,7 @@ then
 			do
 				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ]
 				then
+					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 					echo "do source package for the plugin: ${plugins_cat}/${plugins_name}"
 					mkdir -p ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/
 					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
@@ -83,6 +84,7 @@ then
 			do
 				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ]
 				then
+					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 					echo "do source package for the plugin: ${plugins_cat}/${plugins_name}"
 					mkdir -p ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/
 					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
@@ -119,6 +121,7 @@ then
 		if [ -d ${plugins_name} ]
 		then
 			mkdir -p ${TEMP_PATH}/plugins/Languages/${plugins_name}/
+			find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 			ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 			tar --posix -c -f - ${plugins_name}/ | xz -9 > ${TEMP_PATH}/plugins/Languages/${plugins_name}/Languages-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
 		fi

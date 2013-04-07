@@ -17,13 +17,9 @@
         <translation>Művelet:</translation>
     </message>
     <message>
-        <source>In wait</source>
-        <translation type="obsolete">Várakozik</translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="44"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Várakozás</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="78"/>

@@ -4,7 +4,14 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+241"/>
+        <location filename="../../interface.cpp" line="+206"/>
+        <location line="+2"/>
+        <location line="+3"/>
+        <source>Buy the Ultimate version to fund development</source>
+        <translation>Achetez la version Ultimate pour financer le dévelopmement</translation>
+    </message>
+    <message>
+        <location line="+45"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
@@ -88,7 +95,7 @@
         <translation type="obsolete">Fermer à la fin des transferts</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+168"/>
         <source>&amp;More</source>
         <translation>Pl&amp;us</translation>
     </message>
@@ -112,12 +119,12 @@
         <translation type="obsolete">Limiter la vitesse de copie à:</translation>
     </message>
     <message>
-        <location line="-143"/>
+        <location line="-153"/>
         <source>Close on transfer completion</source>
         <translation>Fermer à la fin des transferts</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+168"/>
         <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>

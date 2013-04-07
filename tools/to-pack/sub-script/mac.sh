@@ -27,7 +27,7 @@ function compil {
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i "s/linux-x86_64-pc/mac-os-x/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/ultracopier-0\.4\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 		if [ ${DEBUG} -eq 1 ]
@@ -41,19 +41,24 @@ function compil {
 			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
 		fi
 
+		echo "try connect"
 		ssh ${SSHUSER}@${IPMAC} "rm -fR /Users/${SSHUSER}/Desktop/ultracopier/"
+		echo "try rsync"
 		rsync -art ${TEMP_PATH}/${TARGET}-mac-os-x/ ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/
 
+		echo "try qmake"
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/ultracopier-core.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/usr/bin/make -j 3" > /dev/null 2>&1
+		echo "try make"
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/usr/bin/make -j 3"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
 			echo "make failed on the mac: ${RETURN_CODE}"
 			exit
 		fi
+		echo "try make plugins"
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/*.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/usr/bin/make -j 3" > /dev/null 2>&1
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/usr/bin/make -j 3"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -61,7 +66,7 @@ function compil {
 			exit
 		fi
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/*.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/;/usr/bin/make -j 3" > /dev/null 2>&1
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/;/usr/bin/make -j 3"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -69,7 +74,7 @@ function compil {
 			exit
 		fi
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/*.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/usr/bin/make -j 3" > /dev/null 2>&1
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/usr/bin/make -j 3"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -78,8 +83,9 @@ function compil {
 		fi
 		if [ ${ULTIMATE} -eq 1 ]
 		then
+			echo "do the ultimate plugin"
 			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/;/usr/bin/make -j 3" > /dev/null 2>&1
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/;/usr/bin/make -j 3"
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -87,7 +93,7 @@ function compil {
 				exit
 			fi
 			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/usr/bin/make -j 3" > /dev/null 2>&1
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/usr/bin/make -j 3"
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -95,7 +101,7 @@ function compil {
 				exit
 			fi
 			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/usr/bin/make -j 3" > /dev/null 2>&1
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/usr/bin/make -j 3"
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -124,6 +130,7 @@ function compil {
 			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
 			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
 		fi
+		echo "make the folder"
 		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks"
 		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks/QtSystemInfo.framework"
 		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks/QtSystemInfo.framework/Versions"
@@ -134,6 +141,8 @@ function compil {
 		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Languages/"
 		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/"
 		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/"
+
+		echo "put the informations.xml"
 		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/informations.xml"
 		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/informations.xml"
 		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/informations.xml"
@@ -145,6 +154,7 @@ function compil {
 		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/Languages/"
 		ssh ${SSHUSER}@${IPMAC} "find /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/ -iname \"*.ts\" -exec rm {} \; > /dev/null 2>&1"
 
+		echo "finish the link"
 		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
 		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
 		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
@@ -187,6 +197,7 @@ function compil_plugin {
 			do
 				if [ -f ${plugins_name}/informations.xml ]
 				then
+					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 					if [ -d ${plugins_name} ] && [ ! -f ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-mac-os-x.urc ]
 					then
@@ -196,7 +207,6 @@ function compil_plugin {
 						find ${plugins_name}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>mac-os-x<\/architecture>/g" {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/ultracopier-0\.4\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 						if [ ${DEBUG} -eq 1 ]
@@ -213,7 +223,7 @@ function compil_plugin {
 						ssh ${SSHUSER}@${IPMAC} "rm -fR /Users/${SSHUSER}/Desktop/ultracopier/"
 						rsync -art ${TEMP_PATH}/${TARGET}-mac-os-x/ ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/
 						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*.pro -spec macx-g++ -config release"
-						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/usr/bin/make -j 3" > /dev/null 2>&1
+						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/usr/bin/make -j 3"
 						RETURN_CODE=$?
 						if [ $? -ne 0 ]
 						then

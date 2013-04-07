@@ -20,40 +20,36 @@
     <message>
         <location filename="../../../CliParser.cpp" line="68"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Probléma a fájl olvasásánál vagy a fájlméret 0</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="153"/>
         <location filename="../../../CliParser.cpp" line="163"/>
         <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
+        <translation>A lehetséges argumentumok:</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="155"/>
         <location filename="../../../CliParser.cpp" line="165"/>
         <source>To quit the other instances (if running)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kilépés a többi példányból (ha fut)</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="157"/>
         <location filename="../../../CliParser.cpp" line="167"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrás másolása a célba, szóközzel elválasztva. Ha a cél &quot;?&quot;, az Ultracopier rákérdez a felhasználónál</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="158"/>
         <location filename="../../../CliParser.cpp" line="168"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrás mozgatása a célba, szóközzel elválasztva. Ha a cél &quot;?&quot;, az Ultracopier rákérdez a felhasználónál</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="162"/>
         <source>Command not valid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Problem at the reading, or file size is null</source>
-        <translation type="obsolete">Hiba az olvasás közben vagy a fájlméret nulla</translation>
+        <translation>A parancs nem érvényes</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="78"/>
@@ -66,32 +62,16 @@
         <translation>Az átviteli listafájl megnyitása nem lehetséges</translation>
     </message>
     <message>
-        <source>The arguments possibles are:</source>
-        <translation type="obsolete">A lehetséges argumentumok:</translation>
-    </message>
-    <message>
         <location filename="../../../CliParser.cpp" line="154"/>
         <location filename="../../../CliParser.cpp" line="164"/>
         <source>To display this help</source>
         <translation>Ennek a súgónak a megjelenítéséhez</translation>
     </message>
     <message>
-        <source>To quit the other instance running (if have)</source>
-        <translation type="obsolete">A többi példány bezárásához (ha van)</translation>
-    </message>
-    <message>
         <location filename="../../../CliParser.cpp" line="156"/>
         <location filename="../../../CliParser.cpp" line="166"/>
         <source>Open transfer list</source>
         <translation>Átviteli lista megnyitása</translation>
-    </message>
-    <message>
-        <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask it to the user</source>
-        <translation type="obsolete">A forrás átmásolása a célba, szóközzel elválasztva. Ha a cél &quot;?&quot;, az Ultracopier rákérdez a felhasználónál</translation>
-    </message>
-    <message>
-        <source>Command line not understand</source>
-        <translation type="obsolete">Parancssor nem érthető</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="173"/>
@@ -135,13 +115,14 @@
     <message>
         <location filename="../../../CopyListener.cpp" line="147"/>
         <source>Error</source>
-        <translation type="unfinished">Hiba</translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <location filename="../../../CopyListener.cpp" line="147"/>
         <source>Error during the reception of the copy/move list
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a másolási/mozgatási lista fogadásakor
+%1</translation>
     </message>
 </context>
 <context>
@@ -176,21 +157,17 @@
     <message>
         <location filename="../../../Core.cpp" line="117"/>
         <source>Unable to get a engine instance</source>
-        <translation type="unfinished"></translation>
+        <translation>Motor állapot lekérése nem lehetséges</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="217"/>
         <source>The argument for the mode is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>A mód argumentuma nem érvényes</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="892"/>
         <source>Do you want to copy? If no, it will be moved.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The argument for the mode is not understand</source>
-        <translation type="obsolete">A mód argumentuma nem érthető</translation>
+        <translation>Szeretnél másolni? Ha nem, akkor átmozgatva lesz.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="251"/>
@@ -301,7 +278,7 @@
         <location filename="../../../FacilityEngine.cpp" line="44"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Átvitel</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="46"/>
@@ -409,11 +386,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Put to the end of the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Put to end of the list</source>
-        <translation type="obsolete">A lista végére helyez</translation>
+        <translation>Helyezze a lista végére</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="70"/>
@@ -521,7 +494,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../HelpDialog.cpp" line="77"/>
         <source>Portable and all in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>Hordozható és teljes verzió</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="79"/>
@@ -531,7 +504,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../HelpDialog.cpp" line="84"/>
         <source>All in one version</source>
-        <translation type="unfinished"></translation>
+        <translation>Teljes verzió</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="86"/>
@@ -575,11 +548,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <location filename="../../../LogThread.cpp" line="100"/>
         <location filename="../../../LogThread.cpp" line="110"/>
         <source>Unable to open the log file, error: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to open file to keep the log file, error: %1</source>
-        <translation type="obsolete">Nem lehetséges a fájl megnyitása a naplófájl megtartásához, hiba: %1</translation>
+        <translation>Naplófájl megnyitása nem lehetséges, hiba: %1</translation>
     </message>
 </context>
 <context>
@@ -600,18 +569,15 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>Rendben</translation>
     </message>
     <message>
-        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="obsolete">Az alapértelmezett másoló/mozgató rendszer lecserélését nem támogatja a fájlkezelő (Dolphin, Nautilus, ...).&lt;br /&gt;Kérd meg a fejlesztőt, hogy támogassa.&lt;br /&gt;A másolás/mozgatást manuálisan kell elvégezned.</translation>
-    </message>
-    <message>
         <location filename="../../../OSSpecific.cpp" line="10"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Az alapértelmezett másolás/mozgatás rendszer lecserélését nem támogatja a fájlkezelő (Dolphin, Nautilus, ...).&lt;br /&gt;Kérd meg a fejlesztőt, hogy támogassa.&lt;br /&gt;A másolás/mozgatást manuálisan kell elvégezned.</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="12"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
-        <translation type="unfinished"></translation>
+        <translation>Indítsd újra a gépet, ha korábban már volt hasonló alkalmazás telepítve (például Teracopy, Supercopier vagy az Ultracopier korábbi verziója).</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="14"/>
@@ -709,7 +675,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../OptionDialog.ui" line="222"/>
         <source>Confirm to group the windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Ablakok csoportosításának megerősítése</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="229"/>
@@ -719,12 +685,12 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../OptionDialog.ui" line="245"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Frissítések keresése</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="697"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
+        <translation>Írás közvetlenül a fájlba, ha új bejegyzést kap (akár 50%-kos teljesítménycsökkenést is okozhat)</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="281"/>
@@ -769,7 +735,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../OptionDialog.ui" line="467"/>
         <source>Client connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliens kapcsolódva</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="523"/>
@@ -795,10 +761,6 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <location filename="../../../OptionDialog.ui" line="685"/>
         <source>Browse</source>
         <translation>Tallózás</translation>
-    </message>
-    <message>
-        <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="obsolete">Fájl közvetlen írása, amikor új bejegyzéssel bővül (akár 50%-os teljesítménycsökkenést is okozhat)</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="700"/>
@@ -845,22 +807,14 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>Betöltés</translation>
     </message>
     <message>
-        <source>Load the themes?</source>
-        <translation type="obsolete">Betöltöd a témákat?</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.cpp" line="181"/>
         <source>Load the theme?</source>
-        <translation type="unfinished"></translation>
+        <translation>Téma betöltése?</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="195"/>
         <source>Load the language?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disabled because you have any SessionLoader plugin</source>
-        <translation type="obsolete">Letiltva, mert nem rendelkezel SessionLoader beéülővel</translation>
+        <translation>Nyelv betöltése?</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="279"/>
@@ -868,7 +822,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <location filename="../../../OptionDialog.cpp" line="431"/>
         <location filename="../../../OptionDialog.cpp" line="432"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Letiltva, mert nem rendelkezel SessionLoader beépülővel</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="283"/>
@@ -920,7 +874,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <location filename="../../../OptionDialog.cpp" line="306"/>
         <location filename="../../../OptionDialog.cpp" line="307"/>
         <source>The variables are %1</source>
-        <translation type="unfinished"></translation>
+        <translation>A változók: %1</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="912"/>
@@ -1030,10 +984,6 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>informations.xml nem férhető hozzá</translation>
     </message>
     <message>
-        <source>informations.xml not found into the plugin</source>
-        <translation type="obsolete">informations.xml nem található a beépülőben</translation>
-    </message>
-    <message>
         <location filename="../../../PluginsManager.cpp" line="255"/>
         <source>%1, parse error at line %2, column %3: %4</source>
         <translation>%1, elemzési hiba a(z) %2. sorban, %3. oszlopban: %4</translation>
@@ -1049,18 +999,14 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>Duplikált beépülő található, már be van töltve!</translation>
     </message>
     <message>
-        <source>English text missing into the informations.xml for the tag: %1</source>
-        <translation type="obsolete">Angol szöveg hiányzik az informations.xml fájlban a következő címkéhez: %1</translation>
-    </message>
-    <message>
         <location filename="../../../PluginsManager.cpp" line="229"/>
         <source>informations.xml not found for the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>informations.xml nem található a beépülőhöz</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="397"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Angol szöveg hiányzik az informations.xml-ből a címkéhez: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="405"/>
@@ -1116,7 +1062,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../PluginsManager.cpp" line="700"/>
         <source>Ultracopier plugin (*.urc)</source>
-        <translation>Ultracopier beéülő (*.urc)</translation>
+        <translation>Ultracopier beépülő (*.urc)</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="717"/>
@@ -1238,13 +1184,9 @@ since:%2</source>
         <translation>Információ keresése...</translation>
     </message>
     <message>
-        <source>Not replace the explorer copy/move</source>
-        <translation type="obsolete">Ne cserélje le az Intéző másolás/mozgatást</translation>
-    </message>
-    <message>
         <location filename="../../../SystrayIcon.cpp" line="172"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne cserélje le az Intéző másolását/mozgatását</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="177"/>
@@ -1295,22 +1237,23 @@ since:%2</source>
         <location filename="../../../SystrayIcon.cpp" line="434"/>
         <source>New version: %1
 Site: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Új verzió: %1
+Honlap: %2</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Másolás</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="457"/>
         <source>&amp;Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Átvitel</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="461"/>
         <source>&amp;Move</source>
-        <translation type="unfinished"></translation>
+        <translation>M&amp;ozgatás</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="473"/>

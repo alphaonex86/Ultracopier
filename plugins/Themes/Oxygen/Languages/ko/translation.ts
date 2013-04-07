@@ -4,7 +4,14 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+241"/>
+        <location filename="../../interface.cpp" line="+206"/>
+        <location line="+2"/>
+        <location line="+3"/>
+        <source>Buy the Ultimate version to fund development</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+45"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
@@ -84,7 +91,7 @@
         <translation type="unfinished">대상:</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+168"/>
         <source>&amp;More</source>
         <translation type="unfinished">&amp;자세히</translation>
     </message>
@@ -148,12 +155,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-224"/>
+        <location line="-234"/>
         <source>Close on transfer completion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+168"/>
         <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>

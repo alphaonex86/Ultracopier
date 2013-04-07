@@ -24,9 +24,18 @@ function compil {
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/
 		fi
 	fi
+	for project in `find ${TEMP_PATH}/${TARGET}/plugins/Languages/ -mindepth 1 -type d`
+	do
+		cd ${project}/
+		if [ -f *.ts ]
+		then
+			lrelease -nounfinished -compress -removeidentical *.ts > /dev/null 2>&1
+		fi
+		cd ${TEMP_PATH}/${TARGET}/
+	done
 	find ${TEMP_PATH}/${TARGET}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/ultracopier-0\.3\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/ultracopier-1\.[0-9]+\.[0-9]+\.[0-9]+/ultracopier-${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 	if [ $DEBUG -eq 1 ]
 	then
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1

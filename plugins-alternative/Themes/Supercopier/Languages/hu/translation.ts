@@ -21,17 +21,17 @@
     <message>
         <location filename="../../interface.cpp" line="812"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished">Ne zárja be, ha hiba történik</translation>
+        <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="813"/>
         <source>Never close</source>
-        <translation type="unfinished">Sose zárja be</translation>
+        <translation>Sose zárja be</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="814"/>
         <source>Always close</source>
-        <translation type="unfinished">Mindig zárja be</translation>
+        <translation>Mindig zárja be</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="816"/>
@@ -43,7 +43,7 @@
         <location filename="../../interface.cpp" line="1011"/>
         <location filename="../../interface.cpp" line="1023"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>Válassz egy színt</translation>
     </message>
 </context>
 <context>
@@ -51,24 +51,24 @@
     <message>
         <location filename="../../factory.cpp" line="186"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished">Ne zárja be, ha hiba történik</translation>
+        <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
         <location filename="../../factory.cpp" line="187"/>
         <source>Never close</source>
-        <translation type="unfinished">Sose zárja be</translation>
+        <translation>Sose zárja be</translation>
     </message>
     <message>
         <location filename="../../factory.cpp" line="188"/>
         <source>Always close</source>
-        <translation type="unfinished">Mindig zárja be</translation>
+        <translation>Mindig zárja be</translation>
     </message>
     <message>
         <location filename="../../factory.cpp" line="366"/>
         <location filename="../../factory.cpp" line="381"/>
         <location filename="../../factory.cpp" line="396"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>Válassz egy színt</translation>
     </message>
 </context>
 <context>
@@ -109,10 +109,6 @@
         <translation>&amp;Mégse</translation>
     </message>
     <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="326"/>
         <source>Transfer list</source>
         <translation>Átviteli lista</translation>
@@ -135,52 +131,52 @@
     <message>
         <location filename="../../interface.ui" line="349"/>
         <source>Move the selected items to the top</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölések elemek mozgatása legfelülre</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="283"/>
         <source>Limit copy speed to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolási sebesség korlátozása:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="375"/>
         <source>Move up the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölt elemek mozgatása fel</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="401"/>
         <source>Move down the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölt elemek mozgatása le</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="427"/>
         <source>Move the selected items to the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölések elemek mozgatása legalulra</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="453"/>
         <source>Add file/folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl/mappa hozzáadása</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="482"/>
         <source>Delete the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>Kijelölt elemek törlése</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="508"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Keresés</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="537"/>
         <source>Export the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Átviteli lista exportálása</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="563"/>
         <source>Import the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Átviteli lista importálása</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="672"/>
@@ -218,61 +214,53 @@
     <message>
         <location filename="../../themesOptions.ui" line="20"/>
         <source>Show dual progression</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="40"/>
         <source>Show speed as main information</source>
-        <translation type="unfinished">Sebesség mutatása, mint fő információ</translation>
-    </message>
-    <message>
-        <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="obsolete">Indítás a &quot;több gomb&quot; lenyomásával</translation>
+        <translation>Sebesség mutatása, mint fő információ</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="60"/>
         <source>At the end of the copy: </source>
-        <translation type="unfinished">A másolás végén:</translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
+        <translation>A másolás végén:</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="50"/>
         <source>Start with the &quot;more button&quot; pressed</source>
-        <translation type="unfinished"></translation>
+        <translation>Indítás a &quot;több gomb&quot; lenyomásával</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="67"/>
         <location filename="../../themesOptions.ui" line="126"/>
         <source>Limit copy speed to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolási sebesség korlátozása:</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="136"/>
         <source> KB/s</source>
-        <translation type="unfinished"> KB/s</translation>
+        <translation> KB/s</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="149"/>
         <source>Speed with progress bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Sebesség folyamatsávval</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="256"/>
         <source>Progression color</source>
-        <translation type="unfinished"></translation>
+        <translation>Folyamat színe</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="263"/>
         <source>Show progression in the title</source>
-        <translation type="unfinished"></translation>
+        <translation>Folyamat megjelenítése a címsorban</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="276"/>
         <source>Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>Mindig legfelül</translation>
     </message>
 </context>
 </TS>

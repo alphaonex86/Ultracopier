@@ -8,7 +8,7 @@ fi
 rm -Rf ${TEMP_PATH}
 
 cd ${ULTRACOPIER_SOURCE}
-lupdate -no-obsolete ultracopier-core.pro > /dev/null 2>&1
+lupdate ultracopier-core.pro > /dev/null 2>&1
 lrelease -nounfinished -compress -removeidentical ultracopier-core.pro > /dev/null 2>&1
 PWD_BASE2=`pwd`
 echo "update the .ts file"
@@ -17,7 +17,7 @@ do
         cd ${project}/
         if [ -f *.pro ]
         then
-                lupdate -no-obsolete *.pro > /dev/null 2>&1
+                lupdate *.pro > /dev/null 2>&1
                 lrelease -nounfinished -compress -removeidentical *.pro > /dev/null 2>&1
         fi
         cd ${PWD_BASE2}

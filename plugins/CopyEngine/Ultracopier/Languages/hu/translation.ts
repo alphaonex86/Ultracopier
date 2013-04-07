@@ -23,17 +23,17 @@
     <message>
         <location filename="../../AvancedQFile.cpp" line="123"/>
         <source>Unknown error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ismeretlen hiba: %1</translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="135"/>
         <source>Path conversion error</source>
-        <translation type="unfinished"></translation>
+        <translation>Útvonal konvertálási hiba</translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="189"/>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ismeretlen hiba</translation>
     </message>
 </context>
 <context>
@@ -42,18 +42,18 @@
         <location filename="../../CopyEngine.cpp" line="405"/>
         <location filename="../../CopyEngine.cpp" line="427"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
-        <translation type="unfinished">A motort mozgatásra kényszerítik, nem másolhatsz vele</translation>
+        <translation>A motort mozgatásra kényszerítik, nem másolhatsz vele</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="438"/>
         <location filename="../../CopyEngine.cpp" line="460"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
-        <translation type="unfinished">A motort másolásra kényszerítik, nem mozgathatsz vele</translation>
+        <translation>A motort másolásra kényszerítik, nem mozgathatsz vele</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="676"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
-        <translation type="unfinished"></translation>
+        <translation>Ezt a módot már korábban kényszerítették. Belső hiba történt, kérlek jelentsd be</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="982"/>
@@ -61,7 +61,7 @@
         <location filename="../../CopyEngine.cpp" line="990"/>
         <location filename="../../CopyEngine.cpp" line="994"/>
         <source>Ask</source>
-        <translation type="unfinished">Kérdezzen rá</translation>
+        <translation>Kérdezzen rá</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="983"/>
@@ -69,68 +69,68 @@
         <location filename="../../CopyEngine.cpp" line="991"/>
         <location filename="../../CopyEngine.cpp" line="995"/>
         <source>Skip</source>
-        <translation type="unfinished">Kihagy</translation>
+        <translation>Kihagy</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="986"/>
         <source>Merge</source>
-        <translation type="unfinished">Összeolvaszt</translation>
+        <translation>Összeolvaszt</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="988"/>
         <location filename="../../CopyEngine.cpp" line="1000"/>
         <source>Rename</source>
-        <translation type="unfinished">Nevezze át</translation>
+        <translation>Nevezze át</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="992"/>
         <source>Put at the end</source>
-        <translation type="unfinished"></translation>
+        <translation>Helyezze a végére</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="996"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="997"/>
         <source>Overwrite if different</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="998"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished">Felülír, ha újabb</translation>
+        <translation>Felülír, ha újabb</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="999"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1002"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1003"/>
         <source>Sequential</source>
-        <translation type="unfinished"></translation>
+        <translation>Szekvenciális</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1004"/>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation>Párhuzamos</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1105"/>
         <source>Options error</source>
-        <translation type="unfinished">Beállítási hiba</translation>
+        <translation>Beállítási hiba</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1105"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
 </context>
 <context>
@@ -141,7 +141,7 @@
         <location filename="../../Factory.cpp" line="386"/>
         <location filename="../../Factory.cpp" line="390"/>
         <source>Ask</source>
-        <translation type="unfinished">Kérdezzen rá</translation>
+        <translation>Kérdezzen rá</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="379"/>
@@ -149,74 +149,74 @@
         <location filename="../../Factory.cpp" line="387"/>
         <location filename="../../Factory.cpp" line="391"/>
         <source>Skip</source>
-        <translation type="unfinished">Kihagy</translation>
+        <translation>Kihagy</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="382"/>
         <source>Merge</source>
-        <translation type="unfinished">Összeolvaszt</translation>
+        <translation>Összeolvaszt</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="384"/>
         <location filename="../../Factory.cpp" line="396"/>
         <source>Rename</source>
-        <translation type="unfinished">Nevezze át</translation>
+        <translation>Nevezze át</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="388"/>
         <source>Put at the end</source>
-        <translation type="unfinished"></translation>
+        <translation>Helyezze a végére</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="392"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="393"/>
         <source>Overwrite if different</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="394"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished">Felülír, ha újabb</translation>
+        <translation>Felülír, ha újabb</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="395"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="398"/>
         <source>Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatikus</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="399"/>
         <source>Sequential</source>
-        <translation type="unfinished"></translation>
+        <translation>Szekvenciális</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="400"/>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation>Párhuzamos</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="451"/>
         <location filename="../../Factory.cpp" line="490"/>
         <source>Options error</source>
-        <translation type="unfinished">Beállítási hiba</translation>
+        <translation>Beállítási hiba</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="451"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="490"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation type="unfinished"></translation>
+        <translation>A beállítási motor nincs betöltve, a szűrők elérése nem lehetséges</translation>
     </message>
 </context>
 <context>
@@ -224,27 +224,27 @@
     <message>
         <location filename="../../DiskSpace.ui" line="14"/>
         <source>Disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemezterület</translation>
     </message>
     <message>
         <location filename="../../DiskSpace.ui" line="24"/>
         <source>You need more space on this drive to finish this transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Több szabad helyre van szükséged ezen a lemezen az átvitel befejezéséhez</translation>
     </message>
     <message>
         <location filename="../../DiskSpace.ui" line="49"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>Folytatás</translation>
     </message>
     <message>
         <location filename="../../DiskSpace.ui" line="56"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Mégse</translation>
     </message>
     <message>
         <location filename="../../DiskSpace.cpp" line="16"/>
         <source>Drives %1 have %2 available but need %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 meghajtón %2 hely van, de %3 szükséges</translation>
     </message>
 </context>
 <context>
@@ -252,12 +252,12 @@
     <message>
         <location filename="../../FileErrorDialog.cpp" line="40"/>
         <source>Error on folder</source>
-        <translation type="unfinished">Hiba a mappával</translation>
+        <translation>Hiba a mappával</translation>
     </message>
     <message>
         <location filename="../../FileErrorDialog.cpp" line="43"/>
         <source>Folder name</source>
-        <translation type="unfinished">Mappa neve</translation>
+        <translation>Mappa neve</translation>
     </message>
 </context>
 <context>
@@ -265,22 +265,22 @@
     <message>
         <location filename="../../FileExistsDialog.cpp" line="118"/>
         <source>%1 - copy</source>
-        <translation type="unfinished">%1 - másolás</translation>
+        <translation>%1 - másolás</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="128"/>
         <source>%1 - copy (%2)</source>
-        <translation type="unfinished">%1 - másolás (%2)</translation>
+        <translation>%1 - másolás (%2)</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="213"/>
         <source>Error</source>
-        <translation type="unfinished">Hiba</translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="213"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
 </context>
 <context>
@@ -288,22 +288,22 @@
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="95"/>
         <source>%1 - copy</source>
-        <translation type="unfinished">%1 - másolás</translation>
+        <translation>%1 - másolás</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="105"/>
         <source>%1 - copy (%2)</source>
-        <translation type="unfinished">%1 - másolás (%2)</translation>
+        <translation>%1 - másolás (%2)</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="172"/>
         <source>Error</source>
-        <translation type="unfinished">Hiba</translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="172"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
 </context>
 <context>
@@ -361,12 +361,12 @@
     <message>
         <location filename="../../FilterRules.ui" line="95"/>
         <source>Whole string must match</source>
-        <translation type="unfinished"></translation>
+        <translation>A teljes szövegnek egyeznie kell</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="125"/>
         <source>The test string matches with the regex</source>
-        <translation type="unfinished"></translation>
+        <translation>A tesztszöveg megegyezik a regexszel</translation>
     </message>
     <message>
         <location filename="../../FilterRules.ui" line="102"/>
@@ -450,73 +450,73 @@
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="41"/>
         <source>Folder already exists</source>
-        <translation type="unfinished">Mappa már létezik</translation>
+        <translation>Mappa már létezik</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="103"/>
         <source>%1 - copy</source>
-        <translation type="unfinished">%1 - másolás</translation>
+        <translation>%1 - másolás</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="113"/>
         <source>%1 - copy (%2)</source>
-        <translation type="unfinished">%1 - másolás (%2)</translation>
+        <translation>%1 - másolás (%2)</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="174"/>
         <source>Error</source>
-        <translation type="unfinished">Hiba</translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="174"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
 </context>
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1347"/>
+        <location filename="../../ListThread.cpp" line="1355"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Elem másolása vagy mozgatás nem lehetséges a hibás kényszerített módban: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1354"/>
+        <location filename="../../ListThread.cpp" line="1362"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Átviteli lista mentése nem lehetséges: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1370"/>
+        <location filename="../../ListThread.cpp" line="1378"/>
         <source>Problem reading file, or file-size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a fájl olvasásánál vagy a fálméret 0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1377"/>
+        <location filename="../../ListThread.cpp" line="1385"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Hibás fejléc: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1386"/>
+        <location filename="../../ListThread.cpp" line="1394"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista kevert módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1395"/>
+        <location filename="../../ListThread.cpp" line="1403"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista másolás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1401"/>
+        <location filename="../../ListThread.cpp" line="1409"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista mozgatás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1457"/>
+        <location filename="../../ListThread.cpp" line="1465"/>
         <source>Some errors have been found during the line parsing</source>
-        <translation type="unfinished"></translation>
+        <translation>Néhány hiba történt a sorelemzés során</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1465"/>
+        <location filename="../../ListThread.cpp" line="1473"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Az átviteli lista megnyitása nem lehetséges: %1</translation>
     </message>
@@ -524,30 +524,30 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="73"/>
+        <location filename="../../MkPath.cpp" line="85"/>
         <source>Unable to get time</source>
-        <translation type="unfinished"></translation>
+        <translation>Idő lekérése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="88"/>
         <location filename="../../MkPath.cpp" line="101"/>
+        <location filename="../../MkPath.cpp" line="114"/>
         <source>Unable to create the folder</source>
         <translation>Mappa létrehozása nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="112"/>
-        <source>Unable to set time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../MkPath.cpp" line="125"/>
-        <source>Unable to set the access-right</source>
-        <translation type="unfinished"></translation>
+        <source>Unable to set time</source>
+        <translation>Idő beállítása nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="137"/>
+        <location filename="../../MkPath.cpp" line="138"/>
+        <source>Unable to set the access-right</source>
+        <translation>Jogok beállítása nem lehetséges</translation>
+    </message>
+    <message>
+        <location filename="../../MkPath.cpp" line="150"/>
         <source>Unable to remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Eltávolítás nem lehetséges</translation>
     </message>
 </context>
 <context>
@@ -560,7 +560,7 @@
     <message>
         <location filename="../../ReadThread.cpp" line="163"/>
         <source>Internal error reading the source file:block size out of range</source>
-        <translation type="unfinished"></translation>
+        <translation>Belső hiba történt a forrásfájl olvasásakor: a blokkméret tartományon kívüli</translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="171"/>
@@ -634,149 +634,150 @@
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="254"/>
         <source>Blacklisted folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Feketelistás mappa</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="316"/>
         <location filename="../../ScanFileOrFolder.cpp" line="382"/>
         <source>%1 - copy</source>
-        <translation type="unfinished">%1 - másolás</translation>
+        <translation>%1 - másolás</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="326"/>
         <location filename="../../ScanFileOrFolder.cpp" line="392"/>
         <source>%1 - copy (%2)</source>
-        <translation type="unfinished">%1 - másolás (%2)</translation>
+        <translation>%1 - másolás (%2)</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="430"/>
         <source>This is not a folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ez nem mappa</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="432"/>
         <source>The folder does exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The folder not exists</source>
-        <translation type="obsolete">A mappa nem létezik</translation>
+        <translation>A mappa létezik</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="434"/>
         <source>The folder is not readable</source>
-        <translation type="unfinished">A mappa nem olvasható</translation>
+        <translation>A mappa nem olvasható</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="445"/>
         <source>Problem with name encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>Probléma a névkódolással</translation>
     </message>
 </context>
 <context>
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="215"/>
-        <location filename="../../TransferThread.cpp" line="541"/>
-        <location filename="../../TransferThread.cpp" line="602"/>
+        <location filename="../../TransferThread.cpp" line="549"/>
+        <location filename="../../TransferThread.cpp" line="610"/>
         <source>File not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl nem található</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="475"/>
+        <location filename="../../TransferThread.cpp" line="483"/>
         <source>Drive %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 meghajtó</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="477"/>
+        <location filename="../../TransferThread.cpp" line="485"/>
         <source>Unknown folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Ismeretlen mappa</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="481"/>
+        <location filename="../../TransferThread.cpp" line="489"/>
         <source>root</source>
-        <translation type="unfinished"></translation>
+        <translation>gyökér</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="509"/>
+        <location filename="../../TransferThread.cpp" line="517"/>
         <source>%1 - copy</source>
         <translation>%1 - másolás</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="519"/>
+        <location filename="../../TransferThread.cpp" line="527"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - másolás (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="643"/>
+        <location filename="../../TransferThread.cpp" line="651"/>
         <source>The source doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrás nem létezik</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="608"/>
-        <location filename="../../TransferThread.cpp" line="685"/>
+        <location filename="../../TransferThread.cpp" line="616"/>
+        <location filename="../../TransferThread.cpp" line="693"/>
         <source>Unable to do the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappaművelet nem lehetséges</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="200"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="578"/>
-        <location filename="../../TransferThread.cpp" line="673"/>
+        <location filename="../../TransferThread.cpp" line="586"/>
+        <location filename="../../TransferThread.cpp" line="681"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrásfájl nem létezik</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="679"/>
+        <location filename="../../TransferThread.cpp" line="687"/>
         <source>Another file exists at same place</source>
-        <translation type="unfinished"></translation>
+        <translation>Egy másik fájl létezik ugyanazon a helyen</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="944"/>
+        <location filename="../../TransferThread.cpp" line="952"/>
         <source>The checksums do not match</source>
-        <translation type="unfinished"></translation>
+        <translation>A checksumok nem egyeznek meg</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1024"/>
+        <location filename="../../TransferThread.cpp" line="1032"/>
         <source>Internal error: The destination is not closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Belső hiba: a cél nincs bezárva</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1038"/>
+        <location filename="../../TransferThread.cpp" line="1046"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation type="unfinished"></translation>
+        <translation>Belső hiba: az átvitt méret nem egyezik meg</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1049"/>
+        <location filename="../../TransferThread.cpp" line="1057"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Belső hiba: a puffer nem üres</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1109"/>
+        <location filename="../../TransferThread.cpp" line="1117"/>
         <source>Unable to change the date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dátum megváltoztatása nem lehetséges</translation>
     </message>
 </context>
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../WriteThread.cpp" line="222"/>
-        <location filename="../../WriteThread.cpp" line="228"/>
+        <location filename="../../WriteThread.cpp" line="76"/>
+        <source>Path resolution error (Empty path)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../WriteThread.cpp" line="231"/>
+        <location filename="../../WriteThread.cpp" line="238"/>
         <source>Internal error, please report it!</source>
         <translation>Belső hiba, kérlek jelentsd!</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="599"/>
+        <location filename="../../WriteThread.cpp" line="610"/>
         <source>Unable to read the source file: </source>
         <translation>A forrásfájl olvasása nem lehetséges:</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="624"/>
+        <location filename="../../WriteThread.cpp" line="635"/>
         <source>File truncated during read, possible data change</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl megsérült az olvasás közben, valószínűleg adatváltozás</translation>
     </message>
 </context>
 <context>
@@ -784,118 +785,118 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="35"/>
         <source>Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Átvitel</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="44"/>
         <source>Move the whole folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Mozgassa át az egész mappát</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="51"/>
         <source>Transfer the file rights</source>
-        <translation type="unfinished">Fájljogok átadása</translation>
+        <translation>Fájljogok átadása</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="61"/>
         <source>Keep the file date</source>
-        <translation type="unfinished">Fájl dátumának megtartása</translation>
+        <translation>Fájl dátumának megtartása</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="71"/>
         <source>Autostart the transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>Átvitel automatikus indítása</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="94"/>
         <location filename="../../copyEngineOptions.ui" line="104"/>
         <source>Less performance if checked</source>
-        <translation type="unfinished"></translation>
+        <translation>Kisebb teljesítmény, ha be van jelölve</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="97"/>
         <source>Follow the strict order</source>
-        <translation type="unfinished"></translation>
+        <translation>Kövesse a szigorú sorrendet</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="120"/>
         <source>Error and collision</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba és ütközés</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="126"/>
         <source>When folder error</source>
-        <translation type="unfinished">Mappa hiba esetén</translation>
+        <translation>Mappa hiba esetén</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="136"/>
         <source>When file error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl hiba esetén</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="162"/>
         <source>When file collision</source>
-        <translation type="unfinished"></translation>
+        <translation>Fájl ütközés esetén</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="222"/>
         <source>When folder collision</source>
-        <translation type="unfinished">Mappa ütközés esetén</translation>
+        <translation>Mappa ütközés esetén</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="253"/>
         <source>Check if destination folder exists</source>
-        <translation type="unfinished">Célmappa létezésének ellenőrzése</translation>
+        <translation>Célmappa létezésének ellenőrzése</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="260"/>
         <source>Renaming rules</source>
-        <translation type="unfinished">Átnevezési szabályok</translation>
+        <translation>Átnevezési szabályok</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="280"/>
         <source>Delete partially transferred files</source>
-        <translation type="unfinished"></translation>
+        <translation>Részben átvitt fájlok törlése</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="293"/>
         <source>Rename the original destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Eredeti cél átnevezése</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="324"/>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Irányítás</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="330"/>
         <source>Checksum</source>
-        <translation type="unfinished">Checksum</translation>
+        <translation>Checksum</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="339"/>
         <source>Only after error</source>
-        <translation type="unfinished">Csak hiba után</translation>
+        <translation>Csak hiba után</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="346"/>
         <source>Ignore if impossible</source>
-        <translation type="unfinished">Hagyja ki, ha nem lehetséges</translation>
+        <translation>Hagyja ki, ha nem lehetséges</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="363"/>
         <source>Verify checksums</source>
-        <translation type="unfinished"></translation>
+        <translation>Checksumok ellenőrzése</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="395"/>
         <source>Performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Teljesítmény</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="401"/>
         <source>Parallel buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Párhuzamos puffer</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="408"/>
@@ -904,67 +905,67 @@
         <location filename="../../copyEngineOptions.ui" line="471"/>
         <location filename="../../copyEngineOptions.ui" line="540"/>
         <source>KB</source>
-        <translation type="unfinished">KB</translation>
+        <translation>KB</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="450"/>
         <source>Block size</source>
-        <translation type="unfinished">Blokkméret</translation>
+        <translation>Blokkméret</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="457"/>
         <source>Sequential buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Szekvenciális puffer</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="464"/>
         <source>Enable OS buffer</source>
-        <translation type="unfinished">OS buffer engedélyezése</translation>
+        <translation>OS puffer engedélyezése</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="487"/>
         <source>OS buffer only if smaller than</source>
-        <translation type="unfinished">OS buffer csak akkor, ha kisebb mint</translation>
+        <translation>OS buffer csak akkor, ha kisebb mint</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="494"/>
         <source>Transfer algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation>Átviteli algoritmus</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="533"/>
         <source>Parallelize if smaller than</source>
-        <translation type="unfinished"></translation>
+        <translation>Párhuzamosítás, ha kisebb mint</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="563"/>
         <source>Inode threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Inode szálak</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="579"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Egyéb</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="585"/>
         <source>Check the disk space</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemezterület ellenőrzése</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="595"/>
         <source>Use this folder when destination is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Használja ezt a mappát, ha a cél üres</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="607"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Tallózás</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="629"/>
         <source>Filters</source>
-        <translation type="unfinished">Szűrők</translation>
+        <translation>Szűrők</translation>
     </message>
 </context>
 <context>
@@ -972,7 +973,7 @@
     <message>
         <location filename="../../fileErrorDialog.ui" line="14"/>
         <source>Error with file</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba a fájllal</translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="20"/>
@@ -1002,17 +1003,17 @@
     <message>
         <location filename="../../fileErrorDialog.ui" line="127"/>
         <source>Folder</source>
-        <translation type="unfinished">Mappa</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="173"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mindig hajtsa végre ezt a műveletet</translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="193"/>
         <source>Try in with elevated privileges</source>
-        <translation type="unfinished"></translation>
+        <translation>Próbálja meg emelt jogosultsággal</translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="200"/>
@@ -1074,7 +1075,7 @@
         <location filename="../../fileExistsDialog.ui" line="133"/>
         <location filename="../../fileExistsDialog.ui" line="221"/>
         <source>Folder</source>
-        <translation type="unfinished">Mappa</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="277"/>
@@ -1084,19 +1085,19 @@
     <message>
         <location filename="../../fileExistsDialog.ui" line="288"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mindig hajtsa végre ezt a műveletet</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="346"/>
         <location filename="../../fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír, ha a módosítás dátuma különbözik</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="354"/>
         <location filename="../../fileExistsDialog.ui" line="357"/>
         <source>Overwrite if older</source>
-        <translation type="unfinished"></translation>
+        <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="308"/>
@@ -1144,12 +1145,12 @@
     <message>
         <location filename="../../fileIsSameDialog.ui" line="14"/>
         <source>The source and destination are same</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrás és a cél megegyezik</translation>
     </message>
     <message>
         <location filename="../../fileIsSameDialog.ui" line="90"/>
         <source>Folder</source>
-        <translation type="unfinished">Mappa</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <location filename="../../fileIsSameDialog.ui" line="159"/>
@@ -1159,7 +1160,7 @@
     <message>
         <location filename="../../fileIsSameDialog.ui" line="170"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mindig hajtsa végre ezt a műveletet</translation>
     </message>
     <message>
         <location filename="../../fileIsSameDialog.ui" line="190"/>
@@ -1209,18 +1210,18 @@
     <message>
         <location filename="../../folderExistsDialog.ui" line="14"/>
         <source>The source and destination is identical</source>
-        <translation type="unfinished"></translation>
+        <translation>A forrás és a cél megegyezik</translation>
     </message>
     <message>
         <location filename="../../folderExistsDialog.ui" line="116"/>
         <location filename="../../folderExistsDialog.ui" line="184"/>
         <source>Folder</source>
-        <translation type="unfinished">Mappa</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <location filename="../../folderExistsDialog.ui" line="238"/>
         <source>&amp;Always perform this action</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mindig hajtsa végre ezt a műveletet</translation>
     </message>
     <message>
         <location filename="../../folderExistsDialog.ui" line="245"/>
