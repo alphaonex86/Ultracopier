@@ -37,6 +37,34 @@ PluginsManager *PluginsManager::pluginsManager=NULL;
 LanguagesManager *LanguagesManager::languagesManager=NULL;
 ThemesManager *ThemesManager::themesManager=NULL;
 
+void registerTheOptions()
+{
+    OptionEngine::optionEngine=new OptionEngine();
+
+    //register the var
+    //add the options to use
+    QList<QPair<QString, QVariant> > KeysList;
+    //add the options hidden, will not show in options pannel
+    KeysList.clear();
+    KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
+    KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
+    KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
+    KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
+    KeysList.append(qMakePair(QString("confirmToGroupWindows"),QVariant(true)));
+    #ifdef ULTRACOPIER_INTERNET_SUPPORT
+    #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(true)));
+    #else
+    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(false)));
+    #endif
+    #endif
+    OptionEngine::optionEngine->addOptionGroup("Ultracopier",KeysList);
+
+    KeysList.clear();
+    KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier")));
+    OptionEngine::optionEngine->addOptionGroup("CopyEngine",KeysList);
+}
+
 /// \brief Define the main() for the point entry
 int main(int argc, char *argv[])
 {
@@ -54,7 +82,8 @@ int main(int argc, char *argv[])
     DebugEngine::debugEngine=new DebugEngine();
     #endif
     ResourcesManager::resourcesManager=new ResourcesManager();
-    OptionEngine::optionEngine=new OptionEngine();
+    registerTheOptions();
+
     PluginsManager::pluginsManager=new PluginsManager();
     LanguagesManager::languagesManager=new LanguagesManager();
     ThemesManager::themesManager=new ThemesManager();

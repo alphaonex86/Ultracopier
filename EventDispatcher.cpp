@@ -87,23 +87,6 @@ EventDispatcher::EventDispatcher()
     lunchInitFunction.setSingleShot(true);
     connect(&lunchInitFunction,&QTimer::timeout,this,&EventDispatcher::initFunction,Qt::QueuedConnection);
     lunchInitFunction.start();
-    //add the options to use
-    QList<QPair<QString, QVariant> > KeysList;
-    //add the options hidden, will not show in options pannel
-    KeysList.clear();
-    KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
-    KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
-    KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
-    KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
-    KeysList.append(qMakePair(QString("confirmToGroupWindows"),QVariant(true)));
-    #ifdef ULTRACOPIER_INTERNET_SUPPORT
-    #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(true)));
-    #else
-    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(false)));
-    #endif
-    #endif
-    OptionEngine::optionEngine->addOptionGroup("Ultracopier",KeysList);
     if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
     {
         //then ultracopier have been updated
@@ -115,10 +98,6 @@ EventDispatcher::EventDispatcher()
     a=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
     if(a<0 || a>5)
         OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
-
-    KeysList.clear();
-    KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier")));
-    OptionEngine::optionEngine->addOptionGroup("CopyEngine",KeysList);
 
     connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);
 }

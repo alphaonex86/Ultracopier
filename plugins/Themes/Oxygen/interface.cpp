@@ -198,6 +198,21 @@ Themes::Themes(const bool &alwaysOnTop,
     #ifdef Q_OS_WIN32
     uiOptions->alwaysOnTop->hide();
     #endif
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    ui->ad_ultimate->hide();
+    #endif
+    #ifdef Q_OS_WIN32
+        #if defined(_M_X64)
+        ui->ad_ultimate->setText(QString("<a href=\"http://ultracopier-shop.first-world.info/ultracopier-ultimate/2-ultracopier-ultimate-windows-64.html\">%1</a>").arg(tr("Buy the Ultimate version to fund development")));
+        #else
+        ui->ad_ultimate->setText(QString("<a href=\"http://ultracopier-shop.first-world.info/ultracopier-ultimate/1-ultracopier-ultimate-windows.html\">%1</a>").arg(tr("Buy the Ultimate version to fund development")));
+        #endif
+    #elif defined(Q_OS_MAC)
+    ui->ad_ultimate->setText(QString("<a href=\"http://ultracopier-shop.first-world.info/ultracopier-ultimate/3-ultracopier-ultimate-mac.html\">%1</a>").arg(tr("Buy the Ultimate version to fund development")));
+    #else
+    ui->ad_ultimate->hide();
+    #endif
+
     show();
 }
 
