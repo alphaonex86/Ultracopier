@@ -74,6 +74,7 @@ private slots:
     void on_GroupWindowWhen_currentIndexChanged(int index);
     void on_DisplayOSWarning_clicked();
     void on_checkTheUpdate_clicked();
+    void on_confirmToGroupWindows_clicked();
 private:
     Ui::OptionDialog *ui;
     struct pluginStore

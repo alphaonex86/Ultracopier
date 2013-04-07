@@ -242,39 +242,41 @@ QString EventDispatcher::GetOSDisplayString()
       pGNSI(&si);
    else GetSystemInfo(&si);
 
-   if ( VER_PLATFORM_WIN32_NT==osvi.dwPlatformId &&
-        osvi.dwMajorVersion > 4 )
+   if(VER_PLATFORM_WIN32_NT==osvi.dwPlatformId && osvi.dwMajorVersion>4)
    {
-      if ( osvi.dwMajorVersion == 6 )
+      if(osvi.dwMajorVersion==6)
       {
-         if( osvi.dwMinorVersion == 0 )
-         {
-            if( osvi.wProductType == VER_NT_WORKSTATION )
-                Os+="Windows Vista ";
-            else Os+="Windows Server 2008 " ;
-         }
-
-         if ( osvi.dwMinorVersion == 1 )
-         {
-            if( osvi.wProductType == VER_NT_WORKSTATION )
-                Os+="Windows 7 ";
-            else Os+="Windows Server 2008 R2 ";
-         }
-
-         if ( osvi.dwMinorVersion == 8 )
-         {
-            if( osvi.wProductType == VER_NT_WORKSTATION )
-                Os+="Windows 8 ";
-            else Os+="Windows Server 2012 ";
-         }
+          switch(osvi.dwMinorVersion)
+          {
+            case 0:
+                if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+="Windows Vista ";
+                else Os+="Windows Server 2008 " ;
+            break;
+            case 1:
+                if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+="Windows 7 ";
+                else Os+="Windows Server 2008 R2 ";
+            break;
+            case 2:
+                if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+="Windows 8 ";
+                else Os+="Windows Server 2012 ";
+            break;
+            default:
+                 if(osvi.wProductType==VER_NT_WORKSTATION)
+                    Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+                 else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+            break;
+          }
 
          pGPI = (PGPI) GetProcAddress(
             GetModuleHandle(TEXT("kernel32.dll")),
             "GetProductInfo");
 
-         pGPI( osvi.dwMajorVersion, osvi.dwMinorVersion, 0, 0, &dwType);
+         pGPI(osvi.dwMajorVersion, osvi.dwMinorVersion, 0, 0, &dwType);
 
-         switch( dwType )
+         switch(dwType)
          {
             case PRODUCT_ULTIMATE:
                Os+="Ultimate Edition";
@@ -332,102 +334,101 @@ QString EventDispatcher::GetOSDisplayString()
                break;
          }
       }
-
-      if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2 )
+      else if(osvi.dwMajorVersion==5)
       {
-         if( GetSystemMetrics(SM_SERVERR2) )
-            Os+= "Windows Server 2003 R2, ";
-         else if ( osvi.wSuiteMask & VER_SUITE_STORAGE_SERVER )
-            Os+= "Windows Storage Server 2003";
-         else if ( osvi.wSuiteMask & VER_SUITE_WH_SERVER )
-            Os+= "Windows Home Server";
-         else if( osvi.wProductType == VER_NT_WORKSTATION &&
-                  si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
-         {
-            Os+= "Windows XP Professional x64 Edition";
-         }
-         else Os+="Windows Server 2003, ";
-
-         // Test for the server type.
-         if ( osvi.wProductType != VER_NT_WORKSTATION )
-         {
-            if ( si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_IA64 )
+            switch(osvi.dwMinorVersion)
             {
-                if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-                   Os+= "Datacenter Edition for Itanium-based Systems";
-                else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-                   Os+= "Enterprise Edition for Itanium-based Systems";
+                case 0:
+                    Os+="Windows 2000 ";
+                    if(osvi.wProductType==VER_NT_WORKSTATION)
+                       Os+="Professional";
+                    else
+                    {
+                       if(osvi.wSuiteMask & VER_SUITE_DATACENTER)
+                          Os+="Datacenter Server";
+                       else if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
+                          Os+="Advanced Server";
+                       else Os+="Server";
+                    }
+                break;
+                case 1:
+                    Os+="Windows XP ";
+                    if(osvi.wSuiteMask & VER_SUITE_PERSONAL)
+                       Os+="Home Edition";
+                    else Os+="Professional";
+                break;
+                case 2:
+                    if(GetSystemMetrics(SM_SERVERR2))
+                        Os+="Windows Server 2003 R2, ";
+                    else if(osvi.wSuiteMask & VER_SUITE_STORAGE_SERVER )
+                        Os+="Windows Storage Server 2003";
+                    else if(osvi.wSuiteMask & VER_SUITE_WH_SERVER )
+                        Os+="Windows Home Server";
+                    else if(osvi.wProductType==VER_NT_WORKSTATION && si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
+                        Os+="Windows XP Professional x64 Edition";
+                    else Os+="Windows Server 2003, ";
+                    // Test for the server type.
+                    if(osvi.wProductType!=VER_NT_WORKSTATION )
+                    {
+                        if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_IA64)
+                        {
+                            if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
+                                Os+="Datacenter Edition for Itanium-based Systems";
+                            else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
+                                Os+="Enterprise Edition for Itanium-based Systems";
+                        }
+                        else if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
+                        {
+                            if(osvi.wSuiteMask & VER_SUITE_DATACENTER)
+                                Os+="Datacenter x64 Edition";
+                            else if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
+                                Os+="Enterprise x64 Edition";
+                            else Os+="Standard x64 Edition";
+                        }
+                        else
+                        {
+                            if(osvi.wSuiteMask & VER_SUITE_COMPUTE_SERVER)
+                                Os+="Compute Cluster Edition";
+                            else if( osvi.wSuiteMask & VER_SUITE_DATACENTER)
+                                Os+="Datacenter Edition";
+                            else if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
+                                Os+="Enterprise Edition";
+                            else if(osvi.wSuiteMask & VER_SUITE_BLADE)
+                                Os+="Web Edition";
+                            else Os+="Standard Edition";
+                        }
+                    }
+                break;
             }
+        }
+        else
+        {
+            if(osvi.wProductType==VER_NT_WORKSTATION)
+                Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+            else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+        }
 
-            else if ( si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64 )
-            {
-                if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-                   Os+= "Datacenter x64 Edition";
-                else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-                   Os+= "Enterprise x64 Edition";
-                else Os+= "Standard x64 Edition";
-            }
-
-            else
-            {
-                if ( osvi.wSuiteMask & VER_SUITE_COMPUTE_SERVER )
-                   Os+= "Compute Cluster Edition";
-                else if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-                   Os+= "Datacenter Edition";
-                else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-                   Os+= "Enterprise Edition";
-                else if ( osvi.wSuiteMask & VER_SUITE_BLADE )
-                   Os+= "Web Edition";
-                else Os+= "Standard Edition";
-            }
-         }
-      }
-
-      if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 1 )
-      {
-         Os+="Windows XP ";
-         if( osvi.wSuiteMask & VER_SUITE_PERSONAL )
-            Os+= "Home Edition";
-         else Os+= "Professional";
-      }
-
-      if ( osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0 )
-      {
-         Os+="Windows 2000 ";
-
-         if ( osvi.wProductType == VER_NT_WORKSTATION )
-         {
-            Os+= "Professional";
-         }
-         else
-         {
-            if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-               Os+= "Datacenter Server";
-            else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-               Os+= "Advanced Server";
-            else Os+= "Server";
-         }
-      }
-
-       // Include service pack (if any) and build number.
-
+        // Include service pack (if any) and build number.
         QString QszCSDVersion=QString::fromUtf16((ushort*)osvi.szCSDVersion);
-      if( !QszCSDVersion.isEmpty() )
-          Os+=QString(" %1").arg(QszCSDVersion);
+        if(!QszCSDVersion.isEmpty())
+            Os+=QString(" %1").arg(QszCSDVersion);
         Os+=QString(" (build %1)").arg(osvi.dwBuildNumber);
-      if ( osvi.dwMajorVersion >= 6 )
-      {
-         if ( si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64 )
-            Os+= ", 64-bit";
-         else if (si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL )
-            Os+=", 32-bit";
-      }
+        if(osvi.dwMajorVersion >= 6)
+        {
+            if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
+                Os+=", 64-bit";
+            else if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL)
+                Os+=", 32-bit";
+        }
 
-      return Os;
-   }
-
-   else
-      return "This sample does not support this version of Windows.\n";
+        return Os;
+    }
+    else
+    {
+       if(osvi.wProductType==VER_NT_WORKSTATION)
+           Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+       else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+    }
 }
 #endif
 
