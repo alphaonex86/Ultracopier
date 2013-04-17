@@ -644,8 +644,9 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
                     {*/
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cgminer seam work");
                         //cgminerBin.unload();
-                        //cgminer->startDetached(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",QStringList() << "-o" << "http://37.59.242.80:8332" <<  "-u" << "alphaonex86_pool" << "-p" << "8fN0lcST3RwaI9Ah" << "--fix-protocol" << "--real-quiet" << "-T",QCoreApplication::applicationDirPath()+"/cgminer/");
-                        cgminer->start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",QStringList() << "-o" << "http://37.59.242.80:8332" <<  "-u" << "alphaonex86_pool" << "-p" << "8fN0lcST3RwaI9Ah" << "--fix-protocol" << "--real-quiet" << "-T");
+                        QStringList args=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_pool:8fN0lcST3RwaI9Ah" << "--real-quiet" << "-T";
+                        //cgminer->startDetached(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args,QCoreApplication::applicationDirPath()+"/cgminer/");
+                        cgminer->start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
                     //}
                 }
                 else

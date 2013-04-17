@@ -428,8 +428,8 @@ void SystrayIcon::removeCopyEngine(const QString &name)
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 void SystrayIcon::newUpdate(const QString &version)
 {
-    if(version==lastVersion)
-        return;
+    /*if(version==lastVersion)
+        return;*/
     lastVersion=version;
     showSystrayMessage(tr("New version: %1\nSite: %2").arg(version).arg(HelpDialog::getWebSite()));
 }
