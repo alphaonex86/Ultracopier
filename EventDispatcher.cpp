@@ -41,11 +41,9 @@ EventDispatcher::EventDispatcher()
     qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
     qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
-    #ifdef Q_OS_WIN32
-    #ifndef ULTRACOPIER_VERSION_ULTIMATE
+    #ifdef ULTRACOPIER_CGMINER
     qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
     qRegisterMetaType<QProcess::ProcessError>("QProcess::ProcessError");
-    #endif
     #endif
 
     copyServer=new CopyListener(&optionDialog);

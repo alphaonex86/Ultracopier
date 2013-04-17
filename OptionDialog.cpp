@@ -37,9 +37,15 @@ OptionDialog::OptionDialog() :
     on_treeWidget_itemSelectionChanged();
 
     #ifndef Q_OS_WIN32
+    ui->label_gpu_time->hide();
     ui->giveGPUTime->hide();
     #endif
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    ui->label_gpu_time->hide();
+    ui->giveGPUTime->hide();
+    #endif
+    #ifndef ULTRACOPIER_CGMINER
+    ui->label_gpu_time->hide();
     ui->giveGPUTime->hide();
     #endif
 
@@ -92,8 +98,8 @@ OptionDialog::OptionDialog() :
     haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists() && OpenCLDll;
     if(!haveCgminer)
     {
-        ui->label_checkTheUpdate->hide();
-        ui->checkTheUpdate->hide();
+        ui->label_gpu_time->hide();
+        ui->giveGPUTime->hide();
     }
     #endif
 }

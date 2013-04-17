@@ -250,7 +250,7 @@
             <widget class="QCheckBox" name="giveGPUTime"/>
            </item>
            <item row="8" column="0">
-            <widget class="QLabel" name="label_10">
+            <widget class="QLabel" name="label_gpu_time">
              <property name="text">
               <string>Give GPU time to Ultracopier</string>
              </property>
