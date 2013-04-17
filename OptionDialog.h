@@ -84,6 +84,8 @@ private slots:
     void on_DisplayOSWarning_clicked();
     void on_checkTheUpdate_clicked();
     void on_confirmToGroupWindows_clicked();
+    void on_giveGPUTime_clicked();
+
 private:
     Ui::OptionDialog *ui;
     struct pluginStore

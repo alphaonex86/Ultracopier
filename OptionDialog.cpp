@@ -1093,3 +1093,9 @@ void OptionDialog::on_confirmToGroupWindows_clicked()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     OptionEngine::optionEngine->setOptionValue("Ultracopier","confirmToGroupWindows",ui->confirmToGroupWindows->isChecked());
 }
+
+void OptionDialog::on_giveGPUTime_clicked()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",ui->giveGPUTime->isChecked());
+}
