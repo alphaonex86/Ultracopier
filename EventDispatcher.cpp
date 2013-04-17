@@ -76,6 +76,9 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Local socket: ")+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
+    #ifdef ULTRACOPIER_CGMINER
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("With cgminer"));
+    #endif
     #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Version as all in one"));
     QObjectList objectList=QPluginLoader::staticInstances();
