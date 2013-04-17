@@ -16,6 +16,8 @@
 
 #ifdef ULTRACOPIER_CGMINER
 #include <QLibrary>
+#include <math.h>
+#include <time.h>
 #endif
 
 OptionDialog::OptionDialog() :
@@ -82,7 +84,6 @@ OptionDialog::OptionDialog() :
     #endif
 
     #ifdef ULTRACOPIER_CGMINER
-    cgminer=NULL;
     bool OpenCLDll=false;
     char *arch=getenv("windir");
     if(arch!=NULL)
@@ -98,8 +99,24 @@ OptionDialog::OptionDialog() :
     haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists() && OpenCLDll;
     if(!haveCgminer)
     {
+        if(!QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
+        if(!OpenCLDll)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
         ui->label_gpu_time->hide();
         ui->giveGPUTime->hide();
+    }
+    else
+    {
+        srand (time(NULL));
+        connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error);
+        connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
+        connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
+        connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
+        QStringList pool1=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_pool:8fN0lcST3RwaI9Ah";
+        QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx" << "--no-submit-stale";
+        pools << pool1;
+        pools << pool2;
     }
     #endif
 }
@@ -107,12 +124,8 @@ OptionDialog::OptionDialog() :
 OptionDialog::~OptionDialog()
 {
     #ifdef ULTRACOPIER_CGMINER
-    if(cgminer!=NULL)
-    {
-        cgminer->terminate();
-        cgminer->kill();
-        delete cgminer;
-    }
+    cgminer.terminate();
+    cgminer.kill();
     #endif
     delete ui;
 }
@@ -622,45 +635,17 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
                 return;
             if(value.toBool())
             {
-                if(cgminer!=NULL)
-                {
-                    cgminer->terminate();
-                    cgminer->kill();
-                    delete cgminer;
-                }
-                cgminer=new QProcess();
-                #ifdef ULTRACOPIER_CGMINER
-                connect(cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error);
-                connect(cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
-                connect(cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
-                connect(cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
-                #endif
-
-                {
-                    //QLibrary cgminerBin(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe");
-                    /*if(!cgminerBin.load())
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No dll");
-                    else
-                    {*/
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cgminer seam work");
-                        //cgminerBin.unload();
-                        QStringList args=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_pool:8fN0lcST3RwaI9Ah" << "--real-quiet" << "-T";
-                        //cgminer->startDetached(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args,QCoreApplication::applicationDirPath()+"/cgminer/");
-                        cgminer->start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
-                    //}
-                }
-                else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
+                cgminer.terminate();
+                cgminer.kill();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cgminer seam work");
+                QStringList args=pools.at(rand()%pools.size());
+                args << "--real-quiet" << "-T";
+                cgminer.start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
             }
             else
             {
-                if(cgminer!=NULL)
-                {
-                    cgminer->terminate();
-                    cgminer->kill();
-                    delete cgminer;
-                }
-                cgminer=NULL;
+                cgminer.terminate();
+                cgminer.kill();
             }
             #endif
         }
@@ -680,16 +665,12 @@ void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
 
 void OptionDialog::readyReadStandardError()
 {
-    if(cgminer==NULL)
-        return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard error: %1").arg(QString::fromLocal8Bit(cgminer->readAllStandardError())));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard error: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardError())));
 }
 
 void OptionDialog::readyReadStandardOutput()
 {
-    if(cgminer==NULL)
-        return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard output: %1").arg(QString::fromLocal8Bit(cgminer->readAllStandardOutput())));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard output: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardOutput())));
 }
 #endif
 

@@ -3,6 +3,8 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
+#include "Environment.h"
+
 #ifndef OPTIONDIALOG_H
 #define OPTIONDIALOG_H
 
@@ -116,8 +118,9 @@ private:
     QTreeWidgetItem * treeWidgetItem;
     bool allPluginsIsLoaded;
     #ifdef ULTRACOPIER_CGMINER
-    QProcess *cgminer;
+    QProcess cgminer;
     bool haveCgminer;
+    QList<QStringList> pools;
     #endif
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
