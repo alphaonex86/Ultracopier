@@ -51,6 +51,7 @@ void registerTheOptions()
     KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
     KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
     KeysList.append(qMakePair(QString("confirmToGroupWindows"),QVariant(true)));
+    KeysList.append(qMakePair(QString("giveGPUTime"),QVariant(true)));
     #ifdef ULTRACOPIER_INTERNET_SUPPORT
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(true)));

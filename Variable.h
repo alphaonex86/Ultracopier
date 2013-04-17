@@ -12,14 +12,14 @@
 #define ULTRACOPIER_DEBUG_MAX_ALL_SIZE 128 ///< \brief Max size (in MB) after the console/file output is dropped
 #define ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE 150 ///< \brief Max size (in MB) after the console/file important output is dropped
 /// \brief the version
-#define ULTRACOPIER_VERSION		"1.0.0.2"
+#define ULTRACOPIER_VERSION		"1.0.0.4"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	1,0,0,2
+#define ULTRACOPIER_WINDOWS_VERSION	1,0,0,4
 // define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
 // define if the version is ultimate, need change only the name in the code
-#define ULTRACOPIER_VERSION_ULTIMATE
+//#define ULTRACOPIER_VERSION_ULTIMATE
 //#define ULTRACOPIER_PLUGIN_ALL_IN_ONE
 /// \brief define time to update the speed detection update ont the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500

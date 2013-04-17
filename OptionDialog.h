@@ -9,6 +9,9 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include <QTreeWidgetItem>
+#ifdef ULTRACOPIER_CGMINER
+#include <QProcess>
+#endif
 
 #include "PluginsManager.h"
 
@@ -49,6 +52,12 @@ private slots:
     void on_Language_currentIndexChanged(int index);
     void on_Language_force_toggled(bool checked);
     void on_CatchCopyAsDefault_toggled(bool checked);
+    #ifdef ULTRACOPIER_CGMINER
+    void error( QProcess::ProcessError error );
+    void finished( int exitCode, QProcess::ExitStatus exitStatus );
+    void readyReadStandardError();
+    void readyReadStandardOutput();
+    #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(bool checked);
     #endif
@@ -104,6 +113,10 @@ private:
     int loadedCopyEnginePlugin;
     QTreeWidgetItem * treeWidgetItem;
     bool allPluginsIsLoaded;
+    #ifdef ULTRACOPIER_CGMINER
+    QProcess *cgminer;
+    bool haveCgminer;
+    #endif
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
     void newClientList(const QStringList &clientsList);
