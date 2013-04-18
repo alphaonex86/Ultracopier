@@ -1112,11 +1112,22 @@ bool TransferThread::doFilePostOperation()
     //do operation needed by copy
     //set the time if no write thread used
     if(doTheDateTransfer)
-        if(!writeFileDateTime(destination))
+    {
+        destination.refresh();
+        if(!destination.exists())
         {
-            emit errorOnFile(destination,tr("Unable to change the date"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date: File not found"));
+            //emit errorOnFile(destination,tr("Unable to change the date")+": "+tr("File not found"));
             return false;
         }
+        if(!writeFileDateTime(destination))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date"));
+            /* error with virtual folder under windows */
+            //emit errorOnFile(destination,tr("Unable to change the date"));
+            return false;
+        }
+    }
     if(stopIt)
         return false;
 
@@ -1419,10 +1430,9 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
             Q_UNUSED(ctime);
             return true;
         #else //mainly for mac
-            QFileInfo fileInfo(destination);
-            time_t ctime=fileInfo.created().toTime_t();
-            time_t actime=fileInfo.lastRead().toTime_t();
-            time_t modtime=fileInfo.lastModified().toTime_t();
+            time_t ctime=source.created().toTime_t();
+            time_t actime=source.lastRead().toTime_t();
+            time_t modtime=source.lastModified().toTime_t();
             //this function avalaible on unix and mingw
             utimbuf butime;
             butime.actime=actime;

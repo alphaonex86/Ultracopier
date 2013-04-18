@@ -9,18 +9,19 @@
 #include <QString>
 
 #ifdef Q_OS_UNIX
-	#include <unistd.h>
-	#include <sys/types.h>
+    #include <unistd.h>
+    #include <sys/types.h>
 #else
-	#include <windows.h>
+    #include <windows.h>
 #endif
 
 /** \brief class to have general socket options */
 class ExtraSocket
 {
 public:
-	/** \brief class to return always the same socket resolution */
-	static QString pathSocket(const QString &name);
+    /** \brief class to return always the same socket resolution */
+    static QString pathSocket(const QString &name);
+    static char * toHex(const char *str);
 };
 
 #endif // EXTRASOCKET_H

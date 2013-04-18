@@ -1,6 +1,5 @@
 #include "listener.h"
-
-
+#include "catchcopy-api-0002/ExtraSocketCatchcopy.h"
 
 Listener::Listener()
 {
@@ -20,7 +19,7 @@ Listener::Listener()
 
 void Listener::listen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start: %1").arg(ExtraSocketCatchcopy::pathSocket()));
     if(server.listen())
         emit newState(Ultracopier::FullListening);
     else

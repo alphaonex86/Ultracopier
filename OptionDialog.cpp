@@ -38,14 +38,6 @@ OptionDialog::OptionDialog() :
     ui->Language->setEnabled(false);
     on_treeWidget_itemSelectionChanged();
 
-    #ifndef Q_OS_WIN32
-    ui->label_gpu_time->hide();
-    ui->giveGPUTime->hide();
-    #endif
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    ui->label_gpu_time->hide();
-    ui->giveGPUTime->hide();
-    #endif
     #ifndef ULTRACOPIER_CGMINER
     ui->label_gpu_time->hide();
     ui->giveGPUTime->hide();
@@ -103,8 +95,8 @@ OptionDialog::OptionDialog() :
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
         if(!OpenCLDll)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
-        ui->label_gpu_time->hide();
-        ui->giveGPUTime->hide();
+        ui->label_gpu_time->setEnabled(false);
+        ui->giveGPUTime->setEnabled(false);
     }
     else
     {
@@ -114,9 +106,9 @@ OptionDialog::OptionDialog() :
         connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
         connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
         QStringList pool1=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_pool:8fN0lcST3RwaI9Ah";
-        QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx" << "--no-submit-stale";
         pools << pool1;
-        pools << pool2;
+        //QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
+        //pools << pool2;
     }
     #endif
 }
@@ -637,8 +629,18 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             {
                 cgminer.terminate();
                 cgminer.kill();
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cgminer seam work");
-                QStringList args=pools.at(rand()%pools.size());
+                QStringList args;
+                switch(pools.size())
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        args=pools.first();
+                    break;
+                    default:
+                        args=pools.at(rand()%pools.size());
+                }
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
                 args << "--real-quiet" << "-T";
                 cgminer.start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
             }

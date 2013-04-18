@@ -187,11 +187,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("renameTheOriginalDestination"),QVariant(false)));
         KeysList.append(qMakePair(QString("checkDiskSpace"),QVariant(true)));
         KeysList.append(qMakePair(QString("defaultDestinationFolder"),QVariant(QString())));
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
         KeysList.append(qMakePair(QString("inodeThreads"),QVariant(1)));
-        #else
-        KeysList.append(qMakePair(QString("inodeThreads"),QVariant(16)));
-        #endif
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)
         ui->keepDate->setEnabled(false);

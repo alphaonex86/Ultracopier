@@ -9,18 +9,19 @@
 #include <QString>
 
 #ifdef Q_OS_UNIX
-	#include <unistd.h>
-	#include <sys/types.h>
+    #include <unistd.h>
+    #include <sys/types.h>
 #else
-	#include <windows.h>
+    #include <windows.h>
 #endif
 
 /// \brief to have extra socket function
 class ExtraSocketCatchcopy
 {
 public:
-	/// \brief to get the socket path
-	static const QString pathSocket();
+    /// \brief to get the socket path
+    static const QString pathSocket();
+    static char * toHex(const char *str);
 };
 
 #endif // EXTRASOCKETCATCHCOPY_H

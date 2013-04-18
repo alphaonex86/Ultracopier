@@ -70,7 +70,9 @@ bool ServerCatchcopy::listen()
             error_string="Unable to remove the old server";
             emit error(error_string);
         }
+        #ifndef Q_OS_MAC
         server.setSocketOptions(QLocalServer::UserAccessOption);
+        #endif
         if(server.listen(pathSocket))
             return true;
         else
