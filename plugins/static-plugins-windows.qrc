@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>PluginLoader/catchcopy-v0002/informations.xml</file>
+	<file>PluginLoader/catchcopy-v0002/Languages/fr/translation.qm</file>
         <file>SessionLoader/Windows/informations.xml</file>
+	<file>SessionLoader/Windows/Languages/fr/translation.qm</file>
     </qresource>
 </RCC>
