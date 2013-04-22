@@ -1116,6 +1116,7 @@ bool TransferThread::doFilePostOperation()
 {
     //do operation needed by copy
     //set the time if no write thread used
+
     if(doTheDateTransfer)
     {
         destination.refresh();
@@ -1123,14 +1124,17 @@ bool TransferThread::doFilePostOperation()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date: File not found"));
             //emit errorOnFile(destination,tr("Unable to change the date")+": "+tr("File not found"));
-            return false;
+            //return false;
         }
         if(!writeFileDateTime(destination))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date"));
+            if(!destination.isFile())
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date (is not a file)"));
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date"));
             /* error with virtual folder under windows */
             //emit errorOnFile(destination,tr("Unable to change the date"));
-            return false;
+            //return false;
         }
     }
     if(stopIt)

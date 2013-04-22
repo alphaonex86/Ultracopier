@@ -1341,9 +1341,9 @@ void ListThread::exportTransferList(const QString &fileName)
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write(QString("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
-                    else
                         transferFile.write(QString("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                    else
+                        transferFile.write(QString("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
                 }
                 else
                     haveError=true;

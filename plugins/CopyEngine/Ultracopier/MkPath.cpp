@@ -118,12 +118,18 @@ void MkPath::internalDoThisPath()
     if(doTheDateTransfer)
         if(!writeFileDateTime(pathList.first().destination))
         {
-            if(stopIt)
+            if(!pathList.first().destination.exists())
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+pathList.first().destination.absoluteFilePath());
+            else if(!pathList.first().destination.isDir())
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+pathList.first().destination.absoluteFilePath());
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+pathList.first().destination.absoluteFilePath());
+            /*if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+pathList.first().destination.absoluteFilePath());
+
             emit errorOnFolder(pathList.first().source,tr("Unable to set time"));
-            return;
+            return;*/
         }
     if(doRightTransfer && pathList.first().actionType!=ActionType_RealMove)
     {
