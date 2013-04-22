@@ -35,10 +35,15 @@ TransferThread::TransferThread()
 
 TransferThread::~TransferThread()
 {
+    stopIt=true;
+    readThread.exit();
+    readThread.wait();
+    writeThread.exit();
+    writeThread.wait();
     exit();
+    //else cash without this disconnect
     //disconnect(&readThread);
     //disconnect(&writeThread);
-    //disconnect(this);
     wait();
 }
 

