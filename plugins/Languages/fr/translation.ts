@@ -655,14 +655,14 @@ Cette version est compilée comme version : %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
-        <location filename="../../../OptionDialog.ui" line="291"/>
-        <location filename="../../../OptionDialog.cpp" line="275"/>
+        <location filename="../../../OptionDialog.ui" line="301"/>
+        <location filename="../../../OptionDialog.cpp" line="326"/>
         <source>Copy engine</source>
         <translation>Moteurs de copie</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="92"/>
-        <location filename="../../../OptionDialog.ui" line="319"/>
+        <location filename="../../../OptionDialog.ui" line="329"/>
         <source>Themes</source>
         <translation>Thèmes</translation>
     </message>
@@ -692,38 +692,43 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Vérifier les mise à jour</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="281"/>
+        <location filename="../../../OptionDialog.ui" line="255"/>
+        <source>Give GPU time to Ultracopier</source>
+        <translation>Donner du temps GPU à Ultracopier</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="291"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="286"/>
+        <location filename="../../../OptionDialog.ui" line="296"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="296"/>
+        <location filename="../../../OptionDialog.ui" line="306"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
-        <location filename="../../../OptionDialog.ui" line="304"/>
-        <location filename="../../../OptionDialog.cpp" line="276"/>
+        <location filename="../../../OptionDialog.ui" line="314"/>
+        <location filename="../../../OptionDialog.cpp" line="327"/>
         <source>Listener</source>
         <translation>Écouteur</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
-        <location filename="../../../OptionDialog.ui" line="309"/>
-        <location filename="../../../OptionDialog.cpp" line="277"/>
+        <location filename="../../../OptionDialog.ui" line="319"/>
+        <location filename="../../../OptionDialog.cpp" line="328"/>
         <source>Plugin loader</source>
         <translation>Chargeur de plugin</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
-        <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="278"/>
+        <location filename="../../../OptionDialog.ui" line="324"/>
+        <location filename="../../../OptionDialog.cpp" line="329"/>
         <source>Session loader</source>
         <translation>Chargeur de session</translation>
     </message>
@@ -732,52 +737,52 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Vérifié les mise à jour</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="327"/>
+        <location filename="../../../OptionDialog.ui" line="337"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="346"/>
+        <location filename="../../../OptionDialog.ui" line="356"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="359"/>
+        <location filename="../../../OptionDialog.ui" line="369"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="369"/>
+        <location filename="../../../OptionDialog.ui" line="379"/>
         <source>Information</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="396"/>
+        <location filename="../../../OptionDialog.ui" line="406"/>
         <source>Copy engine by order of preference:</source>
         <translation>Moteurs de copie par ordre de préférence:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="467"/>
+        <location filename="../../../OptionDialog.ui" line="477"/>
         <source>Client connected</source>
         <translation>Client connecté</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="523"/>
+        <location filename="../../../OptionDialog.ui" line="533"/>
         <source>Themes:</source>
         <translation>Thèmes:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="585"/>
+        <location filename="../../../OptionDialog.ui" line="595"/>
         <source>Unable to load the themes plugin</source>
         <translation>Impossible de charger le plugin des thèmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="635"/>
+        <location filename="../../../OptionDialog.ui" line="645"/>
         <source>No option for this plugin</source>
         <translation>Pas d&apos;options pour ce plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="685"/>
+        <location filename="../../../OptionDialog.ui" line="695"/>
         <source>Browse</source>
         <translation>Parcourir</translation>
     </message>
@@ -786,19 +791,19 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Écrire directement le fichier quand il reçoit une nouvelle entrée (peut entrainer 50% de perte de performances)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="717"/>
+        <location filename="../../../OptionDialog.ui" line="727"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
         <translation>Les variables sont %time%, %source%, %size%, %destination%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="747"/>
+        <location filename="../../../OptionDialog.ui" line="757"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
         <translation>Les variables sont %time%, %path%, %size%, %mtime%, %error%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="666"/>
+        <location filename="../../../OptionDialog.ui" line="676"/>
         <source>Write the log file into:</source>
         <translation>Écrire le fichier journal dans:</translation>
     </message>
@@ -813,28 +818,28 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Remplacer le système de copie/déplacement par défaut:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="697"/>
+        <location filename="../../../OptionDialog.ui" line="707"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation>Écrire directement le fichier quand il reçoit une nouvelle entrée (peut entrainer 50% de perte de performances)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="710"/>
+        <location filename="../../../OptionDialog.ui" line="720"/>
         <source>Write the transfers:</source>
-        <translation>Écrire les transfers:</translation>
+        <translation>Écrire les transferts:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="740"/>
+        <location filename="../../../OptionDialog.ui" line="750"/>
         <source>Write the errors:</source>
         <translation>Écrire les erreurs:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="770"/>
+        <location filename="../../../OptionDialog.ui" line="780"/>
         <source>Write the folder operations:</source>
         <translation>Écrire les opérations dossier:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="181"/>
-        <location filename="../../../OptionDialog.cpp" line="195"/>
+        <location filename="../../../OptionDialog.cpp" line="232"/>
+        <location filename="../../../OptionDialog.cpp" line="246"/>
         <source>Load</source>
         <translation>Charger</translation>
     </message>
@@ -843,12 +848,12 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Charger les thèmes?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="181"/>
+        <location filename="../../../OptionDialog.cpp" line="232"/>
         <source>Load the theme?</source>
         <translation>Charger le thème?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="195"/>
+        <location filename="../../../OptionDialog.cpp" line="246"/>
         <source>Load the language?</source>
         <translation>Charger la langue?</translation>
     </message>
@@ -857,72 +862,72 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="279"/>
-        <location filename="../../../OptionDialog.cpp" line="281"/>
-        <location filename="../../../OptionDialog.cpp" line="431"/>
-        <location filename="../../../OptionDialog.cpp" line="432"/>
+        <location filename="../../../OptionDialog.cpp" line="330"/>
+        <location filename="../../../OptionDialog.cpp" line="332"/>
+        <location filename="../../../OptionDialog.cpp" line="483"/>
+        <location filename="../../../OptionDialog.cpp" line="484"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="283"/>
+        <location filename="../../../OptionDialog.cpp" line="334"/>
         <source>Do nothing</source>
         <translation>Ne rien faire</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="284"/>
+        <location filename="../../../OptionDialog.cpp" line="335"/>
         <source>Ask source as folder</source>
         <translation>Demander la source comme un dossier</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="285"/>
+        <location filename="../../../OptionDialog.cpp" line="336"/>
         <source>Ask sources as files</source>
         <translation>Demander la sources comme des fichiers</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="286"/>
+        <location filename="../../../OptionDialog.cpp" line="337"/>
         <source>Never</source>
         <translation>Jamais</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="287"/>
+        <location filename="../../../OptionDialog.cpp" line="338"/>
         <source>When source is same</source>
         <translation>Quand la source est la même</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="288"/>
+        <location filename="../../../OptionDialog.cpp" line="339"/>
         <source>When destination is same</source>
         <translation>Quand la destination est la même</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="289"/>
+        <location filename="../../../OptionDialog.cpp" line="340"/>
         <source>When source and destination are same</source>
         <translation>Quand la destination et la source sont les mêmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="290"/>
+        <location filename="../../../OptionDialog.cpp" line="341"/>
         <source>When source or destination are same</source>
         <translation>Quand la destination ou la source sont les mêmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="291"/>
+        <location filename="../../../OptionDialog.cpp" line="342"/>
         <source>Always</source>
         <translation>Toujours</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="305"/>
-        <location filename="../../../OptionDialog.cpp" line="306"/>
-        <location filename="../../../OptionDialog.cpp" line="307"/>
+        <location filename="../../../OptionDialog.cpp" line="356"/>
+        <location filename="../../../OptionDialog.cpp" line="357"/>
+        <location filename="../../../OptionDialog.cpp" line="358"/>
         <source>The variables are %1</source>
         <translation>Les variables sont %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="912"/>
+        <location filename="../../../OptionDialog.cpp" line="1018"/>
         <source>Save logs as: </source>
         <translation>Sauvegarder les logs sous: </translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="700"/>
+        <location filename="../../../OptionDialog.ui" line="710"/>
         <source>Synchronized log</source>
         <translation>Log synchronisé</translation>
     </message>
@@ -937,7 +942,7 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Grouper les fenêtres quand:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="780"/>
+        <location filename="../../../OptionDialog.ui" line="790"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
         <translation>Les variables sont %path%, %operation%</translation>

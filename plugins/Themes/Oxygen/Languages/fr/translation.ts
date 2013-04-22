@@ -264,7 +264,7 @@
     <message>
         <location line="+13"/>
         <source>Speed with progress bar</source>
-        <translation>Vitesse avec bar de progression</translation>
+        <translation>Vitesse avec barre de progression</translation>
     </message>
     <message>
         <location line="+107"/>

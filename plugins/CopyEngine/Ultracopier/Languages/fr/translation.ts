@@ -120,7 +120,7 @@
     <message>
         <location filename="../../CopyEngine.cpp" line="1004"/>
         <source>Parallel</source>
-        <translation>Paralléle</translation>
+        <translation>Parallèle</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1105"/>
@@ -136,85 +136,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../Factory.cpp" line="378"/>
-        <location filename="../../Factory.cpp" line="381"/>
+        <location filename="../../Factory.cpp" line="374"/>
+        <location filename="../../Factory.cpp" line="377"/>
+        <location filename="../../Factory.cpp" line="382"/>
         <location filename="../../Factory.cpp" line="386"/>
-        <location filename="../../Factory.cpp" line="390"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
+        <location filename="../../Factory.cpp" line="375"/>
         <location filename="../../Factory.cpp" line="379"/>
         <location filename="../../Factory.cpp" line="383"/>
         <location filename="../../Factory.cpp" line="387"/>
-        <location filename="../../Factory.cpp" line="391"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="382"/>
+        <location filename="../../Factory.cpp" line="378"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="384"/>
-        <location filename="../../Factory.cpp" line="396"/>
+        <location filename="../../Factory.cpp" line="380"/>
+        <location filename="../../Factory.cpp" line="392"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="388"/>
+        <location filename="../../Factory.cpp" line="384"/>
         <source>Put at the end</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="392"/>
+        <location filename="../../Factory.cpp" line="388"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="393"/>
+        <location filename="../../Factory.cpp" line="389"/>
         <source>Overwrite if different</source>
         <translation>Écraser si différent</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="394"/>
+        <location filename="../../Factory.cpp" line="390"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="395"/>
+        <location filename="../../Factory.cpp" line="391"/>
         <source>Overwrite if older</source>
         <translation>Écraser si plus vieux</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="398"/>
+        <location filename="../../Factory.cpp" line="394"/>
         <source>Automatic</source>
         <translation>Automatique</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="399"/>
+        <location filename="../../Factory.cpp" line="395"/>
         <source>Sequential</source>
         <translation>Séquentiel</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="400"/>
+        <location filename="../../Factory.cpp" line="396"/>
         <source>Parallel</source>
-        <translation>Paralléle</translation>
+        <translation>Parallèle</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="451"/>
-        <location filename="../../Factory.cpp" line="490"/>
+        <location filename="../../Factory.cpp" line="447"/>
+        <location filename="../../Factory.cpp" line="486"/>
         <source>Options error</source>
         <translation>Erreur d&apos;options</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="451"/>
+        <location filename="../../Factory.cpp" line="447"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accédé aux filtres</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="490"/>
+        <location filename="../../Factory.cpp" line="486"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Moteur d&apos;options non chargé, impossible d&apos;accéder aux filtres</translation>
     </message>
@@ -780,9 +780,8 @@
         <translation>Erreur interne: Le buffer n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1117"/>
         <source>Unable to change the date</source>
-        <translation>Impossbiel de changer la date</translation>
+        <translation type="obsolete">Impossible de changer la date</translation>
     </message>
 </context>
 <context>
@@ -834,7 +833,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="71"/>
         <source>Autostart the transfer</source>
-        <translation>Démarrer automatiquement le transfer</translation>
+        <translation>Démarrer automatiquement le transfert</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="94"/>
@@ -890,7 +889,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="293"/>
         <source>Rename the original destination</source>
-        <translation>Renommer la destination original</translation>
+        <translation>Renommer la destination originale</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="324"/>
@@ -915,7 +914,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="363"/>
         <source>Verify checksums</source>
-        <translation>Vérifié les sommes de controles</translation>
+        <translation>Vérifier les sommes de contrôles</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="395"/>
@@ -959,12 +958,12 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="494"/>
         <source>Transfer algorithm</source>
-        <translation>Algorithm de transfert</translation>
+        <translation>Algorithme de transfert</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="533"/>
         <source>Parallelize if smaller than</source>
-        <translation>Parallelize si plus petit que</translation>
+        <translation>Parallèlise si plus petit que</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="563"/>
@@ -979,12 +978,12 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="585"/>
         <source>Check the disk space</source>
-        <translation>Vérifié l&apos;espace disque</translation>
+        <translation>Vérifier l&apos;espace disque</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="595"/>
         <source>Use this folder when destination is empty</source>
-        <translation>Utilisé ce dossier quand la destination est vide</translation>
+        <translation>Utiliser ce dossier quand la destination est vide</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="607"/>
@@ -1002,7 +1001,7 @@
     <message>
         <location filename="../../fileErrorDialog.ui" line="14"/>
         <source>Error with file</source>
-        <translation>Error avec un fichier</translation>
+        <translation>Erreur avec un fichier</translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="20"/>
