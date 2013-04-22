@@ -29,6 +29,7 @@ void Listener::listen()
 void Listener::close()
 {
     server.close();
+    emit newState(Ultracopier::NotListening);
 }
 
 const QString Listener::errorString() const

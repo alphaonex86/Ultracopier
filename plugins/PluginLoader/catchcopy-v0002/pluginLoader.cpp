@@ -72,7 +72,11 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
     }
     if(this->needBeRegistred==needBeRegistred)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Double event dropped: %1").arg(needBeRegistred));
+        if(needBeRegistred)
+                emit newState(Ultracopier::Caught);
+        else
+                emit newState(Ultracopier::Uncaught);
         return;
     }
     this->needBeRegistred=needBeRegistred;
