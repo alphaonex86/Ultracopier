@@ -18,22 +18,6 @@ LogThread::LogThread()
 {
     sync=false;
 
-    //load the GUI option
-    QString defaultLogFile="";
-    if(ResourcesManager::resourcesManager->getWritablePath()!="")
-        defaultLogFile=ResourcesManager::resourcesManager->getWritablePath()+"ultracopier-files.log";
-    QList<QPair<QString, QVariant> > KeysList;
-    KeysList.append(qMakePair(QString("enabled"),QVariant(false)));
-    KeysList.append(qMakePair(QString("file"),QVariant(defaultLogFile)));
-    KeysList.append(qMakePair(QString("transfer"),QVariant(true)));
-    KeysList.append(qMakePair(QString("error"),QVariant(true)));
-    KeysList.append(qMakePair(QString("folder"),QVariant(true)));
-    KeysList.append(qMakePair(QString("sync"),QVariant(true)));
-    KeysList.append(qMakePair(QString("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
-    KeysList.append(qMakePair(QString("error_format"),QVariant("[%time%] %path%, %error%")));
-    KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
-    OptionEngine::optionEngine->addOptionGroup("Write_log",KeysList);
-
     connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&LogThread::newOptionValue);
 
     enabled=false;

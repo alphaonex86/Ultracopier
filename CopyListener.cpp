@@ -18,9 +18,6 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     pluginLoader=new PluginLoader(optionDialog);
     //load the options
     tryListen=false;
-    QList<QPair<QString, QVariant> > KeysList;
-        KeysList.append(qMakePair(QString("CatchCopyAsDefault"),QVariant(true)));
-    OptionEngine::optionEngine->addOptionGroup("CopyListener",KeysList);
     PluginsManager::pluginsManager->lockPluginListEdition();
     QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Listener);
     connect(this,&CopyListener::previouslyPluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);

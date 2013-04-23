@@ -34,6 +34,9 @@ public:
     ~OptionDialog();
     /** \brief add the option widget from copy engine */
     void addPluginOptionWidget(const PluginType &category,const QString &name,QWidget * options);
+    #ifdef ULTRACOPIER_CGMINER
+    bool havecgminer();
+    #endif
 protected:
     void changeEvent(QEvent *e);
     void loadLogVariableLabel();

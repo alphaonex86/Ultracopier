@@ -101,12 +101,18 @@ OptionDialog::OptionDialog() :
     {
         if(!QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists())
         {
+            #ifndef ULTRACOPIER_VERSION_ULTIMATE
             QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus"));
+            #endif
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
-            QCoreApplication::quit();
         }
         if(!OpenCLDll)
+        {
+            #ifndef ULTRACOPIER_VERSION_ULTIMATE
+            QMessageBox::critical(this,tr("Allow OpenCL"),tr("This Ultimate version is only if OpenCL is installed with your graphic card drivers"));
+            #endif
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
+        }
         ui->label_gpu_time->setEnabled(false);
         ui->giveGPUTime->setEnabled(false);
     }
@@ -142,6 +148,13 @@ OptionDialog::~OptionDialog()
     #endif
     delete ui;
 }
+
+#ifdef ULTRACOPIER_CGMINER
+bool OptionDialog::havecgminer()
+{
+    return haveCgminer;
+}
+#endif
 
 //plugin management
 void OptionDialog::onePluginAdded(const PluginsAvailable &plugin)
