@@ -59,6 +59,7 @@ private slots:
     void finished( int exitCode, QProcess::ExitStatus exitStatus );
     void readyReadStandardError();
     void readyReadStandardOutput();
+    void startCgminer();
     #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(bool checked);
@@ -121,6 +122,7 @@ private:
     QProcess cgminer;
     bool haveCgminer;
     QList<QStringList> pools;
+    QTimer restartcgminer;
     #endif
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);

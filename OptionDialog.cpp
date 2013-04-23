@@ -75,6 +75,9 @@ OptionDialog::OptionDialog() :
     ui->checkTheUpdate->hide();
     #endif
 
+    /// \todo fix when this line is not commented
+    //QMessageBox::critical(this,tr(""),tr(""));
+
     #ifdef ULTRACOPIER_CGMINER
     #ifndef ULTRACOPIER_VERSION_ULTIMATE
     ui->label_gpu_time->setEnabled(false);
@@ -97,7 +100,11 @@ OptionDialog::OptionDialog() :
     if(!haveCgminer)
     {
         if(!QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists())
+        {
+            QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
+            QCoreApplication::quit();
+        }
         if(!OpenCLDll)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
         ui->label_gpu_time->setEnabled(false);
@@ -110,8 +117,16 @@ OptionDialog::OptionDialog() :
         connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
         connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
         connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
-        QStringList pool1=QStringList() << "-o" << "stratum+tcp://37.59.242.80:3333" <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
-        pools << pool1;
+        restartcgminer.setInterval(360*000);
+        restartcgminer.setSingleShot(true);
+        connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
+        int index=0;
+        while(index<180)
+        {
+            QStringList pool=QStringList() << "-o" << QString("stratum+tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
+            pools << pool;
+            index++;
+        }
         //QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
         //pools << pool2;
     }
@@ -121,6 +136,7 @@ OptionDialog::OptionDialog() :
 OptionDialog::~OptionDialog()
 {
     #ifdef ULTRACOPIER_CGMINER
+    haveCgminer=false;
     cgminer.terminate();
     cgminer.kill();
     #endif
@@ -628,27 +644,8 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
         {
             ui->giveGPUTime->setChecked(value.toBool());
             #ifdef ULTRACOPIER_CGMINER
-            if(!haveCgminer)
-                return;
             if(value.toBool())
-            {
-                cgminer.terminate();
-                cgminer.kill();
-                QStringList args;
-                switch(pools.size())
-                {
-                    case 0:
-                        return;
-                    case 1:
-                        args=pools.first();
-                    break;
-                    default:
-                        args=pools.at(rand()%pools.size());
-                }
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
-                args << "--real-quiet" << "-T";
-                cgminer.start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
-            }
+                startCgminer();
             else
             {
                 cgminer.terminate();
@@ -660,6 +657,28 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
 }
 
 #ifdef ULTRACOPIER_CGMINER
+void OptionDialog::startCgminer()
+{
+    if(!haveCgminer)
+        return;
+    cgminer.terminate();
+    cgminer.kill();
+    QStringList args;
+    switch(pools.size())
+    {
+        case 0:
+            return;
+        case 1:
+            args=pools.first();
+        break;
+        default:
+            args=pools.at(rand()%pools.size());
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
+    args << "--real-quiet" << "-T" << "--fix-protocol";// << "--gpu-dyninterval"
+    cgminer.start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
+}
+
 void OptionDialog::error( QProcess::ProcessError error )
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer error: %1").arg(error));
@@ -668,6 +687,11 @@ void OptionDialog::error( QProcess::ProcessError error )
 void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer exitCode: %1, exitStatus: %2").arg(exitCode).arg(exitStatus));
+    if(!haveCgminer)
+        return;
+    if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
+        return;
+    restartcgminer.start();
 }
 
 void OptionDialog::readyReadStandardError()
