@@ -84,6 +84,10 @@ void registerTheOptions()
     KeysList.clear();
     KeysList.append(qMakePair(QString("CatchCopyAsDefault"),QVariant(true)));
     OptionEngine::optionEngine->addOptionGroup("CopyListener",KeysList);
+    
+    KeysList.clear();
+    KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
+    OptionEngine::optionEngine->addOptionGroup("SessionLoader",KeysList);
 }
 
 /// \brief Define the main() for the point entry

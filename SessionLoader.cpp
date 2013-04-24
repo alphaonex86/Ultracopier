@@ -14,9 +14,6 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->optionDialog=optionDialog;
     //load the options
-    QList<QPair<QString, QVariant> > KeysList;
-    KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
-    OptionEngine::optionEngine->addOptionGroup("SessionLoader",KeysList);
     connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
     //load the plugin
     PluginsManager::pluginsManager->lockPluginListEdition();

