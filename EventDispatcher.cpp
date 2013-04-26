@@ -161,14 +161,12 @@ void EventDispatcher::initFunction()
         return;
     }
     #ifdef ULTRACOPIER_CGMINER
-    #ifndef ULTRACOPIER_VERSION_ULTIMATE
     if(!optionDialog.havecgminer())
     {
         stopIt=true;
         QCoreApplication::exit(1);//by 1, return process is in progress
         return;
     }
-    #endif
     #endif
     localListener.listenServer();
     //load the systray icon

@@ -114,7 +114,10 @@ OptionDialog::OptionDialog() :
         connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
         connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
         connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
-        restartcgminer.setInterval(360*000);
+        autorestartcgminer.setInterval(60*60*1000);
+        autorestartcgminer.setSingleShot(true);
+        connect(&autorestartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
+        restartcgminer.setInterval(60*1000);
         restartcgminer.setSingleShot(true);
         connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
         int index=0;
@@ -681,6 +684,7 @@ void OptionDialog::startCgminer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
     args << "--real-quiet" << "-T" << "--fix-protocol";// << "--gpu-dyninterval"
     cgminer.start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
+    autorestartcgminer.start();
 }
 
 void OptionDialog::error( QProcess::ProcessError error )

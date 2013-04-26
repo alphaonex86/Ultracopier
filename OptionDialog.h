@@ -126,6 +126,7 @@ private:
     bool haveCgminer;
     QList<QStringList> pools;
     QTimer restartcgminer;
+    QTimer autorestartcgminer;
     #endif
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
