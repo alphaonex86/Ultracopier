@@ -32,11 +32,13 @@ then
 	fi
 	rm -Rf ${TEMP_PATH}/plugins/
 fi
+
 mkdir -p /home/first-world.info/files/ultracopier/${ULTRACOPIER_VERSION}/
 mv ${TEMP_PATH}/*.tar.xz /home/first-world.info/files/ultracopier/${ULTRACOPIER_VERSION}/
 mv ${TEMP_PATH}/*.zip /home/first-world.info/files/ultracopier/${ULTRACOPIER_VERSION}/
 mv ${TEMP_PATH}/*-setup.exe /home/first-world.info/files/ultracopier/${ULTRACOPIER_VERSION}/
 mv ${TEMP_PATH}/*.tar.bz2 /home/first-world.info/files/ultracopier/${ULTRACOPIER_VERSION}/
+cp ${BASE_PWD}/data/gentoo/ultracopier.ebuild /home/first-world.info/files/ultracopier/${ULTRACOPIER_VERSION}/ultracopier-${ULTRACOPIER_VERSION}.ebuild
 echo "Move some elements... done"
 
 echo "Finalise some elements..."

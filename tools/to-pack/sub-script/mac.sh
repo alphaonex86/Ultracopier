@@ -17,6 +17,7 @@ function compil {
 	ULTIMATE=$3
 	cd ${TEMP_PATH}/
 	TARGET=$1
+	STATIC=$4
 	FINAL_ARCHIVE="${TARGET}-mac-os-x-${ULTRACOPIER_VERSION}.dmg"
 	if [ ! -e ${FINAL_ARCHIVE} ]
 	then
@@ -26,8 +27,8 @@ function compil {
 		cp -aRf ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${TARGET}-mac-os-x/
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i "s/linux-x86_64-pc/mac-os-x/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>mac-os-x<\/architecture>/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 		if [ ${DEBUG} -eq 1 ]
@@ -39,6 +40,19 @@ function compil {
 			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
 			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
 			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
+		fi
+		if [ $STATIC -eq 1 ]
+		then
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+		else
+
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+		fi
+		if [ $ULTIMATE -eq 1 ]
+		then
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
+		else
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_ULTIMATE/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
 		fi
 
 		echo "try connect"
@@ -256,9 +270,9 @@ function compil_plugin {
 	done
 }
 
-compil "ultracopier" 0 0
-compil "ultracopier-ultimate" 0 1
-compil "ultracopier-debug" 1 0
+compil "ultracopier" 0 0 0
+compil "ultracopier-ultimate" 0 1 0
+compil "ultracopier-debug" 1 0 0
 
 compil_plugin "ultracopier" 0 "plugins-alternative"
 compil_plugin "ultracopier" 0 "plugins"

@@ -6,6 +6,7 @@ export ULTRACOPIERSOURCESPATH="/root/ultracopier/sources/"
 export BASE_PWD=`pwd`
 
 rm -Rf ${TEMP_PATH} > /dev/null 2>&1
+rm -Rf ${ULTRACOPIERSOURCESPATH}/plugins-alternative/CopyEngine/Ultracopier/ > /dev/null 2>&1
 mkdir -p ${TEMP_PATH}
 cd ../
 find ./ -name "Thumbs.db" -exec rm {} \; >> /dev/null 2>&1

@@ -5,7 +5,7 @@ then
 	exit;
 fi
 
-QMAKE="/usr/local/Qt-5.0.1/bin/qmake"
+QMAKE="/usr/local/Qt-5.0.2/bin/qmake"
 
 mkdir -p ${TEMP_PATH}
 cd ${TEMP_PATH}/
@@ -15,6 +15,7 @@ function compil {
 	ULTIMATE=$3
 	cd ${TEMP_PATH}/
 	TARGET=$1
+	STATIC=$4
 	FINAL_ARCHIVE="${TARGET}-linux-x86_64-pc-${ULTRACOPIER_VERSION}"
 	if [ ! -e ${FINAL_ARCHIVE}.tar.xz ]
 	then
@@ -24,7 +25,8 @@ function compil {
 		/usr/bin/rsync -art --delete ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${FINAL_ARCHIVE}/ --exclude='*build*' --exclude='*Qt_5*' --exclude='*qt5*' --exclude='*.pro.user'
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 		if [ ${DEBUG} -eq 1 ]
@@ -37,21 +39,25 @@ function compil {
 			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
 			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
 		fi
+		if [ $STATIC -eq 1 ]
+		then
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+		else
 
-		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+		fi
+		if [ $ULTIMATE -eq 1 ]
+		then
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
+		else
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_ULTIMATE/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
+		fi
+
 		if [ ${DEBUG} -eq 1 ]
 		then
 			QTMODEDEBUGRELEASE="debug"
 		else
 			QTMODEDEBUGRELEASE="release"
-		fi
-		${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-core.pro
-		make -j 5 > /dev/null 2>&1
-		RETURN_CODE=$?
-		if [ $? -ne 0 ]
-		then
-			echo "make failed on the linux: ${RETURN_CODE}"
-			exit
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/CopyEngine/Ultracopier/
 		${QMAKE} -config ${QTMODEDEBUGRELEASE}
@@ -80,7 +86,7 @@ function compil {
 			echo "make failed on the linux: ${RETURN_CODE}"
 			exit
 		fi
-		if [ ${ULTIMATE} -eq 1 ]
+		if [ ${ULTIMATE} -eq 1 ] && [ $STATIC -ne 1 ]
 		then
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Clean/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
@@ -112,8 +118,31 @@ function compil {
 				exit
 			fi
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Teracopy/ ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Teracopy/
+# 			if [ $STATIC -eq 1 ]
+# 			then
+# 				cp -aRf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/*/*/*.a ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
+# 			fi
 		else
 			rm -Rf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/
+		fi
+		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/
+		if [ $STATIC -eq 1 ]
+		then
+			cp -aRf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/*/*/*.a ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
+			${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-static.pro
+		else
+			${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-core.pro
+		fi
+		make -j 5 > /dev/null 2>&1
+		if [ $STATIC -eq 1 ]
+		then
+			upx --lzma -9 ultracopier > /dev/null 2>&1
+		fi
+		RETURN_CODE=$?
+		if [ $? -ne 0 ] || [ ! -e ultracopier ]
+		then
+			echo "make failed on the linux: ${RETURN_CODE}"
+			exit
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}
 		for SUBFOLDER in `ls -1`
@@ -139,6 +168,10 @@ function compil {
 		done
 		cd ${TEMP_PATH}/
 		rm -Rf ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/
+		if [ $STATIC -eq 1 ]
+		then
+			rm -Rf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
+		fi
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type f -not \( -name "*.xml" -or -name "lib*.so" -or -name "ultracopier" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d \( -name "*build*" -or -name "Desktop" -or -name "Qt_5" -or -name "qt5" \) -exec rm -Rf {} \;
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null 2>&1
@@ -231,10 +264,10 @@ function compil_plugin {
 	done
 }
 
-compil "ultracopier" 0 0
-compil "ultracopier-ultimate" 0 1
-compil "ultracopier-debug" 1 0
+compil "ultracopier" 0 0 1
+compil "ultracopier-ultimate" 0 1 1
+compil "ultracopier-debug" 1 0 1
 
-compil_plugin "ultracopier" 0 "plugins-alternative"
-compil_plugin "ultracopier" 0 "plugins"
+#compil_plugin "ultracopier" 0 "plugins-alternative"
+#compil_plugin "ultracopier" 0 "plugins"
 

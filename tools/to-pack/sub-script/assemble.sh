@@ -8,6 +8,7 @@ function assemble {
 	PORTABLE=$5
 	ULTIMATE=$6
 	STATIC=${7}
+	CGMINER=${8}
 	cd ${TEMP_PATH}/
 	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION}.zip"
 	if [ ! -d ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ]
@@ -54,6 +55,10 @@ function assemble {
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -iname "*.a" -exec rm {} \; > /dev/null 2>&1
 		else
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -mindepth 1 -type d -exec rm -Rf {} \;
+		fi
+		if [ ${CGMINER} -eq 1 ]
+		then
+			rsync -aqrt ${BASE_PWD}/data/windows/cg/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/cg/
 		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt
@@ -114,7 +119,7 @@ function assemble {
 
 		zip -r -q -9 ${FINAL_ARCHIVE} ${TARGET}-windows-${ARCHITECTURE}/
 		#7za a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on ${FINAL_ARCHIVE} ${TARGET}-windows-${ARCHITECTURE}/
-		#nice -n 19 ionice -c 3 tar cpf - ${TARGET}-windows-${ARCHITECTURE}/ | nice -n 19 ionice -c 3 xz -z -9 -e > ${FINAL_ARCHIVE}
+		#nice -n 15 ionice -c 3 tar cpf - ${TARGET}-windows-${ARCHITECTURE}/ | nice -n 15 ionice -c 3 xz -z -9 -e > ${FINAL_ARCHIVE}
 		if [ ! -e ${FINAL_ARCHIVE} ]; then
 			echo "${FINAL_ARCHIVE} not exists!";
 			exit;
@@ -142,7 +147,7 @@ function assemble {
 		then
 			sed -i -r "s/PROGRAMFILES/PROGRAMFILES64/g" *.nsi > /dev/null 2>&1
 		fi
-		DISPLAY="na" WINEPREFIX="${WINEBASEPATH}/ultracopier-general/" /usr/bin/nice -n 19 /usr/bin/ionice -c 3 wine "${WINEBASEPATH}/ultracopier-general/drive_c/Program Files (x86)/NSIS/makensis.exe" *.nsi > /dev/null 2>&1
+		DISPLAY="na" WINEPREFIX="${WINEBASEPATH}/ultracopier-general/" /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine "${WINEBASEPATH}/ultracopier-general/drive_c/Program Files (x86)/NSIS/makensis.exe" *.nsi > /dev/null 2>&1
 		if [ ! -e *setup.exe ]; then
 			echo "${TEMP_PATH}/${FINAL_ARCHIVE} not exists!";
 			pwd
