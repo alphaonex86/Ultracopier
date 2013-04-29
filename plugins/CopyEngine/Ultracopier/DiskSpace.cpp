@@ -6,6 +6,13 @@ DiskSpace::DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QW
     QDialog(parent),
     ui(new Ui::DiskSpace)
 {
+    Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_LINUX
+    flags=flags & ~Qt::X11BypassWindowManagerHint;
+    #endif
+    flags=flags | Qt::WindowStaysOnTopHint;
+    setWindowFlags(flags);
+
     ui->setupUi(this);
     ok=false;
     int index=0;

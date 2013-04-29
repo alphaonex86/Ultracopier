@@ -10,6 +10,13 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString fi
     QDialog(parent),
     ui(new Ui::fileIsSameDialog)
 {
+    Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_LINUX
+    flags=flags & ~Qt::X11BypassWindowManagerHint;
+    #endif
+    flags=flags | Qt::WindowStaysOnTopHint;
+    setWindowFlags(flags);
+
     ui->setupUi(this);
     action=FileExists_Cancel;
     oldName=TransferThread::resolvedName(fileInfo);

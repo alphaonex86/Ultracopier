@@ -10,6 +10,13 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
     QDialog(parent),
     ui(new Ui::folderExistsDialog)
 {
+    Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_LINUX
+    flags=flags & ~Qt::X11BypassWindowManagerHint;
+    #endif
+    flags=flags | Qt::WindowStaysOnTopHint;
+    setWindowFlags(flags);
+
     ui->setupUi(this);
     action=FolderExists_Cancel;
     oldName=TransferThread::resolvedName(destination);

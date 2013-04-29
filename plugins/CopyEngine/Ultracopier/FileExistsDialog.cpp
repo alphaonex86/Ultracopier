@@ -10,6 +10,13 @@ FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
     QDialog(parent),
     ui(new Ui::fileExistsDialog)
 {
+    Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_LINUX
+    flags=flags & ~Qt::X11BypassWindowManagerHint;
+    #endif
+    flags=flags | Qt::WindowStaysOnTopHint;
+    setWindowFlags(flags);
+
     ui->setupUi(this);
     action=FileExists_Cancel;
     destinationInfo=destination;

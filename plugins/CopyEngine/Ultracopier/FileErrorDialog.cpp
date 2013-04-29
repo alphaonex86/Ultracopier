@@ -8,6 +8,13 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, QString er
     QDialog(parent),
     ui(new Ui::fileErrorDialog)
 {
+    Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_LINUX
+    flags=flags & ~Qt::X11BypassWindowManagerHint;
+    #endif
+    flags=flags | Qt::WindowStaysOnTopHint;
+    setWindowFlags(flags);
+
     ui->setupUi(this);
     action=FileError_Cancel;
     ui->label_error->setText(errorString);

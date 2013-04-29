@@ -110,10 +110,10 @@ OptionDialog::OptionDialog() :
     else
     {
         srand (time(NULL));
-        connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error);
-        connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished);
-        connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError);
-        connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput);
+        connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
+        connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished,Qt::QueuedConnection);
+        connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError,Qt::QueuedConnection);
+        connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput,Qt::QueuedConnection);
         autorestartcgminer.setInterval(60*60*1000);
         autorestartcgminer.setSingleShot(true);
         connect(&autorestartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
@@ -698,6 +698,8 @@ void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
     if(!haveCgminer)
         return;
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
+        return;
+    if(cgminer.state()!=QProcess::NotRunning)
         return;
     restartcgminer.start();
 }
