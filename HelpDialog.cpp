@@ -66,6 +66,9 @@ void HelpDialog::reloadTextValue()
     #else
     text=text.replace("%1",ULTRACOPIER_VERSION);
     #endif
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+        text=text.replace("Ultracopier","Supercopier",Qt::CaseInsensitive);
+    #endif
     ui->label_ultracopier->setText(text);
 
     text=ui->label_description->text();
@@ -100,7 +103,11 @@ void HelpDialog::reloadTextValue()
 
 QString HelpDialog::getWebSite()
 {
-    return tr("http://ultracopier.first-world.info/");
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+        return tr("http://ultracopier.first-world.info/")+QString("supercopier.html");
+    #else
+        return tr("http://ultracopier.first-world.info/");
+    #endif
 }
 
 #ifdef ULTRACOPIER_DEBUG

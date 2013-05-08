@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string notr="true">Ultracopier</string>
+   <string notr="true">Supercopier</string>
   </property>
   <property name="windowIcon">
    <iconset resource="interfaceResources.qrc">

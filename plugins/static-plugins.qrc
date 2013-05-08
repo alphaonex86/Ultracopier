@@ -6,7 +6,5 @@
         <file>Languages/fr/flag.png</file>
 	<file>Languages/fr/translation.qm</file>
         <file>Listener/catchcopy-v0002/informations.xml</file>
-        <file>Themes/Oxygen/informations.xml</file>
-	<file>Themes/Oxygen/Languages/fr/translation.qm</file>
     </qresource>
 </RCC>

@@ -8,6 +8,8 @@
 #include <QMimeData>
 #include <QScrollArea>
 #include <QColorDialog>
+#include <QRect>
+#include <QPainter>
 #include <math.h>
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -27,7 +29,8 @@ Themes::Themes(const bool &alwaysOnTop,
                const qint32 &currentSpeed,
                const bool &checkBoxShowSpeed,
                FacilityInterface * facilityEngine,
-               const bool &moreButtonPushed) :
+               const bool &moreButtonPushed,
+               const bool &minimizeToSystray) :
     ui(new Ui::interfaceCopy()),
     uiOptions(new Ui::themesOptions())
 {
@@ -39,6 +42,7 @@ Themes::Themes(const bool &alwaysOnTop,
     totalFile       = 0;
     currentSize     = 0;
     totalSize       = 0;
+    getOldProgression = 200;
     haveError       = false;
     stat            = status_never_started;
     modeIsForced	= false;
@@ -53,6 +57,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
     uiOptions->alwaysOnTop->setChecked(alwaysOnTop);
+    uiOptions->minimizeToSystray->setChecked(minimizeToSystray);
     //uiOptions->setupUi(ui->tabWidget->widget(1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
@@ -183,6 +188,13 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->actionAddFolderToCopy->setIcon(tempIcon);
         ui->actionAddFolderToMove->setIcon(tempIcon);
     }
+    #ifdef Q_OS_WIN32
+    pixmapTop=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Uncaught_Windows.png");
+    pixmapBottom=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Windows.png");
+    #else
+    pixmapTop=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Uncaught_Unix.png");
+    pixmapBottom=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Unix.png");
+    #endif
 
     shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
@@ -214,6 +226,9 @@ Themes::Themes(const bool &alwaysOnTop,
     #endif
 
     show();
+
+    sysTrayIcon = new QSystemTrayIcon(this);
+    connect(sysTrayIcon,&QSystemTrayIcon::activated,this,&Themes::catchAction);
 }
 
 Themes::~Themes()
@@ -223,6 +238,7 @@ Themes::~Themes()
     //disconnect(ui->actionAddFolder);
     delete selectionModel;
     delete menu;
+    delete sysTrayIcon;
 }
 
 QWidget * Themes::getOptionsEngineWidget()
@@ -246,7 +262,30 @@ void Themes::closeEvent(QCloseEvent *event)
     event->ignore();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->hide();
-    emit cancel();
+    if(uiOptions->minimizeToSystray->isChecked())
+    {
+        updateSysTrayIcon();
+        sysTrayIcon->show();
+    }
+    else
+        emit cancel();
+}
+
+void Themes::updateSysTrayIcon()
+{
+    if(totalSize==0)
+    {
+        sysTrayIcon->setIcon(dynaIcon(0,"-"));
+        return;
+    }
+    quint64 currentNew=currentSize*100;
+    //update systray icon
+    quint16 getVarProgression=currentNew/totalSize;
+    if(getOldProgression!=getVarProgression)
+    {
+        getOldProgression=getVarProgression;
+        sysTrayIcon->setIcon(dynaIcon(getVarProgression));
+    }
 }
 
 void Themes::updateOverallInformation()
@@ -399,6 +438,8 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
     if(current>0)
         stat = status_started;
     updateOverallInformation();
+    if(isHidden())
+        updateSysTrayIcon();
 }
 
 void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
@@ -423,6 +464,8 @@ void Themes::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &r
         ui->progressBar_all->setValue(65535);
         ui->progressBar_file->setValue(65535);
         currentSize=totalSize;
+        if(isHidden())
+            updateSysTrayIcon();
     }
     else
         ui->skipButton->setEnabled(true);
@@ -1167,4 +1210,91 @@ void Themes::updateTitle()
                 this->setWindowTitle(QString("%1 - Ultracopier").arg(facilityEngine->translateText("Move")));
         }
     }
+}
+
+/** \brief Create progessive icon
+
+Do QIcon with top and bottom image mixed and percent writed on it.
+The icon it be search in the style path.
+Do by mongaulois, remake by alpha_one_x86.
+\param percent indique how many percent need be showed, sould be between 0 and 100
+\param text The showed text if needed (optionnal)
+\return QIcon of the final image
+\note Can be used as it: dynaIcon(75,"...")
+*/
+QIcon Themes::dynaIcon(int percent,QString text)
+{
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(pixmapTop.isNull() || pixmapBottom.isNull())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error loading the icons");
+    #endif
+    if(percent==-1)
+        percent=getOldProgression;
+    if(percent<0)
+        percent=0;
+    if(percent>100)
+        percent=100;
+    //pixmap avec un fond transparent
+    #ifdef Q_OS_WIN32
+    QPixmap resultImage(16,16);
+    #else
+    QPixmap resultImage(22,22);
+    #endif
+    resultImage.fill(Qt::transparent);
+    {
+        QPainter painter(&resultImage);
+
+        //preprocessing the calcul
+        float percent_1 = (100.-percent)/100.;
+        float percent_2 =  percent/100.;
+
+        //top image
+        QRect target(0, 0, resultImage.width(), (int)(percent_1*resultImage.height()));
+        QRect source(0, 0, pixmapTop.width(), (int)(percent_1*pixmapTop.height()));
+        painter.drawPixmap(target, pixmapTop, source);
+
+        //bottom image
+        QRect target2(0, (int)(percent_1*resultImage.height()), resultImage.width(), (int)(percent_2*resultImage.height()));
+        QRect source2(0, (int)(percent_1*pixmapBottom.height()), pixmapBottom.width(), (int)(percent_2*pixmapBottom.height()));
+        painter.drawPixmap(target2, pixmapBottom, source2);
+
+        if(text.isEmpty())
+        {
+            if(percent!=100)
+                text=QString::number(percent);
+            else
+                text=" :)";
+        }
+        quint8 textOffset=0;
+        if(text.size()==1)
+            textOffset+=3;
+        painter.setPen(QPen(Qt::black));
+        #ifdef Q_OS_WIN32
+        painter.drawText(2+textOffset,14,text);
+        #else
+        painter.drawText(5+textOffset,16,text);
+        #endif
+        painter.setPen(QPen(Qt::white));
+        #ifdef Q_OS_WIN32
+        painter.drawText(1+textOffset,13,text);
+        #else
+        painter.drawText(4+textOffset,15,text);
+        #endif
+    }
+    return QIcon(resultImage);
+}
+
+/** \brief For catch an action on the systray icon
+\param reason Why it activated
+*/
+void Themes::catchAction(QSystemTrayIcon::ActivationReason reason)
+{
+    if(reason==QSystemTrayIcon::DoubleClick)
+    {
+        sysTrayIcon->hide();
+        this->show();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Double Click detected");
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("reason: %1").arg(reason));
 }

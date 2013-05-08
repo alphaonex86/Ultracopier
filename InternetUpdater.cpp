@@ -21,11 +21,16 @@ void InternetUpdater::downloadFile()
 {
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate").toBool())
         return;
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+        QString name="Supercopier";
+    #else
+        QString name="Ultracopier";
+    #endif
     QString ultracopierVersion;
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    ultracopierVersion=QString("Ultracopier Ultimate/%1").arg(ULTRACOPIER_VERSION);
+    ultracopierVersion=QString("%1 Ultimate/%2").arg(name).arg(ULTRACOPIER_VERSION);
     #else
-    ultracopierVersion=QString("Ultracopier/%1").arg(ULTRACOPIER_VERSION);
+    ultracopierVersion=QString("%1/%2").arg(name).arg(ULTRACOPIER_VERSION);
     #endif
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE

@@ -18,6 +18,11 @@ function compil {
 	cd ${TEMP_PATH}/
 	TARGET=$1
 	STATIC=$4
+	SUPERCOPIER=${5}
+	if [ $SUPERCOPIER -eq 1 ]
+	then
+		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed "s/1.0/4.0/g"`
+	fi
 	FINAL_ARCHIVE="${TARGET}-mac-os-x-${ULTRACOPIER_VERSION}.dmg"
 	if [ ! -e ${FINAL_ARCHIVE} ]
 	then
@@ -25,10 +30,28 @@ function compil {
 
 		rm -Rf ${TEMP_PATH}/${TARGET}-mac-os-x/
 		cp -aRf ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${TARGET}-mac-os-x/
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "ultracopier-core.pro" -exec sed -i "s/TARGET = ultracopier/TARGET = supercopier/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/1,0/4,0/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/1.0/4.0/g" {} \; > /dev/null 2>&1
+			mv ${TEMP_PATH}/${TARGET}-mac-os-x/resources/supercopier-16x16.png ${TEMP_PATH}/${TARGET}-mac-os-x/resources/ultracopier-16x16.png
+			mv ${TEMP_PATH}/${TARGET}-mac-os-x/resources/supercopier-128x128.png ${TEMP_PATH}/${TARGET}-mac-os-x/resources/ultracopier-128x128.png
+			mv ${TEMP_PATH}/${TARGET}-mac-os-x/resources/supercopier-all-in-one.ico ${TEMP_PATH}/${TARGET}-mac-os-x/resources/ultracopier-all-in-one.ico
+			mv ${TEMP_PATH}/${TARGET}-mac-os-x/resources/supercopier.ico ${TEMP_PATH}/${TARGET}-mac-os-x/resources/ultracopier.ico
+			mv ${TEMP_PATH}/${TARGET}-mac-os-x/resources/supercopier.icns ${TEMP_PATH}/${TARGET}-mac-os-x/resources/ultracopier.icns
+		fi
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>mac-os-x<\/architecture>/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null 2>&1
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
+		else
+			find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_MODE_SUPERCOPIER/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
+		fi
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-mac-os-x/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
 		if [ ${DEBUG} -eq 1 ]
@@ -61,9 +84,16 @@ function compil {
 		rsync -art ${TEMP_PATH}/${TARGET}-mac-os-x/ ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/
 
 		echo "try qmake"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/ultracopier-core.pro -spec macx-g++ -config release"
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			BASEAPPNAME="supercopier.app"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;TARGET=\"supercopier\" /Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake TARGET=\"supercopier\" /Users/${SSHUSER}/Desktop/ultracopier/ultracopier-core.pro -spec macx-g++ -config release"
+		else
+			BASEAPPNAME="ultracopier.app"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/ultracopier-core.pro -spec macx-g++ -config release"
+		fi
 		echo "try make"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/usr/bin/make -j 3"
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/usr/bin/make -j 3 > /dev/null > /dev/null"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -72,7 +102,7 @@ function compil {
 		fi
 		echo "try make plugins"
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/*.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/usr/bin/make -j 3"
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/;/usr/bin/make -j 3 > /dev/null"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -80,26 +110,38 @@ function compil {
 			exit
 		fi
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/*.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/;/usr/bin/make -j 3"
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/;/usr/bin/make -j 3 > /dev/null"
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
 			echo "make failed on the mac: ${RETURN_CODE}"
 			exit
 		fi
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/*.pro -spec macx-g++ -config release"
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/usr/bin/make -j 3"
-		RETURN_CODE=$?
-		if [ $? -ne 0 ]
+		if [ $SUPERCOPIER -eq 1 ]
 		then
-			echo "make failed on the mac: ${RETURN_CODE}"
-			exit
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/*.pro -spec macx-g++ -config release"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/;/usr/bin/make -j 3 > /dev/null"
+			RETURN_CODE=$?
+			if [ $? -ne 0 ]
+			then
+				echo "make failed on the mac: ${RETURN_CODE}"
+				exit
+			fi
+		else
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/*.pro -spec macx-g++ -config release"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/;/usr/bin/make -j 3 > /dev/null"
+			RETURN_CODE=$?
+			if [ $? -ne 0 ]
+			then
+				echo "make failed on the mac: ${RETURN_CODE}"
+				exit
+			fi
 		fi
 		if [ ${ULTIMATE} -eq 1 ]
 		then
 			echo "do the ultimate plugin"
 			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/;/usr/bin/make -j 3"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/;/usr/bin/make -j 3 > /dev/null"
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -107,7 +149,7 @@ function compil {
 				exit
 			fi
 			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/usr/bin/make -j 3"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/;/usr/bin/make -j 3 > /dev/null"
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -115,73 +157,110 @@ function compil {
 				exit
 			fi
 			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
-			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/usr/bin/make -j 3"
+			ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/;/usr/bin/make -j 3 > /dev/null"
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
 				echo "make failed on the mac: ${RETURN_CODE}"
 				exit
 			fi
-			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/"
-			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/"
-			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/informations.xml"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/informations.xml"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/informations.xml"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/Languages/"
-			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/Languages/"
-			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/Languages/"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Clean/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Windows/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
-			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
+			if [ $SUPERCOPIER -ne 1 ]
+			then
+				ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/*.pro -spec macx-g++ -config release" > /dev/null 2>&1
+				ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/;/usr/bin/make -j 3 > /dev/null"
+				RETURN_CODE=$?
+				if [ $? -ne 0 ]
+				then
+					echo "make failed on the mac: ${RETURN_CODE}"
+					exit
+				fi
+				ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/"
+				ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/informations.xml"
+				ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+				ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/Languages/"
+				ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+				ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+				ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+			fi
+			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/"
+			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/"
+			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/informations.xml"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/informations.xml"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/informations.xml"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Clean/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/Languages/"
+			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Windows/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/Languages/"
+			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Teracopy/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/Languages/"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Clean/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Windows/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Teracopy/libinterface.dylib"
 		fi
 		echo "make the folder"
-		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks"
-		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks/QtSystemInfo.framework"
-		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks/QtSystemInfo.framework/Versions"
-		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks/QtSystemInfo.framework/Versions/5"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Qt5.0.0/5.0.0/clang_64/lib/QtSystemInfo.framework/Versions/5/QtSystemInfo /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/Frameworks/QtSystemInfo.framework/Versions/5/QtSystemInfo"
+		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks"
+		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework"
+		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions"
+		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions/5"
+		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Qt5.0.0/5.0.0/clang_64/lib/QtSystemInfo.framework/Versions/5/QtSystemInfo /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions/5/QtSystemInfo"
 
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/"
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/"
-		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/"
+		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/"
+		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Languages/"
+		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy-v0002/"
 
 		echo "put the informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/informations.xml"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/libcopyEngine.dylib /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/liblistener.dylib /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
-		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
-		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/Languages/"
-		ssh ${SSHUSER}@${IPMAC} "find /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/ -iname \"*.ts\" -exec rm {} \; > /dev/null 2>&1"
+		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/informations.xml"
+		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy-v0002/informations.xml"
+		
+		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/libcopyEngine.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
+		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Listener/catchcopy-v0002/liblistener.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
+		
+		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Languages/"
+		ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/CopyEngine/Ultracopier/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/Languages/"
+		ssh ${SSHUSER}@${IPMAC} "find /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/ -iname \"*.ts\" -exec rm {} \; > /dev/null 2>&1"
 
 		echo "finish the link"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtSystem.framework/Versions/5/QtSystem @executable_path/../Frameworks/QtSystem.framework/Versions/5/QtSystem /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
-		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/ultracopier.app/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtSystem.framework/Versions/5/QtSystem @executable_path/../Frameworks/QtSystem.framework/Versions/5/QtSystem /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
+		ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Listener/catchcopy-v0002/liblistener.dylib"
 
-		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/macdeployqt ultracopier.app/ -dmg"
-		rsync -art ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/ultracopier.dmg ${TEMP_PATH}/${FINAL_ARCHIVE}
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/informations.xml"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins-alternative/Themes/Supercopier/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/Languages/"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Supercopier/libinterface.dylib"
+		else
+			ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/informations.xml /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/informations.xml"
+			ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/libinterface.dylib /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "rsync -aqrt /Users/${SSHUSER}/Desktop/ultracopier/plugins/Themes/Oxygen/Languages/ /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/Languages/"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
+			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface.dylib"
+		fi
+
+		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/macdeployqt ${BASEAPPNAME}/ -dmg"
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			rsync -art ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/supercopier.dmg ${TEMP_PATH}/${FINAL_ARCHIVE}
+		else
+			rsync -art ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/ultracopier.dmg ${TEMP_PATH}/${FINAL_ARCHIVE}
+		fi
 		if [ ! -e ${FINAL_ARCHIVE} ]; then
 			echo "${FINAL_ARCHIVE} not exists!";
 			exit;
@@ -237,7 +316,7 @@ function compil_plugin {
 						ssh ${SSHUSER}@${IPMAC} "rm -fR /Users/${SSHUSER}/Desktop/ultracopier/"
 						rsync -art ${TEMP_PATH}/${TARGET}-mac-os-x/ ${SSHUSER}@${IPMAC}:/Users/${SSHUSER}/Desktop/ultracopier/
 						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/Users/user/Qt5.0.0/5.0.0/clang_64/bin/qmake /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*.pro -spec macx-g++ -config release"
-						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/usr/bin/make -j 3"
+						ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/;/usr/bin/make -j 3 > /dev/null"
 						RETURN_CODE=$?
 						if [ $? -ne 0 ]
 						then
@@ -270,9 +349,13 @@ function compil_plugin {
 	done
 }
 
-compil "ultracopier" 0 0 0
-compil "ultracopier-ultimate" 0 1 0
-compil "ultracopier-debug" 1 0 0
+compil "ultracopier" 0 0 0 0
+compil "ultracopier-ultimate" 0 1 0 0
+compil "ultracopier-debug" 1 0 0 0
+
+compil "supercopier" 0 0 0 1
+compil "supercopier-ultimate" 0 1 0 1
+compil "supercopier-debug" 1 0 0 1
 
 compil_plugin "ultracopier" 0 "plugins-alternative"
 compil_plugin "ultracopier" 0 "plugins"

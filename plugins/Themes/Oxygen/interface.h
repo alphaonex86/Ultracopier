@@ -13,6 +13,8 @@
 #include <QShortcut>
 #include <QItemSelectionModel>
 #include <QTimer>
+#include <QSystemTrayIcon>
+#include <QPixmap>
 
 #include "../../../interface/PluginInterface_Themes.h"
 
@@ -47,7 +49,8 @@ public:
            const qint32 &currentSpeed,
            const bool &checkBoxShowSpeed,
            FacilityInterface * facilityEngine,
-           const bool &moreButtonPushed);
+           const bool &moreButtonPushed,
+           const bool &minimizeToSystray);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
@@ -140,7 +143,9 @@ private slots:
     void alwaysOnTop_clickedSlot();
     void updateProgressionColorBar();
     void updateTitle();
+    void catchAction(QSystemTrayIcon::ActivationReason reason);
 private:
+    QPixmap pixmapTop,pixmapBottom;
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
     Ui::interfaceCopy *ui;
     Ui::themesOptions *uiOptions;
@@ -148,6 +153,8 @@ private:
     quint64 totalFile;
     quint64 currentSize;
     quint64 totalSize;
+    quint8 getOldProgression;
+    QSystemTrayIcon *sysTrayIcon;
     void updateOverallInformation();
     void updateCurrentFileInformation();
     QMenu *menu;
@@ -195,6 +202,8 @@ private:
     //have functionality
     bool shutdown;
     void updatePause();
+    QIcon dynaIcon(int percent,QString text="");
+    void updateSysTrayIcon();
 signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
