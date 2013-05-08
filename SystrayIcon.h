@@ -50,9 +50,15 @@ class SystrayIcon : public QSystemTrayIcon
         QMenu* systrayMenu;			///< Pointer on the menu
         QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)
         QAction* actionMenuQuit;		///< Pointer on the Quit action
+        #ifdef ULTRACOPIER_DEBUG
+        QAction* actionSaveBugReport;
+        #endif
         QAction* actionMenuAbout;		///< Pointer on the About action
         QAction* actionOptions;			///< Pointer on the Options action
         QIcon IconQuit;			///< Pointer on the icon for quit
+        #ifdef ULTRACOPIER_DEBUG
+        QIcon IconSaveBugReport;
+        #endif
         QIcon IconInfo;			///< Pointer on the icon for info
         QIcon IconAdd;				///< Pointer on the icon for add
         QIcon IconOptions;			///< Pointer on the options
@@ -125,6 +131,7 @@ class SystrayIcon : public QSystemTrayIcon
         void addWindowCopyMove(Ultracopier::CopyMode mode,QString name);
         void addWindowTransfer(QString name);
         void urlDropped(QList<QUrl> urls);
+        void saveBugReport();
 };
 
 #endif // SYSTRAY_ICON_H

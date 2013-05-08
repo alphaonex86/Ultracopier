@@ -29,6 +29,9 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     havePluginLoaderInfo	= false;
     systrayMenu         = new QMenu();
     actionMenuAbout		= new QAction(this);
+    #ifdef ULTRACOPIER_DEBUG
+    actionSaveBugReport		= new QAction(this);
+    #endif
     actionMenuQuit		= new QAction(this);
     actionOptions		= new QAction(this);
     //actionTransfer		= new QAction(this);
@@ -50,6 +53,10 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     #endif
     //connect the action
     connect(&timerCheckSetTooltip,	&QTimer::timeout,					this,	&SystrayIcon::checkSetTooltip);
+    #ifdef ULTRACOPIER_DEBUG
+    connect(actionSaveBugReport,	&QAction::triggered,			this,	&SystrayIcon::saveBugReport);
+    #endif
+    connect(actionMenuQuit,		&QAction::triggered,					this,	&SystrayIcon::hide);
     connect(actionMenuQuit,		&QAction::triggered,					this,	&SystrayIcon::quit);
     connect(actionMenuAbout,	&QAction::triggered,					this,	&SystrayIcon::showHelp);
     connect(actionOptions,		&QAction::triggered,					this,	&SystrayIcon::showOptions);
@@ -66,6 +73,9 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     systrayMenu->addMenu(copyMenu);
     systrayMenu->addAction(actionOptions);
     systrayMenu->addAction(actionMenuAbout);
+    #ifdef ULTRACOPIER_DEBUG
+    systrayMenu->addAction(actionSaveBugReport);
+    #endif
     systrayMenu->addAction(actionMenuQuit);
     #ifndef Q_OS_MAC
     systrayMenu->insertSeparator(actionOptions);
@@ -95,6 +105,9 @@ SystrayIcon::SystrayIcon(QObject * parent) :
 SystrayIcon::~SystrayIcon()
 {
     delete actionMenuQuit;
+    #ifdef ULTRACOPIER_DEBUG
+    delete actionSaveBugReport;
+    #endif
     delete actionMenuAbout;
     delete actionOptions;
     delete systrayMenu;
@@ -301,6 +314,10 @@ void SystrayIcon::updateCurrentTheme()
         IconQuit=QIcon("");
     actionMenuQuit->setIcon(IconQuit);
 
+    #ifdef ULTRACOPIER_DEBUG
+    actionSaveBugReport->setIcon(QIcon(":/warning.png"));
+    #endif
+
     tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/informations.png");
     if(!tempIcon.isNull())
         IconInfo=QIcon(tempIcon);
@@ -403,6 +420,9 @@ void SystrayIcon::retranslateTheUI()
     #else // ULTRACOPIER_DEBUG
     actionMenuAbout		->setText(tr("&About"));
     #endif // ULTRACOPIER_DEBUG
+    #ifdef ULTRACOPIER_DEBUG
+    actionSaveBugReport->setText(tr("&Save bug Report"));;
+    #endif
     actionMenuQuit		->setText(tr("&Quit"));
     actionOptions		->setText(tr("&Options"));
     copyMenu		->setTitle(tr("A&dd copy/moving"));

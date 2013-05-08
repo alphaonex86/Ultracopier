@@ -47,7 +47,13 @@ DebugEngine::DebugEngine()
     debugHtmlContent+=".location{padding-right:15px;}";
     debugHtmlContent+="td {white-space:nowrap;}";
     debugHtmlContent+="</style>";
-    debugHtmlContent+="<title>Ultracopier "+QString(ULTRACOPIER_VERSION)+" "+QString(ULTRACOPIER_PLATFORM_NAME)+", debug report</title>";
+    debugHtmlContent+="<title>";
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+    debugHtmlContent+="Supercopier";
+    #else
+    debugHtmlContent+="Ultracopier";
+    #endif
+    debugHtmlContent+=" "+QString(ULTRACOPIER_VERSION)+" "+QString(ULTRACOPIER_PLATFORM_NAME)+", debug report</title>";
     debugHtmlContent+="</head>";
     debugHtmlContent+="<body>";
     debugHtmlContent+="<table>";
@@ -120,7 +126,13 @@ DebugEngine::DebugEngine()
             if(removeTheLockFile())
             {
                 //Ask to the user
-                QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report","Ultracopier seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report",
+                                                                              #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+                                                                              QString("Supercopier")+
+                                                                              #else
+                                                                              QString("Ultracopier")+
+                                                                              #endif
+                        " seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                 if(reply==QMessageBox::Yes)
                     saveBugReport();
             }
