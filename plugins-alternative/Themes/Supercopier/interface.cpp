@@ -83,11 +83,11 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->add->setMenu(menu);
 
     #ifdef Q_OS_WIN32
-    pixmapTop=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Top_Progress_Windows.png");
-    pixmapBottom=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Bottom_Progress_Windows.png");
+    pixmapTop=QPixmap(":/Themes/Supercopier/resources/SystemTrayIcon/systray_Top_Progress_Windows.png");
+    pixmapBottom=QPixmap(":/Themes/Supercopier/resources/SystemTrayIcon/systray_Bottom_Progress_Windows.png");
     #else
-    pixmapTop=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Top_Progress_Unix.png");
-    pixmapBottom=QPixmap(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Bottom_Progress_Unix.png");
+    pixmapTop=QPixmap(":/Themes/Supercopier/resources/SystemTrayIcon/systray_Top_Progress_Unix.png");
+    pixmapBottom=QPixmap(":/Themes/Supercopier/resources/SystemTrayIcon/systray_Bottom_Progress_Unix.png");
     #endif
 
     //connect the options
