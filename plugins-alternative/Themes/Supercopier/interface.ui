@@ -52,6 +52,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="ad_ultimate">
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

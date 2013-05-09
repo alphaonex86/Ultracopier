@@ -71,7 +71,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
         KeysList.append(qMakePair(QString("progressColorRead"),QVariant(QApplication::palette().color(QPalette::AlternateBase))));
         KeysList.append(qMakePair(QString("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
         KeysList.append(qMakePair(QString("alwaysOnTop"),QVariant(false)));
-	KeysList.append(qMakePair(QString("minimizeToSystray"),QVariant(false)));
+        KeysList.append(qMakePair(QString("minimizeToSystray"),QVariant(false)));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -98,7 +98,7 @@ QWidget * ThemesFactory::options()
         ui->showDualProgression->setChecked(optionsEngine->getOptionValue("showDualProgression").toBool());
         ui->showProgressionInTheTitle->setChecked(optionsEngine->getOptionValue("showProgressionInTheTitle").toBool());
         ui->alwaysOnTop->setChecked(optionsEngine->getOptionValue("alwaysOnTop").toBool());
-	ui->minimizeToSystray->setChecked(optionsEngine->getOptionValue("minimizeToSystray").toBool());
+    ui->minimizeToSystray->setChecked(optionsEngine->getOptionValue("minimizeToSystray").toBool());
 
         progressColorWrite=optionsEngine->getOptionValue("progressColorWrite").value<QColor>();
         progressColorRead=optionsEngine->getOptionValue("progressColorRead").value<QColor>();
@@ -116,7 +116,7 @@ QWidget * ThemesFactory::options()
 
         connect(ui->alwaysOnTop,&QCheckBox::stateChanged,this,&ThemesFactory::alwaysOnTop);
         connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed);
-	connect(ui->minimizeToSystray,&QCheckBox::stateChanged,this,&ThemesFactory::minimizeToSystray);
+    connect(ui->minimizeToSystray,&QCheckBox::stateChanged,this,&ThemesFactory::minimizeToSystray);
         connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed);
         connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged);
         connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uiUpdateSpeed);

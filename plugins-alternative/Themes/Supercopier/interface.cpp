@@ -156,6 +156,15 @@ Themes::Themes(const bool &alwaysOnTop,
     #ifdef Q_OS_WIN32
     uiOptions->alwaysOnTop->hide();
     #endif
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    ui->ad_ultimate->hide();
+    #else
+    QString ultimateUrl=facilityEngine->ultimateUrl();
+    if(ultimateUrl.isEmpty())
+        ui->ad_ultimate->hide();
+    else
+        ui->ad_ultimate->setText(QString("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")));
+    #endif
 
     uiOptions->labelDualProgression->hide();
     uiOptions->showDualProgression->hide();
@@ -1180,50 +1189,84 @@ QIcon Themes::dynaIcon(int percent,QString text)
         percent=100;
     //pixmap avec un fond transparent
     #ifdef Q_OS_WIN32
-    QPixmap resultImage(16,16);
+    quint8 imageSize=16;
     #else
-    QPixmap resultImage(22,22);
+    quint8 imageSize=22;
     #endif
+    QPixmap resultImage(imageSize,imageSize);
     resultImage.fill(Qt::transparent);
     {
         QPainter painter(&resultImage);
+        #ifndef Q_OS_WIN32
+        QFont font("Courier New",9);
+        font.setBold(true);
+        font.setKerning(true);
+        painter.setFont(font);
+        #endif
+        #ifdef Q_OS_WIN32
+        QFont font("Courier New",8);
+        font.setBold(true);
+        font.setKerning(true);
+        painter.setFont(font);
+        #endif
 
         //preprocessing the calcul
-        float percent_1 = (100.-percent)/100.;
-        float percent_2 =  percent/100.;
+        quint8 bottomPixel=(percent*imageSize)/100;
+        quint8 topPixel=imageSize-bottomPixel;
 
         //top image
-        QRect target(0, 0, resultImage.width(), (int)(percent_1*resultImage.height()));
-        QRect source(0, 0, pixmapTop.width(), (int)(percent_1*pixmapTop.height()));
-        painter.drawPixmap(target, pixmapTop, source);
+        if(topPixel>0)
+        {
+            QRect target(0, 0, imageSize, topPixel);
+            QRect source(0, 0, imageSize, topPixel);
+            painter.drawPixmap(target, pixmapTop, source);
+        }
 
         //bottom image
-        QRect target2(0, (int)(percent_1*resultImage.height()), resultImage.width(), (int)(percent_2*resultImage.height()));
-        QRect source2(0, (int)(percent_1*pixmapBottom.height()), pixmapBottom.width(), (int)(percent_2*pixmapBottom.height()));
-        painter.drawPixmap(target2, pixmapBottom, source2);
+        if(bottomPixel>0)
+        {
+            QRect target2(0, topPixel, imageSize, bottomPixel);
+            QRect source2(0, topPixel, imageSize, bottomPixel);
+            painter.drawPixmap(target2, pixmapBottom, source2);
+        }
 
+        qint8 textxOffset=0;
+        qint8 textyOffset=0;
         if(text.isEmpty())
         {
             if(percent!=100)
                 text=QString::number(percent);
             else
-                text=" :)";
+            {
+                text=":)";
+                #ifdef Q_OS_WIN32
+                textyOffset-=2;
+                #else
+                textyOffset-=1;
+                #endif
+            }
         }
-        quint8 textOffset=0;
         if(text.size()==1)
-            textOffset+=3;
+        {
+            textxOffset+=3;
+            #ifdef Q_OS_WIN32
+            textxOffset-=1;
+            #endif
+        }
+        else
+        {
+            #ifdef Q_OS_WIN32
+            textxOffset-=1;
+            #endif
+        }
+        #ifndef Q_OS_WIN32
+        textxOffset+=2;
+        textyOffset+=3;
+        #endif
         painter.setPen(QPen(Qt::black));
-        #ifdef Q_OS_WIN32
-        painter.drawText(2+textOffset,14,text);
-        #else
-        painter.drawText(5+textOffset,16,text);
-        #endif
+        painter.drawText(3+textxOffset,13+textyOffset,text);
         painter.setPen(QPen(Qt::white));
-        #ifdef Q_OS_WIN32
-        painter.drawText(1+textOffset,13,text);
-        #else
-        painter.drawText(4+textOffset,15,text);
-        #endif
+        painter.drawText(2+textxOffset,12+textyOffset,text);
     }
     return QIcon(resultImage);
 }
