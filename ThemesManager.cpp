@@ -13,7 +13,11 @@
 #include "PluginsManager.h"
 #include "LanguagesManager.h"
 
+#ifdef ULTRACOPIER_MODE_SUPERCOPIER
+#define ULTRACOPIER_DEFAULT_STYLE "Supercopier"
+#else
 #define ULTRACOPIER_DEFAULT_STYLE "Oxygen"
+#endif
 
 /// \warning All plugin remain loaded
 /// \todo get the current themes instance
@@ -259,9 +263,9 @@ void ThemesManager::newOptionValue(const QString &group,const QString &name,cons
             return;
         if(currentPluginIndex!=-1 && value.toString()!=pluginList.at(currentPluginIndex).plugin.name)
         {
-            int tempCurrentPluginIndex=currentPluginIndex;
+            //int tempCurrentPluginIndex=currentPluginIndex;
             emit theThemeNeedBeUnloaded();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("unload the themes: %1 (%2)").arg(pluginList.at(tempCurrentPluginIndex).plugin.name).arg(tempCurrentPluginIndex));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("unload the themes: %1 (%2)").arg(pluginList.at(currentPluginIndex).plugin.name).arg(currentPluginIndex));
             /* Themes remain loaded for the options
              *if(pluginList.at(tempCurrentPluginIndex).options!=NULL)
             {

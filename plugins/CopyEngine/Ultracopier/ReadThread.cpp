@@ -24,7 +24,13 @@ ReadThread::~ReadThread()
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
     #endif
+    pauseMutex.release();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    waitNewClockForSpeed.release();
+    #endif
+    pauseMutex.release();
     isOpen.acquire();
+    isOpen.release();
     exit();
     wait();
 }
@@ -82,6 +88,10 @@ void ReadThread::stop()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] stop()");
     stopIt=true;
     pauseMutex.release();
+    pauseMutex.release();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    waitNewClockForSpeed.release();
+    #endif
     if(isOpen.available()>0)
         return;
     emit internalStartClose();
@@ -90,8 +100,10 @@ void ReadThread::stop()
 void ReadThread::pause()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try put read thread in pause");
-    putInPause=true;
+    if(stopIt)
+        return;
     pauseMutex.tryAcquire(pauseMutex.available());
+    putInPause=true;
 }
 
 void ReadThread::resume()
@@ -150,7 +162,11 @@ void ReadThread::checkSum()
         if(putInPause)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] read put in pause");
+            if(stopIt)
+                return;
             pauseMutex.acquire();
+            if(stopIt)
+                return;
         }
         blockArray=file.read(blockSize);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -263,7 +279,11 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             emit closed();
             return false;
         }
+        if(stopIt)
+            return false;
         pauseMutex.tryAcquire(pauseMutex.available());
+        if(stopIt)
+            return false;
         size_at_open=file.size();
         mtime_at_open=QFileInfo(file).lastModified();
         putInPause=false;
@@ -342,7 +362,11 @@ void ReadThread::internalRead()
         if(putInPause)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] read put in pause");
+            if(stopIt)
+                return;
             pauseMutex.acquire();
+            if(stopIt)
+                return;
         }
         blockArray=file.read(blockSize);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG

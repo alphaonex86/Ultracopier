@@ -38,6 +38,8 @@ signals:
     void newTransferList(QString engine,QString mode,QString file);
 
     void tryLoadPlugin(const QString &file);
+    /// \brief Show the help option
+    void showOptions();
 private:
     /** \brief show the help
      *\param incorrectArguments if the help is call because the arguments are wrong */

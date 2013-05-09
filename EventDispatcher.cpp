@@ -179,6 +179,7 @@ void EventDispatcher::initFunction()
         connect(backgroundIcon,	&SystrayIcon::quit,this,&EventDispatcher::quit);
         //show option is for OptionEngine object
         connect(backgroundIcon,	&SystrayIcon::showOptions,					&optionDialog,	&OptionDialog::show,Qt::DirectConnection);
+        connect(&cliParser,     &CliParser::showOptions,					&optionDialog,	&OptionDialog::show,Qt::DirectConnection);
         connect(copyServer,	&CopyListener::listenerReady,					backgroundIcon,	&SystrayIcon::listenerReady,Qt::DirectConnection);
         connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen,Qt::DirectConnection);

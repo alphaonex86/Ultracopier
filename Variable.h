@@ -19,7 +19,7 @@
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
 // define if the version is ultimate, need change only the name in the code
-//#define ULTRACOPIER_VERSION_ULTIMATE
+#define ULTRACOPIER_VERSION_ULTIMATE
 //#define ULTRACOPIER_PLUGIN_ALL_IN_ONE
 //#define ULTRACOPIER_CGMINER
 #define ULTRACOPIER_MODE_SUPERCOPIER

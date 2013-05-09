@@ -289,6 +289,10 @@ void WriteThread::stop()
         return;
     writeFull.release();
     pauseMutex.release();
+    pauseMutex.release();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    waitNewClockForSpeed.release();
+    #endif
     waitNewClockForSpeed.release();
     waitNewClockForSpeed2.release();
     // useless because stopIt will close all thread, but if thread not runing run it
@@ -382,8 +386,8 @@ void WriteThread::resumeNotStarted()
 void WriteThread::pause()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] try put read thread in pause");
-    putInPause=true;
     pauseMutex.tryAcquire(pauseMutex.available());
+    putInPause=true;
     return;
 }
 
@@ -594,7 +598,11 @@ void WriteThread::checkSum()
         if(putInPause)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] write put in pause");
+            if(stopIt)
+                return;
             pauseMutex.acquire();
+            if(stopIt)
+                return;
         }
         //read one block
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -754,7 +762,11 @@ void WriteThread::internalWrite()
         if(putInPause)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] write put in pause");
+            if(stopIt)
+                return;
             pauseMutex.acquire();
+            if(stopIt)
+                return;
         }
         if(stopIt)
         {

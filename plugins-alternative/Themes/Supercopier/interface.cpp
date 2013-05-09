@@ -1276,7 +1276,7 @@ QIcon Themes::dynaIcon(int percent,QString text)
 */
 void Themes::catchAction(QSystemTrayIcon::ActivationReason reason)
 {
-    if(reason==QSystemTrayIcon::DoubleClick)
+    if(reason==QSystemTrayIcon::DoubleClick || reason==QSystemTrayIcon::Trigger)
     {
         sysTrayIcon->hide();
         this->show();

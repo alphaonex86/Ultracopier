@@ -212,9 +212,12 @@ QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds) const
     return Translation_SimplifiedRemaningTime_AboutHours.arg(seconds/3600);
 }
 
-/// \brief Do the simplified time
+/// \brief Return ultimate url, empty is not found or already ultimate
 QString FacilityEngine::ultimateUrl() const
 {
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    return "";
+    #endif
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
     return "http://ultracopier-shop.first-world.info/en/supercopier-ultimate/5-supercopier-ultimate.html";
     #else

@@ -42,6 +42,11 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
             showHelp(false);
             return;
         }
+        if(ultracopierArguments.last()=="--options")
+        {
+            emit showOptions();
+            return;
+        }
         if(ultracopierArguments.last().endsWith(".urc"))
         {
             tryLoadPlugin(ultracopierArguments.last());
@@ -152,6 +157,7 @@ void CliParser::showHelp(const bool &incorrectArguments)
         qDebug() << "Incorrect arguments detected";
     qDebug() << tr("The arguments possible are:");
     qDebug() << "--help : "+tr("To display this help");
+    qDebug() << "--options : "+tr("To display the options");
     qDebug() << "quit : "+tr("To quit the other instances (if running)");
     qDebug() << "Transfer-list [transfer list file] : "+tr("Open transfer list");
     qDebug() << "cp [source [source2]] [destination] : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask the user");
@@ -162,6 +168,7 @@ void CliParser::showHelp(const bool &incorrectArguments)
         message+="<b>"+tr("Command not valid")+"</b><br />\n";
     message+=+"<b></b>"+tr("The arguments possible are:")+"\n<ul>";
     message+="<li><b>--help</b> : "+tr("To display this help")+"</li>\n";
+    message+="<li><b>--options</b> : "+tr("To display the options")+"</li>\n";
     message+="<li><b>quit</b> : "+tr("To quit the other instances (if running)")+"</li>\n";
     message+="<li><b>Transfer-list [transfer list file]</b> : "+tr("Open transfer list")+"</li>\n";
     message+="<li><b>cp [source [source2]] [destination]</b> : "+tr("To copy sources to destination, separated by space. If destination is \"?\", ultracopier will ask the user")+"</li>\n";
