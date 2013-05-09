@@ -849,17 +849,20 @@ void TransferThread::stop()
 {
     stopIt=true;
     if(transfer_stat==TransferStat_Idle)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("transfer_stat==TransferStat_Idle"));
         return;
+    }
+    if(readIsOpenVariable && !readIsClosedVariable)
+        readThread.stop();
+    if(writeIsOpenVariable && !writeIsClosedVariable)
+        writeThread.stop();
     if(!(readIsOpenVariable && !readIsClosedVariable) && !(writeIsOpenVariable && !writeIsClosedVariable))
     {
         if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath() && source.exists())
             QFile(destination.absoluteFilePath()).remove();
         emit internalStartPostOperation();
     }
-    if(readIsOpenVariable && !readIsClosedVariable)
-        readThread.stop();
-    if(writeIsOpenVariable && !writeIsClosedVariable)
-        writeThread.stop();
 }
 
 void TransferThread::readIsFinish()

@@ -29,6 +29,7 @@ WriteThread::~WriteThread()
 {
     stopIt=true;
     needRemoveTheFile=true;
+    pauseMutex.release();
     writeFull.release();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
@@ -292,9 +293,8 @@ void WriteThread::stop()
     pauseMutex.release();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
-    #endif
-    waitNewClockForSpeed.release();
     waitNewClockForSpeed2.release();
+    #endif
     // useless because stopIt will close all thread, but if thread not runing run it
     endIsDetected();
     //for the stop for skip: void TransferThread::skip()

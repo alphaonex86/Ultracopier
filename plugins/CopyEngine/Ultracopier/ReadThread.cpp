@@ -29,8 +29,9 @@ ReadThread::~ReadThread()
     waitNewClockForSpeed.release();
     #endif
     pauseMutex.release();
+    //if(isOpen.available()<=0)
+        emit internalStartClose();
     isOpen.acquire();
-    isOpen.release();
     exit();
     wait();
 }
@@ -92,9 +93,8 @@ void ReadThread::stop()
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
     #endif
-    if(isOpen.available()>0)
-        return;
-    emit internalStartClose();
+    if(isOpen.available()<=0)
+        emit internalStartClose();
 }
 
 void ReadThread::pause()
@@ -279,11 +279,13 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             emit closed();
             return false;
         }
-        if(stopIt)
-            return false;
         pauseMutex.tryAcquire(pauseMutex.available());
         if(stopIt)
+        {
+            file.close();
+            emit closed();
             return false;
+        }
         size_at_open=file.size();
         mtime_at_open=QFileInfo(file).lastModified();
         putInPause=false;
@@ -356,18 +358,26 @@ void ReadThread::internalRead()
     do
     {
         //read one block
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Read;
-        #endif
         if(putInPause)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] read put in pause");
             if(stopIt)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt == true, then quit");
+                internalClose();
                 return;
+            }
             pauseMutex.acquire();
             if(stopIt)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt == true, then quit");
+                internalClose();
                 return;
+            }
         }
+        #ifdef ULTRACOPIER_PLUGIN_DEBUG
+        stat=Read;
+        #endif
         blockArray=file.read(blockSize);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -401,8 +411,11 @@ void ReadThread::internalRead()
             #endif
 
             if(stopIt)
-                break;
-
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] stopIt == true, then quit");
+                internalClose();
+                return;
+            }
             lastGoodPosition+=blockArray.size();
         }
         /*
@@ -461,13 +474,20 @@ void ReadThread::internalClose(bool callByTheDestructor)
 {
     /// \note never send signal here, because it's called by the destructor
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
+    bool closeTheFile=false;
     if(!fakeMode)
-        file.close();
+    {
+        if(file.isOpen())
+        {
+            closeTheFile=true;
+            file.close();
+        }
+    }
     if(!callByTheDestructor)
         emit closed();
 
     /// \note always the last of this function
-    if(!fakeMode)
+    if(closeTheFile)
         isOpen.release();
 }
 
