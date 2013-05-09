@@ -16,9 +16,6 @@
     <height>16777214</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>About Ultracopier</string>
-  </property>
   <property name="windowIcon">
    <iconset resource="resources/ultracopier-resources.qrc">
     <normaloff>:/ultracopier-16x16.png</normaloff>:/ultracopier-16x16.png</iconset>

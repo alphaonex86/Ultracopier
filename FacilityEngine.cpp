@@ -211,3 +211,26 @@ QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds) const
         return Translation_SimplifiedRemaningTime_AboutMinutes.arg(seconds/60);
     return Translation_SimplifiedRemaningTime_AboutHours.arg(seconds/3600);
 }
+
+/// \brief Do the simplified time
+QString FacilityEngine::ultimateUrl() const
+{
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+    return "http://ultracopier-shop.first-world.info/en/supercopier-ultimate/5-supercopier-ultimate.html";
+    #else
+        #ifdef Q_OS_WIN32
+            #if defined(_M_X64)
+            return "http://ultracopier-shop.first-world.info/ultracopier-ultimate/2-ultracopier-ultimate-windows-64.html";
+            #else
+            return "http://ultracopier-shop.first-world.info/ultracopier-ultimate/1-ultracopier-ultimate-windows.html";
+            #endif
+        #elif defined(Q_OS_MAC)
+        return "http://ultracopier-shop.first-world.info/ultracopier-ultimate/3-ultracopier-ultimate-mac.html";
+        #elif defined(Q_OS_LINUX)
+        return "http://ultracopier-shop.first-world.info/supercopier-ultimate/5-supercopier-ultimate.html";
+        #else
+        return "";
+        #endif
+    #endif
+
+}

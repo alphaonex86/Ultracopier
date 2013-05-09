@@ -40,6 +40,8 @@ public:
     QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
     /// \brief Do the simplified time
     QString simplifiedRemainingTime(const quint32 &seconds) const;
+    /// \brief Do the simplified time
+    QString ultimateUrl() const;
 private:
     //undirect translated string
     QString Translation_perSecond;

@@ -188,7 +188,9 @@ void EventDispatcher::initFunction()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
         //backgroundIcon->readyToListen(copyServer.oneListenerIsLoaded());
 
+        #ifdef ULTRACOPIER_DEBUG
         connect(backgroundIcon,	&SystrayIcon::saveBugReport,                    DebugEngine::debugEngine,		&DebugEngine::saveBugReport,Qt::QueuedConnection);
+        #endif
         connect(backgroundIcon,	&SystrayIcon::addWindowCopyMove,				core,		&Core::addWindowCopyMove,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::addWindowTransfer,				core,		&Core::addWindowTransfer,Qt::DirectConnection);
         connect(copyEngineList,	&CopyEngineManager::addCopyEngine,				backgroundIcon,	&SystrayIcon::addCopyEngine,Qt::DirectConnection);
