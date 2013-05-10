@@ -45,14 +45,14 @@ public:
     explicit TransferThread();
     ~TransferThread();
     /// \brief get transfer stat
-    TransferStat getStat();
+    TransferStat getStat() const;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief to set the id
     void setId(int id);
     /// \brief get the reading letter
-    QChar readingLetter();
+    QChar readingLetter() const;
     /// \brief get the writing letter
-    QChar writingLetter();
+    QChar writingLetter() const;
     #endif
     /// \brief to have semaphore, and try create just one by one
     void setMkpathTransfer(QSemaphore *mkpathTransfer);
@@ -68,9 +68,14 @@ public:
     void set_osBufferLimited(bool osBufferLimited);
 
     //not copied size, because that's count to the checksum, ...
-    quint64 realByteTransfered();
-    QPair<quint64,quint64> progression();
+    quint64 realByteTransfered() const;
+    QPair<quint64,quint64> progression() const;
     static QString resolvedName(const QFileInfo &inode);
+    QString getSourcePath() const;
+    QString getDestinationPath() const;
+    QFileInfo getSourceInode() const;
+    QFileInfo getDestinationInode() const;
+    Ultracopier::CopyMode getMode() const;
 protected:
     void run();
 signals:

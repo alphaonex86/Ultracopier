@@ -99,6 +99,8 @@ public:
     void newErrorAction(const QString &action);
     /// \brief set one error is detected
     void errorDetected();
+    /// \brief new error
+    void errorToRetry(const QString &source,const QString &destination,const QString &error);
     //speed limitation
     /** \brief the max speed used
      * in byte per seconds, -1 if not able, 0 if disabled */

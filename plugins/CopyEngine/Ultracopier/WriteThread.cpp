@@ -563,7 +563,7 @@ bool WriteThread::setBlockSize(const int blockSize)
 }
 
 /// \brief get the last good position
-qint64 WriteThread::getLastGoodPosition()
+qint64 WriteThread::getLastGoodPosition() const
 {
     return lastGoodPosition;
 }

@@ -209,6 +209,14 @@ void InterfacePlugin::errorDetected()
 {
 }
 
+/// \brief new error
+void InterfacePlugin::errorToRetry(const QString &source,const QString &destination,const QString &error)
+{
+    Q_UNUSED(source);
+    Q_UNUSED(destination);
+    Q_UNUSED(error);
+}
+
 void InterfacePlugin::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
 {
     Q_UNUSED(transferListOperation)

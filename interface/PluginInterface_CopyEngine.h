@@ -130,6 +130,8 @@ class PluginInterface_CopyEngine : public QObject
         virtual void forceMode(const Ultracopier::CopyMode &mode) = 0;
         /// \brief export the transfer list into a file
         virtual void exportTransferList() = 0;
+        /// \brief export the transfer list into a file
+        virtual void exportErrorIntoTransferList() = 0;
         /// \brief import the transfer list into a file
         virtual void importTransferList() = 0;
 
@@ -165,6 +167,7 @@ class PluginInterface_CopyEngine : public QObject
 
         //send error occurred
         void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
+	void errorToRetry(const QString &source,const QString &destination,const QString &error);
         //for the extra logging
         void rmPath(const QString &path);
         void mkPath(const QString &path);
@@ -202,6 +205,6 @@ class PluginInterface_CopyEngineFactory : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.1.0");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

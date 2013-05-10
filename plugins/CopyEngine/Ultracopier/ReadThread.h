@@ -42,7 +42,7 @@ public:
     /// \brief get the size of the source file
     qint64 size();
     /// \brief get the last good position
-    qint64 getLastGoodPosition();
+    qint64 getLastGoodPosition() const;
     /// \brief start the reading of the source file
     void startRead();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT

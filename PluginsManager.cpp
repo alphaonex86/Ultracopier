@@ -528,8 +528,13 @@ quint32 PluginsManager::checkDependencies()
 /// \brief get the version
 QString PluginsManager::getPluginVersion(const QString &pluginName) const
 {
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+    if(pluginName=="supercopier")
+        return ULTRACOPIER_VERSION;
+    #else
     if(pluginName=="ultracopier")
         return ULTRACOPIER_VERSION;
+    #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<pluginsList.size())

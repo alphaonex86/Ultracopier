@@ -1902,7 +1902,20 @@ void ListThread::fileAlreadyExists(const QFileInfo &source,const QFileInfo &dest
 /// \note Can be call without queue because all call will be serialized
 void ListThread::errorOnFile(const QFileInfo &fileInfo, const QString &errorString, const ErrorType &errorType)
 {
-    emit send_errorOnFile(fileInfo,errorString,qobject_cast<TransferThread *>(sender()),errorType);
+    TransferThread * transferThread=qobject_cast<TransferThread *>(sender());
+    if(transferThread==NULL)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Thread locating error");
+        return;
+    }
+    ErrorLogEntry errorLogEntry;
+    errorLogEntry.source=transferThread->getSourceInode();
+    errorLogEntry.destination=transferThread->getDestinationInode();
+    errorLogEntry.mode=transferThread->getMode();
+    errorLogEntry.error=errorString;
+    errorLog  << errorLogEntry;
+    emit errorToRetry(transferThread->getSourcePath(),transferThread->getDestinationPath(),errorString);
+    emit send_errorOnFile(fileInfo,errorString,transferThread,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
@@ -2152,4 +2165,64 @@ void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
 void ListThread::setCheckDiskSpace(const bool &checkDiskSpace)
 {
     this->checkDiskSpace=checkDiskSpace;
+}
+
+void ListThread::exportErrorIntoTransferList(const QString &fileName)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    QFile transferFile(fileName);
+    if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
+    {
+        transferFile.write(QString("Ultracopier;Transfer-list;").toUtf8());
+        if(!forcedMode)
+            transferFile.write(QString("Transfer;").toUtf8());
+        else
+        {
+            if(mode==Ultracopier::Copy)
+                transferFile.write(QString("Copy;").toUtf8());
+            else
+                transferFile.write(QString("Move;").toUtf8());
+        }
+        transferFile.write(QString("Ultracopier\n").toUtf8());
+        bool haveError=false;
+        int size=errorLog.size();
+        for (int index=0;index<size;++index) {
+            if(errorLog.at(index).mode==Ultracopier::Copy)
+            {
+                if(!forcedMode || mode==Ultracopier::Copy)
+                {
+                    if(forcedMode)
+                        transferFile.write(QString("%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                    else
+                        transferFile.write(QString("Copy;%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                }
+                else
+                    haveError=true;
+            }
+            else if(errorLog.at(index).mode==Ultracopier::Move)
+            {
+                if(!forcedMode || mode==Ultracopier::Move)
+                {
+                    if(forcedMode)
+                        transferFile.write(QString("%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                    else
+                        transferFile.write(QString("Move;%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                }
+                else
+                    haveError=true;
+            }
+        }
+        if(haveError)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
+            emit errorTransferList(tr("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
+        }
+        transferFile.close();
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to save the transfer list: %1").arg(transferFile.errorString()));
+        emit errorTransferList(tr("Unable to save the transfer list: %1").arg(transferFile.errorString()));
+        return;
+    }
 }

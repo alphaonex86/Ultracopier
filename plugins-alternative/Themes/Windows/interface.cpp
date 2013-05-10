@@ -226,6 +226,14 @@ void Themes::errorDetected()
 {
 }
 
+/// \brief new error
+void Themes::errorToRetry(const QString &source,const QString &destination,const QString &error)
+{
+    Q_UNUSED(source);
+    Q_UNUSED(destination);
+    Q_UNUSED(error);
+}
+
 void Themes::setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation)
 {
     Q_UNUSED(transferListOperation)

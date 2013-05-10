@@ -87,7 +87,7 @@ void TransferThread::run()
     exec();
 }
 
-TransferStat TransferThread::getStat()
+TransferStat TransferThread::getStat() const
 {
     return transfer_stat;
 }
@@ -494,6 +494,31 @@ QString TransferThread::resolvedName(const QFileInfo &inode)
         fileName=tr("root");
     #endif
     return fileName;
+}
+
+QString TransferThread::getSourcePath() const
+{
+    return source.absoluteFilePath();
+}
+
+QString TransferThread::getDestinationPath() const
+{
+    return destination.absoluteFilePath();
+}
+
+QFileInfo TransferThread::getSourceInode() const
+{
+    return source;
+}
+
+QFileInfo TransferThread::getDestinationInode() const
+{
+    return destination;
+}
+
+Ultracopier::CopyMode TransferThread::getMode() const
+{
+    return mode;
 }
 
 //return true if has been renamed
@@ -1683,7 +1708,7 @@ void TransferThread::setId(int id)
     writeThread.setId(id);
 }
 
-QChar TransferThread::readingLetter()
+QChar TransferThread::readingLetter() const
 {
     switch(readThread.stat)
     {
@@ -1707,7 +1732,7 @@ QChar TransferThread::readingLetter()
     }
 }
 
-QChar TransferThread::writingLetter()
+QChar TransferThread::writingLetter() const
 {
     switch(writeThread.stat)
     {
@@ -1768,7 +1793,7 @@ void TransferThread::set_osBufferLimited(bool osBufferLimited)
 }
 
 //not copied size, because that's count to the checksum, ...
-quint64 TransferThread::realByteTransfered()
+quint64 TransferThread::realByteTransfered() const
 {
     switch(transfer_stat)
     {
@@ -1785,7 +1810,7 @@ quint64 TransferThread::realByteTransfered()
 }
 
 //first is read, second is write
-QPair<quint64,quint64> TransferThread::progression()
+QPair<quint64,quint64> TransferThread::progression() const
 {
     QPair<quint64,quint64> returnVar;
     switch(transfer_stat)
@@ -1793,8 +1818,8 @@ QPair<quint64,quint64> TransferThread::progression()
     case TransferStat_Transfer:
         returnVar.first=readThread.getLastGoodPosition();
         returnVar.second=writeThread.getLastGoodPosition();
-        if(returnVar.first<returnVar.second)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read is smaller than write");
+        /*if(returnVar.first<returnVar.second)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read is smaller than write");*/
     break;
     case TransferStat_Checksum:
         returnVar.first=readThread.getLastGoodPosition();
@@ -1803,8 +1828,8 @@ QPair<quint64,quint64> TransferThread::progression()
     case TransferStat_PostTransfer:
         returnVar.first=transferSize;
         returnVar.second=writeThread.getLastGoodPosition();
-        if(returnVar.first<returnVar.second)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read is smaller than write");
+        /*if(returnVar.first<returnVar.second)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read is smaller than write");*/
     break;
     case TransferStat_PostOperation:
         returnVar.first=transferSize;

@@ -167,6 +167,7 @@ private slots:
     void updateBufferCheckbox();
     void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread, const ErrorType &errorType);
     void missingDiskSpace(QList<Diskspace> list);
+    void exportErrorIntoTransferList();
 public:
     /** \brief to send the options panel
      * \return return false if have not the options
@@ -332,6 +333,7 @@ signals:
     void signal_forceMode(const Ultracopier::CopyMode &mode);
     void signal_exportTransferList(const QString &fileName);
     void signal_importTransferList(const QString &fileName);
+    void signal_exportErrorIntoTransferList(const QString &fileName);
 
     //action
     void signal_setTransferAlgorithm(TransferAlgorithm transferAlgorithm);

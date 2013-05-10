@@ -83,6 +83,14 @@ public:
     QList<ActionToDoInode> actionToDoListInode;
     QList<ActionToDoInode> actionToDoListInode_afterTheTransfer;
     int numberOfInodeOperation;
+    struct ErrorLogEntry
+    {
+        QFileInfo source;
+        QFileInfo destination;
+        QString error;
+        Ultracopier::CopyMode mode;
+    };
+    QList<ErrorLogEntry> errorLog;
     //dir operation thread queue
     MkPath mkPathQueue;
     //to get the return value from copyEngine
@@ -186,6 +194,7 @@ public slots:
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
+    void exportErrorIntoTransferList(const QString &fileName);
 private:
     QSemaphore          mkpathTransfer;
     QString             sourceDrive;
@@ -356,6 +365,7 @@ signals:
 
     //send error occurred
     void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
+    void errorToRetry(const QString &source,const QString &destination,const QString &error);
     //for the extra logging
     void rmPath(const QString &path);
     void mkPath(const QString &path);

@@ -36,7 +36,7 @@ Themes::Themes(const bool &alwaysOnTop,
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
-    uiOptions->setupUi(ui->tabWidget->widget(1));
+    uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));
 
     currentFile     = 0;
     totalFile       = 0;
@@ -58,7 +58,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->showDualProgression->setChecked(showDualProgression);
     uiOptions->alwaysOnTop->setChecked(alwaysOnTop);
     uiOptions->minimizeToSystray->setChecked(minimizeToSystray);
-    //uiOptions->setupUi(ui->tabWidget->widget(1));
+    //uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
     uiOptions->label_Slider_speed->setVisible(false);
@@ -112,6 +112,7 @@ Themes::Themes(const bool &alwaysOnTop,
     connect(ui->actionAddFolderToCopy,&QAction::triggered,this,&Themes::forcedModeAddFolderToCopy);
     connect(ui->actionAddFolderToMove,&QAction::triggered,this,&Themes::forcedModeAddFolderToMove);
     connect(ui->actionAddFolder,&QAction::triggered,this,&Themes::forcedModeAddFolder);
+    connect(ui->exportErrorToTransferList,&QToolButton::triggered,this,&Themes::exportErrorIntoTransferList);
 
     //setup the search part
     closeTheSearchBox();
@@ -359,6 +360,12 @@ void Themes::remainingTime(const int &remainingSeconds)
 void Themes::errorDetected()
 {
     haveError=true;
+}
+
+/// \brief new error
+void Themes::errorToRetry(const QString &source,const QString &destination,const QString &error)
+{
+    ui->errorList->addTopLevelItem(new QTreeWidgetItem(QStringList() << source << destination << error));
 }
 
 /** \brief support speed limitation */
@@ -871,8 +878,8 @@ void Themes::newLanguageLoaded()
         updateCurrentFileInformation();
     updateOverallInformation();
     updateSpeed();
-    if(ui->tabWidget->count()>=3)
-        ui->tabWidget->setTabText(2,facilityEngine->translateText("Copy engine"));
+    if(ui->tabWidget->count()>=4)
+        ui->tabWidget->setTabText(ui->tabWidget->count()-1,facilityEngine->translateText("Copy engine"));
     on_moreButton_toggled(ui->moreButton->isChecked());
 }
 
@@ -1284,4 +1291,9 @@ void Themes::catchAction(QSystemTrayIcon::ActivationReason reason)
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("reason: %1").arg(reason));
+}
+
+void Themes::on_exportErrorToTransferList_clicked()
+{
+    emit exportErrorIntoTransferList();
 }

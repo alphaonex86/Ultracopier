@@ -178,6 +178,14 @@ void Themes::errorDetected()
 {
 }
 
+/// \brief new error
+void Themes::errorToRetry(const QString &source,const QString &destination,const QString &error)
+{
+    Q_UNUSED(source);
+    Q_UNUSED(destination);
+    Q_UNUSED(error);
+}
+
 //speed limitation
 bool Themes::setSpeedLimitation(const qint64 &speedLimitation)
 {

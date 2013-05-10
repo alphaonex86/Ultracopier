@@ -560,7 +560,7 @@ void ReadThread::startCheckSum()
     emit internalStartChecksum();
 }
 
-qint64 ReadThread::getLastGoodPosition()
+qint64 ReadThread::getLastGoodPosition() const
 {
     /*if(lastGoodPosition>file.size())
     {

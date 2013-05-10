@@ -63,7 +63,7 @@ public:
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
     /// \brief get the last good position
-    qint64 getLastGoodPosition();
+    qint64 getLastGoodPosition() const;
     /// \brief buffer is empty
     bool bufferIsEmpty();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT

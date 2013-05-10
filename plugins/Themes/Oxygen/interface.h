@@ -69,6 +69,8 @@ public:
     void newErrorAction(const QString &action);
     /// \brief set one error is detected
     void errorDetected();
+    /// \brief new error
+    void errorToRetry(const QString &source,const QString &destination,const QString &error);
     /** \brief support speed limitation */
     void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
     //get information about the copy
@@ -144,6 +146,7 @@ private slots:
     void updateProgressionColorBar();
     void updateTitle();
     void catchAction(QSystemTrayIcon::ActivationReason reason);
+    void on_exportErrorToTransferList_clicked();
 private:
     QPixmap pixmapTop,pixmapBottom;
     QColor progressColorWrite,progressColorRead,progressColorRemaining;

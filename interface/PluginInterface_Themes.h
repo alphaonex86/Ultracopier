@@ -39,6 +39,8 @@ class PluginInterface_Themes : public QWidget
         virtual void remainingTime(const int &remainingSeconds) = 0;
         /// \brief set one error is detected
         virtual void errorDetected() = 0;
+        /// \brief new error
+        virtual void errorToRetry(const QString &source,const QString &destination,const QString &error) = 0;
         /** \brief support speed limitation */
         virtual void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool) = 0;
         /// \brief get action on the transfer list (add/move/remove)
@@ -73,6 +75,7 @@ class PluginInterface_Themes : public QWidget
         void moveItemsOnBottom(const QList<int> &ids);
         void exportTransferList();
         void importTransferList();
+        void exportErrorIntoTransferList();
         //user ask ask to add folder (add it with interface ask source/destination)
         void userAddFolder(const Ultracopier::CopyMode &mode);
         void userAddFile(const Ultracopier::CopyMode &mode);
@@ -109,6 +112,6 @@ class PluginInterface_ThemesFactory : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.1.0");
 
 #endif // PLUGININTERFACE_THEMES_H

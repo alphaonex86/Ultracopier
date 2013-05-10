@@ -16,7 +16,7 @@
 class ThemesFactory : public PluginInterface_ThemesFactory
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.1.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_ThemesFactory)
     public:
         /// \brief to return the instance of the copy engine

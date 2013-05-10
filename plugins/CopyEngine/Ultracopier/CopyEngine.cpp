@@ -127,6 +127,8 @@ void CopyEngine::connectTheSignalsSlots()
 
     if(!connect(this,&CopyEngine::signal_pause,						listThread,&ListThread::pause,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_pause()");
+    if(!connect(this,&CopyEngine::signal_exportErrorIntoTransferList,listThread,&ListThread::exportErrorIntoTransferList,				Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_exportErrorIntoTransferList()");
     if(!connect(this,&CopyEngine::signal_resume,						listThread,&ListThread::resume,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_resume()");
     if(!connect(this,&CopyEngine::signal_skip,					listThread,&ListThread::skip,				Qt::QueuedConnection))
@@ -192,6 +194,8 @@ void CopyEngine::connectTheSignalsSlots()
 
     if(!connect(this,&CopyEngine::queryOneNewDialog,this,&CopyEngine::showOneNewDialog,Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect queryOneNewDialog()");
+    if(!connect(listThread,&ListThread::errorToRetry,this,&CopyEngine::errorToRetry,Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect errorToRetry()");
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
@@ -1158,3 +1162,11 @@ void CopyEngine::setDefaultDestinationFolder(const QString &defaultDestinationFo
         ui->defaultDestinationFolder->setText(defaultDestinationFolder);
 }
 
+void CopyEngine::exportErrorIntoTransferList()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"exportErrorIntoTransferList");
+    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
+    if(fileName.isEmpty())
+        return;
+    emit signal_exportErrorIntoTransferList(fileName);
+}
