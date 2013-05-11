@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>527</width>
-    <height>262</height>
+    <height>287</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -24,7 +24,7 @@
    <item row="11" column="0">
     <widget class="QCheckBox" name="checkBox_limitSpeed">
      <property name="text">
-      <string>Limit copy speed to:</string>
+      <string>Limit copy speed to</string>
      </property>
     </widget>
    </item>
@@ -94,14 +94,14 @@
    <item row="8" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>At the end of the copy: </string>
+      <string>At the end of the copy</string>
      </property>
     </widget>
    </item>
    <item row="10" column="0">
     <widget class="QLabel" name="label_Slider_speed">
      <property name="text">
-      <string>Limit copy speed to:</string>
+      <string>Limit copy speed to</string>
      </property>
     </widget>
    </item>
@@ -283,7 +283,7 @@
    <item row="6" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Minimize to systray</string>
+      <string>Minimize on close to systray</string>
      </property>
     </widget>
    </item>

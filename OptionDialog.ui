@@ -114,7 +114,7 @@
            <item row="0" column="0">
             <widget class="QCheckBox" name="Language_force">
              <property name="text">
-              <string>Force the language:</string>
+              <string>Force the language</string>
              </property>
             </widget>
            </item>
@@ -124,7 +124,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="labelCatchCopyDefault">
              <property name="text">
-              <string>Replace the default copy and move system:</string>
+              <string>Replace the default copy and move system</string>
              </property>
             </widget>
            </item>
@@ -138,7 +138,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="labelLoadAtSession">
              <property name="text">
-              <string>Load at the session loading:</string>
+              <string>Load at the session loading</string>
              </property>
             </widget>
            </item>
@@ -152,7 +152,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>When manual open:</string>
+              <string>When manual open</string>
              </property>
             </widget>
            </item>
@@ -178,7 +178,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="label_9">
              <property name="text">
-              <string>Group the windows when:</string>
+              <string>Group the windows when</string>
              </property>
             </widget>
            </item>
@@ -226,7 +226,7 @@
            <item row="6" column="0">
             <widget class="QLabel" name="label_11">
              <property name="text">
-              <string>Display the OS warning:</string>
+              <string>Display the OS warning</string>
              </property>
             </widget>
            </item>
@@ -717,7 +717,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Write the transfers:</string>
+            <string>Write the transfers</string>
            </property>
           </widget>
          </item>
@@ -747,7 +747,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Write the errors:</string>
+            <string>Write the errors</string>
            </property>
           </widget>
          </item>
@@ -777,7 +777,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Write the folder operations:</string>
+            <string>Write the folder operations</string>
            </property>
           </widget>
          </item>

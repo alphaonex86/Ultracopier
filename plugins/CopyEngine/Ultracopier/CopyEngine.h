@@ -233,6 +233,7 @@ public:
     void setCheckDiskSpace(const bool &checkDiskSpace);
     void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
     void defaultDestinationFolderBrowse();
+    QString askDestination();
 public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface

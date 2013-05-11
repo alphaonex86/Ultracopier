@@ -87,6 +87,8 @@ void MkPath::internalDoThisPath()
             }
         }
     }
+    if(dir.exists(pathList.first().destination.absoluteFilePath()) && pathList.first().actionType==ActionType_RealMove)
+        pathList.first().actionType=ActionType_MovePath;
     if(pathList.first().actionType!=ActionType_RealMove)
     {
         if(!dir.exists(pathList.first().destination.absoluteFilePath()))

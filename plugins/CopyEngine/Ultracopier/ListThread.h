@@ -39,6 +39,8 @@ public:
      * \param destination the destination to compares with the current destination
      * \return true if have same destination, else false (or empty) */
     bool haveSameDestination(const QString &destination);
+    /// \return empty if multiple or no destination
+    QString getUniqueDestinationFolder();
     //external soft like file browser have send copy/move list to do
     /** \brief send copy with destination
      * \param sources the sources list to copy
@@ -200,9 +202,11 @@ private:
     QString             sourceDrive;
     bool                sourceDriveMultiple;
     QString             destinationDrive;
+    QString             destinationFolder;
     QStringList         mountSysPoint;
     QList<QStorageInfo::DriveType> driveType;
     bool                destinationDriveMultiple;
+    bool                destinationFolderMultiple;
     DriveManagement     driveManagement;
 
     bool                stopIt;

@@ -414,7 +414,7 @@ bool CopyEngine::newCopy(const QStringList &sources)
     if(!defaultDestinationFolder.isEmpty() && QDir(defaultDestinationFolder).exists())
         destination = defaultDestinationFolder;
     else
-        destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        destination = askDestination();
     if(destination.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
@@ -447,7 +447,7 @@ bool CopyEngine::newMove(const QStringList &sources)
     if(!ui->defaultDestinationFolder->text().isEmpty() && QDir(ui->defaultDestinationFolder->text()).exists())
         destination = ui->defaultDestinationFolder->text();
     else
-        destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        destination = askDestination();
     if(destination.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
@@ -469,7 +469,7 @@ bool CopyEngine::newMove(const QStringList &sources,const QString &destination)
 
 void CopyEngine::defaultDestinationFolderBrowse()
 {
-    QString destination = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString destination = askDestination();
     if(destination.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
@@ -478,6 +478,19 @@ void CopyEngine::defaultDestinationFolderBrowse()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(uiIsInstalled)
         ui->defaultDestinationFolder->setText(destination);
+}
+
+QString CopyEngine::askDestination()
+{
+    QString destination = listThread->getUniqueDestinationFolder();
+    if(!destination.isEmpty())
+    {
+        QMessageBox::StandardButton button=QMessageBox::question(interface,tr("Destination"),tr("Use the actual destination \"%1\"?").arg(destination),QMessageBox::Yes | QMessageBox::No,QMessageBox::Yes);
+        if(button==QMessageBox::Yes)
+            return destination;
+    }
+    destination=QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    return destination;
 }
 
 void CopyEngine::newTransferList(const QString &file)

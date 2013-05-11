@@ -6,10 +6,9 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     start(HighPriority);
     this->facilityInterface         = facilityInterface;
     putInPause                      = false;
-    sourceDrive                     = "";
     sourceDriveMultiple             = false;
-    destinationDrive                = "";
     destinationDriveMultiple        = false;
+    destinationFolderMultiple       = false;
     stopIt                          = false;
     bytesToTransfer                 = 0;
     bytesTransfered                 = 0;
@@ -334,6 +333,19 @@ bool ListThread::haveSameDestination(const QString &destination)
     return true;
 }
 
+/// \return empty if multiple or no destination
+QString ListThread::getUniqueDestinationFolder()
+{
+    if(stopIt)
+        return QString();
+    if(destinationFolderMultiple)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDriveMultiple");
+        return QString();
+    }
+    return destinationFolder;
+}
+
 ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with: "+QString::number(mode));
@@ -495,6 +507,15 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
         //if have previous destination and the news destination is not the same
         if(destinationDrive!=tempDrive)
             destinationDriveMultiple=true;
+    }
+    if(!destinationFolderMultiple)
+    {
+        //if have not already destination, set the destination
+        if(destinationFolder.isEmpty())
+            destinationFolder=destination;
+        //if have previous destination and the news destination is not the same
+        if(destinationFolder!=destination)
+            destinationFolderMultiple=true;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("destination informations, destinationDrive: %1, destinationDriveMultiple: %2").arg(destinationDrive).arg(destinationDriveMultiple));
 }
