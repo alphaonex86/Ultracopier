@@ -129,7 +129,7 @@ bool AvancedQFile::open(OpenMode mode)
     fileError=QFileDevice::NoError;
     fileErrorString.clear();
     WCHAR fileNameW[fileName().size()+1];
-    if(fileName().toWCharArray(fileNameW)!=fileName().size())
+    if(QDir::toNativeSeparators("\\\\?\\"+fileName()).toWCharArray(fileNameW)!=fileName().size())
     {
         fileError=QFileDevice::OpenError;
         fileErrorString=tr("Path conversion error");

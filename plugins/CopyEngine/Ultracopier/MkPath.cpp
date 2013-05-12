@@ -283,8 +283,8 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
                 return true;
             #else
                 wchar_t filePath[65535];
-                filePath[source.absoluteFilePath().toWCharArray(filePath)]=L'\0';
-                HANDLE hFileSouce = CreateFile(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
+                filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to read: "+QString::fromWCharArray(filePath)+", error: "+QString::number(GetLastError()));
@@ -329,8 +329,8 @@ bool MkPath::writeFileDateTime(const QFileInfo &destination)
                 return utime(destination.toLatin1().data(),&butime)==0;
             #else
                 wchar_t filePath[65535];
-                filePath[destination.absoluteFilePath().toWCharArray(filePath)]=L'\0';
-                HANDLE hFileDestination = CreateFile(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+                filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to write: "+QString::fromWCharArray(filePath)+", error: "+QString::number(GetLastError()));

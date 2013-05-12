@@ -1,4 +1,5 @@
 QT += widgets systeminfo
+DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = \
