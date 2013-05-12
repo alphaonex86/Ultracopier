@@ -64,6 +64,7 @@ bool WriteThread::internalOpen()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] internalOpen destination: "+file.fileName());
     if(stopIt)
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
         emit closed();
         return false;
     }
@@ -79,6 +80,7 @@ bool WriteThread::internalOpen()
         emit error();
         return false;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before the mutex");
     //set to LISTBLOCKSIZE
     if(sequential)
     {
@@ -94,6 +96,7 @@ bool WriteThread::internalOpen()
         if(writeFull.available()>numberOfBlock)
             writeFull.acquire(writeFull.available()-numberOfBlock);
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after the mutex");
     stopIt=false;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -128,8 +131,10 @@ bool WriteThread::internalOpen()
         }
         mkpathTransfer->release();
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after the mkpath");
     if(stopIt)
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
         emit closed();
         return false;
     }
@@ -143,11 +148,15 @@ bool WriteThread::internalOpen()
         {
             writeFileList.insert(file.fileName(),this);
             if(writeFileList.count(file.fileName())>1)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] in waiting because same file is found");
                 return false;
+            }
         }
     }
     if(file.open(flags))
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after the open");
         {
             QMutexLocker lock_mutex(&accessList);
             if(!theBlockList.isEmpty())
@@ -158,8 +167,10 @@ bool WriteThread::internalOpen()
             }
         }
         pauseMutex.tryAcquire(pauseMutex.available());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after the pause mutex");
         if(stopIt)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             file.close();
             emit closed();
             return false;
@@ -177,6 +188,7 @@ bool WriteThread::internalOpen()
         }
         if(stopIt)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             file.close();
             emit closed();
             return false;
@@ -194,10 +206,12 @@ bool WriteThread::internalOpen()
         }
         if(stopIt)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             file.close();
             emit closed();
             return false;
         }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit opened()");
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -211,6 +225,7 @@ bool WriteThread::internalOpen()
     {
         if(stopIt)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             emit closed();
             return false;
         }
@@ -375,10 +390,16 @@ void WriteThread::timeOfTheBlockCopyFinished()
 void WriteThread::resumeNotStarted()
 {
     QMutexLocker lock_mutex(&writeFileListMutex);
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(!writeFileList.contains(file.fileName()))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] file for similar inode is not located!");
+    #endif
     writeFileList.remove(file.fileName(),this);
     if(writeFileList.contains(file.fileName()))
     {
-        writeFileList.values(file.fileName()).first()->reemitStartOpen();
+        QList<WriteThread *> writeList=writeFileList.values(file.fileName());
+        if(!writeList.isEmpty())
+           writeList.first()->reemitStartOpen();
         return;
     }
 }
@@ -438,6 +459,7 @@ void WriteThread::internalClose(bool emitSignal)
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Close;
     #endif
+    bool emit_closed=false;
     if(!fakeMode)
     {
         if(file.isOpen())
@@ -469,18 +491,22 @@ void WriteThread::internalClose(bool emitSignal)
             }
             //here and not after, because the transferThread don't need try close if not open
             if(emitSignal)
-                emit closed();
+                emit_closed=true;
         }
     }
     else
     {
         //here and not after, because the transferThread don't need try close if not open
+
         if(emitSignal)
-            emit closed();
+            emit_closed=true;
     }
     needRemoveTheFile=false;
     resumeNotStarted();
+    //warning: file.setFileName(""); need be after resumeNotStarted()
     file.setFileName("");
+    if(emit_closed)
+        emit closed();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;

@@ -1712,9 +1712,9 @@ void ListThread::doNewActions_inode_manipulation()
         int_for_internal_loop++;
     }
     //error  checking
-    if((actionToDoListTransfer_count+actionToDoListInode_count)>inodeThreads)
+    if(actionToDoListInode_count>inodeThreads)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The index have been detected as out of max range: %1>%2").arg(actionToDoListTransfer_count+actionToDoListInode_count).arg(inodeThreads));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The index have been detected as out of max range: %1>%2").arg(actionToDoListInode_count).arg(inodeThreads));
         return;
     }
 }
