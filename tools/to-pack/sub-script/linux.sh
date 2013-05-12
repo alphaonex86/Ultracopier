@@ -83,7 +83,7 @@ function compil {
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/CopyEngine/Ultracopier/
 		${QMAKE} -config ${QTMODEDEBUGRELEASE}
-		make -j 5 > /dev/null
+		make -j 5 > /dev/null 2>&1
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -92,7 +92,7 @@ function compil {
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Listener/catchcopy-v0002/
 		${QMAKE} -config ${QTMODEDEBUGRELEASE}
-		make -j 5 > /dev/null
+		make -j 5 > /dev/null 2>&1
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -103,7 +103,7 @@ function compil {
 		then
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Supercopier/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null
+			make -j 5 > /dev/null 2>&1
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -117,7 +117,7 @@ function compil {
 		else
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Oxygen/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null
+			make -j 5 > /dev/null 2>&1
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -129,7 +129,7 @@ function compil {
 		then
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Clean/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null
+			make -j 5 > /dev/null 2>&1
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -139,7 +139,7 @@ function compil {
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Clean/ ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Clean/
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Windows/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null
+			make -j 5 > /dev/null 2>&1
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -149,7 +149,7 @@ function compil {
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Windows/ ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Windows/
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Teracopy/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null
+			make -j 5 > /dev/null 2>&1
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -172,7 +172,7 @@ function compil {
 		else
 			${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-core.pro
 		fi
-		make -j 5 > /dev/null
+		make -j 5 > /dev/null 2>&1
 		if [ $STATIC -eq 1 ]
 		then
 			upx --lzma -9 ultracopier > /dev/null 2>&1
@@ -291,7 +291,7 @@ function compil_plugin {
 						fi
 						cd ${plugins_name}/
 						${QMAKE} -config ${QTMODEDEBUGRELEASE} *.pro
-						make -j 5 > /dev/null
+						make -j 5 > /dev/null 2>&1
 						cd ${TEMP_PATH}/${FINAL_ARCHIVE}/${SUBFOLDER}/${plugins_cat}/
 						if [ ! -e ${plugins_name}/lib*.so ]; then
 							echo "no lib*.so file!";

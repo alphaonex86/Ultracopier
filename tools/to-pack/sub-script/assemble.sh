@@ -52,27 +52,17 @@ function assemble {
 					rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
 				fi
 			fi
-			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
 
-# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/CopyEngine/Ultracopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/informations.xml
-# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Listener/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/informations.xml
-# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/PluginLoader/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/informations.xml
-# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/SessionLoader/Windows/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/informations.xml
-# 			if [ $SUPERCOPIER -eq 1 ]
-# 			then
-# 				cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/Themes/Supercopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/informations.xml
-# 			else
-# 				cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Themes/Oxygen/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/informations.xml
-# 			fi
-			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
-			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
+			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
+			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
 			if [ $SUPERCOPIER -eq 1 ]
 			then
-				rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins-alternative/Themes/Supercopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/Languages/
+				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/Themes/Supercopier/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/
 			else
-				rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
 			fi
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -iname "*.a" -exec rm {} \; > /dev/null 2>&1
+			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
 		else
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -mindepth 1 -type d -exec rm -Rf {} \;
 		fi
@@ -87,6 +77,10 @@ function assemble {
 		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			sed -i "s/Ultracopier /Supercopier /g" ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
+		fi
 		if [ "${ARCHITECTURE}" == "x86" ]
 		then
 			if [ $SUPERCOPIER -eq 1 ]
@@ -96,6 +90,7 @@ function assemble {
 				upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier.exe > /dev/null 2>&1
 			fi
 		fi
+		cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt-debug/lib* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
 		if [ ${STATIC} -ne 1 ]
 		then
 			if [ ${DEBUG_REAL} -eq 1 ]
@@ -149,7 +144,7 @@ function assemble {
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
-
+		
 		zip -r -q -9 ${FINAL_ARCHIVE} ${TARGET}-windows-${ARCHITECTURE}/
 		#7za a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on ${FINAL_ARCHIVE} ${TARGET}-windows-${ARCHITECTURE}/
 		#nice -n 15 ionice -c 3 tar cpf - ${TARGET}-windows-${ARCHITECTURE}/ | nice -n 15 ionice -c 3 xz -z -9 -e > ${FINAL_ARCHIVE}

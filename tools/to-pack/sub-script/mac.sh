@@ -267,7 +267,6 @@ function compil {
 			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface${LIBEXT}"
 			ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/Themes/Oxygen/libinterface${LIBEXT}"
 		fi
-		exit
 		ssh ${SSHUSER}@${IPMAC} "cd /Users/${SSHUSER}/Desktop/ultracopier/;/Users/user/Qt${QTVERSION}/${QTVERSION}/clang_64/bin/macdeployqt ${BASEAPPNAME}/ -dmg"
 		if [ $SUPERCOPIER -eq 1 ]
 		then
@@ -306,7 +305,7 @@ function compil_plugin {
 				then
 					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
 					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
-					if [ -d ${plugins_name} ] && [ ! -f ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-mac-os-x.urc ] && [ ${plugins_name} !="Windows" ] && [ ${plugins_name} !="dbus" ]
+					if [ -d ${plugins_name} ] && [ ! -f "${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-mac-os-x.urc" ] && [ ${plugins_name} != "Windows" ] && [ ${plugins_name} != "dbus" ]
 					then
 						echo "pack the ${ARCHITECTURE} mac for the alternative plugin: ${plugins_cat}/${plugins_name}"
 						mkdir -p ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/
@@ -337,7 +336,7 @@ function compil_plugin {
 							echo "make failed on the mac: ${RETURN_CODE}"
 							exit
 						fi
-						ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtSystemInfo.framework/Versions/0/QtSystemInfo @executable_path/../Frameworks/QtSystemInfo.framework/Versions/0/QtSystemInfo /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/libcopyEngine${LIBEXT}"
+						ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtSystemInfo.framework/Versions/0/QtSystemInfo @executable_path/../Frameworks/QtSystemInfo.framework/Versions/0/QtSystemInfo /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
 						ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtGui.framework/Versions/5/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/5/QtGui /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
 						ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtCore.framework/Versions/5/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/5/QtCore /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
 						ssh ${SSHUSER}@${IPMAC} "install_name_tool -change QtNetwork.framework/Versions/5/QtNetwork @executable_path/../Frameworks/QtNetwork.framework/Versions/5/QtNetwork /Users/${SSHUSER}/Desktop/ultracopier/${SUBFOLDER}/${plugins_cat}/${plugins_name}/*${LIBEXT}"
@@ -364,13 +363,13 @@ function compil_plugin {
 	done
 }
 
-#compil "ultracopier" 0 0 0 0 0
-#compil "ultracopier-ultimate" 0 1 0 0 0
-#compil "ultracopier-debug" 1 0 0 0 0
+compil "ultracopier" 0 0 0 0 0
+compil "ultracopier-ultimate" 0 1 0 0 0
+compil "ultracopier-debug" 1 0 0 0 0
 
-#compil "supercopier" 0 0 0 1 0
+compil "supercopier" 0 0 0 1 0
 compil "supercopier-ultimate" 0 1 0 1 1
-#compil "supercopier-debug" 1 0 0 1 0
+compil "supercopier-debug" 1 0 0 1 0
 
 compil_plugin "ultracopier" 0 "plugins-alternative"
 compil_plugin "ultracopier" 0 "plugins"
