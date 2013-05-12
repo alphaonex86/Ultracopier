@@ -8,11 +8,11 @@ fi
 cd ${TEMP_PATH}/
 
 source ${BASE_PWD}/sub-script/compil.sh
-compil "ultracopier-debug-cgminer-portable-windows-x86_64" 1 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 1
+compil "supercopier-ultimate-debug-portable-windows-x86" 1 0 1 0 32 "-mtune=generic -march=nocona" 1 0 0 0 1
 
-ARCHITECTURE="x86_64"
+ARCHITECTURE="x86"
 
 source ${BASE_PWD}/sub-script/assemble.sh
 
-assemble "ultracopier-debug-cgminer-portable" "${ARCHITECTURE}" 1 0 1 0 0 1
+assemble "supercopier-ultimate-debug-portable" "${ARCHITECTURE}" 1 0 1 1 0 0 1
 

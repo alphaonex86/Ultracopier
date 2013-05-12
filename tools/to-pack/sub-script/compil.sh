@@ -12,13 +12,18 @@ function compil {
 	FORPLUGIN=$9
 	STATIC=${10}
 	CGMINER=${11}
+	SUPERCOPIER=${12}
+	if [ $SUPERCOPIER -eq 1 ]
+	then
+		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+	fi
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
 	if [ $FORPLUGIN -eq 1 ]
 	then
 		rsync -aqrt ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/
 	else
-		if [ $ULTIMATE -eq 1 ]
+		if [ $ULTIMATE -eq 1 ] || [ $SUPERCOPIER -eq 1 ]
 		then
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/CopyEngine/Rsync/
 		else
@@ -34,9 +39,24 @@ function compil {
 		fi
 		cd ${TEMP_PATH}/${TARGET}/
 	done
+	if [ $SUPERCOPIER -eq 1 ]
+	then
+		find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i "s/=ultracopier-1.0/=supercopier-4.0/g" {} \;
+		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i -r "s/1,0,([0-9]+,[0-9]+)/4,0,\1/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/Ultracopier/Supercopier/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/ultracopier.exe/supercopier.exe/g" {} \; > /dev/null 2>&1
+		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-16x16.png ${TEMP_PATH}/${TARGET}/resources/ultracopier-16x16.png
+		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-128x128.png ${TEMP_PATH}/${TARGET}/resources/ultracopier-128x128.png
+		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-all-in-one.ico ${TEMP_PATH}/${TARGET}/resources/ultracopier-all-in-one.ico
+		mv ${TEMP_PATH}/${TARGET}/resources/supercopier.ico ${TEMP_PATH}/${TARGET}/resources/ultracopier.ico
+		mv ${TEMP_PATH}/${TARGET}/resources/supercopier.icns ${TEMP_PATH}/${TARGET}/resources/ultracopier.icns
+		rm -Rf ${TEMP_PATH}/${TARGET}/plugins/Themes/Oxygen/
+	fi
 	find ${TEMP_PATH}/${TARGET}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
+	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null 2>&1
 	if [ $DEBUG -eq 1 ]
 	then
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
@@ -46,6 +66,12 @@ function compil {
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
+	fi
+	if [ $SUPERCOPIER -eq 1 ]
+	then
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
+	else
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_MODE_SUPERCOPIER/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
 	fi
         if [ $STATIC -eq 1 ]
         then
@@ -143,7 +169,6 @@ function compil {
 						ULTRACOPIER_PLUGIN_FILENAME=`grep -F "qtLibraryTarget" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/*.pro | sed -r "s/^.*\((.*)\).*$/\1/g"`
 						sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
 					fi
-
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
 					if [ ! -f ${COMPIL_FOLDER}/*.dll ] && [ ! -f ${COMPIL_FOLDER}/*.a ]
@@ -174,7 +199,7 @@ function compil {
 			cd ${PLUGIN_FOLDER}/
 		fi
 	done
-	if [ $ULTIMATE -eq 1 ] || [ $FORPLUGIN -eq 1 ]
+	if [ $ULTIMATE -eq 1 ] || [ $FORPLUGIN -eq 1 ] || [ $SUPERCOPIER -eq 1 ]
 	then
 		PLUGIN_FOLDER="${TEMP_PATH}/${TARGET}/plugins-alternative/"
 		cd ${PLUGIN_FOLDER}/
@@ -238,45 +263,54 @@ function compil {
 				cd ${PLUGIN_FOLDER}/
 			fi
 		done
-	else
-		rm -Rf ${TEMP_PATH}/${TARGET}/plugins-alternative/
 	fi
 	if [ ${STATIC} -eq 1 ]
 	then
-		cp ${TEMP_PATH}/${TARGET}/*/*/*/*/*.a ${TEMP_PATH}/${TARGET}/plugins/ > /dev/null 2>&1
+		cp ${TEMP_PATH}/${TARGET}/plugins/*/*/*/*.a ${TEMP_PATH}/${TARGET}/plugins/ > /dev/null 2>&1
+		cp ${TEMP_PATH}/${TARGET}/plugins-alternative/Themes/Supercopier/*/*.a ${TEMP_PATH}/${TARGET}/plugins/ > /dev/null 2>&1
 	fi
 	cd ${TEMP_PATH}/${TARGET}/
-	if [ ! -f ultracopier.exe ]
+	if [ ${STATIC} -eq 1 ]
+	then
+		echo "${TARGET} static application..."
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" supercopier-static.pro > /dev/null 2>&1
+		else
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro > /dev/null 2>&1
+		fi
+	else
+		echo "${TARGET} application..."
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
+	fi
+	DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
+	if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
 	then
 		if [ ${STATIC} -eq 1 ]
 		then
-			echo "${TARGET} static application..."
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro > /dev/null 2>&1
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
 		else
-			echo "${TARGET} application..."
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
 		fi
-		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
-		if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
-		then
-        	        if [ ${STATIC} -eq 1 ]
-	                then
-        	                DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
-	                else
-        	                DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
-	                fi
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
-			echo "application not created"
-			exit
-		fi
-		if [ "${COMPIL_FOLDER}" != "./" ]
-		then
-			mv ${COMPIL_FOLDER}/ultracopier.exe ./
-		fi
-		if [ ${BITS} -eq 32 ]
-		then
-			upx --lzma -9 ultracopier.exe > /dev/null 2>&1
-		fi
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
+		echo "application not created"
+		exit
+	fi
+	if [ "${COMPIL_FOLDER}" != "./" ]
+	then
+		mv ${COMPIL_FOLDER}/ultracopier.exe ./
+	fi
+	if [ ${BITS} -eq 32 ]
+	then
+		upx --lzma -9 ultracopier.exe > /dev/null 2>&1
+	fi
+	if [ $SUPERCOPIER -eq 1 ]
+	then
+		mv ultracopier.exe supercopier.exe
+	fi
+	if [ $ULTIMATE -ne 1 ] && [ $FORPLUGIN -ne 1 ] && [ $SUPERCOPIER -ne 1 ]
+	then
+		rm -Rf ${TEMP_PATH}/${TARGET}/plugins-alternative/
 	fi
 	/usr/bin/find ${TEMP_PATH}/${TARGET}/ -type f -not \( -name "*.xml" -or -name "*.dll" -or -name "*.a" -or -name "*.exe" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
 	rm -Rf ${TEMP_PATH}/${TARGET}/resources/ ${PLUGIN_FOLDER}/SessionLoader/KDE4/

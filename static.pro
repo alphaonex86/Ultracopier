@@ -7,11 +7,11 @@ RESOURCES += plugins/static-plugins.qrc \
 
 win32:RESOURCES += plugins/static-plugins-windows.qrc
 
-LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt5SystemInfo
+LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt0SystemInfo
 win32:LIBS += -lpluginLoader -lsessionLoader
 
 build_pass:CONFIG(debug, debug|release) {
-LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd -lQt5SystemInfod
+LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd -lQt0SystemInfod
 win32:LIBS += -lpluginLoaderd -lsessionLoaderd
 }
 

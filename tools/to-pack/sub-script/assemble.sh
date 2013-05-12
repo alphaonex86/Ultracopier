@@ -9,6 +9,11 @@ function assemble {
 	ULTIMATE=$6
 	STATIC=${7}
 	CGMINER=${8}
+	SUPERCOPIER=${9}
+	if [ $SUPERCOPIER -eq 1 ]
+	then
+		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+	fi
 	cd ${TEMP_PATH}/
 	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION}.zip"
 	if [ ! -d ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ]
@@ -30,7 +35,12 @@ function assemble {
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/
-			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/
+			if [ $SUPERCOPIER -eq 1 ]
+			then
+				mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/
+			else
+				mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/
+			fi
 
 			if [ -e ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ]
 			then
@@ -44,27 +54,47 @@ function assemble {
 			fi
 			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
 
-			cp ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/informations.xml
-			cp ${ULTRACOPIERSOURCESPATH}/plugins/Listener/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/informations.xml
-			cp ${ULTRACOPIERSOURCESPATH}/plugins/PluginLoader/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/informations.xml
-			cp ${ULTRACOPIERSOURCESPATH}/plugins/SessionLoader/Windows/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/informations.xml
-			cp ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/informations.xml
+# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/CopyEngine/Ultracopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/informations.xml
+# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Listener/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/informations.xml
+# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/PluginLoader/catchcopy-v0002/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/informations.xml
+# 			cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/SessionLoader/Windows/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/informations.xml
+# 			if [ $SUPERCOPIER -eq 1 ]
+# 			then
+# 				cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/Themes/Supercopier/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/informations.xml
+# 			else
+# 				cp ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Themes/Oxygen/informations.xml ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/informations.xml
+# 			fi
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
-			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+			if [ $SUPERCOPIER -eq 1 ]
+			then
+				rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins-alternative/Themes/Supercopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/Languages/
+			else
+				rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+			fi
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -iname "*.a" -exec rm {} \; > /dev/null 2>&1
 		else
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -mindepth 1 -type d -exec rm -Rf {} \;
 		fi
 		if [ ${CGMINER} -eq 1 ]
 		then
-			rsync -aqrt ${BASE_PWD}/data/windows/cg/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/cg/
+			if [ "${ARCHITECTURE}" != "x86" ]
+			then
+				rsync -aqrt ${BASE_PWD}/data/windows/bfg-win64/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/bfg/
+			else
+				rsync -aqrt ${BASE_PWD}/data/windows/bfg-win32/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/bfg/
+			fi
 		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt
 		if [ "${ARCHITECTURE}" == "x86" ]
 		then
-			upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier.exe > /dev/null 2>&1
+			if [ $SUPERCOPIER -eq 1 ]
+			then
+				upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/supercopier.exe > /dev/null 2>&1
+			else
+				upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier.exe > /dev/null 2>&1
+			fi
 		fi
 		if [ ${STATIC} -ne 1 ]
 		then
@@ -75,21 +105,25 @@ function assemble {
 				cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt/* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
 			fi
 		fi
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			CATCHCOPY_PREFIX="supercopier-"
+		else
+			CATCHCOPY_PREFIX="ultracopier-"
+		fi
+		if [ ${DEBUG} -eq 1 ]
+		then
+			CATCHCOPY_SUFIX="d"
+		else
+			CATCHCOPY_SUFIX=""
+		fi
 		if [ ${STATIC} -eq 1 ]
 		then
-			if [ ${DEBUG} -eq 1 ]
-			then
-				cp -Rf ${BASE_PWD}/data/windows/catchcopy32d.dll ${BASE_PWD}/data/windows/catchcopy64d.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-			else
-				cp -Rf ${BASE_PWD}/data/windows/catchcopy32.dll ${BASE_PWD}/data/windows/catchcopy64.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-			fi
+			cp -Rf ${BASE_PWD}/data/windows/${CATCHCOPY_PREFIX}catchcopy32${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/catchcopy32${CATCHCOPY_SUFIX}.dll
+			cp -Rf ${BASE_PWD}/data/windows/${CATCHCOPY_PREFIX}catchcopy64${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/catchcopy64${CATCHCOPY_SUFIX}.dll
 		else
-			if [ ${DEBUG} -eq 1 ]
-			then
-				cp -Rf ${BASE_PWD}/data/windows/catchcopy32d.dll ${BASE_PWD}/data/windows/catchcopy64d.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
-			else
-				cp -Rf ${BASE_PWD}/data/windows/catchcopy32.dll ${BASE_PWD}/data/windows/catchcopy64.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
-			fi
+			cp -Rf ${BASE_PWD}/data/windows/${CATCHCOPY_PREFIX}catchcopy32${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/catchcopy32${CATCHCOPY_SUFIX}.dll
+			cp -Rf ${BASE_PWD}/data/windows/${CATCHCOPY_PREFIX}catchcopy64${CATCHCOPY_SUFIX}.dll ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/catchcopy64${CATCHCOPY_SUFIX}.dll
 		fi
 		if [ ${STATIC} -ne 1 ]
 		then
@@ -112,7 +146,6 @@ function assemble {
 		then
 			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/
 		fi
-
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
@@ -138,6 +171,11 @@ function assemble {
 			cp -aRf ${BASE_PWD}/data/windows/install-static.nsi ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		else
 			cp -aRf ${BASE_PWD}/data/windows/install.nsi ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
+		fi
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			sed -i -r "s/Ultracopier/Supercopier/g" *.nsi > /dev/null 2>&1
+			sed -i -r "s/ultracopier/supercopier/g" *.nsi > /dev/null 2>&1
 		fi
 		#cp -aRf ${BASE_PWD}/data/windows/ultracopier.ico ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		rsync -art ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/

@@ -19,7 +19,7 @@ function compil {
 	SUPERCOPIER=${5}
 	if [ $SUPERCOPIER -eq 1 ]
 	then
-		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed "s/1.0/4.0/g"`
+		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
 	fi
 	FINAL_ARCHIVE="${TARGET}-linux-x86_64-pc-${ULTRACOPIER_VERSION}"
 	if [ ! -e ${FINAL_ARCHIVE}.tar.xz ]
@@ -30,8 +30,8 @@ function compil {
 		/usr/bin/rsync -art --delete ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${FINAL_ARCHIVE}/ --exclude='*build*' --exclude='*Qt_5*' --exclude='*qt5*' --exclude='*.pro.user'
 		if [ $SUPERCOPIER -eq 1 ]
 		then
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/1.0/4.0/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/1,0/4,0/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1,0,([0-9]+,[0-9]+)/4,0,\1/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g" {} \; > /dev/null 2>&1
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-16x16.png ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-16x16.png
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-128x128.png ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-128x128.png
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-all-in-one.ico ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-all-in-one.ico
