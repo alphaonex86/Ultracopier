@@ -221,7 +221,7 @@ function compil {
 		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks"
 		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework"
 		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions"
-		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions/5"
+		ssh ${SSHUSER}@${IPMAC} "mkdir /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions/0"
 		ssh ${SSHUSER}@${IPMAC} "cp /Users/${SSHUSER}/Qt${QTVERSION}/${QTVERSION}/clang_64/lib/QtSystemInfo.framework/Versions/0/QtSystemInfo /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/Frameworks/QtSystemInfo.framework/Versions/0/QtSystemInfo"
 
 		ssh ${SSHUSER}@${IPMAC} "mkdir -p /Users/${SSHUSER}/Desktop/ultracopier/${BASEAPPNAME}/Contents/MacOS/CopyEngine/Ultracopier/"
