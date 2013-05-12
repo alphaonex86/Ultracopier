@@ -14,6 +14,7 @@ ThemesFactory::ThemesFactory()
     tempWidget=new QWidget();
     ui=new Ui::themesOptions();
     ui->setupUi(tempWidget);
+    ui->toolBox->setCurrentIndex(0);
     currentSpeed	= 0;
     updateSpeed();
 }

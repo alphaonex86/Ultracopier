@@ -36,7 +36,7 @@ Themes::Themes(const bool &alwaysOnTop,
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
-    uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));
+    uiOptions->setupUi(ui->optionsTab);
 
     currentFile     = 0;
     totalFile       = 0;
@@ -78,6 +78,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
     ui->tabWidget->setCurrentIndex(0);
+    uiOptions->toolBox->setCurrentIndex(0);
     uiOptions->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
     menu=new QMenu(this);
     ui->add->setMenu(menu);

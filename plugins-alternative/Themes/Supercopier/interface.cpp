@@ -36,7 +36,7 @@ Themes::Themes(const bool &alwaysOnTop,
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
-    uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));
+    uiOptions->setupUi(ui->optionsTab);
 
     currentFile     = 0;
     totalFile       = 0;
@@ -78,6 +78,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
     ui->tabWidget->setCurrentIndex(0);
+    uiOptions->toolBox->setCurrentIndex(0);
     uiOptions->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);
     menu=new QMenu(this);
     ui->add->setMenu(menu);
@@ -175,9 +176,9 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->progressBar_all->setMinimumHeight(17);
     ui->progressBar_file->setMinimumHeight(17);
     ui->progressBarCurrentSpeed->setMinimumHeight(17);
-    ui->progressBar_all->setStyleSheet(QString("QProgressBar{border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
-    ui->progressBar_file->setStyleSheet(QString("QProgressBar{border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
-    ui->progressBarCurrentSpeed->setStyleSheet(QString("QProgressBar{border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
+    ui->progressBar_all->setStyleSheet(QString("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
+    ui->progressBar_file->setStyleSheet(QString("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
+    ui->progressBarCurrentSpeed->setStyleSheet(QString("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
 
     show();
 
