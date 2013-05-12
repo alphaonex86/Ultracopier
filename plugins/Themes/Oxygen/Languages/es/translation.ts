@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="226"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="296"/>
@@ -119,12 +119,12 @@
     <message>
         <location filename="../../interface.ui" line="125"/>
         <source>Close on transfer completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca de finalización de transferencia</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="293"/>
         <source>Limit copy speed to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limitar la velocidad de copia en:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="336"/>
@@ -190,22 +190,22 @@
         <location filename="../../interface.ui" line="670"/>
         <location filename="../../interface.ui" line="739"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="690"/>
         <source>Export the errors into transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar los errores en la lista de transferencias</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="729"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuente</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="734"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Destino</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="748"/>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="35"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Uso</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="41"/>
@@ -268,23 +268,23 @@
     <message>
         <location filename="../../themesOptions.ui" line="61"/>
         <source>Minimize on close to systray</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimizar en cerca de la bandeja del sistema</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="71"/>
         <source>At the end of the copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Al final de la copia</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="97"/>
         <location filename="../../themesOptions.ui" line="131"/>
         <source>Limit copy speed to</source>
-        <translation type="unfinished"></translation>
+        <translation>Limitar la velocidad de copia de</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
-        <translation type="unfinished"></translation>
+        <translation>Haga clic para editar el color</translation>
     </message>
     <message>
         <source>At the end of the copy: </source>
@@ -302,12 +302,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="176"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="214"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualización</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="220"/>
