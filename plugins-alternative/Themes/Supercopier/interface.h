@@ -13,6 +13,7 @@
 #include <QShortcut>
 #include <QItemSelectionModel>
 #include <QTimer>
+#include <QTime>
 #include <QSystemTrayIcon>
 #include <QPixmap>
 
@@ -149,6 +150,8 @@ private slots:
     void on_exportErrorToTransferList_clicked();
 
 private:
+    QTime duration;
+    bool durationStarted;
     QPixmap pixmapTop,pixmapBottom;
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
     Ui::interfaceCopy *ui;

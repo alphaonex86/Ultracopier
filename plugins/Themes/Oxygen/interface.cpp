@@ -48,6 +48,7 @@ Themes::Themes(const bool &alwaysOnTop,
     modeIsForced	= false;
     haveStarted     = false;
     storeIsInPause	= false;
+    durationStarted = false;
 
     this->progressColorWrite    = progressColorWrite;
     this->progressColorRead     = progressColorRead;
@@ -333,6 +334,13 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                     break;
                 }
                 stat = status_stopped;
+                if(durationStarted)
+                {
+                    Ultracopier::TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(duration.elapsed()/1000);
+                    ui->labelTimeRemaining->setText("<html><body style=\"white-space:nowrap;\">"+facilityEngine->translateText("Completed in %1").arg(
+                                                        QString::number(time.hour)+":"+QString::number(time.minute).rightJustified(2,'0')+":"+QString::number(time.second).rightJustified(2,'0')
+                                                        )+"</body></html>");
+                }
             }
         break;
         default:
@@ -344,6 +352,11 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         case Ultracopier::Copying:
         case Ultracopier::CopyingAndListing:
             ui->pauseButton->setEnabled(true);
+            if(!durationStarted)
+            {
+                duration.start();
+                durationStarted=true;
+            }
             haveStarted=true;
             ui->cancelButton->setText(facilityEngine->translateText("Quit"));
             updatePause();

@@ -77,6 +77,7 @@ void FacilityEngine::retranslate()
     translations["Transfer list"]=tr("Transfer list");
     translations["Error"]=tr("Error");
     translations["Not supported on this platform"]=tr("Not supported on this platform");
+    translations["Completed in %1"]=tr("Completed in %1");
 }
 
 /// \brief convert size in Byte to String
