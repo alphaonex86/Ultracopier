@@ -101,12 +101,12 @@ OptionDialog::OptionDialog() :
     {
         if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
         {
-            QMessageBox::critical(this,tr("Allow cgminer"),tr("This Ultimate version is only if cgminer is allowed by your antivirus. You can get the normal free version (without cgminer)"));
+            QMessageBox::critical(this,tr("Allow the application"),tr("This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version").arg(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"application not found");
         }
         if(!OpenCLDll)
         {
-            QMessageBox::critical(this,tr("Allow OpenCL"),tr("This Ultimate version is only if OpenCL is installed with your graphic card drivers. You can get the normal free version (without cgminer)"));
+            QMessageBox::critical(this,tr("Enable the OpenCL"),tr("This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
         }
         ui->label_gpu_time->setEnabled(false);
