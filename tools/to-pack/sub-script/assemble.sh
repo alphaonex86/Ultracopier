@@ -12,10 +12,12 @@ function assemble {
 	SUPERCOPIER=${9}
 	if [ $SUPERCOPIER -eq 1 ]
 	then
-		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+		ULTRACOPIER_VERSION_FINAL=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+	else
+		ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
 	fi
 	cd ${TEMP_PATH}/
-	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION}.zip"
+	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION_FINAL}.zip"
 	if [ ! -d ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ]
 	then
 		echo "no previous compilation folder found into ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/..."
@@ -133,7 +135,7 @@ function assemble {
 		fi
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -iname "*.ts" -exec rm {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>windows-${ARCHITECTURE}<\/architecture>/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION_FINAL}<\/version>/g" {} \; > /dev/null 2>&1
 
 		rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/KDE4/
 		rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/dbus/
@@ -154,7 +156,7 @@ function assemble {
 		fi
 		echo "creating the archive ${TARGET}... done"
 	fi
-	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION}-setup.exe"
+	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION_FINAL}-setup.exe"
 	if [ ${DEBUG} -eq 0 ] && [ ${PORTABLE} -eq 0 ] && [ ! -e ${FINAL_ARCHIVE} ]; then
 		echo "creating the installer ${TARGET}..."
 		cd ${TEMP_PATH}/
@@ -175,7 +177,7 @@ function assemble {
 		#cp -aRf ${BASE_PWD}/data/windows/ultracopier.ico ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		rsync -art ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		cd ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
-		sed -i -r "s/X.X.X.X/${ULTRACOPIER_VERSION}/g" *.nsi > /dev/null 2>&1
+		sed -i -r "s/X.X.X.X/${ULTRACOPIER_VERSION_FINAL}/g" *.nsi > /dev/null 2>&1
 		if [ "${ARCHITECTURE}" != "x86" ]
 		then
 			sed -i -r "s/PROGRAMFILES/PROGRAMFILES64/g" *.nsi > /dev/null 2>&1

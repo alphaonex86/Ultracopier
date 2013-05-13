@@ -15,7 +15,9 @@ function compil {
 	SUPERCOPIER=${12}
 	if [ $SUPERCOPIER -eq 1 ]
 	then
-		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+		ULTRACOPIER_VERSION_FINAL=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+	else
+		ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
 	fi
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
@@ -55,7 +57,7 @@ function compil {
 	fi
 	find ${TEMP_PATH}/${TARGET}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
+	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION_FINAL}<\/version>/g" {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null 2>&1
 	if [ $DEBUG -eq 1 ]
 	then
