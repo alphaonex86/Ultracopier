@@ -412,63 +412,6 @@ void OptionDialog::on_buttonBox_clicked(QAbstractButton *button)
 
 void OptionDialog::loadOption()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
-    newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
-    newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
-    newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
-    newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
-    newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
-    newOptionValue("Ultracopier",	"giveGPUTime",              OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime"));
-    newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
-    newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
-    #ifndef ULTRACOPIER_VERSION_PORTABLE
-    newOptionValue("SessionLoader",	"LoadAtSessionStarting",	OptionEngine::optionEngine->getOptionValue("SessionLoader","LoadAtSessionStarting"));
-    #endif
-    newOptionValue("CopyListener",	"CatchCopyAsDefault",		OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault"));
-    newOptionValue("CopyEngine",	"List",                     OptionEngine::optionEngine->getOptionValue("CopyEngine","List"));
-    if(ResourcesManager::resourcesManager->getWritablePath()=="")
-        ui->checkBox_Log->setEnabled(false);
-    else
-    {
-        newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine->getOptionValue("Write_log","enabled"));
-        newOptionValue("Write_log",	"file",				OptionEngine::optionEngine->getOptionValue("Write_log","file"));
-        newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine->getOptionValue("Write_log","transfer"));
-        newOptionValue("Write_log",	"error",			OptionEngine::optionEngine->getOptionValue("Write_log","error"));
-        newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine->getOptionValue("Write_log","folder"));
-        newOptionValue("Write_log",	"transfer_format",	OptionEngine::optionEngine->getOptionValue("Write_log","transfer_format"));
-        newOptionValue("Write_log",	"error_format",		OptionEngine::optionEngine->getOptionValue("Write_log","error_format"));
-        newOptionValue("Write_log",	"folder_format",	OptionEngine::optionEngine->getOptionValue("Write_log","folder_format"));
-        newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
-    }
-    on_checkBox_Log_clicked();
-    #ifndef ULTRACOPIER_VERSION_PORTABLE
-    if(PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader).size()>0)
-    {
-        ui->labelLoadAtSession->setToolTip("");
-        ui->LoadAtSessionStarting->setToolTip("");
-        ui->labelLoadAtSession->setEnabled(true);
-        ui->LoadAtSessionStarting->setEnabled(true);
-    }
-    else
-    {
-        ui->labelLoadAtSession->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
-        ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
-        ui->labelLoadAtSession->setEnabled(false);
-        ui->LoadAtSessionStarting->setEnabled(false);
-    }
-    #endif
-    allPluginsIsLoaded=true;
-    on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
-
-    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific").toBool())
-    {
-        OSSpecific oSSpecific;
-        oSSpecific.exec();
-        if(oSSpecific.dontShowAgain())
-            OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
-    }
-
     #ifdef ULTRACOPIER_CGMINER
     ui->label_gpu_time->setEnabled(false);
     ui->giveGPUTime->setEnabled(false);
@@ -525,10 +468,73 @@ void OptionDialog::loadOption()
             pools << pool;
             index++;
         }
-        //QStringList pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://eu.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
-        //pools << pool2;
+        /*QStringList pool2;
+        pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://us.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx" << "--thread-concurrency" << "1";
+        index=0;
+        while(index<10)
+        {
+            pools << pool2;
+            index++;
+        }*/
     }
     #endif
+
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
+    newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
+    newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
+    newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
+    newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
+    newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
+    newOptionValue("Ultracopier",	"giveGPUTime",              OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime"));
+    newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
+    newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
+    newOptionValue("SessionLoader",	"LoadAtSessionStarting",	OptionEngine::optionEngine->getOptionValue("SessionLoader","LoadAtSessionStarting"));
+    #endif
+    newOptionValue("CopyListener",	"CatchCopyAsDefault",		OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault"));
+    newOptionValue("CopyEngine",	"List",                     OptionEngine::optionEngine->getOptionValue("CopyEngine","List"));
+    if(ResourcesManager::resourcesManager->getWritablePath()=="")
+        ui->checkBox_Log->setEnabled(false);
+    else
+    {
+        newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine->getOptionValue("Write_log","enabled"));
+        newOptionValue("Write_log",	"file",				OptionEngine::optionEngine->getOptionValue("Write_log","file"));
+        newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine->getOptionValue("Write_log","transfer"));
+        newOptionValue("Write_log",	"error",			OptionEngine::optionEngine->getOptionValue("Write_log","error"));
+        newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine->getOptionValue("Write_log","folder"));
+        newOptionValue("Write_log",	"transfer_format",	OptionEngine::optionEngine->getOptionValue("Write_log","transfer_format"));
+        newOptionValue("Write_log",	"error_format",		OptionEngine::optionEngine->getOptionValue("Write_log","error_format"));
+        newOptionValue("Write_log",	"folder_format",	OptionEngine::optionEngine->getOptionValue("Write_log","folder_format"));
+        newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
+    }
+    on_checkBox_Log_clicked();
+    #ifndef ULTRACOPIER_VERSION_PORTABLE
+    if(PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader).size()>0)
+    {
+        ui->labelLoadAtSession->setToolTip("");
+        ui->LoadAtSessionStarting->setToolTip("");
+        ui->labelLoadAtSession->setEnabled(true);
+        ui->LoadAtSessionStarting->setEnabled(true);
+    }
+    else
+    {
+        ui->labelLoadAtSession->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
+        ui->LoadAtSessionStarting->setToolTip(tr("Disabled because you do not have any SessionLoader plugin"));
+        ui->labelLoadAtSession->setEnabled(false);
+        ui->LoadAtSessionStarting->setEnabled(false);
+    }
+    #endif
+    allPluginsIsLoaded=true;
+    on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
+
+    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific").toBool())
+    {
+        OSSpecific oSSpecific;
+        oSSpecific.exec();
+        if(oSSpecific.dontShowAgain())
+            OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
+    }
 }
 
 void OptionDialog::newOptionValue(const QString &group,const QString &name,const QVariant &value)
