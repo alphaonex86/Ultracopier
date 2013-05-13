@@ -753,6 +753,9 @@ p, li { white-space: pre-wrap; }
        </property>
        <item>
         <widget class="QScrollArea" name="optionsTab">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
          <widget class="QWidget" name="scrollAreaWidgetContents">
           <property name="geometry">
            <rect>
