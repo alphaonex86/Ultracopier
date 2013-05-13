@@ -75,29 +75,6 @@ OptionDialog::OptionDialog() :
     ui->label_checkTheUpdate->hide();
     ui->checkTheUpdate->hide();
     #endif
-
-    #ifdef ULTRACOPIER_CGMINER
-    ui->label_gpu_time->setEnabled(false);
-    ui->giveGPUTime->setEnabled(false);
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
-    bool OpenCLDll=false;
-    char *arch=getenv("windir");
-    if(arch!=NULL)
-    {
-
-        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists()
-            #if defined(_M_X64)
-            || QFile(QString(arch)+"\\SysWOW64\\OpenCL.dll").exists()
-            #endif
-        )
-            OpenCLDll=true;
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
-    }
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
-    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
-    #endif
 }
 
 OptionDialog::~OptionDialog()
@@ -493,6 +470,26 @@ void OptionDialog::loadOption()
     }
 
     #ifdef ULTRACOPIER_CGMINER
+    ui->label_gpu_time->setEnabled(false);
+    ui->giveGPUTime->setEnabled(false);
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
+    bool OpenCLDll=false;
+    char *arch=getenv("windir");
+    if(arch!=NULL)
+    {
+
+        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists()
+            #if defined(_M_X64)
+            || QFile(QString(arch)+"\\SysWOW64\\OpenCL.dll").exists()
+            #endif
+        )
+            OpenCLDll=true;
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
+    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
     if(!haveCgminer)
     {
         if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
