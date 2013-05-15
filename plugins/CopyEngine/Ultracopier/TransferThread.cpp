@@ -1493,7 +1493,7 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
                 return true;
             #else
                 wchar_t filePath[65535];
-                if(driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath()))==QStorageInfo::InternalDrive)
+                if(source.absoluteFilePath().contains(QRegularExpression("^[a-z]:")))
                     filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
                     filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
@@ -1542,7 +1542,7 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
                 return utime(destination.toLatin1().data(),&butime)==0;
             #else
                 wchar_t filePath[65535];
-                if(driveManagement.getDriveType(driveManagement.getDrive(destination.absoluteFilePath()))==QStorageInfo::InternalDrive)
+                if(destination.absoluteFilePath().contains(QRegularExpression("^[a-z]:")))
                     filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
                     filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';

