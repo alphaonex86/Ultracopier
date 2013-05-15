@@ -76,7 +76,7 @@ void MkPath::internalDoThisPath()
         else
         {
             doTheDateTransfer=readFileDateTime(pathList.first().source);
-            if(!doTheDateTransfer)
+            /*if(!doTheDateTransfer)
             {
                 if(stopIt)
                     return;
@@ -84,7 +84,7 @@ void MkPath::internalDoThisPath()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.first().source.absoluteFilePath());
                 emit errorOnFolder(pathList.first().source,tr("Unable to get time"));
                 return;
-            }
+            }*/
         }
     }
     if(dir.exists(pathList.first().destination.absoluteFilePath()) && pathList.first().actionType==ActionType_RealMove)
@@ -283,7 +283,10 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
                 return true;
             #else
                 wchar_t filePath[65535];
-                filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                if(driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath()))==QStorageInfo::InternalDrive)
+                    filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                else
+                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
@@ -329,7 +332,10 @@ bool MkPath::writeFileDateTime(const QFileInfo &destination)
                 return utime(destination.toLatin1().data(),&butime)==0;
             #else
                 wchar_t filePath[65535];
-                filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                if(driveManagement.getDriveType(driveManagement.getDrive(destination.absoluteFilePath()))==QStorageInfo::InternalDrive)
+                    filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                else
+                    filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {

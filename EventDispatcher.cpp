@@ -160,14 +160,6 @@ void EventDispatcher::initFunction()
         QCoreApplication::exit(1);//by 1, return process is in progress
         return;
     }
-    #ifdef ULTRACOPIER_CGMINER
-    if(!optionDialog.havecgminer())
-    {
-        stopIt=true;
-        QCoreApplication::exit(1);//by 1, return process is in progress
-        return;
-    }
-    #endif
     localListener.listenServer();
     //load the systray icon
     if(backgroundIcon==NULL)

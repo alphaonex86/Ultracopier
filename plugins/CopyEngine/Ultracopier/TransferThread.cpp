@@ -1493,7 +1493,10 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
                 return true;
             #else
                 wchar_t filePath[65535];
-                filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                if(driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath()))==QStorageInfo::InternalDrive)
+                    filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                else
+                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
@@ -1539,7 +1542,10 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
                 return utime(destination.toLatin1().data(),&butime)==0;
             #else
                 wchar_t filePath[65535];
-                filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                if(driveManagement.getDriveType(driveManagement.getDrive(destination.absoluteFilePath()))==QStorageInfo::InternalDrive)
+                    filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                else
+                    filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {

