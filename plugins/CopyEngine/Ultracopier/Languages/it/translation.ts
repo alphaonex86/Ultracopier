@@ -544,9 +544,8 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="85"/>
         <source>Unable to get time</source>
-        <translation>Impossibile ottenere l&apos;ora</translation>
+        <translation type="obsolete">Impossibile ottenere l&apos;ora</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="103"/>

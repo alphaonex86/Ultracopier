@@ -5,10 +5,10 @@
     <name>CliParser</name>
     <message>
         <location filename="../../../CliParser.cpp" line="27"/>
-        <location filename="../../../CliParser.cpp" line="68"/>
-        <location filename="../../../CliParser.cpp" line="78"/>
-        <location filename="../../../CliParser.cpp" line="88"/>
-        <location filename="../../../CliParser.cpp" line="171"/>
+        <location filename="../../../CliParser.cpp" line="73"/>
+        <location filename="../../../CliParser.cpp" line="83"/>
+        <location filename="../../../CliParser.cpp" line="93"/>
+        <location filename="../../../CliParser.cpp" line="178"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
@@ -18,44 +18,50 @@
         <translation>Ultracopier ya se está ejecutando, haga clic derecho sobre el icono de la bandeja del sistema (cerca del reloj) para poder utilizarlas</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="68"/>
+        <location filename="../../../CliParser.cpp" line="73"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../CliParser.cpp" line="153"/>
-        <location filename="../../../CliParser.cpp" line="163"/>
-        <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../CliParser.cpp" line="157"/>
-        <location filename="../../../CliParser.cpp" line="167"/>
-        <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Problema al leer el archivo, o el tamaño del archivo es 0</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="158"/>
-        <location filename="../../../CliParser.cpp" line="168"/>
-        <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../CliParser.cpp" line="169"/>
+        <source>The arguments possible are:</source>
+        <translation>Los argumentos posibles son:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="162"/>
+        <location filename="../../../CliParser.cpp" line="160"/>
+        <location filename="../../../CliParser.cpp" line="171"/>
+        <source>To display the options</source>
+        <translation>Para mostrar las opciones</translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="163"/>
+        <location filename="../../../CliParser.cpp" line="174"/>
+        <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
+        <translation>Para copiar las fuentes a destino, separados por un espacio. Si el destino es &quot;?&quot;, Ultracopier le preguntará al usuario</translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="164"/>
+        <location filename="../../../CliParser.cpp" line="175"/>
+        <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
+        <translation>Para mover las fuentes de destino, separados por un espacio. Si el destino es &quot;?&quot;, Ultracopier le preguntará al usuario</translation>
+    </message>
+    <message>
+        <location filename="../../../CliParser.cpp" line="168"/>
         <source>Command not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Comando no válido</translation>
     </message>
     <message>
         <source>Problem at the reading, or file size is null</source>
         <translation type="obsolete">Problema en la lectura, o el tamaño del archivo es nulo</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="78"/>
+        <location filename="../../../CliParser.cpp" line="83"/>
         <source>This file is not supported transfer list</source>
         <translation>Este archivo no es compatible con lista de transferencias</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="88"/>
+        <location filename="../../../CliParser.cpp" line="93"/>
         <source>Unable to open the transfer list file</source>
         <translation>No se puede abrir el archivo de lista de transferencias</translation>
     </message>
@@ -64,20 +70,20 @@
         <translation type="obsolete">Los posibles argumentos son los siguientes:</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="154"/>
-        <location filename="../../../CliParser.cpp" line="164"/>
+        <location filename="../../../CliParser.cpp" line="159"/>
+        <location filename="../../../CliParser.cpp" line="170"/>
         <source>To display this help</source>
         <translation>Para mostrar esta ayuda</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="155"/>
-        <location filename="../../../CliParser.cpp" line="165"/>
+        <location filename="../../../CliParser.cpp" line="161"/>
+        <location filename="../../../CliParser.cpp" line="172"/>
         <source>To quit the other instances (if running)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para salir de los otros casos (si está activo)</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="156"/>
-        <location filename="../../../CliParser.cpp" line="166"/>
+        <location filename="../../../CliParser.cpp" line="162"/>
+        <location filename="../../../CliParser.cpp" line="173"/>
         <source>Open transfer list</source>
         <translation>Abrir lista de transferencias</translation>
     </message>
@@ -98,7 +104,7 @@
         <translation type="obsolete">La línea de comandos que no entiendo</translation>
     </message>
     <message>
-        <location filename="../../../CliParser.cpp" line="173"/>
+        <location filename="../../../CliParser.cpp" line="180"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
@@ -137,12 +143,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="147"/>
+        <location filename="../../../CopyListener.cpp" line="144"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="147"/>
+        <location filename="../../../CopyListener.cpp" line="144"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Error durante la recepción de la lista de copia / movimiento
@@ -186,12 +192,12 @@
     <message>
         <location filename="../../../Core.cpp" line="217"/>
         <source>The argument for the mode is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>El argumento para el modo no es válida</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="892"/>
+        <location filename="../../../Core.cpp" line="896"/>
         <source>Do you want to copy? If no, it will be moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Quieres copiar? Si no, se puede mover.</translation>
     </message>
     <message>
         <source>The argument for the mode is not understand</source>
@@ -209,7 +215,7 @@
         <translation>No se puede cargar el motor de copia, copia abortados</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="892"/>
+        <location filename="../../../Core.cpp" line="896"/>
         <source>Transfer mode</source>
         <translation>Modo de transferencia</translation>
     </message>
@@ -418,7 +424,12 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Put to the end of the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponga al final de la lista</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <source>Completed in %1</source>
+        <translation>Terminado en %1</translation>
     </message>
     <message>
         <source>Put to end of the list</source>
@@ -478,12 +489,12 @@
 <context>
     <name>HelpDialog</name>
     <message>
-        <location filename="../../../HelpDialog.ui" line="20"/>
+        <location filename="../../../HelpDialog.cpp" line="39"/>
         <source>About Ultracopier</source>
         <translation>Acerca Ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="70"/>
+        <location filename="../../../HelpDialog.ui" line="67"/>
         <source>Based on Qt. Advanced utility to copy files under GPL3 license.
 This version is compiled as version: %1.</source>
         <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
@@ -491,63 +502,69 @@ This version is compiled as version: %1.</source>
 Esta versión está compilada en versión:%1.</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="88"/>
+        <location filename="../../../HelpDialog.ui" line="85"/>
         <source>Platform: %1</source>
         <extracomment>%1 will be replaced by the platform (windows, mac, linux, ...)</extracomment>
         <translation>Plataforma: %1</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="124"/>
+        <location filename="../../../HelpDialog.ui" line="121"/>
         <source>About Qt</source>
         <translation>Acerca de Qt</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="144"/>
+        <location filename="../../../HelpDialog.ui" line="141"/>
         <source>Do a crash</source>
         <translation>Hacer a crash</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="151"/>
+        <location filename="../../../HelpDialog.ui" line="148"/>
         <source>Save bug report</source>
         <translation>Guardar informe de error</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="158"/>
+        <location filename="../../../HelpDialog.ui" line="155"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="74"/>
+        <location filename="../../../HelpDialog.cpp" line="37"/>
+        <source>About Supercopier</source>
+        <translation>Acerca de Supercopier</translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="82"/>
         <source>For http://portableapps.com/</source>
         <translation>Para http://portableapps.com/</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="77"/>
+        <location filename="../../../HelpDialog.cpp" line="85"/>
         <source>Portable and all in one version</source>
         <translation>Portable y todo en una versión</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="79"/>
+        <location filename="../../../HelpDialog.cpp" line="87"/>
         <source>Portable version</source>
         <translation>Version portable</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="84"/>
+        <location filename="../../../HelpDialog.cpp" line="92"/>
         <source>All in one version</source>
         <translation>Todo en una sola versión</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="86"/>
+        <location filename="../../../HelpDialog.cpp" line="94"/>
         <source>Normal version</source>
         <translation>Version normal</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="103"/>
+        <location filename="../../../HelpDialog.cpp" line="112"/>
+        <location filename="../../../HelpDialog.cpp" line="114"/>
         <source>http://ultracopier.first-world.info/</source>
         <translation>http://ultracopier-es.first-world.info/</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="78"/>
+        <location filename="../../../HelpDialog.ui" line="75"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For more information see the website &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%1 will be remplaced by the website into the corresponding languages</extracomment>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Para obtener más información, consulte el sitio web &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
@@ -569,22 +586,22 @@ Esta versión está compilada en versión:%1.</translation>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="91"/>
-        <location filename="../../../LogThread.cpp" line="100"/>
-        <location filename="../../../LogThread.cpp" line="110"/>
+        <location filename="../../../LogThread.cpp" line="75"/>
+        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="94"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="91"/>
+        <location filename="../../../LogThread.cpp" line="75"/>
         <source>Log file already open, error: %1</source>
         <translation>Entrar archivo ya está abierto, error: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="100"/>
-        <location filename="../../../LogThread.cpp" line="110"/>
+        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="94"/>
         <source>Unable to open the log file, error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el archivo de registro, error: %1</translation>
     </message>
     <message>
         <source>Unable to open file to keep the log file, error: %1</source>
@@ -615,7 +632,7 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../OSSpecific.cpp" line="10"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>La sustitución de la copia default / sistema de movimiento no está soportado por el gestor de archivos (Dolphin, Nautilus, ...). &lt;br /&gt; Pregunte al desarrollador para apoyarlo. &lt;br /&gt; Es necesario hacer el copiar / mover manualmente.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="12"/>
@@ -653,14 +670,14 @@ Esta versión está compilada en versión:%1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
-        <location filename="../../../OptionDialog.ui" line="291"/>
-        <location filename="../../../OptionDialog.cpp" line="275"/>
+        <location filename="../../../OptionDialog.ui" line="301"/>
+        <location filename="../../../OptionDialog.cpp" line="314"/>
         <source>Copy engine</source>
         <translation>Motor de copia</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="92"/>
-        <location filename="../../../OptionDialog.ui" line="319"/>
+        <location filename="../../../OptionDialog.ui" line="329"/>
         <source>Themes</source>
         <translation>Themas</translation>
     </message>
@@ -670,9 +687,8 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Log</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="141"/>
         <source>Load at the session loading:</source>
-        <translation>Carga en la carga de la sesión:</translation>
+        <translation type="obsolete">Carga en la carga de la sesión:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="222"/>
@@ -680,48 +696,51 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Confirmar al grupo de las ventanas</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="229"/>
         <source>Display the OS warning:</source>
-        <translation>Muestra la advertencia OS:</translation>
+        <translation type="obsolete">Muestra la advertencia OS:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="245"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar actualizaciones</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="281"/>
+        <source>Give GPU time to Ultracopier</source>
+        <translation type="obsolete">Dale GPU tiempo</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="291"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="286"/>
+        <location filename="../../../OptionDialog.ui" line="296"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="296"/>
+        <location filename="../../../OptionDialog.ui" line="306"/>
         <source>Language</source>
         <translation>Lenguaje</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
-        <location filename="../../../OptionDialog.ui" line="304"/>
-        <location filename="../../../OptionDialog.cpp" line="276"/>
+        <location filename="../../../OptionDialog.ui" line="314"/>
+        <location filename="../../../OptionDialog.cpp" line="315"/>
         <source>Listener</source>
         <translation>Oyente</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
-        <location filename="../../../OptionDialog.ui" line="309"/>
-        <location filename="../../../OptionDialog.cpp" line="277"/>
+        <location filename="../../../OptionDialog.ui" line="319"/>
+        <location filename="../../../OptionDialog.cpp" line="316"/>
         <source>Plugin loader</source>
         <translation>Plugin cargador</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
-        <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="278"/>
+        <location filename="../../../OptionDialog.ui" line="324"/>
+        <location filename="../../../OptionDialog.cpp" line="317"/>
         <source>Session loader</source>
         <translation>Sesión cargador</translation>
     </message>
@@ -730,119 +749,164 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Compruebe la actualización</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="327"/>
+        <location filename="../../../OptionDialog.ui" line="117"/>
+        <source>Force the language</source>
+        <translation>Forzar el idioma</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="127"/>
+        <source>Replace the default copy and move system</source>
+        <translation>Sustituto del sistema de copia</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="141"/>
+        <source>Load at the session loading</source>
+        <translation>Carga en la carga de la sesión</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="155"/>
+        <source>When manual open</source>
+        <translation>Cuando apertura manual</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="181"/>
+        <source>Group the windows when</source>
+        <translation>Grupo de las ventanas cuando</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="229"/>
+        <source>Display the OS warning</source>
+        <translation>Muestra la advertencia OS</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="255"/>
+        <source>Give GPU time to fund the development</source>
+        <translation>Dar tiempo GPU para financiar el desarrollo</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="337"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="346"/>
+        <location filename="../../../OptionDialog.ui" line="356"/>
         <source>Add</source>
         <translation>Añadir</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="359"/>
+        <location filename="../../../OptionDialog.ui" line="369"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="369"/>
+        <location filename="../../../OptionDialog.ui" line="379"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="396"/>
+        <location filename="../../../OptionDialog.ui" line="406"/>
         <source>Copy engine by order of preference:</source>
         <translation>Copia del motor por orden de preferencia:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="467"/>
+        <location filename="../../../OptionDialog.ui" line="477"/>
         <source>Client connected</source>
         <translation>Cliente conectado</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="523"/>
+        <location filename="../../../OptionDialog.ui" line="533"/>
         <source>Themes:</source>
         <translation>Temas:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="585"/>
+        <location filename="../../../OptionDialog.ui" line="595"/>
         <source>Unable to load the themes plugin</source>
         <translation>No se puede cargar el plugin temas</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="635"/>
+        <location filename="../../../OptionDialog.ui" line="645"/>
         <source>No option for this plugin</source>
         <translation>No hay ninguna opción para este plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="685"/>
+        <location filename="../../../OptionDialog.ui" line="695"/>
         <source>Browse</source>
         <translation>Navegar</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="720"/>
+        <source>Write the transfers</source>
+        <translation>Escriba las transferencias</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="780"/>
+        <source>Write the folder operations</source>
+        <translation>Escriba la carpeta de las operaciones</translation>
     </message>
     <message>
         <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation type="obsolete">Escriba directamente el archivo cuando se recibe una nueva entrada (se puede producir un 50% de pérdida de rendimiento)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="717"/>
+        <location filename="../../../OptionDialog.ui" line="727"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
         <translation>Las variables son %time%, %source%, %size%, %destination%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="747"/>
+        <location filename="../../../OptionDialog.ui" line="750"/>
+        <source>Write the errors</source>
+        <translation>Escribir los errores</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="757"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
         <translation>Las variables son %time%, %path%, %size%, %mtime%, %error%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="666"/>
+        <location filename="../../../OptionDialog.ui" line="676"/>
         <source>Write the log file into:</source>
         <translation>Escribir el archivo de registro en:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="117"/>
         <source>Force the language:</source>
-        <translation>Forzar el idioma:</translation>
+        <translation type="obsolete">Forzar el idioma:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="127"/>
         <source>Replace the default copy and move system:</source>
-        <translation>Vuelva a colocar la copia por omisión y el sistema de movimiento:</translation>
+        <translation type="obsolete">Vuelva a colocar la copia por omisión y el sistema de movimiento:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="697"/>
+        <location filename="../../../OptionDialog.ui" line="707"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
+        <translation>Escriba directamente el archivo cuando se recibe una nueva entrada (se puede producir un 50% de pérdida de rendimiento)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="710"/>
         <source>Write the transfers:</source>
-        <translation>Escriba las transferencias:</translation>
+        <translation type="obsolete">Escriba las transferencias:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="740"/>
         <source>Write the errors:</source>
-        <translation>Escribir los errores:</translation>
+        <translation type="obsolete">Escribir los errores:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="770"/>
         <source>Write the folder operations:</source>
-        <translation>Escriba la carpeta de las operaciones:</translation>
+        <translation type="obsolete">Escriba la carpeta de las operaciones:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="181"/>
-        <location filename="../../../OptionDialog.cpp" line="195"/>
+        <location filename="../../../OptionDialog.cpp" line="220"/>
+        <location filename="../../../OptionDialog.cpp" line="234"/>
         <source>Load</source>
         <translation>Cargar</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="181"/>
+        <location filename="../../../OptionDialog.cpp" line="220"/>
         <source>Load the theme?</source>
         <translation>Cargue el tema?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="195"/>
+        <location filename="../../../OptionDialog.cpp" line="234"/>
         <source>Load the language?</source>
         <translation>Cargue el idioma?</translation>
     </message>
@@ -851,87 +915,105 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Desactiveado porque no tienes niguano plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="279"/>
-        <location filename="../../../OptionDialog.cpp" line="281"/>
-        <location filename="../../../OptionDialog.cpp" line="431"/>
-        <location filename="../../../OptionDialog.cpp" line="432"/>
-        <source>Disabled because you do not have any SessionLoader plugin</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <source>Allow the application</source>
+        <translation>Permitir la aplicación</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="283"/>
+        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
+        <translation>Esta versión gratuita de ruptura es sólo si %1 es permitido por su antivirus. Cosa que usted puede obtener la versión normal gratis</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <source>Enable the OpenCL</source>
+        <translation>Habilite el OpenCL</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
+        <translation>Esta versión Ultimate es sólo si el OpenCL se instala con los controladores de la tarjeta gráfica. Cosa que usted puede obtener la versión normal gratis</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="318"/>
+        <location filename="../../../OptionDialog.cpp" line="320"/>
+        <location filename="../../../OptionDialog.cpp" line="505"/>
+        <location filename="../../../OptionDialog.cpp" line="506"/>
+        <source>Disabled because you do not have any SessionLoader plugin</source>
+        <translation>Discapacitados, ya que no tiene ningún plugin SessionLoader</translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.cpp" line="322"/>
         <source>Do nothing</source>
         <translation>No hacer nada</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="284"/>
+        <location filename="../../../OptionDialog.cpp" line="323"/>
         <source>Ask source as folder</source>
         <translation>Pregunte a la fuente que la carpeta</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="285"/>
+        <location filename="../../../OptionDialog.cpp" line="324"/>
         <source>Ask sources as files</source>
         <translation>Pregunte a las fuentes como archivos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="286"/>
+        <location filename="../../../OptionDialog.cpp" line="325"/>
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="287"/>
+        <location filename="../../../OptionDialog.cpp" line="326"/>
         <source>When source is same</source>
         <translation>Cuando la fuente es la misma</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="288"/>
+        <location filename="../../../OptionDialog.cpp" line="327"/>
         <source>When destination is same</source>
         <translation>Cuando destino es el mismo</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="289"/>
+        <location filename="../../../OptionDialog.cpp" line="328"/>
         <source>When source and destination are same</source>
         <translation>Cuando la fuente y el destino son los mismos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="290"/>
+        <location filename="../../../OptionDialog.cpp" line="329"/>
         <source>When source or destination are same</source>
         <translation>Cuando la fuente o el destino son los mismos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="291"/>
+        <location filename="../../../OptionDialog.cpp" line="330"/>
         <source>Always</source>
         <translation>Siempre</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="305"/>
-        <location filename="../../../OptionDialog.cpp" line="306"/>
-        <location filename="../../../OptionDialog.cpp" line="307"/>
+        <location filename="../../../OptionDialog.cpp" line="344"/>
+        <location filename="../../../OptionDialog.cpp" line="345"/>
+        <location filename="../../../OptionDialog.cpp" line="346"/>
         <source>The variables are %1</source>
         <translation>Las variables son %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="912"/>
+        <location filename="../../../OptionDialog.cpp" line="1052"/>
         <source>Save logs as: </source>
         <translation>Guardar registros como: </translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="700"/>
+        <location filename="../../../OptionDialog.ui" line="710"/>
         <source>Synchronized log</source>
         <translation>Registro de sincronizada</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="155"/>
         <source>When manual open:</source>
-        <translation>Cuando apertura manual:</translation>
+        <translation type="obsolete">Cuando apertura manual:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="181"/>
         <source>Group the windows when:</source>
-        <translation>Grupo de las ventanas cuando:</translation>
+        <translation type="obsolete">Grupo de las ventanas cuando:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="780"/>
+        <location filename="../../../OptionDialog.ui" line="790"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
         <translation>Las variables son %path%, %operation%</translation>
@@ -1053,17 +1135,17 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Dependencias %1 no está satisfecho, para el plugin:%2</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="662"/>
+        <location filename="../../../PluginsManager.cpp" line="667"/>
         <source>Remove %1</source>
         <translation>Eliminar %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="673"/>
+        <location filename="../../../PluginsManager.cpp" line="678"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="697"/>
+        <location filename="../../../PluginsManager.cpp" line="702"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
@@ -1075,7 +1157,7 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../PluginsManager.cpp" line="229"/>
         <source>informations.xml not found for the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>informations.xml no se encuentra el plug-in</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="263"/>
@@ -1094,7 +1176,7 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../PluginsManager.cpp" line="397"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto Inglés falta en el informations.xml para la etiqueta: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="405"/>
@@ -1102,67 +1184,67 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Etiqueta no encontrada: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="662"/>
+        <location filename="../../../PluginsManager.cpp" line="667"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
         <translation>¿Estás seguro de eliminar &quot;%1&quot; en la versión %2?</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="673"/>
+        <location filename="../../../PluginsManager.cpp" line="678"/>
         <source>Error while the removing plugin, please check the rights on the folder: 
 %1</source>
         <translation>Error al eliminar el plug-in, por favor, compruebe los derechos de la carpeta:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="697"/>
+        <location filename="../../../PluginsManager.cpp" line="702"/>
         <source>Previous import is in progress...</source>
         <translation>Previo de importación está en curso ...</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="700"/>
+        <location filename="../../../PluginsManager.cpp" line="705"/>
         <source>Open Ultracopier plugin</source>
         <translation>Abrir Plugin Ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="700"/>
+        <location filename="../../../PluginsManager.cpp" line="705"/>
         <source>Ultracopier plugin (*.urc)</source>
         <translation>Ultracopier plugin (*.urc)</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="717"/>
-        <location filename="../../../PluginsManager.cpp" line="739"/>
-        <location filename="../../../PluginsManager.cpp" line="806"/>
-        <location filename="../../../PluginsManager.cpp" line="819"/>
-        <location filename="../../../PluginsManager.cpp" line="838"/>
-        <location filename="../../../PluginsManager.cpp" line="844"/>
-        <location filename="../../../PluginsManager.cpp" line="850"/>
-        <location filename="../../../PluginsManager.cpp" line="856"/>
-        <location filename="../../../PluginsManager.cpp" line="862"/>
-        <location filename="../../../PluginsManager.cpp" line="869"/>
+        <location filename="../../../PluginsManager.cpp" line="722"/>
+        <location filename="../../../PluginsManager.cpp" line="744"/>
+        <location filename="../../../PluginsManager.cpp" line="811"/>
+        <location filename="../../../PluginsManager.cpp" line="824"/>
+        <location filename="../../../PluginsManager.cpp" line="843"/>
+        <location filename="../../../PluginsManager.cpp" line="849"/>
+        <location filename="../../../PluginsManager.cpp" line="855"/>
+        <location filename="../../../PluginsManager.cpp" line="861"/>
+        <location filename="../../../PluginsManager.cpp" line="867"/>
+        <location filename="../../../PluginsManager.cpp" line="874"/>
         <source>Plugin loader</source>
         <translation>Plugin cargador</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="717"/>
+        <location filename="../../../PluginsManager.cpp" line="722"/>
         <source>Unable to open the plugin: %1</source>
         <translation>No se puede abrir el plugin: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="739"/>
-        <location filename="../../../PluginsManager.cpp" line="856"/>
-        <location filename="../../../PluginsManager.cpp" line="869"/>
+        <location filename="../../../PluginsManager.cpp" line="744"/>
+        <location filename="../../../PluginsManager.cpp" line="861"/>
+        <location filename="../../../PluginsManager.cpp" line="874"/>
         <source>Unable to load the plugin content, please check it: %1</source>
         <translation>No se puede cargar el contenido del plugin, por favor verifique que: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="806"/>
+        <location filename="../../../PluginsManager.cpp" line="811"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
         <translation>No se puede crear una carpeta para instalar el plugin:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="819"/>
+        <location filename="../../../PluginsManager.cpp" line="824"/>
         <source>Unable to create a file to install the plugin:
 %1
 since:%2</source>
@@ -1171,16 +1253,16 @@ since:%2</source>
 desde: %2</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="838"/>
+        <location filename="../../../PluginsManager.cpp" line="843"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
         <translation>Carpeta con el mismo nombre está presente, no tome la instalación del plugin:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="844"/>
-        <location filename="../../../PluginsManager.cpp" line="850"/>
-        <location filename="../../../PluginsManager.cpp" line="862"/>
+        <location filename="../../../PluginsManager.cpp" line="849"/>
+        <location filename="../../../PluginsManager.cpp" line="855"/>
+        <location filename="../../../PluginsManager.cpp" line="867"/>
         <source>Unable to load the plugin content, please check it</source>
         <translation>
 
@@ -1237,17 +1319,17 @@ No se puede cargar el contenido del plugin, por favor verifique que</translation
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="135"/>
+        <location filename="../../../SystrayIcon.cpp" line="156"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="141"/>
+        <location filename="../../../SystrayIcon.cpp" line="162"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="159"/>
+        <location filename="../../../SystrayIcon.cpp" line="180"/>
         <source>Searching information...</source>
         <translation>Buscar información...</translation>
     </message>
@@ -1256,89 +1338,98 @@ No se puede cargar el contenido del plugin, por favor verifique que</translation
         <translation type="obsolete">No reemplazar la copia explorador/mover</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="172"/>
+        <location filename="../../../SystrayIcon.cpp" line="193"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>No sustituya la copia explorer/move</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="177"/>
+        <location filename="../../../SystrayIcon.cpp" line="198"/>
         <source>Semi replace the explorer copy/move</source>
         <translation>Semi reemplazar la copia explorer/mudanza</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="182"/>
+        <location filename="../../../SystrayIcon.cpp" line="203"/>
         <source>Replace the explorer copy/move</source>
         <translation>Vuelva a colocar la copia explorer/mudanza</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="342"/>
+        <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="342"/>
+        <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>The action on the systray icon is unknown!</source>
         <translation>La acción en el icono de la bandeja del sistema es desconocido!</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="390"/>
+        <location filename="../../../SystrayIcon.cpp" line="419"/>
         <source>&amp;About/Debug report</source>
         <translation>&amp;Acerca de/Debug informe</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="392"/>
+        <location filename="../../../SystrayIcon.cpp" line="421"/>
         <source>&amp;About</source>
         <translation>&amp;Sobre</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="394"/>
+        <source>&amp;Save bug Report</source>
+        <translation type="obsolete">&amp;Guardar informe de error</translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="424"/>
+        <source>&amp;Save bug report</source>
+        <translation>&amp;Guardar informe de error</translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="426"/>
         <source>&amp;Quit</source>
         <translation>&amp;Dejar de</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="395"/>
+        <location filename="../../../SystrayIcon.cpp" line="427"/>
         <source>&amp;Options</source>
         <translation>&amp;Opciones</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="396"/>
+        <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>A&amp;dd copy/moving</source>
         <translation>Aña&amp;dir copiar/mover</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="434"/>
+        <location filename="../../../SystrayIcon.cpp" line="466"/>
         <source>New version: %1
 Site: %2</source>
         <translation>Nueva versión: %1
 Sitio web: %2</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="451"/>
+        <location filename="../../../SystrayIcon.cpp" line="483"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Copia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="457"/>
+        <location filename="../../../SystrayIcon.cpp" line="489"/>
         <source>&amp;Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Transferencia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="461"/>
+        <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>&amp;Move</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Movimiento</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="473"/>
+        <location filename="../../../SystrayIcon.cpp" line="505"/>
         <source>Add &amp;copy</source>
         <translation>Agregar &amp;copia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="479"/>
+        <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;transfer</source>
         <translation>Añadir &amp;transferencia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="483"/>
+        <location filename="../../../SystrayIcon.cpp" line="515"/>
         <source>Add &amp;move</source>
         <translation>Añadir &amp;movimiento</translation>
     </message>

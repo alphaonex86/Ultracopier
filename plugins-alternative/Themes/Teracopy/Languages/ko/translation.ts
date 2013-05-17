@@ -14,7 +14,7 @@
         <translation type="unfinished">%1 / %2</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+154"/>
         <source>%1% done</source>
         <translation type="unfinished">%1% 완료</translation>
     </message>

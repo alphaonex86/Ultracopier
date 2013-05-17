@@ -5,42 +5,42 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="205"/>
-        <location filename="../../interface.cpp" line="443"/>
+        <location filename="../../interface.cpp" line="451"/>
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../interface.cpp" line="370"/>
-        <location filename="../../interface.cpp" line="372"/>
+        <location filename="../../interface.cpp" line="378"/>
+        <location filename="../../interface.cpp" line="380"/>
         <source>Transferring %n item(s) (%2)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../interface.cpp" line="379"/>
-        <location filename="../../interface.cpp" line="381"/>
+        <location filename="../../interface.cpp" line="387"/>
+        <location filename="../../interface.cpp" line="389"/>
         <source>Copying %n item(s) (%2)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../interface.cpp" line="386"/>
-        <location filename="../../interface.cpp" line="388"/>
+        <location filename="../../interface.cpp" line="394"/>
+        <location filename="../../interface.cpp" line="396"/>
         <source>Moving %n item(s) (%2)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="454"/>
+        <location filename="../../interface.cpp" line="462"/>
         <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
         <extracomment>Sample: from &lt;b&gt;sources&lt;/b&gt; (e:<byte value="xc"/>oldersource) to &lt;b&gt;destination&lt;/b&gt; (d:desktopdestination)&lt;br /&gt;About 5 Hours remaining</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="463"/>
+        <location filename="../../interface.cpp" line="471"/>
         <source>In waiting</source>
         <translation type="unfinished"></translation>
     </message>

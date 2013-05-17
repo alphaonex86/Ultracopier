@@ -14,7 +14,7 @@
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="236"/>
+        <location filename="../../interface.cpp" line="244"/>
         <source>%1% done</source>
         <translation>%1% kész</translation>
     </message>

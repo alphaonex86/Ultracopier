@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="226"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation type="unfinished"></translation>
+        <translation>Vásárold meg az Ultimate verziót a fejlesztés támogatásához</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="296"/>
@@ -187,50 +187,50 @@
         <location filename="../../interface.ui" line="670"/>
         <location filename="../../interface.ui" line="739"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="690"/>
         <source>Export the errors into transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Hibák exportálása az átviteli listába</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="729"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrás</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="734"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="782"/>
+        <location filename="../../interface.ui" line="785"/>
         <source>Add file</source>
         <translation>Fájl hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="791"/>
+        <location filename="../../interface.ui" line="794"/>
         <source>Add folder</source>
         <translation>Mappa hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="800"/>
+        <location filename="../../interface.ui" line="803"/>
         <source>Move file(s)</source>
         <translation>Fájl(ok) mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="809"/>
+        <location filename="../../interface.ui" line="812"/>
         <source>Move folder</source>
         <translation>Mappa mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="818"/>
+        <location filename="../../interface.ui" line="821"/>
         <source>Copy file(s)</source>
         <translation>Fájl(ok) másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="827"/>
+        <location filename="../../interface.ui" line="830"/>
         <source>Copy folder</source>
         <translation>Mappa másolása</translation>
     </message>
@@ -250,7 +250,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="35"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Használ</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="41"/>
@@ -260,31 +260,23 @@
     <message>
         <location filename="../../themesOptions.ui" line="61"/>
         <source>Minimize on close to systray</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezáráskor minimalizálás a tálcára</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="71"/>
         <source>At the end of the copy</source>
-        <translation type="unfinished"></translation>
+        <translation>A másolás befejezésekor</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="97"/>
         <location filename="../../themesOptions.ui" line="131"/>
         <source>Limit copy speed to</source>
-        <translation type="unfinished"></translation>
+        <translation>Másolási sebesség korlátozása</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>At the end of the copy: </source>
-        <translation type="obsolete">A másolás végén:</translation>
-    </message>
-    <message>
-        <source>Limit copy speed to:</source>
-        <translation type="obsolete">Másolási sebesség korlátozása:</translation>
+        <translation>Kattints a szín szerkesztéséhez</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="141"/>
@@ -294,12 +286,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="176"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Információk</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="214"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Megjelenítés</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="220"/>

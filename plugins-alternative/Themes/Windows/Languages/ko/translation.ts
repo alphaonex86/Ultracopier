@@ -5,7 +5,7 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="+205"/>
-        <location line="+238"/>
+        <location line="+246"/>
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
     </message>

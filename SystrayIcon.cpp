@@ -421,7 +421,7 @@ void SystrayIcon::retranslateTheUI()
     actionMenuAbout		->setText(tr("&About"));
     #endif // ULTRACOPIER_DEBUG
     #ifdef ULTRACOPIER_DEBUG
-    actionSaveBugReport->setText(tr("&Save bug Report"));
+    actionSaveBugReport->setText(tr("&Save bug report"));
     #endif
     actionMenuQuit		->setText(tr("&Quit"));
     actionOptions		->setText(tr("&Options"));

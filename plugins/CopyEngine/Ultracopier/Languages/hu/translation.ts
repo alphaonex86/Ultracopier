@@ -53,12 +53,12 @@
     <message>
         <location filename="../../CopyEngine.cpp" line="488"/>
         <source>Destination</source>
-        <translation type="unfinished">Cél</translation>
+        <translation>Cél</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="488"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Használja a jelenlegi célt: &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="693"/>
@@ -536,19 +536,10 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="85"/>
-        <source>Unable to get time</source>
-        <translation>Idő lekérése nem lehetséges</translation>
-    </message>
-    <message>
         <location filename="../../MkPath.cpp" line="103"/>
         <location filename="../../MkPath.cpp" line="116"/>
         <source>Unable to create the folder</source>
         <translation>Mappa létrehozása nem lehetséges</translation>
-    </message>
-    <message>
-        <source>Unable to set time</source>
-        <translation type="obsolete">Idő beállítása nem lehetséges</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="146"/>
@@ -761,17 +752,13 @@
         <source>Internal error: The buffer is not empty</source>
         <translation>Belső hiba: a puffer nem üres</translation>
     </message>
-    <message>
-        <source>Unable to change the date</source>
-        <translation type="obsolete">Dátum megváltoztatása nem lehetséges</translation>
-    </message>
 </context>
 <context>
     <name>WriteThread</name>
     <message>
         <location filename="../../WriteThread.cpp" line="78"/>
         <source>Path resolution error (Empty path)</source>
-        <translation type="unfinished"></translation>
+        <translation>Útvonal feloldási hiba (Üres útvonal)</translation>
     </message>
     <message>
         <location filename="../../WriteThread.cpp" line="247"/>

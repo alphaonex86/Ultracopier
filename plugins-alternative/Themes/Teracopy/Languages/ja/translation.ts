@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="236"/>
+        <location filename="../../interface.cpp" line="244"/>
         <source>%1% done</source>
         <translation type="unfinished"></translation>
     </message>

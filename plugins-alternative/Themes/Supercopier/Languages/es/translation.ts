@@ -213,32 +213,32 @@
         <translation>Interfaz</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="779"/>
+        <location filename="../../interface.ui" line="782"/>
         <source>Add file</source>
         <translation>Añadir archivo</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="788"/>
+        <location filename="../../interface.ui" line="791"/>
         <source>Add folder</source>
         <translation>Añadir carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="797"/>
+        <location filename="../../interface.ui" line="800"/>
         <source>Move file(s)</source>
         <translation>Mover archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="806"/>
+        <location filename="../../interface.ui" line="809"/>
         <source>Move folder</source>
         <translation>Mueva la carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="815"/>
+        <location filename="../../interface.ui" line="818"/>
         <source>Copy file(s)</source>
         <translation>Copia el archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="824"/>
+        <location filename="../../interface.ui" line="827"/>
         <source>Copy folder</source>
         <translation>Copia la carpeta</translation>
     </message>

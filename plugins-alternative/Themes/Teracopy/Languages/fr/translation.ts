@@ -14,7 +14,7 @@
         <translation>%1 sur %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="236"/>
+        <location filename="../../interface.cpp" line="244"/>
         <source>%1% done</source>
         <translatorcomment>Exemple: 90% fait</translatorcomment>
         <translation>%1% fait</translation>

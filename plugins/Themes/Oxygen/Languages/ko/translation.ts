@@ -209,7 +209,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+51"/>
         <source>Add file</source>
         <translation type="unfinished">파일 추가</translation>
     </message>

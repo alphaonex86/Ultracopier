@@ -205,32 +205,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="779"/>
+        <location filename="../../interface.ui" line="782"/>
         <source>Add file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="788"/>
+        <location filename="../../interface.ui" line="791"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="797"/>
+        <location filename="../../interface.ui" line="800"/>
         <source>Move file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="806"/>
+        <location filename="../../interface.ui" line="809"/>
         <source>Move folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="815"/>
+        <location filename="../../interface.ui" line="818"/>
         <source>Copy file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="824"/>
+        <location filename="../../interface.ui" line="827"/>
         <source>Copy folder</source>
         <translation type="unfinished"></translation>
     </message>

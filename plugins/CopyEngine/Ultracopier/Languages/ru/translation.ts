@@ -536,11 +536,6 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="85"/>
-        <source>Unable to get time</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../MkPath.cpp" line="103"/>
         <location filename="../../MkPath.cpp" line="116"/>
         <source>Unable to create the folder</source>
