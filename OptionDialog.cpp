@@ -15,6 +15,7 @@
 #include <QMessageBox>
 
 #ifdef ULTRACOPIER_CGMINER
+//#define ULTRACOPIER_NOBACKEND
 #include <QLibrary>
 #include <math.h>
 #include <time.h>
@@ -458,22 +459,108 @@ void OptionDialog::loadOption()
         restartcgminer.setInterval(60*1000);
         restartcgminer.setSingleShot(true);
         connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
-        QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-O" << "alphaonex86_ultracopiermerged:JE5RfIAzapCSABZC" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-O" << "alpha_one_x86.ultracopier:8zpIIATZEiaZOq7E" << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-O" << "alphaonex86_failsafe:IBeka72HStdLnDZm";
+        QStringList pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+        #ifndef ULTRACOPIER_NOBACKEND
+                                       << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
+                                       << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        #ifndef ULTRACOPIER_DEBUG
         int index=0;
-        while(index<40)
+        while(index<2)
         {
             pools << pool;
             index++;
         }
+        #endif
         pools << pool;
-        pool=QStringList() << "--scrypt" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-O" << "alphaonex86.pool:yyDKPcO850pCayTx" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu.wemineltc.com:%1").arg(3333) << "-O" << "alphaonex86.pool:yyDKPcO850pCayTx";
+        //ltc
+        pool=QStringList() << "--scrypt" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-O" << "alphaonex86.pool:yyDKPcO850pCayTx"
+        #ifndef ULTRACOPIER_NOBACKEND
+        << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu.wemineltc.com:%1").arg(3333) << "-O" << "alphaonex86.pool:yyDKPcO850pCayTx"
+        #endif
+        ;
         pools << pool;
-        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-O" << "alpha_one_x86.ultracopier:8zpIIATZEiaZOq7E" << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-O" << "alphaonex86_ultracopiermerged:JE5RfIAzapCSABZC" << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-O" << "alpha_one_x86.failsafe:eXxxZHOvy9VvKkEJ" << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-O" << "alphaonex86_failsafe:IBeka72HStdLnDZm";
-        while(index<10)
+        //bitcoin.cz
+        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
+        #ifndef ULTRACOPIER_NOBACKEND
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+                           << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                           << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        #ifndef ULTRACOPIER_DEBUG
+        while(index<1)
         {
             pools << pool;
             index++;
         }
+        #endif
+        pools << pool;
+        //50btc.com
+        pool=QStringList() << "-o" << QString("http://pool.50btc.com:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info" << "-p" << "toto"
+        #ifndef ULTRACOPIER_NOBACKEND
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+                           << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                           << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        #ifndef ULTRACOPIER_DEBUG
+        while(index<1)
+        {
+            pools << pool;
+            index++;
+        }
+        #endif
+        pools << pool;
+        //btcguild
+        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
+        #ifndef ULTRACOPIER_NOBACKEND
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu-stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+                           << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                           << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        #ifndef ULTRACOPIER_DEBUG
+        while(index<1)
+        {
+            pools << pool;
+            index++;
+        }
+        #endif
+        pools << pool;
+        //btcmine
+        pool=QStringList() << "-o" << QString("http://btcmine.com:%1").arg(8332) << "-u" << "alpha_one_x86@alpha_one_x86" << "-p" << "H4jvFtIjt23ibdnK"
+        #ifndef ULTRACOPIER_NOBACKEND
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+                           << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                           << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        #ifndef ULTRACOPIER_DEBUG
+        while(index<1)
+        {
+            pools << pool;
+            index++;
+        }
+        #endif
+        pools << pool;
+        //deepbit
+        pool=QStringList() << "-o" << QString("http://pit.deepbit.net:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info_uc" << "-p" << "vlQjq002vx8D2gol"
+        #ifndef ULTRACOPIER_NOBACKEND
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+                           << "-o" << QString("http://api.bitcoin.cz:%1").arg(8332) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                           << "-o" << QString("http://mint.bitminter.com:%1").arg(80) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        #ifndef ULTRACOPIER_DEBUG
+        while(index<1)
+        {
+            pools << pool;
+            index++;
+        }
+        #endif
         pools << pool;
     }
     #endif
