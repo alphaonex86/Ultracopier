@@ -210,8 +210,9 @@ void TransferThread::setFileRename(const QString &nameForRename)
         destination.setFile(destination.absolutePath()+QDir::separator()+nameForRename);
     else
     {
-        QFile destinationFile(destination.absoluteFilePath());
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("rename %1: to: %2").arg(destination.absoluteFilePath()).arg(destination.absolutePath()+QDir::separator()+nameForRename));
+        QString tempDestination=destination.absoluteFilePath();
+        QFile destinationFile(tempDestination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+QString::number(id)+"] "+QString("rename %1: to: %2").arg(destination.absoluteFilePath()).arg(destination.absolutePath()+QDir::separator()+nameForRename));
         if(!destinationFile.rename(destination.absolutePath()+QDir::separator()+nameForRename))
         {
             if(!destinationFile.exists())
@@ -225,11 +226,15 @@ void TransferThread::setFileRename(const QString &nameForRename)
             emit errorOnFile(destinationFile,destinationFile.errorString());
             return;
         }
+        if(source.absoluteFilePath()==destination.absoluteFilePath())
+            source.setFile(destination.absolutePath()+QDir::separator()+nameForRename);
+        destination.setFile(tempDestination);
         destination.refresh();
     }
     fileExistsAction	= FileExists_NotSet;
     resetExtraVariable();
     emit internalStartPreOperation();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("destination is: %1").arg(destination.absoluteFilePath()));
 }
 
 void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
