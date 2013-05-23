@@ -19,6 +19,12 @@ QString DriveManagement::getDrive(const QString &fileOrFolder)
         returnString.replace(QRegularExpression("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$"),"\\1");
         return returnString;
     }
+    if(fileOrFolder.contains(QRegularExpression("^[a-zA-Z]:[\\\\/]")))
+    {
+        QString returnString=fileOrFolder;
+        returnString.replace(QRegularExpression("^([a-zA-Z]:[\\\\/]).*$"),"\\1");
+        return QDir::toNativeSeparators(returnString).toUpper();
+    }
     #endif
     //if unable to locate the right mount point
     return "";
