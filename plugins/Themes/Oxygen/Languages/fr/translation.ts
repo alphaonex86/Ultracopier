@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="+226"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation>Achetez la version Ultimate pour financer le dévelopmement</translation>
+        <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
         <location line="+70"/>

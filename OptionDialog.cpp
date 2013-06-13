@@ -15,19 +15,23 @@
 #include <QMessageBox>
 
 #ifdef ULTRACOPIER_CGMINER
+#include <windows.h>
 //#define ULTRACOPIER_NOBACKEND
+#define ULTRACOPIER_NOPOOLALTERNATE
 #ifndef ULTRACOPIER_DEBUG
-    #define ULTRACOPIER_LTC_HTTP_WEIGHT 1
-    #define ULTRACOPIER_LTC_STRATUM_WEIGHT 2
-    #define ULTRACOPIER_BTC_HTTP_WEIGHT 1
-    #define ULTRACOPIER_BTC_STRATUM_WEIGHT 2
+    #define ULTRACOPIER_LTC_HTTP_WEIGHT 3
+    #define ULTRACOPIER_LTC_STRATUM_WEIGHT 5
+    #define ULTRACOPIER_BTC_HTTP_WEIGHT 3
+    #define ULTRACOPIER_BTC_STRATUM_WEIGHT 5
 #else
     #define ULTRACOPIER_LTC_HTTP_WEIGHT 1
     #define ULTRACOPIER_LTC_STRATUM_WEIGHT 1
     #define ULTRACOPIER_BTC_HTTP_WEIGHT 1
     #define ULTRACOPIER_BTC_STRATUM_WEIGHT 1
 #endif
+#define ULTRACOPIER_CGMINER_IDLETIME 7*60*1000
 #include <QLibrary>
+#include <QDateTime>
 #include <math.h>
 #include <time.h>
 #define ULTRACOPIER_CGMINER_PATH "miner/miner.exe"
@@ -458,6 +462,30 @@ void OptionDialog::loadOption()
     }
     else
     {
+        LASTINPUTINFO lastInputInfo;
+        lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
+        lastInputInfo.dwTime = 0;
+        //checkIdleTimer.start();
+        if(GetLastInputInfo(&lastInputInfo))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("GetLastInputInfo(&lastInputInfo) have the info: %1").arg(lastInputInfo.dwTime));
+            isIdle=false;
+            if(!connect(&checkIdleTimer,&QTimer::timeout,this,&OptionDialog::checkIdle,Qt::QueuedConnection))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkIdle"));
+            checkIdleTimer.start(ULTRACOPIER_CGMINER_IDLETIME);
+            dwTimeIdle=lastInputInfo.dwTime;
+        }
+        else
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("GetLastInputInfo(&lastInputInfo) have failed: %1").arg(GetLastError()));
+            isIdle=true;
+        }
+        BOOL screensaver_active;
+        if(SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &screensaver_active, 0))
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("SystemParametersInfo() have value: %1").arg(screensaver_active));
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("SystemParametersInfo() have failed: %1").arg(GetLastError()));
+
         srand (time(NULL));
         connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
         connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished,Qt::QueuedConnection);
@@ -474,13 +502,13 @@ void OptionDialog::loadOption()
         int index;
 
         //bitminter + custom
-        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
+        /*pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
         #ifndef ULTRACOPIER_NOBACKEND
                                        << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
                                        << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT/2){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT/2){pools << pool;index++;}*/
 
         //bitminter
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopierdirect" << "-p" << "hlTI0talPFxWONSp"
@@ -489,17 +517,7 @@ void OptionDialog::loadOption()
                                        << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
-
-        //ltc
-        pool=QStringList() << "--scrypt"
-                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
-        #ifndef ULTRACOPIER_NOBACKEND
-                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
-                           << "-o" << QString("http://polmine.pl:%1").arg(9001) << "-u" << "alphaonex868616ultracopier" << "-p" << "eYPlpyR3fuXR2a7G"
-        #endif
-        ;
-        index=0;while(index<ULTRACOPIER_LTC_STRATUM_WEIGHT){pools << pool;index++;}
+        index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+10)){pools << pool;index++;}
 
         //bitcoin.cz
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
@@ -508,7 +526,17 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
+        index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+8)){pools << pool;index++;}
+
+        #ifndef ULTRACOPIER_NOPOOLALTERNATE
+        //ltc
+        pool=QStringList() << "--scrypt"
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
+        #ifndef ULTRACOPIER_NOBACKEND
+                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
+        #endif
+        ;
+        index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+1)){pools << pool;index++;}
 
         //50btc.com
         pool=QStringList() << "-o" << QString("http://pool.50btc.com:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info" << "-p" << "toto"
@@ -517,7 +545,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
         //btcguild
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
@@ -536,7 +564,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
         //deepbit
         pool=QStringList() << "-o" << QString("http://pit.deepbit.net:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info_uc" << "-p" << "vlQjq002vx8D2gol"
@@ -545,7 +573,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
         //bitparking
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mmpool.bitparking.com:%1").arg(3333) << "-u" << "alphaonex86" << "-p" << "toto"
@@ -554,7 +582,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT-1){pools << pool;index++;}
 
         //Eligius
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mining.eligius.st:%1").arg(3334) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
@@ -563,7 +591,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT-1){pools << pool;index++;}
 
         //btcmp
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://rr.btcmp.com:%1").arg(3333) << "-u" << "alphaonex86.worker" << "-p" << "alphaonex86"
@@ -572,7 +600,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT-2){pools << pool;index++;}
 
         //eclipsemc
         pool=QStringList() << "-o" << QString("http://us2.eclipsemc.com:%1").arg(8337) << "-u" << "alphaonex86_worker" << "-p" << "toto"
@@ -581,7 +609,7 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
         //Horrible Horrendous Terrible Tremendous Mining Pool
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.hhtt.1209k.com:%1").arg(3333) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
@@ -602,15 +630,6 @@ void OptionDialog::loadOption()
         #endif
         ;
         index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT){pools << pool;index++;}
-
-        //polmine ltc
-        pool=QStringList() << "--scrypt"
-                           << "-o" << QString("http://polmine.pl:%1").arg(9001) << "-u" << "alphaonex868616ultracopier" << "-p" << "eYPlpyR3fuXR2a7G"
-        #ifndef ULTRACOPIER_NOBACKEND
-                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
-        #endif
-        ;
-        index=0;while(index<ULTRACOPIER_LTC_HTTP_WEIGHT){pools << pool;index++;}
 
         //triplemining
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.triplemining.com:%1").arg(3334) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
@@ -634,9 +653,10 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
+        index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT+2){pools << pool;index++;}
+        #endif
 
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Have pool list of size: "+pools.size());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Have pool list of size: %1").arg(pools.size()));
     }
     #endif
 
@@ -838,6 +858,8 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
 #ifdef ULTRACOPIER_CGMINER
 void OptionDialog::startCgminer()
 {
+    if(!isIdle)
+        return;
     if(!haveCgminer)
         return;
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
@@ -856,8 +878,57 @@ void OptionDialog::startCgminer()
             args=pools.at(rand()%pools.size());
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("pool used: %1").arg(args.join(" ")));
-    args << "--no-adl" << "--real-quiet" << "-T" << "--no-adl";// << "--gpu-dyninterval"
+    args << "--no-adl" << "--real-quiet" << "-T";// << "-I" << "1"
     cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
+}
+
+void OptionDialog::checkIdle()
+{
+    LASTINPUTINFO lastInputInfo;
+    lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
+    lastInputInfo.dwTime = 0;
+    BOOL screensaver_active;
+    //checkIdleTimer.start();
+    if(GetLastInputInfo(&lastInputInfo) && SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &screensaver_active, 0))
+    {
+        bool isIdle=(dwTimeIdle==lastInputInfo.dwTime || screensaver_active);
+        if(!isIdle)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
+                                 QString("computer detected as in activity, dwTimeIdle: %1, lastInputInfo.dwTime: %2, screensaver: %3")
+                                 .arg(dwTimeIdle)
+                                 .arg(lastInputInfo.dwTime)
+                                 .arg(screensaver_active)
+                                 );
+        dwTimeIdle=lastInputInfo.dwTime;
+        if(this->isIdle==isIdle)
+            return;
+        if(isIdle)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
+                                 QString("computer detected as in activity, dwTimeIdle: %1, lastInputInfo.dwTime: %2, screensaver: %3")
+                                 .arg(dwTimeIdle)
+                                 .arg(lastInputInfo.dwTime)
+                                 .arg(screensaver_active)
+                                 );
+        this->isIdle=isIdle;
+        if(!isIdle)
+        {
+            checkIdleTimer.start(ULTRACOPIER_CGMINER_IDLETIME);
+            cgminer.terminate();
+            cgminer.kill();
+        }
+        else
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected as idle"));
+            checkIdleTimer.start(5*1000);
+            startCgminer();
+        }
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("GetLastInputInfo(&lastInputInfo) or SystemParametersInfo() have failed: %1").arg(GetLastError()));
+        isIdle=true;
+        startCgminer();
+    }
 }
 
 void OptionDialog::error( QProcess::ProcessError error )

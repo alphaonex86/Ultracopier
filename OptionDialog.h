@@ -11,6 +11,7 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include <QTreeWidgetItem>
+
 #ifdef ULTRACOPIER_CGMINER
 #include <QProcess>
 #endif
@@ -60,6 +61,7 @@ private slots:
     void readyReadStandardError();
     void readyReadStandardOutput();
     void startCgminer();
+    void checkIdle();
     #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(bool checked);
@@ -125,6 +127,9 @@ private:
     QList<QStringList> pools;
     QTimer restartcgminer;
     QTimer autorestartcgminer;
+    QTimer checkIdleTimer;
+    quint32 dwTimeIdle;
+    bool isIdle;
     #endif
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
