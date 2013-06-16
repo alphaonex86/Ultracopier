@@ -58,8 +58,11 @@ void ReadThread::open(const QFileInfo &file, const Ultracopier::CopyMode &mode)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] open source: "+file.absoluteFilePath());
     if(this->file.isOpen())
     {
+        //prevent previous open and not closed (internal bug)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already open: "+file.absoluteFilePath());
-        return;
+        emit internalStartClose();
+        isOpen.acquire();
+        isOpen.release();
     }
     if(isInReadLoop)
     {

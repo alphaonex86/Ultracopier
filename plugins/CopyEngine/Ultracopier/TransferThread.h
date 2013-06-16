@@ -192,6 +192,8 @@ private:
     bool			readIsReadyVariable;
     bool			writeIsReadyVariable;
     //can be open but with error
+    bool            readIsOpeningVariable;//after call open() and before the end of internalOpen(), mostly to prevent internal error by open() when another is running
+    bool            writeIsOpeningVariable;//after call open() and before the end of internalOpen(), mostly to prevent internal error by open() when another is running
     bool			readIsOpenVariable;
     bool			writeIsOpenVariable;
     bool			readIsFinishVariable;

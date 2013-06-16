@@ -19,6 +19,7 @@ QString DriveManagement::getDrive(const QString &fileOrFolder)
         returnString.replace(QRegularExpression("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$"),"\\1");
         return returnString;
     }
+    //due to lack of WMI support into mingw, the new drive event is never called, this is a workaround
     if(fileOrFolder.contains(QRegularExpression("^[a-zA-Z]:[\\\\/]")))
     {
         QString returnString=fileOrFolder;

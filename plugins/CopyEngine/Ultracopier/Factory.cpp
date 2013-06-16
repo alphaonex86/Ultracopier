@@ -505,6 +505,7 @@ void CopyEngineFactory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIf
 
 void CopyEngineFactory::logicalDriveChanged(const QString &,bool)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start");
     mountSysPoint.clear();
     QStringList temp=storageInfo.allLogicalDrives();
     for (int i = 0; i < temp.size(); ++i) {

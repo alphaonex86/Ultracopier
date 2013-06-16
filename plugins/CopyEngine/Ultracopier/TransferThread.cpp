@@ -261,6 +261,8 @@ void TransferThread::resetExtraVariable()
     retry                       = false;
     readIsOpenVariable          = false;
     writeIsOpenVariable         = false;
+    readIsOpeningVariable       = false;
+    writeIsOpeningVariable      = false;
 }
 
 void TransferThread::preOperation()
@@ -353,20 +355,42 @@ void TransferThread::tryOpen()
     }
     if(!readIsOpenVariable)
     {
-        readError=false;
-        readThread.open(source.absoluteFilePath(),mode);
+        if(!readIsOpeningVariable)
+        {
+            readError=false;
+            readThread.open(source.absoluteFilePath(),mode);
+            readIsOpeningVariable=true;
+        }
+        else
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("readIsOpeningVariable is true when try open"));
+            emit errorOnFile(source,tr("Internal error: Already opening"));
+            readError=true;
+            return;
+        }
     }
     if(!writeIsOpenVariable)
     {
-        if(transferAlgorithm==TransferAlgorithm_Sequential)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] transferAlgorithm==TransferAlgorithm_Sequential");
+        if(!writeIsOpeningVariable)
+        {
+            if(transferAlgorithm==TransferAlgorithm_Sequential)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] transferAlgorithm==TransferAlgorithm_Sequential");
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
+            writeError=false;
+            if(transferAlgorithm==TransferAlgorithm_Sequential)
+                writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),sequentialBuffer,true);
+            else
+                writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),parallelBuffer,false);
+            writeIsOpeningVariable=true;
+        }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
-        writeError=false;
-        if(transferAlgorithm==TransferAlgorithm_Sequential)
-            writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),sequentialBuffer,true);
-        else
-            writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),parallelBuffer,false);
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("writeIsOpeningVariable is true when try open"));
+            emit errorOnFile(destination,tr("Internal error: Already opening"));
+            writeError=true;
+            return;
+        }
     }
 }
 
@@ -765,6 +789,7 @@ void TransferThread::readIsReady()
     readIsReadyVariable=true;
     readIsOpenVariable=true;
     readIsClosedVariable=false;
+    readIsOpeningVariable=false;
     ifCanStartTransfer();
 }
 
@@ -813,6 +838,7 @@ void TransferThread::writeIsReady()
     writeIsReadyVariable=true;
     writeIsOpenVariable=true;
     writeIsClosedVariable=false;
+    writeIsOpeningVariable=false;
     ifCanStartTransfer();
 }
 
@@ -883,11 +909,11 @@ void TransferThread::stop()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("transfer_stat==TransferStat_Idle"));
         return;
     }
-    if(readIsOpenVariable && !readIsClosedVariable)
+    if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
         readThread.stop();
-    if(writeIsOpenVariable && !writeIsClosedVariable)
+    if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
         writeThread.stop();
-    if(!(readIsOpenVariable && !readIsClosedVariable) && !(writeIsOpenVariable && !writeIsClosedVariable))
+    if(!((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) && !((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
     {
         if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath() && source.exists())
             QFile(destination.absoluteFilePath()).remove();
@@ -1000,6 +1026,7 @@ void TransferThread::readIsClosed()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     readIsClosedVariable=true;
+    readIsOpeningVariable=false;
     checkIfAllIsClosedAndDoOperations();
 }
 
@@ -1012,6 +1039,7 @@ void TransferThread::writeIsClosed()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     writeIsClosedVariable=true;
+    writeIsOpeningVariable=false;
     checkIfAllIsClosedAndDoOperations();
 }
 
@@ -1023,7 +1051,7 @@ bool TransferThread::checkIfAllIsClosedAndDoOperations()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] resolve error before progress");
         return false;
     }
-    if((!readIsOpenVariable || readIsClosedVariable) && (!writeIsOpenVariable || writeIsClosedVariable))
+    if((!(readIsOpenVariable || readIsOpeningVariable) || readIsClosedVariable) && (!(writeIsOpenVariable || writeIsOpeningVariable) || writeIsClosedVariable))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit internalStartPostOperation() to do the real post operation");
         transfer_stat=TransferStat_PostOperation;
@@ -1170,6 +1198,26 @@ bool TransferThread::doFilePostOperation()
             //return false;
         }
     }
+    if(doRightTransfer)
+    {
+        QFile sourceFile(source.absoluteFilePath());
+        QFile destinationFile(destination.absoluteFilePath());
+        if(!destinationFile.setPermissions(sourceFile.permissions()))
+        {
+            if(sourceFile.error()!=QFile::NoError)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to get the source file permission"));
+                //emit errorOnFile(destination,tr("Unable to get the source file permission"));
+                //return false;
+            }
+            else
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to set the destination file permission"));
+                //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
+                //return false;
+            }
+        }
+    }
     if(stopIt)
         return false;
 
@@ -1193,6 +1241,7 @@ void TransferThread::getWriteError()
     writeIsReadyVariable		= false;
     writeError_source_seeked	= false;
     writeError_destination_reopened	= false;
+    writeIsOpeningVariable=false;
     if(!readError)//already display error for the read
         emit errorOnFile(destination,writeThread.errorString());
 }
@@ -1209,6 +1258,7 @@ void TransferThread::getReadError()
     readError		= true;
     writeIsReadyVariable	= false;
     readIsReadyVariable	= false;
+    readIsOpeningVariable=false;
     if(!writeError)//already display error for the write
         emit errorOnFile(source,readThread.errorString());
 }
@@ -1584,8 +1634,8 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
 void TransferThread::skip()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start with stat: "+QString::number(transfer_stat));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] readIsOpenVariable: "+QString::number(readIsOpenVariable)+", readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsFinishVariable: "+QString::number(readIsFinishVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeIsOpenVariable: "+QString::number(writeIsOpenVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsFinishVariable: "+QString::number(writeIsFinishVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] readIsOpeningVariable: "+QString::number(readIsOpeningVariable)+", readIsOpenVariable: "+QString::number(readIsOpenVariable)+", readIsReadyVariable: "+QString::number(readIsReadyVariable)+", readIsFinishVariable: "+QString::number(readIsFinishVariable)+", readIsClosedVariable: "+QString::number(readIsClosedVariable));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] writeIsOpeningVariable: "+QString::number(writeIsOpeningVariable)+", writeIsOpenVariable: "+QString::number(writeIsOpenVariable)+", writeIsReadyVariable: "+QString::number(writeIsReadyVariable)+", writeIsFinishVariable: "+QString::number(writeIsFinishVariable)+", writeIsClosedVariable: "+QString::number(writeIsClosedVariable));
     switch(transfer_stat)
     {
     case TransferStat_WaitForTheTransfer:
@@ -1598,11 +1648,11 @@ void TransferThread::skip()
         }
         needSkip=true;
         //check if all is source and destination is closed
-        if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
+        if(((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) || ((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
         {
-            if(readIsOpenVariable && !readIsClosedVariable)
+            if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
                 readThread.stop();
-            if(writeIsOpenVariable && !writeIsClosedVariable)
+            if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
                 writeThread.stop();
         }
         else // wait nothing, just quit
@@ -1628,11 +1678,11 @@ void TransferThread::skip()
             writeThread.fakeWriteIsStopped();
             return;
         }
-        if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
+        if(((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) || ((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
         {
-            if(readIsOpenVariable && !readIsClosedVariable)
+            if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
                 readThread.stop();
-            if(writeIsOpenVariable && !writeIsClosedVariable)
+            if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
                 writeThread.stop();
         }
         else // wait nothing, just quit
@@ -1649,11 +1699,11 @@ void TransferThread::skip()
         }
         //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
-        if((readIsOpenVariable && !readIsClosedVariable) || (writeIsOpenVariable && !writeIsClosedVariable))
+        if(((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) || ((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
         {
-            if(readIsOpenVariable && !readIsClosedVariable)
+            if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
                 readThread.stop();
-            if(writeIsOpenVariable && !writeIsClosedVariable)
+            if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
                 writeThread.stop();
         }
         else // wait nothing, just quit

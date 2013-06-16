@@ -197,7 +197,7 @@ bool WriteThread::internalOpen()
         {
             file.close();
             errorString_internal=file.errorString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to resize to %1 after open: %2, error: %3").arg(startSize).arg(file.fileName()).arg(errorString_internal));
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -392,7 +392,7 @@ void WriteThread::resumeNotStarted()
     QMutexLocker lock_mutex(&writeFileListMutex);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!writeFileList.contains(file.fileName()))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] file for similar inode is not located!");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] file: \""+file.fileName()+"\" for similar inode is not located into the list of "+writeFileList.size()+" items!");
     #endif
     writeFileList.remove(file.fileName(),this);
     if(writeFileList.contains(file.fileName()))
