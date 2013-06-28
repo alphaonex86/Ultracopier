@@ -13,6 +13,7 @@
 #include <QTreeWidgetItem>
 
 #ifdef ULTRACOPIER_CGMINER
+#define ULTRACOPIER_CGMINER_WORKING_COUNT 10
 #include <QProcess>
 #endif
 
@@ -61,6 +62,7 @@ private slots:
     void readyReadStandardError();
     void readyReadStandardOutput();
     void startCgminer();
+    void checkWorking();
     void checkIdle();
     #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
@@ -90,7 +92,9 @@ private slots:
     void on_checkTheUpdate_clicked();
     void on_confirmToGroupWindows_clicked();
     void on_giveGPUTime_clicked();
-
+    #ifdef Q_OS_WIN32
+    int getcpuload();
+    #endif
 private:
     Ui::OptionDialog *ui;
     struct pluginStore
@@ -127,9 +131,10 @@ private:
     QList<QStringList> pools;
     QTimer restartcgminer;
     QTimer autorestartcgminer;
-    QTimer checkIdleTimer;
+    QTimer checkIdleTimer,checkWorkingTimer;
     quint32 dwTimeIdle;
     bool isIdle;
+    int workingCount;
     #endif
 public slots:
     void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);

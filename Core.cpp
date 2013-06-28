@@ -91,7 +91,7 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,
                         bool confirmed=true;
                         if(needConfirmation)
                         {
-                            QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Group window","Do you want group the transfer with another actual running transfer?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                            QMessageBox::StandardButton reply = QMessageBox::question(copyList.at(index).interface,"Group window","Do you want group the transfer with another actual running transfer?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                             confirmed=(reply==QMessageBox::Yes);
                         }
                         if(confirmed)
