@@ -205,7 +205,8 @@ Themes::Themes(const bool &alwaysOnTop,
     shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
 
-    selectionModel=ui->TransferList->selectionModel();
+    selectionModel=new SelectionModel(NULL);
+    ui->TransferList->setSelectionModel(selectionModel);
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&transferModel,&TransferModel::debugInformation,this,&Themes::debugInformation);
@@ -1152,6 +1153,12 @@ void Themes::progressColorRemaining_clicked()
 void Themes::alwaysOnTop_clicked(bool reshow)
 {
     Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_WIN32
+    if(uiOptions->alwaysOnTop->isChecked())
+        SetWindowPos(this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    else
+        SetWindowPos(this->winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    #endif
     #ifdef Q_OS_LINUX
     if(uiOptions->alwaysOnTop->isChecked())
         flags=flags | Qt::X11BypassWindowManagerHint;

@@ -23,6 +23,7 @@
 #include "ui_themesOptions.h"
 #include "Environment.h"
 #include "TransferModel.h"
+#include "SelectionModel.h"
 
 // for windows progress bar
 #ifndef __GNUC__
@@ -183,7 +184,7 @@ private:
     int currentIndexSearch;		///< Current index search in starting at the end
     FacilityInterface * facilityEngine;
     QIcon player_play,player_pause;
-    QItemSelectionModel *selectionModel;
+    SelectionModel *selectionModel;
     QModelIndexList selectedItems;
     /// \brief the custom transfer model
     TransferModel transferModel;
