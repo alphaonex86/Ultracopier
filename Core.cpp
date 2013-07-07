@@ -392,6 +392,8 @@ void Core::resetSpeedDetected(const int &index)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start on %1").arg(index));
     copyList[index].lastSpeedDetected.clear();
     copyList[index].lastSpeedTime.clear();
+    copyList[index].lastAverageSpeedDetected.clear();
+    copyList[index].lastAverageSpeedTime.clear();
 }
 
 void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
@@ -676,15 +678,20 @@ void Core::periodicSynchronizationWithIndex(const int &index)
             {
                 currentCopyInstance.lastSpeedTime << lastProgressionTime.elapsed();
                 currentCopyInstance.lastSpeedDetected << diffCopiedSize;
-                while(currentCopyInstance.lastSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                {
+                currentCopyInstance.lastAverageSpeedTime << lastProgressionTime.elapsed();
+                currentCopyInstance.lastAverageSpeedDetected << diffCopiedSize;
+                while(currentCopyInstance.lastSpeedTime.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
                     currentCopyInstance.lastSpeedTime.removeFirst();
+                while(currentCopyInstance.lastSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
                     currentCopyInstance.lastSpeedDetected.removeFirst();
-                }
-                double totTime;
-                double totSpeed;
-                totTime=0;
-                totSpeed=0;
+                while(currentCopyInstance.lastAverageSpeedTime.size()>ULTRACOPIER_MAXVALUESPEEDSTOREDTOREMAININGTIME)
+                    currentCopyInstance.lastAverageSpeedTime.removeFirst();
+                while(currentCopyInstance.lastAverageSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTOREDTOREMAININGTIME)
+                    currentCopyInstance.lastAverageSpeedDetected.removeFirst();
+                double totTime=0,totAverageTime=0;
+                double totSpeed=0,totAverageSpeed=0;
+
+                //current speed
                 int index_sub_loop=0;
                 int loop_size=currentCopyInstance.lastSpeedDetected.size();
                 while(index_sub_loop<loop_size)
@@ -694,23 +701,36 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                     index_sub_loop++;
                 }
                 totTime/=1000;
-                if(totTime>0)
+
+                //speed to calculate the remaining time
+                index_sub_loop=0;
+                loop_size=currentCopyInstance.lastAverageSpeedDetected.size();
+                while(index_sub_loop<loop_size)
                 {
+                    totAverageTime+=currentCopyInstance.lastAverageSpeedTime.at(index_sub_loop);
+                    totAverageSpeed+=currentCopyInstance.lastAverageSpeedDetected.at(index_sub_loop);
+                    index_sub_loop++;
+                }
+                totAverageTime/=1000;
+
+                if(totTime>0)
                     if(loop_size>=ULTRACOPIER_MINVALUESPEED)
-                    {
                         currentCopyInstance.interface->detectedSpeed(totSpeed/totTime);
+
+                if(totAverageTime>0)
+                    if(loop_size>=ULTRACOPIER_MINVALUESPEEDTOREMAININGTIME)
+                    {
                         if(totSpeed>0)
                         {
                             //remaining time: (total byte - lastProgression)/byte per ms since the start
                             if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
                                 currentCopyInstance.interface->remainingTime(-1);
                             else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
-                                currentCopyInstance.interface->remainingTime((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)/(totSpeed/totTime));
+                                currentCopyInstance.interface->remainingTime((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)/(totAverageSpeed/totAverageTime));
                         }
                         else
                             currentCopyInstance.interface->remainingTime(-1);
                     }
-                }
             }
             lastProgressionTime.restart();
         }

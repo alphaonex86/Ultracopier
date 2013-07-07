@@ -51,8 +51,12 @@ class Core : public QObject
             quint64 currentProgression,totalProgression;//store the file byte transfered, used into the remaining time
             Ultracopier::EngineActionInProgress action;
             quint64 lastProgression;//store the real byte transfered, used in speed calculation
+            //this speed is for instant speed
             QList<quint64> lastSpeedDetected;//stored in bytes
             QList<double> lastSpeedTime;//stored in ms
+            //this speed is average speed on more time to calculate the remaining time
+            QList<quint64> lastAverageSpeedDetected;//stored in bytes
+            QList<double> lastAverageSpeedTime;//stored in ms
             QList<RunningTransfer> transferItemList;//full info of started item, to have wich progression to poll
             QList<quint32> orderId;//external order send via listener plugin
             QString folderListing;
