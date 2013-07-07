@@ -216,7 +216,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     connect(tempWidget,		&QWidget::destroyed,		this,			&CopyEngine::resetTempWidget);
     //conect the ui widget
-    uiIsInstalled=true;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(!setSpeedLimitation(maxSpeed))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the speed limitation");
@@ -336,6 +335,8 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->transferAlgorithm->setCurrentIndex(0);
         break;
     }
+
+    uiIsInstalled=true;
     return true;
 }
 

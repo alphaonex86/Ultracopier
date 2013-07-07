@@ -91,16 +91,17 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                 {
                     alwaysDoThisActionForFileExists=newAction;
                     listThread->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
-                    switch(newAction)
-                    {
-                        default:
-                        case FileExists_Skip:
-                            ui->comboBoxFileCollision->setCurrentIndex(1);
-                        break;
-                        case FileExists_Rename:
-                            ui->comboBoxFileCollision->setCurrentIndex(6);
-                        break;
-                    }
+                    if(uiIsInstalled)
+                        switch(newAction)
+                        {
+                            default:
+                            case FileExists_Skip:
+                                ui->comboBoxFileCollision->setCurrentIndex(1);
+                            break;
+                            case FileExists_Rename:
+                                ui->comboBoxFileCollision->setCurrentIndex(6);
+                            break;
+                        }
                 }
                 if(dialog.getAlways() || newAction!=FileExists_Rename)
                     thread->setFileExistsAction(newAction);
@@ -161,28 +162,29 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                 {
                     alwaysDoThisActionForFileExists=newAction;
                     listThread->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
-                    switch(newAction)
-                    {
-                        default:
-                        case FileExists_Skip:
-                            ui->comboBoxFileCollision->setCurrentIndex(1);
-                        break;
-                        case FileExists_Rename:
-                            ui->comboBoxFileCollision->setCurrentIndex(6);
-                        break;
-                        case FileExists_Overwrite:
-                            ui->comboBoxFileCollision->setCurrentIndex(2);
-                        break;
-                        case FileExists_OverwriteIfNotSame:
-                            ui->comboBoxFileCollision->setCurrentIndex(3);
-                        break;
-                        case FileExists_OverwriteIfNewer:
-                            ui->comboBoxFileCollision->setCurrentIndex(4);
-                        break;
-                        case FileExists_OverwriteIfOlder:
-                            ui->comboBoxFileCollision->setCurrentIndex(5);
-                        break;
-                    }
+                    if(uiIsInstalled)
+                        switch(newAction)
+                        {
+                            default:
+                            case FileExists_Skip:
+                                ui->comboBoxFileCollision->setCurrentIndex(1);
+                            break;
+                            case FileExists_Rename:
+                                ui->comboBoxFileCollision->setCurrentIndex(6);
+                            break;
+                            case FileExists_Overwrite:
+                                ui->comboBoxFileCollision->setCurrentIndex(2);
+                            break;
+                            case FileExists_OverwriteIfNotSame:
+                                ui->comboBoxFileCollision->setCurrentIndex(3);
+                            break;
+                            case FileExists_OverwriteIfNewer:
+                                ui->comboBoxFileCollision->setCurrentIndex(4);
+                            break;
+                            case FileExists_OverwriteIfOlder:
+                                ui->comboBoxFileCollision->setCurrentIndex(5);
+                            break;
+                        }
                 }
                 if(dialog.getAlways() || newAction!=FileExists_Rename)
                     thread->setFileExistsAction(newAction);
@@ -207,7 +209,8 @@ void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &file
     if(!needPutAtBottom)
     {
         alwaysDoThisActionForFileError=FileError_NotSet;
-        ui->comboBoxFileError->setCurrentIndex(0);
+        if(uiIsInstalled)
+            ui->comboBoxFileError->setCurrentIndex(0);
         errorQueueItem newItem;
         newItem.errorString=errorString;
         newItem.inode=fileInfo;
@@ -291,16 +294,17 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
             if(dialog.getAlways() && newAction!=alwaysDoThisActionForFileError)
             {
                 alwaysDoThisActionForFileError=newAction;
-                switch(newAction)
-                {
-                    default:
-                    case FileError_Skip:
-                        ui->comboBoxFileError->setCurrentIndex(1);
-                    break;
-                    case FileError_PutToEndOfTheList:
-                        ui->comboBoxFileError->setCurrentIndex(2);
-                    break;
-                }
+                if(uiIsInstalled)
+                    switch(newAction)
+                    {
+                        default:
+                        case FileError_Skip:
+                            ui->comboBoxFileError->setCurrentIndex(1);
+                        break;
+                        case FileError_PutToEndOfTheList:
+                            ui->comboBoxFileError->setCurrentIndex(2);
+                        break;
+                    }
             }
             switch(newAction)
             {
