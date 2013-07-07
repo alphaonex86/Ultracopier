@@ -277,7 +277,7 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
                 returnItem.progressBar_file=0;
             break;
             default:
-                returnItem.progressBar_file=0;
+                returnItem.progressBar_file=65535;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                 break;
         }

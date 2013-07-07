@@ -145,7 +145,6 @@ private:
     QList<ItemOfCopyListWithMoreInformations> InternalRunningOperation;
     int loop_size,index_for_loop;
     int sub_loop_size,sub_index_for_loop;
-    currentTransfertItem getCurrentTransfertItem();
     FacilityInterface * facilityEngine;
     void updateDetails();
     void updateInformations();

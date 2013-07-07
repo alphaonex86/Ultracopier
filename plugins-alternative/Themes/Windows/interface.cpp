@@ -297,46 +297,6 @@ void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progr
     updateInformations();
 }
 
-Themes::currentTransfertItem Themes::getCurrentTransfertItem()
-{
-    currentTransfertItem returnItem;
-    returnItem.haveItem=InternalRunningOperation.size()>0;
-    if(returnItem.haveItem)
-    {
-        const ItemOfCopyListWithMoreInformations &itemTransfer=InternalRunningOperation.first();
-        returnItem.from=itemTransfer.generalData.sourceFullPath;
-        returnItem.to=itemTransfer.generalData.destinationFullPath;
-        returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
-        switch(itemTransfer.actionType)
-        {
-            case Ultracopier::CustomOperation:
-            if(!itemTransfer.custom_with_progression)
-                returnItem.progressBar_file=0;
-            else
-            {
-                if(itemTransfer.generalData.size>0)
-                    returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
-                else
-                    returnItem.progressBar_file=0;
-            }
-            break;
-            case Ultracopier::Transfer:
-            if(itemTransfer.generalData.size>0)
-                returnItem.progressBar_file=((double)itemTransfer.currentProgression/itemTransfer.generalData.size)*65535;
-            else
-                returnItem.progressBar_file=0;
-            break;
-            case Ultracopier::PostOperation:
-                returnItem.progressBar_file=65535;
-            break;
-            default:
-                returnItem.progressBar_file=0;
-        }
-    }
-    return returnItem;
-}
-
-
 void Themes::on_more_toggled(bool checked)
 {
     Q_UNUSED(checked);
@@ -395,24 +355,6 @@ void Themes::updateInformations()
             else
                 ui->label_main->setText(tr("Moving %n item(s) (%2)","",transferModel.totalFile).arg(facilityEngine->sizeToString(progression_total)));
         }
-    }
-
-    if(transfertItem.haveItem)
-    {
-        if(transfertItem.progressBar_file!=-1)
-        {
-            ui->progressBar->setRange(0,65535);
-            ui->progressBar->setValue(transfertItem.progressBar_file);
-        }
-        else
-            ui->progressBar->setRange(0,0);
-    }
-    else
-    {
-        if(haveStarted && transferModel.rowCount()==0)
-            ui->progressBar->setValue(65535);
-        else if(!haveStarted)
-            ui->progressBar->setValue(0);
     }
 
     if(ui->more->isChecked())
