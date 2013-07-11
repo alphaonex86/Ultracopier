@@ -584,19 +584,19 @@
         <translation>Erreur interne, merci de la reporter!</translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="179"/>
+        <location filename="../../ReadThread.cpp" line="182"/>
         <source>Internal error reading the source file:block size out of range</source>
         <translation>Erreur interne lisant le fichier source: taille de block hors de la plage</translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="187"/>
-        <location filename="../../ReadThread.cpp" line="388"/>
+        <location filename="../../ReadThread.cpp" line="190"/>
+        <location filename="../../ReadThread.cpp" line="391"/>
         <source>Unable to read the source file: </source>
         <translation>Impossible de lire le fichier source: </translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="228"/>
-        <location filename="../../ReadThread.cpp" line="435"/>
+        <location filename="../../ReadThread.cpp" line="231"/>
+        <location filename="../../ReadThread.cpp" line="438"/>
         <source>File truncated during the read, possible data change</source>
         <translatorcomment>La taille du fichier a diminué durant -&gt; changé le texte original</translatorcomment>
         <translation>Fichier a diminué durant la lecture, possible changement de données</translation>
@@ -707,14 +707,14 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="220"/>
-        <location filename="../../TransferThread.cpp" line="579"/>
-        <location filename="../../TransferThread.cpp" line="640"/>
+        <location filename="../../TransferThread.cpp" line="221"/>
+        <location filename="../../TransferThread.cpp" line="608"/>
+        <location filename="../../TransferThread.cpp" line="669"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="488"/>
+        <location filename="../../TransferThread.cpp" line="517"/>
         <source>Drive %1</source>
         <translation>Lecteur %1</translation>
     </message>
@@ -723,49 +723,49 @@
         <translation type="obsolete">Essaie de renommage avec charatéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="490"/>
+        <location filename="../../TransferThread.cpp" line="519"/>
         <source>Unknown folder</source>
         <translation>Dossier inconnu</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="494"/>
+        <location filename="../../TransferThread.cpp" line="523"/>
         <source>root</source>
         <translation>racine</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="547"/>
+        <location filename="../../TransferThread.cpp" line="576"/>
         <source>%1 - copy</source>
         <translation>%1 - copie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="557"/>
+        <location filename="../../TransferThread.cpp" line="586"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copie (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="681"/>
+        <location filename="../../TransferThread.cpp" line="710"/>
         <source>The source doesn&apos;t exist</source>
         <translation>La source n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="616"/>
-        <location filename="../../TransferThread.cpp" line="711"/>
+        <location filename="../../TransferThread.cpp" line="645"/>
+        <location filename="../../TransferThread.cpp" line="740"/>
         <source>The source file doesn&apos;t exist</source>
         <translation>Le fichier source n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="985"/>
+        <location filename="../../TransferThread.cpp" line="1016"/>
         <source>The checksums do not match</source>
         <translation>Les sommes de controle ne correspondent pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1079"/>
+        <location filename="../../TransferThread.cpp" line="1112"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
         <translation>Erreur interne: La taille transféré ne corresponds pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="646"/>
-        <location filename="../../TransferThread.cpp" line="723"/>
+        <location filename="../../TransferThread.cpp" line="675"/>
+        <location filename="../../TransferThread.cpp" line="752"/>
         <source>Unable to do the folder</source>
         <translation>Impossible de créer le dossier</translation>
     </message>
@@ -775,17 +775,23 @@
         <translation>Essaie de renommage avec charatéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="717"/>
+        <location filename="../../TransferThread.cpp" line="367"/>
+        <location filename="../../TransferThread.cpp" line="390"/>
+        <source>Internal error: Already opening</source>
+        <translation>Erreur interne: Déjà ouvert</translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="746"/>
         <source>Another file exists at same place</source>
         <translation>Un autre fichier exists à la même place</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1065"/>
+        <location filename="../../TransferThread.cpp" line="1098"/>
         <source>Internal error: The destination is not closed</source>
         <translation>Erreur interne: La destination n&apos;est pas fermé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1090"/>
+        <location filename="../../TransferThread.cpp" line="1123"/>
         <source>Internal error: The buffer is not empty</source>
         <translation>Erreur interne: Le buffer n&apos;est pas vide</translation>
     </message>
@@ -854,7 +860,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="97"/>
         <source>Follow the strict order</source>
-        <translation>Suivre l&apos;ordre stricte</translation>
+        <translation>Suivre l&apos;ordre strict</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="120"/>

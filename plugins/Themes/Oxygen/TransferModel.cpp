@@ -144,24 +144,6 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
     return false;
 }
 
-bool TransferModel::getSelected(const QModelIndex& index)
-{
-    row=index.row();
-    column=index.column();
-    if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
-        return false;
-    return transfertItemList.at(row).selected;
-}
-
-void TransferModel::setSelected(const QModelIndex& index,const bool& selected)
-{
-    row=index.row();
-    column=index.column();
-    if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
-        return;
-    transfertItemList[row].selected=selected;
-}
-
 /*
   Return[0]: totalFile
   Return[1]: totalSize

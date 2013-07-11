@@ -27,7 +27,6 @@ public:
         QString source;
         QString size;
         QString destination;
-        bool selected;
     };
     /// \brief the transfer item with progression
     struct ItemOfCopyListWithMoreInformations
@@ -50,8 +49,6 @@ public:
 
     TransferModel();
 
-    virtual bool getSelected(const QModelIndex& index);
-    virtual void setSelected(const QModelIndex& index,const bool& selected);
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
