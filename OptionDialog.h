@@ -17,6 +17,7 @@
 #include <QProcess>
 #endif
 
+#include "OSSpecific.h"
 #include "PluginsManager.h"
 
 namespace Ui {
@@ -92,10 +93,12 @@ private slots:
     void on_checkTheUpdate_clicked();
     void on_confirmToGroupWindows_clicked();
     void on_giveGPUTime_clicked();
+    void oSSpecificClosed();
     #ifdef Q_OS_WIN32
     int getcpuload();
     #endif
 private:
+    bool quit;
     Ui::OptionDialog *ui;
     struct pluginStore
     {
@@ -123,6 +126,7 @@ private:
     int index,loop_size;
     int loadedCopyEnginePlugin;
     QTreeWidgetItem * treeWidgetItem;
+    OSSpecific *oSSpecific;
     bool allPluginsIsLoaded;
     #ifdef ULTRACOPIER_CGMINER
     QProcess cgminer;

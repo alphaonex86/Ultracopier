@@ -27,6 +27,11 @@
 /// \brief initiate the ultracopier event dispatcher and check if no other session is running
 DebugEngine::DebugEngine()
 {
+    quit=false;
+    QStringList ultracopierArguments=QCoreApplication::arguments();
+    if(ultracopierArguments.size()==2)
+        if(ultracopierArguments.last()=="quit")
+            quit=true;
     addDebugInformationCallNumber=0;
     //Load the first content
     debugHtmlContent+="<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
@@ -119,7 +124,7 @@ DebugEngine::DebugEngine()
     if(fileNameIsLoaded)
     {
         //If the previous file is here, then crash previous, ask if the user want to save
-        if(lockFile.exists() && logFile.exists())
+        if(lockFile.exists() && logFile.exists() && !quit)
         {
             //Try open the file as read only to propose save it as the user
             //Don't ask it if unable to write, because unable to remove, then alert at all start

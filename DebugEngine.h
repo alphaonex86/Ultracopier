@@ -119,6 +119,7 @@ class DebugEngine : public QObject
         /// try connect to send to the current running instance the arguements
         bool tryConnect();
         int addDebugInformationCallNumber;
+        bool quit;
 };
 
 #endif // ULTRACOPIER_DEBUG

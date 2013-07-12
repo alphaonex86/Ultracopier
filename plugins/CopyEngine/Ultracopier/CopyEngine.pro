@@ -1,4 +1,4 @@
-QT += widgets systeminfo
+QT += widgets
 DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib
 CONFIG         += plugin
@@ -100,3 +100,95 @@ OTHER_FILES += informations.xml
 RESOURCES += \
     copyEngineResources.qrc
 }
+
+
+win32: !simulator: {
+    win32-msvc*: {
+        LIBS += -lUser32 -lGdi32 -lPowrProf -lBthprops -lWs2_32 -lVfw32 -lSetupapi -lIphlpapi -lOle32 -lWbemuuid
+    }
+    win32-g++*: {
+        LIBS += -luser32 -lgdi32 -lpowrprof -lbthprops -lws2_32 -lmsvfw32 -lavicap32 -luuid
+    }
+    PRIVATE_HEADERS += qstorageinfo_win_p.h
+
+    SOURCES += qstorageinfo_win.cp
+
+       LIBS += \
+            -lOle32 \
+            -lUser32 \
+            -lGdi32 \
+            -lIphlpapi \
+            -lOleaut32 \
+            -lPowrProf \
+            -lSetupapi
+
+  win32-g++: {
+        LIBS += -luser32 -lgdi32
+    }
+
+}
+
+linux-*: !simulator: {
+    PRIVATE_HEADERS += qstorageinfo_linux_p.h
+
+    SOURCES += qstorageinfo_linux.cpp
+
+    qtHaveModule(dbus) {
+        config_ofono: {
+            QT += dbus
+            PRIVATE_HEADERS += qofonowrapper_p.h
+            SOURCES += qofonowrapper.cpp
+        } else {
+            DEFINES += QT_NO_OFONO
+        }
+
+        config_udisks {
+            QT_PRIVATE += dbus
+        } else: {
+            DEFINES += QT_NO_UDISKS
+        }
+    } else {
+        DEFINES += QT_NO_OFONO QT_NO_UDISKS
+    }
+
+    config_udev {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += udev
+        LIBS += -ludev
+        PRIVATE_HEADERS += qudevwrapper_p.h
+        SOURCES += qudevwrapper.cpp
+    } else {
+        DEFINES += QT_NO_UDEV
+    }
+
+    config_libsysinfo {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += sysinfo
+        LIBS += -lsysinfo
+    } else: {
+        DEFINES += QT_NO_LIBSYSINFO
+    }
+}
+
+macx:!simulator {
+#CONFIG -= x86_64
+QT += core-private
+         OBJECTIVE_SOURCES += qstorageinfo_mac.mm
+
+         PRIVATE_HEADERS += qstorageinfo_mac_p.h
+
+         LIBS += -framework SystemConfiguration \
+                -framework Foundation \
+                -framework IOKit  \
+                -framework QTKit \
+                -framework CoreWLAN \
+                -framework CoreLocation \
+                -framework CoreFoundation \
+                -framework ScreenSaver \
+                -framework IOBluetooth \
+                -framework CoreServices \
+                -framework DiskArbitration \
+                -framework ApplicationServices
+}
+
+HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS

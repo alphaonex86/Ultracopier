@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QStorageInfo>
 
+#include "qstorageinfo.h"
 #include "Environment.h"
 
 class DriveManagement : public QObject

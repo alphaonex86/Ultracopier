@@ -10,10 +10,10 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QProcess>
-#include <QStorageInfo>
 #include <QTimer>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
+#include "qstorageinfo.h"
 #include "StructEnumDefinition.h"
 #include "ui_copyEngineOptions.h"
 #include "CopyEngine.h"
