@@ -111,7 +111,7 @@ win32: !simulator: {
     }
     PRIVATE_HEADERS += qstorageinfo_win_p.h
 
-    SOURCES += qstorageinfo_win.cp
+    SOURCES += qstorageinfo_win.cpp
 
        LIBS += \
             -lOle32 \
