@@ -21,6 +21,13 @@
 #include "Filters.h"
 #include "RenamingRules.h"
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
 #ifndef FACTORY_H
 #define FACTORY_H
 
@@ -54,6 +61,7 @@ public:
     QStringList supportedProtocolsForTheDestination() const;
     /// \brief to get the options of the copy engine
     QWidget * options();
+
 private:
     Ui::copyEngineOptions *ui;
     QWidget* tempWidget;
@@ -68,6 +76,10 @@ private:
     QTimer lunchInitFunction;
     QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
     QString firstRenamingRule,otherRenamingRule;
+
+    #if defined(Q_OS_WIN32) or defined(Q_OS_UNIX)
+    static size_t getTotalSystemMemory();
+    #endif
 private slots:
     void init();
     void setDoRightTransfer(bool doRightTransfer);

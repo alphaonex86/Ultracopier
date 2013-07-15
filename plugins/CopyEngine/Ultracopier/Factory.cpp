@@ -159,8 +159,22 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QString("doRightTransfer"),QVariant(true)));
         KeysList.append(qMakePair(QString("keepDate"),QVariant(true)));
         KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));
-        KeysList.append(qMakePair(QString("sequentialBuffer"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK)));
-        KeysList.append(qMakePair(QString("parallelBuffer"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK)));
+        quint32 sequentialBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
+        quint32 parallelBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
+        //to prevent swap and other bad effect, only under windows and unix for now
+        #if defined(Q_OS_WIN32) or defined(Q_OS_UNIX)
+        size_t max_memory=getTotalSystemMemory();
+        if(max_memory>0)
+        {
+            if(sequentialBuffer>(max_memory/10))
+                    sequentialBuffer=max_memory/10;
+            if(parallelBuffer>(max_memory/100))
+                    parallelBuffer=max_memory/100;
+        }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("detected memory: %1").arg(max_memory));
+        #endif
+        KeysList.append(qMakePair(QString("sequentialBuffer"),QVariant(sequentialBuffer)));
+        KeysList.append(qMakePair(QString("parallelBuffer"),QVariant(parallelBuffer)));
         KeysList.append(qMakePair(QString("parallelizeIfSmallerThan"),QVariant(1)));
         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
@@ -636,3 +650,22 @@ void CopyEngineFactory::on_inodeThreads_editingFinished()
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("inodeThreads",ui->inodeThreads->value());
 }
+
+#ifdef Q_OS_WIN32
+size_t CopyEngineFactory::getTotalSystemMemory()
+{
+    MEMORYSTATUSEX status;
+    status.dwLength = sizeof(status);
+    GlobalMemoryStatusEx(&status);
+    return status.ullTotalPhys;
+}
+#endif
+
+#ifdef Q_OS_UNIX
+size_t CopyEngineFactory::getTotalSystemMemory()
+{
+    long pages = sysconf(_SC_PHYS_PAGES);
+    long page_size = sysconf(_SC_PAGE_SIZE);
+    return pages * page_size;
+}
+#endif
