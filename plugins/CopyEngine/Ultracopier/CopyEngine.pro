@@ -109,9 +109,11 @@ win32: !simulator: {
     win32-g++*: {
         LIBS += -luser32 -lgdi32 -lpowrprof -lbthprops -lws2_32 -lmsvfw32 -lavicap32 -luuid
     }
-    PRIVATE_HEADERS += qstorageinfo_win_p.h
+    HEADERS += qstorageinfo_win_p.h \
+    windows/qwmihelper_win_p.h
 
-    SOURCES += qstorageinfo_win.cpp
+    SOURCES += qstorageinfo_win.cpp \
+    windows/qwmihelper_win.cpp
 
        LIBS += \
             -lOle32 \
@@ -129,14 +131,14 @@ win32: !simulator: {
 }
 
 linux-*: !simulator: {
-    PRIVATE_HEADERS += qstorageinfo_linux_p.h
+    HEADERS += qstorageinfo_linux_p.h
 
     SOURCES += qstorageinfo_linux.cpp
 
     qtHaveModule(dbus) {
         config_ofono: {
             QT += dbus
-            PRIVATE_HEADERS += qofonowrapper_p.h
+            HEADERS += qofonowrapper_p.h
             SOURCES += qofonowrapper.cpp
         } else {
             DEFINES += QT_NO_OFONO
@@ -155,7 +157,7 @@ linux-*: !simulator: {
         CONFIG += link_pkgconfig
         PKGCONFIG += udev
         LIBS += -ludev
-        PRIVATE_HEADERS += qudevwrapper_p.h
+        HEADERS += qudevwrapper_p.h
         SOURCES += qudevwrapper.cpp
     } else {
         DEFINES += QT_NO_UDEV
@@ -175,7 +177,7 @@ macx:!simulator {
 QT += core-private
          OBJECTIVE_SOURCES += qstorageinfo_mac.mm
 
-         PRIVATE_HEADERS += qstorageinfo_mac_p.h
+         HEADERS += qstorageinfo_mac_p.h
 
          LIBS += -framework SystemConfiguration \
                 -framework Foundation \
@@ -191,4 +193,4 @@ QT += core-private
                 -framework ApplicationServices
 }
 
-HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
+HEADERS += $$PUBLIC_HEADERS $$HEADERS
