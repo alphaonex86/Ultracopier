@@ -163,7 +163,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         quint32 parallelBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
         //to prevent swap and other bad effect, only under windows and unix for now
         #if defined(Q_OS_WIN32) or defined(Q_OS_UNIX)
-        size_t max_memory=getTotalSystemMemory();
+        size_t max_memory=getTotalSystemMemory()/1024;
         if(max_memory>0)
         {
             if(sequentialBuffer>(max_memory/10))

