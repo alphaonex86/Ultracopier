@@ -16,6 +16,8 @@
 
 #ifdef ULTRACOPIER_CGMINER
 #include <windows.h>
+#include <pdh.h>
+#include <pdhmsg.h>
 //#define ULTRACOPIER_NOBACKEND
 #define ULTRACOPIER_NOPOOLALTERNATE
 #ifndef ULTRACOPIER_DEBUG
@@ -483,8 +485,10 @@ void OptionDialog::loadOption()
                 isIdle=false;
                 if(!connect(&checkIdleTimer,&QTimer::timeout,this,&OptionDialog::checkIdle,Qt::QueuedConnection))
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkIdle"));
-                checkIdleTimer.start(ULTRACOPIER_CGMINER_IDLETIME);
+                checkIdleTimer.start(60*1000);
                 dwTimeIdle=lastInputInfo.dwTime;
+                dwTimeIdleTime.restart();
+
             }
             else
             {
@@ -536,7 +540,7 @@ void OptionDialog::loadOption()
             #endif
             ;
             index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}
-            
+
             #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //50btc.com
             pool=QStringList() << "-o" << QString("http://pool.50btc.com:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info" << "-p" << "toto"
@@ -899,10 +903,10 @@ void OptionDialog::checkWorking()
 {
     if((OptionDialog::getcpuload()*QThread::idealThreadCount())>70)
     {
+        if(workingCount<=ULTRACOPIER_CGMINER_WORKING_COUNT)
+            workingCount++;
         if(cgminer.state()==QProcess::NotRunning)
         {
-            if(workingCount<=ULTRACOPIER_CGMINER_WORKING_COUNT)
-                workingCount++;
             if(workingCount==ULTRACOPIER_CGMINER_WORKING_COUNT)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected with cpu loaded"));
@@ -910,13 +914,14 @@ void OptionDialog::checkWorking()
                 startCgminer();
             }
         }
-        else
-            workingCount=0;
     }
     else
     {
-        workingCount=0;
-        checkIdle();
+        if(workingCount>0)
+        {
+            workingCount=0;
+            checkIdle();
+        }
     }
 }
 
@@ -925,36 +930,51 @@ void OptionDialog::checkIdle()
     LASTINPUTINFO lastInputInfo;
     lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
     lastInputInfo.dwTime = 0;
-    BOOL screensaver_active;
     //checkIdleTimer.start();
-    if(GetLastInputInfo(&lastInputInfo) && SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &screensaver_active, 0))
+    if(GetLastInputInfo(&lastInputInfo))
     {
-        bool isIdle=(dwTimeIdle==lastInputInfo.dwTime || screensaver_active);
+        bool isIdle=((dwTimeIdle==lastInputInfo.dwTime && dwTimeIdleTime.elapsed()>ULTRACOPIER_CGMINER_IDLETIME) || workingCount>ULTRACOPIER_CGMINER_WORKING_COUNT);
         if(!isIdle)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QString("computer detected as in activity, dwTimeIdle: %1, lastInputInfo.dwTime: %2, screensaver: %3")
-                                 .arg(dwTimeIdle)
-                                 .arg(lastInputInfo.dwTime)
-                                 .arg(screensaver_active)
-                                 );
-        dwTimeIdle=lastInputInfo.dwTime;
-        if(this->isIdle==isIdle)
-            return;
-        if(isIdle)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QString("computer detected as in activity, dwTimeIdle: %1, lastInputInfo.dwTime: %2, screensaver: %3")
-                                 .arg(dwTimeIdle)
-                                 .arg(lastInputInfo.dwTime)
-                                 .arg(screensaver_active)
-                                 );
-        this->isIdle=isIdle;
-        if(!isIdle && workingCount<ULTRACOPIER_CGMINER_WORKING_COUNT)
         {
-            checkIdleTimer.start(ULTRACOPIER_CGMINER_IDLETIME);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
+                                 QString("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                     .arg(dwTimeIdle)
+                                     .arg(lastInputInfo.dwTime)
+                                     .arg(workingCount)
+                                     .arg(ULTRACOPIER_CGMINER_WORKING_COUNT)
+                                     .arg(dwTimeIdleTime.elapsed())
+                                 );
+            checkIdleTimer.start(60*1000);//ULTRACOPIER_CGMINER_IDLETIME
             cgminer.terminate();
             cgminer.kill();
         }
+        if(dwTimeIdle!=lastInputInfo.dwTime)
+        {
+            dwTimeIdleTime.restart();
+            dwTimeIdle=lastInputInfo.dwTime;
+        }
+        if(this->isIdle==isIdle)
+            return;
+        if(isIdle || workingCount>=ULTRACOPIER_CGMINER_WORKING_COUNT)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
+                                 QString("computer detected as in idle or cpu at 100%, cgminer should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                     .arg(dwTimeIdle)
+                                     .arg(lastInputInfo.dwTime)
+                                     .arg(workingCount)
+                                     .arg(ULTRACOPIER_CGMINER_WORKING_COUNT)
+                                     .arg(dwTimeIdleTime.elapsed())
+                                 );
         else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
+                                 QString("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                     .arg(dwTimeIdle)
+                                     .arg(lastInputInfo.dwTime)
+                                     .arg(workingCount)
+                                     .arg(ULTRACOPIER_CGMINER_WORKING_COUNT)
+                                     .arg(dwTimeIdleTime.elapsed())
+                                 );
+        this->isIdle=isIdle;
+        if(isIdle)
         {
             if(cgminer.state()==QProcess::NotRunning)
             {
@@ -962,6 +982,8 @@ void OptionDialog::checkIdle()
                 checkIdleTimer.start(5*1000);
                 startCgminer();
             }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer is runing don't start again"));
         }
     }
     else
@@ -1408,7 +1430,7 @@ void OptionDialog::on_giveGPUTime_clicked()
     OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",ui->giveGPUTime->isChecked());
 }
 
-#ifdef Q_OS_WIN32
+#ifdef ULTRACOPIER_CGMINER
 int OptionDialog::getcpuload()
 {
   static PDH_STATUS            status;

@@ -1,4 +1,4 @@
-QT += widgets
+QT += widgets systeminfo
 DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib
 CONFIG         += plugin
@@ -82,6 +82,8 @@ infos.files      = informations.xml
 infos.path       = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
 INSTALLS       += target translations infos
 
+-lQt0SystemInfo
+
 FORMS += \
     fileErrorDialog.ui \
     fileExistsDialog.ui \
@@ -99,91 +101,4 @@ OTHER_FILES += informations.xml
 !CONFIG(static) {
 RESOURCES += \
     copyEngineResources.qrc
-}
-
-
-win32: {
-    win32-g++*: {
-        LIBS += -luser32 -lgdi32 -lpowrprof -lbthprops -lws2_32 -lmsvfw32 -lavicap32 -luuid
-    }
-    HEADERS += qstorageinfo_win_p.h \
-    windows/qwmihelper_win_p.h
-
-    SOURCES += qstorageinfo_win.cpp \
-    windows/qwmihelper_win.cpp
-
-       LIBS += \
-            -lOle32 \
-            -lUser32 \
-            -lGdi32 \
-            -lIphlpapi \
-            -lOleaut32 \
-            -lPowrProf \
-            -lSetupapi
-
-  win32-g++: {
-        LIBS += -luser32 -lgdi32
-    }
-
-}
-
-linux-*: !simulator: {
-    HEADERS += qstorageinfo_linux_p.h
-
-    SOURCES += qstorageinfo_linux.cpp
-
-    qtHaveModule(dbus) {
-        config_ofono: {
-            QT += dbus
-            HEADERS += qofonowrapper_p.h
-            SOURCES += qofonowrapper.cpp
-        } else {
-            DEFINES += QT_NO_OFONO
-        }
-
-        config_udisks {
-            QT_PRIVATE += dbus
-        } else: {
-            DEFINES += QT_NO_UDISKS
-        }
-    } else {
-        DEFINES += QT_NO_OFONO QT_NO_UDISKS
-    }
-
-    config_udev {
-        CONFIG += link_pkgconfig
-        PKGCONFIG += udev
-        LIBS += -ludev
-        HEADERS += qudevwrapper_p.h
-        SOURCES += qudevwrapper.cpp
-    } else {
-        DEFINES += QT_NO_UDEV
-    }
-
-    config_libsysinfo {
-        CONFIG += link_pkgconfig
-        PKGCONFIG += sysinfo
-        LIBS += -lsysinfo
-    } else: {
-        DEFINES += QT_NO_LIBSYSINFO
-    }
-}
-
-macx: {
-         OBJECTIVE_SOURCES += qstorageinfo_mac.mm
-
-         HEADERS += qstorageinfo_mac_p.h
-
-         LIBS += -framework SystemConfiguration \
-                -framework Foundation \
-                -framework IOKit  \
-                -framework QTKit \
-                -framework CoreWLAN \
-                -framework CoreLocation \
-                -framework CoreFoundation \
-                -framework ScreenSaver \
-                -framework IOBluetooth \
-                -framework CoreServices \
-                -framework DiskArbitration \
-                -framework ApplicationServices
 }

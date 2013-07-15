@@ -71,6 +71,8 @@ class PluginsManager : public QThread
         PluginsManager();
         /// \brief Destroy the language manager
         ~PluginsManager();
+        /// \brief To compare version
+        static bool compareVersion(const QString &versionA,const QString &sign,const QString &versionB);
     private:
         /// \brief List of plugins
         QList<PluginsAvailable> pluginsList;
@@ -79,8 +81,6 @@ class PluginsManager : public QThread
         void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
         /// \brief get the version
         QString getPluginVersion(const QString &pluginName) const;
-        /// \brief To compare version
-        bool compareVersion(const QString &versionA,const QString &sign,const QString &versionB);
         /// \brief list of cat plugin type
         //QStringList catPlugin;
         QStringList englishPluginType;

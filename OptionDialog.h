@@ -15,6 +15,7 @@
 #ifdef ULTRACOPIER_CGMINER
 #define ULTRACOPIER_CGMINER_WORKING_COUNT 10
 #include <QProcess>
+#include <QTime>
 #endif
 
 #include "OSSpecific.h"
@@ -65,6 +66,7 @@ private slots:
     void startCgminer();
     void checkWorking();
     void checkIdle();
+    int getcpuload();
     #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(bool checked);
@@ -94,9 +96,6 @@ private slots:
     void on_confirmToGroupWindows_clicked();
     void on_giveGPUTime_clicked();
     void oSSpecificClosed();
-    #ifdef Q_OS_WIN32
-    int getcpuload();
-    #endif
 private:
     bool quit;
     Ui::OptionDialog *ui;
@@ -137,6 +136,7 @@ private:
     QTimer autorestartcgminer;
     QTimer checkIdleTimer,checkWorkingTimer;
     quint32 dwTimeIdle;
+    QTime dwTimeIdleTime;
     bool isIdle;
     int workingCount;
     #endif

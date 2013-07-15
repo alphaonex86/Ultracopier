@@ -24,7 +24,6 @@ TRANSLATIONS += plugins/Languages/ar/translation.ts \
 translations.files += plugins/Languages
 translations.path = $${PREFIX}/share/ultracopier
 
-win32:RC_FILE += resources/resources-windows.rc
 TARGET = ultracopier
 target.path = $${PREFIX}/bin
 INSTALLS += target translations
@@ -41,6 +40,8 @@ RESOURCES += \
     resources/ultracopier-resources_windows.qrc
 win32 {
     RESOURCES += resources/resources-windows-qt-plugin.qrc
+    RC_FILE += resources/resources-windows.rc
+    LIBS += -lpdh
 }
 
 HEADERS += ResourcesManager.h \
