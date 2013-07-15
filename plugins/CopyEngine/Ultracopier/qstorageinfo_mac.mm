@@ -68,7 +68,7 @@ void mountCallback(DADiskRef disk, CFArrayRef /*keys*/, void *context)
 
     QString name = QCFString::toQString([volumePath path]);
 
-    static_cast<QStorageInfoPrivate*>(context)->storageChanged(true, name);
+    static_cast<QStorageInfo*>(context)->storageChanged(true, name);
 }
 
 void mountCallback2(DADiskRef diskRef, void *context)
@@ -89,7 +89,7 @@ void mountCallback2(DADiskRef diskRef, void *context)
 
                 QString name = QCFString::toQString([volumePath path]);
 
-                static_cast<QStorageInfoPrivate*>(context)->storageChanged(true, name);
+                static_cast<QStorageInfo*>(context)->storageChanged(true, name);
                 CFRelease(batDoctionary);
             }
         }
@@ -106,7 +106,7 @@ void unmountCallback(DADiskRef disk, void *context)
 
     QString name = QCFString::toQString([volumePath path]);
 
-    static_cast<QStorageInfoPrivate*>(context)->storageChanged(false,name);
+    static_cast<QStorageInfo*>(context)->storageChanged(false,name);
 }
 
 
@@ -161,14 +161,13 @@ void QDASessionThread::doWork()
 #endif
 }
 
-QStorageInfoPrivate::QStorageInfoPrivate(QStorageInfo *parent)
-    : QObject(parent)
-    , q_ptr(parent), daSessionThread(0),sessionThreadStarted(0)
+QStorageInfo::QStorageInfo(QObject *parent)
+    : QObject(parent), daSessionThread(0),sessionThreadStarted(0)
 {
     updateVolumesMap();
 }
 
-QStorageInfoPrivate::~QStorageInfoPrivate()
+QStorageInfo::~QStorageInfo()
 {
     if (sessionThreadStarted) {
         daSessionThread->stop();
@@ -176,7 +175,7 @@ QStorageInfoPrivate::~QStorageInfoPrivate()
     }
 }
 
-qlonglong QStorageInfoPrivate::availableDiskSpace(const QString &driveVolume)
+qlonglong QStorageInfo::availableDiskSpace(const QString &driveVolume)
 {
     qint64 totalFreeBytes=0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -187,7 +186,7 @@ qlonglong QStorageInfoPrivate::availableDiskSpace(const QString &driveVolume)
     return  totalFreeBytes;
 }
 
-qlonglong QStorageInfoPrivate::totalDiskSpace(const QString &driveVolume)
+qlonglong QStorageInfo::totalDiskSpace(const QString &driveVolume)
 {
     qint64 totalBytes=0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -198,7 +197,7 @@ qlonglong QStorageInfoPrivate::totalDiskSpace(const QString &driveVolume)
 
     return totalBytes;
 }
-QString QStorageInfoPrivate::uriForDrive(const QString &driveVolume)
+QString QStorageInfo::uriForDrive(const QString &driveVolume)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     DADiskRef diskRef;
@@ -234,7 +233,7 @@ QString QStorageInfoPrivate::uriForDrive(const QString &driveVolume)
     return uri;
 }
 
-QStringList QStorageInfoPrivate::allLogicalDrives()
+QStringList QStorageInfo::allLogicalDrives()
 {
     updateVolumesMap();
     QStringList drivesList;
@@ -247,7 +246,7 @@ QStringList QStorageInfoPrivate::allLogicalDrives()
     return drivesList;
 }
 
-QStorageInfo::DriveType QStorageInfoPrivate::driveType(const QString &driveVolume)
+QStorageInfo::DriveType QStorageInfo::driveType(const QString &driveVolume)
 {
     QStorageInfo::DriveType drivetype =  QStorageInfo::UnknownDrive;
 
@@ -319,9 +318,9 @@ QStorageInfo::DriveType QStorageInfoPrivate::driveType(const QString &driveVolum
     return drivetype;
 }
 
-void QStorageInfoPrivate::connectNotify(const QMetaMethod &signal)
+void QStorageInfo::connectNotify(const QMetaMethod &signal)
 {
-    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfoPrivate::logicalDriveChanged);
+    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfo::logicalDriveChanged);
     if (signal == logicalDriveChangedSignal) {
         ///
         sessionThread();
@@ -334,15 +333,15 @@ void QStorageInfoPrivate::connectNotify(const QMetaMethod &signal)
     }
 }
 
-void QStorageInfoPrivate::disconnectNotify(const QMetaMethod &signal)
+void QStorageInfo::disconnectNotify(const QMetaMethod &signal)
 {
-    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfoPrivate::logicalDriveChanged);
+    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfo::logicalDriveChanged);
     if (signal == logicalDriveChangedSignal) {
     }
 }
 
 
-void QStorageInfoPrivate::storageChanged( bool added, const QString &vol)
+void QStorageInfo::storageChanged( bool added, const QString &vol)
 {
     if (!vol.isEmpty()) {
         QMapIterator<QString, QString> it(mountEntriesMap);
@@ -388,7 +387,7 @@ void QStorageInfoPrivate::storageChanged( bool added, const QString &vol)
     }
 }
 
-bool QStorageInfoPrivate::updateVolumesMap()
+bool QStorageInfo::updateVolumesMap()
 {
     struct statfs *buf = NULL;
     unsigned i, count = 0;
@@ -409,7 +408,7 @@ bool QStorageInfoPrivate::updateVolumesMap()
     return true;
 }
 
-bool QStorageInfoPrivate::sessionThread()
+bool QStorageInfo::sessionThread()
 {
     if (!sessionThreadStarted) {
         daSessionThread = new QDASessionThread();

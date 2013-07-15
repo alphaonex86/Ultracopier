@@ -3,6 +3,7 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
+#include <QWidget>
 #include <QObject>
 #include <QList>
 #include <QStringList>

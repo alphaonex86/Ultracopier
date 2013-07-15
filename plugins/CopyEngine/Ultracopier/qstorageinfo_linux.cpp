@@ -68,9 +68,8 @@
 
 QT_BEGIN_NAMESPACE
 
-QStorageInfoPrivate::QStorageInfoPrivate(QStorageInfo *parent)
+QStorageInfo::QStorageInfo(QObject *parent)
     : QObject(parent)
-    , q_ptr(parent)
     , inotifyWatcher(-1)
     , inotifyFileDescriptor(-1)
     , notifier(0)
@@ -81,12 +80,12 @@ QStorageInfoPrivate::QStorageInfoPrivate(QStorageInfo *parent)
 {
 }
 
-QStorageInfoPrivate::~QStorageInfoPrivate()
+QStorageInfo::~QStorageInfo()
 {
     cleanupWatcher();
 }
 
-qlonglong QStorageInfoPrivate::availableDiskSpace(const QString &drive)
+qlonglong QStorageInfo::availableDiskSpace(const QString &drive)
 {
     struct statfs statistics;
     if (statfs(drive.toLatin1(), &statistics) == 0) {
@@ -98,7 +97,7 @@ qlonglong QStorageInfoPrivate::availableDiskSpace(const QString &drive)
     return -1;
 }
 
-qlonglong QStorageInfoPrivate::totalDiskSpace(const QString &drive)
+qlonglong QStorageInfo::totalDiskSpace(const QString &drive)
 {
     struct statfs statistics;
     if (statfs(drive.toLatin1(), &statistics) == 0) {
@@ -110,7 +109,7 @@ qlonglong QStorageInfoPrivate::totalDiskSpace(const QString &drive)
     return -1;
 }
 
-QString QStorageInfoPrivate::uriForDrive(const QString &drive)
+QString QStorageInfo::uriForDrive(const QString &drive)
 {
     QFileInfoList fileinfolist = QDir(QString(QStringLiteral("/dev/disk/by-uuid/"))).entryInfoList(QDir::AllEntries | QDir::NoDot | QDir::NoDotDot);
     if (!fileinfolist.isEmpty()) {
@@ -163,7 +162,7 @@ QString QStorageInfoPrivate::uriForDrive(const QString &drive)
     return QString::null;
 }
 
-QStringList QStorageInfoPrivate::allLogicalDrives()
+QStringList QStorageInfo::allLogicalDrives()
 {
     // No need to update the list if someone is listening to the signal, as it will be updated in that case
 #if !defined(QT_NO_UDEV)
@@ -176,7 +175,7 @@ QStringList QStorageInfoPrivate::allLogicalDrives()
     return logicalDrives;
 }
 
-QStorageInfo::DriveType QStorageInfoPrivate::driveType(const QString &drive)
+QStorageInfo::DriveType QStorageInfo::driveType(const QString &drive)
 {
     QStorageInfo::DriveType type = QStorageInfo::UnknownDrive;
     FILE *fsDescription = setmntent(_PATH_MOUNTED, "r");
@@ -278,21 +277,21 @@ QStorageInfo::DriveType QStorageInfoPrivate::driveType(const QString &drive)
     return type;
 }
 
-void QStorageInfoPrivate::connectNotify(const QMetaMethod &signal)
+void QStorageInfo::connectNotify(const QMetaMethod &signal)
 {
-    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfoPrivate::logicalDriveChanged);
+    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfo::logicalDriveChanged);
     if (signal == logicalDriveChangedSignal)
         setupWatcher();
 }
 
-void QStorageInfoPrivate::disconnectNotify(const QMetaMethod &signal)
+void QStorageInfo::disconnectNotify(const QMetaMethod &signal)
 {
-    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfoPrivate::logicalDriveChanged);
+    static const QMetaMethod logicalDriveChangedSignal = QMetaMethod::fromSignal(&QStorageInfo::logicalDriveChanged);
     if (signal == logicalDriveChangedSignal)
         cleanupWatcher();
 }
 
-void QStorageInfoPrivate::cleanupWatcher()
+void QStorageInfo::cleanupWatcher()
 {
 #if !defined(QT_NO_UDEV)
     if (needsUDevWatcher == 2) {
@@ -319,7 +318,7 @@ void QStorageInfoPrivate::cleanupWatcher()
     }
 }
 
-void QStorageInfoPrivate::setupWatcher()
+void QStorageInfo::setupWatcher()
 {
     updateLogicalDrives();
 
@@ -353,7 +352,7 @@ void QStorageInfoPrivate::setupWatcher()
     }
 }
 
-void QStorageInfoPrivate::updateLogicalDrives()
+void QStorageInfo::updateLogicalDrives()
 {
     FILE *fsDescription = setmntent(_PATH_MOUNTED, "r");
     struct mntent entry;
@@ -365,7 +364,7 @@ void QStorageInfoPrivate::updateLogicalDrives()
     endmntent(fsDescription);
 }
 
-void QStorageInfoPrivate::onInotifyActivated()
+void QStorageInfo::onInotifyActivated()
 {
     inotify_event event;
     if (read(inotifyFileDescriptor, (void *)&event, sizeof(event)) > 0
@@ -390,7 +389,7 @@ void QStorageInfoPrivate::onInotifyActivated()
 }
 
 #if !defined(QT_NO_UDEV)
-void QStorageInfoPrivate::onDriveChanged()
+void QStorageInfo::onDriveChanged()
 {
     QStringList oldLogicalDrives = logicalDrives;
     updateLogicalDrives();

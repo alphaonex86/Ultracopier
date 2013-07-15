@@ -60,19 +60,29 @@ QT_BEGIN_NAMESPACE
 
 class QSocketNotifier;
 
-class QStorageInfoPrivate : public QObject
+class QStorageInfo : public QObject
 {
     Q_OBJECT
 
 public:
-    QStorageInfoPrivate(QStorageInfo *parent);
-    ~QStorageInfoPrivate();
+    enum DriveType {
+        UnknownDrive = 0,
+        InternalDrive,
+        RemovableDrive,
+        RemoteDrive,
+        CdromDrive,
+        RamDrive
+    };
 
-    qlonglong availableDiskSpace(const QString &drive);
-    qlonglong totalDiskSpace(const QString &drive);
-    QString uriForDrive(const QString &drive);
+    QStorageInfo(QObject *parent = 0);
+    virtual ~QStorageInfo();
+
     QStringList allLogicalDrives();
-    QStorageInfo::DriveType driveType(const QString &drive);
+
+    Q_INVOKABLE qlonglong availableDiskSpace(const QString &drive);
+    Q_INVOKABLE qlonglong totalDiskSpace(const QString &drive);
+    Q_INVOKABLE QString uriForDrive(const QString &drive);
+    Q_INVOKABLE QStorageInfo::DriveType driveType(const QString &drive);
 
 Q_SIGNALS:
     void logicalDriveChanged(const QString &drive, bool added);
@@ -82,9 +92,6 @@ protected:
     void disconnectNotify(const QMetaMethod &signal);
 
 private:
-    QStorageInfo * const q_ptr;
-    Q_DECLARE_PUBLIC(QStorageInfo);
-
     QStringList mountEntriesList;
 
 private Q_SLOTS:

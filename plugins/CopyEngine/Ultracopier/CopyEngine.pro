@@ -102,10 +102,7 @@ RESOURCES += \
 }
 
 
-win32: !simulator: {
-    win32-msvc*: {
-        LIBS += -lUser32 -lGdi32 -lPowrProf -lBthprops -lWs2_32 -lVfw32 -lSetupapi -lIphlpapi -lOle32 -lWbemuuid
-    }
+win32: {
     win32-g++*: {
         LIBS += -luser32 -lgdi32 -lpowrprof -lbthprops -lws2_32 -lmsvfw32 -lavicap32 -luuid
     }
@@ -172,9 +169,7 @@ linux-*: !simulator: {
     }
 }
 
-macx:!simulator {
-#CONFIG -= x86_64
-QT += core-private
+macx: {
          OBJECTIVE_SOURCES += qstorageinfo_mac.mm
 
          HEADERS += qstorageinfo_mac_p.h
@@ -192,5 +187,3 @@ QT += core-private
                 -framework DiskArbitration \
                 -framework ApplicationServices
 }
-
-HEADERS += $$PUBLIC_HEADERS $$HEADERS
