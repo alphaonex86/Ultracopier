@@ -195,7 +195,7 @@
         <translation>El argumento para el modo no es válida</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="896"/>
+        <location filename="../../../Core.cpp" line="916"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>¿Quieres copiar? Si no, se puede mover.</translation>
     </message>
@@ -215,7 +215,7 @@
         <translation>No se puede cargar el motor de copia, copia abortados</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="896"/>
+        <location filename="../../../Core.cpp" line="916"/>
         <source>Transfer mode</source>
         <translation>Modo de transferencia</translation>
     </message>
@@ -630,24 +630,29 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">La sustitución de la copia default / sistema de movimiento no está soportado por el gestor de archivos (Dolphin, Nautilus, ...). &lt;br /&gt; Pregunte al desarrollador para apoyarlo. &lt;br /&gt; Es necesario hacer el copiar / mover manualmente.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="10"/>
+        <location filename="../../../OSSpecific.cpp" line="11"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>La sustitución de la copia default / sistema de movimiento no está soportado por el gestor de archivos (Dolphin, Nautilus, ...). &lt;br /&gt; Pregunte al desarrollador para apoyarlo. &lt;br /&gt; Es necesario hacer el copiar / mover manualmente.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="12"/>
+        <location filename="../../../OSSpecific.cpp" line="13"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
         <translation>Reinicie el sistema si previamente se había instalado software similar (como TeraCopy, SuperCopier o una versión anterior de Ultracopier).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="14"/>
+        <location filename="../../../OSSpecific.cpp" line="15"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
         <translation>La sustitución de la copia default / sistema de movimiento no se admite y bloquea buscador de Mac OS X. &lt;br /&gt; Es necesario hacer el copiar / mover manualmente haciendo clic derecho sobre el icono de la bandeja del sistema, cerca del reloj (no el icono del Dock).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="16"/>
+        <location filename="../../../OSSpecific.cpp" line="17"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>La sustitución de incumplimiento de copiar / mover sistema no debe ser soportado por el gestor de archivos. &lt;br /&gt; Pregunte al desarrollador para apoyarlo. &lt;br /&gt; Usted necesita hacer el copiar / mover manualmente.</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="20"/>
+        <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
+        <translation>Considere supercopier como obsoleto, prefieren Ultracopier</translation>
     </message>
 </context>
 <context>
@@ -671,7 +676,7 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
         <location filename="../../../OptionDialog.ui" line="301"/>
-        <location filename="../../../OptionDialog.cpp" line="314"/>
+        <location filename="../../../OptionDialog.cpp" line="339"/>
         <source>Copy engine</source>
         <translation>Motor de copia</translation>
     </message>
@@ -726,21 +731,21 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
         <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="315"/>
+        <location filename="../../../OptionDialog.cpp" line="340"/>
         <source>Listener</source>
         <translation>Oyente</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
         <location filename="../../../OptionDialog.ui" line="319"/>
-        <location filename="../../../OptionDialog.cpp" line="316"/>
+        <location filename="../../../OptionDialog.cpp" line="341"/>
         <source>Plugin loader</source>
         <translation>Plugin cargador</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
         <location filename="../../../OptionDialog.ui" line="324"/>
-        <location filename="../../../OptionDialog.cpp" line="317"/>
+        <location filename="../../../OptionDialog.cpp" line="342"/>
         <source>Session loader</source>
         <translation>Sesión cargador</translation>
     </message>
@@ -895,18 +900,18 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Escriba la carpeta de las operaciones:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="220"/>
-        <location filename="../../../OptionDialog.cpp" line="234"/>
+        <location filename="../../../OptionDialog.cpp" line="245"/>
+        <location filename="../../../OptionDialog.cpp" line="259"/>
         <source>Load</source>
         <translation>Cargar</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="220"/>
+        <location filename="../../../OptionDialog.cpp" line="245"/>
         <source>Load the theme?</source>
         <translation>Cargue el tema?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="234"/>
+        <location filename="../../../OptionDialog.cpp" line="259"/>
         <source>Load the language?</source>
         <translation>Cargue el idioma?</translation>
     </message>
@@ -915,87 +920,87 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Desactiveado porque no tienes niguano plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <location filename="../../../OptionDialog.cpp" line="463"/>
         <source>Allow the application</source>
         <translation>Permitir la aplicación</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <location filename="../../../OptionDialog.cpp" line="463"/>
         <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
         <translation>Esta versión gratuita de ruptura es sólo si %1 es permitido por su antivirus. Cosa que usted puede obtener la versión normal gratis</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <location filename="../../../OptionDialog.cpp" line="468"/>
         <source>Enable the OpenCL</source>
         <translation>Habilite el OpenCL</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <location filename="../../../OptionDialog.cpp" line="468"/>
         <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
         <translation>Esta versión Ultimate es sólo si el OpenCL se instala con los controladores de la tarjeta gráfica. Cosa que usted puede obtener la versión normal gratis</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="318"/>
-        <location filename="../../../OptionDialog.cpp" line="320"/>
-        <location filename="../../../OptionDialog.cpp" line="505"/>
-        <location filename="../../../OptionDialog.cpp" line="506"/>
+        <location filename="../../../OptionDialog.cpp" line="343"/>
+        <location filename="../../../OptionDialog.cpp" line="345"/>
+        <location filename="../../../OptionDialog.cpp" line="718"/>
+        <location filename="../../../OptionDialog.cpp" line="719"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Discapacitados, ya que no tiene ningún plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="322"/>
+        <location filename="../../../OptionDialog.cpp" line="347"/>
         <source>Do nothing</source>
         <translation>No hacer nada</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="323"/>
+        <location filename="../../../OptionDialog.cpp" line="348"/>
         <source>Ask source as folder</source>
         <translation>Pregunte a la fuente que la carpeta</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="324"/>
+        <location filename="../../../OptionDialog.cpp" line="349"/>
         <source>Ask sources as files</source>
         <translation>Pregunte a las fuentes como archivos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="325"/>
+        <location filename="../../../OptionDialog.cpp" line="350"/>
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="326"/>
+        <location filename="../../../OptionDialog.cpp" line="351"/>
         <source>When source is same</source>
         <translation>Cuando la fuente es la misma</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="327"/>
+        <location filename="../../../OptionDialog.cpp" line="352"/>
         <source>When destination is same</source>
         <translation>Cuando destino es el mismo</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="328"/>
+        <location filename="../../../OptionDialog.cpp" line="353"/>
         <source>When source and destination are same</source>
         <translation>Cuando la fuente y el destino son los mismos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="329"/>
+        <location filename="../../../OptionDialog.cpp" line="354"/>
         <source>When source or destination are same</source>
         <translation>Cuando la fuente o el destino son los mismos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="330"/>
+        <location filename="../../../OptionDialog.cpp" line="355"/>
         <source>Always</source>
         <translation>Siempre</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="344"/>
-        <location filename="../../../OptionDialog.cpp" line="345"/>
-        <location filename="../../../OptionDialog.cpp" line="346"/>
+        <location filename="../../../OptionDialog.cpp" line="369"/>
+        <location filename="../../../OptionDialog.cpp" line="370"/>
+        <location filename="../../../OptionDialog.cpp" line="371"/>
         <source>The variables are %1</source>
         <translation>Las variables son %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1052"/>
+        <location filename="../../../OptionDialog.cpp" line="1357"/>
         <source>Save logs as: </source>
         <translation>Guardar registros como: </translation>
     </message>
