@@ -10,12 +10,10 @@ HEADERS         = interface.h \
     ../../../interface/PluginInterface_Themes.h \
     ../../../interface/FacilityInterface.h \
     ../../../interface/OptionInterface.h \
-    TransferModel.h \
-    SelectionModel.h
+    TransferModel.h
 SOURCES         = interface.cpp \
     factory.cpp \
-    TransferModel.cpp \
-    SelectionModel.cpp
+    TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)
 include(../../../extratool.pri)
 target.path     = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)

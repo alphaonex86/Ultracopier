@@ -205,8 +205,7 @@ Themes::Themes(const bool &alwaysOnTop,
     shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
 
-    selectionModel=new SelectionModel(NULL);
-    ui->TransferList->setSelectionModel(selectionModel);
+    selectionModel=ui->TransferList->selectionModel();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(&transferModel,&TransferModel::debugInformation,this,&Themes::debugInformation);

@@ -75,7 +75,6 @@ private:
     int loop_size,index_for_loop;
     int sub_loop_size,sub_index_for_loop;
     int row,column;
-    quint64 totalFile,totalSize,currentFile;
     FacilityInterface * facilityEngine;
     QString search_text;
     /// \brief index from start the search, decresed by remove before it

@@ -1107,6 +1107,12 @@ void Themes::progressColorRemaining_clicked()
 void Themes::alwaysOnTop_clicked(bool reshow)
 {
     Qt::WindowFlags flags = windowFlags();
+    #ifdef Q_OS_WIN32
+    if(uiOptions->alwaysOnTop->isChecked())
+        SetWindowPos(this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    else
+        SetWindowPos(this->winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    #endif
     #ifdef Q_OS_LINUX
     if(uiOptions->alwaysOnTop->isChecked())
         flags=flags | Qt::X11BypassWindowManagerHint;

@@ -153,11 +153,16 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
 {
     const QModelIndexList oldIndexes = persistentIndexList();
     QModelIndexList newIndexes=oldIndexes;
+    QMap<int, quint64> oldMapping;  // model index row in model before update, item id
+    QMap<quint64, int> newMapping;  // item id, model index row in model after update
+    for ( int i = 0; i < oldIndexes.count(); i++ ) {
+        const QModelIndex& index = oldIndexes[ i ];
+        oldMapping[ index.row() ] = index.data( Qt::UserRole ).value<quint64>();
+    }
+
     loop_size=returnActions.size();
     index_for_loop=0;
-    totalFile=0;
-    totalSize=0;
-    currentFile=0;
+    quint64 totalFile=0,totalSize=0,currentFile=0;
     emit layoutAboutToBeChanged();
     while(index_for_loop<loop_size)
     {
@@ -291,7 +296,27 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
         }
         index_for_loop++;
     }
-    //changePersistentIndexList( oldIndexes, newIndexes );
+
+    if(!oldIndexes.isEmpty())
+    {
+        const QSet<quint64> ids = oldMapping.values().toSet();
+
+        for ( int i = 0; i < transfertItemList.count(); i++ ) {
+            const TransferModel::TransfertItem& item = transfertItemList[ i ];
+
+            if ( ids.contains( item.id ) ) {
+                newMapping[ item.id ] = i;
+            }
+        }
+
+        for ( int i = 0; i < oldIndexes.count(); i++ ) {
+            const QModelIndex& index = oldIndexes[ i ];
+            const int newRow = newMapping.value( oldMapping[ index.row() ], -1 );
+            newIndexes[ i ] = newRow == -1 ? QModelIndex() : QAbstractTableModel::index( newRow, index.column(), index.parent() );
+        }
+    }
+
+    changePersistentIndexList( oldIndexes, newIndexes );
     emit layoutChanged();
     return QList<quint64>() << totalFile << totalSize << currentFile;
 }
