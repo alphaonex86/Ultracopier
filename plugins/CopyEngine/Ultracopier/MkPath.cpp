@@ -139,12 +139,12 @@ void MkPath::internalDoThisPath()
         QFile destination(pathList.first().destination.absoluteFilePath());
         if(!destination.setPermissions(source.permissions()))
         {
-            if(stopIt)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set the right: "+pathList.first().destination.absoluteFilePath());
+            /*if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set the right: "+pathList.first().destination.absoluteFilePath());
             emit errorOnFolder(pathList.first().source,tr("Unable to set the access-right"));
-            return;
+            return;*/
         }
     }
     if(pathList.first().actionType==ActionType_MovePath)

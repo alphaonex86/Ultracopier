@@ -162,7 +162,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         quint32 sequentialBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
         quint32 parallelBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
         //to prevent swap and other bad effect, only under windows and unix for now
-        #if defined(Q_OS_WIN32) or (defined(Q_OS_UNIX) and defined(_SC_PHYS_PAGES))
+        #if defined(Q_OS_WIN32) or (defined(Q_OS_LINUX) and defined(_SC_PHYS_PAGES))
         size_t max_memory=getTotalSystemMemory()/1024;
         if(max_memory>0)
         {
@@ -171,7 +171,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
             if(parallelBuffer>(max_memory/100))
                     parallelBuffer=max_memory/100;
         }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("detected memory: %1").arg(max_memory));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("detected memory: %1MB").arg(max_memory/1024));
         #endif
         KeysList.append(qMakePair(QString("sequentialBuffer"),QVariant(sequentialBuffer)));
         KeysList.append(qMakePair(QString("parallelBuffer"),QVariant(parallelBuffer)));
@@ -661,7 +661,7 @@ size_t CopyEngineFactory::getTotalSystemMemory()
 }
 #endif
 
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_LINUX
 size_t CopyEngineFactory::getTotalSystemMemory()
 {
     long pages = sysconf(_SC_PHYS_PAGES);

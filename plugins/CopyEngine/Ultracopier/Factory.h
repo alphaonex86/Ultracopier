@@ -24,7 +24,7 @@
 #ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
-#ifdef Q_OS_UNIX
+#ifdef Q_OS_LINUX
 #include <unistd.h>
 #endif
 
@@ -77,7 +77,7 @@ private:
     QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
     QString firstRenamingRule,otherRenamingRule;
 
-    #if defined(Q_OS_WIN32) or (defined(Q_OS_UNIX) and defined(_SC_PHYS_PAGES))
+    #if defined(Q_OS_WIN32) or (defined(Q_OS_LINUX) and defined(_SC_PHYS_PAGES))
     static size_t getTotalSystemMemory();
     #endif
 private slots:
