@@ -107,14 +107,88 @@ void MkPath::internalDoThisPath()
     }
     else
     {
-        if(!dir.rename(pathList.first().source.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
+        if(!pathList.first().source.exists())
         {
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
-            emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source folder don't exists: "+pathList.first().source.absoluteFilePath());
+            emit errorOnFolder(pathList.first().destination,tr("The source folder don't exists"));
             return;
+        }
+        if(!pathList.first().source.isDir())//it's really an error?
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source is not a folder: "+pathList.first().source.absoluteFilePath());
+            /*if(stopIt)
+                return;
+            waitAction=true;
+            emit errorOnFolder(pathList.first().destination,tr("The source is not a folder"));
+            return;*/
+        }
+        if(pathList.first().destination.absoluteFilePath().startsWith(pathList.first().source.absoluteFilePath()+"/"))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+pathList.first().destination.absoluteFilePath());
+            int random=rand();
+            QFileInfo tempFolder=pathList.first().source.absolutePath()+"/"+QString::number(random);
+            while(tempFolder.exists())
+            {
+                random=rand();
+                tempFolder=pathList.first().source.absolutePath()+"/"+QString::number(random);
+            }
+            if(!dir.rename(pathList.first().source.absoluteFilePath(),tempFolder.absoluteFilePath()))
+            {
+                if(stopIt)
+                    return;
+                waitAction=true;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: "+pathList.first().destination.absoluteFilePath());
+                emit errorOnFolder(pathList.first().destination,tr("Unable to temporary rename the folder"));
+                return;
+            }
+            if(!dir.mkpath(pathList.first().destination.absolutePath()))
+            {
+                if(!dir.exists(pathList.first().destination.absolutePath()))
+                {
+                    if(stopIt)
+                        return;
+                    waitAction=true;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
+                    emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
+                    return;
+                }
+            }
+            if(!dir.rename(tempFolder.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
+            {
+                if(stopIt)
+                    return;
+                waitAction=true;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to final real mvoe the folder: "+pathList.first().destination.absoluteFilePath());
+                emit errorOnFolder(pathList.first().destination,tr("Unable to final real mvoe the folder"));
+                return;
+            }
+        }
+        else
+        {
+            if(!dir.mkpath(pathList.first().destination.absolutePath()))
+            {
+                if(!dir.exists(pathList.first().destination.absolutePath()))
+                {
+                    if(stopIt)
+                        return;
+                    waitAction=true;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
+                    emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
+                    return;
+                }
+            }
+            if(!dir.rename(pathList.first().source.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
+            {
+                if(stopIt)
+                    return;
+                waitAction=true;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
+                emit errorOnFolder(pathList.first().destination,tr("Unable to move the folder"));
+                return;
+            }
         }
     }
     if(doTheDateTransfer)
