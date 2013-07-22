@@ -1,4 +1,5 @@
 #include "ListThread.h"
+#include <QStorageInfo>
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
@@ -741,8 +742,6 @@ void ListThread::cancel()
     while(index<loop_size)
     {
         transferThreadList.at(index)->stop();
-        delete transferThreadList.at(index);//->deleteLayer();
-        transferThreadList[index]=NULL;
         index++;
     }
     index=0;
@@ -763,7 +762,29 @@ void ListThread::cancel()
         clockForTheCopySpeed=NULL;
     }
     #endif
+    checkIfReadyToCancel();
+}
 
+void ListThread::checkIfReadyToCancel()
+{
+    if(!stopIt)
+        return;
+    int index=0;
+    int loop_size=transferThreadList.size();
+    while(index<loop_size)
+    {
+        if(transferThreadList.at(index)!=NULL)
+        {
+            if(transferThreadList.at(index)->transferId!=0)
+                return;
+            delete transferThreadList.at(index);//->deleteLayer();
+            transferThreadList[index]=NULL;
+            transferThreadList.removeAt(index);
+            loop_size=transferThreadList.size();
+            index--;
+        }
+        index++;
+    }
     actionToDoListTransfer.clear();
     actionToDoListInode.clear();
     actionToDoListInode_afterTheTransfer.clear();
@@ -1598,6 +1619,8 @@ void ListThread::doNewActions_inode_manipulation()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoListTransfer.size()));
     #endif
+    if(stopIt)
+        checkIfReadyToCancel();
     if(stopIt || putInPause)
         return;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER

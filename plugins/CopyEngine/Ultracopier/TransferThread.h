@@ -270,6 +270,9 @@ private:
     bool doFilePostOperation();
     //different pre-operation
     void tryOpen();
+    bool remainFileOpen();
+    bool remainSourceOpen();
+    bool remainDestinationOpen();
 };
 
 #endif // TRANSFERTHREAD_H

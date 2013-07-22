@@ -344,6 +344,8 @@ private slots:
     void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
+
+    void checkIfReadyToCancel();
 signals:
     //send information about the copy
     void actionInProgess(const Ultracopier::EngineActionInProgress &);	//should update interface information on this event

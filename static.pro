@@ -8,11 +8,11 @@ RESOURCES += plugins/static-plugins.qrc \
 win32:RESOURCES += plugins/static-plugins-windows.qrc
 
 LIBS           = -Lplugins -lcopyEngine -linterface -llistener -lQt0SystemInfo
-win32:LIBS += -lpluginLoader -lsessionLoader
+win32:LIBS += -lpluginLoader -lsessionLoader -lPowrProf -lSetupapi
 
 build_pass:CONFIG(debug, debug|release) {
 LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd -lQt0SystemInfod
-win32:LIBS += -lpluginLoaderd -lsessionLoaderd
+win32:LIBS += -lpluginLoaderd -lsessionLoaderd -lPowrProf -lSetupapi
 }
 
 HEADERS -= lib/qt-tar-xz/xz.h \

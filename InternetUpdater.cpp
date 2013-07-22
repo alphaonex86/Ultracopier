@@ -7,6 +7,8 @@
 #include <QNetworkRequest>
 #include <QUrl>
 
+#include "PluginsManager.h"
+
 InternetUpdater::InternetUpdater(QObject *parent) :
     QObject(parent)
 {
@@ -70,7 +72,15 @@ void InternetUpdater::httpFinished()
     }
     QString newVersion=QString::fromUtf8(reply->readAll());
     if(newVersion==ULTRACOPIER_VERSION)
+    {
+        reply->deleteLater();
         return;
+    }
+    if(PluginsManager::compareVersion(newVersion,"<=",ULTRACOPIER_VERSION))
+    {
+        reply->deleteLater();
+        return;
+    }
     emit newUpdate(newVersion);
     reply->deleteLater();
 }

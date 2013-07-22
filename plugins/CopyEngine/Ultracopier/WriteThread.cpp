@@ -41,6 +41,8 @@ WriteThread::~WriteThread()
     //endIsDetected();
     emit internalStartClose();
     isOpen.acquire();
+    if(!file.fileName().isEmpty())
+        resumeNotStarted();
     //disconnect(this);//-> do into ~TransferThread()
     quit();
     wait();
@@ -163,6 +165,9 @@ bool WriteThread::internalOpen()
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("General file corruption detected"));
                 stopIt=true;
+                file.close();
+                resumeNotStarted();
+                file.setFileName("");
                 return false;
             }
         }
@@ -172,12 +177,16 @@ bool WriteThread::internalOpen()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             file.close();
+            resumeNotStarted();
+            file.setFileName("");
             emit closed();
             return false;
         }
         if(!file.seek(0))
         {
             file.close();
+            resumeNotStarted();
+            file.setFileName("");
             errorString_internal=file.errorString();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
             emit error();
@@ -190,12 +199,16 @@ bool WriteThread::internalOpen()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             file.close();
+            resumeNotStarted();
+            file.setFileName("");
             emit closed();
             return false;
         }
         if(!file.resize(startSize))
         {
             file.close();
+            resumeNotStarted();
+            file.setFileName("");
             errorString_internal=file.errorString();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to resize to %1 after open: %2, error: %3").arg(startSize).arg(file.fileName()).arg(errorString_internal));
             emit error();
@@ -208,15 +221,17 @@ bool WriteThread::internalOpen()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
             file.close();
+            resumeNotStarted();
+            file.setFileName("");
             emit closed();
             return false;
         }
+        isOpen.acquire();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit opened()");
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
         #endif
-        isOpen.acquire();
         needRemoveTheFile=false;
         postOperationRequested=false;
         return true;
@@ -226,6 +241,8 @@ bool WriteThread::internalOpen()
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
+            resumeNotStarted();
+            file.setFileName("");
             emit closed();
             return false;
         }
@@ -250,10 +267,13 @@ void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool
     }
     if(this->file.isOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] already open! destination: "+file.fileName());
-        errorString_internal=tr("Internal error, please report it!");
-        emit error();
-        return;
+        if(file.absoluteFilePath()==this->file.fileName())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] Try reopen already opened same file: "+file.absoluteFilePath());
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] previous file is already open: "+file.absoluteFilePath());
+        emit internalStartClose();
+        isOpen.acquire();
+        isOpen.release();
     }
     if(numberOfBlock<1 || (numberOfBlock>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK && numberOfBlock>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK))
     {
@@ -455,6 +475,7 @@ void WriteThread::internalCloseSlot()
 
 void WriteThread::internalClose(bool emitSignal)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close for file: "+file.fileName());
     /// \note never send signal here, because it's called by the destructor
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Close;
@@ -520,10 +541,12 @@ void WriteThread::internalClose(bool emitSignal)
 void WriteThread::internalReopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
+    QString tempFile=file.fileName();
     internalClose(false);
     flushBuffer();
     stopIt=false;
     lastGoodPosition=0;
+    file.setFileName(tempFile);
     if(internalOpen())
         emit reopened();
 }

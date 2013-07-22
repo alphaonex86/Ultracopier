@@ -280,11 +280,12 @@ void TransferThread::preOperation()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after is same");
+    /*Why this code?
     if(readError)
     {
         readError=false;
         return;
-    }
+    }*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before destination exists");
     if(destinationExists())
     {
@@ -292,11 +293,12 @@ void TransferThread::preOperation()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after destination exists");
+    /*Why this code?
     if(readError)
     {
         readError=false;
         return;
-    }
+    }*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before keep date");
     if(keepDate)
     {
@@ -909,16 +911,32 @@ void TransferThread::stop()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("transfer_stat==TransferStat_Idle"));
         return;
     }
-    if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
+    if(remainSourceOpen())
         readThread.stop();
-    if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
+    if(remainDestinationOpen())
         writeThread.stop();
-    if(!((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) && !((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
+    if(!remainFileOpen())
     {
         if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath() && source.exists())
             QFile(destination.absoluteFilePath()).remove();
+        transfer_stat=TransferStat_PostOperation;
         emit internalStartPostOperation();
     }
+}
+
+bool TransferThread::remainFileOpen()
+{
+    return remainSourceOpen() || remainDestinationOpen();
+}
+
+bool TransferThread::remainSourceOpen()
+{
+    return (readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable;
+}
+
+bool TransferThread::remainDestinationOpen()
+{
+    return (writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable;
 }
 
 void TransferThread::readIsFinish()
@@ -1046,12 +1064,12 @@ void TransferThread::writeIsClosed()
 // return true if all is closed, and do some operations, don't use into condition to check if is closed!
 bool TransferThread::checkIfAllIsClosedAndDoOperations()
 {
-    if((readError || writeError) && !needSkip)
+    if((readError || writeError) && !needSkip && !stopIt)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] resolve error before progress");
         return false;
     }
-    if((!(readIsOpenVariable || readIsOpeningVariable) || readIsClosedVariable) && (!(writeIsOpenVariable || writeIsOpeningVariable) || writeIsClosedVariable))
+    if(!remainFileOpen())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] emit internalStartPostOperation() to do the real post operation");
         transfer_stat=TransferStat_PostOperation;
@@ -1082,13 +1100,13 @@ void TransferThread::postOperation()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     //all except closing
-    if((readError || writeError) && !needSkip)//normally useless by checkIfAllIsFinish()
+    if((readError || writeError) && !needSkip && !stopIt)//normally useless by checkIfAllIsFinish()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] resume after error");
         return;
     }
 
-    if(!needSkip)
+    if(!needSkip && !stopIt)
     {
         if(!canBeCopiedDirectlyVariable && !canBeMovedDirectlyVariable)
         {
@@ -1256,7 +1274,7 @@ void TransferThread::getReadError()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     fileContentError	= true;
     readError		= true;
-    writeIsReadyVariable	= false;
+    //writeIsReadyVariable	= false;//wrong because write can be ready here
     readIsReadyVariable	= false;
     readIsOpeningVariable=false;
     if(!writeError)//already display error for the write
@@ -1266,6 +1284,7 @@ void TransferThread::getReadError()
 //retry after error
 void TransferThread::retryAfterError()
 {
+    /// \warning skip the resetExtraVariable(); to be more exact and resolv some bug
     if(transfer_stat==TransferStat_Idle)
     {
         if(transferId==0)
@@ -1274,7 +1293,8 @@ void TransferThread::retryAfterError()
             return;
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] restart all, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
-        resetExtraVariable();
+        readError=false;
+        //writeError=false;
         emit internalStartPreOperation();
         return;
     }
@@ -1282,13 +1302,14 @@ void TransferThread::retryAfterError()
     if(transfer_stat==TransferStat_PreOperation)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] is not idle, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath()+", stat: "+QString::number(transfer_stat));
-        resetExtraVariable();
+        readError=false;
+        //writeError=false;
         emit internalStartPreOperation();
         //tryOpen();-> recheck all, because can be an error into isSame(), rename(), ...
         return;
     }
     //data streaming error
-    if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_Checksum)
+    if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] is not in right stat, source: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath()+", stat: "+QString::number(transfer_stat));
         return;
@@ -1297,10 +1318,11 @@ void TransferThread::retryAfterError()
     {
         if(readError || writeError)
         {
+            readError=false;
+            //writeError=false;
             resumeTransferAfterWriteError();
             writeThread.flushBuffer();
             transfer_stat=TransferStat_PreOperation;
-            resetExtraVariable();
             emit internalStartPreOperation();
             return;
         }
@@ -1342,11 +1364,14 @@ void TransferThread::retryAfterError()
     //can have error on source and destination at the same time
     if(writeError)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start and resume the write error");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start and resume the write error: "+QString::number(readError));
         if(readError)
             readThread.reopen();
         else
+        {
+            readIsClosedVariable=false;
             readThread.seekToZeroAndWait();
+        }
         writeThread.reopen();
     }
     if(readError)
@@ -1648,11 +1673,11 @@ void TransferThread::skip()
         }
         needSkip=true;
         //check if all is source and destination is closed
-        if(((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) || ((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
+        if(remainFileOpen())
         {
-            if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
+            if(remainSourceOpen())
                 readThread.stop();
-            if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
+            if(remainDestinationOpen())
                 writeThread.stop();
         }
         else // wait nothing, just quit
@@ -1662,6 +1687,7 @@ void TransferThread::skip()
         }
         break;
     case TransferStat_Transfer:
+    case TransferStat_PostTransfer:
         if(needSkip)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] skip already in progress");
@@ -1678,11 +1704,12 @@ void TransferThread::skip()
             writeThread.fakeWriteIsStopped();
             return;
         }
-        if(((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) || ((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
+        writeThread.flushBuffer();
+        if(remainFileOpen())
         {
-            if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
+            if(remainSourceOpen())
                 readThread.stop();
-            if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
+            if(remainDestinationOpen())
                 writeThread.stop();
         }
         else // wait nothing, just quit
@@ -1699,11 +1726,11 @@ void TransferThread::skip()
         }
         //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
-        if(((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable) || ((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable))
+        if(remainFileOpen())
         {
-            if((readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable)
+            if(remainSourceOpen())
                 readThread.stop();
-            if((writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable)
+            if(remainDestinationOpen())
                 writeThread.stop();
         }
         else // wait nothing, just quit
@@ -1720,10 +1747,11 @@ void TransferThread::skip()
         }
         //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
+        writeThread.flushBuffer();
         emit internalStartPostOperation();
         break;
     default:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] can skip in this state!");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] can skip in this state: "+QString::number(transfer_stat));
         return;
     }
 }
