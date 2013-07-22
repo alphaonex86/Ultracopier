@@ -27,19 +27,19 @@ class ResourcesManager : public QObject
         static ResourcesManager *resourcesManager;
         /** \brief Get folder presence and the path
         \return Empty QString if not found */
-        QString getFolderReadPath(const QString &path);
+        QString getFolderReadPath(const QString &path) const;
         /** \brief Get folder presence, the path and check in the folder and sub-folder the file presence
         \return Empty QString if not found */
-        QString getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck);
-        bool checkFolderContent(const QString &path,const QStringList &fileToCheck);
+        QString getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck) const;
+        bool checkFolderContent(const QString &path,const QStringList &fileToCheck) const;
         /// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
         static QString AddSlashIfNeeded(const QString &path);
         /// \brief get the writable path
-        QString getWritablePath();
+        QString getWritablePath() const;
         /// \brief disable the writable path, if ultracopier is unable to write into
         bool disableWritablePath();
         /// \brief get the read path
-        QStringList getReadPath();
+        QStringList getReadPath() const;
         /// \brief remove folder
         static bool removeFolder(const QString &dir);
     private:

@@ -68,25 +68,25 @@ class PluginInterface_Themes : public QWidget
     // signal to implement
     signals:
         //set the transfer list
-        void removeItems(const QList<int> &ids);
-        void moveItemsOnTop(const QList<int> &ids);
-        void moveItemsUp(const QList<int> &ids);
-        void moveItemsDown(const QList<int> &ids);
-        void moveItemsOnBottom(const QList<int> &ids);
-        void exportTransferList();
-        void importTransferList();
-        void exportErrorIntoTransferList();
+        void removeItems(const QList<int> &ids) const;
+        void moveItemsOnTop(const QList<int> &ids) const;
+        void moveItemsUp(const QList<int> &ids) const;
+        void moveItemsDown(const QList<int> &ids) const;
+        void moveItemsOnBottom(const QList<int> &ids) const;
+        void exportTransferList() const;
+        void importTransferList() const;
+        void exportErrorIntoTransferList() const;
         //user ask ask to add folder (add it with interface ask source/destination)
-        void userAddFolder(const Ultracopier::CopyMode &mode);
-        void userAddFile(const Ultracopier::CopyMode &mode);
-        void urlDropped(const QList<QUrl> &urls);
+        void userAddFolder(const Ultracopier::CopyMode &mode) const;
+        void userAddFile(const Ultracopier::CopyMode &mode) const;
+        void urlDropped(const QList<QUrl> &urls) const;
         //action on the copy
-        void pause();
-        void resume();
-        void skip(const quint64 &id);
-        void cancel();
+        void pause() const;
+        void resume() const;
+        void skip(const quint64 &id) const;
+        void cancel() const;
         //edit the action
-        void newSpeedLimitation(const qint64 &speedLimitation);///< -1 if not able, 0 if disabled
+        void newSpeedLimitation(const qint64 &speedLimitation) const;///< -1 if not able, 0 if disabled
 };
 
 /// \brief To define the interface for the factory to do themes instance
@@ -109,7 +109,7 @@ class PluginInterface_ThemesFactory : public QObject
         virtual void newLanguageLoaded() = 0;
     signals:
         /// \brief To debug source
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.1.0");

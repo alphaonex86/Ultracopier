@@ -68,7 +68,7 @@ private:
     qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
 signals:
-    void reloadLanguage();
+    void reloadLanguage() const;
 };
 
 #endif // FACTORY_H

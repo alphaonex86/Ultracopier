@@ -40,16 +40,15 @@ class PluginInterface_Listener : public QObject
         /// \brief to reload the translation, because the new language have been loaded
         virtual void newLanguageLoaded() = 0;
     signals:
-        void newState(const Ultracopier::ListeningState &state);
-        void newCopyWithoutDestination(const quint32 &orderId,const QStringList &sources);
-        void newCopy(const quint32 &orderId,const QStringList &sources,const QString &destination);
-        void newMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
-        void newMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
-        void error(const QString &error);
-        void newClientList();
-    signals:
+        void newState(const Ultracopier::ListeningState &state) const;
+        void newCopyWithoutDestination(const quint32 &orderId,const QStringList &sources) const;
+        void newCopy(const quint32 &orderId,const QStringList &sources,const QString &destination) const;
+        void newMoveWithoutDestination(const quint32 &orderId,const QStringList &sources) const;
+        void newMove(const quint32 &orderId,const QStringList &sources,const QString &destination) const;
+        void error(const QString &error) const;
+        void newClientList() const;
         /// \brief To debug source
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/1.0.0.0");

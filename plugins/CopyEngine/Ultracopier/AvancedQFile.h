@@ -16,11 +16,11 @@ class AvancedQFile : public QFile
     Q_OBJECT
 public:
     /// \brief set created date, not exists in unix world
-    bool setCreated(QDateTime time);
+    bool setCreated(const QDateTime &time);
     /// \brief set last modification date
-    bool setLastModified(QDateTime time);
+    bool setLastModified(const QDateTime &time);
     /// \brief set last read date
-    bool setLastRead(QDateTime time);
+    bool setLastRead(const QDateTime &time);
 
     #ifdef ULTRACOPIER_OVERLAPPED_FILE
     explicit AvancedQFile();

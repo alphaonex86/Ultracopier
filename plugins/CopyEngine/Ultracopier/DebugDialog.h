@@ -27,9 +27,9 @@ public:
     /// \brief show the transfer thread, it show be a thread pool in normal time
     void setTransferThreadList(const QStringList &list);
     /// \brief show how many transfer is active
-    void setActiveTransfer(int activeTransfer);
+    void setActiveTransfer(const int &activeTransfer);
     /// \brief show many many inode is manipulated
-    void setInodeUsage(int inodeUsage);
+    void setInodeUsage(const int &inodeUsage);
 private:
     Ui::debugDialog *ui;
 };

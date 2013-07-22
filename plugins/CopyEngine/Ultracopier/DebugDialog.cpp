@@ -27,12 +27,12 @@ void DebugDialog::setTransferList(const QStringList &list)
     ui->tranferList->addItems(list);
 }
 
-void DebugDialog::setActiveTransfer(int activeTransfer)
+void DebugDialog::setActiveTransfer(const int &activeTransfer)
 {
     ui->spinBoxActiveTransfer->setValue(activeTransfer);
 }
 
-void DebugDialog::setInodeUsage(int inodeUsage)
+void DebugDialog::setInodeUsage(const int &inodeUsage)
 {
     ui->spinBoxNumberOfInode->setValue(inodeUsage);
 }

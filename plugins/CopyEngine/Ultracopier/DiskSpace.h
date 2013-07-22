@@ -16,7 +16,7 @@ class DiskSpace : public QDialog
 public:
     explicit DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QWidget *parent = 0);
     ~DiskSpace();
-    bool getAction();
+    bool getAction() const;
 private slots:
     void on_ok_clicked();
     void on_cancel_clicked();

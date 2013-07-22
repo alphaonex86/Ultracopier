@@ -53,12 +53,12 @@ private slots:
     #ifdef ULTRACOPIER_DEBUG
     /** \brief If error occured at socket
     \param theErrorDefine The error define */
-    void error(QLocalSocket::LocalSocketError theErrorDefine);
+    void error(const QLocalSocket::LocalSocketError &theErrorDefine);
     #endif
     /// \can now parse the cli
     void allPluginIsloaded();
 signals:
-    void cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck);
+    void cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck) const;
 };
 
 #endif // LOCALLISTENER_H

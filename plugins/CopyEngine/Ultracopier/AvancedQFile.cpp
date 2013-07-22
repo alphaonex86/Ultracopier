@@ -17,7 +17,7 @@
 //destination
 //hDst=CreateFile(pData->strDstFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN | (bNoBuffer ? FILE_FLAG_NO_BUFFERING | FILE_FLAG_WRITE_THROUGH : 0), NULL);
 
-bool AvancedQFile::setCreated(QDateTime time)
+bool AvancedQFile::setCreated(const QDateTime &time)
 {
     time_t ctime=time.toTime_t();
     #ifdef Q_CC_GNU
@@ -30,7 +30,7 @@ bool AvancedQFile::setCreated(QDateTime time)
     #endif
 }
 
-bool AvancedQFile::setLastModified(QDateTime time)
+bool AvancedQFile::setLastModified(const QDateTime &time)
 {
     time_t actime=QFileInfo(*this).lastRead().toTime_t();
     //protect to wrong actime
@@ -61,7 +61,7 @@ bool AvancedQFile::setLastModified(QDateTime time)
     #endif
 }
 
-bool AvancedQFile::setLastRead(QDateTime time)
+bool AvancedQFile::setLastRead(const QDateTime &time)
 {
     time_t modtime=QFileInfo(*this).lastModified().toTime_t();
     //protect to wrong actime

@@ -30,7 +30,7 @@ class OptionInterface : public QObject
         virtual void setOptionValue(const QString &variableName,const QVariant &value) = 0;
     signals:
         //void newOptionValue(QString,QVariant);-> disabled because the value will not externally changed, then useless notification
-        void resetOptions();
+        void resetOptions() const;
 };
 
 #endif // OPTION_INTERFACE_H

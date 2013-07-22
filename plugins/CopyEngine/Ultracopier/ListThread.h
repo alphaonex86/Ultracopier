@@ -40,7 +40,7 @@ public:
      * \return true if have same destination, else false (or empty) */
     bool haveSameDestination(const QString &destination);
     /// \return empty if multiple or no destination
-    QString getUniqueDestinationFolder();
+    QString getUniqueDestinationFolder() const;
     //external soft like file browser have send copy/move list to do
     /** \brief send copy with destination
      * \param sources the sources list to copy
@@ -96,9 +96,9 @@ public:
     //dir operation thread queue
     MkPath mkPathQueue;
     //to get the return value from copyEngine
-    bool getReturnBoolToCopyEngine();
-    QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine();
-    Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine();
+    bool getReturnBoolToCopyEngine() const;
+    QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
+    Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine() const;
 
     void set_doChecksum(bool doChecksum);
     void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
@@ -186,7 +186,7 @@ public slots:
     //send progression
     void sendProgression();
 
-    void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
+    void setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm);
     void setParallelBuffer(int parallelBuffer);
     void setSequentialBuffer(int sequentialBuffer);
     void setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan);
@@ -304,7 +304,7 @@ private:
 
     void realByteTransfered();
     int getNumberOfTranferRuning() const;
-    bool needMoreSpace();
+    bool needMoreSpace() const;
 private slots:
     void scanThreadHaveFinishSlot();
     void scanThreadHaveFinish(bool skipFirstRemove=false);
@@ -348,70 +348,70 @@ private slots:
     void checkIfReadyToCancel();
 signals:
     //send information about the copy
-    void actionInProgess(const Ultracopier::EngineActionInProgress &);	//should update interface information on this event
+    void actionInProgess(const Ultracopier::EngineActionInProgress &) const;	//should update interface information on this event
 
-    void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &);///very important, need be temporized to group the modification to do and not flood the interface
-    void syncReady();
+    void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &) const;///very important, need be temporized to group the modification to do and not flood the interface
+    void syncReady() const;
 
     /** \brief to get the progression for a specific file
      * \param id the id of the transfer, id send during population the transfer list
      * first = current transfered byte, second = byte to transfer */
-    void pushFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList);
+    void pushFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList) const;
     //get information about the copy
     /** \brief to get the general progression
      * first = current transfered byte, second = byte to transfer */
-    void pushGeneralProgression(const quint64 &,const quint64 &);
+    void pushGeneralProgression(const quint64 &,const quint64 &) const;
 
-    void newFolderListing(const QString &path);
-    void isInPause(const bool &);
+    void newFolderListing(const QString &path) const;
+    void isInPause(const bool &) const;
 
     //when can be deleted
-    void canBeDeleted();
-    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType);
+    void canBeDeleted() const;
+    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType) const;
 
     //send error occurred
-    void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
-    void errorToRetry(const QString &source,const QString &destination,const QString &error);
+    void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error) const;
+    void errorToRetry(const QString &source,const QString &destination,const QString &error) const;
     //for the extra logging
-    void rmPath(const QString &path);
-    void mkPath(const QString &path);
+    void rmPath(const QString &path) const;
+    void mkPath(const QString &path) const;
     /// \brief To debug source
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
     #endif
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    void updateTheDebugInfo(const QStringList &,const QStringList&,const int &);
+    void updateTheDebugInfo(const QStringList &,const QStringList&,const int &) const;
     #endif
 
     //other signal
     /// \note Can be call without queue because all call will be serialized
-    void send_fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,TransferThread * thread);
+    void send_fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,TransferThread * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread, const ErrorType &errorType);
+    void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread, const ErrorType &errorType) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,ScanFileOrFolder * thread);
+    void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,ScanFileOrFolder * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,ScanFileOrFolder * thread, const ErrorType &errorType);
+    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
     //send the progression
-    void send_syncTransferList();
+    void send_syncTransferList() const;
     //mkpath error event
-    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType);
+    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType) const;
     //to close
-    void tryCancel();
+    void tryCancel() const;
     //to ask new transfer thread
-    void askNewTransferThread();
+    void askNewTransferThread() const;
 
-    void warningTransferList(const QString &warning);
-    void errorTransferList(const QString &error);
-    void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
-    void send_realBytesTransfered(const quint64 &);
-    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
+    void warningTransferList(const QString &warning) const;
+    void errorTransferList(const QString &error) const;
+    void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule) const;
+    void send_realBytesTransfered(const quint64 &) const;
+    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType) const;
 
-    void send_setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
-    void send_parallelBuffer(const int &parallelBuffer);
-    void send_sequentialBuffer(const int &sequentialBuffer);
-    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
-    void missingDiskSpace(QList<Diskspace> list);
+    void send_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
+    void send_parallelBuffer(const int &parallelBuffer) const;
+    void send_sequentialBuffer(const int &sequentialBuffer) const;
+    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
+    void missingDiskSpace(QList<Diskspace> list) const;
 };
 
 #endif // LISTTHREAD_H

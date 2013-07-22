@@ -121,7 +121,7 @@ private:
     int putAtBottom;//to keep how many automatic put at bottom have been used
 private slots:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    void updateTheDebugInfo(QStringList,QStringList,int);
+    void updateTheDebugInfo(const QStringList &newList, const QStringList &newList2, const int &numberOfInodeOperation);
     #endif
 
     /************* External  call ********************/
@@ -321,54 +321,54 @@ private slots:
     void errorTransferList(const QString &error);
 signals:
     //action on the copy
-    void signal_pause();
-    void signal_resume();
-    void signal_skip(const quint64 &id);
+    void signal_pause() const;
+    void signal_resume() const;
+    void signal_skip(const quint64 &id) const;
 
     //edit the transfer list
-    void signal_removeItems(const QList<int> &ids);
-    void signal_moveItemsOnTop(const QList<int> &ids);
-    void signal_moveItemsUp(const QList<int> &ids);
-    void signal_moveItemsDown(const QList<int> &ids);
-    void signal_moveItemsOnBottom(const QList<int> &ids);
+    void signal_removeItems(const QList<int> &ids) const;
+    void signal_moveItemsOnTop(const QList<int> &ids) const;
+    void signal_moveItemsUp(const QList<int> &ids) const;
+    void signal_moveItemsDown(const QList<int> &ids) const;
+    void signal_moveItemsOnBottom(const QList<int> &ids) const;
 
-    void signal_forceMode(const Ultracopier::CopyMode &mode);
-    void signal_exportTransferList(const QString &fileName);
-    void signal_importTransferList(const QString &fileName);
-    void signal_exportErrorIntoTransferList(const QString &fileName);
+    void signal_forceMode(const Ultracopier::CopyMode &mode) const;
+    void signal_exportTransferList(const QString &fileName) const;
+    void signal_importTransferList(const QString &fileName) const;
+    void signal_exportErrorIntoTransferList(const QString &fileName) const;
 
     //action
-    void signal_setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
-    void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists);
-    void signal_setComboBoxFolderCollision(FolderExistsAction action);
-    void signal_setFolderCollision(FolderExistsAction action);
+    void signal_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
+    void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) const;
+    void signal_setComboBoxFolderCollision(FolderExistsAction action) const;
+    void signal_setFolderCollision(FolderExistsAction action) const;
 
     //internal cancel
-    void tryCancel();
-    void getNeedPutAtBottom(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType);
+    void tryCancel() const;
+    void getNeedPutAtBottom(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType) const;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
     #endif
 
     //other signals
-    void queryOneNewDialog();
+    void queryOneNewDialog() const;
 
-    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
-    void send_speedLimitation(const qint64 &speedLimitation);
-    void send_blockSize(const int &blockSize);
-    void send_osBufferLimit(const unsigned int &osBufferLimit);
-    void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
-    void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
-    void send_parallelBuffer(const int &parallelBuffer);
-    void send_sequentialBuffer(const int &sequentialBuffer);
-    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan);
-    void send_followTheStrictOrder(const bool &followTheStrictOrder);
-    void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
-    void send_setInodeThreads(const int &inodeThreads);
-    void send_moveTheWholeFolder(const bool &moveTheWholeFolder);
-    void send_setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
+    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType) const;
+    void send_speedLimitation(const qint64 &speedLimitation) const;
+    void send_blockSize(const int &blockSize) const;
+    void send_osBufferLimit(const unsigned int &osBufferLimit) const;
+    void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude) const;
+    void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule) const;
+    void send_parallelBuffer(const int &parallelBuffer) const;
+    void send_sequentialBuffer(const int &sequentialBuffer) const;
+    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
+    void send_followTheStrictOrder(const bool &followTheStrictOrder) const;
+    void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles) const;
+    void send_setInodeThreads(const int &inodeThreads) const;
+    void send_moveTheWholeFolder(const bool &moveTheWholeFolder) const;
+    void send_setRenameTheOriginalDestination(const bool &renameTheOriginalDestination) const;
 };
 
 #endif // COPY_ENGINE_H

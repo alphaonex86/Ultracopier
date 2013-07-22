@@ -116,8 +116,8 @@ class Core : public QObject
         LogThread log;///< To save the log like mkpath, rmpath, error, copy, ...
         quint64 realByteTransfered;
     signals:
-        void copyFinished(const quint32 & orderId,bool withError);
-        void copyCanceled(const quint32 & orderId);
+        void copyFinished(const quint32 & orderId,bool withError) const;
+        void copyCanceled(const quint32 & orderId) const;
     public slots:
         /** \brief do copy with sources, but ask the destination */
         void newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);

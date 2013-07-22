@@ -80,26 +80,26 @@ protected:
     void run();
 signals:
     //to send state
-    void preOperationStopped();
-    void checkIfItCanBeResumed();
+    void preOperationStopped() const;
+    void checkIfItCanBeResumed() const;
     //void transferStarted();//not sended (and not used then)
-    void readStopped();
-    void writeStopped();
-    void postOperationStopped();
+    void readStopped() const;
+    void writeStopped() const;
+    void postOperationStopped() const;
     //get dialog
-    void fileAlreadyExists(QFileInfo,QFileInfo,bool isSame);
-    void errorOnFile(QFileInfo,QString,ErrorType errorType=ErrorType_Normal);
+    void fileAlreadyExists(const QFileInfo &info,const QFileInfo &info2,const bool &isSame) const;
+    void errorOnFile(const QFileInfo &info,const QString &string,const ErrorType &errorType=ErrorType_Normal) const;
     //internal signal
-    void internalStartPostOperation();
-    void internalStartPreOperation();
-    void internalStartResumeAfterErrorAndSeek();
+    void internalStartPostOperation() const;
+    void internalStartPreOperation() const;
+    void internalStartResumeAfterErrorAndSeek() const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
-    void tryPutAtBottom();
+    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
+    void tryPutAtBottom() const;
     //force into the right thread
-    void internalTryStartTheTransfer();
+    void internalTryStartTheTransfer() const;
     /// \brief update the transfer stat
-    void pushStat(TransferStat,quint64);
+    void pushStat(const TransferStat &stat,const quint64 &pos) const;
 public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
@@ -138,16 +138,16 @@ public slots:
 
     void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
 
-    void set_osBufferLimit(unsigned int osBufferLimit);
-    void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void set_osBufferLimit(const unsigned int &osBufferLimit);
+    void setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     //speed limitation
     void timeOfTheBlockCopyFinished();
     #endif
 
-    bool setParallelBuffer(int parallelBuffer);
-    bool setSequentialBuffer(int sequentialBuffer);
-    void setTransferAlgorithm(TransferAlgorithm transferAlgorithm);
+    bool setParallelBuffer(const int &parallelBuffer);
+    bool setSequentialBuffer(const int &sequentialBuffer);
+    void setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
 private slots:
@@ -250,8 +250,8 @@ private:
     bool isSame();
     bool destinationExists();
     bool checkAlwaysRename();///< return true if has been renamed
-    bool canBeMovedDirectly();
-    bool canBeCopiedDirectly();
+    bool canBeMovedDirectly() const;
+    bool canBeCopiedDirectly() const;
     void tryMoveDirectly();
     void tryCopyDirectly();
     void ifCanStartTransfer();
@@ -270,9 +270,9 @@ private:
     bool doFilePostOperation();
     //different pre-operation
     void tryOpen();
-    bool remainFileOpen();
-    bool remainSourceOpen();
-    bool remainDestinationOpen();
+    bool remainFileOpen() const;
+    bool remainSourceOpen() const;
+    bool remainDestinationOpen() const;
 };
 
 #endif // TRANSFERTHREAD_H

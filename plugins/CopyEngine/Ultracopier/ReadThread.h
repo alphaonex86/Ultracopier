@@ -31,7 +31,7 @@ public:
     /// \brief open with the name and copy mode
     void open(const QFileInfo &file, const Ultracopier::CopyMode &mode);
     /// \brief return the error string
-    QString errorString();
+    QString errorString() const;
     //QByteArray read(qint64 position,qint64 maxSize);
     /// \brief stop the copy
     void stop();
@@ -40,7 +40,7 @@ public:
     /// \brief resume the copy
     void resume();
     /// \brief get the size of the source file
-    qint64 size();
+    qint64 size() const;
     /// \brief get the last good position
     qint64 getLastGoodPosition() const;
     /// \brief start the reading of the source file
@@ -70,7 +70,7 @@ public:
     ReadStat stat;
     #endif
     /// \brief return if it's reading
-    bool isReading();
+    bool isReading() const;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     /// \brief executed at regular interval to do a speed throling
     void timeOfTheBlockCopyFinished();
@@ -90,24 +90,24 @@ public slots:
     /// do the checksum
     void checkSum();
 signals:
-    void error();
-    void opened();
-    void readIsStarted();
-    void readIsStopped();
-    void closed();
-    void isSeekToZeroAndWait();
-    void checkIfIsWait();
-    void resumeAfterErrorByRestartAll();
-    void resumeAfterErrorByRestartAtTheLastPosition();
-    void checksumFinish(const QByteArray&);
+    void error() const;
+    void opened() const;
+    void readIsStarted() const;
+    void readIsStopped() const;
+    void closed() const;
+    void isSeekToZeroAndWait() const;
+    void checkIfIsWait() const;
+    void resumeAfterErrorByRestartAll() const;
+    void resumeAfterErrorByRestartAtTheLastPosition() const;
+    void checksumFinish(const QByteArray&) const;
     // internal signals
-    void internalStartOpen();
-    void internalStartChecksum();
-    void internalStartReopen();
-    void internalStartRead();
-    void internalStartClose();
+    void internalStartOpen() const;
+    void internalStartChecksum() const;
+    void internalStartReopen() const;
+    void internalStartRead() const;
+    void internalStartClose() const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
 
 private:
     QString         errorString_internal;
@@ -133,7 +133,7 @@ private:
     QDateTime       mtime_at_open;
     bool            fakeMode;
     //internal function
-    bool seek(qint64 position);/// \todo search if is use full
+    bool seek(const qint64 &position);/// \todo search if is use full
 private slots:
     bool internalOpen(bool resetLastGoodPosition=true);
     bool internalOpenSlot();

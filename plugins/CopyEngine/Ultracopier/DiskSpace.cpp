@@ -47,7 +47,7 @@ void DiskSpace::on_cancel_clicked()
     close();
 }
 
-bool DiskSpace::getAction()
+bool DiskSpace::getAction() const
 {
     return ok;
 }

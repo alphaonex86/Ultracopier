@@ -63,9 +63,9 @@ public:
 
     void setFileProgression(QList<Ultracopier::ProgressionItem> &progressionList);
 
-    currentTransfertItem getCurrentTransfertItem();
+    currentTransfertItem getCurrentTransfertItem() const;
 
-    quint64 firstId();
+    quint64 firstId() const;
 protected:
     QList<TransfertItem> transfertItemList;///< To have a transfer list for the user
     QSet<quint64> startId,stopId;///< To show what is started, what is stopped
@@ -84,7 +84,7 @@ private:
 signals:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
     #endif
 };
 

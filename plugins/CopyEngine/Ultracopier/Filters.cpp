@@ -158,12 +158,12 @@ void Filters::reShowAll()
     }
 }
 
-QList<Filters_rules> Filters::getInclude()
+QList<Filters_rules> Filters::getInclude() const
 {
     return include;
 }
 
-QList<Filters_rules> Filters::getExclude()
+QList<Filters_rules> Filters::getExclude() const
 {
     return exclude;
 }

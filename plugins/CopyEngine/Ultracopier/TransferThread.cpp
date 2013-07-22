@@ -765,7 +765,7 @@ void TransferThread::tryCopyDirectly()
     writeThread.fakeWriteIsStopped();
 }
 
-bool TransferThread::canBeMovedDirectly()
+bool TransferThread::canBeMovedDirectly() const
 {
     if(mode!=Ultracopier::Move)
     {
@@ -775,7 +775,7 @@ bool TransferThread::canBeMovedDirectly()
     return source.isSymLink() || driveManagement.isSameDrive(destination.absoluteFilePath(),source.absoluteFilePath());
 }
 
-bool TransferThread::canBeCopiedDirectly()
+bool TransferThread::canBeCopiedDirectly() const
 {
     return source.isSymLink();
 }
@@ -924,17 +924,17 @@ void TransferThread::stop()
     }
 }
 
-bool TransferThread::remainFileOpen()
+bool TransferThread::remainFileOpen() const
 {
     return remainSourceOpen() || remainDestinationOpen();
 }
 
-bool TransferThread::remainSourceOpen()
+bool TransferThread::remainSourceOpen() const
 {
     return (readIsOpenVariable || readIsOpeningVariable) && !readIsClosedVariable;
 }
 
-bool TransferThread::remainDestinationOpen()
+bool TransferThread::remainDestinationOpen() const
 {
     return (writeIsOpenVariable || writeIsOpeningVariable) && !writeIsClosedVariable;
 }
@@ -1484,7 +1484,7 @@ void TransferThread::timeOfTheBlockCopyFinished()
 }
 #endif
 
-bool TransferThread::setParallelBuffer(int parallelBuffer)
+bool TransferThread::setParallelBuffer(const int &parallelBuffer)
 {
     if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
     {
@@ -1498,7 +1498,7 @@ bool TransferThread::setParallelBuffer(int parallelBuffer)
     }
 }
 
-bool TransferThread::setSequentialBuffer(int sequentialBuffer)
+bool TransferThread::setSequentialBuffer(const int &sequentialBuffer)
 {
     if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
     {
@@ -1512,7 +1512,7 @@ bool TransferThread::setSequentialBuffer(int sequentialBuffer)
     }
 }
 
-void TransferThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
+void TransferThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm)
 {
     this->transferAlgorithm=transferAlgorithm;
     if(transferAlgorithm==TransferAlgorithm_Sequential)
@@ -1783,7 +1783,7 @@ void TransferThread::setDrive(const QStringList &mountSysPoint,const QList<QStor
     driveManagement.setDrive(mountSysPoint,driveType);
 }
 
-void TransferThread::set_osBufferLimit(unsigned int osBufferLimit)
+void TransferThread::set_osBufferLimit(const unsigned int &osBufferLimit)
 {
     this->osBufferLimit=osBufferLimit;
 }
@@ -1931,7 +1931,7 @@ QPair<quint64,quint64> TransferThread::progression() const
     return returnVar;
 }
 
-void TransferThread::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void TransferThread::setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
 {
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;

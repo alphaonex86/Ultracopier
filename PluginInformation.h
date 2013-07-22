@@ -23,11 +23,11 @@ class PluginInformation : public QDialog
         explicit PluginInformation();
         ~PluginInformation();
         /** \brief get translated categorie */
-        QString categoryToTranslation(PluginType category) const;
+        QString categoryToTranslation(const PluginType &category) const;
         /** \brief to get the new plugin informations */
-        void setPlugin(PluginsAvailable plugin);
+        void setPlugin(const PluginsAvailable &plugin);
         /** \brief to set the language */
-        void setLanguage(QString language);
+        void setLanguage(const QString &language);
     public slots:
         void retranslateInformation();
     private:
@@ -35,8 +35,8 @@ class PluginInformation : public QDialog
         PluginsAvailable plugin;
         Ui::PluginInformation *ui;
         QString language;
-        QString getInformationText(PluginsAvailable plugin,QString informationName);
-        QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
+        QString getInformationText(const PluginsAvailable &plugin,const QString &informationName);
+        QString getTranslatedText(const PluginsAvailable &plugin,const QString &informationName,const QString &mainShortName);
 };
 
 #endif // PLUGININFORMATION_H

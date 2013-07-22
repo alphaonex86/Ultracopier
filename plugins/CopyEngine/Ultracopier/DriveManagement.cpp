@@ -4,7 +4,7 @@
 #include <QFileInfoList>
 
 //get drive of an file or folder
-QString DriveManagement::getDrive(const QString &fileOrFolder)
+QString DriveManagement::getDrive(const QString &fileOrFolder) const
 {
     QString inode=QDir::toNativeSeparators(fileOrFolder);
     int size=mountSysPoint.size();
@@ -31,7 +31,7 @@ QString DriveManagement::getDrive(const QString &fileOrFolder)
     return "";
 }
 
-QStorageInfo::DriveType DriveManagement::getDriveType(const QString &drive)
+QStorageInfo::DriveType DriveManagement::getDriveType(const QString &drive) const
 {
     int index=mountSysPoint.indexOf(drive);
     if(index!=-1)
@@ -45,7 +45,7 @@ void DriveManagement::setDrive(const QStringList &mountSysPoint, const QList<QSt
     this->driveType=driveType;
 }
 
-bool DriveManagement::isSameDrive(const QString &file1,const QString &file2)
+bool DriveManagement::isSameDrive(const QString &file1,const QString &file2) const
 {
     if(mountSysPoint.size()==0)
     {

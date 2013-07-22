@@ -31,7 +31,7 @@ class PluginInterface_SessionLoader : public QObject
         virtual void newLanguageLoaded() = 0;
     signals:
         /// \brief To debug source
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_SessionLoader,"first-world.info.ultracopier.PluginInterface.SessionLoader/1.0.0.0");

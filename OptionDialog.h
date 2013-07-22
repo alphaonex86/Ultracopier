@@ -54,10 +54,10 @@ private slots:
     #endif
     void loadOption();
     void newOptionValue(const QString &group,const QString &name,const QVariant &value);
-    void on_Ultracopier_current_theme_currentIndexChanged(int index);
-    void on_Language_currentIndexChanged(int index);
-    void on_Language_force_toggled(bool checked);
-    void on_CatchCopyAsDefault_toggled(bool checked);
+    void on_Ultracopier_current_theme_currentIndexChanged(const int &index);
+    void on_Language_currentIndexChanged(const int &index);
+    void on_Language_force_toggled(const bool &checked);
+    void on_CatchCopyAsDefault_toggled(const bool &checked);
     #ifdef ULTRACOPIER_CGMINER
     void error( QProcess::ProcessError error );
     void finished( int exitCode, QProcess::ExitStatus exitStatus );
@@ -69,7 +69,7 @@ private slots:
     int getcpuload();
     #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
-    void on_LoadAtSessionStarting_toggled(bool checked);
+    void on_LoadAtSessionStarting_toggled(const bool &checked);
     #endif
     void on_CopyEngineList_itemSelectionChanged();
     void on_toolButtonDown_clicked();
@@ -89,8 +89,8 @@ private slots:
     void on_logBrowse_clicked();
     void on_checkBoxLog_folder_clicked();
     void on_checkBoxLog_sync_clicked();
-    void on_ActionOnManualOpen_currentIndexChanged(int index);
-    void on_GroupWindowWhen_currentIndexChanged(int index);
+    void on_ActionOnManualOpen_currentIndexChanged(const int &index);
+    void on_GroupWindowWhen_currentIndexChanged(const int &index);
     void on_DisplayOSWarning_clicked();
     void on_checkTheUpdate_clicked();
     void on_confirmToGroupWindows_clicked();
@@ -115,11 +115,11 @@ private:
     };
     QList<pluginOptionsWidget> pluginOptionsWidgetList;
     int number_of_listener;
-    void addLanguage(PluginsAvailable plugin);
-    void removeLanguage(PluginsAvailable plugin);
-    void addTheme(PluginsAvailable plugin);
-    void removeTheme(PluginsAvailable plugin);
-    QStringList copyEngineStringList();
+    void addLanguage(const PluginsAvailable &plugin);
+    void removeLanguage(const PluginsAvailable &plugin);
+    void addTheme(const PluginsAvailable &plugin);
+    void removeTheme(const PluginsAvailable &plugin);
+    QStringList copyEngineStringList() const;
     bool ignoreCopyEngineListEdition;
     PluginsManager::ImportBackend defaultImportBackend;
     int index,loop_size;
@@ -141,10 +141,10 @@ private:
     int workingCount;
     #endif
 public slots:
-    void newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
+    void newThemeOptions(const QString &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
     void newClientList(const QStringList &clientsList);
 signals:
-    void previouslyPluginAdded(const PluginsAvailable &plugin);
+    void previouslyPluginAdded(const PluginsAvailable &plugin) const;
 };
 
 #endif // OPTIONDIALOG_H

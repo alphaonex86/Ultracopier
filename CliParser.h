@@ -27,19 +27,19 @@ public slots:
     void cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck);
 signals:
     /** new copy without destination have been pased by the CLI */
-    void newCopyWithoutDestination(QStringList sources);
+    void newCopyWithoutDestination(QStringList sources) const;
     /** new copy with destination have been pased by the CLI */
-    void newCopy(QStringList sources,QString destination);
+    void newCopy(QStringList sources,QString destination) const;
     /** new move without destination have been pased by the CLI */
-    void newMoveWithoutDestination(QStringList sources);
+    void newMoveWithoutDestination(QStringList sources) const;
     /** new move with destination have been pased by the CLI */
-    void newMove(QStringList sources,QString destination);
+    void newMove(QStringList sources,QString destination) const;
     /** new transfer list pased by the CLI */
-    void newTransferList(QString engine,QString mode,QString file);
+    void newTransferList(QString engine,QString mode,QString file) const;
 
-    void tryLoadPlugin(const QString &file);
+    void tryLoadPlugin(const QString &file) const;
     /// \brief Show the help option
-    void showOptions();
+    void showOptions() const;
 private:
     /** \brief show the help
      *\param incorrectArguments if the help is call because the arguments are wrong */

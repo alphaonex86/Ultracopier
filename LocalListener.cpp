@@ -263,7 +263,7 @@ void LocalListener::newConnexion()
 #ifdef ULTRACOPIER_DEBUG
 /** \brief If error occured at socket
 \param theErrorDefine The error define */
-void LocalListener::error(QLocalSocket::LocalSocketError theErrorDefine)
+void LocalListener::error(const QLocalSocket::LocalSocketError &theErrorDefine)
 {
     if(theErrorDefine!=QLocalSocket::PeerClosedError)
     {

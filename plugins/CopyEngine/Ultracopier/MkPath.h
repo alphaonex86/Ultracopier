@@ -44,13 +44,13 @@ public:
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
 signals:
-    void errorOnFolder(const QFileInfo &,const QString &,const ErrorType &errorType=ErrorType_FolderWithRety);
+    void errorOnFolder(const QFileInfo &,const QString &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void firstFolderFinish();
-    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const ActionType &actionType);
-    void internalStartDoThisPath();
-    void internalStartSkip();
-    void internalStartRetry();
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const ActionType &actionType) const;
+    void internalStartDoThisPath() const;
+    void internalStartSkip() const;
+    void internalStartRetry() const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 public slots:
     /// \brief skip after creation error
     void skip();

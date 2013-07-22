@@ -49,7 +49,7 @@ private slots:
     /** \to update the options value */
     void newOptionValue(const QString &group,const QString &name,const QVariant &value);
 signals:
-    void newData(const QString &text);
+    void newData(const QString &text) const;
 private:
     QString data;
     QString transfer_format;

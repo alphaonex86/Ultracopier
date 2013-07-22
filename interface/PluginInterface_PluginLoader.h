@@ -29,9 +29,9 @@ class PluginInterface_PluginLoader : public QObject
         virtual void newLanguageLoaded() = 0;
     // signal to implement
     signals:
-        void newState(const Ultracopier::CatchState &catchstate);
+        void newState(const Ultracopier::CatchState &catchstate) const;
         /// \brief To debug source
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/1.0.0.0");

@@ -6,7 +6,7 @@
 #include <windows.h>
 #endif
 
-ScanFileOrFolder::ScanFileOrFolder(Ultracopier::CopyMode mode)
+ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
 {
     moveTheWholeFolder  = true;
     stopped             = true;
@@ -34,7 +34,7 @@ ScanFileOrFolder::~ScanFileOrFolder()
     wait();
 }
 
-bool ScanFileOrFolder::isFinished()
+bool ScanFileOrFolder::isFinished() const
 {
     return stopped;
 }
@@ -65,7 +65,7 @@ void ScanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 }
 
 
-QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
+QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources) const
 {
     QRegularExpression splitFolder("[/\\\\]");
     QStringList returnList;
@@ -141,7 +141,7 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources)
     return returnList;
 }
 
-void ScanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude)
+void ScanFileOrFolder::setFilters(const QList<Filters_rules> &include, const QList<Filters_rules> &exclude)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QMutexLocker lock(&filtersMutex);
@@ -153,7 +153,7 @@ void ScanFileOrFolder::setFilters(QList<Filters_rules> include,QList<Filters_rul
 }
 
 //set action if Folder are same or exists
-void ScanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString newName)
+void ScanFileOrFolder::setFolderExistsAction(const FolderExistsAction &action, const QString &newName)
 {
     this->newName=newName;
     folderExistsAction=action;
@@ -161,7 +161,7 @@ void ScanFileOrFolder::setFolderExistsAction(FolderExistsAction action,QString n
 }
 
 //set action if error
-void ScanFileOrFolder::setFolderErrorAction(FileErrorAction action)
+void ScanFileOrFolder::setFolderErrorAction(const FileErrorAction &action)
 {
     fileErrorAction=action;
     waitOneAction.release();
@@ -574,7 +574,7 @@ void ScanFileOrFolder::setCheckDestinationFolderExists(const bool checkDestinati
     this->checkDestinationExists=checkDestinationFolderExists;
 }
 
-void ScanFileOrFolder::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void ScanFileOrFolder::setRenamingRules(const QString &firstRenamingRule, const QString &otherRenamingRule)
 {
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;

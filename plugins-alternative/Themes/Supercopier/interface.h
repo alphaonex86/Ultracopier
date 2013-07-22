@@ -209,11 +209,11 @@ private:
     //have functionality
     bool shutdown;
     void updatePause();
-    QIcon dynaIcon(int percent,QString text="");
+    QIcon dynaIcon(int percent,QString text="") const;
     void updateSysTrayIcon();
 signals:
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
 #endif // INTERFACE_H

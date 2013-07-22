@@ -280,7 +280,7 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
 }
 #endif
 
-void OptionDialog::addLanguage(PluginsAvailable plugin)
+void OptionDialog::addLanguage(const PluginsAvailable &plugin)
 {
     QList<QPair<QString,QString> > listChildAttribute;
     QPair<QString,QString> temp;
@@ -292,7 +292,7 @@ void OptionDialog::addLanguage(PluginsAvailable plugin)
     ui->Language_force->setEnabled(ui->Language->count());
 }
 
-void OptionDialog::removeLanguage(PluginsAvailable plugin)
+void OptionDialog::removeLanguage(const PluginsAvailable &plugin)
 {
     QList<QPair<QString,QString> > listChildAttribute;
     QPair<QString,QString> temp;
@@ -306,13 +306,13 @@ void OptionDialog::removeLanguage(PluginsAvailable plugin)
     ui->Language_force->setEnabled(ui->Language->count());
 }
 
-void OptionDialog::addTheme(PluginsAvailable plugin)
+void OptionDialog::addTheme(const PluginsAvailable &plugin)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"plugin.name: "+plugin.name);
     ui->Ultracopier_current_theme->addItem(plugin.name,plugin.name);
 }
 
-void OptionDialog::removeTheme(PluginsAvailable plugin)
+void OptionDialog::removeTheme(const PluginsAvailable &plugin)
 {
     int index=ui->Ultracopier_current_theme->findData(plugin.name);
     if(index!=-1)
@@ -1023,7 +1023,7 @@ void OptionDialog::readyReadStandardOutput()
 }
 #endif
 
-void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(int index)
+void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
@@ -1047,7 +1047,7 @@ void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(int index)
     }
 }
 
-void OptionDialog::on_Language_currentIndexChanged(int index)
+void OptionDialog::on_Language_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
@@ -1056,7 +1056,7 @@ void OptionDialog::on_Language_currentIndexChanged(int index)
     }
 }
 
-void OptionDialog::on_Language_force_toggled(bool checked)
+void OptionDialog::on_Language_force_toggled(const bool &checked)
 {
     if(allPluginsIsLoaded)
     {
@@ -1066,7 +1066,7 @@ void OptionDialog::on_Language_force_toggled(bool checked)
     }
 }
 
-void OptionDialog::on_CatchCopyAsDefault_toggled(bool checked)
+void OptionDialog::on_CatchCopyAsDefault_toggled(const bool &checked)
 {
     if(allPluginsIsLoaded)
     {
@@ -1076,7 +1076,7 @@ void OptionDialog::on_CatchCopyAsDefault_toggled(bool checked)
 }
 
 #ifndef ULTRACOPIER_VERSION_PORTABLE
-void OptionDialog::on_LoadAtSessionStarting_toggled(bool checked)
+void OptionDialog::on_LoadAtSessionStarting_toggled(const bool &checked)
 {
     if(allPluginsIsLoaded)
     {
@@ -1134,7 +1134,7 @@ void OptionDialog::on_toolButtonUp_clicked()
     }
 }
 
-QStringList OptionDialog::copyEngineStringList()
+QStringList OptionDialog::copyEngineStringList() const
 {
     QStringList newList;
     int index=0;
@@ -1146,7 +1146,7 @@ QStringList OptionDialog::copyEngineStringList()
     return newList;
 }
 
-void OptionDialog::newThemeOptions(QString name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
+void OptionDialog::newThemeOptions(const QString &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
 {
     Q_UNUSED(isLoaded);
     Q_UNUSED(havePlugin);
@@ -1379,7 +1379,7 @@ void OptionDialog::on_checkBoxLog_sync_clicked()
     }
 }
 
-void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(int index)
+void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
@@ -1388,7 +1388,7 @@ void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(int index)
     }
 }
 
-void OptionDialog::on_GroupWindowWhen_currentIndexChanged(int index)
+void OptionDialog::on_GroupWindowWhen_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {

@@ -77,8 +77,8 @@ class OptionEngine : public QObject
         //the reset of right value of widget need be do into the calling object
         void internal_resetToDefaultValue();
     signals:
-        void newOptionValue(const QString&,const QString&,const QVariant&);
-        void resetOptions();
+        void newOptionValue(const QString&,const QString&,const QVariant&) const;
+        void resetOptions() const;
     public:
         static OptionEngine *optionEngine;
 };

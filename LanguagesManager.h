@@ -30,7 +30,7 @@ class LanguagesManager : public QObject
     //public:
     //	QString getMainShortName();
     public:
-        const QString autodetectedLanguage();
+        const QString autodetectedLanguage() const;
         static LanguagesManager *languagesManager;
         /// \brief Create the manager and load the defaults variables
         LanguagesManager();
@@ -53,12 +53,12 @@ class LanguagesManager : public QObject
         /// \brief To store the language detected
         QList<LanguagesAvailable> LanguagesAvailableList;
         /// \brief check if short name is found into language
-        QString getMainShortName(const QString &shortName);
+        QString getMainShortName(const QString &shortName) const;
         /// \brief list of installed translator
         QList<QTranslator *> installedTranslator;
         QString currentLanguage;
         /// \brief load the language selected
-        QString getTheRightLanguage();
+        QString getTheRightLanguage() const;
     private slots:
         /// \brief load the language in languagePath
         void allPluginIsLoaded();
@@ -70,8 +70,8 @@ class LanguagesManager : public QObject
         void newOptionValue(const QString &group);
     signals:
         //send the language is loaded or the new language is loaded
-        void newLanguageLoaded(const QString &mainShortName);
-        void previouslyPluginAdded(PluginsAvailable);
+        void newLanguageLoaded(const QString &mainShortName) const;
+        void previouslyPluginAdded(PluginsAvailable) const;
 };
 
 #endif // LANGUAGES_MANAGER_H

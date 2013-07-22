@@ -311,7 +311,7 @@ void WriteThread::endIsDetected()
     emit internalStartEndOfFile();
 }
 
-QString WriteThread::errorString()
+QString WriteThread::errorString() const
 {
     return errorString_internal;
 }

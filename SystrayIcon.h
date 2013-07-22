@@ -116,22 +116,22 @@ class SystrayIcon : public QSystemTrayIcon
         #endif
     signals:
         /// \brief Quit ultracopier
-        void quit();
+        void quit() const;
         /// \brief Try catch the copy/move with plugin compatible
-        void tryCatchCopy();
+        void tryCatchCopy() const;
         /// \brief Try uncatch the copy/move with plugin compatible
-        void tryUncatchCopy();
+        void tryUncatchCopy() const;
         /// \brief Show the help dialog
-        void showHelp();
+        void showHelp() const;
         /// \brief Show the help option
-        void showOptions();
+        void showOptions() const;
         /** \brief Add window copy or window move
         \param mode Can be CopyMode::Copy or CopyMode::Move
         \return The core object of the new window created */
-        void addWindowCopyMove(Ultracopier::CopyMode mode,QString name);
-        void addWindowTransfer(QString name);
-        void urlDropped(QList<QUrl> urls);
-        void saveBugReport();
+        void addWindowCopyMove(Ultracopier::CopyMode mode,QString name) const;
+        void addWindowTransfer(QString name) const;
+        void urlDropped(QList<QUrl> urls) const;
+        void saveBugReport() const;
 };
 
 #endif // SYSTRAY_ICON_H

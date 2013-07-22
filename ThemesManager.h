@@ -64,10 +64,10 @@ class ThemesManager : public QObject
         bool stopIt;
     signals:
         /// \brief send this signal when the themes have changed
-        void theThemeNeedBeUnloaded();
-        void theThemeIsReloaded();
-        void newThemeOptions(const QString &name,QWidget *,const bool &isLoaded,const bool &havePlugin);
-        void previouslyPluginAdded(PluginsAvailable);
+        void theThemeNeedBeUnloaded() const;
+        void theThemeIsReloaded() const;
+        void newThemeOptions(const QString &name,QWidget *,const bool &isLoaded,const bool &havePlugin) const;
+        void previouslyPluginAdded(PluginsAvailable) const;
     private slots:
         /// \brief reload the themes
         void onePluginAdded(const PluginsAvailable &plugin);

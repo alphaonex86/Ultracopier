@@ -142,35 +142,35 @@ class PluginInterface_CopyEngine : public QObject
     // signal to implement
     signals:
         //send information about the copy
-        void actionInProgess(const Ultracopier::EngineActionInProgress &engineActionInProgress);	//should update interface information on this event
+        void actionInProgess(const Ultracopier::EngineActionInProgress &engineActionInProgress) const;	//should update interface information on this event
 
-        void newFolderListing(const QString &path);
-        void isInPause(const bool &isInPause);
+        void newFolderListing(const QString &path) const;
+        void isInPause(const bool &isInPause) const;
 
-        void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>&);///very important, need be temporized to group the modification to do and not flood the interface
-        void syncReady();
+        void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>&) const;///very important, need be temporized to group the modification to do and not flood the interface
+        void syncReady() const;
 
         /** \brief to get the progression for a specific file
          * \param id the id of the transfer, id send during population the transfer list
          * first = current transfered byte, second = byte to transfer */
-        void pushFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList);
+        void pushFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList) const;
         //get information about the copy
         /** \brief to get the general progression
          * first = current transfered byte, second = byte to transfer */
-        void pushGeneralProgression(const quint64 &,const quint64 &);
+        void pushGeneralProgression(const quint64 &,const quint64 &) const;
 
         //when the cancel is clicked on copy engine dialog
-        void cancelAll();
+        void cancelAll() const;
 
         //when can be deleted
-        void canBeDeleted();
+        void canBeDeleted() const;
 
         //send error occurred
-        void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
-	void errorToRetry(const QString &source,const QString &destination,const QString &error);
+        void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error) const;
+        void errorToRetry(const QString &source,const QString &destination,const QString &error) const;
         //for the extra logging
-        void rmPath(const QString &path);
-        void mkPath(const QString &path);
+        void rmPath(const QString &path) const;
+        void mkPath(const QString &path) const;
 };
 
 /// \brief To define the interface for the factory to do copy engine instance
@@ -202,7 +202,7 @@ class PluginInterface_CopyEngineFactory : public QObject
         virtual void newLanguageLoaded() = 0;
     signals:
         /// \brief To debug source
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.1.0");

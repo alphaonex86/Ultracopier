@@ -126,17 +126,17 @@ class PluginsManager : public QThread
         /// \brief to refresh the plugin list
         void refreshPluginList(QString mainShortName="en");*/
     signals:
-        void pluginListingIsfinish();
-        void onePluginAdded(const PluginsAvailable&);
-        void onePluginInErrorAdded(const PluginsAvailable&);
+        void pluginListingIsfinish() const;
+        void onePluginAdded(const PluginsAvailable&) const;
+        void onePluginInErrorAdded(const PluginsAvailable&) const;
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-        void onePluginWillBeRemoved(const PluginsAvailable&); // when will be really removed
-        void onePluginWillBeUnloaded(const PluginsAvailable&);//just unload to quit the application
+        void onePluginWillBeRemoved(const PluginsAvailable&) const; // when will be really removed
+        void onePluginWillBeUnloaded(const PluginsAvailable&) const;//just unload to quit the application
         #endif
-        void needLangToRefreshPluginList();
-        void newLanguageLoaded();
+        void needLangToRefreshPluginList() const;
+        void newLanguageLoaded() const;
         #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
-        void manuallyAdded(const PluginsAvailable&);
+        void manuallyAdded(const PluginsAvailable&) const;
         #endif
     protected:
         void run();

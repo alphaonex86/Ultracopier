@@ -54,7 +54,7 @@ LanguagesManager::~LanguagesManager()
 }
 
 /// \brief load the language selected, return the main short code like en, fr, ..
-QString LanguagesManager::getTheRightLanguage()
+QString LanguagesManager::getTheRightLanguage() const
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(LanguagesAvailableList.size()==0)
@@ -185,7 +185,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
 }
 
 /// \brief check if short name is found into language
-QString LanguagesManager::getMainShortName(const QString &shortName)
+QString LanguagesManager::getMainShortName(const QString &shortName) const
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
@@ -205,7 +205,7 @@ void LanguagesManager::allPluginIsLoaded()
     setCurrentLanguage(getTheRightLanguage());
 }
 
-const QString LanguagesManager::autodetectedLanguage()
+const QString LanguagesManager::autodetectedLanguage() const
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()));
     QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));

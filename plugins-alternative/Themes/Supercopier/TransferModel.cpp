@@ -81,7 +81,7 @@ int TransferModel::rowCount( const QModelIndex& parent ) const
     return parent == QModelIndex() ? transfertItemList.count() : 0;
 }
 
-quint64 TransferModel::firstId()
+quint64 TransferModel::firstId() const
 {
     if(transfertItemList.count()>0)
         return transfertItemList[0].id;
@@ -326,7 +326,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
     return QList<quint64>() << totalFile << totalSize << currentFile;
 }
 
-void TransferModel::setFacilityEngine(FacilityInterface * facilityEngine)
+void TransferModel::setFacilityEngine(FacilityInterface *facilityEngine)
 {
     this->facilityEngine=facilityEngine;
 }
@@ -398,7 +398,11 @@ int TransferModel::searchPrev(const QString &text)
     return -1;
 }
 
-void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &progressionList)
+void TransferModel::setFileProgression(
+        #ifndef ULTRACOPIER_PLUGIN_DEBUG
+        const
+        #endif
+        QList<Ultracopier::ProgressionItem> &progressionList)
 {
     loop_size=progressionList.size();
     index_for_loop=0;
@@ -423,7 +427,7 @@ void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &prog
     #endif
 }
 
-TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
+TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() const
 {
     currentTransfertItem returnItem;
     returnItem.progressBar_read=-1;

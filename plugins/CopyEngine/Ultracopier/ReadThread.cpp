@@ -84,7 +84,7 @@ void ReadThread::open(const QFileInfo &file, const Ultracopier::CopyMode &mode)
     emit internalStartOpen();
 }
 
-QString ReadThread::errorString()
+QString ReadThread::errorString() const
 {
     return errorString_internal;
 }
@@ -129,7 +129,7 @@ void ReadThread::resume()
     pauseMutex.release();
 }
 
-bool ReadThread::seek(qint64 position)
+bool ReadThread::seek(const qint64 &position)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start with: "+QString::number(position));
     if(position>file.size())
@@ -137,7 +137,7 @@ bool ReadThread::seek(qint64 position)
     return file.seek(position);
 }
 
-qint64 ReadThread::size()
+qint64 ReadThread::size() const
 {
     return file.size();
 }
@@ -679,8 +679,8 @@ void ReadThread::isInWait()
     }
 }
 
-bool ReadThread::isReading()
+bool ReadThread::isReading() const
 {
-        return isInReadLoop;
+    return isInReadLoop;
 }
 

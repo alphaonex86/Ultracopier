@@ -199,7 +199,7 @@ void CopyEngine::connectTheSignalsSlots()
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-void CopyEngine::updateTheDebugInfo(QStringList newList,QStringList newList2,int numberOfInodeOperation)
+void CopyEngine::updateTheDebugInfo(const QStringList &newList, const QStringList &newList2, const int &numberOfInodeOperation)
 {
     debugDialogWindow.setTransferThreadList(newList);
     debugDialogWindow.setTransferList(newList2);

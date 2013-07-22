@@ -25,35 +25,35 @@ class ScanFileOrFolder : public QThread
 {
     Q_OBJECT
 public:
-    explicit ScanFileOrFolder(Ultracopier::CopyMode mode);
+    explicit ScanFileOrFolder(const Ultracopier::CopyMode &mode);
     ~ScanFileOrFolder();
     /// \brief to the a folder listing
     void stop();
     /// \brief to get if is finished
-    bool isFinished();
+    bool isFinished() const;
     /// \brief set action if Folder are same or exists
-    void setFolderExistsAction(FolderExistsAction action,QString newName="");
+    void setFolderExistsAction(const FolderExistsAction &action,const QString &newName="");
     /// \brief set action if error
-    void setFolderErrorAction(FileErrorAction action);
+    void setFolderErrorAction(const FileErrorAction &action);
     /// \brief set if need check if the destination exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
-    void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
 signals:
-    void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const Ultracopier::CopyMode &mode);
+    void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const Ultracopier::CopyMode &mode) const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
-    void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
-    void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType=ErrorType_FolderWithRety);
-    void finishedTheListing();
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame) const;
+    void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void finishedTheListing() const;
 
-    void newFolderListing(const QString &path);
-    void addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode);
-    void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
-    void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
+    void newFolderListing(const QString &path) const;
+    void addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode) const;
+    void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove) const;
+    void addToRealMove(const QFileInfo& source,const QFileInfo& destination) const;
 public slots:
     void addToList(const QStringList& sources,const QString& destination);
-    void setFilters(QList<Filters_rules> include,QList<Filters_rules> exclude);
+    void setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
     void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
 protected:
     void run();
@@ -87,7 +87,7 @@ private:
      * Will give: /toto/f1a/yy*a/toto.mp3, /toto/f2a/yy*a/toto.mp3
      * Will give: /toto/f2a/yy1a/toto.mp3, /toto/f2a/yy2a/toto.mp3
     */
-    QStringList		parseWildcardSources(const QStringList &sources);
+    QStringList		parseWildcardSources(const QStringList &sources) const;
 };
 
 #endif // SCANFILEORFOLDER_H

@@ -20,19 +20,19 @@ PluginInformation::~PluginInformation()
     delete ui;
 }
 
-void PluginInformation::setPlugin(PluginsAvailable plugin)
+void PluginInformation::setPlugin(const PluginsAvailable &plugin)
 {
     this->plugin=plugin;
     pluginIsLoaded=true;
     retranslateInformation();
 }
 
-void PluginInformation::setLanguage(QString language)
+void PluginInformation::setLanguage(const QString &language)
 {
     this->language=language;
 }
 
-QString PluginInformation::categoryToTranslation(PluginType category) const
+QString PluginInformation::categoryToTranslation(const PluginType &category) const
 {
     switch(category)
     {
@@ -85,7 +85,7 @@ void PluginInformation::retranslateInformation()
 }
 
 /// \brief get informations text
-QString PluginInformation::getInformationText(PluginsAvailable plugin,QString informationName)
+QString PluginInformation::getInformationText(const PluginsAvailable &plugin,const QString &informationName)
 {
     int index=0;
     while(index<plugin.informations.size())
@@ -99,7 +99,7 @@ QString PluginInformation::getInformationText(PluginsAvailable plugin,QString in
 }
 
 /// \brief get translated text
-QString PluginInformation::getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName)
+QString PluginInformation::getTranslatedText(const PluginsAvailable &plugin,const QString &informationName,const QString &mainShortName)
 {
     int index=0;
     QString TextFound;

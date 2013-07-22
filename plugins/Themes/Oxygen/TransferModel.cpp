@@ -81,7 +81,7 @@ int TransferModel::rowCount( const QModelIndex& parent ) const
     return parent == QModelIndex() ? transfertItemList.count() : 0;
 }
 
-quint64 TransferModel::firstId()
+quint64 TransferModel::firstId() const
 {
     if(transfertItemList.count()>0)
         return transfertItemList[0].id;
@@ -418,7 +418,7 @@ void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &prog
     #endif
 }
 
-TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
+TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() const
 {
     currentTransfertItem returnItem;
     returnItem.progressBar_read=-1;

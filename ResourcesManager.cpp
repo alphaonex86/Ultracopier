@@ -97,7 +97,7 @@ ResourcesManager::~ResourcesManager()
 }
 
 /// \brief Get folder presence and the path
-QString ResourcesManager::getFolderReadPath(const QString &path)
+QString ResourcesManager::getFolderReadPath(const QString &path) const
 {
     int index=0;
     int loop_size=searchPath.size();
@@ -112,7 +112,7 @@ QString ResourcesManager::getFolderReadPath(const QString &path)
 }
 
 /// \brief Get folder presence, the path and check in the folder and sub-folder the file presence
-QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck)
+QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck) const
 {
     int index=0;
     int loop_size=searchPath.size();
@@ -126,7 +126,7 @@ QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QS
     return "";
 }
 
-bool ResourcesManager::checkFolderContent(const QString &path,const QStringList &fileToCheck)
+bool ResourcesManager::checkFolderContent(const QString &path,const QStringList &fileToCheck) const
 {
     QDir dir(path);
     if(dir.exists()) // if the path have been found, then return the full path
@@ -160,7 +160,7 @@ QString ResourcesManager::AddSlashIfNeeded(const QString &path)
 }
 
 /// \brief get the writable path
-QString ResourcesManager::getWritablePath()
+QString ResourcesManager::getWritablePath() const
 {
     return writablePath;
 }
@@ -177,7 +177,7 @@ bool ResourcesManager::disableWritablePath()
 }
 
 /// \brief get the read path
-QStringList ResourcesManager::getReadPath()
+QStringList ResourcesManager::getReadPath() const
 {
     return searchPath;
 }

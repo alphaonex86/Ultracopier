@@ -71,8 +71,8 @@ private:
     OptionDialog *optionDialog;
     bool stopIt;
 signals:
-    void pluginLoaderReady(Ultracopier::CatchState state,bool havePlugin,bool someAreInWaitOfReply);
-    void previouslyPluginAdded(PluginsAvailable);
+    void pluginLoaderReady(const Ultracopier::CatchState &state,bool havePlugin,bool someAreInWaitOfReply) const;
+    void previouslyPluginAdded(const PluginsAvailable &plugin) const;
 };
 
 #endif // PluginLoader_H

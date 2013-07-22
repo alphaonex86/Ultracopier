@@ -50,7 +50,7 @@ class SessionLoader : public QObject
         bool shouldEnabled;
         OptionDialog *optionDialog;
     signals:
-        void previouslyPluginAdded(PluginsAvailable);
+        void previouslyPluginAdded(PluginsAvailable) const;
 };
 #endif
 

@@ -120,8 +120,8 @@ public slots:
     void resetOptions();
     void newLanguageLoaded();
 signals:
-    void reloadLanguage();
-    void haveDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType);
+    void reloadLanguage() const;
+    void haveDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType) const;
 };
 
 #endif // FACTORY_H

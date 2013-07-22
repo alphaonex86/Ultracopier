@@ -32,7 +32,7 @@ public:
     /// \brief open the destination to open it
     void open(const QFileInfo &file,const quint64 &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential);
     /// \brief to return the error string
-    QString errorString();
+    QString errorString() const;
     /// \brief to stop all
     void stop();
     /// \brief to write data
@@ -92,24 +92,24 @@ public slots:
 
     void resumeNotStarted();
 signals:
-    void error();
-    void opened();
-    void reopened();
-    void writeIsStarted();
-    void writeIsStopped();
-    void flushedAndSeekedToZero();
-    void closed();
-    void checksumFinish(const QByteArray&);
+    void error() const;
+    void opened() const;
+    void reopened() const;
+    void writeIsStarted() const;
+    void writeIsStopped() const;
+    void flushedAndSeekedToZero() const;
+    void closed() const;
+    void checksumFinish(const QByteArray&) const;
     //internal signals
-    void internalStartOpen();
-    void internalStartChecksum();
-    void internalStartReopen();
-    void internalStartWrite();
-    void internalStartClose();
-    void internalStartEndOfFile();
-    void internalStartFlushAndSeekToZero();
+    void internalStartOpen() const;
+    void internalStartChecksum() const;
+    void internalStartReopen() const;
+    void internalStartWrite() const;
+    void internalStartClose() const;
+    void internalStartEndOfFile() const;
+    void internalStartFlushAndSeekToZero() const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 private:
     QString             errorString_internal;
     AvancedQFile		file;

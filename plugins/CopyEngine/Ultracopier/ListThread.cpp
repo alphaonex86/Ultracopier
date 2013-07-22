@@ -335,7 +335,7 @@ bool ListThread::haveSameDestination(const QString &destination)
 }
 
 /// \return empty if multiple or no destination
-QString ListThread::getUniqueDestinationFolder()
+QString ListThread::getUniqueDestinationFolder() const
 {
     if(stopIt)
         return QString();
@@ -556,17 +556,17 @@ void ListThread::setFolderCollision(const FolderExistsAction &alwaysDoThisAction
     this->alwaysDoThisActionForFolderExists=alwaysDoThisActionForFolderExists;
 }
 
-bool ListThread::getReturnBoolToCopyEngine()
+bool ListThread::getReturnBoolToCopyEngine() const
 {
     return returnBoolToCopyEngine;
 }
 
-QPair<quint64,quint64> ListThread::getReturnPairQuint64ToCopyEngine()
+QPair<quint64,quint64> ListThread::getReturnPairQuint64ToCopyEngine() const
 {
     return returnPairQuint64ToCopyEngine;
 }
 
-Ultracopier::ItemOfCopyList ListThread::getReturnItemOfCopyListToCopyEngine()
+Ultracopier::ItemOfCopyList ListThread::getReturnItemOfCopyListToCopyEngine() const
 {
     return returnItemOfCopyListToCopyEngine;
 }
@@ -1536,7 +1536,7 @@ int ListThread::getNumberOfTranferRuning() const
 }
 
 //return
-bool ListThread::needMoreSpace()
+bool ListThread::needMoreSpace() const
 {
     if(!checkDiskSpace)
         return false;
@@ -2115,7 +2115,7 @@ void ListThread::deleteTransferThread()
     }
 }
 
-void ListThread::setTransferAlgorithm(TransferAlgorithm transferAlgorithm)
+void ListThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm)
 {
     if(transferAlgorithm==TransferAlgorithm_Sequential)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Sequential");

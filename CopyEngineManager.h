@@ -94,9 +94,9 @@ private:
     FacilityEngine facilityEngine;
 signals:
     //void newCopyEngineOptions(QString,QString,QWidget *);
-    void addCopyEngine(QString name,bool canDoOnlyCopy);
-    void removeCopyEngine(QString name);
-    void previouslyPluginAdded(PluginsAvailable);
+    void addCopyEngine(QString name,bool canDoOnlyCopy) const;
+    void removeCopyEngine(QString name) const;
+    void previouslyPluginAdded(PluginsAvailable) const;
 };
 
 #endif // COPYENGINEMANAGER_H

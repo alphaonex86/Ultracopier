@@ -1109,9 +1109,9 @@ void Themes::alwaysOnTop_clicked(bool reshow)
     Qt::WindowFlags flags = windowFlags();
     #ifdef Q_OS_WIN32
     if(uiOptions->alwaysOnTop->isChecked())
-        SetWindowPos(this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        SetWindowPos((HWND)this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     else
-        SetWindowPos(this->winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        SetWindowPos((HWND)this->winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     #endif
     #ifdef Q_OS_LINUX
     if(uiOptions->alwaysOnTop->isChecked())
@@ -1202,7 +1202,7 @@ Do by mongaulois, remake by alpha_one_x86.
 \return QIcon of the final image
 \note Can be used as it: dynaIcon(75,"...")
 */
-QIcon Themes::dynaIcon(int percent,QString text)
+QIcon Themes::dynaIcon(int percent,QString text) const
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(pixmapTop.isNull() || pixmapBottom.isNull())
