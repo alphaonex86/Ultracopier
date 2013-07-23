@@ -562,8 +562,14 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="112"/>
         <location filename="../../../HelpDialog.cpp" line="114"/>
+        <location filename="../../../HelpDialog.cpp" line="122"/>
         <source>http://ultracopier.first-world.info/</source>
         <translation>http://ultracopier-fr.first-world.info/</translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="125"/>
+        <source>http://ultracopier.first-world.info/download.html</source>
+        <translation>http://ultracopier-fr.first-world.info/telecharger.html</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="75"/>
@@ -678,7 +684,7 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
         <location filename="../../../OptionDialog.ui" line="301"/>
-        <location filename="../../../OptionDialog.cpp" line="339"/>
+        <location filename="../../../OptionDialog.cpp" line="341"/>
         <source>Copy engine</source>
         <translation>Moteurs de copie</translation>
     </message>
@@ -733,21 +739,21 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
         <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="340"/>
+        <location filename="../../../OptionDialog.cpp" line="342"/>
         <source>Listener</source>
         <translation>Écouteur</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
         <location filename="../../../OptionDialog.ui" line="319"/>
-        <location filename="../../../OptionDialog.cpp" line="341"/>
+        <location filename="../../../OptionDialog.cpp" line="343"/>
         <source>Plugin loader</source>
         <translation>Chargeur de plugin</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
         <location filename="../../../OptionDialog.ui" line="324"/>
-        <location filename="../../../OptionDialog.cpp" line="342"/>
+        <location filename="../../../OptionDialog.cpp" line="344"/>
         <source>Session loader</source>
         <translation>Chargeur de session</translation>
     </message>
@@ -902,8 +908,8 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Écrire les opérations dossier:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="245"/>
-        <location filename="../../../OptionDialog.cpp" line="259"/>
+        <location filename="../../../OptionDialog.cpp" line="247"/>
+        <location filename="../../../OptionDialog.cpp" line="261"/>
         <source>Load</source>
         <translation>Charger</translation>
     </message>
@@ -912,12 +918,12 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Charger les thèmes?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="245"/>
+        <location filename="../../../OptionDialog.cpp" line="247"/>
         <source>Load the theme?</source>
         <translation>Charger le thème?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="259"/>
+        <location filename="../../../OptionDialog.cpp" line="261"/>
         <source>Load the language?</source>
         <translation>Charger la langue?</translation>
     </message>
@@ -938,7 +944,7 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Cette version Ultimate est seuelement is cgminer</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="463"/>
+        <location filename="../../../OptionDialog.cpp" line="465"/>
         <source>Allow the application</source>
         <translation>Autorisé l&apos;application</translation>
     </message>
@@ -947,7 +953,7 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Cette version Ultimate gratuite est seulement is %1 est autorisé par votre antivirus.</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="463"/>
+        <location filename="../../../OptionDialog.cpp" line="465"/>
         <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
         <translation>Cette version Ultimate gratuite est seulement si %1 est autorisé par votre antivirus. Sinon vous pouvez obtenir la version gratuite normale</translation>
     </message>
@@ -956,77 +962,77 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Cette version Ultimate gratuite est seulement si . Sinon vous pouvez obtenir la version gratuite normale</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="468"/>
+        <location filename="../../../OptionDialog.cpp" line="470"/>
         <source>Enable the OpenCL</source>
         <translation>Activé l&apos;OpenCL</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="468"/>
+        <location filename="../../../OptionDialog.cpp" line="470"/>
         <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
         <translation>Cette version Ultimate gratuite est seulement si l&apos;OpenCL est installé avec vos drivers graphiques. Sinon vous pouvez obtenir la version gratuite normale</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="343"/>
         <location filename="../../../OptionDialog.cpp" line="345"/>
-        <location filename="../../../OptionDialog.cpp" line="718"/>
-        <location filename="../../../OptionDialog.cpp" line="719"/>
+        <location filename="../../../OptionDialog.cpp" line="347"/>
+        <location filename="../../../OptionDialog.cpp" line="708"/>
+        <location filename="../../../OptionDialog.cpp" line="709"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="347"/>
+        <location filename="../../../OptionDialog.cpp" line="349"/>
         <source>Do nothing</source>
         <translation>Ne rien faire</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="348"/>
+        <location filename="../../../OptionDialog.cpp" line="350"/>
         <source>Ask source as folder</source>
         <translation>Demander la source comme un dossier</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="349"/>
+        <location filename="../../../OptionDialog.cpp" line="351"/>
         <source>Ask sources as files</source>
         <translation>Demander la sources comme des fichiers</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="350"/>
+        <location filename="../../../OptionDialog.cpp" line="352"/>
         <source>Never</source>
         <translation>Jamais</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="351"/>
+        <location filename="../../../OptionDialog.cpp" line="353"/>
         <source>When source is same</source>
         <translation>Quand la source est la même</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="352"/>
+        <location filename="../../../OptionDialog.cpp" line="354"/>
         <source>When destination is same</source>
         <translation>Quand la destination est la même</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="353"/>
+        <location filename="../../../OptionDialog.cpp" line="355"/>
         <source>When source and destination are same</source>
         <translation>Quand la destination et la source sont les mêmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="354"/>
+        <location filename="../../../OptionDialog.cpp" line="356"/>
         <source>When source or destination are same</source>
         <translation>Quand la destination ou la source sont les mêmes</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="355"/>
+        <location filename="../../../OptionDialog.cpp" line="357"/>
         <source>Always</source>
         <translation>Toujours</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="369"/>
-        <location filename="../../../OptionDialog.cpp" line="370"/>
         <location filename="../../../OptionDialog.cpp" line="371"/>
+        <location filename="../../../OptionDialog.cpp" line="372"/>
+        <location filename="../../../OptionDialog.cpp" line="373"/>
         <source>The variables are %1</source>
         <translation>Les variables sont %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1357"/>
+        <location filename="../../../OptionDialog.cpp" line="1365"/>
         <source>Save logs as: </source>
         <translation>Sauvegarder les logs sous: </translation>
     </message>
@@ -1378,6 +1384,23 @@ depuis:%2</translation>
         <translation>&amp;À propos d&apos;ultracopier</translation>
     </message>
     <message>
+        <location filename="../../../SystrayIcon.cpp" line="466"/>
+        <source>New version: %1</source>
+        <translation>Nouvelle version: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="468"/>
+        <source>Click here to go on download page</source>
+        <translation>Cliquez içi pour aller sur la page de téléchargement</translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="470"/>
+        <source>Click here to go to the shop and login.
+Download the new version into the order details</source>
+        <translation>Cliquez içi pour aller sur la boutique et vous logger.
+Téléchargez la novuelle version dans les détails de la commande</translation>
+    </message>
+    <message>
         <source>&amp;Save bug Report</source>
         <translation type="obsolete">&amp;Sauvergarder le rapport de bug</translation>
     </message>
@@ -1397,39 +1420,38 @@ depuis:%2</translation>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="466"/>
         <source>New version: %1
 Site: %2</source>
-        <translation>Nouvelle version: %1
+        <translation type="obsolete">Nouvelle version: %1
 Site: %2</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="483"/>
+        <location filename="../../../SystrayIcon.cpp" line="489"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copie</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="489"/>
+        <location filename="../../../SystrayIcon.cpp" line="495"/>
         <source>&amp;Transfer</source>
         <translation>&amp;Transfert</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="493"/>
+        <location filename="../../../SystrayIcon.cpp" line="499"/>
         <source>&amp;Move</source>
         <translation>&amp;Déplacer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="505"/>
+        <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
         <translation>Ajouter une &amp;copie</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="511"/>
+        <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
         <translation>Ajouter un &amp;transfert</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="515"/>
+        <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
         <translation>Ajouter un &amp;déplacement</translation>
     </message>

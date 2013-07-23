@@ -165,7 +165,7 @@ void SystrayIcon::showSystrayMessage(const QString& text)
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 void SystrayIcon::messageClicked()
 {
-    QDesktopServices::openUrl(HelpDialog::getWebSite());
+    QDesktopServices::openUrl(HelpDialog::getUpdateUrl());
 }
 #endif
 
@@ -463,7 +463,13 @@ void SystrayIcon::newUpdate(const QString &version)
     /*if(version==lastVersion)
         return;*/
     lastVersion=version;
-    showSystrayMessage(tr("New version: %1\nSite: %2").arg(version).arg(HelpDialog::getWebSite()));
+    showSystrayMessage(tr("New version: %1").arg(version)+"\n"+
+                           #if defined(ULTRACOPIER_CGMINER) || !defined(ULTRACOPIER_VERSION_ULTIMATE)
+                               tr("Click here to go on download page")
+                           #else
+                               tr("Click here to go to the shop and login.\nDownload the new version into the order details")
+                           #endif
+                       );
 }
 #endif
 

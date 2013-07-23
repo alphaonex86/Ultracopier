@@ -115,6 +115,20 @@ QString HelpDialog::getWebSite()
     #endif
 }
 
+
+QString HelpDialog::getUpdateUrl()
+{
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+        return tr("http://ultracopier.first-world.info/")+QString("supercopier.html");
+    #else
+        #if defined(ULTRACOPIER_CGMINER) || !defined(ULTRACOPIER_VERSION_ULTIMATE)
+            return tr("http://ultracopier.first-world.info/download.html");
+        #else
+            return "http://ultracopier-shop.first-world.info/en/order-history";
+        #endif
+    #endif
+}
+
 #ifdef ULTRACOPIER_DEBUG
 void HelpDialog::on_lineEditInsertDebug_returnPressed()
 {

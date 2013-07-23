@@ -161,8 +161,8 @@ void MkPath::internalDoThisPath()
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to final real mvoe the folder: "+pathList.first().destination.absoluteFilePath());
-                emit errorOnFolder(pathList.first().destination,tr("Unable to final real mvoe the folder"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to do the final real move the folder: "+pathList.first().destination.absoluteFilePath());
+                emit errorOnFolder(pathList.first().destination,tr("Unable to do the final real move the folder"));
                 return;
             }
         }

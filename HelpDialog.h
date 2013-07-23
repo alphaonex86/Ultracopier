@@ -28,6 +28,7 @@ class HelpDialog : public QDialog {
         /// \brief Destruct the object
         ~HelpDialog();
         static QString getWebSite();
+        static QString getUpdateUrl();
     protected:
         /// \brief To re-translate the ui
         void changeEvent(QEvent *e);
