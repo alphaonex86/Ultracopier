@@ -24,6 +24,8 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<ErrorType>("ErrorType");
     qRegisterMetaType<Diskspace>("Diskspace");
     qRegisterMetaType<QList<Diskspace> >("QList<Diskspace>");
+    qRegisterMetaType<QFileInfo>("QFileInfo");
+    qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
