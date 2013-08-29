@@ -50,6 +50,13 @@
         <source>Select a color</source>
         <translation>Selectionner une coleur</translation>
     </message>
+    <message>
+        <location line="+75"/>
+        <location line="+4"/>
+        <location line="+2"/>
+        <source>%1 %2% of %3</source>
+        <translation>%1 de %2% de %3</translation>
+    </message>
 </context>
 <context>
     <name>ThemesFactory</name>
@@ -89,7 +96,7 @@
         <translation>Vers:</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+53"/>
         <source>Close at the end of the transfers</source>
         <translation>Fermer à la fin des transferts</translation>
     </message>

@@ -1169,25 +1169,25 @@ void Themes::updateTitle()
     if(uiOptions->showProgressionInTheTitle->isChecked() && totalSize>0)
     {
         if(!modeIsForced)
-            this->setWindowTitle(QString("%1 %2% of %3 - Supercopier").arg(facilityEngine->translateText("Transfer")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize)));
+            this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Transfer")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Supercopier");
         else
         {
             if(mode==Ultracopier::Copy)
-                this->setWindowTitle(QString("%1 %2% of %3 - Supercopier").arg(facilityEngine->translateText("Copy")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize)));
+                this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Copy")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Supercopier");
             else
-                this->setWindowTitle(QString("%1 %2% of %3 - Supercopier").arg(facilityEngine->translateText("Move")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize)));
+                this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Move")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Supercopier");
         }
     }
     else
     {
         if(!modeIsForced)
-            this->setWindowTitle(QString("%1 - Supercopier").arg(facilityEngine->translateText("Transfer")));
+            this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Transfer"))+" - Supercopier");
         else
         {
             if(mode==Ultracopier::Copy)
-                this->setWindowTitle(QString("%1 - Supercopier").arg(facilityEngine->translateText("Copy")));
+                this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Copy"))+" - Supercopier");
             else
-                this->setWindowTitle(QString("%1 - Supercopier").arg(facilityEngine->translateText("Move")));
+                this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Move"))+" - Supercopier");
         }
     }
 }
