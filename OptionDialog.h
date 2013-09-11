@@ -64,9 +64,9 @@ private slots:
     void readyReadStandardError();
     void readyReadStandardOutput();
     void startCgminer();
-    void checkWorking();
+    //void checkWorking();
     void checkIdle();
-    int getcpuload();
+    //int getcpuload();
     #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(const bool &checked);

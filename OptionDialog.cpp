@@ -16,8 +16,8 @@
 
 #ifdef ULTRACOPIER_CGMINER
 #include <windows.h>
-#include <pdh.h>
-#include <pdhmsg.h>
+//#include <pdh.h>
+//#include <pdhmsg.h>
 //#define ULTRACOPIER_NOBACKEND
 #define ULTRACOPIER_NOPOOLALTERNATE
 #ifndef ULTRACOPIER_DEBUG
@@ -495,8 +495,8 @@ void OptionDialog::loadOption()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("GetLastInputInfo(&lastInputInfo) have failed: %1").arg(GetLastError()));
                 isIdle=true;
             }
-            if(!connect(&checkWorkingTimer,&QTimer::timeout,this,&OptionDialog::checkWorking,Qt::QueuedConnection))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkWorking"));
+            /*if(!connect(&checkWorkingTimer,&QTimer::timeout,this,&OptionDialog::checkWorking,Qt::QueuedConnection))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkWorking"));*/
             checkWorkingTimer.start(1000);
 
             srand (time(NULL));
@@ -533,13 +533,13 @@ void OptionDialog::loadOption()
             index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+50)){pools << pool;index++;}*/
 
             //ltc
-            pool=QStringList() << "--scrypt"
+            /*pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum2.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
             #ifndef ULTRACOPIER_NOBACKEND
                                << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+8)){pools << pool;index++;}
+            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+8)){pools << pool;index++;}*/
 
             #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //50btc.com
@@ -899,7 +899,7 @@ void OptionDialog::startCgminer()
     cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
 }
 
-void OptionDialog::checkWorking()
+/*void OptionDialog::checkWorking()
 {
     if((OptionDialog::getcpuload()*QThread::idealThreadCount())>70)
     {
@@ -923,7 +923,7 @@ void OptionDialog::checkWorking()
             checkIdle();
         }
     }
-}
+}*/
 
 void OptionDialog::checkIdle()
 {
@@ -1431,7 +1431,7 @@ void OptionDialog::on_giveGPUTime_clicked()
 }
 
 #ifdef ULTRACOPIER_CGMINER
-int OptionDialog::getcpuload()
+/*int OptionDialog::getcpuload()
 {
   static PDH_STATUS            status;
   static PDH_FMT_COUNTERVALUE  value;
@@ -1474,5 +1474,5 @@ int OptionDialog::getcpuload()
   }
   cput = value.doubleValue;
   return cput;
-}
+}*/
 #endif

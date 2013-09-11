@@ -95,7 +95,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     systrayMenu->setAcceptDrops(true);
 
     #ifdef Q_OS_MAC
-    //qt_mac_set_dock_menu(systrayMenu);
+//    qt_mac_set_dock_menu(systrayMenu);
     #endif
 
     show();

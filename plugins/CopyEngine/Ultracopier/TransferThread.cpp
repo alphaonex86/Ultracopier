@@ -510,6 +510,16 @@ bool TransferThread::destinationExists()
 QString TransferThread::resolvedName(const QFileInfo &inode)
 {
     QString fileName=inode.fileName();
+    if(fileName.isEmpty())
+    {
+        QDir absoluteDir=inode.absoluteDir();
+        fileName=absoluteDir.dirName();
+        if(fileName.isEmpty())
+        {
+            fileName=absoluteDir.cdUp();
+            fileName=absoluteDir.dirName();
+        }
+    }
     #ifdef Q_OS_WIN32
     if(fileName.isEmpty())
     {

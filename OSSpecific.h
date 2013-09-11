@@ -17,7 +17,9 @@ public:
     bool dontShowAgain();
 private slots:
     void on_pushButton_clicked();
-
+    void updateText();
+protected slots:
+    void changeEvent(QEvent *e);
 private:
     Ui::OSSpecific *ui;
 };

@@ -8,6 +8,7 @@
 #include <QList>
 #include <QDebug>
 #include <math.h>
+#include <QStorageInfo>
 
 #include "Factory.h"
 

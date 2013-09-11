@@ -29,6 +29,7 @@ target.path = $${PREFIX}/bin
 INSTALLS += target translations
 macx {
     ICON = resources/ultracopier.icns
+    #QT += macextras
 }
 FORMS += HelpDialog.ui \
     PluginInformation.ui \
@@ -41,7 +42,7 @@ RESOURCES += \
 win32 {
     RESOURCES += resources/resources-windows-qt-plugin.qrc
     RC_FILE += resources/resources-windows.rc
-    LIBS += -lpdh
+    #LIBS += -lpdh
 }
 
 HEADERS += ResourcesManager.h \
