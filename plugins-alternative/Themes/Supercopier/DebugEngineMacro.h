@@ -6,6 +6,10 @@
 #ifndef DEBUGENGINEMACRO_H
 #define DEBUGENGINEMACRO_H
 
+#ifdef WIN32
+#	define __func__ __FUNCTION__
+#endif
+
 /// \brief Macro for the debug log
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 	#if defined (__FILE__) && defined (__LINE__)
