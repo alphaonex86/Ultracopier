@@ -43,7 +43,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     multiForBigSpeed                = 0;
     #endif
 
-    #if ! defined (Q_CC_GNU)
+    #if !defined (Q_CC_GNU)
     ui->keepDate->setEnabled(false);
     ui->keepDate->setToolTip("Not supported with this compiler");
     #endif
