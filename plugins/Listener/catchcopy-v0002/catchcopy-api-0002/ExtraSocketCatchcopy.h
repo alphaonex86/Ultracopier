@@ -9,12 +9,13 @@
 #include <QString>
 
 #ifdef Q_OS_UNIX
-#	include <unistd.h>
-#	include <sys/types.h>
-
+    #include <unistd.h>
+    #include <sys/types.h>
 #else
-#	define NOMINMAX
-#	include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #endif
 
 /// \brief to have extra socket function

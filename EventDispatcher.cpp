@@ -19,7 +19,9 @@
     #include <sys/types.h>
 #endif
 #ifdef Q_OS_WIN32
-#	define NOMINMAX
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
     #include <windows.h>
     #include <tchar.h>
     #include <stdio.h>

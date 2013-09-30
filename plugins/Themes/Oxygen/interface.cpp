@@ -12,8 +12,10 @@
 #include <QPainter>
 #include <cmath>
 #ifdef Q_OS_WIN
-#	define NOMINMAX
-#	include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #endif
 
 #include "interface.h"

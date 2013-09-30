@@ -3,8 +3,10 @@
 #include <QtGlobal>
 
 #ifdef Q_OS_WIN32
-#	define NOMINMAX
-#	include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #endif
 
 ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)

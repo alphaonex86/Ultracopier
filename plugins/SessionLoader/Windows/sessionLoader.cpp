@@ -7,10 +7,12 @@
 #include <QCoreApplication>
 
 #ifdef Q_OS_WIN32
-#	define NOMINMAX
-#	include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #else
-#	error "This plugin will only work under Windows"
+    #error "This plugin will only work under Windows"
 #endif
 
 void WindowsSessionLoader::setEnabled(const bool &newValue)

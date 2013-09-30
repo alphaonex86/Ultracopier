@@ -22,11 +22,13 @@
 #include "RenamingRules.h"
 
 #ifdef Q_OS_WIN32
-#	define NOMINMAX
-#include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #endif
 #ifdef Q_OS_LINUX
-#include <unistd.h>
+    #include <unistd.h>
 #endif
 
 #ifndef FACTORY_H
