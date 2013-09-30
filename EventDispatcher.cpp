@@ -413,8 +413,6 @@ QString EventDispatcher::GetOSDisplayString()
             else if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL)
                 Os+=", 32-bit";
         }
-
-        return Os;
     }
     else
     {
@@ -422,6 +420,7 @@ QString EventDispatcher::GetOSDisplayString()
            Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
        else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
     }
+	return Os;
 }
 #endif
 
