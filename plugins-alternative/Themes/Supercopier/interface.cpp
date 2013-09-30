@@ -10,13 +10,21 @@
 #include <QColorDialog>
 #include <QRect>
 #include <QPainter>
-#include <math.h>
+#include <cmath>
 #ifdef Q_OS_WIN
-#include <windows.h>
+#	define NOMINMAX
+#	include <windows.h>
 #endif
 
 #include "interface.h"
 #include "ui_interface.h"
+
+// The cmath header from MSVC does not contain round()
+#if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
+inline double round(double d) {
+    return floor( d + 0.5 );
+}
+#endif
 
 Themes::Themes(const bool &alwaysOnTop,
                const bool &showProgressionInTheTitle,

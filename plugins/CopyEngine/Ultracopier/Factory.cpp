@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QList>
 #include <QDebug>
-#include <math.h>
+#include <cmath>
 #include <QStorageInfo>
 
 #include "Factory.h"

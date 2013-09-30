@@ -12,7 +12,8 @@
     #include <unistd.h>
     #include <sys/types.h>
 #else
-    #include <windows.h>
+#	define NOMINMAX    
+#	include <windows.h>
 #endif
 
 /** \brief class to have general socket options */

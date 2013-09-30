@@ -14,8 +14,9 @@
 #include <QProcess>
 #include <QSet>
 #ifdef Q_OS_WIN32
-#include <windows.h>
-#include <tlhelp32.h>
+#	define NOMINMAX
+#	include <windows.h>
+#	include <tlhelp32.h>
 #endif
 
 #include "../../../interface/PluginInterface_PluginLoader.h"

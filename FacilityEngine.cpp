@@ -9,6 +9,7 @@
 #include "FacilityEngine.h"
 
 #if defined (Q_OS_WIN32)
+#	define NOMINMAX
 #include <windows.h>
 #endif
 
