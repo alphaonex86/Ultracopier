@@ -1,5 +1,6 @@
 TEMPLATE        = lib
 CONFIG         += plugin
+LIBS += -ladvapi32
 HEADERS         = sessionLoader.h \
     StructEnumDefinition.h \
     Variable.h \

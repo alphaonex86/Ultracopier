@@ -1,6 +1,7 @@
 TEMPLATE        = lib
 CONFIG		+= plugin
 QT		+= network
+win32:LIBS += -ladvapi32
 HEADERS         = listener.h \
     catchcopy-api-0002/VariablesCatchcopy.h \
     catchcopy-api-0002/ServerCatchcopy.h \
