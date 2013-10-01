@@ -3,11 +3,13 @@
 
 #include "TransferThread.h"
 
-#ifndef Q_OS_UNIX
-    #ifdef Q_OS_WIN32
-        #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-            #include <windows.h>
+
+#ifdef Q_OS_WIN32
+    #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+        #ifndef NOMINMAX
+            #define NOMINMAX
         #endif
+        #include <windows.h>
     #endif
 #endif
 

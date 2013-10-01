@@ -44,7 +44,7 @@ infos.files      = informations.xml
 infos.path       = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
 INSTALLS       += target translations infos
 
-win32:LIBS += -lole32
+win32:LIBS += -lole32 -lshell32
 
 FORMS += \
     OptionsWidget.ui

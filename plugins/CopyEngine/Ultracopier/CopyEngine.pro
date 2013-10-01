@@ -2,6 +2,10 @@ QT += widgets systeminfo
 DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib
 CONFIG         += plugin
+win32 {
+    LIBS += -ladvapi32
+}
+
 HEADERS         = \
                 StructEnumDefinition.h \
     StructEnumDefinition_CopyEngine.h \

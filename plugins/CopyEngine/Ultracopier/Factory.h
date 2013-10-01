@@ -22,10 +22,13 @@
 #include "RenamingRules.h"
 
 #ifdef Q_OS_WIN32
-#include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #endif
 #ifdef Q_OS_LINUX
-#include <unistd.h>
+    #include <unistd.h>
 #endif
 
 #ifndef FACTORY_H
@@ -77,9 +80,9 @@ private:
     QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
     QString firstRenamingRule,otherRenamingRule;
 
-    #if defined(Q_OS_WIN32) or (defined(Q_OS_LINUX) and defined(_SC_PHYS_PAGES))
+#if defined(Q_OS_WIN32) || (defined(Q_OS_LINUX) && defined(_SC_PHYS_PAGES))
     static size_t getTotalSystemMemory();
-    #endif
+#endif
 private slots:
     void init();
     void setDoRightTransfer(bool doRightTransfer);

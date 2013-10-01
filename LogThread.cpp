@@ -10,7 +10,10 @@
 #include "OptionEngine.h"
 
 #ifdef Q_OS_WIN32
-#include <windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #include <windows.h>
 #endif
 #include <QMessageBox>
 

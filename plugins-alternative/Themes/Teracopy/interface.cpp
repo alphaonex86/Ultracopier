@@ -5,10 +5,17 @@
 \date 2010 */
 
 #include <QMessageBox>
-#include <math.h>
+#include <cmath>
 
 #include "interface.h"
 #include "ui_interface.h"
+
+// The cmath header from MSVC does not contain round()
+#if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
+inline double round(double d) {
+    return floor( d + 0.5 );
+}
+#endif
 
 Themes::Themes(FacilityInterface * facilityEngine) :
     ui(new Ui::interfaceCopy())
