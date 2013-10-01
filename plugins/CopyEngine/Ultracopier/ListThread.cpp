@@ -43,10 +43,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     multiForBigSpeed                = 0;
     #endif
 
-    #if ! defined (Q_CC_GNU)
-    ui->keepDate->setEnabled(false);
-    ui->keepDate->setToolTip("Not supported with this compiler");
-    #endif
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog);
     timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
