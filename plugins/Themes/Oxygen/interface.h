@@ -26,7 +26,7 @@
 
 // for windows progress bar
 #ifndef __GNUC__
-#include <shobjidl.h>
+#	include <shobjidl.h>
 #endif
 
 namespace Ui {

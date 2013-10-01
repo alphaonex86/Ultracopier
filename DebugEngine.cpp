@@ -15,11 +15,15 @@
 #include "DebugEngine.h"
 #include "ExtraSocket.h"
 
+#ifdef WIN32
+#	define __func__ __FUNCTION__
+#endif
+
 /// \brief The local macro: ULTRACOPIER_DEBUGCONSOLE
 #if defined (__FILE__) && defined (__LINE__)
-    #define ULTRACOPIER_DEBUGCONSOLE(a,b) addDebugInformation(a,__func__,b,__FILE__,__LINE__)
+#	define ULTRACOPIER_DEBUGCONSOLE(a,b) addDebugInformation(a,__func__,b,__FILE__,__LINE__)
 #else
-    #define ULTRACOPIER_DEBUGCONSOLE(a,b) addDebugInformation(a,__func__,b)
+#	define ULTRACOPIER_DEBUGCONSOLE(a,b) addDebugInformation(a,__func__,b)
 #endif
 
 #ifdef ULTRACOPIER_DEBUG

@@ -43,6 +43,7 @@ win32 {
     RESOURCES += resources/resources-windows-qt-plugin.qrc
     RC_FILE += resources/resources-windows.rc
     #LIBS += -lpdh
+	LIBS += -ladvapi32
 }
 
 HEADERS += ResourcesManager.h \

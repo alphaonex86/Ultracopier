@@ -6,11 +6,18 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
-#include <math.h>
+#include <cmath>
 
 #include "CopyEngine.h"
 #include "FolderExistsDialog.h"
 #include "../../../interface/PluginInterface_CopyEngine.h"
+
+// The cmath header from MSVC does not contain round()
+#if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
+inline double round(double d) {
+    return floor( d + 0.5 );
+}
+#endif
 
 CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     ui(new Ui::copyEngineOptions())

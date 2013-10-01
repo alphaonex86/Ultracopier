@@ -11,11 +11,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "../../../interface/PluginInterface_CopyEngine.h"
-#include "fileErrorDialog.h"
-#include "fileExistsDialog.h"
-#include "folderExistsDialog.h"
-#include "fileIsSameDialog.h"
+#include "../../interface/PluginInterface_CopyEngine.h"
+#include "FileErrorDialog.h"
+#include "FileExistsDialog.h"
+#include "FolderExistsDialog.h"
+#include "FileIsSameDialog.h"
 #include "ui_options.h"
 #include "Environment.h"
 #include "ListThread.h"

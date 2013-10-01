@@ -12,6 +12,9 @@
     #include <unistd.h>
     #include <sys/types.h>
 #else
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
     #include <windows.h>
 #endif
 

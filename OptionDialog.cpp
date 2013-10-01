@@ -34,7 +34,7 @@
 #define ULTRACOPIER_CGMINER_IDLETIME 10*60*1000
 #include <QLibrary>
 #include <QDateTime>
-#include <math.h>
+#include <cmath>
 #include <time.h>
 #define ULTRACOPIER_CGMINER_PATH "miner/miner.exe"
 #endif
