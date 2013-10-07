@@ -228,6 +228,9 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the speed limitation");
     #endif
 
+    //here else, the default settings can't be loaded
+    uiIsInstalled=true;
+
     setBlockSize(blockSize);
     setSequentialBuffer(sequentialBuffer);
     setParallelBuffer(parallelBuffer);
@@ -342,8 +345,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->transferAlgorithm->setCurrentIndex(0);
         break;
     }
-
-    uiIsInstalled=true;
     return true;
 }
 
