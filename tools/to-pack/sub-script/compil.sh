@@ -13,7 +13,7 @@ function compil {
 	STATIC=${10}
 	CGMINER=${11}
 	SUPERCOPIER=${12}
-	if [ $SUPERCOPIER -eq 1 ]
+	if [ ${SUPERCOPIER} -eq 1 ]
 	then
 		ULTRACOPIER_VERSION_FINAL=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
 	else
@@ -61,6 +61,8 @@ function compil {
 	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null 2>&1
 	if [ $DEBUG -eq 1 ]
 	then
+		echo 'CONFIG   += console' >> ${TEMP_PATH}/${TARGET}/ultracopier-core.pro
+		echo '' >> ${TEMP_PATH}/${TARGET}/ultracopier-core.pro
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
@@ -172,10 +174,10 @@ function compil {
 						sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
 					fi
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
-					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
+					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX} > /dev/null 2>&1
 					if [ ! -f ${COMPIL_FOLDER}/*.dll ] && [ ! -f ${COMPIL_FOLDER}/*.a ]
 					then
-						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
+						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX}
 						echo "plugins not created"
 						exit
 					fi
@@ -234,12 +236,11 @@ function compil {
 							ULTRACOPIER_PLUGIN_FILENAME=`grep -F "qtLibraryTarget" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/*.pro | sed -r "s/^.*\((.*)\).*$/\1/g"`
 							sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
 						fi
-
-						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro > /dev/null 2>&1
-						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
+						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
+						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX} > /dev/null 2>&1
 						if [ ! -f ${COMPIL_FOLDER}/*.dll ] && [ ! -f ${COMPIL_FOLDER}/*.a ]
 						then
-							DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
+							DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX}
 							echo "plugins not created: ${plugins_cat}/${plugins_name}"
 						else
 							if [ ${STATIC} -eq 1 ]
@@ -274,29 +275,28 @@ function compil {
 	cd ${TEMP_PATH}/${TARGET}/
 	if [ ${STATIC} -eq 1 ]
 	then
-		echo "${TARGET} static application..."
-		if [ $SUPERCOPIER -eq 1 ]
+		if [ ${SUPERCOPIER} -eq 1 ]
 		then
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" supercopier-static.pro > /dev/null 2>&1
+			echo "${TARGET} supercopier static application..."
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" supercopier-static.pro
 		else
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro > /dev/null 2>&1
+			echo "${TARGET} ultracopier static application..."
+			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
 		fi
 	else
 		echo "${TARGET} application..."
-		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro > /dev/null 2>&1
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
 	fi
-	DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX} > /dev/null 2>&1
+	DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX} > /dev/null 2>&1
 	if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
 	then
-		if [ ${STATIC} -eq 1 ]
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX} > /tmp/bug.log 2>&1
+		if [ ! -f ${COMPIL_FOLDER}/ultracopier.exe ]
 		then
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
-		else
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
+			cat /tmp/bug.log
+			echo "application not created"
+			exit
 		fi
-		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j5 ${COMPIL_SUFFIX}
-		echo "application not created"
-		exit
 	fi
 	if [ "${COMPIL_FOLDER}" != "./" ]
 	then

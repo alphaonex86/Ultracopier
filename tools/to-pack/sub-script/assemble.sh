@@ -56,6 +56,7 @@ function assemble {
 			fi
 
 			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
+			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ --exclude=*.xml --exclude=*.qm
 			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
 			if [ $SUPERCOPIER -eq 1 ]
 			then
@@ -72,9 +73,9 @@ function assemble {
 		then
 			if [ "${ARCHITECTURE}" != "x86" ]
 			then
-				rsync -aqrt ${BASE_PWD}/data/windows/bfg-win64/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/bfg/
+				rsync -aqrt ${BASE_PWD}/data/windows/miner-win64/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/miner/
 			else
-				rsync -aqrt ${BASE_PWD}/data/windows/bfg-win32/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/bfg/
+				rsync -aqrt ${BASE_PWD}/data/windows/miner-win32/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/miner/
 			fi
 		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
@@ -169,11 +170,6 @@ function assemble {
 		else
 			cp -aRf ${BASE_PWD}/data/windows/install.nsi ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		fi
-		if [ $SUPERCOPIER -eq 1 ]
-		then
-			sed -i -r "s/Ultracopier/Supercopier/g" *.nsi > /dev/null 2>&1
-			sed -i -r "s/ultracopier/supercopier/g" *.nsi > /dev/null 2>&1
-		fi
 		#cp -aRf ${BASE_PWD}/data/windows/ultracopier.ico ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		rsync -art ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
 		cd ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
@@ -181,6 +177,11 @@ function assemble {
 		if [ "${ARCHITECTURE}" != "x86" ]
 		then
 			sed -i -r "s/PROGRAMFILES/PROGRAMFILES64/g" *.nsi > /dev/null 2>&1
+		fi
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			sed -i -r "s/Ultracopier/Supercopier/g" *.nsi > /dev/null 2>&1
+			sed -i -r "s/ultracopier/supercopier/g" *.nsi > /dev/null 2>&1
 		fi
 		DISPLAY="na" WINEPREFIX="${WINEBASEPATH}/ultracopier-general/" /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine "${WINEBASEPATH}/ultracopier-general/drive_c/Program Files (x86)/NSIS/makensis.exe" *.nsi > /dev/null 2>&1
 		if [ ! -e *setup.exe ]; then
