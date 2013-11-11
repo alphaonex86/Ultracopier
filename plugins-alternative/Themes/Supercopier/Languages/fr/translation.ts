@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+169"/>
+        <location filename="../../interface.cpp" line="+180"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
@@ -253,7 +253,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+222"/>
+        <location filename="../../themesOptions.ui" line="+230"/>
         <source>Show dual progression</source>
         <translation>Afficher une double progression</translation>
     </message>
@@ -263,7 +263,7 @@
         <translation>Afficher la vitesse comme information principale</translation>
     </message>
     <message>
-        <location line="-129"/>
+        <location line="-137"/>
         <source>Use</source>
         <translation>Utilisation</translation>
     </message>
@@ -289,7 +289,7 @@
         <translation>Limiter la vitesse de copie à</translation>
     </message>
     <message>
-        <location line="+130"/>
+        <location line="+138"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour édité la couleur</translation>
     </message>
@@ -306,12 +306,12 @@
         <translation type="obsolete">Limiter la vitesse de copie à:</translation>
     </message>
     <message>
-        <location line="-120"/>
+        <location line="-128"/>
         <source> KB/s</source>
         <translation> Ko/s</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+35"/>
         <source>Informations</source>
         <translation>Informations</translation>
     </message>
@@ -336,7 +336,7 @@
         <translation>Afficher la progression dans le titre</translation>
     </message>
     <message>
-        <location line="-161"/>
+        <location line="-169"/>
         <source>Always on top</source>
         <translation>Toujours au 1er plan</translation>
     </message>

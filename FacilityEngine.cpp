@@ -15,6 +15,8 @@
     #include <windows.h>
 #endif
 
+FacilityEngine FacilityEngine::facilityEngine;
+
 FacilityEngine::FacilityEngine()
 {
     retranslate();
@@ -240,4 +242,14 @@ QString FacilityEngine::ultimateUrl() const
         #endif
     #endif
 
+}
+
+/// \brief Return the software name
+QString FacilityEngine::softwareName() const
+{
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+        return "Supercopier";
+    #else
+        return "Ultracopier";
+    #endif
 }

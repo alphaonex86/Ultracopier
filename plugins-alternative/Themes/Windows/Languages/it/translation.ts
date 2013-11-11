@@ -5,13 +5,13 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="205"/>
-        <location filename="../../interface.cpp" line="451"/>
+        <location filename="../../interface.cpp" line="393"/>
         <source>Unknown remaining time</source>
         <translation>Tempo rediduo indeterminato</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../interface.cpp" line="378"/>
-        <location filename="../../interface.cpp" line="380"/>
+        <location filename="../../interface.cpp" line="338"/>
+        <location filename="../../interface.cpp" line="340"/>
         <source>Transferring %n item(s) (%2)</source>
         <translation>
             <numerusform>Trasferimento di %n elemento (%2)</numerusform>
@@ -19,8 +19,8 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../interface.cpp" line="387"/>
-        <location filename="../../interface.cpp" line="389"/>
+        <location filename="../../interface.cpp" line="347"/>
+        <location filename="../../interface.cpp" line="349"/>
         <source>Copying %n item(s) (%2)</source>
         <translation>
             <numerusform>Copia di %n elemento (%2)</numerusform>
@@ -28,8 +28,8 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../interface.cpp" line="394"/>
-        <location filename="../../interface.cpp" line="396"/>
+        <location filename="../../interface.cpp" line="354"/>
+        <location filename="../../interface.cpp" line="356"/>
         <source>Moving %n item(s) (%2)</source>
         <translation>
             <numerusform>Spostamento di %n elemento (%2)</numerusform>
@@ -37,14 +37,14 @@
         </translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="462"/>
+        <location filename="../../interface.cpp" line="404"/>
         <source>from &lt;b&gt;%1&lt;/b&gt; (%2) to &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</source>
         <extracomment>Sample: from &lt;b&gt;sources&lt;/b&gt; (e:<byte value="xc"/>oldersource) to &lt;b&gt;destination&lt;/b&gt; (d:desktopdestination)&lt;br /&gt;About 5 Hours remaining</extracomment>
         <translatorcomment>Per esempio: da &lt;b&gt;Cartella di origine&lt;/b&gt; (e: precedente origine) to &lt;b&gt;Cartella di destinazione&lt;/b&gt; (d: destinazione desktop)&lt;br /&gt;Circa 5 ore rimanenti</translatorcomment>
         <translation>da &lt;b&gt;%1&lt;/b&gt; (%2) a &lt;b&gt;%3&lt;/b&gt; (%4)&lt;br /&gt;%5</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="471"/>
+        <location filename="../../interface.cpp" line="413"/>
         <source>In waiting</source>
         <translation>In attesa</translation>
     </message>

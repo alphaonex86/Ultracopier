@@ -96,7 +96,7 @@
     <message>
         <location filename="../../CopyEngine.cpp" line="1018"/>
         <source>Put at the end</source>
-        <translation>Ans Ende schieben</translation>
+        <translation>Ans Ende verschieben</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1022"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../../CopyEngine.cpp" line="1131"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation>Option nicht geladen - Kein Zugriff auf Filter</translation>
+        <translation>Optionen nicht geladen - Kein Zugriff auf Filter</translation>
     </message>
 </context>
 <context>
@@ -176,7 +176,7 @@
     <message>
         <location filename="../../Factory.cpp" line="408"/>
         <source>Put at the end</source>
-        <translation>Ans Ende schieben</translation>
+        <translation>Ans Ende verschieben</translation>
     </message>
     <message>
         <location filename="../../Factory.cpp" line="412"/>
@@ -227,7 +227,7 @@
     <message>
         <location filename="../../Factory.cpp" line="510"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation>Optionen-Engine wurde nicht geladen: Kann nicht auf Filter zugreifen</translation>
+        <translation>Option nicht geladen - Kann nicht auf Filter zugreifen</translation>
     </message>
 </context>
 <context>
@@ -276,12 +276,12 @@
     <message>
         <location filename="../../FileExistsDialog.cpp" line="125"/>
         <source>%1 - copy</source>
-        <translation>%1 - kopieren</translation>
+        <translation>%1 - Kopie</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="135"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - kopieren (%2)</translation>
+        <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="220"/>
@@ -415,7 +415,7 @@
     <message>
         <location filename="../../Filters.ui" line="105"/>
         <source>None = Include all</source>
-        <translation>Keiner = Alle mit einbeziehen</translation>
+        <translation>Keiner = Alle einschließen</translation>
     </message>
     <message>
         <location filename="../../Filters.cpp" line="92"/>
@@ -466,12 +466,12 @@
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="110"/>
         <source>%1 - copy</source>
-        <translation>%1 - kopieren</translation>
+        <translation>%1 - Kopie</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="120"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - kopieren (%2)</translation>
+        <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="181"/>
@@ -605,7 +605,7 @@
         <location filename="../../RenamingRules.ui" line="32"/>
         <source>%name% - copy</source>
         <extracomment>%name% should not be translated</extracomment>
-        <translation>%name% -  kopieren</translation>
+        <translation>%name% -  Kopie</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="39"/>
@@ -622,7 +622,7 @@
         <location filename="../../RenamingRules.ui" line="55"/>
         <source>%name% - copy (%number%)</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation>%name% - kopieren (%number%)</translation>
+        <translation>%name% - Kopie (%number%)</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="62"/>
@@ -634,13 +634,13 @@
         <location filename="../../RenamingRules.cpp" line="39"/>
         <location filename="../../RenamingRules.cpp" line="62"/>
         <source>%1 - copy</source>
-        <translation>%1 - kopieren</translation>
+        <translation>%1 - Kopie</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="43"/>
         <location filename="../../RenamingRules.cpp" line="73"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - kopieren (%2)</translation>
+        <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="14"/>
@@ -659,13 +659,13 @@
         <location filename="../../ScanFileOrFolder.cpp" line="319"/>
         <location filename="../../ScanFileOrFolder.cpp" line="385"/>
         <source>%1 - copy</source>
-        <translation>%1 - kopieren</translation>
+        <translation>%1 - Kopie</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="329"/>
         <location filename="../../ScanFileOrFolder.cpp" line="395"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - kopieren (%2)</translation>
+        <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="433"/>
@@ -721,12 +721,12 @@
     <message>
         <location filename="../../TransferThread.cpp" line="590"/>
         <source>%1 - copy</source>
-        <translation>%1 - kopieren</translation>
+        <translation>%1 - Kopie</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="600"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - kopieren (%2)</translation>
+        <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="724"/>
@@ -753,7 +753,7 @@
         <location filename="../../TransferThread.cpp" line="689"/>
         <location filename="../../TransferThread.cpp" line="766"/>
         <source>Unable to do the folder</source>
-        <translation>Kann den Ordner nicht machen</translation>
+        <translation>Ordner kann nicht erstellt werden</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="207"/>
@@ -791,12 +791,12 @@
     <message>
         <location filename="../../WriteThread.cpp" line="667"/>
         <source>Unable to read the source file: </source>
-        <translation>Quelldatei kann nicht gelesen werden:</translation>
+        <translation>Quelldatei kann nicht gelesen werden: </translation>
     </message>
     <message>
         <location filename="../../WriteThread.cpp" line="692"/>
         <source>File truncated during read, possible data change</source>
-        <translation>Datei während des Lesevorgangs abgeschnitten, Daten wurden möglicherweise verändert</translation>
+        <translation>Datenabbruch beim Lesen, Daten wurden möglicherweise verändert</translation>
     </message>
 </context>
 <context>
@@ -973,8 +973,12 @@
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="595"/>
+        <source>Use this folder when destination is not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Use this folder when destination is empty</source>
-        <translation>Benutze diesen Ordner wenn Ziel voll ist</translation>
+        <translation type="obsolete">Benutze diesen Ordner wenn Ziel nicht benannt</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="607"/>
@@ -1037,7 +1041,7 @@
     <message>
         <location filename="../../fileErrorDialog.ui" line="200"/>
         <source>Put to bottom</source>
-        <translation>Ans Ende schieben</translation>
+        <translation>Ans Ende verschieben</translation>
     </message>
     <message>
         <location filename="../../fileErrorDialog.ui" line="207"/>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="142"/>
         <source>%1/%2 files, %3/%4</source>
-        <translation>%1/%2 dateien, %3/%4</translation>
+        <translation>%1/%2 Dateien, %3/%4</translation>
     </message>
 </context>
 <context>
@@ -17,13 +17,9 @@
         <translation>Aktion:</translation>
     </message>
     <message>
-        <source>In wait</source>
-        <translation type="obsolete">auf der Lauer</translation>
-    </message>
-    <message>
         <location filename="../../interface.ui" line="44"/>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Warten</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="78"/>
@@ -38,22 +34,22 @@
     <message>
         <location filename="../../interface.ui" line="96"/>
         <source>Move file(s)</source>
-        <translation>Bewegen Sie Datei (en)</translation>
+        <translation>Datei (en) verschieben</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="105"/>
         <source>Move folder</source>
-        <translation>bewegen Sie Ordner</translation>
+        <translation>Ordner verschieben</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="114"/>
         <source>Copy file(s)</source>
-        <translation>Kopieren Sie die Datei (en)</translation>
+        <translation>Datei (en) kopieren</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="123"/>
         <source>Copy folder</source>
-        <translation>kopieren Sie das Verzeichnis</translation>
+        <translation>Ordner kopieren</translation>
     </message>
 </context>
 </TS>

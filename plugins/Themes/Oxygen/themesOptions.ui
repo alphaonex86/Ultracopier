@@ -20,7 +20,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -46,14 +46,11 @@
         <widget class="QCheckBox" name="checkBoxStartWithMoreButtonPushed"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="labelAlwaysOnTop">
          <property name="text">
           <string>Always on top</string>
          </property>
         </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="alwaysOnTop"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label">
@@ -160,6 +157,9 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QCheckBox" name="alwaysOnTop"/>
        </item>
       </layout>
      </widget>

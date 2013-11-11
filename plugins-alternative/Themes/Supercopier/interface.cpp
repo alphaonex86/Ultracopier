@@ -166,9 +166,10 @@ Themes::Themes(const bool &alwaysOnTop,
 
     updateSpeed();
     alwaysOnTop_clicked(false);
-    #ifdef Q_OS_WIN32
+    /*#ifdef Q_OS_WIN32
+    uiOptions->labelAlwaysOnTop->hide();
     uiOptions->alwaysOnTop->hide();
-    #endif
+    #endif*/
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     ui->ad_ultimate->hide();
     #else

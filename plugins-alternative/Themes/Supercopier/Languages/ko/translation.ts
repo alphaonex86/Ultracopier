@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+169"/>
+        <location filename="../../interface.cpp" line="+180"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -50,6 +50,13 @@
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+75"/>
+        <location line="+4"/>
+        <location line="+2"/>
+        <source>%1 %2% of %3</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ThemesFactory</name>
@@ -89,7 +96,7 @@
         <translation type="unfinished">대상:</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+53"/>
         <source>Close at the end of the transfers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,7 +249,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+222"/>
+        <location filename="../../themesOptions.ui" line="+230"/>
         <source>Show dual progression</source>
         <translation type="unfinished"></translation>
     </message>
@@ -252,7 +259,7 @@
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
     <message>
-        <location line="-129"/>
+        <location line="-137"/>
         <source>Use</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,7 +285,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+130"/>
+        <location line="+138"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -291,12 +298,12 @@
         <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
-        <location line="-120"/>
+        <location line="-128"/>
         <source> KB/s</source>
         <translation type="unfinished"> KB/초</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+35"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -321,7 +328,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-161"/>
+        <location line="-169"/>
         <source>Always on top</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,17 +4,17 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="89"/>
+        <location filename="../../interface.cpp" line="96"/>
         <source>Total: %1 of %2</source>
         <translation>Összesen: %1 / %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="90"/>
+        <location filename="../../interface.cpp" line="97"/>
         <source>%1 of %2</source>
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="244"/>
+        <location filename="../../interface.cpp" line="251"/>
         <source>%1% done</source>
         <translation>%1% kész</translation>
     </message>

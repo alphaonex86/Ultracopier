@@ -91,7 +91,6 @@ private:
     QList<CopyEnginePlugin> pluginList;
     OptionDialog *optionDialog;
     bool isConnected;
-    FacilityEngine facilityEngine;
 signals:
     //void newCopyEngineOptions(QString,QString,QWidget *);
     void addCopyEngine(QString name,bool canDoOnlyCopy) const;

@@ -60,7 +60,6 @@ class ThemesManager : public QObject
         };
         QList<PluginsAvailableThemes> pluginList;
         int currentPluginIndex;
-        FacilityEngine facilityEngine;
         bool stopIt;
     signals:
         /// \brief send this signal when the themes have changed

@@ -4,19 +4,19 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="89"/>
+        <location filename="../../interface.cpp" line="96"/>
         <source>Total: %1 of %2</source>
-        <translation type="unfinished">Total: %1 von %2</translation>
+        <translation>Total: %1 von %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="90"/>
+        <location filename="../../interface.cpp" line="97"/>
         <source>%1 of %2</source>
-        <translation type="unfinished">%1 von %2</translation>
+        <translation>%1 von %2</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="244"/>
+        <location filename="../../interface.cpp" line="251"/>
         <source>%1% done</source>
-        <translation type="unfinished">%1% erledigt</translation>
+        <translation>%1% erledigt</translation>
     </message>
 </context>
 <context>
@@ -24,27 +24,27 @@
     <message>
         <location filename="../../interface.ui" line="159"/>
         <source>&amp;More</source>
-        <translation>Mehr</translation>
+        <translation>&amp;Mehr</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="172"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="210"/>
         <source>&amp;Pause</source>
-        <translation></translation>
+        <translation>&amp;Pause</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="232"/>
         <source>&amp;Skip</source>
-        <translation>überspringen</translation>
+        <translation>überspringen (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="251"/>
         <source>&amp;Cancel</source>
-        <translation>Stornieren</translation>
+        <translation>Abbrechen (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="281"/>
@@ -72,22 +72,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../interface.ui" line="326"/>
         <source>Move file(s)</source>
-        <translation>Bewegen Sie Datei (en)</translation>
+        <translation>Datei (en) verschieben</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="335"/>
         <source>Move folder</source>
-        <translation>bewegen Sie Ordner</translation>
+        <translation>Ordner verschieben</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="344"/>
         <source>Copy file(s)</source>
-        <translation>Kopieren Sie die Datei (en)</translation>
+        <translation>Datei (en) kopieren</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="353"/>
         <source>Copy folder</source>
-        <translation>kopieren Sie das Verzeichnis</translation>
+        <translation>Verzeichnis kopieren</translation>
     </message>
 </context>
 </TS>

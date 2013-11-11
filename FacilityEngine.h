@@ -42,6 +42,10 @@ public:
     QString simplifiedRemainingTime(const quint32 &seconds) const;
     /// \brief Return ultimate url, empty is not found or already ultimate
     QString ultimateUrl() const;
+    /// \brief Return the software name
+    QString softwareName() const;
+
+    static FacilityEngine facilityEngine;
 private:
     //undirect translated string
     QString Translation_perSecond;

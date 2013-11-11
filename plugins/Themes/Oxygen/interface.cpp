@@ -223,9 +223,10 @@ Themes::Themes(const bool &alwaysOnTop,
 
     updateSpeed();
     alwaysOnTop_clicked(false);
-    #ifdef Q_OS_WIN32
+    /*#ifdef Q_OS_WIN32
+    uiOptions->labelAlwaysOnTop->hide();
     uiOptions->alwaysOnTop->hide();
-    #endif
+    #endif*/
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     ui->ad_ultimate->hide();
     #else
@@ -1224,25 +1225,25 @@ void Themes::updateTitle()
     if(uiOptions->showProgressionInTheTitle->isChecked() && totalSize>0)
     {
         if(!modeIsForced)
-            this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Transfer")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Supercopier");
+            this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Transfer")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Ultracopier");
         else
         {
             if(mode==Ultracopier::Copy)
-                this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Copy")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Supercopier");
+                this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Copy")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Ultracopier");
             else
-                this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Move")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Supercopier");
+                this->setWindowTitle(tr("%1 %2% of %3").arg(facilityEngine->translateText("Move")).arg((currentSize*100)/totalSize).arg(facilityEngine->sizeToString(totalSize))+" - Ultracopier");
         }
     }
     else
     {
         if(!modeIsForced)
-            this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Transfer"))+" - Supercopier");
+            this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Transfer"))+" - Ultracopier");
         else
         {
             if(mode==Ultracopier::Copy)
-                this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Copy"))+" - Supercopier");
+                this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Copy"))+" - Ultracopier");
             else
-                this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Move"))+" - Supercopier");
+                this->setWindowTitle(QString("%1").arg(facilityEngine->translateText("Move"))+" - Ultracopier");
         }
     }
 }

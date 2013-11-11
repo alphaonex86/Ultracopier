@@ -5,7 +5,6 @@
 \date 2010
 \licence GPL3, see the file COPYING */
 
-#include <QDebug>
 #include <QMessageBox>
 
 #include "CopyEngineManager.h"
@@ -14,7 +13,6 @@
 CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    connect(LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,			&facilityEngine,&FacilityEngine::retranslate,Qt::DirectConnection);
     this->optionDialog=optionDialog;
     //setup the ui layout
     PluginsManager::pluginsManager->lockPluginListEdition();
@@ -112,7 +110,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     connect(newItem.factory,&PluginInterface_CopyEngineFactory::debugInformation,this,&CopyEngineManager::debugInformation,Qt::QueuedConnection);
     #endif // ULTRACOPIER_DEBUG
     newItem.options=new LocalPluginOptions("CopyEngine-"+newItem.name);
-    newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+    newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,&FacilityEngine::facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     newItem.optionsWidget=newItem.factory->options();
     newItem.supportedProtocolsForTheSource=newItem.factory->supportedProtocolsForTheSource();
     newItem.supportedProtocolsForTheDestination=newItem.factory->supportedProtocolsForTheDestination();

@@ -112,30 +112,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="223"/>
-        <location filename="../../../CopyEngineManager.cpp" line="228"/>
-        <location filename="../../../CopyEngineManager.cpp" line="249"/>
-        <location filename="../../../CopyEngineManager.cpp" line="263"/>
+        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="261"/>
         <source>Warning</source>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="223"/>
+        <location filename="../../../CopyEngineManager.cpp" line="221"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>Impossible de trouver un moteur de copie avec le support des déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="228"/>
+        <location filename="../../../CopyEngineManager.cpp" line="226"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Impossible de trouver un moteur de copie compatible!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="249"/>
+        <location filename="../../../CopyEngineManager.cpp" line="247"/>
         <source>This copy engine does not support motions</source>
         <translation>Ce moteur de copie ne supporte pas les déplacements</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="263"/>
+        <location filename="../../../CopyEngineManager.cpp" line="261"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Impossible de trouver un moteur portant ce nom: %1</translation>
     </message>
@@ -227,209 +227,209 @@
 <context>
     <name>FacilityEngine</name>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="40"/>
+        <location filename="../../../FacilityEngine.cpp" line="45"/>
         <source>Copy engine</source>
         <translation>Moteur de copie</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="42"/>
+        <location filename="../../../FacilityEngine.cpp" line="47"/>
         <source>Copy</source>
         <extracomment>a copy</extracomment>
         <translation>Copie</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="46"/>
+        <location filename="../../../FacilityEngine.cpp" line="51"/>
         <source>Move</source>
         <extracomment>a move</extracomment>
         <translation>Déplacer</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="48"/>
+        <location filename="../../../FacilityEngine.cpp" line="53"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="49"/>
+        <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>Resume</source>
         <translation>Reprendre</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="50"/>
-        <location filename="../../../FacilityEngine.cpp" line="64"/>
+        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="51"/>
+        <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>Unlimited</source>
         <translation>Illimité</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="24"/>
+        <location filename="../../../FacilityEngine.cpp" line="29"/>
         <source>s</source>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="25"/>
+        <location filename="../../../FacilityEngine.cpp" line="30"/>
         <source>Too big</source>
         <translation>Trop grand</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="26"/>
+        <location filename="../../../FacilityEngine.cpp" line="31"/>
         <source>B</source>
         <translation>o</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="27"/>
+        <location filename="../../../FacilityEngine.cpp" line="32"/>
         <source>KB</source>
         <translation>Ko</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="28"/>
+        <location filename="../../../FacilityEngine.cpp" line="33"/>
         <source>MB</source>
         <translation>Mo</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="29"/>
+        <location filename="../../../FacilityEngine.cpp" line="34"/>
         <source>GB</source>
         <translation>Go</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="30"/>
+        <location filename="../../../FacilityEngine.cpp" line="35"/>
         <source>TB</source>
         <translation>To</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="31"/>
+        <location filename="../../../FacilityEngine.cpp" line="36"/>
         <source>PB</source>
         <translation>Po</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="32"/>
+        <location filename="../../../FacilityEngine.cpp" line="37"/>
         <source>EB</source>
         <translation>Eo</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="33"/>
+        <location filename="../../../FacilityEngine.cpp" line="38"/>
         <source>ZB</source>
         <translation>Zo</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="34"/>
+        <location filename="../../../FacilityEngine.cpp" line="39"/>
         <source>YB</source>
         <translation>Yo</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="35"/>
+        <location filename="../../../FacilityEngine.cpp" line="40"/>
         <source>Less than %10 seconds</source>
         <translation>Moins de %10 secondes</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="36"/>
+        <location filename="../../../FacilityEngine.cpp" line="41"/>
         <source>About %10 seconds remaining</source>
         <translation>Environ %10 secondes restantes</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="37"/>
+        <location filename="../../../FacilityEngine.cpp" line="42"/>
         <source>About %1 minutes remaining</source>
         <translation>Environ %1 minutes restantes</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="38"/>
+        <location filename="../../../FacilityEngine.cpp" line="43"/>
         <source>About %1 hours remaining</source>
         <translation>Environ %1 heures restantes</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="44"/>
+        <location filename="../../../FacilityEngine.cpp" line="49"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
         <translation>Transfert</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="47"/>
+        <location filename="../../../FacilityEngine.cpp" line="52"/>
         <source>Start</source>
         <translation>Démarrer</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="52"/>
+        <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>Source</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="53"/>
+        <location filename="../../../FacilityEngine.cpp" line="58"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="54"/>
+        <location filename="../../../FacilityEngine.cpp" line="59"/>
         <source>Destination</source>
         <translation>Destination</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="60"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="56"/>
+        <location filename="../../../FacilityEngine.cpp" line="61"/>
         <source>Target</source>
         <translation>Cible</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="57"/>
-        <location filename="../../../FacilityEngine.cpp" line="61"/>
+        <location filename="../../../FacilityEngine.cpp" line="62"/>
+        <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Time remaining:</source>
         <translation>Temps restant:</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="58"/>
+        <location filename="../../../FacilityEngine.cpp" line="63"/>
         <source>Listing</source>
         <translatorcomment>Création de la liste? Listage?</translatorcomment>
         <translation>Listing</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="59"/>
+        <location filename="../../../FacilityEngine.cpp" line="64"/>
         <source>Copying</source>
         <translatorcomment>Copie en cour -&gt; copying in progress</translatorcomment>
         <translation>Copie</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="60"/>
+        <location filename="../../../FacilityEngine.cpp" line="65"/>
         <source>Listing and copying</source>
         <translation>Listing et copie</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="63"/>
+        <location filename="../../../FacilityEngine.cpp" line="68"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="65"/>
+        <location filename="../../../FacilityEngine.cpp" line="70"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="66"/>
+        <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="67"/>
+        <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Overwrite if the last modification dates are different</source>
         <translation>Écraser si les dates de modification sont différentes</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="68"/>
+        <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="69"/>
+        <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Put to the end of the list</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Completed in %1</source>
         <translation>Fini en %1</translation>
     </message>
@@ -438,52 +438,52 @@
         <translation type="obsolete">Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="70"/>
+        <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Select source directory</source>
         <translation>Sélectionner un dossier source</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="71"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
         <source>Select destination directory</source>
         <translation>Sélectionner un dossier de destination</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="72"/>
+        <location filename="../../../FacilityEngine.cpp" line="77"/>
         <source>Internal error</source>
         <translation>Erreur interne</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="73"/>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Select one or more files to open</source>
         <translation>Sélectionner un ou des fichiers à ouvrir</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="74"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="75"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Save transfer list</source>
         <translation>Sauvegarder la liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Open transfer list</source>
         <translation>Ouvrir la liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Transfer list</source>
         <translation>Liste de transfert</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Not supported on this platform</source>
         <translation>Pas supporté sur cette platforme</translation>
     </message>
@@ -594,20 +594,20 @@ Cette version est compilée comme version : %1.</translation>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="75"/>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="94"/>
+        <location filename="../../../LogThread.cpp" line="78"/>
+        <location filename="../../../LogThread.cpp" line="87"/>
+        <location filename="../../../LogThread.cpp" line="97"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="75"/>
+        <location filename="../../../LogThread.cpp" line="78"/>
         <source>Log file already open, error: %1</source>
         <translation>Fichier de log déjà ouvert, erreur: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="94"/>
+        <location filename="../../../LogThread.cpp" line="87"/>
+        <location filename="../../../LogThread.cpp" line="97"/>
         <source>Unable to open the log file, error: %1</source>
         <translation>Impossible d&apos;ouvrir le fichier de log, erreur: %1</translation>
     </message>
@@ -638,29 +638,39 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier (Dolphin, Nautilus, ...).&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="11"/>
+        <location filename="../../../OSSpecific.cpp" line="23"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier (Dolphin, Nautilus, ...).&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="13"/>
+        <location filename="../../../OSSpecific.cpp" line="25"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
         <translation>Redémarrer le système si précédemment vous avez installé un logiciel similaire (comme Teracopy, Supercopier ou une version précédente d&apos;Ultracopier).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="15"/>
+        <location filename="../../../OSSpecific.cpp" line="27"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
         <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté et bloqué par le finder de Mac OS X.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement en cliquant sur l&apos;icone du systray à coté de l&apos;heure (pas l&apos;icone du dock).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="17"/>
+        <location filename="../../../OSSpecific.cpp" line="29"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>Le remplacement du systéme de copie/déplacement n&apos;est pas supporté par le gestionnaire de fichier.&lt;br /&gt;Demander aux developpeurs de le supporter.&lt;br /&gt;Vous devez faire la copie/déplacement manuellement.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="20"/>
+        <location filename="../../../OSSpecific.cpp" line="32"/>
         <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
         <translation>Considérez Supercopier comme obsolète, préférez Ultracopier</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="35"/>
+        <source>This version use 100% of you graphic card/GPU (you computer can be noisy, or slow/buggy during the games) at exchange of free access to Ultimate version. If you don&apos;t wish it, download the normal version with a small advertisement (just a link on the main window) or buy the Ultimate version to fund the project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="36"/>
+        <source>http://ultracopier.first-world.info/download.html</source>
+        <translation type="unfinished">http://ultracopier-fr.first-world.info/telecharger.html</translation>
     </message>
 </context>
 <context>

@@ -15,45 +15,41 @@
     <message>
         <location filename="../../../CliParser.cpp" line="27"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it</source>
-        <translation>Ultracopier wird bereits ausgeführt. Klicken Sie mit der rechten Maustase auf das Icon in der Taskleiste (neben der Uhr), um es zu benutzen</translation>
+        <translation>Ultracopier wird bereits ausgeführt. Klicken Sie mit der rechten Maustase auf das Icon im Infobereich der Taskleiste</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="73"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Lesefehler, oder Dateigröße=0</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="158"/>
         <location filename="../../../CliParser.cpp" line="169"/>
         <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mögliche Werte sind:</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="160"/>
         <location filename="../../../CliParser.cpp" line="171"/>
         <source>To display the options</source>
-        <translation type="unfinished"></translation>
+        <translation>Optionen anzeigen</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="163"/>
         <location filename="../../../CliParser.cpp" line="174"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Kopieren von Quelle nach Ziel, getrennt durch Leerzeichen. Bei Ziel=? fragt Supercopier nach</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="164"/>
         <location filename="../../../CliParser.cpp" line="175"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Verschieben von Quelle nach Ziel, getrennt durch Leerzeichen. Bei Ziel=? fragt Supercopier nach</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="168"/>
         <source>Command not valid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Problem at the reading, or file size is null</source>
-        <translation type="obsolete">Problem beim Lesen, oder die Dateigröße ist Null</translation>
+        <translation>Ungültiger Befehl</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="83"/>
@@ -67,11 +63,6 @@
         <translation>Die Transferlistendatei kann nicht geöffnet werden</translation>
     </message>
     <message>
-        <source>The arguments possibles are:</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation type="obsolete">Mögliche Parameter sind:</translation>
-    </message>
-    <message>
         <location filename="../../../CliParser.cpp" line="159"/>
         <location filename="../../../CliParser.cpp" line="170"/>
         <source>To display this help</source>
@@ -81,31 +72,13 @@
         <location filename="../../../CliParser.cpp" line="161"/>
         <location filename="../../../CliParser.cpp" line="172"/>
         <source>To quit the other instances (if running)</source>
-        <translation type="unfinished"></translation>
+        <translation>Um andere Instanzen zu beenden (falls laufend)</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="162"/>
         <location filename="../../../CliParser.cpp" line="173"/>
         <source>Open transfer list</source>
         <translation>Transferliste öffnen</translation>
-    </message>
-    <message>
-        <source>To quit the other instance running (if have)</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation type="obsolete">Andere laufende Instanzen beenden (falls vorhanden)</translation>
-    </message>
-    <message>
-        <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask it to the user</source>
-        <translation type="obsolete">Zu kopierende Quelldateien (mit Abstand getrennt anzugeben). Falls als Ziel &quot;?&quot; angegeben wird, fragt Ultracopier den Benutzer</translation>
-    </message>
-    <message>
-        <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask it to the user</source>
-        <translation type="obsolete">Zu verschiebende Quelldateien (mit Abstand getrennt anzugeben). Falls als Ziel &quot;?&quot; angegeben wird, fragt Ultracopier den Benutzer</translation>
-    </message>
-    <message>
-        <source>Command line not understand</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation type="obsolete">Kommandozeile nicht verstanden</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="180"/>
@@ -116,34 +89,33 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="223"/>
-        <location filename="../../../CopyEngineManager.cpp" line="228"/>
-        <location filename="../../../CopyEngineManager.cpp" line="249"/>
-        <location filename="../../../CopyEngineManager.cpp" line="263"/>
+        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="261"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="223"/>
+        <location filename="../../../CopyEngineManager.cpp" line="221"/>
         <source>Cannot find any copy engine with motions support</source>
         <translatorcomment>Motions? Do you mean &quot;move&quot;?</translatorcomment>
         <translation>Finde keine Kopier-Engine mit Motions-Unterstützung</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="228"/>
+        <location filename="../../../CopyEngineManager.cpp" line="226"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Finde keine kompatible Engine!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="249"/>
+        <location filename="../../../CopyEngineManager.cpp" line="247"/>
         <source>This copy engine does not support motions</source>
-        <translatorcomment>Motions? Do you mean &quot;move&quot;?</translatorcomment>
         <translation>Diese Kopier-Engine unterstützt keine Motions</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="263"/>
+        <location filename="../../../CopyEngineManager.cpp" line="261"/>
         <source>Cannot find any engine with this name: %1</source>
-        <translation>Kann keinen Motor mit diesem Namen: %1</translation>
+        <translation>Finde keine Engine mit diesem Namen: %1</translation>
     </message>
 </context>
 <context>
@@ -193,28 +165,23 @@
     <message>
         <location filename="../../../Core.cpp" line="117"/>
         <source>Unable to get a engine instance</source>
-        <translation>Engine Instanz konnte nicht bekommen werden</translation>
+        <translation>Bekomme keine Instanz der Engine</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="217"/>
         <source>The argument for the mode is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Parameter sind in diesem Modus ungültig</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="896"/>
+        <location filename="../../../Core.cpp" line="916"/>
         <source>Do you want to copy? If no, it will be moved.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The argument for the mode is not understand</source>
-        <translatorcomment>Fix english.</translatorcomment>
-        <translation type="obsolete">Der Parameter wird in diesem Modus nicht verstanden</translation>
+        <translation>Möchten Sie kopieren? Wenn nicht, wird verschoben.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="251"/>
         <location filename="../../../Core.cpp" line="366"/>
         <source>Unable to load the interface, copy aborted</source>
-        <translation>Konnte Schnittstelle nicht laden. Kopiervorgang abgebrochen</translation>
+        <translation>Konnte Oberfläche nicht laden. Kopiervorgang abgebrochen</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="371"/>
@@ -222,7 +189,7 @@
         <translation>Konnte Kopier-Engine nicht laden. Kopiervorgang abgebrochen</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="896"/>
+        <location filename="../../../Core.cpp" line="916"/>
         <source>Transfer mode</source>
         <translation>Transfermodus</translation>
     </message>
@@ -230,273 +197,269 @@
 <context>
     <name>FacilityEngine</name>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="40"/>
+        <location filename="../../../FacilityEngine.cpp" line="45"/>
         <source>Copy engine</source>
         <translation>Kopier-Engine</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="42"/>
+        <location filename="../../../FacilityEngine.cpp" line="47"/>
         <source>Copy</source>
         <extracomment>a copy</extracomment>
-        <translation>Kopie</translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="46"/>
+        <location filename="../../../FacilityEngine.cpp" line="51"/>
         <source>Move</source>
         <extracomment>a move</extracomment>
         <translation>Verschieben</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="48"/>
+        <location filename="../../../FacilityEngine.cpp" line="53"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="49"/>
+        <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="50"/>
-        <location filename="../../../FacilityEngine.cpp" line="64"/>
+        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="51"/>
+        <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>Unlimited</source>
         <translation>Unbegrenzt</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="24"/>
+        <location filename="../../../FacilityEngine.cpp" line="29"/>
         <source>s</source>
         <translatorcomment>seconds?</translatorcomment>
-        <translation></translation>
+        <translation>s</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="25"/>
+        <location filename="../../../FacilityEngine.cpp" line="30"/>
         <source>Too big</source>
         <translation>Zu groß</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="26"/>
+        <location filename="../../../FacilityEngine.cpp" line="31"/>
         <source>B</source>
         <translatorcomment>Byte?</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../FacilityEngine.cpp" line="27"/>
-        <source>KB</source>
-        <translatorcomment>Kilobyte</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../FacilityEngine.cpp" line="28"/>
-        <source>MB</source>
-        <translatorcomment>Megabyte</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../FacilityEngine.cpp" line="29"/>
-        <source>GB</source>
-        <translatorcomment>Gigabyte</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../FacilityEngine.cpp" line="30"/>
-        <source>TB</source>
-        <translatorcomment>Terrabyte</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../FacilityEngine.cpp" line="31"/>
-        <source>PB</source>
-        <translatorcomment>Petabyte</translatorcomment>
-        <translation></translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="32"/>
-        <source>EB</source>
-        <translatorcomment>Etabyte</translatorcomment>
-        <translation></translation>
+        <source>KB</source>
+        <translatorcomment>Kilobyte</translatorcomment>
+        <translation>KB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="33"/>
-        <source>ZB</source>
-        <translatorcomment>Zetabyte</translatorcomment>
-        <translation></translation>
+        <source>MB</source>
+        <translatorcomment>Megabyte</translatorcomment>
+        <translation>MB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="34"/>
-        <source>YB</source>
-        <translatorcomment>Yotabyte</translatorcomment>
-        <translation></translation>
+        <source>GB</source>
+        <translatorcomment>Gigabyte</translatorcomment>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="35"/>
+        <source>TB</source>
+        <translatorcomment>Terrabyte</translatorcomment>
+        <translation>TB</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="36"/>
+        <source>PB</source>
+        <translatorcomment>Petabyte</translatorcomment>
+        <translation>PB</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="37"/>
+        <source>EB</source>
+        <translatorcomment>Etabyte</translatorcomment>
+        <translation>EB</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="38"/>
+        <source>ZB</source>
+        <translatorcomment>Zetabyte</translatorcomment>
+        <translation>ZB</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="39"/>
+        <source>YB</source>
+        <translatorcomment>Yotabyte</translatorcomment>
+        <translation>YB</translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="40"/>
         <source>Less than %10 seconds</source>
         <translation>Weniger als %10 Sekunden</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="36"/>
+        <location filename="../../../FacilityEngine.cpp" line="41"/>
         <source>About %10 seconds remaining</source>
         <translation>Ungefähr noch %10 Sekunden</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="37"/>
+        <location filename="../../../FacilityEngine.cpp" line="42"/>
         <source>About %1 minutes remaining</source>
         <translation>Ungefähr noch %1 Minuten</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="38"/>
+        <location filename="../../../FacilityEngine.cpp" line="43"/>
         <source>About %1 hours remaining</source>
         <translation>Ungefähr noch %1 Stunden</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="44"/>
+        <location filename="../../../FacilityEngine.cpp" line="49"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
         <translatorcomment>evtl. &quot;Datenübertragung&quot;, aber ich denke &quot;Transfer&quot; ist hier besser</translatorcomment>
         <translation>Transfer</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="47"/>
+        <location filename="../../../FacilityEngine.cpp" line="52"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="52"/>
+        <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>Source</source>
         <translation>Quelle</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="53"/>
+        <location filename="../../../FacilityEngine.cpp" line="58"/>
         <source>Size</source>
         <translation>Größe</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="54"/>
+        <location filename="../../../FacilityEngine.cpp" line="59"/>
         <source>Destination</source>
         <translation>Ziel</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="60"/>
         <source>Quit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="56"/>
+        <location filename="../../../FacilityEngine.cpp" line="61"/>
         <source>Target</source>
         <translation>Ziel</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="57"/>
-        <location filename="../../../FacilityEngine.cpp" line="61"/>
+        <location filename="../../../FacilityEngine.cpp" line="62"/>
+        <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Time remaining:</source>
         <translation>Verbleibende Zeit:</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="58"/>
+        <location filename="../../../FacilityEngine.cpp" line="63"/>
         <source>Listing</source>
         <translation>Auflistung</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="59"/>
+        <location filename="../../../FacilityEngine.cpp" line="64"/>
         <source>Copying</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="60"/>
+        <location filename="../../../FacilityEngine.cpp" line="65"/>
         <source>Listing and copying</source>
         <translatorcomment>not sure... depends on context</translatorcomment>
         <translation>Auflistung und Kopiervorgang</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="63"/>
+        <location filename="../../../FacilityEngine.cpp" line="68"/>
         <source>Ask</source>
         <translation>Fragen</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="65"/>
+        <location filename="../../../FacilityEngine.cpp" line="70"/>
         <source>Overwrite</source>
         <translation>Überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="66"/>
+        <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Overwrite if newer</source>
         <translation>Überschreiben, falls neuer</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="67"/>
+        <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Overwrite if the last modification dates are different</source>
-        <translation>Überschreiben, wenn die letzten Änderungsdaten unterschiedlich sind</translation>
+        <translation>Überschreiben, falls die letzten Änderungsdaten unterschiedlich sind</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="68"/>
+        <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="69"/>
+        <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Put to the end of the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ans Ende der Liste verschieben</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Completed in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fertig in %1</translation>
     </message>
     <message>
-        <source>Put to end of the list</source>
-        <translation type="obsolete">An&apos;s Ende der Liste setzen</translation>
-    </message>
-    <message>
-        <location filename="../../../FacilityEngine.cpp" line="70"/>
+        <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Select source directory</source>
         <translation>Wählen Sie das Quellverzeichnis</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="71"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
         <source>Select destination directory</source>
         <translation>Wählen Sie das Zielverzeichnis</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="72"/>
+        <location filename="../../../FacilityEngine.cpp" line="77"/>
         <source>Internal error</source>
         <translation>Interner Fehler</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="73"/>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Select one or more files to open</source>
         <translation>Wählen Sie eine oder mehrere Dateien zum Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="74"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>All files</source>
         <translation>Alle Dateien</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="75"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Save transfer list</source>
         <translation>Transferliste speichern</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Open transfer list</source>
         <translation>Transferliste öffnen</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Transfer list</source>
         <translation>Transferliste</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Not supported on this platform</source>
         <translation>Auf dieser Plattform nicht unterstützt</translation>
     </message>
@@ -513,7 +476,7 @@
         <source>Based on Qt. Advanced utility to copy files under GPL3 license.
 This version is compiled as version: %1.</source>
         <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
-        <translation>Basiert auf Qt. Erweitertes Tool um Files zu kopieren (Lizenz: GPLv3).
+        <translation>Basiert auf Qt. Erweitertes Tool um Dateien zu kopieren (Lizenz: GPLv3).
 Diese Version wurde kompiliert als Version: %1.</translation>
     </message>
     <message>
@@ -536,7 +499,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../HelpDialog.ui" line="148"/>
         <source>Save bug report</source>
-        <translation>Bug-Report speichern</translation>
+        <translation>Fehlerbericht speichern</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="155"/>
@@ -546,12 +509,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="37"/>
         <source>About Supercopier</source>
-        <translation type="unfinished"></translation>
+        <translation>Über Supercopier</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="82"/>
         <source>For http://portableapps.com/</source>
-        <translation>Für http://portableapps.com/</translation>
+        <translation>Zu http://portableapps.com/</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="85"/>
@@ -576,8 +539,14 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="112"/>
         <location filename="../../../HelpDialog.cpp" line="114"/>
+        <location filename="../../../HelpDialog.cpp" line="122"/>
         <source>http://ultracopier.first-world.info/</source>
         <translation>http://ultracopier-de.first-world.info/</translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="125"/>
+        <source>http://ultracopier.first-world.info/download.html</source>
+        <translation>http://ultracopier.first-world.info/download.html</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="75"/>
@@ -602,26 +571,22 @@ Diese Version wurde kompiliert als Version: %1.</translation>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="75"/>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="94"/>
+        <location filename="../../../LogThread.cpp" line="78"/>
+        <location filename="../../../LogThread.cpp" line="87"/>
+        <location filename="../../../LogThread.cpp" line="97"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="75"/>
+        <location filename="../../../LogThread.cpp" line="78"/>
         <source>Log file already open, error: %1</source>
         <translation>Log-Datei ist bereits geöffnet, Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="94"/>
+        <location filename="../../../LogThread.cpp" line="87"/>
+        <location filename="../../../LogThread.cpp" line="97"/>
         <source>Unable to open the log file, error: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to open file to keep the log file, error: %1</source>
-        <translation type="obsolete">Datei konnte nicht geöffnet werden um die Protokolldatei zu behalten, Fehler: %1</translation>
+        <translation>Kann Log-Datei nicht öffnen. Fehler: %1</translation>
     </message>
 </context>
 <context>
@@ -639,31 +604,42 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OSSpecific.ui" line="59"/>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation>OK</translation>
     </message>
     <message>
-        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="obsolete">Das Ersetzen des Standard Kopier/Verschieben-Systems wird von diesem File-Manager nicht unterstützt (Dolphin, Nautilus, ...).&lt;br /&gt;Bitten Sie die Entwickler darum es zu supporten. &lt;br /&gt;Sie müssen das Kopieren/Verschieben daher händisch durchführen.</translation>
-    </message>
-    <message>
-        <location filename="../../../OSSpecific.cpp" line="10"/>
+        <location filename="../../../OSSpecific.cpp" line="23"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Ersetzen des Standard Kopier/Verschieben-Systems wird von diesem Datei-Manager nicht unterstützt.&lt;br /&gt;Bitten Sie die Entwickler darum es zu supporten. &lt;br /&gt;Sie müssen das Kopieren/Verschieben daher manuell durchführen.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="12"/>
+        <location filename="../../../OSSpecific.cpp" line="25"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
-        <translation type="unfinished"></translation>
+        <translation>System neustarten, Falls vorher ähnliche Software instaliert war (wie Teracopy, Supercopier oder ältere Version von Ultracopier).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="14"/>
+        <location filename="../../../OSSpecific.cpp" line="27"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
-        <translation>Das Ersetzen des Standard Kopier/Verschieben-Systems wird vom Mac OS X Finder nicht unterstützt und somit verhindert.&lt;br /&gt;Sie müssen das Kopieren/Verschieben daher händisch durchführen.</translation>
+        <translation>Das Ersetzen des Standard Kopier/Verschieben-Systems wird vom Mac OS X Finder nicht unterstützt und somit verhindert.&lt;br /&gt;Sie müssen das Kopieren/Verschieben daher manuell durchführen.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="16"/>
+        <location filename="../../../OSSpecific.cpp" line="29"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation>Das Ersetzen des Standard Kopier/Verschieben-Systems wird von diesem File-Manager nicht unterstützt.&lt;br /&gt;Bitten Sie die Entwickler darum es zu supporten. &lt;br /&gt;Sie müssen das Kopieren/Verschieben daher händisch durchführen.</translation>
+        <translation>Das Ersetzen des Standard Kopier/Verschieben-Systems wird von diesem File-Manager nicht unterstützt.&lt;br /&gt;Bitten Sie die Entwickler darum es zu supporten. &lt;br /&gt;Sie müssen das Kopieren/Verschieben daher manuell durchführen.</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="32"/>
+        <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
+        <translation>Supercopier als veraltet betrachten, Ultracopier vorziehen</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="35"/>
+        <source>This version use 100% of you graphic card/GPU (you computer can be noisy, or slow/buggy during the games) at exchange of free access to Ultimate version. If you don&apos;t wish it, download the normal version with a small advertisement (just a link on the main window) or buy the Ultimate version to fund the project.</source>
+        <translation>Diese Version nutzt die GPU Ihrer Grafikkarte zu 100% (Kann beim Spielen stören) aber kostenloser Zugang zur Ultimate-Version. Alternativ downloaden Sie die Normal-Version (mit Werbe-Link), oder kaufen Sie die Ultimate-Version, um das Projekt zu unterstützen.</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="36"/>
+        <source>http://ultracopier.first-world.info/download.html</source>
+        <translation>http://ultracopier.first-world.info/download.html</translation>
     </message>
 </context>
 <context>
@@ -687,7 +663,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
         <location filename="../../../OptionDialog.ui" line="301"/>
-        <location filename="../../../OptionDialog.cpp" line="314"/>
+        <location filename="../../../OptionDialog.cpp" line="341"/>
         <source>Copy engine</source>
         <translation>Kopier-Engine</translation>
     </message>
@@ -703,23 +679,14 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Log</translation>
     </message>
     <message>
-        <source>Load at the session loading:</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation type="obsolete">Im Zuge der Session laden:</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="222"/>
         <source>Confirm to group the windows</source>
         <translation>Gruppieren der Fenster bestätigen</translation>
     </message>
     <message>
-        <source>Display the OS warning:</source>
-        <translation type="obsolete">OS Warnung anzeigen:</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="245"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="291"/>
@@ -739,62 +706,58 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
         <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="315"/>
+        <location filename="../../../OptionDialog.cpp" line="342"/>
         <source>Listener</source>
         <translation>Listener</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
         <location filename="../../../OptionDialog.ui" line="319"/>
-        <location filename="../../../OptionDialog.cpp" line="316"/>
+        <location filename="../../../OptionDialog.cpp" line="343"/>
         <source>Plugin loader</source>
         <translation>Plugin loader</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
         <location filename="../../../OptionDialog.ui" line="324"/>
-        <location filename="../../../OptionDialog.cpp" line="317"/>
+        <location filename="../../../OptionDialog.cpp" line="344"/>
         <source>Session loader</source>
         <translation>Session loader</translation>
     </message>
     <message>
-        <source>Check the update</source>
-        <translation type="obsolete">Update überprüfen</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="117"/>
         <source>Force the language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache wählen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="127"/>
         <source>Replace the default copy and move system</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard Kopier- und Verschiebebefehl ersetzen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="141"/>
         <source>Load at the session loading</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit OS laden</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="155"/>
         <source>When manual open</source>
-        <translation type="unfinished"></translation>
+        <translation>Bei manuellem Start</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="181"/>
         <source>Group the windows when</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenster gruppieren</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="229"/>
         <source>Display the OS warning</source>
-        <translation type="unfinished"></translation>
+        <translation>OS Warnungen anzeigen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="255"/>
         <source>Give GPU time to fund the development</source>
-        <translation type="unfinished"></translation>
+        <translation>Der GPU Zeit geben, um die Entwicklung zu finanzieren</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="337"/>
@@ -839,11 +802,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="695"/>
         <source>Browse</source>
-        <translation>Browse</translation>
-    </message>
-    <message>
-        <source>Write directly the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="obsolete">File direkt schreiben, sobald neuer Eintrag empfangen wird (kann zu 50% Performanceverlust führen)</translation>
+        <translation>Durchsuchen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="727"/>
@@ -863,152 +822,115 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Log in folgende Datei schreiben:</translation>
     </message>
     <message>
-        <source>Force the language:</source>
-        <translation type="obsolete">Sprache festlegen:</translation>
-    </message>
-    <message>
-        <source>Replace the default copy and move system:</source>
-        <translation type="obsolete">Standard System für Kopieren/Verschieben ersetzen:</translation>
-    </message>
-    <message>
         <location filename="../../../OptionDialog.ui" line="707"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibe direkt in die Datei, wenn ein neuer Eintrag erreicht wird (50% Leistungsverlust möglich)</translation>
     </message>
     <message>
-        <source>Write the transfers:</source>
-        <translation type="obsolete">Transfers schreiben:</translation>
-    </message>
-    <message>
-        <source>Write the errors:</source>
-        <translation type="obsolete">Fehler schreiben:</translation>
-    </message>
-    <message>
-        <source>Write the folder operations:</source>
-        <translation type="obsolete">Ordner-Operationen schreiben:</translation>
-    </message>
-    <message>
-        <location filename="../../../OptionDialog.cpp" line="220"/>
-        <location filename="../../../OptionDialog.cpp" line="234"/>
+        <location filename="../../../OptionDialog.cpp" line="247"/>
+        <location filename="../../../OptionDialog.cpp" line="261"/>
         <source>Load</source>
         <translation>Laden</translation>
     </message>
     <message>
-        <source>Load the themes?</source>
-        <translation type="obsolete">Themes laden?</translation>
-    </message>
-    <message>
-        <location filename="../../../OptionDialog.cpp" line="220"/>
+        <location filename="../../../OptionDialog.cpp" line="247"/>
         <source>Load the theme?</source>
-        <translation type="unfinished"></translation>
+        <translation>Theme laden?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="234"/>
+        <location filename="../../../OptionDialog.cpp" line="261"/>
         <source>Load the language?</source>
         <translation>Sprache laden?</translation>
     </message>
     <message>
-        <source>Disabled because you have any SessionLoader plugin</source>
-        <translatorcomment>fix english?</translatorcomment>
-        <translation type="obsolete">Deaktiviert, weil Sie irgendein SessionLoader-Plugin haben</translation>
-    </message>
-    <message>
-        <location filename="../../../OptionDialog.cpp" line="318"/>
-        <location filename="../../../OptionDialog.cpp" line="320"/>
-        <location filename="../../../OptionDialog.cpp" line="505"/>
-        <location filename="../../../OptionDialog.cpp" line="506"/>
+        <location filename="../../../OptionDialog.cpp" line="345"/>
+        <location filename="../../../OptionDialog.cpp" line="347"/>
+        <location filename="../../../OptionDialog.cpp" line="708"/>
+        <location filename="../../../OptionDialog.cpp" line="709"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert, da kein SessionLoader-Plugin installiert ist</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="322"/>
+        <location filename="../../../OptionDialog.cpp" line="349"/>
         <source>Do nothing</source>
         <translation>Nichts tun</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="323"/>
+        <location filename="../../../OptionDialog.cpp" line="350"/>
         <source>Ask source as folder</source>
-        <translation>Quelle-Ordner nachfragen</translation>
+        <translation>Nach Quell-Ordner fragen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="324"/>
+        <location filename="../../../OptionDialog.cpp" line="351"/>
         <source>Ask sources as files</source>
-        <translation>Quell-Dateien nachfragen</translation>
+        <translation>Nach Quell-Datei fragen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="325"/>
+        <location filename="../../../OptionDialog.cpp" line="352"/>
         <source>Never</source>
         <translation>Nie</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="326"/>
+        <location filename="../../../OptionDialog.cpp" line="353"/>
         <source>When source is same</source>
         <translation>Falls Quelle gleich ist</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="327"/>
+        <location filename="../../../OptionDialog.cpp" line="354"/>
         <source>When destination is same</source>
         <translation>Falls Ziel gleich ist</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="328"/>
+        <location filename="../../../OptionDialog.cpp" line="355"/>
         <source>When source and destination are same</source>
         <translation>Falls Quelle und Ziel gleich sind</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="329"/>
+        <location filename="../../../OptionDialog.cpp" line="356"/>
         <source>When source or destination are same</source>
         <translation>Falls Quelle oder Ziel gleich sind</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="330"/>
+        <location filename="../../../OptionDialog.cpp" line="357"/>
         <source>Always</source>
         <translation>Immer</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="344"/>
-        <location filename="../../../OptionDialog.cpp" line="345"/>
-        <location filename="../../../OptionDialog.cpp" line="346"/>
+        <location filename="../../../OptionDialog.cpp" line="371"/>
+        <location filename="../../../OptionDialog.cpp" line="372"/>
+        <location filename="../../../OptionDialog.cpp" line="373"/>
         <source>The variables are %1</source>
         <translation>Die Variablen sind %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <location filename="../../../OptionDialog.cpp" line="465"/>
         <source>Allow the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Anwendung zulassen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <location filename="../../../OptionDialog.cpp" line="465"/>
         <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Ultimate-Gratis-Version läuft nur, wenn %1 von Ihrer Antivirus-Software erlaubt ist. Sonst benutzen Sie die Normalversion.</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <location filename="../../../OptionDialog.cpp" line="470"/>
         <source>Enable the OpenCL</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenCL einschalten</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <location filename="../../../OptionDialog.cpp" line="470"/>
         <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Ultimate-Gratis-Version läuft nur, wenn mit Ihrem Grafik-Treiber OpenCL installiert wurde. Sonst benutzen Sie die Normalversion.</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1052"/>
+        <location filename="../../../OptionDialog.cpp" line="1365"/>
         <source>Save logs as: </source>
         <translation>Protokolle speichern als: </translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="710"/>
         <source>Synchronized log</source>
-        <translation>Synchronisiertes Log</translation>
-    </message>
-    <message>
-        <source>When manual open:</source>
-        <translation type="obsolete">Beim manuellen Öffnen:</translation>
-    </message>
-    <message>
-        <source>Group the windows when:</source>
-        <translation type="obsolete">Gruppiere Fenster:</translation>
+        <translation>Synchronisiertes Protokoll</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="645"/>
@@ -1018,23 +940,23 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="720"/>
         <source>Write the transfers</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokolliere Transfers:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="750"/>
         <source>Write the errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokolliere Fehler:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="780"/>
         <source>Write the folder operations</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokolliere Ordner-Operationen:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="790"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
-        <translation>Die Variablen sind %path%, %operation%</translation>
+        <translation>Die Variablen sind %path% %operation%</translation>
     </message>
 </context>
 <context>
@@ -1045,7 +967,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <location filename="../../../OptionEngine.cpp" line="197"/>
         <location filename="../../../OptionEngine.cpp" line="201"/>
         <source>The variable was not found: %1 %2</source>
-        <translation>Variable nicht gefunden: %1 %2</translation>
+        <translation>Variablen nicht gefunden: %1 %2</translation>
     </message>
 </context>
 <context>
@@ -1139,11 +1061,6 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Auf &quot;informations.xml&quot; kann nicht zugegriffen werden</translation>
     </message>
     <message>
-        <source>informations.xml not found into the plugin</source>
-        <translatorcomment>fix english</translatorcomment>
-        <translation type="obsolete">&quot;informations.xml&quot; wurde im Plugin nicht gefunden</translation>
-    </message>
-    <message>
         <location filename="../../../PluginsManager.cpp" line="489"/>
         <source>Dependencies part is wrong</source>
         <translatorcomment>clumsy.</translatorcomment>
@@ -1157,7 +1074,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../PluginsManager.cpp" line="667"/>
         <source>Remove %1</source>
-        <translation>Entfernen %1</translation>
+        <translation>Entferne %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="678"/>
@@ -1177,7 +1094,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../PluginsManager.cpp" line="229"/>
         <source>informations.xml not found for the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;informations.xml&quot; für das Plugin nicht gefunden</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="263"/>
@@ -1190,13 +1107,9 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Plugin-Duplikat gefunden. Bereits geladen!</translation>
     </message>
     <message>
-        <source>English text missing into the informations.xml for the tag: %1</source>
-        <translation type="obsolete">Englischer Text fehlt in &quot;informations.xml&quot; für XML-Tag: %1</translation>
-    </message>
-    <message>
         <location filename="../../../PluginsManager.cpp" line="397"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Englischer Text fehlt in &quot;informations.xml&quot; für das Tag: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="405"/>
@@ -1260,8 +1173,8 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <location filename="../../../PluginsManager.cpp" line="811"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
-        <translation>Kann folgenden Ordner nicht erstellen um das Plugin zu installieren:
-%1</translation>
+        <translation>Kann keinen Ordner erstellen um das Plugin %1 zu installieren
+</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="824"/>
@@ -1337,7 +1250,7 @@ seit: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="156"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation>Keine Kopie-Listener gefunden. Führen Sie die Kopie manuell durch Rechtsklick auf ein Symbol in der Taskleiste aus.</translation>
+        <translation>Keine Kopie-Listener gefunden. Führen Sie die Kopie manuell durch Rechtsklick auf das Symbol im Systray aus.</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="162"/>
@@ -1347,26 +1260,22 @@ seit: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="180"/>
         <source>Searching information...</source>
-        <translation>Suchen Sie Informationen ...</translation>
-    </message>
-    <message>
-        <source>Not replace the explorer copy/move</source>
-        <translation type="obsolete">Dateiexplorer Kopieren/Verschieben nicht ersetzen</translation>
+        <translation>Suche Informationen ...</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="193"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation>Explorer:-Kopieren/Verschieben nicht ersetzen</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="198"/>
         <source>Semi replace the explorer copy/move</source>
-        <translation>Dateiexplorer Kopieren/Verschieben teilweise ersetzen</translation>
+        <translation>Explorer: Kopieren/Verschieben teilweise ersetzen</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="203"/>
         <source>Replace the explorer copy/move</source>
-        <translation>Dateiexplorer Kopieren/Verschieben ersetzen</translation>
+        <translation>Explorer:-Kopieren/Verschieben ersetzen</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
@@ -1381,22 +1290,22 @@ seit: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="419"/>
         <source>&amp;About/Debug report</source>
-        <translation>Über/Debug Bericht (&amp;A)</translation>
+        <translation>&amp;Über/Debug Bericht</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="421"/>
         <source>&amp;About</source>
-        <translation>Über (&amp;A)</translation>
+        <translation>&amp;Über</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="424"/>
         <source>&amp;Save bug report</source>
-        <translation type="unfinished"></translation>
+        <translation>Bug-Bericht &amp;speichern</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="426"/>
         <source>&amp;Quit</source>
-        <translation>Beenden (&amp;Q)</translation>
+        <translation>&amp;Beenden</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="427"/>
@@ -1406,41 +1315,52 @@ seit: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>A&amp;dd copy/moving</source>
-        <translation>Kopie/Verschieben hinzufügen (&amp;D)</translation>
+        <translation>&amp;Kopieren/Verschieben hinzufügen</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="466"/>
-        <source>New version: %1
-Site: %2</source>
-        <translation type="unfinished"></translation>
+        <source>New version: %1</source>
+        <translation>Neue Version: %1</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="483"/>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../../SystrayIcon.cpp" line="468"/>
+        <source>Click here to go on download page</source>
+        <translation>Hier klicken für Downloadseite</translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="470"/>
+        <source>Click here to go to the shop and login.
+Download the new version into the order details</source>
+        <translation>Hier klicken für Shop und Login.
+Download der neuen Version unter: Order Details</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="489"/>
+        <source>&amp;Copy</source>
+        <translation>&amp;Kopieren</translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="495"/>
         <source>&amp;Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Transfer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="493"/>
+        <location filename="../../../SystrayIcon.cpp" line="499"/>
         <source>&amp;Move</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verschieben</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="505"/>
+        <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
         <translation>Kopie hinzufügen (&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="511"/>
+        <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
         <translation>Über&amp;tragung hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="515"/>
+        <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
         <translation>Verschieben hinzufügen (&amp;M)</translation>
     </message>

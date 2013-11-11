@@ -53,7 +53,6 @@ ThemesManager::ThemesManager()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Default style: "+defaultStylePath);
     currentStylePath=defaultStylePath;
     connect(OptionEngine::optionEngine,            &OptionEngine::newOptionValue,	this,		&ThemesManager::newOptionValue,Qt::QueuedConnection);
-    connect(LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,		&facilityEngine,&FacilityEngine::retranslate,Qt::QueuedConnection);
 }
 
 /// \brief Destroy the themes manager
@@ -138,7 +137,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     newPlugin.factory=factory;
 
     newPlugin.options=new LocalPluginOptions("Themes-"+newPlugin.plugin.name);
-    newPlugin.factory->setResources(newPlugin.options,newPlugin.plugin.writablePath,newPlugin.plugin.path,&facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+    newPlugin.factory->setResources(newPlugin.options,newPlugin.plugin.writablePath,newPlugin.plugin.path,&FacilityEngine::facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     currentStylePath=newPlugin.plugin.path;
     pluginList << newPlugin;
     if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())

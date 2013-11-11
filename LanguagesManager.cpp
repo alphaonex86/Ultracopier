@@ -9,6 +9,7 @@
 #include <QLibraryInfo>
 
 #include "LanguagesManager.h"
+#include "FacilityEngine.h"
 
 /// \brief Create the manager and load the defaults variables
 LanguagesManager::LanguagesManager()
@@ -175,6 +176,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
                 }
             }
             currentLanguage=newLanguage;
+            FacilityEngine::facilityEngine.retranslate();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newLanguageLoaded()");
             emit newLanguageLoaded(currentLanguage);
             return;

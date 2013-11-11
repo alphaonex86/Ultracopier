@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+226"/>
+        <location filename="../../interface.cpp" line="+237"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
@@ -273,7 +273,7 @@
         <translation>Déplier automatiquement les détails</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+17"/>
         <source>Minimize on close to systray</source>
         <translation>Minimiser à la fermeture dans le systray</translation>
     </message>
@@ -289,7 +289,7 @@
         <translation>Limiter la vitesse de copie à</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+141"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
     </message>
@@ -306,12 +306,12 @@
         <translation type="obsolete">Limiter la vitesse de copie à:</translation>
     </message>
     <message>
-        <location line="-128"/>
+        <location line="-131"/>
         <source> KB/s</source>
         <translation> Ko/s</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+38"/>
         <source>Informations</source>
         <translation>Informations</translation>
     </message>

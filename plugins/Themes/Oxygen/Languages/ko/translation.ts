@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+226"/>
+        <location filename="../../interface.cpp" line="+237"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -50,6 +50,13 @@
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+75"/>
+        <location line="+4"/>
+        <location line="+2"/>
+        <source>%1 %2% of %3</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ThemesFactory</name>
@@ -89,7 +96,7 @@
         <translation type="unfinished">대상:</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="+161"/>
         <source>&amp;More</source>
         <translation type="unfinished">&amp;자세히</translation>
     </message>
@@ -262,7 +269,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+17"/>
         <source>Minimize on close to systray</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,7 +285,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+141"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -291,12 +298,12 @@
         <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
-        <location line="-128"/>
+        <location line="-131"/>
         <source> KB/s</source>
         <translation type="unfinished"> KB/초</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+38"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+89"/>
+        <location filename="../../interface.cpp" line="+96"/>
         <source>Total: %1 of %2</source>
         <translation type="unfinished">전체: %3 / %2 {1 ?}</translation>
     </message>

@@ -88,30 +88,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="223"/>
-        <location filename="../../../CopyEngineManager.cpp" line="228"/>
-        <location filename="../../../CopyEngineManager.cpp" line="249"/>
-        <location filename="../../../CopyEngineManager.cpp" line="263"/>
+        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="261"/>
         <source>Warning</source>
         <translation>Figyelmzetetés</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="223"/>
+        <location filename="../../../CopyEngineManager.cpp" line="221"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>Nem található másolási motor mozgatási támogatással</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="228"/>
+        <location filename="../../../CopyEngineManager.cpp" line="226"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Nem található semmilyen kompatibilis motor!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="249"/>
+        <location filename="../../../CopyEngineManager.cpp" line="247"/>
         <source>This copy engine does not support motions</source>
         <translation>Ez a másoló motor nem támogatja a mozgatást</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="263"/>
+        <location filename="../../../CopyEngineManager.cpp" line="261"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Nem található motor ezzel a névvel: %1</translation>
     </message>
@@ -171,7 +171,7 @@
         <translation>A mód argumentuma nem érvényes</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="896"/>
+        <location filename="../../../Core.cpp" line="916"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Szeretnél másolni? Ha nem, akkor átmozgatva lesz.</translation>
     </message>
@@ -187,7 +187,7 @@
         <translation>Másoló motor betöltése nem lehetséges, másolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="896"/>
+        <location filename="../../../Core.cpp" line="916"/>
         <source>Transfer mode</source>
         <translation>Átviteli mód</translation>
     </message>
@@ -195,257 +195,257 @@
 <context>
     <name>FacilityEngine</name>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="24"/>
+        <location filename="../../../FacilityEngine.cpp" line="29"/>
         <source>s</source>
         <translation>mp</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="25"/>
+        <location filename="../../../FacilityEngine.cpp" line="30"/>
         <source>Too big</source>
         <translation>Túl nagy</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="26"/>
+        <location filename="../../../FacilityEngine.cpp" line="31"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="27"/>
+        <location filename="../../../FacilityEngine.cpp" line="32"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="28"/>
+        <location filename="../../../FacilityEngine.cpp" line="33"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="29"/>
+        <location filename="../../../FacilityEngine.cpp" line="34"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="30"/>
+        <location filename="../../../FacilityEngine.cpp" line="35"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="31"/>
+        <location filename="../../../FacilityEngine.cpp" line="36"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="32"/>
+        <location filename="../../../FacilityEngine.cpp" line="37"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="33"/>
+        <location filename="../../../FacilityEngine.cpp" line="38"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="34"/>
+        <location filename="../../../FacilityEngine.cpp" line="39"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="35"/>
+        <location filename="../../../FacilityEngine.cpp" line="40"/>
         <source>Less than %10 seconds</source>
         <translation>Kevesebb mint %10 másodperc</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="36"/>
+        <location filename="../../../FacilityEngine.cpp" line="41"/>
         <source>About %10 seconds remaining</source>
         <translation>Körülbelül %10 másodperc van hátra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="37"/>
+        <location filename="../../../FacilityEngine.cpp" line="42"/>
         <source>About %1 minutes remaining</source>
         <translation>Körülbelül %1 perc van hátra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="38"/>
+        <location filename="../../../FacilityEngine.cpp" line="43"/>
         <source>About %1 hours remaining</source>
         <translation>Körülbelül %1 óra van hátra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="40"/>
+        <location filename="../../../FacilityEngine.cpp" line="45"/>
         <source>Copy engine</source>
         <translation>Másoló motor</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="42"/>
+        <location filename="../../../FacilityEngine.cpp" line="47"/>
         <source>Copy</source>
         <extracomment>a copy</extracomment>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="44"/>
+        <location filename="../../../FacilityEngine.cpp" line="49"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
         <translation>Átvitel</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="46"/>
+        <location filename="../../../FacilityEngine.cpp" line="51"/>
         <source>Move</source>
         <extracomment>a move</extracomment>
         <translation>Mozgatás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="47"/>
+        <location filename="../../../FacilityEngine.cpp" line="52"/>
         <source>Start</source>
         <translation>Indítás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="48"/>
+        <location filename="../../../FacilityEngine.cpp" line="53"/>
         <source>Pause</source>
         <translation>Szünet</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="49"/>
+        <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>Resume</source>
         <translation>Folytatás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="50"/>
-        <location filename="../../../FacilityEngine.cpp" line="64"/>
+        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="69"/>
         <source>Skip</source>
         <translation>Kihagyás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="51"/>
+        <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>Unlimited</source>
         <translation>Korlátlan</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="52"/>
+        <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>Source</source>
         <translation>Forrás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="53"/>
+        <location filename="../../../FacilityEngine.cpp" line="58"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="54"/>
+        <location filename="../../../FacilityEngine.cpp" line="59"/>
         <source>Destination</source>
         <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="55"/>
+        <location filename="../../../FacilityEngine.cpp" line="60"/>
         <source>Quit</source>
         <translation>Kilépés</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="56"/>
+        <location filename="../../../FacilityEngine.cpp" line="61"/>
         <source>Target</source>
         <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="57"/>
-        <location filename="../../../FacilityEngine.cpp" line="61"/>
+        <location filename="../../../FacilityEngine.cpp" line="62"/>
+        <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Time remaining:</source>
         <translation>Hátralévő idő:</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="58"/>
+        <location filename="../../../FacilityEngine.cpp" line="63"/>
         <source>Listing</source>
         <translation>Listázás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="59"/>
+        <location filename="../../../FacilityEngine.cpp" line="64"/>
         <source>Copying</source>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="60"/>
+        <location filename="../../../FacilityEngine.cpp" line="65"/>
         <source>Listing and copying</source>
         <translation>Listázás és másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="63"/>
+        <location filename="../../../FacilityEngine.cpp" line="68"/>
         <source>Ask</source>
         <translation>Rákérdez</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="65"/>
+        <location filename="../../../FacilityEngine.cpp" line="70"/>
         <source>Overwrite</source>
         <translation>Felülírás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="66"/>
+        <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Overwrite if newer</source>
         <translation>Felülírás, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="67"/>
+        <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Overwrite if the last modification dates are different</source>
         <translation>Felülír, ha az legutóbbi módosítás dátumai különböznek</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="68"/>
+        <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Rename</source>
         <translation>Átnevezés</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="69"/>
+        <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Put to the end of the list</source>
         <translation>Helyezze a lista végére</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="70"/>
+        <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Select source directory</source>
         <translation>Válassz forrásmappát</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="71"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
         <source>Select destination directory</source>
         <translation>Válassz célmappát</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="72"/>
+        <location filename="../../../FacilityEngine.cpp" line="77"/>
         <source>Internal error</source>
         <translation>Belső hiba</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="73"/>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Select one or more files to open</source>
         <translation>Válassz egy vagy több fájlt megnyitásra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="74"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>All files</source>
         <translation>Minden fájl</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="75"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Save transfer list</source>
         <translation>Átviteli lista mentése</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Open transfer list</source>
         <translation>Átviteli lista megnyitása</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Transfer list</source>
         <translation>Átviteli lista</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Not supported on this platform</source>
         <translation>Ezen a platformon nem támogatott</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Completed in %1</source>
         <translation>Befejezve %1 alatt</translation>
     </message>
@@ -530,8 +530,14 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../HelpDialog.cpp" line="112"/>
         <location filename="../../../HelpDialog.cpp" line="114"/>
+        <location filename="../../../HelpDialog.cpp" line="122"/>
         <source>http://ultracopier.first-world.info/</source>
         <translation>http://ultracopier.first-world.info/</translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="125"/>
+        <source>http://ultracopier.first-world.info/download.html</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -550,20 +556,20 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="75"/>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="94"/>
+        <location filename="../../../LogThread.cpp" line="78"/>
+        <location filename="../../../LogThread.cpp" line="87"/>
+        <location filename="../../../LogThread.cpp" line="97"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="75"/>
+        <location filename="../../../LogThread.cpp" line="78"/>
         <source>Log file already open, error: %1</source>
         <translation>Naplófájl már meg van nyitva, hiba: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="94"/>
+        <location filename="../../../LogThread.cpp" line="87"/>
+        <location filename="../../../LogThread.cpp" line="97"/>
         <source>Unable to open the log file, error: %1</source>
         <translation>Naplófájl megnyitása nem lehetséges, hiba: %1</translation>
     </message>
@@ -586,25 +592,40 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>Rendben</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="10"/>
+        <location filename="../../../OSSpecific.cpp" line="23"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translatorcomment>Az alapértelmezett másolás/mozgatás rendszer lecserélését nem támogatja a fájlkezelő (Dolphin, Nautilus, ...).&lt;br /&gt;Kérd meg a fejlesztőt, hogy támogassa.&lt;br /&gt;A másolás/mozgatást manuálisan kell elvégezned.</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="12"/>
+        <location filename="../../../OSSpecific.cpp" line="25"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
         <translation>Indítsd újra a gépet, ha korábban már volt hasonló alkalmazás telepítve (például Teracopy, Supercopier vagy az Ultracopier korábbi verziója).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="14"/>
+        <location filename="../../../OSSpecific.cpp" line="27"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
         <translation>Az alapértelmezett másoló/mozgató rendszer lecserélését nem támogatott és blokkolja a Mac OS X fejlesztője.&lt;br /&gt;A másolást/mozgatást manuálisan kell elvégezned a tálcaikonra kattintva jobb egérgombbal, az óra mellett.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="16"/>
+        <location filename="../../../OSSpecific.cpp" line="29"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>Az alapértelmezett másoló/mozgató rendszer lecserélését nem szabad támogatnia a fájlkezelőnek.&lt;br /&gt;Kérd meg a fejlesztőt, hogy támogassa.&lt;br /&gt;A másolás/mozgatást manuálisan kell elvégezned.</translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="32"/>
+        <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="35"/>
+        <source>This version use 100% of you graphic card/GPU (you computer can be noisy, or slow/buggy during the games) at exchange of free access to Ultimate version. If you don&apos;t wish it, download the normal version with a small advertisement (just a link on the main window) or buy the Ultimate version to fund the project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.cpp" line="36"/>
+        <source>http://ultracopier.first-world.info/download.html</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -628,28 +649,28 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
         <location filename="../../../OptionDialog.ui" line="301"/>
-        <location filename="../../../OptionDialog.cpp" line="314"/>
+        <location filename="../../../OptionDialog.cpp" line="341"/>
         <source>Copy engine</source>
         <translation>Másoló motor</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
         <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="315"/>
+        <location filename="../../../OptionDialog.cpp" line="342"/>
         <source>Listener</source>
         <translation>Figyelő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
         <location filename="../../../OptionDialog.ui" line="319"/>
-        <location filename="../../../OptionDialog.cpp" line="316"/>
+        <location filename="../../../OptionDialog.cpp" line="343"/>
         <source>Plugin loader</source>
         <translation>Beépüő betöltő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
         <location filename="../../../OptionDialog.ui" line="324"/>
-        <location filename="../../../OptionDialog.cpp" line="317"/>
+        <location filename="../../../OptionDialog.cpp" line="344"/>
         <source>Session loader</source>
         <translation>Folyamat betöltő</translation>
     </message>
@@ -823,103 +844,103 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>A változók: %path%, %operation%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <location filename="../../../OptionDialog.cpp" line="465"/>
         <source>Allow the application</source>
         <translation>Alkalmazás engedélyezése</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="436"/>
+        <location filename="../../../OptionDialog.cpp" line="465"/>
         <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
         <translation>Ez az Ultimate ingyenes verzió csak akkor működik, ha a(z) %1-t engedélyezted a vírusirtódban. Egyéb esetben használd a normál ingyenes verziót</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <location filename="../../../OptionDialog.cpp" line="470"/>
         <source>Enable the OpenCL</source>
         <translation>OpenCL engedélyezése</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="441"/>
+        <location filename="../../../OptionDialog.cpp" line="470"/>
         <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
         <translation>Ez az Ultimate ingyenes verzió csak akkor működik, ha az OpenCL telepítve van a videókártya driverrel. Egyéb esetben használd a normál ingyenes verziót</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="220"/>
-        <location filename="../../../OptionDialog.cpp" line="234"/>
+        <location filename="../../../OptionDialog.cpp" line="247"/>
+        <location filename="../../../OptionDialog.cpp" line="261"/>
         <source>Load</source>
         <translation>Betöltés</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="220"/>
+        <location filename="../../../OptionDialog.cpp" line="247"/>
         <source>Load the theme?</source>
         <translation>Téma betöltése?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="234"/>
+        <location filename="../../../OptionDialog.cpp" line="261"/>
         <source>Load the language?</source>
         <translation>Nyelv betöltése?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="318"/>
-        <location filename="../../../OptionDialog.cpp" line="320"/>
-        <location filename="../../../OptionDialog.cpp" line="505"/>
-        <location filename="../../../OptionDialog.cpp" line="506"/>
+        <location filename="../../../OptionDialog.cpp" line="345"/>
+        <location filename="../../../OptionDialog.cpp" line="347"/>
+        <location filename="../../../OptionDialog.cpp" line="708"/>
+        <location filename="../../../OptionDialog.cpp" line="709"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Letiltva, mert nem rendelkezel SessionLoader beépülővel</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="322"/>
+        <location filename="../../../OptionDialog.cpp" line="349"/>
         <source>Do nothing</source>
         <translation>Ne tegyen semmit</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="323"/>
+        <location filename="../../../OptionDialog.cpp" line="350"/>
         <source>Ask source as folder</source>
         <translation>Rákérdezés a forrás mint mappa</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="324"/>
+        <location filename="../../../OptionDialog.cpp" line="351"/>
         <source>Ask sources as files</source>
         <translation>Rákérdezés a forrásokra mint fájlok</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="325"/>
+        <location filename="../../../OptionDialog.cpp" line="352"/>
         <source>Never</source>
         <translation>Soha</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="326"/>
+        <location filename="../../../OptionDialog.cpp" line="353"/>
         <source>When source is same</source>
         <translation>Amikor a forrás ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="327"/>
+        <location filename="../../../OptionDialog.cpp" line="354"/>
         <source>When destination is same</source>
         <translation>Amikor a cél ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="328"/>
+        <location filename="../../../OptionDialog.cpp" line="355"/>
         <source>When source and destination are same</source>
         <translation>Amikor a forrás és a cél ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="329"/>
+        <location filename="../../../OptionDialog.cpp" line="356"/>
         <source>When source or destination are same</source>
         <translation>Amikor a forrás vagy cél ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="330"/>
+        <location filename="../../../OptionDialog.cpp" line="357"/>
         <source>Always</source>
         <translation>Mindig</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="344"/>
-        <location filename="../../../OptionDialog.cpp" line="345"/>
-        <location filename="../../../OptionDialog.cpp" line="346"/>
+        <location filename="../../../OptionDialog.cpp" line="371"/>
+        <location filename="../../../OptionDialog.cpp" line="372"/>
+        <location filename="../../../OptionDialog.cpp" line="373"/>
         <source>The variables are %1</source>
         <translation>A változók: %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1052"/>
+        <location filename="../../../OptionDialog.cpp" line="1365"/>
         <source>Save logs as: </source>
         <translation>Napló mentése mint:</translation>
     </message>
@@ -1266,6 +1287,22 @@ since:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../SystrayIcon.cpp" line="466"/>
+        <source>New version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="468"/>
+        <source>Click here to go on download page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../SystrayIcon.cpp" line="470"/>
+        <source>Click here to go to the shop and login.
+Download the new version into the order details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;Save bug Report</source>
         <translation type="obsolete">&amp;Hibajelentés mentése</translation>
     </message>
@@ -1285,39 +1322,38 @@ since:%2</source>
         <translation>Más&amp;olás/mozgatás hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="466"/>
         <source>New version: %1
 Site: %2</source>
-        <translation>Új verzió: %1
+        <translation type="obsolete">Új verzió: %1
 Honlap: %2</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="483"/>
+        <location filename="../../../SystrayIcon.cpp" line="489"/>
         <source>&amp;Copy</source>
         <translation>&amp;Másolás</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="489"/>
+        <location filename="../../../SystrayIcon.cpp" line="495"/>
         <source>&amp;Transfer</source>
         <translation>&amp;Átvitel</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="493"/>
+        <location filename="../../../SystrayIcon.cpp" line="499"/>
         <source>&amp;Move</source>
         <translation>M&amp;ozgatás</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="505"/>
+        <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
         <translation>Má&amp;solás hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="511"/>
+        <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
         <translation>&amp;Átvitel hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="515"/>
+        <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
         <translation>&amp;Mozgatás hozzáadása</translation>
     </message>

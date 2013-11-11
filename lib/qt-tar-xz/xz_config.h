@@ -18,18 +18,9 @@
 /* #define XZ_DEC_ARMTHUMB */
 /* #define XZ_DEC_SPARC */
 
-#ifndef WIN32
-#	include <stdbool.h>
-#	define FUNC_DECL inline
-#else
-#	define false 0
-#	define true 1
-#	define bool int
-#	define FUNC_DECL
-#endif
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 #include "xz.h"
 
@@ -81,7 +72,7 @@
 
 /* Inline functions to access unaligned unsigned 32-bit integers */
 #ifndef get_unaligned_le32
-static FUNC_DECL uint32_t XZ_FUNC get_unaligned_le32(const uint8_t *buf)
+static inline uint32_t XZ_FUNC get_unaligned_le32(const uint8_t *buf)
 {
 	return (uint32_t)buf[0]
 			| ((uint32_t)buf[1] << 8)
@@ -91,7 +82,7 @@ static FUNC_DECL uint32_t XZ_FUNC get_unaligned_le32(const uint8_t *buf)
 #endif
 
 #ifndef get_unaligned_be32
-static FUNC_DECL uint32_t XZ_FUNC get_unaligned_be32(const uint8_t *buf)
+static inline uint32_t XZ_FUNC get_unaligned_be32(const uint8_t *buf)
 {
 	return (uint32_t)(buf[0] << 24)
 			| ((uint32_t)buf[1] << 16)
@@ -101,7 +92,7 @@ static FUNC_DECL uint32_t XZ_FUNC get_unaligned_be32(const uint8_t *buf)
 #endif
 
 #ifndef put_unaligned_le32
-static FUNC_DECL void XZ_FUNC put_unaligned_le32(uint32_t val, uint8_t *buf)
+static inline void XZ_FUNC put_unaligned_le32(uint32_t val, uint8_t *buf)
 {
 	buf[0] = (uint8_t)val;
 	buf[1] = (uint8_t)(val >> 8);
@@ -111,7 +102,7 @@ static FUNC_DECL void XZ_FUNC put_unaligned_le32(uint32_t val, uint8_t *buf)
 #endif
 
 #ifndef put_unaligned_be32
-static FUNC_DECL void XZ_FUNC put_unaligned_be32(uint32_t val, uint8_t *buf)
+static inline void XZ_FUNC put_unaligned_be32(uint32_t val, uint8_t *buf)
 {
 	buf[0] = (uint8_t)(val >> 24);
 	buf[1] = (uint8_t)(val >> 16);
