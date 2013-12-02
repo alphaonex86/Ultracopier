@@ -32,7 +32,7 @@ TransferThread::TransferThread()
     source.setCaching(false);
     destination.setCaching(false);
 
-    maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
+    minTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
 }
 
 TransferThread::~TransferThread()
@@ -302,25 +302,34 @@ void TransferThread::preOperation()
         return;
     }*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] before keep date");
-    if(keepDate)
+    doTheDateTransfer=true;
+    if(source.lastModified()<minTime)
     {
-        if(maxTime>=source.lastModified())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+source.absoluteFilePath()+": "+minTime.toString("dd.MM.yyyy hh:mm:ss.zzz")+">="+source.lastModified().toString("dd.MM.yyyy hh:mm:ss.zzz"));
+        doTheDateTransfer=false;
+        if(keepDate)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+source.absoluteFilePath()+": "+maxTime.toString("dd.MM.yyyy hh:mm:ss.zzz")+">="+source.lastModified().toString("dd.MM.yyyy hh:mm:ss.zzz"));
-            doTheDateTransfer=false;
-        }
-        else
-        {
-            doTheDateTransfer=readFileDateTime(source);
-            if(!doTheDateTransfer)
-            {
-                //will have the real error at source open
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source.absoluteFilePath());
-            }
+            emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it"));
+            return;
         }
     }
     else
-        doTheDateTransfer=false;
+    {
+        doTheDateTransfer=readFileDateTime(source);
+        #ifdef Q_OS_MAC
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] read the source time: "+QString::number(butime.modtime);
+        #endif
+        if(!doTheDateTransfer)
+        {
+            //will have the real error at source open
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] unable to read the source time: "+source.absoluteFilePath());
+            if(keepDate)
+            {
+                emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it"));
+                return;
+            }
+        }
+    }
     if(canBeMovedDirectly())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] "+QString("need moved directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
@@ -924,16 +933,30 @@ void TransferThread::stop()
         return;
     }
     if(remainSourceOpen())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("remainSourceOpen()"));
         readThread.stop();
+    }
     if(remainDestinationOpen())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("remainDestinationOpen()"));
         writeThread.stop();
+    }
     if(!remainFileOpen())
     {
-        if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath() && source.exists())
-            QFile(destination.absoluteFilePath()).remove();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("transfer_stat==TransferStat_Idle"));
+        if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
+        {
+            if(source.exists())
+                QFile(destination.absoluteFilePath()).remove();
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] try destroy the destination when the source don't exists");
+        }
         transfer_stat=TransferStat_PostOperation;
         emit internalStartPostOperation();
     }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("transfer_stat==%1 && remainFileOpen()").arg(transfer_stat));
 }
 
 bool TransferThread::remainFileOpen() const
@@ -1070,6 +1093,13 @@ void TransferThread::writeIsClosed()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] start");
     writeIsClosedVariable=true;
     writeIsOpeningVariable=false;
+    if(stopIt && needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
+    {
+        if(source.exists())
+            QFile(destination.absoluteFilePath()).remove();
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+QString::number(id)+"] try destroy the destination when the source don't exists");
+    }
     checkIfAllIsClosedAndDoOperations();
 }
 
@@ -1208,43 +1238,70 @@ bool TransferThread::doFilePostOperation()
     //do operation needed by copy
     //set the time if no write thread used
 
-    if(doTheDateTransfer)
+    destination.refresh();
+    if(!destination.exists())
     {
-        destination.refresh();
-        if(!destination.exists())
+        if(!stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date: File not found"));
-            //emit errorOnFile(destination,tr("Unable to change the date")+": "+tr("File not found"));
-            //return false;
-        }
-        if(!writeFileDateTime(destination))
-        {
-            if(!destination.isFile())
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date (is not a file)"));
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date"));
-            /* error with virtual folder under windows */
-            //emit errorOnFile(destination,tr("Unable to change the date"));
-            //return false;
+            emit errorOnFile(destination,tr("Unable to change the date")+": "+tr("File not found"));
+            return false;
         }
     }
-    if(doRightTransfer)
+    else
     {
-        QFile sourceFile(source.absoluteFilePath());
-        QFile destinationFile(destination.absoluteFilePath());
-        if(!destinationFile.setPermissions(sourceFile.permissions()))
+        if(doTheDateTransfer)
         {
-            if(sourceFile.error()!=QFile::NoError)
+            if(!writeFileDateTime(destination))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to get the source file permission"));
-                //emit errorOnFile(destination,tr("Unable to get the source file permission"));
-                //return false;
+                if(!destination.isFile())
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date (is not a file)"));
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to change the date"));
+                /* error with virtual folder under windows */
+                #ifndef Q_OS_WIN32
+                if(keepDate)
+                {
+                    emit errorOnFile(destination,tr("Unable to change the date"));
+                    return false;
+                }
+                #endif
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to set the destination file permission"));
-                //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
-                //return false;
+                #ifndef Q_OS_WIN32
+                destination.refresh();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] read the destination time: "+destination.lastModified().toString());
+                if(destination.lastModified()<minTime)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] read the destination time lower than min time: "+destination.lastModified().toString());
+                    if(keepDate)
+                    {
+                        emit errorOnFile(destination,tr("Unable to change the date"));
+                        return false;
+                    }
+                }
+                #endif
+            }
+        }
+        if(doRightTransfer)
+        {
+            QFile sourceFile(source.absoluteFilePath());
+            QFile destinationFile(destination.absoluteFilePath());
+            if(!destinationFile.setPermissions(sourceFile.permissions()))
+            {
+                if(sourceFile.error()!=QFile::NoError)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to get the source file permission"));
+                    //emit errorOnFile(destination,tr("Unable to get the source file permission"));
+                    //return false;
+                }
+                else
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] "+QString("Unable to set the destination file permission"));
+                    //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
+                    //return false;
+                }
             }
         }
     }
@@ -1539,7 +1596,7 @@ void TransferThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgor
 bool TransferThread::readFileDateTime(const QFileInfo &source)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] readFileDateTime("+source.absoluteFilePath()+")");
-    if(maxTime>=source.lastModified())
+    if(minTime<source.lastModified())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] the sources is older to copy the time: "+source.absoluteFilePath()+": "+source.lastModified().toString());
         return false;

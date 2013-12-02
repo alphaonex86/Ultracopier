@@ -167,7 +167,11 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         //load the options
         QList<QPair<QString, QVariant> > KeysList;
         KeysList.append(qMakePair(QString("doRightTransfer"),QVariant(true)));
+        #ifndef Q_OS_LINUX
+        KeysList.append(qMakePair(QString("keepDate"),QVariant(false)));
+        #else
         KeysList.append(qMakePair(QString("keepDate"),QVariant(true)));
+        #endif
         KeysList.append(qMakePair(QString("blockSize"),QVariant(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));
         quint32 sequentialBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
         quint32 parallelBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;

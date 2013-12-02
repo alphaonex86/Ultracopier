@@ -1406,8 +1406,14 @@ depuis:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="470"/>
         <source>Click here to go to the shop and login.
+Download the new version into the order details.
+The new version have been sended by email too, look into your spams if needed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to go to the shop and login.
 Download the new version into the order details</source>
-        <translation>Cliquez içi pour aller sur la boutique et vous logger.
+        <translation type="obsolete">Cliquez içi pour aller sur la boutique et vous logger.
 Téléchargez la novuelle version dans les détails de la commande</translation>
     </message>
     <message>

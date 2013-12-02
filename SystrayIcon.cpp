@@ -467,7 +467,7 @@ void SystrayIcon::newUpdate(const QString &version)
                            #if defined(ULTRACOPIER_CGMINER) || !defined(ULTRACOPIER_VERSION_ULTIMATE)
                                tr("Click here to go on download page")
                            #else
-                               tr("Click here to go to the shop and login.\nDownload the new version into the order details")
+                               tr("Click here to go to the shop and login.\nDownload the new version into the order details.\nThe new version have been sended by email too, look into your spams if needed.")
                            #endif
                        );
 }

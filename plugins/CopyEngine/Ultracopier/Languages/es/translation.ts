@@ -703,68 +703,52 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="223"/>
-        <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="683"/>
         <source>File not found</source>
         <translation>Archivo no encontrado</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="371"/>
-        <location filename="../../TransferThread.cpp" line="394"/>
         <source>Internal error: Already opening</source>
-        <translation>Error interno: Ya la apertura</translation>
+        <translation type="obsolete">Error interno: Ya la apertura</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="531"/>
         <source>Drive %1</source>
-        <translation>Drive %1</translation>
+        <translation type="obsolete">Drive %1</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="533"/>
         <source>Unknown folder</source>
-        <translation>Desconocido carpeta</translation>
+        <translation type="obsolete">Desconocido carpeta</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="537"/>
         <source>root</source>
-        <translation>raíz</translation>
+        <translation type="obsolete">raíz</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="590"/>
         <source>%1 - copy</source>
-        <translation>%1 - copia</translation>
+        <translation type="obsolete">%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="600"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - copia (%2)</translation>
+        <translation type="obsolete">%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="724"/>
         <source>The source doesn&apos;t exist</source>
-        <translation>La fuente no existe</translation>
+        <translation type="obsolete">La fuente no existe</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="659"/>
-        <location filename="../../TransferThread.cpp" line="754"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation>El archivo de origen no existe</translation>
+        <translation type="obsolete">El archivo de origen no existe</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1046"/>
         <source>The checksums do not match</source>
-        <translation>Las sumas de comprobación no coinciden</translation>
+        <translation type="obsolete">Las sumas de comprobación no coinciden</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1142"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation>Error interno: El tamaño transferido no coincide</translation>
+        <translation type="obsolete">Error interno: El tamaño transferido no coincide</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="689"/>
-        <location filename="../../TransferThread.cpp" line="766"/>
         <source>Unable to do the folder</source>
-        <translation>Incapaz de hacer la carpeta</translation>
+        <translation type="obsolete">Incapaz de hacer la carpeta</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="207"/>
@@ -772,19 +756,16 @@
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="760"/>
         <source>Another file exists at same place</source>
-        <translation>Otro archivo existe en el mismo lugar</translation>
+        <translation type="obsolete">Otro archivo existe en el mismo lugar</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1128"/>
         <source>Internal error: The destination is not closed</source>
-        <translation>Error interno: El destino no está cerrado</translation>
+        <translation type="obsolete">Error interno: El destino no está cerrado</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1153"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation>Error interno: El buffer no está vacío</translation>
+        <translation type="obsolete">Error interno: El buffer no está vacío</translation>
     </message>
 </context>
 <context>
@@ -795,17 +776,17 @@
         <translation>Error de resolución de ruta (camino vacío)</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="264"/>
+        <location filename="../../WriteThread.cpp" line="268"/>
         <source>Internal error, please report it!</source>
         <translation>Error interno, por favor informe de ello!</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="667"/>
+        <location filename="../../WriteThread.cpp" line="671"/>
         <source>Unable to read the source file: </source>
         <translation>No se puede leer el archivo de origen: </translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="692"/>
+        <location filename="../../WriteThread.cpp" line="696"/>
         <source>File truncated during read, possible data change</source>
         <translation>Archivo truncado durante lectura, posible cambio de datos</translation>
     </message>

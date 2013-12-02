@@ -695,46 +695,36 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="223"/>
-        <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="683"/>
         <source>File not found</source>
         <translation>Fájl nem található</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="531"/>
         <source>Drive %1</source>
-        <translation>%1 meghajtó</translation>
+        <translation type="obsolete">%1 meghajtó</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="533"/>
         <source>Unknown folder</source>
-        <translation>Ismeretlen mappa</translation>
+        <translation type="obsolete">Ismeretlen mappa</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="537"/>
         <source>root</source>
-        <translation>gyökér</translation>
+        <translation type="obsolete">gyökér</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="590"/>
         <source>%1 - copy</source>
-        <translation>%1 - másolás</translation>
+        <translation type="obsolete">%1 - másolás</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="600"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - másolás (%2)</translation>
+        <translation type="obsolete">%1 - másolás (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="724"/>
         <source>The source doesn&apos;t exist</source>
-        <translation>A forrás nem létezik</translation>
+        <translation type="obsolete">A forrás nem létezik</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="689"/>
-        <location filename="../../TransferThread.cpp" line="766"/>
         <source>Unable to do the folder</source>
-        <translation>Mappaművelet nem lehetséges</translation>
+        <translation type="obsolete">Mappaművelet nem lehetséges</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="207"/>
@@ -742,41 +732,28 @@
         <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="371"/>
-        <location filename="../../TransferThread.cpp" line="394"/>
-        <source>Internal error: Already opening</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="659"/>
-        <location filename="../../TransferThread.cpp" line="754"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation>A forrásfájl nem létezik</translation>
+        <translation type="obsolete">A forrásfájl nem létezik</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="760"/>
         <source>Another file exists at same place</source>
-        <translation>Egy másik fájl létezik ugyanazon a helyen</translation>
+        <translation type="obsolete">Egy másik fájl létezik ugyanazon a helyen</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1046"/>
         <source>The checksums do not match</source>
-        <translation>A checksumok nem egyeznek meg</translation>
+        <translation type="obsolete">A checksumok nem egyeznek meg</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1128"/>
         <source>Internal error: The destination is not closed</source>
-        <translation>Belső hiba: a cél nincs bezárva</translation>
+        <translation type="obsolete">Belső hiba: a cél nincs bezárva</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1142"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation>Belső hiba: az átvitt méret nem egyezik meg</translation>
+        <translation type="obsolete">Belső hiba: az átvitt méret nem egyezik meg</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1153"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation>Belső hiba: a puffer nem üres</translation>
+        <translation type="obsolete">Belső hiba: a puffer nem üres</translation>
     </message>
 </context>
 <context>
@@ -787,17 +764,17 @@
         <translation>Útvonal feloldási hiba (Üres útvonal)</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="264"/>
+        <location filename="../../WriteThread.cpp" line="268"/>
         <source>Internal error, please report it!</source>
         <translation>Belső hiba, kérlek jelentsd!</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="667"/>
+        <location filename="../../WriteThread.cpp" line="671"/>
         <source>Unable to read the source file: </source>
         <translation>A forrásfájl olvasása nem lehetséges:</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="692"/>
+        <location filename="../../WriteThread.cpp" line="696"/>
         <source>File truncated during read, possible data change</source>
         <translation>Fájl megsérült az olvasás közben, valószínűleg adatváltozás</translation>
     </message>

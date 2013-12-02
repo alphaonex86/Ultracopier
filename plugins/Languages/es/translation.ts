@@ -1406,8 +1406,14 @@ No se puede cargar el contenido del plugin, por favor verifique que</translation
     <message>
         <location filename="../../../SystrayIcon.cpp" line="470"/>
         <source>Click here to go to the shop and login.
+Download the new version into the order details.
+The new version have been sended by email too, look into your spams if needed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to go to the shop and login.
 Download the new version into the order details</source>
-        <translation>Haga clic aquí para ir a la tienda y al acceso.
+        <translation type="obsolete">Haga clic aquí para ir a la tienda y al acceso.
 Descarga la nueva versión en los detalles de la orden</translation>
     </message>
     <message>

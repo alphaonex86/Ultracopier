@@ -212,7 +212,7 @@ private:
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
     bool			needSkip,needRemove;
-    QDateTime		maxTime;
+    QDateTime		minTime;
     int             id;
     QSemaphore		*mkpathTransfer;
     bool			doChecksum,real_doChecksum;

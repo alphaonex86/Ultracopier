@@ -1343,7 +1343,8 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="470"/>
         <source>Click here to go to the shop and login.
-Download the new version into the order details</source>
+Download the new version into the order details.
+The new version have been sended by email too, look into your spams if needed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

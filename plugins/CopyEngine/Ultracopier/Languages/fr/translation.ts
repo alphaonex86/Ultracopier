@@ -728,66 +728,52 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="223"/>
-        <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="683"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="531"/>
         <source>Drive %1</source>
-        <translation>Lecteur %1</translation>
+        <translation type="obsolete">Lecteur %1</translation>
     </message>
     <message>
         <source>Try rename with unauthorized characters</source>
         <translation type="obsolete">Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="533"/>
         <source>Unknown folder</source>
-        <translation>Dossier inconnu</translation>
+        <translation type="obsolete">Dossier inconnu</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="537"/>
         <source>root</source>
-        <translation>racine</translation>
+        <translation type="obsolete">racine</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="590"/>
         <source>%1 - copy</source>
-        <translation>%1 - copie</translation>
+        <translation type="obsolete">%1 - copie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="600"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - copie (%2)</translation>
+        <translation type="obsolete">%1 - copie (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="724"/>
         <source>The source doesn&apos;t exist</source>
-        <translation>La source n&apos;existe pas</translation>
+        <translation type="obsolete">La source n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="659"/>
-        <location filename="../../TransferThread.cpp" line="754"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation>Le fichier source n&apos;existe pas</translation>
+        <translation type="obsolete">Le fichier source n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1046"/>
         <source>The checksums do not match</source>
-        <translation>Les sommes de controle ne correspondent pas</translation>
+        <translation type="obsolete">Les sommes de controle ne correspondent pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1142"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation>Erreur interne: La taille transféré ne corresponds pas</translation>
+        <translation type="obsolete">Erreur interne: La taille transféré ne corresponds pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="689"/>
-        <location filename="../../TransferThread.cpp" line="766"/>
         <source>Unable to do the folder</source>
-        <translation>Impossible de créer le dossier</translation>
+        <translation type="obsolete">Impossible de créer le dossier</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="207"/>
@@ -795,25 +781,20 @@
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="371"/>
-        <location filename="../../TransferThread.cpp" line="394"/>
         <source>Internal error: Already opening</source>
-        <translation>Erreur interne: Déjà ouvert</translation>
+        <translation type="obsolete">Erreur interne: Déjà ouvert</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="760"/>
         <source>Another file exists at same place</source>
-        <translation>Un autre fichier exists à la même place</translation>
+        <translation type="obsolete">Un autre fichier exists à la même place</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1128"/>
         <source>Internal error: The destination is not closed</source>
-        <translation>Erreur interne: La destination n&apos;est pas fermé</translation>
+        <translation type="obsolete">Erreur interne: La destination n&apos;est pas fermé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1153"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation>Erreur interne: Le buffer n&apos;est pas vide</translation>
+        <translation type="obsolete">Erreur interne: Le buffer n&apos;est pas vide</translation>
     </message>
     <message>
         <source>Unable to change the date</source>
@@ -828,17 +809,17 @@
         <translation>Erreur de résolution de chemain (chemain vide)</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="264"/>
+        <location filename="../../WriteThread.cpp" line="268"/>
         <source>Internal error, please report it!</source>
         <translation>Erreur interne, merci de la reporter!</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="667"/>
+        <location filename="../../WriteThread.cpp" line="671"/>
         <source>Unable to read the source file: </source>
         <translation>Impossible de lire le fichier source: </translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="692"/>
+        <location filename="../../WriteThread.cpp" line="696"/>
         <source>File truncated during read, possible data change</source>
         <translation>Fichier rétréci pendant la lecture, possible changement de données</translation>
     </message>

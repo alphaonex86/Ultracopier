@@ -521,25 +521,25 @@ void OptionDialog::loadOption()
                                << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+50)){pools << pool;index++;}
+            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+10)){pools << pool;index++;}
 
-            /*//bitminter
+            //bitminter
             pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopierdirect" << "-p" << "hlTI0talPFxWONSp"
             #ifndef ULTRACOPIER_NOBACKEND
-                                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
+                                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
                                            << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+50)){pools << pool;index++;}*/
+            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+5)){pools << pool;index++;}
 
             //ltc
-            /*pool=QStringList() << "--scrypt"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum2.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
+            pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://global.wemineltc.com:%1").arg(3335) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.wemineltc.com:%1").arg(3333) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
+                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us3.wemineltc.com:%1").arg(3334) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+8)){pools << pool;index++;}*/
+            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}
 
             #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //50btc.com

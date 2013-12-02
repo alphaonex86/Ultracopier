@@ -695,87 +695,12 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="223"/>
-        <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="683"/>
         <source>File not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="371"/>
-        <location filename="../../TransferThread.cpp" line="394"/>
-        <source>Internal error: Already opening</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="531"/>
-        <source>Drive %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="533"/>
-        <source>Unknown folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="537"/>
-        <source>root</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="590"/>
-        <source>%1 - copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="600"/>
-        <source>%1 - copy (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="724"/>
-        <source>The source doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="659"/>
-        <location filename="../../TransferThread.cpp" line="754"/>
-        <source>The source file doesn&apos;t exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1046"/>
-        <source>The checksums do not match</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1142"/>
-        <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="689"/>
-        <location filename="../../TransferThread.cpp" line="766"/>
-        <source>Unable to do the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="207"/>
         <source>Try rename with using special characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="760"/>
-        <source>Another file exists at same place</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1128"/>
-        <source>Internal error: The destination is not closed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1153"/>
-        <source>Internal error: The buffer is not empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -787,17 +712,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="264"/>
+        <location filename="../../WriteThread.cpp" line="268"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="667"/>
+        <location filename="../../WriteThread.cpp" line="671"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished">원본 파일 읽기 불가:</translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="692"/>
+        <location filename="../../WriteThread.cpp" line="696"/>
         <source>File truncated during read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>

@@ -156,6 +156,7 @@ bool WriteThread::internalOpen()
             }
         }
     }
+    bool fileWasExists=file.exists();
     if(file.open(flags))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] after the open");
@@ -238,6 +239,9 @@ bool WriteThread::internalOpen()
     }
     else
     {
+        if(!fileWasExists && file.exists())
+            if(!file.remove())
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+QString::number(id)+"] file created but can't be removed");
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+QString::number(id)+"] close because stopIt is at true");
