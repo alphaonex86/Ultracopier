@@ -112,30 +112,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>No se puede encontrar cualquier motor de copia con movimientos de apoyo a</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
         <source>Cannot find any compatible engine!</source>
         <translation>No se puede encontrar un motor compatible!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
         <source>This copy engine does not support motions</source>
         <translation>Este motor de copia no es compatible con los movimientos</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>No se puede encontrar un motor con este nombre: %1</translation>
     </message>
@@ -143,12 +143,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Error durante la recepción de la lista de copia / movimiento
@@ -183,6 +183,16 @@
         <location filename="../../../Core.cpp" line="210"/>
         <source>Unable to get a copy engine instance</source>
         <translation>No se puede obtener una instancia de motor de copia</translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Group window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Do you want group the transfer with another actual running transfer?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="117"/>
@@ -1119,6 +1129,11 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Themas</translation>
     </message>
     <message>
+        <location filename="../../../PluginInformation.cpp" line="59"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../PluginInformation.cpp" line="69"/>
         <source>Information about %1</source>
         <translation>Información sobre %1</translation>
@@ -1340,68 +1355,68 @@ No se puede cargar el contenido del plugin, por favor verifique que</translation
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="156"/>
-        <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../../SystrayIcon.cpp" line="162"/>
         <source>Information</source>
-        <translation>Información</translation>
+        <translation type="unfinished">Información</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="180"/>
         <source>Searching information...</source>
-        <translation>Buscar información...</translation>
+        <translation type="unfinished">Buscar información...</translation>
     </message>
     <message>
         <source>Not replace the explorer copy/move</source>
         <translation type="obsolete">No reemplazar la copia explorador/mover</translation>
     </message>
     <message>
+        <location filename="../../../SystrayIcon.cpp" line="156"/>
+        <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../SystrayIcon.cpp" line="193"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation>No sustituya la copia explorer/move</translation>
+        <translation type="unfinished">No sustituya la copia explorer/move</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="198"/>
         <source>Semi replace the explorer copy/move</source>
-        <translation>Semi reemplazar la copia explorer/mudanza</translation>
+        <translation type="unfinished">Semi reemplazar la copia explorer/mudanza</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="203"/>
         <source>Replace the explorer copy/move</source>
-        <translation>Vuelva a colocar la copia explorer/mudanza</translation>
+        <translation type="unfinished">Vuelva a colocar la copia explorer/mudanza</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>Warning</source>
-        <translation>Advertencia</translation>
+        <translation type="unfinished">Advertencia</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>The action on the systray icon is unknown!</source>
-        <translation>La acción en el icono de la bandeja del sistema es desconocido!</translation>
+        <translation type="unfinished">La acción en el icono de la bandeja del sistema es desconocido!</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="419"/>
         <source>&amp;About/Debug report</source>
-        <translation>&amp;Acerca de/Debug informe</translation>
+        <translation type="unfinished">&amp;Acerca de/Debug informe</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="421"/>
         <source>&amp;About</source>
-        <translation>&amp;Sobre</translation>
+        <translation type="unfinished">&amp;Sobre</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="466"/>
         <source>New version: %1</source>
-        <translation>Nueva versión: %1</translation>
+        <translation type="unfinished">Nueva versión: %1</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="468"/>
         <source>Click here to go on download page</source>
-        <translation>Haga clic aquí para ir a la página de descarga</translation>
+        <translation type="unfinished">Haga clic aquí para ir a la página de descarga</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="470"/>
@@ -1423,22 +1438,22 @@ Descarga la nueva versión en los detalles de la orden</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="424"/>
         <source>&amp;Save bug report</source>
-        <translation>&amp;Guardar informe de error</translation>
+        <translation type="unfinished">&amp;Guardar informe de error</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="426"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Dejar de</translation>
+        <translation type="unfinished">&amp;Dejar de</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="427"/>
         <source>&amp;Options</source>
-        <translation>&amp;Opciones</translation>
+        <translation type="unfinished">&amp;Opciones</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>A&amp;dd copy/moving</source>
-        <translation>Aña&amp;dir copiar/mover</translation>
+        <translation type="unfinished">Aña&amp;dir copiar/mover</translation>
     </message>
     <message>
         <source>New version: %1
@@ -1449,32 +1464,32 @@ Sitio web: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="489"/>
         <source>&amp;Copy</source>
-        <translation>&amp;Copia</translation>
+        <translation type="unfinished">&amp;Copia</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="495"/>
         <source>&amp;Transfer</source>
-        <translation>&amp;Transferencia</translation>
+        <translation type="unfinished">&amp;Transferencia</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="499"/>
         <source>&amp;Move</source>
-        <translation>&amp;Movimiento</translation>
+        <translation type="unfinished">&amp;Movimiento</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
-        <translation>Agregar &amp;copia</translation>
+        <translation type="unfinished">Agregar &amp;copia</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
-        <translation>Añadir &amp;transferencia</translation>
+        <translation type="unfinished">Añadir &amp;transferencia</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
-        <translation>Añadir &amp;movimiento</translation>
+        <translation type="unfinished">Añadir &amp;movimiento</translation>
     </message>
 </context>
 </TS>

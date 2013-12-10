@@ -113,6 +113,7 @@ class CopyListener : public QObject
         QStringList stripSeparator(QStringList sources);
         OptionDialog *optionDialog;
         bool stopIt;
+        QRegularExpression stripSeparatorRegex;
 };
 
 #endif // COPYLISTENER_H

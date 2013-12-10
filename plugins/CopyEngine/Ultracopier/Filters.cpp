@@ -26,20 +26,20 @@ void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,Q
     while(index<includeStrings.size())
     {
         new_item.search_text=includeStrings.at(index);
-        QStringList options=includeOptions.at(index).split(";");
+        QStringList options=includeOptions.at(index).split(QStringLiteral(";"));
         new_item.need_match_all=false;
         new_item.search_type=SearchType_rawText;
         new_item.apply_on=ApplyOn_fileAndFolder;
 
-        if(options.contains("SearchType_simpleRegex"))
+        if(options.contains(QStringLiteral("SearchType_simpleRegex")))
             new_item.search_type=SearchType_simpleRegex;
-        if(options.contains("SearchType_perlRegex"))
+        if(options.contains(QStringLiteral("SearchType_perlRegex")))
             new_item.search_type=SearchType_perlRegex;
-        if(options.contains("ApplyOn_file"))
+        if(options.contains(QStringLiteral("ApplyOn_file")))
             new_item.apply_on=ApplyOn_file;
-        if(options.contains("ApplyOn_folder"))
+        if(options.contains(QStringLiteral("ApplyOn_folder")))
             new_item.apply_on=ApplyOn_folder;
-        if(options.contains("need_match_all"))
+        if(options.contains(QStringLiteral("need_match_all")))
             new_item.need_match_all=true;
 
         if(convertToRegex(new_item))
@@ -53,20 +53,20 @@ void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,Q
     while(index<excludeStrings.size())
     {
         new_item.search_text=excludeStrings.at(index);
-        QStringList options=excludeOptions.at(index).split(";");
+        QStringList options=excludeOptions.at(index).split(QStringLiteral(";"));
         new_item.need_match_all=false;
         new_item.search_type=SearchType_rawText;
         new_item.apply_on=ApplyOn_fileAndFolder;
 
-        if(options.contains("SearchType_simpleRegex"))
+        if(options.contains(QStringLiteral("SearchType_simpleRegex")))
             new_item.search_type=SearchType_simpleRegex;
-        if(options.contains("SearchType_perlRegex"))
+        if(options.contains(QStringLiteral("SearchType_perlRegex")))
             new_item.search_type=SearchType_perlRegex;
-        if(options.contains("ApplyOn_file"))
+        if(options.contains(QStringLiteral("ApplyOn_file")))
             new_item.apply_on=ApplyOn_file;
-        if(options.contains("ApplyOn_folder"))
+        if(options.contains(QStringLiteral("ApplyOn_folder")))
             new_item.apply_on=ApplyOn_folder;
-        if(options.contains("need_match_all"))
+        if(options.contains(QStringLiteral("need_match_all")))
             new_item.need_match_all=true;
 
         if(convertToRegex(new_item))
@@ -84,7 +84,7 @@ void Filters::reShowAll()
     int index=0;
     while(index<include.size())
     {
-        QString entryShow=include.at(index).search_text+" (";
+        QString entryShow=include.at(index).search_text+QStringLiteral(" (");
         QStringList optionsToShow;
         switch(include.at(index).search_type)
         {
@@ -113,7 +113,7 @@ void Filters::reShowAll()
         }
         if(include.at(index).need_match_all)
             optionsToShow << tr("Full match");
-        entryShow+=optionsToShow.join(",");
+        entryShow+=optionsToShow.join(QStringLiteral(","));
         entryShow+=")";
         ui->inclusion->addItem(new QListWidgetItem(entryShow));
         index++;
@@ -122,7 +122,7 @@ void Filters::reShowAll()
     index=0;
     while(index<exclude.size())
     {
-        QString entryShow=exclude.at(index).search_text+" (";
+        QString entryShow=exclude.at(index).search_text+QStringLiteral(" (");
         QStringList optionsToShow;
         switch(exclude.at(index).search_type)
         {
@@ -151,7 +151,7 @@ void Filters::reShowAll()
         }
         if(exclude.at(index).need_match_all)
             optionsToShow << tr("Full match");
-        entryShow+=optionsToShow.join(",");
+        entryShow+=optionsToShow.join(QStringLiteral(","));
         entryShow+=")";
         ui->exclusion->addItem(new QListWidgetItem(entryShow));
         index++;
@@ -186,13 +186,13 @@ void Filters::updateFilters()
         switch(include.at(index).search_type)
         {
             case SearchType_rawText:
-                optionsToShow << "SearchType_rawText";
+                optionsToShow << QStringLiteral("SearchType_rawText");
             break;
             case SearchType_simpleRegex:
-                optionsToShow << "SearchType_simpleRegex";
+                optionsToShow << QStringLiteral("SearchType_simpleRegex");
             break;
             case SearchType_perlRegex:
-                optionsToShow << "SearchType_perlRegex";
+                optionsToShow << QStringLiteral("SearchType_perlRegex");
             break;
             default:
             break;
@@ -200,20 +200,20 @@ void Filters::updateFilters()
         switch(include.at(index).apply_on)
         {
             case ApplyOn_file:
-                optionsToShow << "ApplyOn_file";
+                optionsToShow << QStringLiteral("ApplyOn_file");
             break;
             case ApplyOn_fileAndFolder:
-                optionsToShow << "ApplyOn_fileAndFolder";
+                optionsToShow << QStringLiteral("ApplyOn_fileAndFolder");
             break;
             case ApplyOn_folder:
-                optionsToShow << "ApplyOn_folder";
+                optionsToShow << QStringLiteral("ApplyOn_folder");
             break;
             default:
             break;
         }
         if(include.at(index).need_match_all)
             optionsToShow << tr("Full match");
-        includeOptions<<optionsToShow.join(";");
+        includeOptions<<optionsToShow.join(QStringLiteral(";"));
         index++;
     }
     index=0;
@@ -225,13 +225,13 @@ void Filters::updateFilters()
         switch(exclude.at(index).search_type)
         {
             case SearchType_rawText:
-                optionsToShow << "SearchType_rawText";
+                optionsToShow << QStringLiteral("SearchType_rawText");
             break;
             case SearchType_simpleRegex:
-                optionsToShow << "SearchType_simpleRegex";
+                optionsToShow << QStringLiteral("SearchType_simpleRegex");
             break;
             case SearchType_perlRegex:
-                optionsToShow << "SearchType_perlRegex";
+                optionsToShow << QStringLiteral("SearchType_perlRegex");
             break;
             default:
             break;
@@ -239,20 +239,20 @@ void Filters::updateFilters()
         switch(exclude.at(index).apply_on)
         {
             case ApplyOn_file:
-                optionsToShow << "ApplyOn_file";
+                optionsToShow << QStringLiteral("ApplyOn_file");
             break;
             case ApplyOn_fileAndFolder:
-                optionsToShow << "ApplyOn_fileAndFolder";
+                optionsToShow << QStringLiteral("ApplyOn_fileAndFolder");
             break;
             case ApplyOn_folder:
-                optionsToShow << "ApplyOn_folder";
+                optionsToShow << QStringLiteral("ApplyOn_folder");
             break;
             default:
             break;
         }
         if(exclude.at(index).need_match_all)
             optionsToShow << tr("Full match");
-        excludeOptions<<optionsToShow.join(";");
+        excludeOptions<<optionsToShow.join(QStringLiteral(";"));
         index++;
     }
     emit sendNewFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
@@ -275,7 +275,7 @@ bool Filters::convertToRegex(Filters_rules &item)
         else if(item.search_type==SearchType_simpleRegex)
         {
             tempString=QRegularExpression::escape(item.search_text);
-            tempString.replace("\\*","[^\\\\/]*");
+            tempString.replace(QStringLiteral("\\*"),QStringLiteral("[^\\\\/]*"));
         }
         else if(item.search_type==SearchType_perlRegex)
         {
@@ -291,7 +291,7 @@ bool Filters::convertToRegex(Filters_rules &item)
         if(isValid)
         {
             if(item.need_match_all==true)
-                tempString="^"+tempString+"$";
+                tempString=QStringLiteral("^")+tempString+QStringLiteral("$");
             regex=QRegularExpression(tempString);
             isValid=regex.isValid();
             item.regex=regex;

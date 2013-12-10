@@ -31,6 +31,7 @@
 /// \brief initiate the ultracopier event dispatcher and check if no other session is running
 DebugEngine::DebugEngine()
 {
+    fileNameCleaner=QRegularExpression(QStringLiteral("\\.\\.?[/\\\\]([^/]+[/\\\\])?"));
     quit=false;
     QStringList ultracopierArguments=QCoreApplication::arguments();
     if(ultracopierArguments.size()==2)
@@ -236,7 +237,7 @@ void DebugEngine::addDebugInformationStatic(const Ultracopier::DebugLevel &level
 {
     if(DebugEngine::debugEngine==NULL)
     {
-        qWarning() << "After close: " << function << file << ligne;
+        qWarning() << QStringLiteral("After close: ") << function << file << ligne;
         return;
     }
     DebugLevel_custom tempLevel=DebugLevel_custom_Information;
@@ -264,7 +265,7 @@ void DebugEngine::addDebugNote(const QString& text)
 {
     if(DebugEngine::debugEngine==NULL)
         return;
-    DebugEngine::debugEngine->addDebugInformation(DebugLevel_custom_UserNote,"",text,"",-1,"Core");
+    DebugEngine::debugEngine->addDebugInformation(DebugLevel_custom_UserNote,QStringLiteral(""),text,QStringLiteral(""),-1,QStringLiteral("Core"));
 }
 
 /// \brief For add message info, this function is thread safe
@@ -272,15 +273,15 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
 {
     if(DebugEngine::debugEngine==NULL)
     {
-        qWarning() << "After close: " << function << file << ligne;
+        qWarning() << QStringLiteral("After close: ") << function << file << ligne;
         return;
     }
     //Remove the compiler extra patch generated
-    file=file.remove(QRegularExpression("\\.\\.?[/\\\\]([^/]+[/\\\\])?"));
+    file=file.remove(fileNameCleaner);
     QString addDebugInformation_lignestring=QString::number(ligne);
     QString addDebugInformation_fileString=file;
     if(ligne!=-1)
-        addDebugInformation_fileString+=":"+addDebugInformation_lignestring;
+        addDebugInformation_fileString+=QStringLiteral(":")+addDebugInformation_lignestring;
     //Load the time from start
     QString addDebugInformation_time = QString::number(startTime.elapsed());
     QString addDebugInformation_htmlFormat;
@@ -288,32 +289,32 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
     switch(level)
     {
         case DebugLevel_custom_Information:
-            addDebugInformation_htmlFormat="<tr class=\"Information\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+            addDebugInformation_htmlFormat=QStringLiteral("<tr class=\"Information\"><td class=\"time\">")+addDebugInformation_time+QStringLiteral("</span></td><td>")+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
         break;
         case DebugLevel_custom_Critical:
-            addDebugInformation_htmlFormat="<tr class=\"Critical\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+            addDebugInformation_htmlFormat=QStringLiteral("<tr class=\"Critical\"><td class=\"time\">")+addDebugInformation_time+QStringLiteral("</span></td><td>")+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
         break;
         case DebugLevel_custom_Warning:
-            addDebugInformation_htmlFormat="<tr class=\"Warning\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+            addDebugInformation_htmlFormat=QStringLiteral("<tr class=\"Warning\"><td class=\"time\">")+addDebugInformation_time+QStringLiteral("</span></td><td>")+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
         break;
         case DebugLevel_custom_Notice:
         {
-            addDebugInformation_htmlFormat="<tr class=\"Notice\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+            addDebugInformation_htmlFormat=QStringLiteral("<tr class=\"Notice\"><td class=\"time\">")+addDebugInformation_time+QStringLiteral("</span></td><td>")+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
             important=false;
         }
         break;
         case DebugLevel_custom_UserNote:
-            addDebugInformation_htmlFormat="<tr class=\"Note\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
+            addDebugInformation_htmlFormat=QStringLiteral("<tr class=\"Note\"><td class=\"time\">")+addDebugInformation_time+QStringLiteral("</span></td><td>")+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
         break;
     }
     //To prevent access of string in multi-thread
     {
         //Show the text in console
         QString addDebugInformation_textFormat;
-        addDebugInformation_textFormat = "("+addDebugInformation_time.rightJustified(8,' ')+") ";
+        addDebugInformation_textFormat = QStringLiteral("(")+addDebugInformation_time.rightJustified(8,' ')+QStringLiteral(") ");
         if(file!="" && ligne!=-1)
-            addDebugInformation_textFormat += file+":"+addDebugInformation_lignestring+":";
-        addDebugInformation_textFormat += function+"(), (location: "+location+"): "+text;
+            addDebugInformation_textFormat += file+QStringLiteral(":")+addDebugInformation_lignestring+QStringLiteral(":");
+        addDebugInformation_textFormat += function+QStringLiteral("(), (location: ")+location+QStringLiteral("): ")+text;
         QMutexLocker lock_mutex(&mutex);
         if(currentBackend==File)
         {

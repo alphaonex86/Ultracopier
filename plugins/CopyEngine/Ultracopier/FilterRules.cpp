@@ -124,7 +124,7 @@ void FilterRules::updateChecking()
         else if(ui->search_type->currentIndex()==1)
         {
             tempString=QRegularExpression::escape(ui->search->text());
-            tempString.replace("\\*","[^\\\\/]*");
+            tempString.replace(QStringLiteral("\\*"),QStringLiteral("[^\\\\/]*"));
         }
         else if(ui->search_type->currentIndex()==2)
         {
@@ -132,15 +132,15 @@ void FilterRules::updateChecking()
             if(tempString.startsWith('^') && tempString.endsWith('$'))
             {
                 ui->need_match_all->setChecked(true);
-                tempString.remove(QRegularExpression("^\\^"));
-                tempString.remove(QRegularExpression("\\$$"));
+                tempString.remove(QRegularExpression(QStringLiteral("^\\^")));
+                tempString.remove(QRegularExpression(QStringLiteral("\\$$")));
                 ui->search->setText(tempString);
             }
         }
         if(isValid)
         {
             if(ui->need_match_all->isChecked())
-                tempString="^"+tempString+"$";
+                tempString=QStringLiteral("^")+tempString+QStringLiteral("$");
             regex=QRegularExpression(tempString);
             isValid=regex.isValid();
         }

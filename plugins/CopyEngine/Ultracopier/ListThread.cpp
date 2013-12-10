@@ -74,12 +74,12 @@ void ListThread::transferInodeIsClosed()
 {
     numberOfInodeOperation--;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
     #endif
     TransferThread *temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
     if(temp_transfer_thread==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("transfer thread not located!"));
         return;
     }
     bool isFound=false;
@@ -88,7 +88,7 @@ void ListThread::transferInodeIsClosed()
     #endif
     if(temp_transfer_thread->getStat()!=TransferStat_Idle)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not idle!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("transfer thread not idle!"));
         return;
     }
     int int_for_internal_loop=0;
@@ -97,7 +97,7 @@ void ListThread::transferInodeIsClosed()
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] have finish, put at idle; for id: %2").arg(int_for_internal_loop).arg(temp_transfer_thread->transferId));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] have finish, put at idle; for id: %2").arg(int_for_internal_loop).arg(temp_transfer_thread->transferId));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
             newAction.userAction.moveAt=0;
@@ -109,7 +109,7 @@ void ListThread::transferInodeIsClosed()
             if(requiredSpace.contains(drive) && (actionToDoListTransfer[int_for_internal_loop].mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].source.absoluteFilePath())))
                 requiredSpace[drive]-=actionToDoListTransfer[int_for_internal_loop].size;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
             if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
 
@@ -118,7 +118,7 @@ void ListThread::transferInodeIsClosed()
             if(copiedSize>(qint64)temp_transfer_thread->transferSize)
             {
                 oversize=copiedSize-temp_transfer_thread->transferSize;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("add oversize of: %1").arg(oversize));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("add oversize of: %1").arg(oversize));
                 bytesToTransfer+=oversize;
                 bytesTransfered+=oversize;
             }
@@ -145,14 +145,14 @@ void ListThread::transferInodeIsClosed()
         deleteTransferThread();
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_internal_loop));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(temp_transfer_thread->transferId).arg(int_for_internal_loop));
         temp_transfer_thread->transferId=0;
         temp_transfer_thread->transferSize=0;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("countLocalParse: %1, actionToDoList.size(): %2").arg(countLocalParse).arg(actionToDoListTransfer.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("countLocalParse: %1, actionToDoList.size(): %2").arg(countLocalParse).arg(actionToDoListTransfer.size()));
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(countLocalParse!=1)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("countLocalParse != 1"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("countLocalParse != 1"));
     #endif
     doNewActions_inode_manipulation();
 }
@@ -164,7 +164,7 @@ void ListThread::transferPutAtBottom()
     TransferThread *transfer=qobject_cast<TransferThread *>(QObject::sender());
     if(transfer==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("transfer thread not located!"));
         return;
     }
     bool isFound=false;
@@ -176,7 +176,7 @@ void ListThread::transferPutAtBottom()
     {
         if(actionToDoListTransfer.at(indexAction).id==transfer->transferId)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Put at the end: %1").arg(transfer->transferId));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Put at the end: %1").arg(transfer->transferId));
             //push for interface at the end
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
@@ -200,14 +200,14 @@ void ListThread::transferPutAtBottom()
     }
     if(!isFound)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("unable to found item into the todo list, id: %1, index: %2").arg(transfer->transferId));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(transfer->transferId));
         transfer->transferId=0;
         transfer->transferSize=0;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("countLocalParse: %1").arg(countLocalParse));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("countLocalParse: %1").arg(countLocalParse));
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(countLocalParse!=1)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("countLocalParse != 1"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("countLocalParse != 1"));
     #endif
     transfer->skip();
 }
@@ -345,7 +345,7 @@ QString ListThread::getUniqueDestinationFolder() const
 
 ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with: "+QString::number(mode));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start with: ")+QString::number(mode));
 
     //create new thread because is auto-detroyed
     scanFileOrFolderThreadsPool << new ScanFileOrFolder(mode);
@@ -380,7 +380,7 @@ void ListThread::scanThreadHaveFinishSlot()
 
 void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"listing thread have finish, skipFirstRemove: "+QString::number(skipFirstRemove));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("listing thread have finish, skipFirstRemove: ")+QString::number(skipFirstRemove));
     if(!skipFirstRemove)
     {
         ScanFileOrFolder * senderThread = qobject_cast<ScanFileOrFolder *>(QObject::sender());
@@ -388,14 +388,14 @@ void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"sender pointer null (plugin copy engine)");
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the next thread, scanFileOrFolderThreadsPool.size(): "+QString::number(scanFileOrFolderThreadsPool.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start the next thread, scanFileOrFolderThreadsPool.size(): ")+QString::number(scanFileOrFolderThreadsPool.size()));
             delete senderThread;
             scanFileOrFolderThreadsPool.removeOne(senderThread);
             if(scanFileOrFolderThreadsPool.isEmpty())
                 updateTheStatus();
         }
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the next thread, scanFileOrFolderThreadsPool.size(): "+QString::number(scanFileOrFolderThreadsPool.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start the next thread, scanFileOrFolderThreadsPool.size(): ")+QString::number(scanFileOrFolderThreadsPool.size()));
     if(scanFileOrFolderThreadsPool.size()>0)
     {
         //then start the next listing threads
@@ -444,7 +444,7 @@ void ListThread::startGeneralTransfer()
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::newCopy(const QStringList &sources,const QString &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", destination: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+sources.join(";")+QStringLiteral(", destination: ")+destination);
     ScanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Copy);
     if(scanFileOrFolderThread==NULL)
     {
@@ -494,7 +494,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
             index++;
         }
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source informations, sourceDrive: %1, sourceDriveMultiple: %2").arg(sourceDrive).arg(sourceDriveMultiple));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source informations, sourceDrive: %1, sourceDriveMultiple: %2").arg(sourceDrive).arg(sourceDriveMultiple));
     if(!destinationDriveMultiple)
     {
         QString tempDrive=driveManagement.getDrive(destination);
@@ -514,14 +514,14 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
         if(destinationFolder!=destination)
             destinationFolderMultiple=true;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("destination informations, destinationDrive: %1, destinationDriveMultiple: %2").arg(destinationDrive).arg(destinationDriveMultiple));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("destination informations, destinationDrive: %1, destinationDriveMultiple: %2").arg(destinationDrive).arg(destinationDriveMultiple));
 }
 
 void ListThread::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
 {
     this->mountSysPoint=mountSysPoint;
     this->driveType=driveType;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("drives: %1").arg(drives.join(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("drives: %1").arg(drives.join(";")));
     driveManagement.setDrive(mountSysPoint,driveType);
     emit send_setDrive(mountSysPoint,driveType);
 }
@@ -693,7 +693,7 @@ bool ListThread::skipInternal(const quint64 &id)
     {
         if(transferThreadList.at(index)->transferId==id)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("skip one transfer: %1").arg(id));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("skip one transfer: %1").arg(id));
             transferThreadList.at(index)->skip();
             return true;
         }
@@ -705,7 +705,7 @@ bool ListThread::skipInternal(const quint64 &id)
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==id)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] remove at not running, for id: %2").arg(int_for_internal_loop).arg(id));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::RemoveItem;
             newAction.userAction.moveAt=1;
@@ -713,14 +713,14 @@ bool ListThread::skipInternal(const quint64 &id)
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
             if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                 updateTheStatus();
             return true;
         }
         int_for_internal_loop++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("skip transfer not found: %1").arg(id));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("skip transfer not found: %1").arg(id));
     return false;
 }
 
@@ -796,7 +796,7 @@ void ListThread::checkIfReadyToCancel()
 bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
 {
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed in KB/s: "+QString::number(speedLimitation));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("maxSpeed in KB/s: ")+QString::number(speedLimitation));
 
     if(speedLimitation>1024*1024)
     {
@@ -855,7 +855,7 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
             }
         }
 
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("fixed speed with new block size and new interval in BlockSize: %1, multiForBigSpeed: %2, newInterval: %3, maxSpeed: %4")
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("fixed speed with new block size and new interval in BlockSize: %1, multiForBigSpeed: %2, newInterval: %3, maxSpeed: %4")
                                  .arg(blockSizeAfterSpeedLimitation)
                                  .arg(multiForBigSpeed)
                                  .arg(newInterval)
@@ -912,7 +912,7 @@ void ListThread::updateTheStatus()
         updateTheStatus_action_in_progress=Ultracopier::Copying;
     else
         updateTheStatus_action_in_progress=Ultracopier::Idle;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit actionInProgess("+QString::number(updateTheStatus_action_in_progress)+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("emit actionInProgess(")+QString::number(updateTheStatus_action_in_progress)+QStringLiteral(")"));
     emit actionInProgess(updateTheStatus_action_in_progress);
 }
 
@@ -936,7 +936,7 @@ quint64 ListThread::addToMkPath(const QFileInfo& source,const QFileInfo& destina
         return 0;
     if(inode!=0 && (!keepDate && !doRightTransfer))
         return 0;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
     ActionToDoInode temp;
     temp.type       = ActionType_MkPath;
     temp.id         = generateIdNumber();
@@ -952,7 +952,7 @@ void ListThread::addToMovePath(const QFileInfo& source, const QFileInfo &destina
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, inodeToRemove: %3").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(inodeToRemove));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, inodeToRemove: %3").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(inodeToRemove));
     ActionToDoInode temp;
     temp.type	= ActionType_MovePath;
     temp.id		= generateIdNumber();
@@ -967,7 +967,7 @@ void ListThread::addToRealMove(const QFileInfo& source,const QFileInfo& destinat
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
     ActionToDoInode temp;
     temp.type	= ActionType_RealMove;
     temp.id		= generateIdNumber();
@@ -1067,7 +1067,7 @@ void ListThread::syncTransferList_internal()
         newAction.addAction.size		= item.size;
         newAction.addAction.mode		= item.mode;
         actionDone << newAction;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, size: %2, name: %3, size2: %4").arg(item.id).arg(item.size).arg(item.source.absoluteFilePath()).arg(newAction.addAction.size));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, size: %2, name: %3, size2: %4").arg(item.id).arg(item.size).arg(item.source.absoluteFilePath()).arg(newAction.addAction.size));
         if(item.isRunning)
         {
             for(int_for_internal_loop=0; int_for_internal_loop<loop_sub_size; ++int_for_internal_loop) {
@@ -1139,7 +1139,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     newAction.type				= Ultracopier::AddingItem;
     newAction.addAction=actionToDoTransferToItemOfCopyList(temp);
     actionDone << newAction;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, add entry: %3, size: %4, size2: %5, isSymLink: %6").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(size).arg(source.isSymLink()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, add entry: %3, size: %4, size2: %5, isSymLink: %6").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(size).arg(source.isSymLink()));
     return temp.id;
 }
 
@@ -1188,7 +1188,7 @@ void ListThread::moveItemsOnTop(QList<int> ids)
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
             ids.removeOne(actionToDoListTransfer.at(i).id);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(indexToMove));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("move item ")+QString::number(i)+QStringLiteral(" to ")+QString::number(indexToMove));
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
             newAction.addAction.id=actionToDoListTransfer.at(i).id;
@@ -1223,7 +1223,7 @@ void ListThread::moveItemsUp(QList<int> ids)
         {
             if(haveGoodPosition)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(i-1));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("move item ")+QString::number(i)+QStringLiteral(" to ")+QString::number(i-1));
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type=Ultracopier::MoveItem;
                 newAction.addAction.id=actionToDoListTransfer.at(i).id;
@@ -1233,7 +1233,7 @@ void ListThread::moveItemsUp(QList<int> ids)
                 actionToDoListTransfer.swap(i,lastGoodPositionReal);
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Try move up false, item ")+QString::number(i));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Try move up false, item ")+QString::number(i));
             ids.removeOne(actionToDoListTransfer.at(i).id);
             if(ids.isEmpty())
             {
@@ -1268,7 +1268,7 @@ void ListThread::moveItemsDown(QList<int> ids)
         {
             if(haveGoodPosition)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(i+1));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("move item ")+QString::number(i)+QStringLiteral(" to ")+QString::number(i+1));
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type=Ultracopier::MoveItem;
                 newAction.addAction.id=actionToDoListTransfer.at(i).id;
@@ -1279,7 +1279,7 @@ void ListThread::moveItemsDown(QList<int> ids)
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Try move up false, item ")+QString::number(i));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Try move up false, item ")+QString::number(i));
             }
             ids.removeOne(actionToDoListTransfer.at(i).id);
             if(ids.isEmpty())
@@ -1310,10 +1310,10 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
     //do list operation
     int lastGoodPositionReal=actionToDoListTransfer.size()-1;
     for (int i=lastGoodPositionReal; i>=0; --i) {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Check action on item ")+QString::number(i));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Check action on item ")+QString::number(i));
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("move item ")+QString::number(i)+" to "+QString::number(lastGoodPositionReal));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("move item ")+QString::number(i)+QStringLiteral(" to ")+QString::number(lastGoodPositionReal));
             ids.removeOne(actionToDoListTransfer.at(i).id);
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
@@ -1338,9 +1338,9 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
 void ListThread::forceMode(const Ultracopier::CopyMode &mode)
 {
     if(mode==Ultracopier::Copy)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to copy"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to copy"));
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to move"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to move"));
     this->mode=mode;
     forcedMode=true;
 }
@@ -1351,17 +1351,17 @@ void ListThread::exportTransferList(const QString &fileName)
     QFile transferFile(fileName);
     if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
     {
-        transferFile.write(QString("Ultracopier;Transfer-list;").toUtf8());
+        transferFile.write(QStringLiteral("Ultracopier;Transfer-list;").toUtf8());
         if(!forcedMode)
-            transferFile.write(QString("Transfer;").toUtf8());
+            transferFile.write(QStringLiteral("Transfer;").toUtf8());
         else
         {
             if(mode==Ultracopier::Copy)
-                transferFile.write(QString("Copy;").toUtf8());
+                transferFile.write(QStringLiteral("Copy;").toUtf8());
             else
-                transferFile.write(QString("Move;").toUtf8());
+                transferFile.write(QStringLiteral("Move;").toUtf8());
         }
-        transferFile.write(QString("Ultracopier\n").toUtf8());
+        transferFile.write(QStringLiteral("Ultracopier\n").toUtf8());
         bool haveError=false;
         int size=actionToDoListTransfer.size();
         for (int index=0;index<size;++index) {
@@ -1370,9 +1370,9 @@ void ListThread::exportTransferList(const QString &fileName)
                 if(!forcedMode || mode==Ultracopier::Copy)
                 {
                     if(forcedMode)
-                        transferFile.write(QString("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
                     else
-                        transferFile.write(QString("Copy;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("Copy;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
                 }
                 else
                     haveError=true;
@@ -1382,9 +1382,9 @@ void ListThread::exportTransferList(const QString &fileName)
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write(QString("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
                     else
-                        transferFile.write(QString("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
                 }
                 else
                     haveError=true;
@@ -1392,14 +1392,14 @@ void ListThread::exportTransferList(const QString &fileName)
         }
         if(haveError)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
             emit errorTransferList(tr("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
         }
         transferFile.close();
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to save the transfer list: %1").arg(transferFile.errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to save the transfer list: %1").arg(transferFile.errorString()));
         emit errorTransferList(tr("Unable to save the transfer list: %1").arg(transferFile.errorString()));
         return;
     }
@@ -1415,14 +1415,14 @@ void ListThread::importTransferList(const QString &fileName)
         QByteArray data=transferFile.readLine(64);
         if(data.size()<=0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Problem reading file, or file-size is 0"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Problem reading file, or file-size is 0"));
             emit errorTransferList(tr("Problem reading file, or file-size is 0"));
             return;
         }
         content=QString::fromUtf8(data);
         if(content!="Ultracopier;Transfer-list;Transfer;Ultracopier\n" && content!="Ultracopier;Transfer-list;Copy;Ultracopier\n" && content!="Ultracopier;Transfer-list;Move;Ultracopier\n")
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Wrong header: \"%1\"").arg(content));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Wrong header: \"%1\"").arg(content));
             emit errorTransferList(tr("Wrong header: \"%1\"").arg(content));
             return;
         }
@@ -1431,7 +1431,7 @@ void ListThread::importTransferList(const QString &fileName)
         {
             if(forcedMode)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in mixed mode, but this instance is not"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("The transfer list is in mixed mode, but this instance is not"));
                 emit errorTransferList(tr("The transfer list is in mixed mode, but this instance is not in this mode"));
                 return;
             }
@@ -1440,13 +1440,13 @@ void ListThread::importTransferList(const QString &fileName)
         }
         if(content=="Ultracopier;Transfer-list;Copy;Ultracopier\n" && (forcedMode && mode==Ultracopier::Move))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in copy mode, but this instance is not: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("The transfer list is in copy mode, but this instance is not: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
             emit errorTransferList(tr("The transfer list is in copy mode, but this instance is not in this mode"));
             return;
         }
         if(content=="Ultracopier;Transfer-list;Move;Ultracopier\n" && (forcedMode && mode==Ultracopier::Copy))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The transfer list is in move mode, but this instance is not: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("The transfer list is in move mode, but this instance is not: forcedMode: %1, mode: %2").arg(forcedMode).arg(mode));
             emit errorTransferList(tr("The transfer list is in move mode, but this instance is not in this mode"));
             return;
         }
@@ -1462,9 +1462,9 @@ void ListThread::importTransferList(const QString &fileName)
         bool errorFound=false;
         QRegularExpression correctLine;
         if(transferListMixedMode)
-            correctLine=QRegularExpression("^(Copy|Move);[^;]+;[^;]+[\n\r]*$");
+            correctLine=QRegularExpression(QStringLiteral("^(Copy|Move);[^;]+;[^;]+[\n\r]*$"));
         else
-            correctLine=QRegularExpression("^[^;]+;[^;]+[\n\r]*$");
+            correctLine=QRegularExpression(QStringLiteral("^[^;]+;[^;]+[\n\r]*$"));
         QStringList args;
         Ultracopier::CopyMode tempMode;
         do
@@ -1476,17 +1476,17 @@ void ListThread::importTransferList(const QString &fileName)
                 //do the import here
                 if(content.contains(correctLine))
                 {
-                    content.remove("\n");
-                    args=content.split(";");
+                    content.remove(QStringLiteral("\n"));
+                    args=content.split(QStringLiteral(";"));
                     if(forcedMode)
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("New data to import in forced mode: %2,%3").arg(args.at(0)).arg(args.at(1)));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("New data to import in forced mode: %2,%3").arg(args.at(0)).arg(args.at(1)));
                         addToTransfer(QFileInfo(args.at(0)),QFileInfo(args.at(1)),mode);
                     }
                     else
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("New data to import: %1,%2,%3").arg(args.at(0)).arg(args.at(1)).arg(args.at(2)));
-                        if(args.at(0)=="Copy")
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("New data to import: %1,%2,%3").arg(args.at(0)).arg(args.at(1)).arg(args.at(2)));
+                        if(args.at(0)==QStringLiteral("Copy"))
                             tempMode=Ultracopier::Copy;
                         else
                             tempMode=Ultracopier::Move;
@@ -1495,7 +1495,7 @@ void ListThread::importTransferList(const QString &fileName)
                 }
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Wrong line syntax: %1").arg(content));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Wrong line syntax: %1").arg(content));
                     errorFound=true;
                 }
             }
@@ -1510,7 +1510,7 @@ void ListThread::importTransferList(const QString &fileName)
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open the transfer list: %1").arg(transferFile.errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to open the transfer list: %1").arg(transferFile.errorString()));
         emit errorTransferList(tr("Unable to open the transfer list: %1").arg(transferFile.errorString()));
         return;
     }
@@ -1559,7 +1559,7 @@ bool ListThread::needMoreSpace() const
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()));
     if(stopIt || putInPause)
         return;
     int numberOfTranferRuning=getNumberOfTranferRuning();
@@ -1601,7 +1601,7 @@ void ListThread::doNewActions_start_transfer()
         }
         int_for_loop++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+QString::number(numberOfTranferRuning));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfTranferRuning: ")+QString::number(numberOfTranferRuning));
 }
 
 /** \brief lunch the pre-op or inode op
@@ -1613,7 +1613,7 @@ void ListThread::doNewActions_start_transfer()
 void ListThread::doNewActions_inode_manipulation()
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoList.size(): %1").arg(actionToDoListTransfer.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoList.size(): %1").arg(actionToDoListTransfer.size()));
     #endif
     if(stopIt)
         checkIfReadyToCancel();
@@ -1674,12 +1674,12 @@ void ListThread::doNewActions_inode_manipulation()
                         currentActionToDoTransfer.mode
                         ))
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] id: %2 is idle, but seam busy at set name: %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] id: %2 is idle, but seam busy at set name: %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
                         break;
                     }
                     currentActionToDoTransfer.isRunning=true;
 
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("[%1] id: %2 is idle, use it for %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] id: %2 is idle, use it for %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()));
 
                     /// \note wrong position? Else write why it's here
                     Ultracopier::ReturnActionOnCopyList newAction;
@@ -1695,7 +1695,7 @@ void ListThread::doNewActions_inode_manipulation()
                     int_for_transfer_thread_search++;
                     numberOfInodeOperation++;
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
                     #endif
                     break;
                 }
@@ -1710,7 +1710,7 @@ void ListThread::doNewActions_inode_manipulation()
                 break;
             }
             #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
             #endif
             if(numberOfInodeOperation>=inodeThreads)
                 break;
@@ -1733,7 +1733,7 @@ void ListThread::doNewActions_inode_manipulation()
     //error  checking
     if(actionToDoListInode_count>inodeThreads)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("The index have been detected as out of max range: %1>%2").arg(actionToDoListInode_count).arg(inodeThreads));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("The index have been detected as out of max range: %1>%2").arg(actionToDoListInode_count).arg(inodeThreads));
         return;
     }
 }
@@ -1745,7 +1745,7 @@ void ListThread::restartTransferIfItCan()
     TransferThread *transfer=qobject_cast<TransferThread *>(QObject::sender());
     if(transfer==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("transfer thread not located!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("transfer thread not located!"));
         return;
     }
     int numberOfTranferRuning=getNumberOfTranferRuning();
@@ -1757,7 +1757,7 @@ void ListThread::restartTransferIfItCan()
 /// \brief update the transfer stat
 void ListThread::newTransferStat(const TransferStat &stat,const quint64 &id)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("TransferStat: %1").arg(stat));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("TransferStat: %1").arg(stat));
     Ultracopier::ReturnActionOnCopyList newAction;
     switch(stat)
     {
@@ -1802,7 +1802,7 @@ void ListThread::set_osBufferLimit(const unsigned int &osBufferLimit)
 
 void ListThread::set_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("include.size(): %1, exclude.size(): %2").arg(include.size()).arg(exclude.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("include.size(): %1, exclude.size(): %2").arg(include.size()).arg(exclude.size()));
     this->include=include;
     this->exclude=exclude;
     int index=0;
@@ -1832,14 +1832,14 @@ void ListThread::mkPathFirstFolderFinish()
             {
                 //to send to the log
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
                 if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                     updateTheStatus();
                 numberOfInodeOperation--;
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
                 #endif
                 doNewActions_inode_manipulation();
                 return;
@@ -1849,14 +1849,14 @@ void ListThread::mkPathFirstFolderFinish()
                 //to send to the log
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
                 emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
                 if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
                     updateTheStatus();
                 numberOfInodeOperation--;
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
                 #endif
                 doNewActions_inode_manipulation();
                 return;
@@ -1902,10 +1902,10 @@ void ListThread::timedUpdateDebugDialog()
             stat="Checksum";
             break;
         default:
-            stat=QString("??? (%1)").arg(transferThreadList.at(index)->getStat());
+            stat=QStringLiteral("??? (%1)").arg(transferThreadList.at(index)->getStat());
             break;
         }
-        newList << QString("%1) (%3,%4) %2")
+        newList << QStringLiteral("%1) (%3,%4) %2")
             .arg(index)
             .arg(stat)
             .arg(transferThreadList.at(index)->readingLetter())
@@ -1917,13 +1917,13 @@ void ListThread::timedUpdateDebugDialog()
     int loop_size=actionToDoListTransfer.size();
     while(index<loop_size)
     {
-        newList2 << QString("%1 %2 %3")
+        newList2 << QStringLiteral("%1 %2 %3")
             .arg(actionToDoListTransfer.at(index).source.absoluteFilePath())
             .arg(actionToDoListTransfer.at(index).size)
             .arg(actionToDoListTransfer.at(index).destination.absoluteFilePath());
         if(index>((inodeThreads+ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)*2+1))
         {
-            newList2 << QString("...");
+            newList2 << QStringLiteral("...");
             break;
         }
         index++;
@@ -2024,15 +2024,15 @@ void ListThread::createTransferThread()
     last->setKeepDate(keepDate);
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(!last->setBlockSize(blockSizeAfterSpeedLimitation))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the block size: "+QString::number(blockSizeAfterSpeedLimitation));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to set the block size: ")+QString::number(blockSizeAfterSpeedLimitation));
     #else
     if(!last->setBlockSize(blockSize))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the block size: "+QString::number(blockSize));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to set the block size: ")+QString::number(blockSize));
     #endif
     if(!last->setSequentialBuffer(sequentialBuffer))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the sequentialBuffer: "+QString::number(sequentialBuffer));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to set the sequentialBuffer: ")+QString::number(sequentialBuffer));
     if(!last->setBlockSize(parallelBuffer))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the parallelBuffer: "+QString::number(parallelBuffer));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to set the parallelBuffer: ")+QString::number(parallelBuffer));
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     last->setMultiForBigSpeed(multiForBigSpeed);
@@ -2070,7 +2070,7 @@ void ListThread::createTransferThread()
     connect(this,&ListThread::send_sequentialBuffer,            last,&TransferThread::setSequentialBuffer,		Qt::QueuedConnection);
 
     last->start();
-    last->setObjectName(QString("transfer %1").arg(transferThreadList.size()-1));
+    last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));
     last->setMkpathTransfer(&mkpathTransfer);
     last->setRenamingRules(firstRenamingRule,otherRenamingRule);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -2078,7 +2078,7 @@ void ListThread::createTransferThread()
     #endif
     if(transferThreadList.size()>=inodeThreads)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"create the last of the "+QString::number(inodeThreads)+" transferThread");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("create the last of the ")+QString::number(inodeThreads)+QStringLiteral(" transferThread"));
         return;
     }
     if(stopIt)
@@ -2107,18 +2107,18 @@ void ListThread::deleteTransferThread()
                 index++;
         }
         if(loop_size==inodeThreads)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inodeThreads is lowered to the right value: "+QString::number(inodeThreads));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("inodeThreads is lowered to the right value: ")+QString::number(inodeThreads));
     }
 }
 
 void ListThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm)
 {
     if(transferAlgorithm==TransferAlgorithm_Sequential)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Sequential");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("transferAlgorithm==TransferAlgorithm_Sequential"));
     else if(transferAlgorithm==TransferAlgorithm_Automatic)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Automatic");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("transferAlgorithm==TransferAlgorithm_Automatic"));
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Parallel");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("transferAlgorithm==TransferAlgorithm_Parallel"));
     emit send_setTransferAlgorithm(transferAlgorithm);
 }
 
@@ -2126,10 +2126,10 @@ void ListThread::setParallelBuffer(int parallelBuffer)
 {
     if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"wrong number of block: "+QString::number(parallelBuffer));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("wrong number of block: ")+QString::number(parallelBuffer));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in number of block: "+QString::number(parallelBuffer));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("in number of block: ")+QString::number(parallelBuffer));
     this->parallelBuffer=parallelBuffer;
     emit send_parallelBuffer(parallelBuffer);
 }
@@ -2138,17 +2138,17 @@ void ListThread::setSequentialBuffer(int sequentialBuffer)
 {
     if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"wrong number of block: "+QString::number(sequentialBuffer));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("wrong number of block: ")+QString::number(sequentialBuffer));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in number of block: "+QString::number(sequentialBuffer));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("in number of block: ")+QString::number(sequentialBuffer));
     this->sequentialBuffer=sequentialBuffer;
     emit send_sequentialBuffer(sequentialBuffer);
 }
 
 void ListThread::setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"parallelizeIfSmallerThan in Bytes: "+QString::number(parallelizeIfSmallerThan));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("parallelizeIfSmallerThan in Bytes: ")+QString::number(parallelizeIfSmallerThan));
     this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
 }
 
@@ -2180,10 +2180,10 @@ void ListThread::setInodeThreads(const int &inodeThreads)
 {
     if(inodeThreads<1 || inodeThreads>32)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"inodeThreads is out of ranges: "+QString::number(inodeThreads));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("inodeThreads is out of ranges: ")+QString::number(inodeThreads));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inodeThreads: "+QString::number(inodeThreads));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("inodeThreads: ")+QString::number(inodeThreads));
     this->inodeThreads=inodeThreads;
     createTransferThread();
     deleteTransferThread();
@@ -2191,7 +2191,7 @@ void ListThread::setInodeThreads(const int &inodeThreads)
 
 void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDestination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"renameTheOriginalDestination: "+QString::number(renameTheOriginalDestination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("renameTheOriginalDestination: ")+QString::number(renameTheOriginalDestination));
     this->renameTheOriginalDestination=renameTheOriginalDestination;
     int index=0;
     int loop_sub_size_transfer_thread_search=transferThreadList.size();
@@ -2213,17 +2213,17 @@ void ListThread::exportErrorIntoTransferList(const QString &fileName)
     QFile transferFile(fileName);
     if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
     {
-        transferFile.write(QString("Ultracopier;Transfer-list;").toUtf8());
+        transferFile.write(QStringLiteral("Ultracopier;Transfer-list;").toUtf8());
         if(!forcedMode)
-            transferFile.write(QString("Transfer;").toUtf8());
+            transferFile.write(QStringLiteral("Transfer;").toUtf8());
         else
         {
             if(mode==Ultracopier::Copy)
-                transferFile.write(QString("Copy;").toUtf8());
+                transferFile.write(QStringLiteral("Copy;").toUtf8());
             else
-                transferFile.write(QString("Move;").toUtf8());
+                transferFile.write(QStringLiteral("Move;").toUtf8());
         }
-        transferFile.write(QString("Ultracopier\n").toUtf8());
+        transferFile.write(QStringLiteral("Ultracopier\n").toUtf8());
         bool haveError=false;
         int size=errorLog.size();
         for (int index=0;index<size;++index) {
@@ -2232,9 +2232,9 @@ void ListThread::exportErrorIntoTransferList(const QString &fileName)
                 if(!forcedMode || mode==Ultracopier::Copy)
                 {
                     if(forcedMode)
-                        transferFile.write(QString("%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
                     else
-                        transferFile.write(QString("Copy;%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("Copy;%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
                 }
                 else
                     haveError=true;
@@ -2244,9 +2244,9 @@ void ListThread::exportErrorIntoTransferList(const QString &fileName)
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write(QString("%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
                     else
-                        transferFile.write(QString("Move;%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(QStringLiteral("Move;%1;%2\n").arg(errorLog.at(index).source.absoluteFilePath()).arg(errorLog.at(index).destination.absoluteFilePath()).toUtf8());
                 }
                 else
                     haveError=true;
@@ -2254,14 +2254,14 @@ void ListThread::exportErrorIntoTransferList(const QString &fileName)
         }
         if(haveError)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
             emit errorTransferList(tr("Unable do to move or copy item into wrong forced mode: %1").arg(transferFile.errorString()));
         }
         transferFile.close();
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to save the transfer list: %1").arg(transferFile.errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to save the transfer list: %1").arg(transferFile.errorString()));
         emit errorTransferList(tr("Unable to save the transfer list: %1").arg(transferFile.errorString()));
         return;
     }

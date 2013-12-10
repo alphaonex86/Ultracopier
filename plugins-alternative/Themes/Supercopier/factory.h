@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QIcon>
 #include <QColor>
+#include <QPixmap>
 
 #include "../../../interface/PluginInterface_Themes.h"
 #include "ui_themesOptions.h"

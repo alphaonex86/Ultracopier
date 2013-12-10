@@ -319,9 +319,9 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab_main">
       <attribute name="title">
        <string>Transfer list</string>
       </attribute>
@@ -655,7 +655,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tab_error">
       <attribute name="title">
        <string>Error</string>
       </attribute>
@@ -733,7 +733,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tab_interface">
       <attribute name="title">
        <string>Interface</string>
       </attribute>

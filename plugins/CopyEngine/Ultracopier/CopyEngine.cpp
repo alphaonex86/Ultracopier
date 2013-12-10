@@ -415,7 +415,7 @@ bool CopyEngine::newCopy(const QStringList &sources)
     if(forcedMode && mode!=Ultracopier::Copy)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to move, you can't copy with it"));
+        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to move, you can't copy with it"));
         return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -437,7 +437,7 @@ bool CopyEngine::newCopy(const QStringList &sources,const QString &destination)
     if(forcedMode && mode!=Ultracopier::Copy)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to move, you can't copy with it"));
+        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to move, you can't copy with it"));
         return false;
     }
     return listThread->newCopy(sources,destination);
@@ -448,7 +448,7 @@ bool CopyEngine::newMove(const QStringList &sources)
     if(forcedMode && mode!=Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to copy, you can't move with it"));
+        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to copy, you can't move with it"));
         return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -470,7 +470,7 @@ bool CopyEngine::newMove(const QStringList &sources,const QString &destination)
     if(forcedMode && mode!=Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The engine is forced to copy, you can't move with it"));
+        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to copy, you can't move with it"));
         return false;
     }
     return listThread->newMove(sources,destination);
@@ -498,7 +498,7 @@ QString CopyEngine::askDestination()
         if(button==QMessageBox::Yes)
             return destination;
     }
-    destination=QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select destination directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    destination=QFileDialog::getExistingDirectory(interface,facilityEngine->translateText(QStringLiteral("Select destination directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     return destination;
 }
 
@@ -619,7 +619,7 @@ void CopyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamin
 
 bool CopyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
 {
-    QString source = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText("Select source directory"),"",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString source = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText(QStringLiteral("Select source directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(source.isEmpty() || source.isNull() || source=="")
         return false;
     if(mode==Ultracopier::Copy)
@@ -633,9 +633,9 @@ bool CopyEngine::userAddFile(const Ultracopier::CopyMode &mode)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QStringList sources = QFileDialog::getOpenFileNames(
         interface,
-        facilityEngine->translateText("Select one or more files to open"),
-        "",
-        facilityEngine->translateText("All files")+" (*)");
+        facilityEngine->translateText(QStringLiteral("Select one or more files to open")),
+        QStringLiteral(""),
+        facilityEngine->translateText(QStringLiteral("All files"))+QStringLiteral(" (*)"));
     if(sources.isEmpty())
         return false;
     if(mode==Ultracopier::Copy)
@@ -698,14 +698,14 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
 {
     if(forcedMode)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Mode forced previously"));
-        QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The mode has been forced previously. This is an internal error, please report it"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Mode forced previously"));
+        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The mode has been forced previously. This is an internal error, please report it"));
         return;
     }
     if(mode==Ultracopier::Copy)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to copy"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to copy"));
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to move"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to move"));
     this->mode=mode;
     forcedMode=true;
     emit signal_forceMode(mode);
@@ -713,7 +713,7 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
 
 void CopyEngine::exportTransferList()
 {
-    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
+    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText(QStringLiteral("Save transfer list")),QStringLiteral("transfer-list.lst"),facilityEngine->translateText(QStringLiteral("Transfer list"))+QStringLiteral(" (*.lst)"));
     if(fileName.isEmpty())
         return;
     emit signal_exportTransferList(fileName);
@@ -721,7 +721,7 @@ void CopyEngine::exportTransferList()
 
 void CopyEngine::importTransferList()
 {
-    QString fileName = QFileDialog::getOpenFileName(interface,facilityEngine->translateText("Open transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
+    QString fileName = QFileDialog::getOpenFileName(interface,facilityEngine->translateText(QStringLiteral("Open transfer list")),QStringLiteral("transfer-list.lst"),facilityEngine->translateText(QStringLiteral("Transfer list"))+QStringLiteral(" (*.lst)"));
     if(fileName.isEmpty())
         return;
     emit signal_importTransferList(fileName);
@@ -729,12 +729,12 @@ void CopyEngine::importTransferList()
 
 void CopyEngine::warningTransferList(const QString &warning)
 {
-    QMessageBox::warning(interface,facilityEngine->translateText("Error"),warning);
+    QMessageBox::warning(interface,facilityEngine->translateText(QStringLiteral("Error")),warning);
 }
 
 void CopyEngine::errorTransferList(const QString &error)
 {
-    QMessageBox::critical(interface,facilityEngine->translateText("Error"),error);
+    QMessageBox::critical(interface,facilityEngine->translateText(QStringLiteral("Error")),error);
 }
 
 bool CopyEngine::setSpeedLimitation(const qint64 &speedLimitation)
@@ -747,7 +747,7 @@ bool CopyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 
 void CopyEngine::setFileCollision(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
     if(uiIsInstalled)
         if(index!=ui->comboBoxFileCollision->currentIndex())
             ui->comboBoxFileCollision->setCurrentIndex(index);
@@ -784,7 +784,7 @@ void CopyEngine::setFileCollision(int index)
 
 void CopyEngine::setFileError(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
     if(uiIsInstalled)
         if(index!=ui->comboBoxFileError->currentIndex())
             ui->comboBoxFileError->setCurrentIndex(index);
@@ -809,7 +809,7 @@ void CopyEngine::setFileError(int index)
 
 void CopyEngine::setTransferAlgorithm(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
     if(uiIsInstalled)
         if(index!=ui->transferAlgorithm->currentIndex())
             ui->transferAlgorithm->setCurrentIndex(index);
@@ -1118,7 +1118,7 @@ void CopyEngine::sendNewFilters()
 
 void CopyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("new filter"));
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
@@ -1187,7 +1187,7 @@ void CopyEngine::setDefaultDestinationFolder(const QString &defaultDestinationFo
 void CopyEngine::exportErrorIntoTransferList()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"exportErrorIntoTransferList");
-    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText("Save transfer list"),"transfer-list.lst",facilityEngine->translateText("Transfer list")+" (*.lst)");
+    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText(QStringLiteral("Save transfer list")),QStringLiteral("transfer-list.lst"),facilityEngine->translateText(QStringLiteral("Transfer list"))+QStringLiteral(" (*.lst)"));
     if(fileName.isEmpty())
         return;
     emit signal_exportErrorIntoTransferList(fileName);

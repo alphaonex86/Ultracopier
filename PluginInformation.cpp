@@ -56,7 +56,7 @@ QString PluginInformation::categoryToTranslation(const PluginType &category) con
         break;
         default:
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"cat translation not found");
-            return "Unknow";
+            return tr("Unknown");
         break;
     }
 }
@@ -68,20 +68,20 @@ void PluginInformation::retranslateInformation()
     ui->retranslateUi(this);
     this->setWindowTitle(tr("Information about %1").arg(plugin.name));
     ui->name->setText(plugin.name);
-    ui->title->setText(getTranslatedText(plugin,"title",language));
+    ui->title->setText(getTranslatedText(plugin,QStringLiteral("title"),language));
     ui->category->setText(categoryToTranslation(plugin.category));
-    ui->author->setText(getInformationText(plugin,"author"));
-    QString website=getTranslatedText(plugin,"website",language);
-    ui->website->setText("<a href=\""+website+"\" title=\""+website+"\">"+website+"</a>");
+    ui->author->setText(getInformationText(plugin,QStringLiteral("author")));
+    QString website=getTranslatedText(plugin,QStringLiteral("website"),language);
+    ui->website->setText(QStringLiteral("<a href=\"")+website+QStringLiteral("\" title=\"")+website+QStringLiteral("\">")+website+QStringLiteral("</a>"));
     bool ok;
-    int timeStamps=getInformationText(plugin,"pubDate").toInt(&ok);
+    int timeStamps=getInformationText(plugin,QStringLiteral("pubDate")).toInt(&ok);
     QDateTime date;
     date.setTime_t(timeStamps);
     ui->date->setDateTime(date);
     if(!ok || timeStamps<=0)
         ui->date->setEnabled(false);
-    ui->description->setPlainText(getTranslatedText(plugin,"description",language));
-    ui->version->setText(getInformationText(plugin,"version"));
+    ui->description->setPlainText(getTranslatedText(plugin,QStringLiteral("description"),language));
+    ui->version->setText(getInformationText(plugin,QStringLiteral("version")));
 }
 
 /// \brief get informations text
@@ -111,7 +111,7 @@ QString PluginInformation::getTranslatedText(const PluginsAvailable &plugin,cons
             {
                 if(plugin.informations.at(index).at(1)==mainShortName)
                     return plugin.informations.at(index).last();
-                else if(plugin.informations.at(index).at(1)=="en")
+                else if(plugin.informations.at(index).at(1)==QStringLiteral("en"))
                     TextFound=plugin.informations.at(index).last();
 
             }

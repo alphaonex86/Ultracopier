@@ -146,85 +146,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../Factory.cpp" line="398"/>
-        <location filename="../../Factory.cpp" line="401"/>
-        <location filename="../../Factory.cpp" line="406"/>
+        <location filename="../../Factory.cpp" line="402"/>
+        <location filename="../../Factory.cpp" line="405"/>
         <location filename="../../Factory.cpp" line="410"/>
+        <location filename="../../Factory.cpp" line="414"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="399"/>
         <location filename="../../Factory.cpp" line="403"/>
         <location filename="../../Factory.cpp" line="407"/>
         <location filename="../../Factory.cpp" line="411"/>
+        <location filename="../../Factory.cpp" line="415"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="402"/>
+        <location filename="../../Factory.cpp" line="406"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="404"/>
-        <location filename="../../Factory.cpp" line="416"/>
+        <location filename="../../Factory.cpp" line="408"/>
+        <location filename="../../Factory.cpp" line="420"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="408"/>
+        <location filename="../../Factory.cpp" line="412"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="412"/>
+        <location filename="../../Factory.cpp" line="416"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="413"/>
+        <location filename="../../Factory.cpp" line="417"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="414"/>
+        <location filename="../../Factory.cpp" line="418"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="415"/>
+        <location filename="../../Factory.cpp" line="419"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="418"/>
+        <location filename="../../Factory.cpp" line="422"/>
         <source>Automatic</source>
         <translation>Automatikus</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="419"/>
+        <location filename="../../Factory.cpp" line="423"/>
         <source>Sequential</source>
         <translation>Szekvenciális</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="420"/>
+        <location filename="../../Factory.cpp" line="424"/>
         <source>Parallel</source>
         <translation>Párhuzamos</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="471"/>
-        <location filename="../../Factory.cpp" line="510"/>
+        <location filename="../../Factory.cpp" line="475"/>
+        <location filename="../../Factory.cpp" line="514"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="471"/>
+        <location filename="../../Factory.cpp" line="475"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../Factory.cpp" line="510"/>
+        <location filename="../../Factory.cpp" line="514"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>A beállítási motor nincs betöltve, a szűrők elérése nem lehetséges</translation>
     </message>
@@ -536,29 +536,29 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="104"/>
-        <location filename="../../MkPath.cpp" line="156"/>
-        <location filename="../../MkPath.cpp" line="180"/>
+        <location filename="../../MkPath.cpp" line="109"/>
+        <location filename="../../MkPath.cpp" line="161"/>
+        <location filename="../../MkPath.cpp" line="185"/>
         <source>Unable to create the folder</source>
         <translation>Mappa létrehozása nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="117"/>
+        <location filename="../../MkPath.cpp" line="122"/>
         <source>The source folder don&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="145"/>
+        <location filename="../../MkPath.cpp" line="150"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="166"/>
+        <location filename="../../MkPath.cpp" line="171"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="190"/>
+        <location filename="../../MkPath.cpp" line="195"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -567,7 +567,7 @@
         <translation type="obsolete">Jogok beállítása nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="233"/>
+        <location filename="../../MkPath.cpp" line="238"/>
         <source>Unable to remove</source>
         <translation>Eltávolítás nem lehetséges</translation>
     </message>
@@ -694,66 +694,103 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="223"/>
+        <location filename="../../TransferThread.cpp" line="229"/>
+        <location filename="../../TransferThread.cpp" line="637"/>
+        <location filename="../../TransferThread.cpp" line="698"/>
+        <location filename="../../TransferThread.cpp" line="1253"/>
         <source>File not found</source>
         <translation>Fájl nem található</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="546"/>
         <source>Drive %1</source>
-        <translation type="obsolete">%1 meghajtó</translation>
+        <translation type="unfinished">%1 meghajtó</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="548"/>
         <source>Unknown folder</source>
-        <translation type="obsolete">Ismeretlen mappa</translation>
+        <translation type="unfinished">Ismeretlen mappa</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="552"/>
         <source>root</source>
-        <translation type="obsolete">gyökér</translation>
+        <translation type="unfinished">gyökér</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="605"/>
         <source>%1 - copy</source>
-        <translation type="obsolete">%1 - másolás</translation>
+        <translation type="unfinished">%1 - másolás</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="615"/>
         <source>%1 - copy (%2)</source>
-        <translation type="obsolete">%1 - másolás (%2)</translation>
+        <translation type="unfinished">%1 - másolás (%2)</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="739"/>
         <source>The source doesn&apos;t exist</source>
-        <translation type="obsolete">A forrás nem létezik</translation>
+        <translation type="unfinished">A forrás nem létezik</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="704"/>
+        <location filename="../../TransferThread.cpp" line="781"/>
         <source>Unable to do the folder</source>
-        <translation type="obsolete">Mappaművelet nem lehetséges</translation>
+        <translation type="unfinished">Mappaművelet nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="207"/>
+        <location filename="../../TransferThread.cpp" line="213"/>
         <source>Try rename with using special characters</source>
         <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="318"/>
+        <location filename="../../TransferThread.cpp" line="334"/>
+        <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="386"/>
+        <location filename="../../TransferThread.cpp" line="409"/>
+        <source>Internal error: Already opening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="674"/>
+        <location filename="../../TransferThread.cpp" line="769"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation type="obsolete">A forrásfájl nem létezik</translation>
+        <translation type="unfinished">A forrásfájl nem létezik</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="775"/>
         <source>Another file exists at same place</source>
-        <translation type="obsolete">Egy másik fájl létezik ugyanazon a helyen</translation>
+        <translation type="unfinished">Egy másik fájl létezik ugyanazon a helyen</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="1075"/>
         <source>The checksums do not match</source>
-        <translation type="obsolete">A checksumok nem egyeznek meg</translation>
+        <translation type="unfinished">A checksumok nem egyeznek meg</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="1164"/>
         <source>Internal error: The destination is not closed</source>
-        <translation type="obsolete">Belső hiba: a cél nincs bezárva</translation>
+        <translation type="unfinished">Belső hiba: a cél nincs bezárva</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="1178"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation type="obsolete">Belső hiba: az átvitt méret nem egyezik meg</translation>
+        <translation type="unfinished">Belső hiba: az átvitt méret nem egyezik meg</translation>
     </message>
     <message>
+        <location filename="../../TransferThread.cpp" line="1189"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation type="obsolete">Belső hiba: a puffer nem üres</translation>
+        <translation type="unfinished">Belső hiba: a puffer nem üres</translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="1253"/>
+        <location filename="../../TransferThread.cpp" line="1271"/>
+        <location filename="../../TransferThread.cpp" line="1286"/>
+        <source>Unable to change the date</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

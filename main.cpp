@@ -46,48 +46,48 @@ void registerTheOptions()
     QList<QPair<QString, QVariant> > KeysList;
     //add the options hidden, will not show in options pannel
     KeysList.clear();
-    KeysList.append(qMakePair(QString("Last_version_used"),QVariant("na")));
-    KeysList.append(qMakePair(QString("ActionOnManualOpen"),QVariant(1)));
-    KeysList.append(qMakePair(QString("GroupWindowWhen"),QVariant(0)));
-    KeysList.append(qMakePair(QString("displayOSSpecific"),QVariant(true)));
-    KeysList.append(qMakePair(QString("confirmToGroupWindows"),QVariant(true)));
-    KeysList.append(qMakePair(QString("giveGPUTime"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("Last_version_used"),QVariant("na")));
+    KeysList.append(qMakePair(QStringLiteral("ActionOnManualOpen"),QVariant(1)));
+    KeysList.append(qMakePair(QStringLiteral("GroupWindowWhen"),QVariant(0)));
+    KeysList.append(qMakePair(QStringLiteral("displayOSSpecific"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("confirmToGroupWindows"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("giveGPUTime"),QVariant(true)));
     #ifdef ULTRACOPIER_INTERNET_SUPPORT
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("checkTheUpdate"),QVariant(true)));
     #else
-    KeysList.append(qMakePair(QString("checkTheUpdate"),QVariant(false)));
+    KeysList.append(qMakePair(QStringLiteral("checkTheUpdate"),QVariant(false)));
     #endif
     #endif
     OptionEngine::optionEngine->addOptionGroup("Ultracopier",KeysList);
 
     KeysList.clear();
-    KeysList.append(qMakePair(QString("List"),QVariant(QStringList() << "Ultracopier")));
-    OptionEngine::optionEngine->addOptionGroup("CopyEngine",KeysList);
+    KeysList.append(qMakePair(QStringLiteral("List"),QVariant(QStringList() << QStringLiteral("Ultracopier"))));
+    OptionEngine::optionEngine->addOptionGroup(QStringLiteral("CopyEngine"),KeysList);
 
     //load the GUI option
     QString defaultLogFile="";
     if(ResourcesManager::resourcesManager->getWritablePath()!="")
         defaultLogFile=ResourcesManager::resourcesManager->getWritablePath()+"ultracopier-files.log";
     KeysList.clear();
-    KeysList.append(qMakePair(QString("enabled"),QVariant(false)));
-    KeysList.append(qMakePair(QString("file"),QVariant(defaultLogFile)));
-    KeysList.append(qMakePair(QString("transfer"),QVariant(true)));
-    KeysList.append(qMakePair(QString("error"),QVariant(true)));
-    KeysList.append(qMakePair(QString("folder"),QVariant(true)));
-    KeysList.append(qMakePair(QString("sync"),QVariant(true)));
-    KeysList.append(qMakePair(QString("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
-    KeysList.append(qMakePair(QString("error_format"),QVariant("[%time%] %path%, %error%")));
-    KeysList.append(qMakePair(QString("folder_format"),QVariant("[%time%] %operation% %path%")));
-    OptionEngine::optionEngine->addOptionGroup("Write_log",KeysList);
+    KeysList.append(qMakePair(QStringLiteral("enabled"),QVariant(false)));
+    KeysList.append(qMakePair(QStringLiteral("file"),QVariant(defaultLogFile)));
+    KeysList.append(qMakePair(QStringLiteral("transfer"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("error"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("folder"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("sync"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("transfer_format"),QVariant("[%time%] %source% (%size%) %destination%")));
+    KeysList.append(qMakePair(QStringLiteral("error_format"),QVariant("[%time%] %path%, %error%")));
+    KeysList.append(qMakePair(QStringLiteral("folder_format"),QVariant("[%time%] %operation% %path%")));
+    OptionEngine::optionEngine->addOptionGroup(QStringLiteral("Write_log"),KeysList);
 
     KeysList.clear();
-    KeysList.append(qMakePair(QString("CatchCopyAsDefault"),QVariant(true)));
-    OptionEngine::optionEngine->addOptionGroup("CopyListener",KeysList);
-    
+    KeysList.append(qMakePair(QStringLiteral("CatchCopyAsDefault"),QVariant(true)));
+    OptionEngine::optionEngine->addOptionGroup(QStringLiteral("CopyListener"),KeysList);
+
     KeysList.clear();
-    KeysList.append(qMakePair(QString("LoadAtSessionStarting"),QVariant(true)));
-    OptionEngine::optionEngine->addOptionGroup("SessionLoader",KeysList);
+    KeysList.append(qMakePair(QStringLiteral("LoadAtSessionStarting"),QVariant(true)));
+    OptionEngine::optionEngine->addOptionGroup(QStringLiteral("SessionLoader"),KeysList);
 }
 
 /// \brief Define the main() for the point entry

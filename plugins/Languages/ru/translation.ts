@@ -104,30 +104,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>Не могу найти копию двигателя движения поддержки</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Не могу найти любой совместимый двигатель!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
         <source>This copy engine does not support motions</source>
         <translation>Эта копия двигателя не поддерживает движение</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Не могу найти любой двигатель с таким именем: %1</translation>
     </message>
@@ -135,12 +135,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error</source>
         <translation type="unfinished">ошибка</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation type="unfinished"></translation>
@@ -174,6 +174,16 @@
         <location filename="../../../Core.cpp" line="210"/>
         <source>Unable to get a copy engine instance</source>
         <translation>Не удалось получить экземпляр копии двигателей</translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Group window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Do you want group the transfer with another actual running transfer?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="117"/>
@@ -1077,6 +1087,11 @@ This version is compiled as version: %1.</source>
         <translation>Темы</translation>
     </message>
     <message>
+        <location filename="../../../PluginInformation.cpp" line="59"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../PluginInformation.cpp" line="69"/>
         <source>Information about %1</source>
         <translation>Информация о %1</translation>
@@ -1296,17 +1311,17 @@ since:%2</source>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="156"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation>Нет копии слушатель найдено. Сделайте копию вручную, щелкните правой кнопкой мыши один из иконки в системном трее.</translation>
+        <translation type="unfinished">Нет копии слушатель найдено. Сделайте копию вручную, щелкните правой кнопкой мыши один из иконки в системном трее.</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="162"/>
         <source>Information</source>
-        <translation>информация</translation>
+        <translation type="unfinished">информация</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="180"/>
         <source>Searching information...</source>
-        <translation>Поиск информации ...</translation>
+        <translation type="unfinished">Поиск информации ...</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="193"/>
@@ -1326,7 +1341,7 @@ since:%2</source>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation type="unfinished">Предупреждение</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
@@ -1336,12 +1351,12 @@ since:%2</source>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="419"/>
         <source>&amp;About/Debug report</source>
-        <translation>О компании/Debug отчет</translation>
+        <translation type="unfinished">О компании/Debug отчет</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="421"/>
         <source>&amp;About</source>
-        <translation>о</translation>
+        <translation type="unfinished">о</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="424"/>
@@ -1351,17 +1366,17 @@ since:%2</source>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="426"/>
         <source>&amp;Quit</source>
-        <translation>выход</translation>
+        <translation type="unfinished">выход</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="427"/>
         <source>&amp;Options</source>
-        <translation>опции</translation>
+        <translation type="unfinished">опции</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>A&amp;dd copy/moving</source>
-        <translation>Добавить копирования/перемещения</translation>
+        <translation type="unfinished">Добавить копирования/перемещения</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="466"/>
@@ -1398,17 +1413,17 @@ The new version have been sended by email too, look into your spams if needed.</
     <message>
         <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
-        <translation>Добавить копию</translation>
+        <translation type="unfinished">Добавить копию</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
-        <translation>Добавить перевод</translation>
+        <translation type="unfinished">Добавить перевод</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
-        <translation>Добавить двигаться</translation>
+        <translation type="unfinished">Добавить двигаться</translation>
     </message>
 </context>
 </TS>

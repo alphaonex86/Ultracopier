@@ -18,6 +18,11 @@ MkPath::MkPath()
     setObjectName("MkPath");
     moveToThread(this);
     start();
+    #ifdef Q_OS_WIN32
+        #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+            regRead=QRegularExpression(QStringLiteral("^[a-z]:"));
+        #endif
+    #endif
 }
 
 MkPath::~MkPath()
@@ -29,7 +34,7 @@ MkPath::~MkPath()
 
 void MkPath::addPath(const QFileInfo& source, const QFileInfo& destination, const ActionType &actionType)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
     if(stopIt)
         return;
     emit internalStartAddPath(source,destination,actionType);
@@ -60,7 +65,7 @@ void MkPath::internalDoThisPath()
 {
     if(waitAction || pathList.isEmpty())
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, move: %3").arg(pathList.first().source.absoluteFilePath()).arg(pathList.first().destination.absoluteFilePath()).arg(pathList.first().actionType));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, move: %3").arg(pathList.first().source.absoluteFilePath()).arg(pathList.first().destination.absoluteFilePath()).arg(pathList.first().actionType));
     doTheDateTransfer=false;
     if(keepDate)
     {
@@ -241,7 +246,7 @@ void MkPath::internalDoThisPath()
 
 void MkPath::internalAddPath(const QFileInfo& source, const QFileInfo& destination, const ActionType &actionType)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
     Item tempPath;
     tempPath.source=source;
     tempPath.destination=destination;
@@ -358,8 +363,8 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
                 return true;
             #else
                 wchar_t filePath[65535];
-                if(source.absoluteFilePath().contains(QRegularExpression("^[a-z]:")))
-                    filePath[QDir::toNativeSeparators("\\\\?\\"+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                if(source.absoluteFilePath().contains(regRead))
+                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
                     filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
@@ -407,8 +412,8 @@ bool MkPath::writeFileDateTime(const QFileInfo &destination)
                 return utime(destination.toLatin1().data(),&butime)==0;
             #else
                 wchar_t filePath[65535];
-                if(destination.absoluteFilePath().contains(QRegularExpression("^[a-z]:")))
-                    filePath[QDir::toNativeSeparators("\\\\?\\"+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
+                if(destination.absoluteFilePath().contains(regRead))
+                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
                     filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);

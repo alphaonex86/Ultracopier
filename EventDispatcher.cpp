@@ -68,27 +68,27 @@ EventDispatcher::EventDispatcher()
     #endif
     copyEngineList=new CopyEngineManager(&optionDialog);
     core=new Core(copyEngineList);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     //show the ultracopier information
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Windows version: %1").arg(GetOSDisplayString()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Windows version: %1").arg(GetOSDisplayString()));
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Qt version: %1 (%2)").arg(qVersion()).arg(QT_VERSION));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Qt version: %1 (%2)").arg(qVersion()).arg(QT_VERSION));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Local socket: ")+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Local socket: ")+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
     #ifdef ULTRACOPIER_CGMINER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("With cgminer"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("With cgminer"));
     #endif
     #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("Version as all in one"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Version as all in one"));
     QObjectList objectList=QPluginLoader::staticInstances();
     int index=0;
     while(index<objectList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("static plugin: %1").arg(objectList.at(index)->metaObject()->className()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("static plugin: %1").arg(objectList.at(index)->metaObject()->className()));
         index++;
     }
     #endif
@@ -97,17 +97,17 @@ EventDispatcher::EventDispatcher()
     lunchInitFunction.setSingleShot(true);
     connect(&lunchInitFunction,&QTimer::timeout,this,&EventDispatcher::initFunction,Qt::QueuedConnection);
     lunchInitFunction.start();
-    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant("na") && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=QVariant(ULTRACOPIER_VERSION))
+    if(OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("Last_version_used"))!=QVariant(QStringLiteral("na")) && OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("Last_version_used"))!=QVariant(ULTRACOPIER_VERSION))
     {
         //then ultracopier have been updated
     }
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","Last_version_used",QVariant(ULTRACOPIER_VERSION));
-    int a=OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
+    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("Last_version_used"),QVariant(ULTRACOPIER_VERSION));
+    int a=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen")).toInt();
     if(a<0 || a>2)
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen",QVariant(1));
-    a=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen"),QVariant(1));
+    a=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen")).toInt();
     if(a<0 || a>5)
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",QVariant(0));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen"),QVariant(0));
 
     connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);
 }
@@ -137,7 +137,7 @@ bool EventDispatcher::shouldBeClosed()
 /// \brief Quit ultracopier
 void EventDispatcher::quit()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Will quit ultracopier");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Will quit ultracopier"));
     //disconnect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
     QCoreApplication::exit();
 }
@@ -224,7 +224,7 @@ QString EventDispatcher::GetOSDisplayString()
    bOsVersionInfoEx = GetVersionEx((OSVERSIONINFO*) &osvi);
 
    if(bOsVersionInfoEx == NULL)
-        return "Os detection blocked";
+        return QStringLiteral("Os detection blocked");
 
    // Call GetNativeSystemInfo if supported or GetSystemInfo otherwise.
 
@@ -243,23 +243,23 @@ QString EventDispatcher::GetOSDisplayString()
           {
             case 0:
                 if(osvi.wProductType==VER_NT_WORKSTATION)
-                    Os+="Windows Vista ";
-                else Os+="Windows Server 2008 " ;
+                    Os+=QStringLiteral("Windows Vista ");
+                else Os+=QStringLiteral("Windows Server 2008 ");
             break;
             case 1:
                 if(osvi.wProductType==VER_NT_WORKSTATION)
-                    Os+="Windows 7 ";
-                else Os+="Windows Server 2008 R2 ";
+                    Os+=QStringLiteral("Windows 7 ");
+                else Os+=QStringLiteral("Windows Server 2008 R2 ");
             break;
             case 2:
                 if(osvi.wProductType==VER_NT_WORKSTATION)
-                    Os+="Windows 8 ";
-                else Os+="Windows Server 2012 ";
+                    Os+=QStringLiteral("Windows 8 ");
+                else Os+=QStringLiteral("Windows Server 2012 ");
             break;
             default:
                  if(osvi.wProductType==VER_NT_WORKSTATION)
-                    Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
-                 else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+                    Os+=QStringLiteral("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+                 else Os+=QStringLiteral("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
             break;
           }
 
@@ -272,58 +272,58 @@ QString EventDispatcher::GetOSDisplayString()
          switch(dwType)
          {
             case PRODUCT_ULTIMATE:
-               Os+="Ultimate Edition";
+               Os+=QStringLiteral("Ultimate Edition");
                break;
             case PRODUCT_PROFESSIONAL:
-               Os+="Professional";
+               Os+=QStringLiteral("Professional");
                break;
             case PRODUCT_HOME_PREMIUM:
-               Os+="Home Premium Edition";
+               Os+=QStringLiteral("Home Premium Edition");
                break;
             case PRODUCT_HOME_BASIC:
-               Os+="Home Basic Edition";
+               Os+=QStringLiteral("Home Basic Edition");
                break;
             case PRODUCT_ENTERPRISE:
-               Os+="Enterprise Edition";
+               Os+=QStringLiteral("Enterprise Edition");
                break;
             case PRODUCT_BUSINESS:
-               Os+="Business Edition";
+               Os+=QStringLiteral("Business Edition");
                break;
             case PRODUCT_STARTER:
-               Os+="Starter Edition";
+               Os+=QStringLiteral("Starter Edition");
                break;
             case PRODUCT_CLUSTER_SERVER:
-               Os+="Cluster Server Edition";
+               Os+=QStringLiteral("Cluster Server Edition");
                break;
             case PRODUCT_DATACENTER_SERVER:
-               Os+="Datacenter Edition";
+               Os+=QStringLiteral("Datacenter Edition");
                break;
             case PRODUCT_DATACENTER_SERVER_CORE:
-               Os+="Datacenter Edition (core installation)";
+               Os+=QStringLiteral("Datacenter Edition (core installation)");
                break;
             case PRODUCT_ENTERPRISE_SERVER:
-               Os+="Enterprise Edition";
+               Os+=QStringLiteral("Enterprise Edition");
                break;
             case PRODUCT_ENTERPRISE_SERVER_CORE:
-               Os+="Enterprise Edition (core installation)";
+               Os+=QStringLiteral("Enterprise Edition (core installation)");
                break;
             case PRODUCT_ENTERPRISE_SERVER_IA64:
-               Os+="Enterprise Edition for Itanium-based Systems";
+               Os+=QStringLiteral("Enterprise Edition for Itanium-based Systems");
                break;
             case PRODUCT_SMALLBUSINESS_SERVER:
-               Os+="Small Business Server";
+               Os+=QStringLiteral("Small Business Server");
                break;
             case PRODUCT_SMALLBUSINESS_SERVER_PREMIUM:
-               Os+="Small Business Server Premium Edition";
+               Os+=QStringLiteral("Small Business Server Premium Edition");
                break;
             case PRODUCT_STANDARD_SERVER:
-               Os+="Standard Edition";
+               Os+=QStringLiteral("Standard Edition");
                break;
             case PRODUCT_STANDARD_SERVER_CORE:
-               Os+="Standard Edition (core installation)";
+               Os+=QStringLiteral("Standard Edition (core installation)");
                break;
             case PRODUCT_WEB_SERVER:
-               Os+="Web Server Edition";
+               Os+=QStringLiteral("Web Server Edition");
                break;
          }
       }
@@ -332,63 +332,63 @@ QString EventDispatcher::GetOSDisplayString()
             switch(osvi.dwMinorVersion)
             {
                 case 0:
-                    Os+="Windows 2000 ";
+                    Os+=QStringLiteral("Windows 2000 ");
                     if(osvi.wProductType==VER_NT_WORKSTATION)
-                       Os+="Professional";
+                       Os+=QStringLiteral("Professional");
                     else
                     {
                        if(osvi.wSuiteMask & VER_SUITE_DATACENTER)
-                          Os+="Datacenter Server";
+                          Os+=QStringLiteral("Datacenter Server");
                        else if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
-                          Os+="Advanced Server";
-                       else Os+="Server";
+                          Os+=QStringLiteral("Advanced Server");
+                       else Os+=QStringLiteral("Server");
                     }
                 break;
                 case 1:
-                    Os+="Windows XP ";
+                    Os+=QStringLiteral("Windows XP ");
                     if(osvi.wSuiteMask & VER_SUITE_PERSONAL)
-                       Os+="Home Edition";
-                    else Os+="Professional";
+                       Os+=QStringLiteral("Home Edition");
+                    else Os+=QStringLiteral("Professional");
                 break;
                 case 2:
                     if(GetSystemMetrics(SM_SERVERR2))
-                        Os+="Windows Server 2003 R2, ";
+                        Os+=QStringLiteral("Windows Server 2003 R2, ");
                     else if(osvi.wSuiteMask & VER_SUITE_STORAGE_SERVER )
-                        Os+="Windows Storage Server 2003";
+                        Os+=QStringLiteral("Windows Storage Server 2003");
                     else if(osvi.wSuiteMask & VER_SUITE_WH_SERVER )
-                        Os+="Windows Home Server";
+                        Os+=QStringLiteral("Windows Home Server");
                     else if(osvi.wProductType==VER_NT_WORKSTATION && si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
-                        Os+="Windows XP Professional x64 Edition";
-                    else Os+="Windows Server 2003, ";
+                        Os+=QStringLiteral("Windows XP Professional x64 Edition");
+                    else Os+=QStringLiteral("Windows Server 2003, ");
                     // Test for the server type.
                     if(osvi.wProductType!=VER_NT_WORKSTATION )
                     {
                         if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_IA64)
                         {
                             if( osvi.wSuiteMask & VER_SUITE_DATACENTER )
-                                Os+="Datacenter Edition for Itanium-based Systems";
+                                Os+=QStringLiteral("Datacenter Edition for Itanium-based Systems");
                             else if( osvi.wSuiteMask & VER_SUITE_ENTERPRISE )
-                                Os+="Enterprise Edition for Itanium-based Systems";
+                                Os+=QStringLiteral("Enterprise Edition for Itanium-based Systems");
                         }
                         else if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
                         {
                             if(osvi.wSuiteMask & VER_SUITE_DATACENTER)
-                                Os+="Datacenter x64 Edition";
+                                Os+=QStringLiteral("Datacenter x64 Edition");
                             else if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
-                                Os+="Enterprise x64 Edition";
-                            else Os+="Standard x64 Edition";
+                                Os+=QStringLiteral("Enterprise x64 Edition");
+                            else Os+=QStringLiteral("Standard x64 Edition");
                         }
                         else
                         {
                             if(osvi.wSuiteMask & VER_SUITE_COMPUTE_SERVER)
-                                Os+="Compute Cluster Edition";
+                                Os+=QStringLiteral("Compute Cluster Edition");
                             else if( osvi.wSuiteMask & VER_SUITE_DATACENTER)
-                                Os+="Datacenter Edition";
+                                Os+=QStringLiteral("Datacenter Edition");
                             else if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)
-                                Os+="Enterprise Edition";
+                                Os+=QStringLiteral("Enterprise Edition");
                             else if(osvi.wSuiteMask & VER_SUITE_BLADE)
-                                Os+="Web Edition";
-                            else Os+="Standard Edition";
+                                Os+=QStringLiteral("Web Edition");
+                            else Os+=QStringLiteral("Standard Edition");
                         }
                     }
                 break;
@@ -397,30 +397,30 @@ QString EventDispatcher::GetOSDisplayString()
         else
         {
             if(osvi.wProductType==VER_NT_WORKSTATION)
-                Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
-            else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+                Os+=QStringLiteral("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+            else Os+=QStringLiteral("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
         }
 
         // Include service pack (if any) and build number.
         QString QszCSDVersion=QString::fromUtf16((ushort*)osvi.szCSDVersion);
         if(!QszCSDVersion.isEmpty())
-            Os+=QString(" %1").arg(QszCSDVersion);
-        Os+=QString(" (build %1)").arg(osvi.dwBuildNumber);
+            Os+=QStringLiteral(" %1").arg(QszCSDVersion);
+        Os+=QStringLiteral(" (build %1)").arg(osvi.dwBuildNumber);
         if(osvi.dwMajorVersion >= 6)
         {
             if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64)
-                Os+=", 64-bit";
+                Os+=QStringLiteral(", 64-bit");
             else if(si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_INTEL)
-                Os+=", 32-bit";
+                Os+=QStringLiteral(", 32-bit");
         }
     }
     else
     {
        if(osvi.wProductType==VER_NT_WORKSTATION)
-           Os+=QString("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
-       else Os+=QString("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+           Os+=QStringLiteral("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
+       else Os+=QStringLiteral("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
     }
-	return Os;
+    return Os;
 }
 #endif
 
@@ -429,7 +429,7 @@ QString EventDispatcher::GetOSDisplayString()
 {
         QStringList key;
     QStringList string;
-    QFile xmlFile("/System/Library/CoreServices/SystemVersion.plist");
+    QFile xmlFile(QStringLiteral("/System/Library/CoreServices/SystemVersion.plist"));
     if(xmlFile.open(QIODevice::ReadOnly))
     {
         QString content=xmlFile.readAll();
@@ -439,59 +439,59 @@ QString EventDispatcher::GetOSDisplayString()
         int errorColumn;
         QDomDocument domDocument;
         if (!domDocument.setContent(content, false, &errorStr,&errorLine,&errorColumn))
-            return "Mac OS X";
+            return QStringLiteral("Mac OS X");
         else
         {
             QDomElement root = domDocument.documentElement();
-            if(root.tagName()!="plist")
-                return "Mac OS X";
+            if(root.tagName()!=QStringLiteral("plist"))
+                return QStringLiteral("Mac OS X");
             else
             {
                 if(root.isElement())
                 {
-                    QDomElement SubChild=root.firstChildElement("dict");
+                    QDomElement SubChild=root.firstChildElement(QStringLiteral("dict"));
                     while(!SubChild.isNull())
                     {
                         if(SubChild.isElement())
                         {
-                            QDomElement SubChild2=SubChild.firstChildElement("key");
+                            QDomElement SubChild2=SubChild.firstChildElement(QStringLiteral("key"));
                             while(!SubChild2.isNull())
                             {
                                 if(SubChild2.isElement())
                                     key << SubChild2.text();
                                 else
-                                    return "Mac OS X";
-                                SubChild2 = SubChild2.nextSiblingElement("key");
+                                    return QStringLiteral("Mac OS X");
+                                SubChild2 = SubChild2.nextSiblingElement(QStringLiteral("key"));
                             }
-                            SubChild2=SubChild.firstChildElement("string");
+                            SubChild2=SubChild.firstChildElement(QStringLiteral("string"));
                             while(!SubChild2.isNull())
                             {
                                 if(SubChild2.isElement())
                                     string << SubChild2.text();
                                 else
-                                    return "Mac OS X";
-                                SubChild2 = SubChild2.nextSiblingElement("string");
+                                    return QStringLiteral("Mac OS X");
+                                SubChild2 = SubChild2.nextSiblingElement(QStringLiteral("string"));
                             }
                         }
                         else
-                            return "Mac OS X";
-                        SubChild = SubChild.nextSiblingElement("property");
+                            return QStringLiteral("Mac OS X");
+                        SubChild = SubChild.nextSiblingElement(QStringLiteral("property"));
                     }
                 }
                 else
-                    return "Mac OS X";
+                    return QStringLiteral("Mac OS X");
             }
         }
     }
     if(key.size()!=string.size())
-        return "Mac OS X";
+        return QStringLiteral("Mac OS X");
     int index=0;
     while(index<key.size())
     {
-        if(key.at(index)=="ProductVersion")
-            return "Mac OS X "+string.at(index);
+        if(key.at(index)==QStringLiteral("ProductVersion"))
+            return QStringLiteral("Mac OS X ")+string.at(index);
         index++;
     }
-    return "Mac OS X";
+    return QStringLiteral("Mac OS X");
 }
 #endif

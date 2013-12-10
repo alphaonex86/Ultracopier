@@ -183,11 +183,13 @@ private:
     QTimer *TimerForSearch;
     int currentIndexSearch;		///< Current index search in starting at the end
     FacilityInterface * facilityEngine;
-    QIcon player_play,player_pause;
     QItemSelectionModel *selectionModel;
     QModelIndexList selectedItems;
     /// \brief the custom transfer model
     TransferModel transferModel;
+
+    static QIcon player_play,player_pause;
+
     /** \brief drag event processing
 
     need setAcceptDrops(true); into the constructor

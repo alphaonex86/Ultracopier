@@ -21,37 +21,37 @@ InternetUpdater::InternetUpdater(QObject *parent) :
 
 void InternetUpdater::downloadFile()
 {
-    if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate").toBool())
+    if(!OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("checkTheUpdate")).toBool())
         return;
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        QString name="Supercopier";
+        QString name=QStringLiteral("Supercopier");
     #else
-        QString name="Ultracopier";
+        QString name=QStringLiteral("Ultracopier");
     #endif
     QString ultracopierVersion;
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    ultracopierVersion=QString("%1 Ultimate/%2").arg(name).arg(ULTRACOPIER_VERSION);
+    ultracopierVersion=QStringLiteral("%1 Ultimate/%2").arg(name).arg(ULTRACOPIER_VERSION);
     #else
-    ultracopierVersion=QString("%1/%2").arg(name).arg(ULTRACOPIER_VERSION);
+    ultracopierVersion=QStringLiteral("%1/%2").arg(name).arg(ULTRACOPIER_VERSION);
     #endif
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-             ultracopierVersion+=QString(" portable/all-in-one");
+             ultracopierVersion+=QStringLiteral(" portable/all-in-one");
         #else
-             ultracopierVersion+=QString(" portable");
+             ultracopierVersion+=QStringLiteral(" portable");
         #endif
     #else
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-            ultracopierVersion+=QString(" all-in-one");
+            ultracopierVersion+=QStringLiteral(" all-in-one");
         #endif
     #endif
     #ifdef ULTRACOPIER_CGMINER
-            ultracopierVersion+=QString(" miner");
+            ultracopierVersion+=QStringLiteral(" miner");
     #endif
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    ultracopierVersion+=QString(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
+    ultracopierVersion+=QStringLiteral(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
     #endif
-    QNetworkRequest networkRequest(QString("%1?platform=%2").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE));
+    QNetworkRequest networkRequest(QStringLiteral("%1?platform=%2").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE));
     networkRequest.setHeader(QNetworkRequest::UserAgentHeader,ultracopierVersion);
     reply = qnam.get(networkRequest);
     connect(reply, &QNetworkReply::finished, this, &InternetUpdater::httpFinished);
@@ -62,11 +62,11 @@ void InternetUpdater::httpFinished()
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (reply->error())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("get the new update failed: %1").arg(reply->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("get the new update failed: %1").arg(reply->errorString()));
         reply->deleteLater();
         return;
     } else if (!redirectionTarget.isNull()) {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("redirection denied to: %1").arg(redirectionTarget.toUrl().toString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("redirection denied to: %1").arg(redirectionTarget.toUrl().toString()));
         reply->deleteLater();
         return;
     }
@@ -76,7 +76,7 @@ void InternetUpdater::httpFinished()
         reply->deleteLater();
         return;
     }
-    if(PluginsManager::compareVersion(newVersion,"<=",ULTRACOPIER_VERSION))
+    if(PluginsManager::compareVersion(newVersion,QStringLiteral("<="),ULTRACOPIER_VERSION))
     {
         reply->deleteLater();
         return;

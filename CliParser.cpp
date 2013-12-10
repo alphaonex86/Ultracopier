@@ -20,7 +20,7 @@ CliParser::CliParser(QObject *parent) :
 */
 void CliParser::cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultracopierArguments: ")+ultracopierArguments.join(QStringLiteral(";")));
     if(ultracopierArguments.size()==1)
     {
         if(external)
@@ -28,26 +28,26 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
         // else do nothing, is normal starting without arguements
         return;
     }
-    if(ultracopierArguments.size()==2)
+    else if(ultracopierArguments.size()==2)
     {
-        if(ultracopierArguments.last()=="quit")
+        if(ultracopierArguments.last()==QStringLiteral("quit"))
         {
             if(onlyCheck)
                 return;
             QCoreApplication::exit();
             return;
         }
-        if(ultracopierArguments.last()=="--help")
+        else if(ultracopierArguments.last()==QStringLiteral("--help"))
         {
             showHelp(false);
             return;
         }
-        if(ultracopierArguments.last()=="--options")
+        else if(ultracopierArguments.last()==QStringLiteral("--options"))
         {
             emit showOptions();
             return;
         }
-        if(ultracopierArguments.last().endsWith(".urc"))
+        else if(ultracopierArguments.last().endsWith(QStringLiteral(".urc")))
         {
             tryLoadPlugin(ultracopierArguments.last());
             return;
@@ -56,9 +56,9 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
         showHelp();
         return;
     }
-    if(ultracopierArguments.size()==3)
+    else if(ultracopierArguments.size()==3)
     {
-        if(ultracopierArguments[1]=="Transfer-list")
+        if(ultracopierArguments[1]==QStringLiteral("Transfer-list"))
         {
             if(onlyCheck)
                 return;
@@ -99,9 +99,9 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
         showHelp();
         return;
     }
-    if(ultracopierArguments.size()>3)
+    else if(ultracopierArguments.size()>3)
     {
-        if(ultracopierArguments[1]=="Copy" || ultracopierArguments[1]=="cp")
+        if(ultracopierArguments[1]==QStringLiteral("Copy") || ultracopierArguments[1]==QStringLiteral("cp"))
         {
             if(onlyCheck)
                 return;
@@ -121,7 +121,7 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
             }
             return;
         }
-        if(ultracopierArguments[1]=="Move" || ultracopierArguments[1]=="mv")
+        else if(ultracopierArguments[1]==QStringLiteral("Move") || ultracopierArguments[1]==QStringLiteral("mv"))
         {
             if(onlyCheck)
                 return;

@@ -33,7 +33,7 @@ LocalListener::~LocalListener()
 
 bool LocalListener::tryConnect()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     QStringList ultracopierArguments=QCoreApplication::arguments();
     //remove excutable path because is useless (unsafe to use)
     ultracopierArguments.removeFirst();
@@ -99,8 +99,8 @@ bool LocalListener::tryConnect()
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"connection failed, continu...");
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("connection failed, continu..."));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultracopierArguments: ")+ultracopierArguments.join(";"));
         return false;
     }
 }
@@ -109,14 +109,14 @@ bool LocalListener::tryConnect()
 void LocalListener::listenServer()
 {
     if(!QLocalServer::removeServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to remove the listening server"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to remove the listening server"));
     #ifndef Q_OS_MAC
     localServer.setSocketOptions(QLocalServer::UserAccessOption);
     #endif
     if(!localServer.listen(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)))
     {
         #ifndef Q_OS_MAC
-        //QMessageBox::critical(NULL,"Alert",QString("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
+        //QMessageBox::critical(NULL,"Alert",QStringLiteral("Ultracopier have not able to lock unique instance: %1").arg(localServer.errorString()));
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Ultracopier have not able to lock unique instance: %1, error code: %2").arg(localServer.errorString()).arg((qint32)localServer.serverError()));
     }
@@ -127,7 +127,7 @@ void LocalListener::listenServer()
 //the time is done
 void LocalListener::timeoutDectected()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("start"));
     while(clientList.size()>0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"clientList.first().size: "+QString::number(clientList.first().size));
@@ -140,14 +140,14 @@ void LocalListener::timeoutDectected()
 /// \brief Data is incomming
 void LocalListener::dataIncomming()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("start"));
     // 1 : we get packets from client
 
     //Which client send the message (Search of the QLocalSocket of client)
     QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
     if (socket == 0) // If not found
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"bad socket");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("bad socket"));
         return;
     }
 
@@ -156,7 +156,7 @@ void LocalListener::dataIncomming()
         if(clientList.at(i).socket==socket)
             index=i;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable() "+QString::number(socket->bytesAvailable()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("socket->bytesAvailable() ")+QString::number(socket->bytesAvailable()));
     if(index!=-1)
     {
         if(!clientList.at(index).haveData)
@@ -195,20 +195,20 @@ void LocalListener::dataIncomming()
                 clientList[index].haveData=false;
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"socket->bytesAvailable(): "+QString::number(socket->bytesAvailable())+" > clientList.at(index).size!: "+QString::number(clientList.at(index).size));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("socket->bytesAvailable(): ")+QString::number(socket->bytesAvailable())+QStringLiteral(" > clientList.at(index).size!: ")+QString::number(clientList.at(index).size));
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Query recomposed with this size: "+QString::number(clientList.at(index).data.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Query recomposed with this size: ")+QString::number(clientList.at(index).data.size()));
             clientList[index].data.append(socket->readAll());
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Query recomposed with this size: "+QString::number(clientList.at(index).data.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Query recomposed with this size: ")+QString::number(clientList.at(index).data.size()));
             if(clientList.at(index).data.size()==clientList.at(index).size)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"QByteArray reconstruction finished");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("QByteArray reconstruction finished"));
                 QDataStream in(clientList.at(index).data);
                 QStringList ultracopierArguments;
                 in >> ultracopierArguments;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultracopierArguments: ")+ultracopierArguments.join(";"));
                 emit cli(ultracopierArguments,true,false);
                 clientList[index].data.clear();
                 clientList[index].haveData=false;
@@ -216,20 +216,20 @@ void LocalListener::dataIncomming()
             else
             {
                 TimeOutQLocalSocket.start();
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+QString::number(clientList.at(index).data.size())+", targeted: "+QString::number(clientList.at(index).size));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Need wait to recomposite: ")+QString::number(clientList.at(index).data.size())+QStringLiteral(", targeted: ")+QString::number(clientList.at(index).size));
                 return;
             }
         }
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Socket not found???");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Socket not found???"));
 }
 
 /// \brief Deconnexion client
 /// \todo Remove the data in wait linker with this socket
 void LocalListener::deconnectClient()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
 
     // Wich client leave
     QLocalSocket *socket = qobject_cast<QLocalSocket *>(sender());
@@ -245,7 +245,7 @@ void LocalListener::deconnectClient()
 /// LocalListener New connexion
 void LocalListener::newConnexion()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("start"));
     composedData newClient;
     newClient.socket = localServer.nextPendingConnection();
     #ifdef ULTRACOPIER_DEBUG
@@ -279,7 +279,7 @@ void LocalListener::error(const QLocalSocket::LocalSocketError &theErrorDefine)
 /// \can now parse the cli
 void LocalListener::allPluginIsloaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     QStringList ultracopierArguments=QCoreApplication::arguments();
     //remove excutable path because is useless (unsafe to use)
     ultracopierArguments.removeFirst();

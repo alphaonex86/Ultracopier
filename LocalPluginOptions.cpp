@@ -9,7 +9,7 @@
 
 LocalPluginOptions::LocalPluginOptions(const QString &group)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start(\"")+group+QStringLiteral("\",[...])"));
     groupOptionAdded=false;
     this->group=group;
     connect(OptionEngine::optionEngine,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
@@ -24,10 +24,10 @@ LocalPluginOptions::~LocalPluginOptions()
 /// \brief To add option group to options
 bool LocalPluginOptions::addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start(\"")+group+QStringLiteral("\",[...])"));
     if(groupOptionAdded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Group already added!");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("Group already added!"));
         return false;
     }
     else

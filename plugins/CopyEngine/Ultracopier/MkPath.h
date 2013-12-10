@@ -83,6 +83,7 @@ private:
             #else
                 quint32 ftCreateL, ftAccessL, ftWriteL;
                 quint32 ftCreateH, ftAccessH, ftWriteH;
+                QRegularExpression regRead;
             #endif
         #endif
     #endif

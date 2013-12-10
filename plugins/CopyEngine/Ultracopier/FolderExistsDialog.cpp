@@ -90,15 +90,15 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
     QString fileName=TransferThread::resolvedName(destinationInfo);
-    QString suffix="";
+    QString suffix=QStringLiteral("");
     QString destination;
     QString newFileName;
     //resolv the suffix
-    if(fileName.contains(QRegularExpression("^(.*)(\\.[a-z0-9]+)$")))
+    if(fileName.contains(QRegularExpression(QStringLiteral("^(.*)(\\.[a-z0-9]+)$"))))
     {
         suffix=fileName;
-        suffix.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\2");
-        fileName.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\1");
+        suffix.replace(QRegularExpression(QStringLiteral("^(.*)(\\.[a-z0-9]+)$")),QStringLiteral("\\2"));
+        fileName.replace(QRegularExpression(QStringLiteral("^(.*)(\\.[a-z0-9]+)$")),QStringLiteral("\\1"));
     }
     //resolv the new name
     int num=1;
@@ -106,23 +106,23 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
     {
         if(num==1)
         {
-            if(firstRenamingRule=="")
+            if(firstRenamingRule.isEmpty())
                 newFileName=tr("%1 - copy").arg(fileName);
             else
             {
                 newFileName=firstRenamingRule;
-                newFileName.replace("%name%",fileName);
+                newFileName.replace(QStringLiteral("%name%"),fileName);
             }
         }
         else
         {
-            if(otherRenamingRule=="")
+            if(otherRenamingRule.isEmpty())
                 newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
             else
             {
                 newFileName=otherRenamingRule;
-                newFileName.replace("%name%",fileName);
-                newFileName.replace("%number%",QString::number(num));
+                newFileName.replace(QStringLiteral("%name%"),fileName);
+                newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
         destination=absolutePath+QDir::separator()+newFileName+suffix;

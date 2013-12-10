@@ -3,6 +3,16 @@
 #include <QDir>
 #include <QFileInfoList>
 
+DriveManagement::DriveManagement()
+{
+    #ifdef Q_OS_WIN32
+    reg1=QRegularExpression(QStringLiteral("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+"));
+    reg2=QRegularExpression(QStringLiteral("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$"));
+    reg3=QRegularExpression(QStringLiteral("^[a-zA-Z]:[\\\\/]"));
+    reg4=QRegularExpression(QStringLiteral("^([a-zA-Z]:[\\\\/]).*$"));
+    #endif
+}
+
 //get drive of an file or folder
 QString DriveManagement::getDrive(const QString &fileOrFolder) const
 {
@@ -13,22 +23,22 @@ QString DriveManagement::getDrive(const QString &fileOrFolder) const
             return QDir::toNativeSeparators(mountSysPoint.at(i));
     }
     #ifdef Q_OS_WIN32
-    if(fileOrFolder.contains(QRegularExpression("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+")))
+    if(fileOrFolder.contains(reg1))
     {
         QString returnString=fileOrFolder;
-        returnString.replace(QRegularExpression("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$"),"\\1");
+        returnString.replace(reg2,QStringLiteral("\\1"));
         return returnString;
     }
     //due to lack of WMI support into mingw, the new drive event is never called, this is a workaround
-    if(fileOrFolder.contains(QRegularExpression("^[a-zA-Z]:[\\\\/]")))
+    if(fileOrFolder.contains(reg3))
     {
         QString returnString=fileOrFolder;
-        returnString.replace(QRegularExpression("^([a-zA-Z]:[\\\\/]).*$"),"\\1");
+        returnString.replace(reg4,QStringLiteral("\\1"));
         return QDir::toNativeSeparators(returnString).toUpper();
     }
     #endif
     //if unable to locate the right mount point
-    return "";
+    return QString();
 }
 
 QStorageInfo::DriveType DriveManagement::getDriveType(const QString &drive) const
@@ -49,22 +59,22 @@ bool DriveManagement::isSameDrive(const QString &file1,const QString &file2) con
 {
     if(mountSysPoint.size()==0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"no mount point found");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("no mount point found"));
         return false;
     }
     QString drive1=getDrive(file1);
     if(drive1.isEmpty())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("drive for the file1 not found: %1").arg(file1));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("drive for the file1 not found: %1").arg(file1));
         return false;
     }
     QString drive2=getDrive(file2);
     if(drive2.isEmpty())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("drive for the file2 not found: %1").arg(file2));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("drive for the file2 not found: %1").arg(file2));
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("%1 is egal to %2?").arg(drive1).arg(drive2));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1 is egal to %2?").arg(drive1).arg(drive2));
     if(drive1==drive2)
         return true;
     else

@@ -16,6 +16,7 @@
 #include <QList>
 #include <QCoreApplication>
 #include <QAbstractTableModel>
+#include <QRegularExpression>
 
 #include "Variable.h"
 #include "PlatformMacro.h"
@@ -120,6 +121,7 @@ class DebugEngine : public QObject
         bool tryConnect();
         int addDebugInformationCallNumber;
         bool quit;
+        QRegularExpression fileNameCleaner;
 };
 
 #endif // ULTRACOPIER_DEBUG

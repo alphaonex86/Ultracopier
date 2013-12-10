@@ -88,30 +88,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>동작 감지를 지원하는 복사 엔진을 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
         <source>Cannot find any compatible engine!</source>
         <translation>호환되는 엔진을 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
         <source>This copy engine does not support motions</source>
         <translation>이 복사 엔진은 동작 감지를 지원하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -119,12 +119,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error</source>
         <translation type="unfinished">오류</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation type="unfinished"></translation>
@@ -157,6 +157,16 @@
         <location filename="../../../Core.cpp" line="201"/>
         <location filename="../../../Core.cpp" line="210"/>
         <source>Unable to get a copy engine instance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Group window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Do you want group the transfer with another actual running transfer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1045,6 +1055,11 @@ This version is compiled as version: %1.</source>
         <translation>테마</translation>
     </message>
     <message>
+        <location filename="../../../PluginInformation.cpp" line="59"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../PluginInformation.cpp" line="69"/>
         <source>Information about %1</source>
         <translation>%1 파일 정보</translation>
@@ -1263,17 +1278,17 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="156"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation>복사 리스너를 찾을 수 없습니다. 트레이 아이콘에서 우클릭하여 수동으로 복사하십시오.</translation>
+        <translation type="unfinished">복사 리스너를 찾을 수 없습니다. 트레이 아이콘에서 우클릭하여 수동으로 복사하십시오.</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="162"/>
         <source>Information</source>
-        <translation>정보</translation>
+        <translation type="unfinished">정보</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="180"/>
         <source>Searching information...</source>
-        <translation>정보 검색중...</translation>
+        <translation type="unfinished">정보 검색중...</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="193"/>
@@ -1293,7 +1308,7 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>Warning</source>
-        <translation>알림</translation>
+        <translation type="unfinished">알림</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
@@ -1303,12 +1318,12 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="419"/>
         <source>&amp;About/Debug report</source>
-        <translation>&amp;정보/디버그 보고서</translation>
+        <translation type="unfinished">&amp;정보/디버그 보고서</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="421"/>
         <source>&amp;About</source>
-        <translation>&amp;정보</translation>
+        <translation type="unfinished">&amp;정보</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="424"/>
@@ -1318,17 +1333,17 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="426"/>
         <source>&amp;Quit</source>
-        <translation>&amp;끝내기</translation>
+        <translation type="unfinished">&amp;끝내기</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="427"/>
         <source>&amp;Options</source>
-        <translation>&amp;옵션</translation>
+        <translation type="unfinished">&amp;옵션</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>A&amp;dd copy/moving</source>
-        <translation>복사/이동 &amp;추가</translation>
+        <translation type="unfinished">복사/이동 &amp;추가</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="466"/>
@@ -1365,17 +1380,17 @@ The new version have been sended by email too, look into your spams if needed.</
     <message>
         <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
-        <translation>&amp;복사 추가</translation>
+        <translation type="unfinished">&amp;복사 추가</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
-        <translation>&amp;전송 추가</translation>
+        <translation type="unfinished">&amp;전송 추가</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
-        <translation>&amp;이동 추가</translation>
+        <translation type="unfinished">&amp;이동 추가</translation>
     </message>
 </context>
 </TS>

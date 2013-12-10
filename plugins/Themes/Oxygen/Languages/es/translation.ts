@@ -4,56 +4,56 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="237"/>
+        <location filename="../../interface.cpp" line="238"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="307"/>
+        <location filename="../../interface.cpp" line="308"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="519"/>
+        <location filename="../../interface.cpp" line="522"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="521"/>
+        <location filename="../../interface.cpp" line="524"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="942"/>
+        <location filename="../../interface.cpp" line="945"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="943"/>
+        <location filename="../../interface.cpp" line="946"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="944"/>
+        <location filename="../../interface.cpp" line="947"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="946"/>
+        <location filename="../../interface.cpp" line="949"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1129"/>
-        <location filename="../../interface.cpp" line="1141"/>
-        <location filename="../../interface.cpp" line="1153"/>
+        <location filename="../../interface.cpp" line="1132"/>
+        <location filename="../../interface.cpp" line="1144"/>
+        <location filename="../../interface.cpp" line="1156"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1228"/>
-        <location filename="../../interface.cpp" line="1232"/>
-        <location filename="../../interface.cpp" line="1234"/>
+        <location filename="../../interface.cpp" line="1231"/>
+        <location filename="../../interface.cpp" line="1235"/>
+        <location filename="../../interface.cpp" line="1237"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>

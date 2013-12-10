@@ -18,10 +18,10 @@ QRegularExpression ResourcesManager::slashEnd;
 /// \brief Create the manager and load the defaults variables
 ResourcesManager::ResourcesManager()
 {
-    slashEnd=QRegularExpression("[/\\\\]$");
+    slashEnd=QRegularExpression(QStringLiteral("[/\\\\]$"));
 
     //load the internal path
-    searchPath<<QString(":/");
+    searchPath<<QString(QStringLiteral(":/"));
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         //load the user path but only if exists and writable
         //load the ultracopier path
@@ -32,29 +32,29 @@ ResourcesManager::ResourcesManager()
                 QDir dir(QApplication::applicationDirPath());
                 dir.cdUp();
                 dir.cdUp();
-                dir.cd("Data");
+                dir.cd(QStringLiteral("Data");
                 searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
                 writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
             #else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled with the flag: ULTRACOPIER_VERSION_PORTABLE");
                 //load the ultracopier path
                 QDir dir(QApplication::applicationDirPath());
-                dir.cd("Data");
+                dir.cd(QStringLiteral("Data"));
                 searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
                 writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
             #endif
         #else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled as user privacy mode");
             #ifdef Q_OS_WIN32
-                #define EXTRA_HOME_PATH "\\ultracopier\\"
+                #define EXTRA_HOME_PATH QStringLiteral("\\ultracopier\\")
             #else
-                #define EXTRA_HOME_PATH "/.config/Ultracopier/"
+                #define EXTRA_HOME_PATH QStringLiteral("/.config/Ultracopier/")
             #endif
             #ifdef Q_OS_LINUX
-                QDir linuxArchIndepDir("/usr/share/ultracopier/");
+                QDir linuxArchIndepDir(QStringLiteral("/usr/share/ultracopier/"));
                 if(linuxArchIndepDir.exists())
                     searchPath<<ResourcesManager::AddSlashIfNeeded(linuxArchIndepDir.absolutePath());
-                QDir linuxPluginsDir("/usr/lib/ultracopier/");
+                QDir linuxPluginsDir(QStringLiteral("/usr/lib/ultracopier/"));
                 if(linuxPluginsDir.exists())
                     searchPath<<ResourcesManager::AddSlashIfNeeded(linuxPluginsDir.absolutePath());
             #endif
@@ -84,10 +84,10 @@ ResourcesManager::ResourcesManager()
     int loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"searchPath.at("+QString::number(index)+"): "+searchPath.at(index));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("searchPath.at(")+QString::number(index)+QStringLiteral("): ")+searchPath.at(index));
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"writablePath: "+writablePath);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("writablePath: ")+writablePath);
     #endif // ULTRACOPIER_DEBUG
 }
 
@@ -108,7 +108,7 @@ QString ResourcesManager::getFolderReadPath(const QString &path) const
             return ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
         index++;
     }
-    return "";
+    return QStringLiteral("");
 }
 
 /// \brief Get folder presence, the path and check in the folder and sub-folder the file presence
@@ -123,7 +123,7 @@ QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QS
             return dir.absolutePath()+QDir::separator();
         index++;
     }
-    return "";
+    return QStringLiteral("");
 }
 
 bool ResourcesManager::checkFolderContent(const QString &path,const QStringList &fileToCheck) const
@@ -169,10 +169,10 @@ QString ResourcesManager::getWritablePath() const
 bool ResourcesManager::disableWritablePath()
 {
     bool returnVal=true;
-    if(writablePath=="")
+    if(writablePath.isEmpty())
         returnVal=false;
     else
-        writablePath="";
+        writablePath=QStringLiteral("");
     return returnVal;
 }
 

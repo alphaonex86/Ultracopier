@@ -26,7 +26,7 @@ FacilityEngine::FacilityEngine()
 void FacilityEngine::retranslate()
 {
     //undirect translated string
-    Translation_perSecond="/"+tr("s");
+    Translation_perSecond=QStringLiteral("/")+tr("s");
     Translation_tooBig=tr("Too big");
     Translation_B=tr("B");
     Translation_KB=tr("KB");
@@ -222,23 +222,23 @@ QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds) const
 QString FacilityEngine::ultimateUrl() const
 {
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    return "";
+    return QStringLiteral("");
     #endif
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    return "http://ultracopier-shop.first-world.info/en/supercopier-ultimate/5-supercopier-ultimate.html";
+    return QStringLiteral("http://ultracopier-shop.first-world.info/en/supercopier-ultimate/5-supercopier-ultimate.html");
     #else
         #ifdef Q_OS_WIN32
             #if defined(_M_X64)
-            return "http://ultracopier-shop.first-world.info/ultracopier-ultimate/2-ultracopier-ultimate-windows-64.html";
+            return QStringLiteral("http://ultracopier-shop.first-world.info/ultracopier-ultimate/2-ultracopier-ultimate-windows-64.html");
             #else
-            return "http://ultracopier-shop.first-world.info/ultracopier-ultimate/1-ultracopier-ultimate-windows.html";
+            return QStringLiteral("http://ultracopier-shop.first-world.info/ultracopier-ultimate/1-ultracopier-ultimate-windows.html");
             #endif
         #elif defined(Q_OS_MAC)
-        return "http://ultracopier-shop.first-world.info/ultracopier-ultimate/3-ultracopier-ultimate-mac.html";
+        return QStringLiteral("http://ultracopier-shop.first-world.info/ultracopier-ultimate/3-ultracopier-ultimate-mac.html");
         #elif defined(Q_OS_LINUX)
-        return "http://ultracopier-shop.first-world.info/supercopier-ultimate/5-supercopier-ultimate.html";
+        return QStringLiteral("http://ultracopier-shop.first-world.info/supercopier-ultimate/5-supercopier-ultimate.html");
         #else
-        return "";
+        return QStringLiteral("");
         #endif
     #endif
 
@@ -248,8 +248,8 @@ QString FacilityEngine::ultimateUrl() const
 QString FacilityEngine::softwareName() const
 {
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return "Supercopier";
+        return QStringLiteral("Supercopier");
     #else
-        return "Ultracopier";
+        return QStringLiteral("Ultracopier");
     #endif
 }

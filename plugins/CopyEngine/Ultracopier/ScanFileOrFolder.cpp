@@ -15,8 +15,8 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
     stopped             = true;
     stopIt              = false;
     this->mode          = mode;
-    folder_isolation    = QRegularExpression("^(.*/)?([^/]+)/$");
-    setObjectName("ScanFileOrFolder");
+    folder_isolation    = QRegularExpression(QStringLiteral("^(.*/)?([^/]+)/$"));
+    setObjectName(QStringLiteral("ScanFileOrFolder"));
     #ifdef Q_OS_WIN32
     QString userName;
     DWORD size=255;
@@ -24,7 +24,7 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
     if(GetUserNameW(userNameW,&size))
     {
         userName=QString::fromWCharArray(userNameW,size-1);
-        blackList << QFileInfo(QString("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath();
+        blackList << QFileInfo(QStringLiteral("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath();
     }
     delete userNameW;
     #endif
@@ -48,14 +48,14 @@ void ScanFileOrFolder::addToList(const QStringList& sources,const QString& desti
     this->sources=parseWildcardSources(sources);
     this->destination=destination;
     QFileInfo destinationInfo(this->destination);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("check symblink: %1").arg(destinationInfo.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("check symblink: %1").arg(destinationInfo.absoluteFilePath()));
     while(destinationInfo.isSymLink())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("resolv destination to: %1").arg(destinationInfo.symLinkTarget()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("resolv destination to: %1").arg(destinationInfo.symLinkTarget()));
         if(QFileInfo(destinationInfo.symLinkTarget()).isAbsolute())
             this->destination=destinationInfo.symLinkTarget();
         else
-            this->destination=destinationInfo.absolutePath()+"/"+destinationInfo.symLinkTarget();
+            this->destination=destinationInfo.absolutePath()+QStringLiteral("/")+destinationInfo.symLinkTarget();
         destinationInfo.setFile(this->destination);
     }
     if(sources.size()>1 || QFileInfo(destination).isDir())
@@ -70,17 +70,17 @@ void ScanFileOrFolder::addToList(const QStringList& sources,const QString& desti
 
 QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources) const
 {
-    QRegularExpression splitFolder("[/\\\\]");
+    QRegularExpression splitFolder(QStringLiteral("[/\\\\]"));
     QStringList returnList;
     int index=0;
     while(index<sources.size())
     {
-        if(sources.at(index).contains("*"))
+        if(sources.at(index).contains(QStringLiteral("*")))
         {
             QStringList toParse=sources.at(index).split(splitFolder);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("before wildcard parse: %1, toParse: %2, is valid: %3").arg(sources.at(index)).arg(toParse.join(", ")).arg(splitFolder.isValid()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("before wildcard parse: %1, toParse: %2, is valid: %3").arg(sources.at(index)).arg(toParse.join(", ")).arg(splitFolder.isValid()));
             QList<QStringList> recomposedSource;
-            recomposedSource << (QStringList() << "");
+            recomposedSource << (QStringList() << QStringLiteral(""));
             while(toParse.size()>0)
             {
                 if(toParse.first().contains('*'))
@@ -89,16 +89,16 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources) c
                     if(toParseFirst=="")
                         toParseFirst="/";
                     QList<QStringList> newRecomposedSource;
-                    QRegularExpression toResolv=QRegularExpression(toParseFirst.replace('*',"[^/\\\\]*"));
+                    QRegularExpression toResolv=QRegularExpression(toParseFirst.replace('*',QStringLiteral("[^/\\\\]*")));
                     int index_recomposedSource=0;
                     while(index_recomposedSource<recomposedSource.size())//parse each url part
                     {
-                        QFileInfo info(recomposedSource.at(index_recomposedSource).join("/"));
+                        QFileInfo info(recomposedSource.at(index_recomposedSource).join(QStringLiteral("/")));
                         if(info.isDir() && !info.isSymLink())
                         {
                             QDir folder(info.absoluteFilePath());
                             QFileInfoList fileFile=folder.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//QStringList() << toResolv
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("list the folder: %1, with the wildcard: %2").arg(info.absoluteFilePath()).arg(toResolv.pattern()));
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("list the folder: %1, with the wildcard: %2").arg(info.absoluteFilePath()).arg(toResolv.pattern()));
                             int index_fileList=0;
                             while(index_fileList<fileFile.size())
                             {
@@ -117,12 +117,12 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources) c
                 }
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("add toParse: %1").arg(toParse.join("/")));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("add toParse: %1").arg(toParse.join(QStringLiteral("/"))));
                     int index_recomposedSource=0;
                     while(index_recomposedSource<recomposedSource.size())
                     {
                         recomposedSource[index_recomposedSource] << toParse.first();
-                        if(!QFileInfo(recomposedSource.at(index_recomposedSource).join("/")).exists())
+                        if(!QFileInfo(recomposedSource.at(index_recomposedSource).join(QStringLiteral("/"))).exists())
                             recomposedSource.removeAt(index_recomposedSource);
                         else
                             index_recomposedSource++;
@@ -133,7 +133,7 @@ QStringList ScanFileOrFolder::parseWildcardSources(const QStringList &sources) c
             int index_recomposedSource=0;
             while(index_recomposedSource<recomposedSource.size())
             {
-                returnList<<recomposedSource.at(index_recomposedSource).join("/");
+                returnList<<recomposedSource.at(index_recomposedSource).join(QStringLiteral("/"));
                 index_recomposedSource++;
             }
         }
@@ -152,7 +152,7 @@ void ScanFileOrFolder::setFilters(const QList<Filters_rules> &include, const QLi
     this->exclude_send=exclude;
     reloadTheNewFilters=true;
     haveFilters=include_send.size()>0 || exclude_send.size()>0;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("haveFilters: %1, include_send.size(): %2, exclude_send.size(): %3").arg(haveFilters).arg(include_send.size()).arg(exclude_send.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("haveFilters: %1, include_send.size(): %2, exclude_send.size(): %3").arg(haveFilters).arg(include_send.size()).arg(exclude_send.size()));
 }
 
 //set action if Folder are same or exists
@@ -214,19 +214,19 @@ void ScanFileOrFolder::run()
             tempString+=TransferThread::resolvedName(source);
             if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(tempString).exists() && driveManagement.isSameDrive(source.absoluteFilePath(),tempString))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("tempString: %1 move and not exists").arg(tempString));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("do real move: %1 to %2").arg(source.absoluteFilePath()).arg(tempString));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("tempString: %1 move and not exists").arg(tempString));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("do real move: %1 to %2").arg(source.absoluteFilePath()).arg(tempString));
                 emit addToRealMove(source.absoluteFilePath(),tempString);
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("tempString: %1 normal listing, blacklist size: %2").arg(tempString).arg(blackList.size()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("tempString: %1 normal listing, blacklist size: %2").arg(tempString).arg(blackList.size()));
                 listFolder(source.absoluteFilePath(),tempString);
             }
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1 is file or symblink").arg(source.absoluteFilePath()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1 is file or symblink").arg(source.absoluteFilePath()));
             emit fileTransfer(source,destination+"/"+source.fileName(),mode);
         }
         sourceIndex++;
@@ -242,7 +242,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
     QFileInfo newDestination=destination;
     while(newDestination.isSymLink())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("resolv destination to: %1").arg(newDestination.symLinkTarget()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("resolv destination to: %1").arg(newDestination.symLinkTarget()));
         if(QFileInfo(newDestination.symLinkTarget()).isAbsolute())
             newDestination.setFile(newDestination.symLinkTarget());
         else
@@ -253,7 +253,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
         fileErrorAction=FileError_NotSet;
         if(isBlackListed(destination))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("isBlackListed: %1").arg(destination.absoluteFilePath()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("isBlackListed: %1").arg(destination.absoluteFilePath()));
             emit errorOnFolder(destination,tr("Blacklisted folder"),ErrorType_Folder);
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
@@ -270,11 +270,11 @@ bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
     {
         if(destination.absoluteFilePath().startsWith(blackList.at(index)))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("%1 start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1 start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
             return true;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("%1 not start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1 not start with: %2").arg(destination.absoluteFilePath()).arg(blackList.at(index)));
         index++;
     }
     return false;
@@ -282,7 +282,7 @@ bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
 
 void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1 (%2), destination: %3 (%4)").arg(source.absoluteFilePath()).arg(source.isSymLink()).arg(destination.absoluteFilePath()).arg(destination.isSymLink()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1 (%2), destination: %3 (%4)").arg(source.absoluteFilePath()).arg(source.isSymLink()).arg(destination.absoluteFilePath()).arg(destination.isSymLink()));
     if(stopIt)
         return;
     destination=resolvDestination(destination);
@@ -305,7 +305,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
             break;
             case FolderExists_Rename:
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination.absoluteFilePath());
-                if(newName=="")
+                if(newName.isEmpty())
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
                     //resolv the new name
@@ -315,30 +315,30 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     {
                         if(num==1)
                         {
-                            if(firstRenamingRule=="")
+                            if(firstRenamingRule.isEmpty())
                                 destinationSuffixPath=tr("%1 - copy").arg(destination.baseName());
                             else
                             {
                                 destinationSuffixPath=firstRenamingRule;
-                                destinationSuffixPath.replace("%name%",destination.baseName());
+                                destinationSuffixPath.replace(QStringLiteral("%name%"),destination.baseName());
                             }
                         }
                         else
                         {
-                            if(otherRenamingRule=="")
+                            if(otherRenamingRule.isEmpty())
                                 destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num);
                             else
                             {
                                 destinationSuffixPath=otherRenamingRule;
-                                destinationSuffixPath.replace("%name%",destination.baseName());
-                                destinationSuffixPath.replace("%number%",QString::number(num));
+                                destinationSuffixPath.replace(QStringLiteral("%name%"),destination.baseName());
+                                destinationSuffixPath.replace(QStringLiteral("%number%"),QString::number(num));
                             }
                         }
                         num++;
                         if(destination.completeSuffix().isEmpty())
-                            destination.setFile(destination.absolutePath()+"/"+destinationSuffixPath);
+                            destination.setFile(destination.absolutePath()+QStringLiteral("/")+destinationSuffixPath);
                         else
-                            destination.setFile(destination.absolutePath()+"/"+destinationSuffixPath+"."+destination.completeSuffix());
+                            destination.setFile(destination.absolutePath()+QStringLiteral("/")+destinationSuffixPath+QStringLiteral(".")+destination.completeSuffix());
                     }
                     while(destination.exists());
                 }
@@ -347,7 +347,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+newName);
                     destinationSuffixPath = newName;
                 }
-                destination.setFile(destination.absolutePath()+"/"+destinationSuffixPath);
+                destination.setFile(destination.absolutePath()+QStringLiteral("/")+destinationSuffixPath);
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination.absoluteFilePath());
             break;
             default:
@@ -372,7 +372,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                 break;
                 case FolderExists_Rename:
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination.absoluteFilePath());
-                    if(newName=="")
+                    if(newName.isEmpty())
                     {
                         //resolv the new name
                         QFileInfo destinationInfo;
@@ -381,26 +381,26 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                         {
                             if(num==1)
                             {
-                                if(firstRenamingRule=="")
+                                if(firstRenamingRule.isEmpty())
                                     destinationSuffixPath=tr("%1 - copy").arg(destination.baseName());
                                 else
                                 {
                                     destinationSuffixPath=firstRenamingRule;
-                                    destinationSuffixPath.replace("%name%",destination.baseName());
+                                    destinationSuffixPath.replace(QStringLiteral("%name%"),destination.baseName());
                                 }
                             }
                             else
                             {
-                                if(otherRenamingRule=="")
+                                if(otherRenamingRule.isEmpty())
                                     destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num);
                                 else
                                 {
                                     destinationSuffixPath=otherRenamingRule;
-                                    destinationSuffixPath.replace("%name%",destination.baseName());
-                                    destinationSuffixPath.replace("%number%",QString::number(num));
+                                    destinationSuffixPath.replace(QStringLiteral("%name%"),destination.baseName());
+                                    destinationSuffixPath.replace(QStringLiteral("%number%"),QString::number(num));
                                 }
                             }
-                            destinationInfo.setFile(destinationInfo.absolutePath()+"/"+destinationSuffixPath);
+                            destinationInfo.setFile(destinationInfo.absolutePath()+QStringLiteral("/")+destinationSuffixPath);
                             num++;
                         }
                         while(destinationInfo.exists());
@@ -411,9 +411,9 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                         destinationSuffixPath = newName;
                     }
                     if(destination.completeSuffix().isEmpty())
-                        destination.setFile(destination.absolutePath()+"/"+destinationSuffixPath);
+                        destination.setFile(destination.absolutePath()+QStringLiteral("/")+destinationSuffixPath);
                     else
-                        destination.setFile(destination.absolutePath()+"/"+destinationSuffixPath+"."+destination.completeSuffix());
+                        destination.setFile(destination.absolutePath()+QStringLiteral("/")+destinationSuffixPath+QStringLiteral(".")+destination.completeSuffix());
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination.absoluteFilePath());
                 break;
                 default:
@@ -512,7 +512,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     if(!included)
                     {}
                     else
-                        listFolder(fileInfo,destination.absoluteFilePath()+"/"+fileInfo.fileName());
+                        listFolder(fileInfo,destination.absoluteFilePath()+QStringLiteral("/")+fileInfo.fileName());
                 }
             }
             else
@@ -551,7 +551,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     if(!included)
                     {}
                     else
-                        emit fileTransfer(fileInfo,destination.absoluteFilePath()+"/"+fileInfo.fileName(),mode);
+                        emit fileTransfer(fileInfo,destination.absoluteFilePath()+QStringLiteral("/")+fileInfo.fileName(),mode);
                 }
             }
         }
@@ -559,9 +559,9 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         {
             if(fileInfo.isDir() && !fileInfo.isSymLink())//possible wait time here
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
-                listFolder(fileInfo,destination.absoluteFilePath()+"/"+fileInfo.fileName());//put unix separator because it's transformed into that's under windows too
+                listFolder(fileInfo,destination.absoluteFilePath()+QStringLiteral("/")+fileInfo.fileName());//put unix separator because it's transformed into that's under windows too
             else
-                emit fileTransfer(fileInfo,destination.absoluteFilePath()+"/"+fileInfo.fileName(),mode);
+                emit fileTransfer(fileInfo,destination.absoluteFilePath()+QStringLiteral("/")+fileInfo.fileName(),mode);
         }
     }
     if(mode==Ultracopier::Move)

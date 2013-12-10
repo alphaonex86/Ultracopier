@@ -37,6 +37,8 @@ class FacilityInterface : public QObject
         virtual QString simplifiedRemainingTime(const quint32 &seconds) const = 0;
         /// \brief Do the simplified time
         virtual QString ultimateUrl() const = 0;
+        /// \brief Return the software name
+        virtual QString softwareName() const = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

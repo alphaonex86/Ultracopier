@@ -24,7 +24,7 @@ DiskSpace::DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QW
                 .arg(list[index].drive)
                 .arg(facilityEngine->sizeToString(list[index].freeSpace))
                 .arg(facilityEngine->sizeToString(list[index].requiredSpace));
-        drives+="<br />";
+        drives+=QStringLiteral("<br />");
         index++;
     }
     ui->drives->setText(drives);

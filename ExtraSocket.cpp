@@ -12,7 +12,7 @@
 QString ExtraSocket::pathSocket(const QString &name)
 {
 #ifdef Q_OS_UNIX
-    return name+"-"+QString::number(getuid());
+    return name+QStringLiteral("-")+QString::number(getuid());
 #else
     QString userName;
 
@@ -39,7 +39,7 @@ QString ExtraSocket::pathSocket(const QString &name)
         userName=tempArray.toHex();
     }
     delete userNameW;
-    return name+"-"+userName;
+    return name+QStringLiteral("-")+userName;
 #endif
 }
 

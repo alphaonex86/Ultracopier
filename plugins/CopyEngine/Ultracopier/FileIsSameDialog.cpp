@@ -86,11 +86,11 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
     QString destination;
     QString newFileName;
     //resolv the suffix
-    if(fileName.contains(QRegularExpression("^(.*)(\\.[a-z0-9]+)$")))
+    if(fileName.contains(QRegularExpression(QStringLiteral("^(.*)(\\.[a-z0-9]+)$"))))
     {
         suffix=fileName;
-        suffix.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\2");
-        fileName.replace(QRegularExpression("^(.*)(\\.[a-z0-9]+)$"),"\\1");
+        suffix.replace(QRegularExpression(QStringLiteral("^(.*)(\\.[a-z0-9]+)$")),QStringLiteral("\\2"));
+        fileName.replace(QRegularExpression(QStringLiteral("^(.*)(\\.[a-z0-9]+)$")),QStringLiteral("\\1"));
     }
     //resolv the new name
     int num=1;
@@ -103,7 +103,7 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
             else
             {
                 newFileName=firstRenamingRule;
-                newFileName.replace("%name%",fileName);
+                newFileName.replace(QStringLiteral("%name%"),fileName);
             }
         }
         else
@@ -113,8 +113,8 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
             else
             {
                 newFileName=otherRenamingRule;
-                newFileName.replace("%name%",fileName);
-                newFileName.replace("%number%",QString::number(num));
+                newFileName.replace(QStringLiteral("%name%"),fileName);
+                newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
         destination=absolutePath+QDir::separator()+newFileName+suffix;

@@ -74,7 +74,6 @@ protected:
     QList<TransfertItem> transfertItemList;///< To have a transfer list for the user
     QSet<quint64> startId,stopId;///< To show what is started, what is stopped
     QHash<quint64,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
-    QIcon start,stop;
 private:
     int loop_size,index_for_loop;
     int sub_loop_size,sub_index_for_loop;
@@ -85,6 +84,8 @@ private:
     int currentIndexSearch;
     bool haveSearchItem;
     quint64 searchId;
+    static QIcon start;
+    static QIcon stop;
 signals:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source

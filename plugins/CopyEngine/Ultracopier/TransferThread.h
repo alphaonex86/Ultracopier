@@ -233,6 +233,7 @@ private:
     int             parallelBuffer;
     int             sequentialBuffer;
     int             parallelizeIfSmallerThan;
+    QRegularExpression renameRegex;
     TransferAlgorithm transferAlgorithm;
     #ifdef Q_OS_UNIX
             utimbuf butime;
@@ -243,6 +244,7 @@ private:
             #else
                 quint32 ftCreateL, ftAccessL, ftWriteL;
                 quint32 ftCreateH, ftAccessH, ftWriteH;
+                QRegularExpression regRead;
             #endif
         #endif
     #endif

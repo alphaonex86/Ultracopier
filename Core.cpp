@@ -13,7 +13,7 @@
 
 Core::Core(CopyEngineManager *copyEngineList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     this->copyEngineList=copyEngineList;
     nextId=0;
     forUpateInformation.setInterval(ULTRACOPIER_TIME_INTERFACE_UPDATE);
@@ -39,7 +39,7 @@ Core::~Core()
 
 void Core::newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     if(openNewCopyEngineInstance(Ultracopier::Copy,false,protocolsUsedForTheSources)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
@@ -53,13 +53,13 @@ void Core::newCopyWithoutDestination(const quint32 &orderId,const QStringList &p
 
 void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+sources.join(";")+", dest: "+destination+", mode: "+QString::number(mode));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+sources.join(QStringLiteral(";"))+QStringLiteral(", dest: ")+destination+QStringLiteral(", mode: ")+QString::number(mode));
     //search to group the window
-    int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen").toInt();
+    int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen")).toInt();
     bool haveSameSource=false,haveSameDestination=false;
     if(GroupWindowWhen!=0)
     {
-        bool needConfirmation=OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows").toInt();
+        bool needConfirmation=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("confirmToGroupWindows")).toInt();
         int index=0;
         while(index<copyList.size())
         {
@@ -91,7 +91,7 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,
                         bool confirmed=true;
                         if(needConfirmation)
                         {
-                            QMessageBox::StandardButton reply = QMessageBox::question(copyList.at(index).interface,"Group window","Do you want group the transfer with another actual running transfer?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                            QMessageBox::StandardButton reply = QMessageBox::question(copyList.at(index).interface,tr("Group window"),tr("Do you want group the transfer with another actual running transfer?"),QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                             confirmed=(reply==QMessageBox::Yes);
                         }
                         if(confirmed)
@@ -113,7 +113,7 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,
     //else open new windows
     if(openNewCopyEngineInstance(mode,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a engine instance");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to get a engine instance"));
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a engine instance"));
         return;
     }
@@ -151,14 +151,14 @@ void Core::newMoveWithoutDestination(const quint32 &orderId,const QStringList &p
 /// \brief name to open the right copy engine
 void Core::addWindowCopyMove(const Ultracopier::CopyMode &mode,const QString &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+name);
     if(openNewCopyEngineInstance(mode,false,name)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
         return;
     }
-    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen").toInt();
+    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen")).toInt();
     if(ActionOnManualOpen_value!=ActionOnManualOpen_Nothing)
     {
         if(ActionOnManualOpen_value==ActionOnManualOpen_Folder)
@@ -171,7 +171,7 @@ void Core::addWindowCopyMove(const Ultracopier::CopyMode &mode,const QString &na
 /// \brief name to open the right copy engine
 void Core::addWindowTransfer(const QString &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start"+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start")+name);
     if(openNewCopyEngineInstance(Ultracopier::Copy,true,name)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
@@ -183,8 +183,8 @@ void Core::addWindowTransfer(const QString &name)
 /** new transfer list pased by the CLI */
 void Core::newTransferList(QString engine,QString mode,QString file)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("engine: %1, mode: %2, file: %3").arg(engine).arg(mode).arg(file));
-    if(mode=="Transfer")
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("engine: %1, mode: %2, file: %3").arg(engine).arg(mode).arg(file));
+    if(mode==QStringLiteral("Transfer"))
     {
         if(openNewCopyEngineInstance(Ultracopier::Copy,true,engine)==-1)
         {
@@ -193,7 +193,7 @@ void Core::newTransferList(QString engine,QString mode,QString file)
             return;
         }
     }
-    else if(mode=="Copy")
+    else if(mode==QStringLiteral("Copy"))
     {
         if(openNewCopyEngineInstance(Ultracopier::Copy,false,engine)==-1)
         {
@@ -202,7 +202,7 @@ void Core::newTransferList(QString engine,QString mode,QString file)
             return;
         }
     }
-    else if(mode=="Move")
+    else if(mode==QStringLiteral("Move"))
     {
         if(openNewCopyEngineInstance(Ultracopier::Move,false,engine)==-1)
         {
@@ -222,7 +222,7 @@ void Core::newTransferList(QString engine,QString mode,QString file)
 
 void Core::loadInterface()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     //load the extra files to check the themes availability
     if(copyList.size()>0)
     {
@@ -255,7 +255,7 @@ void Core::loadInterface()
 
 void Core::unloadInterface()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     int index=0;
     int loop_size=copyList.size();
     while(index<loop_size)
@@ -290,7 +290,7 @@ int Core::incrementId()
 */
 int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,protocolsUsedForTheSources,protocolsUsedForTheDestination);
     if(returnInformations.engine==NULL)
         return -1;
@@ -389,7 +389,7 @@ void Core::resetSpeedDetectedInterface()
 
 void Core::resetSpeedDetected(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start on %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start on %1").arg(index));
     copyList[index].lastSpeedDetected.clear();
     copyList[index].lastSpeedTime.clear();
     copyList[index].lastAverageSpeedDetected.clear();
@@ -401,11 +401,11 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("action: %1, from %2").arg(action).arg(index));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action: %1, from %2").arg(action).arg(index));
         //drop here the duplicate action
         if(copyList[index].action==action)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("The copy engine have send 2x the same EngineActionInProgress"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("The copy engine have send 2x the same EngineActionInProgress"));
             return;
         }
         //update time runing for time remaning caculation
@@ -526,85 +526,85 @@ int Core::indexCopySenderInterface()
 
 void Core::connectEngine(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start with index: %1: %2").arg(index).arg((quint64)sender()));
     //disconnectEngine(index);
 
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing,			this,&Core::newFolderListing,Qt::QueuedConnection))//to check to change
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for newFolderListing()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for newFolderListing()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess,	this,&Core::actionInProgess,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for actionInProgess()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for actionInProgess()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::isInPause,				this,&Core::isInPause,Qt::QueuedConnection))//to check to change
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for isInPause()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for isInPause()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::cancelAll,					this,&Core::copyInstanceCanceledByEngine,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for cancelAll()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for cancelAll()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::error,	this,&Core::error,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for error()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for error()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::rmPath,				this,&Core::rmPath,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for rmPath()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for rmPath()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath,				this,&Core::mkPath,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for mkPath()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for mkPath()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::syncReady,					this,&Core::syncReady,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::canBeDeleted,					this,&Core::deleteCopyEngine,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
 }
 
 void Core::connectInterfaceAndSync(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start with index: %1: %2").arg(index).arg((quint64)sender()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start with index: %1: %2").arg(index).arg((quint64)sender()));
     //disconnectInterface(index);
 
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::pause,					currentCopyInstance.engine,&PluginInterface_CopyEngine::pause))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pause()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pause()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::resume,					currentCopyInstance.engine,&PluginInterface_CopyEngine::resume))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::skip,				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for skip()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for skip()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		currentCopyInstance.engine,&PluginInterface_CopyEngine::setSpeedLimitation))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFolder,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFolder))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for userAddFolder()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for userAddFolder()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for userAddFile()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for userAddFile()").arg(index).arg((quint64)sender()));
 
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::removeItems,			currentCopyInstance.engine,&PluginInterface_CopyEngine::removeItems))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for removeItems()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for removeItems()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnTop,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnTop))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnTop()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnTop()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsUp,			currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsUp))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsUp()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsUp()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsDown,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsDown))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsDown()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsDown()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnBottom,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnBottom))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnBottom()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnBottom()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::exportTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::exportTransferList))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for exportTransferList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for exportTransferList()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::exportErrorIntoTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::exportErrorIntoTransferList))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for exportErrorIntoTransferList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for exportErrorIntoTransferList()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::importTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::importTransferList))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for importTransferList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for importTransferList()").arg(index).arg((quint64)sender()));
 
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		this,&Core::resetSpeedDetectedInterface))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::resume,					this,&Core::resetSpeedDetectedInterface))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::cancel,					this,&Core::copyInstanceCanceledByInterface,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for cancel()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for cancel()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::urlDropped,			this,&Core::urlDropped,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for urlDropped()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for urlDropped()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList,this,&Core::getActionOnList,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for newActionOnList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for newActionOnList()").arg(index).arg((quint64)sender()));
 
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushFileProgression()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pushFileProgression()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		this,&Core::pushGeneralProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::errorToRetry,		currentCopyInstance.interface,&PluginInterface_Themes::errorToRetry,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("error at connect, the interface can not work correctly: %1: %2 for errorToRetry() for this").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for errorToRetry() for this").arg(index).arg((quint64)sender()));
 
     currentCopyInstance.interface->setSupportSpeedLimitation(currentCopyInstance.engine->supportSpeedLimitation());
     currentCopyInstance.interface->setCopyType(currentCopyInstance.type);
@@ -740,7 +740,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
 /// \brief the copy engine have canceled the transfer
 void Core::copyInstanceCanceledByEngine()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
         copyInstanceCanceledByIndex(index);
@@ -751,7 +751,7 @@ void Core::copyInstanceCanceledByEngine()
 /// \brief the interface have canceled the transfer
 void Core::copyInstanceCanceledByInterface()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     int index=indexCopySenderInterface();
     if(index!=-1)
         copyInstanceCanceledByIndex(index);
@@ -843,7 +843,7 @@ void Core::syncReady()
 
 void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &actionList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     //log to thje file
     if(log.logTransfer())
     {
@@ -895,7 +895,7 @@ void Core::pushGeneralProgression(const quint64 &current,const quint64 &total)
 /// \brief used to drag and drop files
 void Core::urlDropped(const QList<QUrl> &urls)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     int index=indexCopySenderInterface();
     if(index!=-1)
     {

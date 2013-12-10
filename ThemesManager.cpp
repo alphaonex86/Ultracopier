@@ -45,12 +45,12 @@ ThemesManager::ThemesManager()
 
     //do the options
     QList<QPair<QString, QVariant> > KeysList;
-    KeysList.append(qMakePair(QString("Ultracopier_current_theme"),QVariant(ULTRACOPIER_DEFAULT_STYLE)));
-    OptionEngine::optionEngine->addOptionGroup("Themes",KeysList);
+    KeysList.append(qMakePair(QStringLiteral("Ultracopier_current_theme"),QVariant(ULTRACOPIER_DEFAULT_STYLE)));
+    OptionEngine::optionEngine->addOptionGroup(QStringLiteral("Themes"),KeysList);
 
     //load the default and current themes path
-    defaultStylePath=":/Themes/"+QString(ULTRACOPIER_DEFAULT_STYLE)+"/";
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Default style: "+defaultStylePath);
+    defaultStylePath=QStringLiteral(":/Themes/")+QStringLiteral(ULTRACOPIER_DEFAULT_STYLE)+QStringLiteral("/");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Default style: ")+defaultStylePath);
     currentStylePath=defaultStylePath;
     connect(OptionEngine::optionEngine,            &OptionEngine::newOptionValue,	this,		&ThemesManager::newOptionValue,Qt::QueuedConnection);
 }
@@ -136,7 +136,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,factory,&PluginInterface_ThemesFactory::newLanguageLoaded);
     newPlugin.factory=factory;
 
-    newPlugin.options=new LocalPluginOptions("Themes-"+newPlugin.plugin.name);
+    newPlugin.options=new LocalPluginOptions(QStringLiteral("Themes-")+newPlugin.plugin.name);
     newPlugin.factory->setResources(newPlugin.options,newPlugin.plugin.writablePath,newPlugin.plugin.path,&FacilityEngine::facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     currentStylePath=newPlugin.plugin.path;
     pluginList << newPlugin;
@@ -203,7 +203,7 @@ QIcon ThemesManager::loadIcon(const QString &fileName)
 
 void ThemesManager::allPluginIsLoaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     if(pluginList.size()==0)
     {
         emit theThemeIsReloaded();
@@ -250,13 +250,13 @@ PluginInterface_Themes * ThemesManager::getThemesInstance()
 #ifdef ULTRACOPIER_DEBUG
 void ThemesManager::debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
 {
-    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Theme plugin");
+    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,QStringLiteral("Theme plugin"));
 }
 #endif // ULTRACOPIER_DEBUG
 
 void ThemesManager::newOptionValue(const QString &group,const QString &name,const QVariant &value)
 {
-    if(group=="Themes" && name=="Ultracopier_current_theme")
+    if(group==QStringLiteral("Themes") && name==QStringLiteral("Ultracopier_current_theme"))
     {
         if(!PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
             return;

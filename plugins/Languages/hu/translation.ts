@@ -88,30 +88,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Warning</source>
         <translation>Figyelmzetetés</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="221"/>
+        <location filename="../../../CopyEngineManager.cpp" line="222"/>
         <source>Cannot find any copy engine with motions support</source>
         <translation>Nem található másolási motor mozgatási támogatással</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="226"/>
+        <location filename="../../../CopyEngineManager.cpp" line="227"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Nem található semmilyen kompatibilis motor!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="247"/>
+        <location filename="../../../CopyEngineManager.cpp" line="248"/>
         <source>This copy engine does not support motions</source>
         <translation>Ez a másoló motor nem támogatja a mozgatást</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Nem található motor ezzel a névvel: %1</translation>
     </message>
@@ -119,12 +119,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="144"/>
+        <location filename="../../../CopyListener.cpp" line="145"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Hiba a másolási/mozgatási lista fogadásakor
@@ -159,6 +159,16 @@
         <location filename="../../../Core.cpp" line="210"/>
         <source>Unable to get a copy engine instance</source>
         <translation>Nem lehetséges másoló motor példány észlelése</translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Group window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../Core.cpp" line="94"/>
+        <source>Do you want group the transfer with another actual running transfer?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="117"/>
@@ -1034,6 +1044,11 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>Témák</translation>
     </message>
     <message>
+        <location filename="../../../PluginInformation.cpp" line="59"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../PluginInformation.cpp" line="69"/>
         <source>Information about %1</source>
         <translation>%1 információi</translation>
@@ -1234,52 +1249,52 @@ since:%2</source>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="156"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation>Nem található másoló figyelő. Végezd el manuálisan a másolást a jobb egérgombbal a tálcaikonra kattintva.</translation>
+        <translation type="unfinished">Nem található másoló figyelő. Végezd el manuálisan a másolást a jobb egérgombbal a tálcaikonra kattintva.</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="162"/>
         <source>Information</source>
-        <translation>Információ</translation>
+        <translation type="unfinished">Információ</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="180"/>
         <source>Searching information...</source>
-        <translation>Információ keresése...</translation>
+        <translation type="unfinished">Információ keresése...</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="193"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation>Ne cserélje le az Intéző másolását/mozgatását</translation>
+        <translation type="unfinished">Ne cserélje le az Intéző másolását/mozgatását</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="198"/>
         <source>Semi replace the explorer copy/move</source>
-        <translation>Az Intéző másolás/mozgatás félig lecserélése</translation>
+        <translation type="unfinished">Az Intéző másolás/mozgatás félig lecserélése</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="203"/>
         <source>Replace the explorer copy/move</source>
-        <translation>Az Intéző másolás/mozgatás lecserélése</translation>
+        <translation type="unfinished">Az Intéző másolás/mozgatás lecserélése</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>Warning</source>
-        <translation>Figyelmeztetés</translation>
+        <translation type="unfinished">Figyelmeztetés</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="371"/>
         <source>The action on the systray icon is unknown!</source>
-        <translation>A művelet a tálcaikonon ismeretlen!</translation>
+        <translation type="unfinished">A művelet a tálcaikonon ismeretlen!</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="419"/>
         <source>&amp;About/Debug report</source>
-        <translation>Né&amp;vjegy/Hibajelentés</translation>
+        <translation type="unfinished">Né&amp;vjegy/Hibajelentés</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="421"/>
         <source>&amp;About</source>
-        <translation>&amp;Névjegy</translation>
+        <translation type="unfinished">&amp;Névjegy</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="424"/>
@@ -1310,17 +1325,17 @@ The new version have been sended by email too, look into your spams if needed.</
     <message>
         <location filename="../../../SystrayIcon.cpp" line="426"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Kilépés</translation>
+        <translation type="unfinished">&amp;Kilépés</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="427"/>
         <source>&amp;Options</source>
-        <translation>&amp;Beállítások</translation>
+        <translation type="unfinished">&amp;Beállítások</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>A&amp;dd copy/moving</source>
-        <translation>Más&amp;olás/mozgatás hozzáadása</translation>
+        <translation type="unfinished">Más&amp;olás/mozgatás hozzáadása</translation>
     </message>
     <message>
         <source>New version: %1
@@ -1331,32 +1346,32 @@ Honlap: %2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="489"/>
         <source>&amp;Copy</source>
-        <translation>&amp;Másolás</translation>
+        <translation type="unfinished">&amp;Másolás</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="495"/>
         <source>&amp;Transfer</source>
-        <translation>&amp;Átvitel</translation>
+        <translation type="unfinished">&amp;Átvitel</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="499"/>
         <source>&amp;Move</source>
-        <translation>M&amp;ozgatás</translation>
+        <translation type="unfinished">M&amp;ozgatás</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="511"/>
         <source>Add &amp;copy</source>
-        <translation>Má&amp;solás hozzáadása</translation>
+        <translation type="unfinished">Má&amp;solás hozzáadása</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>Add &amp;transfer</source>
-        <translation>&amp;Átvitel hozzáadása</translation>
+        <translation type="unfinished">&amp;Átvitel hozzáadása</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="521"/>
         <source>Add &amp;move</source>
-        <translation>&amp;Mozgatás hozzáadása</translation>
+        <translation type="unfinished">&amp;Mozgatás hozzáadása</translation>
     </message>
 </context>
 </TS>

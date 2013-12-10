@@ -97,15 +97,15 @@ QVariant DebugModel::headerData( int section, Qt::Orientation orientation, int r
     if ( role == Qt::DisplayRole && orientation == Qt::Horizontal && section >= 0 && section < COLUMN_COUNT ) {
         switch ( section ) {
             case 0:
-            return QString("Time");
+            return QStringLiteral("Time");
             case 1:
-            return QString("File");
+            return QStringLiteral("File");
             case 2:
-            return QString("Function");
+            return QStringLiteral("Function");
             case 3:
-            return QString("Location");
+            return QStringLiteral("Location");
             case 4:
-            return QString("Text");
+            return QStringLiteral("Text");
         }
     }
 
@@ -124,7 +124,7 @@ void DebugModel::addDebugInformation(const int &time,const DebugLevel_custom &le
     item.level=level;
     item.function=function;
     item.text=text;
-    item.file=QString("%1:%2").arg(file).arg(ligne);
+    item.file=QStringLiteral("%1:%2").arg(file).arg(ligne);
     item.location=location;
     list << item;
     if(!displayed)

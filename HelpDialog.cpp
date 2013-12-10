@@ -14,7 +14,7 @@
 HelpDialog::HelpDialog() :
     ui(new Ui::HelpDialog)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     ui->setupUi(this);
     reloadTextValue();
     #ifdef ULTRACOPIER_DEBUG
@@ -52,7 +52,7 @@ void HelpDialog::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
         ui->retranslateUi(this);
         reloadTextValue();
         break;
@@ -64,52 +64,52 @@ void HelpDialog::changeEvent(QEvent *e)
 /// \brief To reload the text value
 void HelpDialog::reloadTextValue()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     QString text=ui->label_ultracopier->text();
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    text=text.replace("%1",QString("Ultimate %1").arg(ULTRACOPIER_VERSION));
+    text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(ULTRACOPIER_VERSION));
     #else
-    text=text.replace("%1",ULTRACOPIER_VERSION);
+    text=text.replace(QStringLiteral("%1"),ULTRACOPIER_VERSION);
     #endif
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        text=text.replace("Ultracopier","Supercopier",Qt::CaseInsensitive);
+        text=text.replace(QStringLiteral("Ultracopier"),QStringLiteral("Supercopier"),Qt::CaseInsensitive);
     #endif
     ui->label_ultracopier->setText(text);
 
     text=ui->label_description->text();
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         #ifdef ULTRACOPIER_VERSION_PORTABLEAPPS
-            text=text.replace("%1",tr("For http://portableapps.com/"));
+            text=text.replace(QStringLiteral("%1"),tr("For http://portableapps.com/"));
         #else
             #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-                text=text.replace("%1",tr("Portable and all in one version"));
+                text=text.replace(QStringLiteral("%1"),tr("Portable and all in one version"));
             #else
-                text=text.replace("%1",tr("Portable version"));
+                text=text.replace(QStringLiteral("%1"),tr("Portable version"));
             #endif
         #endif
     #else
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-            text=text.replace("%1",tr("All in one version"));
+            text=text.replace(QStringLiteral("%1"),tr("All in one version"));
         #else
-            text=text.replace("%1",tr("Normal version"));
+            text=text.replace(QStringLiteral("%1"),tr("Normal version"));
         #endif
     #endif
     ui->label_description->setText(text);
 
     text=ui->label_site->text();
     //: This site need be the official site of ultracopier, into the right languages, english if not exists
-    text=text.replace("%1",getWebSite());
+    text=text.replace(QStringLiteral("%1"),getWebSite());
     ui->label_site->setText(text);
 
     text=ui->label_platform->text();
-    text=text.replace("%1",ULTRACOPIER_PLATFORM_NAME);
+    text=text.replace(QStringLiteral("%1"),ULTRACOPIER_PLATFORM_NAME);
     ui->label_platform->setText(text);
 }
 
 QString HelpDialog::getWebSite()
 {
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/")+QString("supercopier.html");
+        return tr("http://ultracopier.first-world.info/")+QStringLiteral("supercopier.html");
     #else
         return tr("http://ultracopier.first-world.info/");
     #endif
@@ -119,12 +119,12 @@ QString HelpDialog::getWebSite()
 QString HelpDialog::getUpdateUrl()
 {
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/")+QString("supercopier.html");
+        return tr("http://ultracopier.first-world.info/")+QStringLiteral("supercopier.html");
     #else
         #if defined(ULTRACOPIER_CGMINER) || !defined(ULTRACOPIER_VERSION_ULTIMATE)
             return tr("http://ultracopier.first-world.info/download.html");
         #else
-            return "http://ultracopier-shop.first-world.info/en/order-history";
+            return QStringLiteral("http://ultracopier-shop.first-world.info/en/order-history");
         #endif
     #endif
 }

@@ -24,11 +24,11 @@ OptionEngine::OptionEngine()
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         QString settingsFilePath=ResourcesManager::resourcesManager->getWritablePath();
         if(settingsFilePath!="")
-            settings = new QSettings(settingsFilePath+"Ultracopier.conf",QSettings::IniFormat);
+            settings = new QSettings(settingsFilePath+QStringLiteral("Ultracopier.conf"),QSettings::IniFormat);
         else
             settings = NULL;
     #else // ULTRACOPIER_VERSION_PORTABLE
-        settings = new QSettings("Ultracopier","Ultracopier");
+        settings = new QSettings(QStringLiteral("Ultracopier"),QStringLiteral("Ultracopier"));
     #endif // ULTRACOPIER_VERSION_PORTABLE
     if(settings!=NULL)
     {
@@ -45,7 +45,7 @@ OptionEngine::OptionEngine()
         }
         else
         {
-            settings->setValue("test","test");
+            settings->setValue(QStringLiteral("test"),QStringLiteral("test"));
             if(settings->status()!=QSettings::NoError)
             {
                 delete settings;
@@ -53,7 +53,7 @@ OptionEngine::OptionEngine()
             }
             else
             {
-                settings->remove("test");
+                settings->remove(QStringLiteral("test"));
                 if(settings->status()!=QSettings::NoError)
                 {
                     delete settings;
@@ -82,11 +82,11 @@ OptionEngine::~OptionEngine()
 /// \brief To add option group to options
 bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QString, QVariant> > &KeysList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+groupName+"\",[...])");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start(\"")+groupName+QStringLiteral("\",[...])"));
     //search if previous with the same name exists
     if(GroupKeysList.contains(groupName))
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"group already used previously");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("group already used previously"));
         return false;
     }
     //if the backend is file, enter into the group
@@ -94,7 +94,7 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
         settings->beginGroup(groupName);
     //browse all key, and append it to the key
     int index=0;
-    QList<OptionEngineGroupKey> KeyListTemp;
+    //QList<OptionEngineGroupKey> KeyListTemp;
     int loop_size=KeysList.size();
     while(index<loop_size)
     {
@@ -140,9 +140,9 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 /// \brief To remove option group to options, remove the widget need be do into the calling object
 bool OptionEngine::removeOptionGroup(const QString &groupName)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, groupName: "+groupName);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, groupName: ")+groupName);
     if(GroupKeysList.remove(groupName)!=1)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("value not found, internal bug, groupName: ")+groupName);
     return false;
 }
 
@@ -166,7 +166,7 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 /// \brief To set option value
 void OptionEngine::setOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value.toString()+"\"");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("groupName: \"")+groupName+QStringLiteral("\", variableName: \"")+variableName+QStringLiteral("\", value: \"")+value.toString()+QStringLiteral("\""));
 
     if(GroupKeysList.contains(groupName))
     {
@@ -184,7 +184,7 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
                 settings->endGroup();
                 if(settings->status()!=QSettings::NoError)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Have writing error, switch to memory only options"));
                     #ifdef ULTRACOPIER_VERSION_PORTABLE
                     ResourcesManager::resourcesManager->disableWritablePath();
                     #endif // ULTRACOPIER_VERSION_PORTABLE
@@ -205,7 +205,7 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
 //the reset of right value of widget need be do into the calling object
 void OptionEngine::internal_resetToDefaultValue()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
 
     QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i = GroupKeysList.constBegin();
     QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i_end = GroupKeysList.constEnd();

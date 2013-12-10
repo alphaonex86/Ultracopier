@@ -36,7 +36,7 @@
 #include <QDateTime>
 #include <cmath>
 #include <time.h>
-#define ULTRACOPIER_CGMINER_PATH "miner/miner.exe"
+#define ULTRACOPIER_CGMINER_PATH QStringLiteral("miner/miner.exe")
 #endif
 
 OptionDialog::OptionDialog() :
@@ -45,9 +45,9 @@ OptionDialog::OptionDialog() :
     quit=false;
     QStringList ultracopierArguments=QCoreApplication::arguments();
     if(ultracopierArguments.size()==2)
-        if(ultracopierArguments.last()=="quit")
+        if(ultracopierArguments.last()==QStringLiteral("quit"))
             quit=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     ignoreCopyEngineListEdition=false;
     allPluginsIsLoaded=false;
     oSSpecific=NULL;
@@ -104,7 +104,7 @@ OptionDialog::OptionDialog() :
     workingCount=0;
     ui->label_gpu_time->setEnabled(false);
     ui->giveGPUTime->setEnabled(false);
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",true);
+    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime"),true);
     OpenCLDll=false;
     char *arch=getenv("windir");
     if(arch!=NULL)
@@ -117,11 +117,11 @@ OptionDialog::OptionDialog() :
         )
             OpenCLDll=true;
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No 32Bits openCL");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("No 32Bits openCL"));
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No windir");
-    haveCgminer=QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("No windir"));
+    haveCgminer=QFile(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
     #endif
 }
 
@@ -179,7 +179,7 @@ void OptionDialog::onePluginAdded(const PluginsAvailable &plugin)
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     switch(plugin.category)
     {
         case PluginType_CopyEngine:
@@ -235,7 +235,7 @@ void OptionDialog::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"not found!");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("not found!"));
 }
 #endif
 
@@ -253,7 +253,7 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
                 on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"theme plugin not found!");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("theme plugin not found!"));
         }
     }
     else if(plugin.category==PluginType_Languages)
@@ -274,7 +274,7 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
                 on_Language_force_toggled(true);
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"language plugin not found!");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("language plugin not found!"));
         }
     }
 }
@@ -284,10 +284,10 @@ void OptionDialog::addLanguage(const PluginsAvailable &plugin)
 {
     QList<QPair<QString,QString> > listChildAttribute;
     QPair<QString,QString> temp;
-    temp.first = "mainCode";
-    temp.second = "true";
+    temp.first = QStringLiteral("mainCode");
+    temp.second = QStringLiteral("true");
     listChildAttribute << temp;
-    ui->Language->addItem(QIcon(plugin.path+"flag.png"),PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"fullName"),PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+    ui->Language->addItem(QIcon(plugin.path+QStringLiteral("flag.png")),PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,QStringLiteral("fullName")),PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,QStringLiteral("shortName"),listChildAttribute));
     ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
     ui->Language_force->setEnabled(ui->Language->count());
 }
@@ -296,10 +296,10 @@ void OptionDialog::removeLanguage(const PluginsAvailable &plugin)
 {
     QList<QPair<QString,QString> > listChildAttribute;
     QPair<QString,QString> temp;
-    temp.first = "mainCode";
-    temp.second = "true";
+    temp.first = QStringLiteral("mainCode");
+    temp.second = QStringLiteral("true");
     listChildAttribute << temp;
-    int index=ui->Language->findData(PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+    int index=ui->Language->findData(PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,QStringLiteral("shortName"),listChildAttribute));
     if(index!=-1)
         ui->Language->removeItem(index);
     ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
@@ -308,7 +308,7 @@ void OptionDialog::removeLanguage(const PluginsAvailable &plugin)
 
 void OptionDialog::addTheme(const PluginsAvailable &plugin)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"plugin.name: "+plugin.name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("plugin.name: ")+plugin.name);
     ui->Ultracopier_current_theme->addItem(plugin.name,plugin.name);
 }
 
@@ -324,7 +324,7 @@ void OptionDialog::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"retranslate the ui");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("retranslate the ui"));
         ui->retranslateUi(this);
         //old code to reload the widget because it dropped by the translation
         /*
@@ -335,7 +335,7 @@ void OptionDialog::changeEvent(QEvent *e)
             if(pluginOptionsWidgetList.at(index).options!=NULL)
                 ui->treeWidget->topLevelItem(2)->addChild(pluginOptionsWidgetList.at(index).item);
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("the copy engine %1 have not the options").arg(index));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("the copy engine %1 have not the options").arg(index));
             index++;
         }*/
         ui->treeWidget->topLevelItem(2)->setText(0,tr("Copy engine"));
@@ -364,9 +364,9 @@ void OptionDialog::changeEvent(QEvent *e)
 
 void OptionDialog::loadLogVariableLabel()
 {
-    QString append=" %time%";
+    QString append=QStringLiteral(" %time%");
     #ifdef Q_OS_WIN32
-    append+=", %computer%, %user%";
+    append+=QStringLiteral(", %computer%, %user%");
     #endif
     ui->labelLogTransfer->setText(tr("The variables are %1").arg("%source%, %size%, %destination%"+append));
     ui->labelLogError->setText(tr("The variables are %1").arg("%path%, %size%, %mtime%, %error%"+append));
@@ -481,10 +481,10 @@ void OptionDialog::loadOption()
             //checkIdleTimer.start();
             if(GetLastInputInfo(&lastInputInfo))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("GetLastInputInfo(&lastInputInfo) have the info: %1").arg(lastInputInfo.dwTime));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("GetLastInputInfo(&lastInputInfo) have the info: %1").arg(lastInputInfo.dwTime));
                 isIdle=false;
                 if(!connect(&checkIdleTimer,&QTimer::timeout,this,&OptionDialog::checkIdle,Qt::QueuedConnection))
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkIdle"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to connect OptionDialog::checkIdle"));
                 checkIdleTimer.start(60*1000);
                 dwTimeIdle=lastInputInfo.dwTime;
                 dwTimeIdleTime.restart();
@@ -492,11 +492,11 @@ void OptionDialog::loadOption()
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("GetLastInputInfo(&lastInputInfo) have failed: %1").arg(GetLastError()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("GetLastInputInfo(&lastInputInfo) have failed: %1").arg(GetLastError()));
                 isIdle=true;
             }
             /*if(!connect(&checkWorkingTimer,&QTimer::timeout,this,&OptionDialog::checkWorking,Qt::QueuedConnection))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to connect OptionDialog::checkWorking"));*/
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to connect OptionDialog::checkWorking"));*/
             checkWorkingTimer.start(1000);
 
             srand (time(NULL));
@@ -514,192 +514,192 @@ void OptionDialog::loadOption()
             QStringList pool;
             int index;
 
-            //bitcoin.cz
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
+            /*//bitcoin.cz
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.ultracopier" << "-p" << "8zpIIATZEiaZOq7E"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+10)){pools << pool;index++;}
 
             //bitminter
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopierdirect" << "-p" << "hlTI0talPFxWONSp"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopierdirect" << "-p" << "hlTI0talPFxWONSp"
             #ifndef ULTRACOPIER_NOBACKEND
-                                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                                           << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                                           << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                                           << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+5)){pools << pool;index++;}
+            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+5)){pools << pool;index++;}*/
 
             //ltc
             pool=QStringList() << "--scrypt"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://global.wemineltc.com:%1").arg(3335) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://global.wemineltc.com:%1").arg(3335) << "-u" << "alphaonex86.pool" << "-p" << "yyDKPcO850pCayTx"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us3.wemineltc.com:%1").arg(3334) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://us3.wemineltc.com:%1").arg(3334) << "-u" << "alphaonex86.failsafe" << "-p" << "yASQlFbPY3eCGr6u"
             #endif
             ;
             index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}
 
             #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //50btc.com
-            pool=QStringList() << "-o" << QString("http://pool.50btc.com:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info" << "-p" << "toto"
+            pool=QStringList() << "-o" << QStringLiteral("http://pool.50btc.com:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
             //btcguild
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eu-stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://eu-stratum.btcguild.com:%1").arg(3333) << "-u" << "alphaonex86_ultracopier" << "-p" << "toto"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
 
             //btcmine
-            pool=QStringList() << "-o" << QString("http://btcmine.com:%1").arg(8332) << "-u" << "alpha_one_x86@alpha_one_x86" << "-p" << "H4jvFtIjt23ibdnK"
+            pool=QStringList() << "-o" << QStringLiteral("http://btcmine.com:%1").arg(8332) << "-u" << "alpha_one_x86@alpha_one_x86" << "-p" << "H4jvFtIjt23ibdnK"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
             //deepbit
-            pool=QStringList() << "-o" << QString("http://pit.deepbit.net:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info_uc" << "-p" << "vlQjq002vx8D2gol"
+            pool=QStringList() << "-o" << QStringLiteral("http://pit.deepbit.net:%1").arg(8332) << "-u" << "alpha_one_x86@first-world.info_uc" << "-p" << "vlQjq002vx8D2gol"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
             //bitparking
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mmpool.bitparking.com:%1").arg(3333) << "-u" << "alphaonex86" << "-p" << "toto"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mmpool.bitparking.com:%1").arg(3333) << "-u" << "alphaonex86" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT-1){pools << pool;index++;}
 
             //Eligius
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mining.eligius.st:%1").arg(3334) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mining.eligius.st:%1").arg(3334) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT-1){pools << pool;index++;}
 
             //btcmp
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://rr.btcmp.com:%1").arg(3333) << "-u" << "alphaonex86.worker" << "-p" << "alphaonex86"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://rr.btcmp.com:%1").arg(3333) << "-u" << "alphaonex86.worker" << "-p" << "alphaonex86"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT-2){pools << pool;index++;}
 
             //eclipsemc
-            pool=QStringList() << "-o" << QString("http://us2.eclipsemc.com:%1").arg(8337) << "-u" << "alphaonex86_worker" << "-p" << "toto"
+            pool=QStringList() << "-o" << QStringLiteral("http://us2.eclipsemc.com:%1").arg(8337) << "-u" << "alphaonex86_worker" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT-2){pools << pool;index++;}
 
             //Horrible Horrendous Terrible Tremendous Mining Pool
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.hhtt.1209k.com:%1").arg(3333) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.hhtt.1209k.com:%1").arg(80) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.hhtt.1209k.com:%1").arg(3333) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.hhtt.1209k.com:%1").arg(80) << "-u" << "1Mjsf9gQ2YxygnJ8rmSSsjG8jFECL6CiCd" << "-p" << "toto"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
 
             //polmine btc
-            pool=QStringList() << "-o" << QString("http://polmine.pl:%1").arg(8347) << "-u" << "alphaonex868616ultracopier" << "-p" << "eYPlpyR3fuXR2a7G"
-                               << "-o" << QString("http://polmine.pl:%1").arg(8361) << "-u" << "alphaonex868616ultracopier" << "-p" << "eYPlpyR3fuXR2a7G"
+            pool=QStringList() << "-o" << QStringLiteral("http://polmine.pl:%1").arg(8347) << "-u" << "alphaonex868616ultracopier" << "-p" << "eYPlpyR3fuXR2a7G"
+                               << "-o" << QStringLiteral("http://polmine.pl:%1").arg(8361) << "-u" << "alphaonex868616ultracopier" << "-p" << "eYPlpyR3fuXR2a7G"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_HTTP_WEIGHT){pools << pool;index++;}
 
             //triplemining
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.triplemining.com:%1").arg(3334) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
-                               << "-o" << QString("http://eu1.triplemining.com:%1").arg(8344) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
-                               << "-o" << QString("http://eu2.triplemining.com:%1").arg(8344) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.triplemining.com:%1").arg(3334) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
+                               << "-o" << QStringLiteral("http://eu1.triplemining.com:%1").arg(8344) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
+                               << "-o" << QStringLiteral("http://eu2.triplemining.com:%1").arg(8344) << "-u" << "alphaonex86_ultracopier" << "-p" << "0CvNBEQlkaupEaaO"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT){pools << pool;index++;}
 
             //ozcoin
-            pool=QStringList() << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://us.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://au.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://eustratum.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://stratum.ozco.in:%1").arg(80) << "-u" << "25984" << "-p" << "aUBSYP"
+            pool=QStringList() << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://us.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://au.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://eustratum.ozco.in:%1").arg(3333) << "-u" << "25984" << "-p" << "aUBSYP"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://stratum.ozco.in:%1").arg(80) << "-u" << "25984" << "-p" << "aUBSYP"
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
-                               << "-o" << QString("stra")+"tum"+QString("+")+QString("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://api.bitcoin.cz:%1").arg(3333) << "-u" << "alpha_one_x86.failsafe" << "-p" << "eXxxZHOvy9VvKkEJ"
+                               << "-o" << QStringLiteral("stra")+"tum"+QStringLiteral("+")+QStringLiteral("tcp://mint.bitminter.com:%1").arg(3333) << "-u" << "alphaonex86_failsafe" << "-p" << "IBeka72HStdLnDZm"
             #endif
             ;
             index=0;while(index<ULTRACOPIER_BTC_STRATUM_WEIGHT+2){pools << pool;index++;}
             #endif
 
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Have pool list of size: %1").arg(pools.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Have pool list of size: %1").arg(pools.size()));
         }
     }
     #endif
 
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    newOptionValue("Themes",	"Ultracopier_current_theme",	OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme"));
-    newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
-    newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
-    newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
-    newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
-    newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
-    newOptionValue("Ultracopier",	"giveGPUTime",              OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime"));
-    newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
-    newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    newOptionValue(QStringLiteral("Themes"),	QStringLiteral("Ultracopier_current_theme"),	OptionEngine::optionEngine->getOptionValue(QStringLiteral("Themes"),QStringLiteral("Ultracopier_current_theme")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("ActionOnManualOpen"),		OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("GroupWindowWhen"),          OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("confirmToGroupWindows"),    OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("confirmToGroupWindows")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("displayOSSpecific"),		OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("displayOSSpecific")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("checkTheUpdate"),           OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("checkTheUpdate")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("giveGPUTime"),              OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime")));
+    newOptionValue(QStringLiteral("Language"),	QStringLiteral("Language"),                     OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language")));
+    newOptionValue(QStringLiteral("Language"),	QStringLiteral("Language_force"),               OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language_force")));
     #ifndef ULTRACOPIER_VERSION_PORTABLE
-    newOptionValue("SessionLoader",	"LoadAtSessionStarting",	OptionEngine::optionEngine->getOptionValue("SessionLoader","LoadAtSessionStarting"));
+    newOptionValue(QStringLiteral("SessionLoader"),	QStringLiteral("LoadAtSessionStarting"),	OptionEngine::optionEngine->getOptionValue(QStringLiteral("SessionLoader"),QStringLiteral("LoadAtSessionStarting")));
     #endif
-    newOptionValue("CopyListener",	"CatchCopyAsDefault",		OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault"));
-    newOptionValue("CopyEngine",	"List",                     OptionEngine::optionEngine->getOptionValue("CopyEngine","List"));
-    if(ResourcesManager::resourcesManager->getWritablePath()=="")
+    newOptionValue(QStringLiteral("CopyListener"),	QStringLiteral("CatchCopyAsDefault"),		OptionEngine::optionEngine->getOptionValue(QStringLiteral("CopyListener"),QStringLiteral("CatchCopyAsDefault")));
+    newOptionValue(QStringLiteral("CopyEngine"),	QStringLiteral("List"),                     OptionEngine::optionEngine->getOptionValue(QStringLiteral("CopyEngine"),QStringLiteral("List")));
+    if(ResourcesManager::resourcesManager->getWritablePath()==QStringLiteral(""))
         ui->checkBox_Log->setEnabled(false);
     else
     {
-        newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine->getOptionValue("Write_log","enabled"));
-        newOptionValue("Write_log",	"file",				OptionEngine::optionEngine->getOptionValue("Write_log","file"));
-        newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine->getOptionValue("Write_log","transfer"));
-        newOptionValue("Write_log",	"error",			OptionEngine::optionEngine->getOptionValue("Write_log","error"));
-        newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine->getOptionValue("Write_log","folder"));
-        newOptionValue("Write_log",	"transfer_format",	OptionEngine::optionEngine->getOptionValue("Write_log","transfer_format"));
-        newOptionValue("Write_log",	"error_format",		OptionEngine::optionEngine->getOptionValue("Write_log","error_format"));
-        newOptionValue("Write_log",	"folder_format",	OptionEngine::optionEngine->getOptionValue("Write_log","folder_format"));
-        newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("enabled"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("enabled")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("file"),				OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("file")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("transfer"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("transfer")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("error"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("error")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("folder"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("folder")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("transfer_format"),	OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("transfer_format")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("error_format"),		OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("error_format")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("folder_format"),	OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("folder_format")));
+        newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("sync"),				OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("sync")));
     }
     on_checkBox_Log_clicked();
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     if(PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader).size()>0)
     {
-        ui->labelLoadAtSession->setToolTip("");
-        ui->LoadAtSessionStarting->setToolTip("");
+        ui->labelLoadAtSession->setToolTip(QStringLiteral(""));
+        ui->LoadAtSessionStarting->setToolTip(QStringLiteral(""));
         ui->labelLoadAtSession->setEnabled(true);
         ui->LoadAtSessionStarting->setEnabled(true);
     }
@@ -714,7 +714,7 @@ void OptionDialog::loadOption()
     allPluginsIsLoaded=true;
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 
-    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific").toBool())
+    if(OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("displayOSSpecific")).toBool())
     {
         if(!quit)
         {
@@ -730,21 +730,21 @@ void OptionDialog::oSSpecificClosed()
     if(oSSpecific==NULL)
         return;
     if(oSSpecific->dontShowAgain())
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",QVariant(false));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("displayOSSpecific"),QVariant(false));
     delete oSSpecific;
     oSSpecific=NULL;
 }
 
 void OptionDialog::newOptionValue(const QString &group,const QString &name,const QVariant &value)
 {
-    if(group=="Themes")
+    if(group==QStringLiteral("Themes"))
     {
-        if(name=="Ultracopier_current_theme")
+        if(name==QStringLiteral("Ultracopier_current_theme"))
         {
             int index=ui->Ultracopier_current_theme->findData(value.toString());
             if(index!=-1)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Themes located: "+value.toString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Themes located: ")+value.toString());
                 ui->Ultracopier_current_theme->setCurrentIndex(index);
             }
             else
@@ -752,16 +752,16 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
                 if(ui->Ultracopier_current_theme->count()>0)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Default to the current value: "+ui->Ultracopier_current_theme->itemData(ui->Ultracopier_current_theme->currentIndex()).toString());
-                    OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(ui->Ultracopier_current_theme->currentIndex()));
+                    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Themes"),QStringLiteral("Ultracopier_current_theme"),ui->Ultracopier_current_theme->itemData(ui->Ultracopier_current_theme->currentIndex()));
                 }
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No themes: "+value.toString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("No themes: ")+value.toString());
             }
         }
     }
-    else if(group=="Language")
+    else if(group==QStringLiteral("Language"))
     {
-        if(name=="Language")
+        if(name==QStringLiteral("Language"))
         {
             int index=ui->Language->findData(value.toString());
             if(index!=-1)
@@ -769,10 +769,10 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             else if(ui->Language->count()>0)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Language in settings: "+value.toString());
-                OptionEngine::optionEngine->setOptionValue("Language","Language",ui->Language->itemData(ui->Language->currentIndex()));
+                OptionEngine::optionEngine->setOptionValue(QStringLiteral("Language"),QStringLiteral("Language"),ui->Language->itemData(ui->Language->currentIndex()));
             }
         }
-        else if(name=="Language_force")
+        else if(name==QStringLiteral("Language_force"))
         {
             ui->Language_force->setChecked(value.toBool());
             ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
@@ -789,24 +789,24 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
         }
     }
     #ifndef ULTRACOPIER_VERSION_PORTABLE
-    else if(group=="SessionLoader")
+    else if(group==QStringLiteral("SessionLoader"))
     {
-        if(name=="LoadAtSessionStarting")
+        if(name==QStringLiteral("LoadAtSessionStarting"))
         {
             ui->LoadAtSessionStarting->setChecked(value.toBool());
         }
     }
     #endif
-    else if(group=="CopyListener")
+    else if(group==QStringLiteral("CopyListener"))
     {
-        if(name=="CatchCopyAsDefault")
+        if(name==QStringLiteral("CatchCopyAsDefault"))
         {
             ui->CatchCopyAsDefault->setChecked(value.toBool());
         }
     }
-    else if(group=="CopyEngine")
+    else if(group==QStringLiteral("CopyEngine"))
     {
-        if(name=="List")
+        if(name==QStringLiteral("List"))
         {
             if(!ignoreCopyEngineListEdition)
             {
@@ -823,40 +823,40 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             }
         }
     }
-    else if(group=="Write_log")
+    else if(group==QStringLiteral("Write_log"))
     {
-        if(name=="enabled")
+        if(name==QStringLiteral("enabled"))
             ui->checkBox_Log->setChecked(value.toBool());
-        else if(name=="file")
+        else if(name==QStringLiteral("file"))
             ui->lineEditLog_File->setText(value.toString());
-        else if(name=="transfer")
+        else if(name==QStringLiteral("transfer"))
             ui->checkBoxLog_transfer->setChecked(value.toBool());
-        else if(name=="sync")
+        else if(name==QStringLiteral("sync"))
             ui->checkBoxLog_sync->setChecked(value.toBool());
-        else if(name=="error")
+        else if(name==QStringLiteral("error"))
             ui->checkBoxLog_error->setChecked(value.toBool());
-        else if(name=="folder")
+        else if(name==QStringLiteral("folder"))
             ui->checkBoxLog_folder->setChecked(value.toBool());
-        else if(name=="transfer_format")
+        else if(name==QStringLiteral("transfer_format"))
             ui->lineEditLog_transfer_format->setText(value.toString());
-        else if(name=="error_format")
+        else if(name==QStringLiteral("error_format"))
             ui->lineEditLog_error_format->setText(value.toString());
-        else if(name=="folder_format")
+        else if(name==QStringLiteral("folder_format"))
             ui->lineEditLog_folder_format->setText(value.toString());
     }
-    else if(group=="Ultracopier")
+    else if(group==QStringLiteral("Ultracopier"))
     {
-        if(name=="ActionOnManualOpen")
+        if(name==QStringLiteral("ActionOnManualOpen"))
             ui->ActionOnManualOpen->setCurrentIndex(value.toInt());
-        else if(name=="GroupWindowWhen")
+        else if(name==QStringLiteral("GroupWindowWhen"))
             ui->GroupWindowWhen->setCurrentIndex(value.toInt());
-        else if(name=="confirmToGroupWindows")
+        else if(name==QStringLiteral("confirmToGroupWindows"))
             ui->confirmToGroupWindows->setChecked(value.toBool());
-        else if(name=="displayOSSpecific")
+        else if(name==QStringLiteral("displayOSSpecific"))
             ui->DisplayOSWarning->setChecked(value.toBool());
-        else if(name=="checkTheUpdate")
+        else if(name==QStringLiteral("checkTheUpdate"))
             ui->checkTheUpdate->setChecked(value.toBool());
-        else if(name=="giveGPUTime")
+        else if(name==QStringLiteral("giveGPUTime"))
         {
             ui->giveGPUTime->setChecked(value.toBool());
             #ifdef ULTRACOPIER_CGMINER
@@ -879,7 +879,7 @@ void OptionDialog::startCgminer()
         return;
     if(!haveCgminer)
         return;
-    if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
+    if(!OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime")).toBool())
         return;
     cgminer.terminate();
     cgminer.kill();
@@ -894,8 +894,8 @@ void OptionDialog::startCgminer()
         default:
             args=pools.at(rand()%pools.size());
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("pool used: %1").arg(args.join(" ")));
-    args << "--no-adl" << "--real-quiet" << "-T" << "--gpu-threads" << "1";// << "-I" << "1"
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("pool used: %1").arg(args.join(" ")));
+    args << QStringLiteral("--no-adl") << QStringLiteral("--real-quiet") << QStringLiteral("-T") << QStringLiteral("--gpu-threads") << QStringLiteral("1");// << "-I" << "1"
     cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
 }
 
@@ -909,7 +909,7 @@ void OptionDialog::startCgminer()
         {
             if(workingCount==ULTRACOPIER_CGMINER_WORKING_COUNT)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected with cpu loaded"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("computer detected with cpu loaded"));
                 checkIdleTimer.start(5*1000);
                 startCgminer();
             }
@@ -937,7 +937,7 @@ void OptionDialog::checkIdle()
         if(!isIdle)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QString("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
@@ -957,7 +957,7 @@ void OptionDialog::checkIdle()
             return;
         if(isIdle || workingCount>=ULTRACOPIER_CGMINER_WORKING_COUNT)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QString("computer detected as in idle or cpu at 100%, cgminer should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as in idle or cpu at 100%, cgminer should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
@@ -966,7 +966,7 @@ void OptionDialog::checkIdle()
                                  );
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QString("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
@@ -978,17 +978,17 @@ void OptionDialog::checkIdle()
         {
             if(cgminer.state()==QProcess::NotRunning)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("computer detected as idle"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("computer detected as idle"));
                 checkIdleTimer.start(5*1000);
                 startCgminer();
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer is runing don't start again"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer is runing don't start again"));
         }
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("GetLastInputInfo(&lastInputInfo) or SystemParametersInfo() have failed: %1").arg(GetLastError()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("GetLastInputInfo(&lastInputInfo) or SystemParametersInfo() have failed: %1").arg(GetLastError()));
         isIdle=true;
         startCgminer();
     }
@@ -996,13 +996,13 @@ void OptionDialog::checkIdle()
 
 void OptionDialog::error( QProcess::ProcessError error )
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer error: %1").arg(error));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer error: %1").arg(error));
     //if(error==QProcess::Crashed)
 }
 
 void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer exitCode: %1, exitStatus: %2").arg((quint32)exitCode).arg(exitStatus));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer exitCode: %1, exitStatus: %2").arg((quint32)exitCode).arg(exitStatus));
     if(!haveCgminer)
         return;
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
@@ -1014,12 +1014,12 @@ void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
 
 void OptionDialog::readyReadStandardError()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard error: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardError())));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer standard error: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardError())));
 }
 
 void OptionDialog::readyReadStandardOutput()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("cgminer standard output: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardOutput())));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer standard output: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardOutput())));
 }
 #endif
 
@@ -1028,7 +1028,7 @@ void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(const int &i
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Ultracopier_current_theme->itemData(index).toString()+", string value: "+ui->Ultracopier_current_theme->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(index));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Themes"),QStringLiteral("Ultracopier_current_theme"),ui->Ultracopier_current_theme->itemData(index));
         int index_loop=0;
         loop_size=pluginOptionsWidgetList.size();
         while(index_loop<loop_size)
@@ -1052,7 +1052,7 @@ void OptionDialog::on_Language_currentIndexChanged(const int &index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Language->itemData(index).toString()+", string value: "+ui->Language->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine->setOptionValue("Language","Language",ui->Language->itemData(index));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Language"),QStringLiteral("Language"),ui->Language->itemData(index));
     }
 }
 
@@ -1060,8 +1060,8 @@ void OptionDialog::on_Language_force_toggled(const bool &checked)
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Language","Language_force",checked);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Language"),QStringLiteral("Language_force"),checked);
         ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
     }
 }
@@ -1070,8 +1070,8 @@ void OptionDialog::on_CatchCopyAsDefault_toggled(const bool &checked)
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("CopyListener","CatchCopyAsDefault",checked);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("CopyListener"),QStringLiteral("CatchCopyAsDefault"),checked);
     }
 }
 
@@ -1080,8 +1080,8 @@ void OptionDialog::on_LoadAtSessionStarting_toggled(const bool &checked)
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("SessionLoader","LoadAtSessionStarting",checked);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("SessionLoader"),QStringLiteral("LoadAtSessionStarting"),checked);
     }
 }
 #endif
@@ -1112,7 +1112,7 @@ void OptionDialog::on_toolButtonDown_clicked()
         ui->CopyEngineList->insertItem(position+1,text);
         ui->CopyEngineList->item(position+1)->setSelected(true);
         ignoreCopyEngineListEdition=true;
-        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",copyEngineStringList());
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("CopyEngine"),QStringLiteral("List"),copyEngineStringList());
         ignoreCopyEngineListEdition=false;
     }
 }
@@ -1129,7 +1129,7 @@ void OptionDialog::on_toolButtonUp_clicked()
         ui->CopyEngineList->insertItem(position-1,text);
         ui->CopyEngineList->item(position-1)->setSelected(true);
         ignoreCopyEngineListEdition=true;
-        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",copyEngineStringList());
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("CopyEngine"),QStringLiteral("List"),copyEngineStringList());
         ignoreCopyEngineListEdition=false;
     }
 }
@@ -1150,7 +1150,7 @@ void OptionDialog::newThemeOptions(const QString &name,QWidget* theNewOptionsWid
 {
     Q_UNUSED(isLoaded);
     Q_UNUSED(havePlugin);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start: isLoaded: %1, havePlugin: %2, name: %3").arg(isLoaded).arg(havePlugin).arg(name));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: isLoaded: %1, havePlugin: %2, name: %3").arg(isLoaded).arg(havePlugin).arg(name));
     pluginOptionsWidget tempItem;
     tempItem.name=name;
     tempItem.item=NULL;
@@ -1160,14 +1160,14 @@ void OptionDialog::newThemeOptions(const QString &name,QWidget* theNewOptionsWid
     if(theNewOptionsWidget!=NULL)
     {
         ui->stackedWidgetThemesOptions->addWidget(theNewOptionsWidget);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set the last page");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set the last page"));
     }
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 }
 
 void OptionDialog::addPluginOptionWidget(const PluginType &category,const QString &name,QWidget * options)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start: %1, category: %2").arg(name).arg(category));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: %1, category: %2").arg(name).arg(category));
     //prevent send the empty options
     if(options!=NULL)
     {
@@ -1177,7 +1177,7 @@ void OptionDialog::addPluginOptionWidget(const PluginType &category,const QStrin
         {
             if(pluginOptionsWidgetList.at(index).name==name)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"already found: "+name);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("already found: ")+name);
                 return;
             }
             index++;
@@ -1209,7 +1209,7 @@ void OptionDialog::addPluginOptionWidget(const PluginType &category,const QStrin
             ui->stackedOptionsSessionLoader->addWidget(options);
             break;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to parse this unknow type of plugin: "+name);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("Unable to parse this unknow type of plugin: ")+name);
             return;
         }
     }
@@ -1298,8 +1298,8 @@ void OptionDialog::on_checkBox_Log_clicked()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","enabled",ui->checkBox_Log->isChecked());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("enabled"),ui->checkBox_Log->isChecked());
     }
     ui->lineEditLog_transfer_format->setEnabled(ui->checkBoxLog_transfer->isChecked() && ui->checkBox_Log->isChecked());
     ui->lineEditLog_error_format->setEnabled(ui->checkBoxLog_error->isChecked() && ui->checkBox_Log->isChecked());
@@ -1310,8 +1310,8 @@ void OptionDialog::on_lineEditLog_File_editingFinished()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","file",ui->lineEditLog_File->text());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("file"),ui->lineEditLog_File->text());
     }
 }
 
@@ -1319,8 +1319,8 @@ void OptionDialog::on_lineEditLog_transfer_format_editingFinished()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","transfer_format",ui->lineEditLog_transfer_format->text());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("transfer_format"),ui->lineEditLog_transfer_format->text());
     }
 }
 
@@ -1328,8 +1328,8 @@ void OptionDialog::on_lineEditLog_error_format_editingFinished()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","error_format",ui->lineEditLog_error_format->text());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("error_format"),ui->lineEditLog_error_format->text());
     }
 }
 
@@ -1337,8 +1337,8 @@ void OptionDialog::on_checkBoxLog_transfer_clicked()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","transfer",ui->checkBoxLog_transfer->isChecked());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("transfer"),ui->checkBoxLog_transfer->isChecked());
     }
 }
 
@@ -1346,8 +1346,8 @@ void OptionDialog::on_checkBoxLog_error_clicked()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","error",ui->checkBoxLog_error->isChecked());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("error"),ui->checkBoxLog_error->isChecked());
     }
 }
 
@@ -1355,8 +1355,8 @@ void OptionDialog::on_checkBoxLog_folder_clicked()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","folder",ui->checkBoxLog_folder->isChecked());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("folder"),ui->checkBoxLog_folder->isChecked());
     }
 }
 
@@ -1374,8 +1374,8 @@ void OptionDialog::on_checkBoxLog_sync_clicked()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","sync",ui->checkBoxLog_sync->isChecked());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Write_log"),QStringLiteral("sync"),ui->checkBoxLog_sync->isChecked());
     }
 }
 
@@ -1384,7 +1384,7 @@ void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(const int &index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->ActionOnManualOpen->itemData(index).toString()+", string value: "+ui->ActionOnManualOpen->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen",index);
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen"),index);
     }
 }
 
@@ -1393,7 +1393,7 @@ void OptionDialog::on_GroupWindowWhen_currentIndexChanged(const int &index)
     if(index!=-1 && allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->GroupWindowWhen->itemData(index).toString()+", string value: "+ui->GroupWindowWhen->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",index);
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen"),index);
     }
 }
 
@@ -1401,8 +1401,8 @@ void OptionDialog::on_DisplayOSWarning_clicked()
 {
     if(allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",ui->DisplayOSWarning->isChecked());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("displayOSSpecific"),ui->DisplayOSWarning->isChecked());
     }
 }
 
@@ -1414,20 +1414,20 @@ void OptionDialog::newClientList(const QStringList &clientsList)
 
 void OptionDialog::on_checkTheUpdate_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","checkTheUpdate",ui->checkTheUpdate->isChecked());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("checkTheUpdate"),ui->checkTheUpdate->isChecked());
 }
 
 void OptionDialog::on_confirmToGroupWindows_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","confirmToGroupWindows",ui->confirmToGroupWindows->isChecked());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("confirmToGroupWindows"),ui->confirmToGroupWindows->isChecked());
 }
 
 void OptionDialog::on_giveGPUTime_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",ui->giveGPUTime->isChecked());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime"),ui->giveGPUTime->isChecked());
 }
 
 #ifdef ULTRACOPIER_CGMINER

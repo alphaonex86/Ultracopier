@@ -30,29 +30,29 @@ LogThread::LogThread()
 
     connect(this,	&LogThread::newData,		this,&LogThread::realDataWrite,Qt::QueuedConnection);
 
-    newOptionValue("Write_log",	"transfer",			OptionEngine::optionEngine->getOptionValue("Write_log","transfer"));
-    newOptionValue("Write_log",	"error",			OptionEngine::optionEngine->getOptionValue("Write_log","error"));
-    newOptionValue("Write_log",	"folder",			OptionEngine::optionEngine->getOptionValue("Write_log","folder"));
-    newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
-    newOptionValue("Write_log",	"transfer_format",		OptionEngine::optionEngine->getOptionValue("Write_log","transfer_format"));
-    newOptionValue("Write_log",	"error_format",			OptionEngine::optionEngine->getOptionValue("Write_log","error_format"));
-    newOptionValue("Write_log",	"folder_format",		OptionEngine::optionEngine->getOptionValue("Write_log","folder_format"));
-    newOptionValue("Write_log",	"sync",				OptionEngine::optionEngine->getOptionValue("Write_log","sync"));
-    newOptionValue("Write_log",	"enabled",			OptionEngine::optionEngine->getOptionValue("Write_log","enabled"));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("transfer"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("transfer")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("error"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("error")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("folder"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("folder")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("sync"),				OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("sync")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("transfer_format"),	OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("transfer_format")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("error_format"),		OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("error_format")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("folder_format"),	OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("folder_format")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("sync"),				OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("sync")));
+    newOptionValue(QStringLiteral("Write_log"),	QStringLiteral("enabled"),			OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("enabled")));
     #ifdef Q_OS_WIN32
     DWORD size=0;
     WCHAR * computerNameW=new WCHAR[size];
     if(GetComputerNameW(computerNameW,&size))
         computer=QString::fromWCharArray(computerNameW,size-1);
     else
-        computer="Unknown computer";
+        computer=QStringLiteral("Unknown computer");
     delete computerNameW;
 
     WCHAR * userNameW=new WCHAR[size];
     if(GetUserNameW(userNameW,&size))
         user=QString::fromWCharArray(userNameW,size-1);
     else
-        user="Unknown user";
+        user=QStringLiteral("Unknown user");
     delete userNameW;
     #endif
 }
@@ -71,7 +71,7 @@ bool LogThread::logTransfer()
 
 void LogThread::openLogs()
 {
-    if(OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool()==false)
+    if(OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("enabled")).toBool()==false)
         return;
     if(log.isOpen())
     {
@@ -98,7 +98,7 @@ void LogThread::openLogs()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open the log file, error: %1").arg(log.errorString()));
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"opened log: "+OptionEngine::optionEngine->getOptionValue("Write_log","file").toString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("opened log: ")+OptionEngine::optionEngine->getOptionValue(QStringLiteral("Write_log"),QStringLiteral("file")).toString());
     }
 }
 
@@ -115,14 +115,14 @@ void LogThread::newTransferStart(const Ultracopier::ItemOfCopyList &item)
         return;
     QString text;
     if(item.mode==Ultracopier::Copy)
-        text="[Copy] "+transfer_format+"\n";
+        text=QStringLiteral("[Copy] ")+transfer_format+QStringLiteral("\n");
     else
-        text="[Move] "+transfer_format+"\n";
+        text=QStringLiteral("[Move] ")+transfer_format+QStringLiteral("\n");
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
-    text=text.replace("%source%",item.sourceFullPath);
-    text=text.replace("%size%",QString::number(item.size));
-    text=text.replace("%destination%",item.destinationFullPath);
+    text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
+    text=text.replace(QStringLiteral("%size%"),QString::number(item.size));
+    text=text.replace(QStringLiteral("%destination%"),item.destinationFullPath);
     emit newData(text);
 }
 
@@ -131,12 +131,12 @@ void LogThread::transferSkip(const Ultracopier::ItemOfCopyList &item)
 {
     if(!log_enable_transfer)
         return;
-    QString text="[Skip] "+transfer_format+"\n";
+    QString text=QStringLiteral("[Skip] ")+transfer_format+QStringLiteral("\n");
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
-    text=text.replace("%source%",item.sourceFullPath);
-    text=text.replace("%size%",QString::number(item.size));
-    text=text.replace("%destination%",item.destinationFullPath);
+    text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
+    text=text.replace(QStringLiteral("%size%"),QString::number(item.size));
+    text=text.replace(QStringLiteral("%destination%"),item.destinationFullPath);
     emit newData(text);
 }
 
@@ -144,12 +144,12 @@ void LogThread::newTransferStop(const Ultracopier::ItemOfCopyList &item)
 {
     if(!log_enable_transfer)
         return;
-    QString text="[Stop] "+transfer_format+"\n";
+    QString text=QStringLiteral("[Stop] ")+transfer_format+QStringLiteral("\n");
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
-    text=text.replace("%source%",item.sourceFullPath);
-    text=text.replace("%size%",QString::number(item.size));
-    text=text.replace("%destination%",item.destinationFullPath);
+    text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
+    text=text.replace(QStringLiteral("%size%"),QString::number(item.size));
+    text=text.replace(QStringLiteral("%destination%"),item.destinationFullPath);
     emit newData(text);
 }
 
@@ -157,13 +157,13 @@ void LogThread::error(const QString &path,const quint64 &size,const QDateTime &m
 {
     if(!log_enable_error)
         return;
-    QString text="[Error] "+error_format+"\n";
+    QString text=QStringLiteral("[Error] ")+error_format+QStringLiteral("\n");
     text=replaceBaseVar(text);
     //Variable is %path%, %size%, %mtime%, %error%
-    text=text.replace("%path%",path);
-    text=text.replace("%size%",QString::number(size));
-    text=text.replace("%mtime%",mtime.toString(Qt::ISODate));
-    text=text.replace("%error%",error);
+    text=text.replace(QStringLiteral("%path%"),path);
+    text=text.replace(QStringLiteral("%size%"),QString::number(size));
+    text=text.replace(QStringLiteral("%mtime%"),mtime.toString(Qt::ISODate));
+    text=text.replace(QStringLiteral("%error%"),error);
     emit newData(text);
 }
 
@@ -181,7 +181,7 @@ void LogThread::realDataWrite(const QString &text)
         return;
     }
     #endif // ULTRACOPIER_DEBUG
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     if(log.write(text.toUtf8())==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to write into transfer log: %1").arg(log.errorString()));
@@ -193,16 +193,16 @@ void LogThread::realDataWrite(const QString &text)
 
 void LogThread::newOptionValue(const QString &group,const QString &name,const QVariant &value)
 {
-    if(group!="Write_log")
+    if(group!=QStringLiteral("Write_log"))
         return;
 
-    if(name=="transfer_format")
+    if(name==QStringLiteral("transfer_format"))
         transfer_format=value.toString();
-    else if(name=="error_format")
+    else if(name==QStringLiteral("error_format"))
         error_format=value.toString();
-    else if(name=="folder_format")
+    else if(name==QStringLiteral("folder_format"))
         folder_format=value.toString();
-    else if(name=="sync")
+    else if(name==QStringLiteral("sync"))
     {
         sync=value.toBool();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("sync flag is set on: %1").arg(sync));
@@ -212,13 +212,13 @@ void LogThread::newOptionValue(const QString &group,const QString &name,const QV
                 log.flush();
         }
     }
-    else if(name=="transfer")
+    else if(name==QStringLiteral("transfer"))
         log_enable_transfer=OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool() && value.toBool();
-    else if(name=="error")
+    else if(name==QStringLiteral("error"))
         log_enable_error=OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool() && value.toBool();
-    else if(name=="folder")
+    else if(name==QStringLiteral("folder"))
         log_enable_folder=OptionEngine::optionEngine->getOptionValue("Write_log","enabled").toBool() && value.toBool();
-    if(name=="enabled")
+    if(name==QStringLiteral("enabled"))
     {
         enabled=value.toBool();
         if(enabled)
@@ -230,10 +230,10 @@ void LogThread::newOptionValue(const QString &group,const QString &name,const QV
 
 QString LogThread::replaceBaseVar(QString text)
 {
-    text=text.replace("%time%",QDateTime::currentDateTime().toString("dd.MM.yyyy h:m:s"));
+    text=text.replace(QStringLiteral("%time%"),QDateTime::currentDateTime().toString(QStringLiteral("dd.MM.yyyy h:m:s")));
     #ifdef Q_OS_WIN32
-    text=text.replace("%computer%",computer);
-    text=text.replace("%user%",user);
+    text=text.replace(QStringLiteral("%computer%"),computer);
+    text=text.replace(QStringLiteral("%user%"),user);
     #endif
     return text;
 }
@@ -242,11 +242,11 @@ void LogThread::rmPath(const QString &path)
 {
     if(!log_enable_folder)
         return;
-    QString text="[RmPath] "+folder_format+"\n";
+    QString text=QStringLiteral("[RmPath] ")+folder_format+QStringLiteral("\n");
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
-    text=text.replace("%path%",path);
-    text=text.replace("%operation%","rmPath");
+    text=text.replace(QStringLiteral("%path%"),path);
+    text=text.replace(QStringLiteral("%operation%"),QStringLiteral("rmPath"));
     emit newData(text);
 }
 
@@ -254,10 +254,10 @@ void LogThread::mkPath(const QString &path)
 {
     if(!log_enable_folder)
         return;
-    QString text="[MkPath] "+folder_format+"\n";
+    QString text=QStringLiteral("[MkPath] ")+folder_format+QStringLiteral("\n");
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
-    text=text.replace("%path%",path);
-    text=text.replace("%operation%","mkPath");
+    text=text.replace(QStringLiteral("%path%"),path);
+    text=text.replace(QStringLiteral("%operation%"),QStringLiteral("mkPath"));
     emit newData(text);
 }
