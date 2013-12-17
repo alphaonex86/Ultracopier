@@ -207,7 +207,7 @@ void ClientCatchcopy::readyRead()
 				}
 				else
 				{
-					error_string=QString("First send protocol send with the query id %1 have been already previously replied").arg(orderIdFirstSendProtocol);
+					error_string=QStringLiteral("First send protocol send with the query id %1 have been already previously replied").arg(orderIdFirstSendProtocol);
 					emit error(error_string);
 					disconnectFromServer();
 					return;
@@ -250,8 +250,8 @@ bool ClientCatchcopy::checkDataIntegrity(QByteArray data)
 		}
 		if(stringSize>(in.device()->size()-in.device()->pos()))
 		{
-			emit error(QString("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos()));
-			qWarning() << QString("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos());
+			emit error(QStringLiteral("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos()));
+			qWarning() << QStringLiteral("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos());
 			return false;
 		}
 		in.device()->seek(in.device()->pos()+stringSize);

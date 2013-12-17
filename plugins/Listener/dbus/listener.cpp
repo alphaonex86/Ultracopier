@@ -81,5 +81,5 @@ void Listener::clientName(quint32 client,QString name)
 {
     Q_UNUSED(client);
     Q_UNUSED(name);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("clientName: %1, for the id: %2").arg(name).arg(client));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("clientName: %1, for the id: %2").arg(name).arg(client));
 }

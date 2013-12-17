@@ -132,7 +132,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
             default:
                 if(dialogIsOpen)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("dialog open, put in queue: %1 %2")
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("dialog open, put in queue: %1 %2")
                                  .arg(source.absoluteFilePath())
                                  .arg(destination.absoluteFilePath())
                                  );

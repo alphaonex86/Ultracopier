@@ -370,16 +370,16 @@ void Themes::updateInformations()
             simplifiedFrom.replace(ThemesFactory::isolateName, "\\1");
             simplifiedTo.replace(ThemesFactory::isolateName, "\\1");
             ui->label_file->setText(transfertItem.current_file);
-            ui->label_from->setText(QString("<b>%1</b> (%2)").arg(simplifiedFrom).arg(transfertItem.from));
-            ui->label_to->setText(QString("<b>%1</b> (%2)").arg(simplifiedTo).arg(transfertItem.to));
-            ui->label_items->setText(QString("%1 (%2)").arg(transferModel.totalFile-transferModel.currentFile).arg(facilityEngine->sizeToString(progression_total-progression_current)));
+            ui->label_from->setText(QStringLiteral("<b>%1</b> (%2)").arg(simplifiedFrom).arg(transfertItem.from));
+            ui->label_to->setText(QStringLiteral("<b>%1</b> (%2)").arg(simplifiedTo).arg(transfertItem.to));
+            ui->label_items->setText(QStringLiteral("%1 (%2)").arg(transferModel.totalFile-transferModel.currentFile).arg(facilityEngine->sizeToString(progression_total-progression_current)));
         }
         else
         {
             ui->label_file->setText("");
             ui->label_from->setText("");
             ui->label_to->setText("");
-            ui->label_items->setText(QString("%1 (%2)").arg(transferModel.totalFile-transferModel.currentFile).arg(facilityEngine->sizeToString(progression_total-progression_current)));
+            ui->label_items->setText(QStringLiteral("%1 (%2)").arg(transferModel.totalFile-transferModel.currentFile).arg(facilityEngine->sizeToString(progression_total-progression_current)));
         }
     }
     else

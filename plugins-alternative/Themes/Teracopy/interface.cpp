@@ -50,11 +50,11 @@ Themes::Themes(FacilityInterface * facilityEngine) :
     progressColorRead=QApplication::palette().color(QPalette::AlternateBase);
     progressColorRemaining=QApplication::palette().color(QPalette::Base);
 
-    ui->progressBar_all->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+    ui->progressBar_all->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
                                        .arg(progressColorRemaining.name())
                                        .arg(progressColorWrite.name())
                                        );
-    ui->progressBar_file->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+    ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
                                         .arg(progressColorRemaining.name())
                                         .arg(progressColorWrite.name())
                                         );
@@ -291,7 +291,7 @@ void Themes::updateCurrentFileInformation()
             {
                 float permilleread=round((float)transfertItem.progressBar_read/65535*1000)/1000;
                 float permillewrite=permilleread-0.001;
-                ui->progressBar_file->setStyleSheet(QString("QProgressBar{border: 1px solid grey;text-align: center;background-color: qlineargradient(spread:pad, x1:%1, y1:0, x2:%2, y2:0, stop:0 %3, stop:1 %4);}QProgressBar::chunk{background-color:%5;}")
+                ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border: 1px solid grey;text-align: center;background-color: qlineargradient(spread:pad, x1:%1, y1:0, x2:%2, y2:0, stop:0 %3, stop:1 %4);}QProgressBar::chunk{background-color:%5;}")
                     .arg(permilleread)
                     .arg(permillewrite)
                     .arg(progressColorRemaining.name())
@@ -300,7 +300,7 @@ void Themes::updateCurrentFileInformation()
                     );
             }
             else
-                ui->progressBar_file->setStyleSheet(QString("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
                     .arg(progressColorRemaining.name())
                     .arg(progressColorWrite.name())
                     );
@@ -345,14 +345,14 @@ void Themes::on_skipButton_clicked()
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(transfertItem.haveItem)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("skip at running: %1").arg(transfertItem.id));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("skip at running: %1").arg(transfertItem.id));
         emit skip(transfertItem.id);
     }
     else
     {
         if(transferModel.rowCount()>1)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("skip at idle: %1").arg(transferModel.firstId()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("skip at idle: %1").arg(transferModel.firstId()));
             emit skip(transferModel.firstId());
         }
         else

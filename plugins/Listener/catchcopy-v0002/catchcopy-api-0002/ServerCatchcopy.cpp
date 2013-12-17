@@ -77,7 +77,7 @@ bool ServerCatchcopy::listen()
             return true;
         else
         {
-            error_string=QString("Unable to listen %1: %2").arg(pathSocket).arg(server.errorString());
+            error_string=QStringLiteral("Unable to listen %1: %2").arg(pathSocket).arg(server.errorString());
             emit error(error_string);
             return false;
         }
@@ -347,7 +347,7 @@ bool ServerCatchcopy::checkDataIntegrity(const QByteArray &data)
         }
         if(stringSize>(in.device()->size()-in.device()->pos()))
         {
-            emit error(QString("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos()));
+            emit error(QStringLiteral("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos()));
             return false;
         }
         in.device()->seek(in.device()->pos()+stringSize);

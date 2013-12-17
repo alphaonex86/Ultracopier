@@ -176,7 +176,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 transfertItemList<<newItem;
                 totalFile++;
                 totalSize+=action.addAction.size;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, size: %2, name: %3").arg(action.addAction.id).arg(action.addAction.size).arg(action.addAction.sourceFullPath));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, size: %2, name: %3").arg(action.addAction.id).arg(action.addAction.size).arg(action.addAction.sourceFullPath));
             }
             break;
             case Ultracopier::MoveItem:
@@ -184,22 +184,22 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 //bool current_entry=
                 if(action.userAction.position<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.position>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.moveAt<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.moveAt>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 transfertItemList.move(action.userAction.position,action.userAction.moveAt);
@@ -211,12 +211,12 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                     currentIndexSearch--;
                 if(action.userAction.position<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 if(action.userAction.position>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
                     break;
                 }
                 transfertItemList.removeAt(action.userAction.position);
@@ -234,19 +234,19 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 tempItem.generalData=action.addAction;
                 tempItem.actionType=action.type;
                 internalRunningOperation[action.addAction.id]=tempItem;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("set for file %1: actionType: PreOperation").arg(action.addAction.id));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set for file %1: actionType: PreOperation").arg(action.addAction.id));
             }
             break;
             case Ultracopier::Transfer:
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("found entry for file %1: actionType: Transfer").arg(action.addAction.id));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("found entry for file %1: actionType: Transfer").arg(action.addAction.id));
                 if(!startId.contains(action.addAction.id))
                     startId << action.addAction.id;
                 stopId.remove(action.addAction.id);
                 if(internalRunningOperation.contains(action.addAction.id))
                     internalRunningOperation[action.addAction.id].actionType=action.type;
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to found entry for file %1: actionType: Transfer").arg(action.addAction.id));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to found entry for file %1: actionType: Transfer").arg(action.addAction.id));
             }
             break;
             case Ultracopier::PostOperation:
@@ -438,20 +438,20 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
             break;
             //should never pass here
             case Ultracopier::PostOperation:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                 returnItem.progressBar_read=65535;
                 returnItem.progressBar_write=65535;
             break;
             //should never pass here
             case Ultracopier::PreOperation:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                 returnItem.progressBar_read=0;
                 returnItem.progressBar_write=0;
             break;
             default:
                 returnItem.progressBar_read=0;
                 returnItem.progressBar_write=0;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                 break;
         }
     }
@@ -499,20 +499,20 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem()
                 }
                 break;
                 case Ultracopier::PostOperation:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                     returnItem.progressBar_read=65535;
                     returnItem.progressBar_write=65535;
                 break;
                 //should never pass here
                 case Ultracopier::PreOperation:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                     returnItem.progressBar_read=0;
                     returnItem.progressBar_write=0;
                 break;
                 default:
                     returnItem.progressBar_read=65535;
                     returnItem.progressBar_write=65535;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
                     break;
             }
         }

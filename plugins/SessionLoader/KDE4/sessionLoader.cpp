@@ -22,7 +22,7 @@ void KDESessionLoader::setEnabled(const bool &enabled)
     {
         if(link.open(QIODevice::WriteOnly))
         {
-            link.write(QString("#!/bin/bash\n").toLocal8Bit());
+            link.write(QStringLiteral("#!/bin/bash\n").toLocal8Bit());
             link.write(QString(QCoreApplication::applicationFilePath()).toLocal8Bit());
             link.close();
             if(!link.setPermissions(QFile::ExeOwner|QFile::WriteOwner|QFile::ReadOwner))

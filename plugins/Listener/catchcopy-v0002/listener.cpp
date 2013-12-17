@@ -19,7 +19,7 @@ Listener::Listener()
 
 void Listener::listen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("start: %1").arg(ExtraSocketCatchcopy::pathSocket()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: %1").arg(ExtraSocketCatchcopy::pathSocket()));
     if(server.listen())
         emit newState(Ultracopier::FullListening);
     else
@@ -90,29 +90,29 @@ void Listener::clientName(quint32 client,QString name)
 {
     Q_UNUSED(client);
     Q_UNUSED(name);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("clientName: %1, for the id: %2").arg(name).arg(client));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("clientName: %1, for the id: %2").arg(name).arg(client));
 }
 
 void Listener::copyWithoutDestination(const quint32 &orderId,const QStringList &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("copyWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("copyWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
     emit newCopyWithoutDestination(orderId,sources);
 }
 
 void Listener::copy(const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("copy(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("copy(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
     emit newCopy(orderId,sources,destination);
 }
 
 void Listener::moveWithoutDestination(const quint32 &orderId,const QStringList &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("moveWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("moveWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
     emit newMoveWithoutDestination(orderId,sources);
 }
 
 void Listener::move(const quint32 &orderId,const QStringList &sources,const QString &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("move(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("move(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
     emit newMove(orderId,sources,destination);
 }
