@@ -83,7 +83,10 @@ OptionDialog::OptionDialog() :
     connect(OptionEngine::optionEngine,	&OptionEngine::newOptionValue,              this,	&OptionDialog::newOptionValue);
     QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPlugins(true);
     foreach(PluginsAvailable currentPlugin,list)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentPlugin.name+" ("+QString::number(currentPlugin.category)+")");
         emit previouslyPluginAdded(currentPlugin);
+    }
     PluginsManager::pluginsManager->unlockPluginListEdition();
     defaultImportBackend=PluginsManager::ImportBackend_File;
     #ifndef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
@@ -515,7 +518,7 @@ void OptionDialog::loadOption()
             int index;
 
             //bitcoin.cz
-            pool=QStringList() << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://st%4tum.bit%2%3.cz:%1").arg(3333).arg("co").arg("in").arg("ra") << QStringLiteral("-u") << QStringLiteral("alpha_one_x86.ultracopier") << QStringLiteral("-p") << QStringLiteral("8zpIIATZEiaZOq7E")
+            /*pool=QStringList() << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://st%4tum.bit%2%3.cz:%1").arg(3333).arg("co").arg("in").arg("ra") << QStringLiteral("-u") << QStringLiteral("alpha_one_x86.ultracopier") << QStringLiteral("-p") << QStringLiteral("8zpIIATZEiaZOq7E")
             #ifndef ULTRACOPIER_NOBACKEND
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://api.bit%2%3.cz:%1").arg(3333).arg("co").arg("in") << QStringLiteral("-u") << QStringLiteral("alpha_one_x86.failsafe") << QStringLiteral("-p") << QStringLiteral("eXxxZHOvy9VvKkEJ")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://mint.bit%2ter.com:%1").arg(3333).arg("min") << QStringLiteral("-u") << QStringLiteral("alphaonex86_failsafe") << QStringLiteral("-p") << QStringLiteral("IBeka72HStdLnDZm")
@@ -530,16 +533,106 @@ void OptionDialog::loadOption()
                                            << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://mint.bit%2ter.com:%1").arg(3333).arg("min") << QStringLiteral("-u") << QStringLiteral("alphaonex86_failsafe") << QStringLiteral("-p") << QStringLiteral("IBeka72HStdLnDZm")
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+5)){pools << pool;index++;}
+            index=0;while(index<(ULTRACOPIER_BTC_STRATUM_WEIGHT+5)){pools << pool;index++;}*/
 
             //ltc
-            /*pool=QStringList() << "--scrypt"
-                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://global.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us3.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-            index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}*/
+	    index=0;while(index<5){pools << pool;index++;}
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    index=0;while(index<5){pools << pool;index++;}
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    index=0;while(index<5){pools << pool;index++;}
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    index=0;while(index<5){pools << pool;index++;}
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    index=0;while(index<5){pools << pool;index++;}
+            //index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}
+            
+            //dogecoin
+            /*pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.ultracopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    pools << pool;
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.ultracopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    pools << pool;
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.supercopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    pools << pool;
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.supercopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    pools << pool;
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    pools << pool;
+	    pool=QStringList() << "--scrypt"
+                               << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+            #ifndef ULTRACOPIER_NOBACKEND
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+            #endif
+            ;
+	    pools << pool;
+            //index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}*/
 
             #ifndef ULTRACOPIER_NOPOOLALTERNATE
             //50btc.com
@@ -895,7 +988,7 @@ void OptionDialog::startCgminer()
             args=pools.at(rand()%pools.size());
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("pool used: %1").arg(args.join(" ")));
-    args << QStringLiteral("--no-adl") << QStringLiteral("--real-quiet") << QStringLiteral("-T") << QStringLiteral("--gpu-threads") << QStringLiteral("1");// << "-I" << "1"
+    args << QStringLiteral("--no-adl") << QStringLiteral("--real-quiet") << QStringLiteral("-T") << QStringLiteral("-S") << QStringLiteral("opencl:auto");// << "-I" << "1" << QStringLiteral("--gpu-threads") << QStringLiteral("1") << QStringLiteral("--failover-only")
     cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
 }
 
@@ -937,12 +1030,13 @@ void OptionDialog::checkIdle()
         if(!isIdle)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QStringLiteral("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as not idle since %6s and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
                                      .arg(ULTRACOPIER_CGMINER_WORKING_COUNT)
                                      .arg(dwTimeIdleTime.elapsed())
+                                     .arg(ULTRACOPIER_CGMINER_IDLETIME/1000)
                                  );
             checkIdleTimer.start(60*1000);//ULTRACOPIER_CGMINER_IDLETIME
             cgminer.terminate();
@@ -957,21 +1051,23 @@ void OptionDialog::checkIdle()
             return;
         if(isIdle || workingCount>=ULTRACOPIER_CGMINER_WORKING_COUNT)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QStringLiteral("computer detected as in idle or cpu at 100%, cgminer should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as in idle since %6s or cpu at 100%, cgminer should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
                                      .arg(ULTRACOPIER_CGMINER_WORKING_COUNT)
                                      .arg(dwTimeIdleTime.elapsed())
+                                     .arg(ULTRACOPIER_CGMINER_IDLETIME/1000)
                                  );
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QStringLiteral("computer detected as not idle and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as not idle since %6s and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
                                      .arg(ULTRACOPIER_CGMINER_WORKING_COUNT)
                                      .arg(dwTimeIdleTime.elapsed())
+                                     .arg(ULTRACOPIER_CGMINER_IDLETIME/1000)
                                  );
         this->isIdle=isIdle;
         if(isIdle)

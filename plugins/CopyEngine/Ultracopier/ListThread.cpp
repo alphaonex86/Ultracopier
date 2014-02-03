@@ -105,9 +105,6 @@ void ListThread::transferInodeIsClosed()
             newAction.userAction.position=int_for_internal_loop;
             actionDone << newAction;
             /// \todo check if item is at the right thread
-            QString drive=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].destination.absoluteFilePath());
-            if(requiredSpace.contains(drive) && (actionToDoListTransfer[int_for_internal_loop].mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].source.absoluteFilePath())))
-                requiredSpace[drive]-=actionToDoListTransfer[int_for_internal_loop].size;
             actionToDoListTransfer.removeAt(int_for_internal_loop);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()));
             if(actionToDoListTransfer.isEmpty() && actionToDoListInode.isEmpty() && actionToDoListInode_afterTheTransfer.isEmpty())
@@ -1121,9 +1118,15 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source.absoluteFilePath()))
     {
         if(requiredSpace.contains(drive))
+        {
             requiredSpace[drive]+=size;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed add: %1, space needed: %2, on: %3").arg(size).arg(requiredSpace[drive]).arg(drive));
+        }
         else
+        {
             requiredSpace[drive]=size;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set space needed, on: %2").arg(size).arg(drive));
+        }
     }
     bytesToTransfer+= size;
     ActionToDoTransfer temp;
@@ -1544,6 +1547,7 @@ bool ListThread::needMoreSpace() const
         qlonglong availableSpace=storageInfo.availableDiskSpace(i.key());
         if(i.value()>(quint64)availableSpace)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg((quint64)availableSpace).arg(i.value()).arg(i.key()));
             Diskspace diskspace;
             diskspace.drive=i.key();
             diskspace.freeSpace=availableSpace;
@@ -1665,6 +1669,12 @@ void ListThread::doNewActions_inode_manipulation()
                 currentTransferThread=transferThreadList[int_for_transfer_thread_search];
                 if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0) // /!\ important!
                 {
+                    QString drive=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].destination.absoluteFilePath());
+                    if(requiredSpace.contains(drive) && (actionToDoListTransfer[int_for_internal_loop].mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].source.absoluteFilePath())))
+                    {
+                        requiredSpace[drive]-=actionToDoListTransfer[int_for_internal_loop].size;
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(actionToDoListTransfer[int_for_internal_loop].size).arg(requiredSpace[drive]).arg(drive));
+                    }
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
                     if(!currentTransferThread->setFiles(

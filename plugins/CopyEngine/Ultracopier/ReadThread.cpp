@@ -253,7 +253,7 @@ bool ReadThread::internalOpenSlot()
 
 bool ReadThread::internalOpen(bool resetLastGoodPosition)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] internalOpen source: ")+file.fileName());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] internalOpen source: ")+file.fileName()+QStringLiteral(", open in write because move: ")+QString::number(mode==Ultracopier::Move));
     if(stopIt)
     {
         emit closed();
@@ -273,8 +273,9 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         return false;
     }
     QIODevice::OpenMode openMode=QIODevice::ReadOnly;
-    if(mode==Ultracopier::Move)
-        openMode=QIODevice::ReadWrite;
+    /*can have permision to remove but not write
+     * if(mode==Ultracopier::Move)
+        openMode=QIODevice::ReadWrite;*/
     seekToZero=false;
     if(file.open(openMode))
     {

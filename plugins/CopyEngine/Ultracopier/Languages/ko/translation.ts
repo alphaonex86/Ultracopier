@@ -582,13 +582,13 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="192"/>
-        <location filename="../../ReadThread.cpp" line="407"/>
+        <location filename="../../ReadThread.cpp" line="408"/>
         <source>Unable to read the source file: </source>
         <translation>원본 파일 읽기 불가:</translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="233"/>
-        <location filename="../../ReadThread.cpp" line="455"/>
+        <location filename="../../ReadThread.cpp" line="456"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>

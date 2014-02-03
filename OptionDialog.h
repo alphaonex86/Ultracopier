@@ -18,6 +18,7 @@
 #include <QTime>
 #endif
 
+#include "Environment.h"
 #include "OSSpecific.h"
 #include "PluginsManager.h"
 

@@ -84,8 +84,8 @@ private:
     int currentIndexSearch;
     bool haveSearchItem;
     quint64 searchId;
-    static QIcon start;
-    static QIcon stop;
+    static QIcon *start;
+    static QIcon *stop;
 signals:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source

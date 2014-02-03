@@ -610,13 +610,13 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="192"/>
-        <location filename="../../ReadThread.cpp" line="407"/>
+        <location filename="../../ReadThread.cpp" line="408"/>
         <source>Unable to read the source file: </source>
         <translation>Impossible de lire le fichier source: </translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="233"/>
-        <location filename="../../ReadThread.cpp" line="455"/>
+        <location filename="../../ReadThread.cpp" line="456"/>
         <source>File truncated during the read, possible data change</source>
         <translatorcomment>La taille du fichier a diminué durant -&gt; changé le texte original</translatorcomment>
         <translation>Fichier a diminué durant la lecture, possible changement de données</translation>

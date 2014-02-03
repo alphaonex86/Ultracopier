@@ -2,6 +2,8 @@
 #include "ui_fileErrorDialog.h"
 #include "TransferThread.h"
 
+#include <QString>
+
 bool FileErrorDialog::isInAdmin=false;
 
 FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, QString errorString, const ErrorType &errorType) :
@@ -28,7 +30,12 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, QString er
             ui->label_content_folder->setVisible(false);
         }
         else
+        {
+            QString folder=fileInfo.absolutePath();
+            if(folder.size()>80)
+                folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
             ui->label_content_folder->setText(fileInfo.absolutePath());
+        }
         ui->label_content_size->setText(QString::number(fileInfo.size()));
         QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
         if(maxTime<fileInfo.lastModified())

@@ -659,28 +659,28 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
         <location filename="../../../OptionDialog.ui" line="301"/>
-        <location filename="../../../OptionDialog.cpp" line="341"/>
+        <location filename="../../../OptionDialog.cpp" line="344"/>
         <source>Copy engine</source>
         <translation>Másoló motor</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
         <location filename="../../../OptionDialog.ui" line="314"/>
-        <location filename="../../../OptionDialog.cpp" line="342"/>
+        <location filename="../../../OptionDialog.cpp" line="345"/>
         <source>Listener</source>
         <translation>Figyelő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
         <location filename="../../../OptionDialog.ui" line="319"/>
-        <location filename="../../../OptionDialog.cpp" line="343"/>
+        <location filename="../../../OptionDialog.cpp" line="346"/>
         <source>Plugin loader</source>
         <translation>Beépüő betöltő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
         <location filename="../../../OptionDialog.ui" line="324"/>
-        <location filename="../../../OptionDialog.cpp" line="344"/>
+        <location filename="../../../OptionDialog.cpp" line="347"/>
         <source>Session loader</source>
         <translation>Folyamat betöltő</translation>
     </message>
@@ -854,103 +854,103 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>A változók: %path%, %operation%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="465"/>
+        <location filename="../../../OptionDialog.cpp" line="468"/>
         <source>Allow the application</source>
         <translation>Alkalmazás engedélyezése</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="465"/>
+        <location filename="../../../OptionDialog.cpp" line="468"/>
         <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
         <translation>Ez az Ultimate ingyenes verzió csak akkor működik, ha a(z) %1-t engedélyezted a vírusirtódban. Egyéb esetben használd a normál ingyenes verziót</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="470"/>
+        <location filename="../../../OptionDialog.cpp" line="473"/>
         <source>Enable the OpenCL</source>
         <translation>OpenCL engedélyezése</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="470"/>
+        <location filename="../../../OptionDialog.cpp" line="473"/>
         <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
         <translation>Ez az Ultimate ingyenes verzió csak akkor működik, ha az OpenCL telepítve van a videókártya driverrel. Egyéb esetben használd a normál ingyenes verziót</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="247"/>
-        <location filename="../../../OptionDialog.cpp" line="261"/>
+        <location filename="../../../OptionDialog.cpp" line="250"/>
+        <location filename="../../../OptionDialog.cpp" line="264"/>
         <source>Load</source>
         <translation>Betöltés</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="247"/>
+        <location filename="../../../OptionDialog.cpp" line="250"/>
         <source>Load the theme?</source>
         <translation>Téma betöltése?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="261"/>
+        <location filename="../../../OptionDialog.cpp" line="264"/>
         <source>Load the language?</source>
         <translation>Nyelv betöltése?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="345"/>
-        <location filename="../../../OptionDialog.cpp" line="347"/>
-        <location filename="../../../OptionDialog.cpp" line="708"/>
-        <location filename="../../../OptionDialog.cpp" line="709"/>
+        <location filename="../../../OptionDialog.cpp" line="348"/>
+        <location filename="../../../OptionDialog.cpp" line="350"/>
+        <location filename="../../../OptionDialog.cpp" line="727"/>
+        <location filename="../../../OptionDialog.cpp" line="728"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Letiltva, mert nem rendelkezel SessionLoader beépülővel</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="349"/>
+        <location filename="../../../OptionDialog.cpp" line="352"/>
         <source>Do nothing</source>
         <translation>Ne tegyen semmit</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="350"/>
+        <location filename="../../../OptionDialog.cpp" line="353"/>
         <source>Ask source as folder</source>
         <translation>Rákérdezés a forrás mint mappa</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="351"/>
+        <location filename="../../../OptionDialog.cpp" line="354"/>
         <source>Ask sources as files</source>
         <translation>Rákérdezés a forrásokra mint fájlok</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="352"/>
+        <location filename="../../../OptionDialog.cpp" line="355"/>
         <source>Never</source>
         <translation>Soha</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="353"/>
+        <location filename="../../../OptionDialog.cpp" line="356"/>
         <source>When source is same</source>
         <translation>Amikor a forrás ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="354"/>
+        <location filename="../../../OptionDialog.cpp" line="357"/>
         <source>When destination is same</source>
         <translation>Amikor a cél ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="355"/>
+        <location filename="../../../OptionDialog.cpp" line="358"/>
         <source>When source and destination are same</source>
         <translation>Amikor a forrás és a cél ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="356"/>
+        <location filename="../../../OptionDialog.cpp" line="359"/>
         <source>When source or destination are same</source>
         <translation>Amikor a forrás vagy cél ugyanaz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="357"/>
+        <location filename="../../../OptionDialog.cpp" line="360"/>
         <source>Always</source>
         <translation>Mindig</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="371"/>
-        <location filename="../../../OptionDialog.cpp" line="372"/>
-        <location filename="../../../OptionDialog.cpp" line="373"/>
+        <location filename="../../../OptionDialog.cpp" line="374"/>
+        <location filename="../../../OptionDialog.cpp" line="375"/>
+        <location filename="../../../OptionDialog.cpp" line="376"/>
         <source>The variables are %1</source>
         <translation>A változók: %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1365"/>
+        <location filename="../../../OptionDialog.cpp" line="1387"/>
         <source>Save logs as: </source>
         <translation>Napló mentése mint:</translation>
     </message>

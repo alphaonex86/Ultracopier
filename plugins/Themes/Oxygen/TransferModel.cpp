@@ -4,11 +4,16 @@
 
 // Model
 
-QIcon TransferModel::start=QIcon(QStringLiteral(":/resources/player_play.png"));
-QIcon TransferModel::stop=QIcon(QStringLiteral(":/resources/player_pause.png"));
+QIcon *TransferModel::start=NULL;
+QIcon *TransferModel::stop=NULL;
 
 TransferModel::TransferModel()
 {
+    /// \warning to prevent Must construct a QGuiApplication before QPixmap INOT STATIC VERSION ONLY
+    if(TransferModel::start==NULL)
+        TransferModel::start=new QIcon(QStringLiteral(":/resources/player_play.png"));
+    if(TransferModel::stop==NULL)
+        TransferModel::stop=new QIcon(QStringLiteral(":/resources/player_pause.png"));
     currentIndexSearch=0;
     haveSearchItem=false;
 }
@@ -52,9 +57,9 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
         {
             case 0:
                 if(stopId.contains(item.id))
-                    return stop;
+                    return *stop;
                 else if(startId.contains(item.id))
-                    return start;
+                    return *start;
                 else
                     return QVariant();
             break;

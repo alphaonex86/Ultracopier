@@ -45,7 +45,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     forcedMode                      = false;
     followTheStrictOrder            = false;
     deletePartiallyTransferredFiles = true;
-    inodeThreads                    = 1;
+    inodeThreads                    = 16;
     moveTheWholeFolder              = true;
 
     //implement the SingleShot in this class

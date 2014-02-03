@@ -28,11 +28,17 @@ FileExistsDialog::FileExistsDialog(QWidget *parent,QFileInfo source,QFileInfo de
     ui->label_content_source_size->setText(QString::number(source.size()));
     ui->label_content_source_modified->setText(source.lastModified().toString());
     ui->label_content_source_file_name->setText(TransferThread::resolvedName(source));
-    ui->label_content_source_folder->setText(source.absolutePath());
+    QString folder=source.absolutePath();
+    if(folder.size()>80)
+        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
+    ui->label_content_source_folder->setText(folder);
     ui->label_content_destination_size->setText(QString::number(destination.size()));
     ui->label_content_destination_modified->setText(destination.lastModified().toString());
     ui->label_content_destination_file_name->setText(TransferThread::resolvedName(destination));
-    ui->label_content_destination_folder->setText(destination.absolutePath());
+    folder=destination.absolutePath();
+    if(folder.size()>80)
+        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
+    ui->label_content_destination_folder->setText(folder);
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     if(maxTime<source.lastModified())
     {

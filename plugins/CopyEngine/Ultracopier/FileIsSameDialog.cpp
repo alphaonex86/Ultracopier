@@ -26,7 +26,10 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString fi
     ui->label_content_size->setText(QString::number(fileInfo.size()));
     ui->label_content_modified->setText(fileInfo.lastModified().toString());
     ui->label_content_file_name->setText(TransferThread::resolvedName(fileInfo));
-    ui->label_content_folder->setText(fileInfo.absolutePath());
+    QString folder=fileInfo.absolutePath();
+    if(folder.size()>80)
+        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
+    ui->label_content_folder->setText(folder);
     updateRenameButton();
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     if(maxTime<fileInfo.lastModified())

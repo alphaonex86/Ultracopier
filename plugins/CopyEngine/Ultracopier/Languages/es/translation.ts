@@ -590,13 +590,13 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="192"/>
-        <location filename="../../ReadThread.cpp" line="407"/>
+        <location filename="../../ReadThread.cpp" line="408"/>
         <source>Unable to read the source file: </source>
         <translation>No se puede leer el archivo de origen: </translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="233"/>
-        <location filename="../../ReadThread.cpp" line="455"/>
+        <location filename="../../ReadThread.cpp" line="456"/>
         <source>File truncated during the read, possible data change</source>
         <translation>Archivo truncada durante el cambio de lectura, los datos posibles</translation>
     </message>

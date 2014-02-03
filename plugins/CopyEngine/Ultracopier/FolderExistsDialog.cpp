@@ -24,7 +24,10 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
     ui->lineEditNewName->setPlaceholderText(oldName);
     ui->label_content_source_modified->setText(source.lastModified().toString());
     ui->label_content_source_folder_name->setText(source.fileName());
-    ui->label_content_source_folder->setText(source.absolutePath());
+    QString folder=source.absolutePath();
+    if(folder.size()>80)
+        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
+    ui->label_content_source_folder->setText(folder);
     if(ui->label_content_source_folder_name->text().isEmpty())
     {
         ui->label_source_folder_name->hide();
@@ -48,7 +51,10 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isS
         this->setWindowTitle(tr("Folder already exists"));
         ui->label_content_destination_modified->setText(destination.lastModified().toString());
         ui->label_content_destination_folder_name->setText(destination.fileName());
-        ui->label_content_destination_folder->setText(destination.absolutePath());
+        QString folder=destination.absolutePath();
+        if(folder.size()>80)
+            folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
+        ui->label_content_destination_folder->setText(folder);
         if(ui->label_content_destination_folder_name->text().isEmpty())
         {
             ui->label_destination_folder_name->hide();
