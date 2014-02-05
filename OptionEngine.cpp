@@ -151,8 +151,8 @@ QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &va
 {
     if(GroupKeysList.contains(groupName))
     {
-        if(GroupKeysList[groupName].contains(variableName))
-            return GroupKeysList[groupName][variableName].currentValue;
+        if(GroupKeysList.value(groupName).contains(variableName))
+            return GroupKeysList.value(groupName).value(variableName).currentValue;
         QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(groupName).arg(variableName));
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
         return QVariant();
@@ -170,10 +170,10 @@ void OptionEngine::setOptionValue(const QString &groupName,const QString &variab
 
     if(GroupKeysList.contains(groupName))
     {
-        if(GroupKeysList[groupName].contains(variableName))
+        if(GroupKeysList.value(groupName).contains(variableName))
         {
             //prevent re-write the same value into the variable
-            if(GroupKeysList[groupName][variableName].currentValue==value)
+            if(GroupKeysList.value(groupName).value(variableName).currentValue==value)
                 return;
             //write ONLY the new value
             GroupKeysList[groupName][variableName].currentValue=value;
