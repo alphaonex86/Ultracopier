@@ -34,7 +34,7 @@ QVariant DebugModel::data( const QModelIndex& index, int role ) const
     if(index.parent()!=QModelIndex() || row < 0 || row >= list.count() || column < 0 || column >= COLUMN_COUNT)
         return QVariant();
 
-    const DebugItem& item = list[row];
+    const DebugItem& item = list.at(row);
     if(role==Qt::UserRole)
         return row;
     else if(role==Qt::DisplayRole)

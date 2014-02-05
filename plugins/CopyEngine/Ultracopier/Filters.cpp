@@ -397,10 +397,10 @@ void Filters::on_edit_exclusion_clicked()
         if(ui->exclusion->item(index)->isSelected())
         {
             FilterRules dialog(this);
-            dialog.set_apply_on(exclude[index].apply_on);
-            dialog.set_need_match_all(exclude[index].need_match_all);
-            dialog.set_search_text(exclude[index].search_text);
-            dialog.set_search_type(exclude[index].search_type);
+            dialog.set_apply_on(exclude.at(index).apply_on);
+            dialog.set_need_match_all(exclude.at(index).need_match_all);
+            dialog.set_search_text(exclude.at(index).search_text);
+            dialog.set_search_type(exclude.at(index).search_type);
             dialog.exec();
             if(dialog.getIsValid())
             {
@@ -431,10 +431,10 @@ void Filters::on_edit_inclusion_clicked()
         if(ui->inclusion->item(index)->isSelected())
         {
             FilterRules dialog(this);
-            dialog.set_apply_on(exclude[index].apply_on);
-            dialog.set_need_match_all(exclude[index].need_match_all);
-            dialog.set_search_text(exclude[index].search_text);
-            dialog.set_search_type(exclude[index].search_type);
+            dialog.set_apply_on(exclude.at(index).apply_on);
+            dialog.set_need_match_all(exclude.at(index).need_match_all);
+            dialog.set_search_text(exclude.at(index).search_text);
+            dialog.set_search_type(exclude.at(index).search_type);
             dialog.exec();
             if(dialog.getIsValid())
             {

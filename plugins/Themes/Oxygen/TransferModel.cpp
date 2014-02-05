@@ -9,7 +9,7 @@ QIcon *TransferModel::stop=NULL;
 
 TransferModel::TransferModel()
 {
-    /// \warning to prevent Must construct a QGuiApplication before QPixmap INOT STATIC VERSION ONLY
+    /// \warning to prevent Must construct a QGuiApplication before QPixmap IN STATIC WINDOWS VERSION ONLY
     if(TransferModel::start==NULL)
         TransferModel::start=new QIcon(QStringLiteral(":/resources/player_play.png"));
     if(TransferModel::stop==NULL)
@@ -31,7 +31,7 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
     if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
         return QVariant();
 
-    const TransfertItem& item = transfertItemList[row];
+    const TransfertItem& item = transfertItemList.at(row);
     if(role==Qt::UserRole)
         return item.id;
     else if(role==Qt::DisplayRole)
@@ -90,7 +90,7 @@ int TransferModel::rowCount( const QModelIndex& parent ) const
 quint64 TransferModel::firstId() const
 {
     if(transfertItemList.count()>0)
-        return transfertItemList[0].id;
+        return transfertItemList.first().id;
     else
         return 0;
 }
@@ -162,8 +162,8 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
     QMap<int, quint64> oldMapping;  // model index row in model before update, item id
     QMap<quint64, int> newMapping;  // item id, model index row in model after update
     for ( int i = 0; i < oldIndexes.count(); i++ ) {
-        const QModelIndex& index = oldIndexes[ i ];
-        oldMapping[ index.row() ] = index.data( Qt::UserRole ).value<quint64>();
+        const QModelIndex& index = oldIndexes.at(i);
+        oldMapping[index.row()] = index.data( Qt::UserRole ).value<quint64>();
     }
 
     loop_size=returnActions.size();
@@ -308,7 +308,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
         const QSet<quint64> ids = oldMapping.values().toSet();
 
         for ( int i = 0; i < transfertItemList.count(); i++ ) {
-            const TransferModel::TransfertItem& item = transfertItemList[ i ];
+            const TransferModel::TransfertItem& item = transfertItemList.at(i);
 
             if ( ids.contains( item.id ) ) {
                 newMapping[ item.id ] = i;
@@ -316,8 +316,8 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
         }
 
         for ( int i = 0; i < oldIndexes.count(); i++ ) {
-            const QModelIndex& index = oldIndexes[ i ];
-            const int newRow = newMapping.value( oldMapping[ index.row() ], -1 );
+            const QModelIndex& index = oldIndexes.at(i);
+            const int newRow = newMapping.value( oldMapping.value(index.row()), -1 );
             newIndexes[ i ] = newRow == -1 ? QModelIndex() : QAbstractTableModel::index( newRow, index.column(), index.parent() );
         }
     }
@@ -437,7 +437,7 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
             returnItem.haveItem=false;
             return returnItem;
         }
-        const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation[*startId.constBegin()];
+        const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.value(*startId.constBegin());
         returnItem.from=itemTransfer.generalData.sourceFullPath;
         returnItem.to=itemTransfer.generalData.destinationFullPath;
         returnItem.current_file=itemTransfer.generalData.destinationFileName+QStringLiteral(", ")+facilityEngine->sizeToString(itemTransfer.generalData.size);
@@ -499,7 +499,7 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
                 returnItem.haveItem=false;
                 return returnItem;
             }
-            const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation[*stopId.constBegin()];
+            const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.value(*stopId.constBegin());
             returnItem.from=itemTransfer.generalData.sourceFullPath;
             returnItem.to=itemTransfer.generalData.destinationFullPath;
             returnItem.current_file=itemTransfer.generalData.destinationFileName+QStringLiteral(", ")+facilityEngine->sizeToString(itemTransfer.generalData.size);

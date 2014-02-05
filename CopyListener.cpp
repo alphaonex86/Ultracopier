@@ -394,8 +394,8 @@ void CopyListener::reloadClientList()
     {
         if(pluginList.at(indexPlugin).listenInterface!=NULL)
         {
-            clients << pluginList[indexPlugin].listenInterface->clientsList();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ask client to: ")+pluginList[indexPlugin].path);
+            clients << pluginList.at(indexPlugin).listenInterface->clientsList();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ask client to: ")+pluginList.at(indexPlugin).path);
         }
         indexPlugin++;
     }

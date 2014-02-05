@@ -207,8 +207,8 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
         }
         if(isTheGoodEngine)
         {
-            pluginList[index].intances<<pluginList[index].factory->getInstance();
-            temp.engine=pluginList[index].intances.last();
+            pluginList[index].intances<<pluginList.at(index).factory->getInstance();
+            temp.engine=pluginList.at(index).intances.last();
             temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
             temp.type=pluginList.at(index).type;
             temp.transferListOperation=pluginList.at(index).transferListOperation;
@@ -249,8 +249,8 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
                 temp.engine=NULL;
                 return temp;
             }
-            pluginList[index].intances<<pluginList[index].factory->getInstance();
-            temp.engine=pluginList[index].intances.last();
+            pluginList[index].intances<<pluginList.at(index).factory->getInstance();
+            temp.engine=pluginList.at(index).intances.last();
             temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
             temp.type=pluginList.at(index).type;
             temp.transferListOperation=pluginList.at(index).transferListOperation;

@@ -21,9 +21,9 @@ DiskSpace::DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QW
     while(index<size)
     {
         drives+=tr("Drives %1 have %2 available but need %3")
-                .arg(list[index].drive)
-                .arg(facilityEngine->sizeToString(list[index].freeSpace))
-                .arg(facilityEngine->sizeToString(list[index].requiredSpace));
+                .arg(list.at(index).drive)
+                .arg(facilityEngine->sizeToString(list.at(index).freeSpace))
+                .arg(facilityEngine->sizeToString(list.at(index).requiredSpace));
         drives+=QStringLiteral("<br />");
         index++;
     }

@@ -30,9 +30,9 @@ Core::~Core()
     while(index<copyList.size())
     {
         copyList[index].engine->cancel();
-        delete copyList[index].nextConditionalSync;
-        delete copyList[index].interface;
-        delete copyList[index].engine;
+        delete copyList.at(index).nextConditionalSync;
+        delete copyList.at(index).interface;
+        delete copyList.at(index).engine;
         index++;
     }
 }
@@ -231,7 +231,7 @@ void Core::loadInterface()
         while(index<copyList.size())
         {
             copyList[index].interface=ThemesManager::themesManager->getThemesInstance();
-            if(copyList[index].interface==NULL)
+            if(copyList.at(index).interface==NULL)
             {
                 copyInstanceCanceledByIndex(index);
                 error=true;
@@ -403,7 +403,7 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action: %1, from %2").arg(action).arg(index));
         //drop here the duplicate action
-        if(copyList[index].action==action)
+        if(copyList.at(index).action==action)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("The copy engine have send 2x the same EngineActionInProgress"));
             return;
@@ -873,8 +873,8 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
-        if(copyList[index].copyEngineIsSync)
-            copyList[index].interface->getActionOnList(actionList);
+        if(copyList.at(index).copyEngineIsSync)
+            copyList.at(index).interface->getActionOnList(actionList);
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");

@@ -1120,7 +1120,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
         if(requiredSpace.contains(drive))
         {
             requiredSpace[drive]+=size;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed add: %1, space needed: %2, on: %3").arg(size).arg(requiredSpace[drive]).arg(drive));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed add: %1, space needed: %2, on: %3").arg(size).arg(requiredSpace.value(drive)).arg(drive));
         }
         else
         {
@@ -1637,14 +1637,14 @@ void ListThread::doNewActions_inode_manipulation()
     //search the next transfer action to do
     while(int_for_loop<actionToDoListTransfer_count)
     {
-        if(!actionToDoListTransfer[int_for_loop].isRunning)
+        if(!actionToDoListTransfer.at(int_for_loop).isRunning)
         {
             //search the next inode action to do
             while(int_for_internal_loop<actionToDoListInode_count)
             {
-                if(!actionToDoListInode[int_for_internal_loop].isRunning)
+                if(!actionToDoListInode.at(int_for_internal_loop).isRunning)
                 {
-                    if(actionToDoListTransfer[int_for_loop].id<actionToDoListInode[int_for_internal_loop].id)
+                    if(actionToDoListTransfer.at(int_for_loop).id<actionToDoListInode.at(int_for_internal_loop).id)
                     {
                         //do the tranfer action in the next code
                         break;
@@ -1666,14 +1666,14 @@ void ListThread::doNewActions_inode_manipulation()
                     Because the other thread can have call doNewAction before than this thread have the finish event parsed!
                     I this case it lose all data
                     */
-                currentTransferThread=transferThreadList[int_for_transfer_thread_search];
+                currentTransferThread=transferThreadList.at(int_for_transfer_thread_search);
                 if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0) // /!\ important!
                 {
-                    QString drive=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].destination.absoluteFilePath());
-                    if(requiredSpace.contains(drive) && (actionToDoListTransfer[int_for_internal_loop].mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer[int_for_internal_loop].source.absoluteFilePath())))
+                    QString drive=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).destination.absoluteFilePath());
+                    if(requiredSpace.contains(drive) && (actionToDoListTransfer.at(int_for_internal_loop).mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).source.absoluteFilePath())))
                     {
-                        requiredSpace[drive]-=actionToDoListTransfer[int_for_internal_loop].size;
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(actionToDoListTransfer[int_for_internal_loop].size).arg(requiredSpace[drive]).arg(drive));
+                        requiredSpace[drive]-=actionToDoListTransfer.at(int_for_internal_loop).size;
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(actionToDoListTransfer.at(int_for_internal_loop).size).arg(requiredSpace.value(drive)).arg(drive));
                     }
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
@@ -1733,7 +1733,7 @@ void ListThread::doNewActions_inode_manipulation()
     int_for_internal_loop=0;
     while(int_for_internal_loop<actionToDoListInode_count)
     {
-        if(!actionToDoListInode[int_for_internal_loop].isRunning)
+        if(!actionToDoListInode.at(int_for_internal_loop).isRunning)
         {
             //do the inode action
             #include "ListThread_InodeAction.cpp"

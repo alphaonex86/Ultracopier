@@ -104,8 +104,8 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
         int indexTranslator=0;
         while(indexTranslator<installedTranslator.size())
         {
-            QCoreApplication::removeTranslator(installedTranslator[indexTranslator]);
-            delete installedTranslator[indexTranslator];
+            QCoreApplication::removeTranslator(installedTranslator.at(indexTranslator));
+            delete installedTranslator.at(indexTranslator);
             indexTranslator++;
         }
         installedTranslator.clear();

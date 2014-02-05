@@ -488,9 +488,9 @@ void Themes::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &r
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, returnActions.size(): ")+QString::number(returnActions.size()));
     QList<quint64> returnValue=transferModel.synchronizeItems(returnActions);
-    totalFile+=returnValue[0];
-    totalSize+=returnValue[1];
-    currentFile+=returnValue[2];
+    totalFile+=returnValue.first();
+    totalSize+=returnValue.at(1);
+    currentFile+=returnValue.last();
     if(transferModel.rowCount()==0)
     {
         ui->skipButton->setEnabled(false);

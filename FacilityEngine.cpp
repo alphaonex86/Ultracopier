@@ -152,7 +152,7 @@ QString FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) 
 QString FacilityEngine::translateText(const QString &text) const
 {
     if(translations.contains(text))
-        return translations[text];
+        return translations.value(text);
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"translation not found: "+text);
