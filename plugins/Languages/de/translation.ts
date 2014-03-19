@@ -855,8 +855,8 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.cpp" line="348"/>
         <location filename="../../../OptionDialog.cpp" line="350"/>
-        <location filename="../../../OptionDialog.cpp" line="727"/>
-        <location filename="../../../OptionDialog.cpp" line="728"/>
+        <location filename="../../../OptionDialog.cpp" line="1026"/>
+        <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Deaktiviert, da kein SessionLoader-Plugin installiert ist</translation>
     </message>
@@ -933,7 +933,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Diese Ultimate-Gratis-Version läuft nur, wenn mit Ihrem Grafik-Treiber OpenCL installiert wurde. Sonst benutzen Sie die Normalversion.</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1387"/>
+        <location filename="../../../OptionDialog.cpp" line="1686"/>
         <source>Save logs as: </source>
         <translation>Protokolle speichern als: </translation>
     </message>

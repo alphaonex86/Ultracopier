@@ -9,6 +9,8 @@
     #endif
 #endif
 
+QString MkPath::text_slash=QLatin1Literal("/");
+
 MkPath::MkPath()
 {
     stopIt=false;
@@ -131,15 +133,15 @@ void MkPath::internalDoThisPath()
             emit errorOnFolder(pathList.first().destination,tr("The source is not a folder"));
             return;*/
         }
-        if(pathList.first().destination.absoluteFilePath().startsWith(pathList.first().source.absoluteFilePath()+"/"))
+        if(pathList.first().destination.absoluteFilePath().startsWith(pathList.first().source.absoluteFilePath()+text_slash))
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+pathList.first().destination.absoluteFilePath());
             int random=rand();
-            QFileInfo tempFolder=pathList.first().source.absolutePath()+"/"+QString::number(random);
+            QFileInfo tempFolder=pathList.first().source.absolutePath()+text_slash+QString::number(random);
             while(tempFolder.exists())
             {
                 random=rand();
-                tempFolder=pathList.first().source.absolutePath()+"/"+QString::number(random);
+                tempFolder=pathList.first().source.absolutePath()+text_slash+QString::number(random);
             }
             if(!dir.rename(pathList.first().source.absoluteFilePath(),tempFolder.absoluteFilePath()))
             {

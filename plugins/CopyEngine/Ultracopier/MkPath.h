@@ -90,6 +90,7 @@ private:
     //fonction to edit the file date time
     bool readFileDateTime(const QFileInfo &source);
     bool writeFileDateTime(const QFileInfo &destination);
+    static QString text_slash;
 private slots:
     void internalDoThisPath();
     void internalAddPath(const QFileInfo& source, const QFileInfo& destination,const ActionType &actionType);

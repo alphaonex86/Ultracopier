@@ -88,6 +88,10 @@ private:
      * Will give: /toto/f2a/yy1a/toto.mp3, /toto/f2a/yy2a/toto.mp3
     */
     QStringList		parseWildcardSources(const QStringList &sources) const;
+
+    static QString text_slash;
+    static QString text_antislash;
+    static QString text_dot;
 };
 
 #endif // SCANFILEORFOLDER_H

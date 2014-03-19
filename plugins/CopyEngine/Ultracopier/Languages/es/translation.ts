@@ -260,12 +260,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="47"/>
+        <location filename="../../FileErrorDialog.cpp" line="54"/>
         <source>Error on folder</source>
         <translation>Error en la carpeta</translation>
     </message>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="50"/>
+        <location filename="../../FileErrorDialog.cpp" line="57"/>
         <source>Folder name</source>
         <translation>Nombre de la carpeta</translation>
     </message>
@@ -273,22 +273,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="125"/>
+        <location filename="../../FileExistsDialog.cpp" line="131"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="135"/>
+        <location filename="../../FileExistsDialog.cpp" line="141"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="220"/>
+        <location filename="../../FileExistsDialog.cpp" line="226"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="220"/>
+        <location filename="../../FileExistsDialog.cpp" line="226"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -296,22 +296,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="102"/>
+        <location filename="../../FileIsSameDialog.cpp" line="105"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="112"/>
+        <location filename="../../FileIsSameDialog.cpp" line="115"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="179"/>
+        <location filename="../../FileIsSameDialog.cpp" line="182"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="179"/>
+        <location filename="../../FileIsSameDialog.cpp" line="182"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -458,27 +458,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="48"/>
+        <location filename="../../FolderExistsDialog.cpp" line="51"/>
         <source>Folder already exists</source>
         <translation>Carpeta ya existe</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="110"/>
+        <location filename="../../FolderExistsDialog.cpp" line="116"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="120"/>
+        <location filename="../../FolderExistsDialog.cpp" line="126"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="181"/>
+        <location filename="../../FolderExistsDialog.cpp" line="187"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="181"/>
+        <location filename="../../FolderExistsDialog.cpp" line="187"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -486,49 +486,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1396"/>
-        <location filename="../../ListThread.cpp" line="2258"/>
+        <location filename="../../ListThread.cpp" line="1399"/>
+        <location filename="../../ListThread.cpp" line="2268"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>No se puede hacer para mover o copiar elemento en modo incorrecto obligado: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1403"/>
-        <location filename="../../ListThread.cpp" line="2265"/>
+        <location filename="../../ListThread.cpp" line="1406"/>
+        <location filename="../../ListThread.cpp" line="2275"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>No se puede guardar la lista de transferencias: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1419"/>
+        <location filename="../../ListThread.cpp" line="1422"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Problema al leer el archivo o archivos de tamaño es 0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1426"/>
+        <location filename="../../ListThread.cpp" line="1429"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Encabezado incorrecto: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1435"/>
+        <location filename="../../ListThread.cpp" line="1438"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>La lista de transferencia está en modo mixto, pero este caso no es de este modo</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1444"/>
+        <location filename="../../ListThread.cpp" line="1447"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>La lista de transferencia está en el modo de copia, pero esta instancia no está en este modo</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1450"/>
+        <location filename="../../ListThread.cpp" line="1453"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>La lista de transferencia es el modo de desplazamiento, pero esta instancia no está en este modo</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1506"/>
+        <location filename="../../ListThread.cpp" line="1509"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Algunos errores han sido encontrados durante el análisis de línea</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1514"/>
+        <location filename="../../ListThread.cpp" line="1517"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>No se puede abrir la lista de transferencias: %1</translation>
     </message>
@@ -540,29 +540,29 @@
         <translation type="obsolete">No es posible obtener el tiempo</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="109"/>
-        <location filename="../../MkPath.cpp" line="161"/>
-        <location filename="../../MkPath.cpp" line="185"/>
+        <location filename="../../MkPath.cpp" line="111"/>
+        <location filename="../../MkPath.cpp" line="163"/>
+        <location filename="../../MkPath.cpp" line="187"/>
         <source>Unable to create the folder</source>
         <translation>No se puede crear la carpeta</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="122"/>
+        <location filename="../../MkPath.cpp" line="124"/>
         <source>The source folder don&apos;t exists</source>
         <translation>La carpeta de origen no existe</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="150"/>
+        <location filename="../../MkPath.cpp" line="152"/>
         <source>Unable to temporary rename the folder</source>
         <translation>No es posible cambiar el nombre de la carpeta temporal</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="171"/>
+        <location filename="../../MkPath.cpp" line="173"/>
         <source>Unable to do the final real move the folder</source>
         <translation>No se puede hacer el movimiento final real de la carpeta</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="195"/>
+        <location filename="../../MkPath.cpp" line="197"/>
         <source>Unable to move the folder</source>
         <translation>No se puede mover la carpeta</translation>
     </message>
@@ -571,7 +571,7 @@
         <translation type="obsolete">No se puede establecer el acceso a la derecha</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="238"/>
+        <location filename="../../MkPath.cpp" line="240"/>
         <source>Unable to remove</source>
         <translation>No se puede eliminar</translation>
     </message>
@@ -658,29 +658,29 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="257"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="261"/>
         <source>Blacklisted folder</source>
         <translation>Carpeta de la lista negra</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="319"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="385"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="323"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="389"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="329"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="395"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="333"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="399"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="433"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="437"/>
         <source>This is not a folder</source>
         <translation>Esto no es una carpeta</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="435"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="439"/>
         <source>The folder does exists</source>
         <translation>La carpeta no existe</translation>
     </message>
@@ -689,12 +689,12 @@
         <translation type="obsolete">La carpeta no existe</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="437"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="441"/>
         <source>The folder is not readable</source>
         <translation>La carpeta no se puede leer</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="448"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="452"/>
         <source>Problem with name encoding</source>
         <translation>Problema con codificación de nombres</translation>
     </message>

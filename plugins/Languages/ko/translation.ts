@@ -888,8 +888,8 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.cpp" line="348"/>
         <location filename="../../../OptionDialog.cpp" line="350"/>
-        <location filename="../../../OptionDialog.cpp" line="727"/>
-        <location filename="../../../OptionDialog.cpp" line="728"/>
+        <location filename="../../../OptionDialog.cpp" line="1026"/>
+        <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -966,7 +966,7 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1387"/>
+        <location filename="../../../OptionDialog.cpp" line="1686"/>
         <source>Save logs as: </source>
         <translation>로그 따로 저장:</translation>
     </message>

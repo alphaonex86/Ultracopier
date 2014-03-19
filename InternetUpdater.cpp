@@ -70,7 +70,19 @@ void InternetUpdater::httpFinished()
         reply->deleteLater();
         return;
     }
-    QString newVersion=QString::fromUtf8(reply->readAll());
+    const QString &newVersion=QString::fromUtf8(reply->readAll());
+    if(newVersion.isEmpty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("version string is empty"));
+        reply->deleteLater();
+        return;
+    }
+    if(!newVersion.contains(QRegularExpression(QLatin1Literal("^[0-9]+(\\.[0-9]+)+$"))))
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("version string don't match: %1").arg(newVersion));
+        reply->deleteLater();
+        return;
+    }
     if(newVersion==ULTRACOPIER_VERSION)
     {
         reply->deleteLater();

@@ -6,7 +6,7 @@
     <message>
         <location filename="../../interface.cpp" line="238"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation type="unfinished"></translation>
+        <translation>Acquista la versione Ultimate per finanziare lo sviluppo del programma</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="308"/>
@@ -55,7 +55,7 @@
         <location filename="../../interface.cpp" line="1235"/>
         <location filename="../../interface.cpp" line="1237"/>
         <source>%1 %2% of %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% di %3</translation>
     </message>
 </context>
 <context>
@@ -126,12 +126,12 @@
     <message>
         <location filename="../../interface.ui" line="118"/>
         <source>Close on transfer completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Arresta il sistema a trasferimento comletato</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="286"/>
         <source>Limit copy speed to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Limitare la velocità di copia a:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="329"/>
@@ -197,22 +197,22 @@
         <location filename="../../interface.ui" line="663"/>
         <location filename="../../interface.ui" line="732"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="683"/>
         <source>Export the errors into transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>Esporta gli errori nella lista dei trasferimenti</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="722"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella di origine</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="727"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella di destinazione</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="741"/>
@@ -265,7 +265,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="35"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilità</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="41"/>
@@ -275,23 +275,23 @@
     <message>
         <location filename="../../themesOptions.ui" line="58"/>
         <source>Minimize on close to systray</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla chiusura riduci nella&apos;area di notifica</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="68"/>
         <source>At the end of the copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Al termine della copia</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="94"/>
         <location filename="../../themesOptions.ui" line="128"/>
         <source>Limit copy speed to</source>
-        <translation type="unfinished"></translation>
+        <translation>Limitare la velocità di copia a</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="269"/>
         <source>Click to edit the color</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca per modificare il colore</translation>
     </message>
     <message>
         <source>At the end of the copy: </source>
@@ -309,12 +309,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="176"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="214"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="220"/>

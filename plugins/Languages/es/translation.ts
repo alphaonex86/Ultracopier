@@ -968,8 +968,8 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../OptionDialog.cpp" line="348"/>
         <location filename="../../../OptionDialog.cpp" line="350"/>
-        <location filename="../../../OptionDialog.cpp" line="727"/>
-        <location filename="../../../OptionDialog.cpp" line="728"/>
+        <location filename="../../../OptionDialog.cpp" line="1026"/>
+        <location filename="../../../OptionDialog.cpp" line="1027"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Discapacitados, ya que no tiene ningún plugin SessionLoader</translation>
     </message>
@@ -1026,7 +1026,7 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Las variables son %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1387"/>
+        <location filename="../../../OptionDialog.cpp" line="1686"/>
         <source>Save logs as: </source>
         <translation>Guardar registros como: </translation>
     </message>
