@@ -22,6 +22,9 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     inodeThreads                    = 1;
     renameTheOriginalDestination    = false;
     doRightTransfer                 = false;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync                           = false;
+    #endif
     keepDate                        = false;
     checkDiskSpace                  = true;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
@@ -259,6 +262,24 @@ void ListThread::setAutoStart(const bool autoStart)
     this->autoStart=autoStart;
 }
 
+#ifdef ULTRACOPIER_PLUGIN_RSYNC
+/// \brief set rsync
+void ListThread::setRsync(const bool rsync)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
+    this->rsync=rsync;
+    int index=0;
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
+    while(index<loop_sub_size_transfer_thread_search)
+    {
+        transferThreadList.at(index)->setRsync(rsync);
+        index++;
+    }
+    for(int i=0;i<scanFileOrFolderThreadsPool.size();i++)
+        scanFileOrFolderThreadsPool.at(i)->setRsync(rsync);
+}
+#endif
+
 //set check destination folder
 void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
 {
@@ -355,6 +376,9 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::addToRmForRsync,                  this,&ListThread::addToRmForRsync,          Qt::QueuedConnection);
+    #endif
 
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
@@ -364,6 +388,10 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
     scanFileOrFolderThreadsPool.last()->setMoveTheWholeFolder(moveTheWholeFolder);
     scanFileOrFolderThreadsPool.last()->setDrive(mountSysPoint,driveType);
+    scanFileOrFolderThreadsPool.last()->setCopyListOrder(copyListOrder);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    scanFileOrFolderThreadsPool.last()->setRsync(rsync);
+    #endif
     if(scanFileOrFolderThreadsPool.size()==1)
         updateTheStatus();
     scanFileOrFolderThreadsPool.last()->setRenamingRules(firstRenamingRule,otherRenamingRule);
@@ -975,6 +1003,20 @@ void ListThread::addToRealMove(const QFileInfo& source,const QFileInfo& destinat
     actionToDoListInode << temp;
 }
 
+#ifdef ULTRACOPIER_PLUGIN_RSYNC
+//rsync rm
+void ListThread::addToRmForRsync(const QFileInfo& destination)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inode: "+destination.absoluteFilePath());
+    ActionToDoInode temp;
+    temp.type	= ActionType_RmSync;
+    temp.id		= generateIdNumber();
+    temp.destination= destination;
+    temp.isRunning	= false;
+    actionToDoListInode << temp;
+}
+#endif
+
 //send action done
 void ListThread::sendActionDone()
 {
@@ -1340,6 +1382,10 @@ void ListThread::moveItemsOnBottom(QList<int> ids)
 /** \brief give the forced mode, to export/import transfer list */
 void ListThread::forceMode(const Ultracopier::CopyMode &mode)
 {
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    if(mode==Ultracopier::Move)
+        setRsync(false);
+    #endif
     if(mode==Ultracopier::Copy)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to copy"));
     else
@@ -1854,10 +1900,19 @@ void ListThread::mkPathFirstFolderFinish()
                 doNewActions_inode_manipulation();
                 return;
             }
-            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath || actionToDoListInode.at(int_for_loop).type==ActionType_RealMove)
+            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath || actionToDoListInode.at(int_for_loop).type==ActionType_RmSync || actionToDoListInode.at(int_for_loop).type==ActionType_RealMove
+                    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+                     || actionToDoListInode.at(int_for_loop).type==ActionType_RmSync
+                    #endif
+                    )
             {
                 //to send to the log
+                #ifdef ULTRACOPIER_PLUGIN_RSYNC
+                if(actionToDoListInode.at(int_for_loop).type!=ActionType_RmSync)
+                    emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
+                #else
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
+                #endif
                 emit rmPath(actionToDoListInode.at(int_for_loop).source.absoluteFilePath());
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("stop mkpath: %1").arg(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath()));
                 actionToDoListInode.removeAt(int_for_loop);
@@ -2054,6 +2109,9 @@ void ListThread::createTransferThread()
     last->set_osBufferLimited(osBufferLimited);
     last->set_osBufferLimit(osBufferLimit);
     last->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    last->setRsync(rsync);
+    #endif
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection);
@@ -2215,6 +2273,13 @@ void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
 void ListThread::setCheckDiskSpace(const bool &checkDiskSpace)
 {
     this->checkDiskSpace=checkDiskSpace;
+}
+
+void ListThread::setCopyListOrder(const bool &order)
+{
+    this->copyListOrder=order;
+    for(int i=0;i<scanFileOrFolderThreadsPool.size();i++)
+        scanFileOrFolderThreadsPool.at(i)->setCopyListOrder(this->copyListOrder);
 }
 
 void ListThread::exportErrorIntoTransferList(const QString &fileName)

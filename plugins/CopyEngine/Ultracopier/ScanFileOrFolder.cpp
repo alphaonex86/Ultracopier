@@ -1,6 +1,7 @@
 #include "ScanFileOrFolder.h"
 #include "TransferThread.h"
 #include <QtGlobal>
+#include <QDateTime>
 
 #ifdef Q_OS_WIN32
     #ifndef NOMINMAX
@@ -15,6 +16,9 @@ QString ScanFileOrFolder::text_dot=QLatin1Literal(".");
 
 ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
 {
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync               = false;
+    #endif
     moveTheWholeFolder  = true;
     stopped             = true;
     stopIt              = false;
@@ -457,7 +461,11 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
     if(stopIt)
         return;
     /// \todo check here if the folder is not readable or not exists
-    QFileInfoList entryList=QDir(source.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst|QDir::Name|QDir::IgnoreCase);//possible wait time here
+    QFileInfoList entryList;
+    if(copyListOrder)
+        entryList=QDir(source.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst|QDir::Name|QDir::IgnoreCase);//possible wait time here
+    else
+        entryList=QDir(source.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//possible wait time here
     if(stopIt)
         return;
     int sizeEntryList=entryList.size();
@@ -555,7 +563,21 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     if(!included)
                     {}
                     else
+                        #ifndef ULTRACOPIER_PLUGIN_RSYNC
                         emit fileTransfer(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName(),mode);
+                        #else
+                        {
+                            bool sendToTransfer=false;
+                            if(!rsync)
+                                sendToTransfer=true;
+                            else if(!QFile::exists(destination.absoluteFilePath()+"/"+fileInfo.fileName()))
+                                sendToTransfer=true;
+                            else if(fileInfo.lastModified()!=QFileInfo(destination.absoluteFilePath()+"/"+fileInfo.fileName()).lastModified())
+                                sendToTransfer=true;
+                            if(sendToTransfer)
+                                emit fileTransfer(fileInfo.absoluteFilePath(),destination.absoluteFilePath()+"/"+fileInfo.fileName(),mode);
+                        }
+                        #endif
                 }
             }
         }
@@ -565,9 +587,52 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
                 listFolder(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName());//put unix separator because it's transformed into that's under windows too
             else
+                #ifndef ULTRACOPIER_PLUGIN_RSYNC
                 emit fileTransfer(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName(),mode);
+                #else
+                {
+                    bool sendToTransfer=false;
+                    if(!rsync)
+                        sendToTransfer=true;
+                    else if(!QFile::exists(destination.absoluteFilePath()+"/"+fileInfo.fileName()))
+                        sendToTransfer=true;
+                    else if(fileInfo.lastModified()!=QFileInfo(destination.absoluteFilePath()+"/"+fileInfo.fileName()).lastModified())
+                        sendToTransfer=true;
+                    if(sendToTransfer)
+                        emit fileTransfer(fileInfo.absoluteFilePath(),destination.absoluteFilePath()+"/"+fileInfo.fileName(),mode);
+                }
+                #endif
         }
     }
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    if(rsync)
+    {
+        //check the reverse path here
+        QFileInfoList entryListDestination;
+        if(copyListOrder)
+            entryListDestination=QDir(destination.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst|QDir::Name|QDir::IgnoreCase);//possible wait time here
+        else
+            entryListDestination=QDir(destination.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//possible wait time here
+        int sizeEntryListDestination=entryListDestination.size();
+        int index=0;
+        for (int indexDestination=0;indexDestination<sizeEntryListDestination;++indexDestination)
+        {
+            index=0;
+            while(index<sizeEntryList)
+            {
+                if(entryListDestination.at(indexDestination).fileName()==entryList.at(index).fileName())
+                    break;
+                index++;
+            }
+            if(index==sizeEntryList)
+            {
+                //then not found, need be remove
+                emit addToRmForRsync(entryListDestination.at(indexDestination));
+            }
+         }
+         return;
+    }
+    #endif
     if(mode==Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath()+", sizeEntryList: "+QString::number(sizeEntryList));
@@ -596,3 +661,17 @@ void ScanFileOrFolder::setDrive(const QStringList &mountSysPoint,const QList<QSt
 {
     driveManagement.setDrive(mountSysPoint,driveType);
 }
+
+void ScanFileOrFolder::setCopyListOrder(const bool &order)
+{
+    this->copyListOrder=order;
+}
+
+#ifdef ULTRACOPIER_PLUGIN_RSYNC
+/// \brief set rsync
+void ScanFileOrFolder::setRsync(const bool rsync)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
+    this->rsync=rsync;
+}
+#endif

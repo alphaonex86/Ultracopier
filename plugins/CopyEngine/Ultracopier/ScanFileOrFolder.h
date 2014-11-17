@@ -39,6 +39,9 @@ public:
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
     void setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    void setRsync(const bool rsync);
+    #endif
 signals:
     void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const Ultracopier::CopyMode &mode) const;
     /// \brief To debug source
@@ -51,10 +54,14 @@ signals:
     void addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode) const;
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove) const;
     void addToRealMove(const QFileInfo& source,const QFileInfo& destination) const;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    void addToRmForRsync(const QFileInfo& destination) const;
+    #endif
 public slots:
     void addToList(const QStringList& sources,const QString& destination);
     void setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
     void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
+    void setCopyListOrder(const bool &order);
 protected:
     void run();
 private:
@@ -72,7 +79,11 @@ private:
     FileErrorAction		fileErrorAction;
     volatile bool		checkDestinationExists;
     QString             newName;
+    bool                copyListOrder;
     QRegularExpression	folder_isolation;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    bool                rsync;
+    #endif
     Ultracopier::CopyMode	mode;
     QList<Filters_rules>	include,exclude;
     QList<Filters_rules>	include_send,exclude_send;

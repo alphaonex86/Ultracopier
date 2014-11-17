@@ -68,6 +68,9 @@ private:
     bool                    renameTheOriginalDestination;
     bool                    moveTheWholeFolder;
     bool                    autoStart;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    bool                    rsync;
+    #endif
     bool                    checkDestinationFolderExists;
     FileExistsAction		alwaysDoThisActionForFileExists;
     FileErrorAction			alwaysDoThisActionForFileError;
@@ -231,8 +234,12 @@ public:
     void set_osBufferLimit(unsigned int osBufferLimit);
     void set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
     void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    void setRsync(const bool rsync);
+    #endif
     void setCheckDiskSpace(const bool &checkDiskSpace);
     void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
+    void setCopyListOrder(const bool &order);
     void defaultDestinationFolderBrowse();
     QString askDestination();
 public slots:

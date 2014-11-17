@@ -1,0 +1,18 @@
+--- Factory.cpp	2013-07-24 09:24:34.000000000 +0200
++++ Factory.cpp	2013-07-24 09:38:46.741288192 +0200
+@@ -181,6 +183,7 @@
+         KeysList.append(qMakePair(QString("parallelBuffer"),QVariant(parallelBuffer)));
+         KeysList.append(qMakePair(QString("parallelizeIfSmallerThan"),QVariant(1)));
+         KeysList.append(qMakePair(QString("autoStart"),QVariant(true)));
++        KeysList.append(qMakePair(QString("rsync"),QVariant(true)));
+         KeysList.append(qMakePair(QString("folderError"),QVariant(0)));
+         KeysList.append(qMakePair(QString("folderCollision"),QVariant(0)));
+         KeysList.append(qMakePair(QString("fileError"),QVariant(0)));
+@@ -215,6 +218,7 @@
+         ui->keepDate->setChecked(options->getOptionValue("keepDate").toBool());
+         ui->blockSize->setValue(options->getOptionValue("blockSize").toUInt());//keep before sequentialBuffer and parallelBuffer
+         ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());
++        ui->rsync->setChecked(options->getOptionValue("rsync").toBool());
+         ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue("folderError").toUInt());
+         ui->comboBoxFolderCollision->setCurrentIndex(options->getOptionValue("folderCollision").toUInt());
+         ui->comboBoxFileError->setCurrentIndex(options->getOptionValue("fileError").toUInt());

@@ -235,6 +235,9 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setSequentialBuffer(sequentialBuffer);
     setParallelBuffer(parallelBuffer);
     setAutoStart(autoStart);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    setRsync(rsync);
+    #endif
     setCheckDestinationFolderExists(checkDestinationFolderExists);
     set_doChecksum(doChecksum);
     set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
@@ -371,6 +374,9 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->deletePartiallyTransferredFiles,    &QCheckBox::toggled,		this,&CopyEngine::setDeletePartiallyTransferredFiles);
         connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
         connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
+        #ifdef ULTRACOPIER_PLUGIN_RSYNC
+        connect(ui->rsync,                              &QCheckBox::toggled,        this,&CopyEngine::setRsync);
+        #endif
         connect(ui->renameTheOriginalDestination,       &QCheckBox::toggled,        this,&CopyEngine::setRenameTheOriginalDestination);
         connect(filters,                                &Filters::haveNewFilters,   this,&CopyEngine::sendNewFilters);
         connect(ui->filters,                            &QPushButton::clicked,      this,&CopyEngine::showFilterDialog);
@@ -696,16 +702,33 @@ void CopyEngine::moveItemsOnBottom(const QList<int> &ids)
 /** \brief give the forced mode, to export/import transfer list */
 void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
 {
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    if(mode==Ultracopier::Move)
+    {
+         listThread->setRsync(false);
+         rsync=false;
+    }
+    if(uiIsInstalled)
+         ui->rsync->setEnabled(mode==Ultracopier::Copy);
+    #endif
     if(forcedMode)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Mode forced previously"));
         QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The mode has been forced previously. This is an internal error, please report it"));
         return;
     }
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    if(mode==Ultracopier::Move)
+        rsync=false;
+    #endif
     if(mode==Ultracopier::Copy)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to copy"));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to move"));
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    if(uiIsInstalled)
+         ui->rsync->setEnabled(mode==Ultracopier::Copy);
+    #endif
     this->mode=mode;
     forcedMode=true;
     emit signal_forceMode(mode);
@@ -950,6 +973,22 @@ void CopyEngine::setAutoStart(const bool autoStart)
     listThread->setAutoStart(autoStart);
 }
 
+#ifdef ULTRACOPIER_PLUGIN_RSYNC
+/// \brief set rsync
+void CopyEngine::setRsync(const bool rsync)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
+    this->rsync=rsync;
+    if(uiIsInstalled)
+    {
+        ui->rsync->setChecked(rsync);
+        ui->rsync->setEnabled(forcedMode && mode==Ultracopier::Copy);
+        ui->label_rsync->setEnabled(forcedMode && mode==Ultracopier::Copy);
+    }
+    listThread->setRsync(rsync);
+}
+#endif
+
 //set check destination folder
 void CopyEngine::setCheckDestinationFolderExists(const bool checkDestinationFolderExists)
 {
@@ -1182,6 +1221,11 @@ void CopyEngine::setDefaultDestinationFolder(const QString &defaultDestinationFo
     this->defaultDestinationFolder=defaultDestinationFolder;
     if(uiIsInstalled)
         ui->defaultDestinationFolder->setText(defaultDestinationFolder);
+}
+
+void CopyEngine::setCopyListOrder(const bool &order)
+{
+    listThread->setCopyListOrder(order);
 }
 
 void CopyEngine::exportErrorIntoTransferList()

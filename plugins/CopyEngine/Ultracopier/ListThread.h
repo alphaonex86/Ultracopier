@@ -157,6 +157,10 @@ public slots:
     void setBlockSize(const int blockSize);
     /// \brief set auto start
     void setAutoStart(const bool autoStart);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    /// \brief set rsync
+    void setRsync(const bool rsync);
+    #endif
     /// \brief set check destination folder
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
     /// \brief set data local to the thread
@@ -196,6 +200,7 @@ public slots:
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
+    void setCopyListOrder(const bool &order);
     void exportErrorIntoTransferList(const QString &fileName);
 private:
     QSemaphore          mkpathTransfer;
@@ -217,6 +222,9 @@ private:
     quint64				bytesToTransfer;
     quint64				bytesTransfered;
     bool				autoStart;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    bool                rsync;
+    #endif
     bool				putInPause;
     QList<Ultracopier::ReturnActionOnCopyList>	actionDone;///< to action to send to the interface
     quint64				idIncrementNumber;///< to store the last id returned
@@ -238,6 +246,7 @@ private:
     int                 inodeThreads;
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
+    bool                copyListOrder;
     QHash<QString,quint64> requiredSpace;
     unsigned int        putAtBottom;
     unsigned int		osBufferLimit;
@@ -342,6 +351,10 @@ private slots:
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
     //add to real move
     void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    //rsync rm
+    void addToRmForRsync(const QFileInfo& destination);
+    #endif
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
 

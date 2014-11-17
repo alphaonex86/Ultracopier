@@ -137,6 +137,9 @@ public slots:
     void putAtBottom();
 
     void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    void setRsync(const bool rsync);
+    #endif
 
     void set_osBufferLimit(const unsigned int &osBufferLimit);
     void setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
@@ -187,6 +190,9 @@ private:
     QString			destination;*/
     Ultracopier::CopyMode		mode;
     bool			doRightTransfer;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    bool            rsync;
+    #endif
     bool			keepDate;
     //ready = open + ready to operation (no error to resolv)
     bool			readIsReadyVariable;

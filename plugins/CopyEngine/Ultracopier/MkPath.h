@@ -96,7 +96,11 @@ private slots:
     void internalAddPath(const QFileInfo& source, const QFileInfo& destination,const ActionType &actionType);
     void internalSkip();
     void internalRetry();
-    bool rmpath(const QDir &dir);
+    bool rmpath(const QDir &dir
+                #ifdef ULTRACOPIER_PLUGIN_RSYNC
+                , const bool &toSync=false
+                #endif
+            );
 };
 
 #endif // MKPATH_H

@@ -92,6 +92,9 @@ private slots:
     void setSequentialBuffer(int sequentialBuffer);
     void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
     void setAutoStart(bool autoStart);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    void setRsync(bool rsync);
+    #endif
     void setFolderCollision(int index);
     void setFolderError(int index);
     void setTransferAlgorithm(int index);
@@ -119,6 +122,7 @@ private slots:
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
+    void copyListOrder(bool checked);
 public slots:
     void resetOptions();
     void newLanguageLoaded();

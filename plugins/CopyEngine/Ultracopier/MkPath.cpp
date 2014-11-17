@@ -68,6 +68,37 @@ void MkPath::internalDoThisPath()
     if(waitAction || pathList.isEmpty())
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, move: %3").arg(pathList.first().source.absoluteFilePath()).arg(pathList.first().destination.absoluteFilePath()).arg(pathList.first().actionType));
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    if(pathList.first().actionType==ActionType_RmSync)
+    {
+        if(pathList.first().destination.isFile())
+        {
+            QFile removedFile(pathList.first().destination.absoluteFilePath());
+            if(!removedFile.remove())
+            {
+                if(stopIt)
+                    return;
+                waitAction=true;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath()+", error: "+removedFile.errorString());
+                emit errorOnFolder(pathList.first().destination,removedFile.errorString());
+                return;
+            }
+        }
+        else if(!rmpath(pathList.first().destination.absoluteFilePath()))
+        {
+            if(stopIt)
+                return;
+            waitAction=true;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath());
+            emit errorOnFolder(pathList.first().destination,tr("Unable to remove"));
+            return;
+        }
+        pathList.removeFirst();
+        emit firstFolderFinish();
+        checkIfCanDoTheNext();
+        return;
+    }
+    #endif
     doTheDateTransfer=false;
     if(keepDate)
     {
@@ -290,7 +321,11 @@ void MkPath::setKeepDate(const bool keepDate)
     this->keepDate=keepDate;
 }
 
-bool MkPath::rmpath(const QDir &dir)
+bool MkPath::rmpath(const QDir &dir
+                    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+                    ,const bool &toSync
+                    #endif
+                    )
 {
     if(!dir.exists())
         return true;
@@ -301,8 +336,37 @@ bool MkPath::rmpath(const QDir &dir)
         QFileInfo fileInfo(list.at(i));
         if(!fileInfo.isDir())
         {
+            #ifdef ULTRACOPIER_PLUGIN_RSYNC
+            if(toSync)
+            {
+                QFile file(fileInfo.absoluteFilePath());
+                if(!file.remove())
+                {
+                    if(toSync)
+                    {
+                        QFile file(fileInfo.absoluteFilePath());
+                        if(!file.remove())
+                        {
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove a file: "+fileInfo.absoluteFilePath()+", due to: "+file.errorString());
+                            allHaveWork=false;
+                        }
+                    }
+                    else
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
+                        allHaveWork=false;
+                    }
+                }
+            }
+            else
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
+                allHaveWork=false;
+            }
+            #else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
             allHaveWork=false;
+            #endif
         }
         else
         {

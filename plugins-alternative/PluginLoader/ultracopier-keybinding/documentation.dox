@@ -1,0 +1,34 @@
+/* -*- mode: C++ ; c-file-style: "stroustrup" -*- **/
+
+/*
+  This file contains NO source code, just some documentation for doxygen to
+  parse.
+*/
+
+/*!
+  \mainpage catchcopy-v0002
+
+  \section mainpage_overview Overview
+
+  Is the plugin to load the catchcopy plugin into the windows file manager. Mostly it use the command: regsvr32 /s catchcopy32.dll/catchcopy64.dll\n
+  More informations on <a href="http://ultracopier-wiki.first-world.info/">the wiki of ultracopier</a>.
+
+  \section mainpage_platforms Platforms
+
+  Ultracopier might be usable in all environments where you find Qt 5.\n
+  Ultracopier requires Qt 5.0 or newer. Tested on Qt 5.0.
+
+  \section mainpage_downloads Downloads
+
+  You can found link on <a href="http://ultracopier.first-world.info/">Ultracopier (Supercopier/Teracopy)</a> project page, via git, snapshot sources, ...
+
+  \section mainpage_algorithm Requirements
+
+  You can see the documentation on <a href="http://catchcopy.first-world.info/">Catchcopy web site</a>. It use catchcopy32.dll/catchcopy64.dll as explorer plugin for the windows's file manager. Need it into the plugins.\n
+  In function if Ultracopier is compiled by portable version, try load the dll by other way.
+
+  \section license GPL Version 3
+  The code source is under GPL3.
+
+*/
+

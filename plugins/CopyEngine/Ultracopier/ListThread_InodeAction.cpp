@@ -27,6 +27,16 @@ switch(currentActionToDoInode.type)
         if(numberOfInodeOperation>=inodeThreads)
             return;
     break;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    case ActionType_RmSync:
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmsync, destination: %1").arg(currentActionToDoInode.destination.absoluteFilePath()));
+        mkPathQueue.addPath(currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
+        currentActionToDoInode.isRunning=true;
+        numberOfInodeOperation++;
+        if(numberOfInodeOperation>=inodeThreads)
+            return;
+    break;
+    #endif
     case ActionType_MovePath:
         //then empty (no file), can try remove it
         if(currentActionToDoInode.size==0 || actionToDoListTransfer.isEmpty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer

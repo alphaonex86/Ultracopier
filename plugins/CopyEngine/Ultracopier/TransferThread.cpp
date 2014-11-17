@@ -27,6 +27,9 @@ TransferThread::TransferThread()
     writeError                      = false;
     renameTheOriginalDestination    = false;
     needRemove                      = false;
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync                           = false;
+    #endif
     this->mkpathTransfer            = mkpathTransfer;
     readThread.setWriteThread(&writeThread);
     source.setCaching(false);
@@ -452,7 +455,11 @@ bool TransferThread::destinationExists()
                              .arg(readError)
                              .arg(writeError)
                              );
-    if(alwaysDoFileExistsAction==FileExists_Overwrite || readError || writeError)
+    if(alwaysDoFileExistsAction==FileExists_Overwrite || readError || writeError
+            #ifdef ULTRACOPIER_PLUGIN_RSYNC
+            || rsync
+            #endif
+            )
         return false;
     bool destinationExists;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] time to first FS access"));
@@ -1857,6 +1864,14 @@ void TransferThread::setDrive(const QStringList &mountSysPoint,const QList<QStor
 {
     driveManagement.setDrive(mountSysPoint,driveType);
 }
+
+#ifdef ULTRACOPIER_PLUGIN_RSYNC
+/// \brief set rsync
+void TransferThread::setRsync(const bool rsync)
+{
+    this->rsync=rsync;
+}
+#endif
 
 void TransferThread::set_osBufferLimit(const unsigned int &osBufferLimit)
 {

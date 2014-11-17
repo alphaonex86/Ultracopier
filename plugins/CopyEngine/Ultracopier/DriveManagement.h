@@ -5,8 +5,8 @@
 #include <QString>
 #include <QStringList>
 #include <QRegularExpression>
+#include <QVolumeInfo>
 
-#include "qstorageinfo.h"
 #include "Environment.h"
 
 class DriveManagement : public QObject

@@ -20,7 +20,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -62,6 +62,9 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="autoStart"/>
+       </item>
        <item row="1" column="2">
         <widget class="QCheckBox" name="keepDate"/>
        </item>
@@ -72,10 +75,14 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="autoStart"/>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="followTheStrictOrder">
+         <property name="toolTip">
+          <string>Less performance if checked</string>
+         </property>
+        </widget>
        </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -98,12 +105,15 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QCheckBox" name="followTheStrictOrder">
-         <property name="toolTip">
-          <string>Less performance if checked</string>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_rsync">
+         <property name="text">
+          <string notr="true">resources</string>
          </property>
         </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="rsync"/>
        </item>
       </layout>
      </widget>
@@ -561,6 +571,26 @@
         <widget class="QLabel" name="label_21">
          <property name="text">
           <string>Inode threads</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QCheckBox" name="copyListOrder">
+         <property name="toolTip">
+          <string>More cpu, but better organisation on the disk</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_25">
+         <property name="toolTip">
+          <string>More cpu, but better organisation on the disk</string>
+         </property>
+         <property name="text">
+          <string>Order the list</string>
          </property>
         </widget>
        </item>

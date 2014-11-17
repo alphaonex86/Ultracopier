@@ -1,0 +1,30 @@
+--- CopyEngine.cpp	2013-07-22 12:39:58.000000000 +0200
++++ CopyEngine.cpp	2013-07-24 09:38:46.741288192 +0200
+@@ -690,16 +692,27 @@
+ /** \brief give the forced mode, to export/import transfer list */
+ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
+ {
++    if(mode==Ultracopier::Move)
++    {
++        listThread->setRsync(false);
++        rsync=false;
++    }
++    if(uiIsInstalled)
++        ui->rsync->setEnabled(mode==Ultracopier::Copy);
+     if(forcedMode)
+     {
+         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Mode forced previously"));
+         QMessageBox::critical(NULL,facilityEngine->translateText("Internal error"),tr("The mode has been forced previously. This is an internal error, please report it"));
+         return;
+     }
++    if(mode==Ultracopier::Move)
++        rsync=false;
+     if(mode==Ultracopier::Copy)
+         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to copy"));
+     else
+         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("Force mode to move"));
++    if(uiIsInstalled)
++        ui->rsync->setEnabled(mode==Ultracopier::Copy);
+     this->mode=mode;
+     forcedMode=true;
+     emit signal_forceMode(mode);

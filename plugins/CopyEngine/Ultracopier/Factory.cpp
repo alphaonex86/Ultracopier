@@ -66,6 +66,9 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->osBuffer,                   &QCheckBox::toggled,                this,&CopyEngineFactory::osBuffer_toggled);
     connect(ui->osBufferLimited,            &QCheckBox::toggled,                this,&CopyEngineFactory::osBufferLimited_toggled);
     connect(ui->osBufferLimit,              &QSpinBox::editingFinished,         this,&CopyEngineFactory::osBufferLimit_editingFinished);
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    connect(ui->rsync,                      &QCheckBox::toggled,                this,&CopyEngineFactory::setRsync);
+    #endif
     connect(ui->inodeThreads,               &QSpinBox::editingFinished,         this,&CopyEngineFactory::on_inodeThreads_editingFinished);
     connect(ui->osBufferLimited,            &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
     connect(ui->osBuffer,                   &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
@@ -76,6 +79,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->checkDiskSpace,             &QCheckBox::toggled,                this,&CopyEngineFactory::checkDiskSpace);
     connect(ui->defaultDestinationFolderBrowse,&QPushButton::clicked,           this,&CopyEngineFactory::defaultDestinationFolderBrowse);
     connect(ui->defaultDestinationFolder,&QLineEdit::editingFinished,           this,&CopyEngineFactory::defaultDestinationFolder);
+    connect(ui->copyListOrder,              &QCheckBox::toggled,                this,&CopyEngineFactory::copyListOrder);
 
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
@@ -117,6 +121,9 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setKeepDate(ui->keepDate->isChecked());
     realObject->setBlockSize(ui->blockSize->value());
     realObject->setAutoStart(ui->autoStart->isChecked());
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    realObject->setRsync(ui->rsync->isChecked());
+    #endif
     realObject->setFolderCollision(ui->comboBoxFolderCollision->currentIndex());
     realObject->setFolderError(ui->comboBoxFolderError->currentIndex());
     realObject->setFileCollision(ui->comboBoxFileCollision->currentIndex());
@@ -141,6 +148,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
     realObject->setCheckDiskSpace(ui->checkDiskSpace->isChecked());
     realObject->setDefaultDestinationFolder(ui->defaultDestinationFolder->text());
+    realObject->setCopyListOrder(ui->copyListOrder->isChecked());
     return newTransferEngine;
 }
 
@@ -191,6 +199,9 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QStringLiteral("parallelBuffer"),QVariant(parallelBuffer)));
         KeysList.append(qMakePair(QStringLiteral("parallelizeIfSmallerThan"),QVariant(1)));
         KeysList.append(qMakePair(QStringLiteral("autoStart"),QVariant(true)));
+        #ifdef ULTRACOPIER_PLUGIN_RSYNC
+        KeysList.append(qMakePair(QStringLiteral("rsync"),QVariant(true)));
+        #endif
         KeysList.append(qMakePair(QStringLiteral("folderError"),QVariant(0)));
         KeysList.append(qMakePair(QStringLiteral("folderCollision"),QVariant(0)));
         KeysList.append(qMakePair(QStringLiteral("fileError"),QVariant(0)));
@@ -216,6 +227,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QStringLiteral("checkDiskSpace"),QVariant(true)));
         KeysList.append(qMakePair(QStringLiteral("defaultDestinationFolder"),QVariant(QString())));
         KeysList.append(qMakePair(QStringLiteral("inodeThreads"),QVariant(1)));
+        KeysList.append(qMakePair(QStringLiteral("copyListOrder"),QVariant(false)));
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)
         ui->keepDate->setEnabled(false);
@@ -225,6 +237,9 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ui->keepDate->setChecked(options->getOptionValue(QStringLiteral("keepDate")).toBool());
         ui->blockSize->setValue(options->getOptionValue(QStringLiteral("blockSize")).toUInt());//keep before sequentialBuffer and parallelBuffer
         ui->autoStart->setChecked(options->getOptionValue(QStringLiteral("autoStart")).toBool());
+        #ifdef ULTRACOPIER_PLUGIN_RSYNC
+        ui->rsync->setChecked(options->getOptionValue(QStringLiteral("rsync")).toBool());
+        #endif
         ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue(QStringLiteral("folderError")).toUInt());
         ui->comboBoxFolderCollision->setCurrentIndex(options->getOptionValue(QStringLiteral("folderCollision")).toUInt());
         ui->comboBoxFileError->setCurrentIndex(options->getOptionValue(QStringLiteral("fileError")).toUInt());
@@ -263,6 +278,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
 
         ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
         ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
+        ui->copyListOrder->setChecked(options->getOptionValue(QStringLiteral("copyListOrder")).toBool());
 
         updateBufferCheckbox();
         optionsEngine=options;
@@ -683,3 +699,19 @@ size_t CopyEngineFactory::getTotalSystemMemory()
     return pages * page_size;
 }
 #endif
+
+#ifdef ULTRACOPIER_PLUGIN_RSYNC
+void CopyEngineFactory::setRsync(bool rsync)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("rsync",rsync);
+}
+#endif
+
+void CopyEngineFactory::copyListOrder(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue(QStringLiteral("copyListOrder"),checked);
+}

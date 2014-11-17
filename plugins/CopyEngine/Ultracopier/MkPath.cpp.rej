@@ -1,0 +1,38 @@
+--- MkPath.cpp	2013-07-23 22:01:59.000000000 +0200
++++ MkPath.cpp	2013-07-24 09:38:46.742288192 +0200
+@@ -60,6 +60,35 @@
+     if(waitAction || pathList.isEmpty())
+         return;
+     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("source: %1, destination: %2, move: %3").arg(pathList.first().source.absoluteFilePath()).arg(pathList.first().destination.absoluteFilePath()).arg(pathList.first().actionType));
++    if(pathList.first().actionType==ActionType_RmSync)
++    {
++        if(pathList.first().destination.isFile())
++        {
++            QFile removedFile(pathList.first().destination.absoluteFilePath());
++            if(!removedFile.remove())
++            {
++                if(stopIt)
++                    return;
++                waitAction=true;
++                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath()+", error: "+removedFile.errorString());
++                emit errorOnFolder(pathList.first().destination,removedFile.errorString());
++                return;
++            }
++        }
++        else if(!rmpath(pathList.first().destination.absoluteFilePath()))
++        {
++            if(stopIt)
++                return;
++            waitAction=true;
++            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath());
++            emit errorOnFolder(pathList.first().destination,tr("Unable to remove"));
++            return;
++        }
++        pathList.removeFirst();
++        emit firstFolderFinish();
++        checkIfCanDoTheNext();
++        return;
++    }
+     doTheDateTransfer=false;
+     if(keepDate)
+     {

@@ -18,7 +18,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="copyEngineResources.qrc">
-    <normaloff>:/CopyEngine/Ultracopier/resources/filter.png</normaloff>:/CopyEngine/Ultracopier/resources/filter.png</iconset>
+    <normaloff>:/CopyEngine/resources/resources/filter.png</normaloff>:/CopyEngine/resources/resources/filter.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <property name="margin">
