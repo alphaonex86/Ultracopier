@@ -18,6 +18,7 @@ public:
     void setKeyBind(const QKeySequence &keySequence);
     void retranslate();
 private:
+    const QList<int> modifier;
     Ui::OptionsWidget *ui;
     KeyBind *keyBind;
 private slots:

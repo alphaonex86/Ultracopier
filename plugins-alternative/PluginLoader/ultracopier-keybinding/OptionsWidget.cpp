@@ -6,6 +6,7 @@
 
 OptionsWidget::OptionsWidget(QWidget *parent) :
         QWidget(parent),
+        modifier(QList<int>() << Qt::Key_Control << Qt::Key_Shift << Qt::Key_Meta << Qt::Key_Alt << Qt::Key_AltGr),
     ui(new Ui::OptionsWidget)
 {
     ui->setupUi(this);
@@ -33,11 +34,9 @@ void OptionsWidget::setKeyBind(const QKeySequence &keySequence)
 void OptionsWidget::newKey(QKeyEvent * event)
 {
     int keyInt = event->key();
-    QList<int> modifier = QList<int>() << Qt::Key_Control << Qt::Key_Shift << Qt::Key_Meta << Qt::Key_Alt << Qt::Key_AltGr;
-    if(modifier.indexOf(keyInt) != -1)
-         keyInt = 0;
-    else {
-        Qt::KeyboardModifiers modifiers = event->modifiers();
+    if(!modifier.contains(keyInt))
+    {
+        const Qt::KeyboardModifiers &modifiers = event->modifiers();
         if(modifiers & Qt::ShiftModifier)
             keyInt += Qt::SHIFT;
         if(modifiers & Qt::ControlModifier)
@@ -47,7 +46,7 @@ void OptionsWidget::newKey(QKeyEvent * event)
         if(modifiers & Qt::MetaModifier)
             keyInt += Qt::META;
 
-        QKeySequence keySeq = QKeySequence(keyInt);
+        const QKeySequence &keySeq = QKeySequence(keyInt);
         keyBind->setText(keySeq.toString());
 
         sendKeyBind(keySeq);
