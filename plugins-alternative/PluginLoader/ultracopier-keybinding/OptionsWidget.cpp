@@ -6,7 +6,7 @@
 
 OptionsWidget::OptionsWidget(QWidget *parent) :
         QWidget(parent),
-        modifier(QList<int>() << Qt::Key_Control << Qt::Key_Shift << Qt::Key_Meta << Qt::Key_Alt << Qt::Key_AltGr),
+        modifier(QList<int>() << Qt::Key_Control << Qt::Key_Shift << Qt::Key_Super_R << Qt::Key_Super_L << Qt::Key_Meta << Qt::Key_Alt << Qt::Key_AltGr),
     ui(new Ui::OptionsWidget)
 {
     ui->setupUi(this);
