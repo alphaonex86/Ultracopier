@@ -41,18 +41,12 @@ QString DriveManagement::getDrive(const QString &fileOrFolder) const
     return QString();
 }
 
-QStorageInfo::DriveType DriveManagement::getDriveType(const QString &drive) const
+QByteArray DriveManagement::getDriveType(const QString &drive) const
 {
     int index=mountSysPoint.indexOf(drive);
     if(index!=-1)
         return driveType.at(index);
-    return QStorageInfo::UnknownDrive;
-}
-
-void DriveManagement::setDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType)
-{
-    this->mountSysPoint=mountSysPoint;
-    this->driveType=driveType;
+    return QByteArray();
 }
 
 bool DriveManagement::isSameDrive(const QString &file1,const QString &file2) const

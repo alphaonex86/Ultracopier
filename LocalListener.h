@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <QList>
+#include <QByteArray>
 
 #include "Environment.h"
 #include "ExtraSocket.h"
@@ -33,14 +34,14 @@ public slots:
     void listenServer();
 private:
     QLocalServer localServer;
-    QTimer TimeOutQLocalSocket;
+    QTimer TimeOutQLocalSocket;/// \todo by client
     typedef struct {
         QLocalSocket * socket;
         QByteArray data;
         int size;
         bool haveData;
-    } composedData;
-    QList<composedData> clientList;
+    } ComposedData;
+    QList<ComposedData> clientList;
 private slots:
     //the time is done
     void timeoutDectected();

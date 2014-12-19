@@ -218,14 +218,16 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
     }
     if(mode==Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Cannot find any copy engine with motions support");
-        QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any copy engine with motions support"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Cannot find any copy engine with move support");
+        QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any copy engine with move support"));
     }
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Cannot find any compatible engine!");
         QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any compatible engine!"));
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("protocolsUsedForTheSources: %1, protocolsUsedForTheDestination: %2").arg(protocolsUsedForTheSources.join(";")).arg(protocolsUsedForTheDestination));
+
     temp.engine=NULL;
     temp.type=Ultracopier::File;
     temp.canDoOnlyCopy=true;
@@ -244,8 +246,8 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
         {
             if(mode==Ultracopier::Move && pluginList.at(index).canDoOnlyCopy)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This copy engine does not support motions: pluginList.at(index).canDoOnlyCopy: "+QString::number(pluginList.at(index).canDoOnlyCopy));
-                QMessageBox::critical(NULL,tr("Warning"),tr("This copy engine does not support motions"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This copy engine does not support move: pluginList.at(index).canDoOnlyCopy: "+QString::number(pluginList.at(index).canDoOnlyCopy));
+                QMessageBox::critical(NULL,tr("Warning"),tr("This copy engine does not support move"));
                 temp.engine=NULL;
                 return temp;
             }

@@ -26,7 +26,7 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<FileExistsAction>("FileExistsAction");
     qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
     qRegisterMetaType<TransferStat>("TransferStat");
-    qRegisterMetaType<QList<QStorageInfo::DriveType> >("QList<QStorageInfo::DriveType>");
+    qRegisterMetaType<QList<QByteArray> >("QList<QByteArray>");
     qRegisterMetaType<TransferAlgorithm>("TransferAlgorithm");
     qRegisterMetaType<ActionType>("ActionType");
     qRegisterMetaType<ErrorType>("ErrorType");
@@ -43,8 +43,6 @@ CopyEngineFactory::CopyEngineFactory() :
     optionsEngine=NULL;
     filters=new Filters(tempWidget);
     renamingRules=new RenamingRules(tempWidget);
-
-    connect(&storageInfo,&QStorageInfo::logicalDriveChanged,this,&CopyEngineFactory::logicalDriveChanged);
 
     connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
     connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
@@ -101,9 +99,6 @@ CopyEngineFactory::~CopyEngineFactory()
 
 void CopyEngineFactory::init()
 {
-    logicalDriveChanged(QString(),true);
-    if(mountSysPoint.empty())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("no drive found with QtSystemInformation"));
 }
 
 PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
@@ -113,8 +108,6 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     connect(realObject,&CopyEngine::debugInformation,this,&CopyEngineFactory::debugInformation);
     #endif
     realObject->connectTheSignalsSlots();
-    connect(this,&CopyEngineFactory::haveDrive,realObject,&CopyEngine::setDrive);
-    realObject->setDrive(mountSysPoint,driveType);
     PluginInterface_CopyEngine * newTransferEngine=realObject;
     connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
@@ -545,25 +538,6 @@ void CopyEngineFactory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIf
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue(QStringLiteral("checksumIgnoreIfImpossible"),checksumIgnoreIfImpossible);
-}
-
-void CopyEngineFactory::logicalDriveChanged(const QString &,bool)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start");
-    mountSysPoint.clear();
-    QStringList temp=storageInfo.allLogicalDrives();
-    for (int i = 0; i < temp.size(); ++i) {
-        mountSysPoint<<QDir::toNativeSeparators(temp.at(i));
-    }
-    if(mountSysPoint.empty())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"no drive found with QtSystemInformation");
-    mountSysPoint.removeDuplicates();
-    driveType.clear();
-    for (int i = 0; i < mountSysPoint.size(); ++i) {
-        driveType<<storageInfo.driveType(mountSysPoint.at(i));
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("mountSysPoint: %1 (type: %2)").arg(mountSysPoint.at(i)).arg(driveType.last()));
-    }
-    emit haveDrive(mountSysPoint,driveType);
 }
 
 void CopyEngineFactory::setFileCollision(int index)

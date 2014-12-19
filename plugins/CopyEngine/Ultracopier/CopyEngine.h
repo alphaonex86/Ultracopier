@@ -220,7 +220,6 @@ public:
 
     /** \brief to set drives detected
      * specific to this copy engine */
-    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
 
     /** \brief to sync the transfer list
      * Used when the interface is changed, useful to minimize the memory size */
@@ -362,7 +361,6 @@ signals:
     //other signals
     void queryOneNewDialog() const;
 
-    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType) const;
     void send_speedLimitation(const qint64 &speedLimitation) const;
     void send_blockSize(const int &blockSize) const;
     void send_osBufferLimit(const unsigned int &osBufferLimit) const;

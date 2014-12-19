@@ -364,15 +364,17 @@ void TransferThread::tryOpen()
     TransferAlgorithm transferAlgorithm=this->transferAlgorithm;
     if(transferAlgorithm==TransferAlgorithm_Automatic)
     {
+        #ifdef Q_OS_LINUX
         if(driveManagement.isSameDrive(destination.absoluteFilePath(),source.absoluteFilePath()))
         {
-            QStorageInfo::DriveType type=driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath()));
-            if(type==QStorageInfo::RemoteDrive || type==QStorageInfo::RamDrive)
+            const QByteArray &type=driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath()));
+            if(type=="nfs" || type=="smb")
                 transferAlgorithm=TransferAlgorithm_Parallel;
             else
                 transferAlgorithm=TransferAlgorithm_Sequential;
         }
         else
+        #endif
             transferAlgorithm=TransferAlgorithm_Parallel;
     }
     if(!readIsOpenVariable)
@@ -1858,11 +1860,6 @@ qint64 TransferThread::copiedSize()
 void TransferThread::putAtBottom()
 {
     emit tryPutAtBottom();
-}
-
-void TransferThread::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
-{
-    driveManagement.setDrive(mountSysPoint,driveType);
 }
 
 #ifdef ULTRACOPIER_PLUGIN_RSYNC

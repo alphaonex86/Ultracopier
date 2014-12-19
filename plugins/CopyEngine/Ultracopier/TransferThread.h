@@ -136,7 +136,6 @@ public slots:
     /// \brief put the current file at bottom
     void putAtBottom();
 
-    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     void setRsync(const bool rsync);
     #endif

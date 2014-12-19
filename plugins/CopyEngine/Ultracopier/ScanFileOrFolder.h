@@ -60,7 +60,6 @@ signals:
 public slots:
     void addToList(const QStringList& sources,const QString& destination);
     void setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
-    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
     void setCopyListOrder(const bool &order);
 protected:
     void run();

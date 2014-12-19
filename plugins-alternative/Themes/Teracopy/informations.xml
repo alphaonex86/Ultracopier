@@ -22,6 +22,5 @@
 	<name>Teracopy</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
 	<dependencies><![CDATA[
-	=ultracopier-1.0
 	]]></dependencies>
 </package>

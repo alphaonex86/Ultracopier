@@ -128,13 +128,25 @@ void LocalListener::listenServer()
 void LocalListener::timeoutDectected()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("start"));
-    while(clientList.size()>0)
+    if(clientList.size()>0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"clientList.first().size: "+QString::number(clientList.first().size));
-        clientList.removeFirst();
+        int index=0;
+        bool haveData=false;
+        while(index<clientList.size())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"clientList.first().size: "+QString::number(clientList.first().size));
+            if(!clientList.at(index).data.isEmpty() || clientList.at(index).haveData)
+            {
+                haveData=true;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Timeout while recomposing data from connected clients: %1").arg(QString(clientList.at(index).data.toHex())));
+                clientList.removeFirst();
+            }
+            else
+                index++;
+        }
+        if(haveData)
+            QMessageBox::warning(NULL,tr("Warning"),tr("Timeout while recomposing data from connected clients"));
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Timeout while recomposing data from connected clients");
-    QMessageBox::warning(NULL,tr("Warning"),tr("Timeout while recomposing data from connected clients"));
 }
 
 /// \brief Data is incomming
@@ -193,6 +205,7 @@ void LocalListener::dataIncomming()
                 emit cli(ultracopierArguments,true,false);
                 clientList[index].data.clear();
                 clientList[index].haveData=false;
+                TimeOutQLocalSocket.stop();
             }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("socket->bytesAvailable(): ")+QString::number(socket->bytesAvailable())+QStringLiteral(" > clientList.at(index).size!: ")+QString::number(clientList.at(index).size));
@@ -212,6 +225,7 @@ void LocalListener::dataIncomming()
                 emit cli(ultracopierArguments,true,false);
                 clientList[index].data.clear();
                 clientList[index].haveData=false;
+                TimeOutQLocalSocket.stop();
             }
             else
             {
@@ -246,7 +260,7 @@ void LocalListener::deconnectClient()
 void LocalListener::newConnexion()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("start"));
-    composedData newClient;
+    ComposedData newClient;
     newClient.socket = localServer.nextPendingConnection();
     #ifdef ULTRACOPIER_DEBUG
     connect(newClient.socket, static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LocalListener::error);

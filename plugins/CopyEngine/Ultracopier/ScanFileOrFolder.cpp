@@ -657,11 +657,6 @@ void ScanFileOrFolder::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
     this->moveTheWholeFolder=moveTheWholeFolder;
 }
 
-void ScanFileOrFolder::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
-{
-    driveManagement.setDrive(mountSysPoint,driveType);
-}
-
 void ScanFileOrFolder::setCopyListOrder(const bool &order)
 {
     this->copyListOrder=order;

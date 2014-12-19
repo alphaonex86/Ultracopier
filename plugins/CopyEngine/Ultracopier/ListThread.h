@@ -54,7 +54,6 @@ public:
     bool newMove(const QStringList &sources,const QString &destination);
     /** \brief to set drives detected
      * specific to this copy engine */
-    void setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType);
     /// \brief to set the collision action
     void setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists);
     /** \brief to sync the transfer list
@@ -208,8 +207,6 @@ private:
     bool                sourceDriveMultiple;
     QString             destinationDrive;
     QString             destinationFolder;
-    QStringList         mountSysPoint;
-    QList<QStorageInfo::DriveType> driveType;
     bool                destinationDriveMultiple;
     bool                destinationFolderMultiple;
     DriveManagement     driveManagement;
@@ -418,7 +415,6 @@ signals:
     void errorTransferList(const QString &error) const;
     void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule) const;
     void send_realBytesTransfered(const quint64 &) const;
-    void send_setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType) const;
 
     void send_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
     void send_parallelBuffer(const int &parallelBuffer) const;

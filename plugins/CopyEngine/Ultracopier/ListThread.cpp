@@ -382,13 +382,10 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
-    connect(this,&ListThread::send_setDrive   ,scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::setDrive,             Qt::QueuedConnection);
 
     scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
     scanFileOrFolderThreadsPool.last()->setMoveTheWholeFolder(moveTheWholeFolder);
-    scanFileOrFolderThreadsPool.last()->setDrive(mountSysPoint,driveType);
-    scanFileOrFolderThreadsPool.last()->setCopyListOrder(copyListOrder);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     scanFileOrFolderThreadsPool.last()->setRsync(rsync);
     #endif
@@ -540,15 +537,6 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
             destinationFolderMultiple=true;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("destination informations, destinationDrive: %1, destinationDriveMultiple: %2").arg(destinationDrive).arg(destinationDriveMultiple));
-}
-
-void ListThread::setDrive(const QStringList &mountSysPoint,const QList<QStorageInfo::DriveType> &driveType)
-{
-    this->mountSysPoint=mountSysPoint;
-    this->driveType=driveType;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("drives: %1").arg(drives.join(";")));
-    driveManagement.setDrive(mountSysPoint,driveType);
-    emit send_setDrive(mountSysPoint,driveType);
 }
 
 void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists)
@@ -1585,12 +1573,12 @@ bool ListThread::needMoreSpace() const
 {
     if(!checkDiskSpace)
         return false;
-    QStorageInfo storageInfo;
     QList<Diskspace> diskspace_list;
     QHashIterator<QString,quint64> i(requiredSpace);
     while (i.hasNext()) {
         i.next();
-        qlonglong availableSpace=storageInfo.availableDiskSpace(i.key());
+        QStorageInfo storageInfo(i.key());
+        const qlonglong &availableSpace=storageInfo.bytesAvailable();
         if(i.value()>(quint64)availableSpace)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg((quint64)availableSpace).arg(i.value()).arg(i.key()));
@@ -1900,7 +1888,7 @@ void ListThread::mkPathFirstFolderFinish()
                 doNewActions_inode_manipulation();
                 return;
             }
-            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath || actionToDoListInode.at(int_for_loop).type==ActionType_RmSync || actionToDoListInode.at(int_for_loop).type==ActionType_RealMove
+            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath || actionToDoListInode.at(int_for_loop).type==ActionType_RealMove
                     #ifdef ULTRACOPIER_PLUGIN_RSYNC
                      || actionToDoListInode.at(int_for_loop).type==ActionType_RmSync
                     #endif
@@ -2085,7 +2073,6 @@ void ListThread::createTransferThread()
     last->transferId=0;
     last->transferSize=0;
     last->setRightTransfer(doRightTransfer);
-    last->setDrive(mountSysPoint,driveType);
     last->setKeepDate(keepDate);
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(!last->setBlockSize(blockSizeAfterSpeedLimitation))
@@ -2131,7 +2118,6 @@ void ListThread::createTransferThread()
     #endif
 
     connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,		Qt::QueuedConnection);
-    connect(this,&ListThread::send_setDrive,                    last,&TransferThread::setDrive,             Qt::QueuedConnection);
 
     connect(this,&ListThread::send_setTransferAlgorithm,		last,&TransferThread::setTransferAlgorithm,		Qt::QueuedConnection);
     connect(this,&ListThread::send_parallelBuffer,              last,&TransferThread::setParallelBuffer,		Qt::QueuedConnection);

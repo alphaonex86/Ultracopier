@@ -62,7 +62,7 @@ void InternetUpdater::httpFinished()
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!reply->isFinished())
     {
-        CatchChallenger::DebugClass::debugConsole(QStringLiteral("get the new update failed: not finished"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("get the new update failed: not finished"));
         reply->deleteLater();
         return;
     }

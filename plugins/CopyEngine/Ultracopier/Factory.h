@@ -69,8 +69,6 @@ private:
     Ui::copyEngineOptions *ui;
     QWidget* tempWidget;
     OptionInterface * optionsEngine;
-    QStringList mountSysPoint;
-    QList<QStorageInfo::DriveType> driveType;
     bool errorFound;
     FacilityInterface * facilityEngine;
     Filters *filters;
@@ -110,7 +108,6 @@ private slots:
     void sendNewRenamingRules(const QString &firstRenamingRule, const QString &otherRenamingRule);
     void showRenamingRules();
     void updateBufferCheckbox();
-    void logicalDriveChanged(const QString &, bool);
     void setFileCollision(int index);
     void setFileError(int index);
     void updatedBlockSize();
@@ -128,7 +125,6 @@ public slots:
     void newLanguageLoaded();
 signals:
     void reloadLanguage() const;
-    void haveDrive(const QStringList &mountSysPoint, const QList<QStorageInfo::DriveType> &driveType) const;
 };
 
 #endif // FACTORY_H
