@@ -6,6 +6,7 @@
 #include <QStringList>
 #include <QRegularExpression>
 #include <QStorageInfo>
+#include <QTimer>
 
 #include "Environment.h"
 
@@ -24,6 +25,9 @@ protected:
     #ifdef Q_OS_WIN32
     QRegularExpression reg1,reg2,reg3,reg4;
     #endif
+//    QTimer timer;//to externalise
+private:
+    void tryUpdate();
 signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;

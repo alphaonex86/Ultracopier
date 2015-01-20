@@ -503,7 +503,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
         int index=0;
         while(index<sources.size())
         {
-            QString tempDrive=driveManagement.getDrive(sources.at(index));
+            const QString &tempDrive=driveManagement.getDrive(sources.at(index));
             //if have not already source, set the source
             if(sourceDrive.isEmpty())
                 sourceDrive=tempDrive;
@@ -519,7 +519,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const QStringList &sources,const 
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source informations, sourceDrive: %1, sourceDriveMultiple: %2").arg(sourceDrive).arg(sourceDriveMultiple));
     if(!destinationDriveMultiple)
     {
-        QString tempDrive=driveManagement.getDrive(destination);
+        const QString &tempDrive=driveManagement.getDrive(destination);
         //if have not already destination, set the destination
         if(destinationDrive.isEmpty())
             destinationDrive=tempDrive;
@@ -1144,7 +1144,9 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
     quint64 size=0;
     if(!source.isSymLink())
         size=source.size();
-    QString drive=driveManagement.getDrive(destination.absoluteFilePath());
+    const QString &drive=driveManagement.getDrive(destination.absoluteFilePath());
+    if(drive.isEmpty())
+        abort();
     if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source.absoluteFilePath()))
     {
         if(requiredSpace.contains(drive))
@@ -1155,7 +1157,7 @@ quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& desti
         else
         {
             requiredSpace[drive]=size;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set space needed, on: %2").arg(size).arg(drive));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set space %1 needed, on: %2").arg(size).arg(drive));
         }
     }
     bytesToTransfer+= size;
@@ -1578,10 +1580,13 @@ bool ListThread::needMoreSpace() const
     while (i.hasNext()) {
         i.next();
         QStorageInfo storageInfo(i.key());
-        const qlonglong &availableSpace=storageInfo.bytesAvailable();
-        if(i.value()>(quint64)availableSpace)
+        storageInfo.refresh();
+        const qint64 &availableSpace=storageInfo.bytesAvailable();
+        if(availableSpace<0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg(availableSpace).arg(i.value()).arg(i.key()));
+        else if(i.value()>(quint64)availableSpace)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg((quint64)availableSpace).arg(i.value()).arg(i.key()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg(availableSpace).arg(i.value()).arg(i.key()));
             Diskspace diskspace;
             diskspace.drive=i.key();
             diskspace.freeSpace=availableSpace;
