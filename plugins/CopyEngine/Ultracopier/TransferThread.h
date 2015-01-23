@@ -152,6 +152,7 @@ public slots:
     void setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
+    void set_updateMount();
 private slots:
     void preOperation();
     void readIsReady();

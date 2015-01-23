@@ -61,6 +61,7 @@ public slots:
     void addToList(const QStringList& sources,const QString& destination);
     void setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
     void setCopyListOrder(const bool &order);
+    void set_updateMount();
 protected:
     void run();
 private:

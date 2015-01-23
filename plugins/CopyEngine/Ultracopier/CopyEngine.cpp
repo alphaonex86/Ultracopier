@@ -54,6 +54,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     //timerProgression.setSingleShot(true);
     timerProgression.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_PROGRESSION);
 
+    timerUpdateMount.setInterval(ULTRACOPIER_PLUGIN_TIME_UPDATE_MOUNT_MS);
 }
 
 CopyEngine::~CopyEngine()
@@ -201,6 +202,9 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect queryOneNewDialog()");
     if(!connect(listThread,&ListThread::errorToRetry,this,&CopyEngine::errorToRetry,Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect errorToRetry()");
+
+    if(!connect(&timerUpdateMount,&QTimer::timeout,listThread,&ListThread::set_updateMount,		Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect set_updateMount()");
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW

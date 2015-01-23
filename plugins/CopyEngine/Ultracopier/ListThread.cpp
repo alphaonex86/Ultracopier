@@ -383,6 +383,8 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection);
     connect(scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
 
+    connect(this,&ListThread::send_updateMount,                 scanFileOrFolderThreadsPool.last(),&ScanFileOrFolder::set_updateMount,          Qt::QueuedConnection);
+
     scanFileOrFolderThreadsPool.last()->setFilters(include,exclude);
     scanFileOrFolderThreadsPool.last()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
     scanFileOrFolderThreadsPool.last()->setMoveTheWholeFolder(moveTheWholeFolder);
@@ -1869,6 +1871,12 @@ void ListThread::set_sendNewRenamingRules(const QString &firstRenamingRule,const
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
+void ListThread::set_updateMount()
+{
+    driveManagement.tryUpdate();
+    emit send_updateMount();
+}
+
 void ListThread::mkPathFirstFolderFinish()
 {
     int int_for_loop=0;
@@ -2122,11 +2130,12 @@ void ListThread::createTransferThread()
     connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThread::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
     #endif
 
-    connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,         Qt::QueuedConnection);
 
     connect(this,&ListThread::send_setTransferAlgorithm,		last,&TransferThread::setTransferAlgorithm,		Qt::QueuedConnection);
     connect(this,&ListThread::send_parallelBuffer,              last,&TransferThread::setParallelBuffer,		Qt::QueuedConnection);
     connect(this,&ListThread::send_sequentialBuffer,            last,&TransferThread::setSequentialBuffer,		Qt::QueuedConnection);
+    connect(this,&ListThread::send_updateMount,                 last,&TransferThread::set_updateMount,          Qt::QueuedConnection);
 
     last->start();
     last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));

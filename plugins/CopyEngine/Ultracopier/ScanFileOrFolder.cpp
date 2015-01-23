@@ -670,3 +670,8 @@ void ScanFileOrFolder::setRsync(const bool rsync)
     this->rsync=rsync;
 }
 #endif
+
+void ScanFileOrFolder::set_updateMount()
+{
+    driveManagement.tryUpdate();
+}

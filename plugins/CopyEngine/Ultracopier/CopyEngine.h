@@ -121,6 +121,8 @@ private:
     QTimer timerActionDone;
     //send progression timer
     QTimer timerProgression;
+
+    QTimer timerUpdateMount;
     int putAtBottom;//to keep how many automatic put at bottom have been used
 private slots:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW

@@ -183,6 +183,7 @@ public slots:
     void set_osBufferLimit(const unsigned int &osBufferLimit);
     void set_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
     void set_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
+    void set_updateMount();
 
     //send action done
     void sendActionDone();
@@ -420,6 +421,7 @@ signals:
     void send_parallelBuffer(const int &parallelBuffer) const;
     void send_sequentialBuffer(const int &sequentialBuffer) const;
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
+    void send_updateMount();
     void missingDiskSpace(QList<Diskspace> list) const;
 };
 

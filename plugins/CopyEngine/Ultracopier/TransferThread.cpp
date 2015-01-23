@@ -2033,3 +2033,8 @@ void TransferThread::setRenameTheOriginalDestination(const bool &renameTheOrigin
 {
     this->renameTheOriginalDestination=renameTheOriginalDestination;
 }
+
+void TransferThread::set_updateMount()
+{
+    driveManagement.tryUpdate();
+}
