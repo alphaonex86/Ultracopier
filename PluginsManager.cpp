@@ -117,7 +117,7 @@ void PluginsManager::run()
     }
     #ifdef ULTRACOPIER_DEBUG
     int index_debug=0;
-    int loop_size=pluginsList.size();
+    const int &loop_size=pluginsList.size();
     while(index_debug<loop_size)
     {
         QString category=categoryToString(pluginsList.at(index_debug).category);
@@ -323,7 +323,7 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
             {
                 thePlugin->name=thePlugin->informations.last().last();
                 int index=0;
-                int loop_size=pluginsList.size();
+                const int &loop_size=pluginsList.size();
                 int sub_index,loop_sub_size;
                 while(index<loop_size)
                 {
@@ -460,7 +460,7 @@ quint32 PluginsManager::checkDependencies()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     quint32 errors=0;
     int index=0;
-    int loop_size=pluginsList.size();
+    const int &loop_size=pluginsList.size();
     int sub_index,loop_sub_size,resolv_size,indexOfDependencies;
     bool depCheck;
     while(index<loop_size)

@@ -39,6 +39,13 @@ class Core : public QObject
             Ultracopier::ItemOfCopyList item;
             bool progression;
         };
+        struct RemainingTimeLogarithmicColumn
+        {
+            QList<int> lastProgressionTime;
+            quint64 totalSize;
+            quint64 transferedSize;
+        };
+
         struct CopyInstance
         {
             int id;
@@ -51,12 +58,6 @@ class Core : public QObject
             quint64 currentProgression,totalProgression;//store the file byte transfered, used into the remaining time
             Ultracopier::EngineActionInProgress action;
             quint64 lastProgression;//store the real byte transfered, used in speed calculation
-            //this speed is for instant speed
-            QList<quint64> lastSpeedDetected;//stored in bytes
-            QList<double> lastSpeedTime;//stored in ms
-            //this speed is average speed on more time to calculate the remaining time
-            QList<quint64> lastAverageSpeedDetected;//stored in bytes
-            QList<double> lastAverageSpeedTime;//stored in ms
             QList<RunningTransfer> transferItemList;//full info of started item, to have wich progression to poll
             QList<quint32> orderId;//external order send via listener plugin
             QString folderListing;
@@ -71,6 +72,19 @@ class Core : public QObject
             QTimer *nextConditionalSync;
             bool copyEngineIsSync;
             bool canceled;//to not try groun when is in canceling
+
+            Ultracopier::RemainingTimeAlgo remainingTimeAlgo;
+
+            /** for RemainingTimeAlgo_Traditional **/
+            //this speed is for instant speed
+            QList<quint64> lastSpeedDetected;//stored in bytes
+            QList<double> lastSpeedTime;//stored in ms
+            //this speed is average speed on more time to calculate the remaining time
+            QList<quint64> lastAverageSpeedDetected;//stored in bytes
+            QList<double> lastAverageSpeedTime;//stored in ms
+
+            /** for RemainingTimeAlgo_Logarithmic **/
+            QList<RemainingTimeLogarithmicColumn> remainingTimeLogarithmicValue;
         };
         QList<CopyInstance> copyList;
         /** open with specific source/destination
@@ -115,6 +129,8 @@ class Core : public QObject
 
         LogThread log;///< To save the log like mkpath, rmpath, error, copy, ...
         quint64 realByteTransfered;
+
+        static quint8 fileCatNumber(quint64 size);
     signals:
         void copyFinished(const quint32 & orderId,bool withError) const;
         void copyCanceled(const quint32 & orderId) const;

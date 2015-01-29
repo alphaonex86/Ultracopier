@@ -95,7 +95,7 @@ void ListThread::transferInodeIsClosed()
         return;
     }
     int int_for_internal_loop=0;
-    int loop_size=actionToDoListTransfer.size();
+    const int &loop_size=actionToDoListTransfer.size();
     while(int_for_internal_loop<loop_size)
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
@@ -715,7 +715,7 @@ bool ListThread::skipInternal(const quint64 &id)
         index++;
     }
     int int_for_internal_loop=0;
-    int loop_size=actionToDoListTransfer.size();
+    const int &loop_size=actionToDoListTransfer.size();
     while(int_for_internal_loop<loop_size)
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==id)
@@ -860,7 +860,7 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
             }
 
             //set the new block size into the thread
-            int loop_size=transferThreadList.size();
+            const int &loop_size=transferThreadList.size();
             int int_for_loop=0;
             while(int_for_loop<loop_size)
             {
@@ -890,7 +890,7 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"clockForTheCopySpeed == NULL at this point");
         int int_for_loop=0;
-        int loop_size=transferThreadList.size();
+        const int &loop_size=transferThreadList.size();
         while(int_for_loop<loop_size)
         {
             transferThreadList.at(int_for_loop)->setBlockSize(blockSize);
@@ -898,7 +898,7 @@ bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
         }
     }
     int int_for_loop=0;
-    int loop_size=transferThreadList.size();
+    const int &loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
         transferThreadList.at(int_for_loop)->setMultiForBigSpeed(multiForBigSpeed);
@@ -936,7 +936,7 @@ void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisA
 {
     this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
     int int_for_loop=0;
-    int loop_size=transferThreadList.size();
+    const int &loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
         transferThreadList.at(int_for_loop)->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
@@ -1026,7 +1026,7 @@ void ListThread::sendProgression()
     oversize=0;
     currentProgression=0;
     int int_for_loop=0;
-    int loop_size=transferThreadList.size();
+    const int &loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
         TransferThread * temp_transfer_thread=transferThreadList.at(int_for_loop);
@@ -1080,7 +1080,7 @@ void ListThread::syncTransferList_internal()
     actionDone.clear();
     //do list operation
     TransferThread *transferThread;
-    int loop_size=actionToDoListTransfer.size();
+    const int &loop_size=actionToDoListTransfer.size();
     int loop_sub_size=transferThreadList.size();
     //this loop to have at max inodeThreads*inodeThreads, not inodeThreads*transferThreadList.size()
     int int_for_internal_loop;
@@ -1220,7 +1220,7 @@ void ListThread::moveItemsOnTop(QList<int> ids)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //do list operation
     int indexToMove=0;
-    int loop_size=actionToDoListTransfer.size();
+    const int &loop_size=actionToDoListTransfer.size();
     for (int i=0; i<loop_size; ++i) {
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
@@ -1254,7 +1254,7 @@ void ListThread::moveItemsUp(QList<int> ids)
     //do list operation
     int lastGoodPositionReal=0;
     bool haveGoodPosition=false;
-    int loop_size=actionToDoListTransfer.size();
+    const int &loop_size=actionToDoListTransfer.size();
     for (int i=0; i<loop_size; ++i) {
         if(ids.contains(actionToDoListTransfer.at(i).id))
         {
@@ -1560,7 +1560,7 @@ void ListThread::importTransferList(const QString &fileName)
 int ListThread::getNumberOfTranferRuning() const
 {
     int numberOfTranferRuning=0;
-    int loop_size=transferThreadList.size();
+    const int &loop_size=transferThreadList.size();
     //lunch the transfer in WaitForTheTransfer
     int int_for_loop=0;
     while(int_for_loop<loop_size)
@@ -1608,7 +1608,7 @@ void ListThread::doNewActions_start_transfer()
     if(stopIt || putInPause)
         return;
     int numberOfTranferRuning=getNumberOfTranferRuning();
-    int loop_size=transferThreadList.size();
+    const int &loop_size=transferThreadList.size();
     //lunch the transfer in WaitForTheTransfer
     int int_for_loop=0;
     while(int_for_loop<loop_size)
@@ -1880,7 +1880,7 @@ void ListThread::set_updateMount()
 void ListThread::mkPathFirstFolderFinish()
 {
     int int_for_loop=0;
-    int loop_size=actionToDoListInode.size();
+    const int &loop_size=actionToDoListInode.size();
     while(int_for_loop<loop_size)
     {
         if(actionToDoListInode.at(int_for_loop).isRunning)
@@ -1980,7 +1980,7 @@ void ListThread::timedUpdateDebugDialog()
     }
     QStringList newList2;
     index=0;
-    int loop_size=actionToDoListTransfer.size();
+    const int &loop_size=actionToDoListTransfer.size();
     while(index<loop_size)
     {
         newList2 << QStringLiteral("%1 %2 %3")

@@ -18,6 +18,12 @@ enum CopyMode
     Move=0x00000001
 };
 
+enum RemainingTimeAlgo
+{
+    RemainingTimeAlgo_Traditional=0x00000000,
+    RemainingTimeAlgo_Logarithmic=0x00000001
+};
+
 /// \brief Define the catching state, if the copy is totally catch of the explorer, partially or nothing
 enum CatchState
 {

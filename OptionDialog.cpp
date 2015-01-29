@@ -265,10 +265,10 @@ void OptionDialog::manuallyAdded(const PluginsAvailable &plugin)
         {
             QList<QPair<QString,QString> > listChildAttribute;
             QPair<QString,QString> temp;
-            temp.first = "mainCode";
-            temp.second = "true";
+            temp.first = QStringLiteral("mainCode");
+            temp.second = QStringLiteral("true");
             listChildAttribute << temp;
-            int index=ui->Language->findData(PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,"shortName",listChildAttribute));
+            int index=ui->Language->findData(PluginsManager::pluginsManager->getDomSpecific(plugin.categorySpecific,QStringLiteral("shortName"),listChildAttribute));
             if(index!=-1)
             {
                 ui->Language->setCurrentIndex(index);
@@ -539,324 +539,324 @@ void OptionDialog::loadOption()
             pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool2") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool2") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool2") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool2") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool2") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool2") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool3") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool3") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool3") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool3") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool3") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool3") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool4") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool4") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool4") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool4") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool4") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool4") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool5") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool5") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool5") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool5") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool5") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool5") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	                pool=QStringList() << "--scrypt"
+        pools << pool;
+                    pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool6") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool6") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool6") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool6") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool6") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool6") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool7") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool7") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool7") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool7") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool7") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool7") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool8") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool8") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool8") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool8") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool8") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool8") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool9") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool9") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool9") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool9") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool9") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool9") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool10") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool10") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool10") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool10") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool10") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool10") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	                pool=QStringList() << "--scrypt"
+        pools << pool;
+                    pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool11") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool11") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool11") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool11") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool11") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool11") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool12") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool12") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool12") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool12") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool12") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool12") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool13") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool13") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool13") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool13") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool13") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool13") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool14") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool14") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool14") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool14") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool14") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool14") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool15") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool15") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool15") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool15") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool15") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool15") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	                pool=QStringList() << "--scrypt"
+        pools << pool;
+                    pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool16") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool16") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool16") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool16") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool16") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool16") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool17") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool17") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool17") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool17") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool18") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool18") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool18") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool18") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool18") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool18") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool19") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool19") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool19") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool19") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool19") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool19") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool20") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool20") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool20") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool20") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool20") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool20") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	                pool=QStringList() << "--scrypt"
+        pools << pool;
+                    pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool21") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool21") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool21") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool21") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool21") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool21") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool22") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool22") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool22") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool22") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool22") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool22") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool23") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool23") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool23") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool23") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool23") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool23") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool24") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool24") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool24") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool24") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool24") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool24") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool25") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool25") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool25") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool25") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool25") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool25") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	                pool=QStringList() << "--scrypt"
+        pools << pool;
+                    pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool26") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool26") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool26") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool26") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool26") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool26") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool27") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool27") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool27") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool27") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool27") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool27") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool28") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool28") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool28") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool28") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool28") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool28") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool29") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool29") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool29") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool29") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool29") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool29") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool30") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool30") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://freedom.wemineltc.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool30") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://hk2.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool30") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool30") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://usa.wemineltc.com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alphaonex86.pool30") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #endif
             ;
-	    pools << pool;
+        pools << pool;
             //index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}
-            
+
             //dogecoin
             /*pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.ultracopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.ultracopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.supercopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.supercopier") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-	    pools << pool;
-	    pool=QStringList() << "--scrypt"
+        pools << pool;
+        pool=QStringList() << "--scrypt"
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us2.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.pool") << QStringLiteral("-p") << QStringLiteral("yyDKPcO850pCayTx")
             #ifndef ULTRACOPIER_NOBACKEND
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
-			       << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://us.suchcoins.com:%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
+                   << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://de.suchcoins.com:%1").arg(3333) << QStringLiteral("-u") << QStringLiteral("1qsByIrmly7NkGx.failsafe") << QStringLiteral("-p") << QStringLiteral("yASQlFbPY3eCGr6u")
             #endif
             ;
-	    pools << pool;
+        pools << pool;
             //index=0;while(index<(ULTRACOPIER_LTC_STRATUM_WEIGHT+15)){pools << pool;index++;}*/
 
             #ifndef ULTRACOPIER_NOPOOLALTERNATE
@@ -991,6 +991,7 @@ void OptionDialog::loadOption()
     newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("displayOSSpecific"),		OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("displayOSSpecific")));
     newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("checkTheUpdate"),           OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("checkTheUpdate")));
     newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("giveGPUTime"),              OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime")));
+    newOptionValue(QStringLiteral("Ultracopier"),	QStringLiteral("remainingTimeAlgorithm"),   OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("remainingTimeAlgorithm")));
     newOptionValue(QStringLiteral("Language"),	QStringLiteral("Language"),                     OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language")));
     newOptionValue(QStringLiteral("Language"),	QStringLiteral("Language_force"),               OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language_force")));
     #ifndef ULTRACOPIER_VERSION_PORTABLE
@@ -1096,7 +1097,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
             if(!ui->Language_force->isChecked())
             {
-                QString lang=LanguagesManager::languagesManager->autodetectedLanguage();
+                const QString &lang=LanguagesManager::languagesManager->autodetectedLanguage();
                 if(!lang.isEmpty())
                 {
                     int index=ui->Language->findData(lang);
@@ -1131,7 +1132,7 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
                 QStringList copyEngine=value.toStringList();
                 copyEngine.removeDuplicates();
                 int index=0;
-                int loop_size=ui->CopyEngineList->count();
+                const int &loop_size=ui->CopyEngineList->count();
                 while(index<loop_size)
                 {
                     copyEngine.removeOne(ui->CopyEngineList->item(index)->text());
@@ -1174,6 +1175,13 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->DisplayOSWarning->setChecked(value.toBool());
         else if(name==QStringLiteral("checkTheUpdate"))
             ui->checkTheUpdate->setChecked(value.toBool());
+        else if(name==QStringLiteral("remainingTimeAlgorithm"))
+        {
+            bool ok;
+            const quint32 &valueInt=value.toUInt(&ok);
+            if(ok)
+                ui->remainingTimeAlgorithm->setCurrentIndex(valueInt);
+        }
         else if(name==QStringLiteral("giveGPUTime"))
         {
             ui->giveGPUTime->setChecked(value.toBool());
@@ -1797,3 +1805,12 @@ void OptionDialog::on_giveGPUTime_clicked()
   return cput;
 }*/
 #endif
+
+void OptionDialog::on_remainingTimeAlgorithm_currentIndexChanged(int index)
+{
+    if(allPluginsIsLoaded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("remainingTimeAlgorithm"),index);
+    }
+}

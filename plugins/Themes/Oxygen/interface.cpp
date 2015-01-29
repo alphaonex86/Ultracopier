@@ -626,7 +626,7 @@ void Themes::on_putOnTop_clicked()
     selectedItems=selectionModel->selectedRows();
     QList<int> ids;
     int index=0;
-    int loop_size=selectedItems.size();
+    const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -642,7 +642,7 @@ void Themes::on_pushUp_clicked()
     selectedItems=selectionModel->selectedRows();
     QList<int> ids;
     int index=0;
-    int loop_size=selectedItems.size();
+    const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -658,7 +658,7 @@ void Themes::on_pushDown_clicked()
     selectedItems=selectionModel->selectedRows();
     QList<int> ids;
     int index=0;
-    int loop_size=selectedItems.size();
+    const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -674,7 +674,7 @@ void Themes::on_putOnBottom_clicked()
     selectedItems=selectionModel->selectedRows();
     QList<int> ids;
     int index=0;
-    int loop_size=selectedItems.size();
+    const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
@@ -690,7 +690,7 @@ void Themes::on_del_clicked()
     selectedItems=selectionModel->selectedRows();
     QList<int> ids;
     int index=0;
-    int loop_size=selectedItems.size();
+    const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
         ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();

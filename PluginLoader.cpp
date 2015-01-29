@@ -36,7 +36,7 @@ PluginLoader::~PluginLoader()
 {
     stopIt=true;
     int index=0;
-    int loop_size=pluginList.size();
+    const int &loop_size=pluginList.size();
     while(index<loop_size)
     {
         pluginList.at(index).pluginLoaderInterface->setEnabled(false);
@@ -104,7 +104,7 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     newEntry.pluginLoader			= pluginLoader;
     //check if found
     int index=0;
-    int loop_size=pluginList.size();
+    const int &loop_size=pluginList.size();
     while(index<loop_size)
     {
         if(pluginList.at(index).pluginLoaderInterface==pluginLoaderInstance)
@@ -146,7 +146,7 @@ void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     int index=0;
-    int loop_size=pluginList.size();
+    const int &loop_size=pluginList.size();
     while(index<loop_size)
     {
         if(plugin.path==pluginList.at(index).path)

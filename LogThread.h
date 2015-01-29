@@ -25,7 +25,7 @@ class LogThread : public QThread
 public:
     explicit LogThread();
      ~LogThread();
-    bool logTransfer();
+    bool logTransfer() const;
 public slots:
     /** method called when new transfer is started */
     void newTransferStart(const Ultracopier::ItemOfCopyList &item);

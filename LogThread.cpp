@@ -64,7 +64,7 @@ LogThread::~LogThread()
     wait();
 }
 
-bool LogThread::logTransfer()
+bool LogThread::logTransfer() const
 {
     return enabled && log_enable_transfer;
 }

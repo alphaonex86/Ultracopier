@@ -32,7 +32,7 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
 SessionLoader::~SessionLoader()
 {
     int index=0;
-    int loop_size=pluginList.size();
+    const int &loop_size=pluginList.size();
     while(index<loop_size)
     {
         if(pluginList.at(index).pluginLoader!=NULL)

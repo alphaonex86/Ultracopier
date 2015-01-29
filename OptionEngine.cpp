@@ -95,7 +95,7 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
     //browse all key, and append it to the key
     int index=0;
     //QList<OptionEngineGroupKey> KeyListTemp;
-    int loop_size=KeysList.size();
+    const int &loop_size=KeysList.size();
     while(index<loop_size)
     {
         OptionEngineGroupKey theCurrentKey;

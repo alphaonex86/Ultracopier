@@ -7,6 +7,7 @@
 
 #include <QMessageBox>
 #include <QtPlugin>
+#include <cmath>
 
 #include "Core.h"
 #include "ThemesManager.h"
@@ -257,7 +258,7 @@ void Core::unloadInterface()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     int index=0;
-    int loop_size=copyList.size();
+    const int &loop_size=copyList.size();
     while(index<loop_size)
     {
         if(copyList.at(index).interface!=NULL)
@@ -349,6 +350,26 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.copyEngineIsSync=true;
             newItem.canceled=false;
 
+            switch(OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("remainingTimeAlgorithm")).toUInt())
+            {
+                default:
+                case 0:
+                    newItem.remainingTimeAlgo=Ultracopier::RemainingTimeAlgo_Traditional;
+                break;
+                case 1:
+                    newItem.remainingTimeAlgo=Ultracopier::RemainingTimeAlgo_Logarithmic;
+                    {
+                        int index=0;
+                        while(index<10)
+                        {
+                            newItem.remainingTimeLogarithmicValue[index].totalSize=0;
+                            newItem.remainingTimeLogarithmicValue[index].transferedSize=0;
+                            index++;
+                        }
+                    }
+                break;
+            }
+
             if(!ignoreMode)
             {
                 newItem.interface->forceCopyMode(mode);
@@ -390,10 +411,18 @@ void Core::resetSpeedDetectedInterface()
 void Core::resetSpeedDetected(const int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start on %1").arg(index));
-    copyList[index].lastSpeedDetected.clear();
-    copyList[index].lastSpeedTime.clear();
-    copyList[index].lastAverageSpeedDetected.clear();
-    copyList[index].lastAverageSpeedTime.clear();
+    switch(copyList.at(index).remainingTimeAlgo)
+    {
+        case Ultracopier::RemainingTimeAlgo_Logarithmic:
+            copyList[index].remainingTimeLogarithmicValue.clear();
+        default:
+        case Ultracopier::RemainingTimeAlgo_Traditional:
+            copyList[index].lastSpeedDetected.clear();
+            copyList[index].lastSpeedTime.clear();
+            copyList[index].lastAverageSpeedDetected.clear();
+            copyList[index].lastAverageSpeedTime.clear();
+        break;
+    }
 }
 
 void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
@@ -427,7 +456,7 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         if(action==Ultracopier::Idle)
         {
             int index_sub_loop=0;
-            int loop_size=copyList.at(index).orderId.size();
+            const int &loop_size=copyList.at(index).orderId.size();
             while(index_sub_loop<loop_size)
             {
                 emit copyCanceled(copyList.at(index).orderId.at(index_sub_loop));
@@ -466,7 +495,7 @@ void Core::isInPause(const bool &isPaused)
 /// \brief get the right copy instance (copy engine + interface), by signal emited from copy engine
 int Core::indexCopySenderCopyEngine()
 {
-    QObject * senderObject=sender();
+    const QObject * senderObject=sender();
     if(senderObject==NULL)
     {
         //QMessageBox::critical(NULL,tr("Internal error"),tr("A communication error occured between the interface and the copy plugin. Please report this bug."));
@@ -474,7 +503,7 @@ int Core::indexCopySenderCopyEngine()
         return -1;
     }
     int index=0;
-    int loop_size=copyList.size();
+    const int &loop_size=copyList.size();
     while(index<loop_size)
     {
         if(copyList.at(index).engine==senderObject)
@@ -497,7 +526,7 @@ int Core::indexCopySenderInterface()
         return -1;
     }
     int index=0;
-    int loop_size=copyList.size();
+    const int &loop_size=copyList.size();
     while(index<loop_size)
     {
         if(copyList.at(index).interface==senderObject)
@@ -568,7 +597,6 @@ void Core::connectInterfaceAndSync(const int &index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for userAddFolder()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for userAddFile()").arg(index).arg((quint64)sender()));
-
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::removeItems,			currentCopyInstance.engine,&PluginInterface_CopyEngine::removeItems))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for removeItems()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnTop,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnTop))
@@ -629,7 +657,7 @@ void Core::connectInterfaceAndSync(const int &index)
 void Core::periodicSynchronization()
 {
     int index_sub_loop=0;
-    int loop_size=copyList.size();
+    const int &loop_size=copyList.size();
     while(index_sub_loop<loop_size)
     {
         if(copyList.at(index_sub_loop).action==Ultracopier::Copying || copyList.at(index_sub_loop).action==Ultracopier::CopyingAndListing)
@@ -737,6 +765,16 @@ void Core::periodicSynchronizationWithIndex(const int &index)
     }
 }
 
+quint8 Core::fileCatNumber(quint64 size)
+{
+    //all is in base 10 to understand more easily
+    //drop the big value
+    if(size>ULTRACOPIER_REMAININGTIME_BIGFILEMEGABYTEBASE10*1000*1000)
+        size=ULTRACOPIER_REMAININGTIME_BIGFILEMEGABYTEBASE10*1000*1000;
+    size=size/100;//to group all the too small file into the value 0
+    return log10(size);
+}
+
 /// \brief the copy engine have canceled the transfer
 void Core::copyInstanceCanceledByEngine()
 {
@@ -771,7 +809,7 @@ void Core::copyInstanceCanceledByIndex(const int &index)
     delete currentCopyInstance.nextConditionalSync;
     delete currentCopyInstance.interface;
     int index_sub_loop=0;
-    int loop_size=currentCopyInstance.orderId.size();
+    const int &loop_size=currentCopyInstance.orderId.size();
     while(index_sub_loop<loop_size)
     {
         emit copyCanceled(currentCopyInstance.orderId.at(index_sub_loop));
@@ -844,37 +882,95 @@ void Core::syncReady()
 void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &actionList)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    //log to thje file
-    if(log.logTransfer())
-    {
-        int index=0;
-        int size=actionList.size();
-        while(index<size)
-        {
-            const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
-            switch(returnAction.type)
-            {
-                case Ultracopier::PreOperation:
-                    log.newTransferStart(returnAction.addAction);
-                break;
-                case Ultracopier::RemoveItem:
-                    if(returnAction.userAction.moveAt==0)
-                        log.newTransferStop(returnAction.addAction);
-                    else
-                        log.transferSkip(returnAction.addAction);
-                break;
-                default:
-                break;
-            }
-            index++;
-        }
-    }
     //send the the interface
-    int index=indexCopySenderCopyEngine();
+    const int &index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
         if(copyList.at(index).copyEngineIsSync)
             copyList.at(index).interface->getActionOnList(actionList);
+        //log to the file and compute the remaining time
+        if(log.logTransfer() || copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
+        {
+            int index=0;
+            const int &size=actionList.size();
+            if(log.logTransfer() && copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
+                while(index<size)
+                {
+                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+                    switch(returnAction.type)
+                    {
+                        case Ultracopier::PreOperation:
+                            log.newTransferStart(returnAction.addAction);
+                        break;
+                        case Ultracopier::RemoveItem:
+                            if(returnAction.userAction.moveAt==0)
+                                log.newTransferStop(returnAction.addAction);
+                            else
+                                log.transferSkip(returnAction.addAction);
+                            {
+                                const quint8 &col=fileCatNumber(returnAction.addAction.size);
+                                copyList[index].remainingTimeLogarithmicValue[col].transferedSize+=returnAction.addAction.size;
+                            }
+                        break;
+                        case Ultracopier::AddingItem:
+                            {
+                                const quint8 &col=fileCatNumber(returnAction.addAction.size);
+                                copyList[index].remainingTimeLogarithmicValue[col].totalSize+=returnAction.addAction.size;
+                            }
+                        break;
+                        default:
+                        break;
+                    }
+                    index++;
+                }
+            else if(log.logTransfer())
+                while(index<size)
+                {
+                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+                    switch(returnAction.type)
+                    {
+                        case Ultracopier::PreOperation:
+                            log.newTransferStart(returnAction.addAction);
+                        break;
+                        case Ultracopier::RemoveItem:
+                            if(returnAction.userAction.moveAt==0)
+                                log.newTransferStop(returnAction.addAction);
+                            else
+                                log.transferSkip(returnAction.addAction);
+                            {
+                                const quint8 &col=fileCatNumber(returnAction.addAction.size);
+                                copyList[index].remainingTimeLogarithmicValue[col].transferedSize+=returnAction.addAction.size;
+                            }
+                        break;
+                        default:
+                        break;
+                    }
+                    index++;
+                }
+            else
+                while(index<size)
+                {
+                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+                    switch(returnAction.type)
+                    {
+                        case Ultracopier::RemoveItem:
+                            {
+                                const quint8 &col=fileCatNumber(returnAction.addAction.size);
+                                copyList[index].remainingTimeLogarithmicValue[col].transferedSize+=returnAction.addAction.size;
+                            }
+                        break;
+                        case Ultracopier::AddingItem:
+                            {
+                                const quint8 &col=fileCatNumber(returnAction.addAction.size);
+                                copyList[index].remainingTimeLogarithmicValue[col].totalSize+=returnAction.addAction.size;
+                            }
+                        break;
+                        default:
+                        break;
+                    }
+                    index++;
+                }
+        }
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");

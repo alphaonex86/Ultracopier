@@ -33,6 +33,7 @@
 #define ULTRACOPIER_MINVALUESPEED 3
 #define ULTRACOPIER_MAXVALUESPEEDSTOREDTOREMAININGTIME 120
 #define ULTRACOPIER_MINVALUESPEEDTOREMAININGTIME 10
+#define ULTRACOPIER_REMAININGTIME_BIGFILEMEGABYTEBASE10   100
 
 /// \brief the socket name, to have unique instance of ultracopier, and pass arguments between the instance
 #define ULTRACOPIER_SOCKETNAME "ultracopier"
