@@ -55,6 +55,12 @@ LogThread::LogThread()
         user=QStringLiteral("Unknown user");
     delete userNameW;
     #endif
+
+    #ifdef Q_OS_WIN32
+    lineReturn=QStringLiteral("\r\n");
+    #else
+    lineReturn=QStringLiteral("\n");
+    #endif
 }
 
 LogThread::~LogThread()
@@ -115,9 +121,9 @@ void LogThread::newTransferStart(const Ultracopier::ItemOfCopyList &item)
         return;
     QString text;
     if(item.mode==Ultracopier::Copy)
-        text=QStringLiteral("[Copy] ")+transfer_format+QStringLiteral("\n");
+        text=QStringLiteral("[Copy] ")+transfer_format+lineReturn;
     else
-        text=QStringLiteral("[Move] ")+transfer_format+QStringLiteral("\n");
+        text=QStringLiteral("[Move] ")+transfer_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
     text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
@@ -131,7 +137,7 @@ void LogThread::transferSkip(const Ultracopier::ItemOfCopyList &item)
 {
     if(!log_enable_transfer)
         return;
-    QString text=QStringLiteral("[Skip] ")+transfer_format+QStringLiteral("\n");
+    QString text=QStringLiteral("[Skip] ")+transfer_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
     text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
@@ -144,7 +150,7 @@ void LogThread::newTransferStop(const Ultracopier::ItemOfCopyList &item)
 {
     if(!log_enable_transfer)
         return;
-    QString text=QStringLiteral("[Stop] ")+transfer_format+QStringLiteral("\n");
+    QString text=QStringLiteral("[Stop] ")+transfer_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
     text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
@@ -157,7 +163,7 @@ void LogThread::error(const QString &path,const quint64 &size,const QDateTime &m
 {
     if(!log_enable_error)
         return;
-    QString text=QStringLiteral("[Error] ")+error_format+QStringLiteral("\n");
+    QString text=QStringLiteral("[Error] ")+error_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %path%, %size%, %mtime%, %error%
     text=text.replace(QStringLiteral("%path%"),path);
@@ -242,7 +248,7 @@ void LogThread::rmPath(const QString &path)
 {
     if(!log_enable_folder)
         return;
-    QString text=QStringLiteral("[RmPath] ")+folder_format+QStringLiteral("\n");
+    QString text=QStringLiteral("[RmPath] ")+folder_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
     text=text.replace(QStringLiteral("%path%"),path);
@@ -254,7 +260,7 @@ void LogThread::mkPath(const QString &path)
 {
     if(!log_enable_folder)
         return;
-    QString text=QStringLiteral("[MkPath] ")+folder_format+QStringLiteral("\n");
+    QString text=QStringLiteral("[MkPath] ")+folder_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
     text=text.replace(QStringLiteral("%path%"),path);

@@ -56,6 +56,7 @@ private:
     QString error_format;
     QString folder_format;
     QFile log;
+    QString lineReturn;
     QString replaceBaseVar(QString text);
     #ifdef Q_OS_WIN32
     QString computer;
