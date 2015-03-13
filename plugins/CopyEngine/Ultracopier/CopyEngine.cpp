@@ -91,6 +91,8 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect mkPath()");
     if(!connect(listThread,&ListThread::newActionOnList,	this,&CopyEngine::newActionOnList,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect newActionOnList()");
+    if(!connect(listThread,&ListThread::doneTime,	this,&CopyEngine::doneTime,	Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect doneTime()");
     if(!connect(listThread,&ListThread::pushFileProgression,		this,&CopyEngine::pushFileProgression,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect pushFileProgression()");
     if(!connect(listThread,&ListThread::pushGeneralProgression,		this,&CopyEngine::pushGeneralProgression,		Qt::QueuedConnection))

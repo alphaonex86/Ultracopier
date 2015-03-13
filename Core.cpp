@@ -425,6 +425,27 @@ void Core::resetSpeedDetected(const int &index)
     }
 }
 
+void Core::doneTime(const QList<QPair<quint64,quint32> > &timeList)
+{
+    int index=indexCopySenderCopyEngine();
+    if(index!=-1)
+    {
+        int size=timeList.size();
+        int sub_index=0;
+        while(sub_index<size)
+        {
+            const QPair<quint64,quint32> &timeUnit=timeList.at(sub_index);
+            const quint8 &col=fileCatNumber(timeUnit.first);
+            copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed << timeUnit.first/timeUnit.second;
+            if(copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+                copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.removeFirst();
+            sub_index++;
+        }
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the interface sender");
+}
+
 void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
 {
     int index=indexCopySenderCopyEngine();
@@ -577,6 +598,8 @@ void Core::connectEngine(const int &index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::canBeDeleted,					this,&Core::deleteCopyEngine,Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
+    if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::doneTime,					this,&Core::doneTime,Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for doneTime()").arg(index).arg((quint64)sender()));
 }
 
 void Core::connectInterfaceAndSync(const int &index)
@@ -748,16 +771,60 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                 if(totAverageTime>0)
                     if(loop_size>=ULTRACOPIER_MINVALUESPEEDTOREMAININGTIME)
                     {
-                        if(totSpeed>0)
+                        if(currentCopyInstance.remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Traditional)
                         {
-                            //remaining time: (total byte - lastProgression)/byte per ms since the start
-                            if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
+                            if(totSpeed>0)
+                            {
+                                //remaining time: (total byte - lastProgression)/byte per ms since the start
+                                if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
+                                    currentCopyInstance.interface->remainingTime(-1);
+                                else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
+                                    currentCopyInstance.interface->remainingTime((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)/(totAverageSpeed/totAverageTime));
+                            }
+                            else
                                 currentCopyInstance.interface->remainingTime(-1);
-                            else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
-                                currentCopyInstance.interface->remainingTime((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)/(totAverageSpeed/totAverageTime));
                         }
                         else
-                            currentCopyInstance.interface->remainingTime(-1);
+                        {
+                            int remainingTimeValue=0;
+                            //calculate for each file class
+                            index_sub_loop=0;
+                            loop_size=currentCopyInstance.remainingTimeLogarithmicValue.size();
+                            while(index_sub_loop<loop_size)
+                            {
+                                const RemainingTimeLogarithmicColumn &remainingTimeLogarithmicColumn=currentCopyInstance.remainingTimeLogarithmicValue.at(index_sub_loop);
+                                //normal detect
+                                const quint64 &remainingSize=remainingTimeLogarithmicColumn.totalSize-remainingTimeLogarithmicColumn.transferedSize;
+                                if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>=ULTRACOPIER_MINVALUESPEED)
+                                {
+                                    int average_speed=0;
+                                    int temp_loop_index=0;
+                                    while(temp_loop_index<remainingTimeLogarithmicColumn.lastProgressionSpeed.size())
+                                    {
+                                        average_speed+=remainingTimeLogarithmicColumn.lastProgressionSpeed.at(temp_loop_index);
+                                        temp_loop_index++;
+                                    }
+                                    average_speed/=remainingTimeLogarithmicColumn.lastProgressionSpeed.size();
+                                    remainingTimeValue+=remainingSize/average_speed;
+                                }
+                                //fallback
+                                else
+                                {
+                                    if(totSpeed>0)
+                                    {
+                                        //remaining time: (total byte - lastProgression)/byte per ms since the start
+                                        if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
+                                            remainingTimeValue+=1;
+                                        else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
+                                            remainingTimeValue+=remainingSize/totAverageSpeed;
+                                    }
+                                    else
+                                        remainingTimeValue+=1;
+                                }
+                                index_sub_loop++;
+                            }
+                            currentCopyInstance.interface->remainingTime(remainingTimeValue);
+                        }
                     }
             }
             lastProgressionTime.restart();

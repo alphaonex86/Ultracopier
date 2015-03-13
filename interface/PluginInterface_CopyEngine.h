@@ -148,6 +148,7 @@ class PluginInterface_CopyEngine : public QObject
         void isInPause(const bool &isInPause) const;
 
         void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList>&) const;///very important, need be temporized to group the modification to do and not flood the interface
+        void doneTime(const QList<QPair<quint64,quint32> >&) const;
         void syncReady() const;
 
         /** \brief to get the progression for a specific file
@@ -205,6 +206,6 @@ class PluginInterface_CopyEngineFactory : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.1.0");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.2.0.0");
 
 #endif // PLUGININTERFACE_COPYENGINE_H

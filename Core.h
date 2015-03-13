@@ -41,7 +41,7 @@ class Core : public QObject
         };
         struct RemainingTimeLogarithmicColumn
         {
-            QList<int> lastProgressionTime;
+            QList<int> lastProgressionSpeed;
             quint64 totalSize;
             quint64 transferedSize;
         };
@@ -187,6 +187,7 @@ class Core : public QObject
         void urlDropped(const QList<QUrl> &urls);
         /// \brief to rsync after a new interface connection
         void syncReady();
+        void doneTime(const QList<QPair<quint64,quint32> > &timeList);
 
         void getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> & actionList);
         void pushGeneralProgression(const quint64 &current,const quint64 &total);

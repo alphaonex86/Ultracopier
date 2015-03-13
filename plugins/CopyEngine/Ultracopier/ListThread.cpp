@@ -124,6 +124,11 @@ void ListThread::transferInodeIsClosed()
             }
             bytesTransfered+=temp_transfer_thread->transferSize;
 
+            if(temp_transfer_thread->haveStartTime)
+            {
+                timeToTransfer << QPair<quint64,quint32>(temp_transfer_thread->transferSize,temp_transfer_thread->startTransferTime.elapsed());
+                temp_transfer_thread->haveStartTime=false;
+            }
             temp_transfer_thread->transferId=0;
             temp_transfer_thread->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -1010,11 +1015,15 @@ void ListThread::addToRmForRsync(const QFileInfo& destination)
 //send action done
 void ListThread::sendActionDone()
 {
-    if(actionDone.size()>0)
+    if(!actionDone.isEmpty())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
         emit newActionOnList(actionDone);
         actionDone.clear();
+    }
+    if(!timeToTransfer.isEmpty())
+    {
+        emit doneTime(timeToTransfer);
+        timeToTransfer.clear();
     }
 }
 

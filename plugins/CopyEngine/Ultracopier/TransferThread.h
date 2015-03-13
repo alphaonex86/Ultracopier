@@ -60,6 +60,8 @@ public:
     quint64			transferId;
     /// \brief to store the transfer size
     quint64			transferSize;
+    bool haveStartTime;
+    QTime startTransferTime;
 
     void set_doChecksum(bool doChecksum);
     void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);

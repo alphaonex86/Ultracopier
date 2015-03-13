@@ -13,23 +13,25 @@
     #endif
 #endif
 
-TransferThread::TransferThread()
+TransferThread::TransferThread() :
+    haveStartTime                   (false),
+    transfer_stat                   (TransferStat_Idle),
+    doRightTransfer                 (false),
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync                           (false),
+    #endif
+    stopIt                          (false),
+    fileExistsAction                (FileExists_NotSet),
+    alwaysDoFileExistsAction        (FileExists_NotSet),
+    needSkip                        (false),
+    needRemove                      (false),
+    deletePartiallyTransferredFiles (true),
+    writeError                      (false),
+    readError                       (false),
+    renameTheOriginalDestination    (false)
 {
     start();
     moveToThread(this);
-    deletePartiallyTransferredFiles = true;
-    needSkip                        = false;
-    transfer_stat                   = TransferStat_Idle;
-    stopIt                          = false;
-    fileExistsAction                = FileExists_NotSet;
-    alwaysDoFileExistsAction        = FileExists_NotSet;
-    readError                       = false;
-    writeError                      = false;
-    renameTheOriginalDestination    = false;
-    needRemove                      = false;
-    #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    rsync                           = false;
-    #endif
     this->mkpathTransfer            = mkpathTransfer;
     readThread.setWriteThread(&writeThread);
     source.setCaching(false);
@@ -283,6 +285,8 @@ void TransferThread::preOperation()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("[")+QString::number(id)+QStringLiteral("] already used, source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath());
         return;
     }
+    haveStartTime=true;
+    startTransferTime.restart();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start: source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath());
     needRemove=false;
     if(isSame())
@@ -920,6 +924,7 @@ void TransferThread::pause()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] wrong stat to put in pause"));
         return;
     }
+    haveStartTime=false;
     readThread.pause();
     writeThread.pause();
 }
@@ -942,6 +947,7 @@ void TransferThread::resume()
 void TransferThread::stop()
 {
     stopIt=true;
+    haveStartTime=false;
     if(transfer_stat==TransferStat_Idle)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("transfer_stat==TransferStat_Idle"));

@@ -246,6 +246,7 @@ private:
     bool                checkDiskSpace;
     bool                copyListOrder;
     QHash<QString,quint64> requiredSpace;
+    QList<QPair<quint64,quint32> > timeToTransfer;
     unsigned int        putAtBottom;
     unsigned int		osBufferLimit;
     QList<Filters_rules>		include,exclude;
@@ -363,6 +364,7 @@ signals:
 
     void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &) const;///very important, need be temporized to group the modification to do and not flood the interface
     void syncReady() const;
+    void doneTime(const QList<QPair<quint64,quint32> >&) const;
 
     /** \brief to get the progression for a specific file
      * \param id the id of the transfer, id send during population the transfer list
