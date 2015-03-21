@@ -91,16 +91,25 @@
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="222"/>
         <location filename="../../../CopyEngineManager.cpp" line="227"/>
-        <location filename="../../../CopyEngineManager.cpp" line="248"/>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="250"/>
+        <location filename="../../../CopyEngineManager.cpp" line="264"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="222"/>
+        <source>Cannot find any copy engine with move support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../CopyEngineManager.cpp" line="250"/>
+        <source>This copy engine does not support move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Cannot find any copy engine with motions support</source>
         <translatorcomment>Motions? Do you mean &quot;move&quot;?</translatorcomment>
-        <translation>Finde keine Kopier-Engine mit Motions-Unterstützung</translation>
+        <translation type="obsolete">Finde keine Kopier-Engine mit Motions-Unterstützung</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="227"/>
@@ -108,12 +117,11 @@
         <translation>Finde keine kompatible Engine!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="248"/>
         <source>This copy engine does not support motions</source>
-        <translation>Diese Kopier-Engine unterstützt keine Motions</translation>
+        <translation type="obsolete">Diese Kopier-Engine unterstützt keine Motions</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="264"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Finde keine Engine mit diesem Namen: %1</translation>
     </message>
@@ -136,70 +144,70 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="46"/>
-        <location filename="../../../Core.cpp" line="117"/>
-        <location filename="../../../Core.cpp" line="143"/>
-        <location filename="../../../Core.cpp" line="158"/>
-        <location filename="../../../Core.cpp" line="178"/>
-        <location filename="../../../Core.cpp" line="192"/>
-        <location filename="../../../Core.cpp" line="201"/>
-        <location filename="../../../Core.cpp" line="210"/>
-        <location filename="../../../Core.cpp" line="217"/>
-        <location filename="../../../Core.cpp" line="251"/>
-        <location filename="../../../Core.cpp" line="366"/>
-        <location filename="../../../Core.cpp" line="371"/>
+        <location filename="../../../Core.cpp" line="47"/>
+        <location filename="../../../Core.cpp" line="118"/>
+        <location filename="../../../Core.cpp" line="144"/>
+        <location filename="../../../Core.cpp" line="159"/>
+        <location filename="../../../Core.cpp" line="179"/>
+        <location filename="../../../Core.cpp" line="193"/>
+        <location filename="../../../Core.cpp" line="202"/>
+        <location filename="../../../Core.cpp" line="211"/>
+        <location filename="../../../Core.cpp" line="218"/>
+        <location filename="../../../Core.cpp" line="252"/>
+        <location filename="../../../Core.cpp" line="387"/>
+        <location filename="../../../Core.cpp" line="392"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="46"/>
-        <location filename="../../../Core.cpp" line="143"/>
-        <location filename="../../../Core.cpp" line="158"/>
-        <location filename="../../../Core.cpp" line="178"/>
-        <location filename="../../../Core.cpp" line="192"/>
-        <location filename="../../../Core.cpp" line="201"/>
-        <location filename="../../../Core.cpp" line="210"/>
+        <location filename="../../../Core.cpp" line="47"/>
+        <location filename="../../../Core.cpp" line="144"/>
+        <location filename="../../../Core.cpp" line="159"/>
+        <location filename="../../../Core.cpp" line="179"/>
+        <location filename="../../../Core.cpp" line="193"/>
+        <location filename="../../../Core.cpp" line="202"/>
+        <location filename="../../../Core.cpp" line="211"/>
         <source>Unable to get a copy engine instance</source>
         <translation>Bekomme keine Instanz der Kopier-Engine</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="94"/>
+        <location filename="../../../Core.cpp" line="95"/>
         <source>Group window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="94"/>
+        <location filename="../../../Core.cpp" line="95"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="117"/>
+        <location filename="../../../Core.cpp" line="118"/>
         <source>Unable to get a engine instance</source>
         <translation>Bekomme keine Instanz der Engine</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="217"/>
+        <location filename="../../../Core.cpp" line="218"/>
         <source>The argument for the mode is not valid</source>
         <translation>Die Parameter sind in diesem Modus ungültig</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="916"/>
+        <location filename="../../../Core.cpp" line="1079"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Möchten Sie kopieren? Wenn nicht, wird verschoben.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="251"/>
-        <location filename="../../../Core.cpp" line="366"/>
+        <location filename="../../../Core.cpp" line="252"/>
+        <location filename="../../../Core.cpp" line="387"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>Konnte Oberfläche nicht laden. Kopiervorgang abgebrochen</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="371"/>
+        <location filename="../../../Core.cpp" line="392"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>Konnte Kopier-Engine nicht laden. Kopiervorgang abgebrochen</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="916"/>
+        <location filename="../../../Core.cpp" line="1079"/>
         <source>Transfer mode</source>
         <translation>Transfermodus</translation>
     </message>
@@ -568,12 +576,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
 <context>
     <name>LocalListener</name>
     <message>
-        <location filename="../../../LocalListener.cpp" line="137"/>
+        <location filename="../../../LocalListener.cpp" line="148"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../../LocalListener.cpp" line="137"/>
+        <location filename="../../../LocalListener.cpp" line="148"/>
         <source>Timeout while recomposing data from connected clients</source>
         <translation>Timeout beim Zusammenfügen der Daten von verbundenen Clients</translation>
     </message>
@@ -581,20 +589,20 @@ Diese Version wurde kompiliert als Version: %1.</translation>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="78"/>
-        <location filename="../../../LogThread.cpp" line="87"/>
-        <location filename="../../../LogThread.cpp" line="97"/>
+        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="93"/>
+        <location filename="../../../LogThread.cpp" line="103"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="78"/>
+        <location filename="../../../LogThread.cpp" line="84"/>
         <source>Log file already open, error: %1</source>
         <translation>Log-Datei ist bereits geöffnet, Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="87"/>
-        <location filename="../../../LogThread.cpp" line="97"/>
+        <location filename="../../../LogThread.cpp" line="93"/>
+        <location filename="../../../LogThread.cpp" line="103"/>
         <source>Unable to open the log file, error: %1</source>
         <translation>Kann Log-Datei nicht öffnen. Fehler: %1</translation>
     </message>
@@ -672,14 +680,14 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
-        <location filename="../../../OptionDialog.ui" line="301"/>
+        <location filename="../../../OptionDialog.ui" line="322"/>
         <location filename="../../../OptionDialog.cpp" line="344"/>
         <source>Copy engine</source>
         <translation>Kopier-Engine</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="92"/>
-        <location filename="../../../OptionDialog.ui" line="329"/>
+        <location filename="../../../OptionDialog.ui" line="350"/>
         <source>Themes</source>
         <translation>Themes</translation>
     </message>
@@ -699,37 +707,37 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="291"/>
+        <location filename="../../../OptionDialog.ui" line="312"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="296"/>
+        <location filename="../../../OptionDialog.ui" line="317"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="306"/>
+        <location filename="../../../OptionDialog.ui" line="327"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
-        <location filename="../../../OptionDialog.ui" line="314"/>
+        <location filename="../../../OptionDialog.ui" line="335"/>
         <location filename="../../../OptionDialog.cpp" line="345"/>
         <source>Listener</source>
         <translation>Listener</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
-        <location filename="../../../OptionDialog.ui" line="319"/>
+        <location filename="../../../OptionDialog.ui" line="340"/>
         <location filename="../../../OptionDialog.cpp" line="346"/>
         <source>Plugin loader</source>
         <translation>Plugin loader</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
-        <location filename="../../../OptionDialog.ui" line="324"/>
+        <location filename="../../../OptionDialog.ui" line="345"/>
         <location filename="../../../OptionDialog.cpp" line="347"/>
         <source>Session loader</source>
         <translation>Session loader</translation>
@@ -770,69 +778,84 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Der GPU Zeit geben, um die Entwicklung zu finanzieren</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="337"/>
+        <location filename="../../../OptionDialog.ui" line="262"/>
+        <source>Remaining time algorithm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="270"/>
+        <source>Traditional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="275"/>
+        <source>Logarithmic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="358"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="356"/>
+        <location filename="../../../OptionDialog.ui" line="377"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="369"/>
+        <location filename="../../../OptionDialog.ui" line="390"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="379"/>
+        <location filename="../../../OptionDialog.ui" line="400"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="406"/>
+        <location filename="../../../OptionDialog.ui" line="427"/>
         <source>Copy engine by order of preference:</source>
         <translation>Kopier-Engine in Reihenfolge ihrer Präferenz:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="477"/>
+        <location filename="../../../OptionDialog.ui" line="498"/>
         <source>Client connected</source>
         <translation>Client verbunden</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="533"/>
+        <location filename="../../../OptionDialog.ui" line="554"/>
         <source>Themes:</source>
         <translation>Themes:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="595"/>
+        <location filename="../../../OptionDialog.ui" line="616"/>
         <source>Unable to load the themes plugin</source>
         <translation>Konnte das Themes-Plugin nicht laden</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="695"/>
+        <location filename="../../../OptionDialog.ui" line="716"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="727"/>
+        <location filename="../../../OptionDialog.ui" line="748"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
         <translation>Die Variablen sind %time%, %source%, %size%, %destination%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="757"/>
+        <location filename="../../../OptionDialog.ui" line="778"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
         <translation>Die Variablen sind %time%, %path%, %size%, %mtime%, %error%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="676"/>
+        <location filename="../../../OptionDialog.ui" line="697"/>
         <source>Write the log file into:</source>
         <translation>Log in folgende Datei schreiben:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="707"/>
+        <location filename="../../../OptionDialog.ui" line="728"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation>Schreibe direkt in die Datei, wenn ein neuer Eintrag erreicht wird (50% Leistungsverlust möglich)</translation>
     </message>
@@ -855,8 +878,8 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.cpp" line="348"/>
         <location filename="../../../OptionDialog.cpp" line="350"/>
-        <location filename="../../../OptionDialog.cpp" line="1026"/>
         <location filename="../../../OptionDialog.cpp" line="1027"/>
+        <location filename="../../../OptionDialog.cpp" line="1028"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
         <translation>Deaktiviert, da kein SessionLoader-Plugin installiert ist</translation>
     </message>
@@ -933,37 +956,37 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Diese Ultimate-Gratis-Version läuft nur, wenn mit Ihrem Grafik-Treiber OpenCL installiert wurde. Sonst benutzen Sie die Normalversion.</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1686"/>
+        <location filename="../../../OptionDialog.cpp" line="1694"/>
         <source>Save logs as: </source>
         <translation>Protokolle speichern als: </translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="710"/>
+        <location filename="../../../OptionDialog.ui" line="731"/>
         <source>Synchronized log</source>
         <translation>Synchronisiertes Protokoll</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="645"/>
+        <location filename="../../../OptionDialog.ui" line="666"/>
         <source>No option for this plugin</source>
         <translation>Keine Option für dieses Plugin</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="720"/>
+        <location filename="../../../OptionDialog.ui" line="741"/>
         <source>Write the transfers</source>
         <translation>Protokolliere Transfers:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="750"/>
+        <location filename="../../../OptionDialog.ui" line="771"/>
         <source>Write the errors</source>
         <translation>Protokolliere Fehler:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="780"/>
+        <location filename="../../../OptionDialog.ui" line="801"/>
         <source>Write the folder operations</source>
         <translation>Protokolliere Ordner-Operationen:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="790"/>
+        <location filename="../../../OptionDialog.ui" line="811"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
         <translation>Die Variablen sind %path% %operation%</translation>
