@@ -13,9 +13,6 @@ SOURCES         = interface.cpp \
     factory.cpp \
     TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)
-include(../../../extratool.pri)
-target.path     = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
-include(../../../updateqm.pri)
 TRANSLATIONS += Languages/ar/translation.ts \
     Languages/de/translation.ts \
     Languages/el/translation.ts \
@@ -35,12 +32,6 @@ TRANSLATIONS += Languages/ar/translation.ts \
     Languages/th/translation.ts \
     Languages/tr/translation.ts \
     Languages/zh/translation.ts
-
-translations.files = Languages
-translations.path = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
-infos.files      = informations.xml
-infos.path       = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
-INSTALLS       += target translations infos
 
 RESOURCES	+= resources.qrc
 

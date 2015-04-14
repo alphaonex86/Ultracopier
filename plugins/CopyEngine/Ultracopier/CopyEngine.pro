@@ -56,7 +56,6 @@ SOURCES         = \
     ../Ultracopier/ScanFileOrFolder.cpp \
     ../Ultracopier/DiskSpace.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
-include(../../../updateqm.pri)
 TRANSLATIONS += ../Ultracopier/Languages/ar/translation.ts \
     ../Ultracopier/Languages/de/translation.ts \
     ../Ultracopier/Languages/el/translation.ts \
@@ -77,14 +76,6 @@ TRANSLATIONS += ../Ultracopier/Languages/ar/translation.ts \
     ../Ultracopier/Languages/th/translation.ts \
     ../Ultracopier/Languages/tr/translation.ts \
     ../Ultracopier/Languages/zh/translation.ts
-
-include(../../../extratool.pri)
-target.path     = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
-translations.files = Languages
-translations.path = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
-infos.files      = informations.xml
-infos.path       = $${PREFIX}/lib/ultracopier/$$superBaseName(_PRO_FILE_PWD_)
-INSTALLS       += target translations infos
 
 FORMS += \
     ../Ultracopier/fileErrorDialog.ui \
