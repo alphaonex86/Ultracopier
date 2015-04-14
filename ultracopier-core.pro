@@ -1,6 +1,5 @@
 TEMPLATE = app
 QT += network xml widgets
-include(updateqm.pri)
 TRANSLATIONS += plugins/Languages/ar/translation.ts \
     plugins/Languages/de/translation.ts \
     plugins/Languages/el/translation.ts \
@@ -21,12 +20,8 @@ TRANSLATIONS += plugins/Languages/ar/translation.ts \
     plugins/Languages/th/translation.ts \
     plugins/Languages/tr/translation.ts \
     plugins/Languages/zh/translation.ts
-translations.files += plugins/Languages
-translations.path = $${PREFIX}/share/ultracopier
 
 TARGET = ultracopier
-target.path = $${PREFIX}/bin
-INSTALLS += target translations
 macx {
     ICON = resources/ultracopier.icns
     #QT += macextras
