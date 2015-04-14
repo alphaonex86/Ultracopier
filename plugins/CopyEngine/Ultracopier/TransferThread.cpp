@@ -315,31 +315,43 @@ void TransferThread::preOperation()
         return;
     }*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] before keep date"));
+    #ifdef Q_OS_WIN32
+    doTheDateTransfer=!source.isSymLink();
+    #else
     doTheDateTransfer=true;
-    if(source.lastModified()<minTime)
+    #endif
+    if(doTheDateTransfer)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("the sources is older to copy the time: ")+source.absoluteFilePath()+QStringLiteral(": ")+minTime.toString(QStringLiteral("dd.MM.yyyy hh:mm:ss.zzz"))+QStringLiteral(">=")+source.lastModified().toString(QStringLiteral("dd.MM.yyyy hh:mm:ss.zzz")));
-        doTheDateTransfer=false;
-        if(keepDate)
+        if(source.lastModified()<minTime)
         {
-            emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it"));
-            return;
-        }
-    }
-    else
-    {
-        doTheDateTransfer=readFileDateTime(source);
-        #ifdef Q_OS_MAC
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] read the source time: ")+QString::number(butime.modtime));
-        #endif
-        if(!doTheDateTransfer)
-        {
-            //will have the real error at source open
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] unable to read the source time: ")+source.absoluteFilePath());
-            if(keepDate)
+            if(/*true when the destination have been remove but not the symlink:*/source.isSymLink())
+                doTheDateTransfer=false;
+            else
             {
-                emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it"));
-                return;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("the sources is older to copy the time: ")+source.absoluteFilePath()+QStringLiteral(": ")+minTime.toString(QStringLiteral("dd.MM.yyyy hh:mm:ss.zzz"))+QStringLiteral(">=")+source.lastModified().toString(QStringLiteral("dd.MM.yyyy hh:mm:ss.zzz")));
+                doTheDateTransfer=false;
+                if(keepDate)
+                {
+                    emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it"));
+                    return;
+                }
+            }
+        }
+        else
+        {
+            doTheDateTransfer=readFileDateTime(source);
+            #ifdef Q_OS_MAC
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] read the source time: ")+QString::number(butime.modtime));
+            #endif
+            if(!doTheDateTransfer)
+            {
+                //will have the real error at source open
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] unable to read the source time: ")+source.absoluteFilePath());
+                if(keepDate)
+                {
+                    emit errorOnFile(source,tr("Wrong modification date or unable to get it, you can disable time transfer to do it"));
+                    return;
+                }
             }
         }
     }
@@ -1263,11 +1275,12 @@ bool TransferThread::doFilePostOperation()
     if(!destination.exists())
     {
         if(!stopIt)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to change the date: File not found"));
-            emit errorOnFile(destination,tr("Unable to change the date")+QStringLiteral(": ")+tr("File not found"));
-            return false;
-        }
+            if(/*true when the destination have been remove but not the symlink:*/!source.isSymLink())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to change the date: File not found"));
+                emit errorOnFile(destination,tr("Unable to change the date")+QStringLiteral(": ")+tr("File not found"));
+                return false;
+            }
     }
     else
     {
