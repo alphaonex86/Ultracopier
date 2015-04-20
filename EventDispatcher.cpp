@@ -36,6 +36,10 @@
 #include <QDomElement>
 #endif
 
+#ifdef ULTRACOPIER_VERSION_ULTIMATE
+#include <QInputDialog>
+#endif
+
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
 {
@@ -63,6 +67,8 @@ EventDispatcher::EventDispatcher()
     copyMoveEventIdIndex=0;
     backgroundIcon=NULL;
     stopIt=false;
+
+
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     sessionloader=new SessionLoader(&optionDialog);
     #endif
@@ -108,6 +114,46 @@ EventDispatcher::EventDispatcher()
     a=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen")).toInt();
     if(a<0 || a>5)
         OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen"),QVariant(0));
+
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    static bool crackedVersion=false;
+    if(!crackedVersion)
+    {
+        while(1)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultimate key"));
+            QSettings keySettings;
+            QString key=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("key")).toString();
+            if(key.isEmpty())
+            {
+                QCryptographicHash hash(QCryptographicHash::Sha224);
+                hash.addData(QStringLiteral("U2NgvbKVrVwlaXnx").toUtf8());
+                hash.addData(keySettings.value(QStringLiteral("key")).toString().toUtf8());
+                const QByteArray &result=hash.result();
+                if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
+                    break;
+            }
+            key=QInputDialog::getText(NULL,tr("Key"),tr("Give the key of this software, more information on <a href=\"http://ultracopier.first-world.info/\">ultracopier.first-world.info</a>"));
+            if(key.isEmpty())
+            {
+                QCoreApplication::quit();
+                stopIt=true;
+                return;
+            }
+            {
+                QCryptographicHash hash(QCryptographicHash::Sha224);
+                hash.addData(QStringLiteral("U2NgvbKVrVwlaXnx").toUtf8());
+                hash.addData(key.toUtf8());
+                const QByteArray &result=hash.result();
+                if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
+                {
+                    keySettings.setValue(QStringLiteral("key"),key);
+                    break;
+                }
+            }
+        }
+    }
+    #endif
 
     connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);
 }

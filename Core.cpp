@@ -360,7 +360,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
                     newItem.remainingTimeAlgo=Ultracopier::RemainingTimeAlgo_Logarithmic;
                     {
                         int index=0;
-                        while(index<10)
+                        while(index<ULTRACOPIER_MAXREMAININGTIMECOL)
                         {
                             newItem.remainingTimeLogarithmicValue[index].totalSize=0;
                             newItem.remainingTimeLogarithmicValue[index].transferedSize=0;
@@ -430,16 +430,36 @@ void Core::doneTime(const QList<QPair<quint64,quint32> > &timeList)
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
-        int size=timeList.size();
-        int sub_index=0;
-        while(sub_index<size)
+        switch(copyList.at(index).remainingTimeAlgo)
         {
-            const QPair<quint64,quint32> &timeUnit=timeList.at(sub_index);
-            const quint8 &col=fileCatNumber(timeUnit.first);
-            copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed << timeUnit.first/timeUnit.second;
-            if(copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.removeFirst();
-            sub_index++;
+            case Ultracopier::RemainingTimeAlgo_Logarithmic:
+            if(copyList.at(index).remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("bug, copyList.at(index).remainingTimeLogarithmicValue.size() %1 <ULTRACOPIER_MAXREMAININGTIMECOL").arg(copyList.at(index).remainingTimeLogarithmicValue.size()));
+            else
+            {
+                int size=timeList.size();
+                int sub_index=0;
+                while(sub_index<size)
+                {
+                    const QPair<quint64,quint32> &timeUnit=timeList.at(sub_index);
+                    const quint8 &col=fileCatNumber(timeUnit.first);
+                    if(copyList.at(index).remainingTimeLogarithmicValue.size()<=col)
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("bug, copyList.at(index).remainingTimeLogarithmicValue.size() %1 < col %2").arg(copyList.at(index).remainingTimeLogarithmicValue.size()).arg(col));
+                        break;
+                    }
+                    else
+                    {
+                        copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed << timeUnit.first/timeUnit.second;
+                        if(copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+                            copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.removeFirst();
+                    }
+                    sub_index++;
+                }
+            }
+            default:
+            case Ultracopier::RemainingTimeAlgo_Traditional:
+            break;
         }
     }
     else
@@ -953,14 +973,19 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
     const int &index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start2"));
         if(copyList.at(index).copyEngineIsSync)
             copyList.at(index).interface->getActionOnList(actionList);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start3"));
         //log to the file and compute the remaining time
         if(log.logTransfer() || copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start4"));
             int sub_index=0;
             const int &size=actionList.size();
             if(log.logTransfer() && copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start5"));
                 while(sub_index<size)
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
@@ -990,7 +1015,10 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                     }
                     sub_index++;
                 }
+            }
             else if(log.logTransfer())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start6"));
                 while(sub_index<size)
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
@@ -1014,7 +1042,10 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                     }
                     sub_index++;
                 }
+            }
             else
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start7"));
                 while(sub_index<size)
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
@@ -1037,10 +1068,14 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                     }
                     sub_index++;
                 }
+            }
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start8"));
         }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start9"));
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start end"));
 }
 
 void Core::pushGeneralProgression(const quint64 &current,const quint64 &total)
