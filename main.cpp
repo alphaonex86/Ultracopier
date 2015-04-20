@@ -47,11 +47,15 @@ void registerTheOptions()
     //add the options hidden, will not show in options pannel
     KeysList.clear();
     KeysList.append(qMakePair(QStringLiteral("Last_version_used"),QVariant("na")));
+    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    KeysList.append(qMakePair(QStringLiteral("key"),QStringLiteral("")));
+    #endif
     KeysList.append(qMakePair(QStringLiteral("ActionOnManualOpen"),QVariant(1)));
     KeysList.append(qMakePair(QStringLiteral("GroupWindowWhen"),QVariant(0)));
     KeysList.append(qMakePair(QStringLiteral("displayOSSpecific"),QVariant(true)));
     KeysList.append(qMakePair(QStringLiteral("confirmToGroupWindows"),QVariant(true)));
     KeysList.append(qMakePair(QStringLiteral("giveGPUTime"),QVariant(true)));
+    KeysList.append(qMakePair(QStringLiteral("remainingTimeAlgorithm"),QVariant(0)));
     #ifdef ULTRACOPIER_INTERNET_SUPPORT
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     KeysList.append(qMakePair(QStringLiteral("checkTheUpdate"),QVariant(true)));
