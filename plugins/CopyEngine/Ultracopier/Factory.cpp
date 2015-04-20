@@ -232,6 +232,9 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         ui->autoStart->setChecked(options->getOptionValue(QStringLiteral("autoStart")).toBool());
         #ifdef ULTRACOPIER_PLUGIN_RSYNC
         ui->rsync->setChecked(options->getOptionValue(QStringLiteral("rsync")).toBool());
+        #else
+        ui->label_rsync->setVisible(false);
+        ui->rsync->setVisible(false);
         #endif
         ui->comboBoxFolderError->setCurrentIndex(options->getOptionValue(QStringLiteral("folderError")).toUInt());
         ui->comboBoxFolderCollision->setCurrentIndex(options->getOptionValue(QStringLiteral("folderCollision")).toUInt());

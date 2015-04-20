@@ -20,7 +20,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -108,7 +108,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="label_rsync">
          <property name="text">
-          <string notr="true">resources</string>
+          <string notr="true">Rsync</string>
          </property>
         </widget>
        </item>
@@ -122,8 +122,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>502</width>
+        <height>218</height>
        </rect>
       </property>
       <attribute name="label">
@@ -326,8 +326,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>172</width>
+        <height>119</height>
        </rect>
       </property>
       <attribute name="label">
@@ -601,8 +601,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>791</width>
-        <height>364</height>
+        <width>449</width>
+        <height>89</height>
        </rect>
       </property>
       <attribute name="label">

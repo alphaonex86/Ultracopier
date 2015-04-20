@@ -958,12 +958,12 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
         //log to the file and compute the remaining time
         if(log.logTransfer() || copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
         {
-            int index=0;
+            int sub_index=0;
             const int &size=actionList.size();
             if(log.logTransfer() && copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
-                while(index<size)
+                while(sub_index<size)
                 {
-                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
                     switch(returnAction.type)
                     {
                         case Ultracopier::PreOperation:
@@ -988,12 +988,12 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                         default:
                         break;
                     }
-                    index++;
+                    sub_index++;
                 }
             else if(log.logTransfer())
-                while(index<size)
+                while(sub_index<size)
                 {
-                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
                     switch(returnAction.type)
                     {
                         case Ultracopier::PreOperation:
@@ -1012,12 +1012,12 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                         default:
                         break;
                     }
-                    index++;
+                    sub_index++;
                 }
             else
-                while(index<size)
+                while(sub_index<size)
                 {
-                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(index);
+                    const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
                     switch(returnAction.type)
                     {
                         case Ultracopier::RemoveItem:
@@ -1035,7 +1035,7 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                         default:
                         break;
                     }
-                    index++;
+                    sub_index++;
                 }
         }
     }

@@ -241,6 +241,9 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setAutoStart(autoStart);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     setRsync(rsync);
+    #else
+    ui->label_rsync->setVisible(false);
+    ui->rsync->setVisible(false);
     #endif
     setCheckDestinationFolderExists(checkDestinationFolderExists);
     set_doChecksum(doChecksum);

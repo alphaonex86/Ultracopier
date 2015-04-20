@@ -118,13 +118,13 @@ QString HelpDialog::getWebSite()
 
 QString HelpDialog::getUpdateUrl()
 {
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/")+QStringLiteral("supercopier.html");
+    #if defined(ULTRACOPIER_VERSION_ULTIMATE)
+    return tr("http://ultracopier.first-world.info/shop.html");
     #else
-        #if defined(ULTRACOPIER_CGMINER) || !defined(ULTRACOPIER_VERSION_ULTIMATE)
-            return tr("http://ultracopier.first-world.info/download.html");
+        #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+        return tr("http://ultracopier.first-world.info/")+QStringLiteral("supercopier.html");
         #else
-            return QStringLiteral("http://ultracopier-shop.first-world.info/en/order-history");
+        return tr("http://ultracopier.first-world.info/download.html");
         #endif
     #endif
 }

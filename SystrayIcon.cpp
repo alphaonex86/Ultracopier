@@ -24,6 +24,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     QSystemTrayIcon(parent)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+
     //setup the systray icon
     haveListenerInfo	= false;
     havePluginLoaderInfo	= false;
@@ -463,13 +464,7 @@ void SystrayIcon::newUpdate(const QString &version)
     /*if(version==lastVersion)
         return;*/
     lastVersion=version;
-    showSystrayMessage(tr("New version: %1").arg(version)+"\n"+
-                           #if defined(ULTRACOPIER_CGMINER) || !defined(ULTRACOPIER_VERSION_ULTIMATE)
-                               tr("Click here to go on download page")
-                           #else
-                               tr("Click here to go to the shop and login.\nDownload the new version into the order details.\nThe new version have been sended by email too, look into your spams if needed.")
-                           #endif
-                       );
+    showSystrayMessage(tr("New version: %1").arg(version)+"\n"+tr("Click here to go on download page"));
 }
 #endif
 
