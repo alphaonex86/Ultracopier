@@ -122,13 +122,12 @@ EventDispatcher::EventDispatcher()
         while(1)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultimate key"));
-            QSettings keySettings;
             QString key=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("key")).toString();
-            if(key.isEmpty())
+            if(!key.isEmpty())
             {
                 QCryptographicHash hash(QCryptographicHash::Sha224);
                 hash.addData(QStringLiteral("U2NgvbKVrVwlaXnx").toUtf8());
-                hash.addData(keySettings.value(QStringLiteral("key")).toString().toUtf8());
+                hash.addData(key.toUtf8());
                 const QByteArray &result=hash.result();
                 if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
                     break;
@@ -147,7 +146,7 @@ EventDispatcher::EventDispatcher()
                 const QByteArray &result=hash.result();
                 if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
                 {
-                    keySettings.setValue(QStringLiteral("key"),key);
+                    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("key"),key);
                     break;
                 }
             }

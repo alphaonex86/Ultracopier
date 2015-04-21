@@ -1593,16 +1593,32 @@ bool ListThread::needMoreSpace() const
         QStorageInfo storageInfo(i.key());
         storageInfo.refresh();
         const qint64 &availableSpace=storageInfo.bytesAvailable();
+        #ifdef ULTRACOPIER_PLUGIN_DEBUG
+        const qint64 &bytesFree=storageInfo.bytesFree();
+        #endif
+
         if(availableSpace<0)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg(availableSpace).arg(i.value()).arg(i.key()));
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
+        }
         else if(i.value()>(quint64)availableSpace)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3").arg(availableSpace).arg(i.value()).arg(i.key()));
-            Diskspace diskspace;
-            diskspace.drive=i.key();
-            diskspace.freeSpace=availableSpace;
-            diskspace.requiredSpace=i.value();
-            diskspace_list << diskspace;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
+            #ifdef Q_OS_WIN32
+            //if(i.key().contains(QRegularExpression("^[a-zA-Z]:[\\\\/]")))
+            if(i.key().contains(QRegularExpression("^[a-zA-Z]:")))
+            #endif
+            {
+                Diskspace diskspace;
+                diskspace.drive=i.key();
+                diskspace.freeSpace=availableSpace;
+                diskspace.requiredSpace=i.value();
+                diskspace_list << diskspace;
+            }
+            #ifdef Q_OS_WIN32
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("not local drive"));
+            #endif
         }
     }
     if(!diskspace_list.isEmpty())
