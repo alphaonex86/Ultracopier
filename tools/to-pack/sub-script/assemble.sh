@@ -10,12 +10,8 @@ function assemble {
 	STATIC=${7}
 	CGMINER=${8}
 	SUPERCOPIER=${9}
-	if [ $SUPERCOPIER -eq 1 ]
-	then
-		ULTRACOPIER_VERSION_FINAL=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
-	else
-		ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
-	fi
+	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
+    DEBUGANDSETUP=1
 	cd ${TEMP_PATH}/
 	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION_FINAL}.zip"
 	if [ ! -d ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ ]
@@ -158,7 +154,7 @@ function assemble {
 		echo "creating the archive ${TARGET}... done"
 	fi
 	FINAL_ARCHIVE="${TARGET}-windows-${ARCHITECTURE}-${ULTRACOPIER_VERSION_FINAL}-setup.exe"
-	if [ ${DEBUG} -eq 0 ] && [ ${PORTABLE} -eq 0 ] && [ ! -e ${FINAL_ARCHIVE} ]; then
+	if ( [ ${DEBUG} -eq 0 ] || [ ${DEBUGANDSETUP} -eq 1 ] ) && [ ${PORTABLE} -eq 0 ] && [ ! -e ${FINAL_ARCHIVE} ]; then
 		echo "creating the installer ${TARGET}..."
 		cd ${TEMP_PATH}/
 		rm -Rf ${TEMP_PATH}/Ultracopier-installer-windows-${ARCHITECTURE}/
@@ -183,7 +179,12 @@ function assemble {
 			sed -i -r "s/Ultracopier/Supercopier/g" *.nsi > /dev/null 2>&1
 			sed -i -r "s/ultracopier/supercopier/g" *.nsi > /dev/null 2>&1
 		fi
-		DISPLAY="na" WINEPREFIX="${WINEBASEPATH}/ultracopier-general/" /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine "${WINEBASEPATH}/ultracopier-general/drive_c/Program Files (x86)/NSIS/makensis.exe" *.nsi > /dev/null 2>&1
+        if [ ${DEBUG} -eq 1 ]
+        then
+            sed -i -r "s/catchcopy32.dll/catchcopy32d.dll/g" *.nsi > /dev/null 2>&1
+            sed -i -r "s/catchcopy64.dll/catchcopy64d.dll/g" *.nsi > /dev/null 2>&1
+        fi
+        DISPLAY="na" WINEPREFIX="${WINEBASEPATH}/ultracopier-general/" /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine "${WINEBASEPATH}/ultracopier-general/drive_c/Program Files (x86)/NSIS/makensis.exe" *.nsi > /dev/null 2>&1
 		if [ ! -e *setup.exe ]; then
 			echo "${TEMP_PATH}/${FINAL_ARCHIVE} not exists!";
 			pwd

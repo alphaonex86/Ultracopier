@@ -1,13 +1,12 @@
 #!/bin/bash
 
-export TEMP_PATH="/home/ultracopier-temp/"
-export WINEBASEPATH="/home/wine/"
-export ULTRACOPIERSOURCESPATH="/root/ultracopier/sources/"
+export TEMP_PATH="/mnt/world/ultracopier-temp/"
+export ULTRACOPIER_SOURCE="/home/user/Desktop/ultracopier/sources/"
 export BASE_PWD=`pwd`
 
 cd ${BASE_PWD}
 
-export ULTRACOPIER_VERSION=`grep -F "ULTRACOPIER_VERSION" ${ULTRACOPIERSOURCESPATH}/Variable.h | grep -F "1." | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
+export ULTRACOPIER_VERSION=`grep -F "ULTRACOPIER_VERSION" ${ULTRACOPIER_SOURCE}/Variable.h | grep -F "1.2" | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 function valid_ip()
 {
     local  ip=$1
@@ -29,10 +28,10 @@ if ! valid_ip ${ULTRACOPIER_VERSION}; then
 fi
 echo Version: ${ULTRACOPIER_VERSION}
 
-echo "Compil windows version..."
-source sub-script/compil-windows32.sh
+echo "Assemble linux version..."
+source sub-script/linux.sh
 cd ${BASE_PWD}
-echo "Compil windows version... done"
+echo "Assemble linux version... done"
 
 
 

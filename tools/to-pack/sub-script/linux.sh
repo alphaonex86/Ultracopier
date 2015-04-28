@@ -5,7 +5,7 @@ then
 	exit;
 fi
 
-QMAKE="/usr/local/Qt-5.0.2/bin/qmake"
+QMAKE="/usr/local/Qt-5.2.0/bin/qmake"
 
 mkdir -p ${TEMP_PATH}
 cd ${TEMP_PATH}/
@@ -30,49 +30,49 @@ function compil {
 		/usr/bin/rsync -art --delete ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${FINAL_ARCHIVE}/ --exclude='*build*' --exclude='*Qt_5*' --exclude='*qt5*' --exclude='*.pro.user'
 		if [ $SUPERCOPIER -eq 1 ]
 		then
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1,0,([0-9]+,[0-9]+)/4,0,\1/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1,0,([0-9]+,[0-9]+)/4,0,\1/g" {} \; > /dev/null
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g" {} \; > /dev/null
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-16x16.png ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-16x16.png
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-128x128.png ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-128x128.png
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-all-in-one.ico ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-all-in-one.ico
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier.ico ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier.ico
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier.icns ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier.icns
 		fi
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*.pro.user" -exec rm {} \; > /dev/null
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null
 		if [ $SUPERCOPIER -eq 1 ]
 		then
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null
 		else
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_MODE_SUPERCOPIER/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_MODE_SUPERCOPIER/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null
 		fi
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null
+		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null
 		if [ ${DEBUG} -eq 1 ]
 		then
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null
 		else
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null
+			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null
 		fi
 		if [ $STATIC -eq 1 ]
 		then
-			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null
 		else
 
-			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null
 		fi
 		if [ $ULTIMATE -eq 1 ]
 		then
-			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null
 		else
-			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_ULTIMATE/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null 2>&1
+			find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_ULTIMATE/\/\/#define ULTRACOPIER_VERSION_ULTIMATE/g" {} \; > /dev/null
 		fi
 
 		if [ ${DEBUG} -eq 1 ]
@@ -83,7 +83,7 @@ function compil {
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/CopyEngine/Ultracopier/
 		${QMAKE} -config ${QTMODEDEBUGRELEASE}
-		make -j 5 > /dev/null 2>&1
+		make -j 4 > /dev/null
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -92,7 +92,7 @@ function compil {
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Listener/catchcopy-v0002/
 		${QMAKE} -config ${QTMODEDEBUGRELEASE}
-		make -j 5 > /dev/null 2>&1
+		make -j 4 > /dev/null
 		RETURN_CODE=$?
 		if [ $? -ne 0 ]
 		then
@@ -103,7 +103,7 @@ function compil {
 		then
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Supercopier/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null 2>&1
+			make -j 4 > /dev/null
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -117,7 +117,7 @@ function compil {
 		else
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Oxygen/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null 2>&1
+			make -j 4 > /dev/null
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -129,7 +129,7 @@ function compil {
 		then
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Clean/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null 2>&1
+			make -j 4 > /dev/null
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -139,7 +139,7 @@ function compil {
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Clean/ ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Clean/
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Windows/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null 2>&1
+			make -j 4 > /dev/null
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -149,7 +149,7 @@ function compil {
 			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Windows/ ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Windows/
 			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Teracopy/
 			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 5 > /dev/null 2>&1
+			make -j 4 > /dev/null
 			RETURN_CODE=$?
 			if [ $? -ne 0 ]
 			then
@@ -172,10 +172,10 @@ function compil {
 		else
 			${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-core.pro
 		fi
-		make -j 5 > /dev/null 2>&1
+		make -j 4 > /dev/null
 		if [ $STATIC -eq 1 ]
 		then
-			upx --lzma -9 ultracopier > /dev/null 2>&1
+			upx --lzma -9 ultracopier > /dev/null
 		fi
 		RETURN_CODE=$?
 		if [ $? -ne 0 ] || [ ! -e ultracopier ]
@@ -221,10 +221,10 @@ function compil {
 		fi
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type f -not \( -name "*.xml" -or -name "lib*.so" -or -name "ultracopier" -or -name "supercopier" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d \( -name "*build*" -or -name "Desktop" -or -name "Qt_5" -or -name "qt5" \) -exec rm -Rf {} \;
-		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null 2>&1
-		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null 2>&1
-		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null 2>&1
-		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null 2>&1
+		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null
+		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null
+		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null
+		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null
 		cd ${TEMP_PATH}/
 		if [ ! -e ${FINAL_ARCHIVE} ]; then
 			echo "${FINAL_ARCHIVE} not exists!";
@@ -267,43 +267,43 @@ function compil_plugin {
 			do
 				if [ -f ${plugins_name}/informations.xml ]
 				then
-					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null 2>&1
+					find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/1\.0\.0\.0/${ULTRACOPIER_VERSION}/g" {} \; > /dev/null
 					ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 					if [ -d ${plugins_name} ] && [ ! -f ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-linux-x86_64-pc.urc ]
 					then
 						echo "pack the ${ARCHITECTURE} linux for the alternative plugin: ${plugins_cat}/${plugins_name}"
 						mkdir -p ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/
 
-						find ${plugins_name}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null 2>&1
-						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null 2>&1
+						find ${plugins_name}/ -name "*.pro.user" -exec rm {} \; > /dev/null
+						find ${plugins_name}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null
+						find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null
+						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null
+						find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null
 						if [ ${DEBUG} -eq 1 ]
 						then
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
+							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_DEBUG/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null
+							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null
+							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null
 						else
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
-							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
+							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_DEBUG/\/\/#define ULTRACOPIER_DEBUG/g" {} \; > /dev/null
+							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null
+							find ${plugins_name}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null
 						fi
 						cd ${plugins_name}/
 						${QMAKE} -config ${QTMODEDEBUGRELEASE} *.pro
-						make -j 5 > /dev/null 2>&1
+						make -j 4 > /dev/null
 						cd ${TEMP_PATH}/${FINAL_ARCHIVE}/${SUBFOLDER}/${plugins_cat}/
 						if [ ! -e ${plugins_name}/lib*.so ]; then
 							echo "no lib*.so file!";
-							make -j 5
+							make -j 4
 						else
 							find ${plugins_name}/ -iname "*.ts" -exec rm {} \;
 							find ${plugins_name}/ -maxdepth 1 -mindepth 1 -type f ! -iname "lib*.so" ! -iname "informations.xml" -exec rm {} \;
 							find ${plugins_name}/ -maxdepth 1 -mindepth 1 -type d ! -iname "Languages" -exec rm -Rf {} \;
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
-							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null 2>&1
+							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null
+							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null
+							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null
+							/usr/bin/find ${plugins_name}/ -type d -empty -delete > /dev/null
 
 							tar --posix -c -f - ${plugins_name}/ | xz -9 --check=crc32 > ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-linux-x86_64-pc.urc
 						fi
@@ -315,13 +315,13 @@ function compil_plugin {
 	done
 }
 
-compil "ultracopier" 0 0 1 0
-compil "ultracopier-ultimate" 0 1 1 0
-compil "ultracopier-debug" 1 0 1 0
+compil "ultracopier" 0 0 0 0
+compil "ultracopier-ultimate" 0 1 0 0
+compil "ultracopier-debug" 1 0 0 0
 
-compil "supercopier" 0 0 1 1
-compil "supercopier-ultimate" 0 1 1 1
-compil "supercopier-debug" 1 0 1 1
+compil "supercopier" 0 0 0 1
+compil "supercopier-ultimate" 0 1 0 1
+compil "supercopier-debug" 1 0 0 1
 
 #compil_plugin "ultracopier" 0 "plugins-alternative"
 #compil_plugin "ultracopier" 0 "plugins"

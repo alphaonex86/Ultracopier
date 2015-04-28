@@ -13,12 +13,7 @@ function compil {
 	STATIC=${10}
 	CGMINER=${11}
 	SUPERCOPIER=${12}
-	if [ ${SUPERCOPIER} -eq 1 ]
-	then
-		ULTRACOPIER_VERSION_FINAL=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
-	else
-		ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
-	fi
+	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
 	if [ $FORPLUGIN -eq 1 ]
@@ -43,9 +38,7 @@ function compil {
 	done
 	if [ $SUPERCOPIER -eq 1 ]
 	then
-		find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i "s/=ultracopier-1.0/=supercopier-4.0/g" {} \;
-		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i -r "s/1,0,([0-9]+,[0-9]+)/4,0,\1/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g" {} \; > /dev/null 2>&1
+		find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i "s/=ultracopier/=supercopier/g" {} \;
 		find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/Ultracopier/Supercopier/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/ultracopier.exe/supercopier.exe/g" {} \; > /dev/null 2>&1
 		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-16x16.png ${TEMP_PATH}/${TARGET}/resources/ultracopier-16x16.png
@@ -141,8 +134,9 @@ function compil {
 		COMPIL_SUFFIX="release"
 		COMPIL_FOLDER="release"
 	fi
-	cd ${TEMP_PATH}/${TARGET}/
-	PLUGIN_FOLDER="${TEMP_PATH}/${TARGET}/plugins/"
+    rsync -art --delete ${TEMP_PATH}/${TARGET}/ ${REAL_WINEPREFIX}/drive_c/temp/
+    cd ${REAL_WINEPREFIX}/drive_c/temp/
+	PLUGIN_FOLDER="${REAL_WINEPREFIX}/drive_c/temp/plugins/"
 	cd ${PLUGIN_FOLDER}
 	for plugins_cat in `ls -1`
 	do
@@ -151,7 +145,7 @@ function compil {
 			cd ${PLUGIN_FOLDER}/${plugins_cat}/
 			for plugins_name in `ls -1`
 			do
-				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ]
+				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ "${plugins_name}" != "keybinding" ] && [ "${plugins_name}" != "ultracopier-keybinding" ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ]
 				then
 					echo "${TARGET} compilation of the plugin: ${plugins_cat}/${plugins_name}..."
 					cd ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
@@ -174,10 +168,20 @@ function compil {
 						sed -i "s/ULTRACOPIER_PLUGIN_FILENAME/${ULTRACOPIER_PLUGIN_FILENAME}.dll/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
 					fi
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
+                    if [ ! -f Makefile ]
+                    then
+                        DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
+                        pwd
+                        echo DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CFLAGS="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" *.pro
+                        echo "plugins not created (makefile not found)"
+                        exit
+                    fi
 					DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX} > /dev/null 2>&1
 					if [ ! -f ${COMPIL_FOLDER}/*.dll ] && [ ! -f ${COMPIL_FOLDER}/*.a ]
 					then
 						DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX}
+                        pwd
+                        echo DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX}
 						echo "plugins not created"
 						exit
 					fi
@@ -205,7 +209,7 @@ function compil {
 	done
 	if [ $ULTIMATE -eq 1 ] || [ $FORPLUGIN -eq 1 ] || [ $SUPERCOPIER -eq 1 ]
 	then
-		PLUGIN_FOLDER="${TEMP_PATH}/${TARGET}/plugins-alternative/"
+		PLUGIN_FOLDER="${REAL_WINEPREFIX}/drive_c/temp/plugins-alternative/"
 		cd ${PLUGIN_FOLDER}/
 		for plugins_cat in `ls -1`
 		do
@@ -272,7 +276,7 @@ function compil {
 		cp ${TEMP_PATH}/${TARGET}/plugins/*/*/*/*.a ${TEMP_PATH}/${TARGET}/plugins/ > /dev/null 2>&1
 		cp ${TEMP_PATH}/${TARGET}/plugins-alternative/Themes/Supercopier/*/*.a ${TEMP_PATH}/${TARGET}/plugins/ > /dev/null 2>&1
 	fi
-	cd ${TEMP_PATH}/${TARGET}/
+	cd ${REAL_WINEPREFIX}/drive_c/temp/
 	if [ ${STATIC} -eq 1 ]
 	then
 		if [ ${SUPERCOPIER} -eq 1 ]
@@ -298,6 +302,9 @@ function compil {
 			exit
 		fi
 	fi
+    rsync -art --delete ${REAL_WINEPREFIX}/drive_c/temp/ ${TEMP_PATH}/${TARGET}/
+	rm -Rf ${REAL_WINEPREFIX}/drive_c/temp/
+    cd ${TEMP_PATH}/${TARGET}/
 	if [ "${COMPIL_FOLDER}" != "./" ]
 	then
 		mv ${COMPIL_FOLDER}/ultracopier.exe ./

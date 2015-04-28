@@ -7,7 +7,7 @@ fi
 
 ARCHITECTURE="x86"
 
-COMPIL_DEBUGREAL=0
+COMPIL_DEBUGREAL=1
 COMPIL_NORMAL=1
 COMPIL_PLUGIN=1
 COMPIL_ULTIMATE=1
@@ -48,18 +48,18 @@ then
 	#assemble "ultracopier-debug-portable-static" "${ARCHITECTURE}" 1 0 1 0 1 0 0
 	#compil "ultracopier-portable-static-windows-x86" 0 0 1 0 32 "-mtune=generic -march=i686" 0 0 1 0 0
 	#assemble "ultracopier-portable-static" "${ARCHITECTURE}" 0 0 1 0 1 0 0
-	compil "ultracopier-static-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 0 0 1 0 0
-	assemble "ultracopier-static" "${ARCHITECTURE}" 0 0 0 0 1 0 0
+	#compil "ultracopier-static-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 0 0 1 0 0
+	#assemble "ultracopier-static" "${ARCHITECTURE}" 0 0 0 0 1 0 0
 fi
 
 if [ ${COMPIL_ULTIMATE} -eq 1 ]
 then
 	compil "supercopier-ultimate-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 0 1
 	assemble "supercopier-ultimate" "${ARCHITECTURE}" 0 0 0 1 0 0 1
-	compil "supercopier-ultimate-cgminer-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 1 1
-	assemble "supercopier-ultimate-cgminer" "${ARCHITECTURE}" 0 0 0 1 0 1 1
-#	compil "supercopier-ultimate-cgminer-static-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 1 1 1
-#	assemble "supercopier-ultimate-cgminer-static" "${ARCHITECTURE}" 0 0 0 1 1 1 1
+	#compil "supercopier-ultimate-cgminer-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 1 1
+	#assemble "supercopier-ultimate-cgminer" "${ARCHITECTURE}" 0 0 0 1 0 1 1
+	#compil "supercopier-ultimate-cgminer-static-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 1 1 1
+	#assemble "supercopier-ultimate-cgminer-static" "${ARCHITECTURE}" 0 0 0 1 1 1 1
 
 	compil "supercopier-ultimate-portable-windows-x86" 0 0 1 0 32 "-mtune=generic -march=i686" 1 0 0 0 1
 	assemble "supercopier-ultimate-portable" "${ARCHITECTURE}" 0 0 1 1 0 0 1
@@ -68,33 +68,41 @@ then
 
 	compil "ultracopier-ultimate-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 0 0
 	assemble "ultracopier-ultimate" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	compil "ultracopier-ultimate-cgminer-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 1 0
-	assemble "ultracopier-ultimate-cgminer" "${ARCHITECTURE}" 0 0 0 1 0 1 0
-#	compil "ultracopier-debug-ultimate-cgminer-windows-x86" 1 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 1 0
-#	assemble "ultracopier-debug-ultimate-cgminer" "${ARCHITECTURE}" 1 0 0 1 0 1 0
-#	compil "ultracopier-ultimate-sse2-windows-x86" 0 0 0 0 32 "-msse -msse2" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-sse2" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-#	compil "ultracopier-ultimate-sse3-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-sse3" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-#	compil "ultracopier-ultimate-pentium3-windows-x86" 0 0 0 0 32 "-msse -march=pentium3" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-pentium3" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-#	compil "ultracopier-ultimate-pentium4-windows-x86" 0 0 0 0 32 "-msse -march=pentium4" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-pentium4" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	compil "ultracopier-ultimate-core2-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0
-	assemble "ultracopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	compil "ultracopier-ultimate-core-i-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0
-	assemble "ultracopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-cgminer-windows-x86" 0 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 1 0
+	#assemble "ultracopier-ultimate-cgminer" "${ARCHITECTURE}" 0 0 0 1 0 1 0
+	#compil "ultracopier-debug-ultimate-cgminer-windows-x86" 1 0 0 0 32 "-mtune=generic -march=i686" 1 0 0 1 0
+	#assemble "ultracopier-debug-ultimate-cgminer" "${ARCHITECTURE}" 1 0 0 1 0 1 0
+	#compil "ultracopier-ultimate-sse2-windows-x86" 0 0 0 0 32 "-msse -msse2" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-sse2" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-sse3-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-sse3" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-pentium3-windows-x86" 0 0 0 0 32 "-msse -march=pentium3" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-pentium3" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-pentium4-windows-x86" 0 0 0 0 32 "-msse -march=pentium4" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-pentium4" "${ARCHITECTURE}" 0 0 0 1 0 0 0
 
-	compil "ultracopier-ultimate-k8-windows-x86" 0 0 0 0 32 "-msse -msse2 -march=k8" 1 0 0 0 0
-	assemble "ultracopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-#	compil "ultracopier-ultimate-barcelona-windows-x86" 0 0 0 0 32 "-msse -msse2 -march=k8" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-barcelona" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-#	compil "ultracopier-ultimate-bobcat-windows-x86" 0 0 0 0 32 "-march=amdfam10 -mno-3dnow -mcx16 -mpopcnt -mssse3 -mmmx" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-bobcat" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-#	compil "ultracopier-ultimate-llano-windows-x86" 0 0 0 0 32 "-march=amdfam10 -mcx16 -mpopcnt" 1 0 0 0 0
-#	assemble "ultracopier-ultimate-llano" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	compil "ultracopier-ultimate-bulldozer-windows-x86" 0 0 0 0 32 "-march=amdfam10 -mcx16 -msahf -maes -mpclmul -mpopcnt -mabm" 1 0 0 0 0
-	assemble "ultracopier-ultimate-bulldozer" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+    compil "ultracopier-ultimate-core2-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0
+    assemble "ultracopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+    compil "ultracopier-ultimate-core-i-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0
+    assemble "ultracopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+    compil "ultracopier-ultimate-k8-windows-x86" 0 0 0 0 32 "-msse -msse2 -march=k8" 1 0 0 0 0
+    assemble "ultracopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+
+    compil "supercopier-ultimate-core2-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 1
+    assemble "supercopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1 0 0 1
+    compil "supercopier-ultimate-core-i-windows-x86" 0 0 0 0 32 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 1
+    assemble "supercopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1 0 0 1
+    compil "supercopier-ultimate-k8-windows-x86" 0 0 0 0 32 "-msse -msse2 -march=k8" 1 0 0 0 1
+    assemble "supercopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1 0 0 1
+
+	#compil "ultracopier-ultimate-barcelona-windows-x86" 0 0 0 0 32 "-msse -msse2 -march=k8" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-barcelona" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-bobcat-windows-x86" 0 0 0 0 32 "-march=amdfam10 -mno-3dnow -mcx16 -mpopcnt -mssse3 -mmmx" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-bobcat" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-llano-windows-x86" 0 0 0 0 32 "-march=amdfam10 -mcx16 -mpopcnt" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-llano" "${ARCHITECTURE}" 0 0 0 1 0 0 0
+	#compil "ultracopier-ultimate-bulldozer-windows-x86" 0 0 0 0 32 "-march=amdfam10 -mcx16 -msahf -maes -mpclmul -mpopcnt -mabm" 1 0 0 0 0
+	#assemble "ultracopier-ultimate-bulldozer" "${ARCHITECTURE}" 0 0 0 1 0 0 0
 fi
 
 if [ ${COMPIL_PLUGIN} -eq 1 ]

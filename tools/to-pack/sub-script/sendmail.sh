@@ -8,7 +8,7 @@ if [ "${ULTRACOPIER_VERSION}" = "" ]
 then
         exit;
 fi
-SUPERCOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
+SUPERCOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}"`
 
 cd ${TEMP_PATH}/
 

@@ -39,5 +39,7 @@ echo "Do the test folder... done"
 
 ./4-clean-all.sh
 
-cp /home/ultracopier-temp/*.zip /home/first-world.info/files/temp/
+rm /home/first-world.info/ultracopier/temp/*
+cp /home/ultracopier-temp/*.zip /home/first-world.info/ultracopier/temp/
+cp /home/ultracopier-temp/*-setup.exe /home/first-world.info/ultracopier/temp/
 
