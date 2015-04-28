@@ -110,7 +110,15 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
                 theCurrentKey.currentValue=settings->value(KeysList.at(index).first);
                 #ifdef ULTRACOPIER_DEBUG
                 if(theCurrentKey.currentValue!=theCurrentKey.defaultValue)
+                {
+                    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+                    if(groupName=="Ultracopier" && KeysList.at(index).first=="key")
+                    {
+                    }
+                    else
+                    #endif
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("The current key: %1, group: %2, have value: %3").arg(groupName).arg(KeysList.at(index).first).arg(theCurrentKey.currentValue.toString()));
+                }
                 #endif
             }
             else //or if not found load the default value and set into the file

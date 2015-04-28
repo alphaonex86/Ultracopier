@@ -15,10 +15,6 @@
 	<version>1.0.0.0</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>en</name>
-	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
-	<dependencies><![CDATA[
-	=ultracopier-1.0
-	]]></dependencies>
 	<!-- Additional information that is specific to the category (in this case Language). -->
 	<categorySpecific>
 		<!-- The full name in the language we're translating to. -->

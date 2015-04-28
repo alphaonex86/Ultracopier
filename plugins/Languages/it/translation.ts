@@ -213,7 +213,7 @@
         <translation>L&apos;argomento per la modalità non è valido</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1079"/>
+        <location filename="../../../Core.cpp" line="1114"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Vuoi copiarlo? se no, verrà spostato.</translation>
     </message>
@@ -233,9 +233,22 @@
         <translation>Impossibile avviare il motore per la copia, copia interrotta</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1079"/>
+        <location filename="../../../Core.cpp" line="1114"/>
         <source>Transfer mode</source>
         <translation>Modalità di trasferimento</translation>
+    </message>
+</context>
+<context>
+    <name>EventDispatcher</name>
+    <message>
+        <location filename="../../../EventDispatcher.cpp" line="135"/>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../EventDispatcher.cpp" line="135"/>
+        <source>Give the key of this software, more information on &lt;a href=&quot;http://ultracopier.first-world.info/&quot;&gt;ultracopier.first-world.info&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -577,13 +590,18 @@ Compilata come versione: %1.</translation>
     <message>
         <location filename="../../../HelpDialog.cpp" line="112"/>
         <location filename="../../../HelpDialog.cpp" line="114"/>
-        <location filename="../../../HelpDialog.cpp" line="122"/>
+        <location filename="../../../HelpDialog.cpp" line="125"/>
         <source>http://ultracopier.first-world.info/</source>
         <translatorcomment>Questo dovrebbe essere il sito ufficiale di Ultracopier in italiano</translatorcomment>
         <translation>http://ultracopier-it.first-world.info/</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.cpp" line="125"/>
+        <location filename="../../../HelpDialog.cpp" line="122"/>
+        <source>http://ultracopier.first-world.info/shop.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../HelpDialog.cpp" line="127"/>
         <source>http://ultracopier.first-world.info/download.html</source>
         <translation>http://ultracopier.first-world.info/download.html</translation>
     </message>
@@ -1378,17 +1396,17 @@ da: %2</translation>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="156"/>
+        <location filename="../../../SystrayIcon.cpp" line="157"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation>Nessuna copia del rilevatore trovata. Fare una copia manualmente cliccando col tasto destro del mouse sull&apos;icona nella barra di sistema.</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="162"/>
+        <location filename="../../../SystrayIcon.cpp" line="163"/>
         <source>Information</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="180"/>
+        <location filename="../../../SystrayIcon.cpp" line="181"/>
         <source>Searching information...</source>
         <translation>Ricerca informazioni...</translation>
     </message>
@@ -1397,106 +1415,105 @@ da: %2</translation>
         <translation type="obsolete">Non ripristinare la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="193"/>
+        <location filename="../../../SystrayIcon.cpp" line="194"/>
         <source>Do not replace the explorer copy/move</source>
         <translation>Non ripristinare la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="198"/>
+        <location filename="../../../SystrayIcon.cpp" line="199"/>
         <source>Semi replace the explorer copy/move</source>
         <translation>Ripristinare parzialmente la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="203"/>
+        <location filename="../../../SystrayIcon.cpp" line="204"/>
         <source>Replace the explorer copy/move</source>
         <translation>Ripristina la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="371"/>
+        <location filename="../../../SystrayIcon.cpp" line="372"/>
         <source>Warning</source>
         <translation>Avviso</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="371"/>
+        <location filename="../../../SystrayIcon.cpp" line="372"/>
         <source>The action on the systray icon is unknown!</source>
         <translation>Azione non idonea nell&apos;area di notifica!</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="419"/>
+        <location filename="../../../SystrayIcon.cpp" line="420"/>
         <source>&amp;About/Debug report</source>
         <translation>&amp;Informazioni/Rapporto di Debug</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="421"/>
+        <location filename="../../../SystrayIcon.cpp" line="422"/>
         <source>&amp;About</source>
         <translation>&amp;Informazioni</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="424"/>
+        <location filename="../../../SystrayIcon.cpp" line="425"/>
         <source>&amp;Save bug report</source>
         <translation>&amp;Salva il bug</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="426"/>
+        <location filename="../../../SystrayIcon.cpp" line="427"/>
         <source>&amp;Quit</source>
         <translation>&amp;Esci</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="427"/>
+        <location filename="../../../SystrayIcon.cpp" line="428"/>
         <source>&amp;Options</source>
         <translation>&amp;Opzioni</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="428"/>
+        <location filename="../../../SystrayIcon.cpp" line="429"/>
         <source>A&amp;dd copy/moving</source>
         <translation>&amp;Aggiungi copia/spostamento</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="466"/>
+        <location filename="../../../SystrayIcon.cpp" line="467"/>
         <source>New version: %1</source>
         <translation>Nuova versione: %1</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="468"/>
+        <location filename="../../../SystrayIcon.cpp" line="467"/>
         <source>Click here to go on download page</source>
         <translation>Clicca qui per accedere alla pagina di download</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="470"/>
         <source>Click here to go to the shop and login.
 Download the new version into the order details.
 The new version have been sended by email too, look into your spams if needed.</source>
-        <translation>Clicca qui per andare al negozio ed effettuare il login.
+        <translation type="obsolete">Clicca qui per andare al negozio ed effettuare il login.
 Scarica la nuova versione nei dettagli dell&apos;ordine.
 La nuova versione è stata inviata anche via e-mail, controlla negli spam se necessario.</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="489"/>
+        <location filename="../../../SystrayIcon.cpp" line="484"/>
         <source>&amp;Copy</source>
         <translation>&amp;Copia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="495"/>
+        <location filename="../../../SystrayIcon.cpp" line="490"/>
         <source>&amp;Transfer</source>
         <translation>&amp;Trasferisci</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="499"/>
+        <location filename="../../../SystrayIcon.cpp" line="494"/>
         <source>&amp;Move</source>
         <translation>&amp;Sposta</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="511"/>
+        <location filename="../../../SystrayIcon.cpp" line="506"/>
         <source>Add &amp;copy</source>
         <translation>Aggiungi &amp;copia</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="517"/>
+        <location filename="../../../SystrayIcon.cpp" line="512"/>
         <source>Add &amp;transfer</source>
         <translation>Aggiungi &amp;trasferimento</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="521"/>
+        <location filename="../../../SystrayIcon.cpp" line="516"/>
         <source>Add &amp;move</source>
         <translation>Aggiungi &amp;spostamento</translation>
     </message>

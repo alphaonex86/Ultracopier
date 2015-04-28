@@ -8,6 +8,10 @@
 #include <QFile>
 #include <QDir>
 
+#ifndef Q_OS_UNIX
+#error "Only for unix"
+#endif
+
 KeyBindPlugin::KeyBindPlugin()
 {
     connect(&optionsWidget,&OptionsWidget::sendKeyBind,this,&KeyBindPlugin::setKeyBind);

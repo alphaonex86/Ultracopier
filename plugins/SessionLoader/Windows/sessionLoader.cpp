@@ -25,12 +25,22 @@ void WindowsSessionLoader::setEnabled(const bool &newValue)
     runStringApp.replace( "/", "\\" );
     wchar_t windowsString[255];
     runStringApp.toWCharArray(windowsString);
-    RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0);
+    if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+    {
         if(newValue)
-        RegSetValueEx(ultracopier_regkey, TEXT("ultracopier"), 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2);
-    else
-        RegDeleteValue(ultracopier_regkey, TEXT("ultracopier"));
+        {
+            if(RegSetValueEx(ultracopier_regkey, TEXT("ultracopier"), 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"newValue: "+QString::number(newValue)+" failed");
+        }
+        else
+        {
+            if(RegDeleteValue(ultracopier_regkey, TEXT("ultracopier"))!=ERROR_SUCCESS)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"newValue: "+QString::number(newValue)+" failed");
+        }
         RegCloseKey(ultracopier_regkey);
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"RegCreateKeyEx: Software\\Microsoft\\Windows\\CurrentVersion\\Run failed");
 }
 
 bool WindowsSessionLoader::getEnabled() const
@@ -38,11 +48,15 @@ bool WindowsSessionLoader::getEnabled() const
     //return the value into the variable
     HKEY    ultracopier_regkey;
     bool temp=false;
-    RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0);
-    DWORD kSize=254;
-    if(RegQueryValueEx(ultracopier_regkey,TEXT("ultracopier"),NULL,NULL,(LPBYTE)0,&kSize) == ERROR_SUCCESS)
-        temp=true;
-    RegCloseKey(ultracopier_regkey);
+    if(RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 0, 0, REG_OPTION_NON_VOLATILE,KEY_ALL_ACCESS, 0, &ultracopier_regkey, 0)==ERROR_SUCCESS)
+    {
+        DWORD kSize=254;
+        if(RegQueryValueEx(ultracopier_regkey,TEXT("ultracopier"),NULL,NULL,(LPBYTE)0,&kSize) == ERROR_SUCCESS)
+            temp=true;
+        RegCloseKey(ultracopier_regkey);
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"RegCreateKeyEx: Software\\Microsoft\\Windows\\CurrentVersion\\Run failed");
     return temp;
 }
 
