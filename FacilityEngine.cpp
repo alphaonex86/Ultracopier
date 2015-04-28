@@ -222,26 +222,14 @@ QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds) const
 QString FacilityEngine::ultimateUrl() const
 {
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    return QStringLiteral("");
-    #endif
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    return QStringLiteral("http://ultracopier-shop.first-world.info/en/supercopier-ultimate/5-supercopier-ultimate.html");
+    return QString();
     #else
-        #ifdef Q_OS_WIN32
-            #if defined(_M_X64)
-            return QStringLiteral("http://ultracopier-shop.first-world.info/ultracopier-ultimate/2-ultracopier-ultimate-windows-64.html");
-            #else
-            return QStringLiteral("http://ultracopier-shop.first-world.info/ultracopier-ultimate/1-ultracopier-ultimate-windows.html");
-            #endif
-        #elif defined(Q_OS_MAC)
-        return QStringLiteral("http://ultracopier-shop.first-world.info/ultracopier-ultimate/3-ultracopier-ultimate-mac.html");
-        #elif defined(Q_OS_LINUX)
-        return QStringLiteral("http://ultracopier-shop.first-world.info/supercopier-ultimate/5-supercopier-ultimate.html");
+        #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+        return QStringLiteral("http://ultracopier-shop.first-world.info/shop.html");
         #else
-        return QStringLiteral("");
+        return QString();
         #endif
     #endif
-
 }
 
 /// \brief Return the software name
