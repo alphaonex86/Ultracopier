@@ -326,7 +326,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->comboBoxFolderCollision->setCurrentIndex(0);
         break;
     }
-    switch(alwaysDoThisActionForFileError)
+    switch(alwaysDoThisActionForFolderError)
     {
         case FileError_NotSet:
             ui->comboBoxFolderError->setCurrentIndex(0);
@@ -335,7 +335,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->comboBoxFolderError->setCurrentIndex(1);
         break;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored: "+QString::number(alwaysDoThisActionForFolderError));
             ui->comboBoxFolderError->setCurrentIndex(0);
         break;
     }

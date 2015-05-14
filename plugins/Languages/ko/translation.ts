@@ -151,8 +151,8 @@
         <location filename="../../../Core.cpp" line="211"/>
         <location filename="../../../Core.cpp" line="218"/>
         <location filename="../../../Core.cpp" line="252"/>
-        <location filename="../../../Core.cpp" line="387"/>
-        <location filename="../../../Core.cpp" line="392"/>
+        <location filename="../../../Core.cpp" line="389"/>
+        <location filename="../../../Core.cpp" line="394"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
@@ -188,23 +188,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1114"/>
+        <location filename="../../../Core.cpp" line="1125"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="252"/>
-        <location filename="../../../Core.cpp" line="387"/>
+        <location filename="../../../Core.cpp" line="389"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>인터페이스를 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="392"/>
+        <location filename="../../../Core.cpp" line="394"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>복사 엔진을 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1114"/>
+        <location filename="../../../Core.cpp" line="1125"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1020,10 +1020,10 @@ This version is compiled as version: %1.</source>
 <context>
     <name>OptionEngine</name>
     <message>
-        <location filename="../../../OptionEngine.cpp" line="156"/>
-        <location filename="../../../OptionEngine.cpp" line="160"/>
-        <location filename="../../../OptionEngine.cpp" line="197"/>
-        <location filename="../../../OptionEngine.cpp" line="201"/>
+        <location filename="../../../OptionEngine.cpp" line="164"/>
+        <location filename="../../../OptionEngine.cpp" line="168"/>
+        <location filename="../../../OptionEngine.cpp" line="205"/>
+        <location filename="../../../OptionEngine.cpp" line="209"/>
         <source>The variable was not found: %1 %2</source>
         <translation type="unfinished"></translation>
     </message>

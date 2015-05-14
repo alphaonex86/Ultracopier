@@ -362,8 +362,10 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
                         int index=0;
                         while(index<ULTRACOPIER_MAXREMAININGTIMECOL)
                         {
-                            newItem.remainingTimeLogarithmicValue[index].totalSize=0;
-                            newItem.remainingTimeLogarithmicValue[index].transferedSize=0;
+                            RemainingTimeLogarithmicColumn remainingTimeLogarithmicColumn;
+                            remainingTimeLogarithmicColumn.totalSize=0;
+                            remainingTimeLogarithmicColumn.transferedSize=0;
+                            newItem.remainingTimeLogarithmicValue << remainingTimeLogarithmicColumn;
                             index++;
                         }
                     }
@@ -414,7 +416,16 @@ void Core::resetSpeedDetected(const int &index)
     switch(copyList.at(index).remainingTimeAlgo)
     {
         case Ultracopier::RemainingTimeAlgo_Logarithmic:
-            copyList[index].remainingTimeLogarithmicValue.clear();
+        {
+            int sub_index=0;
+            while(sub_index<ULTRACOPIER_MAXREMAININGTIMECOL)
+            {
+                copyList[index].remainingTimeLogarithmicValue[sub_index].lastProgressionSpeed.clear();
+                copyList[index].remainingTimeLogarithmicValue[sub_index].totalSize=0;
+                copyList[index].remainingTimeLogarithmicValue[sub_index].transferedSize=0;
+                sub_index++;
+            }
+        }
         default:
         case Ultracopier::RemainingTimeAlgo_Traditional:
             copyList[index].lastSpeedDetected.clear();
