@@ -19,6 +19,8 @@ PluginInterface_Themes * ThemesFactory::getInstance()
 
 void ThemesFactory::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
 {
+    Q_UNUSED(writePath);
+    Q_UNUSED(pluginPath);
     this->facilityEngine=facilityInterface;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath: "+pluginPath);
     Q_UNUSED(portableVersion);

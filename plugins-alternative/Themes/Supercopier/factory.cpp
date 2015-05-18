@@ -49,7 +49,15 @@ PluginInterface_Themes * ThemesFactory::getInstance()
     return newInterface;
 }
 
-void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion)
+void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
+                                 #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                                 writePath
+                                 #endif
+                                 ,const QString &
+                                 #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                                 pluginPath
+                                 #endif
+                                 ,FacilityInterface * facilityEngine,const bool &portableVersion)
 {
     Q_UNUSED(portableVersion);
     Q_UNUSED(writePath);

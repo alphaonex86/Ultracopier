@@ -123,7 +123,7 @@ DebugEngine::DebugEngine()
             logFile.setFileName(dir.absolutePath()+QDir::separator()+"log.html");
             lockFile.setFileName(dir.absolutePath()+QDir::separator()+"ultracopier.lock");
         }
-        errorFound=false;
+        //errorFound=false;
     #endif
     //If the file name is loaded
     if(fileNameIsLoaded)

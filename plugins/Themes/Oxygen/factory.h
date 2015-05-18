@@ -36,7 +36,15 @@ public:
     /// \brief to return the instance of the copy engine
     PluginInterface_Themes * getInstance();
     /// \brief set the resources, to store options, to have facilityInterface
-    void setResources(OptionInterface * optionsEngine,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityEngine,const bool &portableVersion);
+    void setResources(OptionInterface * optionsEngine,const QString &
+                  #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                  writePath
+                  #endif
+                  ,const QString &
+                  #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                  pluginPath
+                  #endif
+                  ,FacilityInterface * facilityEngine,const bool &portableVersion);
     /// \brief to get the default options widget
     QWidget * options();
     /// \brief to get a resource icon

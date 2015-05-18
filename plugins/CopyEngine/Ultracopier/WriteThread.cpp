@@ -13,7 +13,7 @@ WriteThread::WriteThread()
     isOpen.release();
     moveToThread(this);
     setObjectName(QStringLiteral("write"));
-    this->mkpathTransfer            = mkpathTransfer;
+    //this->mkpathTransfer            = mkpathTransfer;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat                            = Idle;
     #endif
@@ -875,7 +875,7 @@ void WriteThread::internalWrite()
                             }
                         }
                     }
-                    haveBlock=!blockArray.isEmpty();
+                    //haveBlock=!blockArray.isEmpty();
                 }
                 else
                 {

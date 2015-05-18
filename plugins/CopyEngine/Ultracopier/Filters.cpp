@@ -293,7 +293,7 @@ bool Filters::convertToRegex(Filters_rules &item)
             if(item.need_match_all==true)
                 tempString=QStringLiteral("^")+tempString+QStringLiteral("$");
             regex=QRegularExpression(tempString);
-            isValid=regex.isValid();
+            //isValid=regex.isValid();
             item.regex=regex;
             return true;
         }
