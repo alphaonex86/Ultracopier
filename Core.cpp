@@ -461,9 +461,12 @@ void Core::doneTime(const QList<QPair<quint64,quint32> > &timeList)
                     }
                     else
                     {
-                        copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed << timeUnit.first/timeUnit.second;
-                        if(copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                            copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.removeFirst();
+                        if(timeUnit.second>0)
+                        {
+                            copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed << timeUnit.first/timeUnit.second;
+                            if(copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+                                copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.removeFirst();
+                        }
                     }
                     sub_index++;
                 }
