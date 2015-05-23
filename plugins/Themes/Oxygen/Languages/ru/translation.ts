@@ -61,24 +61,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../factory.cpp" line="213"/>
+        <location filename="../../factory.cpp" line="221"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">Не закрывать, если найдены ошибки</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="214"/>
+        <location filename="../../factory.cpp" line="222"/>
         <source>Never close</source>
         <translation type="unfinished">Никогда не закрывать</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="215"/>
+        <location filename="../../factory.cpp" line="223"/>
         <source>Always close</source>
         <translation type="unfinished">Всегда закрывайте</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="402"/>
-        <location filename="../../factory.cpp" line="417"/>
-        <location filename="../../factory.cpp" line="432"/>
+        <location filename="../../factory.cpp" line="410"/>
+        <location filename="../../factory.cpp" line="425"/>
+        <location filename="../../factory.cpp" line="440"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>

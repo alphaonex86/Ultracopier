@@ -189,7 +189,7 @@
         <translation>A mód argumentuma nem érvényes</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Szeretnél másolni? Ha nem, akkor átmozgatva lesz.</translation>
     </message>
@@ -205,7 +205,7 @@
         <translation>Másoló motor betöltése nem lehetséges, másolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Transfer mode</source>
         <translation>Átviteli mód</translation>
     </message>

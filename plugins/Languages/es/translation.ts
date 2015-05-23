@@ -213,7 +213,7 @@
         <translation>El argumento para el modo no es válida</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>¿Quieres copiar? Si no, se puede mover.</translation>
     </message>
@@ -233,7 +233,7 @@
         <translation>No se puede cargar el motor de copia, copia abortados</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Transfer mode</source>
         <translation>Modo de transferencia</translation>
     </message>

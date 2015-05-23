@@ -213,7 +213,7 @@
         <translation>L&apos;argomento per la modalità non è valido</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Vuoi copiarlo? se no, verrà spostato.</translation>
     </message>
@@ -233,7 +233,7 @@
         <translation>Impossibile avviare il motore per la copia, copia interrotta</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Transfer mode</source>
         <translation>Modalità di trasferimento</translation>
     </message>

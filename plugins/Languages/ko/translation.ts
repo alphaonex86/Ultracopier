@@ -188,7 +188,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,7 +204,7 @@
         <translation>복사 엔진을 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1125"/>
+        <location filename="../../../Core.cpp" line="1128"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>

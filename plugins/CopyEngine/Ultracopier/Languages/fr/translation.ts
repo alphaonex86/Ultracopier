@@ -738,7 +738,7 @@
     <message>
         <location filename="../../TransferThread.cpp" line="571"/>
         <source>Drive %1</source>
-        <translation type="unfinished">Lecteur %1</translation>
+        <translation>Lecteur %1</translation>
     </message>
     <message>
         <source>Try rename with unauthorized characters</source>
@@ -747,49 +747,49 @@
     <message>
         <location filename="../../TransferThread.cpp" line="573"/>
         <source>Unknown folder</source>
-        <translation type="unfinished">Dossier inconnu</translation>
+        <translation>Dossier inconnu</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="577"/>
         <source>root</source>
-        <translation type="unfinished">racine</translation>
+        <translation>racine</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="630"/>
         <source>%1 - copy</source>
-        <translation type="unfinished">%1 - copie</translation>
+        <translation>%1 - copie</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="640"/>
         <source>%1 - copy (%2)</source>
-        <translation type="unfinished">%1 - copie (%2)</translation>
+        <translation>%1 - copie (%2)</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="764"/>
         <source>The source doesn&apos;t exist</source>
-        <translation type="unfinished">La source n&apos;existe pas</translation>
+        <translation>La source n&apos;existe pas</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="699"/>
         <location filename="../../TransferThread.cpp" line="794"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation type="unfinished">Le fichier source n&apos;existe pas</translation>
+        <translation>Le fichier source n&apos;existe pas</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1102"/>
         <source>The checksums do not match</source>
-        <translation type="unfinished">Les sommes de controle ne correspondent pas</translation>
+        <translation>Les sommes de controle ne correspondent pas</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1205"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation type="unfinished">Erreur interne: La taille transféré ne corresponds pas</translation>
+        <translation>Erreur interne: La taille transféré ne corresponds pas</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="729"/>
         <location filename="../../TransferThread.cpp" line="806"/>
         <source>Unable to do the folder</source>
-        <translation type="unfinished">Impossible de créer le dossier</translation>
+        <translation>Impossible de créer le dossier</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="218"/>
@@ -800,35 +800,35 @@
         <location filename="../../TransferThread.cpp" line="335"/>
         <location filename="../../TransferThread.cpp" line="352"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactivé le transfert de celui si</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="407"/>
         <location filename="../../TransferThread.cpp" line="430"/>
         <source>Internal error: Already opening</source>
-        <translation type="unfinished">Erreur interne: Déjà ouvert</translation>
+        <translation>Erreur interne: Déjà ouvert</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="800"/>
         <source>Another file exists at same place</source>
-        <translation type="unfinished">Un autre fichier exists à la même place</translation>
+        <translation>Un autre fichier exists à la même place</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1191"/>
         <source>Internal error: The destination is not closed</source>
-        <translation type="unfinished">Erreur interne: La destination n&apos;est pas fermé</translation>
+        <translation>Erreur interne: La destination n&apos;est pas fermé</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1216"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation type="unfinished">Erreur interne: Le buffer n&apos;est pas vide</translation>
+        <translation>Erreur interne: Le buffer n&apos;est pas vide</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1281"/>
         <location filename="../../TransferThread.cpp" line="1299"/>
         <location filename="../../TransferThread.cpp" line="1314"/>
         <source>Unable to change the date</source>
-        <translation type="unfinished">Impossible de changer la date</translation>
+        <translation>Impossible de changer la date</translation>
     </message>
 </context>
 <context>
@@ -1020,12 +1020,12 @@
         <location filename="../../copyEngineOptions.ui" line="580"/>
         <location filename="../../copyEngineOptions.ui" line="590"/>
         <source>More cpu, but better organisation on the disk</source>
-        <translation type="unfinished"></translation>
+        <translation>Plus de cpu mais meilleur organisation sur le disque</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="593"/>
         <source>Order the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordonner la liste</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="609"/>
@@ -1040,7 +1040,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="625"/>
         <source>Use this folder when destination is not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser ce dossier quand la destination n&apos;est pas défini</translation>
     </message>
     <message>
         <source>Use this folder when destination is empty</source>
