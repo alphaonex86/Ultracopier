@@ -55,11 +55,9 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
                                  #ifdef ULTRACOPIER_PLUGIN_DEBUG
                                  pluginPath
                                  #endif
-                                 ,FacilityInterface * facilityEngine,const bool &portableVersion)
+                                 ,FacilityInterface * facilityEngine,const bool &
+                                )
 {
-    Q_UNUSED(portableVersion);
-    Q_UNUSED(writePath);
-    Q_UNUSED(pluginPath);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath: "+pluginPath);
     this->facilityEngine=facilityEngine;
     if(optionsEngine!=NULL)
