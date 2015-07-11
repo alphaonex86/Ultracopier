@@ -67,6 +67,30 @@ private:
     bool log_enable_transfer;
     bool log_enable_error;
     bool log_enable_folder;
+
+    static QString text_header_copy;
+    static QString text_header_move;
+    static QString text_header_skip;
+    static QString text_header_stop;
+    static QString text_header_error;
+    static QString text_header_MkPath;
+    static QString text_header_RmPath;
+
+    static QString text_var_source;
+    static QString text_var_size;
+    static QString text_var_destination;
+    static QString text_var_path;
+    static QString text_var_error;
+    static QString text_var_mtime;
+    static QString text_var_time;
+    static QString text_var_timestring;
+    #ifdef Q_OS_WIN32
+    static QString text_var_computer;
+    static QString text_var_user;
+    #endif
+    static QString text_var_operation;
+    static QString text_var_rmPath;
+    static QString text_var_mkPath;
 protected:
     void run();
 };

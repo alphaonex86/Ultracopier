@@ -19,6 +19,8 @@ ThemesFactory::ThemesFactory()
     updateSpeed();
     ui->labelDualProgression->hide();
     ui->showDualProgression->hide();
+    
+    qRegisterMetaType<QList<QPersistentModelIndex> >("QList<QPersistentModelIndex>");
 }
 
 ThemesFactory::~ThemesFactory()

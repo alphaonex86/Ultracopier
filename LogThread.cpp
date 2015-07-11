@@ -17,6 +17,30 @@
 #endif
 #include <QMessageBox>
 
+QString LogThread::text_header_copy=QStringLiteral("[Copy] ");
+QString LogThread::text_header_move=QStringLiteral("[Move] ");
+QString LogThread::text_header_skip=QStringLiteral("[Skip] ");
+QString LogThread::text_header_stop=QStringLiteral("[Stop] ");
+QString LogThread::text_header_error=QStringLiteral("[Error] ");
+QString LogThread::text_header_MkPath=QStringLiteral("[MkPath] ");
+QString LogThread::text_header_RmPath=QStringLiteral("[RmPath] ");
+
+QString LogThread::text_var_source=QStringLiteral("%source%");
+QString LogThread::text_var_size=QStringLiteral("%size%");
+QString LogThread::text_var_destination=QStringLiteral("%destination%");
+QString LogThread::text_var_path=QStringLiteral("%path%");
+QString LogThread::text_var_error=QStringLiteral("%error%");
+QString LogThread::text_var_mtime=QStringLiteral("%mtime%");
+QString LogThread::text_var_time=QStringLiteral("%time%");
+QString LogThread::text_var_timestring=QStringLiteral("%dd.MM.yyyy h:m:s%");
+#ifdef Q_OS_WIN32
+QString LogThread::text_var_computer=QStringLiteral("%computer%");
+QString LogThread::text_var_user=QStringLiteral("%user%");
+#endif
+QString LogThread::text_var_operation=QStringLiteral("%operation%");
+QString LogThread::text_var_rmPath=QStringLiteral("%rmPath%");
+QString LogThread::text_var_mkPath=QStringLiteral("%mkPath%");
+
 LogThread::LogThread()
 {
     sync=false;
@@ -117,45 +141,45 @@ void LogThread::closeLogs()
 
 void LogThread::newTransferStart(const Ultracopier::ItemOfCopyList &item)
 {
-    if(!log_enable_transfer)
+    if(!logTransfer())
         return;
     QString text;
     if(item.mode==Ultracopier::Copy)
-        text=QStringLiteral("[Copy] ")+transfer_format+lineReturn;
+        text=LogThread::text_header_copy+transfer_format+lineReturn;
     else
-        text=QStringLiteral("[Move] ")+transfer_format+lineReturn;
+        text=LogThread::text_header_move+transfer_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
-    text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
-    text=text.replace(QStringLiteral("%size%"),QString::number(item.size));
-    text=text.replace(QStringLiteral("%destination%"),item.destinationFullPath);
+    text=text.replace(LogThread::text_var_source,item.sourceFullPath);
+    text=text.replace(LogThread::text_var_size,QString::number(item.size));
+    text=text.replace(LogThread::text_var_destination,item.destinationFullPath);
     emit newData(text);
 }
 
 /** method called when new transfer is started */
 void LogThread::transferSkip(const Ultracopier::ItemOfCopyList &item)
 {
-    if(!log_enable_transfer)
+    if(!logTransfer())
         return;
-    QString text=QStringLiteral("[Skip] ")+transfer_format+lineReturn;
+    QString text=LogThread::text_header_skip+transfer_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
-    text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
-    text=text.replace(QStringLiteral("%size%"),QString::number(item.size));
-    text=text.replace(QStringLiteral("%destination%"),item.destinationFullPath);
+    text=text.replace(LogThread::text_var_source,item.sourceFullPath);
+    text=text.replace(LogThread::text_var_size,QString::number(item.size));
+    text=text.replace(LogThread::text_var_destination,item.destinationFullPath);
     emit newData(text);
 }
 
 void LogThread::newTransferStop(const Ultracopier::ItemOfCopyList &item)
 {
-    if(!log_enable_transfer)
+    if(!logTransfer())
         return;
-    QString text=QStringLiteral("[Stop] ")+transfer_format+lineReturn;
+    QString text=LogThread::text_header_stop+transfer_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %source%, %size%, %destination%
-    text=text.replace(QStringLiteral("%source%"),item.sourceFullPath);
-    text=text.replace(QStringLiteral("%size%"),QString::number(item.size));
-    text=text.replace(QStringLiteral("%destination%"),item.destinationFullPath);
+    text=text.replace(LogThread::text_var_source,item.sourceFullPath);
+    text=text.replace(LogThread::text_var_size,QString::number(item.size));
+    text=text.replace(LogThread::text_var_destination,item.destinationFullPath);
     emit newData(text);
 }
 
@@ -163,13 +187,13 @@ void LogThread::error(const QString &path,const quint64 &size,const QDateTime &m
 {
     if(!log_enable_error)
         return;
-    QString text=QStringLiteral("[Error] ")+error_format+lineReturn;
+    QString text=LogThread::text_header_error+error_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %path%, %size%, %mtime%, %error%
-    text=text.replace(QStringLiteral("%path%"),path);
-    text=text.replace(QStringLiteral("%size%"),QString::number(size));
-    text=text.replace(QStringLiteral("%mtime%"),mtime.toString(Qt::ISODate));
-    text=text.replace(QStringLiteral("%error%"),error);
+    text=text.replace(LogThread::text_var_path,path);
+    text=text.replace(LogThread::text_var_size,QString::number(size));
+    text=text.replace(LogThread::text_var_mtime,mtime.toString(Qt::ISODate));
+    text=text.replace(LogThread::text_var_error,error);
     emit newData(text);
 }
 
@@ -236,34 +260,34 @@ void LogThread::newOptionValue(const QString &group,const QString &name,const QV
 
 QString LogThread::replaceBaseVar(QString text)
 {
-    text=text.replace(QStringLiteral("%time%"),QDateTime::currentDateTime().toString(QStringLiteral("dd.MM.yyyy h:m:s")));
+    text=text.replace(LogThread::text_var_time,QDateTime::currentDateTime().toString(LogThread::text_var_timestring));
     #ifdef Q_OS_WIN32
-    text=text.replace(QStringLiteral("%computer%"),computer);
-    text=text.replace(QStringLiteral("%user%"),user);
+    text=text.replace(LogThread::text_var_computer,computer);
+    text=text.replace(LogThread::text_var_user,user);
     #endif
     return text;
 }
 
 void LogThread::rmPath(const QString &path)
 {
-    if(!log_enable_folder)
+    if(!logTransfer())
         return;
-    QString text=QStringLiteral("[RmPath] ")+folder_format+lineReturn;
+    QString text=LogThread::text_header_RmPath+folder_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
-    text=text.replace(QStringLiteral("%path%"),path);
-    text=text.replace(QStringLiteral("%operation%"),QStringLiteral("rmPath"));
+    text=text.replace(LogThread::text_var_path,path);
+    text=text.replace(LogThread::text_var_operation,LogThread::text_var_rmPath);
     emit newData(text);
 }
 
 void LogThread::mkPath(const QString &path)
 {
-    if(!log_enable_folder)
+    if(!logTransfer())
         return;
-    QString text=QStringLiteral("[MkPath] ")+folder_format+lineReturn;
+    QString text=LogThread::text_header_MkPath+folder_format+lineReturn;
     text=replaceBaseVar(text);
     //Variable is %operation% %path%
-    text=text.replace(QStringLiteral("%path%"),path);
-    text=text.replace(QStringLiteral("%operation%"),QStringLiteral("mkPath"));
+    text=text.replace(LogThread::text_var_path,path);
+    text=text.replace(LogThread::text_var_operation,LogThread::text_var_mkPath);
     emit newData(text);
 }

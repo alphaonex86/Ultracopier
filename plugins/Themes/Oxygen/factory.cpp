@@ -17,6 +17,8 @@ ThemesFactory::ThemesFactory()
     ui->toolBox->setCurrentIndex(0);
     currentSpeed	= 0;
     updateSpeed();
+
+    qRegisterMetaType<QList<QPersistentModelIndex> >("QList<QPersistentModelIndex>");
 }
 
 ThemesFactory::~ThemesFactory()

@@ -197,7 +197,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         #endif
         KeysList.append(qMakePair(QStringLiteral("folderError"),QVariant(0)));
         KeysList.append(qMakePair(QStringLiteral("folderCollision"),QVariant(0)));
-        KeysList.append(qMakePair(QStringLiteral("fileError"),QVariant(0)));
+        KeysList.append(qMakePair(QStringLiteral("fileError"),QVariant(2)));
         KeysList.append(qMakePair(QStringLiteral("fileCollision"),QVariant(0)));
         KeysList.append(qMakePair(QStringLiteral("transferAlgorithm"),QVariant(0)));
         KeysList.append(qMakePair(QStringLiteral("checkDestinationFolder"),QVariant(true)));
