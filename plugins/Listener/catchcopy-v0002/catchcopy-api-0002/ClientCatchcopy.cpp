@@ -8,6 +8,8 @@
 #include "VariablesCatchcopy.h"
 #include "ExtraSocketCatchcopy.h"
 
+#include <QDataStream>
+
 ClientCatchcopy::ClientCatchcopy()
 {
 	disconnectedFromSocket();

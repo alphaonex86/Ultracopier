@@ -9,6 +9,7 @@
 #include "ExtraSocketCatchcopy.h"
 
 #include <QFile>
+#include <QDataStream>
 
 ServerCatchcopy::ServerCatchcopy()
 {
