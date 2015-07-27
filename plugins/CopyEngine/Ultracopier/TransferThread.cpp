@@ -32,7 +32,6 @@ TransferThread::TransferThread() :
 {
     start();
     moveToThread(this);
-    //this->mkpathTransfer            = mkpathTransfer;
     readThread.setWriteThread(&writeThread);
     source.setCaching(false);
     destination.setCaching(false);
