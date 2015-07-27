@@ -189,7 +189,7 @@
         <translation>A mód argumentuma nem érvényes</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Szeretnél másolni? Ha nem, akkor átmozgatva lesz.</translation>
     </message>
@@ -205,7 +205,7 @@
         <translation>Másoló motor betöltése nem lehetséges, másolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Transfer mode</source>
         <translation>Átviteli mód</translation>
     </message>
@@ -592,20 +592,20 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
         <source>Log file already open, error: %1</source>
         <translation>Naplófájl már meg van nyitva, hiba: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Unable to open the log file, error: %1</source>
         <translation>Naplófájl megnyitása nem lehetséges, hiba: %1</translation>
     </message>

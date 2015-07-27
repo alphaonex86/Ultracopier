@@ -188,7 +188,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -204,7 +204,7 @@
         <translation>복사 엔진을 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -590,20 +590,20 @@ This version is compiled as version: %1.</source>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
         <source>Log file already open, error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Unable to open the log file, error: %1</source>
         <translation type="unfinished"></translation>
     </message>

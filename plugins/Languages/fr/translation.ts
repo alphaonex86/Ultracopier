@@ -213,7 +213,7 @@
         <translation>L&apos;argument pour le mode n&apos;est pas valide</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Voulez vous faire une copie? Si vous repondez non alors il sera déplacé.</translation>
     </message>
@@ -233,7 +233,7 @@
         <translation>Impossible de charger le moteur de copie, copie annulée</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Transfer mode</source>
         <translation>Mode de transfert</translation>
     </message>
@@ -630,20 +630,20 @@ Cette version est compilée comme version : %1.</translation>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
         <source>Log file already open, error: %1</source>
         <translation>Fichier de log déjà ouvert, erreur: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Unable to open the log file, error: %1</source>
         <translation>Impossible d&apos;ouvrir le fichier de log, erreur: %1</translation>
     </message>

@@ -503,13 +503,13 @@
     <name>ListThread</name>
     <message>
         <location filename="../../ListThread.cpp" line="1446"/>
-        <location filename="../../ListThread.cpp" line="2358"/>
+        <location filename="../../ListThread.cpp" line="2361"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
     </message>
     <message>
         <location filename="../../ListThread.cpp" line="1453"/>
-        <location filename="../../ListThread.cpp" line="2365"/>
+        <location filename="../../ListThread.cpp" line="2368"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Impossible de sauvegarder la liste de transfert: %1</translation>
     </message>

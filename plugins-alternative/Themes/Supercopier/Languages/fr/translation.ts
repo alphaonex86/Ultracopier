@@ -61,7 +61,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../factory.cpp" line="+199"/>
+        <location filename="../../factory.cpp" line="+198"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>

@@ -213,7 +213,7 @@
         <translation>El argumento para el modo no es válida</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>¿Quieres copiar? Si no, se puede mover.</translation>
     </message>
@@ -233,7 +233,7 @@
         <translation>No se puede cargar el motor de copia, copia abortados</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1128"/>
+        <location filename="../../../Core.cpp" line="1135"/>
         <source>Transfer mode</source>
         <translation>Modo de transferencia</translation>
     </message>
@@ -628,20 +628,20 @@ Esta versión está compilada en versión:%1.</translation>
 <context>
     <name>LogThread</name>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="84"/>
+        <location filename="../../../LogThread.cpp" line="108"/>
         <source>Log file already open, error: %1</source>
         <translation>Entrar archivo ya está abierto, error: %1</translation>
     </message>
     <message>
-        <location filename="../../../LogThread.cpp" line="93"/>
-        <location filename="../../../LogThread.cpp" line="103"/>
+        <location filename="../../../LogThread.cpp" line="117"/>
+        <location filename="../../../LogThread.cpp" line="127"/>
         <source>Unable to open the log file, error: %1</source>
         <translation>No se puede abrir el archivo de registro, error: %1</translation>
     </message>
