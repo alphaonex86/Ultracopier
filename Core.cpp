@@ -818,7 +818,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                             else
                                 currentCopyInstance.interface->remainingTime(-1);
                         }
-                        else
+                        else if(currentCopyInstance.remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
                         {
                             int remainingTimeValue=0;
                             //calculate for each file class
@@ -859,6 +859,8 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                             }
                             currentCopyInstance.interface->remainingTime(remainingTimeValue);
                         }
+                        else
+                        {}//error case
                     }
             }
             lastProgressionTime.restart();
@@ -1013,12 +1015,14 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                                 log.newTransferStop(returnAction.addAction);
                             else
                                 log.transferSkip(returnAction.addAction);
+                            if(copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
                             {
                                 const quint8 &col=fileCatNumber(returnAction.addAction.size);
                                 copyList[index].remainingTimeLogarithmicValue[col].transferedSize+=returnAction.addAction.size;
                             }
                         break;
                         case Ultracopier::AddingItem:
+                            if(copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
                             {
                                 const quint8 &col=fileCatNumber(returnAction.addAction.size);
                                 copyList[index].remainingTimeLogarithmicValue[col].totalSize+=returnAction.addAction.size;
@@ -1046,6 +1050,7 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                                 log.newTransferStop(returnAction.addAction);
                             else
                                 log.transferSkip(returnAction.addAction);
+                            if(copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
                             {
                                 const quint8 &col=fileCatNumber(returnAction.addAction.size);
                                 copyList[index].remainingTimeLogarithmicValue[col].transferedSize+=returnAction.addAction.size;
@@ -1066,12 +1071,14 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                     switch(returnAction.type)
                     {
                         case Ultracopier::RemoveItem:
+                            if(copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
                             {
                                 const quint8 &col=fileCatNumber(returnAction.addAction.size);
                                 copyList[index].remainingTimeLogarithmicValue[col].transferedSize+=returnAction.addAction.size;
                             }
                         break;
                         case Ultracopier::AddingItem:
+                            if(copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
                             {
                                 const quint8 &col=fileCatNumber(returnAction.addAction.size);
                                 copyList[index].remainingTimeLogarithmicValue[col].totalSize+=returnAction.addAction.size;

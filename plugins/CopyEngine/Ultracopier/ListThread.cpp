@@ -1597,7 +1597,10 @@ bool ListThread::needMoreSpace() const
         const qint64 &bytesFree=storageInfo.bytesFree();
         #endif
 
-        if(availableSpace<0)
+        if(availableSpace<0 ||
+                //workaround for all 0 value in case of bug from Qt
+                (availableSpace==0 && storageInfo.bytesTotal()==0)
+                )
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
         }
