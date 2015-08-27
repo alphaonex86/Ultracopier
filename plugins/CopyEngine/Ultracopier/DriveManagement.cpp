@@ -50,7 +50,7 @@ QString DriveManagement::getDrive(const QString &fileOrFolder) const
     }
     #endif
     //if unable to locate the right mount point
-    abort();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("unable to locate the right mount point for: %1, mount point: %2").arg(fileOrFolder).arg(mountSysPoint.join(";")));
     return QString();
 }
 
