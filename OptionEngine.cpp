@@ -7,7 +7,6 @@
 
 #include <QFileInfo>
 #include <QDir>
-#include <QPluginLoader>
 #include <QLabel>
 #include <QComboBox>
 #include <QDialogButtonBox>

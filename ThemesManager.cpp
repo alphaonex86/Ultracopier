@@ -13,6 +13,14 @@
 #include "PluginsManager.h"
 #include "LanguagesManager.h"
 
+#ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+#ifdef ULTRACOPIER_MODE_SUPERCOPIER
+#error, not done
+#else
+#include "plugins/Themes/Oxygen/ThemesFactory.h"
+#endif
+#endif
+
 #ifdef ULTRACOPIER_MODE_SUPERCOPIER
 #define ULTRACOPIER_DEFAULT_STYLE "Supercopier"
 #else
@@ -70,25 +78,29 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     newPlugin.plugin=plugin;
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     PluginInterface_ThemesFactory *factory;
-    QObjectList objectList=QPluginLoader::staticInstances();
-    int index=0;
-    QObject *pluginObject;
-    while(index<objectList.size())
-    {
-        pluginObject=objectList.at(index);
-        factory = qobject_cast<PluginInterface_ThemesFactory *>(pluginObject);
-        if(factory!=NULL)
-            break;
-        index++;
-    }
-    if(index==objectList.size())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("static themes not found"));
-        emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
-        emit theThemeIsReloaded();
-        return;
-    }
-    newPlugin.pluginLoader=NULL;
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
+        QObjectList objectList=QPluginLoader::staticInstances();
+        int index=0;
+        QObject *pluginObject;
+        while(index<objectList.size())
+        {
+            pluginObject=objectList.at(index);
+            factory = qobject_cast<PluginInterface_ThemesFactory *>(pluginObject);
+            if(factory!=NULL)
+                break;
+            index++;
+        }
+        if(index==objectList.size())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("static themes not found"));
+            emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
+            emit theThemeIsReloaded();
+            return;
+        }
+        newPlugin.pluginLoader=NULL;
+    #else
+        factory=new ThemesFactory();
+    #endif
     #else
     QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"));
     QObject *pluginInstance = pluginLoader->instance();

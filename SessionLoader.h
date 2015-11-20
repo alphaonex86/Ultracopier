@@ -11,7 +11,9 @@ This class load ALL plugin compatible to listen and catch the copy/move
 
 #include <QObject>
 #include <QList>
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QPluginLoader>
+#endif
 #include <QString>
 #include <QStringList>
 
@@ -42,7 +44,9 @@ class SessionLoader : public QObject
         struct LocalPlugin
         {
             PluginInterface_SessionLoader * sessionLoaderInterface;
+            #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
             QPluginLoader * pluginLoader;
+            #endif
             QString path;
             LocalPluginOptions *options;
         };

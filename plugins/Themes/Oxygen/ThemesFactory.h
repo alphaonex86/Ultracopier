@@ -28,8 +28,10 @@ namespace Ui {
 class ThemesFactory : public PluginInterface_ThemesFactory
 {
     Q_OBJECT
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.ThemesFactory/1.0.1.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_ThemesFactory)
+    #endif
 public:
     ThemesFactory();
     ~ThemesFactory();

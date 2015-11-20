@@ -1,7 +1,7 @@
 QT += widgets
 TEMPLATE        = lib
 CONFIG         += plugin
-HEADERS         = interface.h \
+HEADERS         = ThemesFactory.h \
                 StructEnumDefinition.h \
     factory.h \
     DebugEngineMacro.h \
@@ -11,7 +11,7 @@ HEADERS         = interface.h \
     ../../../interface/FacilityInterface.h \
     ../../../interface/OptionInterface.h \
     TransferModel.h
-SOURCES         = interface.cpp \
+SOURCES         = ThemesFactory.cpp \
     factory.cpp \
     TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)

@@ -8,6 +8,10 @@
 #include "CopyListener.h"
 #include "LanguagesManager.h"
 
+#ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
+#include "plugins/Listener/catchcopy-v0002/listener.h"
+#endif
+
 #include <QRegularExpression>
 #include <QMessageBox>
 
@@ -60,6 +64,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     //setFileName
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     PluginInterface_Listener *listen;
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     QObjectList objectList=QPluginLoader::staticInstances();
     int index=0;
     QObject *pluginObject;
@@ -76,7 +81,12 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("static listener not found"));
         return;
     }
-    newPluginListener.pluginLoader=NULL;
+    #else
+    listen=new Listener();
+    #endif
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
+        newPluginListener.pluginLoader=NULL;
+        #endif
     #else
     QPluginLoader *pluginOfPluginLoader=new QPluginLoader(plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("listener")));
     QObject *pluginInstance = pluginOfPluginLoader->instance();

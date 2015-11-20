@@ -7,7 +7,9 @@
 #define SERVER_H
 
 #include <QString>
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QtPlugin>
+#endif
 
 #include "Environment.h"
 #include "../../../interface/PluginInterface_Listener.h"
@@ -17,8 +19,10 @@
 class Listener : public PluginInterface_Listener
 {
     Q_OBJECT
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.Listener/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_Listener)
+    #endif
 public:
     Listener();
     /// \brief try listen the copy/move

@@ -89,6 +89,7 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("With cgminer"));
     #endif
     #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Version as all in one"));
     QObjectList objectList=QPluginLoader::staticInstances();
     int index=0;
@@ -97,6 +98,9 @@ EventDispatcher::EventDispatcher()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("static plugin: %1").arg(objectList.at(index)->metaObject()->className()));
         index++;
     }
+    #else
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Version as all in one, direct"));
+    #endif
     #endif
     //To lunch some initialization after QApplication::exec() to quit eventually
     lunchInitFunction.setInterval(0);

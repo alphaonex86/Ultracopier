@@ -7,7 +7,9 @@
 #define COPYENGINEMANAGER_H
 
 #include <QObject>
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QPluginLoader>
+#endif
 #include <QList>
 #include <QWidget>
 #include <QString>
@@ -79,7 +81,9 @@ private:
         QString pluginPath;
         QStringList supportedProtocolsForTheSource;
         QStringList supportedProtocolsForTheDestination;
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
         QPluginLoader * pointer;
+        #endif
         PluginInterface_CopyEngineFactory * factory;
         QList<PluginInterface_CopyEngine *> intances;
         bool canDoOnlyCopy;

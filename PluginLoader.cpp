@@ -39,6 +39,7 @@ PluginLoader::~PluginLoader()
     const int &loop_size=pluginList.size();
     while(index<loop_size)
     {
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
         pluginList.at(index).pluginLoaderInterface->setEnabled(false);
         if(pluginList.at(index).pluginLoader!=NULL)
         {
@@ -48,6 +49,7 @@ PluginLoader::~PluginLoader()
                 pluginList.removeAt(index);
             }
         }
+        #endif
         index++;
     }
 }
@@ -61,6 +63,7 @@ void PluginLoader::resendState()
 
 void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
 {
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     if(stopIt)
         return;
     if(plugin.category!=PluginType_PluginLoader)
@@ -135,6 +138,9 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
         pluginList.last().inWaitOfReply=true;
         newEntry.pluginLoaderInterface->setEnabled(needEnable);
     }
+    #else
+    Q_UNUSED(plugin);
+    #endif
 }
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE

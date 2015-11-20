@@ -8,7 +8,9 @@
 
 #include <QObject>
 #include <QList>
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QPluginLoader>
+#endif
 
 #include "interface/PluginInterface_Listener.h"
 #include "Environment.h"
@@ -86,7 +88,9 @@ class CopyListener : public QObject
         struct PluginListener
         {
             PluginInterface_Listener *listenInterface;
+            #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
             QPluginLoader *pluginLoader;
+            #endif
             QString path;
             Ultracopier::ListeningState state;
             bool inWaitOfReply;

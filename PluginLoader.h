@@ -11,7 +11,9 @@ This class load ALL plugin compatible to listen and catch the copy/move
 
 #include <QObject>
 #include <QList>
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QPluginLoader>
+#endif
 #include <QString>
 #include <QStringList>
 
@@ -57,7 +59,9 @@ private:
     struct LocalPlugin
     {
         PluginInterface_PluginLoader * pluginLoaderInterface;
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
         QPluginLoader * pluginLoader;
+        #endif
         Ultracopier::CatchState state;
         QString path;
         bool inWaitOfReply;

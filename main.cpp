@@ -15,6 +15,7 @@
 #include "OptionEngine.h"
 #include "PluginsManager.h"
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     Q_IMPORT_PLUGIN(CopyEngineFactory)
     Q_IMPORT_PLUGIN(ThemesFactory)
@@ -25,6 +26,7 @@
         Q_IMPORT_PLUGIN(WindowsSessionLoader)
         #endif
     #endif
+#endif
 #endif
 
 #ifdef ULTRACOPIER_DEBUG

@@ -42,8 +42,10 @@ namespace Ui {
 class CopyEngineFactory : public PluginInterface_CopyEngineFactory
 {
     Q_OBJECT
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_CopyEngineFactory)
+    #endif
 public:
     CopyEngineFactory();
     ~CopyEngineFactory();

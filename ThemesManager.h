@@ -10,7 +10,9 @@
 #include <QObject>
 #include <QIcon>
 #include <QList>
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QPluginLoader>
+#endif
 
 #include "Environment.h"
 #include "ResourcesManager.h"
@@ -55,7 +57,9 @@ class ThemesManager : public QObject
         {
             PluginsAvailable plugin;
             PluginInterface_ThemesFactory *factory;
+            #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
             QPluginLoader *pluginLoader;
+            #endif
             LocalPluginOptions *options;
         };
         QList<PluginsAvailableThemes> pluginList;

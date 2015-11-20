@@ -6,7 +6,7 @@
 
 #include <QColorDialog>
 
-#include "factory.h"
+#include "ThemesFactory.h"
 
 ThemesFactory::ThemesFactory()
 {

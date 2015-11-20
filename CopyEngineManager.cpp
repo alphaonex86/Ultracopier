@@ -10,6 +10,10 @@
 #include "CopyEngineManager.h"
 #include "LanguagesManager.h"
 
+#ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
+#include "plugins/CopyEngine/Ultracopier/CopyEngineFactory.h"
+#endif
+
 CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -60,6 +64,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     newItem.pluginPath=pluginPath;
     newItem.path=plugin.path;
     newItem.name=plugin.name;
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     newItem.pointer=new QPluginLoader(newItem.pluginPath);
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     QObjectList objectList=QPluginLoader::staticInstances();
@@ -107,6 +112,10 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
         return;
     }
     #endif
+    #else
+    newItem.factory=new CopyEngineFactory();
+    #endif
+
     #ifdef ULTRACOPIER_DEBUG
     connect(newItem.factory,&PluginInterface_CopyEngineFactory::debugInformation,this,&CopyEngineManager::debugInformation,Qt::QueuedConnection);
     #endif // ULTRACOPIER_DEBUG

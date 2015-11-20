@@ -10,7 +10,7 @@
 #include <cmath>
 #include <QStorageInfo>
 
-#include "Factory.h"
+#include "CopyEngineFactory.h"
 
 // The cmath header from MSVC does not contain round()
 #if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)

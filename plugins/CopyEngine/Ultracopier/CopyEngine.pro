@@ -26,7 +26,7 @@ HEADERS         = \
     ../Ultracopier/DriveManagement.h \
     ../Ultracopier/CopyEngine.h \
     ../Ultracopier/DebugDialog.h \
-    ../Ultracopier/Factory.h \
+    ../Ultracopier/CopyEngineFactory.h \
     ../Ultracopier/FileErrorDialog.h \
     ../Ultracopier/FileExistsDialog.h \
     ../Ultracopier/FileIsSameDialog.h \
@@ -48,7 +48,7 @@ SOURCES         = \
     ../Ultracopier/CopyEngine-collision-and-error.cpp \
     ../Ultracopier/CopyEngine.cpp \
     ../Ultracopier/DebugDialog.cpp \
-    ../Ultracopier/Factory.cpp \
+    ../Ultracopier/CopyEngineFactory.cpp \
     ../Ultracopier/FileErrorDialog.cpp \
     ../Ultracopier/FileExistsDialog.cpp \
     ../Ultracopier/FileIsSameDialog.cpp \
