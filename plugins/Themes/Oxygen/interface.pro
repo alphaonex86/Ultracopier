@@ -3,7 +3,6 @@ TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = ThemesFactory.h \
                 StructEnumDefinition.h \
-    factory.h \
     DebugEngineMacro.h \
     Environment.h \
     Variable.h \
@@ -12,7 +11,6 @@ HEADERS         = ThemesFactory.h \
     ../../../interface/OptionInterface.h \
     TransferModel.h
 SOURCES         = ThemesFactory.cpp \
-    factory.cpp \
     TransferModel.cpp
 TARGET          = $$qtLibraryTarget(interface)
 TRANSLATIONS += Languages/ar/translation.ts \

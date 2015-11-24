@@ -22,6 +22,8 @@ DriveManagement::DriveManagement()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("mountSysPoint: %1").arg(mountSysPoint.at(index)));
         index++;
     }
+    if(mountSysPoint.isEmpty())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("mountSysPoint is empty"));
     #endif
 }
 
@@ -100,4 +102,6 @@ void DriveManagement::tryUpdate()
         driveType << mountedVolumesList.at(index).fileSystemType();
         index++;
     }
+    if(mountedVolumesList.isEmpty())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("QStorageInfo::mountedVolumes() list is empty"));
 }
