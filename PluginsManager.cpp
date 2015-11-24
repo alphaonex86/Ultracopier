@@ -161,7 +161,7 @@ QString PluginsManager::categoryToString(const PluginType &category) const
             return QStringLiteral("Themes");
         break;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("cat text not found: ")+category);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("cat text not found: ")+QString::number(category));
             return QStringLiteral("Unknown");
         break;
     }

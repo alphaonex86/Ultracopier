@@ -20,7 +20,7 @@
 
 #include "interface.h"
 #include "ui_interface.h"
-#include "factory.h"
+#include "ThemesFactory.h"
 
 QIcon Themes::player_play;
 QIcon Themes::player_pause;
