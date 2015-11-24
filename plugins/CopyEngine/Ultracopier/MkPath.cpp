@@ -183,6 +183,8 @@ void MkPath::internalDoThisPath()
                 emit errorOnFolder(pathList.first().destination,tr("Unable to temporary rename the folder"));
                 return;
             }
+            /* http://doc.qt.io/qt-5/qdir.html#rename
+             * On most file systems, rename() fails only if oldName does not exist, or if a file with the new name already exists.
             if(!dir.mkpath(pathList.first().destination.absolutePath()))
             {
                 if(!dir.exists(pathList.first().destination.absolutePath()))
@@ -194,7 +196,7 @@ void MkPath::internalDoThisPath()
                     emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
                     return;
                 }
-            }
+            }*/
             if(!dir.rename(tempFolder.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
             {
                 if(stopIt)
@@ -207,6 +209,8 @@ void MkPath::internalDoThisPath()
         }
         else
         {
+            /* http://doc.qt.io/qt-5/qdir.html#rename
+             * On most file systems, rename() fails only if oldName does not exist, or if a file with the new name already exists.
             if(!dir.mkpath(pathList.first().destination.absolutePath()))
             {
                 if(!dir.exists(pathList.first().destination.absolutePath()))
@@ -218,13 +222,13 @@ void MkPath::internalDoThisPath()
                     emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
                     return;
                 }
-            }
+            }*/
             if(!dir.rename(pathList.first().source.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+pathList.first().source.absoluteFilePath()+", soruce exists: "+QString::number(QDir(pathList.first().source.absoluteFilePath()).exists())+", to: "+pathList.first().destination.absoluteFilePath()+", destination exist: "+QString::number(QDir(pathList.first().destination.absoluteFilePath()).exists()));
                 emit errorOnFolder(pathList.first().destination,tr("Unable to move the folder"));
                 return;
             }
