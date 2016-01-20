@@ -6,8 +6,6 @@
 
 DriveManagement::DriveManagement()
 {
-//    timer.start(60*1000);
-//    connect(&timer,&QTimer::timeout,this,&DriveManagement::tryUpdate,Qt::QueuedConnection);
     tryUpdate();
     #ifdef Q_OS_WIN32
     reg1=QRegularExpression(QStringLiteral("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+"));
@@ -15,16 +13,7 @@ DriveManagement::DriveManagement()
     reg3=QRegularExpression(QStringLiteral("^[a-zA-Z]:[\\\\/]"));
     reg4=QRegularExpression(QStringLiteral("^([a-zA-Z]:[\\\\/]).*$"));
     #endif
-    #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    int index=0;
-    while(index<mountSysPoint.size())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("mountSysPoint: %1").arg(mountSysPoint.at(index)));
-        index++;
-    }
-    if(mountSysPoint.isEmpty())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("mountSysPoint is empty"));
-    #endif
+    /// \warn ULTRACOPIER_DEBUGCONSOLE() don't work here because the sinal slot is not connected!
 }
 
 //get drive of an file or folder
@@ -102,6 +91,4 @@ void DriveManagement::tryUpdate()
         driveType << mountedVolumesList.at(index).fileSystemType();
         index++;
     }
-    if(mountedVolumesList.isEmpty())
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("QStorageInfo::mountedVolumes() list is empty"));
 }

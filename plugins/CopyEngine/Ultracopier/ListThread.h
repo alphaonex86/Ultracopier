@@ -30,6 +30,7 @@ class ListThread : public QThread
 public:
     explicit ListThread(FacilityInterface * facilityInterface);
     ~ListThread();
+
     //duplication copy detection
     /** \brief compare the current sources of the copy, with the passed arguments
      * \param sources the sources list to compares with the current sources list

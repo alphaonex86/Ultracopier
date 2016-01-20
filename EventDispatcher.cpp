@@ -8,6 +8,7 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 #include <QWidget>
+#include <QStorageInfo>
 
 #include "EventDispatcher.h"
 #include "ExtraSocket.h"
@@ -102,6 +103,19 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Version as all in one, direct"));
     #endif
     #endif
+
+    {
+        const QList<QStorageInfo> mountedVolumesList=QStorageInfo::mountedVolumes();
+        int index=0;
+        while(index<mountedVolumesList.size())
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("mountSysPoint: %1").arg(mountedVolumesList.at(index).rootPath()));
+            index++;
+        }
+        if(mountedVolumesList.isEmpty())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("mountSysPoint is empty"));
+    }
+
     //To lunch some initialization after QApplication::exec() to quit eventually
     lunchInitFunction.setInterval(0);
     lunchInitFunction.setSingleShot(true);
