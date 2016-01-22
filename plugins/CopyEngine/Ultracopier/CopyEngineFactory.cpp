@@ -190,7 +190,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         #endif
         KeysList.append(qMakePair(QStringLiteral("sequentialBuffer"),QVariant(sequentialBuffer)));
         KeysList.append(qMakePair(QStringLiteral("parallelBuffer"),QVariant(parallelBuffer)));
-        KeysList.append(qMakePair(QStringLiteral("parallelizeIfSmallerThan"),QVariant(1)));
+        KeysList.append(qMakePair(QStringLiteral("parallelizeIfSmallerThan"),QVariant(128)));//128KB, better for modern hardware: Multiple queue en linux, SSD, ...
         KeysList.append(qMakePair(QStringLiteral("autoStart"),QVariant(true)));
         #ifdef ULTRACOPIER_PLUGIN_RSYNC
         KeysList.append(qMakePair(QStringLiteral("rsync"),QVariant(true)));
@@ -219,7 +219,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QStringLiteral("renameTheOriginalDestination"),QVariant(false)));
         KeysList.append(qMakePair(QStringLiteral("checkDiskSpace"),QVariant(true)));
         KeysList.append(qMakePair(QStringLiteral("defaultDestinationFolder"),QVariant(QString())));
-        KeysList.append(qMakePair(QStringLiteral("inodeThreads"),QVariant(1)));
+        KeysList.append(qMakePair(QStringLiteral("inodeThreads"),QVariant(16)));
         KeysList.append(qMakePair(QStringLiteral("copyListOrder"),QVariant(false)));
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)
