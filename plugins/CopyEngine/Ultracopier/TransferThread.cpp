@@ -2,7 +2,9 @@
 //then do overwrite node function to not re-set the file name
 
 #include "TransferThread.h"
-
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 #ifdef Q_OS_WIN32
     #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -689,9 +691,10 @@ void TransferThread::tryMoveDirectly()
     //move if on same mount point
     QFile sourceFile(source.absoluteFilePath());
     QFile destinationFile(destination.absoluteFilePath());
-    if(destinationFile.exists())
+    #ifndef Q_OS_WIN32
+    if(destinationFile.exists() || destination.isSymLink())
     {
-        if(!sourceFile.exists())
+        if(!sourceFile.exists() && !source.isSymLink())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+destinationFile.fileName()+QStringLiteral(", source not exists"));
             readError=true;
@@ -706,6 +709,7 @@ void TransferThread::tryMoveDirectly()
             return;
         }
     }
+    #endif
     QDir dir(destination.absolutePath());
     {
         mkpathTransfer->acquire();
@@ -713,10 +717,19 @@ void TransferThread::tryMoveDirectly()
             dir.mkpath(destination.absolutePath());
         mkpathTransfer->release();
     }
+    #ifdef Q_OS_WIN32
+    //if(!sourceFile.copy(destinationFile.fileName()))
+    if(MoveFileEx(
+            reinterpret_cast<const wchar_t*>(sourceFile.fileName().utf16()),
+            reinterpret_cast<const wchar_t*>(destinationFile.fileName().utf16()),
+            MOVEFILE_COPY_ALLOWED|MOVEFILE_REPLACE_EXISTING
+        )==0)
+    #else
     if(!sourceFile.rename(destinationFile.fileName()))
+    #endif
     {
         readError=true;
-        if(!sourceFile.exists())
+        if(!sourceFile.exists() && !source.isSymLink())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
             emit errorOnFile(sourceFile,tr("File not found"));
@@ -754,9 +767,10 @@ void TransferThread::tryCopyDirectly()
     //move if on same mount point
     QFile sourceFile(source.absoluteFilePath());
     QFile destinationFile(destination.absoluteFilePath());
-    if(destinationFile.exists())
+    #ifndef Q_OS_WIN32
+    if(destinationFile.exists() || destination.isSymLink())
     {
-        if(!sourceFile.exists())
+        if(!sourceFile.exists() && !source.isSymLink())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+destinationFile.fileName()+QStringLiteral(", source not exists"));
             readError=true;
@@ -771,6 +785,7 @@ void TransferThread::tryCopyDirectly()
             return;
         }
     }
+    #endif
     QDir dir(destination.absolutePath());
     {
         mkpathTransfer->acquire();
@@ -781,19 +796,27 @@ void TransferThread::tryCopyDirectly()
     /** on windows, symLink is normal file, can be copied
      * on unix not, should be created **/
     #ifdef Q_OS_WIN32
-    if(!sourceFile.copy(destinationFile.fileName()))
+    //if(!sourceFile.copy(destinationFile.fileName()))
+    if(CopyFileEx(
+                reinterpret_cast<const wchar_t*>(sourceFile.fileName().utf16()),
+                reinterpret_cast<const wchar_t*>(destinationFile.fileName().utf16()),
+            NULL,
+            NULL,
+            FALSE,
+            0
+        )==0)
     #else
     if(!QFile::link(sourceFile.symLinkTarget(),destinationFile.fileName()))
     #endif
     {
         readError=true;
-        if(!sourceFile.exists())
+        if(!sourceFile.exists() && !source.isSymLink())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
             emit errorOnFile(sourceFile,tr("The source file doesn't exist"));
             return;
         }
-        else if(destinationFile.exists())
+        else if(destinationFile.exists() || destination.isSymLink())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
             emit errorOnFile(sourceFile,tr("Another file exists at same place"));
@@ -1271,7 +1294,7 @@ bool TransferThread::doFilePostOperation()
     //set the time if no write thread used
 
     destination.refresh();
-    if(!destination.exists())
+    if(!destination.exists() && !destination.isSymLink())
     {
         if(!stopIt)
             if(/*true when the destination have been remove but not the symlink:*/!source.isSymLink())
