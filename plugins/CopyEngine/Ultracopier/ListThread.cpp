@@ -1,5 +1,6 @@
 #include "ListThread.h"
 #include <QStorageInfo>
+#include <QMutexLocker>
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
 {
@@ -75,6 +76,7 @@ ListThread::~ListThread()
 //transfer is finished
 void ListThread::transferInodeIsClosed()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     numberOfInodeOperation--;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
@@ -166,6 +168,7 @@ void ListThread::transferInodeIsClosed()
 \note ONLY IN CASE OF ERROR */
 void ListThread::transferPutAtBottom()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     TransferThread *transfer=qobject_cast<TransferThread *>(QObject::sender());
     if(transfer==NULL)
     {
@@ -369,6 +372,7 @@ QString ListThread::getUniqueDestinationFolder() const
 ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start with: ")+QString::number(mode));
+    QMutexLocker mutexLocker(&globalListProtection);
 
     //create new thread because is auto-detroyed
     scanFileOrFolderThreadsPool << new ScanFileOrFolder(mode);
@@ -409,6 +413,7 @@ void ListThread::scanThreadHaveFinishSlot()
 
 void ListThread::scanThreadHaveFinish(bool skipFirstRemove)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("listing thread have finish, skipFirstRemove: ")+QString::number(skipFirstRemove));
     if(!skipFirstRemove)
     {
@@ -681,6 +686,7 @@ void ListThread::pause()
 
 void ListThread::resume()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!putInPause)
     {
@@ -707,6 +713,7 @@ void ListThread::skip(const quint64 &id)
 
 bool ListThread::skipInternal(const quint64 &id)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     int index=0;
     int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
@@ -747,6 +754,7 @@ bool ListThread::skipInternal(const quint64 &id)
 //executed in this thread
 void ListThread::cancel()
 {
+    QMutexLocker mutexLocker(&globalListProtection);//for checkIfReadyToCancel();
     if(stopIt)
     {
         waitCancel.release();
@@ -1030,6 +1038,7 @@ void ListThread::sendActionDone()
 //send progression
 void ListThread::sendProgression()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(actionToDoListTransfer.isEmpty())
         return;
     oversize=0;
@@ -1084,6 +1093,7 @@ void ListThread::sendProgression()
 //send the progression, after full reset of the interface (then all is empty)
 void ListThread::syncTransferList_internal()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     emit syncReady();
     actionDone.clear();
@@ -1148,6 +1158,7 @@ void ListThread::syncTransferList_internal()
 //add file transfer to do
 quint64 ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(stopIt)
         return 0;
     //add to transfer list
@@ -1221,6 +1232,7 @@ void ListThread::removeItems(const QList<int> &ids)
 //put on top
 void ListThread::moveItemsOnTop(QList<int> ids)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(actionToDoListTransfer.size()<=1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list size is empty");
@@ -1254,6 +1266,7 @@ void ListThread::moveItemsOnTop(QList<int> ids)
 //move up
 void ListThread::moveItemsUp(QList<int> ids)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(actionToDoListTransfer.size()<=1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list size is empty");
@@ -1300,6 +1313,7 @@ void ListThread::moveItemsUp(QList<int> ids)
 //move down
 void ListThread::moveItemsDown(QList<int> ids)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(actionToDoListTransfer.size()<=1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list size is empty");
@@ -1347,6 +1361,7 @@ void ListThread::moveItemsDown(QList<int> ids)
 //put on bottom
 void ListThread::moveItemsOnBottom(QList<int> ids)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(actionToDoListTransfer.size()<=1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list size is empty");
@@ -1457,6 +1472,7 @@ void ListThread::exportTransferList(const QString &fileName)
 
 void ListThread::importTransferList(const QString &fileName)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QFile transferFile(fileName);
     if(transferFile.open(QIODevice::ReadOnly))
@@ -1554,8 +1570,8 @@ void ListThread::importTransferList(const QString &fileName)
         transferFile.close();
         if(errorFound)
             emit warningTransferList(tr("Some errors have been found during the line parsing"));
-        sendActionDone();
-        updateTheStatus();
+
+        updateTheStatus();//->sendActionDone(); into this
         autoStartAndCheckSpace();
     }
     else
@@ -1632,6 +1648,7 @@ bool ListThread::needMoreSpace() const
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2").arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()));
     if(stopIt || putInPause)
         return;
@@ -1836,6 +1853,7 @@ void ListThread::restartTransferIfItCan()
 /// \brief update the transfer stat
 void ListThread::newTransferStat(const TransferStat &stat,const quint64 &id)
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("TransferStat: %1").arg(stat));
     Ultracopier::ReturnActionOnCopyList newAction;
     switch(stat)
@@ -1907,6 +1925,7 @@ void ListThread::set_updateMount()
 
 void ListThread::mkPathFirstFolderFinish()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     int int_for_loop=0;
     const int &loop_size=actionToDoListInode.size();
     while(int_for_loop<loop_size)
@@ -2105,6 +2124,7 @@ void ListThread::getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &er
 /// \to create transfer thread
 void ListThread::createTransferThread()
 {
+    QMutexLocker mutexLocker(&globalListProtection);
     if(stopIt)
         return;
     if(transferThreadList.size()>=inodeThreads)
