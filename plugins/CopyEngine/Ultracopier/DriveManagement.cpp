@@ -88,7 +88,15 @@ void DriveManagement::tryUpdate()
     while(index<mountedVolumesList.size())
     {
         mountSysPoint << QDir::toNativeSeparators(mountedVolumesList.at(index).rootPath());
+        #ifdef Q_OS_WIN32
+        if(mountSysPoint.last()!="A:\\" && mountSysPoint.last()!="A:/" && mountSysPoint.last()!="A:" && mountSysPoint.last()!="A" &&
+                mountSysPoint.last()!="a:\\" && mountSysPoint.last()!="a:/" && mountSysPoint.last()!="a:" && mountSysPoint.last()!="a")
+            driveType << mountedVolumesList.at(index).fileSystemType();
+        else
+            driveType << QByteArray();
+        #else
         driveType << mountedVolumesList.at(index).fileSystemType();
+        #endif
         index++;
     }
 }

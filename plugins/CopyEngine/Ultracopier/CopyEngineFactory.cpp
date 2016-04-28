@@ -219,7 +219,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const QString &wr
         KeysList.append(qMakePair(QStringLiteral("renameTheOriginalDestination"),QVariant(false)));
         KeysList.append(qMakePair(QStringLiteral("checkDiskSpace"),QVariant(true)));
         KeysList.append(qMakePair(QStringLiteral("defaultDestinationFolder"),QVariant(QString())));
-        KeysList.append(qMakePair(QStringLiteral("inodeThreads"),QVariant(16)));
+        KeysList.append(qMakePair(QStringLiteral("inodeThreads"),QVariant(1)));
         KeysList.append(qMakePair(QStringLiteral("copyListOrder"),QVariant(false)));
         options->addOptionGroup(KeysList);
         #if ! defined (Q_CC_GNU)

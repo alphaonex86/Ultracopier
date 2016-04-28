@@ -89,20 +89,20 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="222"/>
-        <location filename="../../../CopyEngineManager.cpp" line="227"/>
-        <location filename="../../../CopyEngineManager.cpp" line="250"/>
-        <location filename="../../../CopyEngineManager.cpp" line="264"/>
+        <location filename="../../../CopyEngineManager.cpp" line="231"/>
+        <location filename="../../../CopyEngineManager.cpp" line="236"/>
+        <location filename="../../../CopyEngineManager.cpp" line="259"/>
+        <location filename="../../../CopyEngineManager.cpp" line="273"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="222"/>
+        <location filename="../../../CopyEngineManager.cpp" line="231"/>
         <source>Cannot find any copy engine with move support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="250"/>
+        <location filename="../../../CopyEngineManager.cpp" line="259"/>
         <source>This copy engine does not support move</source>
         <translation type="unfinished"></translation>
     </message>
@@ -112,7 +112,7 @@
         <translation type="obsolete">Finde keine Kopier-Engine mit Motions-Unterstützung</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="227"/>
+        <location filename="../../../CopyEngineManager.cpp" line="236"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Finde keine kompatible Engine!</translation>
     </message>
@@ -121,7 +121,7 @@
         <translation type="obsolete">Diese Kopier-Engine unterstützt keine Motions</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="264"/>
+        <location filename="../../../CopyEngineManager.cpp" line="273"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Finde keine Engine mit diesem Namen: %1</translation>
     </message>
@@ -129,12 +129,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="145"/>
+        <location filename="../../../CopyListener.cpp" line="155"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="145"/>
+        <location filename="../../../CopyListener.cpp" line="155"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Fehler während Empfang der Kopier/Verschieben-Liste
@@ -215,12 +215,12 @@
 <context>
     <name>EventDispatcher</name>
     <message>
-        <location filename="../../../EventDispatcher.cpp" line="135"/>
+        <location filename="../../../EventDispatcher.cpp" line="153"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../EventDispatcher.cpp" line="135"/>
+        <location filename="../../../EventDispatcher.cpp" line="153"/>
         <source>Give the key of this software, more information on &lt;a href=&quot;http://ultracopier.first-world.info/&quot;&gt;ultracopier.first-world.info&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -894,12 +894,8 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Sprache laden?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="348"/>
-        <location filename="../../../OptionDialog.cpp" line="350"/>
-        <location filename="../../../OptionDialog.cpp" line="1027"/>
-        <location filename="../../../OptionDialog.cpp" line="1028"/>
         <source>Disabled because you do not have any SessionLoader plugin</source>
-        <translation>Deaktiviert, da kein SessionLoader-Plugin installiert ist</translation>
+        <translation type="obsolete">Deaktiviert, da kein SessionLoader-Plugin installiert ist</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="352"/>
@@ -1013,10 +1009,10 @@ Diese Version wurde kompiliert als Version: %1.</translation>
 <context>
     <name>OptionEngine</name>
     <message>
-        <location filename="../../../OptionEngine.cpp" line="164"/>
-        <location filename="../../../OptionEngine.cpp" line="168"/>
-        <location filename="../../../OptionEngine.cpp" line="205"/>
-        <location filename="../../../OptionEngine.cpp" line="209"/>
+        <location filename="../../../OptionEngine.cpp" line="163"/>
+        <location filename="../../../OptionEngine.cpp" line="167"/>
+        <location filename="../../../OptionEngine.cpp" line="204"/>
+        <location filename="../../../OptionEngine.cpp" line="208"/>
         <source>The variable was not found: %1 %2</source>
         <translation>Variablen nicht gefunden: %1 %2</translation>
     </message>

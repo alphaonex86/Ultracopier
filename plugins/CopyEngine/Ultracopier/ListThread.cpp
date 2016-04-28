@@ -1606,39 +1606,46 @@ bool ListThread::needMoreSpace() const
     QHashIterator<QString,quint64> i(requiredSpace);
     while (i.hasNext()) {
         i.next();
-        QStorageInfo storageInfo(i.key());
-        storageInfo.refresh();
-        const qint64 &availableSpace=storageInfo.bytesAvailable();
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        const qint64 &bytesFree=storageInfo.bytesFree();
+        #ifdef Q_OS_WIN32
+        if(i.key()!="A:\\" && i.key()!="A:/" && i.key()!="A:" && i.key()!="A" && i.key()!="a:\\" && i.key()!="a:/" && i.key()!="a:" && i.key()!="a")
+        {
         #endif
+            QStorageInfo storageInfo(i.key());
+            storageInfo.refresh();
+            const qint64 &availableSpace=storageInfo.bytesAvailable();
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG
+            const qint64 &bytesFree=storageInfo.bytesFree();
+            #endif
 
-        if(availableSpace<0 ||
-                //workaround for all 0 value in case of bug from Qt
-                (availableSpace==0 && storageInfo.bytesTotal()==0)
-                )
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
-        }
-        else if(i.value()>(quint64)availableSpace)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
-            #ifdef Q_OS_WIN32
-            //if(i.key().contains(QRegularExpression("^[a-zA-Z]:[\\\\/]")))
-            if(i.key().contains(QRegularExpression("^[a-zA-Z]:")))
-            #endif
+            if(availableSpace<0 ||
+                    //workaround for all 0 value in case of bug from Qt
+                    (availableSpace==0 && storageInfo.bytesTotal()==0)
+                    )
             {
-                Diskspace diskspace;
-                diskspace.drive=i.key();
-                diskspace.freeSpace=availableSpace;
-                diskspace.requiredSpace=i.value();
-                diskspace_list << diskspace;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
             }
-            #ifdef Q_OS_WIN32
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("not local drive"));
-            #endif
+            else if(i.value()>(quint64)availableSpace)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("availableSpace: %1, space needed: %2, on: %3, bytesFree: %4").arg(availableSpace).arg(i.value()).arg(i.key()).arg(bytesFree));
+                #ifdef Q_OS_WIN32
+                //if(i.key().contains(QRegularExpression("^[a-zA-Z]:[\\\\/]")))
+                if(i.key().contains(QRegularExpression("^[a-zA-Z]:")))
+                #endif
+                {
+                    Diskspace diskspace;
+                    diskspace.drive=i.key();
+                    diskspace.freeSpace=availableSpace;
+                    diskspace.requiredSpace=i.value();
+                    diskspace_list << diskspace;
+                }
+                #ifdef Q_OS_WIN32
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("not local drive"));
+                #endif
+            }
+        #ifdef Q_OS_WIN32
         }
+        #endif
     }
     if(!diskspace_list.isEmpty())
         emit missingDiskSpace(diskspace_list);
