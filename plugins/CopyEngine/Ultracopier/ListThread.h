@@ -15,7 +15,6 @@
 #include <QTextStream>
 #include <QFile>
 #include <QTimer>
-#include <QMutex>
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "ScanFileOrFolder.h"
@@ -206,7 +205,6 @@ public slots:
     void exportErrorIntoTransferList(const QString &fileName);
 private:
     QSemaphore          mkpathTransfer;
-    QMutex              globalListProtection;
     QString             sourceDrive;
     bool                sourceDriveMultiple;
     QString             destinationDrive;
