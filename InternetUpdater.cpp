@@ -51,8 +51,10 @@ void InternetUpdater::downloadFile()
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     ultracopierVersion+=QStringLiteral(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
     #endif
-    QNetworkRequest networkRequest(QStringLiteral("%1?platform=%2").arg(ULTRACOPIER_UPDATER_URL).arg(ULTRACOPIER_PLATFORM_CODE));
+    ultracopierVersion+=QStringLiteral(" ")+ULTRACOPIER_PLATFORM_CODE;
+    QNetworkRequest networkRequest(QStringLiteral(ULTRACOPIER_UPDATER_URL));
     networkRequest.setHeader(QNetworkRequest::UserAgentHeader,ultracopierVersion);
+    networkRequest.setRawHeader("Connection", "Close");
     reply = qnam.get(networkRequest);
     connect(reply, &QNetworkReply::finished, this, &InternetUpdater::httpFinished);
 }
@@ -68,6 +70,8 @@ void InternetUpdater::httpFinished()
     }
     else if (reply->error())
     {
+        newUpdateTimer.stop();
+        newUpdateTimer.start(1000*3600*24);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("get the new update failed: %1").arg(reply->errorString()));
         reply->deleteLater();
         return;
