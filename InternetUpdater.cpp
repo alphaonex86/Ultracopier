@@ -103,6 +103,7 @@ void InternetUpdater::httpFinished()
         reply->deleteLater();
         return;
     }
+    newUpdateTimer.stop();
     emit newUpdate(newVersion);
     reply->deleteLater();
 }
