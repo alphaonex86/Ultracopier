@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <string>
 
 /// \brief read the raw tar data, and organize it into data structure
 class QTarDecode

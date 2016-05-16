@@ -1,8 +1,12 @@
+CONFIG += c++11
+QMAKE_CXXFLAGS+="-std=c++0x -Wall -Wextra"
+mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
+
 QT += widgets
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = interface.h \
-		StructEnumDefinition.h \
+                StructEnumDefinition.h \
     factory.h \
     ../../../interface/PluginInterface_Themes.h \
     TransferModel.h

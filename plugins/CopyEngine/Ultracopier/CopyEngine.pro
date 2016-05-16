@@ -1,3 +1,7 @@
+CONFIG += c++11
+QMAKE_CXXFLAGS+="-std=c++0x -Wall -Wextra"
+mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
+
 QT += widgets
 DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib

@@ -487,49 +487,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1461"/>
-        <location filename="../../ListThread.cpp" line="2388"/>
+        <location filename="../../ListThread.cpp" line="1447"/>
+        <location filename="../../ListThread.cpp" line="2369"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Falscher Modus: %1 - Kann Element nicht verschieben oder kopieren</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1468"/>
-        <location filename="../../ListThread.cpp" line="2395"/>
+        <location filename="../../ListThread.cpp" line="1454"/>
+        <location filename="../../ListThread.cpp" line="2376"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Konnte die Transferliste: %1 nicht speichern</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1485"/>
+        <location filename="../../ListThread.cpp" line="1470"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Lesefehler, oder Dateigröße=0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1492"/>
+        <location filename="../../ListThread.cpp" line="1477"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Falscher Header: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1501"/>
+        <location filename="../../ListThread.cpp" line="1486"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Die Transferliste ist im gemischten Modus, aber diese Instanz ist nicht im selben Modus</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1510"/>
+        <location filename="../../ListThread.cpp" line="1495"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Die Transferliste ist im Kopiermodus, aber diese Instanz ist nicht im selben Modus</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1516"/>
+        <location filename="../../ListThread.cpp" line="1501"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Die Transferliste ist im Verschiebe-Modus, aber diese Instanz ist nicht im selben Modus</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1572"/>
+        <location filename="../../ListThread.cpp" line="1557"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Bei der Zeilenanalyse sind Fehler aufgetreten</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1580"/>
+        <location filename="../../ListThread.cpp" line="1565"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Transferliste: %1 kann nicht geöffnet werden</translation>
     </message>

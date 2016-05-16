@@ -738,15 +738,18 @@ void PluginsManager::decodingFinished()
         QByteArray data=decodeThread.decodedData();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data.size(): "+QString::number(data.size()));
         QTarDecode tarFile;
-        if(!tarFile.decodeData(data))
+        std::vector<char> cppdata;
+        cppdata.resize(data.size());
+        memcpy(cppdata.data(),data.data(),data.size());
+        if(!tarFile.decodeData(cppdata))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"tarFile.errorString(): "+tarFile.errorString());
-            QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to load the plugin content, please check it: %1").arg(tarFile.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"tarFile.errorString(): "+QString::fromStdString(tarFile.errorString()));
+            QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to load the plugin content, please check it: %1").arg(QString::fromStdString(tarFile.errorString())));
         }
         else
         {
-            QStringList fileList		= tarFile.getFileList();
-            QList<QByteArray> dataList	= tarFile.getDataList();
+            std::vector<std::string> fileList		= tarFile.getFileList();
+            std::vector<std::vector<char> > dataList	= tarFile.getDataList();
             if(fileList.size()>1)
             {
                 QString basePluginArchive=QStringLiteral("");
@@ -774,10 +777,10 @@ void PluginsManager::decodingFinished()
                 }*/
                 PluginsAvailable tempPlugin;
                 QString categoryFinal=QStringLiteral("");
-                for (int i = 0; i < fileList.size(); ++i)
-                    if(fileList.at(i)==QStringLiteral("informations.xml"))
+                for (unsigned int i = 0; i < fileList.size(); ++i)
+                    if(fileList.at(i)=="informations.xml")
                     {
-                        loadPluginXml(&tempPlugin,dataList.at(i));
+                        loadPluginXml(&tempPlugin,QByteArray(dataList.at(i).data(),dataList.at(i).size()));
                         break;
                     }
                 if(tempPlugin.errorString=="")
@@ -797,11 +800,12 @@ void PluginsManager::decodingFinished()
                             if(!dir.exists(finalPluginPath))
                             {
                                 bool errorFound=false;
-                                for (int i = 0; i < fileList.size(); ++i)
+                                for (unsigned int i = 0; i < fileList.size(); ++i)
                                 {
-                                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"file "+QString::number(i)+": "+finalPluginPath+fileList.at(i));
-                                    fileList[i].remove(QRegularExpression("^(..?[\\/])+"));
-                                    QFile currentFile(finalPluginPath+fileList.at(i));
+                                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"file "+QString::number(i)+": "+finalPluginPath+QString::fromStdString(fileList.at(i)));
+                                    QString fileListEntry=QString::fromStdString(fileList[i]);
+                                    fileListEntry.remove(QRegularExpression("^(..?[\\/])+"));
+                                    QFile currentFile(finalPluginPath+fileListEntry);
                                     QFileInfo info(currentFile);
                                     if(!dir.exists(info.absolutePath()))
                                         if(!dir.mkpath(info.absolutePath()))
@@ -814,7 +818,7 @@ void PluginsManager::decodingFinished()
                                         }
                                     if(currentFile.open(QIODevice::ReadWrite))
                                     {
-                                        currentFile.write(dataList.at(i));
+                                        currentFile.write(QByteArray(dataList.at(i).data(),dataList.at(i).size()));
                                         currentFile.close();
                                     }
                                     else

@@ -1,3 +1,7 @@
+CONFIG += c++11
+QMAKE_CXXFLAGS+="-std=c++0x -Wall -Wextra"
+mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
+
 TEMPLATE = app
 QT += network xml widgets
 TRANSLATIONS += plugins/Languages/ar/translation.ts \
@@ -38,7 +42,7 @@ win32 {
     RESOURCES += resources/resources-windows-qt-plugin.qrc
     RC_FILE += resources/resources-windows.rc
     #LIBS += -lpdh
-	LIBS += -ladvapi32
+        LIBS += -ladvapi32
 }
 
 HEADERS += ResourcesManager.h \

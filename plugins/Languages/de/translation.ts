@@ -1197,15 +1197,15 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="722"/>
-        <location filename="../../../PluginsManager.cpp" line="744"/>
-        <location filename="../../../PluginsManager.cpp" line="811"/>
-        <location filename="../../../PluginsManager.cpp" line="824"/>
-        <location filename="../../../PluginsManager.cpp" line="843"/>
-        <location filename="../../../PluginsManager.cpp" line="849"/>
-        <location filename="../../../PluginsManager.cpp" line="855"/>
-        <location filename="../../../PluginsManager.cpp" line="861"/>
-        <location filename="../../../PluginsManager.cpp" line="867"/>
-        <location filename="../../../PluginsManager.cpp" line="874"/>
+        <location filename="../../../PluginsManager.cpp" line="747"/>
+        <location filename="../../../PluginsManager.cpp" line="815"/>
+        <location filename="../../../PluginsManager.cpp" line="828"/>
+        <location filename="../../../PluginsManager.cpp" line="847"/>
+        <location filename="../../../PluginsManager.cpp" line="853"/>
+        <location filename="../../../PluginsManager.cpp" line="859"/>
+        <location filename="../../../PluginsManager.cpp" line="865"/>
+        <location filename="../../../PluginsManager.cpp" line="871"/>
+        <location filename="../../../PluginsManager.cpp" line="878"/>
         <source>Plugin loader</source>
         <translation>Plugin-Loader</translation>
     </message>
@@ -1215,21 +1215,21 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation>Kann das Plugin nicht öffnen: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="744"/>
-        <location filename="../../../PluginsManager.cpp" line="861"/>
-        <location filename="../../../PluginsManager.cpp" line="874"/>
+        <location filename="../../../PluginsManager.cpp" line="747"/>
+        <location filename="../../../PluginsManager.cpp" line="865"/>
+        <location filename="../../../PluginsManager.cpp" line="878"/>
         <source>Unable to load the plugin content, please check it: %1</source>
         <translation>Kann Plugin-Inhalte nicht laden. Bitte überprüfen Sie das: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="811"/>
+        <location filename="../../../PluginsManager.cpp" line="815"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
         <translation>Kann keinen Ordner erstellen um das Plugin %1 zu installieren
 </translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="824"/>
+        <location filename="../../../PluginsManager.cpp" line="828"/>
         <source>Unable to create a file to install the plugin:
 %1
 since:%2</source>
@@ -1238,16 +1238,16 @@ since:%2</source>
 seit: %2</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="843"/>
+        <location filename="../../../PluginsManager.cpp" line="847"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
         <translation>Ordner mit demselben Namen existiert bereits. Überspringen Sie die Plugin-Installation:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="849"/>
-        <location filename="../../../PluginsManager.cpp" line="855"/>
-        <location filename="../../../PluginsManager.cpp" line="867"/>
+        <location filename="../../../PluginsManager.cpp" line="853"/>
+        <location filename="../../../PluginsManager.cpp" line="859"/>
+        <location filename="../../../PluginsManager.cpp" line="871"/>
         <source>Unable to load the plugin content, please check it</source>
         <translation>Kann Plugin-Inhalte nicht laden. Bitte überprüfen Sie das</translation>
     </message>
