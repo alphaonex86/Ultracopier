@@ -52,7 +52,7 @@ private:
     bool dllChecked;
     bool needBeRegistred;
     OptionInterface * optionsEngine;
-    OptionsWidget optionsWidget;
+    OptionsWidget *optionsWidget;
     bool allDllIsImportant,Debug;
     bool changeOfArchDetected,is64Bits;
 private slots:

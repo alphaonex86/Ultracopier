@@ -43,7 +43,11 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
 CopyListener::~CopyListener()
 {
     stopIt=true;
-    delete pluginLoader;
+    if(pluginLoader!=NULL)
+    {
+        delete pluginLoader;
+        pluginLoader=NULL;
+    }
 }
 
 void CopyListener::resendState()
@@ -51,7 +55,8 @@ void CopyListener::resendState()
     if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
     {
         sendState(true);
-        pluginLoader->resendState();
+        if(pluginLoader!=NULL)
+            pluginLoader->resendState();
     }
 }
 
@@ -235,14 +240,16 @@ void CopyListener::listen()
         pluginList.at(index).listenInterface->listen();
         index++;
     }
-    pluginLoader->load();
+    if(pluginLoader!=NULL)
+        pluginLoader->load();
 }
 
 void CopyListener::close()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
     tryListen=false;
-    pluginLoader->unload();
+    if(pluginLoader!=NULL)
+        pluginLoader->unload();
     int index=0;
     while(index<pluginList.size())
     {

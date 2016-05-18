@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>304</width>
-    <height>76</height>
+    <height>88</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Warning</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources/resources.qrc">
+   <iconset resource="resources/ultracopier-resources.qrc">
     <normaloff>:/warning.png</normaloff>:/warning.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -22,6 +22,9 @@
     <widget class="QLabel" name="label">
      <property name="textFormat">
       <enum>Qt::RichText</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -78,7 +81,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources/resources.qrc"/>
+  <include location="resources/ultracopier-resources.qrc"/>
  </resources>
  <connections/>
 </ui>

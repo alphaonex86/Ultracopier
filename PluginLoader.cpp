@@ -35,23 +35,28 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
 PluginLoader::~PluginLoader()
 {
     stopIt=true;
-    int index=0;
-    const int &loop_size=pluginList.size();
-    while(index<loop_size)
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     {
-        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-        pluginList.at(index).pluginLoaderInterface->setEnabled(false);
-        if(pluginList.at(index).pluginLoader!=NULL)
+        /* why it crash here? Only under Window with PluginLoader
+        int index=0;
+        while(index<pluginList.size())
         {
-            if(!pluginList.at(index).pluginLoader->isLoaded() || pluginList.at(index).pluginLoader->unload())
+            pluginList.at(index).pluginLoaderInterface->setEnabled(false);
+            if(pluginList.at(index).pluginLoader!=NULL)
             {
-                delete pluginList.at(index).options;
-                pluginList.removeAt(index);
+                if(!pluginList.at(index).pluginLoader->isLoaded() || pluginList.at(index).pluginLoader->unload())
+                {
+                    delete pluginList.at(index).options;
+                    pluginList.removeAt(index);
+                }
+                else
+                    index++;
             }
-        }
-        #endif
-        index++;
+            else
+                index++;
+        }*/
     }
+    #endif
 }
 
 void PluginLoader::resendState()

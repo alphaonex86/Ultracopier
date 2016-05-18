@@ -134,7 +134,11 @@ EventDispatcher::EventDispatcher()
         OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen"),QVariant(0));
 
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    #ifdef  ULTRACOPIER_ILLEGAL
+    static bool crackedVersion=true;
+    #else
     static bool crackedVersion=false;
+    #endif
     if(!crackedVersion)
     {
         while(1)
@@ -179,16 +183,32 @@ EventDispatcher::EventDispatcher()
 EventDispatcher::~EventDispatcher()
 {
     if(core!=NULL)
+    {
         delete core;
+        core=NULL;
+    }
     if(copyEngineList!=NULL)
+    {
         delete copyEngineList;
+        copyEngineList=NULL;
+    }
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     if(sessionloader!=NULL)
+    {
         delete sessionloader;
+        sessionloader=NULL;
+    }
     #endif
     if(backgroundIcon!=NULL)
+    {
         delete backgroundIcon;
-    delete copyServer;
+        backgroundIcon=NULL;
+    }
+    if(copyServer!=NULL)
+    {
+        delete copyServer;
+        copyServer=NULL;
+    }
 }
 
 /// \brief return if need be close

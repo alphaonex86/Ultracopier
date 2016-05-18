@@ -3,37 +3,37 @@
 
 OptionsWidget::OptionsWidget(QWidget *parent) :
         QWidget(parent),
-	ui(new Ui::OptionsWidget)
+    ui(new Ui::OptionsWidget)
 {
-	ui->setupUi(this);
+    ui->setupUi(this);
 }
 
 OptionsWidget::~OptionsWidget()
 {
-	delete ui;
+    //delete ui;//attached to the main program, then it's the main program responsive the delete
 }
 
 void OptionsWidget::setAllDllIsImportant(bool allDllIsImportant)
 {
-	ui->allDllIsImportant->setChecked(allDllIsImportant);
+    ui->allDllIsImportant->setChecked(allDllIsImportant);
 }
 
 void OptionsWidget::setDebug(bool Debug)
 {
-	ui->Debug->setChecked(Debug);
+    ui->Debug->setChecked(Debug);
 }
 
 void OptionsWidget::on_allDllIsImportant_toggled(bool checked)
 {
-	emit sendAllDllIsImportant(checked);
+    emit sendAllDllIsImportant(checked);
 }
 
 void OptionsWidget::retranslate()
 {
-	ui->retranslateUi(this);
+    ui->retranslateUi(this);
 }
 
 void OptionsWidget::on_Debug_toggled(bool checked)
 {
-	emit sendDebug(checked);
+    emit sendDebug(checked);
 }
