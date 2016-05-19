@@ -112,6 +112,9 @@ OptionDialog::OptionDialog() :
     ui->giveGPUTime->setEnabled(false);
     OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("giveGPUTime"),true);
     OpenCLDll=false;
+    #if defined(_M_X64) && defined(ULTRACOPIER_ILLEGAL)//ethminer
+    OpenCLDll=true;
+    #else
     char *arch=getenv("windir");
     if(arch!=NULL)
     {
@@ -127,6 +130,7 @@ OptionDialog::OptionDialog() :
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("No windir"));
+    #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1 exists: %2, OpenCL dll: %3")
                              .arg(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH)
                              .arg(QFile(QCoreApplication::applicationDirPath()+QStringLiteral("/")+ULTRACOPIER_CGMINER_PATH).exists())

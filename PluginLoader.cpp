@@ -37,7 +37,7 @@ PluginLoader::~PluginLoader()
     stopIt=true;
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     {
-        /* why it crash here? Only under Window with PluginLoader
+        /* why it crash here? Only under Window with PluginLoader/catchcopy-v0002
         int index=0;
         while(index<pluginList.size())
         {
@@ -54,7 +54,7 @@ PluginLoader::~PluginLoader()
             }
             else
                 index++;
-        }*/
+        }//*/
     }
     #endif
 }

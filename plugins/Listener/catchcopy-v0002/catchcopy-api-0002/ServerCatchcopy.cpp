@@ -364,7 +364,8 @@ bool ServerCatchcopy::checkDataIntegrity(const QByteArray &data)
 
 void ServerCatchcopy::parseInput(const quint32 &client,const quint32 &orderId,const QStringList &returnList)
 {
-    switch(parseInputCurrentProtocol(client,orderId,returnList))
+    const ServerCatchcopy::inputReturnType returnVal=parseInputCurrentProtocol(client,orderId,returnList);
+    switch(returnVal)
     {
         case Ok:
             emit newQuery(client,orderId,returnList);
@@ -381,7 +382,7 @@ void ServerCatchcopy::parseInput(const quint32 &client,const quint32 &orderId,co
             incorrectArgumentListSize(client,orderId);
         break;
         case UnknowOrder:
-            emit error("Unknown query");
+            emit error("Unknown query: "+QString::number(returnVal)+", with client: "+QString::number(client)+", orderId: "+QString::number(orderId)+", returnList: "+returnList.join(", "));
             qWarning() << "Unknown query";
             unknowOrder(client,orderId);
         break;

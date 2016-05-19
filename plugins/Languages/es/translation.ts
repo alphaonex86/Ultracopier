@@ -151,12 +151,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="155"/>
+        <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="155"/>
+        <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Error durante la recepción de la lista de copia / movimiento
@@ -245,12 +245,12 @@
 <context>
     <name>EventDispatcher</name>
     <message>
-        <location filename="../../../EventDispatcher.cpp" line="153"/>
+        <location filename="../../../EventDispatcher.cpp" line="157"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../EventDispatcher.cpp" line="153"/>
+        <location filename="../../../EventDispatcher.cpp" line="157"/>
         <source>Give the key of this software, more information on &lt;a href=&quot;http://ultracopier.first-world.info/&quot;&gt;ultracopier.first-world.info&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -653,17 +653,17 @@ Esta versión está compilada en versión:%1.</translation>
 <context>
     <name>OSSpecific</name>
     <message>
-        <location filename="../../../OSSpecific.ui" line="14"/>
+        <location filename="../../../OSSpecific.ui" line="26"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.ui" line="37"/>
+        <location filename="../../../OSSpecific.ui" line="58"/>
         <source>Don&apos;t show again</source>
         <translation>No mostrar de nuevo</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.ui" line="59"/>
+        <location filename="../../../OSSpecific.ui" line="83"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -728,7 +728,7 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="66"/>
         <location filename="../../../OptionDialog.ui" line="322"/>
-        <location filename="../../../OptionDialog.cpp" line="344"/>
+        <location filename="../../../OptionDialog.cpp" line="356"/>
         <source>Copy engine</source>
         <translation>Motor de copia</translation>
     </message>
@@ -783,21 +783,21 @@ Esta versión está compilada en versión:%1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="71"/>
         <location filename="../../../OptionDialog.ui" line="335"/>
-        <location filename="../../../OptionDialog.cpp" line="345"/>
+        <location filename="../../../OptionDialog.cpp" line="357"/>
         <source>Listener</source>
         <translation>Oyente</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="76"/>
         <location filename="../../../OptionDialog.ui" line="340"/>
-        <location filename="../../../OptionDialog.cpp" line="346"/>
+        <location filename="../../../OptionDialog.cpp" line="358"/>
         <source>Plugin loader</source>
         <translation>Plugin cargador</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="84"/>
         <location filename="../../../OptionDialog.ui" line="345"/>
-        <location filename="../../../OptionDialog.cpp" line="347"/>
+        <location filename="../../../OptionDialog.cpp" line="359"/>
         <source>Session loader</source>
         <translation>Sesión cargador</translation>
     </message>
@@ -967,18 +967,18 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Escriba la carpeta de las operaciones:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="250"/>
-        <location filename="../../../OptionDialog.cpp" line="264"/>
+        <location filename="../../../OptionDialog.cpp" line="262"/>
+        <location filename="../../../OptionDialog.cpp" line="276"/>
         <source>Load</source>
         <translation>Cargar</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="250"/>
+        <location filename="../../../OptionDialog.cpp" line="262"/>
         <source>Load the theme?</source>
         <translation>Cargue el tema?</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="264"/>
+        <location filename="../../../OptionDialog.cpp" line="276"/>
         <source>Load the language?</source>
         <translation>Cargue el idioma?</translation>
     </message>
@@ -987,22 +987,22 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Desactiveado porque no tienes niguano plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="468"/>
+        <location filename="../../../OptionDialog.cpp" line="480"/>
         <source>Allow the application</source>
         <translation>Permitir la aplicación</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="468"/>
+        <location filename="../../../OptionDialog.cpp" line="480"/>
         <source>This Ultimate free version is only if %1 is allowed by your antivirus. Else you can get the normal free version</source>
         <translation>Esta versión gratuita de ruptura es sólo si %1 es permitido por su antivirus. Cosa que usted puede obtener la versión normal gratis</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="473"/>
+        <location filename="../../../OptionDialog.cpp" line="485"/>
         <source>Enable the OpenCL</source>
         <translation>Habilite el OpenCL</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="473"/>
+        <location filename="../../../OptionDialog.cpp" line="485"/>
         <source>This Ultimate version is only if the OpenCL is installed with your graphic card drivers. Else you can get the normal free version</source>
         <translation>Esta versión Ultimate es sólo si el OpenCL se instala con los controladores de la tarjeta gráfica. Cosa que usted puede obtener la versión normal gratis</translation>
     </message>
@@ -1011,59 +1011,59 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="obsolete">Discapacitados, ya que no tiene ningún plugin SessionLoader</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="352"/>
+        <location filename="../../../OptionDialog.cpp" line="364"/>
         <source>Do nothing</source>
         <translation>No hacer nada</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="353"/>
+        <location filename="../../../OptionDialog.cpp" line="365"/>
         <source>Ask source as folder</source>
         <translation>Pregunte a la fuente que la carpeta</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="354"/>
+        <location filename="../../../OptionDialog.cpp" line="366"/>
         <source>Ask sources as files</source>
         <translation>Pregunte a las fuentes como archivos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="355"/>
+        <location filename="../../../OptionDialog.cpp" line="367"/>
         <source>Never</source>
         <translation>Nunca</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="356"/>
+        <location filename="../../../OptionDialog.cpp" line="368"/>
         <source>When source is same</source>
         <translation>Cuando la fuente es la misma</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="357"/>
+        <location filename="../../../OptionDialog.cpp" line="369"/>
         <source>When destination is same</source>
         <translation>Cuando destino es el mismo</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="358"/>
+        <location filename="../../../OptionDialog.cpp" line="370"/>
         <source>When source and destination are same</source>
         <translation>Cuando la fuente y el destino son los mismos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="359"/>
+        <location filename="../../../OptionDialog.cpp" line="371"/>
         <source>When source or destination are same</source>
         <translation>Cuando la fuente o el destino son los mismos</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="360"/>
+        <location filename="../../../OptionDialog.cpp" line="372"/>
         <source>Always</source>
         <translation>Siempre</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="374"/>
-        <location filename="../../../OptionDialog.cpp" line="375"/>
-        <location filename="../../../OptionDialog.cpp" line="376"/>
+        <location filename="../../../OptionDialog.cpp" line="386"/>
+        <location filename="../../../OptionDialog.cpp" line="387"/>
+        <location filename="../../../OptionDialog.cpp" line="388"/>
         <source>The variables are %1</source>
         <translation>Las variables son %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="1694"/>
+        <location filename="../../../OptionDialog.cpp" line="1593"/>
         <source>Save logs as: </source>
         <translation>Guardar registros como: </translation>
     </message>
