@@ -80,13 +80,14 @@ void InternetUpdater::httpFinished()
         reply->deleteLater();
         return;
     }
-    const QString &newVersion=QString::fromUtf8(reply->readAll());
+    QString newVersion=QString::fromUtf8(reply->readAll());
     if(newVersion.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("version string is empty"));
         reply->deleteLater();
         return;
     }
+    newVersion.remove("\n");
     if(!newVersion.contains(QRegularExpression(QLatin1Literal("^[0-9]+(\\.[0-9]+)+$"))))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("version string don't match: %1").arg(newVersion));
