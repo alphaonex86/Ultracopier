@@ -263,6 +263,8 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
         case FileError_PutToEndOfTheList:
             emit getNeedPutAtBottom(fileInfo,errorString,thread,errorType);
         return;
+        case FileError_Cancel:
+        return;
         default:
             if(dialogIsOpen)
             {
@@ -551,7 +553,7 @@ void CopyEngine::showOneNewDialog()
         loop_size--;
     }
     loop_size=errorQueue.size();
-    while(errorQueue.size()>0)
+    while(errorQueue.size()>0 && loop_size>0)
     {
         if(errorQueue.first().transfer!=NULL)
             errorOnFile(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().transfer,errorQueue.first().errorType,true);

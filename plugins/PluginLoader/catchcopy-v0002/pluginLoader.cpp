@@ -341,7 +341,22 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: regsvr32 "+arguments.join(" "));
     int result;
     #ifdef Q_OS_WIN32
-    result=QProcess::execute("regsvr32",arguments);
+    QProcess process;
+    process.start("regsvr32",arguments);
+    if(!process.waitForStarted())
+        result=985;
+    else if(!process.waitForFinished())
+        result=984;
+    else
+    {
+        result=process.exitCode();
+        QString out=QString::fromLocal8Bit(process.readAllStandardOutput());
+        QString outError=QString::fromLocal8Bit(process.readAllStandardError());
+        if(!out.isEmpty())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 output: "+out);
+        if(!outError.isEmpty())
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 error output: "+outError);
+    }
     #else
     result=0;
     #endif

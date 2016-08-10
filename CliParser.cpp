@@ -75,9 +75,12 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
                     return;
                 }
                 content=QString::fromUtf8(data);
-                content.remove('\n');
                 QStringList transferListArguments=content.split(';');
-                if(transferListArguments.size()!=4 || transferListArguments.at(0)!=QStringLiteral("Ultracopier-0.3") || transferListArguments.at(1)!=QStringLiteral("Transfer-list"))
+                transferListArguments[3].remove('\n');
+                if(transferListArguments.at(0)!="Ultracopier" ||
+                        transferListArguments.at(1)!="Transfer-list" ||
+                        (transferListArguments.at(2)!="Transfer" && transferListArguments.at(2)!="Copy" && transferListArguments.at(2)!="Move")
+                        )
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("This file is not supported transfer list"));
                     QMessageBox::warning(NULL,tr("Warning"),tr("This file is not supported transfer list"));
