@@ -13,18 +13,19 @@ function compil {
 	STATIC=${10}
 	CGMINER=${11}
 	SUPERCOPIER=${12}
+    ILLEGAL=${13}
 	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
 	if [ $FORPLUGIN -eq 1 ]
 	then
-		rsync -aqrt ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/
+		rsync -aqrt --delete ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/PluginLoader/keybinding/
 	else
 		if [ $ULTIMATE -eq 1 ] || [ $SUPERCOPIER -eq 1 ]
 		then
-			rsync -aqrt ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/CopyEngine/Rsync/
+			rsync -aqrt --delete ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/CopyEngine/Rsync/ --exclude=/plugins-alternative/PluginLoader/keybinding/
 		else
-			rsync -aqrt ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/
+			rsync -aqrt --delete ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/ --exclude=/plugins-alternative/PluginLoader/keybinding/
 		fi
 	fi
 	for project in `find ${TEMP_PATH}/${TARGET}/plugins/Languages/ -mindepth 1 -type d`
@@ -80,6 +81,12 @@ function compil {
         if [ $CGMINER -eq 1 ]
         then
                 find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_CGMINER/#define ULTRACOPIER_CGMINER/g" {} \; > /dev/null 2>&1
+            if [ $ILLEGAL -eq 1 ]
+            then
+                    find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_ILLEGAL/#define ULTRACOPIER_ILLEGAL/g" {} \; > /dev/null 2>&1
+            else
+                    find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_ILLEGAL/\/\/#define ULTRACOPIER_ILLEGAL/g" {} \; > /dev/null 2>&1
+            fi
         else
                 find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_CGMINER/\/\/#define ULTRACOPIER_CGMINER/g" {} \; > /dev/null 2>&1
         fi
@@ -145,7 +152,7 @@ function compil {
 			cd ${PLUGIN_FOLDER}/${plugins_cat}/
 			for plugins_name in `ls -1`
 			do
-				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ "${plugins_name}" != "keybinding" ] && [ "${plugins_name}" != "ultracopier-keybinding" ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ]
+				if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ "${plugins_name}" != "keybinding" ] && [ "${plugins_name}" != "ultracopier-keybinding" ]
 				then
 					echo "${TARGET} compilation of the plugin: ${plugins_cat}/${plugins_name}..."
 					cd ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
@@ -183,6 +190,8 @@ function compil {
                         pwd
                         echo DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX}
 						echo "plugins not created"
+                        rm -f informations.xml
+                        rm -Rf ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
 						exit
 					fi
 					if [ ${STATIC} -eq 1 ]
@@ -192,15 +201,17 @@ function compil {
 							cp ${COMPIL_FOLDER}/*.a ./
 						fi
 					else
-                                                if [ "${COMPIL_FOLDER}" != "./" ]
-                                                then
-                                                        mv ${COMPIL_FOLDER}/*.dll ./
-                                                fi
+                        if [ "${COMPIL_FOLDER}" != "./" ]
+                        then
+                                mv ${COMPIL_FOLDER}/*.dll ./
+                        fi
 					fi
 					if [ $STATIC -ne 1 ]
 					then
 						/usr/bin/find ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ -type f -name "*.png" -exec rm -f {} \;
 					fi
+                else
+                    rm -Rf ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
 				fi
 				cd ${PLUGIN_FOLDER}/${plugins_cat}/
 			done
@@ -218,7 +229,7 @@ function compil {
 				cd ${PLUGIN_FOLDER}/${plugins_cat}/
 				for plugins_name in `ls -1`
 				do
-					if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ]
+					if [ -d ${plugins_name} ] &&  [ -f ${plugins_name}/informations.xml ] && [ ! -f ${plugins_name}/*.dll ] && [ ! -f ${plugins_name}/*.a ] && [ -f ${plugins_name}/informations.xml ] && [ "${plugins_name}" != "KDE4" ] && [ "${plugins_name}" != "dbus" ] && [ "${plugins_name}" != "keybinding" ] && [ "${plugins_name}" != "ultracopier-keybinding" ]
 					then
 						echo "${TARGET} compilation of the plugin: ${plugins_cat}/${plugins_name}..."
 						cd ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
@@ -246,6 +257,8 @@ function compil {
 						then
 							DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine mingw32-make -j4 ${COMPIL_SUFFIX}
 							echo "plugins not created: ${plugins_cat}/${plugins_name}"
+                            rm -f informations.xml
+                            rm -Rf ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
 						else
 							if [ ${STATIC} -eq 1 ]
 							then
@@ -255,15 +268,17 @@ function compil {
 								fi
 							else
 								if [ "${COMPIL_FOLDER}" != "./" ]
-	                                                        then
-	                                                                mv ${COMPIL_FOLDER}/*.dll ./
-	                                                        fi
+                                then
+                                        mv ${COMPIL_FOLDER}/*.dll ./
+                                fi
 							fi
 						fi
 						if [ $STATIC -ne 1 ]
 						then
 							/usr/bin/find ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ -type f -name "*.png" -exec rm -f {} \;
 						fi
+                    else
+                        rm -Rf ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
 					fi
 					cd ${PLUGIN_FOLDER}/${plugins_cat}/
 				done
@@ -309,9 +324,12 @@ function compil {
 	then
 		mv ${COMPIL_FOLDER}/ultracopier.exe ./
 	fi
-	if [ ${BITS} -eq 32 ]
+	if [ 1 == 2 ]
+	then
+	if [ ${BITS} -eq 32 ] && [ ${DEBUG_REAL} -ne 1 ]
 	then
 		upx --lzma -9 ultracopier.exe > /dev/null 2>&1
+	fi
 	fi
 	if [ $SUPERCOPIER -eq 1 ]
 	then

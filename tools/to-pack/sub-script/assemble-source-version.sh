@@ -22,7 +22,7 @@ if [ ! -e ${FINAL_ARCHIVE} ]; then
 	find ${TEMP_PATH}/ultracopier-src/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/ultracopier-src/ -iname "*.qm" -exec rm {} \; > /dev/null 2>&1
 
-	tar cJpf ${FINAL_ARCHIVE} ultracopier-src/
+	tar cJf ${FINAL_ARCHIVE} ultracopier-src/ --owner=0 --group=0 --mtime='2010-01-01' -H ustar
 	if [ ! -e ${FINAL_ARCHIVE} ]; then
 		echo "${FINAL_ARCHIVE} not exists!";
 		exit;
@@ -67,7 +67,7 @@ then
 						rm -f ${plugins_name}/${FILE}
 						cp ${TEMP_PATH}/ultracopier-src/${FILE} ${plugins_name}/${FILE}
 					fi
-					tar --posix -c -f - ${plugins_name}/ | xz -9 > ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
+					tar -c -f - ${plugins_name}/ --owner=0 --group=0 --mtime='2010-01-01' -H ustar | xz -9 > ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
 				fi
 			done
 			cd ${TEMP_PATH}/ultracopier-src/plugins/
@@ -109,7 +109,7 @@ then
 						rm -f ${plugins_name}/${FILE}
 						cp ${TEMP_PATH}/ultracopier-src/${FILE} ${plugins_name}/${FILE}
 					fi
-					tar --posix -c -f - ${plugins_name}/ | xz -9 > ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
+					tar -c -f - ${plugins_name}/ --owner=0 --group=0 --mtime='2010-01-01' -H ustar | xz -9 > ${TEMP_PATH}/plugins/${plugins_cat}/${plugins_name}/${plugins_cat}-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
 				fi
 			done
 			cd ${TEMP_PATH}/ultracopier-src/plugins-alternative/
@@ -123,7 +123,7 @@ then
 			mkdir -p ${TEMP_PATH}/plugins/Languages/${plugins_name}/
 			find ${plugins_name}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null 2>&1
 			ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
-			tar --posix -c -f - ${plugins_name}/ | xz -9 > ${TEMP_PATH}/plugins/Languages/${plugins_name}/Languages-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
+			tar -c -f - ${plugins_name}/ --owner=0 --group=0 --mtime='2010-01-01' -H ustar | xz -9 > ${TEMP_PATH}/plugins/Languages/${plugins_name}/Languages-${plugins_name}-${ULTRACOPIER_PLUGIN_VERSION}-src.tar.xz
 		fi
 	done
 fi
