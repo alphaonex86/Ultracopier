@@ -69,6 +69,12 @@ public:
     /// \brief set the current error action
     void newErrorAction(const QString &action);
     /// \brief set one error is detected
+	void playErr();
+    /// \brief error sound small version
+	void playError();
+    /// \brief error sound
+	void playSuccess();
+    /// \brief success sound
     void errorDetected();
     /// \brief new error
     void errorToRetry(const QString &source,const QString &destination,const QString &error);
