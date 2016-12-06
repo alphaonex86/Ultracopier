@@ -11,6 +11,9 @@
 #include <QRect>
 #include <QPainter>
 #include <cmath>
+#include <windows.h>
+#include <mmsystem.h>
+
 #ifdef Q_OS_WIN
     #ifndef NOMINMAX
         #define NOMINMAX
@@ -286,20 +289,17 @@ void Themes::closeEvent(QCloseEvent *event)
 
 void Themes::playErr()
 {
-    PlaySound(L"Err.wav", NULL, SND_APPLICATION);
-    //QSound::play("Err.wav");
+    PlaySoundA((LPCSTR) "Err.wav", NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Themes::playError()
 {
-    PlaySound(L"Error.wav", NULL, SND_APPLICATION);
-    //QSound::play("Error.wav");
+    PlaySoundA((LPCSTR) "Error.wav", NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Themes::playSuccess()
 {
-    PlaySound(L"Complete.wav", NULL, SND_APPLICATION);
-    //QSound::play("Error.wav");
+    PlaySoundA((LPCSTR) "Complete.wav", NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Themes::updateSysTrayIcon()
