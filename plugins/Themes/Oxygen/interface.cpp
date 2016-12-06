@@ -284,6 +284,24 @@ void Themes::closeEvent(QCloseEvent *event)
         emit cancel();
 }
 
+void Themes::playErr()
+{
+    PlaySound(L"Err.wav", NULL, SND_APPLICATION);
+    //QSound::play("Err.wav");
+}
+
+void Themes::playError()
+{
+    PlaySound(L"Error.wav", NULL, SND_APPLICATION);
+    //QSound::play("Error.wav");
+}
+
+void Themes::playSuccess()
+{
+    PlaySound(L"Complete.wav", NULL, SND_APPLICATION);
+    //QSound::play("Error.wav");
+}
+
 void Themes::updateSysTrayIcon()
 {
     if(totalSize==0)
@@ -337,14 +355,20 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                 {
                     case 2:
                         emit cancel();
+                        playSuccess();
                     break;
                     case 0:
-                        if(!haveError)
+                        if(!haveError) {
                             emit cancel();
-                        else
+                            playSuccess();
+                        }
+                        else {
+                            playError();
                             ui->tabWidget->setCurrentWidget(ui->tab_error);
+                        }
                     break;
                     default:
+                        playSuccess();
                     break;
                 }
                 stat = status_stopped;
@@ -438,6 +462,7 @@ void Themes::errorDetected()
 /// \brief new error
 void Themes::errorToRetry(const QString &source,const QString &destination,const QString &error)
 {
+    playErr();
     ui->errorList->addTopLevelItem(new QTreeWidgetItem(QStringList() << source << destination << error));
 }
 
@@ -1374,5 +1399,6 @@ void Themes::catchAction(QSystemTrayIcon::ActivationReason reason)
 
 void Themes::on_exportErrorToTransferList_clicked()
 {
+    playErr();
     emit exportErrorIntoTransferList();
 }
