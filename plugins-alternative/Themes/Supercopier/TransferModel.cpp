@@ -14,6 +14,7 @@ TransferModel::TransferModel()
         TransferModel::stop=new QIcon(QStringLiteral(":/resources/player_pause.png"));
     currentIndexSearch=0;
     haveSearchItem=false;
+    facilityEngine=NULL;
 }
 
 int TransferModel::columnCount( const QModelIndex& parent ) const

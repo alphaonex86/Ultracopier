@@ -89,8 +89,8 @@ Themes::Themes(const bool &alwaysOnTop,
     pixmap.fill(progressColorRemaining);
     uiOptions->progressColorRemaining->setIcon(pixmap);
 
-    ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
+    ui->TransferList->setModel(&transferModel);
     ui->tabWidget->setCurrentIndex(0);
     uiOptions->toolBox->setCurrentIndex(0);
     uiOptions->checkBoxShowSpeed->setChecked(checkBoxShowSpeed);

@@ -21,8 +21,8 @@ Themes::Themes(FacilityInterface * facilityEngine) :
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
-    ui->TransferList->setModel(&transferModel);
     transferModel.setFacilityEngine(facilityEngine);
+    ui->TransferList->setModel(&transferModel);
 
     currentFile		= 0;
     totalFile		= 0;

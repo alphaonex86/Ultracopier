@@ -493,7 +493,7 @@ void SystrayIcon::reloadEngineList()
     }
     #else
     {
-        unsigned int index=0;
+        int index=0;
         while(index<actions.size())
         {
             delete actions.at(index);

@@ -11,6 +11,7 @@ TransferModel::TransferModel()
     iconStop=QIcon(":/Themes/Teracopy/resources/checkbox.png");
     currentIndexSearch=0;
     haveSearchItem=false;
+    facilityEngine=NULL;
 }
 
 int TransferModel::columnCount( const QModelIndex& parent ) const
