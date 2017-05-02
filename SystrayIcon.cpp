@@ -508,7 +508,7 @@ void SystrayIcon::reloadEngineList()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"engineEntryList.size(): "+QString::number(engineEntryList.size()));
     if(engineEntryList.size()==1)
     {
-        QAction *copy=new QAction(IconAdd,tr("&Copy"));
+        QAction *copy=new QAction(IconAdd,tr("&Copy"),nullptr);
         connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
         copy->setData(engineEntryList.first().name);
         #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
@@ -536,11 +536,11 @@ void SystrayIcon::reloadEngineList()
         #else
         if(!engineEntryList.first().canDoOnlyCopy)
         {
-            QAction *transfer=new QAction(IconAdd,tr("&Transfer"));
+            QAction *transfer=new QAction(IconAdd,tr("&Transfer"),nullptr);
             connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
             transfer->setData(engineEntryList.first().name);
             systrayMenu->insertAction(actionOptions,transfer);
-            QAction *move=new QAction(IconAdd,tr("&Move"));
+            QAction *move=new QAction(IconAdd,tr("&Move"),nullptr);
             connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
             move->setData(engineEntryList.first().name);
             systrayMenu->insertAction(actionOptions,move);
@@ -574,17 +574,17 @@ void SystrayIcon::reloadEngineList()
             }
             copyMenu->addMenu(menu);
             #else
-            QAction *copy=new QAction(IconAdd,tr("Add &copy")+" ("+name+")");
+            QAction *copy=new QAction(IconAdd,tr("Add &copy")+" ("+name+")",nullptr);
             connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
             copy->setData(name);
             systrayMenu->insertAction(actionOptions,copy);
             if(!engineEntry.canDoOnlyCopy)
             {
-                QAction *transfer=new QAction(IconAdd,tr("Add &transfer")+" ("+name+")");
+                QAction *transfer=new QAction(IconAdd,tr("Add &transfer")+" ("+name+")",nullptr);
                 connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
                 transfer->setData(name);
                 systrayMenu->insertAction(actionOptions,transfer);
-                QAction *move=new QAction(IconAdd,tr("Add &move")+" ("+name+")");
+                QAction *move=new QAction(IconAdd,tr("Add &move")+" ("+name+")",nullptr);
                 connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
                 move->setData(name);
                 systrayMenu->insertAction(actionOptions,move);
