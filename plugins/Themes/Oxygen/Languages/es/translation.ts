@@ -4,56 +4,56 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="238"/>
+        <location filename="../../interface.cpp" line="240"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="308"/>
+        <location filename="../../interface.cpp" line="310"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="522"/>
+        <location filename="../../interface.cpp" line="524"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="524"/>
+        <location filename="../../interface.cpp" line="526"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="945"/>
+        <location filename="../../interface.cpp" line="947"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="946"/>
+        <location filename="../../interface.cpp" line="948"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="947"/>
+        <location filename="../../interface.cpp" line="949"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="949"/>
+        <location filename="../../interface.cpp" line="951"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1132"/>
-        <location filename="../../interface.cpp" line="1144"/>
-        <location filename="../../interface.cpp" line="1156"/>
+        <location filename="../../interface.cpp" line="1134"/>
+        <location filename="../../interface.cpp" line="1146"/>
+        <location filename="../../interface.cpp" line="1158"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1231"/>
-        <location filename="../../interface.cpp" line="1235"/>
+        <location filename="../../interface.cpp" line="1233"/>
         <location filename="../../interface.cpp" line="1237"/>
+        <location filename="../../interface.cpp" line="1239"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,24 +61,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="221"/>
+        <location filename="../../ThemesFactory.cpp" line="223"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="222"/>
+        <location filename="../../ThemesFactory.cpp" line="224"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="223"/>
+        <location filename="../../ThemesFactory.cpp" line="225"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="410"/>
-        <location filename="../../ThemesFactory.cpp" line="425"/>
-        <location filename="../../ThemesFactory.cpp" line="440"/>
+        <location filename="../../ThemesFactory.cpp" line="421"/>
+        <location filename="../../ThemesFactory.cpp" line="436"/>
+        <location filename="../../ThemesFactory.cpp" line="451"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
@@ -253,43 +253,48 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="230"/>
+        <location filename="../../themesOptions.ui" line="253"/>
         <source>Show dual progression</source>
         <translation>Mostrar progresión dual</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="182"/>
+        <location filename="../../themesOptions.ui" line="205"/>
         <source>Show speed as main information</source>
         <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="35"/>
+        <location filename="../../themesOptions.ui" line="44"/>
         <source>Use</source>
         <translation>Uso</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="41"/>
+        <location filename="../../themesOptions.ui" line="50"/>
         <source>Start with the &quot;more button&quot; pushed</source>
         <translation>Comience con el &quot;botón más&quot; empujada</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="58"/>
+        <location filename="../../themesOptions.ui" line="67"/>
         <source>Minimize on close to systray</source>
         <translation>Minimizar en cerca de la bandeja del sistema</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="68"/>
+        <location filename="../../themesOptions.ui" line="96"/>
         <source>At the end of the copy</source>
         <translation>Al final de la copia</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="94"/>
-        <location filename="../../themesOptions.ui" line="128"/>
+        <location filename="../../themesOptions.ui" line="103"/>
+        <location filename="../../themesOptions.ui" line="137"/>
         <source>Limit copy speed to</source>
         <translation>Limitar la velocidad de copia de</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="269"/>
+        <location filename="../../themesOptions.ui" line="176"/>
+        <source>Start minimized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="292"/>
         <source>Click to edit the color</source>
         <translation>Haga clic para editar el color</translation>
     </message>
@@ -302,37 +307,37 @@
         <translation type="obsolete">Limitar la velocidad de copia en:</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="138"/>
+        <location filename="../../themesOptions.ui" line="147"/>
         <source> KB/s</source>
         <translation> KB/s</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="176"/>
+        <location filename="../../themesOptions.ui" line="199"/>
         <source>Informations</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="214"/>
+        <location filename="../../themesOptions.ui" line="237"/>
         <source>Display</source>
         <translation>Visualización</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="220"/>
+        <location filename="../../themesOptions.ui" line="243"/>
         <source>Speed with progress bar</source>
         <translation>Velocidad con barra de progreso</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="250"/>
+        <location filename="../../themesOptions.ui" line="273"/>
         <source>Progression color</source>
         <translation>Progresión de color</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="240"/>
+        <location filename="../../themesOptions.ui" line="263"/>
         <source>Show progression in the title</source>
         <translation>Mostrar progresión en el título</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="51"/>
+        <location filename="../../themesOptions.ui" line="60"/>
         <source>Always on top</source>
         <translation>Siempre visible</translation>
     </message>

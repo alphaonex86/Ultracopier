@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+238"/>
+        <location filename="../../interface.cpp" line="+240"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+221"/>
+        <location filename="../../ThemesFactory.cpp" line="+223"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>
@@ -76,7 +76,7 @@
         <translation type="unfinished">항상 종료</translation>
     </message>
     <message>
-        <location line="+187"/>
+        <location line="+196"/>
         <location line="+15"/>
         <location line="+15"/>
         <source>Select a color</source>
@@ -249,7 +249,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+230"/>
+        <location filename="../../themesOptions.ui" line="+253"/>
         <source>Show dual progression</source>
         <translation type="unfinished"></translation>
     </message>
@@ -259,7 +259,7 @@
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
     <message>
-        <location line="-147"/>
+        <location line="-161"/>
         <source>Use</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,18 +274,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>At the end of the copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+7"/>
         <location line="+34"/>
         <source>Limit copy speed to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+39"/>
+        <source>Start minimized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+116"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -298,12 +303,12 @@
         <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
-        <location line="-131"/>
+        <location line="-145"/>
         <source> KB/s</source>
         <translation type="unfinished"> KB/초</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+52"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -328,7 +333,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-203"/>
         <source>Always on top</source>
         <translation type="unfinished"></translation>
     </message>

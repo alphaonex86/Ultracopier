@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+181"/>
+        <location filename="../../interface.cpp" line="+180"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,7 +61,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../factory.cpp" line="+198"/>
+        <location filename="../../factory.cpp" line="+197"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>

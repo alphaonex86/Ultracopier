@@ -4,56 +4,56 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="238"/>
+        <location filename="../../interface.cpp" line="240"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Vásárold meg az Ultimate verziót a fejlesztés támogatásához</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="308"/>
+        <location filename="../../interface.cpp" line="310"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fájl %1/%2, méret: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="522"/>
+        <location filename="../../interface.cpp" line="524"/>
         <source>Copy list</source>
         <translation>Lista másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="524"/>
+        <location filename="../../interface.cpp" line="526"/>
         <source>Move list</source>
         <translation>Lista mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="945"/>
+        <location filename="../../interface.cpp" line="947"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="946"/>
+        <location filename="../../interface.cpp" line="948"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="947"/>
+        <location filename="../../interface.cpp" line="949"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="949"/>
+        <location filename="../../interface.cpp" line="951"/>
         <source>File Name, 0KB</source>
         <translation>Fájlnév, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1132"/>
-        <location filename="../../interface.cpp" line="1144"/>
-        <location filename="../../interface.cpp" line="1156"/>
+        <location filename="../../interface.cpp" line="1134"/>
+        <location filename="../../interface.cpp" line="1146"/>
+        <location filename="../../interface.cpp" line="1158"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1231"/>
-        <location filename="../../interface.cpp" line="1235"/>
+        <location filename="../../interface.cpp" line="1233"/>
         <location filename="../../interface.cpp" line="1237"/>
+        <location filename="../../interface.cpp" line="1239"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,24 +61,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="221"/>
+        <location filename="../../ThemesFactory.cpp" line="223"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="222"/>
+        <location filename="../../ThemesFactory.cpp" line="224"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="223"/>
+        <location filename="../../ThemesFactory.cpp" line="225"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="410"/>
-        <location filename="../../ThemesFactory.cpp" line="425"/>
-        <location filename="../../ThemesFactory.cpp" line="440"/>
+        <location filename="../../ThemesFactory.cpp" line="421"/>
+        <location filename="../../ThemesFactory.cpp" line="436"/>
+        <location filename="../../ThemesFactory.cpp" line="451"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
@@ -245,78 +245,83 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="230"/>
+        <location filename="../../themesOptions.ui" line="253"/>
         <source>Show dual progression</source>
         <translation>Páros folyamat mutatása</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="182"/>
+        <location filename="../../themesOptions.ui" line="205"/>
         <source>Show speed as main information</source>
         <translation>Sebesség mutatása, mint fő információ</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="35"/>
+        <location filename="../../themesOptions.ui" line="44"/>
         <source>Use</source>
         <translation>Használ</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="41"/>
+        <location filename="../../themesOptions.ui" line="50"/>
         <source>Start with the &quot;more button&quot; pushed</source>
         <translation>Indítás a &quot;több gomb&quot; lenyomásával</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="58"/>
+        <location filename="../../themesOptions.ui" line="67"/>
         <source>Minimize on close to systray</source>
         <translation>Bezáráskor minimalizálás a tálcára</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="68"/>
+        <location filename="../../themesOptions.ui" line="96"/>
         <source>At the end of the copy</source>
         <translation>A másolás befejezésekor</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="94"/>
-        <location filename="../../themesOptions.ui" line="128"/>
+        <location filename="../../themesOptions.ui" line="103"/>
+        <location filename="../../themesOptions.ui" line="137"/>
         <source>Limit copy speed to</source>
         <translation>Másolási sebesség korlátozása</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="269"/>
+        <location filename="../../themesOptions.ui" line="176"/>
+        <source>Start minimized</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="292"/>
         <source>Click to edit the color</source>
         <translation>Kattints a szín szerkesztéséhez</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="138"/>
+        <location filename="../../themesOptions.ui" line="147"/>
         <source> KB/s</source>
         <translation> KB/s</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="176"/>
+        <location filename="../../themesOptions.ui" line="199"/>
         <source>Informations</source>
         <translation>Információk</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="214"/>
+        <location filename="../../themesOptions.ui" line="237"/>
         <source>Display</source>
         <translation>Megjelenítés</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="220"/>
+        <location filename="../../themesOptions.ui" line="243"/>
         <source>Speed with progress bar</source>
         <translation>Sebesség folyamatsávval</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="250"/>
+        <location filename="../../themesOptions.ui" line="273"/>
         <source>Progression color</source>
         <translation>Folyamat színe</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="240"/>
+        <location filename="../../themesOptions.ui" line="263"/>
         <source>Show progression in the title</source>
         <translation>Folyamat mutatása a címsorban</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="51"/>
+        <location filename="../../themesOptions.ui" line="60"/>
         <source>Always on top</source>
         <translation>Mindig legfelül</translation>
     </message>

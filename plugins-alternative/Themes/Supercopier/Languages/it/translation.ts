@@ -4,56 +4,56 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="181"/>
+        <location filename="../../interface.cpp" line="180"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="263"/>
+        <location filename="../../interface.cpp" line="262"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>File %1/%2, dimensione: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="477"/>
+        <location filename="../../interface.cpp" line="476"/>
         <source>Copy list</source>
         <translation>Lista della copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="479"/>
+        <location filename="../../interface.cpp" line="478"/>
         <source>Move list</source>
         <translation>Lista dello spostamento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="900"/>
+        <location filename="../../interface.cpp" line="899"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Non chiudere se vengono rilevati errori</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="901"/>
+        <location filename="../../interface.cpp" line="900"/>
         <source>Never close</source>
         <translation>Non chiudere mai</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="902"/>
+        <location filename="../../interface.cpp" line="901"/>
         <source>Always close</source>
         <translation>Chiudere sempre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="904"/>
+        <location filename="../../interface.cpp" line="903"/>
         <source>File Name, 0KB</source>
         <translation>Nome del file, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1087"/>
-        <location filename="../../interface.cpp" line="1099"/>
-        <location filename="../../interface.cpp" line="1111"/>
+        <location filename="../../interface.cpp" line="1086"/>
+        <location filename="../../interface.cpp" line="1098"/>
+        <location filename="../../interface.cpp" line="1110"/>
         <source>Select a color</source>
         <translation>Scegliere un colore</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1186"/>
-        <location filename="../../interface.cpp" line="1190"/>
-        <location filename="../../interface.cpp" line="1192"/>
+        <location filename="../../interface.cpp" line="1185"/>
+        <location filename="../../interface.cpp" line="1189"/>
+        <location filename="../../interface.cpp" line="1191"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,24 +61,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../factory.cpp" line="198"/>
+        <location filename="../../factory.cpp" line="197"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Non chiudere se vengono rilevati errori</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="199"/>
+        <location filename="../../factory.cpp" line="198"/>
         <source>Never close</source>
         <translation>Non chiudere mai</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="200"/>
+        <location filename="../../factory.cpp" line="199"/>
         <source>Always close</source>
         <translation>Chiudere sempre</translation>
     </message>
     <message>
-        <location filename="../../factory.cpp" line="387"/>
-        <location filename="../../factory.cpp" line="402"/>
-        <location filename="../../factory.cpp" line="417"/>
+        <location filename="../../factory.cpp" line="386"/>
+        <location filename="../../factory.cpp" line="401"/>
+        <location filename="../../factory.cpp" line="416"/>
         <source>Select a color</source>
         <translation>Scegliere un colore</translation>
     </message>

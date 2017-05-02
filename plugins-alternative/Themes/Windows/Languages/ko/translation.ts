@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+205"/>
+        <location filename="../../interface.cpp" line="+204"/>
         <location line="+188"/>
         <source>Unknown remaining time</source>
         <translation type="unfinished"></translation>
