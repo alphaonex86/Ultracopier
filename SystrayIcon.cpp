@@ -1,8 +1,6 @@
 /** \file SystrayIcon.cpp
 \brief Define the class of the systray icon
 \author alpha_one_x86
-\version 0.3
-\date 2010
 \licence GPL3, see the file COPYING */
 
 #include <QMessageBox>
@@ -36,7 +34,9 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     actionMenuQuit		= new QAction(this);
     actionOptions		= new QAction(this);
     //actionTransfer		= new QAction(this);
-    copyMenu		= new QMenu();
+    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    copyMenu		= NULL;
+    #endif
     //to prevent init bug
     stateListener=Ultracopier::NotListening;
     statePluginLoader=Ultracopier::Uncaught;
@@ -71,7 +71,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     //if theme/language change, update graphic part
     connect(ThemesManager::themesManager,			&ThemesManager::theThemeIsReloaded,             this,	&SystrayIcon::updateCurrentTheme, Qt::QueuedConnection);
     connect(LanguagesManager::languagesManager,	&LanguagesManager::newLanguageLoaded,			this,	&SystrayIcon::retranslateTheUI, Qt::QueuedConnection);
-    systrayMenu->addMenu(copyMenu);
+
     systrayMenu->addAction(actionOptions);
     systrayMenu->addAction(actionMenuAbout);
     #ifdef ULTRACOPIER_DEBUG
@@ -112,7 +112,13 @@ SystrayIcon::~SystrayIcon()
     delete actionMenuAbout;
     delete actionOptions;
     delete systrayMenu;
-    delete copyMenu;
+    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    if(copyMenu!=NULL)
+    {
+        delete copyMenu;
+        copyMenu=NULL;
+    }
+    #endif
 }
 
 void SystrayIcon::checkSetTooltip()
@@ -338,7 +344,6 @@ void SystrayIcon::updateCurrentTheme()
         IconAdd=QIcon(tempIcon);
     else
         IconAdd=QIcon(QStringLiteral(""));
-    copyMenu->setIcon(IconAdd);
 
     //update the systray icon
     updateSystrayIcon();
@@ -426,7 +431,6 @@ void SystrayIcon::retranslateTheUI()
     #endif
     actionMenuQuit		->setText(tr("&Quit"));
     actionOptions		->setText(tr("&Options"));
-    copyMenu		->setTitle(tr("A&dd copy/moving"));
     reloadEngineList();
     updateSystrayIcon();
 }
@@ -471,20 +475,49 @@ void SystrayIcon::newUpdate(const QString &version)
 void SystrayIcon::reloadEngineList()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    copyMenu->clear();
+    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    if(copyMenu!=NULL)
+    {
+        delete copyMenu;
+        copyMenu=NULL;
+    }
+    copyMenu=new QMenu();
+    copyMenu		->setTitle(tr("A&dd copy/moving"));
+    copyMenu->setIcon(IconAdd);
+    systrayMenu->insertMenu(actionOptions,copyMenu);
+    copyMenu->setEnabled(true);
     if(engineEntryList.size()==0)
     {
         copyMenu->setEnabled(false);
         return;
     }
+    #else
+    {
+        unsigned int index=0;
+        while(index<actions.size())
+        {
+            delete actions.at(index);
+            index++;
+        }
+        actions.clear();
+    }
+    #endif
+
+    if(engineEntryList.size()==0)
+        return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"engineEntryList.size(): "+QString::number(engineEntryList.size()));
-    copyMenu->setEnabled(true);
     if(engineEntryList.size()==1)
     {
-        QAction *copy=new QAction(IconAdd,tr("&Copy"),copyMenu);
+        QAction *copy=new QAction(IconAdd,tr("&Copy"));
         connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
         copy->setData(engineEntryList.first().name);
+        #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
         copyMenu->addAction(copy);
+        #else
+        actions << copy;
+        systrayMenu->insertAction(actionOptions,copy);
+        #endif
+        #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
         if(!engineEntryList.first().canDoOnlyCopy)
         {
             connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchTransferQuery);
@@ -500,29 +533,63 @@ void SystrayIcon::reloadEngineList()
         }
         else
             connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchCopyQuery);
+        #else
+        if(!engineEntryList.first().canDoOnlyCopy)
+        {
+            QAction *transfer=new QAction(IconAdd,tr("&Transfer"));
+            connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
+            transfer->setData(engineEntryList.first().name);
+            systrayMenu->insertAction(actionOptions,transfer);
+            QAction *move=new QAction(IconAdd,tr("&Move"));
+            connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
+            move->setData(engineEntryList.first().name);
+            systrayMenu->insertAction(actionOptions,move);
+        }
+        #endif
+
     }
     else
     {
         int index=0;
         while(index<engineEntryList.size())
         {
-            QMenu * menu=new QMenu(engineEntryList.at(index).name);
+            const EngineEntry &engineEntry=engineEntryList.at(index);
+            const QString &name=engineEntry.name;
+            #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+            QMenu * menu=new QMenu(name);
             QAction *copy=new QAction(IconAdd,tr("Add &copy"),menu);
             connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
-            copy->setData(engineEntryList.at(index).name);
+            copy->setData(name);
             menu->addAction(copy);
-            if(!engineEntryList.at(index).canDoOnlyCopy)
+            if(!engineEntry.canDoOnlyCopy)
             {
                 QAction *transfer=new QAction(IconAdd,tr("Add &transfer"),menu);
                 connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
-                transfer->setData(engineEntryList.at(index).name);
+                transfer->setData(name);
                 menu->addAction(transfer);
                 QAction *move=new QAction(IconAdd,tr("Add &move"),menu);
                 connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
-                move->setData(engineEntryList.at(index).name);
+                move->setData(name);
                 menu->addAction(move);
             }
             copyMenu->addMenu(menu);
+            #else
+            QAction *copy=new QAction(IconAdd,tr("Add &copy")+" ("+name+")");
+            connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
+            copy->setData(name);
+            systrayMenu->insertAction(actionOptions,copy);
+            if(!engineEntry.canDoOnlyCopy)
+            {
+                QAction *transfer=new QAction(IconAdd,tr("Add &transfer")+" ("+name+")");
+                connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
+                transfer->setData(name);
+                systrayMenu->insertAction(actionOptions,transfer);
+                QAction *move=new QAction(IconAdd,tr("Add &move")+" ("+name+")");
+                connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
+                move->setData(name);
+                systrayMenu->insertAction(actionOptions,move);
+            }
+            #endif
             index++;
         }
     }

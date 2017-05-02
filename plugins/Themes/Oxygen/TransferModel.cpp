@@ -97,6 +97,8 @@ quint64 TransferModel::firstId() const
 
 QVariant TransferModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
+    if(facilityEngine==NULL)
+        abort();
     if ( role == Qt::DisplayRole && orientation == Qt::Horizontal && section >= 0 && section < COLUMN_COUNT ) {
         switch ( section ) {
             case 0:

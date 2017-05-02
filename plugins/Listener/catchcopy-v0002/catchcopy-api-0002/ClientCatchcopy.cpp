@@ -1,8 +1,6 @@
 /** \file ClientCatchcopy.cpp
 \brief Define the catchcopy client
-\author alpha_one_x86
-\version 0002
-\date 2010 */
+\author alpha_one_x86 */
 
 #include "ClientCatchcopy.h"
 #include "VariablesCatchcopy.h"

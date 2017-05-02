@@ -1,8 +1,6 @@
 /** \file LocalPluginOptions.cpp
 \brief To bind the options of the plugin, into unique group options
 \author alpha_one_x86
-\version 0.3
-\date 2010
 \licence GPL3, see the file COPYING */
 
 #include "LocalPluginOptions.h"

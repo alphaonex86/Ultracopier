@@ -1,8 +1,7 @@
 /** \file copyEngine.cpp
 \brief Define the copy engine
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+*/
 
 #include "copyEngine.h"
 #include "folderExistsDialog.h"

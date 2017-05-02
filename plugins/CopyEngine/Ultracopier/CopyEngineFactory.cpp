@@ -1,8 +1,6 @@
 /** \file factory.cpp
 \brief Define the factory to create new instance
-\author alpha_one_x86
-\version 0.3
-\date 2010 */
+\author alpha_one_x86 */
 
 #include <QFileDialog>
 #include <QList>

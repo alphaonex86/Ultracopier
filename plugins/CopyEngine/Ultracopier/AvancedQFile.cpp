@@ -1,8 +1,6 @@
 /** \file AvancedQFile.cpp
 \brief Define the QFile herited class to set file date/time
-\author alpha_one_x86
-\version 0.3
-\date 2010 */
+\author alpha_one_x86 */
 
 #include "AvancedQFile.h"
 

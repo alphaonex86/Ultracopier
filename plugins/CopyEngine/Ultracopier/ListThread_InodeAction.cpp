@@ -1,9 +1,6 @@
 /** \file ListThread_InodeAction.cpp
 \brief To be included into ListThread.cpp, to optimize and prevent code duplication
-\see ListThread.cpp
-\author alpha_one_x86
-\version 0.3
-\date 2011 */
+\see ListThread.cpp */
 
 #ifdef LISTTHREAD_H
 

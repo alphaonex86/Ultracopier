@@ -1,8 +1,6 @@
 /** \file ServerCatchcopy.cpp
 \brief Define the server of catchcopy
-\author alpha_one_x86
-\version 0002
-\date 2010 */
+\author alpha_one_x86*/
 
 #include "ServerCatchcopy.h"
 #include "VariablesCatchcopy.h"

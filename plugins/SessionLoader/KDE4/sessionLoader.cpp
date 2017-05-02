@@ -1,8 +1,7 @@
 /** \file session-loader.cpp
 \brief Define the session plugin loader test
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+*/
 
 #include <QFile>
 #include <QDir>

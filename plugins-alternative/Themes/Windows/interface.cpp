@@ -1,8 +1,7 @@
 /** \file interface.cpp
 \brief Define the interface core
 \author alpha_one_x86
-\version 0.3
-\date 2010 */
+*/
 
 #include "interface.h"
 #include "factory.h"

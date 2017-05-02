@@ -48,7 +48,11 @@ class SystrayIcon : public QSystemTrayIcon
         QString lastVersion;
         #endif
         QMenu* systrayMenu;			///< Pointer on the menu
+        #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
         QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)
+        #else
+        QList<QAction*> actions;
+        #endif
         QAction* actionMenuQuit;		///< Pointer on the Quit action
         #ifdef ULTRACOPIER_DEBUG
         QAction* actionSaveBugReport;

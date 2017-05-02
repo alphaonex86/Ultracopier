@@ -1,8 +1,6 @@
 /** \file interface.cpp
 \brief Define the interface core
-\author alpha_one_x86
-\version 0.3
-\date 2010 */
+\author alpha_one_x86 */
 
 #include <QMessageBox>
 #include <QMimeData>
