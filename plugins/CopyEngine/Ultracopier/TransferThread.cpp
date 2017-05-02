@@ -1040,7 +1040,7 @@ void TransferThread::readIsFinish()
     readIsFinishVariable=true;
     canStartTransfer=false;
     //check here if need start checksuming or not
-    real_doChecksum=doChecksum && (!checksumOnlyOnError || fileContentError) && !canBeMovedDirectlyVariable;
+    real_doChecksum=doChecksum && (!checksumOnlyOnError || fileContentError) && (!canBeMovedDirectlyVariable && !canBeCopiedDirectlyVariable);
     if(real_doChecksum)
     {
         readIsFinishVariable=false;

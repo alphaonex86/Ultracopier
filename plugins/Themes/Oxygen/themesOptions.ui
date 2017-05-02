@@ -14,7 +14,16 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -28,7 +37,7 @@
         <x>0</x>
         <y>0</y>
         <width>509</width>
-        <height>301</height>
+        <height>292</height>
        </rect>
       </property>
       <attribute name="label">
@@ -62,14 +71,7 @@
        <item row="2" column="1">
         <widget class="QCheckBox" name="minimizeToSystray"/>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>At the end of the copy</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1" colspan="2">
+       <item row="4" column="1" colspan="2">
         <widget class="QComboBox" name="comboBox_copyEnd">
          <item>
           <property name="text">
@@ -89,13 +91,20 @@
         </widget>
        </item>
        <item row="4" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>At the end of the copy</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
         <widget class="QLabel" name="label_Slider_speed">
          <property name="text">
           <string>Limit copy speed to</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1" colspan="2">
+       <item row="5" column="1" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QSlider" name="SliderSpeed">
@@ -122,14 +131,14 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QCheckBox" name="checkBox_limitSpeed">
          <property name="text">
           <string>Limit copy speed to</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="2">
+       <item row="6" column="1" colspan="2">
         <widget class="QSpinBox" name="limitSpeed">
          <property name="enabled">
           <bool>false</bool>
@@ -145,7 +154,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
+       <item row="7" column="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -161,6 +170,20 @@
        <item row="1" column="1" colspan="2">
         <widget class="QCheckBox" name="alwaysOnTop"/>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_startMinimized">
+         <property name="text">
+          <string>Start minimized</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="startMinimized">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
@@ -169,7 +192,7 @@
         <x>0</x>
         <y>0</y>
         <width>509</width>
-        <height>301</height>
+        <height>292</height>
        </rect>
       </property>
       <attribute name="label">
@@ -207,7 +230,7 @@
         <x>0</x>
         <y>0</y>
         <width>509</width>
-        <height>301</height>
+        <height>292</height>
        </rect>
       </property>
       <attribute name="label">
@@ -272,7 +295,16 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>

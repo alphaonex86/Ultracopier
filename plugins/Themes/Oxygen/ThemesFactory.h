@@ -68,6 +68,7 @@ private slots:
     void progressColorRemaining_clicked();
     void updateProgressionColorBar();
     void setShowProgressionInTheTitle();
+    void startMinimized(bool checked);
 public slots:
     void resetOptions();
     void newLanguageLoaded();

@@ -51,7 +51,8 @@ public:
            const bool &checkBoxShowSpeed,
            FacilityInterface * facilityEngine,
            const bool &moreButtonPushed,
-           const bool &minimizeToSystray);
+           const bool &minimizeToSystray,
+           const bool &startMinimized);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress

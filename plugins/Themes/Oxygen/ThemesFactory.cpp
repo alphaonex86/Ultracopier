@@ -40,7 +40,8 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 ui->checkBoxShowSpeed->isChecked(),
                 facilityEngine,
                 ui->checkBoxStartWithMoreButtonPushed->isChecked(),
-                ui->minimizeToSystray->isChecked()
+                ui->minimizeToSystray->isChecked(),
+                ui->startMinimized->isChecked()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation);
@@ -79,6 +80,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
         KeysList.append(qMakePair(QStringLiteral("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
         KeysList.append(qMakePair(QStringLiteral("alwaysOnTop"),QVariant(false)));
         KeysList.append(qMakePair(QStringLiteral("minimizeToSystray"),QVariant(false)));
+        KeysList.append(qMakePair(QStringLiteral("startMinimized"),QVariant(false)));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -106,6 +108,7 @@ QWidget * ThemesFactory::options()
         ui->showProgressionInTheTitle->setChecked(optionsEngine->getOptionValue(QStringLiteral("showProgressionInTheTitle")).toBool());
         ui->alwaysOnTop->setChecked(optionsEngine->getOptionValue(QStringLiteral("alwaysOnTop")).toBool());
         ui->minimizeToSystray->setChecked(optionsEngine->getOptionValue(QStringLiteral("minimizeToSystray")).toBool());
+        ui->startMinimized->setChecked(optionsEngine->getOptionValue(QStringLiteral("startMinimized")).toBool());
 
         progressColorWrite=optionsEngine->getOptionValue(QStringLiteral("progressColorWrite")).value<QColor>();
         progressColorRead=optionsEngine->getOptionValue(QStringLiteral("progressColorRead")).value<QColor>();
@@ -137,6 +140,7 @@ QWidget * ThemesFactory::options()
         connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked);
         connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked);
         connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked);
+        connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized);
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
@@ -254,6 +258,15 @@ void ThemesFactory::showDualProgression(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue(QStringLiteral("showDualProgression"),checked);
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::startMinimized(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue(QStringLiteral("startMinimized"),checked);
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

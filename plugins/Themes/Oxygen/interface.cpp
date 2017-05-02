@@ -52,7 +52,8 @@ Themes::Themes(const bool &alwaysOnTop,
                const bool &checkBoxShowSpeed,
                FacilityInterface * facilityEngine,
                const bool &moreButtonPushed,
-               const bool &minimizeToSystray) :
+               const bool &minimizeToSystray,
+               const bool &startMinimized) :
     ui(new Ui::interfaceCopy()),
     uiOptions(new Ui::themesOptions())
 {
@@ -71,6 +72,8 @@ Themes::Themes(const bool &alwaysOnTop,
     haveStarted     = false;
     storeIsInPause	= false;
     durationStarted = false;
+    if(startMinimized)
+        this->showMinimized();
 
     this->progressColorWrite    = progressColorWrite;
     this->progressColorRead     = progressColorRead;
@@ -79,6 +82,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->showProgressionInTheTitle->setChecked(showProgressionInTheTitle);
     uiOptions->speedWithProgressBar->setChecked(speedWithProgressBar);
     uiOptions->showDualProgression->setChecked(showDualProgression);
+    uiOptions->startMinimized->setEnabled(false);
     uiOptions->alwaysOnTop->setChecked(alwaysOnTop);
     uiOptions->minimizeToSystray->setChecked(minimizeToSystray);
     //uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));

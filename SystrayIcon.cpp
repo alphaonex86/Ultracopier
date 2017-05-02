@@ -487,6 +487,8 @@ void SystrayIcon::reloadEngineList()
         copyMenu->addAction(copy);
         if(!engineEntryList.first().canDoOnlyCopy)
         {
+            connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchTransferQuery);
+
             QAction *transfer=new QAction(IconAdd,tr("&Transfer"),copyMenu);
             connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
             transfer->setData(engineEntryList.first().name);
@@ -496,6 +498,8 @@ void SystrayIcon::reloadEngineList()
             move->setData(engineEntryList.first().name);
             copyMenu->addAction(move);
         }
+        else
+            connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchCopyQuery);
     }
     else
     {
