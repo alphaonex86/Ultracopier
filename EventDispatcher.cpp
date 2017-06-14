@@ -78,6 +78,9 @@ EventDispatcher::EventDispatcher()
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Windows version: %1").arg(GetOSDisplayString()));
     #endif
+    #ifdef __STDC_VERSION__
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("__STDC_VERSION__: ")+QString::number(__STDC_VERSION__));
+    #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Qt version: %1 (%2)").arg(qVersion()).arg(QT_VERSION));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
