@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/Themes/Supercopier">
+        <file>resources/SystemTrayIcon/systray_Caught_Windows.png</file>
+        <file>resources/SystemTrayIcon/systray_Semiuncaught_Windows.png</file>
+        <file>resources/SystemTrayIcon/systray_Uncaught_Windows.png</file>
+        <file>resources/SystemTrayIcon/systray_Top_Progress_Windows.png</file>
+        <file>resources/SystemTrayIcon/systray_Bottom_Progress_Windows.png</file>
+    </qresource>
+</RCC>

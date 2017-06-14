@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/Themes/Supercopier">
+        <file>resources/add.png</file>
+        <file>resources/cancel.png</file>
+        <file>resources/main.png</file>
+        <file>resources/moveDown.png</file>
+        <file>resources/moveUp.png</file>
+        <file>resources/player_end.png</file>
+        <file>resources/player_pause.png</file>
+        <file>resources/player_play.png</file>
+        <file>resources/putOnBottom.png</file>
+        <file>resources/putOnTop.png</file>
+        <file>resources/remove.png</file>
+        <file>resources/search.png</file>
+        <file>resources/export-transfer-list.png</file>
+        <file>resources/import-transfer-list.png</file>
+        <file>resources/SystemTrayIcon/add.png</file>
+        <file>resources/SystemTrayIcon/exit.png</file>
+        <file>resources/SystemTrayIcon/informations.png</file>
+        <file>resources/SystemTrayIcon/options.png</file>
+        <file>resources/progressbarleft.png</file>
+        <file>resources/progressbarright.png</file>
+    </qresource>
+</RCC>

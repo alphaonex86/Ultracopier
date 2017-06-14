@@ -23,7 +23,8 @@ TRANSLATIONS += plugins/Languages/ar/translation.ts \
     plugins/Languages/ru/translation.ts \
     plugins/Languages/th/translation.ts \
     plugins/Languages/tr/translation.ts \
-    plugins/Languages/zh/translation.ts
+    plugins/Languages/zh/translation.ts \
+    plugins/Languages/zh_TW/translation.ts
 
 TARGET = ultracopier
 macx {

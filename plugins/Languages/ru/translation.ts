@@ -20,25 +20,25 @@
     <message>
         <location filename="../../../CliParser.cpp" line="71"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Проблема с чтением файла, или размер файла равен 0</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="159"/>
         <location filename="../../../CliParser.cpp" line="170"/>
         <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Возможные аргументы:</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="161"/>
         <location filename="../../../CliParser.cpp" line="172"/>
         <source>To display the options</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы отобразить опции</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="164"/>
         <location filename="../../../CliParser.cpp" line="175"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы копировать исходники в место назначения, разделенными пробелом. If destination is &quot;?&quot;, ultracopier will ask the user</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="165"/>
