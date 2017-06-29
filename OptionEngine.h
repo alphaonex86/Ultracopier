@@ -20,6 +20,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QHash>
+#include <unordered_map>
 
 #include "interface/OptionInterface.h"
 
@@ -41,13 +42,13 @@ class OptionEngine : public QObject
         /// \brief Destroy the option
         ~OptionEngine();
         /// \brief To add option group to options
-        bool addOptionGroup(const QString &groupName,const QList<QPair<QString, QVariant> > &KeysList);
+        bool addOptionGroup(const std::string &groupName,const std::vector<std::pair<std::string, std::string> > &KeysList);
         /// \brief To remove option group to options, remove the widget need be do into the calling object
-        bool removeOptionGroup(const QString &groupName);
+        bool removeOptionGroup(const std::string &groupName);
         /// \brief To get option value
-        QVariant getOptionValue(const QString &groupName,const QString &variableName) const;
+        std::string getOptionValue(const std::string &groupName,const std::string &variableName) const;
         /// \brief To set option value
-        void setOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
+        void setOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value);
         /// \brief To invalid option value
         //void setInvalidOptionValue(const QString &groupName,const QString &variableName);
         /// \brief get query reset options
@@ -56,14 +57,14 @@ class OptionEngine : public QObject
         /// \brief OptionEngineGroupKey then: Group -> Key
         struct OptionEngineGroupKey
         {
-            QVariant defaultValue;
-            QVariant currentValue;
+            std::string defaultValue;
+            std::string currentValue;
             bool emptyList;
         };
 
         /// \brief store the option group list
-        QHash<QString,QHash<QString,OptionEngineGroupKey> > GroupKeysList;
-        QStringList unmanagedTabName;
+        std::unordered_map<std::string,std::unordered_map<std::string,OptionEngineGroupKey> > GroupKeysList;
+        std::vector<std::string> unmanagedTabName;
         /// \brief Enumeration of backend
         enum Backend
         {
@@ -77,7 +78,7 @@ class OptionEngine : public QObject
         //the reset of right value of widget need be do into the calling object
         void internal_resetToDefaultValue();
     signals:
-        void newOptionValue(const QString&,const QString&,const QVariant&) const;
+        void newOptionValue(const std::string&,const std::string&,const std::string&) const;
         void resetOptions() const;
     public:
         static OptionEngine *optionEngine;

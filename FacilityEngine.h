@@ -7,10 +7,9 @@
 #ifndef FACILITYENGINE_H
 #define FACILITYENGINE_H
 
-#include <QVariant>
-#include <QString>
-#include <QStringList>
-#include <QHash>
+#include <string>
+#include <vector>
+#include <unordered_map>
 
 #include "interface/FacilityInterface.h"
 #include "Environment.h"
@@ -25,48 +24,48 @@ class FacilityEngine : public FacilityInterface
 public:
     explicit FacilityEngine();
     /// \brief convert size in Byte to String
-    QString sizeToString(const double &size) const;
+    std::string sizeToString(const double &size) const;
     /// \brief convert size unit to String
-    QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const;
+    std::string sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const;
     /// \brief translate the text
-    QString translateText(const QString &text) const;
+    std::string translateText(const std::string &text) const;
     /// \brief speed to string in byte per seconds
-    QString speedToString(const double &speed) const;
+    std::string speedToString(const double &speed) const;
     /// \brief Decompose the time in second
-    Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) const;
+    Ultracopier::TimeDecomposition secondsToTimeDecomposition(const uint32_t &seconds) const;
     /// \brief have the fonctionnality
-    bool haveFunctionality(const QString &fonctionnality) const;
+    bool haveFunctionality(const std::string &fonctionnality) const;
     /// \brief call the fonctionnality
-    QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList());
+    std::string callFunctionality(const std::string &fonctionnality,const std::vector<std::string> &args=std::vector<std::string>());
     /// \brief Do the simplified time
-    QString simplifiedRemainingTime(const quint32 &seconds) const;
+    std::string simplifiedRemainingTime(const uint32_t &seconds) const;
     /// \brief Return ultimate url, empty is not found or already ultimate
-    QString ultimateUrl() const;
+    std::string ultimateUrl() const;
     /// \brief Return the software name
-    QString softwareName() const;
+    std::string softwareName() const;
 
     static FacilityEngine facilityEngine;
 private:
     //undirect translated string
-    QString Translation_perSecond;
-    QString Translation_tooBig;
-    QString Translation_B;
-    QString Translation_KB;
-    QString Translation_MB;
-    QString Translation_GB;
-    QString Translation_TB;
-    QString Translation_PB;
-    QString Translation_EB;
-    QString Translation_ZB;
-    QString Translation_YB;
+    std::string Translation_perSecond;
+    std::string Translation_tooBig;
+    std::string Translation_B;
+    std::string Translation_KB;
+    std::string Translation_MB;
+    std::string Translation_GB;
+    std::string Translation_TB;
+    std::string Translation_PB;
+    std::string Translation_EB;
+    std::string Translation_ZB;
+    std::string Translation_YB;
     //simplified remaining time
-    QString Translation_SimplifiedRemaningTime_LessThan10s;
-    QString Translation_SimplifiedRemaningTime_AboutSeconds;
-    QString Translation_SimplifiedRemaningTime_AboutMinutes;
-    QString Translation_SimplifiedRemaningTime_AboutHours;
+    std::string Translation_SimplifiedRemaningTime_LessThan10s;
+    std::string Translation_SimplifiedRemaningTime_AboutSeconds;
+    std::string Translation_SimplifiedRemaningTime_AboutMinutes;
+    std::string Translation_SimplifiedRemaningTime_AboutHours;
     //internal fonction
-    inline QString adaptString(const float &nb) const;
-    QHash<QString,QString> translations;
+    inline std::string adaptString(const float &nb) const;
+    std::unordered_map<std::string,std::string> translations;
 public slots:
     /// \brief To force the text re-translation
     void retranslate();

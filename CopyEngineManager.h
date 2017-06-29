@@ -44,22 +44,22 @@ public:
       \param protocolsUsedForTheDestination list of destination used
       \see getCopyEngine()
       */
-    returnCopyEngine getCopyEngine(const Ultracopier::CopyMode &mode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination);
+    returnCopyEngine getCopyEngine(const Ultracopier::CopyMode &mode,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination);
     /** \brief return copy engine instance with specific engine
       \param mode the mode (copy/move)
       \param name name of the engine needed
       \see getCopyEngine()
       */
-    returnCopyEngine getCopyEngine(const Ultracopier::CopyMode &mode,const QString &name);
-    //bool currentEngineCanDoOnlyCopy(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
-    //CopyType currentEngineGetCopyType(QStringList protocolsUsedForTheSources,QString protocolsUsedForTheDestination="");
+    returnCopyEngine getCopyEngine(const Ultracopier::CopyMode &mode,const std::string &name);
+    //bool currentEngineCanDoOnlyCopy(std::vector<std::string> protocolsUsedForTheSources,std::string protocolsUsedForTheDestination="");
+    //CopyType currentEngineGetCopyType(std::vector<std::string> protocolsUsedForTheSources,std::string protocolsUsedForTheDestination="");
     /** \brief to send all signal because all object is connected on it */
     void setIsConnected();
     /** \brief check if the protocols given is supported by the copy engine
       \see Core::newCopy()
       \see Core::newMove()
       */
-    bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination);
+    bool protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination);
 private slots:
     void onePluginAdded(const PluginsAvailable &plugin);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
@@ -67,38 +67,38 @@ private slots:
     void onePluginWillBeUnloaded(const PluginsAvailable &plugin);
     #endif
     #ifdef ULTRACOPIER_DEBUG
-    void debugInformation(const Ultracopier::DebugLevel &level, const QString& fonction, const QString& text, const QString& file, const int& ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level, const std::string& fonction, const std::string& text, const std::string& file, const int& ligne);
     #endif // ULTRACOPIER_DEBUG
     /// \brief To notify when new value into a group have changed
-    void newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
+    void newOptionValue(const std::string &groupName,const std::string &variableName,const QVariant &value);
     void allPluginIsloaded();
 private:
     /// \brief the option interface
     struct CopyEnginePlugin
     {
-        QString path;
-        QString name;
-        QString pluginPath;
-        QStringList supportedProtocolsForTheSource;
-        QStringList supportedProtocolsForTheDestination;
+        std::string path;
+        std::string name;
+        std::string pluginPath;
+        std::vector<std::string> supportedProtocolsForTheSource;
+        std::vector<std::string> supportedProtocolsForTheDestination;
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
         QPluginLoader * pointer;
         #endif
         PluginInterface_CopyEngineFactory * factory;
-        QList<PluginInterface_CopyEngine *> intances;
+        std::vector<PluginInterface_CopyEngine *> intances;
         bool canDoOnlyCopy;
         Ultracopier::CopyType type;
         Ultracopier::TransferListOperation transferListOperation;
         LocalPluginOptions *options;
         QWidget *optionsWidget;
     };
-    QList<CopyEnginePlugin> pluginList;
+    std::vector<CopyEnginePlugin> pluginList;
     OptionDialog *optionDialog;
     bool isConnected;
 signals:
-    //void newCopyEngineOptions(QString,QString,QWidget *);
-    void addCopyEngine(QString name,bool canDoOnlyCopy) const;
-    void removeCopyEngine(QString name) const;
+    //void newCopyEngineOptions(std::string,std::string,QWidget *);
+    void addCopyEngine(std::string name,bool canDoOnlyCopy) const;
+    void removeCopyEngine(std::string name) const;
     void previouslyPluginAdded(PluginsAvailable) const;
 };
 

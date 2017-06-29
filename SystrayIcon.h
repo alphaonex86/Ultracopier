@@ -30,7 +30,7 @@ class SystrayIcon : public QSystemTrayIcon
         ~SystrayIcon();
     public slots:
         /// \brief For show a message linked to the systray icon
-        void showSystrayMessage(const QString& text);
+        void showSystrayMessage(const std::string& text);
         /** \brief Send that's caught state have changed for CatchedState::Uncatched or CatchedState::Semicatched or CatchedState::Catched
         \see CatchState
         \see tryCatchCopy()
@@ -38,20 +38,20 @@ class SystrayIcon : public QSystemTrayIcon
         \param state is the new state */
         void listenerReady(const Ultracopier::ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
         void pluginLoaderReady(const Ultracopier::CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply);
-        void addCopyEngine(const QString &name,const bool &canDoOnlyCopy);
-        void removeCopyEngine(const QString &name);
+        void addCopyEngine(const std::string &name,const bool &canDoOnlyCopy);
+        void removeCopyEngine(const std::string &name);
         #ifdef ULTRACOPIER_INTERNET_SUPPORT
-        void newUpdate(const QString &version);
+        void newUpdate(const std::string &version);
         #endif
     private:
         #ifdef ULTRACOPIER_INTERNET_SUPPORT
-        QString lastVersion;
+        std::string lastVersion;
         #endif
         QMenu* systrayMenu;			///< Pointer on the menu
         #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
         QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)
         #else
-        QList<QAction*> actions;
+        std::vector<QAction*> actions;
         #endif
         QAction* actionMenuQuit;		///< Pointer on the Quit action
         #ifdef ULTRACOPIER_DEBUG
@@ -72,9 +72,9 @@ class SystrayIcon : public QSystemTrayIcon
         struct EngineEntry
         {
             bool canDoOnlyCopy;
-            QString name;
+            std::string name;
         };
-        QList<EngineEntry> engineEntryList;
+        std::vector<EngineEntry> engineEntryList;
         // To store the current catch state
         Ultracopier::ListeningState stateListener;
         Ultracopier::CatchState statePluginLoader;
@@ -132,9 +132,9 @@ class SystrayIcon : public QSystemTrayIcon
         /** \brief Add window copy or window move
         \param mode Can be CopyMode::Copy or CopyMode::Move
         \return The core object of the new window created */
-        void addWindowCopyMove(Ultracopier::CopyMode mode,QString name) const;
-        void addWindowTransfer(QString name) const;
-        void urlDropped(QList<QUrl> urls) const;
+        void addWindowCopyMove(Ultracopier::CopyMode mode,std::string name) const;
+        void addWindowTransfer(std::string name) const;
+        void urlDropped(std::vector<std::string> urls) const;
         void saveBugReport() const;
 };
 

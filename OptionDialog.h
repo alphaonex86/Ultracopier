@@ -38,7 +38,7 @@ public:
     explicit OptionDialog();
     ~OptionDialog();
     /** \brief add the option widget from copy engine */
-    void addPluginOptionWidget(const PluginType &category,const QString &name,QWidget * options);
+    void addPluginOptionWidget(const PluginType &category,const std::string &name,QWidget * options);
 protected:
     void changeEvent(QEvent *e);
     void loadLogVariableLabel();
@@ -54,7 +54,7 @@ private slots:
     void manuallyAdded(const PluginsAvailable &plugin);
     #endif
     void loadOption();
-    void newOptionValue(const QString &group,const QString &name,const QVariant &value);
+    void newOptionValue(const std::string &group,const std::string &name,const std::string &value);
     void on_Ultracopier_current_theme_currentIndexChanged(const int &index);
     void on_Language_currentIndexChanged(const int &index);
     void on_Language_force_toggled(const bool &checked);
@@ -105,24 +105,24 @@ private:
     struct pluginStore
     {
         QTreeWidgetItem * item;
-        QString path;
+        std::string path;
         bool isWritable;
     };
-    QList<pluginStore> pluginLink;
+    std::vector<pluginStore> pluginLink;
     struct pluginOptionsWidget
     {
-        QString name;
+        std::string name;
         QTreeWidgetItem * item;
         QWidget *options;
         PluginType category;
     };
-    QList<pluginOptionsWidget> pluginOptionsWidgetList;
+    std::vector<pluginOptionsWidget> pluginOptionsWidgetList;
     int number_of_listener;
     void addLanguage(const PluginsAvailable &plugin);
     void removeLanguage(const PluginsAvailable &plugin);
     void addTheme(const PluginsAvailable &plugin);
     void removeTheme(const PluginsAvailable &plugin);
-    QStringList copyEngineStringList() const;
+    std::vector<std::string> copyEngineStringList() const;
     bool ignoreCopyEngineListEdition;
     PluginsManager::ImportBackend defaultImportBackend;
     int index,loop_size;
@@ -147,8 +147,8 @@ private:
     int workingCount;
     #endif
 public slots:
-    void newThemeOptions(const QString &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
-    void newClientList(const QStringList &clientsList);
+    void newThemeOptions(const std::string &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
+    void newClientList(const std::vector<std::string> &clientsList);
 signals:
     void previouslyPluginAdded(const PluginsAvailable &plugin) const;
 };

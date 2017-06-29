@@ -50,13 +50,13 @@ ThemesManager::ThemesManager()
     PluginsManager::pluginsManager->unlockPluginListEdition();
 
     //do the options
-    QList<QPair<QString, QVariant> > KeysList;
-    KeysList.append(qMakePair(QStringLiteral("Ultracopier_current_theme"),QVariant(ULTRACOPIER_DEFAULT_STYLE)));
-    OptionEngine::optionEngine->addOptionGroup(QStringLiteral("Themes"),KeysList);
+    std::vector<std::pair<std::string, std::string> > KeysList;
+    KeysList.append(std::pair<std::string, std::string>("Ultracopier_current_theme",ULTRACOPIER_DEFAULT_STYLE));
+    OptionEngine::optionEngine->addOptionGroup("Themes",KeysList);
 
     //load the default and current themes path
-    defaultStylePath=QStringLiteral(":/Themes/")+QStringLiteral(ULTRACOPIER_DEFAULT_STYLE)+QStringLiteral("/");
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Default style: ")+defaultStylePath);
+    defaultStylePath=std::string(":/Themes/")+ULTRACOPIER_DEFAULT_STYLE+"/";
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Default style: "+defaultStylePath);
     currentStylePath=defaultStylePath;
     connect(OptionEngine::optionEngine,            &OptionEngine::newOptionValue,	this,		&ThemesManager::newOptionValue,Qt::QueuedConnection);
 }

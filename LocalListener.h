@@ -41,7 +41,7 @@ private:
         int size;
         bool haveData;
     } ComposedData;
-    QList<ComposedData> clientList;
+    std::vector<ComposedData> clientList;
 private slots:
     //the time is done
     void timeoutDectected();
@@ -59,7 +59,7 @@ private slots:
     /// \can now parse the cli
     void allPluginIsloaded();
 signals:
-    void cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck) const;
+    void cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck) const;
 };
 
 #endif // LOCALLISTENER_H

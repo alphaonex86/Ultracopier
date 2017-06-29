@@ -18,6 +18,7 @@
 #include <QCoreApplication>
 #include <QAbstractTableModel>
 #include <QRegularExpression>
+#include <regex>
 
 #include "Variable.h"
 #include "PlatformMacro.h"
@@ -122,7 +123,7 @@ class DebugEngine : public QObject
         bool tryConnect();
         int addDebugInformationCallNumber;
         bool quit;
-        QRegularExpression fileNameCleaner;
+        std::regex fileNameCleaner;
 };
 
 #endif // ULTRACOPIER_DEBUG

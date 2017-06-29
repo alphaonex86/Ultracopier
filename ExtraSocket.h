@@ -23,7 +23,7 @@ class ExtraSocket
 {
 public:
     /** \brief class to return always the same socket resolution */
-    static QString pathSocket(const QString &name);
+    static std::string pathSocket(const std::string &name);
     static char * toHex(const char *str);
 };
 

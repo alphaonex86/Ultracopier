@@ -41,9 +41,9 @@ class Core : public QObject
         };
         struct RemainingTimeLogarithmicColumn
         {
-            QList<int> lastProgressionSpeed;
-            quint64 totalSize;
-            quint64 transferedSize;
+            std::vector<int> lastProgressionSpeed;
+            uint64_t totalSize;
+            uint64_t transferedSize;
         };
 
         struct CopyInstance
@@ -53,16 +53,16 @@ class Core : public QObject
             PluginInterface_Themes * interface;
             bool ignoreMode;
             Ultracopier::CopyMode mode;
-            quint64 numberOfFile;
-            quint64 numberOfTransferedFile;
-            quint64 currentProgression,totalProgression;//store the file byte transfered, used into the remaining time
+            uint64_t numberOfFile;
+            uint64_t numberOfTransferedFile;
+            uint64_t currentProgression,totalProgression;//store the file byte transfered, used into the remaining time
             Ultracopier::EngineActionInProgress action;
-            quint64 lastProgression;//store the real byte transfered, used in speed calculation
-            QList<RunningTransfer> transferItemList;//full info of started item, to have wich progression to poll
-            QList<quint32> orderId;//external order send via listener plugin
-            QString folderListing;
-            QString collisionAction;
-            QString errorAction;
+            uint64_t lastProgression;//store the real byte transfered, used in speed calculation
+            std::vector<RunningTransfer> transferItemList;//full info of started item, to have wich progression to poll
+            std::vector<uint32_t> orderId;//external order send via listener plugin
+            std::string folderListing;
+            std::string collisionAction;
+            std::string errorAction;
             bool isPaused;
             bool isRunning;
             Ultracopier::CopyType type;
@@ -77,30 +77,30 @@ class Core : public QObject
 
             /** for RemainingTimeAlgo_Traditional **/
             //this speed is for instant speed
-            QList<quint64> lastSpeedDetected;//stored in bytes
-            QList<double> lastSpeedTime;//stored in ms
+            std::vector<uint64_t> lastSpeedDetected;//stored in bytes
+            std::vector<double> lastSpeedTime;//stored in ms
             //this speed is average speed on more time to calculate the remaining time
-            QList<quint64> lastAverageSpeedDetected;//stored in bytes
-            QList<double> lastAverageSpeedTime;//stored in ms
+            std::vector<uint64_t> lastAverageSpeedDetected;//stored in bytes
+            std::vector<double> lastAverageSpeedTime;//stored in ms
 
             /** for RemainingTimeAlgo_Logarithmic **/
-            QList<RemainingTimeLogarithmicColumn> remainingTimeLogarithmicValue;
+            std::vector<RemainingTimeLogarithmicColumn> remainingTimeLogarithmicValue;
         };
-        QList<CopyInstance> copyList;
+        std::vector<CopyInstance> copyList;
         /** open with specific source/destination
         \param move Copy or move
         \param ignoreMode if need ignore the mode
         \param protocolsUsedForTheSources protocols used for sources
         \param protocolsUsedForTheDestination protocols used for destination
         */
-        int openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources=QStringList(),const QString &protocolsUsedForTheDestination="");
+        int openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const std::vector<std::string> &protocolsUsedForTheSources=std::vector<std::string>(),const std::string &protocolsUsedForTheDestination="");
         /** open with specific copy engine
         \param move Copy or move
         \param ignoreMode if need ignore the mode
         \param protocolsUsedForTheSources protocols used for sources
         \param protocolsUsedForTheDestination protocols used for destination
         */
-        int openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const QString &name);
+        int openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const std::string &name);
 
         /// \brief get the right copy instance (copy engine + interface), by signal emited from copy engine
         int indexCopySenderCopyEngine();
@@ -119,7 +119,7 @@ class Core : public QObject
         //for the internal management
         int incrementId();
         int nextId;
-        QList<int> idList;
+        std::vector<int> idList;
         QTime lastProgressionTime;
         QTimer forUpateInformation;///< used to call \see periodicSynchronization()
         void resetSpeedDetected(const int &index);
@@ -128,28 +128,28 @@ class Core : public QObject
         int connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
 
         LogThread log;///< To save the log like mkpath, rmpath, error, copy, ...
-        quint64 realByteTransfered;
+        uint64_t realByteTransfered;
 
-        static quint8 fileCatNumber(quint64 size);
+        static uint8_t fileCatNumber(uint64_t size);
     signals:
-        void copyFinished(const quint32 & orderId,bool withError) const;
-        void copyCanceled(const quint32 & orderId) const;
+        void copyFinished(const uint32_t & orderId,bool withError) const;
+        void copyCanceled(const uint32_t & orderId) const;
     public slots:
         /** \brief do copy with sources, but ask the destination */
-        void newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
-        void newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
+        void newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources);
+        void newTransfer(const Ultracopier::CopyMode &mode,const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination);
         /** \brief do copy with sources and destination */
-        void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
+        void newCopy(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination);
         /** \brief do move with sources, but ask the destination */
-        void newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources);
+        void newMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources);
         /** \brief do move with sources and destination */
-        void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination);
+        void newMove(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination);
         /** \brief open copy/move windows with specific engine */
-        void addWindowCopyMove(const Ultracopier::CopyMode &mode,const QString &name);
+        void addWindowCopyMove(const Ultracopier::CopyMode &mode,const std::string &name);
         /** \brief open transfer (copy+move) windows with specific engine */
-        void addWindowTransfer(const QString &name);
+        void addWindowTransfer(const std::string &name);
         /** new transfer list pased by the CLI */
-        void newTransferList(QString engine,QString mode,QString file);
+        void newTransferList(std::string engine,std::string mode,std::string file);
     private slots:
         /// \brief the copy engine have canceled the transfer
         void copyInstanceCanceledByEngine();
@@ -162,7 +162,7 @@ class Core : public QObject
 
         // some stat update
         void actionInProgess(const Ultracopier::EngineActionInProgress &action);
-        void newFolderListing(const QString &path);
+        void newFolderListing(const std::string &path);
         void isInPause(const bool&);
 
         /** \brief update at periodic interval, the synchronization between copy engine and interface
@@ -178,19 +178,19 @@ class Core : public QObject
         void unloadInterface();
 
         //error occurred
-        void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
+        void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error);
         //for the extra logging
-        void rmPath(const QString &path);
-        void mkPath(const QString &path);
+        void rmPath(const std::string &path);
+        void mkPath(const std::string &path);
 
         /// \brief used to drag and drop files
-        void urlDropped(const QList<QUrl> &urls);
+        void urlDropped(const std::vector<std::string> &urls);
         /// \brief to rsync after a new interface connection
         void syncReady();
-        void doneTime(const QList<QPair<quint64,quint32> > &timeList);
+        void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList);
 
-        void getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> & actionList);
-        void pushGeneralProgression(const quint64 &current,const quint64 &total);
+        void getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> & actionList);
+        void pushGeneralProgression(const uint64_t &current,const uint64_t &total);
 };
 
 #endif // CORE_H

@@ -17,7 +17,7 @@ class InternetUpdater : public QObject
 public:
     explicit InternetUpdater(QObject *parent = 0);
 signals:
-    void newUpdate(const QString &version) const;
+    void newUpdate(const std::string &version) const;
 private:
     QTimer newUpdateTimer;
     QTimer firstUpdateTimer;

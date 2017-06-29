@@ -37,7 +37,7 @@ class ThemesManager : public QObject
         /** \brief To get image into the current themes, or default if not found
         \param filePath The file path to search, like toto.png resolved with the root of the current themes
         \see currentStylePath */
-        QIcon loadIcon(const QString &fileName);
+        QIcon loadIcon(const std::string &fileName);
         /** \brief To get if one themes instance
         \see Core() */
         PluginInterface_Themes * getThemesInstance();
@@ -49,9 +49,9 @@ class ThemesManager : public QObject
         ~ThemesManager();
     private:
         /// \brief The default themes path where it has theme's files
-        QString defaultStylePath;
+        std::string defaultStylePath;
         /// \brief The current themes path loaded by ultracopier
-        QString currentStylePath;
+        std::string currentStylePath;
         /// \brief OptionEngineGroupKey then: Group -> Key
         struct PluginsAvailableThemes
         {
@@ -62,14 +62,14 @@ class ThemesManager : public QObject
             #endif
             LocalPluginOptions *options;
         };
-        QList<PluginsAvailableThemes> pluginList;
+        std::vector<PluginsAvailableThemes> pluginList;
         int currentPluginIndex;
         bool stopIt;
     signals:
         /// \brief send this signal when the themes have changed
         void theThemeNeedBeUnloaded() const;
         void theThemeIsReloaded() const;
-        void newThemeOptions(const QString &name,QWidget *,const bool &isLoaded,const bool &havePlugin) const;
+        void newThemeOptions(const std::string &name,QWidget *,const bool &isLoaded,const bool &havePlugin) const;
         void previouslyPluginAdded(PluginsAvailable) const;
     private slots:
         /// \brief reload the themes
@@ -78,9 +78,9 @@ class ThemesManager : public QObject
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
         #endif
         void allPluginIsLoaded();
-        void newOptionValue(const QString &group,const QString &name,const QVariant &value);
+        void newOptionValue(const std::string &group,const std::string &name,const std::string &value);
         #ifdef ULTRACOPIER_DEBUG
-        void debugInformation(const Ultracopier::DebugLevel &level, const QString& fonction, const QString& text, const QString& file, const int& ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level, const std::string& fonction, const std::string& text, const std::string& file, const int& ligne);
         #endif // ULTRACOPIER_DEBUG
 };
 

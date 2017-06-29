@@ -35,9 +35,9 @@ class SessionLoader : public QObject
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
         #endif
-        void newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value);
+        void newOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value);
         #ifdef ULTRACOPIER_DEBUG
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne);
         #endif // ULTRACOPIER_DEBUG
     private:
         //variable
@@ -47,10 +47,10 @@ class SessionLoader : public QObject
             #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
             QPluginLoader * pluginLoader;
             #endif
-            QString path;
+            std::string path;
             LocalPluginOptions *options;
         };
-        QList<LocalPlugin> pluginList;
+        std::vector<LocalPlugin> pluginList;
         bool shouldEnabled;
         OptionDialog *optionDialog;
     signals:

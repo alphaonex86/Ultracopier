@@ -21,16 +21,16 @@ class LocalPluginOptions : public OptionInterface
 {
     Q_OBJECT
 public:
-    explicit LocalPluginOptions(const QString &group);
+    explicit LocalPluginOptions(const std::string &group);
     ~LocalPluginOptions();
     /// \brief To add option group to options
-    bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList);
+    bool addOptionGroup(const std::vector<std::pair<std::string, std::string> > &KeysList);
     /*/// \brief To remove option group to options, removed to the load plugin
     bool removeOptionGroup();*/
     /// \brief To get option value
-    QVariant getOptionValue(const QString &variableName) const;
+    std::string getOptionValue(const std::string &variableName) const;
     /// \brief To set option value
-    void setOptionValue(const QString &variableName,const QVariant &value);
+    void setOptionValue(const std::string &variableName,const std::string &value);
 protected:
     //for the options
     QString group;

@@ -58,28 +58,28 @@ public:
     /// \brief to set the action in progress
     void actionInProgess(const Ultracopier::EngineActionInProgress &);
     /// \brief the new folder is listing
-    void newFolderListing(const QString &path);
+    void newFolderListing(const std::string &path);
     /** \brief show the detected speed
      * in byte per seconds */
-    void detectedSpeed(const quint64 &speed);
+    void detectedSpeed(const uint64_t &speed);
     /** \brief show the remaining time
      * time in seconds */
     void remainingTime(const int &remainingSeconds);
     /// \brief set the current collision action
-    void newCollisionAction(const QString &action);
+    void newCollisionAction(const std::string &action);
     /// \brief set the current error action
-    void newErrorAction(const QString &action);
+    void newErrorAction(const std::string &action);
     /// \brief set one error is detected
     void errorDetected();
     /// \brief new error
-    void errorToRetry(const QString &source,const QString &destination,const QString &error);
+    void errorToRetry(const std::string &source,const std::string &destination,const std::string &error);
     /** \brief support speed limitation */
     void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
     //get information about the copy
     /// \brief show the general progression
-    void setGeneralProgression(const quint64 &current,const quint64 &total);
+    void setGeneralProgression(const uint64_t &current,const uint64_t &total);
     /// \brief show the file progression
-    void setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList);
+    void setFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList);
     /// \brief set the copyType -> file or folder
     void setCopyType(const Ultracopier::CopyType &);
     /// \brief set the copyMove -> copy or move, to force in copy or move, else support both
@@ -88,7 +88,7 @@ public:
     void setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation);
     //edit the transfer list
     /// \brief get action on the transfer list (add/move/remove)
-    void getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &returnActions);
+    void getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &returnActions);
     /** \brief set if the order is external (like file manager copy)
      * to notify the interface, which can hide add folder/filer button */
     void haveExternalOrder();
@@ -150,24 +150,24 @@ private slots:
     void catchAction(QSystemTrayIcon::ActivationReason reason);
     void on_exportErrorToTransferList_clicked();
 private:
-    QTime duration;
+    uint64_t duration;
     bool durationStarted;
     QPixmap pixmapTop,pixmapBottom;
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
     Ui::interfaceCopy *ui;
     Ui::themesOptions *uiOptions;
-    quint64 currentFile;
-    quint64 totalFile;
-    quint64 currentSize;
-    quint64 totalSize;
-    quint8 getOldProgression;
+    uint64_t currentFile;
+    uint64_t totalFile;
+    uint64_t currentSize;
+    uint64_t totalSize;
+    uint8_t getOldProgression;
     QSystemTrayIcon *sysTrayIcon;
     void updateOverallInformation();
     void updateCurrentFileInformation();
     QMenu *menu;
     Ultracopier::EngineActionInProgress action;
     void closeEvent(QCloseEvent *event);
-    qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
+    int32_t currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
     void updateSpeed();
     bool storeIsInPause;
     bool modeIsForced;
@@ -212,11 +212,11 @@ private:
     //have functionality
     bool shutdown;
     void updatePause();
-    QIcon dynaIcon(int percent,QString text="") const;
+    QIcon dynaIcon(int percent,std::string text="") const;
     void updateSysTrayIcon();
 signals:
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 };
 
 #endif // INTERFACE_H

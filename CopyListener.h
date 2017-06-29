@@ -30,19 +30,19 @@ class CopyListener : public QObject
         void resendState();
     private slots:
         //void newPlugin();
-        void newPluginCopyWithoutDestination(const quint32 &orderId,const QStringList &sources);
-        void newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination);
-        void newPluginMoveWithoutDestination(const quint32 &orderId,const QStringList &sources);
-        void newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination);
+        void newPluginCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources);
+        void newPluginCopy(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination);
+        void newPluginMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources);
+        void newPluginMove(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination);
         void onePluginAdded(const PluginsAvailable &plugin);
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
         #endif
         void newState(const Ultracopier::ListeningState &state);
         #ifdef ULTRACOPIER_DEBUG
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
+        void debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne);
         #endif // ULTRACOPIER_DEBUG
-        void error(const QString &error);
+        void error(const std::string &error);
         void allPluginIsloaded();
         void reloadClientList();
     public slots:
@@ -52,13 +52,13 @@ class CopyListener : public QObject
          \see newCopy()
          \see newMove()
         */
-        void copyFinished(const quint32 & orderId,const bool &withError);
+        void copyFinished(const uint32_t & orderId,const bool &withError);
         /** \brief the copy is canceled by the user
          \param orderId id used when it have send the copy
          \see newCopy()
          \see newMove()
         */
-        void copyCanceled(const quint32 & orderId);
+        void copyCanceled(const uint32_t & orderId);
         /** \brief try listen, to get copy/move from external source (mainly the file manager)
          \see close()
         */
@@ -68,22 +68,22 @@ class CopyListener : public QObject
         */
         void close();
         /** new copy without destination have been pased by the CLI */
-        void copyWithoutDestination(QStringList sources);
+        void copyWithoutDestination(std::vector<std::string> sources);
         /** new copy with destination have been pased by the CLI */
-        void copy(QStringList sources,QString destination);
+        void copy(std::vector<std::string> sources,std::string destination);
         /** new move without destination have been pased by the CLI */
-        void moveWithoutDestination(QStringList sources);
+        void moveWithoutDestination(std::vector<std::string> sources);
         /** new move with destination have been pased by the CLI */
-        void move(QStringList sources,QString destination);
+        void move(std::vector<std::string> sources,std::string destination);
     signals:
-        void newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources) const;
-        void newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination) const;
-        void newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources) const;
-        void newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination) const;
+        void newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources) const;
+        void newCopy(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination) const;
+        void newMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources) const;
+        void newMove(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination) const;
         void listenerReady(const Ultracopier::ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply) const;
         void pluginLoaderReady(const Ultracopier::CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply) const;
         void previouslyPluginAdded(const PluginsAvailable &) const;
-        void newClientList(const QStringList &clientsList) const;
+        void newClientList(const std::vector<std::string> &clientsList) const;
     private:
         struct PluginListener
         {
@@ -91,33 +91,33 @@ class CopyListener : public QObject
             #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
             QPluginLoader *pluginLoader;
             #endif
-            QString path;
+            std::string path;
             Ultracopier::ListeningState state;
             bool inWaitOfReply;
             LocalPluginOptions *options;
         };
-        QList<PluginListener> pluginList;
+        std::vector<PluginListener> pluginList;
         //for the options
-        quint32 nextOrderId;
-        QList<quint32> orderList;
+        uint32_t nextOrderId;
+        std::vector<uint32_t> orderList;
         //for the copy as suspend
         struct CopyRunning
         {
             PluginInterface_Listener *listenInterface;
-            quint32 pluginOrderId;
-            quint32 orderId;
+            uint32_t pluginOrderId;
+            uint32_t orderId;
         };
-        QList<CopyRunning> copyRunningList;
-        quint32 incrementOrderId();
+        std::vector<CopyRunning> copyRunningList;
+        uint32_t incrementOrderId();
         bool tryListen;
         PluginLoader *pluginLoader;
         Ultracopier::ListeningState last_state;
         bool last_have_plugin,last_inWaitOfReply;
         void sendState(bool force=false);
-        QStringList stripSeparator(QStringList sources);
+        std::vector<std::string> stripSeparator(std::vector<std::string> sources);
         OptionDialog *optionDialog;
         bool stopIt;
-        QRegularExpression stripSeparatorRegex;
+        std::regex stripSeparatorRegex;
 };
 
 #endif // COPYLISTENER_H

@@ -50,7 +50,7 @@ private slots:
     void onePluginWillBeRemoved(const PluginsAvailable &plugin);
     #endif
     #ifdef ULTRACOPIER_DEBUG
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne);
     #endif // ULTRACOPIER_DEBUG
     void allPluginIsloaded();
     void newState(const Ultracopier::CatchState &state);
@@ -63,11 +63,11 @@ private:
         QPluginLoader * pluginLoader;
         #endif
         Ultracopier::CatchState state;
-        QString path;
+        std::string path;
         bool inWaitOfReply;
         LocalPluginOptions *options;
     };
-    QList<LocalPlugin> pluginList;
+    std::vector<LocalPlugin> pluginList;
     bool needEnable;
     Ultracopier::CatchState last_state;
     bool last_have_plugin,last_inWaitOfReply;

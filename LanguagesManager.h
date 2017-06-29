@@ -39,26 +39,26 @@ class LanguagesManager : public QObject
     private:
         /** \brief To set the current language
         \param newLanguage Should be short name code found into informations.xml of language file */
-        void setCurrentLanguage(const QString &newLanguage);
+        void setCurrentLanguage(const std::string &newLanguage);
         /// \brief Structure of language
         struct LanguagesAvailable
         {
-            QString path;
-            QString fullName;
-            QString mainShortName;
-            QStringList shortName;
+            std::string path;
+            std::string fullName;
+            std::string mainShortName;
+            std::vector<std::string> shortName;
         };
         /// \brief To store the language path
-        QStringList languagePath;
+        std::vector<std::string> languagePath;
         /// \brief To store the language detected
-        QList<LanguagesAvailable> LanguagesAvailableList;
+        std::vector<LanguagesAvailable> LanguagesAvailableList;
         /// \brief check if short name is found into language
-        QString getMainShortName(const QString &shortName) const;
+        std::string getMainShortName(const QString &shortName) const;
         /// \brief list of installed translator
-        QList<QTranslator *> installedTranslator;
-        QString currentLanguage;
+        std::vector<QTranslator *> installedTranslator;
+        std::string currentLanguage;
         /// \brief load the language selected
-        QString getTheRightLanguage() const;
+        std::string getTheRightLanguage() const;
     private slots:
         /// \brief load the language in languagePath
         void allPluginIsLoaded();
@@ -67,10 +67,10 @@ class LanguagesManager : public QObject
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         void onePluginWillBeRemoved(const PluginsAvailable &plugin);
         #endif
-        void newOptionValue(const QString &group);
+        void newOptionValue(const std::string &group);
     signals:
         //send the language is loaded or the new language is loaded
-        void newLanguageLoaded(const QString &mainShortName) const;
+        void newLanguageLoaded(const std::string &mainShortName) const;
         void previouslyPluginAdded(PluginsAvailable) const;
 };
 

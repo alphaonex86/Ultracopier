@@ -38,11 +38,11 @@ public:
     /// \brief to return the instance of the copy engine
     PluginInterface_Themes * getInstance();
     /// \brief set the resources, to store options, to have facilityInterface
-    void setResources(OptionInterface * optionsEngine,const QString &
+    void setResources(OptionInterface * optionsEngine,const std::string &
                   #ifdef ULTRACOPIER_PLUGIN_DEBUG
                   writePath
                   #endif
-                  ,const QString &
+                  ,const std::string &
                   #ifdef ULTRACOPIER_PLUGIN_DEBUG
                   pluginPath
                   #endif
@@ -50,7 +50,7 @@ public:
     /// \brief to get the default options widget
     QWidget * options();
     /// \brief to get a resource icon
-    QIcon getIcon(const QString &fileName) const;
+    QIcon getIcon(const std::string &fileName) const;
 private slots:
     void checkBoxShowSpeedHaveChanged(bool toggled);
     void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
@@ -77,7 +77,7 @@ private:
     Ui::themesOptions *ui;
     QWidget *tempWidget;
     FacilityInterface * facilityEngine;
-    qint32 currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
+    int32_t currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
     QColor progressColorWrite,progressColorRead,progressColorRemaining;
 signals:
     void reloadLanguage() const;

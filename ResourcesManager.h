@@ -9,7 +9,7 @@
 #include <QStringList>
 #include <QString>
 #include <QObject>
-#include <QRegularExpression>
+#include <regex>
 
 #include "Environment.h"
 
@@ -27,28 +27,28 @@ class ResourcesManager : public QObject
         static ResourcesManager *resourcesManager;
         /** \brief Get folder presence and the path
         \return Empty QString if not found */
-        QString getFolderReadPath(const QString &path) const;
+        std::string getFolderReadPath(const std::string &path) const;
         /** \brief Get folder presence, the path and check in the folder and sub-folder the file presence
         \return Empty QString if not found */
-        QString getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck) const;
-        bool checkFolderContent(const QString &path,const QStringList &fileToCheck) const;
+        std::string getFolderReadPathMultiple(const std::string &path,const std::vector<std::string> &fileToCheck) const;
+        bool checkFolderContent(const std::string &path,const std::vector<std::string> &fileToCheck) const;
         /// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
-        static QString AddSlashIfNeeded(const QString &path);
+        static std::string AddSlashIfNeeded(const std::string &path);
         /// \brief get the writable path
-        QString getWritablePath() const;
+        std::string getWritablePath() const;
         /// \brief disable the writable path, if ultracopier is unable to write into
         bool disableWritablePath();
         /// \brief get the read path
-        QStringList getReadPath() const;
+        std::vector<std::string> getReadPath() const;
         /// \brief remove folder
-        static bool removeFolder(const QString &dir);
+        static bool removeFolder(const std::string &dir);
     private:
         /// \brief List of the path to read only access
-        QStringList searchPath;
+        std::vector<std::string> searchPath;
         /// \brief The writable path, empty if not found
-        QString writablePath;
+        std::string writablePath;
         /// \brief match with slash end
-        static QRegularExpression slashEnd;
+        static std::regex slashEnd;
 };
 
 #endif // RESOURCES_MANAGER_H

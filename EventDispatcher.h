@@ -67,7 +67,7 @@ class EventDispatcher : public QObject
         struct CoreSession
         {
             Core * CoreWindow;
-            QList<int> copyMoveEventIdManaged;
+            std::vector<int> copyMoveEventIdManaged;
         };
         /// \brief the systray icon
         SystrayIcon *backgroundIcon;

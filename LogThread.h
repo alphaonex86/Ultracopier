@@ -34,30 +34,30 @@ public slots:
     /** method called when new transfer is started */
     void transferSkip(const Ultracopier::ItemOfCopyList &item);
     /** method called when new error is occurred */
-    void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error);
+    void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error);
     /** method called when the log file need be created */
     void openLogs();
     /** method called when the log file need be closed */
     void closeLogs();
     /** method called when one folder is removed */
-    void rmPath(const QString &path);
+    void rmPath(const std::string &path);
     /** method called when one folder is created */
-    void mkPath(const QString &path);
+    void mkPath(const std::string &path);
 private slots:
     /** \to write the data into the file */
     void realDataWrite(const QString &text);
     /** \to update the options value */
-    void newOptionValue(const QString &group,const QString &name,const QVariant &value);
+    void newOptionValue(const std::string &group,const std::string &name,const std::string &value);
 signals:
-    void newData(const QString &text) const;
+    void newData(const std::string &text) const;
 private:
-    QString data;
-    QString transfer_format;
-    QString error_format;
-    QString folder_format;
+    std::string data;
+    std::string transfer_format;
+    std::string error_format;
+    std::string folder_format;
     QFile log;
-    QString lineReturn;
-    QString replaceBaseVar(QString text);
+    std::string lineReturn;
+    std::string replaceBaseVar(std::string text);
     #ifdef Q_OS_WIN32
     QString computer;
     QString user;
@@ -68,29 +68,29 @@ private:
     bool log_enable_error;
     bool log_enable_folder;
 
-    static QString text_header_copy;
-    static QString text_header_move;
-    static QString text_header_skip;
-    static QString text_header_stop;
-    static QString text_header_error;
-    static QString text_header_MkPath;
-    static QString text_header_RmPath;
+    static std::string text_header_copy;
+    static std::string text_header_move;
+    static std::string text_header_skip;
+    static std::string text_header_stop;
+    static std::string text_header_error;
+    static std::string text_header_MkPath;
+    static std::string text_header_RmPath;
 
-    static QString text_var_source;
-    static QString text_var_size;
-    static QString text_var_destination;
-    static QString text_var_path;
-    static QString text_var_error;
-    static QString text_var_mtime;
-    static QString text_var_time;
-    static QString text_var_timestring;
+    static std::string text_var_source;
+    static std::string text_var_size;
+    static std::string text_var_destination;
+    static std::string text_var_path;
+    static std::string text_var_error;
+    static std::string text_var_mtime;
+    static std::string text_var_time;
+    static std::string text_var_timestring;
     #ifdef Q_OS_WIN32
-    static QString text_var_computer;
-    static QString text_var_user;
+    static std::string text_var_computer;
+    static std::string text_var_user;
     #endif
-    static QString text_var_operation;
-    static QString text_var_rmPath;
-    static QString text_var_mkPath;
+    static std::string text_var_operation;
+    static std::string text_var_rmPath;
+    static std::string text_var_mkPath;
 protected:
     void run();
 };

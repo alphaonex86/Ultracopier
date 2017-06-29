@@ -21,6 +21,8 @@
 #include <QSemaphore>
 #include <QRegularExpression>
 #include <QThread>
+#include <map>
+#include <regex>
 
 #include "Environment.h"
 #include "OptionEngine.h"
@@ -43,23 +45,23 @@ class PluginsManager : public QThread
     Q_OBJECT
     public:
         /// \brief to get plugins of type specific
-        QList<PluginsAvailable> getPluginsByCategory(const PluginType &type) const;
+        std::vector<PluginsAvailable> getPluginsByCategory(const PluginType &type) const;
         /** \brief to get plugins */
-        QList<PluginsAvailable> getPlugins(bool withError=false) const;
+        std::vector<PluginsAvailable> getPlugins(bool withError=false) const;
         /// \brief get translated text
         //QString getTranslatedText(PluginsAvailable plugin,QString informationName,QString mainShortName);
         //QString getTranslatedText(PluginsAvailable plugin,QString informationName);
         /// \brief transform short plugin name into file name
-        static QString getResolvedPluginName(const QString &name);
+        static std::string getResolvedPluginName(const std::string &name);
         static bool isSamePlugin(const PluginsAvailable &pluginA,const PluginsAvailable &pluginB);
         void lockPluginListEdition();
         void unlockPluginListEdition();
         bool allPluginHaveBeenLoaded() const;
         /// \brief to load the get dom specific
-        QString getDomSpecific(const QDomElement &root,const QString &name,const QList<QPair<QString,QString> > &listChildAttribute) const;
-        QString getDomSpecific(const QDomElement &root,const QString &name) const;
+        std::string getDomSpecific(const QDomElement &root,const std::string &name,const std::vector<std::pair<std::string,std::string> > &listChildAttribute) const;
+        std::string getDomSpecific(const QDomElement &root,const std::string &name) const;
         /// \brief set current language
-        void setLanguage(const QString &language);
+        void setLanguage(const std::string &language);
         /// \brief Enumeration of plugin add backend
         enum ImportBackend
         {
@@ -72,21 +74,21 @@ class PluginsManager : public QThread
         /// \brief Destroy the language manager
         ~PluginsManager();
         /// \brief To compare version
-        static bool compareVersion(const QString &versionA,const QString &sign,const QString &versionB);
+        static bool compareVersion(const std::string &versionA,const std::string &sign,const std::string &versionB);
     private:
         /// \brief List of plugins
-        QList<PluginsAvailable> pluginsList;
-        QMultiMap<PluginType,PluginsAvailable> pluginsListIndexed;
+        std::vector<PluginsAvailable> pluginsList;
+        std::multimap<PluginType,PluginsAvailable> pluginsListIndexed;
         /// \brief to load the multi-language balise
-        void loadBalise(const QDomElement &root,const QString &name,QList<QStringList> *informations,QString *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
+        void loadBalise(const QDomElement &root,const std::string &name,std::vector<std::vector<std::string> > *informations,std::string *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
         /// \brief get the version
-        QString getPluginVersion(const QString &pluginName) const;
+        std::string getPluginVersion(const std::string &pluginName) const;
         /// \brief list of cat plugin type
         //QStringList catPlugin;
-        QStringList englishPluginType;
-        QList<QTreeWidgetItem *> catItemList;
+        std::vector<std::string> englishPluginType;
+        std::vector<QTreeWidgetItem *> catItemList;
         /// \brief store the current mainShortName
-        QString mainShortName;
+        std::string mainShortName;
         /// \brief load the plugin list
         void loadPluginList();
         #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
@@ -98,19 +100,19 @@ class PluginsManager : public QThread
         #endif
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         /// \brief check the dependencies, return number of error
-        quint32 checkDependencies();
+        uint32_t checkDependencies();
         #endif
         void loadPluginXml(PluginsAvailable * thePlugin,const QByteArray &xml);
-        QStringList readPluginPath;
+        std::vector<std::string> readPluginPath;
         bool loadPluginInformation(const QString &path);
         QSemaphore editionSemList;
         bool stopIt;
         bool pluginLoaded;
-        QString language;
-        QString categoryToString(const PluginType &category) const;
-        QString categoryToTranslation(const PluginType &category);
-        QRegularExpression regexp_to_clean_1,regexp_to_clean_2,regexp_to_clean_3,regexp_to_clean_4,regexp_to_clean_5;
-        QRegularExpression regexp_to_dep_1,regexp_to_dep_2,regexp_to_dep_3,regexp_to_dep_4,regexp_to_dep_5,regexp_to_dep_6;
+        std::string language;
+        std::string categoryToString(const PluginType &category) const;
+        std::string categoryToTranslation(const PluginType &category);
+        std::regex regexp_to_clean_1,regexp_to_clean_2,regexp_to_clean_3,regexp_to_clean_4,regexp_to_clean_5;
+        std::regex regexp_to_dep_1,regexp_to_dep_2,regexp_to_dep_3,regexp_to_dep_4,regexp_to_dep_5,regexp_to_dep_6;
         PluginInformation *pluginInformation;
     private slots:
         /// \brief show the information
