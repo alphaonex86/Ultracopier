@@ -8,6 +8,7 @@
 #include <QColorDialog>
 #include <QRect>
 #include <QPainter>
+#include <QDebug>
 #include <cmath>
 #ifdef Q_OS_WIN
     #ifndef NOMINMAX
@@ -158,6 +159,12 @@ Themes::Themes(const bool &alwaysOnTop,
     /// \note important for drag and drop, \see dropEvent()
     setAcceptDrops(true);
 
+    #ifdef SUPERCOPIER
+    const QString themePath=":/Themes/Supercopier/";
+    #else
+    const QString themePath=":/Themes/Oxygen/";
+    #endif
+
     // try set the OS icon
     if(!iconLoaded)
     {
@@ -166,10 +173,10 @@ Themes::Themes(const bool &alwaysOnTop,
         editDelete=QIcon::fromTheme(QStringLiteral("edit-delete"));
         player_pause=QIcon::fromTheme(QStringLiteral("media-playback-pause"));
         if(player_pause.isNull())
-            player_pause=QIcon(QStringLiteral(":/Themes/Oxygen/resources/player_pause.png"));
+            player_pause=QIcon(themePath+QStringLiteral("resources/player_pause.png"));
         player_play=QIcon::fromTheme(QStringLiteral("media-playback-play"));
         if(player_play.isNull())
-            player_play=QIcon(QStringLiteral(":/Themes/Oxygen/resources/player_play.png"));
+            player_play=QIcon(themePath+QStringLiteral("resources/player_play.png"));
         skinIcon=QIcon::fromTheme(QStringLiteral("media-skip-forward"));
         editFind=QIcon::fromTheme(QStringLiteral("edit-find"));
         documentOpen=QIcon::fromTheme(QStringLiteral("document-open"));
@@ -208,11 +215,65 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->actionAddFolderToMove->setIcon(listAdd);
     }
     #ifdef Q_OS_WIN32
-    pixmapTop=QPixmap(QStringLiteral(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Uncaught_Windows.png"));
-    pixmapBottom=QPixmap(QStringLiteral(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Windows.png"));
+    pixmapTop=QPixmap(themePath+QStringLiteral("resources/SystemTrayIcon/systray_Uncaught_Windows.png"));
+    pixmapBottom=QPixmap(themePath+QStringLiteral("resources/SystemTrayIcon/systray_Caught_Windows.png"));
     #else
-    pixmapTop=QPixmap(QStringLiteral(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Uncaught_Unix.png"));
-    pixmapBottom=QPixmap(QStringLiteral(":/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Unix.png"));
+    pixmapTop=QPixmap(themePath+QStringLiteral("resources/SystemTrayIcon/systray_Uncaught_Unix.png"));
+    pixmapBottom=QPixmap(themePath+QStringLiteral("resources/SystemTrayIcon/systray_Caught_Unix.png"));
+    #endif
+
+    #ifdef SUPERCOPIER
+    /*QIcon icon;
+    icon.addFile(themePath+QStringLiteral("resources/main.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->interfaceCopy->setWindowIcon(icon);*/
+    QIcon icon1;
+    icon1.addFile(themePath+QStringLiteral("resources/add.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->actionAddFile->setIcon(icon1);
+    QIcon icon2;
+    icon2.addFile(themePath+QStringLiteral("resources/SystemTrayIcon/exit.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->shutdown->setIcon(icon2);
+    QIcon icon3;
+    icon3.addFile(themePath+QStringLiteral("resources/moveDown.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->moreButton->setIcon(icon3);
+    ui->pushDown->setIcon(icon3);
+    if(!QFile::exists(themePath+QStringLiteral("resources/moveDown.png")))
+    {
+        qDebug() << "File not found, can't continue: " << themePath+QStringLiteral("resources/moveDown.png");
+        abort();
+    }
+    QIcon icon4;
+    icon4.addFile(themePath+QStringLiteral("resources/player_pause.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->pauseButton->setIcon(icon4);
+    QIcon icon5;
+    icon5.addFile(themePath+QStringLiteral("resources/player_end.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->skipButton->setIcon(icon5);
+    QIcon icon6;
+    icon6.addFile(themePath+QStringLiteral("resources/cancel.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->cancelButton->setIcon(icon6);
+    QIcon icon7;
+    icon7.addFile(themePath+QStringLiteral("resources/putOnTop.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->putOnTop->setIcon(icon7);
+    QIcon icon8;
+    icon8.addFile(themePath+QStringLiteral("resources/moveUp.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->pushUp->setIcon(icon8);
+    QIcon icon9;
+    icon9.addFile(themePath+QStringLiteral("resources/putOnBottom.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->putOnBottom->setIcon(icon9);
+    QIcon icon10;
+    icon10.addFile(themePath+QStringLiteral("resources/remove.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->del->setIcon(icon10);
+    QIcon icon11;
+    icon11.addFile(themePath+QStringLiteral("resources/search.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->searchButton->setIcon(icon11);
+    QIcon icon12;
+    icon12.addFile(themePath+QStringLiteral("resources/export-transfer-list.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->exportTransferList->setIcon(icon12);
+    QIcon icon13;
+    icon13.addFile(themePath+QStringLiteral("resources/import-transfer-list.png"), QSize(), QIcon::Normal, QIcon::Off);
+    ui->importTransferList->setIcon(icon13);
+    QIcon icon14;
+    icon14.addFile(themePath+QStringLiteral("resources/main.png"), QSize(), QIcon::Normal, QIcon::Off);
+    this->setWindowIcon(icon14);
     #endif
 
     shutdown=facilityEngine->haveFunctionality(QStringLiteral("shutdown"));
@@ -231,13 +292,36 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->alwaysOnTop->hide();
     #endif*/
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    #ifdef SUPERCOPIER
+    ui->ad_ultimate->setText(tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a>"));
+    #else
     ui->ad_ultimate->hide();
+    #endif
     #else
     QString ultimateUrl=facilityEngine->ultimateUrl();
     if(ultimateUrl.isEmpty())
         ui->ad_ultimate->hide();
     else
-        ui->ad_ultimate->setText(QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")));
+        ui->ad_ultimate->setText(
+                    #ifdef SUPERCOPIER
+                    tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a><br />")+
+                    #endif
+                    QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")));
+    #endif
+
+    #ifdef SUPERCOPIER
+    uiOptions->labelDualProgression->hide();
+    uiOptions->showDualProgression->hide();
+    ui->progressBar_all->setMaximumHeight(17);
+    ui->progressBar_file->setMaximumHeight(17);
+    ui->progressBarCurrentSpeed->setMaximumHeight(17);
+    ui->progressBar_all->setMinimumHeight(17);
+    ui->progressBar_file->setMinimumHeight(17);
+    ui->progressBarCurrentSpeed->setMinimumHeight(17);
+    ui->progressBar_all->setStyleSheet(QStringLiteral("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
+    ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
+    ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
+    this->setWindowTitle("Supercopier");
     #endif
 
     show();
