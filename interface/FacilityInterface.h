@@ -6,9 +6,8 @@
 #ifndef FACILITY_INTERFACE_H
 #define FACILITY_INTERFACE_H
 
-#include <QVariant>
-#include <QString>
-#include <QStringList>
+#include <string>
+#include <vector>
 
 #include "../StructEnumDefinition.h"
 
@@ -20,25 +19,25 @@ class FacilityInterface : public QObject
         /// \brief To force the text re-translation
         virtual void retranslate() = 0;
         /// \brief convert size in Byte to String
-        virtual QString sizeToString(const double &size) const = 0;
+        virtual std::string sizeToString(const double &size) const = 0;
         /// \brief convert size unit to String
-        virtual QString sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const = 0;
+        virtual std::string sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const = 0;
         /// \brief translate the text
-        virtual QString translateText(const QString &text) const = 0;
+        virtual std::string translateText(const std::string &text) const = 0;
         /// \brief speed to string in byte per seconds
-        virtual QString speedToString(const double &speed) const = 0;
+        virtual std::string speedToString(const double &speed) const = 0;
         /// \brief Decompose the time in second
         virtual Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) const = 0;
         /// \brief have the fonctionnality
-        virtual bool haveFunctionality(const QString &fonctionnality) const = 0;
+        virtual bool haveFunctionality(const std::string &fonctionnality) const = 0;
         /// \brief call the fonctionnality
-        virtual QVariant callFunctionality(const QString &fonctionnality,const QStringList &args=QStringList()) = 0;
+        virtual std::string callFunctionality(const std::string &fonctionnality,const std::vector<std::string> &args=std::vector<std::string>()) = 0;
         /// \brief Do the simplified time
-        virtual QString simplifiedRemainingTime(const quint32 &seconds) const = 0;
+        virtual std::string simplifiedRemainingTime(const quint32 &seconds) const = 0;
         /// \brief Do the simplified time
-        virtual QString ultimateUrl() const = 0;
+        virtual std::string ultimateUrl() const = 0;
         /// \brief Return the software name
-        virtual QString softwareName() const = 0;
+        virtual std::string softwareName() const = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

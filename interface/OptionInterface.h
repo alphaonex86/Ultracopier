@@ -6,10 +6,9 @@
 #ifndef OPTION_INTERFACE_H
 #define OPTION_INTERFACE_H
 
-#include <QString>
-#include <QList>
-#include <QVariant>
-#include <QPair>
+#include <string>
+#include <vector>
+#include <utility>
 
 #include "../StructEnumDefinition.h"
 
@@ -21,15 +20,15 @@ class OptionInterface : public QObject
     Q_OBJECT
     public:
         /// \brief To add option group to options
-        virtual bool addOptionGroup(const QList<QPair<QString, QVariant> > &KeysList) = 0;
+        virtual bool addOptionGroup(const std::vector<std::pair<std::string, std::string> > &KeysList) = 0;
         /*/// \brief To remove option group to options, removed to the load plugin
         virtual bool removeOptionGroup() = 0;*/
         /// \brief To get option value
-        virtual QVariant getOptionValue(const QString &variableName) const = 0;
+        virtual std::string getOptionValue(const std::string &variableName) const = 0;
         /// \brief To set option value
-        virtual void setOptionValue(const QString &variableName,const QVariant &value) = 0;
+        virtual void setOptionValue(const std::string &variableName,const std::string &value) = 0;
     signals:
-        //void newOptionValue(QString,QVariant);-> disabled because the value will not externally changed, then useless notification
+        //void newOptionValue(std::string,std::string);-> disabled because the value will not externally changed, then useless notification
         void resetOptions() const;
 };
 

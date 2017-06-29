@@ -117,7 +117,7 @@ bool DebugModel::setData( const QModelIndex&, const QVariant&, int)
     return false;
 }
 
-void DebugModel::addDebugInformation(const int &time,const DebugLevel_custom &level,const QString& function,const QString& text,const QString &file,const int& ligne,const QString& location)
+void DebugModel::addDebugInformation(const int &time, const DebugLevel_custom &level, const std::__cxx11::string &function, const std::__cxx11::string &text, const std::__cxx11::string &file, const int& ligne, const std::__cxx11::string &location)
 {
     DebugItem item;
     item.time=time;

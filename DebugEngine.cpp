@@ -340,7 +340,7 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const QStri
 }
 
 /// \brief Get the html text info for re-show it
-QString DebugEngine::getTheDebugHtml()
+std::string DebugEngine::getTheDebugHtml()
 {
     if(currentBackend==File)
     {
@@ -354,15 +354,15 @@ QString DebugEngine::getTheDebugHtml()
 }
 
 /// \brief Get the html end
-QString DebugEngine::getTheDebugEnd()
+std::string DebugEngine::getTheDebugEnd()
 {
     return endOfLogFile;
 }
 
 /// \brief Drop the html entities
-QString DebugEngine::htmlEntities(const QString &text)
+std::string DebugEngine::htmlEntities(const std::string &text)
 {
-    QString newText(text);
+    std::string newText(text);
     newText.replace('&',"&amp;");
     newText.replace('"',"&quot;");
     newText.replace('\'',"&#039;");

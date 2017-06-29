@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QString>
+#include <string>
 #include <QFile>
 #include <QMutex>
 #include <QTime>
@@ -34,10 +35,10 @@ public:
     {
         int time;
         DebugLevel_custom level;
-        QString function;
-        QString text;
-        QString file;
-        QString location;
+        std::string function;
+        std::string text;
+        std::string file;
+        std::string location;
     };
 
     static DebugModel *debugModel;
@@ -50,13 +51,13 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex&, const QVariant&, int = Qt::EditRole);
 
-    void addDebugInformation(const int &time, const DebugLevel_custom &level, const QString& function, const QString& text, const QString &file="", const int& ligne=-1, const QString& location="Core");
+    void addDebugInformation(const int &time, const DebugLevel_custom &level, const std::string& function, const std::string& text, const std::string &file="", const int& ligne=-1, const std::string& location="Core");
     void setupTheTimer();
     QTimer *updateDisplayTimer;
     bool displayed;
     bool inWaitOfDisplay;
 private:
-    QList<DebugItem> list;
+    std::vector<DebugItem> list;
 private slots:
     void updateDisplay();
 };
@@ -75,7 +76,7 @@ class DebugEngine : public QObject
         ~DebugEngine();
         /** \brief Get the html text info for re-show it
         \note This function is thread safe */
-        QString getTheDebugHtml();
+        std::string getTheDebugHtml();
         /// \brief Enumeration of backend
         enum Backend
         {
@@ -85,17 +86,17 @@ class DebugEngine : public QObject
         /// \brief return the current backend
         Backend getCurrentBackend();
         /// \brief Get the html end
-        QString getTheDebugEnd();
+        std::string getTheDebugEnd();
         /** \brief For add message info, this function
         \note This function is reentrant */
-        static void addDebugInformationStatic(const Ultracopier::DebugLevel &level,const QString& function,const QString& text,const QString& file="",const int& ligne=-1,const QString& location="Core");
-        static void addDebugNote(const QString& text);
+        static void addDebugInformationStatic(const Ultracopier::DebugLevel &level,const std::string& function,const std::string& text,const std::string& file="",const int& ligne=-1,const std::string& location="Core");
+        static void addDebugNote(const std::string& text);
         static DebugEngine *debugEngine;
     public slots:
         /** \brief ask to the user where save the bug report
         \warning This function can be only call by the graphical thread */
         void saveBugReport();
-        void addDebugInformation(const DebugLevel_custom &level,const QString& fonction,const QString& text,QString file="",const int& ligne=-1,const QString& location="Core");
+        void addDebugInformation(const DebugLevel_custom &level,const std::string& fonction,const std::string& text,std::string file="",const int& ligne=-1,const std::string& location="Core");
     private:
         /// \brief Path for log file
         QFile logFile;
@@ -110,11 +111,11 @@ class DebugEngine : public QObject
         /// \brief For record the start time
         QTime startTime;
         /// \brief String for the end of log file
-        QString endOfLogFile;
+        std::string endOfLogFile;
         /// \brief Drop the html entities
-        QString htmlEntities(const QString &text);
+        std::string htmlEntities(const std::string &text);
         /// \brief To store the debug informations
-        QString debugHtmlContent;
+        std::string debugHtmlContent;
         /// \brief The current backend
         Backend currentBackend;
         /// try connect to send to the current running instance the arguements

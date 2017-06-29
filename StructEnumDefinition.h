@@ -3,9 +3,8 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#include <QVariant>
-#include <QString>
-#include <QList>
+#include <string>
+#include <stdint.h>
 
 #ifndef STRUCTDEF_H
 #define STRUCTDEF_H
@@ -89,9 +88,9 @@ enum SizeUnit
 /// \brief structure for decompossed time
 struct TimeDecomposition
 {
-    quint16 second;
-    quint16 minute;
-    quint16 hour;
+    uint16_t second;
+    uint16_t minute;
+    uint16_t hour;
 };
 
 //////////////////////////// Return list //////////////////////////////
@@ -111,23 +110,23 @@ enum ActionTypeCopyList
 /// \brief structure for progression item
 struct ProgressionItem
 {
-    quint64 id;
-    quint64 currentRead;
-    quint64 currentWrite;
-    quint64 total;
+    uint64_t id;
+    uint64_t currentRead;
+    uint64_t currentWrite;
+    uint64_t total;
 };
 
 /// \brief item to insert item in the interface
 struct ItemOfCopyList
 {
-    quint64 id;
+    uint64_t id;
     // if type == CustomOperation, then is the translated name of the operation
-    QString sourceFullPath;///< full path with file name: /foo/foo.txt
-    QString sourceFileName;///< full path with file name: foo.txt
-    QString destinationFullPath;///< full path with file name: /foo/foo.txt
-    QString destinationFileName;///< full path with file name: foo.txt
+    std::string sourceFullPath;///< full path with file name: /foo/foo.txt
+    std::string sourceFileName;///< full path with file name: foo.txt
+    std::string destinationFullPath;///< full path with file name: /foo/foo.txt
+    std::string destinationFileName;///< full path with file name: foo.txt
     // if type == CustomOperation, then 0 = without progression, 1 = with progression
-    quint64 size;
+    uint64_t size;
     CopyMode mode;
 };
 

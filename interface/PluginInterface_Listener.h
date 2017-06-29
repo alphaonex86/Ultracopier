@@ -7,8 +7,8 @@
 #define PLUGININTERFACE_LISTENER_H
 
 #include <QObject>
-#include <QString>
-#include <QStringList>
+#include <string>
+#include <vector>
 
 #include "OptionInterface.h"
 
@@ -25,32 +25,32 @@ class PluginInterface_Listener : public QObject
         /// \brief put close the listen
         virtual void close() = 0;
         /// \brief to get the error string
-        virtual const QString errorString() const = 0;
+        virtual const std::string errorString() const = 0;
         /// \brief set the resources for the plugin
-        virtual void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion) = 0;
+        virtual void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,const bool &portableVersion) = 0;
         /// \brief to get the options widget, NULL if not have
         virtual QWidget * options() = 0;
         /// \brief to get a client list
-        virtual QStringList clientsList() const = 0;
+        virtual std::vector<std::string> clientsList() const = 0;
     public slots:
         /// \brief send when copy is finished
-        virtual void transferFinished(const quint32 &orderId,const bool &withError) = 0;
+        virtual void transferFinished(const uint32_t &orderId,const bool &withError) = 0;
         /// \brief send when copy is canceled
-        virtual void transferCanceled(const quint32 &orderId) = 0;
+        virtual void transferCanceled(const uint32_t &orderId) = 0;
         /// \brief to reload the translation, because the new language have been loaded
         virtual void newLanguageLoaded() = 0;
     signals:
         void newState(const Ultracopier::ListeningState &state) const;
-        void newCopyWithoutDestination(const quint32 &orderId,const QStringList &sources) const;
-        void newCopy(const quint32 &orderId,const QStringList &sources,const QString &destination) const;
-        void newMoveWithoutDestination(const quint32 &orderId,const QStringList &sources) const;
-        void newMove(const quint32 &orderId,const QStringList &sources,const QString &destination) const;
-        void error(const QString &error) const;
+        void newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources) const;
+        void newCopy(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination) const;
+        void newMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources) const;
+        void newMove(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination) const;
+        void error(const std::string &error) const;
         void newClientList() const;
         /// \brief To debug source
-        void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+        void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/1.0.0.0");
+Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/1.2.4.0");
 
 #endif // PLUGININTERFACE_LISTENER_H
