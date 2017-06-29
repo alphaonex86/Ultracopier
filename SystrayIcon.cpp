@@ -593,4 +593,5 @@ void SystrayIcon::reloadEngineList()
             index++;
         }
     }
+    setContextMenu(systrayMenu);
 }
