@@ -11,7 +11,7 @@
 
 #include "ResourcesManager.h"
 
-QRegularExpression ResourcesManager::slashEnd;
+std::regex ResourcesManager::slashEnd;
 
 /// \brief Create the manager and load the defaults variables
 ResourcesManager::ResourcesManager()

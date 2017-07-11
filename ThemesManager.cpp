@@ -44,14 +44,14 @@ ThemesManager::ThemesManager()
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeUnloaded,		this,&ThemesManager::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
     connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&ThemesManager::allPluginIsLoaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Themes);
+    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Themes);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();
 
     //do the options
     std::vector<std::pair<std::string, std::string> > KeysList;
-    KeysList.append(std::pair<std::string, std::string>("Ultracopier_current_theme",ULTRACOPIER_DEFAULT_STYLE));
+    KeysList.push_back(std::pair<std::string, std::string>("Ultracopier_current_theme",ULTRACOPIER_DEFAULT_STYLE));
     OptionEngine::optionEngine->addOptionGroup("Themes",KeysList);
 
     //load the default and current themes path
@@ -139,17 +139,17 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     }
     newPlugin.pluginLoader=pluginLoader;
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("preload: %1, at the index: %2").arg(newPlugin.plugin.name).arg(QString::number(pluginList.size())));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"preload: "+newPlugin.plugin.name+", at the index: "+std::to_string(pluginList.size()));
     #ifdef ULTRACOPIER_DEBUG
     connect(factory,&PluginInterface_ThemesFactory::debugInformation,this,&ThemesManager::debugInformation,Qt::QueuedConnection);
     #endif // ULTRACOPIER_DEBUG
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,factory,&PluginInterface_ThemesFactory::newLanguageLoaded);
     newPlugin.factory=factory;
 
-    newPlugin.options=new LocalPluginOptions(QStringLiteral("Themes-")+newPlugin.plugin.name);
+    newPlugin.options=new LocalPluginOptions("Themes-"+newPlugin.plugin.name);
     newPlugin.factory->setResources(newPlugin.options,newPlugin.plugin.writablePath,newPlugin.plugin.path,&FacilityEngine::facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     currentStylePath=newPlugin.plugin.path;
-    pluginList << newPlugin;
+    pluginList.push_back(newPlugin);
     if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         allPluginIsLoaded();
     emit newThemeOptions(newPlugin.plugin.name,newPlugin.factory->options(),true,true);
@@ -198,7 +198,7 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 /** \brief To get image into the current themes, or default if not found
 \param filePath The file path to search, like toto.png resolved with the root of the current themes
 \see currentStylePath */
-QIcon ThemesManager::loadIcon(const QString &fileName)
+QIcon ThemesManager::loadIcon(const std::string &fileName)
 {
     if(currentPluginIndex==-1)
         return QIcon();
@@ -213,14 +213,14 @@ QIcon ThemesManager::loadIcon(const QString &fileName)
 
 void ThemesManager::allPluginIsLoaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(pluginList.size()==0)
     {
         emit theThemeIsReloaded();
         return;
     }
-    QString name=OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme").toString();
-    int index=0;
+    std::string name=OptionEngine::optionEngine->getOptionValue("Themes","Ultracopier_current_theme");
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(pluginList.at(index).plugin.name==name)
@@ -244,7 +244,7 @@ PluginInterface_Themes * ThemesManager::getThemesInstance()
         return NULL;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Send interface: "+pluginList.at(currentPluginIndex).plugin.name);
-    if(currentPluginIndex>=pluginList.size())
+    if((unsigned int)currentPluginIndex>=pluginList.size())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the interface, internal selection bug");
         return NULL;
@@ -258,23 +258,23 @@ PluginInterface_Themes * ThemesManager::getThemesInstance()
 }
 
 #ifdef ULTRACOPIER_DEBUG
-void ThemesManager::debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
+void ThemesManager::debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne)
 {
-    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,QStringLiteral("Theme plugin"));
+    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Theme plugin");
 }
 #endif // ULTRACOPIER_DEBUG
 
-void ThemesManager::newOptionValue(const QString &group,const QString &name,const QVariant &value)
+void ThemesManager::newOptionValue(const std::string &group,const std::string &name,const std::string &value)
 {
-    if(group==QStringLiteral("Themes") && name==QStringLiteral("Ultracopier_current_theme"))
+    if(group=="Themes" && name=="Ultracopier_current_theme")
     {
         if(!PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
             return;
-        if(currentPluginIndex!=-1 && value.toString()!=pluginList.at(currentPluginIndex).plugin.name)
+        if(currentPluginIndex!=-1 && value!=pluginList.at(currentPluginIndex).plugin.name)
         {
             //int tempCurrentPluginIndex=currentPluginIndex;
             emit theThemeNeedBeUnloaded();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("unload the themes: %1 (%2)").arg(pluginList.at(currentPluginIndex).plugin.name).arg(currentPluginIndex));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unload the themes: "+pluginList.at(currentPluginIndex).plugin.name+" ("+std::to_string(currentPluginIndex)+")");
             /* Themes remain loaded for the options
              *if(pluginList.at(tempCurrentPluginIndex).options!=NULL)
             {
