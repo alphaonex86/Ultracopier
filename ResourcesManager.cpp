@@ -8,7 +8,7 @@
 #include <QApplication>
 #include <QFileInfo>
 
-
+#include "cpp11addition.h"
 #include "ResourcesManager.h"
 
 std::regex ResourcesManager::slashEnd;
@@ -16,10 +16,10 @@ std::regex ResourcesManager::slashEnd;
 /// \brief Create the manager and load the defaults variables
 ResourcesManager::ResourcesManager()
 {
-    slashEnd=QRegularExpression(QStringLiteral("[/\\\\]$"));
+    slashEnd=std::regex("[/\\\\]$");
 
     //load the internal path
-    searchPath<<QString(QStringLiteral(":/"));
+    searchPath.push_back(":/");
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         //load the user path but only if exists and writable
         //load the ultracopier path
@@ -74,18 +74,18 @@ ResourcesManager::ResourcesManager()
         #endif
     #else
     QDir dir(QApplication::applicationDirPath());
-    writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+    writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
     #endif
-    searchPath.removeDuplicates();
+    vectorRemoveDuplicatesForSmallList(searchPath);
     #ifdef ULTRACOPIER_DEBUG
     int index=0;
     const int &loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("searchPath.at(")+QString::number(index)+QStringLiteral("): ")+searchPath.at(index));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"searchPath.at("+std::to_string(index)+"): "+searchPath.at(index));
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("writablePath: ")+writablePath);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"writablePath: "+writablePath);
     #endif // ULTRACOPIER_DEBUG
 }
 
@@ -95,47 +95,47 @@ ResourcesManager::~ResourcesManager()
 }
 
 /// \brief Get folder presence and the path
-QString ResourcesManager::getFolderReadPath(const QString &path) const
+std::string ResourcesManager::getFolderReadPath(const std::string &path) const
 {
     int index=0;
     const int &loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
-        QDir dir(searchPath.at(index)+path);
+        QDir dir(QString::fromStdString(searchPath.at(index)+path));
         if(dir.exists()) // if the path have been found, then return the full path
-            return ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+            return ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
         index++;
     }
-    return QStringLiteral("");
+    return std::string();
 }
 
 /// \brief Get folder presence, the path and check in the folder and sub-folder the file presence
-QString ResourcesManager::getFolderReadPathMultiple(const QString &path,const QStringList &fileToCheck) const
+std::string ResourcesManager::getFolderReadPathMultiple(const std::string &path,const std::vector<std::string> &fileToCheck) const
 {
     int index=0;
     const int &loop_size=searchPath.size();
     while(index<loop_size) //look at each val
     {
-        QDir dir(searchPath.at(index)+path);
-        if(checkFolderContent(dir.absolutePath(),fileToCheck))
-            return dir.absolutePath()+QDir::separator();
+        QDir dir(QString::fromStdString(searchPath.at(index)+path));
+        if(checkFolderContent(dir.absolutePath().toStdString(),fileToCheck))
+            return (dir.absolutePath()+QDir::separator()).toStdString();
         index++;
     }
-    return QStringLiteral("");
+    return std::string();
 }
 
-bool ResourcesManager::checkFolderContent(const QString &path,const QStringList &fileToCheck) const
+bool ResourcesManager::checkFolderContent(const std::string &path,const std::vector<std::string> &fileToCheck) const
 {
-    QDir dir(path);
+    QDir dir(QString::fromStdString(path));
     if(dir.exists()) // if the path have been found, then return the full path
     {
         bool allFileToCheckIsFound=true;
         int index=0;
         const int &loop_size=fileToCheck.size();
-        QString partialPath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+        std::string partialPath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
         while(index<loop_size) //look at each val
         {
-            if(!QFile::exists(partialPath+fileToCheck.at(index))) //if a file have been not found, consider the folder as not suitable
+            if(!QFile::exists(QString::fromStdString(partialPath+fileToCheck.at(index)))) //if a file have been not found, consider the folder as not suitable
             {
                 allFileToCheckIsFound=false;
                 break;
@@ -149,16 +149,18 @@ bool ResourcesManager::checkFolderContent(const QString &path,const QStringList 
 }
 
 /// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
-QString ResourcesManager::AddSlashIfNeeded(const QString &path)
+std::string ResourcesManager::AddSlashIfNeeded(const std::string &path)
 {
-    if(path.contains(slashEnd))
+    if(path.empty())
+        return "/";
+    if(path.at(path.size()-1)=='/')
         return path;
     else
-        return path+QDir::separator();
+        return path+QString(QDir::separator()).toStdString();
 }
 
 /// \brief get the writable path
-QString ResourcesManager::getWritablePath() const
+std::string ResourcesManager::getWritablePath() const
 {
     return writablePath;
 }
@@ -167,25 +169,25 @@ QString ResourcesManager::getWritablePath() const
 bool ResourcesManager::disableWritablePath()
 {
     bool returnVal=true;
-    if(writablePath.isEmpty())
+    if(writablePath.empty())
         returnVal=false;
     else
-        writablePath=QStringLiteral("");
+        writablePath.clear();
     return returnVal;
 }
 
 /// \brief get the read path
-QStringList ResourcesManager::getReadPath() const
+const std::vector<std::string> &ResourcesManager::getReadPath() const
 {
     return searchPath;
 }
 
 /// \brief remove folder
-bool ResourcesManager::removeFolder(const QString &dir)
+bool ResourcesManager::removeFolder(const std::string &dir)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder to remove: "+dir);
     bool errorFound=false;
-    QDir currentDir(dir);
+    QDir currentDir(QString::fromStdString(dir));
     QFileInfoList files = currentDir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
     int index=0;
     const int &loop_size=files.size();
@@ -197,18 +199,18 @@ bool ResourcesManager::removeFolder(const QString &dir)
             if(!file.remove())
             {
                 errorFound=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"remove file failed: "+file.errorString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"remove file failed: "+file.errorString().toStdString());
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file removed: "+file.fileName());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file removed: "+file.fileName().toStdString());
         }
         else if(files.at(index).isDir())
-            removeFolder(files.at(index).absoluteFilePath());
+            removeFolder(files.at(index).absoluteFilePath().toStdString());
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unknow file type for: "+files.at(index).absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unknow file type for: "+files.at(index).absoluteFilePath().toStdString());
         index++;
     }
-    if(!currentDir.rmpath(dir))
+    if(!currentDir.rmpath(QString::fromStdString(dir)))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"remove path failed, check right and if is empty: "+dir);
         errorFound=true;

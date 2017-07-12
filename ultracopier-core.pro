@@ -87,6 +87,7 @@ HEADERS += ResourcesManager.h \
     CompilerInfo.h \
     StructEnumDefinition_UltracopierSpecific.h \
     OSSpecific.h \
+    cpp11addition.h \
     InternetUpdater.h
 SOURCES += ThemesManager.cpp \
     ResourcesManager.cpp \
@@ -119,6 +120,7 @@ SOURCES += ThemesManager.cpp \
     FacilityEngine.cpp \
     LogThread.cpp \
     OSSpecific.cpp \
+    cpp11addition.cpp \
     DebugModel.cpp \
     InternetUpdater.cpp
 INCLUDEPATH += lib/qt-tar-xz/

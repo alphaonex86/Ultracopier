@@ -39,7 +39,7 @@ class ResourcesManager : public QObject
         /// \brief disable the writable path, if ultracopier is unable to write into
         bool disableWritablePath();
         /// \brief get the read path
-        std::vector<std::string> getReadPath() const;
+        const std::vector<std::string> &getReadPath() const;
         /// \brief remove folder
         static bool removeFolder(const std::string &dir);
     private:
