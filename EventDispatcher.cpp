@@ -12,6 +12,7 @@
 #include "ExtraSocket.h"
 #include "CompilerInfo.h"
 #include "ThemesManager.h"
+#include "cpp11addition.h"
 
 #ifdef Q_OS_UNIX
     #include <unistd.h>
@@ -73,36 +74,36 @@ EventDispatcher::EventDispatcher()
     #endif
     copyEngineList=new CopyEngineManager(&optionDialog);
     core=new Core(copyEngineList);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //show the ultracopier information
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Windows version: %1").arg(GetOSDisplayString()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Windows version: "+std::string(GetOSDisplayString()));
     #endif
     #ifdef __STDC_VERSION__
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("__STDC_VERSION__: ")+QString::number(__STDC_VERSION__));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__STDC_VERSION__: "+std::to_string(__STDC_VERSION__));
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Qt version: %1 (%2)").arg(qVersion()).arg(QT_VERSION));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Application path: %1 (%2)").arg(QCoreApplication::applicationFilePath()).arg(QCoreApplication::applicationPid()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("Qt version: ")+qVersion()+" "+std::to_string(QT_VERSION));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME.toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Application path: "+QCoreApplication::applicationFilePath().toStdString()+" "+std::to_string(QCoreApplication::applicationPid()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Local socket: ")+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Local socket: "+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
     #ifdef ULTRACOPIER_CGMINER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("With cgminer"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"With cgminer");
     #endif
     #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Version as all in one"));
-    QObjectList objectList=QPluginLoader::staticInstances();
-    int index=0;
-    while(index<objectList.size())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("static plugin: %1").arg(objectList.at(index)->metaObject()->className()));
-        index++;
-    }
-    #else
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Version as all in one, direct"));
-    #endif
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Version as all in one");
+            QObjectList objectList=QPluginLoader::staticInstances();
+            int index=0;
+            while(index<objectList.size())
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"static plugin: "+objectList.at(index)->metaObject()->className().toStdString());
+                index++;
+            }
+        #else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Version as all in one, direct");
+        #endif
     #endif
 
     {
@@ -110,11 +111,11 @@ EventDispatcher::EventDispatcher()
         int index=0;
         while(index<mountedVolumesList.size())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("mountSysPoint: %1").arg(mountedVolumesList.at(index).rootPath()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"mountSysPoint: "+mountedVolumesList.at(index).rootPath().toStdString());
             index++;
         }
         if(mountedVolumesList.isEmpty())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("mountSysPoint is empty"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"mountSysPoint is empty");
     }
 
     //To lunch some initialization after QApplication::exec() to quit eventually
@@ -122,17 +123,17 @@ EventDispatcher::EventDispatcher()
     lunchInitFunction.setSingleShot(true);
     connect(&lunchInitFunction,&QTimer::timeout,this,&EventDispatcher::initFunction,Qt::QueuedConnection);
     lunchInitFunction.start();
-    if(OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("Last_version_used"))!=QVariant(QStringLiteral("na")) && OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("Last_version_used"))!=QVariant(ULTRACOPIER_VERSION))
+    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!="na" && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=ULTRACOPIER_VERSION)
     {
         //then ultracopier have been updated
     }
-    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("Last_version_used"),QVariant(ULTRACOPIER_VERSION));
-    int a=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen")).toInt();
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","Last_version_used",ULTRACOPIER_VERSION);
+    int a=stringtouint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     if(a<0 || a>2)
-        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen"),QVariant(1));
-    a=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen")).toInt();
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen","1");
+    a=stringtouint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
     if(a<0 || a>5)
-        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen"),QVariant(0));
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen","0");
 
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     #ifdef  ULTRACOPIER_ILLEGAL
@@ -144,8 +145,8 @@ EventDispatcher::EventDispatcher()
     {
         while(1)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultimate key"));
-            QString key=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("key")).toString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultimate key");
+            QString key=QString::fromStdString(OptionEngine::optionEngine->getOptionValue("Ultracopier","key"));
             if(!key.isEmpty())
             {
                 QCryptographicHash hash(QCryptographicHash::Sha224);
@@ -169,7 +170,7 @@ EventDispatcher::EventDispatcher()
                 const QByteArray &result=hash.result();
                 if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
                 {
-                    OptionEngine::optionEngine->setOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("key"),key);
+                    OptionEngine::optionEngine->setOptionValue("Ultracopier","key",key.toStdString());
                     break;
                 }
             }
@@ -221,7 +222,7 @@ bool EventDispatcher::shouldBeClosed()
 /// \brief Quit ultracopier
 void EventDispatcher::quit()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Will quit ultracopier"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Will quit ultracopier");
     //disconnect(QCoreApplication::instance(),SIGNAL(aboutToQuit()),this,SLOT(quit()));
     QCoreApplication::exit();
 }
@@ -263,9 +264,9 @@ void EventDispatcher::initFunction()
         connect(copyServer,	&CopyListener::pluginLoaderReady,				backgroundIcon,	&SystrayIcon::pluginLoaderReady,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::tryCatchCopy,					copyServer,	&CopyListener::listen,Qt::DirectConnection);
         connect(backgroundIcon,	&SystrayIcon::tryUncatchCopy,				copyServer,	&CopyListener::close,Qt::DirectConnection);
-        if(OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault").toBool())
+        if(stringtobool(OptionEngine::optionEngine->getOptionValue("CopyListener","CatchCopyAsDefault")))
             copyServer->listen();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+QString::number(copyServer->oneListenerIsLoaded()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyServer.oneListenerIsLoaded(): "+std::to_string(copyServer->oneListenerIsLoaded()));
         //backgroundIcon->readyToListen(copyServer.oneListenerIsLoaded());
 
         #ifdef ULTRACOPIER_DEBUG

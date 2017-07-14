@@ -47,18 +47,6 @@ int32_t stringtoint32(const std::string &string,bool *ok=NULL);
 int64_t stringtoint64(const std::string &string,bool *ok=NULL);
 float stringtofloat(const std::string &string,bool *ok=NULL);
 double stringtodouble(const std::string &string,bool *ok=NULL);
-/*
-uint8_t stringtouint8(const char * const string,bool *ok=NULL);
-uint16_t stringtouint16(const char * const string,bool *ok=NULL);
-uint32_t stringtouint32(const char * const string,bool *ok=NULL);
-bool stringtobool(const char * const string,bool *ok=NULL);
-uint64_t stringtouint64(const char * const string,bool *ok=NULL);
-int8_t stringtoint8(const char * const string,bool *ok=NULL);
-int16_t stringtoint16(const char * const string,bool *ok=NULL);
-int32_t stringtoint32(const char * const string,bool *ok=NULL);
-int64_t stringtoint64(const char * const string,bool *ok=NULL);
-float stringtofloat(const char * const string,bool *ok=NULL);
-double stringtodouble(const char * const string,bool *ok=NULL);*/
 
 std::string binarytoHexa(const std::vector<char> &data,bool *ok=NULL);
 std::string binarytoHexa(const char * const data,const uint32_t &size,bool *ok=NULL);

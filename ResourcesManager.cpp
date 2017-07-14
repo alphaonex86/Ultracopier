@@ -160,7 +160,7 @@ std::string ResourcesManager::AddSlashIfNeeded(const std::string &path)
 }
 
 /// \brief get the writable path
-std::string ResourcesManager::getWritablePath() const
+const std::string &ResourcesManager::getWritablePath() const
 {
     return writablePath;
 }

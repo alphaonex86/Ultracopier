@@ -1,5 +1,4 @@
 #include "cpp11addition.h"
-#include "GeneralVariable.h"
 #include <sstream>
 #include <cassert>
 #include <stdlib.h>

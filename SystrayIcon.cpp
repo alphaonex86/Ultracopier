@@ -21,7 +21,7 @@
 SystrayIcon::SystrayIcon(QObject * parent) :
     QSystemTrayIcon(parent)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 
     //setup the systray icon
     haveListenerInfo	= false;
