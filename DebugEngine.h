@@ -123,7 +123,7 @@ class DebugEngine : public QObject
         bool tryConnect();
         int addDebugInformationCallNumber;
         bool quit;
-        std::regex fileNameCleaner;
+        //std::regex fileNameCleaner;don't clean, too many performance heart
 };
 
 #endif // ULTRACOPIER_DEBUG

@@ -138,7 +138,7 @@ void SystrayIcon::checkSetTooltip()
 
 void SystrayIcon::listenerReady(const Ultracopier::ListeningState &state,const bool &havePlugin,const bool &someAreInWaitOfReply)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("state: %1, havePlugin: %2, someAreInWaitOfReply: %3").arg(state).arg(havePlugin).arg(someAreInWaitOfReply));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"state: "+std::to_string((int)state)+", havePlugin: "+std::to_string((int)havePlugin)+", someAreInWaitOfReply: "+std::to_string((int)someAreInWaitOfReply));
     Q_UNUSED(someAreInWaitOfReply);
     stateListener=state;
     haveListenerInfo=true;
@@ -150,7 +150,7 @@ void SystrayIcon::listenerReady(const Ultracopier::ListeningState &state,const b
 
 void SystrayIcon::pluginLoaderReady(const Ultracopier::CatchState &state,const bool &havePlugin,const bool &someAreInWaitOfReply)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("state: %1, havePlugin: %2, someAreInWaitOfReply: %3").arg(state).arg(havePlugin).arg(someAreInWaitOfReply));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"state: "+std::to_string((int)state)+", havePlugin: "+std::to_string((int)havePlugin)+", someAreInWaitOfReply: "+std::to_string((int)someAreInWaitOfReply));
     Q_UNUSED(someAreInWaitOfReply);
     statePluginLoader=state;
     havePluginLoaderInfo=true;
@@ -160,32 +160,32 @@ void SystrayIcon::pluginLoaderReady(const Ultracopier::CatchState &state,const b
 
 void SystrayIcon::showTryCatchMessageWithNoListener()
 {
-    showSystrayMessage(tr("No copy listener found. Do the copy manually by right click one the system tray icon."));
+    showSystrayMessage(tr("No copy listener found. Do the copy manually by right click one the system tray icon.").toStdString());
 }
 
 /// \brief To show a message linked to the systray icon
-void SystrayIcon::showSystrayMessage(const QString& text)
+void SystrayIcon::showSystrayMessage(const std::string& text)
 {
-    showMessage(tr("Information"),text,QSystemTrayIcon::Information,0);
+    showMessage(tr("Information"),QString::fromStdString(text),QSystemTrayIcon::Information,0);
 }
 
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 void SystrayIcon::messageClicked()
 {
-    QDesktopServices::openUrl(HelpDialog::getUpdateUrl());
+    QDesktopServices::openUrl(QString::fromStdString(HelpDialog::getUpdateUrl()));
 }
 #endif
 
 /// \brief To update the systray icon
 void SystrayIcon::updateSystrayIcon()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, haveListenerInfo %1, havePluginLoaderInfo: %2").arg(haveListenerInfo).arg(havePluginLoaderInfo));
-    QString toolTip=QStringLiteral("???");
-    QString icon;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, haveListenerInfo "+std::to_string((int)haveListenerInfo)+", havePluginLoaderInfo: "+std::to_string((int)havePluginLoaderInfo));
+    std::string toolTip="???";
+    std::string icon;
     if(!haveListenerInfo || !havePluginLoaderInfo)
     {
-        toolTip=tr("Searching information...");
-        icon=QStringLiteral("Uncaught");
+        toolTip=tr("Searching information...").toStdString();
+        icon="Uncaught";
     }
     else
     {
@@ -197,58 +197,58 @@ void SystrayIcon::updateSystrayIcon()
         {
             if(stateListener==Ultracopier::NotListening)
             {
-                toolTip=tr("Do not replace the explorer copy/move");
-                icon=QStringLiteral("Uncaught");
+                toolTip=tr("Do not replace the explorer copy/move").toStdString();
+                icon="Uncaught";
             }
             else if(stateListener==Ultracopier::SemiListening)
             {
-                toolTip=tr("Semi replace the explorer copy/move");
-                icon=QStringLiteral("Semiuncaught");
+                toolTip=tr("Semi replace the explorer copy/move").toStdString();
+                icon="Semiuncaught";
             }
             else
             {
-                toolTip=tr("Replace the explorer copy/move");
-                icon=QStringLiteral("Caught");
+                toolTip=tr("Replace the explorer copy/move").toStdString();
+                icon="Caught";
             }
         }
         else
         {
-            icon=QStringLiteral("Semiuncaught");
-            QString first_part;
-            QString second_part;
+            icon="Semiuncaught";
+            std::string first_part;
+            std::string second_part;
             if(stateListener==Ultracopier::NotListening)
-                first_part=QStringLiteral("No listening");
+                first_part="No listening";
             else if(stateListener==Ultracopier::SemiListening)
-                first_part=QStringLiteral("Semi listening");
+                first_part="Semi listening";
             else if(stateListener==Ultracopier::FullListening)
-                first_part=QStringLiteral("Full listening");
+                first_part="Full listening";
             else
-                first_part=QStringLiteral("Unknow listening");
+                first_part="Unknow listening";
             if(statePluginLoader==Ultracopier::Uncaught)
-                second_part=QStringLiteral("No replace");
+                second_part="No replace";
             else if(statePluginLoader==Ultracopier::Semiuncaught)
-                second_part=QStringLiteral("Semi replace");
+                second_part="Semi replace";
             else if(statePluginLoader==Ultracopier::Caught)
-                second_part=QStringLiteral("Full replace");
+                second_part="Full replace";
             else
-                second_part=QStringLiteral("Unknow replace");
-            toolTip=first_part+QStringLiteral("/")+second_part;
+                second_part="Unknow replace";
+            toolTip=first_part+"/"+second_part;
         }
     }
     QIcon theNewSystrayIcon;
     #ifdef Q_OS_WIN32
-    theNewSystrayIcon=ThemesManager::themesManager->loadIcon(QStringLiteral("SystemTrayIcon/systray_")+icon+QStringLiteral("_Windows.png"));
+    theNewSystrayIcon=ThemesManager::themesManager->loadIcon(SystemTrayIcon/systray_"+icon+"_Windows.png");
     #else
-    theNewSystrayIcon=ThemesManager::themesManager->loadIcon(QStringLiteral("SystemTrayIcon/systray_")+icon+QStringLiteral("_Unix.png"));
+    theNewSystrayIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/systray_"+icon+"_Unix.png");
     #endif
     if(theNewSystrayIcon.isNull())
     {
         #ifdef Q_OS_WIN32
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use the default systray icon: :/systray_"+icon+"_Windows.png");
-        theNewSystrayIcon=QIcon(QStringLiteral(":/systray_")+icon+QStringLiteral("_Windows.png"));
+        theNewSystrayIcon=QIcon(QString::fromStdString(":/systray_"+icon+"_Windows.png"));
         #else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use the default systray icon: :/systray_"+icon+"_Unix.png");
-        theNewSystrayIcon=QIcon(QStringLiteral(":/systray_")+icon+QStringLiteral("_Unix.png"));
+        theNewSystrayIcon=QIcon(QString::fromStdString(":/systray_"+icon+"_Unix.png"));
         #endif
     }
     else
@@ -263,9 +263,9 @@ void SystrayIcon::updateSystrayIcon()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"All the icon include the default icon remain null");
     setIcon(theNewSystrayIcon);
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    setToolTip(QStringLiteral("Supercopier - ")+toolTip);
+    setToolTip(QString::fromStdString("Supercopier - "+toolTip));
     #else
-    setToolTip(QStringLiteral("Ultracopier - ")+toolTip);
+    setToolTip(QString::fromStdString("Ultracopier - "+toolTip));
     #endif
 }
 
@@ -283,8 +283,15 @@ void SystrayIcon::dropEvent(QDropEvent *event)
     if(mimeData->hasUrls())
     {
         //impossible with Qt on systray
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mimeData->urls().size()"+QString::number(mimeData->urls().size()));
-        emit urlDropped(mimeData->urls());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"mimeData->urls().size()"+std::to_string(mimeData->urls().size()));
+        std::vector<std::string> urls;
+        unsigned int index=0;
+        while(index<(unsigned int)mimeData->urls().size())
+        {
+            urls.push_back(mimeData->urls().at(index).toString().toStdString());
+            index++;
+        }
+        emit urlDropped(urls);
         event->acceptProposedAction();
     }
 }
@@ -310,40 +317,40 @@ void SystrayIcon::dragLeaveEvent(QDragLeaveEvent* event)
 /// \brief To update the current themes
 void SystrayIcon::updateCurrentTheme()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("icon: start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"icon: start");
     //load the systray menu item
     QIcon tempIcon;
 
-    tempIcon=ThemesManager::themesManager->loadIcon(QStringLiteral("SystemTrayIcon/exit.png"));
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/exit.png");
     if(!tempIcon.isNull())
         IconQuit=QIcon(tempIcon);
     else
-        IconQuit=QIcon(QStringLiteral(""));
+        IconQuit=QIcon("");
     actionMenuQuit->setIcon(IconQuit);
 
     #ifdef ULTRACOPIER_DEBUG
     actionSaveBugReport->setIcon(QIcon(":/warning.png"));
     #endif
 
-    tempIcon=ThemesManager::themesManager->loadIcon(QStringLiteral("SystemTrayIcon/informations.png"));
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/informations.png");
     if(!tempIcon.isNull())
         IconInfo=QIcon(tempIcon);
     else
-        IconInfo=QIcon(QStringLiteral(""));
+        IconInfo=QIcon("");
     actionMenuAbout->setIcon(IconInfo);
 
-    tempIcon=ThemesManager::themesManager->loadIcon(QStringLiteral("SystemTrayIcon/options.png"));
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/options.png");
     if(!tempIcon.isNull())
         IconOptions=QIcon(tempIcon);
     else
-        IconOptions=QIcon(QStringLiteral(""));
+        IconOptions=QIcon("");
     actionOptions->setIcon(IconOptions);
 
-    tempIcon=ThemesManager::themesManager->loadIcon(QStringLiteral("SystemTrayIcon/add.png"));
+    tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/add.png");
     if(!tempIcon.isNull())
         IconAdd=QIcon(tempIcon);
     else
-        IconAdd=QIcon(QStringLiteral(""));
+        IconAdd=QIcon("");
 
     //update the systray icon
     updateSystrayIcon();
@@ -370,10 +377,10 @@ void SystrayIcon::CatchAction(QSystemTrayIcon::ActivationReason reason)
         }
     }
     else if(reason==QSystemTrayIcon::Context)//do nothing on right click to show as auto the menu
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("The action on the systray icon is unknown: %1").arg(reason));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"The action on the systray icon is unknown: "+std::to_string((int)reason));
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("The action on the systray icon is unknown: %1").arg(reason));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The action on the systray icon is unknown: "+std::to_string((int)reason));
         QMessageBox::warning(NULL,tr("Warning"),tr("The action on the systray icon is unknown!"));
     }
 }
@@ -387,8 +394,8 @@ void SystrayIcon::CatchCopyQuery()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action not found");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentAction->data().toString());
-    emit addWindowCopyMove(Ultracopier::Copy,currentAction->data().toString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentAction->data().toString().toStdString());
+    emit addWindowCopyMove(Ultracopier::Copy,currentAction->data().toString().toStdString());
 }
 
 /// \brief To catch move menu action
@@ -400,8 +407,8 @@ void SystrayIcon::CatchMoveQuery()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action not found");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentAction->data().toString());
-    emit addWindowCopyMove(Ultracopier::Move,currentAction->data().toString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentAction->data().toString().toStdString());
+    emit addWindowCopyMove(Ultracopier::Move,currentAction->data().toString().toStdString());
 }
 
 /// \brief To catch transfer menu action
@@ -413,8 +420,8 @@ void SystrayIcon::CatchTransferQuery()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action not found");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentAction->data().toString());
-    emit addWindowTransfer(currentAction->data().toString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+currentAction->data().toString().toStdString());
+    emit addWindowTransfer(currentAction->data().toString().toStdString());
 }
 
 /// \brief to retranslate the ui
@@ -435,26 +442,26 @@ void SystrayIcon::retranslateTheUI()
     updateSystrayIcon();
 }
 
-void SystrayIcon::addCopyEngine(const QString &name,const bool &canDoOnlyCopy)
+void SystrayIcon::addCopyEngine(const std::string &name,const bool &canDoOnlyCopy)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     EngineEntry entry;
     entry.name=name;
     entry.canDoOnlyCopy=canDoOnlyCopy;
-    engineEntryList << entry;
+    engineEntryList.push_back(entry);
     if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         reloadEngineList();
 }
 
-void SystrayIcon::removeCopyEngine(const QString &name)
+void SystrayIcon::removeCopyEngine(const std::string &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    unsigned int index=0;
     while(index<engineEntryList.size())
     {
         if(engineEntryList.at(index).name==name)
         {
-            engineEntryList.removeAt(index);
+            engineEntryList.erase(engineEntryList.cbegin()+index);
             break;
         }
         index++;
@@ -463,18 +470,18 @@ void SystrayIcon::removeCopyEngine(const QString &name)
 }
 
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
-void SystrayIcon::newUpdate(const QString &version)
+void SystrayIcon::newUpdate(const std::string &version)
 {
     /*if(version==lastVersion)
         return;*/
     lastVersion=version;
-    showSystrayMessage(tr("New version: %1").arg(version)+"\n"+tr("Click here to go on download page"));
+    showSystrayMessage((tr("New version: %1").arg(QString::fromStdString(version))+"\n"+tr("Click here to go on download page")).toStdString());
 }
 #endif
 
 void SystrayIcon::reloadEngineList()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
     if(copyMenu!=NULL)
     {
@@ -493,7 +500,7 @@ void SystrayIcon::reloadEngineList()
     }
     #else
     {
-        int index=0;
+        unsigned int index=0;
         while(index<actions.size())
         {
             delete actions.at(index);
@@ -505,44 +512,46 @@ void SystrayIcon::reloadEngineList()
 
     if(engineEntryList.size()==0)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"engineEntryList.size(): "+QString::number(engineEntryList.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"engineEntryList.size(): "+std::to_string(engineEntryList.size()));
     if(engineEntryList.size()==1)
     {
+        const EngineEntry &engineEntry=engineEntryList.front();
+        const QString &name=QString::fromStdString(engineEntry.name);
         QAction *copy=new QAction(IconAdd,tr("&Copy"),nullptr);
         connect(copy,&QAction::triggered,this,&SystrayIcon::CatchCopyQuery);
-        copy->setData(engineEntryList.first().name);
+        copy->setData(name);
         #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
         copyMenu->addAction(copy);
         #else
-        actions << copy;
+        actions.push_back(copy);
         systrayMenu->insertAction(actionOptions,copy);
         #endif
         #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
-        if(!engineEntryList.first().canDoOnlyCopy)
+        if(!frontEngine.canDoOnlyCopy)
         {
             connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchTransferQuery);
 
             QAction *transfer=new QAction(IconAdd,tr("&Transfer"),copyMenu);
             connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
-            transfer->setData(engineEntryList.first().name);
+            transfer->setData(name);
             copyMenu->addAction(transfer);
             QAction *move=new QAction(IconAdd,tr("&Move"),copyMenu);
             connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
-            move->setData(engineEntryList.first().name);
+            move->setData(name);
             copyMenu->addAction(move);
         }
         else
             connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchCopyQuery);
         #else
-        if(!engineEntryList.first().canDoOnlyCopy)
+        if(!engineEntry.canDoOnlyCopy)
         {
             QAction *transfer=new QAction(IconAdd,tr("&Transfer"),nullptr);
             connect(transfer,&QAction::triggered,this,&SystrayIcon::CatchTransferQuery);
-            transfer->setData(engineEntryList.first().name);
+            transfer->setData(name);
             systrayMenu->insertAction(actionOptions,transfer);
             QAction *move=new QAction(IconAdd,tr("&Move"),nullptr);
             connect(move,&QAction::triggered,this,&SystrayIcon::CatchMoveQuery);
-            move->setData(engineEntryList.first().name);
+            move->setData(name);
             systrayMenu->insertAction(actionOptions,move);
         }
         #endif
@@ -550,11 +559,11 @@ void SystrayIcon::reloadEngineList()
     }
     else
     {
-        int index=0;
+        unsigned int index=0;
         while(index<engineEntryList.size())
         {
             const EngineEntry &engineEntry=engineEntryList.at(index);
-            const QString &name=engineEntry.name;
+            const QString &name=QString::fromStdString(engineEntry.name);
             #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
             QMenu * menu=new QMenu(name);
             QAction *copy=new QAction(IconAdd,tr("Add &copy"),menu);
