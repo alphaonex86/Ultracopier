@@ -77,18 +77,18 @@ OptionEngine::~OptionEngine()
 }
 
 /// \brief To add option group to options
-bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QString, QVariant> > &KeysList)
+bool OptionEngine::addOptionGroup(const std::string &groupName,const std::vector<std::pair<std::string, std::string> > &KeysList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start(\"")+groupName+QStringLiteral("\",[...])"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+groupName+"\",[...])");
     //search if previous with the same name exists
-    if(GroupKeysList.contains(groupName))
+    if(GroupKeysList.find(groupName)!=GroupKeysList.cend())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("group already used previously"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"group already used previously");
         return false;
     }
     //if the backend is file, enter into the group
     if(currentBackend==File)
-        settings->beginGroup(groupName);
+        settings->beginGroup(QString::fromStdString(groupName));
     //browse all key, and append it to the key
     int index=0;
     //QList<OptionEngineGroupKey> KeyListTemp;
@@ -102,9 +102,9 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
             theCurrentKey.currentValue=theCurrentKey.defaultValue;
         else
         {
-            if(settings->contains(KeysList.at(index).first))//if file backend, load the default value from the file
+            if(settings->contains(QString::fromStdString(KeysList.at(index).first)))//if file backend, load the default value from the file
             {
-                theCurrentKey.currentValue=settings->value(KeysList.at(index).first);
+                theCurrentKey.currentValue=settings->value(QString::fromStdString(KeysList.at(index).first)).toString().toStdString();
                 #ifdef ULTRACOPIER_DEBUG
                 if(theCurrentKey.currentValue!=theCurrentKey.defaultValue)
                 {
@@ -114,7 +114,7 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
                     }
                     else
                     #endif
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QString("The current key: %1, group: %2, have value: %3").arg(groupName).arg(KeysList.at(index).first).arg(theCurrentKey.currentValue.toString()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"The current key: "+groupName+", group: "+KeysList.at(index).first+", have value: "+theCurrentKey.currentValue);
                 }
                 #endif
             }
@@ -143,33 +143,34 @@ bool OptionEngine::addOptionGroup(const QString &groupName,const QList<QPair<QSt
 }
 
 /// \brief To remove option group to options, remove the widget need be do into the calling object
-bool OptionEngine::removeOptionGroup(const QString &groupName)
+bool OptionEngine::removeOptionGroup(const std::string &groupName)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, groupName: ")+groupName);
-    if(GroupKeysList.remove(groupName)!=1)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("value not found, internal bug, groupName: ")+groupName);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, groupName: "+groupName);
+    if(GroupKeysList.erase(groupName)!=1)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName);
     return false;
 }
 
 /// \brief To get option value
-QVariant OptionEngine::getOptionValue(const QString &groupName,const QString &variableName) const
+std::string OptionEngine::getOptionValue(const std::string &groupName,const std::string &variableName) const
 {
-    if(GroupKeysList.contains(groupName))
+    if(GroupKeysList.find(groupName)!=GroupKeysList.cend())
     {
-        if(GroupKeysList.value(groupName).contains(variableName))
-            return GroupKeysList.value(groupName).value(variableName).currentValue;
-        QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(groupName).arg(variableName));
+        const std::unordered_map<std::string,OptionEngineGroupKey> &optionEngineGroupKey=GroupKeysList.at(groupName);
+        if(optionEngineGroupKey.find(variableName)!=optionEngineGroupKey.cend())
+            return optionEngineGroupKey.at(variableName).currentValue;
+        QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: "+groupName+" "+variableName);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
-        return QVariant();
+        return std::string();
     }
-    QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(groupName).arg(variableName));
+    QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(QString::fromStdString(groupName)).arg(QString::fromStdString(variableName)));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("The variable was not found: %1 %2").arg(groupName).arg(variableName));
     //return default value
     return QVariant();
 }
 
 /// \brief To set option value
-void OptionEngine::setOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
+void OptionEngine::setOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("groupName: \"")+groupName+QStringLiteral("\", variableName: \"")+variableName+QStringLiteral("\", value: \"")+value.toString()+QStringLiteral("\""));
 

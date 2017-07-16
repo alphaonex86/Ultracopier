@@ -13,6 +13,7 @@
 #include "Variable.h"
 #include "DebugEngine.h"
 #include "ExtraSocket.h"
+#include "cpp11addition.h"
 
 #ifdef WIN32
 #	define __func__ __FUNCTION__
@@ -288,46 +289,49 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
     switch(level)
     {
         case DebugLevel_custom_Information:
-            addDebugInformation_htmlFormat="<tr class=\"Information\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
+            addDebugInformation_htmlFormat="<tr class=\"Information\"><td class=\"time\">";
         break;
         case DebugLevel_custom_Critical:
-            addDebugInformation_htmlFormat="<tr class=\"Critical\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
+            addDebugInformation_htmlFormat="<tr class=\"Critical\"><td class=\"time\">";
         break;
         case DebugLevel_custom_Warning:
-            addDebugInformation_htmlFormat="<tr class=\"Warning\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
+            addDebugInformation_htmlFormat="<tr class=\"Warning\"><td class=\"time\">";
         break;
         case DebugLevel_custom_Notice:
         {
-            addDebugInformation_htmlFormat="<tr class=\"Notice\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
+            addDebugInformation_htmlFormat="<tr class=\"Notice\"><td class=\"time\">";
             important=false;
         }
         break;
         case DebugLevel_custom_UserNote:
-            addDebugInformation_htmlFormat="<tr class=\"Note\"><td class=\"time\">"+addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+QStringLiteral("</td><td class=\"function\">")+function+QStringLiteral("()</td><td class=\"location\">")+location+QStringLiteral("</td><td>")+htmlEntities(text)+QStringLiteral("</td></tr>\n");
+            addDebugInformation_htmlFormat="<tr class=\"Note\"><td class=\"time\">";
         break;
     }
+    addDebugInformation_htmlFormat+=addDebugInformation_time+"</span></td><td>"+addDebugInformation_fileString+"</td><td class=\"function\">"+function+"()</td><td class=\"location\">"+location+"</td><td>"+htmlEntities(text)+"</td></tr>\n";
     //To prevent access of string in multi-thread
     {
         //Show the text in console
-        QString addDebugInformation_textFormat;
-        addDebugInformation_textFormat = QStringLiteral("(")+addDebugInformation_time.rightJustified(8,' ')+QStringLiteral(") ");
-        if(file!="" && ligne!=-1)
-            addDebugInformation_textFormat += file+QStringLiteral(":")+addDebugInformation_lignestring+QStringLiteral(":");
-        addDebugInformation_textFormat += function+QStringLiteral("(), (location: ")+location+QStringLiteral("): ")+text;
+        std::string addDebugInformation_textFormat;
+        if(addDebugInformation_time.size()<8)
+            addDebugInformation_time=std::string(8-addDebugInformation_time.size(),' ')+addDebugInformation_time;
+        addDebugInformation_textFormat = "("+addDebugInformation_time+") ";
+        if(!file.empty() && ligne!=-1)
+            addDebugInformation_textFormat += file+":"+addDebugInformation_lignestring+":";
+        addDebugInformation_textFormat += function+"(), (location: "+location+"): "+text;
         QMutexLocker lock_mutex(&mutex);
         if(currentBackend==File)
         {
             if(logFile.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && logFile.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
             {
-                puts(qPrintable(addDebugInformation_textFormat));
-                logFile.write(addDebugInformation_htmlFormat.toUtf8());
+                std::cout << addDebugInformation_textFormat << std::endl;
+                logFile.write(addDebugInformation_htmlFormat.data(),addDebugInformation_htmlFormat.size());
             }
         }
         else
         {
             if(debugHtmlContent.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && debugHtmlContent.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
             {
-                puts(qPrintable(addDebugInformation_textFormat));
+                std::cout << addDebugInformation_textFormat << std::endl;
                 debugHtmlContent+=addDebugInformation_htmlFormat;
             }
         }
@@ -348,7 +352,8 @@ std::string DebugEngine::getTheDebugHtml()
         logFile.seek(0);
         if(!logFile.isOpen())
             ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Warning,"The log file is not open");
-        return QString().fromUtf8(logFile.readAll().data())+endOfLogFile;
+        const QByteArray &data=logFile.readAll();
+        return std::string(data.constData(),data.size())+endOfLogFile;
     }
     else
         return debugHtmlContent+endOfLogFile;
@@ -364,11 +369,11 @@ std::string DebugEngine::getTheDebugEnd()
 std::string DebugEngine::htmlEntities(const std::string &text)
 {
     std::string newText(text);
-    newText.replace('&',"&amp;");
-    newText.replace('"',"&quot;");
-    newText.replace('\'',"&#039;");
-    newText.replace('<',"&lt;");
-    newText.replace('>',"&gt;");
+    stringreplaceAll(newText,"&","&amp;");
+    /*stringreplaceAll(newText,"\"","&quot;");
+    stringreplaceAll(newText,"\\","&#039;");*/
+    stringreplaceAll(newText,"<","&lt;");
+    stringreplaceAll(newText,">","&gt;");
     return newText;
 }
 
@@ -381,7 +386,7 @@ DebugEngine::Backend DebugEngine::getCurrentBackend()
 bool DebugEngine::tryConnect()
 {
     QLocalSocket localSocket;
-    localSocket.connectToServer(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME),QIODevice::WriteOnly|QIODevice::Unbuffered);
+    localSocket.connectToServer(QString::fromStdString(ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME)),QIODevice::WriteOnly|QIODevice::Unbuffered);
     if(localSocket.waitForConnected(1000))
     {
         localSocket.disconnectFromServer();
