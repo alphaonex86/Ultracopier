@@ -78,7 +78,7 @@ class PluginsManager : public QThread
     private:
         /// \brief List of plugins
         std::vector<PluginsAvailable> pluginsList;
-        std::multimap<PluginType,PluginsAvailable> pluginsListIndexed;
+        std::map<PluginType,std::vector<PluginsAvailable> > pluginsListIndexed;
         /// \brief to load the multi-language balise
         void loadBalise(const QDomElement &root,const std::string &name,std::vector<std::vector<std::string> > *informations,std::string *errorString,bool needHaveOneEntryMinimum=true,bool multiLanguage=false,bool englishNeedBeFound=false);
         /// \brief get the version
@@ -104,7 +104,7 @@ class PluginsManager : public QThread
         #endif
         void loadPluginXml(PluginsAvailable * thePlugin,const QByteArray &xml);
         std::vector<std::string> readPluginPath;
-        bool loadPluginInformation(const QString &path);
+        bool loadPluginInformation(const std::string &path);
         QSemaphore editionSemList;
         bool stopIt;
         bool pluginLoaded;
@@ -143,7 +143,7 @@ class PluginsManager : public QThread
     protected:
         void run();
     public slots: //do gui action
-        void showInformation(const QString &path);
+        void showInformation(const std::string &path);
         #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
         void removeThePluginSelected(const QString &path);
         void addPlugin(const ImportBackend &backend);

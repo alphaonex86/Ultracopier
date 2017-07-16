@@ -159,38 +159,46 @@ std::string OptionEngine::getOptionValue(const std::string &groupName,const std:
         const std::unordered_map<std::string,OptionEngineGroupKey> &optionEngineGroupKey=GroupKeysList.at(groupName);
         if(optionEngineGroupKey.find(variableName)!=optionEngineGroupKey.cend())
             return optionEngineGroupKey.at(variableName).currentValue;
-        QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: "+groupName+" "+variableName);
+        QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2")
+                              .arg(QString::fromStdString(groupName))
+                              .arg(QString::fromStdString(variableName))
+                              );
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
         return std::string();
     }
     QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(QString::fromStdString(groupName)).arg(QString::fromStdString(variableName)));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("The variable was not found: %1 %2").arg(groupName).arg(variableName));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("The variable was not found: %1 %2")
+                             .arg(QString::fromStdString(groupName))
+                             .arg(QString::fromStdString(variableName))
+                             .toStdString()
+                             );
     //return default value
-    return QVariant();
+    return std::string();
 }
 
 /// \brief To set option value
 void OptionEngine::setOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("groupName: \"")+groupName+QStringLiteral("\", variableName: \"")+variableName+QStringLiteral("\", value: \"")+value.toString()+QStringLiteral("\""));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"groupName: \""+groupName+"\", variableName: \""+variableName+"\", value: \""+value+"\"");
 
-    if(GroupKeysList.contains(groupName))
+    if(GroupKeysList.find(groupName)!=GroupKeysList.cend())
     {
-        if(GroupKeysList.value(groupName).contains(variableName))
+        const std::unordered_map<std::string,OptionEngineGroupKey> &group=GroupKeysList.at(groupName);
+        if(group.find(variableName)!=group.cend())
         {
             //prevent re-write the same value into the variable
-            if(GroupKeysList.value(groupName).value(variableName).currentValue==value)
+            if(group.at(variableName).currentValue==value)
                 return;
             //write ONLY the new value
             GroupKeysList[groupName][variableName].currentValue=value;
             if(currentBackend==File)
             {
-                settings->beginGroup(groupName);
-                settings->setValue(variableName,value);
+                settings->beginGroup(QString::fromStdString(groupName));
+                settings->setValue(QString::fromStdString(variableName),QString::fromStdString(value));
                 settings->endGroup();
                 if(settings->status()!=QSettings::NoError)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Have writing error, switch to memory only options"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
                     #ifdef ULTRACOPIER_VERSION_PORTABLE
                     ResourcesManager::resourcesManager->disableWritablePath();
                     #endif // ULTRACOPIER_VERSION_PORTABLE
@@ -200,37 +208,32 @@ void OptionEngine::setOptionValue(const std::string &groupName,const std::string
             emit newOptionValue(groupName,variableName,value);
             return;
         }
-        QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(groupName).arg(variableName));
+        QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(QString::fromStdString(groupName)).arg(QString::fromStdString(variableName)));
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"value not found, internal bug, groupName: "+groupName+", variableName: "+variableName);
         return;
     }
-    QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(groupName).arg(variableName));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QString("The variable was not found: %1 %2").arg(groupName).arg(variableName));
+    QMessageBox::critical(NULL,"Internal error",tr("The variable was not found: %1 %2").arg(QString::fromStdString(groupName)).arg(QString::fromStdString(variableName)));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"The variable was not found: "+groupName+" "+variableName);
 }
 
 //the reset of right value of widget need be do into the calling object
 void OptionEngine::internal_resetToDefaultValue()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 
-    QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i = GroupKeysList.constBegin();
-    QHash<QString,QHash<QString,OptionEngineGroupKey> >::const_iterator i_end = GroupKeysList.constEnd();
-    QHash<QString,OptionEngineGroupKey>::const_iterator j;
-    QHash<QString,OptionEngineGroupKey>::const_iterator j_end;
-    while (i != i_end)
+    for(auto& n:GroupKeysList)
     {
-        j = i.value().constBegin();
-        j_end = i.value().constEnd();
-        while (j != j_end)
+        const std::string &firstKey=n.first;
+        for(auto& m:n.second)
         {
-            if(j.value().currentValue!=j.value().defaultValue)
+            const std::string &secondKey=m.first;
+            OptionEngineGroupKey &o=m.second;
+            if(o.currentValue!=o.defaultValue)
             {
-                GroupKeysList[i.key()][j.key()].currentValue=j.value().defaultValue;
-                emit newOptionValue(i.key(),j.key(),j.value().currentValue);
+                o.currentValue=o.defaultValue;
+                emit newOptionValue(firstKey,secondKey,o.currentValue);
             }
-            ++j;
         }
-        ++i;
     }
 }
 

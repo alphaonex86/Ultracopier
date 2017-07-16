@@ -12,7 +12,7 @@
 HelpDialog::HelpDialog() :
     ui(new Ui::HelpDialog)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     ui->setupUi(this);
     reloadTextValue();
     #ifdef ULTRACOPIER_DEBUG
@@ -50,7 +50,7 @@ void HelpDialog::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
         ui->retranslateUi(this);
         reloadTextValue();
         break;
@@ -62,7 +62,7 @@ void HelpDialog::changeEvent(QEvent *e)
 /// \brief To reload the text value
 void HelpDialog::reloadTextValue()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QString text=ui->label_ultracopier->text();
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(ULTRACOPIER_VERSION));
@@ -96,7 +96,7 @@ void HelpDialog::reloadTextValue()
 
     text=ui->label_site->text();
     //: This site need be the official site of ultracopier, into the right languages, english if not exists
-    text=text.replace(QStringLiteral("%1"),getWebSite());
+    text=text.replace("%1",QString::fromStdString(getWebSite()));
     ui->label_site->setText(text);
 
     text=ui->label_platform->text();
@@ -104,25 +104,25 @@ void HelpDialog::reloadTextValue()
     ui->label_platform->setText(text);
 }
 
-QString HelpDialog::getWebSite()
+std::string HelpDialog::getWebSite()
 {
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/")+QStringLiteral("supercopier.html");
+        return tr("http://ultracopier.first-world.info/").toStdString()+"supercopier.html";
     #else
-        return tr("http://ultracopier.first-world.info/");
+        return tr("http://ultracopier.first-world.info/").toStdString();
     #endif
 }
 
 
-QString HelpDialog::getUpdateUrl()
+std::string HelpDialog::getUpdateUrl()
 {
     #if defined(ULTRACOPIER_VERSION_ULTIMATE)
-    return tr("http://ultracopier.first-world.info/shop.html");
+    return tr("http://ultracopier.first-world.info/shop.html").toStdString();
     #else
         #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/")+QStringLiteral("supercopier.html");
+        return tr("http://ultracopier.first-world.info/").toStdString()+"supercopier.html";
         #else
-        return tr("http://ultracopier.first-world.info/download.html");
+        return tr("http://ultracopier.first-world.info/download.html").toStdString();
         #endif
     #endif
 }
@@ -130,7 +130,7 @@ QString HelpDialog::getUpdateUrl()
 #ifdef ULTRACOPIER_DEBUG
 void HelpDialog::on_lineEditInsertDebug_returnPressed()
 {
-    DebugEngine::addDebugNote(ui->lineEditInsertDebug->text());
+    DebugEngine::addDebugNote(ui->lineEditInsertDebug->text().toStdString());
     ui->lineEditInsertDebug->clear();
     ui->debugView->scrollToBottom();
 }

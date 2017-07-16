@@ -10,15 +10,15 @@
 #ifndef STRUCTDEF_ULTRACOPIERSPECIFIC_H
 #define STRUCTDEF_ULTRACOPIERSPECIFIC_H
 
-enum PluginType
+enum PluginType : uint8_t
 {
-    PluginType_Unknow,
-    PluginType_CopyEngine,
-    PluginType_Languages,
-    PluginType_Listener,
-    PluginType_PluginLoader,
-    PluginType_SessionLoader,
-    PluginType_Themes
+    PluginType_Unknow=0,
+    PluginType_CopyEngine=1,
+    PluginType_Languages=2,
+    PluginType_Listener=3,
+    PluginType_PluginLoader=4,
+    PluginType_SessionLoader=5,
+    PluginType_Themes=6
 };
 
 /// \brief structure to store the general plugin related information
@@ -36,16 +36,16 @@ struct PluginsAvailable
     bool isAuth;
 };
 
-enum DebugLevel_custom
+enum DebugLevel_custom : uint8_t
 {
-    DebugLevel_custom_Information,
-    DebugLevel_custom_Critical,
-    DebugLevel_custom_Warning,
-    DebugLevel_custom_Notice,
-    DebugLevel_custom_UserNote
+    DebugLevel_custom_Information=0,
+    DebugLevel_custom_Critical=1,
+    DebugLevel_custom_Warning=2,
+    DebugLevel_custom_Notice=3,
+    DebugLevel_custom_UserNote=4
 };
 
-enum ActionOnManualOpen
+enum ActionOnManualOpen : uint8_t
 {
     ActionOnManualOpen_Nothing=0x00,
     ActionOnManualOpen_Folder=0x01,
