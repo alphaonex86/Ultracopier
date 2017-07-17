@@ -100,11 +100,11 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
         factory=new ThemesFactory();
     #endif
     #else
-    QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"));
+    QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"));
     QObject *pluginInstance = pluginLoader->instance();
     if(pluginInstance==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
         pluginLoader->unload();
         emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
         emit theThemeIsReloaded();
@@ -126,8 +126,8 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
         if(pluginList.at(indexTemp).factory==factory)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Plugin already found, current: %1, conflit plugin: %2, name: %3")
-            .arg(newPlugin.plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
-            .arg(pluginList.at(indexTemp).plugin.path+QDir::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
+            .arg(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
+            .arg(pluginList.at(indexTemp).plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
             .arg(newPlugin.plugin.name)
             );
             pluginLoader->unload();

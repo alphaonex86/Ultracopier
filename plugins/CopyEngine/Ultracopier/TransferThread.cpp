@@ -221,13 +221,13 @@ void TransferThread::setFileRename(const QString &nameForRename)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] nameForRename: ")+nameForRename);
     if(!renameTheOriginalDestination)
-        destination.setFile(destination.absolutePath()+QDir::separator()+nameForRename);
+        destination.setFile(destination.absolutePath()+FacilityEngine::separator()+nameForRename);
     else
     {
         QString tempDestination=destination.absoluteFilePath();
         QFile destinationFile(tempDestination);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("rename %1: to: %2").arg(destination.absoluteFilePath()).arg(destination.absolutePath()+QDir::separator()+nameForRename));
-        if(!destinationFile.rename(destination.absolutePath()+QDir::separator()+nameForRename))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("rename %1: to: %2").arg(destination.absoluteFilePath()).arg(destination.absolutePath()+FacilityEngine::separator()+nameForRename));
+        if(!destinationFile.rename(destination.absolutePath()+FacilityEngine::separator()+nameForRename))
         {
             if(!destinationFile.exists())
             {
@@ -241,7 +241,7 @@ void TransferThread::setFileRename(const QString &nameForRename)
             return;
         }
         if(source.absoluteFilePath()==destination.absoluteFilePath())
-            source.setFile(destination.absolutePath()+QDir::separator()+nameForRename);
+            source.setFile(destination.absolutePath()+FacilityEngine::separator()+nameForRename);
         destination.setFile(tempDestination);
         destination.refresh();
     }
@@ -646,7 +646,7 @@ bool TransferThread::checkAlwaysRename()
                     newFileName.replace(QStringLiteral("%number%"),QString::number(num));
                 }
             }
-            newDestination.setFile(newDestination.absolutePath()+QDir::separator()+newFileName+suffix);
+            newDestination.setFile(newDestination.absolutePath()+FacilityEngine::separator()+newFileName+suffix);
             num++;
         }
         while(newDestination.exists());

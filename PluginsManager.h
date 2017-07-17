@@ -73,7 +73,7 @@ class PluginsManager : public QThread
         PluginsManager();
         /// \brief Destroy the language manager
         ~PluginsManager();
-        /// \brief To compare version
+        /// \brief To compare version, \return true is case of error
         static bool compareVersion(const std::string &versionA,const std::string &sign,const std::string &versionB);
     private:
         /// \brief List of plugins

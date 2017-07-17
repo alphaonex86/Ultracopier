@@ -12,16 +12,16 @@
 /// \brief Create the manager and load the defaults variables
 LanguagesManager::LanguagesManager()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //load the rest
-    QStringList resourcesPaths=ResourcesManager::resourcesManager->getReadPath();
-    int index=0;
+    std::vector<std::string> resourcesPaths=ResourcesManager::resourcesManager->getReadPath();
+    unsigned int index=0;
     while(index<resourcesPaths.size())
     {
-        QString composedTempPath=resourcesPaths.at(index)+QStringLiteral("Languages")+QDir::separator();
-        QDir LanguagesConfiguration(composedTempPath);
+        std::string composedTempPath=resourcesPaths.at(index)+"Languages"+FacilityEngine::separator();
+        QDir LanguagesConfiguration(QString::fromStdString(composedTempPath));
         if(LanguagesConfiguration.exists())
-            languagePath<<composedTempPath;
+            languagePath.push_back(composedTempPath);
         index++;
     }
     //load the plugins
@@ -32,14 +32,14 @@ LanguagesManager::LanguagesManager()
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
     connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Languages);
+    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Languages);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();
     //load the GUI option
-    QList<QPair<QString, QVariant> > KeysList;
-    KeysList.append(qMakePair(QStringLiteral("Language"),QVariant("en")));
-    KeysList.append(qMakePair(QStringLiteral("Language_force"),QVariant(false)));
+    std::vector<std::pair<std::string, std::string> > KeysList;
+    KeysList.push_back(std::pair<std::string, std::string>("Language","en"));
+    KeysList.push_back(std::pair<std::string, std::string>("Language_force","false"));
     OptionEngine::optionEngine->addOptionGroup("Language",KeysList);
 //	connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::refreshPluginList);
 //	connect(this,	&LanguagesManager::newLanguageLoaded,			this,&LanguagesManager::retranslateTheUI);
@@ -53,9 +53,9 @@ LanguagesManager::~LanguagesManager()
 }
 
 /// \brief load the language selected, return the main short code like en, fr, ..
-QString LanguagesManager::getTheRightLanguage() const
+std::string LanguagesManager::getTheRightLanguage() const
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(LanguagesAvailableList.size()==0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"empty combobox list, failing back to english");
@@ -63,7 +63,7 @@ QString LanguagesManager::getTheRightLanguage() const
     }
     else
     {
-        if(!OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language_force")).toBool())
+        if(!OptionEngine::optionEngine->getOptionValue("Language","Language_force").toBool())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("language auto-detection, QLocale::system().name(): ")+QLocale::system().name()+QStringLiteral(", QLocale::languageToString(QLocale::system().language()): ")+QLocale::languageToString(QLocale::system().language()));
             QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));
@@ -130,7 +130,7 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
                 {
                     if(listLoadedPlugins.at(indexPluginIndex).category!=PluginType_Languages)
                     {
-                        QString tempPath=listLoadedPlugins.at(indexPluginIndex).path+QStringLiteral("Languages")+QDir::separator()+LanguagesAvailableList.at(index).mainShortName+QDir::separator()+QStringLiteral("translation.qm");
+                        QString tempPath=listLoadedPlugins.at(indexPluginIndex).path+QStringLiteral("Languages")+FacilityEngine::separator()+LanguagesAvailableList.at(index).mainShortName+FacilityEngine::separator()+QStringLiteral("translation.qm");
                         if(QFile::exists(tempPath))
                             fileToLoad<<tempPath;
                     }

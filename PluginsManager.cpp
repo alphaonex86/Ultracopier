@@ -10,6 +10,8 @@
 #include <QFileInfo>
 
 #include "PluginsManager.h"
+#include "cpp11addition.h"
+#include "FacilityEngine.h"
 
 /// \brief Create the manager and load the defaults variables
 PluginsManager::PluginsManager()
@@ -89,7 +91,7 @@ void PluginsManager::run()
     regexp_to_dep_6=std::regex("[a-zA-Z0-9\\-]+-([0-9]+\\.)*[0-9]+");
 
     //load the path and plugins into the path
-    std::string separator=QString(QDir::separator()).toStdString();
+    const std::string &separator=FacilityEngine::separator();
     std::vector<std::string> readPath;
     readPath=ResourcesManager::resourcesManager->getReadPath();
     pluginsList.clear();
@@ -559,21 +561,26 @@ std::string PluginsManager::getPluginVersion(const std::string &pluginName) cons
     return "";
 }
 
-/// \brief To compare version
+/// \brief To compare version, \return true is case of error
 bool PluginsManager::compareVersion(const std::string &versionA,const std::string &sign,const std::string &versionB)
 {
-    std::vector<std::string> versionANumber=versionA.split(".");
-    std::vector<std::string> versionBNumber=versionB.split(".");
-    int index=0;
-    int defaultReturnValue=true;
+    std::vector<std::string> versionANumber=stringsplit(versionA,'.');
+    std::vector<std::string> versionBNumber=stringsplit(versionB,'.');
+    unsigned int index=0;
+    unsigned int defaultReturnValue=true;
     if(sign=="<")
         defaultReturnValue=false;
     if(sign==">")
         defaultReturnValue=false;
+    bool ok;
     while(index<versionANumber.size() && index<versionBNumber.size())
     {
-        unsigned int reaNumberA=versionANumber.at(index).toUInt();
-        unsigned int reaNumberB=versionBNumber.at(index).toUInt();
+        unsigned int reaNumberA=stringtouint8(versionANumber.at(index),&ok);
+        if(!ok)
+            return true;
+        unsigned int reaNumberB=stringtouint8(versionBNumber.at(index),&ok);
+        if(!ok)
+            return true;
         if(sign=="=" && reaNumberA!=reaNumberB)
             return false;
         if(sign=="<")
@@ -616,12 +623,12 @@ std::vector<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginT
 
 std::vector<PluginsAvailable> PluginsManager::getPlugins(bool withError) const
 {
-    QList<PluginsAvailable> list;
+    std::vector<PluginsAvailable> list;
     unsigned int index=0;
     while(index<pluginsList.size())
     {
         if(withError || pluginsList.at(index).errorString.empty())
-            list<<pluginsList.at(index);
+            list.push_back(pluginsList.at(index));
         index++;
     }
     return list;
@@ -630,7 +637,7 @@ std::vector<PluginsAvailable> PluginsManager::getPlugins(bool withError) const
 /// \brief show the information
 void PluginsManager::showInformation(const std::string &path)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     unsigned int index=0;
     while(index<pluginsList.size())
     {
@@ -648,7 +655,7 @@ void PluginsManager::showInformation(const std::string &path)
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("item not selected"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"item not selected");
 }
 
 void PluginsManager::showInformationDoubleClick()
@@ -795,7 +802,7 @@ void PluginsManager::decodingFinished()
                         if(writablePath!="")
                         {
                             QDir dir;
-                            QString finalPluginPath=writablePath+categoryFinal+QDir::separator()+tempPlugin.name+QDir::separator();
+                            QString finalPluginPath=writablePath+categoryFinal+FacilityEngine::separator()+tempPlugin.name+FacilityEngine::separator();
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"writablePath: \""+writablePath+"\"");
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"basePluginArchive: \""+basePluginArchive+"\"");
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"categoryFinal: \""+categoryFinal+"\"");
@@ -903,21 +910,21 @@ void PluginsManager::newAuthPath(const QString &path)
 #endif
 
 /// \brief transfor short plugin name into file name
-QString PluginsManager::getResolvedPluginName(const QString &name)
+std::string PluginsManager::getResolvedPluginName(const std::string &name)
 {
     #if defined(Q_OS_LINUX)
-        return QStringLiteral("lib")+name+QStringLiteral(".so");
+        return "lib"+name+".so";
     #elif defined(Q_OS_MAC)
         #if defined(QT_DEBUG)
-            return QStringLiteral("lib")+name+QStringLiteral("_debug.dylib");
+            return "lib"+name+"_debug.dylib";
         #else
-            return QStringLiteral("lib")+name+QStringLiteral(".dylib");
+            return "lib"+name+".dylib";
         #endif
     #elif defined(Q_OS_WIN32)
         #if defined(QT_DEBUG)
-            return name+QStringLiteral("d.dll");
+            return name+"d.dll";
         #else
-            return name+QStringLiteral(".dll");
+            return name+".dll";
         #endif
     #else
         #error "Platform not supported"

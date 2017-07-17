@@ -87,14 +87,14 @@ DebugEngine::DebugEngine()
             dir.cdUp();
             dir.cdUp();
             dir.cd("Data");
-            logFile.setFileName(dir.absolutePath()+QDir::separator()+"log.html");
-            lockFile.setFileName(dir.absolutePath()+QDir::separator()+"ultracopier.lock");
+            logFile.setFileName(dir.absolutePath()+FacilityEngine::separator()+"log.html");
+            lockFile.setFileName(dir.absolutePath()+FacilityEngine::separator()+"ultracopier.lock");
             fileNameIsLoaded=true;
         #else
             //Load the ultracopier path
             QDir dir(QCoreApplication::applicationDirPath());
-            logFile.setFileName(dir.absolutePath()+QDir::separator()+"log.html");
-            lockFile.setFileName(dir.absolutePath()+QDir::separator()+"ultracopier.lock");
+            logFile.setFileName(dir.absolutePath()+FacilityEngine::separator()+"log.html");
+            lockFile.setFileName(dir.absolutePath()+FacilityEngine::separator()+"ultracopier.lock");
             fileNameIsLoaded=true;
         #endif
     #else

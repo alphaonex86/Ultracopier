@@ -20,6 +20,16 @@ FacilityEngine::FacilityEngine()
     retranslate();
 }
 
+/// \brief separator native to the current OS
+std::string FacilityEngine::separator()
+{
+    #ifdef Q_OS_WIN32
+    return "\\";
+    #else
+    return "/";
+    #endif
+}
+
 /// \brief To force the text re-translation
 void FacilityEngine::retranslate()
 {

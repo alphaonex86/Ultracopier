@@ -10,6 +10,7 @@
 
 #include "cpp11addition.h"
 #include "ResourcesManager.h"
+#include "FacilityEngine.h"
 
 std::regex ResourcesManager::slashEnd;
 
@@ -118,7 +119,7 @@ std::string ResourcesManager::getFolderReadPathMultiple(const std::string &path,
     {
         QDir dir(QString::fromStdString(searchPath.at(index)+path));
         if(checkFolderContent(dir.absolutePath().toStdString(),fileToCheck))
-            return (dir.absolutePath()+QDir::separator()).toStdString();
+            return dir.absolutePath().toStdString()+FacilityEngine::separator();
         index++;
     }
     return std::string();
@@ -156,7 +157,7 @@ std::string ResourcesManager::AddSlashIfNeeded(const std::string &path)
     if(path.at(path.size()-1)=='/')
         return path;
     else
-        return path+QString(QDir::separator()).toStdString();
+        return path+FacilityEngine::separator();
 }
 
 /// \brief get the writable path

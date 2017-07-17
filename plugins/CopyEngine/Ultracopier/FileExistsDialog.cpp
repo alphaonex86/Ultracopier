@@ -146,7 +146,7 @@ void FileExistsDialog::on_SuggestNewName_clicked()
                 newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
-        destination=absolutePath+QDir::separator()+newFileName+suffix;
+        destination=absolutePath+FacilityEngine::separator()+newFileName+suffix;
         destinationInfo.setFile(destination);
         num++;
     }
