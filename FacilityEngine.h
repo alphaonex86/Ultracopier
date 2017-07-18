@@ -43,6 +43,8 @@ public:
     std::string ultimateUrl() const;
     /// \brief Return the software name
     std::string softwareName() const;
+    /// \brief separator native to the current OS
+    static std::string separator();
 
     static FacilityEngine facilityEngine;
 private:

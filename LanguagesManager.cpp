@@ -8,6 +8,7 @@
 
 #include "LanguagesManager.h"
 #include "FacilityEngine.h"
+#include "cpp11addition.h"
 
 /// \brief Create the manager and load the defaults variables
 LanguagesManager::LanguagesManager()
@@ -63,43 +64,43 @@ std::string LanguagesManager::getTheRightLanguage() const
     }
     else
     {
-        if(!OptionEngine::optionEngine->getOptionValue("Language","Language_force").toBool())
+        if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Language","Language_force")))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("language auto-detection, QLocale::system().name(): ")+QLocale::system().name()+QStringLiteral(", QLocale::languageToString(QLocale::system().language()): ")+QLocale::languageToString(QLocale::system().language()));
-            QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));
-            if(tempLanguage!=QStringLiteral(""))
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name().toStdString()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()).toStdString());
+            std::string tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()).toStdString());
+            if(!tempLanguage.empty())
                 return tempLanguage;
             else
             {
-                tempLanguage=getMainShortName(QLocale::system().name());
-                if(tempLanguage!=QStringLiteral(""))
+                tempLanguage=getMainShortName(QLocale::system().name().toStdString());
+                if(!tempLanguage.empty())
                     return tempLanguage;
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Autodetection of the language failed, QLocale::languageToString(QLocale::system().language()): ")+QLocale::languageToString(QLocale::system().language())+QStringLiteral(", QLocale::system().name(): ")+QLocale::system().name()+", failing back to english");
-                    return OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language")).toString();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Autodetection of the language failed, QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()).toStdString()+", QLocale::system().name(): "+QLocale::system().name().toStdString()+", failing back to english");
+                    return OptionEngine::optionEngine->getOptionValue("Language","Language");
                 }
             }
         }
         else
-            return OptionEngine::optionEngine->getOptionValue(QStringLiteral("Language"),QStringLiteral("Language")).toString();
+            return OptionEngine::optionEngine->getOptionValue("Language","Language");
     }
 }
 
 /* \brief To set the current language
 \param newLanguage Should be short name code found into informations.xml of language file */
-void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
+void LanguagesManager::setCurrentLanguage(const std::string &newLanguage)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+newLanguage);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+newLanguage);
     //protection for re-set the same language
     if(currentLanguage==newLanguage)
         return;
     //store the language
     PluginsManager::pluginsManager->setLanguage(newLanguage);
     //unload the old language
-    if(currentLanguage!=QStringLiteral("en"))
+    if(currentLanguage!="en")
     {
-        int indexTranslator=0;
+        unsigned int indexTranslator=0;
         while(indexTranslator<installedTranslator.size())
         {
             QCoreApplication::removeTranslator(installedTranslator.at(indexTranslator));
@@ -108,60 +109,60 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
         }
         installedTranslator.clear();
     }
-    int index=0;
+    unsigned int index=0;
     while(index<LanguagesAvailableList.size())
     {
         if(LanguagesAvailableList.at(index).mainShortName==newLanguage)
         {
             //load the new language
-            if(newLanguage!=QStringLiteral("en"))
+            if(newLanguage!="en")
             {
                 QTranslator *temp;
-                QStringList fileToLoad;
+                std::vector<std::string> fileToLoad;
                 //load the language main
-                if(newLanguage==QStringLiteral("en"))
-                    fileToLoad<<QStringLiteral(":/Languages/en/translation.qm");
+                if(newLanguage=="en")
+                    fileToLoad.push_back(":/Languages/en/translation.qm");
                 else
-                    fileToLoad<<LanguagesAvailableList.at(index).path+QStringLiteral("translation.qm");
+                    fileToLoad.push_back(LanguagesAvailableList.at(index).path+"translation.qm");
                 //load the language plugin
-                QList<PluginsAvailable> listLoadedPlugins=PluginsManager::pluginsManager->getPlugins();
-                int indexPluginIndex=0;
+                std::vector<PluginsAvailable> listLoadedPlugins=PluginsManager::pluginsManager->getPlugins();
+                unsigned int indexPluginIndex=0;
                 while(indexPluginIndex<listLoadedPlugins.size())
                 {
                     if(listLoadedPlugins.at(indexPluginIndex).category!=PluginType_Languages)
                     {
-                        QString tempPath=listLoadedPlugins.at(indexPluginIndex).path+QStringLiteral("Languages")+FacilityEngine::separator()+LanguagesAvailableList.at(index).mainShortName+FacilityEngine::separator()+QStringLiteral("translation.qm");
-                        if(QFile::exists(tempPath))
-                            fileToLoad<<tempPath;
+                        std::string tempPath=listLoadedPlugins.at(indexPluginIndex).path+"Languages"+FacilityEngine::separator()+LanguagesAvailableList.at(index).mainShortName+FacilityEngine::separator()+"translation.qm";
+                        if(QFile::exists(QString::fromStdString(tempPath)))
+                            fileToLoad.push_back(tempPath);
                     }
                     indexPluginIndex++;
                 }
-                int indexTranslationFile=0;
+                unsigned int indexTranslationFile=0;
                 while(indexTranslationFile<fileToLoad.size())
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Translation to load: ")+fileToLoad.at(indexTranslationFile));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Translation to load: "+fileToLoad.at(indexTranslationFile));
                     temp=new QTranslator();
-                    if(!temp->load(fileToLoad.at(indexTranslationFile)) || temp->isEmpty())
+                    if(!temp->load(QString::fromStdString(fileToLoad.at(indexTranslationFile))) || temp->isEmpty())
                     {
                         delete temp;
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to load the translation file: ")+fileToLoad.at(indexTranslationFile));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: "+fileToLoad.at(indexTranslationFile));
                     }
                     else
                     {
                         QCoreApplication::installTranslator(temp);
-                        installedTranslator<<temp;
+                        installedTranslator.push_back(temp);
                     }
                     indexTranslationFile++;
                 }
                 temp=new QTranslator();
-                if(temp->load(QString("qt_")+newLanguage, QLibraryInfo::location(QLibraryInfo::TranslationsPath)) && !temp->isEmpty())
+                if(temp->load(QString("qt_")+QString::fromStdString(newLanguage), QLibraryInfo::location(QLibraryInfo::TranslationsPath)) && !temp->isEmpty())
                 {
                     QCoreApplication::installTranslator(temp);
-                    installedTranslator<<temp;
+                    installedTranslator.push_back(temp);
                 }
                 else
                 {
-                    if(!temp->load(LanguagesAvailableList.at(index).path+QStringLiteral("qt.qm")) || temp->isEmpty())
+                    if(!temp->load(QString::fromStdString(LanguagesAvailableList.at(index).path)+"qt.qm") || temp->isEmpty())
                     {
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the translation file: qt.qm, into: "+LanguagesAvailableList.at(index).path);
                         delete temp;
@@ -169,30 +170,31 @@ void LanguagesManager::setCurrentLanguage(const QString &newLanguage)
                     else
                     {
                         QCoreApplication::installTranslator(temp);
-                        installedTranslator<<temp;
+                        installedTranslator.push_back(temp);
                     }
                 }
             }
             currentLanguage=newLanguage;
             FacilityEngine::facilityEngine.retranslate();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("emit newLanguageLoaded()"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newLanguageLoaded()");
             emit newLanguageLoaded(currentLanguage);
             return;
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to found language: "+newLanguage+", LanguagesAvailableList.size(): "+QString::number(LanguagesAvailableList.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to found language: "+newLanguage+", LanguagesAvailableList.size(): "+std::to_string(LanguagesAvailableList.size()));
 }
 
 /// \brief check if short name is found into language
-QString LanguagesManager::getMainShortName(const QString &shortName) const
+std::string LanguagesManager::getMainShortName(const std::string &shortName) const
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    unsigned int index=0;
     while(index<LanguagesAvailableList.size())
     {
-        if(LanguagesAvailableList.at(index).shortName.contains(shortName) || LanguagesAvailableList.at(index).fullName.contains(shortName))
-            return LanguagesAvailableList.at(index).mainShortName;
+        const LanguagesAvailable &languagesAvailable=LanguagesAvailableList.at(index);
+        if(languagesAvailable.shortName.find(shortName)!=languagesAvailable.shortName.cend() || languagesAvailable.fullName==shortName)
+            return languagesAvailable.mainShortName;
         index++;
     }
     return "";
@@ -201,60 +203,60 @@ QString LanguagesManager::getMainShortName(const QString &shortName) const
 /// \brief load the language in languagePath
 void LanguagesManager::allPluginIsLoaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     setCurrentLanguage(getTheRightLanguage());
 }
 
-const QString LanguagesManager::autodetectedLanguage() const
+const std::string LanguagesManager::autodetectedLanguage() const
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("language auto-detection, QLocale::system().name(): ")+QLocale::system().name()+QStringLiteral(", QLocale::languageToString(QLocale::system().language()): ")+QLocale::languageToString(QLocale::system().language()));
-    QString tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()));
-    if(tempLanguage!=QStringLiteral(""))
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"language auto-detection, QLocale::system().name(): "+QLocale::system().name().toStdString()+", QLocale::languageToString(QLocale::system().language()): "+QLocale::languageToString(QLocale::system().language()).toStdString());
+    std::string tempLanguage=getMainShortName(QLocale::languageToString(QLocale::system().language()).toStdString());
+    if(!tempLanguage.empty())
         return tempLanguage;
     else
     {
-        tempLanguage=getMainShortName(QLocale::system().name());
-        if(tempLanguage!=QStringLiteral(""))
+        tempLanguage=getMainShortName(QLocale::system().name().toStdString());
+        if(!tempLanguage.empty())
             return tempLanguage;
     }
-    return "";
+    return std::string();
 }
 
 void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_Languages)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QDomElement child = plugin.categorySpecific.firstChildElement(QStringLiteral("fullName"));
     LanguagesAvailable temp;
     if(!child.isNull() && child.isElement())
-        temp.fullName=child.text();
+        temp.fullName=child.text().toStdString();
     child = plugin.categorySpecific.firstChildElement(QStringLiteral("shortName"));
     while(!child.isNull())
     {
         if(child.isElement())
         {
             if(child.hasAttribute("mainCode") && child.attribute(QStringLiteral("mainCode"))==QStringLiteral("true"))
-                temp.mainShortName=child.text();
-            temp.shortName<<child.text();
+                temp.mainShortName=child.text().toStdString();
+            temp.shortName.insert(child.text().toStdString());
         }
         child = child.nextSiblingElement(QStringLiteral("shortName"));
     }
     temp.path=plugin.path;
-    if(temp.fullName.isEmpty())
+    if(temp.fullName.empty())
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"fullName empty for: "+plugin.path);
-    else if(temp.path.isEmpty())
+    else if(temp.path.empty())
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"path empty for: "+plugin.path);
-    else if(temp.mainShortName.isEmpty())
+    else if(temp.mainShortName.empty())
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"mainShortName empty for: "+plugin.path);
     else if(temp.shortName.size()<=0)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"temp.shortName.size()<=0 for: "+plugin.path);
-    else if(!QFile::exists(temp.path+QStringLiteral("flag.png")))
+    else if(!QFile::exists(QString::fromStdString(temp.path)+QStringLiteral("flag.png")))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flag file not found for: "+plugin.path);
-    else if(!QFile::exists(temp.path+QStringLiteral("translation.qm")) && temp.mainShortName!=QStringLiteral("en"))
+    else if(!QFile::exists(QString::fromStdString(temp.path)+QStringLiteral("translation.qm")) && temp.mainShortName!="en")
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"translation not found for: "+plugin.path);
     else
-        LanguagesAvailableList<<temp;
+        LanguagesAvailableList.push_back(temp);
     if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         setCurrentLanguage(getTheRightLanguage());
 }
@@ -262,7 +264,7 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<LanguagesAvailableList.size())
     {
@@ -275,11 +277,11 @@ void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 }
 #endif
 
-void LanguagesManager::newOptionValue(const QString &group)
+void LanguagesManager::newOptionValue(const std::string &group)
 {
-    if(group==QStringLiteral("Language"))
+    if(group=="Language")
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("group: ")+group);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"group: "+group);
         setCurrentLanguage(getTheRightLanguage());
     }
 }

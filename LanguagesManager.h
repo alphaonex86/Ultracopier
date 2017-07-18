@@ -15,6 +15,7 @@
 #include <QByteArray>
 #include <QCoreApplication>
 #include <QDir>
+#include <unordered_set>
 
 #include "Environment.h"
 #include "OptionEngine.h"
@@ -30,7 +31,7 @@ class LanguagesManager : public QObject
     //public:
     //	QString getMainShortName();
     public:
-        const QString autodetectedLanguage() const;
+        const std::string autodetectedLanguage() const;
         static LanguagesManager *languagesManager;
         /// \brief Create the manager and load the defaults variables
         LanguagesManager();
@@ -46,14 +47,14 @@ class LanguagesManager : public QObject
             std::string path;
             std::string fullName;
             std::string mainShortName;
-            std::vector<std::string> shortName;
+            std::unordered_set<std::string> shortName;
         };
         /// \brief To store the language path
         std::vector<std::string> languagePath;
         /// \brief To store the language detected
         std::vector<LanguagesAvailable> LanguagesAvailableList;
         /// \brief check if short name is found into language
-        std::string getMainShortName(const QString &shortName) const;
+        std::string getMainShortName(const std::string &shortName) const;
         /// \brief list of installed translator
         std::vector<QTranslator *> installedTranslator;
         std::string currentLanguage;
