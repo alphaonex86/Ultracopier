@@ -5,6 +5,7 @@
 
 #include "CopyListener.h"
 #include "LanguagesManager.h"
+#include "cpp11addition.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include "plugins/Listener/catchcopy-v0002/listener.h"
@@ -21,7 +22,7 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     //load the options
     tryListen=false;
     PluginsManager::pluginsManager->lockPluginListEdition();
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Listener);
+    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Listener);
     connect(this,&CopyListener::previouslyPluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,			this,&CopyListener::onePluginAdded,Qt::QueuedConnection);
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
@@ -35,7 +36,7 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     last_state=Ultracopier::NotListening;
     last_have_plugin=false;
     last_inWaitOfReply=false;
-    stripSeparatorRegex=QRegularExpression(QStringLiteral("[\\\\/]+$"));
+    stripSeparatorRegex=std::regex("[\\\\/]+$");
 }
 
 CopyListener::~CopyListener()
@@ -63,7 +64,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     if(plugin.category!=PluginType_Listener)
         return;
     PluginListener newPluginListener;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("try load: ")+plugin.path+PluginsManager::getResolvedPluginName("listener"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try load: "+plugin.path+PluginsManager::getResolvedPluginName("listener"));
     //setFileName
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     PluginInterface_Listener *listen;
@@ -118,7 +119,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     }
     newPluginListener.pluginLoader		= pluginOfPluginLoader;
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Plugin correctly loaded"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Plugin correctly loaded");
     #ifdef ULTRACOPIER_DEBUG
     connect(listen,&PluginInterface_Listener::debugInformation,this,&CopyListener::debugInformation,Qt::DirectConnection);
     #endif // ULTRACOPIER_DEBUG
@@ -130,32 +131,32 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     connect(listen,&PluginInterface_Listener::newClientList,                    this,&CopyListener::reloadClientList,Qt::DirectConnection);
     newPluginListener.listenInterface	= listen;
 
-    newPluginListener.path			= plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("listener"));
+    newPluginListener.path			= plugin.path+PluginsManager::getResolvedPluginName("listener");
     newPluginListener.state			= Ultracopier::NotListening;
     newPluginListener.inWaitOfReply		= false;
-    newPluginListener.options=new LocalPluginOptions(QStringLiteral("Listener-")+plugin.name);
+    newPluginListener.options=new LocalPluginOptions("Listener-"+plugin.name);
     newPluginListener.listenInterface->setResources(newPluginListener.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_Listener,plugin.name,newPluginListener.listenInterface->options());
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newPluginListener.listenInterface,&PluginInterface_Listener::newLanguageLoaded,Qt::DirectConnection);
-    pluginList << newPluginListener;
-    connect(pluginList.last().listenInterface,&PluginInterface_Listener::newState,this,&CopyListener::newState,Qt::DirectConnection);
+    pluginList.push_back(newPluginListener);
+    connect(pluginList.back().listenInterface,&PluginInterface_Listener::newState,this,&CopyListener::newState,Qt::DirectConnection);
     if(tryListen)
     {
-        pluginList.last().inWaitOfReply=true;
+        pluginList.back().inWaitOfReply=true;
         listen->listen();
     }
 }
 
 #ifdef ULTRACOPIER_DEBUG
-void CopyListener::debugInformation(const Ultracopier::DebugLevel &level, const QString& fonction, const QString& text, const QString& file, const int& ligne)
+void CopyListener::debugInformation(const Ultracopier::DebugLevel &level, const std::string& fonction, const std::string& text, const std::string& file, const int& ligne)
 {
-    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,QStringLiteral("Listener plugin"));
+    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Listener plugin");
 }
 #endif // ULTRACOPIER_DEBUG
 
-void CopyListener::error(const QString &error)
+void CopyListener::error(const std::string &error)
 {
-    QMessageBox::critical(NULL,tr("Error"),tr("Error during the reception of the copy/move list\n%1").arg(error));
+    QMessageBox::critical(NULL,tr("Error"),tr("Error during the reception of the copy/move list\n%1").arg(QString::fromStdString(error)));
 }
 
 bool CopyListener::oneListenerIsLoaded()
@@ -171,7 +172,7 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     int indexPlugin=0;
     while(indexPlugin<pluginList.size())
     {
-        if((plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("listener")))==pluginList.at(indexPlugin).path)
+        if((plugin.path+PluginsManager::getResolvedPluginName("listener"))==pluginList.at(indexPlugin).path)
         {
             int index=0;
             while(index<copyRunningList.size())
@@ -204,34 +205,34 @@ void CopyListener::newState(const Ultracopier::ListeningState &state)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     PluginInterface_Listener *temp=qobject_cast<PluginInterface_Listener *>(QObject::sender());
     if(temp==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("listener not located!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"listener not located!");
         return;
     }
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(temp==pluginList.at(index).listenInterface)
         {
             pluginList[index].state=state;
             pluginList[index].inWaitOfReply=false;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("new state for the plugin %1: %2").arg(index).arg(state));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new state for the plugin "+std::to_string(index)+": "+std::to_string((int)state));
             sendState(true);
             return;
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("listener not found!"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"listener not found!");
 }
 
 void CopyListener::listen()
 {
     tryListen=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         pluginList[index].inWaitOfReply=true;
@@ -244,11 +245,11 @@ void CopyListener::listen()
 
 void CopyListener::close()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     tryListen=false;
     if(pluginLoader!=NULL)
         pluginLoader->unload();
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         pluginList[index].inWaitOfReply=true;
@@ -258,49 +259,57 @@ void CopyListener::close()
     copyRunningList.clear();
 }
 
-QStringList CopyListener::stripSeparator(QStringList sources)
+std::vector<std::string> CopyListener::stripSeparator(std::vector<std::string> sources)
 {
-    int index=0;
+    unsigned int index=0;
     while(index<sources.size())
     {
-        sources[index].remove(stripSeparatorRegex);
+        std::regex_replace(sources[index],stripSeparatorRegex,"");
         index++;
     }
     return sources;
 }
 
 /** new copy without destination have been pased by the CLI */
-void CopyListener::copyWithoutDestination(QStringList sources)
+void CopyListener::copyWithoutDestination(std::vector<std::string> sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    emit newCopyWithoutDestination(incrementOrderId(),QStringList() << QStringLiteral("file"),stripSeparator(sources));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    std::vector<std::string> list;
+    list.push_back("file");
+    emit newCopyWithoutDestination(incrementOrderId(),list,stripSeparator(sources));
 }
 
 /** new copy with destination have been pased by the CLI */
-void CopyListener::copy(QStringList sources,QString destination)
+void CopyListener::copy(std::vector<std::string> sources,std::string destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    emit newCopy(incrementOrderId(),QStringList() << QStringLiteral("file"),stripSeparator(sources),QStringLiteral("file"),destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    std::vector<std::string> list;
+    list.push_back("file");
+    emit newCopy(incrementOrderId(),list,stripSeparator(sources),"file",destination);
 }
 
 /** new move without destination have been pased by the CLI */
-void CopyListener::moveWithoutDestination(QStringList sources)
+void CopyListener::moveWithoutDestination(std::vector<std::string> sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    emit newMoveWithoutDestination(incrementOrderId(),QStringList() << QStringLiteral("file"),stripSeparator(sources));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    std::vector<std::string> list;
+    list.push_back("file");
+    emit newMoveWithoutDestination(incrementOrderId(),list,stripSeparator(sources));
 }
 
 /** new move with destination have been pased by the CLI */
-void CopyListener::move(QStringList sources,QString destination)
+void CopyListener::move(std::vector<std::string> sources,std::string destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    emit newMove(incrementOrderId(),QStringList() << QStringLiteral("file"),stripSeparator(sources),QStringLiteral("file"),destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    std::vector<std::string> list;
+    list.push_back("file");
+    emit newMove(incrementOrderId(),list,stripSeparator(sources),"file",destination);
 }
 
 void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    unsigned int index=0;
     while(index<copyRunningList.size())
     {
         if(orderId==copyRunningList.at(index).orderId)
@@ -315,9 +324,9 @@ void CopyListener::copyFinished(const quint32 & orderId,const bool &withError)
     }
 }
 
-void CopyListener::copyCanceled(const quint32 & orderId)
+void CopyListener::copyCanceled(const uint32_t & orderId)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<copyRunningList.size())
     {
@@ -333,55 +342,55 @@ void CopyListener::copyCanceled(const quint32 & orderId)
     }
 }
 
-void CopyListener::newPluginCopyWithoutDestination(const quint32 &orderId,const QStringList &sources)
+void CopyListener::newPluginCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("sources: ")+sources.join(QStringLiteral(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+sources.join(";"));
     PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
     CopyRunning newCopyInformation;
     newCopyInformation.listenInterface	= plugin;
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList << newCopyInformation;
-    emit newCopyWithoutDestination(orderId,QStringList() << QStringLiteral("file"),stripSeparator(sources));
+    emit newCopyWithoutDestination(orderId,std::vector<std::string>().push_back("file"),stripSeparator(sources));
 }
 
-void CopyListener::newPluginCopy(const quint32 &orderId,const QStringList &sources,const QString &destination)
+void CopyListener::newPluginCopy(const quint32 &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("sources: ")+sources.join(QStringLiteral(";"))+QStringLiteral(", destination: ")+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+sources.join(";")+", destination: "+destination);
     PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
     CopyRunning newCopyInformation;
     newCopyInformation.listenInterface	= plugin;
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList << newCopyInformation;
-    emit newCopy(orderId,QStringList() << QStringLiteral("file"),stripSeparator(sources),QStringLiteral("file"),destination);
+    emit newCopy(orderId,std::vector<std::string>().push_back("file"),stripSeparator(sources),"file",destination);
 }
 
-void CopyListener::newPluginMoveWithoutDestination(const quint32 &orderId,const QStringList &sources)
+void CopyListener::newPluginMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("sources: ")+sources.join(QStringLiteral(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sources: "+sources.join(";"));
     PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
     CopyRunning newCopyInformation;
     newCopyInformation.listenInterface	= plugin;
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList << newCopyInformation;
-    emit newMoveWithoutDestination(orderId,QStringList() << QStringLiteral("file"),stripSeparator(sources));
+    emit newMoveWithoutDestination(orderId,std::vector<std::string>().push_back("file"),stripSeparator(sources));
 }
 
-void CopyListener::newPluginMove(const quint32 &orderId,const QStringList &sources,const QString &destination)
+void CopyListener::newPluginMove(const quint32 &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("sources: ")+sources.join(";")+QStringLiteral(", destination: ")+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("sources: ")+sources.join(";")+", destination: "+destination);
     PluginInterface_Listener *plugin		= qobject_cast<PluginInterface_Listener *>(sender());
     CopyRunning newCopyInformation;
     newCopyInformation.listenInterface	= plugin;
     newCopyInformation.pluginOrderId	= orderId;
     newCopyInformation.orderId		= incrementOrderId();
     copyRunningList << newCopyInformation;
-    emit newMove(orderId,QStringList() << QStringLiteral("file"),stripSeparator(sources),QStringLiteral("file"),destination);
+    emit newMove(orderId,std::vector<std::string>().push_back("file"),stripSeparator(sources),"file",destination);
 }
 
-quint32 CopyListener::incrementOrderId()
+uint32_t CopyListener::incrementOrderId()
 {
     do
     {
@@ -394,7 +403,7 @@ quint32 CopyListener::incrementOrderId()
 
 void CopyListener::allPluginIsloaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("with value: ")+QString::number(pluginList.size()>0));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"with value: "+std::to_string(pluginList.size()>0));
     sendState(true);
     reloadClientList();
 }
@@ -403,14 +412,14 @@ void CopyListener::reloadClientList()
 {
     if(!PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         return;
-    QStringList clients;
+    std::vector<std::string> clients;
     int indexPlugin=0;
     while(indexPlugin<pluginList.size())
     {
         if(pluginList.at(indexPlugin).listenInterface!=NULL)
         {
             clients << pluginList.at(indexPlugin).listenInterface->clientsList();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ask client to: ")+pluginList.at(indexPlugin).path);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ask client to: "+pluginList.at(indexPlugin).path);
         }
         indexPlugin++;
     }
@@ -421,7 +430,7 @@ void CopyListener::sendState(bool force)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, pluginList.size(): %1, force: %2").arg(pluginList.size()).arg(force));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, pluginList.size(): "+std::to_string(pluginList.size())+", force: "+std::to_string(force));
     Ultracopier::ListeningState current_state=Ultracopier::NotListening;
     bool found_not_listen=false,found_listen=false,found_inWaitOfReply=false;
     int index=0;
@@ -454,11 +463,11 @@ void CopyListener::sendState(bool force)
     bool have_plugin=pluginList.size()>0;
     if(force || current_state!=last_state || have_plugin!=last_have_plugin || found_inWaitOfReply!=last_inWaitOfReply)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("send listenerReady(%1,%2,%3)").arg(current_state).arg(have_plugin).arg(found_inWaitOfReply));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"send listenerReady("+std::to_string(current_state)+","+std::to_string(have_plugin)+","+std::to_string(found_inWaitOfReply)+")");
         emit listenerReady(current_state,have_plugin,found_inWaitOfReply);
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Skip the signal sending"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Skip the signal sending");
     last_state=current_state;
     last_have_plugin=have_plugin;
     last_inWaitOfReply=found_inWaitOfReply;

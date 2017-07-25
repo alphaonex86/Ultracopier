@@ -89,12 +89,13 @@ std::string PluginInformation::getInformationText(const PluginsAvailable &plugin
     unsigned int index=0;
     while(index<plugin.informations.size())
     {
-        if(plugin.informations.at(index).size()==2 && plugin.informations.at(index).first()==informationName)
-            return plugin.informations.at(index).last();
+        const std::vector<std::string> &information=plugin.informations.at(index);
+        if(information.size()==2 && information.front()==informationName)
+            return information.back();
         index++;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"information not found: "+informationName+", for: "+plugin.name+", cat: "+categoryToTranslation(plugin.category));
-    return std::string;
+    return std::string();
 }
 
 /// \brief get translated text
@@ -104,14 +105,15 @@ std::string PluginInformation::getTranslatedText(const PluginsAvailable &plugin,
     std::string TextFound;
     while(index<plugin.informations.size())
     {
-        if(plugin.informations.at(index).size()==3)
+        const std::vector<std::string> &information=plugin.informations.at(index);
+        if(information.size()==3)
         {
-            if(plugin.informations.at(index).first()==informationName)
+            if(information.front()==informationName)
             {
-                if(plugin.informations.at(index).at(1)==mainShortName)
-                    return plugin.informations.at(index).last();
-                else if(plugin.informations.at(index).at(1)=="en")
-                    TextFound=plugin.informations.at(index).last();
+                if(information.at(1)==mainShortName)
+                    return information.back();
+                else if(information.at(1)=="en")
+                    TextFound=information.back();
 
             }
         }

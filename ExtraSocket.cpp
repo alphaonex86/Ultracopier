@@ -7,18 +7,18 @@
 #include <QByteArray>
 #include <stdio.h>
 
-QString ExtraSocket::pathSocket(const QString &name)
+std::string ExtraSocket::pathSocket(const std::string &name)
 {
 #ifdef Q_OS_UNIX
-    return name+QStringLiteral("-")+QString::number(getuid());
+    return name+"-"+std::to_string(getuid());
 #else
-    QString userName;
+    std::string userName;
 
     /* bad way for catchcopy compatibility
     char uname[1024];
     DWORD len=1023;
     if(GetUserNameA(uname, &len)!=FALSE)
-        userName=QString::fromLatin1(toHex(uname));*/
+        userName=toHex(uname);*/
 
     QChar charTemp;
     DWORD size=255;
@@ -37,7 +37,7 @@ QString ExtraSocket::pathSocket(const QString &name)
         userName=tempArray.toHex();
     }
     delete userNameW;
-    return name+QStringLiteral("-")+userName;
+    return name+"-"+userName;
 #endif
 }
 

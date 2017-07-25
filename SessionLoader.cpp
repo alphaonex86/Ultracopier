@@ -5,11 +5,12 @@
 
 #include "SessionLoader.h"
 #include "LanguagesManager.h"
+#include "cpp11addition.h"
 
 #ifndef ULTRACOPIER_VERSION_PORTABLE
 SessionLoader::SessionLoader(OptionDialog *optionDialog)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->optionDialog=optionDialog;
     //load the options
     connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,	this,	&SessionLoader::newOptionValue,Qt::QueuedConnection);
@@ -20,11 +21,11 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,	this,&SessionLoader::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader);
+    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_SessionLoader);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();
-    shouldEnabled=OptionEngine::optionEngine->getOptionValue(QStringLiteral("SessionLoader"),QStringLiteral("LoadAtSessionStarting")).toBool();
+    shouldEnabled=stringtobool(OptionEngine::optionEngine->getOptionValue("SessionLoader","LoadAtSessionStarting"));
 }
 
 SessionLoader::~SessionLoader()
@@ -147,13 +148,13 @@ void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 }
 #endif
 
-void SessionLoader::newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
+void SessionLoader::newOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value)
 {
-    if(groupName==QStringLiteral("SessionLoader") && variableName==QStringLiteral("LoadAtSessionStarting"))
+    if(groupName=="SessionLoader" && variableName=="LoadAtSessionStarting")
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, value: %1").arg(value.toBool()));
-        shouldEnabled=value.toBool();
-        int index=0;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, value: "+value);
+        shouldEnabled=stringtobool(value);
+        unsigned int index=0;
         while(index<pluginList.size())
         {
             pluginList.at(index).sessionLoaderInterface->setEnabled(shouldEnabled);
@@ -163,9 +164,9 @@ void SessionLoader::newOptionValue(const QString &groupName,const QString &varia
 }
 
 #ifdef ULTRACOPIER_DEBUG
-void SessionLoader::debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
+void SessionLoader::debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne)
 {
-    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,QStringLiteral("Session loader plugin"));
+    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Session loader plugin");
 }
 #endif // ULTRACOPIER_DEBUG
 #endif // !defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || !defined(ULTRACOPIER_VERSION_PORTABLE)
