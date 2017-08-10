@@ -24,7 +24,7 @@ CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,		this,&CopyEngineManager::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
     connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&CopyEngineManager::allPluginIsloaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_CopyEngine);
+    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_CopyEngine);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();
@@ -37,7 +37,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     if(plugin.category!=PluginType_CopyEngine)
         return;
     //setFileName
-    QString pluginPath=plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("copyEngine"));
+    std::string pluginPath=plugin.path+PluginsManager::getResolvedPluginName("copyEngine");
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     /*more IO
     if(!QFile(pluginPath).exists())
@@ -46,14 +46,14 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
         return;
     }*/
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+pluginPath);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+pluginPath);
     //search into loaded session
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(pluginList.at(index).pluginPath==pluginPath)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("Engine already found!"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Engine already found!");
             return;
         }
         index++;
@@ -117,7 +117,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     #ifdef ULTRACOPIER_DEBUG
     connect(newItem.factory,&PluginInterface_CopyEngineFactory::debugInformation,this,&CopyEngineManager::debugInformation,Qt::QueuedConnection);
     #endif // ULTRACOPIER_DEBUG
-    newItem.options=new LocalPluginOptions(QStringLiteral("CopyEngine-")+newItem.name);
+    newItem.options=new LocalPluginOptions("CopyEngine-"+newItem.name);
     newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,&FacilityEngine::facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     newItem.optionsWidget=newItem.factory->options();
     newItem.supportedProtocolsForTheSource=newItem.factory->supportedProtocolsForTheSource();
@@ -126,9 +126,9 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     newItem.type=newItem.factory->getCopyType();
     newItem.transferListOperation=newItem.factory->getTransferListOperation();
     optionDialog->addPluginOptionWidget(PluginType_CopyEngine,newItem.name,newItem.optionsWidget);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("plugin: ")+newItem.name+QStringLiteral(" loaded, send options"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"plugin: "+newItem.name+" loaded, send options");
     //emit newCopyEngineOptions(plugin.path,newItem.name,newItem.optionsWidget);
-    pluginList << newItem;
+    pluginList.push_back(newItem);
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newItem.factory,&PluginInterface_CopyEngineFactory::newLanguageLoaded);
     if(PluginsManager::pluginsManager->allPluginHaveBeenLoaded())
         allPluginIsloaded();
@@ -176,15 +176,15 @@ void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
 }
 #endif
 
-CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultracopier::CopyMode &mode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
+CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultracopier::CopyMode &mode,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, pluginList.size(): %1, mode: %2, and particular protocol").arg(pluginList.size()).arg((int)mode));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, pluginList.size(): "+std::to_string(pluginList.size())+", mode: "+std::to_string((int)mode)+", and particular protocol");
     returnCopyEngine temp;
-    int index=0;
+    unsigned int index=0;
     bool isTheGoodEngine=false;
     while(index<pluginList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("pluginList.at(%1).name: %2").arg(index).arg(pluginList.at(index).name));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pluginList.at("+std::to_string(index)+").name: "+pluginList.at(index).name);
         isTheGoodEngine=false;
         if(mode!=Ultracopier::Move || !pluginList.at(index).canDoOnlyCopy)
         {

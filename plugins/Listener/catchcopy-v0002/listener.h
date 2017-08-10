@@ -6,7 +6,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <QString>
+#include <string>
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include <QtPlugin>
 #endif
@@ -30,30 +30,30 @@ public:
     /// \brief stop listen to copy/move
     void close();
     /// \brief return the error strong
-    const QString errorString() const;
+    const std::string errorString() const;
     /// \brief set resources for this plugins
-    void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
+    void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,const bool &portableVersion);
     /// \brief to get the options widget, NULL if not have
     QWidget * options();
     /// \brief to get a client list
-    QStringList clientsList() const;
+    std::vector<std::string> clientsList() const;
 public slots:
     /// \brief say to the client that's the copy/move is finished
-    void transferFinished(const quint32 &orderId,const bool &withError);
+    void transferFinished(const uint32_t &orderId,const bool &withError);
     /// \brief say to the client that's the copy/move is finished
-    void transferCanceled(const quint32 &orderId);
+    void transferCanceled(const uint32_t &orderId);
     /// \brief to reload the translation, because the new language have been loaded
     void newLanguageLoaded();
 private:
     ServerCatchcopy server;
 private slots:
-    void errorInternal(const QString &string);
-    void communicationErrorInternal(const QString &string);
-    void clientName(quint32 client,QString name);
-    void copyWithoutDestination(const quint32 &orderId,const QStringList &sources);
-    void copy(const quint32 &orderId,const QStringList &sources,const QString &destination);
-    void moveWithoutDestination(const quint32 &orderId,const QStringList &sources);
-    void move(const quint32 &orderId,const QStringList &sources,const QString &destination);
+    void errorInternal(const std::string &string);
+    void communicationErrorInternal(const std::string &string);
+    void clientName(uint32_t client,std::string name);
+    void copyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources);
+    void copy(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination);
+    void moveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources);
+    void move(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination);
 };
 
 #endif // SERVER_H

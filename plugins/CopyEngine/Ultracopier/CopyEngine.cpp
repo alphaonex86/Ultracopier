@@ -519,7 +519,7 @@ void CopyEngine::newTransferList(const QString &file)
 }
 
 //because direct access to list thread into the main thread can't be do
-quint64 CopyEngine::realByteTransfered()
+uint64_t CopyEngine::realByteTransfered()
 {
     return size_for_speed;
 }

@@ -32,12 +32,12 @@ void Listener::close()
     emit newState(Ultracopier::NotListening);
 }
 
-const QString Listener::errorString() const
+const std::string Listener::errorString() const
 {
     return server.errorString();
 }
 
-void Listener::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
+void Listener::setResources(OptionInterface * options, const std::string &writePath, const std::string &pluginPath, const bool &portableVersion)
 {
     Q_UNUSED(options);
     Q_UNUSED(writePath);
@@ -52,18 +52,18 @@ QWidget * Listener::options()
 }
 
 /// \brief to get a client list
-QStringList Listener::clientsList() const
+std::vector<std::string> Listener::clientsList() const
 {
     return server.clientsList();
 }
 
-void Listener::transferFinished(const quint32 &orderId,const bool &withError)
+void Listener::transferFinished(const uint32_t &orderId, const bool &withError)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+QString::number(orderId)+", withError: "+QString::number(withError));
     server.copyFinished(orderId,withError);
 }
 
-void Listener::transferCanceled(const quint32 &orderId)
+void Listener::transferCanceled(const uint32_t &orderId)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+QString::number(orderId));
     server.copyCanceled(orderId);

@@ -61,8 +61,8 @@ std::string FSabsolutePath(const std::string &string);
 uint64_t msFrom1970();
 uint64_t sFrom1970();
 
-template <class T, class U>
-int vectorindexOf(const std::vector<T> &list,const U &item)
+template <class T>
+int vectorindexOf(const std::vector<T> &list,const T &item)
 {
     const auto &r=std::find(list.cbegin(),list.cend(),item);
     if(r==list.cend())
@@ -71,8 +71,8 @@ int vectorindexOf(const std::vector<T> &list,const U &item)
         return std::distance(list.cbegin(),r);
 }
 
-template <class T, class U>
-bool vectorremoveOne(std::vector<T> &list,const U &item)
+template <class T>
+bool vectorremoveOne(std::vector<T> &list,const T &item)
 {
     const auto &r=std::find(list.cbegin(),list.cend(),item);
     if(r==list.cend())
@@ -86,8 +86,8 @@ bool vectorremoveOne(std::vector<T> &list,const U &item)
     }
 }
 
-template <class T, class U>
-bool vectorcontainsAtLeastOne(const std::vector<T> &list,const U &item)
+template <class T>
+bool vectorcontainsAtLeastOne(const std::vector<T> &list,const T &item)
 {
     const auto &r=std::find(list.cbegin(),list.cend(),item);
     if(r==list.cend())
@@ -96,8 +96,8 @@ bool vectorcontainsAtLeastOne(const std::vector<T> &list,const U &item)
         return true;
 }
 
-template <class T, class U>
-unsigned int vectorcontainsCount(const std::vector<T> &list,const U &item)
+template <class T>
+unsigned int vectorcontainsCount(const std::vector<T> &list,const T &item)
 {
     return std::count(list.cbegin(), list.cend(), item);
 }
@@ -156,6 +156,24 @@ unsigned int vectorRemoveDuplicatesForBigList(std::vector<T> &list)
     std::unordered_set<T> s(list.cbegin(),list.cend());
     const unsigned int removedEntryNumber=list.size()-s.size();
     list=std::vector<T>(s.cbegin(),s.cend());
+    return removedEntryNumber;
+}
+
+template <class T>
+unsigned int vectorRemoveAll(std::vector<T> &list,const T &item)
+{
+    unsigned int removedEntryNumber=0;
+    unsigned int index=0;
+    while(index<list.size())
+    {
+        if(list.at(index)==item)
+        {
+            removedEntryNumber++;
+            list.erase(list.cbegin()+index);
+        }
+        else
+            index++;
+    }
     return removedEntryNumber;
 }
 

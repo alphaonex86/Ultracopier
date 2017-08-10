@@ -52,7 +52,7 @@ public:
     /// \brief to return the instance of the copy engine
     PluginInterface_CopyEngine * getInstance();
     /// \brief set the resources, to store options, to have facilityInterface
-    void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
+    void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
     //get mode allowed
     /// \brief define if can copy file, folder or both
     Ultracopier::CopyType getCopyType();
@@ -61,9 +61,9 @@ public:
     /// \brief define if can only copy, or copy and move
     bool canDoOnlyCopy() const;
     /// \brief to get the supported protocols for the source
-    QStringList supportedProtocolsForTheSource() const;
+    std::vector<std::string> supportedProtocolsForTheSource() const;
     /// \brief to get the supported protocols for the destination
-    QStringList supportedProtocolsForTheDestination() const;
+    std::vector<std::string> supportedProtocolsForTheDestination() const;
     /// \brief to get the options of the copy engine
     QWidget * options();
 
@@ -77,8 +77,8 @@ private:
     RenamingRules *renamingRules;
     QStorageInfo storageInfo;
     QTimer lunchInitFunction;
-    QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
-    QString firstRenamingRule,otherRenamingRule;
+    std::vector<std::string> includeStrings,includeOptions,excludeStrings,excludeOptions;
+    std::string firstRenamingRule,otherRenamingRule;
 
 #if defined(Q_OS_WIN32) || (defined(Q_OS_LINUX) && defined(_SC_PHYS_PAGES))
     static size_t getTotalSystemMemory();
@@ -100,14 +100,15 @@ private slots:
     void setTransferAlgorithm(int index);
     void setCheckDestinationFolder();
     void showFilterDialog();
-    void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions);
+    void sendNewFilters(const std::vector<std::string> &includeStrings,const std::vector<std::string> &includeOptions,
+                        const std::vector<std::string> &excludeStrings,const std::vector<std::string> &excludeOptions);
     void doChecksum_toggled(bool);
     void checksumOnlyOnError_toggled(bool);
     void osBuffer_toggled(bool);
     void osBufferLimited_toggled(bool);
     void osBufferLimit_editingFinished();
     void checksumIgnoreIfImpossible_toggled(bool);
-    void sendNewRenamingRules(const QString &firstRenamingRule, const QString &otherRenamingRule);
+    void sendNewRenamingRules(const std::string &firstRenamingRule, const std::string &otherRenamingRule);
     void showRenamingRules();
     void updateBufferCheckbox();
     void setFileCollision(int index);

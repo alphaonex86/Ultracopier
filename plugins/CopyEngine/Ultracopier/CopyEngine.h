@@ -6,7 +6,8 @@
 #include <QWidget>
 #include <QObject>
 #include <QList>
-#include <QStringList>
+#include <vector>
+#include <string>
 #include <QFileInfo>
 #include <QFile>
 #include <QFileDialog>
@@ -55,7 +56,7 @@ private:
     Filters *               filters;
     RenamingRules *			renamingRules;
     FacilityInterface *		facilityEngine;
-    quint32                 maxSpeed;
+    uint32_t                 maxSpeed;
     bool                    doRightTransfer;
     bool                    keepDate;
     int                     blockSize;
@@ -79,7 +80,7 @@ private:
     TransferAlgorithm       transferAlgorithm;
     bool                    dialogIsOpen;
     volatile bool			stopIt;
-    QString                 defaultDestinationFolder;
+    std::string                 defaultDestinationFolder;
     /// \brief error queue
     struct errorQueueItem
     {
@@ -88,10 +89,10 @@ private:
         bool mkPath;
         bool rmPath;
         QFileInfo inode;
-        QString errorString;
+        std::string errorString;
         ErrorType errorType;
     };
-    QList<errorQueueItem> errorQueue;
+    std::vector<errorQueueItem> errorQueue;
     /// \brief already exists queue
     struct alreadyExistsQueueItem
     {
@@ -101,8 +102,8 @@ private:
         QFileInfo destination;
         bool isSame;
     };
-    QList<alreadyExistsQueueItem> alreadyExistsQueue;
-    quint64 size_for_speed;//because direct access to list thread into the main thread can't be do
+    std::vector<alreadyExistsQueueItem> alreadyExistsQueue;
+    uint64_t size_for_speed;//because direct access to list thread into the main thread can't be do
     Ultracopier::CopyMode			mode;
     bool				forcedMode;
 
@@ -113,9 +114,9 @@ private:
     bool osBufferLimited;
     bool checkDiskSpace;
     unsigned int osBufferLimit;
-    QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
-    QString firstRenamingRule;
-    QString otherRenamingRule;
+    std::vector<std::string> includeStrings,includeOptions,excludeStrings,excludeOptions;
+    std::string firstRenamingRule;
+    std::string otherRenamingRule;
 
     //send action done timer
     QTimer timerActionDone;
@@ -126,7 +127,7 @@ private:
     int putAtBottom;//to keep how many automatic put at bottom have been used
 private slots:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    void updateTheDebugInfo(const QStringList &newList, const QStringList &newList2, const int &numberOfInodeOperation);
+    void updateTheDebugInfo(const std::vector<std::string> &newList, const std::vector<std::string> &newList2, const int &numberOfInodeOperation);
     #endif
 
     /************* External  call ********************/
@@ -134,13 +135,13 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFileSlot(QFileInfo fileInfo, QString errorString, TransferThread * thread, const ErrorType &errorType);
+    void errorOnFileSlot(QFileInfo fileInfo, std::string errorString, TransferThread * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolderSlot(QFileInfo fileInfo, QString errorString, ScanFileOrFolder * thread, ErrorType errorType);
+    void errorOnFolderSlot(QFileInfo fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType);
     //mkpath event
-    void mkPathErrorOnFolderSlot(QFileInfo, QString, ErrorType errorType);
+    void mkPathErrorOnFolderSlot(QFileInfo, std::string, ErrorType errorType);
 
     //dialog message
     /// \note Can be call without queue because all call will be serialized
@@ -152,7 +153,7 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread, ErrorType errorType,bool isCalledByShowOneNewDialog=false);
     //mkpath event
-    void mkPathErrorOnFolder(QFileInfo, QString, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
+    void mkPathErrorOnFolder(QFileInfo, std::string, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
 
     //show one new dialog if needed
     void showOneNewDialog();
@@ -165,14 +166,14 @@ private slots:
     void osBufferLimited_toggled(bool);
     void osBufferLimit_editingFinished();
     void showFilterDialog();
-    void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule);
     void showRenamingRules();
     void get_realBytesTransfered(quint64 realBytesTransfered);
     void newActionInProgess(Ultracopier::EngineActionInProgress);
     void updatedBlockSize();
     void updateBufferCheckbox();
-    void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread, const ErrorType &errorType);
-    void missingDiskSpace(QList<Diskspace> list);
+    void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const std::string &errorString, TransferThread *thread, const ErrorType &errorType);
+    void missingDiskSpace(std::vector<Diskspace> list);
     void exportErrorIntoTransferList();
 public:
     /** \brief to send the options panel
@@ -186,37 +187,37 @@ public:
     /** \brief compare the current sources of the copy, with the passed arguments
      * \param sources the sources list to compares with the current sources list
      * \return true if have same sources, else false (or empty) */
-    bool haveSameSource(const QStringList &sources);
+    bool haveSameSource(const std::vector<std::string> &sources);
     /** \brief compare the current destination of the copy, with the passed arguments
      * \param destination the destination to compares with the current destination
      * \return true if have same destination, else false (or empty) */
-    bool haveSameDestination(const QString &destination);
+    bool haveSameDestination(const std::string &destination);
     //external soft like file browser have send copy/move list to do
     /** \brief send copy without destination, ask the destination
      * \param sources the sources list to copy
      * \return true if the copy have been accepted */
-    bool newCopy(const QStringList &sources);
+    bool newCopy(const std::vector<std::string> &sources);
     /** \brief send copy with destination
      * \param sources the sources list to copy
      * \param destination the destination to copy
      * \return true if the copy have been accepted */
-    bool newCopy(const QStringList &sources,const QString &destination);
+    bool newCopy(const std::vector<std::string> &sources,const std::string &destination);
     /** \brief send move without destination, ask the destination
      * \param sources the sources list to move
      * \return true if the move have been accepted */
-    bool newMove(const QStringList &sources);
+    bool newMove(const std::vector<std::string> &sources);
     /** \brief send move without destination, ask the destination
      * \param sources the sources list to move
      * \param destination the destination to move
      * \return true if the move have been accepted */
-    bool newMove(const QStringList &sources,const QString &destination);
+    bool newMove(const std::vector<std::string> &sources,const std::string &destination);
     /** \brief send the new transfer list
      * \param file the transfer list */
-    void newTransferList(const QString &file);
+    void newTransferList(const std::string &file);
 
     /** \brief to get byte read, use by Ultracopier for the speed calculation
      * real size transfered to right speed calculation */
-    quint64 realByteTransfered();
+    uint64_t realByteTransfered();
     /** \brief support speed limitation */
     bool supportSpeedLimitation() const;
 
@@ -233,13 +234,13 @@ public:
     void set_osBuffer(bool osBuffer);
     void set_osBufferLimited(bool osBufferLimited);
     void set_osBufferLimit(unsigned int osBufferLimit);
-    void set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
-    void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void set_setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions);
+    void setRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     void setRsync(const bool rsync);
     #endif
     void setCheckDiskSpace(const bool &checkDiskSpace);
-    void setDefaultDestinationFolder(const QString &defaultDestinationFolder);
+    void setDefaultDestinationFolder(const std::string &defaultDestinationFolder);
     void setCopyListOrder(const bool &order);
     void defaultDestinationFolderBrowse();
     QString askDestination();
@@ -258,25 +259,25 @@ public slots:
     void resume();
     /** \brief skip one transfer entry
      * \param id id of the file to remove */
-    void skip(const quint64 &id);
+    void skip(const uint64_t &id);
     /// \brief cancel all the transfer
     void cancel();
     //edit the transfer list
     /** \brief remove the selected item
      * \param ids ids is the id list of the selected items */
-    void removeItems(const QList<int> &ids);
+    void removeItems(const std::vector<int> &ids);
     /** \brief move on top of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnTop(const QList<int> &ids);
+    void moveItemsOnTop(const std::vector<int> &ids);
     /** \brief move up the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsUp(const QList<int> &ids);
+    void moveItemsUp(const std::vector<int> &ids);
     /** \brief move down the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsDown(const QList<int> &ids);
+    void moveItemsDown(const std::vector<int> &ids);
     /** \brief move on bottom of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnBottom(const QList<int> &ids);
+    void moveItemsOnBottom(const std::vector<int> &ids);
 
     /** \brief give the forced mode, to export/import transfer list */
     void forceMode(const Ultracopier::CopyMode &mode);
@@ -287,7 +288,7 @@ public slots:
 
     /** \brief to set the speed limitation
      * -1 if not able, 0 if disabled */
-    bool setSpeedLimitation(const qint64 &speedLimitation);
+    bool setSpeedLimitation(const int64_t &speedLimitation);
 
     // specific to this copy engine
 
@@ -325,25 +326,25 @@ public slots:
 private slots:
     void setComboBoxFolderCollision(FolderExistsAction action,bool changeComboBox=true);
     void setComboBoxFolderError(FileErrorAction action,bool changeComboBox=true);
-    void warningTransferList(const QString &warning);
-    void errorTransferList(const QString &error);
+    void warningTransferList(const std::string &warning);
+    void errorTransferList(const std::string &error);
 signals:
     //action on the copy
     void signal_pause() const;
     void signal_resume() const;
-    void signal_skip(const quint64 &id) const;
+    void signal_skip(const uint64_t &id) const;
 
     //edit the transfer list
-    void signal_removeItems(const QList<int> &ids) const;
-    void signal_moveItemsOnTop(const QList<int> &ids) const;
-    void signal_moveItemsUp(const QList<int> &ids) const;
-    void signal_moveItemsDown(const QList<int> &ids) const;
-    void signal_moveItemsOnBottom(const QList<int> &ids) const;
+    void signal_removeItems(const std::vector<int> &ids) const;
+    void signal_moveItemsOnTop(const std::vector<int> &ids) const;
+    void signal_moveItemsUp(const std::vector<int> &ids) const;
+    void signal_moveItemsDown(const std::vector<int> &ids) const;
+    void signal_moveItemsOnBottom(const std::vector<int> &ids) const;
 
     void signal_forceMode(const Ultracopier::CopyMode &mode) const;
-    void signal_exportTransferList(const QString &fileName) const;
-    void signal_importTransferList(const QString &fileName) const;
-    void signal_exportErrorIntoTransferList(const QString &fileName) const;
+    void signal_exportTransferList(const std::string &fileName) const;
+    void signal_importTransferList(const std::string &fileName) const;
+    void signal_exportErrorIntoTransferList(const std::string &fileName) const;
 
     //action
     void signal_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
@@ -353,21 +354,21 @@ signals:
 
     //internal cancel
     void tryCancel() const;
-    void getNeedPutAtBottom(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType) const;
+    void getNeedPutAtBottom(const QFileInfo &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,std::string fonction,std::string text,std::string file,int ligne) const;
     #endif
 
     //other signals
     void queryOneNewDialog() const;
 
-    void send_speedLimitation(const qint64 &speedLimitation) const;
+    void send_speedLimitation(const uint64_t &speedLimitation) const;
     void send_blockSize(const int &blockSize) const;
     void send_osBufferLimit(const unsigned int &osBufferLimit) const;
-    void send_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude) const;
-    void send_sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule) const;
+    void send_setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude) const;
+    void send_sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule) const;
     void send_parallelBuffer(const int &parallelBuffer) const;
     void send_sequentialBuffer(const int &sequentialBuffer) const;
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;

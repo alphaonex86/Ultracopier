@@ -100,7 +100,7 @@ class PluginInterface_CopyEngine : public QObject
         virtual void resume() = 0;
         /** \brief skip one transfer entry
          * \param id id of the file to remove */
-        virtual void skip(const quint64 &id) = 0;
+        virtual void skip(const uint64_t &id) = 0;
         /// \brief cancel all the transfer
         virtual void cancel() = 0;
 
