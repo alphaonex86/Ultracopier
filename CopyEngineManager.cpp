@@ -7,6 +7,7 @@
 
 #include "CopyEngineManager.h"
 #include "LanguagesManager.h"
+#include "cpp11addition.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #include "plugins/CopyEngine/Ultracopier/CopyEngineFactory.h"
@@ -184,25 +185,26 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
     bool isTheGoodEngine=false;
     while(index<pluginList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pluginList.at("+std::to_string(index)+").name: "+pluginList.at(index).name);
+        const CopyEnginePlugin &copyEnginePlugin=pluginList.at(index);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pluginList.at("+std::to_string(index)+").name: "+copyEnginePlugin.name);
         isTheGoodEngine=false;
-        if(mode!=Ultracopier::Move || !pluginList.at(index).canDoOnlyCopy)
+        if(mode!=Ultracopier::Move || !copyEnginePlugin.canDoOnlyCopy)
         {
             if(protocolsUsedForTheSources.size()==0)
                 isTheGoodEngine=true;
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("pluginList.at(index).supportedProtocolsForTheDestination: %1").arg(pluginList.at(index).supportedProtocolsForTheDestination.join(";")));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("protocolsUsedForTheDestination: %1").arg(protocolsUsedForTheDestination));
-                if(protocolsUsedForTheDestination.isEmpty() || pluginList.at(index).supportedProtocolsForTheDestination.contains(protocolsUsedForTheDestination))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyEnginePlugin.supportedProtocolsForTheDestination: "+stringimplode(copyEnginePlugin.supportedProtocolsForTheDestination,";"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"protocolsUsedForTheDestination: "+protocolsUsedForTheDestination);
+                if(protocolsUsedForTheDestination.empty() || vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheDestination,protocolsUsedForTheDestination))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("pluginList.at(index).supportedProtocolsForTheSource: %1").arg(pluginList.at(index).supportedProtocolsForTheSource.join(";")));
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("protocolsUsedForTheSources.at(indexProto): %1").arg(protocolsUsedForTheSources.join(";")));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyEnginePlugin.supportedProtocolsForTheSource: "+stringimplode(copyEnginePlugin.supportedProtocolsForTheSource,";"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"protocolsUsedForTheSources.at(indexProto): "+stringimplode(protocolsUsedForTheSources,";"));
                     isTheGoodEngine=true;
-                    int indexProto=0;
+                    unsigned int indexProto=0;
                     while(indexProto<protocolsUsedForTheSources.size())
                     {
-                        if(!pluginList.at(index).supportedProtocolsForTheSource.contains(protocolsUsedForTheSources.at(indexProto)))
+                        if(!vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheSource,protocolsUsedForTheSources.at(indexProto)))
                         {
                             isTheGoodEngine=false;
                             break;
@@ -214,8 +216,8 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
         }
         if(isTheGoodEngine)
         {
-            pluginList[index].intances<<pluginList.at(index).factory->getInstance();
-            temp.engine=pluginList.at(index).intances.last();
+            pluginList[index].intances.push_back(pluginList.at(index).factory->getInstance());
+            temp.engine=pluginList.at(index).intances.back();
             temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
             temp.type=pluginList.at(index).type;
             temp.transferListOperation=pluginList.at(index).transferListOperation;
@@ -233,7 +235,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Cannot find any compatible engine!");
         QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any compatible engine!"));
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("protocolsUsedForTheSources: %1, protocolsUsedForTheDestination: %2").arg(protocolsUsedForTheSources.join(";")).arg(protocolsUsedForTheDestination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"protocolsUsedForTheSources: "+stringimplode(protocolsUsedForTheSources,";")+", protocolsUsedForTheDestination: "+protocolsUsedForTheDestination);
 
     temp.engine=NULL;
     temp.type=Ultracopier::File;
@@ -241,25 +243,25 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
     return temp;
 }
 
-CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultracopier::CopyMode &mode,const QString &name)
+CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultracopier::CopyMode &mode,const std::string &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, pluginList.size(): %1, with mode: %2, and name: %3").arg(pluginList.size()).arg((int)mode).arg(name));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, pluginList.size(): "+std::to_string(pluginList.size())+", with mode: "+std::to_string((int)mode)+", and name: "+name);
     returnCopyEngine temp;
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Check matching: %1").arg(pluginList.at(index).name));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Check matching: "+pluginList.at(index).name);
         if(pluginList.at(index).name==name)
         {
             if(mode==Ultracopier::Move && pluginList.at(index).canDoOnlyCopy)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This copy engine does not support move: pluginList.at(index).canDoOnlyCopy: "+QString::number(pluginList.at(index).canDoOnlyCopy));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This copy engine does not support move: pluginList.at(index).canDoOnlyCopy: "+std::to_string(pluginList.at(index).canDoOnlyCopy));
                 QMessageBox::critical(NULL,tr("Warning"),tr("This copy engine does not support move"));
                 temp.engine=NULL;
                 return temp;
             }
-            pluginList[index].intances<<pluginList.at(index).factory->getInstance();
-            temp.engine=pluginList.at(index).intances.last();
+            pluginList[index].intances.push_back(pluginList.at(index).factory->getInstance());
+            temp.engine=pluginList.at(index).intances.back();
             temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
             temp.type=pluginList.at(index).type;
             temp.transferListOperation=pluginList.at(index).transferListOperation;
@@ -267,8 +269,8 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Cannot find any engine with this name: %1").arg(name));
-    QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any engine with this name: %1").arg(name));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Cannot find any engine with this name: "+name);
+    QMessageBox::critical(NULL,tr("Warning"),tr("Cannot find any engine with this name: %1").arg(QString::fromStdString(name)));
     temp.engine=NULL;
     temp.type=Ultracopier::File;
     temp.canDoOnlyCopy=true;
@@ -276,19 +278,19 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
 }
 
 #ifdef ULTRACOPIER_DEBUG
-void CopyEngineManager::debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
+void CopyEngineManager::debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne)
 {
-    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,QStringLiteral("Copy Engine plugin"));
+    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Copy Engine plugin");
 }
 #endif // ULTRACOPIER_DEBUG
 
 /// \brief To notify when new value into a group have changed
-void CopyEngineManager::newOptionValue(const QString &groupName,const QString &variableName,const QVariant &value)
+void CopyEngineManager::newOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value)
 {
-    if(groupName==QStringLiteral("CopyEngine") && variableName==QStringLiteral("List"))
+    if(groupName=="CopyEngine" && variableName=="List")
     {
         Q_UNUSED(value)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start(\""+groupName+"\",\""+variableName+"\",\""+value.toString()+"\")");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start(\""+groupName+"\",\""+variableName+"\",\""+value+"\")");
         allPluginIsloaded();
     }
 }
@@ -299,7 +301,7 @@ void CopyEngineManager::setIsConnected()
       prevent bug, I don't know why, in one case it bug here
       */
     isConnected=true;
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         emit addCopyEngine(pluginList.at(index).name,pluginList.at(index).canDoOnlyCopy);
@@ -309,23 +311,23 @@ void CopyEngineManager::setIsConnected()
 
 void CopyEngineManager::allPluginIsloaded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    QStringList actualList;
-    int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    std::vector<std::string> actualList;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
-        actualList << pluginList.at(index).name;
+        actualList.push_back(pluginList.at(index).name);
         index++;
     }
-    QStringList preferedList=OptionEngine::optionEngine->getOptionValue(QStringLiteral("CopyEngine"),QStringLiteral("List")).toStringList();
-    preferedList.removeDuplicates();
-    actualList.removeDuplicates();
+    std::vector<std::string> preferedList=stringsplit(OptionEngine::optionEngine->getOptionValue("CopyEngine","List"),';');
+    vectorRemoveDuplicatesForSmallList(preferedList);
+    vectorRemoveDuplicatesForSmallList(actualList);
     index=0;
     while(index<preferedList.size())
     {
-        if(!actualList.contains(preferedList.at(index)))
+        if(!vectorcontainsAtLeastOne(actualList,preferedList.at(index)))
         {
-            preferedList.removeAt(index);
+            preferedList.erase(preferedList.cbegin()+index);
             index--;
         }
         index++;
@@ -333,21 +335,21 @@ void CopyEngineManager::allPluginIsloaded()
     index=0;
     while(index<actualList.size())
     {
-        if(!preferedList.contains(actualList.at(index)))
-            preferedList << actualList.at(index);
+        if(!vectorcontainsAtLeastOne(preferedList,actualList.at(index)))
+            preferedList.push_back( actualList.at(index));
         index++;
     }
-    OptionEngine::optionEngine->setOptionValue(QStringLiteral("CopyEngine"),QStringLiteral("List"),preferedList);
-    QList<CopyEnginePlugin> newPluginList;
+    OptionEngine::optionEngine->setOptionValue("CopyEngine","List",stringimplode(preferedList,';'));
+    std::vector<CopyEnginePlugin> newPluginList;
     index=0;
     while(index<preferedList.size())
     {
-        int pluginListIndex=0;
+        unsigned int pluginListIndex=0;
         while(pluginListIndex<pluginList.size())
         {
             if(preferedList.at(index)==pluginList.at(pluginListIndex).name)
             {
-                newPluginList << pluginList.at(pluginListIndex);
+                newPluginList.push_back(pluginList.at(pluginListIndex));
                 break;
             }
             pluginListIndex++;
@@ -357,20 +359,21 @@ void CopyEngineManager::allPluginIsloaded()
     pluginList=newPluginList;
 }
 
-bool CopyEngineManager::protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
+bool CopyEngineManager::protocolsSupportedByTheCopyEngine(PluginInterface_CopyEngine * engine,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
 {
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("pluginList.at(%1).name: %2").arg(index).arg(pluginList.at(index).name));
-        if(pluginList.at(index).intances.contains(engine))
+        const CopyEnginePlugin &copyEnginePlugin=pluginList.at(index);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pluginList.at("+std::to_string(index)+").name: "+copyEnginePlugin.name);
+        if(vectorcontainsAtLeastOne(copyEnginePlugin.intances,engine))
         {
-            if(!pluginList.at(index).supportedProtocolsForTheDestination.contains(protocolsUsedForTheDestination))
+            if(!vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheDestination,protocolsUsedForTheDestination))
                 return false;
-            int indexProto=0;
+            unsigned int indexProto=0;
             while(indexProto<protocolsUsedForTheSources.size())
             {
-                if(!pluginList.at(index).supportedProtocolsForTheSource.contains(protocolsUsedForTheSources.at(indexProto)))
+                if(!vectorcontainsAtLeastOne(copyEnginePlugin.supportedProtocolsForTheSource,protocolsUsedForTheSources.at(indexProto)))
                     return false;
                 indexProto++;
             }

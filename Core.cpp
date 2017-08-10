@@ -9,10 +9,11 @@
 
 #include "Core.h"
 #include "ThemesManager.h"
+#include "cpp11addition.h"
 
 Core::Core(CopyEngineManager *copyEngineList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->copyEngineList=copyEngineList;
     nextId=0;
     forUpateInformation.setInterval(ULTRACOPIER_TIME_INTERFACE_UPDATE);
@@ -25,7 +26,7 @@ Core::Core(CopyEngineManager *copyEngineList)
 
 Core::~Core()
 {
-    int index=0;
+    unsigned int index=0;
     while(index<copyList.size())
     {
         copyList[index].engine->cancel();
@@ -36,30 +37,30 @@ Core::~Core()
     }
 }
 
-void Core::newCopyWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
+void Core::newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(openNewCopyEngineInstance(Ultracopier::Copy,false,protocolsUsedForTheSources)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
         return;
     }
-    copyList.last().orderId<<orderId;
-    copyList.last().engine->newCopy(sources);
-    copyList.last().interface->haveExternalOrder();
+    copyList.back().orderId.push_back(orderId);
+    copyList.back().engine->newCopy(sources);
+    copyList.back().interface->haveExternalOrder();
 }
 
-void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
+void Core::newTransfer(const Ultracopier::CopyMode &mode,const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+sources.join(QStringLiteral(";"))+QStringLiteral(", dest: ")+destination+QStringLiteral(", mode: ")+QString::number(mode));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+stringimplode(sources,";")+", dest: "+destination+", mode: "+std::to_string(mode));
     //search to group the window
-    int GroupWindowWhen=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("GroupWindowWhen")).toInt();
+    int GroupWindowWhen=stringtoint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
     bool haveSameSource=false,haveSameDestination=false;
     if(GroupWindowWhen!=0)
     {
-        bool needConfirmation=OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("confirmToGroupWindows")).toInt();
-        int index=0;
+        bool needConfirmation=stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
+        unsigned int index=0;
         while(index<copyList.size())
         {
             bool rightMode=false;
@@ -95,7 +96,7 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,
                         }
                         if(confirmed)
                         {
-                            copyList[index].orderId<<orderId;
+                            copyList[index].orderId.push_back(orderId);
                             if(mode==Ultracopier::Copy)
                                 copyList.at(index).engine->newCopy(sources,destination);
                             else
@@ -112,29 +113,29 @@ void Core::newTransfer(const Ultracopier::CopyMode &mode,const quint32 &orderId,
     //else open new windows
     if(openNewCopyEngineInstance(mode,false,protocolsUsedForTheSources,protocolsUsedForTheDestination)==-1)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Unable to get a engine instance"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a engine instance");
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a engine instance"));
         return;
     }
-    copyList.last().orderId<<orderId;
+    copyList.back().orderId.push_back(orderId);
     if(mode==Ultracopier::Copy)
-        copyList.last().engine->newCopy(sources,destination);
+        copyList.back().engine->newCopy(sources,destination);
     else
-        copyList.last().engine->newMove(sources,destination);
-    copyList.last().interface->haveExternalOrder();
+        copyList.back().engine->newMove(sources,destination);
+    copyList.back().interface->haveExternalOrder();
 }
 
-void Core::newCopy(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
+void Core::newCopy(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination)
 {
     newTransfer(Ultracopier::Copy,orderId,protocolsUsedForTheSources,sources,protocolsUsedForTheDestination,destination);
 }
 
-void Core::newMove(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources,const QString &protocolsUsedForTheDestination,const QString &destination)
+void Core::newMove(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources,const std::string &protocolsUsedForTheDestination,const std::string &destination)
 {
     newTransfer(Ultracopier::Move,orderId,protocolsUsedForTheSources,sources,protocolsUsedForTheDestination,destination);
 }
 
-void Core::newMoveWithoutDestination(const quint32 &orderId,const QStringList &protocolsUsedForTheSources,const QStringList &sources)
+void Core::newMoveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources)
 {
     if(openNewCopyEngineInstance(Ultracopier::Move,false,protocolsUsedForTheSources)==-1)
     {
@@ -142,35 +143,35 @@ void Core::newMoveWithoutDestination(const quint32 &orderId,const QStringList &p
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
         return;
     }
-    copyList.last().orderId<<orderId;
-    copyList.last().engine->newMove(sources);
-    copyList.last().interface->haveExternalOrder();
+    copyList.back().orderId.push_back(orderId);
+    copyList.back().engine->newMove(sources);
+    copyList.back().interface->haveExternalOrder();
 }
 
 /// \brief name to open the right copy engine
-void Core::addWindowCopyMove(const Ultracopier::CopyMode &mode,const QString &name)
+void Core::addWindowCopyMove(const Ultracopier::CopyMode &mode,const std::string &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: ")+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+name);
     if(openNewCopyEngineInstance(mode,false,name)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
         return;
     }
-    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("ActionOnManualOpen")).toInt();
+    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)stringtoint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     if(ActionOnManualOpen_value!=ActionOnManualOpen_Nothing)
     {
         if(ActionOnManualOpen_value==ActionOnManualOpen_Folder)
-            copyList.last().engine->userAddFolder(mode);
+            copyList.back().engine->userAddFolder(mode);
         else
-            copyList.last().engine->userAddFile(mode);
+            copyList.back().engine->userAddFile(mode);
     }
 }
 
 /// \brief name to open the right copy engine
-void Core::addWindowTransfer(const QString &name)
+void Core::addWindowTransfer(const std::string &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start")+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start"+name);
     if(openNewCopyEngineInstance(Ultracopier::Copy,true,name)==-1)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
@@ -180,10 +181,10 @@ void Core::addWindowTransfer(const QString &name)
 }
 
 /** new transfer list pased by the CLI */
-void Core::newTransferList(QString engine,QString mode,QString file)
+void Core::newTransferList(std::string engine,std::string mode,std::string file)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("engine: %1, mode: %2, file: %3").arg(engine).arg(mode).arg(file));
-    if(mode==QStringLiteral("Transfer"))
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"engine: "+engine+", mode: "+mode+", file: "+file);
+    if(mode=="Transfer")
     {
         if(openNewCopyEngineInstance(Ultracopier::Copy,true,engine)==-1)
         {
@@ -192,7 +193,7 @@ void Core::newTransferList(QString engine,QString mode,QString file)
             return;
         }
     }
-    else if(mode==QStringLiteral("Copy"))
+    else if(mode=="Copy")
     {
         if(openNewCopyEngineInstance(Ultracopier::Copy,false,engine)==-1)
         {
@@ -201,7 +202,7 @@ void Core::newTransferList(QString engine,QString mode,QString file)
             return;
         }
     }
-    else if(mode==QStringLiteral("Move"))
+    else if(mode=="Move")
     {
         if(openNewCopyEngineInstance(Ultracopier::Move,false,engine)==-1)
         {
@@ -216,17 +217,17 @@ void Core::newTransferList(QString engine,QString mode,QString file)
         QMessageBox::critical(NULL,tr("Error"),tr("The argument for the mode is not valid"));
         return;
     }
-    copyList.last().engine->newTransferList(file);
+    copyList.back().engine->newTransferList(file);
 }
 
 void Core::loadInterface()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //load the extra files to check the themes availability
     if(copyList.size()>0)
     {
         bool error=false;
-        int index=0;
+        unsigned int index=0;
         while(index<copyList.size())
         {
             copyList[index].interface=ThemesManager::themesManager->getThemesInstance();
@@ -239,7 +240,7 @@ void Core::loadInterface()
             {
                 if(!copyList.at(index).ignoreMode)
                     copyList.at(index).interface->forceCopyMode(copyList.at(index).mode);
-                connectInterfaceAndSync(copyList.count()-1);
+                connectInterfaceAndSync(copyList.size()-1);
                 copyList.at(index).engine->syncTransferList();
                 index++;
             }
@@ -254,7 +255,7 @@ void Core::loadInterface()
 
 void Core::unloadInterface()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     const int &loop_size=copyList.size();
     while(index<loop_size)
@@ -277,7 +278,7 @@ int Core::incrementId()
         nextId++;
         if(nextId>2000000)
             nextId=0;
-    } while(idList.contains(nextId));
+    } while(vectorcontainsAtLeastOne(idList,nextId));
     return nextId;
 }
 
@@ -287,9 +288,9 @@ int Core::incrementId()
 \param protocolsUsedForTheSources protocols used for sources
 \param protocolsUsedForTheDestination protocols used for destination
 */
-int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const QStringList &protocolsUsedForTheSources,const QString &protocolsUsedForTheDestination)
+int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,protocolsUsedForTheSources,protocolsUsedForTheDestination);
     if(returnInformations.engine==NULL)
         return -1;
@@ -302,9 +303,9 @@ int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool
 \param protocolsUsedForTheSources protocols used for sources
 \param protocolsUsedForTheDestination protocols used for destination
 */
-int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const QString &name)
+int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const std::string &name)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, mode: "+QString::number(mode)+", name: "+name);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, mode: "+std::to_string(mode)+", name: "+name);
     CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,name);
     if(returnInformations.engine==NULL)
         return -1;
@@ -348,7 +349,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.copyEngineIsSync=true;
             newItem.canceled=false;
 
-            switch(OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("remainingTimeAlgorithm")).toUInt())
+            switch(stringtoint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","remainingTimeAlgorithm")))
             {
                 default:
                 case 0:
@@ -363,7 +364,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
                             RemainingTimeLogarithmicColumn remainingTimeLogarithmicColumn;
                             remainingTimeLogarithmicColumn.totalSize=0;
                             remainingTimeLogarithmicColumn.transferedSize=0;
-                            newItem.remainingTimeLogarithmicValue << remainingTimeLogarithmicColumn;
+                            newItem.remainingTimeLogarithmicValue.push_back(remainingTimeLogarithmicColumn);
                             index++;
                         }
                     }
@@ -377,9 +378,9 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             }
             if(copyList.size()==0)
                 forUpateInformation.start();
-            copyList << newItem;
-            connectEngine(copyList.count()-1);
-            connectInterfaceAndSync(copyList.count()-1);
+            copyList.push_back(newItem);
+            connectEngine(copyList.size()-1);
+            connectInterfaceAndSync(copyList.size()-1);
             return newItem.id;
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the interface, copy aborted");
@@ -410,7 +411,7 @@ void Core::resetSpeedDetectedInterface()
 
 void Core::resetSpeedDetected(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start on %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start on "+std::to_string(index));
     switch(copyList.at(index).remainingTimeAlgo)
     {
         case Ultracopier::RemainingTimeAlgo_Logarithmic:
@@ -434,36 +435,38 @@ void Core::resetSpeedDetected(const int &index)
     }
 }
 
-void Core::doneTime(const QList<QPair<quint64,quint32> > &timeList)
+void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
 {
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
-        switch(copyList.at(index).remainingTimeAlgo)
+        CopyInstance &copyInstance=copyList[index];
+        switch(copyInstance.remainingTimeAlgo)
         {
             case Ultracopier::RemainingTimeAlgo_Logarithmic:
-            if(copyList.at(index).remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("bug, copyList.at(index).remainingTimeLogarithmicValue.size() %1 <ULTRACOPIER_MAXREMAININGTIMECOL").arg(copyList.at(index).remainingTimeLogarithmicValue.size()));
+            if(copyInstance.remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
             else
             {
                 int size=timeList.size();
                 int sub_index=0;
                 while(sub_index<size)
                 {
-                    const QPair<quint64,quint32> &timeUnit=timeList.at(sub_index);
-                    const quint8 &col=fileCatNumber(timeUnit.first);
-                    if(copyList.at(index).remainingTimeLogarithmicValue.size()<=col)
+                    const std::pair<uint64_t,uint32_t> &timeUnit=timeList.at(sub_index);
+                    const uint8_t &col=fileCatNumber(timeUnit.first);
+                    RemainingTimeLogarithmicColumn &remainingTimeLogarithmicColumn=copyInstance.remainingTimeLogarithmicValue[col];
+                    if(copyInstance.remainingTimeLogarithmicValue.size()<=col)
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("bug, copyList.at(index).remainingTimeLogarithmicValue.size() %1 < col %2").arg(copyList.at(index).remainingTimeLogarithmicValue.size()).arg(col));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" < col %2"+std::to_string(col));
                         break;
                     }
                     else
                     {
                         if(timeUnit.second>0)
                         {
-                            copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed << timeUnit.first/timeUnit.second;
-                            if(copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                                copyList[index].remainingTimeLogarithmicValue[col].lastProgressionSpeed.removeFirst();
+                            remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(timeUnit.first/timeUnit.second);
+                            if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+                                remainingTimeLogarithmicColumn.lastProgressionSpeed.erase(remainingTimeLogarithmicColumn.lastProgressionSpeed.cend());
                         }
                     }
                     sub_index++;
@@ -483,11 +486,11 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action: %1, from %2").arg(action).arg(index));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action: "+std::to_string(action)+", from "+std::to_string(index));
         //drop here the duplicate action
         if(copyList.at(index).action==action)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("The copy engine have send 2x the same EngineActionInProgress"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"The copy engine have send 2x the same EngineActionInProgress");
             return;
         }
         //update time runing for time remaning caculation
@@ -523,7 +526,7 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the interface sender");
 }
 
-void Core::newFolderListing(const QString &path)
+void Core::newFolderListing(const std::string &path)
 {
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
@@ -608,86 +611,86 @@ int Core::indexCopySenderInterface()
 
 void Core::connectEngine(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start with index: %1: %2").arg(index).arg((quint64)sender()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with index: "+std::to_string(index)+": "+std::to_string((uint64_t)sender()));
     //disconnectEngine(index);
 
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newFolderListing,			this,&Core::newFolderListing,Qt::QueuedConnection))//to check to change
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for newFolderListing()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for newFolderListing()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::actionInProgess,	this,&Core::actionInProgess,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for actionInProgess()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for actionInProgess()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::isInPause,				this,&Core::isInPause,Qt::QueuedConnection))//to check to change
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for isInPause()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for isInPause()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::cancelAll,					this,&Core::copyInstanceCanceledByEngine,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for cancelAll()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for cancelAll()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::error,	this,&Core::error,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for error()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for error()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::rmPath,				this,&Core::rmPath,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for rmPath()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for rmPath()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::mkPath,				this,&Core::mkPath,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for mkPath()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for mkPath()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::syncReady,					this,&Core::syncReady,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for syncReady()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::canBeDeleted,					this,&Core::deleteCopyEngine,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for syncReady()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for syncReady()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::doneTime,					this,&Core::doneTime,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the engine can not work correctly: %1: %2 for doneTime()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for doneTime()");
 }
 
 void Core::connectInterfaceAndSync(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start with index: %1: %2").arg(index).arg((quint64)sender()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with index: "+std::to_string(index)+": "+std::to_string((uint64_t)sender()));
     //disconnectInterface(index);
 
     CopyInstance& currentCopyInstance=copyList[index];
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::pause,					currentCopyInstance.engine,&PluginInterface_CopyEngine::pause))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pause()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pause()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::resume,					currentCopyInstance.engine,&PluginInterface_CopyEngine::resume))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for resume()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::skip,				currentCopyInstance.engine,&PluginInterface_CopyEngine::skip))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for skip()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for skip()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		currentCopyInstance.engine,&PluginInterface_CopyEngine::setSpeedLimitation))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for newSpeedLimitation()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFolder,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFolder))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for userAddFolder()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for userAddFolder()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::userAddFile,			currentCopyInstance.engine,&PluginInterface_CopyEngine::userAddFile))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for userAddFile()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for userAddFile()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::removeItems,			currentCopyInstance.engine,&PluginInterface_CopyEngine::removeItems))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for removeItems()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for removeItems()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnTop,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnTop))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnTop()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for moveItemsOnTop()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsUp,			currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsUp))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsUp()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for moveItemsUp()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsDown,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsDown))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsDown()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for moveItemsDown()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::moveItemsOnBottom,		currentCopyInstance.engine,&PluginInterface_CopyEngine::moveItemsOnBottom))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for moveItemsOnBottom()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for moveItemsOnBottom()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::exportTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::exportTransferList))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for exportTransferList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for exportTransferList()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::exportErrorIntoTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::exportErrorIntoTransferList))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for exportErrorIntoTransferList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for exportErrorIntoTransferList()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::importTransferList,			currentCopyInstance.engine,&PluginInterface_CopyEngine::importTransferList))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for importTransferList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for importTransferList()");
 
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::newSpeedLimitation,		this,&Core::resetSpeedDetectedInterface))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for newSpeedLimitation()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for newSpeedLimitation()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::resume,					this,&Core::resetSpeedDetectedInterface))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for resume()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for resume()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::cancel,					this,&Core::copyInstanceCanceledByInterface,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for cancel()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for cancel()");
     if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::urlDropped,			this,&Core::urlDropped,Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for urlDropped()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for urlDropped()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList,this,&Core::getActionOnList,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for newActionOnList()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for newActionOnList()");
 
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pushFileProgression()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pushFileProgression()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression()").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pushGeneralProgression()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		this,&Core::pushGeneralProgression,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for pushGeneralProgression() for this").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pushGeneralProgression() for this");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::errorToRetry,		currentCopyInstance.interface,&PluginInterface_Themes::errorToRetry,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("error at connect, the interface can not work correctly: %1: %2 for errorToRetry() for this").arg(index).arg((quint64)sender()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for errorToRetry() for this");
 
     currentCopyInstance.interface->setSupportSpeedLimitation(currentCopyInstance.engine->supportSpeedLimitation());
     currentCopyInstance.interface->setCopyType(currentCopyInstance.type);
@@ -759,18 +762,18 @@ void Core::periodicSynchronizationWithIndex(const int &index)
         {
             if((currentCopyInstance.action==Ultracopier::Copying || currentCopyInstance.action==Ultracopier::CopyingAndListing))
             {
-                currentCopyInstance.lastSpeedTime << lastProgressionTime.elapsed();
-                currentCopyInstance.lastSpeedDetected << diffCopiedSize;
-                currentCopyInstance.lastAverageSpeedTime << lastProgressionTime.elapsed();
-                currentCopyInstance.lastAverageSpeedDetected << diffCopiedSize;
+                currentCopyInstance.lastSpeedTime.push_back(lastProgressionTime.elapsed());
+                currentCopyInstance.lastSpeedDetected.push_back(diffCopiedSize);
+                currentCopyInstance.lastAverageSpeedTime.push_back(lastProgressionTime.elapsed());
+                currentCopyInstance.lastAverageSpeedDetected.push_back(diffCopiedSize);
                 while(currentCopyInstance.lastSpeedTime.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                    currentCopyInstance.lastSpeedTime.removeFirst();
+                    currentCopyInstance.lastSpeedTime.erase(currentCopyInstance.lastSpeedTime.cbegin());
                 while(currentCopyInstance.lastSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                    currentCopyInstance.lastSpeedDetected.removeFirst();
+                    currentCopyInstance.lastSpeedDetected.erase(currentCopyInstance.lastSpeedDetected.cbegin());
                 while(currentCopyInstance.lastAverageSpeedTime.size()>ULTRACOPIER_MAXVALUESPEEDSTOREDTOREMAININGTIME)
-                    currentCopyInstance.lastAverageSpeedTime.removeFirst();
+                    currentCopyInstance.lastAverageSpeedTime.erase(currentCopyInstance.lastAverageSpeedTime.cbegin());
                 while(currentCopyInstance.lastAverageSpeedDetected.size()>ULTRACOPIER_MAXVALUESPEEDSTOREDTOREMAININGTIME)
-                    currentCopyInstance.lastAverageSpeedDetected.removeFirst();
+                    currentCopyInstance.lastAverageSpeedDetected.erase(currentCopyInstance.lastAverageSpeedDetected.cbegin());
                 double totTime=0,totAverageTime=0;
                 double totSpeed=0,totAverageSpeed=0;
 
@@ -830,7 +833,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                                 if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>=ULTRACOPIER_MINVALUESPEED)
                                 {
                                     int average_speed=0;
-                                    int temp_loop_index=0;
+                                    unsigned int temp_loop_index=0;
                                     while(temp_loop_index<remainingTimeLogarithmicColumn.lastProgressionSpeed.size())
                                     {
                                         average_speed+=remainingTimeLogarithmicColumn.lastProgressionSpeed.at(temp_loop_index);
@@ -866,7 +869,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
     }
 }
 
-quint8 Core::fileCatNumber(quint64 size)
+uint8_t Core::fileCatNumber(uint64_t size)
 {
     //all is in base 10 to understand more easily
     //drop the big value
@@ -879,7 +882,7 @@ quint8 Core::fileCatNumber(quint64 size)
 /// \brief the copy engine have canceled the transfer
 void Core::copyInstanceCanceledByEngine()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
         copyInstanceCanceledByIndex(index);
@@ -890,7 +893,7 @@ void Core::copyInstanceCanceledByEngine()
 /// \brief the interface have canceled the transfer
 void Core::copyInstanceCanceledByInterface()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=indexCopySenderInterface();
     if(index!=-1)
         copyInstanceCanceledByIndex(index);
@@ -901,7 +904,7 @@ void Core::copyInstanceCanceledByInterface()
 /// \brief the transfer have been canceled
 void Core::copyInstanceCanceledByIndex(const int &index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, remove with the index: "+QString::number(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, remove with the index: "+std::to_string(index));
     //disconnectEngine(index);
     //disconnectInterface(index);
     copyList[index].canceled=true;
@@ -917,10 +920,10 @@ void Core::copyInstanceCanceledByIndex(const int &index)
         index_sub_loop++;
     }
     currentCopyInstance.orderId.clear();
-    copyList.removeAt(index);
+    copyList.erase(copyList.cbegin()+index);
     if(copyList.size()==0)
         forUpateInformation.stop();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyList.size(): "+QString::number(copyList.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"copyList.size(): "+std::to_string(copyList.size()));
 }
 
 /// \brief only when the copy engine say it's ready to delete them self, it call this
@@ -946,7 +949,7 @@ void Core::deleteCopyEngine()
 }
 
 //error occurred
-void Core::error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error)
+void Core::error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error)
 {
     log.error(path,size,mtime,error);
     int index=indexCopySenderCopyEngine();
@@ -960,12 +963,12 @@ void Core::error(const QString &path,const quint64 &size,const QDateTime &mtime,
 }
 
 //for the extra logging
-void Core::rmPath(const QString &path)
+void Core::rmPath(const std::string &path)
 {
     log.rmPath(path);
 }
 
-void Core::mkPath(const QString &path)
+void Core::mkPath(const std::string &path)
 {
     log.mkPath(path);
 }
@@ -980,26 +983,26 @@ void Core::syncReady()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");
 }
 
-void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &actionList)
+void Core::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &actionList)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //send the the interface
     const int &index=indexCopySenderCopyEngine();
     if(index!=-1)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start2"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start2");
         if(copyList.at(index).copyEngineIsSync)
             copyList.at(index).interface->getActionOnList(actionList);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start3"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start3");
         //log to the file and compute the remaining time
         if(log.logTransfer() || copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start4"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start4");
             int sub_index=0;
             const int &size=actionList.size();
             if(log.logTransfer() && copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start5"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start5");
                 while(sub_index<size)
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
@@ -1034,7 +1037,7 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
             }
             else if(log.logTransfer())
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start6"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start6");
                 while(sub_index<size)
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
@@ -1062,7 +1065,7 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start7"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start7");
                 while(sub_index<size)
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
@@ -1088,16 +1091,16 @@ void Core::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &act
                     sub_index++;
                 }
             }
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start8"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start8");
         }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start9"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start9");
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the copy engine sender");
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start end"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start end");
 }
 
-void Core::pushGeneralProgression(const quint64 &current,const quint64 &total)
+void Core::pushGeneralProgression(const uint64_t &current,const uint64_t &total)
 {
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
@@ -1110,18 +1113,18 @@ void Core::pushGeneralProgression(const quint64 &current,const quint64 &total)
 }
 
 /// \brief used to drag and drop files
-void Core::urlDropped(const QList<QUrl> &urls)
+void Core::urlDropped(const std::vector<std::string> &urls)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=indexCopySenderInterface();
     if(index!=-1)
     {
-        QStringList sources;
-        int index_loop=0;
+        std::vector<std::string> sources;
+        unsigned int index_loop=0;
         while(index_loop<urls.size())
         {
-            if(!urls.at(index_loop).isEmpty())
-                sources << urls.at(index_loop).toLocalFile();
+            if(!urls.at(index_loop).empty())
+                sources.push_back(urls.at(index_loop));
             index_loop++;
         }
         if(sources.size()==0)

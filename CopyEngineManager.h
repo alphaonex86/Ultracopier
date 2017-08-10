@@ -70,7 +70,7 @@ private slots:
     void debugInformation(const Ultracopier::DebugLevel &level, const std::string& fonction, const std::string& text, const std::string& file, const int& ligne);
     #endif // ULTRACOPIER_DEBUG
     /// \brief To notify when new value into a group have changed
-    void newOptionValue(const std::string &groupName,const std::string &variableName,const QVariant &value);
+    void newOptionValue(const std::string &groupName,const std::string &variableName,const std::string &value);
     void allPluginIsloaded();
 private:
     /// \brief the option interface
