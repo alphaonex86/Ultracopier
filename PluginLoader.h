@@ -50,7 +50,7 @@ private slots:
     void onePluginWillBeRemoved(const PluginsAvailable &plugin);
     #endif
     #ifdef ULTRACOPIER_DEBUG
-    void debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const int& ligne);
+    void debugInformation(const Ultracopier::DebugLevel &level, const std::string& fonction, const std::string& text, const std::string& file, const unsigned int &ligne);
     #endif // ULTRACOPIER_DEBUG
     void allPluginIsloaded();
     void newState(const Ultracopier::CatchState &state);

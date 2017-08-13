@@ -34,7 +34,7 @@ public:
     /// \brief the transfer item displayed
     struct DebugItem
     {
-        int time;
+        unsigned int time;
         DebugLevel_custom level;
         std::string function;
         std::string text;
@@ -52,7 +52,7 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex&, const QVariant&, int = Qt::EditRole);
 
-    void addDebugInformation(const int &time, const DebugLevel_custom &level, const std::string& function, const std::string& text, const std::string &file="", const int& ligne=-1, const std::string& location="Core");
+    void addDebugInformation(const int &time, const DebugLevel_custom &level, const std::string& function, const std::string& text, const std::string &file="", const unsigned int& ligne=0, const std::string& location="Core");
     void setupTheTimer();
     QTimer *updateDisplayTimer;
     bool displayed;

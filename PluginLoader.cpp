@@ -8,7 +8,7 @@
 
 PluginLoader::PluginLoader(OptionDialog *optionDialog)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->optionDialog=optionDialog;
     //load the overall instance
     //load the plugin
@@ -19,7 +19,7 @@ PluginLoader::PluginLoader(OptionDialog *optionDialog)
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,this,&PluginLoader::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
     connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,	this,&PluginLoader::allPluginIsloaded,Qt::QueuedConnection);
-    QList<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_PluginLoader);
+    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_PluginLoader);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();
@@ -182,8 +182,8 @@ void PluginLoader::load()
     if(stopIt)
         return;
     needEnable=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
-    int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         pluginList[index].inWaitOfReply=true;
@@ -197,9 +197,9 @@ void PluginLoader::unload()
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     needEnable=false;
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         pluginList[index].inWaitOfReply=true;
@@ -210,9 +210,9 @@ void PluginLoader::unload()
 }
 
 #ifdef ULTRACOPIER_DEBUG
-void PluginLoader::debugInformation(const Ultracopier::DebugLevel &level,const QString& fonction,const QString& text,const QString& file,const int& ligne)
+void PluginLoader::debugInformation(const Ultracopier::DebugLevel &level,const std::string& fonction,const std::string& text,const std::string& file,const unsigned int& ligne)
 {
-    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,QStringLiteral("Plugin loader plugin"));
+    DebugEngine::addDebugInformationStatic(level,fonction,text,file,ligne,"Plugin loader plugin");
 }
 #endif // ULTRACOPIER_DEBUG
 
@@ -220,7 +220,7 @@ void PluginLoader::allPluginIsloaded()
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("with value: ")+QString::number(pluginList.size()>0));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"with value: "+std::to_string(pluginList.size()>0));
     sendState(true);
 }
 
@@ -228,10 +228,10 @@ void PluginLoader::sendState(bool force)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, pluginList.size(): %1, force: %2").arg(pluginList.size()).arg(force));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, pluginList.size(): "+std::to_string(pluginList.size())+", force: "+std::to_string(force));
     Ultracopier::CatchState current_state=Ultracopier::Uncaught;
     bool found_not_listen=false,found_listen=false,found_inWaitOfReply=false;
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(current_state==Ultracopier::Uncaught)
@@ -247,7 +247,7 @@ void PluginLoader::sendState(bool force)
             found_inWaitOfReply=true;
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("current_state: %1").arg(current_state));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"current_state: "+std::to_string(current_state));
     if(current_state==Ultracopier::Uncaught)
     {
         if(!found_not_listen && !found_listen)
@@ -265,11 +265,11 @@ void PluginLoader::sendState(bool force)
     bool have_plugin=pluginList.size()>0;
     if(force || current_state!=last_state || have_plugin!=last_have_plugin || found_inWaitOfReply!=last_inWaitOfReply)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("send pluginLoaderReady(%1,%2,%3)").arg(current_state).arg(have_plugin).arg(found_inWaitOfReply));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"send pluginLoaderReady("+std::to_string(current_state)+","+std::to_string(have_plugin)+","+std::to_string(found_inWaitOfReply)+")");
         emit pluginLoaderReady(current_state,have_plugin,found_inWaitOfReply);
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Skip the signal sending"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Skip the signal sending");
     last_state=current_state;
     last_have_plugin=have_plugin;
     last_inWaitOfReply=found_inWaitOfReply;
@@ -279,14 +279,14 @@ void PluginLoader::newState(const Ultracopier::CatchState &state)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, state: %1").arg(state));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, state: "+std::to_string(state));
     PluginInterface_PluginLoader *temp=qobject_cast<PluginInterface_PluginLoader *>(QObject::sender());
     if(temp==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("listener not located!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"listener not located!");
         return;
     }
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(temp==pluginList.at(index).pluginLoaderInterface)
@@ -298,5 +298,5 @@ void PluginLoader::newState(const Ultracopier::CatchState &state)
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("listener not found!"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"listener not found!");
 }

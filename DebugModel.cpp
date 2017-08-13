@@ -117,14 +117,14 @@ bool DebugModel::setData( const QModelIndex&, const QVariant&, int)
     return false;
 }
 
-void DebugModel::addDebugInformation(const int &time, const DebugLevel_custom &level, const std::__cxx11::string &function, const std::__cxx11::string &text, const std::__cxx11::string &file, const int& ligne, const std::__cxx11::string &location)
+void DebugModel::addDebugInformation(const int &time, const DebugLevel_custom &level, const std::string &function, const std::string &text, const std::string &file, const unsigned int& ligne, const std::string &location)
 {
     DebugItem item;
     item.time=time;
     item.level=level;
     item.function=function;
     item.text=text;
-    item.file=QStringLiteral("%1:%2").arg(file).arg(ligne);
+    item.file=file+":"+std::to_string(ligne);
     item.location=location;
     list << item;
     if(!displayed)
