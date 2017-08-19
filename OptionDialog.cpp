@@ -961,7 +961,7 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
         {
             if(!ignoreCopyEngineListEdition)
             {
-                std::vector<std::string> copyEngine=stringsplit(value,';');
+                QStringList copyEngine=QString::fromStdString(value).split(';');
                 copyEngine.removeDuplicates();
                 int index=0;
                 const int &loop_size=ui->CopyEngineList->count();
@@ -1010,13 +1010,13 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
         else if(name=="remainingTimeAlgorithm")
         {
             bool ok;
-            const quint32 &valueInt=value.toUInt(&ok);
+            const uint32_t &valueInt=stringtouint32(value,&ok);
             if(ok)
                 ui->remainingTimeAlgorithm->setCurrentIndex(valueInt);
         }
         else if(name=="giveGPUTime")
         {
-            ui->giveGPUTime->setChecked(value.toBool());
+            ui->giveGPUTime->setChecked(stringtobool(value));
             #ifdef ULTRACOPIER_CGMINER
             if(value.toBool())
                 startAddon();
@@ -1256,8 +1256,10 @@ void OptionDialog::on_Ultracopier_current_theme_currentIndexChanged(const int &i
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Ultracopier_current_theme->itemData(index).toString()+", string value: "+ui->Ultracopier_current_theme->itemText(index)+", index: "+std::to_string(index));
-        OptionEngine::optionEngine->setOptionValue(QStringLiteral("Themes"),QStringLiteral("Ultracopier_current_theme"),ui->Ultracopier_current_theme->itemData(index));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Ultracopier_current_theme->itemData(index).toString().toStdString()+
+                                 ", string value: "+ui->Ultracopier_current_theme->itemText(index).toStdString()+
+                                 ", index: "+std::to_string(index));
+        OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme",ui->Ultracopier_current_theme->itemData(index).toString().toStdString());
         int index_loop=0;
         loop_size=pluginOptionsWidgetList.size();
         while(index_loop<loop_size)
@@ -1280,8 +1282,9 @@ void OptionDialog::on_Language_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Language->itemData(index).toString().toStdString()+", string value: "+ui->Language->itemText(index)+", index: "+std::to_string(index));
-        OptionEngine::optionEngine->setOptionValue("Language","Language",ui->Language->itemData(index));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->Language->itemData(index).toString().toStdString()+
+                                 ", string value: "+ui->Language->itemText(index).toStdString()+", index: "+std::to_string(index));
+        OptionEngine::optionEngine->setOptionValue("Language","Language",ui->Language->itemData(index).toString().toStdString());
     }
 }
 
@@ -1290,7 +1293,7 @@ void OptionDialog::on_Language_force_toggled(const bool &checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Language","Language_force",checked);
+        OptionEngine::optionEngine->setOptionValue("Language","Language_force",booltostring(checked));
         ui->Language->setEnabled(ui->Language_force->isChecked() && ui->Language->count());
     }
 }
@@ -1300,7 +1303,7 @@ void OptionDialog::on_CatchCopyAsDefault_toggled(const bool &checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("CopyListener","CatchCopyAsDefault",checked);
+        OptionEngine::optionEngine->setOptionValue("CopyListener","CatchCopyAsDefault",booltostring(checked));
     }
 }
 
@@ -1310,7 +1313,7 @@ void OptionDialog::on_LoadAtSessionStarting_toggled(const bool &checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("SessionLoader","LoadAtSessionStarting",checked);
+        OptionEngine::optionEngine->setOptionValue("SessionLoader","LoadAtSessionStarting",booltostring(checked));
     }
 }
 #endif
@@ -1341,7 +1344,7 @@ void OptionDialog::on_toolButtonDown_clicked()
         ui->CopyEngineList->insertItem(position+1,text);
         ui->CopyEngineList->item(position+1)->setSelected(true);
         ignoreCopyEngineListEdition=true;
-        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",copyEngineStringList());
+        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",stringimplode(copyEngineStringList(),";"));
         ignoreCopyEngineListEdition=false;
     }
 }
@@ -1358,34 +1361,35 @@ void OptionDialog::on_toolButtonUp_clicked()
         ui->CopyEngineList->insertItem(position-1,text);
         ui->CopyEngineList->item(position-1)->setSelected(true);
         ignoreCopyEngineListEdition=true;
-        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",copyEngineStringList());
+        OptionEngine::optionEngine->setOptionValue("CopyEngine","List",stringimplode(copyEngineStringList(),";"));
         ignoreCopyEngineListEdition=false;
     }
 }
 
-QStringList OptionDialog::copyEngineStringList() const
+std::vector<std::string> OptionDialog::copyEngineStringList() const
 {
-    QStringList newList;
+    std::vector<std::string> newList;
     int index=0;
     while(index<ui->CopyEngineList->count())
     {
-        newList << ui->CopyEngineList->item(index)->text();
+        newList.push_back(ui->CopyEngineList->item(index)->text().toStdString());
         index++;
     }
     return newList;
 }
 
-void OptionDialog::newThemeOptions(const QString &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
+void OptionDialog::newThemeOptions(const std::string &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin)
 {
     Q_UNUSED(isLoaded);
     Q_UNUSED(havePlugin);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: isLoaded: "+std::to_string(isLoaded)+", havePlugin: "+std::to_string(havePlugin)+", name: "+std::to_string(name));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: isLoaded: "+booltostring(isLoaded)+", havePlugin: "+
+                             booltostring(havePlugin)+", name: "+name);
     pluginOptionsWidget tempItem;
     tempItem.name=name;
     tempItem.item=NULL;
     tempItem.options=theNewOptionsWidget;
     tempItem.category=PluginType_Themes;
-    pluginOptionsWidgetList << tempItem;
+    pluginOptionsWidgetList.push_back(tempItem);
     if(theNewOptionsWidget!=NULL)
     {
         ui->stackedWidgetThemesOptions->addWidget(theNewOptionsWidget);
@@ -1415,7 +1419,7 @@ void OptionDialog::addPluginOptionWidget(const PluginType &category,const std::s
         pluginOptionsWidget temp;
         temp.name=name;
         temp.options=options;
-        temp.item=new QTreeWidgetItem(QStringList() << name);
+        temp.item=new QTreeWidgetItem(QStringList() << QString::fromStdString(name));
         temp.category=category;
         pluginOptionsWidgetList.push_back(temp);
         //add the specific options
@@ -1450,7 +1454,7 @@ void OptionDialog::addPluginOptionWidget(const PluginType &category,const std::s
         loop_size=ui->CopyEngineList->count();
         while(index<loop_size)
         {
-            if(ui->CopyEngineList->item(index)->text()==name)
+            if(ui->CopyEngineList->item(index)->text().toStdString()==name)
                 break;
             index++;
         }
@@ -1528,7 +1532,7 @@ void OptionDialog::on_checkBox_Log_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","enabled",ui->checkBox_Log->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","enabled",booltostring(ui->checkBox_Log->isChecked()));
     }
     ui->lineEditLog_transfer_format->setEnabled(ui->checkBoxLog_transfer->isChecked() && ui->checkBox_Log->isChecked());
     ui->lineEditLog_error_format->setEnabled(ui->checkBoxLog_error->isChecked() && ui->checkBox_Log->isChecked());
@@ -1540,7 +1544,7 @@ void OptionDialog::on_lineEditLog_File_editingFinished()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","file",ui->lineEditLog_File->text());
+        OptionEngine::optionEngine->setOptionValue("Write_log","file",ui->lineEditLog_File->text().toStdString());
     }
 }
 
@@ -1549,7 +1553,7 @@ void OptionDialog::on_lineEditLog_transfer_format_editingFinished()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","transfer_format",ui->lineEditLog_transfer_format->text());
+        OptionEngine::optionEngine->setOptionValue("Write_log","transfer_format",ui->lineEditLog_transfer_format->text().toStdString());
     }
 }
 
@@ -1558,7 +1562,7 @@ void OptionDialog::on_lineEditLog_error_format_editingFinished()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","error_format",ui->lineEditLog_error_format->text());
+        OptionEngine::optionEngine->setOptionValue("Write_log","error_format",ui->lineEditLog_error_format->text().toStdString());
     }
 }
 
@@ -1567,7 +1571,7 @@ void OptionDialog::on_checkBoxLog_transfer_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","transfer",ui->checkBoxLog_transfer->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","transfer",booltostring(ui->checkBoxLog_transfer->isChecked()));
     }
 }
 
@@ -1576,7 +1580,7 @@ void OptionDialog::on_checkBoxLog_error_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","error",ui->checkBoxLog_error->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","error",booltostring(ui->checkBoxLog_error->isChecked()));
     }
 }
 
@@ -1585,13 +1589,13 @@ void OptionDialog::on_checkBoxLog_folder_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","folder",ui->checkBoxLog_folder->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","folder",booltostring(ui->checkBoxLog_folder->isChecked()));
     }
 }
 
 void OptionDialog::on_logBrowse_clicked()
 {
-    QString file=QFileDialog::getSaveFileName(this,tr("Save logs as: "),ResourcesManager::resourcesManager->getWritablePath());
+    QString file=QFileDialog::getSaveFileName(this,tr("Save logs as: "),QString::fromStdString(ResourcesManager::resourcesManager->getWritablePath()));
     if(file!="")
     {
         ui->lineEditLog_File->setText(file);
@@ -1604,7 +1608,7 @@ void OptionDialog::on_checkBoxLog_sync_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Write_log","sync",ui->checkBoxLog_sync->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Write_log","sync",booltostring(ui->checkBoxLog_sync->isChecked()));
     }
 }
 
@@ -1612,8 +1616,9 @@ void OptionDialog::on_ActionOnManualOpen_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->ActionOnManualOpen->itemData(index).toString()+", string value: "+ui->ActionOnManualOpen->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen",index);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->ActionOnManualOpen->itemData(index).toString().toStdString()+
+                                 ", string value: "+ui->ActionOnManualOpen->itemText(index).toStdString()+", index: "+std::to_string(index));
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen",std::to_string(index));
     }
 }
 
@@ -1621,8 +1626,9 @@ void OptionDialog::on_GroupWindowWhen_currentIndexChanged(const int &index)
 {
     if(index!=-1 && allPluginsIsLoaded)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->GroupWindowWhen->itemData(index).toString()+", string value: "+ui->GroupWindowWhen->itemText(index)+", index: "+QString::number(index));
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",index);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data value: "+ui->GroupWindowWhen->itemData(index).toString().toStdString()+
+                                 ", string value: "+ui->GroupWindowWhen->itemText(index).toStdString()+", index: "+std::to_string(index));
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen",std::to_string(index));
     }
 }
 
@@ -1631,32 +1637,37 @@ void OptionDialog::on_DisplayOSWarning_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",ui->DisplayOSWarning->isChecked());
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",booltostring(ui->DisplayOSWarning->isChecked()));
     }
 }
 
-void OptionDialog::newClientList(const QStringList &clientsList)
+void OptionDialog::newClientList(const std::vector<std::string> &clientsList)
 {
     ui->clientConnected->clear();
-    ui->clientConnected->addItems(clientsList);
+    unsigned int index=0;
+    while(index<clientsList.size())
+    {
+        ui->clientConnected->addItem(QString::fromStdString(clientsList.at(index)));
+        index++;
+    }
 }
 
 void OptionDialog::on_checkTheUpdate_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","checkTheUpdate",ui->checkTheUpdate->isChecked());
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","checkTheUpdate",booltostring(ui->checkTheUpdate->isChecked()));
 }
 
 void OptionDialog::on_confirmToGroupWindows_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","confirmToGroupWindows",ui->confirmToGroupWindows->isChecked());
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","confirmToGroupWindows",booltostring(ui->confirmToGroupWindows->isChecked()));
 }
 
 void OptionDialog::on_giveGPUTime_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",ui->giveGPUTime->isChecked());
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",booltostring(ui->giveGPUTime->isChecked()));
 }
 
 #ifdef ULTRACOPIER_CGMINER
@@ -1711,6 +1722,6 @@ void OptionDialog::on_remainingTimeAlgorithm_currentIndexChanged(int index)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","remainingTimeAlgorithm",index);
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","remainingTimeAlgorithm",std::to_string(index));
     }
 }
