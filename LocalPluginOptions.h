@@ -33,7 +33,7 @@ public:
     void setOptionValue(const std::string &variableName,const std::string &value);
 protected:
     //for the options
-    QString group;
+    std::string group;
     bool groupOptionAdded;
 /*public slots:-> disabled because the value will not externaly changed, then useless notification
     void newOptionValue(QString group,QString variable,QVariant value);*/

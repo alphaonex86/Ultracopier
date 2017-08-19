@@ -13,7 +13,7 @@
 
 /// \brief To define the interface, to pass the facility object from Ultracopier to the plugins without compatibility problem
 //not possible to be static, because in the plugin it's not resolved
-class FacilityInterface : public QObject
+class FacilityInterface
 {
     public:
         /// \brief To force the text re-translation
@@ -27,13 +27,13 @@ class FacilityInterface : public QObject
         /// \brief speed to string in byte per seconds
         virtual std::string speedToString(const double &speed) const = 0;
         /// \brief Decompose the time in second
-        virtual Ultracopier::TimeDecomposition secondsToTimeDecomposition(const quint32 &seconds) const = 0;
+        virtual Ultracopier::TimeDecomposition secondsToTimeDecomposition(const uint32_t &seconds) const = 0;
         /// \brief have the fonctionnality
         virtual bool haveFunctionality(const std::string &fonctionnality) const = 0;
         /// \brief call the fonctionnality
         virtual std::string callFunctionality(const std::string &fonctionnality,const std::vector<std::string> &args=std::vector<std::string>()) = 0;
         /// \brief Do the simplified time
-        virtual std::string simplifiedRemainingTime(const quint32 &seconds) const = 0;
+        virtual std::string simplifiedRemainingTime(const uint32_t &seconds) const = 0;
         /// \brief Do the simplified time
         virtual std::string ultimateUrl() const = 0;
         /// \brief Return the software name

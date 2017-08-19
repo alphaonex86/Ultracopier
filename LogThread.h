@@ -45,7 +45,7 @@ public slots:
     void mkPath(const std::string &path);
 private slots:
     /** \to write the data into the file */
-    void realDataWrite(const QString &text);
+    void realDataWrite(const std::string &text);
     /** \to update the options value */
     void newOptionValue(const std::string &group,const std::string &name,const std::string &value);
 signals:

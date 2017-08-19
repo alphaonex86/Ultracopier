@@ -31,7 +31,7 @@ QVariant DebugModel::data( const QModelIndex& index, int role ) const
     int row,column;
     row=index.row();
     column=index.column();
-    if(index.parent()!=QModelIndex() || row < 0 || row >= list.count() || column < 0 || column >= COLUMN_COUNT)
+    if(index.parent()!=QModelIndex() || row < 0 || row >= (int)list.size() || column < 0 || column >= COLUMN_COUNT)
         return QVariant();
 
     const DebugItem& item = list.at(row);
@@ -45,16 +45,16 @@ QVariant DebugModel::data( const QModelIndex& index, int role ) const
                 return item.time;
             break;
             case 1:
-                return item.file;
+                return QString::fromStdString(item.file);
             break;
             case 2:
-                return item.function;
+                return QString::fromStdString(item.function);
             break;
             case 3:
-                return item.location;
+                return QString::fromStdString(item.location);
             break;
             case 4:
-                return item.text;
+                return QString::fromStdString(item.text);
             break;
             default:
             return QVariant();
@@ -89,7 +89,7 @@ QVariant DebugModel::data( const QModelIndex& index, int role ) const
 
 int DebugModel::rowCount( const QModelIndex& parent ) const
 {
-    return parent == QModelIndex() ? list.count() : 0;
+    return parent == QModelIndex() ? list.size() : 0;
 }
 
 QVariant DebugModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -126,7 +126,7 @@ void DebugModel::addDebugInformation(const int &time, const DebugLevel_custom &l
     item.text=text;
     item.file=file+":"+std::to_string(ligne);
     item.location=location;
-    list << item;
+    list.push_back(item);
     if(!displayed)
     {
         displayed=true;

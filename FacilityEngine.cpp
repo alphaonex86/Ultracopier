@@ -34,71 +34,71 @@ std::string FacilityEngine::separator()
 void FacilityEngine::retranslate()
 {
     //undirect translated string
-    Translation_perSecond=QStringLiteral("/")+tr("s");
-    Translation_tooBig=tr("Too big");
-    Translation_B=tr("B");
-    Translation_KB=tr("KB");
-    Translation_MB=tr("MB");
-    Translation_GB=tr("GB");
-    Translation_TB=tr("TB");
-    Translation_PB=tr("PB");
-    Translation_EB=tr("EB");
-    Translation_ZB=tr("ZB");
-    Translation_YB=tr("YB");
-    Translation_SimplifiedRemaningTime_LessThan10s=tr("Less than %10 seconds");
-    Translation_SimplifiedRemaningTime_AboutSeconds=tr("About %10 seconds remaining");
-    Translation_SimplifiedRemaningTime_AboutMinutes=tr("About %1 minutes remaining");
-    Translation_SimplifiedRemaningTime_AboutHours=tr("About %1 hours remaining");
+    Translation_perSecond="/"+tr("s").toStdString();
+    Translation_tooBig=tr("Too big").toStdString();
+    Translation_B=tr("B").toStdString();
+    Translation_KB=tr("KB").toStdString();
+    Translation_MB=tr("MB").toStdString();
+    Translation_GB=tr("GB").toStdString();
+    Translation_TB=tr("TB").toStdString();
+    Translation_PB=tr("PB").toStdString();
+    Translation_EB=tr("EB").toStdString();
+    Translation_ZB=tr("ZB").toStdString();
+    Translation_YB=tr("YB").toStdString();
+    Translation_SimplifiedRemaningTime_LessThan10s=tr("Less than %10 seconds").toStdString();
+    Translation_SimplifiedRemaningTime_AboutSeconds=tr("About %10 seconds remaining").toStdString();
+    Translation_SimplifiedRemaningTime_AboutMinutes=tr("About %1 minutes remaining").toStdString();
+    Translation_SimplifiedRemaningTime_AboutHours=tr("About %1 hours remaining").toStdString();
     //load the translations tab
-    translations["Copy engine"]=tr("Copy engine");
+    translations["Copy engine"]=tr("Copy engine").toStdString();
     //: a copy
-    translations["Copy"]=tr("Copy");
+    translations["Copy"]=tr("Copy").toStdString();
     //: a transfer
-    translations["Transfer"]=tr("Transfer");
+    translations["Transfer"]=tr("Transfer").toStdString();
     //: a move
-    translations["Move"]=tr("Move");
-    translations["Start"]=tr("Start");
-    translations["Pause"]=tr("Pause");
-    translations["Resume"]=tr("Resume");
-    translations["Skip"]=tr("Skip");
-    translations["Unlimited"]=tr("Unlimited");
-    translations["Source"]=tr("Source");
-    translations["Size"]=tr("Size");
-    translations["Destination"]=tr("Destination");
-    translations["Quit"]=tr("Quit");
-    translations["Target"]=tr("Target");
-    translations["Time remaining:"]=tr("Time remaining:");
-    translations["Listing"]=tr("Listing");
-    translations["Copying"]=tr("Copying");
-    translations["Listing and copying"]=tr("Listing and copying");
-    translations["Time remaining:"]=tr("Time remaining:");
+    translations["Move"]=tr("Move").toStdString();
+    translations["Start"]=tr("Start").toStdString();
+    translations["Pause"]=tr("Pause").toStdString();
+    translations["Resume"]=tr("Resume").toStdString();
+    translations["Skip"]=tr("Skip").toStdString();
+    translations["Unlimited"]=tr("Unlimited").toStdString();
+    translations["Source"]=tr("Source").toStdString();
+    translations["Size"]=tr("Size").toStdString();
+    translations["Destination"]=tr("Destination").toStdString();
+    translations["Quit"]=tr("Quit").toStdString();
+    translations["Target"]=tr("Target").toStdString();
+    translations["Time remaining:"]=tr("Time remaining:").toStdString();
+    translations["Listing"]=tr("Listing").toStdString();
+    translations["Copying"]=tr("Copying").toStdString();
+    translations["Listing and copying"]=tr("Listing and copying").toStdString();
+    translations["Time remaining:"]=tr("Time remaining:").toStdString();
     //for copy engine
-    translations["Ask"]=tr("Ask");
-    translations["Skip"]=tr("Skip");
-    translations["Overwrite"]=tr("Overwrite");
-    translations["Overwrite if newer"]=tr("Overwrite if newer");
-    translations["Overwrite if the last modification dates are different"]=tr("Overwrite if the last modification dates are different");
-    translations["Rename"]=tr("Rename");
-    translations["Put to the end of the list"]=tr("Put to the end of the list");
-    translations["Select source directory"]=tr("Select source directory");
-    translations["Select destination directory"]=tr("Select destination directory");
-    translations["Internal error"]=tr("Internal error");
-    translations["Select one or more files to open"]=tr("Select one or more files to open");
-    translations["All files"]=tr("All files");
-    translations["Save transfer list"]=tr("Save transfer list");
-    translations["Open transfer list"]=tr("Open transfer list");
-    translations["Transfer list"]=tr("Transfer list");
-    translations["Error"]=tr("Error");
-    translations["Not supported on this platform"]=tr("Not supported on this platform");
-    translations["Completed in %1"]=tr("Completed in %1");
+    translations["Ask"]=tr("Ask").toStdString();
+    translations["Skip"]=tr("Skip").toStdString();
+    translations["Overwrite"]=tr("Overwrite").toStdString();
+    translations["Overwrite if newer"]=tr("Overwrite if newer").toStdString();
+    translations["Overwrite if the last modification dates are different"]=tr("Overwrite if the last modification dates are different").toStdString();
+    translations["Rename"]=tr("Rename").toStdString();
+    translations["Put to the end of the list"]=tr("Put to the end of the list").toStdString();
+    translations["Select source directory"]=tr("Select source directory").toStdString();
+    translations["Select destination directory"]=tr("Select destination directory").toStdString();
+    translations["Internal error"]=tr("Internal error").toStdString();
+    translations["Select one or more files to open"]=tr("Select one or more files to open").toStdString();
+    translations["All files"]=tr("All files").toStdString();
+    translations["Save transfer list"]=tr("Save transfer list").toStdString();
+    translations["Open transfer list"]=tr("Open transfer list").toStdString();
+    translations["Transfer list"]=tr("Transfer list").toStdString();
+    translations["Error"]=tr("Error").toStdString();
+    translations["Not supported on this platform"]=tr("Not supported on this platform").toStdString();
+    translations["Completed in %1"]=tr("Completed in %1").toStdString();
 }
 
 /// \brief convert size in Byte to String
-QString FacilityEngine::sizeToString(const double &size) const
+std::string FacilityEngine::sizeToString(const double &size) const
 {
     double size_temp=size;
     if(size_temp<1024)
-        return QString::number(size_temp)+sizeUnitToString(Ultracopier::SizeUnit_byte);
+        return std::to_string(size_temp)+sizeUnitToString(Ultracopier::SizeUnit_byte);
     if((size_temp=size_temp/1024)<1024)
         return adaptString(size_temp)+sizeUnitToString(Ultracopier::SizeUnit_KiloByte);
     if((size_temp=size_temp/1024)<1024)
@@ -118,17 +118,17 @@ QString FacilityEngine::sizeToString(const double &size) const
     return Translation_tooBig;
 }
 
-QString FacilityEngine::adaptString(const float &size) const
+std::string FacilityEngine::adaptString(const float &size) const
 {
     if(size>=100)
-        return QString::number(size,'f',0);
+        return QString::number(size,'f',0).toStdString();
     else
-        return QString::number(size,'g',3);
+        return QString::number(size,'g',3).toStdString();
 }
 
 
 /// \brief convert size unit to String
-QString FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const
+std::string FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) const
 {
     switch(sizeUnit)
     {
@@ -151,16 +151,16 @@ QString FacilityEngine::sizeUnitToString(const Ultracopier::SizeUnit &sizeUnit) 
         case Ultracopier::SizeUnit_YottaByte:
             return Translation_YB;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"sizeUnit: "+QString::number(sizeUnit));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"sizeUnit: "+std::to_string(sizeUnit));
             return "???";
     }
 }
 
 /// \brief translate the text
-QString FacilityEngine::translateText(const QString &text) const
+std::string FacilityEngine::translateText(const std::string &text) const
 {
-    if(translations.contains(text))
-        return translations.value(text);
+    if(translations.find(text)!=translations.cend())
+        return translations.at(text);
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"translation not found: "+text);
@@ -169,12 +169,12 @@ QString FacilityEngine::translateText(const QString &text) const
 }
 
 /// \brief speed to string in byte per seconds
-QString FacilityEngine::speedToString(const double &speed) const
+std::string FacilityEngine::speedToString(const double &speed) const
 {
     return sizeToString(speed)+Translation_perSecond;
 }
 /// \brief Decompose the time in second
-Ultracopier::TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const quint32 &seconds) const
+Ultracopier::TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const uint32_t &seconds) const
 {
     quint32 seconds_temp=seconds;
     Ultracopier::TimeDecomposition returnValue;
@@ -189,7 +189,7 @@ Ultracopier::TimeDecomposition FacilityEngine::secondsToTimeDecomposition(const 
 }
 
 /// \brief have the functionality
-bool FacilityEngine::haveFunctionality(const QString &fonctionnality) const
+bool FacilityEngine::haveFunctionality(const std::string &fonctionnality) const
 {
     #if defined (Q_OS_WIN32)
     if(fonctionnality=="shutdown")
@@ -200,7 +200,7 @@ bool FacilityEngine::haveFunctionality(const QString &fonctionnality) const
 }
 
 /// \brief call the fonctionnality
-QVariant FacilityEngine::callFunctionality(const QString &fonctionnality,const QStringList &args)
+std::string FacilityEngine::callFunctionality(const std::string &fonctionnality,const std::vector<std::string> &args)
 {
     #if defined (Q_OS_WIN32)
     ExitWindowsEx(EWX_POWEROFF | EWX_FORCE,0);
@@ -208,29 +208,29 @@ QVariant FacilityEngine::callFunctionality(const QString &fonctionnality,const Q
     #endif
     Q_UNUSED(fonctionnality);
     Q_UNUSED(args);
-    return QVariant();
+    return std::string();
 }
 
 /// \brief Do the simplified time
-QString FacilityEngine::simplifiedRemainingTime(const quint32 &seconds) const
+std::string FacilityEngine::simplifiedRemainingTime(const uint32_t &seconds) const
 {
     if(seconds<50)
     {
         if(seconds<10)
-            return Translation_SimplifiedRemaningTime_LessThan10s.arg(seconds/10+1);
+            return QString::fromStdString(Translation_SimplifiedRemaningTime_LessThan10s).arg(seconds/10+1).toStdString();
         else
-            return Translation_SimplifiedRemaningTime_AboutSeconds.arg(seconds/10+1);
+            return QString::fromStdString(Translation_SimplifiedRemaningTime_AboutSeconds).arg(seconds/10+1).toStdString();
     }
     if(seconds<3600)
-        return Translation_SimplifiedRemaningTime_AboutMinutes.arg(seconds/60);
-    return Translation_SimplifiedRemaningTime_AboutHours.arg(seconds/3600);
+        return QString::fromStdString(Translation_SimplifiedRemaningTime_AboutMinutes).arg(seconds/60).toStdString();
+    return QString::fromStdString(Translation_SimplifiedRemaningTime_AboutHours).arg(seconds/3600).toStdString();
 }
 
 /// \brief Return ultimate url, empty is not found or already ultimate
-QString FacilityEngine::ultimateUrl() const
+std::string FacilityEngine::ultimateUrl() const
 {
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    return QString();
+    return std::string();
     #else
         #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
         return QStringLiteral("http://ultracopier.first-world.info/shop.html");
@@ -241,11 +241,11 @@ QString FacilityEngine::ultimateUrl() const
 }
 
 /// \brief Return the software name
-QString FacilityEngine::softwareName() const
+std::string FacilityEngine::softwareName() const
 {
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return QStringLiteral("Supercopier");
+        return "Supercopier";
     #else
-        return QStringLiteral("Ultracopier");
+        return "Ultracopier";
     #endif
 }

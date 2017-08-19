@@ -1,6 +1,7 @@
 #include "InternetUpdater.h"
 #include "EventDispatcher.h"
 #include "OptionEngine.h"
+#include "cpp11addition.h"
 
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 
@@ -21,7 +22,7 @@ InternetUpdater::InternetUpdater(QObject *parent) :
 
 void InternetUpdater::downloadFile()
 {
-    if(!OptionEngine::optionEngine->getOptionValue(QStringLiteral("Ultracopier"),QStringLiteral("checkTheUpdate")).toBool())
+    if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate")))
         return;
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
         QString name=QStringLiteral("Supercopier");
@@ -64,7 +65,7 @@ void InternetUpdater::httpFinished()
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!reply->isFinished())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("get the new update failed: not finished"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"get the new update failed: not finished");
         reply->deleteLater();
         return;
     }
@@ -72,25 +73,25 @@ void InternetUpdater::httpFinished()
     {
         newUpdateTimer.stop();
         newUpdateTimer.start(1000*3600*24);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("get the new update failed: %1").arg(reply->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"get the new update failed: "+reply->errorString().toStdString());
         reply->deleteLater();
         return;
     } else if (!redirectionTarget.isNull()) {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("redirection denied to: %1").arg(redirectionTarget.toUrl().toString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"redirection denied to: "+redirectionTarget.toUrl().toString().toStdString());
         reply->deleteLater();
         return;
     }
     QString newVersion=QString::fromUtf8(reply->readAll());
     if(newVersion.isEmpty())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("version string is empty"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string is empty");
         reply->deleteLater();
         return;
     }
     newVersion.remove("\n");
     if(!newVersion.contains(QRegularExpression(QLatin1Literal("^[0-9]+(\\.[0-9]+)+$"))))
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("version string don't match: %1").arg(newVersion));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string don't match: "+newVersion.toStdString());
         reply->deleteLater();
         return;
     }
@@ -99,13 +100,13 @@ void InternetUpdater::httpFinished()
         reply->deleteLater();
         return;
     }
-    if(PluginsManager::compareVersion(newVersion,QStringLiteral("<="),ULTRACOPIER_VERSION))
+    if(PluginsManager::compareVersion(newVersion.toStdString(),"<=",ULTRACOPIER_VERSION))
     {
         reply->deleteLater();
         return;
     }
     newUpdateTimer.stop();
-    emit newUpdate(newVersion);
+    emit newUpdate(newVersion.toStdString());
     reply->deleteLater();
 }
 

@@ -4,6 +4,7 @@
 \licence GPL3, see the file COPYING */
 
 #include "CliParser.h"
+#include "cpp11addition.h"
 
 #include <QDebug>
 
@@ -16,9 +17,9 @@ CliParser::CliParser(QObject *parent) :
   \param ultracopierArguments the argument list
   \param external true if the arguments come from other instance of ultracopier
 */
-void CliParser::cli(const QStringList &ultracopierArguments,const bool &external,const bool &onlyCheck)
+void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("ultracopierArguments: ")+ultracopierArguments.join(QStringLiteral(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+stringimplode(ultracopierArguments,';'));
     if(ultracopierArguments.size()==1)
     {
         if(external)
@@ -28,26 +29,26 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
     }
     else if(ultracopierArguments.size()==2)
     {
-        if(ultracopierArguments.last()==QStringLiteral("quit"))
+        if(ultracopierArguments.back()=="quit")
         {
             if(onlyCheck)
                 return;
             QCoreApplication::exit();
             return;
         }
-        else if(ultracopierArguments.last()==QStringLiteral("--help"))
+        else if(ultracopierArguments.back()=="--help")
         {
             showHelp(false);
             return;
         }
-        else if(ultracopierArguments.last()==QStringLiteral("--options"))
+        else if(ultracopierArguments.back()=="--options")
         {
             emit showOptions();
             return;
         }
-        else if(ultracopierArguments.last().endsWith(QStringLiteral(".urc")))
+        else if(stringEndsWith(ultracopierArguments.back(),".urc"))
         {
-            tryLoadPlugin(ultracopierArguments.last());
+            tryLoadPlugin(ultracopierArguments.back());
             return;
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
@@ -56,41 +57,41 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
     }
     else if(ultracopierArguments.size()==3)
     {
-        if(ultracopierArguments.at(1)==QStringLiteral("Transfer-list"))
+        if(ultracopierArguments.at(1)=="Transfer-list")
         {
             if(onlyCheck)
                 return;
-            QFile transferFile(ultracopierArguments.last());
+            QFile transferFile(QString::fromStdString(ultracopierArguments.back()));
             if(transferFile.open(QIODevice::ReadOnly))
             {
                 QString content;
                 QByteArray data=transferFile.readLine(64);
                 if(data.size()<=0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Problem reading file, or file size is 0"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Problem reading file, or file size is 0");
                     QMessageBox::warning(NULL,tr("Warning"),tr("Problem reading file, or file size is 0"));
                     transferFile.close();
                     return;
                 }
                 content=QString::fromUtf8(data);
-                QStringList transferListArguments=content.split(';');
-                transferListArguments[3].remove('\n');
+                std::vector<std::string> transferListArguments=stringsplit(content.toStdString(),';');
+                transferListArguments[3].erase(std::remove(transferListArguments[3].begin(), transferListArguments[3].end(),'\n'),transferListArguments[3].end());
                 if(transferListArguments.at(0)!="Ultracopier" ||
                         transferListArguments.at(1)!="Transfer-list" ||
                         (transferListArguments.at(2)!="Transfer" && transferListArguments.at(2)!="Copy" && transferListArguments.at(2)!="Move")
                         )
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("This file is not supported transfer list"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"This file is not supported transfer list");
                     QMessageBox::warning(NULL,tr("Warning"),tr("This file is not supported transfer list"));
                     transferFile.close();
                     return;
                 }
                 transferFile.close();
-                emit newTransferList(transferListArguments.at(3),transferListArguments.at(2),ultracopierArguments.last());
+                emit newTransferList(transferListArguments.at(3),transferListArguments.at(2),ultracopierArguments.back());
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Unable to open the transfer list file: %1").arg(transferFile.errorString()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to open the transfer list file: "+transferFile.errorString().toStdString());
                 QMessageBox::warning(NULL,tr("Warning"),tr("Unable to open the transfer list file"));
                 return;
             }
@@ -102,51 +103,51 @@ void CliParser::cli(const QStringList &ultracopierArguments,const bool &external
     }
     else if(ultracopierArguments.size()>3)
     {
-        if(ultracopierArguments.at(1)==QStringLiteral("Copy") || ultracopierArguments.at(1)==QStringLiteral("cp"))
+        if(ultracopierArguments.at(1)=="Copy" || ultracopierArguments.at(1)=="cp")
         {
             if(onlyCheck)
                 return;
-            QStringList transferList=ultracopierArguments;
-            transferList.removeFirst();
-            transferList.removeFirst();
-            if(transferList.last()=="?")
+            std::vector<std::string> transferList=ultracopierArguments;
+            transferList.erase(transferList.cbegin());
+            transferList.erase(transferList.cbegin());
+            if(transferList.back()=="?")
             {
-                transferList.removeLast();
+                transferList.erase(transferList.cbegin());
                 emit newCopyWithoutDestination(transferList);
             }
             else
             {
-                QString destination=transferList.last();
-                transferList.removeLast();
+                std::string destination=transferList.back();
+                transferList.erase(transferList.cbegin());
                 emit newCopy(transferList,destination);
             }
             return;
         }
-        else if(ultracopierArguments.at(1)==QStringLiteral("Move") || ultracopierArguments.at(1)==QStringLiteral("mv"))
+        else if(ultracopierArguments.at(1)=="Move" || ultracopierArguments.at(1)=="mv")
         {
             if(onlyCheck)
                 return;
-            QStringList transferList=ultracopierArguments;
-            transferList.removeFirst();
-            transferList.removeFirst();
-            if(transferList.last()=="?")
+            std::vector<std::string> transferList=ultracopierArguments;
+            transferList.erase(transferList.cbegin());
+            transferList.erase(transferList.cbegin());
+            if(transferList.back()=="?")
             {
-                transferList.removeLast();
+                transferList.erase(transferList.cbegin());
                 emit newMoveWithoutDestination(transferList);
             }
             else
             {
-                QString destination=transferList.last();
-                transferList.removeLast();
+                std::string destination=transferList.back();
+                transferList.erase(transferList.cbegin());
                 emit newMove(transferList,destination);
             }
             return;
         }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Command line not understand"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
         showHelp();
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Command line not understand"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Command line not understand");
     showHelp();
 }
 
