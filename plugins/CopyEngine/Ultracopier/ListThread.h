@@ -8,8 +8,9 @@
 
 #include <QThread>
 #include <QObject>
-#include <QList>
-#include <QStringList>
+#include <string>
+#include <vector>
+#include <unordered_map>
 #include <QFileInfo>
 #include <QSemaphore>
 #include <QTextStream>
@@ -35,24 +36,24 @@ public:
     /** \brief compare the current sources of the copy, with the passed arguments
      * \param sources the sources list to compares with the current sources list
      * \return true if have same sources, else false (or empty) */
-    bool haveSameSource(const QStringList &sources);
+    bool haveSameSource(const std::vector<std::string> &sources);
     /** \brief compare the current destination of the copy, with the passed arguments
      * \param destination the destination to compares with the current destination
      * \return true if have same destination, else false (or empty) */
-    bool haveSameDestination(const QString &destination);
+    bool haveSameDestination(const std::string &destination);
     /// \return empty if multiple or no destination
-    QString getUniqueDestinationFolder() const;
+    std::string getUniqueDestinationFolder() const;
     //external soft like file browser have send copy/move list to do
     /** \brief send copy with destination
      * \param sources the sources list to copy
      * \param destination the destination to copy
      * \return true if the copy have been accepted */
-    bool newCopy(const QStringList &sources,const QString &destination);
+    bool newCopy(const std::vector<std::string> &sources,const std::string &destination);
     /** \brief send move without destination, ask the destination
      * \param sources the sources list to move
      * \param destination the destination to move
      * \return true if the move have been accepted */
-    bool newMove(const QStringList &sources,const QString &destination);
+    bool newMove(const std::vector<std::string> &sources,const std::string &destination);
     /** \brief to set drives detected
      * specific to this copy engine */
     /// \brief to set the collision action
@@ -63,41 +64,41 @@ public:
     /// \brief to store one action to do
     struct ActionToDoTransfer
     {
-        quint64 id;
-        qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
+        uint64_t id;
+        uint64_t size;///< Used to set: used in case of transfer or remainingInode for drop folder
         QFileInfo source;///< Used to set: source for transfer, folder to create, folder to drop
         QFileInfo destination;
         Ultracopier::CopyMode mode;
         bool isRunning;///< store if the action si running
         //TransferThread * transfer; // -> see transferThreadList
     };
-    QList<ActionToDoTransfer> actionToDoListTransfer;
+    std::vector<ActionToDoTransfer> actionToDoListTransfer;
     /// \brief to store one action to do
     struct ActionToDoInode
     {
         ActionType type;///< \see ActionType
-        quint64 id;
-        qint64 size;///< Used to set: used in case of transfer or remainingInode for drop folder
+        uint64_t id;
+        int64_t size;///< Used to set: used in case of transfer or remainingInode for drop folder
         QFileInfo source;///< Keep to copy the right/date, to remove (for move)
         QFileInfo destination;///< Used to set: folder to create, folder to drop
         bool isRunning;///< store if the action si running
     };
-    QList<ActionToDoInode> actionToDoListInode;
-    QList<ActionToDoInode> actionToDoListInode_afterTheTransfer;
+    std::vector<ActionToDoInode> actionToDoListInode;
+    std::vector<ActionToDoInode> actionToDoListInode_afterTheTransfer;
     int numberOfInodeOperation;
     struct ErrorLogEntry
     {
         QFileInfo source;
         QFileInfo destination;
-        QString error;
+        std::string error;
         Ultracopier::CopyMode mode;
     };
-    QList<ErrorLogEntry> errorLog;
+    std::vector<ErrorLogEntry> errorLog;
     //dir operation thread queue
     MkPath mkPathQueue;
     //to get the return value from copyEngine
     bool getReturnBoolToCopyEngine() const;
-    QPair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
+    std::pair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
     Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine() const;
 
     void set_doChecksum(bool doChecksum);
@@ -114,41 +115,41 @@ public slots:
     void resume();
     /** \brief skip one transfer entry
      * \param id id of the file to remove */
-    void skip(const quint64 &id);
+    void skip(const uint64_t &id);
     /** \brief skip as interanl one transfer entry
      * \param id id of the file to remove */
-    bool skipInternal(const quint64 &id);
+    bool skipInternal(const uint64_t &id);
     /// \brief cancel all the transfer
     void cancel();
     //edit the transfer list
     /** \brief remove the selected item
      * \param ids ids is the id list of the selected items */
-    void removeItems(const QList<int> &ids);
+    void removeItems(const std::vector<int> &ids);
     /** \brief move on top of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnTop(QList<int> ids);
+    void moveItemsOnTop(std::vector<int> ids);
     /** \brief move up the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsUp(QList<int> ids);
+    void moveItemsUp(std::vector<int> ids);
     /** \brief move down the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsDown(QList<int> ids);
+    void moveItemsDown(std::vector<int> ids);
     /** \brief move on bottom of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnBottom(QList<int> ids);
+    void moveItemsOnBottom(std::vector<int> ids);
 
     /** \brief give the forced mode, to export/import transfer list */
     void forceMode(const Ultracopier::CopyMode &mode);
     /// \brief export the transfer list into a file
-    void exportTransferList(const QString &fileName);
+    void exportTransferList(const std::string &fileName);
     /// \brief import the transfer list into a file
-    void importTransferList(const QString &fileName);
+    void importTransferList(const std::string &fileName);
 
     /// \brief set the folder local collision
     void setFolderCollision(const FolderExistsAction &alwaysDoThisActionForFolderExists);
     /** \brief to set the speed limitation
      * -1 if not able, 0 if disabled */
-    bool setSpeedLimitation(const qint64 &speedLimitation);
+    bool setSpeedLimitation(const int64_t &speedLimitation);
     /// \brief set the copy info and options before runing
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
@@ -176,14 +177,14 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
-    void getNeedPutAtBottom(const QFileInfo &fileInfo, const QString &errorString, TransferThread *thread,const ErrorType &errorType);
+    void getNeedPutAtBottom(const QFileInfo &fileInfo, const std::string &errorString, TransferThread *thread,const ErrorType &errorType);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
 
     void set_osBufferLimit(const unsigned int &osBufferLimit);
-    void set_setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
-    void set_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
+    void set_setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude);
+    void set_sendNewRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule);
     void set_updateMount();
 
     //send action done
@@ -202,32 +203,32 @@ public slots:
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
     void setCopyListOrder(const bool &order);
-    void exportErrorIntoTransferList(const QString &fileName);
+    void exportErrorIntoTransferList(const std::string &fileName);
 private:
     QSemaphore          mkpathTransfer;
-    QString             sourceDrive;
+    std::string             sourceDrive;
     bool                sourceDriveMultiple;
-    QString             destinationDrive;
-    QString             destinationFolder;
+    std::string             destinationDrive;
+    std::string             destinationFolder;
     bool                destinationDriveMultiple;
     bool                destinationFolderMultiple;
     DriveManagement     driveManagement;
 
     bool                stopIt;
-    QList<ScanFileOrFolder *> scanFileOrFolderThreadsPool;
+    std::vector<ScanFileOrFolder *> scanFileOrFolderThreadsPool;
     int                 numberOfTransferIntoToDoList;
-    QList<TransferThread *>		transferThreadList;
+    std::vector<TransferThread *>		transferThreadList;
     ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
-    quint64				bytesToTransfer;
-    quint64				bytesTransfered;
+    uint64_t				bytesToTransfer;
+    uint64_t				bytesTransfered;
     bool				autoStart;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool                rsync;
     #endif
     bool				putInPause;
-    QList<Ultracopier::ReturnActionOnCopyList>	actionDone;///< to action to send to the interface
-    quint64				idIncrementNumber;///< to store the last id returned
-    qint64				actualRealByteTransfered;
+    std::vector<Ultracopier::ReturnActionOnCopyList>	actionDone;///< to action to send to the interface
+    uint64_t				idIncrementNumber;///< to store the last id returned
+    int64_t				actualRealByteTransfered;
     int                 maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
     FolderExistsAction	alwaysDoThisActionForFolderExists;
     bool				checkDestinationFolderExists;
@@ -246,15 +247,15 @@ private:
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
     bool                copyListOrder;
-    QHash<QString,quint64> requiredSpace;
-    QList<QPair<quint64,quint32> > timeToTransfer;
+    std::unordered_map<std::string,uint64_t> requiredSpace;
+    std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
     unsigned int        putAtBottom;
     unsigned int		osBufferLimit;
-    QList<Filters_rules>		include,exclude;
+    std::vector<Filters_rules>		include,exclude;
     Ultracopier::CopyMode		mode;
     bool				forcedMode;
-    QString				firstRenamingRule;
-    QString				otherRenamingRule;
+    std::string				firstRenamingRule;
+    std::string				otherRenamingRule;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     int                 multiForBigSpeed;
     #endif
@@ -267,34 +268,34 @@ private:
 
     inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
-    quint64 addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode);
+    uint64_t addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode);
     //generate id number
-    quint64 generateIdNumber();
+    uint64_t generateIdNumber();
     //warning the first entry is accessible will copy
-    bool removeSingleItem(const quint64 &id);
+    bool removeSingleItem(const uint64_t &id);
     //put on top
-    bool moveOnTopItem(const quint64 &id);
+    bool moveOnTopItem(const uint64_t &id);
     //move up
-    bool moveUpItem(const quint64 &id);
+    bool moveUpItem(const uint64_t &id);
     //move down
-    bool moveDownItem(const quint64 &id);
+    bool moveDownItem(const uint64_t &id);
     //put on bottom
-    bool moveOnBottomItem(const quint64 &id);
+    bool moveOnBottomItem(const uint64_t &id);
     //general transfer
     void startGeneralTransfer();
     //debug windows if needed
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     QTimer timerUpdateDebugDialog;
     #endif
-    void detectDrivesOfCurrentTransfer(const QStringList &sources,const QString &destination);
+    void detectDrivesOfCurrentTransfer(const std::vector<std::string> &sources,const std::string &destination);
     FacilityInterface * facilityInterface;
     QSemaphore waitConstructor,waitCancel;
     int actionToDoListTransfer_count,actionToDoListInode_count;
     bool doTransfer,doInode;
-    qint64 oversize;//used as temp variable
-    qint64 currentProgression;
-    qint64 copiedSize,totalSize,localOverSize;
-    QList<Ultracopier::ProgressionItem> progressionList;
+    int64_t oversize;//used as temp variable
+    int64_t currentProgression;
+    int64_t copiedSize,totalSize,localOverSize;
+    std::vector<Ultracopier::ProgressionItem> progressionList;
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
@@ -302,12 +303,12 @@ private:
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     int blockSizeAfterSpeedLimitation;//in Bytes
     #endif
-    QStringList drives;
+    std::vector<std::string> drives;
     FileExistsAction alwaysDoThisActionForFileExists;
     //to return value to the copyEngine
     bool returnBoolToCopyEngine;
-    QPair<quint64,quint64> returnPairQuint64ToCopyEngine;
-    QList<Ultracopier::ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
+    std::pair<quint64,quint64> returnPairQuint64ToCopyEngine;
+    std::vector<Ultracopier::ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
     Ultracopier::ItemOfCopyList returnItemOfCopyListToCopyEngine;
     Ultracopier::ProgressionItem tempItem;
 
@@ -335,18 +336,18 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(const QFileInfo &fileInfo,const QString &errorString, const ErrorType &errorType);
+    void errorOnFile(const QFileInfo &fileInfo,const std::string &errorString, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(const QFileInfo &fileInfo, const QString &errorString, const ErrorType &errorType);
+    void errorOnFolder(const QFileInfo &fileInfo, const std::string &errorString, const ErrorType &errorType);
     //to run the thread
     void run();
     /// \to create transfer thread
     void createTransferThread();
     void deleteTransferThread();
     //mk path to do
-    quint64 addToMkPath(const QFileInfo& source, const QFileInfo& destination, const int &inode);
+    uint64_t addToMkPath(const QFileInfo& source, const QFileInfo& destination, const int &inode);
     //add rm path to do
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
     //add to real move
@@ -363,69 +364,69 @@ signals:
     //send information about the copy
     void actionInProgess(const Ultracopier::EngineActionInProgress &) const;	//should update interface information on this event
 
-    void newActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &) const;///very important, need be temporized to group the modification to do and not flood the interface
+    void newActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &) const;///very important, need be temporized to group the modification to do and not flood the interface
     void syncReady() const;
-    void doneTime(const QList<QPair<quint64,quint32> >&) const;
+    void doneTime(const std::vector<std::pair<uint64_t,uint32_t> >&) const;
 
     /** \brief to get the progression for a specific file
      * \param id the id of the transfer, id send during population the transfer list
      * first = current transfered byte, second = byte to transfer */
-    void pushFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList) const;
+    void pushFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList) const;
     //get information about the copy
     /** \brief to get the general progression
      * first = current transfered byte, second = byte to transfer */
-    void pushGeneralProgression(const quint64 &,const quint64 &) const;
+    void pushGeneralProgression(const uint64_t &,const uint64_t &) const;
 
-    void newFolderListing(const QString &path) const;
+    void newFolderListing(const std::string &path) const;
     void isInPause(const bool &) const;
 
     //when can be deleted
     void canBeDeleted() const;
-    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread,const ErrorType &errorType) const;
+    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
 
     //send error occurred
-    void error(const QString &path,const quint64 &size,const QDateTime &mtime,const QString &error) const;
-    void errorToRetry(const QString &source,const QString &destination,const QString &error) const;
+    void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error) const;
+    void errorToRetry(const std::string &source,const std::string &destination,const std::string &error) const;
     //for the extra logging
-    void rmPath(const QString &path) const;
-    void mkPath(const QString &path) const;
+    void rmPath(const std::string &path) const;
+    void mkPath(const std::string &path) const;
     /// \brief To debug source
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
     #endif
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    void updateTheDebugInfo(const QStringList &,const QStringList&,const int &) const;
+    void updateTheDebugInfo(const std::vector<std::string> &,const std::vector<std::string>&,const int &) const;
     #endif
 
     //other signal
     /// \note Can be call without queue because all call will be serialized
     void send_fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,TransferThread * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const QFileInfo &fileInfo,const QString &errorString,TransferThread * thread, const ErrorType &errorType) const;
+    void send_errorOnFile(const QFileInfo &fileInfo,const std::string &errorString,TransferThread * thread, const ErrorType &errorType) const;
     /// \note Can be call without queue because all call will be serialized
     void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,ScanFileOrFolder * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
+    void send_errorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
     //send the progression
     void send_syncTransferList() const;
     //mkpath error event
-    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType) const;
+    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,const ErrorType &errorType) const;
     //to close
     void tryCancel() const;
     //to ask new transfer thread
     void askNewTransferThread() const;
 
-    void warningTransferList(const QString &warning) const;
-    void errorTransferList(const QString &error) const;
-    void send_sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule) const;
-    void send_realBytesTransfered(const quint64 &) const;
+    void warningTransferList(const std::string &warning) const;
+    void errorTransferList(const std::string &error) const;
+    void send_sendNewRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule) const;
+    void send_realBytesTransfered(const uint64_t &) const;
 
     void send_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
     void send_parallelBuffer(const int &parallelBuffer) const;
     void send_sequentialBuffer(const int &sequentialBuffer) const;
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
     void send_updateMount();
-    void missingDiskSpace(QList<Diskspace> list) const;
+    void missingDiskSpace(std::vector<Diskspace> list) const;
 };
 
 #endif // LISTTHREAD_H

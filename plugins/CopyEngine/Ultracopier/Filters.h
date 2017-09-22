@@ -18,19 +18,19 @@ class Filters : public QDialog
 public:
     explicit Filters(QWidget *parent = 0);
     ~Filters();
-    void setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions);
+    void setFilters(std::vector<std::string> includeStrings, std::vector<std::string> includeOptions, std::vector<std::string> excludeStrings, std::vector<std::string> excludeOptions);
     void reShowAll();
-    QList<Filters_rules> getInclude() const;
-    QList<Filters_rules> getExclude() const;
+    std::vector<Filters_rules> getInclude() const;
+    std::vector<Filters_rules> getExclude() const;
     void newLanguageLoaded();
 private:
     Ui::Filters *ui;
-    QList<Filters_rules> include;
-    QList<Filters_rules> exclude;
+    std::vector<Filters_rules> include;
+    std::vector<Filters_rules> exclude;
     void updateFilters();
     bool convertToRegex(Filters_rules &item);
 signals:
-    void sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions) const;
+    void sendNewFilters(const std::vector<std::string> &includeStrings,const std::vector<std::string> &includeOptions,const std::vector<std::string> &excludeStrings,const std::vector<std::string> &excludeOptions) const;
     void haveNewFilters() const;
 private slots:
     void on_remove_exclusion_clicked();

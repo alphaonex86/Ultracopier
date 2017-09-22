@@ -28,7 +28,7 @@ void RenamingRules::on_buttonBox_clicked(QAbstractButton *button)
     }
 }
 
-void RenamingRules::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void RenamingRules::setRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule)
 {
     disconnectUI();
     this->firstRenamingRule=firstRenamingRule;

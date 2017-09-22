@@ -15,7 +15,7 @@ Filters::~Filters()
     delete ui;
 }
 
-void Filters::setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+void Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions)
 {
     if(includeStrings.size()!=includeOptions.size() || excludeStrings.size()!=excludeOptions.size())
         return;
@@ -158,12 +158,12 @@ void Filters::reShowAll()
     }
 }
 
-QList<Filters_rules> Filters::getInclude() const
+std::vector<Filters_rules> Filters::getInclude() const
 {
     return include;
 }
 
-QList<Filters_rules> Filters::getExclude() const
+std::vector<Filters_rules> Filters::getExclude() const
 {
     return exclude;
 }

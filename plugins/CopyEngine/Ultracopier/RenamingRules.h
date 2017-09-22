@@ -15,20 +15,20 @@ class RenamingRules : public QDialog
 public:
     explicit RenamingRules(QWidget *parent = 0);
     ~RenamingRules();
-    void setRenamingRules(QString firstRenamingRule,QString otherRenamingRule);
+    void setRenamingRules(std::string firstRenamingRule, std::string otherRenamingRule);
     void newLanguageLoaded();
 private:
     Ui::RenamingRules *ui;
     void connectUI();
     void disconnectUI();
-    QString firstRenamingRule;
-    QString otherRenamingRule;
+    std::string firstRenamingRule;
+    std::string otherRenamingRule;
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
     void firstRenamingRule_haveChanged();
     void otherRenamingRule_haveChanged();
 signals:
-    void sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule) const;
+    void sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule) const;
 };
 
 #endif // RENAMINGRULES_H

@@ -302,7 +302,7 @@ void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &d
 }
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
-bool ListThread::haveSameSource(const QStringList &sources)
+bool ListThread::haveSameSource(const std::vector<std::string> &sources)
 {
     if(stopIt)
         return false;
@@ -355,7 +355,7 @@ bool ListThread::haveSameDestination(const QString &destination)
 }
 
 /// \return empty if multiple or no destination
-QString ListThread::getUniqueDestinationFolder() const
+std::string ListThread::getUniqueDestinationFolder() const
 {
     if(stopIt)
         return QString();
@@ -578,7 +578,7 @@ bool ListThread::getReturnBoolToCopyEngine() const
     return returnBoolToCopyEngine;
 }
 
-QPair<quint64,quint64> ListThread::getReturnPairQuint64ToCopyEngine() const
+std::pair<quint64, quint64> ListThread::getReturnPairQuint64ToCopyEngine() const
 {
     return returnPairQuint64ToCopyEngine;
 }
@@ -814,7 +814,7 @@ void ListThread::checkIfReadyToCancel()
 }
 
 //speedLimitation in KB/s
-bool ListThread::setSpeedLimitation(const qint64 &speedLimitation)
+bool ListThread::setSpeedLimitation(const int64_t &speedLimitation)
 {
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("maxSpeed in KB/s: ")+QString::number(speedLimitation));
@@ -2042,7 +2042,7 @@ void ListThread::fileAlreadyExists(const QFileInfo &source,const QFileInfo &dest
 }
 
 /// \note Can be call without queue because all call will be serialized
-void ListThread::errorOnFile(const QFileInfo &fileInfo, const QString &errorString, const ErrorType &errorType)
+void ListThread::errorOnFile(const QFileInfo &fileInfo, const std::string &errorString, const ErrorType &errorType)
 {
     TransferThread * transferThread=qobject_cast<TransferThread *>(sender());
     if(transferThread==NULL)

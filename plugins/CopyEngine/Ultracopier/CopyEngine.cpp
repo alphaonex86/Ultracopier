@@ -411,31 +411,31 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
-bool CopyEngine::haveSameSource(const QStringList &sources)
+bool CopyEngine::haveSameSource(const std::vector<std::string> &sources)
 {
     return listThread->haveSameSource(sources);
 }
 
-bool CopyEngine::haveSameDestination(const QString &destination)
+bool CopyEngine::haveSameDestination(const std::string &destination)
 {
     return listThread->haveSameDestination(destination);
 }
 
-bool CopyEngine::newCopy(const QStringList &sources)
+bool CopyEngine::newCopy(const std::vector<std::string> &sources)
 {
     if(forcedMode && mode!=Ultracopier::Copy)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to move, you can't copy with it"));
+        QMessageBox::critical(NULL,QString::fromStdString(facilityEngine->translateText("Internal error")),tr("The engine is forced to move, you can't copy with it"));
         return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    QString destination;
-    if(!defaultDestinationFolder.isEmpty() && QDir(defaultDestinationFolder).exists())
+    std::string destination;
+    if(!defaultDestinationFolder.empty() && QDir(QString::fromStdString(defaultDestinationFolder)).exists())
         destination = defaultDestinationFolder;
     else
         destination = askDestination();
-    if(destination.isEmpty())
+    if(destination.empty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return false;
@@ -443,32 +443,32 @@ bool CopyEngine::newCopy(const QStringList &sources)
     return listThread->newCopy(sources,destination);
 }
 
-bool CopyEngine::newCopy(const QStringList &sources,const QString &destination)
+bool CopyEngine::newCopy(const std::vector<std::string> &sources,const std::string &destination)
 {
     if(forcedMode && mode!=Ultracopier::Copy)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to move, you can't copy with it"));
+        QMessageBox::critical(NULL,QString::fromStdString(facilityEngine->translateText("Internal error")),tr("The engine is forced to move, you can't copy with it"));
         return false;
     }
     return listThread->newCopy(sources,destination);
 }
 
-bool CopyEngine::newMove(const QStringList &sources)
+bool CopyEngine::newMove(const std::vector<std::string> &sources)
 {
     if(forcedMode && mode!=Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to copy, you can't move with it"));
+        QMessageBox::critical(NULL,QString::fromStdString(facilityEngine->translateText("Internal error")),tr("The engine is forced to copy, you can't move with it"));
         return false;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    QString destination;
+    std::string destination;
     if(!ui->defaultDestinationFolder->text().isEmpty() && QDir(ui->defaultDestinationFolder->text()).exists())
-        destination = ui->defaultDestinationFolder->text();
+        destination = ui->defaultDestinationFolder->text().toStdString();
     else
         destination = askDestination();
-    if(destination.isEmpty())
+    if(destination.empty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return false;
@@ -476,12 +476,12 @@ bool CopyEngine::newMove(const QStringList &sources)
     return listThread->newMove(sources,destination);
 }
 
-bool CopyEngine::newMove(const QStringList &sources,const QString &destination)
+bool CopyEngine::newMove(const std::vector<std::string> &sources,const std::string &destination)
 {
     if(forcedMode && mode!=Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
-        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The engine is forced to copy, you can't move with it"));
+        QMessageBox::critical(NULL,QString::fromStdString(facilityEngine->translateText("Internal error")),tr("The engine is forced to copy, you can't move with it"));
         return false;
     }
     return listThread->newMove(sources,destination);
@@ -489,31 +489,33 @@ bool CopyEngine::newMove(const QStringList &sources,const QString &destination)
 
 void CopyEngine::defaultDestinationFolderBrowse()
 {
-    QString destination = askDestination();
-    if(destination.isEmpty())
+    std::string destination = askDestination();
+    if(destination.empty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(uiIsInstalled)
-        ui->defaultDestinationFolder->setText(destination);
+        ui->defaultDestinationFolder->setText(QString::fromStdString(destination));
 }
 
-QString CopyEngine::askDestination()
+std::string CopyEngine::askDestination()
 {
-    QString destination = listThread->getUniqueDestinationFolder();
-    if(!destination.isEmpty())
+    std::string destination = listThread->getUniqueDestinationFolder();
+    if(!destination.empty())
     {
-        QMessageBox::StandardButton button=QMessageBox::question(interface,tr("Destination"),tr("Use the actual destination \"%1\"?").arg(destination),QMessageBox::Yes | QMessageBox::No,QMessageBox::Yes);
+        QMessageBox::StandardButton button=QMessageBox::question(interface,tr("Destination"),tr("Use the actual destination \"%1\"?")
+                                                                 .arg(QString::fromStdString(destination)),
+                                                                 QMessageBox::Yes | QMessageBox::No,QMessageBox::Yes);
         if(button==QMessageBox::Yes)
             return destination;
     }
-    destination=QFileDialog::getExistingDirectory(interface,facilityEngine->translateText(QStringLiteral("Select destination directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    destination=QFileDialog::getExistingDirectory(interface,QString::fromStdString(facilityEngine->translateText("Select destination directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks).toStdString();
     return destination;
 }
 
-void CopyEngine::newTransferList(const QString &file)
+void CopyEngine::newTransferList(const std::string &file)
 {
     emit signal_importTransferList(file);
 }
@@ -605,7 +607,7 @@ void CopyEngine::updateBufferCheckbox()
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
-void CopyEngine::set_setFilters(QStringList includeStrings,QStringList includeOptions,QStringList excludeStrings,QStringList excludeOptions)
+void CopyEngine::set_setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions)
 {
     if(filters!=NULL)
     {
@@ -618,20 +620,24 @@ void CopyEngine::set_setFilters(QStringList includeStrings,QStringList includeOp
     this->excludeOptions=excludeOptions;
 }
 
-void CopyEngine::setRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void CopyEngine::setRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule)
 {
     sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
 bool CopyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
 {
-    QString source = QFileDialog::getExistingDirectory(interface,facilityEngine->translateText(QStringLiteral("Select source directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if(source.isEmpty() || source.isNull() || source=="")
+    std::string source = QFileDialog::getExistingDirectory(interface,QString::fromStdString(facilityEngine->translateText("Select source directory")),
+                                                           QStringLiteral(""),
+                                                           QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks).toStdString();
+    if(source.empty() || source=="")
         return false;
+    std::vector<std::string> sources;
+    sources.push_back(source);
     if(mode==Ultracopier::Copy)
-        return newCopy(QStringList() << source);
+        return newCopy(sources);
     else
-        return newMove(QStringList() << source);
+        return newMove(sources);
 }
 
 bool CopyEngine::userAddFile(const Ultracopier::CopyMode &mode)
@@ -639,15 +645,24 @@ bool CopyEngine::userAddFile(const Ultracopier::CopyMode &mode)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QStringList sources = QFileDialog::getOpenFileNames(
         interface,
-        facilityEngine->translateText(QStringLiteral("Select one or more files to open")),
+        QString::fromStdString(facilityEngine->translateText("Select one or more files to open")),
         QStringLiteral(""),
-        facilityEngine->translateText(QStringLiteral("All files"))+QStringLiteral(" (*)"));
-    if(sources.isEmpty())
+        QString::fromStdString(facilityEngine->translateText("All files"))+QStringLiteral(" (*)"));
+
+    std::vector<std::string> sourcesstd;
+    unsigned int index=0;
+    while(index<(unsigned int)sources.size())
+    {
+        sourcesstd.push_back(sources.at(index).toStdString());
+        index++;
+    }
+
+    if(sourcesstd.empty())
         return false;
     if(mode==Ultracopier::Copy)
-        return newCopy(sources);
+        return newCopy(sourcesstd);
     else
-        return newMove(sources);
+        return newMove(sourcesstd);
 }
 
 void CopyEngine::pause()
@@ -660,7 +675,7 @@ void CopyEngine::resume()
     emit signal_resume();
 }
 
-void CopyEngine::skip(const quint64 &id)
+void CopyEngine::skip(const uint64_t &id)
 {
     emit signal_skip(id);
 }
@@ -674,27 +689,27 @@ void CopyEngine::cancel()
     emit tryCancel();
 }
 
-void CopyEngine::removeItems(const QList<int> &ids)
+void CopyEngine::removeItems(const std::vector<int> &ids)
 {
     emit signal_removeItems(ids);
 }
 
-void CopyEngine::moveItemsOnTop(const QList<int> &ids)
+void CopyEngine::moveItemsOnTop(const std::vector<int> &ids)
 {
     emit signal_moveItemsOnTop(ids);
 }
 
-void CopyEngine::moveItemsUp(const QList<int> &ids)
+void CopyEngine::moveItemsUp(const std::vector<int> &ids)
 {
     emit signal_moveItemsUp(ids);
 }
 
-void CopyEngine::moveItemsDown(const QList<int> &ids)
+void CopyEngine::moveItemsDown(const std::vector<int> &ids)
 {
     emit signal_moveItemsDown(ids);
 }
 
-void CopyEngine::moveItemsOnBottom(const QList<int> &ids)
+void CopyEngine::moveItemsOnBottom(const std::vector<int> &ids)
 {
     emit signal_moveItemsOnBottom(ids);
 }
@@ -713,8 +728,8 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
     #endif
     if(forcedMode)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Mode forced previously"));
-        QMessageBox::critical(NULL,facilityEngine->translateText(QStringLiteral("Internal error")),tr("The mode has been forced previously. This is an internal error, please report it"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Mode forced previously");
+        QMessageBox::critical(NULL,QString::fromStdString(facilityEngine->translateText("Internal error")),tr("The mode has been forced previously. This is an internal error, please report it"));
         return;
     }
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -722,9 +737,9 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
         rsync=false;
     #endif
     if(mode==Ultracopier::Copy)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to copy"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Force mode to copy");
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("Force mode to move"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Force mode to move");
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     if(uiIsInstalled)
          ui->rsync->setEnabled(mode==Ultracopier::Copy);
@@ -736,33 +751,33 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
 
 void CopyEngine::exportTransferList()
 {
-    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText(QStringLiteral("Save transfer list")),QStringLiteral("transfer-list.lst"),facilityEngine->translateText(QStringLiteral("Transfer list"))+QStringLiteral(" (*.lst)"));
-    if(fileName.isEmpty())
+    std::string fileName = QFileDialog::getSaveFileName(interface,QString::fromStdString(facilityEngine->translateText("Save transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
+    if(fileName.empty())
         return;
     emit signal_exportTransferList(fileName);
 }
 
 void CopyEngine::importTransferList()
 {
-    QString fileName = QFileDialog::getOpenFileName(interface,facilityEngine->translateText(QStringLiteral("Open transfer list")),QStringLiteral("transfer-list.lst"),facilityEngine->translateText(QStringLiteral("Transfer list"))+QStringLiteral(" (*.lst)"));
-    if(fileName.isEmpty())
+    std::string fileName = QFileDialog::getOpenFileName(interface,QString::fromStdString(facilityEngine->translateText("Open transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
+    if(fileName.empty())
         return;
     emit signal_importTransferList(fileName);
 }
 
-void CopyEngine::warningTransferList(const QString &warning)
+void CopyEngine::warningTransferList(const std::string &warning)
 {
-    QMessageBox::warning(interface,facilityEngine->translateText(QStringLiteral("Error")),warning);
+    QMessageBox::warning(interface,QString::fromStdString(facilityEngine->translateText("Error")),QString::fromStdString(warning));
 }
 
-void CopyEngine::errorTransferList(const QString &error)
+void CopyEngine::errorTransferList(const std::string &error)
 {
-    QMessageBox::critical(interface,facilityEngine->translateText(QStringLiteral("Error")),error);
+    QMessageBox::critical(interface,QString::fromStdString(facilityEngine->translateText("Error")),QString::fromStdString(error));
 }
 
-bool CopyEngine::setSpeedLimitation(const qint64 &speedLimitation)
+bool CopyEngine::setSpeedLimitation(const int64_t &speedLimitation)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+QString::number(speedLimitation));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+std::to_string(speedLimitation));
     maxSpeed=speedLimitation;
     emit send_speedLimitation(speedLimitation);
     return true;
@@ -770,7 +785,7 @@ bool CopyEngine::setSpeedLimitation(const qint64 &speedLimitation)
 
 void CopyEngine::setFileCollision(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
     if(uiIsInstalled)
         if(index!=ui->comboBoxFileCollision->currentIndex())
             ui->comboBoxFileCollision->setCurrentIndex(index);
@@ -807,7 +822,7 @@ void CopyEngine::setFileCollision(int index)
 
 void CopyEngine::setFileError(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
     if(uiIsInstalled)
         if(index!=ui->comboBoxFileError->currentIndex())
             ui->comboBoxFileError->setCurrentIndex(index);
@@ -832,7 +847,7 @@ void CopyEngine::setFileError(int index)
 
 void CopyEngine::setTransferAlgorithm(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
     if(uiIsInstalled)
         if(index!=ui->transferAlgorithm->currentIndex())
             ui->transferAlgorithm->setCurrentIndex(index);
@@ -1155,9 +1170,9 @@ void CopyEngine::sendNewFilters()
         emit send_setFilters(filters->getInclude(),filters->getExclude());
 }
 
-void CopyEngine::sendNewRenamingRules(QString firstRenamingRule,QString otherRenamingRule)
+void CopyEngine::sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("new filter"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
@@ -1216,11 +1231,11 @@ void CopyEngine::setCheckDiskSpace(const bool &checkDiskSpace)
     listThread->setCheckDiskSpace(checkDiskSpace);
 }
 
-void CopyEngine::setDefaultDestinationFolder(const QString &defaultDestinationFolder)
+void CopyEngine::setDefaultDestinationFolder(const std::string &defaultDestinationFolder)
 {
     this->defaultDestinationFolder=defaultDestinationFolder;
     if(uiIsInstalled)
-        ui->defaultDestinationFolder->setText(defaultDestinationFolder);
+        ui->defaultDestinationFolder->setText(QString::fromStdString(defaultDestinationFolder));
 }
 
 void CopyEngine::setCopyListOrder(const bool &order)
@@ -1231,8 +1246,8 @@ void CopyEngine::setCopyListOrder(const bool &order)
 void CopyEngine::exportErrorIntoTransferList()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"exportErrorIntoTransferList");
-    QString fileName = QFileDialog::getSaveFileName(interface,facilityEngine->translateText(QStringLiteral("Save transfer list")),QStringLiteral("transfer-list.lst"),facilityEngine->translateText(QStringLiteral("Transfer list"))+QStringLiteral(" (*.lst)"));
-    if(fileName.isEmpty())
+    std::string fileName = QFileDialog::getSaveFileName(interface,QString::fromStdString(facilityEngine->translateText("Save transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
+    if(fileName.empty())
         return;
     emit signal_exportErrorIntoTransferList(fileName);
 }

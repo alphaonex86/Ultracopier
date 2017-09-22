@@ -243,7 +243,7 @@ public:
     void setDefaultDestinationFolder(const std::string &defaultDestinationFolder);
     void setCopyListOrder(const bool &order);
     void defaultDestinationFolderBrowse();
-    QString askDestination();
+    std::string askDestination();
 public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface
