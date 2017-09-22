@@ -6,7 +6,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-FolderExistsDialog::FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule) :
+FolderExistsDialog::FolderExistsDialog(QWidget *parent, QFileInfo source, bool isSame, QFileInfo destination, std::string firstRenamingRule, std::string otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::folderExistsDialog)
 {

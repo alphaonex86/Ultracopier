@@ -208,7 +208,7 @@ void CopyEngine::connectTheSignalsSlots()
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-void CopyEngine::updateTheDebugInfo(const QStringList &newList, const QStringList &newList2, const int &numberOfInodeOperation)
+void CopyEngine::updateTheDebugInfo(const std::vector<std::string> &newList, const std::vector<std::string> &newList2, const int &numberOfInodeOperation)
 {
     debugDialogWindow.setTransferThreadList(newList);
     debugDialogWindow.setTransferList(newList2);
@@ -333,7 +333,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->comboBoxFolderError->setCurrentIndex(1);
         break;
         default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored: "+QString::number(alwaysDoThisActionForFolderError));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored: "+std::to_string(alwaysDoThisActionForFolderError));
             ui->comboBoxFolderError->setCurrentIndex(0);
         break;
     }

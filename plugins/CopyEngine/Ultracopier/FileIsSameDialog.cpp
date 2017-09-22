@@ -6,7 +6,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-FileIsSameDialog::FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule) :
+FileIsSameDialog::FileIsSameDialog(QWidget *parent, QFileInfo fileInfo, std::string firstRenamingRule, std::string otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::fileIsSameDialog)
 {

@@ -14,7 +14,7 @@ void CopyEngine::fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bo
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFileSlot(QFileInfo fileInfo,QString errorString,TransferThread * thread,const ErrorType &errorType)
+void CopyEngine::errorOnFileSlot(QFileInfo fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType)
 {
     errorOnFile(fileInfo,errorString,thread,errorType);
 }
@@ -26,13 +26,13 @@ void CopyEngine::folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFolderSlot(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread,ErrorType errorType)
+void CopyEngine::errorOnFolderSlot(QFileInfo fileInfo,std::string errorString,ScanFileOrFolder * thread,ErrorType errorType)
 {
     errorOnFolder(fileInfo,errorString,thread,errorType);
 }
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,QString error,ErrorType errorType)
+void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,std::string error,ErrorType errorType)
 {
     mkPathErrorOnFolder(folder,error,errorType);
 }
@@ -50,7 +50,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     //load the action
     if(isSame)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source.absoluteFilePath());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source.absoluteFilePath().toStdString());
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
@@ -69,7 +69,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                     newItem.isSame=isSame;
                     newItem.transfer=thread;
                     newItem.scan=NULL;
-                    alreadyExistsQueue << newItem;
+                    alreadyExistsQueue.push_back(newItem);
                     return;
                 }
                 dialogIsOpen=true;
@@ -79,7 +79,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
                 emit isInPause(false);
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
                 if(newAction==FileExists_Cancel)
                 {
                     emit cancelAll();
@@ -114,7 +114,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString());
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         switch(tempFileExistsAction)
         {
@@ -124,7 +124,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
             case FileExists_OverwriteIfNewer:
             case FileExists_OverwriteIfOlder:
             case FileExists_OverwriteIfNotSame:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"always do this action: "+QString::number(tempFileExistsAction));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"always do this action: "+std::to_string(tempFileExistsAction));
                 thread->setFileExistsAction(tempFileExistsAction);
             break;
             default:
@@ -133,6 +133,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("dialog open, put in queue: %1 %2")
                                  .arg(source.absoluteFilePath())
                                  .arg(destination.absoluteFilePath())
+                                 .toStdString()
                                  );
                     alreadyExistsQueueItem newItem;
                     newItem.source=source;
@@ -140,7 +141,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                     newItem.isSame=isSame;
                     newItem.transfer=thread;
                     newItem.scan=NULL;
-                    alreadyExistsQueue << newItem;
+                    alreadyExistsQueue.push_back(newItem);
                     return;
                 }
                 dialogIsOpen=true;
@@ -150,7 +151,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
                 emit isInPause(false);
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
                 if(newAction==FileExists_Cancel)
                 {
                     emit cancelAll();
@@ -201,7 +202,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const QString &errorString,TransferThread *thread,const ErrorType &errorType)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const std::string &errorString,TransferThread *thread,const ErrorType &errorType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
@@ -217,12 +218,12 @@ void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &file
         newItem.scan=NULL;
         newItem.transfer=thread;
         newItem.errorType=errorType;
-        errorQueue << newItem;
+        errorQueue.push_back(newItem);
         showOneNewDialog();
     }
 }
 
-void CopyEngine::missingDiskSpace(QList<Diskspace> list)
+void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
     DiskSpace dialog(facilityEngine,list,interface);
@@ -230,7 +231,7 @@ void CopyEngine::missingDiskSpace(QList<Diskspace> list)
     dialog.exec();/// \bug crash when external close
     bool ok=dialog.getAction();
     emit isInPause(false);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cancel: "+QString::number(ok));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"cancel: "+std::to_string(ok));
     if(!ok)
         emit cancelAll();
     else
@@ -238,11 +239,11 @@ void CopyEngine::missingDiskSpace(QList<Diskspace> list)
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThread * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(QFileInfo fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo.absoluteFilePath()+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo.absoluteFilePath().toStdString()+", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -274,18 +275,18 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,QString errorString,TransferThre
                 newItem.scan=NULL;
                 newItem.transfer=thread;
                 newItem.errorType=errorType;
-                errorQueue << newItem;
+                errorQueue.push_back(newItem);
                 return;
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
+            emit error(fileInfo.absoluteFilePath().toStdString(),fileInfo.size(),fileInfo.lastModified().toMSecsSinceEpoch()/1000,errorString);
             FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             emit isInPause(false);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FileError_Cancel)
             {
                 emit cancelAll();
@@ -337,7 +338,7 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+source.absoluteFilePath()+", destination: "+destination.absoluteFilePath());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString());
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -361,7 +362,7 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
                 newItem.isSame=isSame;
                 newItem.transfer=NULL;
                 newItem.scan=thread;
-                alreadyExistsQueue << newItem;
+                alreadyExistsQueue.push_back(newItem);
                 return;
             }
             dialogIsOpen=true;
@@ -369,7 +370,7 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
             FolderExistsDialog dialog(interface,source,isSame,destination,firstRenamingRule,otherRenamingRule);
             dialog.exec();/// \bug crash when external close
             FolderExistsAction newAction=dialog.getAction();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FolderExists_Cancel)
             {
                 emit cancelAll();
@@ -391,11 +392,11 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void CopyEngine::errorOnFolder(QFileInfo fileInfo, QString errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFolder(QFileInfo fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo.absoluteFilePath()+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo.absoluteFilePath().toStdString()+", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -421,16 +422,16 @@ void CopyEngine::errorOnFolder(QFileInfo fileInfo, QString errorString, ScanFile
                 newItem.scan=thread;
                 newItem.transfer=NULL;
                 newItem.errorType=errorType;
-                errorQueue << newItem;
+                errorQueue.push_back(newItem);
                 return;
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(fileInfo.absoluteFilePath(),fileInfo.size(),fileInfo.lastModified(),errorString);
+            emit error(fileInfo.absoluteFilePath().toStdString(),fileInfo.size(),fileInfo.lastModified().toMSecsSinceEpoch()/1000,errorString);
             FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FileError_Cancel)
             {
                 emit cancelAll();
@@ -454,11 +455,11 @@ void CopyEngine::errorOnFolder(QFileInfo fileInfo, QString errorString, ScanFile
 // -----------------------------------------------------
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,std::string errorString,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+folder.absoluteFilePath()+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+folder.absoluteFilePath().toStdString()+", error: "+errorString);
     //load the always action
     FileErrorAction tempFileErrorAction=alwaysDoThisActionForFolderError;
     switch(tempFileErrorAction)
@@ -480,16 +481,16 @@ void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,const 
                 newItem.scan=NULL;
                 newItem.transfer=NULL;
                 newItem.errorType=errorType;
-                errorQueue << newItem;
+                errorQueue.push_back(newItem);
                 return;
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(folder.absoluteFilePath(),folder.size(),folder.lastModified(),errorString);
+            emit error(folder.absoluteFilePath().toStdString(),folder.size(),folder.lastModified().toMSecsSinceEpoch()/1000,errorString);
             FileErrorDialog dialog(interface,folder,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+QString::number(newAction));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
             if(newAction==FileError_Cancel)
             {
                 emit cancelAll();
@@ -510,7 +511,7 @@ void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,QString errorString,const 
                     listThread->mkPathQueue.retry();
                 break;
                 default:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unknow switch case: "+QString::number(newAction));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unknow switch case: "+std::to_string(newAction));
                 break;
             }
             if(!isCalledByShowOneNewDialog)
@@ -526,42 +527,42 @@ void CopyEngine::showOneNewDialog()
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"alreadyExistsQueue.size(): "+QString::number(alreadyExistsQueue.size()));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"errorQueue.size(): "+QString::number(errorQueue.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"alreadyExistsQueue.size(): "+std::to_string(alreadyExistsQueue.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"errorQueue.size(): "+std::to_string(errorQueue.size()));
     int loop_size=alreadyExistsQueue.size();
     while(loop_size>0)
     {
-        if(alreadyExistsQueue.first().transfer!=NULL)
+        if(alreadyExistsQueue.front().transfer!=NULL)
         {
-            fileAlreadyExists(alreadyExistsQueue.first().source,
-                      alreadyExistsQueue.first().destination,
-                      alreadyExistsQueue.first().isSame,
-                      alreadyExistsQueue.first().transfer,
+            fileAlreadyExists(alreadyExistsQueue.front().source,
+                      alreadyExistsQueue.front().destination,
+                      alreadyExistsQueue.front().isSame,
+                      alreadyExistsQueue.front().transfer,
                       true);
         }
-        else if(alreadyExistsQueue.first().scan!=NULL)
-            folderAlreadyExists(alreadyExistsQueue.first().source,
-                        alreadyExistsQueue.first().destination,
-                        alreadyExistsQueue.first().isSame,
-                        alreadyExistsQueue.first().scan,
+        else if(alreadyExistsQueue.front().scan!=NULL)
+            folderAlreadyExists(alreadyExistsQueue.front().source,
+                        alreadyExistsQueue.front().destination,
+                        alreadyExistsQueue.front().isSame,
+                        alreadyExistsQueue.front().scan,
                         true);
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
-        alreadyExistsQueue.removeFirst();
+        alreadyExistsQueue.erase(alreadyExistsQueue.cbegin());
         loop_size--;
     }
     loop_size=errorQueue.size();
     while(errorQueue.size()>0 && loop_size>0)
     {
-        if(errorQueue.first().transfer!=NULL)
-            errorOnFile(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().transfer,errorQueue.first().errorType,true);
-        else if(errorQueue.first().scan!=NULL)
-            errorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().scan,errorQueue.first().errorType,true);
-        else if(errorQueue.first().mkPath)
-            mkPathErrorOnFolder(errorQueue.first().inode,errorQueue.first().errorString,errorQueue.first().errorType,true);
+        if(errorQueue.front().transfer!=NULL)
+            errorOnFile(errorQueue.front().inode,errorQueue.front().errorString,errorQueue.front().transfer,errorQueue.front().errorType,true);
+        else if(errorQueue.front().scan!=NULL)
+            errorOnFolder(errorQueue.front().inode,errorQueue.front().errorString,errorQueue.front().scan,errorQueue.front().errorType,true);
+        else if(errorQueue.front().mkPath)
+            mkPathErrorOnFolder(errorQueue.front().inode,errorQueue.front().errorString,errorQueue.front().errorType,true);
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, no thread actived");
-        errorQueue.removeFirst();
+        errorQueue.erase(errorQueue.cbegin());
         loop_size--;
     }
 }

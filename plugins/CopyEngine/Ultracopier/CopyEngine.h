@@ -147,11 +147,11 @@ private slots:
     /// \note Can be call without queue because all call will be serialized
     void fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(QFileInfo fileInfo, QString errorString, TransferThread * thread, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
+    void errorOnFile(QFileInfo fileInfo, std::string errorString, TransferThread * thread, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
     void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(QFileInfo fileInfo,QString errorString,ScanFileOrFolder * thread, ErrorType errorType,bool isCalledByShowOneNewDialog=false);
+    void errorOnFolder(QFileInfo fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog=false);
     //mkpath event
     void mkPathErrorOnFolder(QFileInfo, std::string, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
 

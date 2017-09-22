@@ -24,7 +24,7 @@ class FileIsSameDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,QString firstRenamingRule,QString otherRenamingRule);
+    explicit FileIsSameDialog(QWidget *parent,QFileInfo fileInfo,std::string firstRenamingRule,std::string otherRenamingRule);
     ~FileIsSameDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

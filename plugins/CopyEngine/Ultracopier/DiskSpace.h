@@ -2,6 +2,7 @@
 #define DISKSPACE_H
 
 #include <QDialog>
+#include <vector>
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
@@ -14,7 +15,7 @@ class DiskSpace : public QDialog
     Q_OBJECT
 
 public:
-    explicit DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QWidget *parent = 0);
+    explicit DiskSpace(FacilityInterface * facilityEngine,std::vector<Diskspace> list,QWidget *parent = 0);
     ~DiskSpace();
     bool getAction() const;
 private slots:

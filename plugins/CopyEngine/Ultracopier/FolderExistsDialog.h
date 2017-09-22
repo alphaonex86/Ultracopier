@@ -25,7 +25,7 @@ class FolderExistsDialog : public QDialog
 
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,QString firstRenamingRule,QString otherRenamingRule);
+    explicit FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,std::string firstRenamingRule,std::string otherRenamingRule);
     ~FolderExistsDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

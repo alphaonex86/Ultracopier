@@ -19,7 +19,7 @@ DebugDialog::~DebugDialog()
     delete ui;
 }
 
-void DebugDialog::setTransferList(const QStringList &list)
+void DebugDialog::setTransferList(const std::vector<std::string> &list)
 {
     ui->tranferList->clear();
     ui->tranferList->addItems(list);
@@ -35,7 +35,7 @@ void DebugDialog::setInodeUsage(const int &inodeUsage)
     ui->spinBoxNumberOfInode->setValue(inodeUsage);
 }
 
-void DebugDialog::setTransferThreadList(const QStringList &list)
+void DebugDialog::setTransferThreadList(const std::vector<std::string> &list)
 {
     ui->transferThreadList->clear();
     ui->transferThreadList->addItems(list);

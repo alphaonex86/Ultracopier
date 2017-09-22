@@ -1676,7 +1676,6 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
             time_t actime=source.lastRead().toTime_t();
             time_t modtime=source.lastModified().toTime_t();
             //this function avalaible on unix and mingw
-            utimbuf butime;
             butime.actime=actime;
             butime.modtime=modtime;
             Q_UNUSED(ctime);

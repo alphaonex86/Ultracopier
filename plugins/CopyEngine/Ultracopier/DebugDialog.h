@@ -23,9 +23,9 @@ public:
     explicit DebugDialog(QWidget *parent = 0);
     ~DebugDialog();
     /// \brief to set the transfer list, limited in result to not slow down the application
-    void setTransferList(const QStringList &list);
+    void setTransferList(const std::vector<std::string> &list);
     /// \brief show the transfer thread, it show be a thread pool in normal time
-    void setTransferThreadList(const QStringList &list);
+    void setTransferThreadList(const std::vector<std::string> &list);
     /// \brief show how many transfer is active
     void setActiveTransfer(const int &activeTransfer);
     /// \brief show many many inode is manipulated
