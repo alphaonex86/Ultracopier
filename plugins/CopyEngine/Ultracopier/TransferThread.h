@@ -8,12 +8,12 @@
 
 #include <QThread>
 #include <QFileInfo>
-#include <QString>
-#include <QList>
-#include <QStringList>
+#include <regex>
+#include <vector>
+#include <string>
 #include <QDateTime>
 #include <QDir>
-#include <QPair>
+#include <utility>
 
 #ifdef Q_OS_UNIX
     #include <utime.h>
@@ -50,16 +50,16 @@ public:
     /// \brief to set the id
     void setId(int id);
     /// \brief get the reading letter
-    QChar readingLetter() const;
+    char readingLetter() const;
     /// \brief get the writing letter
-    QChar writingLetter() const;
+    char writingLetter() const;
     #endif
     /// \brief to have semaphore, and try create just one by one
     void setMkpathTransfer(QSemaphore *mkpathTransfer);
     /// \brief to store the transfer id
-    quint64			transferId;
+    uint64_t			transferId;
     /// \brief to store the transfer size
-    quint64			transferSize;
+    uint64_t			transferSize;
     bool haveStartTime;
     QTime startTransferTime;
 
@@ -70,11 +70,11 @@ public:
     void set_osBufferLimited(bool osBufferLimited);
 
     //not copied size, because that's count to the checksum, ...
-    quint64 realByteTransfered() const;
-    QPair<quint64,quint64> progression() const;
-    static QString resolvedName(const QFileInfo &inode);
-    QString getSourcePath() const;
-    QString getDestinationPath() const;
+    uint64_t realByteTransfered() const;
+    std::pair<quint64,quint64> progression() const;
+    static std::string resolvedName(const QFileInfo &inode);
+    std::string getSourcePath() const;
+    std::string getDestinationPath() const;
     QFileInfo getSourceInode() const;
     QFileInfo getDestinationInode() const;
     Ultracopier::CopyMode getMode() const;
@@ -90,27 +90,27 @@ signals:
     void postOperationStopped() const;
     //get dialog
     void fileAlreadyExists(const QFileInfo &info,const QFileInfo &info2,const bool &isSame) const;
-    void errorOnFile(const QFileInfo &info,const QString &string,const ErrorType &errorType=ErrorType_Normal) const;
+    void errorOnFile(const QFileInfo &info,const std::string &string,const ErrorType &errorType=ErrorType_Normal) const;
     //internal signal
     void internalStartPostOperation() const;
     void internalStartPreOperation() const;
     void internalStartResumeAfterErrorAndSeek() const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,std::string fonction,std::string text,std::string file,int ligne) const;
     void tryPutAtBottom() const;
     //force into the right thread
     void internalTryStartTheTransfer() const;
     /// \brief update the transfer stat
-    void pushStat(const TransferStat &stat,const quint64 &pos) const;
+    void pushStat(const TransferStat &stat,const uint64_t &pos) const;
 public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
     /// \brief to set files to transfer
-    bool setFiles(const QFileInfo& source,const qint64 &size,const QFileInfo& destination,const Ultracopier::CopyMode &mode);
+    bool setFiles(const QFileInfo& source,const int64_t &size,const QFileInfo& destination,const Ultracopier::CopyMode &mode);
     /// \brief to set file exists action to do
     void setFileExistsAction(const FileExistsAction &action);
     /// \brief to set the new name of the destination
-    void setFileRename(const QString &nameForRename);
+    void setFileRename(const std::string &nameForRename);
     /// \brief to start the transfer of data
     void setAlwaysFileExistsAction(const FileExistsAction &action);
     /// \brief set the copy info and options before runing
@@ -134,7 +134,7 @@ public slots:
     /// \brief retry after error
     void retryAfterError();
     /// \brief return info about the copied size
-    qint64 copiedSize();
+    int64_t copiedSize();
     /// \brief put the current file at bottom
     void putAtBottom();
 
@@ -143,7 +143,7 @@ public slots:
     #endif
 
     void set_osBufferLimit(const unsigned int &osBufferLimit);
-    void setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
+    void setRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule);
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     //speed limitation
     void timeOfTheBlockCopyFinished();
@@ -216,7 +216,7 @@ private:
     bool			retry;
     QFileInfo		source;
     QFileInfo		destination;
-    qint64			size;
+    int64_t			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
     bool			needSkip,needRemove;
@@ -230,8 +230,8 @@ private:
     bool			osBuffer;
     bool			osBufferLimited;
     unsigned int	osBufferLimit;
-    QString			firstRenamingRule;
-    QString			otherRenamingRule;
+    std::string			firstRenamingRule;
+    std::string			otherRenamingRule;
     //error management
     bool			writeError,writeError_source_seeked,writeError_destination_reopened;
     bool			readError;
@@ -241,7 +241,7 @@ private:
     int             parallelBuffer;
     int             sequentialBuffer;
     int             parallelizeIfSmallerThan;
-    QRegularExpression renameRegex;
+    std::regex renameRegex;
     TransferAlgorithm transferAlgorithm;
     #ifdef Q_OS_UNIX
             utimbuf butime;
@@ -250,9 +250,9 @@ private:
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 utimbuf butime;
             #else
-                quint32 ftCreateL, ftAccessL, ftWriteL;
-                quint32 ftCreateH, ftAccessH, ftWriteH;
-                QRegularExpression regRead;
+                uint32_t ftCreateL, ftAccessL, ftWriteL;
+                uint32_t ftCreateH, ftAccessH, ftWriteH;
+                std::regex regRead;
             #endif
         #endif
     #endif

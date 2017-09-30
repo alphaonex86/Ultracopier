@@ -21,7 +21,7 @@ DiskSpace::DiskSpace(FacilityInterface * facilityEngine,std::vector<Diskspace> l
     while(index<size)
     {
         drives+=tr("Drives %1 have %2 available but need %3")
-                .arg(list.at(index).drive)
+                .arg(QString::fromStdString(list.at(index).drive))
                 .arg(QString::fromStdString(facilityEngine->sizeToString(list.at(index).freeSpace)))
                 .arg(QString::fromStdString(facilityEngine->sizeToString(list.at(index).requiredSpace)));
         drives+=QStringLiteral("<br />");

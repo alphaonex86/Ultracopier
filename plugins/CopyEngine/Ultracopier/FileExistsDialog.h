@@ -31,7 +31,7 @@ public:
     /// \brief return the action clicked
     FileExistsAction getAction();
     /// \brief return the new rename is case in manual renaming
-    QString getNewName();
+    std::string getNewName();
 protected:
     void changeEvent(QEvent *e);
 private slots:
@@ -51,10 +51,10 @@ private slots:
 private:
     Ui::fileExistsDialog *ui;
     FileExistsAction action;
-    QString oldName;
+    std::string oldName;
     QFileInfo destinationInfo;
-    QString firstRenamingRule;
-    QString otherRenamingRule;
+    std::string firstRenamingRule;
+    std::string otherRenamingRule;
 };
 
 #endif // FILEEXISTSDIALOG_H

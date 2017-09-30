@@ -148,7 +148,7 @@ void TransferThread::internalStartTheTransfer()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start the transfer as delayed"));
 }
 
-bool TransferThread::setFiles(const QFileInfo& source,const qint64 &size,const QFileInfo& destination,const Ultracopier::CopyMode &mode)
+bool TransferThread::setFiles(const QFileInfo& source, const int64_t &size, const QFileInfo& destination, const Ultracopier::CopyMode &mode)
 {
     if(transfer_stat!=TransferStat_Idle)
     {
@@ -550,7 +550,7 @@ bool TransferThread::destinationExists()
     return false;
 }
 
-QString TransferThread::resolvedName(const QFileInfo &inode)
+std::string TransferThread::resolvedName(const QFileInfo &inode)
 {
     QString fileName=inode.fileName();
     if(fileName.isEmpty())
@@ -1881,7 +1881,7 @@ void TransferThread::skip()
 }
 
 //return info about the copied size
-qint64 TransferThread::copiedSize()
+int64_t TransferThread::copiedSize()
 {
     switch(transfer_stat)
     {
@@ -1924,7 +1924,7 @@ void TransferThread::setId(int id)
     writeThread.setId(id);
 }
 
-QChar TransferThread::readingLetter() const
+char TransferThread::readingLetter() const
 {
     switch(readThread.stat)
     {
@@ -1948,7 +1948,7 @@ QChar TransferThread::readingLetter() const
     }
 }
 
-QChar TransferThread::writingLetter() const
+char TransferThread::writingLetter() const
 {
     switch(writeThread.stat)
     {
@@ -2009,7 +2009,7 @@ void TransferThread::set_osBufferLimited(bool osBufferLimited)
 }
 
 //not copied size, because that's count to the checksum, ...
-quint64 TransferThread::realByteTransfered() const
+uint64_t TransferThread::realByteTransfered() const
 {
     switch(transfer_stat)
     {
@@ -2026,7 +2026,7 @@ quint64 TransferThread::realByteTransfered() const
 }
 
 //first is read, second is write
-QPair<quint64,quint64> TransferThread::progression() const
+std::pair<quint64, quint64> TransferThread::progression() const
 {
     QPair<quint64,quint64> returnVar;
     switch(transfer_stat)
@@ -2058,7 +2058,7 @@ QPair<quint64,quint64> TransferThread::progression() const
     return returnVar;
 }
 
-void TransferThread::setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
+void TransferThread::setRenamingRules(const std::string &firstRenamingRule, const std::string &otherRenamingRule)
 {
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;

@@ -1,5 +1,6 @@
 #include "Filters.h"
 #include "ui_Filters.h"
+#include "../../../cpp11addition.h"
 
 #include <QRegularExpression>
 
@@ -22,28 +23,28 @@ void Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std
     Filters_rules new_item;
 
     include.clear();
-    int index=0;
-    while(index<includeStrings.size())
+    unsigned int index=0;
+    while(index<(unsigned int)includeStrings.size())
     {
         new_item.search_text=includeStrings.at(index);
-        QStringList options=includeOptions.at(index).split(QStringLiteral(";"));
+        std::vector<std::string> options=stringsplit(includeOptions.at(index),';');
         new_item.need_match_all=false;
         new_item.search_type=SearchType_rawText;
         new_item.apply_on=ApplyOn_fileAndFolder;
 
-        if(options.contains(QStringLiteral("SearchType_simpleRegex")))
+        if(vectorcontainsAtLeastOne(options,std::string("SearchType_simpleRegex")))
             new_item.search_type=SearchType_simpleRegex;
-        if(options.contains(QStringLiteral("SearchType_perlRegex")))
+        if(vectorcontainsAtLeastOne(options,std::string("SearchType_perlRegex")))
             new_item.search_type=SearchType_perlRegex;
-        if(options.contains(QStringLiteral("ApplyOn_file")))
+        if(vectorcontainsAtLeastOne(options,std::string("ApplyOn_file")))
             new_item.apply_on=ApplyOn_file;
-        if(options.contains(QStringLiteral("ApplyOn_folder")))
+        if(vectorcontainsAtLeastOne(options,std::string("ApplyOn_folder")))
             new_item.apply_on=ApplyOn_folder;
-        if(options.contains(QStringLiteral("need_match_all")))
+        if(vectorcontainsAtLeastOne(options,std::string("need_match_all")))
             new_item.need_match_all=true;
 
         if(convertToRegex(new_item))
-            include << new_item;
+            include.push_back(new_item);
 
         index++;
     }
@@ -53,24 +54,24 @@ void Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std
     while(index<excludeStrings.size())
     {
         new_item.search_text=excludeStrings.at(index);
-        QStringList options=excludeOptions.at(index).split(QStringLiteral(";"));
+        std::vector<std::string> options=stringsplit(excludeOptions.at(index),';');
         new_item.need_match_all=false;
         new_item.search_type=SearchType_rawText;
         new_item.apply_on=ApplyOn_fileAndFolder;
 
-        if(options.contains(QStringLiteral("SearchType_simpleRegex")))
+        if(vectorcontainsAtLeastOne(options,std::string("SearchType_simpleRegex")))
             new_item.search_type=SearchType_simpleRegex;
-        if(options.contains(QStringLiteral("SearchType_perlRegex")))
+        if(vectorcontainsAtLeastOne(options,std::string("SearchType_perlRegex")))
             new_item.search_type=SearchType_perlRegex;
-        if(options.contains(QStringLiteral("ApplyOn_file")))
+        if(vectorcontainsAtLeastOne(options,std::string("ApplyOn_file")))
             new_item.apply_on=ApplyOn_file;
-        if(options.contains(QStringLiteral("ApplyOn_folder")))
+        if(vectorcontainsAtLeastOne(options,std::string("ApplyOn_folder")))
             new_item.apply_on=ApplyOn_folder;
-        if(options.contains(QStringLiteral("need_match_all")))
+        if(vectorcontainsAtLeastOne(options,std::string("need_match_all")))
             new_item.need_match_all=true;
 
         if(convertToRegex(new_item))
-            exclude << new_item;
+            exclude.push_back(new_item);
 
         index++;
     }
@@ -81,21 +82,21 @@ void Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std
 void Filters::reShowAll()
 {
     ui->inclusion->clear();
-    int index=0;
-    while(index<include.size())
+    unsigned int index=0;
+    while(index<(unsigned int)include.size())
     {
-        QString entryShow=include.at(index).search_text+QStringLiteral(" (");
-        QStringList optionsToShow;
+        std::string entryShow=include.at(index).search_text+" (";
+        std::vector<std::string> optionsToShow;
         switch(include.at(index).search_type)
         {
             case SearchType_rawText:
-                optionsToShow << tr("Raw text");
+                optionsToShow.push_back(tr("Raw text").toStdString());
             break;
             case SearchType_simpleRegex:
-                optionsToShow << tr("Simplified regex");
+                optionsToShow.push_back(tr("Simplified regex").toStdString());
             break;
             case SearchType_perlRegex:
-                optionsToShow << tr("Perl's regex");
+                optionsToShow.push_back(tr("Perl's regex").toStdString());
             break;
             default:
             break;
@@ -103,37 +104,37 @@ void Filters::reShowAll()
         switch(include.at(index).apply_on)
         {
             case ApplyOn_file:
-                optionsToShow << tr("Only on file");
+                optionsToShow.push_back(tr("Only on file").toStdString());
             break;
             case ApplyOn_folder:
-                optionsToShow << tr("Only on folder");
+                optionsToShow.push_back(tr("Only on folder").toStdString());
             break;
             default:
             break;
         }
         if(include.at(index).need_match_all)
-            optionsToShow << tr("Full match");
-        entryShow+=optionsToShow.join(QStringLiteral(","));
+            optionsToShow.push_back(tr("Full match").toStdString());
+        entryShow+=stringimplode(optionsToShow,",");
         entryShow+=")";
-        ui->inclusion->addItem(new QListWidgetItem(entryShow));
+        ui->inclusion->addItem(new QListWidgetItem(QString::fromStdString(entryShow)));
         index++;
     }
     ui->exclusion->clear();
     index=0;
-    while(index<exclude.size())
+    while(index<(unsigned int)exclude.size())
     {
-        QString entryShow=exclude.at(index).search_text+QStringLiteral(" (");
-        QStringList optionsToShow;
+        std::string entryShow=exclude.at(index).search_text+" (";
+        std::vector<std::string> optionsToShow;
         switch(exclude.at(index).search_type)
         {
             case SearchType_rawText:
-                optionsToShow << tr("Raw text");
+                optionsToShow.push_back(tr("Raw text").toStdString());
             break;
             case SearchType_simpleRegex:
-                optionsToShow << tr("Simplified regex");
+                optionsToShow.push_back(tr("Simplified regex").toStdString());
             break;
             case SearchType_perlRegex:
-                optionsToShow << tr("Perl's regex");
+                optionsToShow.push_back(tr("Perl's regex").toStdString());
             break;
             default:
             break;
@@ -141,19 +142,19 @@ void Filters::reShowAll()
         switch(exclude.at(index).apply_on)
         {
             case ApplyOn_file:
-                optionsToShow << tr("Only on file");
+                optionsToShow.push_back(tr("Only on file").toStdString());
             break;
             case ApplyOn_folder:
-                optionsToShow << tr("Only on folder");
+                optionsToShow.push_back(tr("Only on folder").toStdString());
             break;
             default:
             break;
         }
         if(exclude.at(index).need_match_all)
-            optionsToShow << tr("Full match");
-        entryShow+=optionsToShow.join(QStringLiteral(","));
+            optionsToShow.push_back(tr("Full match").toStdString());
+        entryShow+=stringimplode(optionsToShow,",");
         entryShow+=")";
-        ui->exclusion->addItem(new QListWidgetItem(entryShow));
+        ui->exclusion->addItem(new QListWidgetItem(QString::fromStdString(entryShow)));
         index++;
     }
 }
@@ -176,23 +177,23 @@ void Filters::newLanguageLoaded()
 
 void Filters::updateFilters()
 {
-    QStringList includeStrings,includeOptions,excludeStrings,excludeOptions;
-    int index=0;
-    while(index<include.size())
+    std::vector<std::string> includeStrings,includeOptions,excludeStrings,excludeOptions;
+    unsigned int index=0;
+    while(index<(unsigned int)include.size())
     {
-        includeStrings<<include.at(index).search_text;
-        QStringList optionsToShow;
+        includeStrings.push_back(include.at(index).search_text);
+        std::vector<std::string> optionsToShow;
 
         switch(include.at(index).search_type)
         {
             case SearchType_rawText:
-                optionsToShow << QStringLiteral("SearchType_rawText");
+                optionsToShow.push_back("SearchType_rawText");
             break;
             case SearchType_simpleRegex:
-                optionsToShow << QStringLiteral("SearchType_simpleRegex");
+                optionsToShow.push_back("SearchType_simpleRegex");
             break;
             case SearchType_perlRegex:
-                optionsToShow << QStringLiteral("SearchType_perlRegex");
+                optionsToShow.push_back("SearchType_perlRegex");
             break;
             default:
             break;
@@ -200,38 +201,38 @@ void Filters::updateFilters()
         switch(include.at(index).apply_on)
         {
             case ApplyOn_file:
-                optionsToShow << QStringLiteral("ApplyOn_file");
+                optionsToShow.push_back("ApplyOn_file");
             break;
             case ApplyOn_fileAndFolder:
-                optionsToShow << QStringLiteral("ApplyOn_fileAndFolder");
+                optionsToShow.push_back("ApplyOn_fileAndFolder");
             break;
             case ApplyOn_folder:
-                optionsToShow << QStringLiteral("ApplyOn_folder");
+                optionsToShow.push_back("ApplyOn_folder");
             break;
             default:
             break;
         }
         if(include.at(index).need_match_all)
-            optionsToShow << tr("Full match");
-        includeOptions<<optionsToShow.join(QStringLiteral(";"));
+            optionsToShow.push_back(tr("Full match").toStdString());
+        includeOptions.push_back(stringimplode(optionsToShow,";"));
         index++;
     }
     index=0;
-    while(index<exclude.size())
+    while(index<(unsigned int)exclude.size())
     {
-        excludeStrings<<exclude.at(index).search_text;
-        QStringList optionsToShow;
+        excludeStrings.push_back(exclude.at(index).search_text);
+        std::vector<std::string> optionsToShow;
 
         switch(exclude.at(index).search_type)
         {
             case SearchType_rawText:
-                optionsToShow << QStringLiteral("SearchType_rawText");
+                optionsToShow.push_back("SearchType_rawText");
             break;
             case SearchType_simpleRegex:
-                optionsToShow << QStringLiteral("SearchType_simpleRegex");
+                optionsToShow.push_back("SearchType_simpleRegex");
             break;
             case SearchType_perlRegex:
-                optionsToShow << QStringLiteral("SearchType_perlRegex");
+                optionsToShow.push_back("SearchType_perlRegex");
             break;
             default:
             break;
@@ -239,20 +240,20 @@ void Filters::updateFilters()
         switch(exclude.at(index).apply_on)
         {
             case ApplyOn_file:
-                optionsToShow << QStringLiteral("ApplyOn_file");
+                optionsToShow.push_back("ApplyOn_file");
             break;
             case ApplyOn_fileAndFolder:
-                optionsToShow << QStringLiteral("ApplyOn_fileAndFolder");
+                optionsToShow.push_back("ApplyOn_fileAndFolder");
             break;
             case ApplyOn_folder:
-                optionsToShow << QStringLiteral("ApplyOn_folder");
+                optionsToShow.push_back("ApplyOn_folder");
             break;
             default:
             break;
         }
         if(exclude.at(index).need_match_all)
-            optionsToShow << tr("Full match");
-        excludeOptions<<optionsToShow.join(QStringLiteral(";"));
+            optionsToShow.push_back(tr("Full match").toStdString());
+        excludeOptions.push_back(stringimplode(optionsToShow,";"));
         index++;
     }
     emit sendNewFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
@@ -261,14 +262,14 @@ void Filters::updateFilters()
 
 bool Filters::convertToRegex(Filters_rules &item)
 {
-    bool isValid=!item.search_text.isEmpty();
+    bool isValid=!item.search_text.empty();
     if(isValid)
     {
-        QRegularExpression regex;
-        QString tempString;
+        std::regex regex;
+        std::string tempString;
         if(item.search_type==SearchType_rawText)
         {
-            tempString=QRegularExpression::escape(item.search_text);
+            tempString=QRegularExpression::escape(QString::fromStdString(item.search_text));
             if(tempString.contains('/') || tempString.contains('\\'))
                 isValid=false;
         }
@@ -279,13 +280,13 @@ bool Filters::convertToRegex(Filters_rules &item)
         }
         else if(item.search_type==SearchType_perlRegex)
         {
-            tempString=item.search_text;
+            tempString=QString::fromStdString(item.search_text);
             if(tempString.startsWith('^') && tempString.endsWith('$'))
             {
                 item.need_match_all=true;
                 tempString.remove(QRegularExpression("^\\^"));
                 tempString.remove(QRegularExpression("\\$$"));
-                item.search_text=tempString;
+                item.search_text=QString::fromStdString(tempString);
             }
         }
         if(isValid)
@@ -312,7 +313,7 @@ void Filters::on_remove_exclusion_clicked()
         if(ui->exclusion->item(index)->isSelected())
         {
             delete ui->exclusion->item(index);
-            exclude.removeAt(index);
+            exclude.erase(exclude.cbegin()+index);
             removedEntry=true;
         }
         else
@@ -334,7 +335,7 @@ void Filters::on_remove_inclusion_clicked()
         if(ui->inclusion->item(index)->isSelected())
         {
             delete ui->inclusion->item(index);
-            include.removeAt(index);
+            include.erase(include.cbegin()+index);
             removedEntry=true;
         }
         else
@@ -358,7 +359,7 @@ void Filters::on_add_exclusion_clicked()
         new_item.need_match_all=dialog.get_need_match_all();
         new_item.search_text=dialog.get_search_text();
         new_item.search_type=dialog.get_search_type();
-        exclude << new_item;
+        exclude.push_back(new_item);
         reShowAll();
         updateFilters();
     }
@@ -382,7 +383,7 @@ void Filters::on_add_inclusion_clicked()
         new_item.search_text=dialog.get_search_text();
         new_item.search_type=dialog.get_search_type();
         if(convertToRegex(new_item))
-            include << new_item;
+            include.push_back(new_item);
         reShowAll();
         updateFilters();
     }
@@ -409,7 +410,7 @@ void Filters::on_edit_exclusion_clicked()
                 exclude[index].search_text=dialog.get_search_text();
                 exclude[index].search_type=dialog.get_search_type();
                 if(!convertToRegex(exclude[index]))
-                    exclude.removeAt(index);
+                    exclude.erase(exclude.cbegin()+index);
                 editedEntry=true;
             }
         }
@@ -443,7 +444,7 @@ void Filters::on_edit_inclusion_clicked()
                 exclude[index].search_text=dialog.get_search_text();
                 exclude[index].search_type=dialog.get_search_type();
                 if(!convertToRegex(exclude[index]))
-                    exclude.removeAt(index);
+                    exclude.erase(exclude.cbegin()+index);
                 editedEntry=true;
             }
         }

@@ -3,8 +3,8 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#include <QString>
-#include <QRegularExpression>
+#include <string>
+#include <regex>
 
 #ifndef STRUCTDEF_COPYENGINE_H
 #define STRUCTDEF_COPYENGINE_H
@@ -95,11 +95,11 @@ enum ApplyOn
 /** to store into different way the filter rules to be exported */
 struct Filters_rules
 {
-    QString search_text;
+    std::string search_text;
     SearchType search_type;
     ApplyOn apply_on;
     bool need_match_all;
-    QRegularExpression regex;
+    std::regex regex;
 };
 
 /// \brief get action type
@@ -116,9 +116,9 @@ enum ActionType
 
 struct Diskspace
 {
-    QString drive;
-    quint64 requiredSpace;
-    quint64 freeSpace;
+    std::string drive;
+    uint64_t requiredSpace;
+    uint64_t freeSpace;
 };
 
 #endif // STRUCTDEF_COPYENGINE_H

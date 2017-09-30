@@ -1,6 +1,7 @@
 #include "FileExistsDialog.h"
 #include "ui_fileExistsDialog.h"
 #include "TransferThread.h"
+#include "FacilityEngine.h"
 
 #include <QRegularExpression>
 #include <QFileInfo>
@@ -21,20 +22,20 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, QFileInfo source, QFileInfo 
     action=FileExists_Cancel;
     destinationInfo=destination;
     oldName=TransferThread::resolvedName(destination);
-    ui->lineEditNewName->setText(oldName);
-    ui->lineEditNewName->setPlaceholderText(oldName);
+    ui->lineEditNewName->setText(QString::fromStdString(oldName));
+    ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     ui->Overwrite->addAction(ui->actionOverwrite_if_newer);
     ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_modification_date);
     ui->label_content_source_size->setText(QString::number(source.size()));
     ui->label_content_source_modified->setText(source.lastModified().toString());
-    ui->label_content_source_file_name->setText(TransferThread::resolvedName(source));
+    ui->label_content_source_file_name->setText(QString::fromStdString(TransferThread::resolvedName(source)));
     QString folder=source.absolutePath();
     if(folder.size()>80)
         folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
     ui->label_content_source_folder->setText(folder);
     ui->label_content_destination_size->setText(QString::number(destination.size()));
     ui->label_content_destination_modified->setText(destination.lastModified().toString());
-    ui->label_content_destination_file_name->setText(TransferThread::resolvedName(destination));
+    ui->label_content_destination_file_name->setText(QString::fromStdString(TransferThread::resolvedName(destination)));
     folder=destination.absolutePath();
     if(folder.size()>80)
         folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
@@ -98,19 +99,19 @@ void FileExistsDialog::changeEvent(QEvent *e)
     }
 }
 
-QString FileExistsDialog::getNewName()
+std::string FileExistsDialog::getNewName()
 {
-    if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
+    if(oldName==ui->lineEditNewName->text().toStdString() || ui->checkBoxAlways->isChecked())
         return oldName;
     else
-        return ui->lineEditNewName->text();
+        return ui->lineEditNewName->text().toStdString();
 }
 
 void FileExistsDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
-    QString fileName=TransferThread::resolvedName(destinationInfo);
+    QString fileName=QString::fromStdString(TransferThread::resolvedName(destinationInfo));
     QString suffix="";
     QString destination;
     QString newFileName;
@@ -127,26 +128,26 @@ void FileExistsDialog::on_SuggestNewName_clicked()
     {
         if(num==1)
         {
-            if(firstRenamingRule==QStringLiteral(""))
+            if(firstRenamingRule.empty())
                 newFileName=tr("%1 - copy").arg(fileName);
             else
             {
-                newFileName=firstRenamingRule;
+                newFileName=QString::fromStdString(firstRenamingRule);
                 newFileName.replace("%name%",fileName);
             }
         }
         else
         {
-            if(otherRenamingRule=="")
+            if(otherRenamingRule.empty())
                 newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
             else
             {
-                newFileName=otherRenamingRule;
+                newFileName=QString::fromStdString(otherRenamingRule);
                 newFileName.replace(QStringLiteral("%name%"),fileName);
                 newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
-        destination=absolutePath+FacilityEngine::separator()+newFileName+suffix;
+        destination=absolutePath+QString::fromStdString(FacilityEngine::separator())+newFileName+suffix;
         destinationInfo.setFile(destination);
         num++;
     }
@@ -202,7 +203,7 @@ bool FileExistsDialog::getAlways()
 
 void FileExistsDialog::updateRenameButton()
 {
-    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
+    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text().toStdString() && !ui->lineEditNewName->text().isEmpty()));
 }
 
 void FileExistsDialog::on_checkBoxAlways_toggled(bool checked)
