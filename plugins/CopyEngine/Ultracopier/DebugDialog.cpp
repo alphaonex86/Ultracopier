@@ -22,7 +22,12 @@ DebugDialog::~DebugDialog()
 void DebugDialog::setTransferList(const std::vector<std::string> &list)
 {
     ui->tranferList->clear();
-    ui->tranferList->addItems(list);
+    unsigned int index=0;
+    while(index<list.size())
+    {
+        ui->tranferList->addItem(QString::fromStdString(list.at(index)));
+        index++;
+    }
 }
 
 void DebugDialog::setActiveTransfer(const int &activeTransfer)
@@ -38,7 +43,12 @@ void DebugDialog::setInodeUsage(const int &inodeUsage)
 void DebugDialog::setTransferThreadList(const std::vector<std::string> &list)
 {
     ui->transferThreadList->clear();
-    ui->transferThreadList->addItems(list);
+    unsigned int index=0;
+    while(index<list.size())
+    {
+        ui->transferThreadList->addItem(QString::fromStdString(list.at(index)));
+        index++;
+    }
 }
 
 #endif

@@ -235,7 +235,7 @@ std::string FacilityEngine::ultimateUrl() const
         #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
         return QStringLiteral("http://ultracopier.first-world.info/shop.html");
         #else
-        return QString();
+        return std::string();
         #endif
     #endif
 }

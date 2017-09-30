@@ -2,7 +2,7 @@
 #include "ui_DiskSpace.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
-DiskSpace::DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QWidget *parent) :
+DiskSpace::DiskSpace(FacilityInterface * facilityEngine,std::vector<Diskspace> list,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DiskSpace)
 {
@@ -22,8 +22,8 @@ DiskSpace::DiskSpace(FacilityInterface * facilityEngine,QList<Diskspace> list,QW
     {
         drives+=tr("Drives %1 have %2 available but need %3")
                 .arg(list.at(index).drive)
-                .arg(facilityEngine->sizeToString(list.at(index).freeSpace))
-                .arg(facilityEngine->sizeToString(list.at(index).requiredSpace));
+                .arg(QString::fromStdString(facilityEngine->sizeToString(list.at(index).freeSpace)))
+                .arg(QString::fromStdString(facilityEngine->sizeToString(list.at(index).requiredSpace)));
         drives+=QStringLiteral("<br />");
         index++;
     }
