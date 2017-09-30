@@ -1,6 +1,7 @@
 #include "FolderExistsDialog.h"
 #include "ui_folderExistsDialog.h"
 #include "TransferThread.h"
+#include "FacilityEngine.h"
 
 #include <QMessageBox>
 #include <QFileInfo>
@@ -20,8 +21,8 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, QFileInfo source, bool i
     ui->setupUi(this);
     action=FolderExists_Cancel;
     oldName=TransferThread::resolvedName(destination);
-    ui->lineEditNewName->setText(oldName);
-    ui->lineEditNewName->setPlaceholderText(oldName);
+    ui->lineEditNewName->setText(QString::fromStdString(oldName));
+    ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     ui->label_content_source_modified->setText(source.lastModified().toString());
     ui->label_content_source_folder_name->setText(source.fileName());
     QString folder=source.absolutePath();
@@ -83,20 +84,20 @@ void FolderExistsDialog::changeEvent(QEvent *e)
     }
 }
 
-QString FolderExistsDialog::getNewName()
+std::string FolderExistsDialog::getNewName()
 {
-    if(oldName==ui->lineEditNewName->text() || ui->checkBoxAlways->isChecked())
+    if(oldName==ui->lineEditNewName->text().toStdString() || ui->checkBoxAlways->isChecked())
         return "";
     else
-        return ui->lineEditNewName->text();
+        return ui->lineEditNewName->text().toStdString();
 }
 
 void FolderExistsDialog::on_SuggestNewName_clicked()
 {
     QFileInfo destinationInfo=this->destinationInfo;
     QString absolutePath=destinationInfo.absolutePath();
-    QString fileName=TransferThread::resolvedName(destinationInfo);
-    QString suffix=QStringLiteral("");
+    QString fileName=QString::fromStdString(TransferThread::resolvedName(destinationInfo));
+    QString suffix;
     QString destination;
     QString newFileName;
     //resolv the suffix
@@ -112,26 +113,26 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
     {
         if(num==1)
         {
-            if(firstRenamingRule.isEmpty())
+            if(firstRenamingRule.empty())
                 newFileName=tr("%1 - copy").arg(fileName);
             else
             {
-                newFileName=firstRenamingRule;
+                newFileName=QString::fromStdString(firstRenamingRule);
                 newFileName.replace(QStringLiteral("%name%"),fileName);
             }
         }
         else
         {
-            if(otherRenamingRule.isEmpty())
+            if(otherRenamingRule.empty())
                 newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
             else
             {
-                newFileName=otherRenamingRule;
+                newFileName=QString::fromStdString(otherRenamingRule);
                 newFileName.replace(QStringLiteral("%name%"),fileName);
                 newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
-        destination=absolutePath+FacilityEngine::separator()+newFileName+suffix;
+        destination=absolutePath+QString::fromStdString(FacilityEngine::separator())+newFileName+suffix;
         destinationInfo.setFile(destination);
         num++;
     }
@@ -187,7 +188,7 @@ void FolderExistsDialog::on_lineEditNewName_returnPressed()
         QMessageBox::warning(this,tr("Error"),tr("Try rename with using special characters"));
 }
 
-void FolderExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
+void FolderExistsDialog::on_lineEditNewName_textChanged(const std::string &arg1)
 {
     Q_UNUSED(arg1);
     updateRenameButton();
@@ -195,5 +196,5 @@ void FolderExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
 
 void FolderExistsDialog::updateRenameButton()
 {
-    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text() && !ui->lineEditNewName->text().isEmpty()));
+    ui->Rename->setEnabled(ui->checkBoxAlways->isChecked() || (!ui->lineEditNewName->text().contains(QRegularExpression("[/\\\\\\*]")) && oldName!=ui->lineEditNewName->text().toStdString() && !ui->lineEditNewName->text().isEmpty()));
 }

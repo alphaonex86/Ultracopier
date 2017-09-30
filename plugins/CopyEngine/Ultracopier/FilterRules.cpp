@@ -22,9 +22,9 @@ bool FilterRules::getIsValid()
     return isValid && haveBeenValided;
 }
 
-QString FilterRules::get_search_text()
+std::string FilterRules::get_search_text()
 {
-    return ui->search->text();
+    return ui->search->text().toStdString();
 }
 
 SearchType FilterRules::get_search_type()
@@ -60,9 +60,9 @@ bool FilterRules::get_need_match_all()
     return ui->need_match_all->isChecked();
 }
 
-void FilterRules::set_search_text(QString search_text)
+void FilterRules::set_search_text(std::string search_text)
 {
-    ui->search->setText(search_text);
+    ui->search->setText(QString::fromStdString(search_text));
 }
 
 void FilterRules::set_search_type(SearchType search_type)
@@ -102,7 +102,7 @@ void FilterRules::set_need_match_all(bool need_match_all)
     ui->need_match_all->setChecked(need_match_all);
 }
 
-void FilterRules::on_search_textChanged(const QString &arg1)
+void FilterRules::on_search_textChanged(const std::string &arg1)
 {
     Q_UNUSED(arg1);
     updateChecking();
@@ -159,7 +159,7 @@ void FilterRules::on_isValid_clicked()
     updateChecking();
 }
 
-void FilterRules::on_testString_textChanged(const QString &arg1)
+void FilterRules::on_testString_textChanged(const std::string &arg1)
 {
     Q_UNUSED(arg1);
     updateChecking();

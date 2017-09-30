@@ -32,12 +32,12 @@ public:
     /// \brief to get if is finished
     bool isFinished() const;
     /// \brief set action if Folder are same or exists
-    void setFolderExistsAction(const FolderExistsAction &action,const QString &newName="");
+    void setFolderExistsAction(const FolderExistsAction &action, const std::string &newName="");
     /// \brief set action if error
     void setFolderErrorAction(const FileErrorAction &action);
     /// \brief set if need check if the destination exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
-    void setRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule);
+    void setRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule);
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     void setRsync(const bool rsync);
@@ -45,12 +45,12 @@ public:
 signals:
     void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const Ultracopier::CopyMode &mode) const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
     void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame) const;
-    void errorOnFolder(const QFileInfo &fileInfo,const QString &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void errorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void finishedTheListing() const;
 
-    void newFolderListing(const QString &path) const;
+    void newFolderListing(const std::string &path) const;
     void addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode) const;
     void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove) const;
     void addToRealMove(const QFileInfo& source,const QFileInfo& destination) const;
@@ -58,8 +58,8 @@ signals:
     void addToRmForRsync(const QFileInfo& destination) const;
     #endif
 public slots:
-    void addToList(const QStringList& sources,const QString& destination);
-    void setFilters(const QList<Filters_rules> &include,const QList<Filters_rules> &exclude);
+    void addToList(const std::vector<std::string>& sources,const std::string& destination);
+    void setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude);
     void setCopyListOrder(const bool &order);
     void set_updateMount();
 protected:
@@ -67,8 +67,8 @@ protected:
 private:
     DriveManagement     driveManagement;
     bool                moveTheWholeFolder;
-    QStringList         sources;
-    QString             destination;
+    std::vector<std::string>         sources;
+    std::string             destination;
     volatile bool		stopIt;
     void                listFolder(QFileInfo source, QFileInfo destination);
     bool                isBlackListed(const QFileInfo &destination);
@@ -78,31 +78,31 @@ private:
     FolderExistsAction	folderExistsAction;
     FileErrorAction		fileErrorAction;
     volatile bool		checkDestinationExists;
-    QString             newName;
+    std::string             newName;
     bool                copyListOrder;
-    QRegularExpression	folder_isolation;
+    std::regex	folder_isolation;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool                rsync;
     #endif
     Ultracopier::CopyMode	mode;
-    QList<Filters_rules>	include,exclude;
-    QList<Filters_rules>	include_send,exclude_send;
+    std::vector<Filters_rules>	include,exclude;
+    std::vector<Filters_rules>	include_send,exclude_send;
     bool			reloadTheNewFilters;
     bool			haveFilters;
     QMutex			filtersMutex;
-    QString			firstRenamingRule;
-    QString			otherRenamingRule;
-    QStringList     blackList;
+    std::string			firstRenamingRule;
+    std::string			otherRenamingRule;
+    std::vector<std::string>     blackList;
     /** Parse the multiple wildcard source, it allow resolv multiple wildcard with Qt into their path
      * The string: /toto/f*a/yy*a/toto.mp3
      * Will give: /toto/f1a/yy*a/toto.mp3, /toto/f2a/yy*a/toto.mp3
      * Will give: /toto/f2a/yy1a/toto.mp3, /toto/f2a/yy2a/toto.mp3
     */
-    QStringList		parseWildcardSources(const QStringList &sources) const;
+    std::vector<std::string>		parseWildcardSources(const std::vector<std::string> &sources) const;
 
-    static QString text_slash;
-    static QString text_antislash;
-    static QString text_dot;
+    static std::string text_slash;
+    static std::string text_antislash;
+    static std::string text_dot;
 };
 
 #endif // SCANFILEORFOLDER_H

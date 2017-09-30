@@ -15,20 +15,20 @@ class DriveManagement : public QObject
     Q_OBJECT
 public:
     explicit DriveManagement();
-    bool isSameDrive(const QString &file1,const QString &file2) const;
+    bool isSameDrive(const std::string &file1, const std::string &file2) const;
     /// \brief get drive of an file or folder
-    QString getDrive(const QString &fileOrFolder) const;
-    QByteArray getDriveType(const QString &drive) const;
+    std::string getDrive(const std::string &fileOrFolder) const;
+    QByteArray getDriveType(const std::string &drive) const;
     void tryUpdate();
 protected:
-    QStringList		mountSysPoint;
-    QList<QByteArray> driveType;
+    std::vector<std::string>		mountSysPoint;
+    std::vector<QByteArray> driveType;
     #ifdef Q_OS_WIN32
-    QRegularExpression reg1,reg2,reg3,reg4;
+    std::regex reg1,reg2,reg3,reg4;
     #endif
 signals:
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 };
 
 #endif // DRIVEMANAGEMENT_H

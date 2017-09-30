@@ -4,6 +4,8 @@
 #include <QFileInfoList>
 #include <QStorageInfo>
 
+#include "../../../cpp11addition.h"
+
 DriveManagement::DriveManagement()
 {
     tryUpdate();
@@ -17,13 +19,13 @@ DriveManagement::DriveManagement()
 }
 
 //get drive of an file or folder
-QString DriveManagement::getDrive(const QString &fileOrFolder) const
+std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
 {
-    const QString &inode=QDir::toNativeSeparators(fileOrFolder);
+    const std::string &inode=QDir::toNativeSeparators(QString::fromStdString(fileOrFolder)).toStdString();
     int size=mountSysPoint.size();
     for (int i = 0; i < size; ++i) {
-        if(inode.startsWith(mountSysPoint.at(i)))
-            return QDir::toNativeSeparators(mountSysPoint.at(i));
+        if(stringStartWith(inode,mountSysPoint.at(i)))
+            return QDir::toNativeSeparators(QString::fromStdString(mountSysPoint.at(i))).toStdString();
     }
     #ifdef Q_OS_WIN32
     if(fileOrFolder.contains(reg1))
@@ -41,38 +43,38 @@ QString DriveManagement::getDrive(const QString &fileOrFolder) const
     }
     #endif
     //if unable to locate the right mount point
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("unable to locate the right mount point for: %1, mount point: %2").arg(fileOrFolder).arg(mountSysPoint.join(";")));
-    return QString();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to locate the right mount point for: "+fileOrFolder+", mount point: "+stringimplode(mountSysPoint,";"));
+    return std::string();
 }
 
-QByteArray DriveManagement::getDriveType(const QString &drive) const
+QByteArray DriveManagement::getDriveType(const std::string &drive) const
 {
-    int index=mountSysPoint.indexOf(drive);
+    int index=vectorindexOf(mountSysPoint,drive);
     if(index!=-1)
         return driveType.at(index);
     return QByteArray();
 }
 
-bool DriveManagement::isSameDrive(const QString &file1,const QString &file2) const
+bool DriveManagement::isSameDrive(const std::string &file1,const std::string &file2) const
 {
     if(mountSysPoint.size()==0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("no mount point found"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"no mount point found");
         return false;
     }
-    const QString &drive1=getDrive(file1);
-    if(drive1.isEmpty())
+    const std::string &drive1=getDrive(file1);
+    if(drive1.empty())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("drive for the file1 not found: %1").arg(file1));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"drive for the file1 not found: "+file1);
         return false;
     }
-    const QString &drive2=getDrive(file2);
-    if(drive2.isEmpty())
+    const std::string &drive2=getDrive(file2);
+    if(drive2.empty())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("drive for the file2 not found: %1").arg(file2));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"drive for the file2 not found: "+file2);
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1 is egal to %2?").arg(drive1).arg(drive2));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,drive1+" is egal to "+drive2);
     if(drive1==drive2)
         return true;
     else
@@ -87,15 +89,15 @@ void DriveManagement::tryUpdate()
     int index=0;
     while(index<mountedVolumesList.size())
     {
-        mountSysPoint << QDir::toNativeSeparators(mountedVolumesList.at(index).rootPath());
+        mountSysPoint.push_back(QDir::toNativeSeparators(mountedVolumesList.at(index).rootPath()).toStdString());
         #ifdef Q_OS_WIN32
         if(mountSysPoint.last()!="A:\\" && mountSysPoint.last()!="A:/" && mountSysPoint.last()!="A:" && mountSysPoint.last()!="A" &&
                 mountSysPoint.last()!="a:\\" && mountSysPoint.last()!="a:/" && mountSysPoint.last()!="a:" && mountSysPoint.last()!="a")
-            driveType << mountedVolumesList.at(index).fileSystemType();
+            driveType.push_back(mountedVolumesList.at(index).fileSystemType());
         else
-            driveType << QByteArray();
+            driveType.push_back(QByteArray());
         #else
-        driveType << mountedVolumesList.at(index).fileSystemType();
+        driveType.push_back(mountedVolumesList.at(index).fileSystemType());
         #endif
         index++;
     }

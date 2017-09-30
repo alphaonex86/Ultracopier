@@ -32,7 +32,7 @@ public:
     /// \brief return the action clicked
     FolderExistsAction getAction();
     /// \brief return the new rename is case in manual renaming
-    QString getNewName();
+    std::string getNewName();
 protected:
     void changeEvent(QEvent *e);
 private slots:
@@ -44,13 +44,13 @@ private slots:
     void on_Merge_clicked();
     void on_lineEditNewName_editingFinished();
     void on_lineEditNewName_returnPressed();
-    void on_lineEditNewName_textChanged(const QString &arg1);
+    void on_lineEditNewName_textChanged(const std::string &arg1);
 private:
     Ui::folderExistsDialog *ui;
     FolderExistsAction action;
-    QString oldName;
-    QString firstRenamingRule;
-    QString otherRenamingRule;
+    std::string oldName;
+    std::string firstRenamingRule;
+    std::string otherRenamingRule;
     QFileInfo destinationInfo;
 };
 

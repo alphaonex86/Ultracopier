@@ -269,31 +269,33 @@ bool Filters::convertToRegex(Filters_rules &item)
         std::string tempString;
         if(item.search_type==SearchType_rawText)
         {
-            tempString=QRegularExpression::escape(QString::fromStdString(item.search_text));
-            if(tempString.contains('/') || tempString.contains('\\'))
+            tempString=QRegularExpression::escape(QString::fromStdString(item.search_text)).toStdString();
+            if(tempString.find('/') != std::string::npos || tempString.find('\\') != std::string::npos)
                 isValid=false;
         }
         else if(item.search_type==SearchType_simpleRegex)
         {
-            tempString=QRegularExpression::escape(item.search_text);
-            tempString.replace(QStringLiteral("\\*"),QStringLiteral("[^\\\\/]*"));
+            tempString=QRegularExpression::escape(QString::fromStdString(item.search_text)).toStdString();
+            stringreplaceAll(tempString,"\\*","[^\\\\/]*");
         }
         else if(item.search_type==SearchType_perlRegex)
         {
-            tempString=QString::fromStdString(item.search_text);
-            if(tempString.startsWith('^') && tempString.endsWith('$'))
+            tempString=item.search_text;
+            if(stringStartWith(tempString,'^') && stringEndsWith(tempString,'$'))
             {
                 item.need_match_all=true;
-                tempString.remove(QRegularExpression("^\\^"));
-                tempString.remove(QRegularExpression("\\$$"));
-                item.search_text=QString::fromStdString(tempString);
+                if(stringStartWith(tempString,'^'))
+                    tempString=tempString.substr(1,tempString.size()-1);
+                if(stringEndsWith(tempString,'$'))
+                    tempString=tempString.substr(0,tempString.size()-1);
+                item.search_text=tempString;
             }
         }
         if(isValid)
         {
             if(item.need_match_all==true)
-                tempString=QStringLiteral("^")+tempString+QStringLiteral("$");
-            regex=QRegularExpression(tempString);
+                tempString="^"+tempString+"$";
+            regex=std::regex(tempString);
             //isValid=regex.isValid();
             item.regex=regex;
             return true;

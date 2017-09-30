@@ -9,7 +9,7 @@ RenamingRules::RenamingRules(QWidget *parent) :
 {
     ui->setupUi(this);
     connectUI();
-    setRenamingRules(QStringLiteral(""),QStringLiteral(""));
+    setRenamingRules("","");
 }
 
 RenamingRules::~RenamingRules()
@@ -23,7 +23,7 @@ void RenamingRules::on_buttonBox_clicked(QAbstractButton *button)
         reject();
     if(ui->buttonBox->buttonRole(button)==QDialogButtonBox::ResetRole)
     {
-        setRenamingRules(QStringLiteral(""),QStringLiteral(""));
+        setRenamingRules("","");
         emit sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
     }
 }
@@ -33,12 +33,12 @@ void RenamingRules::setRenamingRules(std::string firstRenamingRule,std::string o
     disconnectUI();
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
-    if(!firstRenamingRule.isEmpty())
-        ui->firstRenamingRule->setText(firstRenamingRule);
+    if(!firstRenamingRule.empty())
+        ui->firstRenamingRule->setText(QString::fromStdString(firstRenamingRule));
     else
         ui->firstRenamingRule->setText(tr("%1 - copy").arg(QStringLiteral("%name%")));
-    if(!otherRenamingRule.isEmpty())
-        ui->otherRenamingRule->setText(otherRenamingRule);
+    if(!otherRenamingRule.empty())
+        ui->otherRenamingRule->setText(QString::fromStdString(otherRenamingRule));
     else
         ui->otherRenamingRule->setText(tr("%1 - copy (%2)").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")));
     connectUI();
@@ -61,9 +61,9 @@ void RenamingRules::firstRenamingRule_haveChanged()
     QString newValue=ui->firstRenamingRule->text();
     if(newValue==tr("%1 - copy").arg(QStringLiteral("%name%")))
         newValue=QStringLiteral("");
-    if(newValue==firstRenamingRule)
+    if(newValue.toStdString()==firstRenamingRule)
         return;
-    firstRenamingRule=newValue;
+    firstRenamingRule=newValue.toStdString();
     emit sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
@@ -72,9 +72,9 @@ void RenamingRules::otherRenamingRule_haveChanged()
     QString newValue=ui->otherRenamingRule->text();
     if(newValue==tr("%1 - copy (%2)").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")))
         newValue=QStringLiteral("");
-    if(newValue==otherRenamingRule)
+    if(newValue.toStdString()==otherRenamingRule)
         return;
-    otherRenamingRule=newValue;
+    otherRenamingRule=newValue.toStdString();
     emit sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
 }
 
