@@ -282,14 +282,18 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
     }
 }
 
-QStringList CopyEngineFactory::supportedProtocolsForTheSource() const
+std::vector<std::string> CopyEngineFactory::supportedProtocolsForTheSource() const
 {
-    return QStringList() << QStringLiteral("file");
+    std::vector<std::string> l;
+    l.push_back("file");
+    return l;
 }
 
-QStringList CopyEngineFactory::supportedProtocolsForTheDestination() const
+std::vector<std::string> CopyEngineFactory::supportedProtocolsForTheDestination() const
 {
-    return QStringList() << QStringLiteral("file");
+    std::vector<std::string> l;
+    l.push_back("file");
+    return l;
 }
 
 Ultracopier::CopyType CopyEngineFactory::getCopyType()
@@ -320,21 +324,21 @@ void CopyEngineFactory::setDoRightTransfer(bool doRightTransfer)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("doRightTransfer"),doRightTransfer);
+        optionsEngine->setOptionValue("doRightTransfer",booltostring(doRightTransfer));
 }
 
 void CopyEngineFactory::setKeepDate(bool keepDate)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("keepDate"),keepDate);
+        optionsEngine->setOptionValue("keepDate",booltostring(keepDate));
 }
 
 void CopyEngineFactory::setBlockSize(int blockSize)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("blockSize"),blockSize);
+        optionsEngine->setOptionValue("blockSize",std::to_string(blockSize));
     updatedBlockSize();
 }
 
@@ -345,7 +349,7 @@ void CopyEngineFactory::setParallelBuffer(int parallelBuffer)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
         parallelBuffer=round((float)parallelBuffer/(float)ui->blockSize->value())*ui->blockSize->value();
         ui->parallelBuffer->setValue(parallelBuffer);
-        optionsEngine->setOptionValue(QStringLiteral("parallelBuffer"),parallelBuffer);
+        optionsEngine->setOptionValue("parallelBuffer",std::to_string(parallelBuffer));
     }
 }
 
@@ -353,10 +357,10 @@ void CopyEngineFactory::setSequentialBuffer(int sequentialBuffer)
 {
     if(optionsEngine!=NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("the value have changed"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
         sequentialBuffer=round((float)sequentialBuffer/(float)ui->blockSize->value())*ui->blockSize->value();
         ui->sequentialBuffer->setValue(sequentialBuffer);
-        optionsEngine->setOptionValue(QStringLiteral("sequentialBuffer"),sequentialBuffer);
+        optionsEngine->setOptionValue("sequentialBuffer",std::to_string(sequentialBuffer));
     }
 }
 
@@ -365,7 +369,7 @@ void CopyEngineFactory::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan
     if(optionsEngine!=NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-        optionsEngine->setOptionValue(QStringLiteral("parallelizeIfSmallerThan"),parallelizeIfSmallerThan);
+        optionsEngine->setOptionValue("parallelizeIfSmallerThan",std::to_string(parallelizeIfSmallerThan));
     }
 }
 
@@ -373,35 +377,35 @@ void CopyEngineFactory::setAutoStart(bool autoStart)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("autoStart"),autoStart);
+        optionsEngine->setOptionValue("autoStart",booltostring(autoStart));
 }
 
 void CopyEngineFactory::setFolderCollision(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("folderCollision"),index);
+        optionsEngine->setOptionValue("folderCollision",std::to_string(index));
 }
 
 void CopyEngineFactory::setFolderError(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("folderError"),index);
+        optionsEngine->setOptionValue("folderError",std::to_string(index));
 }
 
 void CopyEngineFactory::setTransferAlgorithm(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("transferAlgorithm"),index);
+        optionsEngine->setOptionValue("transferAlgorithm",std::to_string(index));
 }
 
 void CopyEngineFactory::setCheckDestinationFolder()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("checkDestinationFolder"),ui->checkBoxDestinationFolderExists->isChecked());
+        optionsEngine->setOptionValue("checkDestinationFolder",booltostring(ui->checkBoxDestinationFolderExists->isChecked()));
 }
 
 void CopyEngineFactory::newLanguageLoaded()
@@ -446,21 +450,21 @@ void CopyEngineFactory::doChecksum_toggled(bool doChecksum)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("doChecksum"),doChecksum);
+        optionsEngine->setOptionValue("doChecksum",booltostring(doChecksum));
 }
 
 void CopyEngineFactory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("checksumOnlyOnError"),checksumOnlyOnError);
+        optionsEngine->setOptionValue("checksumOnlyOnError",booltostring(checksumOnlyOnError));
 }
 
 void CopyEngineFactory::osBuffer_toggled(bool osBuffer)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("osBuffer"),osBuffer);
+        optionsEngine->setOptionValue("osBuffer",booltostring(osBuffer));
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
@@ -468,7 +472,7 @@ void CopyEngineFactory::osBufferLimited_toggled(bool osBufferLimited)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("osBufferLimited"),osBufferLimited);
+        optionsEngine->setOptionValue("osBufferLimited",booltostring(osBufferLimited));
     ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
@@ -476,7 +480,7 @@ void CopyEngineFactory::osBufferLimit_editingFinished()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("osBufferLimit"),ui->osBufferLimit->value());
+        optionsEngine->setOptionValue("osBufferLimit",std::to_string(ui->osBufferLimit->value()));
 }
 
 void CopyEngineFactory::showFilterDialog()
@@ -490,31 +494,31 @@ void CopyEngineFactory::showFilterDialog()
     filters->exec();
 }
 
-void CopyEngineFactory::sendNewFilters(const QStringList &includeStrings,const QStringList &includeOptions,const QStringList &excludeStrings,const QStringList &excludeOptions)
+void CopyEngineFactory::sendNewFilters(const std::vector<std::string> &includeStrings,const std::vector<std::string> &includeOptions,const std::vector<std::string> &excludeStrings,const std::vector<std::string> &excludeOptions)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("new filter"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->includeStrings=includeStrings;
     this->includeOptions=includeOptions;
     this->excludeStrings=excludeStrings;
     this->excludeOptions=excludeOptions;
     if(optionsEngine!=NULL)
     {
-        optionsEngine->setOptionValue(QStringLiteral("includeStrings"),includeStrings);
-        optionsEngine->setOptionValue(QStringLiteral("includeOptions"),includeOptions);
-        optionsEngine->setOptionValue(QStringLiteral("excludeStrings"),excludeStrings);
-        optionsEngine->setOptionValue(QStringLiteral("excludeOptions"),excludeOptions);
+        optionsEngine->setOptionValue("includeStrings",stringlisttostring(includeStrings));
+        optionsEngine->setOptionValue("includeOptions",stringlisttostring(includeOptions));
+        optionsEngine->setOptionValue("excludeStrings",stringlisttostring(excludeStrings));
+        optionsEngine->setOptionValue("excludeOptions",stringlisttostring(excludeOptions));
     }
 }
 
-void CopyEngineFactory::sendNewRenamingRules(const QString &firstRenamingRule,const QString &otherRenamingRule)
+void CopyEngineFactory::sendNewRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"new filter");
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
     if(optionsEngine!=NULL)
     {
-        optionsEngine->setOptionValue(QStringLiteral("firstRenamingRule"),firstRenamingRule);
-        optionsEngine->setOptionValue(QStringLiteral("otherRenamingRule"),otherRenamingRule);
+        optionsEngine->setOptionValue("firstRenamingRule",firstRenamingRule);
+        optionsEngine->setOptionValue("otherRenamingRule",otherRenamingRule);
     }
 }
 
@@ -539,12 +543,12 @@ void CopyEngineFactory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIf
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("checksumIgnoreIfImpossible"),checksumIgnoreIfImpossible);
+        optionsEngine->setOptionValue("checksumIgnoreIfImpossible",booltostring(checksumIgnoreIfImpossible));
 }
 
 void CopyEngineFactory::setFileCollision(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
     if(optionsEngine==NULL)
         return;
     switch(index)
@@ -556,7 +560,7 @@ void CopyEngineFactory::setFileCollision(int index)
         case 4:
         case 5:
         case 6:
-            optionsEngine->setOptionValue(QStringLiteral("fileCollision"),index);
+            optionsEngine->setOptionValue("fileCollision",std::to_string(index));
         break;
         default:
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
@@ -566,7 +570,7 @@ void CopyEngineFactory::setFileCollision(int index)
 
 void CopyEngineFactory::setFileError(int index)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("action index: %1").arg(index));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
     if(optionsEngine==NULL)
         return;
     switch(index)
@@ -574,7 +578,7 @@ void CopyEngineFactory::setFileError(int index)
         case 0:
         case 1:
         case 2:
-            optionsEngine->setOptionValue(QStringLiteral("fileError"),index);
+            optionsEngine->setOptionValue("fileError",std::to_string(index));
         break;
         default:
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
@@ -598,26 +602,28 @@ void CopyEngineFactory::deletePartiallyTransferredFiles(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("deletePartiallyTransferredFiles"),checked);
+        optionsEngine->setOptionValue("deletePartiallyTransferredFiles",booltostring(checked));
 }
 
 void CopyEngineFactory::renameTheOriginalDestination(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("renameTheOriginalDestination"),checked);
+        optionsEngine->setOptionValue("renameTheOriginalDestination",booltostring(checked));
 }
 
 void CopyEngineFactory::checkDiskSpace(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("checkDiskSpace"),checked);
+        optionsEngine->setOptionValue("checkDiskSpace",booltostring(checked));
 }
 
 void CopyEngineFactory::defaultDestinationFolderBrowse()
 {
-    QString destination = QFileDialog::getExistingDirectory(ui->defaultDestinationFolder,facilityEngine->translateText(QStringLiteral("Select destination directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    QString destination = QFileDialog::getExistingDirectory(ui->defaultDestinationFolder,
+                                                            QString::fromStdString(facilityEngine->translateText("Select destination directory")),
+                                                            "",QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if(destination.isEmpty())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Canceled by the user");
@@ -626,35 +632,35 @@ void CopyEngineFactory::defaultDestinationFolderBrowse()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     ui->defaultDestinationFolder->setText(destination);
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("defaultDestinationFolder"),destination);
+        optionsEngine->setOptionValue("defaultDestinationFolder",destination.toStdString());
 }
 
 void CopyEngineFactory::defaultDestinationFolder()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("defaultDestinationFolder"),ui->defaultDestinationFolder->text());
+        optionsEngine->setOptionValue("defaultDestinationFolder",ui->defaultDestinationFolder->text().toStdString());
 }
 
 void CopyEngineFactory::followTheStrictOrder(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("followTheStrictOrder"),checked);
+        optionsEngine->setOptionValue("followTheStrictOrder",booltostring(checked));
 }
 
 void CopyEngineFactory::moveTheWholeFolder(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("moveTheWholeFolder"),checked);
+        optionsEngine->setOptionValue("moveTheWholeFolder",booltostring(checked));
 }
 
 void CopyEngineFactory::on_inodeThreads_editingFinished()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("inodeThreads"),ui->inodeThreads->value());
+        optionsEngine->setOptionValue("inodeThreads",std::to_string(ui->inodeThreads->value()));
 }
 
 #ifdef Q_OS_WIN32
@@ -689,5 +695,5 @@ void CopyEngineFactory::copyListOrder(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("copyListOrder"),checked);
+        optionsEngine->setOptionValue("copyListOrder",booltostring(checked));
 }
