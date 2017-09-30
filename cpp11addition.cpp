@@ -480,3 +480,39 @@ std::string booltostring(const bool &value)
     else
         return "false";
 }
+
+std::vector<std::string> stringtostringlist(const std::string &string)
+{
+    if(string.empty())
+        return std::vector<std::string>();
+    std::vector<std::string> returnedVar;
+    size_t start_pos = 0;
+    size_t firstChar = 0;
+    while((start_pos = string.find(',', start_pos)) != std::string::npos) {
+        if(start_pos==0 || string.at(start_pos-1)!=',')
+        {
+            std::string tempString=string.substr(firstChar,start_pos-1);
+            stringreplaceAll(tempString,",,",",");
+            returnedVar.push_back(tempString);
+            start_pos++;
+            firstChar=start_pos;
+        }
+    }
+    return returnedVar;
+}
+
+std::string stringlisttostring(const std::vector<std::string> &stringlist)
+{
+    std::string returnedString;
+    unsigned int index=0;
+    while(index<stringlist.size())
+    {
+        if(!returnedString.empty())
+            returnedString+=',';
+        std::string tempString=stringlist.at(index);
+        stringreplaceAll(tempString,",",",,");
+        returnedString+=tempString;
+        index++;
+    }
+    return returnedString;
+}

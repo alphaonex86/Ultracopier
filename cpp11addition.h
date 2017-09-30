@@ -49,6 +49,9 @@ float stringtofloat(const std::string &string,bool *ok=NULL);
 double stringtodouble(const std::string &string,bool *ok=NULL);
 std::string booltostring(const bool &value);
 
+std::vector<std::string> stringtostringlist(const std::string &string);
+std::string stringlisttostring(const std::vector<std::string> &stringlist);
+
 std::string binarytoHexa(const std::vector<char> &data,bool *ok=NULL);
 std::string binarytoHexa(const char * const data,const uint32_t &size,bool *ok=NULL);
 std::string binarytoHexa(const unsigned char * const data,const uint32_t &size,bool *ok=NULL);
