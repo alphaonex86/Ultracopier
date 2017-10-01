@@ -4,15 +4,15 @@
 \licence GPL3, see the file COPYING */
 
 #include <QThread>
-#include <QStringList>
-#include <QString>
-#include <QList>
 #include <QFileInfo>
 #include <QDir>
 #include <QSemaphore>
 #include <QEventLoop>
 #include <QCoreApplication>
 #include <QMutexLocker>
+#include <regex>
+#include <string>
+#include <vector>
 
 #include "Environment.h"
 #include "DriveManagement.h"

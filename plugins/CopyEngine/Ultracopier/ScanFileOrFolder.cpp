@@ -263,7 +263,7 @@ QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
         if(QFileInfo(newDestination.symLinkTarget()).isAbsolute())
             newDestination.setFile(newDestination.symLinkTarget());
         else
-            newDestination.setFile(newDestination.absolutePath().toStdString()+text_slash+newDestination.symLinkTarget().toStdString());
+            newDestination.setFile(newDestination.absolutePath()+QString::fromStdString(text_slash)+newDestination.symLinkTarget());
     }
     do
     {
@@ -326,38 +326,38 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination.absoluteFilePath().toStdString());
                 if(newName.empty())
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pattern: "+folder_isolation.pattern());
+                    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pattern: "+folder_isolation.str());
                     //resolv the new name
-                    destinationSuffixPath=destination.baseName();
+                    destinationSuffixPath=destination.baseName().toStdString();
                     int num=1;
                     do
                     {
                         if(num==1)
                         {
                             if(firstRenamingRule.empty())
-                                destinationSuffixPath=tr("%1 - copy").arg(destination.baseName());
+                                destinationSuffixPath=tr("%1 - copy").arg(destination.baseName()).toStdString();
                             else
                             {
                                 destinationSuffixPath=firstRenamingRule;
-                                stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName());
+                                stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
                             }
                         }
                         else
                         {
                             if(otherRenamingRule.empty())
-                                destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num);
+                                destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num).toStdString();
                             else
                             {
                                 destinationSuffixPath=otherRenamingRule;
-                                stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName());
+                                stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
                                 stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                             }
                         }
                         num++;
                         if(destination.completeSuffix().isEmpty())
-                            destination.setFile(destination.absolutePath().toStdString()+text_slash+destinationSuffixPath);
+                            destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
                         else
-                            destination.setFile(destination.absolutePath().toStdString()+text_slash+destinationSuffixPath+text_dot+destination.completeSuffix());
+                            destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath)+QString::fromStdString(text_dot)+destination.completeSuffix());
                     }
                     while(destination.exists());
                 }
@@ -381,7 +381,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         {
             emit folderAlreadyExists(source,destination,false);
             waitOneAction.acquire();
-            QString destinationSuffixPath;
+            std::string destinationSuffixPath;
             switch(folderExistsAction)
             {
                 case FolderExists_Merge:
@@ -391,7 +391,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                 break;
                 case FolderExists_Rename:
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination.absoluteFilePath().toStdString());
-                    if(newName.isEmpty())
+                    if(newName.empty())
                     {
                         //resolv the new name
                         QFileInfo destinationInfo;
@@ -400,26 +400,26 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                         {
                             if(num==1)
                             {
-                                if(firstRenamingRule.isEmpty())
-                                    destinationSuffixPath=tr("%1 - copy").arg(destination.baseName());
+                                if(firstRenamingRule.empty())
+                                    destinationSuffixPath=tr("%1 - copy").arg(destination.baseName()).toStdString();
                                 else
                                 {
                                     destinationSuffixPath=firstRenamingRule;
-                                    destinationSuffixPath.replace(QStringLiteral("%name%"),destination.baseName());
+                                    stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
                                 }
                             }
                             else
                             {
-                                if(otherRenamingRule.isEmpty())
-                                    destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num);
+                                if(otherRenamingRule.empty())
+                                    destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num).toStdString();
                                 else
                                 {
                                     destinationSuffixPath=otherRenamingRule;
-                                    destinationSuffixPath.replace(QStringLiteral("%name%"),destination.baseName());
-                                    destinationSuffixPath.replace(QStringLiteral("%number%"),QString::number(num));
+                                    stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                                    stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                                 }
                             }
-                            destinationInfo.setFile(destinationInfo.absolutePath()+text_slash+destinationSuffixPath);
+                            destinationInfo.setFile(destinationInfo.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
                             num++;
                         }
                         while(destinationInfo.exists());
@@ -430,10 +430,10 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                         destinationSuffixPath = newName;
                     }
                     if(destination.completeSuffix().isEmpty())
-                        destination.setFile(destination.absolutePath()+text_slash+destinationSuffixPath);
+                        destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
                     else
-                        destination.setFile(destination.absolutePath()+text_slash+destinationSuffixPath+QStringLiteral(".")+destination.completeSuffix());
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination.absoluteFilePath());
+                        destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath)+QStringLiteral(".")+destination.completeSuffix());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination.absoluteFilePath().toStdString());
                 break;
                 default:
                     return;
@@ -449,13 +449,13 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         if(!source.isReadable() || !source.isExecutable() || !source.exists() || !source.isDir())
         {
             if(!source.isDir())
-                emit errorOnFolder(source,tr("This is not a folder"));
+                emit errorOnFolder(source,tr("This is not a folder").toStdString());
             else if(!source.exists())
-                emit errorOnFolder(source,tr("The folder does exists"));
+                emit errorOnFolder(source,tr("The folder does exists").toStdString());
             else
-                emit errorOnFolder(source,tr("The folder is not readable"));
+                emit errorOnFolder(source,tr("The folder is not readable").toStdString());
             waitOneAction.acquire();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
         }
     } while(fileErrorAction==FileError_Retry);
     do
@@ -464,9 +464,9 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         fileErrorAction=FileError_NotSet;
         if(!tempDir.isReadable() || !tempDir.exists())
         {
-            emit errorOnFolder(source,tr("Problem with name encoding"));
+            emit errorOnFolder(source,tr("Problem with name encoding").toStdString());
             waitOneAction.acquire();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+QString::number(fileErrorAction));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
         }
     } while(fileErrorAction==FileError_Retry);
     if(stopIt)
@@ -480,7 +480,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
     if(stopIt)
         return;
     int sizeEntryList=entryList.size();
-    emit newFolderListing(source.absoluteFilePath());
+    emit newFolderListing(source.absoluteFilePath().toStdString());
     if(mode!=Ultracopier::Move)
         emit addToMkPath(source,destination,sizeEntryList);
     for (int index=0;index<sizeEntryList;++index)
@@ -498,16 +498,16 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                 this->include=this->include_send;
                 this->exclude=this->exclude_send;
             }
-            QString fileName=fileInfo.fileName();
+            std::string fileName=fileInfo.fileName().toStdString();
             if(fileInfo.isDir() && !fileInfo.isSymLink())
             {
                 bool excluded=false,included=(include.size()==0);
-                int filters_index=0;
+                unsigned int filters_index=0;
                 while(filters_index<exclude.size())
                 {
                     if(exclude.at(filters_index).apply_on==ApplyOn_folder || exclude.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                     {
-                        if(fileName.contains(exclude.at(filters_index).regex))
+                        if(std::regex_match(fileName,exclude.at(filters_index).regex))
                         {
                             excluded=true;
                             break;
@@ -524,7 +524,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     {
                         if(include.at(filters_index).apply_on==ApplyOn_folder || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                         {
-                            if(fileName.contains(include.at(filters_index).regex))
+                            if(std::regex_match(fileName,include.at(filters_index).regex))
                             {
                                 included=true;
                                 break;
@@ -535,18 +535,18 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     if(!included)
                     {}
                     else
-                        listFolder(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName());
+                        listFolder(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName());
                 }
             }
             else
             {
                 bool excluded=false,included=(include.size()==0);
-                int filters_index=0;
+                unsigned int filters_index=0;
                 while(filters_index<exclude.size())
                 {
                     if(exclude.at(filters_index).apply_on==ApplyOn_file || exclude.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                     {
-                        if(fileName.contains(exclude.at(filters_index).regex))
+                        if(std::regex_match(fileName,exclude.at(filters_index).regex))
                         {
                             excluded=true;
                             break;
@@ -563,7 +563,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     {
                         if(include.at(filters_index).apply_on==ApplyOn_file || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                         {
-                            if(fileName.contains(include.at(filters_index).regex))
+                            if(std::regex_match(fileName,include.at(filters_index).regex))
                             {
                                 included=true;
                                 break;
@@ -575,7 +575,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                     {}
                     else
                         #ifndef ULTRACOPIER_PLUGIN_RSYNC
-                        emit fileTransfer(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName(),mode);
+                        emit fileTransfer(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName(),mode);
                         #else
                         {
                             bool sendToTransfer=false;
@@ -596,10 +596,10 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
         {
             if(fileInfo.isDir() && !fileInfo.isSymLink())//possible wait time here
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
-                listFolder(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName());//put unix separator because it's transformed into that's under windows too
+                listFolder(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName());//put unix separator because it's transformed into that's under windows too
             else
                 #ifndef ULTRACOPIER_PLUGIN_RSYNC
-                emit fileTransfer(fileInfo,destination.absoluteFilePath()+text_slash+fileInfo.fileName(),mode);
+                emit fileTransfer(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName(),mode);
                 #else
                 {
                     bool sendToTransfer=false;
@@ -646,7 +646,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
     #endif
     if(mode==Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath()+", sizeEntryList: "+QString::number(sizeEntryList));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath().toStdString()+", sizeEntryList: "+std::to_string(sizeEntryList));
         emit addToMovePath(source,destination,sizeEntryList);
     }
 }
