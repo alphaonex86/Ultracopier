@@ -71,7 +71,7 @@ public:
 
     //not copied size, because that's count to the checksum, ...
     uint64_t realByteTransfered() const;
-    std::pair<quint64,quint64> progression() const;
+    std::pair<uint64_t, uint64_t> progression() const;
     static std::string resolvedName(const QFileInfo &inode);
     std::string getSourcePath() const;
     std::string getDestinationPath() const;

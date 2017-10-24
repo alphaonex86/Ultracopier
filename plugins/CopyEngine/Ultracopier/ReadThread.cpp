@@ -129,7 +129,7 @@ void ReadThread::resume()
     pauseMutex.release();
 }
 
-bool ReadThread::seek(const qint64 &position)
+bool ReadThread::seek(const int64_t &position)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start with: ")+QString::number(position));
     if(position>file.size())

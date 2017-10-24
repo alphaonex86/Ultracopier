@@ -15,6 +15,7 @@
     #endif
 #endif
 #include "FacilityEngine.h"
+#include "../../../cpp11addition.h"
 
 TransferThread::TransferThread() :
     haveStartTime                   (false),
@@ -64,7 +65,7 @@ TransferThread::~TransferThread()
 
 void TransferThread::run()
 {
-    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
     transfer_stat			= TransferStat_Idle;
     stopIt			= false;
     fileExistsAction	= FileExists_NotSet;
@@ -254,7 +255,7 @@ void TransferThread::setFileRename(const std::string &nameForRename)
 
 void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
 {
-    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] action to do always: ")+QString::number(action)));
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] action to do always: ")+QString::number(action)));
     alwaysDoFileExistsAction=action;
 }
 
@@ -617,11 +618,11 @@ bool TransferThread::checkAlwaysRename()
         std::string suffix;
         std::string newFileName;
         //resolv the suffix
-        if(fileName.contains(renameRegex))
+        if(std::regex_match(fileName,renameRegex))
         {
             suffix=fileName;
-            suffix.replace(renameRegex,QStringLiteral("\\2"));
-            fileName.replace(renameRegex,QStringLiteral("\\1"));
+            suffix=std::regex_replace(suffix,renameRegex,"$2");
+            fileName=std::regex_replace(fileName,renameRegex,"$1");
         }
         //resolv the new name
         int num=1;
@@ -630,25 +631,25 @@ bool TransferThread::checkAlwaysRename()
             if(num==1)
             {
                 if(firstRenamingRule.empty())
-                    newFileName=tr("%1 - copy").arg(fileName);
+                    newFileName=tr("%1 - copy").arg(QString::fromStdString(fileName)).toStdString();
                 else
                 {
                     newFileName=firstRenamingRule;
-                    newFileName.replace(QStringLiteral("%name%"),fileName);
+                    stringreplaceAll(newFileName,"%name%",fileName);
                 }
             }
             else
             {
                 if(otherRenamingRule.empty())
-                    newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
+                    newFileName=tr("%1 - copy (%2)").arg(QString::fromStdString(fileName)).arg(num).toStdString();
                 else
                 {
                     newFileName=otherRenamingRule;
-                    newFileName.replace(QStringLiteral("%name%"),fileName);
-                    newFileName.replace(QStringLiteral("%number%"),QString::number(num));
+                    stringreplaceAll(newFileName,"%name%",fileName);
+                    stringreplaceAll(newFileName,"%number%",std::to_string(num));
                 }
             }
-            newDestination.setFile(newDestination.absolutePath()+FacilityEngine::separator()+newFileName+suffix);
+            newDestination.setFile(newDestination.absolutePath()+QString::fromStdString(FacilityEngine::separator()+newFileName+suffix));
             num++;
         }
         while(newDestination.exists());
@@ -661,15 +662,15 @@ bool TransferThread::checkAlwaysRename()
             {
                 if(!destinationFile.exists())
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()));
-                    emit errorOnFile(destinationFile,tr("File not found"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()).toStdString());
+                    emit errorOnFile(destinationFile,tr("File not found").toStdString());
                     readError=true;
                     return true;
                 }
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("unable to do real move %1: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("unable to do real move %1: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()).toStdString());
                 readError=true;
-                emit errorOnFile(destinationFile,destinationFile.errorString());
+                emit errorOnFile(destinationFile,destinationFile.errorString().toStdString());
                 return true;
             }
         }
@@ -680,7 +681,7 @@ bool TransferThread::checkAlwaysRename()
 
 void TransferThread::tryMoveDirectly()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("need moved directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+QStringLiteral("need moved directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
 
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
@@ -698,16 +699,16 @@ void TransferThread::tryMoveDirectly()
     {
         if(!sourceFile.exists() && !source.isSymLink())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+destinationFile.fileName()+QStringLiteral(", source not exists"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", source not exists");
             readError=true;
-            emit errorOnFile(destination,tr("The source file doesn't exist"));
+            emit errorOnFile(destination,tr("The source file doesn't exist").toStdString());
             return;
         }
         else if(!destinationFile.remove())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+destinationFile.fileName()+QStringLiteral(", error: ")+destinationFile.errorString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", error: "+destinationFile.errorString().toStdString());
             readError=true;
-            emit errorOnFile(destination,destinationFile.errorString());
+            emit errorOnFile(destination,destinationFile.errorString().toStdString());
             return;
         }
     }
@@ -733,19 +734,19 @@ void TransferThread::tryMoveDirectly()
         readError=true;
         if(!sourceFile.exists() && !source.isSymLink())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
-            emit errorOnFile(sourceFile,tr("File not found"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).toStdString());
+            emit errorOnFile(sourceFile,tr("File not found").toStdString());
             return;
         }
         else if(!dir.exists())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
-            emit errorOnFile(destination.absolutePath(),tr("Unable to do the folder"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).toStdString());
+            emit errorOnFile(destination.absolutePath(),tr("Unable to do the folder").toStdString());
             return;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("unable to do real move %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()));
-        emit errorOnFile(sourceFile,sourceFile.errorString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("unable to do real move %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).toStdString());
+        emit errorOnFile(sourceFile,sourceFile.errorString().toStdString());
         return;
     }
     readThread.fakeReadIsStarted();
@@ -756,7 +757,7 @@ void TransferThread::tryMoveDirectly()
 
 void TransferThread::tryCopyDirectly()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("need copied directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+QStringLiteral("need copied directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
 
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
@@ -774,16 +775,16 @@ void TransferThread::tryCopyDirectly()
     {
         if(!sourceFile.exists() && !source.isSymLink())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+destinationFile.fileName()+QStringLiteral(", source not exists"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", source not exists");
             readError=true;
-            emit errorOnFile(destination,tr("The source doesn't exist"));
+            emit errorOnFile(destination,tr("The source doesn't exist").toStdString());
             return;
         }
         else if(!destinationFile.remove())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+destinationFile.fileName()+QStringLiteral(", error: ")+destinationFile.errorString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", error: "+destinationFile.errorString().toStdString());
             readError=true;
-            emit errorOnFile(destination,destinationFile.errorString());
+            emit errorOnFile(destination,destinationFile.errorString().toStdString());
             return;
         }
     }
@@ -814,25 +815,25 @@ void TransferThread::tryCopyDirectly()
         readError=true;
         if(!sourceFile.exists() && !source.isSymLink())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-            emit errorOnFile(sourceFile,tr("The source file doesn't exist"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
+            emit errorOnFile(sourceFile,tr("The source file doesn't exist").toStdString());
             return;
         }
         else if(destinationFile.exists() || destination.isSymLink())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-            emit errorOnFile(sourceFile,tr("Another file exists at same place"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
+            emit errorOnFile(sourceFile,tr("Another file exists at same place").toStdString());
             return;
         }
         else if(!dir.exists())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-            emit errorOnFile(sourceFile,tr("Unable to do the folder"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
+            emit errorOnFile(sourceFile,tr("Unable to do the folder").toStdString());
             return;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()));
-        emit errorOnFile(sourceFile,sourceFile.errorString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
+        emit errorOnFile(sourceFile,sourceFile.errorString().toStdString());
         return;
     }
     readThread.fakeReadIsStarted();
@@ -845,10 +846,10 @@ bool TransferThread::canBeMovedDirectly() const
 {
     if(mode!=Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("mode!=Ultracopier::Move"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] mode!=Ultracopier::Move");
         return false;
     }
-    return source.isSymLink() || driveManagement.isSameDrive(destination.absoluteFilePath(),source.absoluteFilePath());
+    return source.isSymLink() || driveManagement.isSameDrive(destination.absoluteFilePath().toStdString(),source.absoluteFilePath().toStdString());
 }
 
 bool TransferThread::canBeCopiedDirectly() const
@@ -860,10 +861,10 @@ void TransferThread::readIsReady()
 {
     if(readIsReadyVariable)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     readIsReadyVariable=true;
     readIsOpenVariable=true;
     readIsClosedVariable=false;
@@ -873,13 +874,13 @@ void TransferThread::readIsReady()
 
 void TransferThread::ifCanStartTransfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] readIsReadyVariable: ")+QString::number(readIsReadyVariable)+QStringLiteral(", writeIsReadyVariable: ")+QString::number(writeIsReadyVariable));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsReadyVariable: "+std::to_string(readIsReadyVariable)+", writeIsReadyVariable: "+std::to_string(writeIsReadyVariable));
     if(readIsReadyVariable && writeIsReadyVariable)
     {
         transfer_stat=TransferStat_WaitForTheTransfer;
         sended_state_readStopped	= false;
         sended_state_writeStopped	= false;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] stat=WaitForTheTransfer"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stat=WaitForTheTransfer");
         if(!sended_state_preOperationStopped)
         {
             sended_state_preOperationStopped=true;
@@ -887,7 +888,7 @@ void TransferThread::ifCanStartTransfer()
         }
         if(canStartTransfer)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] stat=Transfer, ")+QStringLiteral("canBeMovedDirectlyVariable: %1, canBeCopiedDirectlyVariable: %2").arg(canBeMovedDirectlyVariable).arg(canBeCopiedDirectlyVariable));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stat=Transfer, "+QStringLiteral("canBeMovedDirectlyVariable: %1, canBeCopiedDirectlyVariable: %2").arg(canBeMovedDirectlyVariable).arg(canBeCopiedDirectlyVariable).toStdString());
             transfer_stat=TransferStat_Transfer;
             if(canBeMovedDirectlyVariable)
                 tryMoveDirectly();
@@ -909,10 +910,10 @@ void TransferThread::writeIsReady()
 {
     if(writeIsReadyVariable)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     writeIsReadyVariable=true;
     writeIsOpenVariable=true;
     writeIsClosedVariable=false;
@@ -957,7 +958,7 @@ void TransferThread::pause()
     //from transfer_stat!=TransferStat_Idle because it resume at wrong order
     if(transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] wrong stat to put in pause"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] wrong stat to put in pause");
         return;
     }
     haveStartTime=false;
@@ -972,7 +973,7 @@ void TransferThread::resume()
     //from transfer_stat!=TransferStat_Idle because it resume at wrong order
     if(transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] wrong stat to put in pause"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] wrong stat to put in pause");
         return;
     }
     readThread.resume();
@@ -986,22 +987,22 @@ void TransferThread::stop()
     haveStartTime=false;
     if(transfer_stat==TransferStat_Idle)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("transfer_stat==TransferStat_Idle"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
         return;
     }
     if(remainSourceOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("remainSourceOpen()"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"remainSourceOpen()");
         readThread.stop();
     }
     if(remainDestinationOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("remainDestinationOpen()"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"remainDestinationOpen()");
         writeThread.stop();
     }
     if(!remainFileOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("transfer_stat==TransferStat_Idle"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
         if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
         {
             if(source.exists())
@@ -1013,7 +1014,7 @@ void TransferThread::stop()
         emit internalStartPostOperation();
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("transfer_stat==%1 && remainFileOpen()").arg(transfer_stat));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("transfer_stat==%1 && remainFileOpen()").arg(transfer_stat).toStdString());
 }
 
 bool TransferThread::remainFileOpen() const
@@ -1038,7 +1039,7 @@ void TransferThread::readIsFinish()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] double event dropped"));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     readIsFinishVariable=true;
     canStartTransfer=false;
     //check here if need start checksuming or not
@@ -1057,7 +1058,7 @@ void TransferThread::readIsFinish()
         if(!needSkip || (canBeCopiedDirectlyVariable || canBeMovedDirectlyVariable))//if skip, stop call, then readIsClosed() already call
             readThread.postOperation();
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] in skip, don't start postOperation"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
     }
     emit pushStat(transfer_stat,transferId);
 }
@@ -1066,10 +1067,10 @@ void TransferThread::writeIsFinish()
 {
     if(writeIsFinishVariable)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] double event dropped");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     writeIsFinishVariable=true;
     //check here if need start checksuming or not
     if(real_doChecksum)
@@ -1083,7 +1084,7 @@ void TransferThread::writeIsFinish()
         if(!needSkip || (canBeCopiedDirectlyVariable || canBeMovedDirectlyVariable))//if skip, stop call, then writeIsClosed() already call
             writeThread.postOperation();
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] in skip, don't start postOperation"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
     }
 }
 
@@ -1103,17 +1104,17 @@ void TransferThread::compareChecksum()
 {
     if(sourceChecksum.size()==0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] the checksum of source is missing"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] the checksum of source is missing");
         return;
     }
     if(destinationChecksum.size()==0)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] the checksum of destination is missing"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] the checksum of destination is missing");
         return;
     }
     if(sourceChecksum==destinationChecksum)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] the checksum match"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] the checksum match");
         readThread.postOperation();
         writeThread.postOperation();
         transfer_stat=TransferStat_PostTransfer;
@@ -1123,7 +1124,7 @@ void TransferThread::compareChecksum()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] the checksum not match"));
         //emit error here, and wait to resume
-        emit errorOnFile(destination,tr("The checksums do not match"));
+        emit errorOnFile(destination,tr("The checksums do not match").toStdString());
     }
 }
 
@@ -1134,7 +1135,7 @@ void TransferThread::readIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] double event dropped"));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     readIsClosedVariable=true;
     readIsOpeningVariable=false;
     checkIfAllIsClosedAndDoOperations();
@@ -1144,10 +1145,10 @@ void TransferThread::writeIsClosed()
 {
     if(writeIsClosedVariable)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] double event dropped");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     writeIsClosedVariable=true;
     writeIsOpeningVariable=false;
     if(stopIt && needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
@@ -1165,12 +1166,12 @@ bool TransferThread::checkIfAllIsClosedAndDoOperations()
 {
     if((readError || writeError) && !needSkip && !stopIt)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] resolve error before progress"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] resolve error before progress");
         return false;
     }
     if(!remainFileOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] emit internalStartPostOperation() to do the real post operation"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit internalStartPostOperation() to do the real post operation");
         transfer_stat=TransferStat_PostOperation;
         //emit pushStat(stat,transferId);
         emit internalStartPostOperation();
@@ -1178,11 +1179,12 @@ bool TransferThread::checkIfAllIsClosedAndDoOperations()
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("wait self close: readIsReadyVariable: %1, readIsClosedVariable: %2, writeIsReadyVariable: %3, writeIsClosedVariable: %4")
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+QStringLiteral("wait self close: readIsReadyVariable: %1, readIsClosedVariable: %2, writeIsReadyVariable: %3, writeIsClosedVariable: %4")
                      .arg(readIsReadyVariable)
                      .arg(readIsClosedVariable)
                      .arg(writeIsReadyVariable)
                      .arg(writeIsClosedVariable)
+                                 .toStdString()
                      );
         return false;
     }
@@ -1194,14 +1196,14 @@ void TransferThread::postOperation()
 {
     if(transfer_stat!=TransferStat_PostOperation)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] need be in transfer, source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath()+QStringLiteral(", stat:")+QString::number(transfer_stat));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] need be in transfer, source: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString()+", stat:"+std::to_string(transfer_stat));
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     //all except closing
     if((readError || writeError) && !needSkip && !stopIt)//normally useless by checkIfAllIsFinish()
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] resume after error"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] resume after error");
         return;
     }
 
@@ -1212,7 +1214,7 @@ void TransferThread::postOperation()
             if(writeIsOpenVariable && !writeIsClosedVariable)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't pass in post operation if write is not closed"));
-                emit errorOnFile(destination,tr("Internal error: The destination is not closed"));
+                emit errorOnFile(destination,tr("Internal error: The destination is not closed").toStdString());
                 needSkip=false;
                 if(deletePartiallyTransferredFiles)
                     needRemove=true;
@@ -1222,11 +1224,12 @@ void TransferThread::postOperation()
             if(readThread.getLastGoodPosition()!=writeThread.getLastGoodPosition())
             {
                 writeThread.flushBuffer();
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] readThread.getLastGoodPosition(%1)!=writeThread.getLastGoodPosition(%2)")
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+QString("] readThread.getLastGoodPosition(%1)!=writeThread.getLastGoodPosition(%2)")
                                          .arg(readThread.getLastGoodPosition())
                                          .arg(writeThread.getLastGoodPosition())
+                                         .toStdString()
                                          );
-                emit errorOnFile(destination,tr("Internal error: The size transfered doesn't match"));
+                emit errorOnFile(destination,tr("Internal error: The size transfered doesn't match").toStdString());
                 needSkip=false;
                 if(deletePartiallyTransferredFiles)
                     needRemove=true;
@@ -1237,7 +1240,7 @@ void TransferThread::postOperation()
             {
                 writeThread.flushBuffer();
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] buffer is not empty"));
-                emit errorOnFile(destination,tr("Internal error: The buffer is not empty"));
+                emit errorOnFile(destination,tr("Internal error: The buffer is not empty").toStdString());
                 needSkip=false;
                 if(deletePartiallyTransferredFiles)
                     needRemove=true;
@@ -1258,7 +1261,7 @@ void TransferThread::postOperation()
                 if(!sourceFile.remove())
                 {
                     needSkip=false;
-                    emit errorOnFile(source,sourceFile.errorString());
+                    emit errorOnFile(source,sourceFile.errorString().toStdString());
                     return;
                 }
             }
@@ -1278,14 +1281,14 @@ void TransferThread::postOperation()
             }
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] try remove destination but not exists!"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] try remove destination but not exists!");
     }
     source.setFile(QStringLiteral(""));
     destination.setFile(QStringLiteral(""));
     //don't need remove because have correctly finish (it's not in: have started)
     needRemove=false;
     needSkip=false;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] emit postOperationStopped()"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit postOperationStopped()");
     transfer_stat=TransferStat_Idle;
     emit postOperationStopped();
 }
@@ -1301,8 +1304,8 @@ bool TransferThread::doFilePostOperation()
         if(!stopIt)
             if(/*true when the destination have been remove but not the symlink:*/!source.isSymLink())
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to change the date: File not found"));
-                emit errorOnFile(destination,tr("Unable to change the date")+QStringLiteral(": ")+tr("File not found"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date: File not found");
+                emit errorOnFile(destination,tr("Unable to change the date").toStdString()+": "+tr("File not found").toStdString());
                 return false;
             }
     }
@@ -1313,14 +1316,14 @@ bool TransferThread::doFilePostOperation()
             if(!writeFileDateTime(destination))
             {
                 if(!destination.isFile())
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to change the date (is not a file)"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date (is not a file)");
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to change the date"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date");
                 /* error with virtual folder under windows */
                 #ifndef Q_OS_WIN32
                 if(keepDate)
                 {
-                    emit errorOnFile(destination,tr("Unable to change the date"));
+                    emit errorOnFile(destination,tr("Unable to change the date").toStdString());
                     return false;
                 }
                 #endif
@@ -1329,13 +1332,13 @@ bool TransferThread::doFilePostOperation()
             {
                 #ifndef Q_OS_WIN32
                 destination.refresh();
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] read the destination time: ")+destination.lastModified().toString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] read the destination time: "+destination.lastModified().toString().toStdString());
                 if(destination.lastModified()<minTime)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] read the destination time lower than min time: ")+destination.lastModified().toString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] read the destination time lower than min time: "+destination.lastModified().toString().toStdString());
                     if(keepDate)
                     {
-                        emit errorOnFile(destination,tr("Unable to change the date"));
+                        emit errorOnFile(destination,tr("Unable to change the date").toStdString());
                         return false;
                     }
                 }
@@ -1350,13 +1353,13 @@ bool TransferThread::doFilePostOperation()
             {
                 if(sourceFile.error()!=QFile::NoError)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to get the source file permission"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to get the source file permission");
                     //emit errorOnFile(destination,tr("Unable to get the source file permission"));
                     //return false;
                 }
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to set the destination file permission"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to set the destination file permission");
                     //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
                     //return false;
                 }
@@ -1377,10 +1380,10 @@ void TransferThread::getWriteError()
 {
     if(writeError)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] already in write error!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already in write error!");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     fileContentError		= true;
     writeError			= true;
     writeIsReadyVariable		= false;
@@ -1388,24 +1391,24 @@ void TransferThread::getWriteError()
     writeError_destination_reopened	= false;
     writeIsOpeningVariable=false;
     if(!readError)//already display error for the read
-        emit errorOnFile(destination,writeThread.errorString());
+        emit errorOnFile(destination,writeThread.errorString().toStdString());
 }
 
 void TransferThread::getReadError()
 {
     if(readError)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] already in read error!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already in read error!");
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     fileContentError	= true;
     readError		= true;
     //writeIsReadyVariable	= false;//wrong because write can be ready here
     readIsReadyVariable	= false;
     readIsOpeningVariable=false;
     if(!writeError)//already display error for the write
-        emit errorOnFile(source,readThread.errorString());
+        emit errorOnFile(source,readThread.errorString().toStdString());
 }
 
 //retry after error
@@ -1416,10 +1419,10 @@ void TransferThread::retryAfterError()
     {
         if(transferId==0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] seam have bug, source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] seam have bug, source: ")+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString());
             return;
         }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] restart all, source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] restart all, source: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString());
         readError=false;
         //writeError=false;
         emit internalStartPreOperation();
@@ -1428,7 +1431,7 @@ void TransferThread::retryAfterError()
     //opening error
     if(transfer_stat==TransferStat_PreOperation)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] is not idle, source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath()+QStringLiteral(", stat: ")+QString::number(transfer_stat));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] is not idle, source: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString()+", stat: "+std::to_string(transfer_stat));
         readError=false;
         //writeError=false;
         emit internalStartPreOperation();
@@ -1438,7 +1441,7 @@ void TransferThread::retryAfterError()
     //data streaming error
     if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] is not in right stat, source: ")+source.absoluteFilePath()+QStringLiteral(", destination: ")+destination.absoluteFilePath()+QStringLiteral(", stat: ")+QString::number(transfer_stat));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] is not in right stat, source: ")+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString()+", stat: "+std::to_string(transfer_stat));
         return;
     }
     if(transfer_stat==TransferStat_PostOperation)
@@ -1458,13 +1461,13 @@ void TransferThread::retryAfterError()
     }
     if(canBeMovedDirectlyVariable)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] retry the system move"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retry the system move");
         tryMoveDirectly();
         return;
     }
     if(canBeCopiedDirectlyVariable)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] retry the copy directly"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retry the copy directly");
         tryCopyDirectly();
         return;
     }
@@ -1472,17 +1475,17 @@ void TransferThread::retryAfterError()
     {
         if(writeError)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start and resume the write error"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start and resume the write error");
             writeThread.reopen();
         }
         else if(readError)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start and resume the read error"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start and resume the read error");
             readThread.reopen();
         }
         else //only checksum difference
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] retry all the transfer"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retry all the transfer");
             canStartTransfer=true;
             ifCanStartTransfer();
         }
@@ -1491,7 +1494,7 @@ void TransferThread::retryAfterError()
     //can have error on source and destination at the same time
     if(writeError)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start and resume the write error: ")+QString::number(readError));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start and resume the write error: "+std::to_string(readError));
         if(readError)
             readThread.reopen();
         else
@@ -1503,18 +1506,18 @@ void TransferThread::retryAfterError()
     }
     if(readError)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start and resume the read error"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start and resume the read error");
         readThread.reopen();
     }
     if(!writeError && !readError)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] unknow error resume"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] unknow error resume");
 }
 
 void TransferThread::writeThreadIsReopened()
 {
     if(writeError_destination_reopened)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
         return;
     }
     writeError_destination_reopened=true;
@@ -1531,7 +1534,7 @@ void TransferThread::readThreadIsSeekToZeroAndWait()
 {
     if(writeError_source_seeked)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
         return;
     }
     writeError_source_seeked=true;
@@ -1560,7 +1563,7 @@ useless because already do at open event
 
 void TransferThread::readThreadResumeAfterError()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     readError=false;
     writeIsReady();
     readIsReady();
@@ -1575,12 +1578,12 @@ void TransferThread::readIsStopped()
     if(!sended_state_readStopped)
     {
         sended_state_readStopped=true;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] emit readIsStopped()"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit readIsStopped()");
         emit readStopped();
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] drop dual read stopped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] drop dual read stopped");
         return;
     }
     readIsFinish();
@@ -1588,16 +1591,16 @@ void TransferThread::readIsStopped()
 
 void TransferThread::writeIsStopped()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     if(!sended_state_writeStopped)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] emit writeStopped()"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit writeStopped()");
         sended_state_writeStopped=true;
         emit writeStopped();
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
         return;
     }
     writeIsFinish();
@@ -1615,7 +1618,7 @@ bool TransferThread::setParallelBuffer(const int &parallelBuffer)
 {
     if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] wrong parallelBuffer: ")+QString::number(parallelBuffer));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] wrong parallelBuffer: "+std::to_string(parallelBuffer));
         return false;
     }
     else
@@ -1629,7 +1632,7 @@ bool TransferThread::setSequentialBuffer(const int &sequentialBuffer)
 {
     if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] wrong sequentialBuffer: ")+QString::number(sequentialBuffer));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] wrong sequentialBuffer: "+std::to_string(sequentialBuffer));
         return false;
     }
     else
@@ -1643,20 +1646,20 @@ void TransferThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgor
 {
     this->transferAlgorithm=transferAlgorithm;
     if(transferAlgorithm==TransferAlgorithm_Sequential)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("]transferAlgorithm==TransferAlgorithm_Sequential"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Sequential");
     else if(transferAlgorithm==TransferAlgorithm_Automatic)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("]transferAlgorithm==TransferAlgorithm_Automatic"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Automatic");
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("]transferAlgorithm==TransferAlgorithm_Parallel"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
 }
 
 //fonction to edit the file date time
 bool TransferThread::readFileDateTime(const QFileInfo &source)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] readFileDateTime(")+source.absoluteFilePath()+QStringLiteral(")"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+source.absoluteFilePath().toStdString()+")");
     if(source.lastModified()<minTime)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] the sources is older to copy the time: ")+source.absoluteFilePath()+QStringLiteral(": ")+source.lastModified().toString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source.absoluteFilePath().toStdString()+": "+source.lastModified().toString().toStdString());
         return false;
     }
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
@@ -1706,14 +1709,14 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
                 HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] open failed to read: ")+QString::fromWCharArray(filePath)+QStringLiteral(", error: ")+QString::number(GetLastError()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] open failed to read: ")+QString::fromWCharArray(filePath)+QStringLiteral(", error: ")+QString::number(GetLastError()));
                     return false;
                 }
                 FILETIME ftCreate, ftAccess, ftWrite;
                 if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
                 {
                     CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] unable to get the file time"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] unable to get the file time"));
                     return false;
                 }
                 this->ftCreateL=ftCreate.dwLowDateTime;
@@ -1734,7 +1737,7 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
 
 bool TransferThread::writeFileDateTime(const QFileInfo &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] writeFileDateTime(")+destination.absoluteFilePath()+QStringLiteral(")"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeFileDateTime("+destination.absoluteFilePath().toStdString()+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
@@ -1755,7 +1758,7 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
                 HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] open failed to write: ")+QString::fromWCharArray(filePath)+QStringLiteral(", error: ")+QString::number(GetLastError()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] open failed to write: ")+QString::fromWCharArray(filePath)+QStringLiteral(", error: ")+QString::number(GetLastError()));
                     return false;
                 }
                 FILETIME ftCreate, ftAccess, ftWrite;
@@ -1768,7 +1771,7 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
                 if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
                 {
                     CloseHandle(hFileDestination);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] unable to set the file time"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] unable to set the file time"));
                     return false;
                 }
                 CloseHandle(hFileDestination);
@@ -1784,9 +1787,9 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
 //skip the copy
 void TransferThread::skip()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start with stat: ")+QString::number(transfer_stat));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] readIsOpeningVariable: ")+QString::number(readIsOpeningVariable)+QStringLiteral(", readIsOpenVariable: ")+QString::number(readIsOpenVariable)+QStringLiteral(", readIsReadyVariable: ")+QString::number(readIsReadyVariable)+QStringLiteral(", readIsFinishVariable: ")+QString::number(readIsFinishVariable)+QStringLiteral(", readIsClosedVariable: ")+QString::number(readIsClosedVariable));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] writeIsOpeningVariable: ")+QString::number(writeIsOpeningVariable)+QStringLiteral(", writeIsOpenVariable: ")+QString::number(writeIsOpenVariable)+QStringLiteral(", writeIsReadyVariable: ")+QString::number(writeIsReadyVariable)+QStringLiteral(", writeIsFinishVariable: ")+QString::number(writeIsFinishVariable)+QStringLiteral(", writeIsClosedVariable: ")+QString::number(writeIsClosedVariable));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with stat: "+std::to_string(transfer_stat));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsOpeningVariable: "+std::to_string(readIsOpeningVariable)+", readIsOpenVariable: "+std::to_string(readIsOpenVariable)+", readIsReadyVariable: "+std::to_string(readIsReadyVariable)+", readIsFinishVariable: "+std::to_string(readIsFinishVariable)+", readIsClosedVariable: "+std::to_string(readIsClosedVariable));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeIsOpeningVariable: "+std::to_string(writeIsOpeningVariable)+", writeIsOpenVariable: "+std::to_string(writeIsOpenVariable)+", writeIsReadyVariable: "+std::to_string(writeIsReadyVariable)+", writeIsFinishVariable: "+std::to_string(writeIsFinishVariable)+", writeIsClosedVariable: "+std::to_string(writeIsClosedVariable));
     switch(transfer_stat)
     {
     case TransferStat_WaitForTheTransfer:
@@ -1794,7 +1797,7 @@ void TransferThread::skip()
     case TransferStat_PreOperation:
         if(needSkip)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] skip already in progress"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
             return;
         }
         needSkip=true;
@@ -1816,14 +1819,14 @@ void TransferThread::skip()
     case TransferStat_PostTransfer:
         if(needSkip)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] skip already in progress"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
             return;
         }
         //needRemove=true;never put that's here, can product destruction of the file
         needSkip=true;
         if(canBeMovedDirectlyVariable || canBeCopiedDirectlyVariable)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] Do the direct FS fake close, canBeMovedDirectlyVariable: ")+QString::number(canBeMovedDirectlyVariable)+QStringLiteral(", canBeCopiedDirectlyVariable: ")+QString::number(canBeCopiedDirectlyVariable));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] Do the direct FS fake close, canBeMovedDirectlyVariable: "+std::to_string(canBeMovedDirectlyVariable)+", canBeCopiedDirectlyVariable: "+std::to_string(canBeCopiedDirectlyVariable));
             readThread.fakeReadIsStarted();
             writeThread.fakeWriteIsStarted();
             readThread.fakeReadIsStopped();
@@ -1847,7 +1850,7 @@ void TransferThread::skip()
     case TransferStat_Checksum:
         if(needSkip)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] skip already in progress"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
             return;
         }
         //needRemove=true;never put that's here, can product destruction of the file
@@ -1868,7 +1871,7 @@ void TransferThread::skip()
     case TransferStat_PostOperation:
         if(needSkip)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] skip already in progress"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
             return;
         }
         //needRemove=true;never put that's here, can product destruction of the file
@@ -1877,7 +1880,7 @@ void TransferThread::skip()
         emit internalStartPostOperation();
         break;
     default:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] can skip in this state: ")+QString::number(transfer_stat));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] can skip in this state: "+std::to_string(transfer_stat));
         return;
     }
 }
@@ -2028,16 +2031,16 @@ uint64_t TransferThread::realByteTransfered() const
 }
 
 //first is read, second is write
-std::pair<quint64, quint64> TransferThread::progression() const
+std::pair<uint64_t, uint64_t> TransferThread::progression() const
 {
-    QPair<quint64,quint64> returnVar;
+    std::pair<uint64_t,uint64_t> returnVar;
     switch(transfer_stat)
     {
     case TransferStat_Transfer:
         returnVar.first=readThread.getLastGoodPosition();
         returnVar.second=writeThread.getLastGoodPosition();
         /*if(returnVar.first<returnVar.second)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] read is smaller than write"));*/
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
     case TransferStat_Checksum:
         returnVar.first=readThread.getLastGoodPosition();
@@ -2047,7 +2050,7 @@ std::pair<quint64, quint64> TransferThread::progression() const
         returnVar.first=transferSize;
         returnVar.second=writeThread.getLastGoodPosition();
         /*if(returnVar.first<returnVar.second)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] read is smaller than write"));*/
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
     case TransferStat_PostOperation:
         returnVar.first=transferSize;

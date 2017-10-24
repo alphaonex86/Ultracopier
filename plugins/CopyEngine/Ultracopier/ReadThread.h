@@ -107,14 +107,14 @@ signals:
     void internalStartRead() const;
     void internalStartClose() const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,QString fonction,QString text,QString file,int ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,std::string fonction,std::string text,std::string file,int ligne) const;
 
 private:
-    QString         errorString_internal;
+    std::string         errorString_internal;
     AvancedQFile	file;
     volatile bool	stopIt;
     Ultracopier::CopyMode	mode;
-    qint64          lastGoodPosition;
+    int64_t          lastGoodPosition;
     volatile int	blockSize;//in Bytes
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     QSemaphore      waitNewClockForSpeed;
@@ -129,11 +129,11 @@ private:
     volatile bool	isInReadLoop;
     volatile bool	seekToZero;
     volatile bool	tryStartRead;
-    qint64          size_at_open;
-    QDateTime       mtime_at_open;
+    int64_t          size_at_open;
+    uint64_t       mtime_at_open;
     bool            fakeMode;
     //internal function
-    bool seek(const qint64 &position);/// \todo search if is use full
+    bool seek(const int64_t &position);/// \todo search if is use full
 private slots:
     bool internalOpen(bool resetLastGoodPosition=true);
     bool internalOpenSlot();
