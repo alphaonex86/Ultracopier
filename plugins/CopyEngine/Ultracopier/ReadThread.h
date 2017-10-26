@@ -31,7 +31,7 @@ public:
     /// \brief open with the name and copy mode
     void open(const QFileInfo &file, const Ultracopier::CopyMode &mode);
     /// \brief return the error string
-    QString errorString() const;
+    std::string errorString() const;
     //QByteArray read(qint64 position,qint64 maxSize);
     /// \brief stop the copy
     void stop();
@@ -40,9 +40,9 @@ public:
     /// \brief resume the copy
     void resume();
     /// \brief get the size of the source file
-    qint64 size() const;
+    int64_t size() const;
     /// \brief get the last good position
-    qint64 getLastGoodPosition() const;
+    int64_t getLastGoodPosition() const;
     /// \brief start the reading of the source file
     void startRead();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT

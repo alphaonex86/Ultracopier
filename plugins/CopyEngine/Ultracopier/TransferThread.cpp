@@ -1408,7 +1408,7 @@ void TransferThread::getReadError()
     readIsReadyVariable	= false;
     readIsOpeningVariable=false;
     if(!writeError)//already display error for the write
-        emit errorOnFile(source,readThread.errorString().toStdString());
+        emit errorOnFile(source,readThread.errorString());
 }
 
 //retry after error
