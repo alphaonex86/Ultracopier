@@ -63,26 +63,26 @@ void WriteThread::run()
 bool WriteThread::internalOpen()
 {
     //do a bug
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] internalOpen destination: ")+file.fileName());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] internalOpen destination: "+file.fileName().toStdString());
     if(stopIt)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close because stopIt is at true"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
         emit closed();
         return false;
     }
     if(file.isOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] already open! destination: ")+file.fileName());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already open! destination: "+file.fileName().toStdString());
         return false;
     }
     if(file.fileName().isEmpty())
     {
-        errorString_internal=tr("Path resolution error (Empty path)");
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+        errorString_internal=tr("Path resolution error (Empty path)").toStdString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] before the mutex"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before the mutex");
     //set to LISTBLOCKSIZE
     if(sequential)
     {
@@ -98,7 +98,7 @@ bool WriteThread::internalOpen()
         if(writeFull.available()>numberOfBlock)
             writeFull.acquire(writeFull.available()-numberOfBlock);
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] after the mutex"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the mutex");
     stopIt=false;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -111,17 +111,18 @@ bool WriteThread::internalOpen()
         mkpathTransfer->acquire();
         if(!destinationFolder.exists(destinationInfo.absolutePath()))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Try create the path: %1")
-                         .arg(destinationInfo.absolutePath()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] Try create the path: "+
+                         destinationInfo.absolutePath().toStdString());
             if(!destinationFolder.mkpath(destinationInfo.absolutePath()))
             {
                 if(!destinationFolder.exists(destinationInfo.absolutePath()))
                 {
                     /// \todo do real folder error here
                     errorString_internal="mkpath error on destination";
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable create the folder: %1, error: %2")
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable create the folder: %1, error: %2")
                                  .arg(destinationInfo.absolutePath())
-                                 .arg(errorString_internal));
+                                 .arg(QString::fromStdString(errorString_internal))
+                                             .toStdString());
                     emit error();
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
                     stat=Idle;
@@ -133,10 +134,10 @@ bool WriteThread::internalOpen()
         }
         mkpathTransfer->release();
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] after the mkpath"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the mkpath");
     if(stopIt)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close because stopIt is at true"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
         emit closed();
         return false;
     }
@@ -151,7 +152,7 @@ bool WriteThread::internalOpen()
             writeFileList.insert(file.fileName(),this);
             if(writeFileList.count(file.fileName())>1)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] in waiting because same file is found"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] in waiting because same file is found");
                 return false;
             }
         }
@@ -159,12 +160,12 @@ bool WriteThread::internalOpen()
     bool fileWasExists=file.exists();
     if(file.open(flags))
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] after the open"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the open");
         {
             QMutexLocker lock_mutex(&accessList);
             if(!theBlockList.isEmpty())
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("General file corruption detected"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] General file corruption detected");
                 stopIt=true;
                 file.close();
                 resumeNotStarted();
@@ -173,10 +174,10 @@ bool WriteThread::internalOpen()
             }
         }
         pauseMutex.tryAcquire(pauseMutex.available());
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] after the pause mutex"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the pause mutex");
         if(stopIt)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close because stopIt is at true"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
@@ -188,8 +189,8 @@ bool WriteThread::internalOpen()
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
-            errorString_internal=file.errorString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+            errorString_internal=file.errorString().toStdString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -198,7 +199,7 @@ bool WriteThread::internalOpen()
         }
         if(stopIt)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close because stopIt is at true"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
@@ -210,8 +211,8 @@ bool WriteThread::internalOpen()
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
-            errorString_internal=file.errorString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to resize to %1 after open: %2, error: %3").arg(startSize).arg(file.fileName()).arg(errorString_internal));
+            errorString_internal=file.errorString().toStdString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to resize to %1 after open: %2, error: %3").arg(startSize).arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -220,7 +221,7 @@ bool WriteThread::internalOpen()
         }
         if(stopIt)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close because stopIt is at true"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
@@ -228,7 +229,7 @@ bool WriteThread::internalOpen()
             return false;
         }
         isOpen.acquire();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] emit opened()"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit opened()");
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -241,17 +242,17 @@ bool WriteThread::internalOpen()
     {
         if(!fileWasExists && file.exists())
             if(!file.remove())
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] file created but can't be removed"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] file created but can't be removed");
         if(stopIt)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close because stopIt is at true"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
             emit closed();
             return false;
         }
-        errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+        errorString_internal=file.errorString().toStdString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -260,33 +261,33 @@ bool WriteThread::internalOpen()
     }
 }
 
-void WriteThread::open(const QFileInfo &file,const quint64 &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential)
+void WriteThread::open(const QFileInfo &file,const uint64_t &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential)
 {
     if(!isRunning())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] the thread not running to open destination: ")+file.absoluteFilePath()+QStringLiteral(", numberOfBlock: ")+QString::number(numberOfBlock));
-        errorString_internal=tr("Internal error, please report it!");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the thread not running to open destination: "+file.absoluteFilePath().toStdString()+", numberOfBlock: "+std::to_string(numberOfBlock));
+        errorString_internal=tr("Internal error, please report it!").toStdString();
         emit error();
         return;
     }
     if(this->file.isOpen())
     {
         if(file.absoluteFilePath()==this->file.fileName())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] Try reopen already opened same file: ")+file.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+file.absoluteFilePath().toStdString());
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("[")+QString::number(id)+QStringLiteral("] previous file is already open: ")+file.absoluteFilePath());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already open: "+file.absoluteFilePath().toStdString());
         emit internalStartClose();
         isOpen.acquire();
         isOpen.release();
     }
     if(numberOfBlock<1 || (numberOfBlock>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK && numberOfBlock>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK))
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] numberOfBlock wrong, set to default"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] numberOfBlock wrong, set to default");
         this->numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     }
     else
         this->numberOfBlock=numberOfBlock;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("open destination: %1, sequential: %2").arg(file.absoluteFilePath()).arg(sequential));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+QStringLiteral("open destination: %1, sequential: %2").arg(file.absoluteFilePath()).arg(sequential).toStdString());
     stopIt=false;
     fakeMode=false;
     lastGoodPosition=0;
@@ -306,23 +307,23 @@ void WriteThread::endIsDetected()
 {
     if(endDetected)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
         return;
     }
     endDetected=true;
     pauseMutex.release();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     emit internalStartEndOfFile();
 }
 
-QString WriteThread::errorString() const
+std::string WriteThread::errorString() const
 {
     return errorString_internal;
 }
 
 void WriteThread::stop()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] stop()"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop()");
     needRemoveTheFile=true;
     stopIt=true;
     if(isOpen.available()>0)
@@ -342,7 +343,7 @@ void WriteThread::stop()
 
 void WriteThread::flushBuffer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     writeFull.release();
     writeFull.acquire();
     pauseMutex.release();
@@ -350,7 +351,7 @@ void WriteThread::flushBuffer()
         QMutexLocker lock_mutex(&accessList);
         theBlockList.clear();
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] stop"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop");
 }
 
 /// \brief buffer is empty
@@ -370,15 +371,15 @@ void WriteThread::internalEndOfFile()
     {
         if(sequential)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start the write"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start the write");
             emit internalStartWrite();
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] buffer is not empty!"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] buffer is not empty!");
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] writeIsStopped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeIsStopped");
         emit writeIsStopped();
     }
 }
@@ -416,7 +417,7 @@ void WriteThread::resumeNotStarted()
     QMutexLocker lock_mutex(&writeFileListMutex);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!writeFileList.contains(file.fileName()))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("[")+QString::number(id)+QStringLiteral("] file: \"")+file.fileName()+QStringLiteral("\" for similar inode is not located into the list of ")+writeFileList.size()+QStringLiteral(" items!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] file: \""+file.fileName().toStdString()+"\" for similar inode is not located into the list of "+std::to_string(writeFileList.size())+" items!");
     #endif
     writeFileList.remove(file.fileName(),this);
     if(writeFileList.contains(file.fileName()))
@@ -430,7 +431,7 @@ void WriteThread::resumeNotStarted()
 
 void WriteThread::pause()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] try put read thread in pause"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] try put read thread in pause");
     pauseMutex.tryAcquire(pauseMutex.available());
     putInPause=true;
     return;
@@ -440,7 +441,7 @@ void WriteThread::resume()
 {
     if(putInPause)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
         putInPause=false;
         stopIt=false;
     }
@@ -448,7 +449,7 @@ void WriteThread::resume()
         return;
     if(!file.isOpen())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] file is not open"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] file is not open");
         return;
     }
     pauseMutex.release();
@@ -456,7 +457,7 @@ void WriteThread::resume()
 
 void WriteThread::reemitStartOpen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] start");
     emit internalStartOpen();
 }
 
@@ -464,11 +465,11 @@ void WriteThread::postOperation()
 {
     if(postOperationRequested)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("[")+QString::number(id)+QStringLiteral("] double event dropped"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] double event dropped");
         return;
     }
     postOperationRequested=true;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     emit internalStartClose();
 }
 
@@ -479,7 +480,7 @@ void WriteThread::internalCloseSlot()
 
 void WriteThread::internalClose(bool emitSignal)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] close for file: ")+file.fileName());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close for file: "+file.fileName().toStdString());
     /// \note never send signal here, because it's called by the destructor
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Close;
@@ -496,8 +497,8 @@ void WriteThread::internalClose(bool emitSignal)
                     {
                         if(emitSignal)
                         {
-                            errorString_internal=file.errorString();
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+                            errorString_internal=file.errorString().toStdString();
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
                             emit error();
                         }
                         else
@@ -511,7 +512,7 @@ void WriteThread::internalClose(bool emitSignal)
                 {
                     if(!file.remove())
                         if(emitSignal)
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] unable to remove the destination file"));
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] unable to remove the destination file");
                 }
             }
             //here and not after, because the transferThread don't need try close if not open
@@ -544,7 +545,7 @@ void WriteThread::internalClose(bool emitSignal)
 
 void WriteThread::internalReopen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     QString tempFile=file.fileName();
     internalClose(false);
     flushBuffer();
@@ -557,7 +558,7 @@ void WriteThread::internalReopen()
 
 void WriteThread::reopen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     stopIt=true;
     endDetected=false;
     emit internalStartReopen();
@@ -610,20 +611,20 @@ bool WriteThread::setBlockSize(const int blockSize)
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("block size out of range: ")+QString::number(blockSize));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"block size out of range: "+std::to_string(blockSize));
         return false;
     }
 }
 
 /// \brief get the last good position
-qint64 WriteThread::getLastGoodPosition() const
+int64_t WriteThread::getLastGoodPosition() const
 {
     return lastGoodPosition;
 }
 
 void WriteThread::flushAndSeekToZero()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("flushAndSeekToZero: ")+QString::number(blockSize));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flushAndSeekToZero: "+std::to_string(blockSize));
     stopIt=true;
     emit internalStartFlushAndSeekToZero();
 }
@@ -640,8 +641,8 @@ void WriteThread::checkSum()
     #endif
     if(!file.seek(0))
     {
-        errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+        errorString_internal=file.errorString().toStdString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         return;
     }
@@ -650,7 +651,7 @@ void WriteThread::checkSum()
     {
         if(putInPause)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("[")+QString::number(id)+QStringLiteral("] write put in pause"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] write put in pause");
             if(stopIt)
                 return;
             pauseMutex.acquire();
@@ -668,8 +669,8 @@ void WriteThread::checkSum()
 
         if(file.error()!=QFile::NoError)
         {
-            errorString_internal=tr("Unable to read the source file: ")+file.errorString()+QStringLiteral(" (")+QString::number(file.error())+QStringLiteral(")");
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("file.error()!=QFile::NoError: %1, error: %2").arg(QString::number(file.error())).arg(errorString_internal));
+            errorString_internal=tr("Unable to read the source file: ").toStdString()+file.errorString().toStdString()+" ("+std::to_string(file.error())+")";
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("file.error()!=QFile::NoError: %1, error: %2").arg(QString::number(file.error())).arg(QString::fromStdString(errorString_internal)).toStdString());
             emit error();
             return;
         }
@@ -693,8 +694,8 @@ void WriteThread::checkSum()
     while(sizeReaden>0 && !stopIt);
     if(lastGoodPosition>(quint64)file.size())
     {
-        errorString_internal=tr("File truncated during read, possible data change");
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())));
+        errorString_internal=tr("File truncated during read, possible data change").toStdString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())).toStdString());
         emit error();
         return;
     }
@@ -706,7 +707,7 @@ void WriteThread::checkSum()
         return;
     }
     emit checksumFinish(hash.result());
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] stop the read"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
 
 void WriteThread::internalFlushAndSeekToZero()
@@ -714,8 +715,8 @@ void WriteThread::internalFlushAndSeekToZero()
     flushBuffer();
     if(!file.seek(0))
     {
-        errorString_internal=file.errorString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(errorString_internal));
+        errorString_internal=file.errorString().toStdString();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         return;
     }
@@ -814,7 +815,7 @@ void WriteThread::internalWrite()
     {
         if(putInPause)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("[")+QString::number(id)+QStringLiteral("] write put in pause"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] write put in pause");
             if(stopIt)
                 return;
             pauseMutex.acquire();
@@ -823,7 +824,7 @@ void WriteThread::internalWrite()
         }
         if(stopIt)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] stopIt"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt");
             return;
         }
         if(stopIt)
@@ -899,7 +900,7 @@ void WriteThread::internalWrite()
                     writeFull.release();
                 return;
             }
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] End detected of the file"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] End detected of the file");
             return;
         }
         #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
@@ -941,23 +942,23 @@ void WriteThread::internalWrite()
         //mutex for stream this data
         if(lastGoodPosition==0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[")+QString::number(id)+QStringLiteral("] emit writeIsStarted()"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit writeIsStarted()");
             emit writeIsStarted();
         }
         if(stopIt)
             return;
         if(file.error()!=QFile::NoError)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Error in writing: %1 (%2)").arg(file.errorString()).arg(file.error()));
-            errorString_internal=QStringLiteral("Error in writing: %1 (%2)").arg(file.errorString()).arg(file.error());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing: %1 (%2)").arg(file.errorString()).arg(file.error()).toStdString());
+            errorString_internal=QStringLiteral("Error in writing: %1 (%2)").arg(file.errorString()).arg(file.error()).toStdString();
             stopIt=true;
             emit error();
             return;
         }
         if(bytesWriten!=blockArray.size())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()));
-            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString());
+            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString();
             stopIt=true;
             emit error();
             return;

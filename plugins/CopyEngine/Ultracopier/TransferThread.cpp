@@ -1391,7 +1391,7 @@ void TransferThread::getWriteError()
     writeError_destination_reopened	= false;
     writeIsOpeningVariable=false;
     if(!readError)//already display error for the read
-        emit errorOnFile(destination,writeThread.errorString().toStdString());
+        emit errorOnFile(destination,writeThread.errorString());
 }
 
 void TransferThread::getReadError()

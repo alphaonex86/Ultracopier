@@ -83,7 +83,7 @@ void ListThread::transferInodeIsClosed()
     TransferThread *temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
     if(temp_transfer_thread==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("transfer thread not located!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
         return;
     }
     bool isFound=false;
@@ -92,7 +92,7 @@ void ListThread::transferInodeIsClosed()
     #endif
     if(temp_transfer_thread->getStat()!=TransferStat_Idle)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("transfer thread not idle!"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not idle!");
         return;
     }
     int int_for_internal_loop=0;

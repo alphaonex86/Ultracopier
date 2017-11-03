@@ -30,9 +30,9 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const QFileInfo &file,const quint64 &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential);
+    void open(const QFileInfo &file,const uint64_t &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential);
     /// \brief to return the error string
-    QString errorString() const;
+    std::string errorString() const;
     /// \brief to stop all
     void stop();
     /// \brief to write data
@@ -63,7 +63,7 @@ public:
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
     /// \brief get the last good position
-    qint64 getLastGoodPosition() const;
+    int64_t getLastGoodPosition() const;
     /// \brief buffer is empty
     bool bufferIsEmpty();
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
@@ -109,9 +109,9 @@ signals:
     void internalStartEndOfFile() const;
     void internalStartFlushAndSeekToZero() const;
     /// \brief To debug source
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 private:
-    QString             errorString_internal;
+    std::string             errorString_internal;
     AvancedQFile		file;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
@@ -132,12 +132,12 @@ private:
     QSemaphore          pauseMutex;
     volatile bool		putInPause;
     QList<QByteArray>	theBlockList;		///< Store the block list
-    quint64             lastGoodPosition;
+    uint64_t             lastGoodPosition;
     QByteArray          blockArray;		///< temp data for block writing, the data
-    qint64              bytesWriten;		///< temp data for block writing, the bytes writen
+    int64_t              bytesWriten;		///< temp data for block writing, the bytes writen
     int                 id;
     volatile bool       endDetected;
-    quint64             startSize;
+    uint64_t             startSize;
     QSemaphore          *mkpathTransfer;
     bool                fakeMode;
     bool                buffer;
