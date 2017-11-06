@@ -265,19 +265,19 @@ public slots:
     //edit the transfer list
     /** \brief remove the selected item
      * \param ids ids is the id list of the selected items */
-    void removeItems(const std::vector<int> &ids);
+    void removeItems(const std::vector<uint64_t> &ids);
     /** \brief move on top of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnTop(const std::vector<int> &ids);
+    void moveItemsOnTop(const std::vector<uint64_t> &ids);
     /** \brief move up the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsUp(const std::vector<int> &ids);
+    void moveItemsUp(const std::vector<uint64_t> &ids);
     /** \brief move down the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsDown(const std::vector<int> &ids);
+    void moveItemsDown(const std::vector<uint64_t> &ids);
     /** \brief move on bottom of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnBottom(const std::vector<int> &ids);
+    void moveItemsOnBottom(const std::vector<uint64_t> &ids);
 
     /** \brief give the forced mode, to export/import transfer list */
     void forceMode(const Ultracopier::CopyMode &mode);
@@ -335,11 +335,11 @@ signals:
     void signal_skip(const uint64_t &id) const;
 
     //edit the transfer list
-    void signal_removeItems(const std::vector<int> &ids) const;
-    void signal_moveItemsOnTop(const std::vector<int> &ids) const;
-    void signal_moveItemsUp(const std::vector<int> &ids) const;
-    void signal_moveItemsDown(const std::vector<int> &ids) const;
-    void signal_moveItemsOnBottom(const std::vector<int> &ids) const;
+    void signal_removeItems(const std::vector<uint64_t> &ids) const;
+    void signal_moveItemsOnTop(const std::vector<uint64_t> &ids) const;
+    void signal_moveItemsUp(const std::vector<uint64_t> &ids) const;
+    void signal_moveItemsDown(const std::vector<uint64_t> &ids) const;
+    void signal_moveItemsOnBottom(const std::vector<uint64_t> &ids) const;
 
     void signal_forceMode(const Ultracopier::CopyMode &mode) const;
     void signal_exportTransferList(const std::string &fileName) const;

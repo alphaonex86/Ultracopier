@@ -66,11 +66,11 @@ class PluginInterface_Themes : public QWidget
     // signal to implement
     signals:
         //set the transfer list
-        void removeItems(const std::vector<int> &ids) const;
-        void moveItemsOnTop(const std::vector<int> &ids) const;
-        void moveItemsUp(const std::vector<int> &ids) const;
-        void moveItemsDown(const std::vector<int> &ids) const;
-        void moveItemsOnBottom(const std::vector<int> &ids) const;
+        void removeItems(const std::vector<uint64_t> &ids) const;
+        void moveItemsOnTop(const std::vector<uint64_t> &ids) const;
+        void moveItemsUp(const std::vector<uint64_t> &ids) const;
+        void moveItemsDown(const std::vector<uint64_t> &ids) const;
+        void moveItemsOnBottom(const std::vector<uint64_t> &ids) const;
         void exportTransferList() const;
         void importTransferList() const;
         void exportErrorIntoTransferList() const;

@@ -124,19 +124,19 @@ public slots:
     //edit the transfer list
     /** \brief remove the selected item
      * \param ids ids is the id list of the selected items */
-    void removeItems(const std::vector<int> &ids);
+    void removeItems(const std::vector<uint64_t> &ids);
     /** \brief move on top of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnTop(std::vector<int> ids);
+    void moveItemsOnTop(std::vector<uint64_t> ids);
     /** \brief move up the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsUp(std::vector<int> ids);
+    void moveItemsUp(std::vector<uint64_t> ids);
     /** \brief move down the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsDown(std::vector<int> ids);
+    void moveItemsDown(std::vector<uint64_t> ids);
     /** \brief move on bottom of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnBottom(std::vector<int> ids);
+    void moveItemsOnBottom(std::vector<uint64_t> ids);
 
     /** \brief give the forced mode, to export/import transfer list */
     void forceMode(const Ultracopier::CopyMode &mode);

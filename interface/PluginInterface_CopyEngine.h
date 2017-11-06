@@ -108,19 +108,19 @@ class PluginInterface_CopyEngine : public QObject
         //edit the transfer list
         /** \brief remove the selected item
          * \param ids ids is the id list of the selected items */
-        virtual void removeItems(const std::vector<int> &ids) = 0;
+        virtual void removeItems(const std::vector<uint64_t> &ids) = 0;
         /** \brief move on top of the list the selected item
          * \param ids ids is the id list of the selected items */
-        virtual void moveItemsOnTop(const std::vector<int> &ids) = 0;
+        virtual void moveItemsOnTop(const std::vector<uint64_t> &ids) = 0;
         /** \brief move up the list the selected item
          * \param ids ids is the id list of the selected items */
-        virtual void moveItemsUp(const std::vector<int> &ids) = 0;
+        virtual void moveItemsUp(const std::vector<uint64_t> &ids) = 0;
         /** \brief move down the list the selected item
          * \param ids ids is the id list of the selected items */
-        virtual void moveItemsDown(const std::vector<int> &ids) = 0;
+        virtual void moveItemsDown(const std::vector<uint64_t> &ids) = 0;
         /** \brief move on bottom of the list the selected item
          * \param ids ids is the id list of the selected items */
-        virtual void moveItemsOnBottom(const std::vector<int> &ids) = 0;
+        virtual void moveItemsOnBottom(const std::vector<uint64_t> &ids) = 0;
 
 
         /** \brief give the forced mode, to export/import transfer list */

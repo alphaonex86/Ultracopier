@@ -689,27 +689,27 @@ void CopyEngine::cancel()
     emit tryCancel();
 }
 
-void CopyEngine::removeItems(const std::vector<int> &ids)
+void CopyEngine::removeItems(const std::vector<uint64_t> &ids)
 {
     emit signal_removeItems(ids);
 }
 
-void CopyEngine::moveItemsOnTop(const std::vector<int> &ids)
+void CopyEngine::moveItemsOnTop(const std::vector<uint64_t> &ids)
 {
     emit signal_moveItemsOnTop(ids);
 }
 
-void CopyEngine::moveItemsUp(const std::vector<int> &ids)
+void CopyEngine::moveItemsUp(const std::vector<uint64_t> &ids)
 {
     emit signal_moveItemsUp(ids);
 }
 
-void CopyEngine::moveItemsDown(const std::vector<int> &ids)
+void CopyEngine::moveItemsDown(const std::vector<uint64_t> &ids)
 {
     emit signal_moveItemsDown(ids);
 }
 
-void CopyEngine::moveItemsOnBottom(const std::vector<int> &ids)
+void CopyEngine::moveItemsOnBottom(const std::vector<uint64_t> &ids)
 {
     emit signal_moveItemsOnBottom(ids);
 }
