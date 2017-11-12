@@ -9,8 +9,8 @@
 #include <QObject>
 #include <QLocalSocket>
 #include <QLocalServer>
-#include <QStringList>
-#include <QString>
+#include <vector>
+#include <string>
 #include <QByteArray>
 #include <QTimer>
 
@@ -28,54 +28,54 @@ class ServerCatchcopy : public QObject
         /// \brief try close the server
         void close();
         /// \brief get the error string on the QLocalServer
-        const QString errorStringServer() const;
+        const std::string errorStringServer() const;
         /// \brief get the general error string
-        const QString errorString() const;
+        const std::string errorString() const;
         /// \brief set the name of the server
-        void setName(const QString & name);
+        void setName(const std::string & name);
         /// \brief get the name
-        QString getName() const;
+        std::string getName() const;
         /// \brief to get a client list
-        QStringList clientsList() const;
+        std::vector<std::string> clientsList() const;
     private:
-        QString pathSocket;
-        QString name;
-        QString error_string;
+        std::string pathSocket;
+        std::string name;
+        std::string error_string;
         QLocalServer server;
-        quint32 idNextClient;
+        uint32_t idNextClient;
         struct Client
         {
-            quint32 id;
+            uint32_t id;
             QLocalSocket *socket;
             QByteArray data;
             bool haveData;
-            quint32 dataSize;
+            uint32_t dataSize;
             bool firstProtocolReplied;
-            QList<quint32> queryNoReplied;
+            QList<uint32_t> queryNoReplied;
             QTimer *detectTimeOut;
-            QString name;
+            std::string name;
         };
         QList<Client> clientList;
         struct LinkGlobalToLocalClient
         {
-            quint32 idClient;
-            quint32 orderId;
-            quint32 globalOrderId;
+            uint32_t idClient;
+            uint32_t orderId;
+            uint32_t globalOrderId;
         };
         QList<LinkGlobalToLocalClient> LinkGlobalToLocalClientList;
         enum inputReturnType{Ok,Replied,ExtensionWrong,WrongArgument,WrongArgumentListSize,UnknowOrder};
-        inputReturnType parseInputCurrentProtocol(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
-        bool clientIdFound(const quint32 &id) const;
-        quint32 nextOrderId;
-        QList<quint32> orderList;
-        quint32 incrementOrderId();
-        void emitNewCopyWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources);
-        void emitNewCopy(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination);
-        void emitNewMoveWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources);
-        void emitNewMove(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination);
+        inputReturnType parseInputCurrentProtocol(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &returnList);
+        bool clientIdFound(const uint32_t &id) const;
+        uint32_t nextOrderId;
+        QList<uint32_t> orderList;
+        uint32_t incrementOrderId();
+        void emitNewCopyWithoutDestination(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources);
+        void emitNewCopy(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination);
+        void emitNewMoveWithoutDestination(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources);
+        void emitNewMove(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination);
         bool checkDataIntegrity(const QByteArray &data);
     protected:
-        void parseInput(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
+        void parseInput(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &returnList);
     private slots:
         void newConnection();
         void connectionError(const QLocalSocket::LocalSocketError &error);
@@ -84,61 +84,61 @@ class ServerCatchcopy : public QObject
         void checkTimeOut();
     public slots:
         /// \brief disconnect one client
-        void disconnectClient(const quint32 &id);
-        /// \brief reply to a client with QStringList
-        void reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QStringList &returnList);
+        void disconnectClient(const uint32_t &id);
+        /// \brief reply to a client with std::vector<std::string>
+        void reply(const uint32_t &client,const uint32_t &orderId,const uint32_t &returnCode,const std::vector<std::string> &returnList);
         /// \brief reply to a client
-        void reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QString &returnString);
+        void reply(const uint32_t &client,const uint32_t &orderId,const uint32_t &returnCode,const std::string &returnString);
         //reply
         /// \brief send if the protocol is supported
-        void protocolSupported(const quint32 &client,const quint32 &orderId,const bool &value);
+        void protocolSupported(const uint32_t &client,const uint32_t &orderId,const bool &value);
         /// \brief send incorrect arguement list size
-        void incorrectArgumentListSize(const quint32 &client,const quint32 &orderId);
+        void incorrectArgumentListSize(const uint32_t &client,const uint32_t &orderId);
         /// \brief send incorrect arguement
-        void incorrectArgument(const quint32 &client,const quint32 &orderId);
+        void incorrectArgument(const uint32_t &client,const uint32_t &orderId);
         /// \brief the client is registred
-        void clientRegistered(const quint32 &client,const quint32 &orderId);
+        void clientRegistered(const uint32_t &client,const uint32_t &orderId);
         /// \brief send the server name
-        void serverName(const quint32 &client,const quint32 &orderId,const QString &name);
+        void serverName(const uint32_t &client,const uint32_t &orderId,const std::string &name);
         /// \brief send the copy is finished
-        void copyFinished(const quint32 &client,const quint32 &orderId,const bool &withError);
+        void copyFinished(const uint32_t &client,const uint32_t &orderId,const bool &withError);
         /// \brief send the copy is canceled
-        void copyCanceled(const quint32 &client,const quint32 &orderId);
+        void copyCanceled(const uint32_t &client,const uint32_t &orderId);
         /// \brief send the copy is finished by global is order
-        void copyFinished(const quint32 &globalOrderId,const bool &withError);
+        void copyFinished(const uint32_t &globalOrderId,const bool &withError);
         /// \brief send copy cancel by global is order
-        void copyCanceled(const quint32 &globalOrderId);
+        void copyCanceled(const uint32_t &globalOrderId);
         /// \brief send the unknow order
-        void unknowOrder(const quint32 &client,const quint32 &orderId);
+        void unknowOrder(const uint32_t &client,const uint32_t &orderId);
     signals:
         /// \brief send connected client
-        void connectedClient(const quint32 &id);
+        void connectedClient(const uint32_t &id);
         /// \brief send disconnect client
-        void disconnectedClient(const quint32 &id);
+        void disconnectedClient(const uint32_t &id);
         /// \brief have new query
-        void newQuery(const quint32 &client,const quint32 &orderId,const QStringList &returnList);
+        void newQuery(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &returnList);
         /// \brief have new error
-        void error(const QString &error);
-        void communicationError(const QString &error);
+        void error(const std::string &error);
+        void communicationError(const std::string &error);
         //query
         /// \brief ask the protocol compatility
-        void askProtocolCompatibility(const quint32 &client,const quint32 &orderId,const QString &version);
+        void askProtocolCompatibility(const uint32_t &client,const uint32_t &orderId,const std::string &version);
         /// \brief ask protocol extension
-        void askProtocolExtension(const quint32 &client,const quint32 &orderId,const QString &extension);
+        void askProtocolExtension(const uint32_t &client,const uint32_t &orderId,const std::string &extension);
         /// \brief ask protocol extension with version
-        void askProtocolExtension(const quint32 &client,const quint32 &orderId,const QString &extension,const QString &version);
+        void askProtocolExtension(const uint32_t &client,const uint32_t &orderId,const std::string &extension,const std::string &version);
         /// \brief send the client name, without query id
-        void clientName(const quint32 &client,const QString &name);
+        void clientName(const uint32_t &client,const std::string &name);
         /// \brief send the client have ask the server name
-        void askServerName(const quint32 &client,const quint32 &orderId);
+        void askServerName(const uint32_t &client,const uint32_t &orderId);
         /// \brief copy is send, by globalOrderId, without destination
-        void newCopyWithoutDestination(const quint32 &globalOrderId,const QStringList &sources);
+        void newCopyWithoutDestination(const uint32_t &globalOrderId,const std::vector<std::string> &sources);
         /// \brief copy is send, by globalOrderId, with destination
-        void newCopy(const quint32 &globalOrderId,const QStringList &sources,const QString &destination);
+        void newCopy(const uint32_t &globalOrderId,const std::vector<std::string> &sources,const std::string &destination);
         /// \brief move is send, by globalOrderId, without destination
-        void newMoveWithoutDestination(const quint32 &globalOrderId,const QStringList &sources);
+        void newMoveWithoutDestination(const uint32_t &globalOrderId,const std::vector<std::string> &sources);
         /// \brief move is send, by globalOrderId, with destination
-        void newMove(const quint32 &globalOrderId,const QStringList &sources,const QString &destination);
+        void newMove(const uint32_t &globalOrderId,const std::vector<std::string> &sources,const std::string &destination);
 };
 
 #endif // SERVERCATCHCOPY_H

@@ -8,9 +8,9 @@
 
 #include <QThread>
 #include <QFileInfo>
-#include <QString>
+#include <string>
 #include <QSemaphore>
-#include <QStringList>
+#include <vector>
 #include <QDir>
 #include <QDateTime>
 
@@ -44,13 +44,13 @@ public:
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
 signals:
-    void errorOnFolder(const QFileInfo &,const QString &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void errorOnFolder(const QFileInfo &,const std::string &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void firstFolderFinish();
     void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const ActionType &actionType) const;
     void internalStartDoThisPath() const;
     void internalStartSkip() const;
     void internalStartRetry() const;
-    void debugInformation(const Ultracopier::DebugLevel &level,const QString &fonction,const QString &text,const QString &file,const int &ligne) const;
+    void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 public slots:
     /// \brief skip after creation error
     void skip();
@@ -90,7 +90,7 @@ private:
     //fonction to edit the file date time
     bool readFileDateTime(const QFileInfo &source);
     bool writeFileDateTime(const QFileInfo &destination);
-    static QString text_slash;
+    static std::string text_slash;
 private slots:
     void internalDoThisPath();
     void internalAddPath(const QFileInfo& source, const QFileInfo& destination,const ActionType &actionType);

@@ -6,6 +6,7 @@
 #ifndef EXTRASOCKETCATCHCOPY_H
 #define EXTRASOCKETCATCHCOPY_H
 
+#include <string>
 #include <QString>
 
 #ifdef Q_OS_UNIX
@@ -23,7 +24,7 @@ class ExtraSocketCatchcopy
 {
 public:
     /// \brief to get the socket path
-    static const QString pathSocket();
+    static const std::string pathSocket();
     static char * toHex(const char *str);
 };
 

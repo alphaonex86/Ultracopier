@@ -6,10 +6,10 @@
 
 #include <stdio.h>
 
-const QString ExtraSocketCatchcopy::pathSocket()
+const std::string ExtraSocketCatchcopy::pathSocket()
 {
 #ifdef Q_OS_UNIX
-    return "advanced-copier-"+QString::number(getuid());
+    return "advanced-copier-"+std::to_string(getuid());
 #else
     QString userName;
     char uname[1024];

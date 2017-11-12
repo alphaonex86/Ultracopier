@@ -27,20 +27,20 @@ bool ServerCatchcopy::isListening() const
     return server.isListening();
 }
 
-void ServerCatchcopy::setName(const QString & name)
+void ServerCatchcopy::setName(const std::string & name)
 {
     this->name=name;
 }
 
-QString ServerCatchcopy::getName() const
+std::string ServerCatchcopy::getName() const
 {
     return name;
 }
 
 /// \brief to get a client list
-QStringList ServerCatchcopy::clientsList() const
+std::vector<std::string> ServerCatchcopy::clientsList() const
 {
-    QStringList clients;
+    std::vector<std::string> clients;
     int index=0;
     int size=clientList.size();
     while(index<size)

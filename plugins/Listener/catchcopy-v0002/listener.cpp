@@ -1,9 +1,10 @@
 #include "listener.h"
 #include "catchcopy-api-0002/ExtraSocketCatchcopy.h"
+#include "../../../cpp11addition.h"
 
 Listener::Listener()
 {
-    server.setName(tr("Ultracopier"));
+    server.setName(tr("Ultracopier").toStdString());
     connect(&server,&ServerCatchcopy::newCopyWithoutDestination,		this,&Listener::copyWithoutDestination);
     connect(&server,&ServerCatchcopy::newCopy,                          this,&Listener::copy);
     connect(&server,&ServerCatchcopy::newMoveWithoutDestination,		this,&Listener::moveWithoutDestination);
@@ -19,7 +20,7 @@ Listener::Listener()
 
 void Listener::listen()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start: %1").arg(ExtraSocketCatchcopy::pathSocket()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+ExtraSocketCatchcopy::pathSocket());
     if(server.listen())
         emit newState(Ultracopier::FullListening);
     else
@@ -59,13 +60,13 @@ std::vector<std::string> Listener::clientsList() const
 
 void Listener::transferFinished(const uint32_t &orderId, const bool &withError)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+QString::number(orderId)+", withError: "+QString::number(withError));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+std::to_string(orderId)+", withError: "+std::to_string(withError));
     server.copyFinished(orderId,withError);
 }
 
 void Listener::transferCanceled(const uint32_t &orderId)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+QString::number(orderId));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, orderId: "+std::to_string(orderId));
     server.copyCanceled(orderId);
 }
 
@@ -74,45 +75,49 @@ void Listener::newLanguageLoaded()
 {
 }
 
-void Listener::errorInternal(const QString &string)
+void Listener::errorInternal(const std::string &string)
 {
     Q_UNUSED(string);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"warning emited from Catchcopy lib: "+string);
 }
 
-void Listener::communicationErrorInternal(const QString &string)
+void Listener::communicationErrorInternal(const std::string &string)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"warning emited from Catchcopy lib: "+string);
     emit error(string);
 }
 
-void Listener::clientName(quint32 client,QString name)
+void Listener::clientName(uint32_t client,std::string name)
 {
     Q_UNUSED(client);
     Q_UNUSED(name);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("clientName: %1, for the id: %2").arg(name).arg(client));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("clientName: %1, for the id: %2").arg(QString::fromStdString(name)).arg(client).toStdString());
 }
 
-void Listener::copyWithoutDestination(const quint32 &orderId,const QStringList &sources)
+void Listener::copyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("copyWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("copyWithoutDestination(%1,%2)")
+                             .arg(orderId)
+                             .arg(QString::fromStdString(stringimplode(sources,";")))
+                             .toStdString()
+                             );
     emit newCopyWithoutDestination(orderId,sources);
 }
 
-void Listener::copy(const quint32 &orderId,const QStringList &sources,const QString &destination)
+void Listener::copy(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("copy(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("copy(%1,%2,%3)").arg(orderId).arg(QString::fromStdString(stringimplode(sources,";")).arg(QString::fromStdString(destination))).toStdString());
     emit newCopy(orderId,sources,destination);
 }
 
-void Listener::moveWithoutDestination(const quint32 &orderId,const QStringList &sources)
+void Listener::moveWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &sources)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("moveWithoutDestination(%1,%2)").arg(orderId).arg(sources.join(";")));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("moveWithoutDestination(%1,%2)").arg(orderId).arg(QString::fromStdString(stringimplode(sources,";"))).toStdString());
     emit newMoveWithoutDestination(orderId,sources);
 }
 
-void Listener::move(const quint32 &orderId,const QStringList &sources,const QString &destination)
+void Listener::move(const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("move(%1,%2,%3)").arg(orderId).arg(sources.join(";")).arg(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("move(%1,%2,%3)").arg(orderId).arg(QString::fromStdString(stringimplode(sources,";")).arg(QString::fromStdString(destination))).toStdString());
     emit newMove(orderId,sources,destination);
 }
