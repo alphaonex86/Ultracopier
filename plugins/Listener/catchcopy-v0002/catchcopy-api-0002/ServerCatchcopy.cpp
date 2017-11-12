@@ -5,6 +5,7 @@
 #include "ServerCatchcopy.h"
 #include "VariablesCatchcopy.h"
 #include "ExtraSocketCatchcopy.h"
+#include "cpp11addition.h"
 
 #include <QFile>
 #include <QDataStream>
@@ -45,7 +46,7 @@ std::vector<std::string> ServerCatchcopy::clientsList() const
     int size=clientList.size();
     while(index<size)
     {
-        clients << clientList[index].name;
+        clients.push_back(clientList[index].name);
         index++;
     }
     return clients;
@@ -55,7 +56,7 @@ bool ServerCatchcopy::listen()
 {
     QLocalSocket socketTestConnection;
     pathSocket=ExtraSocketCatchcopy::pathSocket();
-    socketTestConnection.connectToServer(pathSocket);
+    socketTestConnection.connectToServer(QString::fromStdString(pathSocket));
     if(socketTestConnection.waitForConnected(CATCHCOPY_COMMUNICATION_TIMEOUT))
     {
         error_string="Other server is listening";
@@ -64,7 +65,7 @@ bool ServerCatchcopy::listen()
     }
     else
     {
-        if(!server.removeServer(pathSocket))
+        if(!server.removeServer(QString::fromStdString(pathSocket)))
         {
             error_string="Unable to remove the old server";
             emit error(error_string);
@@ -72,11 +73,11 @@ bool ServerCatchcopy::listen()
         #ifndef Q_OS_MAC
         server.setSocketOptions(QLocalServer::UserAccessOption);
         #endif
-        if(server.listen(pathSocket))
+        if(server.listen(QString::fromStdString(pathSocket)))
             return true;
         else
         {
-            error_string=QStringLiteral("Unable to listen %1: %2").arg(pathSocket).arg(server.errorString());
+            error_string=QStringLiteral("Unable to listen %1: %2").arg(QString::fromStdString(pathSocket)).arg(server.errorString()).toStdString();
             emit error(error_string);
             return false;
         }
@@ -94,7 +95,7 @@ void ServerCatchcopy::close()
             index++;
         }
         server.close();
-        if(!server.removeServer(pathSocket))
+        if(!server.removeServer(QString::fromStdString(pathSocket)))
         {
             error_string="Unable to remove the old server";
             emit error(error_string);
@@ -102,12 +103,12 @@ void ServerCatchcopy::close()
     }
 }
 
-const QString ServerCatchcopy::errorStringServer() const
+const std::string ServerCatchcopy::errorStringServer() const
 {
-    return server.errorString();
+    return server.errorString().toStdString();
 }
 
-const QString ServerCatchcopy::errorString() const
+const std::string ServerCatchcopy::errorString() const
 {
     return error_string;
 }
@@ -145,7 +146,7 @@ void ServerCatchcopy::newConnection()
     }
 }
 
-bool ServerCatchcopy::clientIdFound(const quint32 &id) const
+bool ServerCatchcopy::clientIdFound(const uint32_t &id) const
 {
     int index=0;
     while(index<clientList.size())
@@ -195,7 +196,7 @@ void ServerCatchcopy::disconnected()
     {
         if(clientList.at(index).socket==socket)
         {
-            const quint32 &id=clientList.at(index).id;
+            const uint32_t &id=clientList.at(index).id;
             //ClientList.at(index).socket->disconnectFromServer();//already disconnected
             delete clientList.at(index).detectTimeOut;
             clientList.at(index).socket->deleteLater();
@@ -208,7 +209,7 @@ void ServerCatchcopy::disconnected()
     qWarning() << "Unlocated client!";
 }
 
-void ServerCatchcopy::disconnectClient(const quint32 &id)
+void ServerCatchcopy::disconnectClient(const uint32_t &id)
 {
     int index=0;
     while(index<clientList.size())
@@ -259,8 +260,8 @@ void ServerCatchcopy::readyRead()
                         return;
                     }
                     if(clientList.at(index).dataSize<(int)(sizeof(int) //orderId
-                             + sizeof(quint32) //returnCode
-                             + sizeof(quint32) //string list size
+                             + sizeof(uint32_t) //returnCode
+                             + sizeof(uint32_t) //string list size
                                 ))
                     {
                         error_string="Reply size is too small to have correct code";
@@ -274,22 +275,31 @@ void ServerCatchcopy::readyRead()
                     clientList[index].data.append(socket->read(clientList.at(index).dataSize-clientList.at(index).data.size()));
                 else
                     clientList[index].data.append(socket->readAll());
-                if(clientList.at(index).dataSize==(quint32)clientList.at(index).data.size())
+                if(clientList.at(index).dataSize==(uint32_t)clientList.at(index).data.size())
                 {
                     if(!checkDataIntegrity(clientList.at(index).data))
                     {
-                        emit communicationError("Data integrity wrong: "+QString(clientList.at(index).data.toHex()));
+                        emit communicationError("Data integrity wrong: "+QString(clientList.at(index).data.toHex()).toStdString());
                         clientList[index].data.clear();
                         clientList[index].haveData=false;
                         qWarning() << "Data integrity wrong";
                         return;
                     }
-                    QStringList returnList;
-                    quint32 orderId;
+                    std::vector<std::string> returnList;
+                    QStringList returnListQt;
+                    uint32_t orderId;
                     QDataStream in(clientList.at(index).data);
                     in.setVersion(QDataStream::Qt_4_4);
                     in >> orderId;
-                    in >> returnList;
+                    in >> returnListQt;
+                    {
+                        int index=0;
+                        while(index<returnListQt.size())
+                        {
+                            returnList.push_back(returnListQt.at(index).toStdString());
+                            index++;
+                        }
+                    }
                     clientList[index].data.clear();
                     clientList[index].haveData=false;
                     if(clientList.at(index).queryNoReplied.contains(orderId))
@@ -299,10 +309,10 @@ void ServerCatchcopy::readyRead()
                         return;
                     }
                     clientList[index].queryNoReplied << orderId;
-                    if(!clientList.at(index).firstProtocolReplied && returnList.size()==2 && returnList.first()=="protocol")
+                    if(!clientList.at(index).firstProtocolReplied && returnList.size()==2 && returnList.front()=="protocol")
                     {
                         clientList[index].firstProtocolReplied=true;
-                        protocolSupported(clientList.at(index).id,orderId,(returnList.last()==CATCHCOPY_PROTOCOL_VERSION));
+                        protocolSupported(clientList.at(index).id,orderId,(returnList.back()==CATCHCOPY_PROTOCOL_VERSION));
                     }
                     else
                         parseInput(clientList.at(index).id,orderId,returnList);
@@ -322,7 +332,7 @@ void ServerCatchcopy::readyRead()
 
 bool ServerCatchcopy::checkDataIntegrity(const QByteArray &data)
 {
-    quint32 orderId;
+    uint32_t orderId;
     qint32 listSize;
     QDataStream in(data);
     in.setVersion(QDataStream::Qt_4_4);
@@ -346,7 +356,7 @@ bool ServerCatchcopy::checkDataIntegrity(const QByteArray &data)
         }
         if(stringSize>(in.device()->size()-in.device()->pos()))
         {
-            emit error(QStringLiteral("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos()));
+            emit error(QStringLiteral("String size is greater than the data: %1>(%2-%3)").arg(stringSize).arg(in.device()->size()).arg(in.device()->pos()).toStdString());
             return false;
         }
         in.device()->seek(in.device()->pos()+stringSize);
@@ -360,7 +370,7 @@ bool ServerCatchcopy::checkDataIntegrity(const QByteArray &data)
     return true;
 }
 
-void ServerCatchcopy::parseInput(const quint32 &client,const quint32 &orderId,const QStringList &returnList)
+void ServerCatchcopy::parseInput(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &returnList)
 {
     const ServerCatchcopy::inputReturnType returnVal=parseInputCurrentProtocol(client,orderId,returnList);
     switch(returnVal)
@@ -380,24 +390,24 @@ void ServerCatchcopy::parseInput(const quint32 &client,const quint32 &orderId,co
             incorrectArgumentListSize(client,orderId);
         break;
         case UnknowOrder:
-            emit error("Unknown query: "+QString::number(returnVal)+", with client: "+QString::number(client)+", orderId: "+QString::number(orderId)+", returnList: "+returnList.join(", "));
+            emit error("Unknown query: "+std::to_string(returnVal)+", with client: "+std::to_string(client)+", orderId: "+std::to_string(orderId)+", returnList: "+stringimplode(returnList,", "));
             qWarning() << "Unknown query";
             unknowOrder(client,orderId);
         break;
     }
 }
 
-ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(const quint32 &client,const quint32 &orderId,const QStringList &returnList)
+ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &returnList)
 {
     if(returnList.size()==0)
         return WrongArgumentListSize;
     //if is supported
-    QString firstArgument=returnList.first();
+    std::string firstArgument=returnList.front();
     if(firstArgument=="protocol")
     {
         if(returnList.size()!=2)
             return WrongArgumentListSize;
-        emit askProtocolCompatibility(client,orderId,returnList.last());
+        emit askProtocolCompatibility(client,orderId,returnList.back());
         return Ok;
     }
     else if(firstArgument=="protocol extension")
@@ -416,12 +426,12 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         {
             if(clientList.at(index).id==client)
             {
-                clientList[index].name=returnList.last();
+                clientList[index].name=returnList.back();
                 break;
             }
             index++;
         }
-        emit clientName(client,returnList.last());
+        emit clientName(client,returnList.back());
         clientRegistered(client,orderId);
         return Replied;
     }
@@ -429,7 +439,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
     {
         if(returnList.size()!=2)
             return WrongArgumentListSize;
-        if(returnList.last()!="name?")
+        if(returnList.back()!="name?")
             return WrongArgument;
         serverName(client,orderId,name);
         return Replied;
@@ -438,7 +448,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
     {
         if(returnList.size()<3)
             return WrongArgumentListSize;
-        QStringList sourceList=returnList;
+        std::vector<std::string> sourceList=returnList;
         sourceList.removeFirst();
         sourceList.removeLast();
         emitNewCopy(client,orderId,sourceList,returnList.last());
@@ -448,7 +458,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
     {
         if(returnList.size()<2)
             return WrongArgumentListSize;
-        QStringList sourceList=returnList;
+        std::vector<std::string> sourceList=returnList;
         sourceList.removeFirst();
         emitNewCopyWithoutDestination(client,orderId,sourceList);
         return Ok;
@@ -457,7 +467,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
     {
         if(returnList.size()<3)
             return WrongArgumentListSize;
-        QStringList sourceList=returnList;
+        std::vector<std::string> sourceList=returnList;
         sourceList.removeFirst();
         sourceList.removeLast();
         emitNewMove(client,orderId,sourceList,returnList.last());
@@ -467,7 +477,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
     {
         if(returnList.size()<2)
             return WrongArgumentListSize;
-        QStringList sourceList=returnList;
+        std::vector<std::string> sourceList=returnList;
         sourceList.removeFirst();
         emitNewMoveWithoutDestination(client,orderId,sourceList);
         return Ok;
@@ -476,7 +486,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         return UnknowOrder;
 }
 
-void ServerCatchcopy::emitNewCopyWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources)
+void ServerCatchcopy::emitNewCopyWithoutDestination(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources)
 {
     LinkGlobalToLocalClient newAssociation;
     newAssociation.idClient=client;
@@ -486,7 +496,7 @@ void ServerCatchcopy::emitNewCopyWithoutDestination(const quint32 &client,const 
     emit newCopyWithoutDestination(newAssociation.globalOrderId,sources);
 }
 
-void ServerCatchcopy::emitNewCopy(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination)
+void ServerCatchcopy::emitNewCopy(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
     LinkGlobalToLocalClient newAssociation;
     newAssociation.idClient=client;
@@ -496,7 +506,7 @@ void ServerCatchcopy::emitNewCopy(const quint32 &client,const quint32 &orderId,c
     emit newCopy(newAssociation.globalOrderId,sources,destination);
 }
 
-void ServerCatchcopy::emitNewMoveWithoutDestination(const quint32 &client,const quint32 &orderId,const QStringList &sources)
+void ServerCatchcopy::emitNewMoveWithoutDestination(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources)
 {
     LinkGlobalToLocalClient newAssociation;
     newAssociation.idClient=client;
@@ -506,7 +516,7 @@ void ServerCatchcopy::emitNewMoveWithoutDestination(const quint32 &client,const 
     emit newMoveWithoutDestination(newAssociation.globalOrderId,sources);
 }
 
-void ServerCatchcopy::emitNewMove(const quint32 &client,const quint32 &orderId,const QStringList &sources,const QString &destination)
+void ServerCatchcopy::emitNewMove(const uint32_t &client,const uint32_t &orderId,const std::vector<std::string> &sources,const std::string &destination)
 {
     LinkGlobalToLocalClient newAssociation;
     newAssociation.idClient=client;
@@ -516,7 +526,7 @@ void ServerCatchcopy::emitNewMove(const quint32 &client,const quint32 &orderId,c
     emit newMove(newAssociation.globalOrderId,sources,destination);
 }
 
-void ServerCatchcopy::copyFinished(const quint32 &globalOrderId,const bool &withError)
+void ServerCatchcopy::copyFinished(const uint32_t &globalOrderId,const bool &withError)
 {
     int index=0;
     while(index<LinkGlobalToLocalClientList.size())
@@ -532,7 +542,7 @@ void ServerCatchcopy::copyFinished(const quint32 &globalOrderId,const bool &with
     }
 }
 
-void ServerCatchcopy::copyCanceled(const quint32 &globalOrderId)
+void ServerCatchcopy::copyCanceled(const uint32_t &globalOrderId)
 {
     int index=0;
     while(index<LinkGlobalToLocalClientList.size())
@@ -548,12 +558,12 @@ void ServerCatchcopy::copyCanceled(const quint32 &globalOrderId)
     }
 }
 
-void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QString &returnString)
+void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const uint32_t &returnCode,const std::string &returnString)
 {
-    reply(client,orderId,returnCode,QStringList() << returnString);
+    reply(client,orderId,returnCode,std::vector<std::string>() << returnString);
 }
 
-void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const quint32 &returnCode,const QStringList &returnList)
+void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const uint32_t &returnCode,const std::vector<std::string> &returnList)
 {
     int index=0;
     while(index<clientList.size())
@@ -618,7 +628,7 @@ void ServerCatchcopy::reply(const quint32 &client,const quint32 &orderId,const q
     qWarning() << "Client id not found:" << client;
 }
 
-void ServerCatchcopy::protocolSupported(const quint32 &client,const quint32 &orderId,const bool &value)
+void ServerCatchcopy::protocolSupported(const uint32_t &client,const uint32_t &orderId,const bool &value)
 {
     if(value)
         reply(client,orderId,1000,"protocol supported");
@@ -626,27 +636,27 @@ void ServerCatchcopy::protocolSupported(const quint32 &client,const quint32 &ord
         reply(client,orderId,5003,"protocol not supported");
 }
 
-void ServerCatchcopy::incorrectArgumentListSize(const quint32 &client,const quint32 &orderId)
+void ServerCatchcopy::incorrectArgumentListSize(const uint32_t &client,const uint32_t &orderId)
 {
     reply(client,orderId,5000,"incorrect argument list size");
 }
 
-void ServerCatchcopy::incorrectArgument(const quint32 &client,const quint32 &orderId)
+void ServerCatchcopy::incorrectArgument(const uint32_t &client,const uint32_t &orderId)
 {
     reply(client,orderId,5001,"incorrect argument");
 }
 
-void ServerCatchcopy::clientRegistered(const quint32 &client,const quint32 &orderId)
+void ServerCatchcopy::clientRegistered(const uint32_t &client,const uint32_t &orderId)
 {
     reply(client,orderId,1003,"client registered");
 }
 
-void ServerCatchcopy::serverName(const quint32 &client,const quint32 &orderId,const QString &name)
+void ServerCatchcopy::serverName(const uint32_t &client,const uint32_t &orderId,const std::string &name)
 {
     reply(client,orderId,1004,name);
 }
 
-void ServerCatchcopy::copyFinished(const quint32 &client,const quint32 &orderId,const bool &withError)
+void ServerCatchcopy::copyFinished(const uint32_t &client,const uint32_t &orderId,const bool &withError)
 {
     if(!withError)
         reply(client,orderId,1005,"finished");
@@ -654,12 +664,12 @@ void ServerCatchcopy::copyFinished(const quint32 &client,const quint32 &orderId,
         reply(client,orderId,1006,"finished with error(s)");
 }
 
-void ServerCatchcopy::copyCanceled(const quint32 &client,const quint32 &orderId)
+void ServerCatchcopy::copyCanceled(const uint32_t &client,const uint32_t &orderId)
 {
     reply(client,orderId,1007,"canceled");
 }
 
-void ServerCatchcopy::unknowOrder(const quint32 &client,const quint32 &orderId)
+void ServerCatchcopy::unknowOrder(const uint32_t &client,const uint32_t &orderId)
 {
     reply(client,orderId,5002,"unknown order");
 }
@@ -692,7 +702,7 @@ void ServerCatchcopy::checkTimeOut()
     }
 }
 
-quint32 ServerCatchcopy::incrementOrderId()
+uint32_t ServerCatchcopy::incrementOrderId()
 {
     do
     {
