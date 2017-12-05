@@ -11,9 +11,8 @@ function compil {
 	ULTIMATE=$8
 	FORPLUGIN=$9
 	STATIC=${10}
-	CGMINER=${11}
-	SUPERCOPIER=${12}
-    ILLEGAL=${13}
+	SUPERCOPIER=${11}
+	ILLEGAL=${12}
 	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
@@ -77,18 +76,6 @@ function compil {
         else
 
                 find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
-        fi
-        if [ $CGMINER -eq 1 ]
-        then
-                find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_CGMINER/#define ULTRACOPIER_CGMINER/g" {} \; > /dev/null 2>&1
-            if [ $ILLEGAL -eq 1 ]
-            then
-                    find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_ILLEGAL/#define ULTRACOPIER_ILLEGAL/g" {} \; > /dev/null 2>&1
-            else
-                    find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_ILLEGAL/\/\/#define ULTRACOPIER_ILLEGAL/g" {} \; > /dev/null 2>&1
-            fi
-        else
-                find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_CGMINER/\/\/#define ULTRACOPIER_CGMINER/g" {} \; > /dev/null 2>&1
         fi
 	if [ $ULTIMATE -eq 1 ]
 	then

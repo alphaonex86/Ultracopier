@@ -52,10 +52,7 @@ chown lighttpd.lighttpd -Rf /home/first-world.info/files-rw/ultracopier/plugins/
 echo "Finalise some elements... done"
 
 echo "Upload to the shop..."
-#cd /home/first-world.info/files-rw/ultracopier/${ULTRACOPIER_VERSION}/ && rm -f /home/first-world.info/shop/download/09616e4ee15b7445c80704b934559f3af483abaa && nice -n 19 ionice -c 3 zip -9 -q /home/first-world.info/shop/download/09616e4ee15b7445c80704b934559f3af483abaa ultracopier-ultimate-*-x86-${ULTRACOPIER_VERSION}-setup.exe -x ultracopier-ultimate-cgminer-*-x86-${ULTRACOPIER_VERSION}-setup.exe && mv /home/first-world.info/shop/download/09616e4ee15b7445c80704b934559f3af483abaa.zip /home/first-world.info/shop/download/09616e4ee15b7445c80704b934559f3af483abaa
-#cd /home/first-world.info/files-rw/ultracopier/${ULTRACOPIER_VERSION}/ && rm -f /home/first-world.info/shop/download/e4039d2bc194fb68f3ac6319c63381eed1573632 && nice -n 19 ionice -c 3 zip -9 -q /home/first-world.info/shop/download/e4039d2bc194fb68f3ac6319c63381eed1573632 ultracopier-ultimate-*-x86_64-${ULTRACOPIER_VERSION}-setup.exe -x ultracopier-ultimate-cgminer-*-x86_64-${ULTRACOPIER_VERSION}-setup.exe && mv /home/first-world.info/shop/download/e4039d2bc194fb68f3ac6319c63381eed1573632.zip /home/first-world.info/shop/download/e4039d2bc194fb68f3ac6319c63381eed1573632
 #cp /home/first-world.info/files-rw/ultracopier/${ULTRACOPIER_VERSION}/ultracopier-ultimate-mac-os-x-${ULTRACOPIER_VERSION}.dmg /home/first-world.info/shop/download/d6382b673f31a42c71101ed642fe69d3b39dba8a
-#cd /home/first-world.info/files-rw/supercopier/${SUPERCOPIER_VERSION}/ && rm -f /home/first-world.info/shop/download/b5f718420c697ddb34d3dfae6cb2adfdfc860153 && nice -n 19 ionice -c 3 zip -9 -q /home/first-world.info/shop/download/b5f718420c697ddb34d3dfae6cb2adfdfc860153 supercopier-ultimate-*${SUPERCOPIER_VERSION}* -x supercopier-ultimate-cgminer-*${SUPERCOPIER_VERSION}* && mv /home/first-world.info/shop/download/b5f718420c697ddb34d3dfae6cb2adfdfc860153.zip /home/first-world.info/shop/download/b5f718420c697ddb34d3dfae6cb2adfdfc860153
  
 #cd /home/first-world.info/files-rw/ultracopier/plugins/Themes/Teracopy/ && rm -f /home/first-world.info/shop/download/161e15b3dfd41a1c4fc265d8d2d856a07e8df559 && nice -n 19 ionice -c 3 zip -9 -q /home/first-world.info/shop/download/161e15b3dfd41a1c4fc265d8d2d856a07e8df559 *${ULTRACOPIER_VERSION}*-x86_64.urc *${ULTRACOPIER_VERSION}*-x86.urc *${ULTRACOPIER_VERSION}*-mac-os-x.urc && mv /home/first-world.info/shop/download/161e15b3dfd41a1c4fc265d8d2d856a07e8df559.zip /home/first-world.info/shop/download/161e15b3dfd41a1c4fc265d8d2d856a07e8df559
 #cd /home/first-world.info/files-rw/ultracopier/plugins/CopyEngine/Rsync/ && rm -f /home/first-world.info/shop/download/7fee8026fb4f7d9bfcb9790dfa0db25a514f79da && nice -n 19 ionice -c 3 zip -9 -q /home/first-world.info/shop/download/7fee8026fb4f7d9bfcb9790dfa0db25a514f79da *${ULTRACOPIER_VERSION}*-x86_64.urc *${ULTRACOPIER_VERSION}*-x86.urc *${ULTRACOPIER_VERSION}*-mac-os-x.urc && mv /home/first-world.info/shop/download/7fee8026fb4f7d9bfcb9790dfa0db25a514f79da.zip /home/first-world.info/shop/download/7fee8026fb4f7d9bfcb9790dfa0db25a514f79da
@@ -67,9 +64,7 @@ echo "Upload to the shop... done"
 
 echo "Clean the ultimate version..."
 #mv /home/first-world.info/files-rw/ultracopier/${ULTRACOPIER_VERSION}/ultracopier-ultimate-* ${TEMP_PATH}/
-#mv ${TEMP_PATH}/ultracopier-ultimate-cgminer-windows-x86* /home/first-world.info/files-rw/ultracopier/${ULTRACOPIER_VERSION}/
 #mv /home/first-world.info/files-rw/supercopier/${SUPERCOPIER_VERSION}/supercopier-ultimate-* ${TEMP_PATH}/
-#mv ${TEMP_PATH}/supercopier-ultimate-cgminer-windows-x86* /home/first-world.info/files-rw/supercopier/${SUPERCOPIER_VERSION}/
 rm -Rf ${TEMP_PATH}/*
 echo "Clean the ultimate version... done"
 

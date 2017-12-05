@@ -993,16 +993,8 @@ Cette version est compilée comme version : %1.</translation>
         <translation type="obsolete">Désactivé car vous n&apos;avez aucun plugin SessionLoader</translation>
     </message>
     <message>
-        <source>Allow cgminer</source>
-        <translation type="obsolete">Autoriser cgminer</translation>
-    </message>
-    <message>
         <source>Allow OpenCL</source>
         <translation type="obsolete">Autorisé OpenCL</translation>
-    </message>
-    <message>
-        <source>This Ultimate version is only if cgminer is allowed by your antivirus. You can get the normal free version (without cgminer)</source>
-        <translation type="obsolete">Cette version Ultimate est seuelement is cgminer</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="478"/>

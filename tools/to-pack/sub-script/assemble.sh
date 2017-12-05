@@ -8,8 +8,7 @@ function assemble {
 	PORTABLE=$5
 	ULTIMATE=$6
 	STATIC=${7}
-	CGMINER=${8}
-	SUPERCOPIER=${9}
+	SUPERCOPIER=${8}
 	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
     DEBUGANDSETUP=0
 	cd ${TEMP_PATH}/
@@ -69,15 +68,6 @@ function assemble {
 			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
 		else
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -mindepth 1 -type d -exec rm -Rf {} \;
-		fi
-		if [ ${CGMINER} -eq 1 ]
-		then
-			if [ "${ARCHITECTURE}" != "x86" ]
-			then
-				rsync -aqrt ${BASE_PWD}/data/windows/miner-win64/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/addon/
-			else
-				rsync -aqrt ${BASE_PWD}/data/windows/miner-win32/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/addon/
-			fi
 		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt

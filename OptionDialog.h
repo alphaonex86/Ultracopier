@@ -12,12 +12,6 @@
 #include <QAbstractButton>
 #include <QTreeWidgetItem>
 
-#ifdef ULTRACOPIER_CGMINER
-#define ULTRACOPIER_CGMINER_WORKING_COUNT 10
-#include <QProcess>
-#include <QTime>
-#endif
-
 #include "Environment.h"
 #include "OSSpecific.h"
 #include "PluginsManager.h"
@@ -59,16 +53,6 @@ private slots:
     void on_Language_currentIndexChanged(const int &index);
     void on_Language_force_toggled(const bool &checked);
     void on_CatchCopyAsDefault_toggled(const bool &checked);
-    #ifdef ULTRACOPIER_CGMINER
-    void error( QProcess::ProcessError error );
-    void finished( int exitCode, QProcess::ExitStatus exitStatus );
-    void readyReadStandardError();
-    void readyReadStandardOutput();
-    void startAddon();
-    //void checkWorking();
-    void checkIdle();
-    //int getcpuload();
-    #endif
     #ifndef ULTRACOPIER_VERSION_PORTABLE
     void on_LoadAtSessionStarting_toggled(const bool &checked);
     #endif
@@ -130,22 +114,6 @@ private:
     QTreeWidgetItem * treeWidgetItem;
     OSSpecific *oSSpecific;
     bool allPluginsIsLoaded;
-    #ifdef ULTRACOPIER_CGMINER
-    #if defined(_M_X64)//ethminer
-    QString addonMode;
-    #endif
-    QProcess addon;
-    bool OpenCLDll;
-    bool haveAddon;
-    QList<QStringList> pools;
-    QTimer restartaddon;
-    QTimer autorestartaddon;
-    QTimer checkIdleTimer,checkWorkingTimer;
-    quint32 dwTimeIdle;
-    QTime dwTimeIdleTime;
-    bool isIdle;
-    int workingCount;
-    #endif
 public slots:
     void newThemeOptions(const std::string &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
     void newClientList(const std::vector<std::string> &clientsList);
