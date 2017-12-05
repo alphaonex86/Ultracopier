@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <QObject>
 
 #include "../StructEnumDefinition.h"
 
