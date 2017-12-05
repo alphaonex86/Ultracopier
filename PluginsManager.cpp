@@ -618,6 +618,8 @@ bool PluginsManager::compareVersion(const std::string &versionA,const std::strin
 
 std::vector<PluginsAvailable> PluginsManager::getPluginsByCategory(const PluginType &category) const
 {
+    if(pluginsListIndexed.find(category)==pluginsListIndexed.cend())
+        return std::vector<PluginsAvailable>();
     return pluginsListIndexed.at(category);
 }
 
