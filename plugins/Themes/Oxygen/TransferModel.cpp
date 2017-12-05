@@ -1,4 +1,5 @@
 #include "TransferModel.h"
+#include "cpp11addition.h"
 
 #define COLUMN_COUNT 3
 
@@ -35,24 +36,24 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
     int row,column;
     row=index.row();
     column=index.column();
-    if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
+    if(index.parent()!=QModelIndex() || row < 0 || (unsigned int)row >= transfertItemList.size() || column < 0 || column >= COLUMN_COUNT)
         return QVariant();
 
     const TransfertItem& item = transfertItemList.at(row);
     if(role==Qt::UserRole)
-        return item.id;
+        return (quint64)item.id;
     else if(role==Qt::DisplayRole)
     {
         switch(column)
         {
             case 0:
-                return item.source;
+                return QString::fromStdString(item.source);
             break;
             case 1:
-                return item.size;
+                return QString::fromStdString(item.size);
             break;
             case 2:
-                return item.destination;
+                return QString::fromStdString(item.destination);
             break;
             default:
             return QVariant();
@@ -63,9 +64,9 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
         switch(column)
         {
             case 0:
-                if(stopId.contains(item.id))
+                if(stopId.find(item.id)!=stopId.cend())
                     return *stop;
-                else if(startId.contains(item.id))
+                else if(startId.find(item.id).cend())
                     return *start;
                 else
                     return QVariant();
@@ -76,7 +77,8 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
     }
     else if(role==Qt::BackgroundRole)
     {
-        if(!search_text.isEmpty() && (item.source.indexOf(search_text,0,Qt::CaseInsensitive)!=-1 || item.destination.indexOf(search_text,0,Qt::CaseInsensitive)!=-1))
+        if(!search_text.empty() && (item.source.find(search_text,0,Qt::CaseInsensitive)!=std::basic_string::npos ||
+                                    item.destination.find(search_text,0,Qt::CaseInsensitive)!=std::basic_string::npos))
         {
             if(haveSearchItem && searchId==item.id)
                 return QColor(255,150,150,100);
@@ -91,13 +93,13 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
 
 int TransferModel::rowCount( const QModelIndex& parent ) const
 {
-    return parent == QModelIndex() ? transfertItemList.count() : 0;
+    return parent == QModelIndex() ? transfertItemList.size() : 0;
 }
 
-quint64 TransferModel::firstId() const
+uint64_t TransferModel::firstId() const
 {
-    if(transfertItemList.count()>0)
-        return transfertItemList.first().id;
+    if(transfertItemList.size()>0)
+        return transfertItemList.front().id;
     else
         return 0;
 }
@@ -109,11 +111,11 @@ QVariant TransferModel::headerData( int section, Qt::Orientation orientation, in
     if ( role == Qt::DisplayRole && orientation == Qt::Horizontal && section >= 0 && section < COLUMN_COUNT ) {
         switch ( section ) {
             case 0:
-            return facilityEngine->translateText(QStringLiteral("Source"));
+            return QString::fromStdString(facilityEngine->translateText("Source"));
             case 1:
-            return facilityEngine->translateText(QStringLiteral("Size"));
+            return QString::fromStdString(facilityEngine->translateText("Size"));
             case 2:
-            return facilityEngine->translateText(QStringLiteral("Destination"));
+            return QString::fromStdString(facilityEngine->translateText("Destination"));
         }
     }
 
@@ -124,7 +126,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
 {
     row=index.row();
     column=index.column();
-    if(index.parent()!=QModelIndex() || row < 0 || row >= transfertItemList.count() || column < 0 || column >= COLUMN_COUNT)
+    if(index.parent()!=QModelIndex() || row < 0 || (unsigned int)row >= transfertItemList.size() || column < 0 || column >= COLUMN_COUNT)
         return false;
 
     TransfertItem& item = transfertItemList[row];
@@ -138,17 +140,17 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
         switch(column)
         {
             case 0:
-                item.source=value.toString();
+                item.source=value.toString().toStdString();
                 emit dataChanged(index,index);
                 return true;
             break;
             case 1:
-                item.size=value.toString();
+                item.size=value.toString().toStdString();
                 emit dataChanged(index,index);
                 return true;
             break;
             case 2:
-                item.destination=value.toString();
+                item.destination=value.toString().toStdString();
                 emit dataChanged(index,index);
                 return true;
             break;
@@ -164,7 +166,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
   Return[1]: totalSize
   Return[2]: currentFile
   */
-QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnActionOnCopyList>& returnActions)
+std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracopier::ReturnActionOnCopyList>& returnActions)
 {
     const QModelIndexList oldIndexes = persistentIndexList();
     QModelIndexList newIndexes=oldIndexes;
@@ -191,7 +193,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 newItem.source=action.addAction.sourceFullPath;
                 newItem.size=facilityEngine->sizeToString(action.addAction.size);
                 newItem.destination=action.addAction.destinationFullPath;
-                transfertItemList<<newItem;
+                transfertItemList.push_back(newItem);
                 totalFile++;
                 totalSize+=action.addAction.size;
             }
@@ -201,27 +203,27 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 //bool current_entry=
                 if(action.userAction.position<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 if(action.userAction.position>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 if(action.userAction.moveAt<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 if(action.userAction.moveAt>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 if(action.userAction.position==action.userAction.moveAt)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, move at same position: %2").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, move at same position: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 transfertItemList.move(action.userAction.position,action.userAction.moveAt);
@@ -234,12 +236,12 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                     currentIndexSearch--;
                 if(action.userAction.position<0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 if(action.userAction.position>(transfertItemList.size()-1))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
                 transfertItemList.removeAt(action.userAction.position);
@@ -268,7 +270,7 @@ QList<quint64> TransferModel::synchronizeItems(const QList<Ultracopier::ReturnAc
                 if(internalRunningOperation.contains(action.addAction.id))
                     internalRunningOperation[action.addAction.id].actionType=action.type;
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to found entry for file %1: actionType: Transfer").arg(action.addAction.id));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to found entry for file %1: actionType: Transfer").arg(action.addAction.id).toStdString());
             }
             break;
             case Ultracopier::PostOperation:
