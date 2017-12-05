@@ -48,6 +48,11 @@ EventDispatcher::EventDispatcher()
     qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
     qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
+    qRegisterMetaType<std::string>("std::string");
+    qRegisterMetaType<uint64_t>("uint64_t");
+    qRegisterMetaType<std::vector<Ultracopier::ProgressionItem> >("std::vector<Ultracopier::ProgressionItem>");
+    qRegisterMetaType<std::vector<Ultracopier::ReturnActionOnCopyList> >("std::vector<Ultracopier::ReturnActionOnCopyList>");
+    qRegisterMetaType<std::vector<std::string> >("std::vector<std::string>");
 
     copyServer=new CopyListener(&optionDialog);
     connect(&localListener, &LocalListener::cli,                    &cliParser,     &CliParser::cli,Qt::QueuedConnection);

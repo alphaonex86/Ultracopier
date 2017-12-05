@@ -33,6 +33,7 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<QList<Diskspace> >("QList<Diskspace>");
     qRegisterMetaType<QFileInfo>("QFileInfo");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
+    qRegisterMetaType<std::vector<Filters_rules> >("std::vector<Filters_rules>");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);

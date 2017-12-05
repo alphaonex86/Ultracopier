@@ -342,6 +342,7 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
     emit layoutChanged();
     {
         std::vector<uint64_t> newList;
+        newList.resize(3);
         newList[0]=totalFile;
         newList[1]=totalSize;
         newList[2]=currentFile;
