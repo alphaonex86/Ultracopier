@@ -122,7 +122,8 @@ SOURCES += ThemesManager.cpp \
     OSSpecific.cpp \
     cpp11addition.cpp \
     DebugModel.cpp \
-    InternetUpdater.cpp
+    InternetUpdater.cpp \
+    cpp11additionstringtointcpp.cpp
 INCLUDEPATH += lib/qt-tar-xz/
 
 OTHER_FILES += resources/resources-windows.rc

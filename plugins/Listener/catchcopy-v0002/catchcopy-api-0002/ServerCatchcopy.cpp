@@ -449,9 +449,9 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         if(returnList.size()<3)
             return WrongArgumentListSize;
         std::vector<std::string> sourceList=returnList;
-        sourceList.removeFirst();
-        sourceList.removeLast();
-        emitNewCopy(client,orderId,sourceList,returnList.last());
+        sourceList.erase(sourceList.cbegin());
+        sourceList.erase(sourceList.cend());
+        emitNewCopy(client,orderId,sourceList,returnList.back());
         return Ok;
     }
     else if(firstArgument=="cp-?")
@@ -459,7 +459,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         if(returnList.size()<2)
             return WrongArgumentListSize;
         std::vector<std::string> sourceList=returnList;
-        sourceList.removeFirst();
+        sourceList.erase(sourceList.cbegin());
         emitNewCopyWithoutDestination(client,orderId,sourceList);
         return Ok;
     }
@@ -468,9 +468,9 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         if(returnList.size()<3)
             return WrongArgumentListSize;
         std::vector<std::string> sourceList=returnList;
-        sourceList.removeFirst();
-        sourceList.removeLast();
-        emitNewMove(client,orderId,sourceList,returnList.last());
+        sourceList.erase(sourceList.cbegin());
+        sourceList.erase(sourceList.cend());
+        emitNewMove(client,orderId,sourceList,returnList.back());
         return Ok;
     }
     else if(firstArgument=="mv-?")
@@ -478,7 +478,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
         if(returnList.size()<2)
             return WrongArgumentListSize;
         std::vector<std::string> sourceList=returnList;
-        sourceList.removeFirst();
+        sourceList.erase(sourceList.cbegin());
         emitNewMoveWithoutDestination(client,orderId,sourceList);
         return Ok;
     }
@@ -560,7 +560,9 @@ void ServerCatchcopy::copyCanceled(const uint32_t &globalOrderId)
 
 void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const uint32_t &returnCode,const std::string &returnString)
 {
-    reply(client,orderId,returnCode,std::vector<std::string>() << returnString);
+    std::vector<std::string> returnList;
+    returnList.push_back(returnString);
+    reply(client,orderId,returnCode,returnList);
 }
 
 void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const uint32_t &returnCode,const std::vector<std::string> &returnList)
@@ -585,7 +587,16 @@ void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const
                 out << int(0);
                 out << orderId;
                 out << returnCode;
-                out << returnList;
+                QStringList returnListQt;
+                {
+                    unsigned int index=0;
+                    while(index<returnList.size())
+                    {
+                        returnListQt << QString::fromStdString(returnList.at(index));
+                        index++;
+                    }
+                }
+                out << returnListQt;
                 out.device()->seek(0);
                 out << block.size();
                 do
@@ -603,7 +614,7 @@ void ServerCatchcopy::reply(const uint32_t &client,const uint32_t &orderId,const
                     }
                     if(clientList[index].socket->error()!=QLocalSocket::UnknownSocketError && clientList[index].socket->error()!=QLocalSocket::PeerClosedError)
                     {
-                        error_string="Error with socket: "+clientList[index].socket->errorString();
+                        error_string="Error with socket: "+clientList[index].socket->errorString().toStdString();
                         emit error(error_string);
                         return;
                     }
@@ -690,7 +701,7 @@ void ServerCatchcopy::checkTimeOut()
             clientList.at(index).detectTimeOut->stop();
             if(clientList.at(index).haveData)
             {
-                error_string="The client is too long to send the next part of the reply: "+clientList.at(index).data;
+                error_string="The client is too long to send the next part of the reply: "+QString(clientList.at(index).data.toHex()).toStdString();
                 clientList[index].haveData=false;
                 clientList[index].data.clear();
                 clientList.at(index).socket->disconnectFromServer();
