@@ -59,8 +59,8 @@ private:
     std::string lineReturn;
     std::string replaceBaseVar(std::string text);
     #ifdef Q_OS_WIN32
-    QString computer;
-    QString user;
+    std::string computer;
+    std::string user;
     #endif
     bool sync;
     bool enabled;

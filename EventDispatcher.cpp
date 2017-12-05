@@ -73,7 +73,7 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //show the ultracopier information
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Windows version: "+std::string(GetOSDisplayString()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Windows version: "+GetOSDisplayString());
     #endif
     #ifdef __STDC_VERSION__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__STDC_VERSION__: "+std::to_string(__STDC_VERSION__));
@@ -285,7 +285,7 @@ void EventDispatcher::initFunction()
 }
 
 #ifdef Q_OS_WIN32
-QString EventDispatcher::GetOSDisplayString()
+std::string EventDispatcher::GetOSDisplayString()
 {
    QString Os;
    OSVERSIONINFOEX osvi;
@@ -302,7 +302,7 @@ QString EventDispatcher::GetOSDisplayString()
    bOsVersionInfoEx = GetVersionEx((OSVERSIONINFO*) &osvi);
 
    if(bOsVersionInfoEx == NULL)
-        return QStringLiteral("Os detection blocked");
+        return "Os detection blocked";
 
    // Call GetNativeSystemInfo if supported or GetSystemInfo otherwise.
 
@@ -498,12 +498,12 @@ QString EventDispatcher::GetOSDisplayString()
            Os+=QStringLiteral("Windows (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
        else Os+=QStringLiteral("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
     }
-    return Os;
+    return Os.toStdString();
 }
 #endif
 
 #ifdef Q_OS_MAC
-QString EventDispatcher::GetOSDisplayString()
+std::string EventDispatcher::GetOSDisplayString()
 {
         QStringList key;
     QStringList string;
@@ -517,12 +517,12 @@ QString EventDispatcher::GetOSDisplayString()
         int errorColumn;
         QDomDocument domDocument;
         if (!domDocument.setContent(content, false, &errorStr,&errorLine,&errorColumn))
-            return QStringLiteral("Mac OS X");
+            return "Mac OS X";
         else
         {
             QDomElement root = domDocument.documentElement();
             if(root.tagName()!=QStringLiteral("plist"))
-                return QStringLiteral("Mac OS X");
+                return "Mac OS X";
             else
             {
                 if(root.isElement())
@@ -538,7 +538,7 @@ QString EventDispatcher::GetOSDisplayString()
                                 if(SubChild2.isElement())
                                     key << SubChild2.text();
                                 else
-                                    return QStringLiteral("Mac OS X");
+                                    return "Mac OS X";
                                 SubChild2 = SubChild2.nextSiblingElement(QStringLiteral("key"));
                             }
                             SubChild2=SubChild.firstChildElement(QStringLiteral("string"));
@@ -547,29 +547,29 @@ QString EventDispatcher::GetOSDisplayString()
                                 if(SubChild2.isElement())
                                     string << SubChild2.text();
                                 else
-                                    return QStringLiteral("Mac OS X");
+                                    return "Mac OS X";
                                 SubChild2 = SubChild2.nextSiblingElement(QStringLiteral("string"));
                             }
                         }
                         else
-                            return QStringLiteral("Mac OS X");
+                            return "Mac OS X";
                         SubChild = SubChild.nextSiblingElement(QStringLiteral("property"));
                     }
                 }
                 else
-                    return QStringLiteral("Mac OS X");
+                    return "Mac OS X";
             }
         }
     }
     if(key.size()!=string.size())
-        return QStringLiteral("Mac OS X");
+        return "Mac OS X";
     int index=0;
     while(index<key.size())
     {
         if(key.at(index)==QStringLiteral("ProductVersion"))
-            return QStringLiteral("Mac OS X ")+string.at(index);
+            return "Mac OS X "+string.at(index).toStdString();
         index++;
     }
-    return QStringLiteral("Mac OS X");
+    return "Mac OS X";
 }
 #endif

@@ -34,7 +34,7 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
     if(GetUserNameW(userNameW,&size))
     {
         userName=QString::fromWCharArray(userNameW,size-1);
-        blackList << QFileInfo(QStringLiteral("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath();
+        blackList.push_back(QFileInfo(QStringLiteral("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath().toStdString());
     }
     delete userNameW;
     #endif

@@ -1642,7 +1642,7 @@ bool ListThread::needMoreSpace() const
                 }
                 #ifdef Q_OS_WIN32
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("not local drive"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"not local drive");
                 #endif
             }
         #ifdef Q_OS_WIN32

@@ -237,7 +237,7 @@ void SystrayIcon::updateSystrayIcon()
     }
     QIcon theNewSystrayIcon;
     #ifdef Q_OS_WIN32
-    theNewSystrayIcon=ThemesManager::themesManager->loadIcon(SystemTrayIcon/systray_"+icon+"_Windows.png");
+    theNewSystrayIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/systray_"+icon+"_Windows.png");
     #else
     theNewSystrayIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/systray_"+icon+"_Unix.png");
     #endif
@@ -527,7 +527,7 @@ void SystrayIcon::reloadEngineList()
         systrayMenu->insertAction(actionOptions,copy);
         #endif
         #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
-        if(!frontEngine.canDoOnlyCopy)
+        if(!engineEntry.canDoOnlyCopy)
         {
             connect(copyMenu,&QMenu::triggered,this,&SystrayIcon::CatchTransferQuery);
 

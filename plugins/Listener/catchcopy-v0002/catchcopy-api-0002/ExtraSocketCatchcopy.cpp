@@ -16,7 +16,7 @@ const std::string ExtraSocketCatchcopy::pathSocket()
     DWORD len=1023;
     if(GetUserNameA(uname, &len)!=FALSE)
         userName=QString::fromLatin1(toHex(uname));
-    return "advanced-copier-"+userName;
+    return "advanced-copier-"+userName.toStdString();
 #endif
 }
 
