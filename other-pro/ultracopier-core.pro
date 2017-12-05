@@ -4,126 +4,126 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 TEMPLATE = app
 QT += network xml widgets
-TRANSLATIONS += plugins/Languages/ar/translation.ts \
-    plugins/Languages/de/translation.ts \
-    plugins/Languages/el/translation.ts \
-    resources/Languages/en/translation.ts \
-    plugins/Languages/es/translation.ts \
-    plugins/Languages/fr/translation.ts \
-    plugins/Languages/hi/translation.ts \
-    plugins/Languages/hu/translation.ts \
-    plugins/Languages/id/translation.ts \
-    plugins/Languages/it/translation.ts \
-    plugins/Languages/ja/translation.ts \
-    plugins/Languages/ko/translation.ts \
-    plugins/Languages/nl/translation.ts \
-    plugins/Languages/no/translation.ts \
-    plugins/Languages/pl/translation.ts \
-    plugins/Languages/pt/translation.ts \
-    plugins/Languages/ru/translation.ts \
-    plugins/Languages/th/translation.ts \
-    plugins/Languages/tr/translation.ts \
-    plugins/Languages/zh/translation.ts \
-    plugins/Languages/zh_TW/translation.ts
+TRANSLATIONS += $$PWD/../plugins/Languages/ar/translation.ts \
+    $$PWD/../plugins/Languages/de/translation.ts \
+    $$PWD/../plugins/Languages/el/translation.ts \
+    $$PWD/../resources/Languages/en/translation.ts \
+    $$PWD/../plugins/Languages/es/translation.ts \
+    $$PWD/../plugins/Languages/fr/translation.ts \
+    $$PWD/../plugins/Languages/hi/translation.ts \
+    $$PWD/../plugins/Languages/hu/translation.ts \
+    $$PWD/../plugins/Languages/id/translation.ts \
+    $$PWD/../plugins/Languages/it/translation.ts \
+    $$PWD/../plugins/Languages/ja/translation.ts \
+    $$PWD/../plugins/Languages/ko/translation.ts \
+    $$PWD/../plugins/Languages/nl/translation.ts \
+    $$PWD/../plugins/Languages/no/translation.ts \
+    $$PWD/../plugins/Languages/pl/translation.ts \
+    $$PWD/../plugins/Languages/pt/translation.ts \
+    $$PWD/../plugins/Languages/ru/translation.ts \
+    $$PWD/../plugins/Languages/th/translation.ts \
+    $$PWD/../plugins/Languages/tr/translation.ts \
+    $$PWD/../plugins/Languages/zh/translation.ts \
+    $$PWD/../plugins/Languages/zh_TW/translation.ts
 
 TARGET = ultracopier
 macx {
-    ICON = resources/ultracopier.icns
+    ICON = $$PWD/../resources/ultracopier.icns
     #QT += macextras
 }
-FORMS += HelpDialog.ui \
-    PluginInformation.ui \
-    OptionDialog.ui \
-    OSSpecific.ui
+FORMS += $$PWD/../HelpDialog.ui \
+    $$PWD/../PluginInformation.ui \
+    $$PWD/../OptionDialog.ui \
+    $$PWD/../OSSpecific.ui
 RESOURCES += \
-    resources/ultracopier-resources.qrc \
-    resources/ultracopier-resources_unix.qrc \
-    resources/ultracopier-resources_windows.qrc
+    $$PWD/../resources/ultracopier-resources.qrc \
+    $$PWD/../resources/ultracopier-resources_unix.qrc \
+    $$PWD/../resources/ultracopier-resources_windows.qrc
 win32 {
-    RESOURCES += resources/resources-windows-qt-plugin.qrc
-    RC_FILE += resources/resources-windows.rc
+    RESOURCES += $$PWD/../resources/resources-windows-qt-plugin.qrc
+    RC_FILE += $$PWD/../resources/resources-windows.rc
     #LIBS += -lpdh
         LIBS += -ladvapi32
 }
 
-HEADERS += ResourcesManager.h \
-    ThemesManager.h \
-    SystrayIcon.h \
-    StructEnumDefinition.h \
-    EventDispatcher.h \
-    Environment.h \
-    DebugEngine.h \
-    Core.h \
-    OptionEngine.h \
-    HelpDialog.h \
-    PluginsManager.h \
-    LanguagesManager.h \
-    DebugEngineMacro.h \
-    PluginInformation.h \
-    lib/qt-tar-xz/xz.h \
-    lib/qt-tar-xz/QXzDecodeThread.h \
-    lib/qt-tar-xz/QXzDecode.h \
-    lib/qt-tar-xz/QTarDecode.h \
-    SessionLoader.h \
-    ExtraSocket.h \
-    CopyListener.h \
-    CopyEngineManager.h \
-    PlatformMacro.h \
-    interface/PluginInterface_Themes.h \
-    interface/PluginInterface_SessionLoader.h \
-    interface/PluginInterface_Listener.h \
-    interface/PluginInterface_CopyEngine.h \
-    interface/OptionInterface.h \
-    Variable.h \
-    PluginLoader.h \
-    interface/PluginInterface_PluginLoader.h \
-    OptionDialog.h \
-    LocalPluginOptions.h \
-    LocalListener.h \
-    CliParser.h \
-    interface/FacilityInterface.h \
-    FacilityEngine.h \
-    LogThread.h \
-    CompilerInfo.h \
-    StructEnumDefinition_UltracopierSpecific.h \
-    OSSpecific.h \
-    cpp11addition.h \
-    InternetUpdater.h
-SOURCES += ThemesManager.cpp \
-    ResourcesManager.cpp \
-    main.cpp \
-    EventDispatcher.cpp \
-    SystrayIcon.cpp \
-    DebugEngine.cpp \
-    OptionEngine.cpp \
-    HelpDialog.cpp \
-    PluginsManager.cpp \
-    LanguagesManager.cpp \
-    PluginInformation.cpp \
-    lib/qt-tar-xz/QXzDecodeThread.cpp \
-    lib/qt-tar-xz/QXzDecode.cpp \
-    lib/qt-tar-xz/QTarDecode.cpp \
-    lib/qt-tar-xz/xz_crc32.c \
-    lib/qt-tar-xz/xz_dec_stream.c \
-    lib/qt-tar-xz/xz_dec_lzma2.c \
-    lib/qt-tar-xz/xz_dec_bcj.c \
-    SessionLoader.cpp \
-    ExtraSocket.cpp \
-    CopyListener.cpp \
-    CopyEngineManager.cpp \
-    Core.cpp \
-    PluginLoader.cpp \
-    OptionDialog.cpp \
-    LocalPluginOptions.cpp \
-    LocalListener.cpp \
-    CliParser.cpp \
-    FacilityEngine.cpp \
-    LogThread.cpp \
-    OSSpecific.cpp \
-    cpp11addition.cpp \
-    DebugModel.cpp \
-    InternetUpdater.cpp \
-    cpp11additionstringtointcpp.cpp
+HEADERS += $$PWD/../ResourcesManager.h \
+    $$PWD/../ThemesManager.h \
+    $$PWD/../SystrayIcon.h \
+    $$PWD/../StructEnumDefinition.h \
+    $$PWD/../EventDispatcher.h \
+    $$PWD/../Environment.h \
+    $$PWD/../DebugEngine.h \
+    $$PWD/../Core.h \
+    $$PWD/../OptionEngine.h \
+    $$PWD/../HelpDialog.h \
+    $$PWD/../PluginsManager.h \
+    $$PWD/../LanguagesManager.h \
+    $$PWD/../DebugEngineMacro.h \
+    $$PWD/../PluginInformation.h \
+    $$PWD/../lib/qt-tar-xz/xz.h \
+    $$PWD/../lib/qt-tar-xz/QXzDecodeThread.h \
+    $$PWD/../lib/qt-tar-xz/QXzDecode.h \
+    $$PWD/../lib/qt-tar-xz/QTarDecode.h \
+    $$PWD/../SessionLoader.h \
+    $$PWD/../ExtraSocket.h \
+    $$PWD/../CopyListener.h \
+    $$PWD/../CopyEngineManager.h \
+    $$PWD/../PlatformMacro.h \
+    $$PWD/../interface/PluginInterface_Themes.h \
+    $$PWD/../interface/PluginInterface_SessionLoader.h \
+    $$PWD/../interface/PluginInterface_Listener.h \
+    $$PWD/../interface/PluginInterface_CopyEngine.h \
+    $$PWD/../interface/OptionInterface.h \
+    $$PWD/../Variable.h \
+    $$PWD/../PluginLoader.h \
+    $$PWD/../interface/PluginInterface_PluginLoader.h \
+    $$PWD/../OptionDialog.h \
+    $$PWD/../LocalPluginOptions.h \
+    $$PWD/../LocalListener.h \
+    $$PWD/../CliParser.h \
+    $$PWD/../interface/FacilityInterface.h \
+    $$PWD/../FacilityEngine.h \
+    $$PWD/../LogThread.h \
+    $$PWD/../CompilerInfo.h \
+    $$PWD/../StructEnumDefinition_UltracopierSpecific.h \
+    $$PWD/../OSSpecific.h \
+    $$PWD/../cpp11addition.h \
+    $$PWD/../InternetUpdater.h
+SOURCES += $$PWD/../ThemesManager.cpp \
+    $$PWD/../ResourcesManager.cpp \
+    $$PWD/../main.cpp \
+    $$PWD/../EventDispatcher.cpp \
+    $$PWD/../SystrayIcon.cpp \
+    $$PWD/../DebugEngine.cpp \
+    $$PWD/../OptionEngine.cpp \
+    $$PWD/../HelpDialog.cpp \
+    $$PWD/../PluginsManager.cpp \
+    $$PWD/../LanguagesManager.cpp \
+    $$PWD/../PluginInformation.cpp \
+    $$PWD/../lib/qt-tar-xz/QXzDecodeThread.cpp \
+    $$PWD/../lib/qt-tar-xz/QXzDecode.cpp \
+    $$PWD/../lib/qt-tar-xz/QTarDecode.cpp \
+    $$PWD/../lib/qt-tar-xz/xz_crc32.c \
+    $$PWD/../lib/qt-tar-xz/xz_dec_stream.c \
+    $$PWD/../lib/qt-tar-xz/xz_dec_lzma2.c \
+    $$PWD/../lib/qt-tar-xz/xz_dec_bcj.c \
+    $$PWD/../SessionLoader.cpp \
+    $$PWD/../ExtraSocket.cpp \
+    $$PWD/../CopyListener.cpp \
+    $$PWD/../CopyEngineManager.cpp \
+    $$PWD/../Core.cpp \
+    $$PWD/../PluginLoader.cpp \
+    $$PWD/../OptionDialog.cpp \
+    $$PWD/../LocalPluginOptions.cpp \
+    $$PWD/../LocalListener.cpp \
+    $$PWD/../CliParser.cpp \
+    $$PWD/../FacilityEngine.cpp \
+    $$PWD/../LogThread.cpp \
+    $$PWD/../OSSpecific.cpp \
+    $$PWD/../cpp11addition.cpp \
+    $$PWD/../DebugModel.cpp \
+    $$PWD/../InternetUpdater.cpp \
+    $$PWD/../cpp11additionstringtointcpp.cpp
 INCLUDEPATH += lib/qt-tar-xz/
 
-OTHER_FILES += resources/resources-windows.rc
+OTHER_FILES += $$PWD/../resources/resources-windows.rc

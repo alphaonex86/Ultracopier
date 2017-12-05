@@ -2,10 +2,10 @@ DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
 
 include(ultracopier-core.pro)
 
-RESOURCES += plugins/static-plugins.qrc \
-    plugins/CopyEngine/Ultracopier/copyEngineResources.qrc
+RESOURCES += $$PWD/../plugins/static-plugins.qrc \
+    $$PWD/../plugins/CopyEngine/Ultracopier/copyEngineResources.qrc
 
-win32:RESOURCES += plugins/static-plugins-windows.qrc
+win32:RESOURCES += $$PWD/../plugins/static-plugins-windows.qrc
 
 LIBS           = -Lplugins -lcopyEngine -linterface -llistener
 win32:LIBS += -lpluginLoader -lsessionLoader
@@ -15,19 +15,19 @@ LIBS           = -Lplugins -lcopyEngined -linterfaced -llistenerd
 win32:LIBS += -lpluginLoaderd -lsessionLoaderd
 }
 
-HEADERS -= lib/qt-tar-xz/xz.h \
-    lib/qt-tar-xz/QXzDecodeThread.h \
-    lib/qt-tar-xz/QXzDecode.h \
-    lib/qt-tar-xz/QTarDecode.h \
-    AuthPlugin.h
-SOURCES -= lib/qt-tar-xz/QXzDecodeThread.cpp \
-    lib/qt-tar-xz/QXzDecode.cpp \
-    lib/qt-tar-xz/QTarDecode.cpp \
-    lib/qt-tar-xz/xz_crc32.c \
-    lib/qt-tar-xz/xz_dec_stream.c \
-    lib/qt-tar-xz/xz_dec_lzma2.c \
-    lib/qt-tar-xz/xz_dec_bcj.c \
-    AuthPlugin.cpp
-INCLUDEPATH -= lib/qt-tar-xz/
+HEADERS -= $$PWD/../lib/qt-tar-xz/xz.h \
+    $$PWD/../lib/qt-tar-xz/QXzDecodeThread.h \
+    $$PWD/../lib/qt-tar-xz/QXzDecode.h \
+    $$PWD/../lib/qt-tar-xz/QTarDecode.h \
+    $$PWD/../AuthPlugin.h
+SOURCES -= $$PWD/../lib/qt-tar-xz/QXzDecodeThread.cpp \
+    $$PWD/../lib/qt-tar-xz/QXzDecode.cpp \
+    $$PWD/../lib/qt-tar-xz/QTarDecode.cpp \
+    $$PWD/../lib/qt-tar-xz/xz_crc32.c \
+    $$PWD/../lib/qt-tar-xz/xz_dec_stream.c \
+    $$PWD/../lib/qt-tar-xz/xz_dec_lzma2.c \
+    $$PWD/../lib/qt-tar-xz/xz_dec_bcj.c \
+    $$PWD/../AuthPlugin.cpp
+INCLUDEPATH -= $$PWD/../lib/qt-tar-xz/
 
-RESOURCES -= resources/resources-windows-qt-plugin.qrc
+RESOURCES -= $$PWD/../resources/resources-windows-qt-plugin.qrc
