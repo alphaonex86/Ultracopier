@@ -5,6 +5,7 @@
 #include <QColorDialog>
 
 #include "ThemesFactory.h"
+#include "cpp11addition.h"
 
 ThemesFactory::ThemesFactory()
 {
@@ -25,7 +26,7 @@ ThemesFactory::~ThemesFactory()
 
 PluginInterface_Themes * ThemesFactory::getInstance()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, currentSpeed: %1").arg(currentSpeed));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, currentSpeed: "+std::to_string(currentSpeed));
 
     Themes * newInterface=new Themes(
                 ui->alwaysOnTop->isChecked(),
@@ -48,11 +49,11 @@ PluginInterface_Themes * ThemesFactory::getInstance()
     return newInterface;
 }
 
-void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
+void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::string &
                                  #ifdef ULTRACOPIER_PLUGIN_DEBUG
                                  writePath
                                  #endif
-                                 ,const QString &
+                                 ,const std::string &
                                  #ifdef ULTRACOPIER_PLUGIN_DEBUG
                                  pluginPath
                                  #endif
@@ -65,20 +66,20 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const QString &
     {
         this->optionsEngine=optionsEngine;
         //load the options
-        QList<QPair<QString, QVariant> > KeysList;
-        KeysList.append(qMakePair(QStringLiteral("checkBoxShowSpeed"),QVariant(false)));
-        KeysList.append(qMakePair(QStringLiteral("moreButtonPushed"),QVariant(false)));
-        KeysList.append(qMakePair(QStringLiteral("speedWithProgressBar"),QVariant(true)));
-        KeysList.append(qMakePair(QStringLiteral("currentSpeed"),QVariant(0)));
-        KeysList.append(qMakePair(QStringLiteral("comboBox_copyEnd"),QVariant(0)));
-        KeysList.append(qMakePair(QStringLiteral("showDualProgression"),QVariant(false)));
-        KeysList.append(qMakePair(QStringLiteral("showProgressionInTheTitle"),QVariant(true)));
-        KeysList.append(qMakePair(QStringLiteral("progressColorWrite"),QVariant(QApplication::palette().color(QPalette::Highlight))));
-        KeysList.append(qMakePair(QStringLiteral("progressColorRead"),QVariant(QApplication::palette().color(QPalette::AlternateBase))));
-        KeysList.append(qMakePair(QStringLiteral("progressColorRemaining"),QVariant(QApplication::palette().color(QPalette::Base))));
-        KeysList.append(qMakePair(QStringLiteral("alwaysOnTop"),QVariant(false)));
-        KeysList.append(qMakePair(QStringLiteral("minimizeToSystray"),QVariant(false)));
-        KeysList.append(qMakePair(QStringLiteral("startMinimized"),QVariant(false)));
+        std::vector<std::pair<std::string, std::string> > KeysList;
+        KeysList.push_back(std::pair<std::string, std::string>("checkBoxShowSpeed","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("moreButtonPushed","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("speedWithProgressBar","true"));
+        KeysList.push_back(std::pair<std::string, std::string>("currentSpeed","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("comboBox_copyEnd","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("showDualProgression","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("showProgressionInTheTitle","true"));
+        KeysList.push_back(std::pair<std::string, std::string>("progressColorWrite",QApplication::palette().color(QPalette::Highlight).name().toStdString()));
+        KeysList.push_back(std::pair<std::string, std::string>("progressColorRead",QApplication::palette().color(QPalette::AlternateBase).name().toStdString()));
+        KeysList.push_back(std::pair<std::string, std::string>("progressColorRemaining",QApplication::palette().color(QPalette::Base).name().toStdString()));
+        KeysList.push_back(std::pair<std::string, std::string>("alwaysOnTop","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("minimizeToSystray","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("startMinimized","false"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -95,22 +96,22 @@ QWidget * ThemesFactory::options()
     if(optionsEngine!=NULL)
     {
         bool ok;
-        currentSpeed=optionsEngine->getOptionValue(QStringLiteral("currentSpeed")).toUInt(&ok);
+        currentSpeed=stringtouint32(optionsEngine->getOptionValue("currentSpeed"),&ok);
         if(!ok)
             currentSpeed=0;
-        ui->comboBox_copyEnd->setCurrentIndex(optionsEngine->getOptionValue(QStringLiteral("comboBox_copyEnd")).toUInt());
-        ui->speedWithProgressBar->setChecked(optionsEngine->getOptionValue(QStringLiteral("speedWithProgressBar")).toBool());
-        ui->checkBoxShowSpeed->setChecked(optionsEngine->getOptionValue(QStringLiteral("checkBoxShowSpeed")).toBool());
-        ui->checkBoxStartWithMoreButtonPushed->setChecked(optionsEngine->getOptionValue(QStringLiteral("moreButtonPushed")).toBool());
-        ui->showDualProgression->setChecked(optionsEngine->getOptionValue(QStringLiteral("showDualProgression")).toBool());
-        ui->showProgressionInTheTitle->setChecked(optionsEngine->getOptionValue(QStringLiteral("showProgressionInTheTitle")).toBool());
-        ui->alwaysOnTop->setChecked(optionsEngine->getOptionValue(QStringLiteral("alwaysOnTop")).toBool());
-        ui->minimizeToSystray->setChecked(optionsEngine->getOptionValue(QStringLiteral("minimizeToSystray")).toBool());
-        ui->startMinimized->setChecked(optionsEngine->getOptionValue(QStringLiteral("startMinimized")).toBool());
+        ui->comboBox_copyEnd->setCurrentIndex(stringtouint32(optionsEngine->getOptionValue("comboBox_copyEnd")));
+        ui->speedWithProgressBar->setChecked(stringtobool(optionsEngine->getOptionValue("speedWithProgressBar")));
+        ui->checkBoxShowSpeed->setChecked(stringtobool(optionsEngine->getOptionValue("checkBoxShowSpeed")));
+        ui->checkBoxStartWithMoreButtonPushed->setChecked(stringtobool(optionsEngine->getOptionValue("moreButtonPushed")));
+        ui->showDualProgression->setChecked(stringtobool(optionsEngine->getOptionValue("showDualProgression")));
+        ui->showProgressionInTheTitle->setChecked(stringtobool(optionsEngine->getOptionValue("showProgressionInTheTitle")));
+        ui->alwaysOnTop->setChecked(stringtobool(optionsEngine->getOptionValue("alwaysOnTop")));
+        ui->minimizeToSystray->setChecked(stringtobool(optionsEngine->getOptionValue("minimizeToSystray")));
+        ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
 
-        progressColorWrite=optionsEngine->getOptionValue(QStringLiteral("progressColorWrite")).value<QColor>();
-        progressColorRead=optionsEngine->getOptionValue(QStringLiteral("progressColorRead")).value<QColor>();
-        progressColorRemaining=optionsEngine->getOptionValue(QStringLiteral("progressColorRemaining")).value<QColor>();
+        progressColorWrite=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorWrite"))).value<QColor>();
+        progressColorRead=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorRead"))).value<QColor>();
+        progressColorRemaining=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorRemaining"))).value<QColor>();
 
         QPixmap pixmap(75,20);
         pixmap.fill(progressColorWrite);
@@ -146,33 +147,33 @@ QWidget * ThemesFactory::options()
     return tempWidget;
 }
 
-QIcon ThemesFactory::getIcon(const QString &fileName) const
+QIcon ThemesFactory::getIcon(const std::string &fileName) const
 {
-    if(fileName==QStringLiteral("SystemTrayIcon/exit.png"))
+    if(fileName=="SystemTrayIcon/exit.png")
     {
-        QIcon tempIcon=QIcon::fromTheme(QStringLiteral("application-exit"));
+        QIcon tempIcon=QIcon::fromTheme("application-exit");
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    else if(fileName==QStringLiteral("SystemTrayIcon/add.png"))
+    else if(fileName=="SystemTrayIcon/add.png")
     {
-        QIcon tempIcon=QIcon::fromTheme(QStringLiteral("list-add"));
+        QIcon tempIcon=QIcon::fromTheme("list-add");
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    else if(fileName==QStringLiteral("SystemTrayIcon/informations.png"))
+    else if(fileName=="SystemTrayIcon/informations.png")
     {
-        QIcon tempIcon=QIcon::fromTheme(QStringLiteral("help-about"));
+        QIcon tempIcon=QIcon::fromTheme("help-about");
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    else if(fileName==QStringLiteral("SystemTrayIcon/options.png"))
+    else if(fileName=="SystemTrayIcon/options.png")
     {
-        QIcon tempIcon=QIcon::fromTheme(QStringLiteral("applications-system"));
+        QIcon tempIcon=QIcon::fromTheme("applications-system");
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    return QIcon(QStringLiteral(":/Themes/Oxygen/resources/")+fileName);
+    return QIcon(":/Themes/Oxygen/resources/"+QString::fromStdString(fileName));
 }
 
 void ThemesFactory::resetOptions()
@@ -185,7 +186,7 @@ void ThemesFactory::checkBoxShowSpeedHaveChanged(bool toggled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("checkBoxShowSpeed"),toggled);
+        optionsEngine->setOptionValue("checkBoxShowSpeed",std::to_string(toggled));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -194,7 +195,7 @@ void ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("moreButtonPushed"),toggled);
+        optionsEngine->setOptionValue("moreButtonPushed",std::to_string(toggled));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -203,7 +204,7 @@ void ThemesFactory::comboBox_copyEnd(int value)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("comboBox_copyEnd"),value);
+        optionsEngine->setOptionValue("comboBox_copyEnd",std::to_string(value));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -212,7 +213,7 @@ void ThemesFactory::speedWithProgressBar(bool toggled)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("speedWithProgressBar"),toggled);
+        optionsEngine->setOptionValue("speedWithProgressBar",std::to_string(toggled));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -237,7 +238,7 @@ void ThemesFactory::minimizeToSystray(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("minimizeToSystray"),checked);
+        optionsEngine->setOptionValue("minimizeToSystray",std::to_string(checked));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -246,7 +247,7 @@ void ThemesFactory::alwaysOnTop(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("alwaysOnTop"),checked);
+        optionsEngine->setOptionValue("alwaysOnTop",std::to_string(checked));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -255,7 +256,7 @@ void ThemesFactory::showDualProgression(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("showDualProgression"),checked);
+        optionsEngine->setOptionValue("showDualProgression",std::to_string(checked));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -264,7 +265,7 @@ void ThemesFactory::startMinimized(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("startMinimized"),checked);
+        optionsEngine->setOptionValue("startMinimized",std::to_string(checked));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -275,7 +276,7 @@ void ThemesFactory::on_SliderSpeed_valueChanged(int value)
         return;
     if(!ui->checkBoxShowSpeed->isChecked())
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("value: %1").arg(value));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"value: "+std::to_string(value));
     switch(value)
     {
         case 0:
@@ -298,7 +299,7 @@ void ThemesFactory::on_SliderSpeed_valueChanged(int value)
         break;
     }
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+        optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
     updateSpeed();
@@ -314,9 +315,9 @@ void ThemesFactory::uiUpdateSpeed()
         currentSpeed=0;
     else
         currentSpeed=ui->limitSpeed->value();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("emit newSpeedLimitation(%1)").arg(currentSpeed));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit newSpeedLimitation: "+std::to_string(currentSpeed));
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+        optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -333,12 +334,12 @@ void ThemesFactory::updateSpeed()
 
     if(ui->checkBoxShowSpeed->isChecked())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("checked, currentSpeed: %1").arg(currentSpeed));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"checked, currentSpeed: "+std::to_string(currentSpeed));
         ui->limitSpeed->setEnabled(false);
         if(currentSpeed==0)
         {
             ui->SliderSpeed->setValue(0);
-            ui->label_SpeedMaxValue->setText(facilityEngine->translateText("Unlimited"));
+            ui->label_SpeedMaxValue->setText(QString::fromStdString(facilityEngine->translateText("Unlimited")));
         }
         else if(currentSpeed<=1024)
         {
@@ -346,12 +347,12 @@ void ThemesFactory::updateSpeed()
             {
                 currentSpeed=1024;
                 if(optionsEngine!=NULL)
-                    optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+                    optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
             }
             ui->SliderSpeed->setValue(1);
-            ui->label_SpeedMaxValue->setText(facilityEngine->speedToString((double)(1024*1024)*1));
+            ui->label_SpeedMaxValue->setText(QString::fromStdString(facilityEngine->speedToString((double)(1024*1024)*1)));
         }
         else if(currentSpeed<=1024*4)
         {
@@ -359,12 +360,12 @@ void ThemesFactory::updateSpeed()
             {
                 currentSpeed=1024*4;
                 if(optionsEngine!=NULL)
-                    optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+                    optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
             }
             ui->SliderSpeed->setValue(2);
-            ui->label_SpeedMaxValue->setText(facilityEngine->speedToString((double)(1024*1024)*4));
+            ui->label_SpeedMaxValue->setText(QString::fromStdString(facilityEngine->speedToString((double)(1024*1024)*4)));
         }
         else if(currentSpeed<=1024*16)
         {
@@ -372,12 +373,12 @@ void ThemesFactory::updateSpeed()
             {
                 currentSpeed=1024*16;
                 if(optionsEngine!=NULL)
-                    optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+                    optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
             }
             ui->SliderSpeed->setValue(3);
-            ui->label_SpeedMaxValue->setText(facilityEngine->speedToString((double)(1024*1024)*16));
+            ui->label_SpeedMaxValue->setText(QString::fromStdString(facilityEngine->speedToString((double)(1024*1024)*16)));
         }
         else if(currentSpeed<=1024*64)
         {
@@ -385,12 +386,12 @@ void ThemesFactory::updateSpeed()
             {
                 currentSpeed=1024*64;
                 if(optionsEngine!=NULL)
-                    optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+                    optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
             }
             ui->SliderSpeed->setValue(4);
-            ui->label_SpeedMaxValue->setText(facilityEngine->speedToString((double)(1024*1024)*64));
+            ui->label_SpeedMaxValue->setText(QString::fromStdString(facilityEngine->speedToString((double)(1024*1024)*64)));
         }
         else
         {
@@ -398,12 +399,12 @@ void ThemesFactory::updateSpeed()
             {
                 currentSpeed=1024*128;
                 if(optionsEngine!=NULL)
-                    optionsEngine->setOptionValue(QStringLiteral("currentSpeed"),currentSpeed);
+                    optionsEngine->setOptionValue("currentSpeed",std::to_string(currentSpeed));
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
             }
             ui->SliderSpeed->setValue(5);
-            ui->label_SpeedMaxValue->setText(facilityEngine->speedToString((double)(1024*1024)*128));
+            ui->label_SpeedMaxValue->setText(QString::fromStdString(facilityEngine->speedToString((double)(1024*1024)*128)));
         }
     }
     else
@@ -426,7 +427,7 @@ void ThemesFactory::progressColorWrite_clicked()
     pixmap.fill(progressColorWrite);
     ui->progressColorWrite->setIcon(pixmap);
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("progressColorWrite"),progressColorWrite);
+        optionsEngine->setOptionValue("progressColorWrite",progressColorWrite.name().toStdString());
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -441,7 +442,7 @@ void ThemesFactory::progressColorRead_clicked()
     pixmap.fill(progressColorRead);
     ui->progressColorRead->setIcon(pixmap);
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("progressColorRead"),progressColorRead);
+        optionsEngine->setOptionValue("progressColorRead",progressColorRead.name().toStdString());
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -456,7 +457,7 @@ void ThemesFactory::progressColorRemaining_clicked()
     pixmap.fill(progressColorRemaining);
     ui->progressColorRemaining->setIcon(pixmap);
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("progressColorRemaining"),progressColorRemaining);
+        optionsEngine->setOptionValue("progressColorRemaining",progressColorRemaining.name().toStdString());
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
@@ -470,7 +471,7 @@ void ThemesFactory::updateProgressionColorBar()
 void ThemesFactory::setShowProgressionInTheTitle()
 {
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue(QStringLiteral("showProgressionInTheTitle"),ui->showProgressionInTheTitle->isChecked());
+        optionsEngine->setOptionValue("showProgressionInTheTitle",std::to_string(ui->showProgressionInTheTitle->isChecked()));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

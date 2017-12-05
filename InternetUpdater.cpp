@@ -46,9 +46,6 @@ void InternetUpdater::downloadFile()
             ultracopierVersion+=QStringLiteral(" all-in-one");
         #endif
     #endif
-    #ifdef ULTRACOPIER_CGMINER
-            ultracopierVersion+=QStringLiteral(" miner");
-    #endif
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     ultracopierVersion+=QStringLiteral(" (OS: %1)").arg(EventDispatcher::GetOSDisplayString());
     #endif

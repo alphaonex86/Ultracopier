@@ -10,6 +10,8 @@
 #include <QPainter>
 #include <QDebug>
 #include <cmath>
+#include <chrono>
+#include <ctime>
 #ifdef Q_OS_WIN
     #ifndef NOMINMAX
         #define NOMINMAX
@@ -276,7 +278,7 @@ Themes::Themes(const bool &alwaysOnTop,
     this->setWindowIcon(icon14);
     #endif
 
-    shutdown=facilityEngine->haveFunctionality(QStringLiteral("shutdown"));
+    shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
 
     selectionModel=ui->TransferList->selectionModel();
@@ -332,7 +334,7 @@ Themes::Themes(const bool &alwaysOnTop,
 
 Themes::~Themes()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //disconnect(ui->actionAddFile);
     //disconnect(ui->actionAddFolder);
     delete selectionModel;
@@ -352,14 +354,14 @@ void Themes::getOptionsEngineEnabled(const bool &isEnabled)
         QScrollArea *scrollArea=new QScrollArea(ui->tabWidget);
         scrollArea->setWidgetResizable(true);
         scrollArea->setWidget(&optionEngineWidget);
-        ui->tabWidget->addTab(scrollArea,facilityEngine->translateText(QStringLiteral("Copy engine")));
+        ui->tabWidget->addTab(scrollArea,QString::fromStdString(facilityEngine->translateText("Copy engine")));
     }
 }
 
 void Themes::closeEvent(QCloseEvent *event)
 {
     event->ignore();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->hide();
     if(uiOptions->minimizeToSystray->isChecked())
     {
@@ -374,7 +376,7 @@ void Themes::updateSysTrayIcon()
 {
     if(totalSize==0)
     {
-        sysTrayIcon->setIcon(dynaIcon(0,QStringLiteral("-")));
+        sysTrayIcon->setIcon(dynaIcon(0,"-"));
         return;
     }
     quint64 currentNew=currentSize*100;
@@ -391,12 +393,17 @@ void Themes::updateOverallInformation()
 {
     if(uiOptions->showProgressionInTheTitle->isChecked())
         updateTitle();
-    ui->overall->setText(tr("File %1/%2, size: %3/%4").arg(currentFile).arg(totalFile).arg(facilityEngine->sizeToString(currentSize)).arg(facilityEngine->sizeToString(totalSize)));
+    ui->overall->setText(tr("File %1/%2, size: %3/%4")
+                         .arg(currentFile)
+                         .arg(totalFile)
+                         .arg(QString::fromStdString(facilityEngine->sizeToString(currentSize)))
+                         .arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))
+                         );
 }
 
 void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("start: ")+QString::number(action));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"start: "+std::to_string(action));
     this->action=action;
     switch(action)
     {
@@ -416,7 +423,7 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             {
                 if(shutdown && ui->shutdown->isChecked())
                 {
-                    facilityEngine->callFunctionality(QStringLiteral("shutdown"));
+                    facilityEngine->callFunctionality("shutdown");
                     return;
                 }
                 switch(uiOptions->comboBox_copyEnd->currentIndex())
@@ -436,9 +443,16 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
                 stat = status_stopped;
                 if(durationStarted)
                 {
-                    Ultracopier::TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(duration.elapsed()/1000);
-                    ui->labelTimeRemaining->setText(QStringLiteral("<html><body style=\"white-space:nowrap;\">")+facilityEngine->translateText(QStringLiteral("Completed in %1")).arg(
-                                                        QString::number(time.hour)+QStringLiteral(":")+QString::number(time.minute).rightJustified(2,'0')+QStringLiteral(":")+QString::number(time.second).rightJustified(2,'0')
+                    Ultracopier::TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(
+                                (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()-
+                                duration)
+                                /1000);
+                    ui->labelTimeRemaining->setText(QStringLiteral("<html><body style=\"white-space:nowrap;\">")+
+                                                    QString::fromStdString(facilityEngine->translateText("Completed in %1")).arg(
+                                                        QString::number(time.hour)+QStringLiteral(":")+
+                                                        QString::number(time.minute).rightJustified(2,'0')+
+                                                        QStringLiteral(":")+
+                                                        QString::number(time.second).rightJustified(2,'0')
                                                         )+QStringLiteral("</body></html>"));
                 }
             }
@@ -454,11 +468,11 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             ui->pauseButton->setEnabled(true);
             if(!durationStarted)
             {
-                duration.start();
+                duration=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
                 durationStarted=true;
             }
             haveStarted=true;
-            ui->cancelButton->setText(facilityEngine->translateText(QStringLiteral("Quit")));
+            ui->cancelButton->setText(QString::fromStdString(facilityEngine->translateText("Quit")));
             updatePause();
         break;
         case Ultracopier::Listing:
@@ -473,17 +487,17 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
     }
 }
 
-void Themes::newFolderListing(const QString &path)
+void Themes::newFolderListing(const std::string &path)
 {
-    QString newPath=path;
+    QString newPath=QString::fromStdString(path);
     if(newPath.size()>(64+3))
         newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(action==Ultracopier::Listing)
         ui->from->setText(newPath);
 }
 
-void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
+void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
 {
     if(uiOptions->speedWithProgressBar->isChecked())
     {
@@ -492,19 +506,23 @@ void Themes::detectedSpeed(const quint64 &speed)//in byte per seconds
             tempSpeed=999999999;
         if(tempSpeed>(quint64)ui->progressBarCurrentSpeed->maximum())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set max speed to: %1").arg(tempSpeed));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set max speed to: "+std::to_string(tempSpeed));
             ui->progressBarCurrentSpeed->setMaximum(tempSpeed);
         }
         ui->progressBarCurrentSpeed->setValue(tempSpeed);
-        ui->progressBarCurrentSpeed->setFormat(facilityEngine->speedToString(speed));
+        ui->progressBarCurrentSpeed->setFormat(QString::fromStdString(facilityEngine->speedToString(speed)));
     }
     else
-        ui->currentSpeed->setText(facilityEngine->speedToString(speed));
+        ui->currentSpeed->setText(QString::fromStdString(facilityEngine->speedToString(speed)));
 }
 
 void Themes::remainingTime(const int &remainingSeconds)
 {
-    QString labelTimeRemaining(QStringLiteral("<html><body style=\"white-space:nowrap;\">")+facilityEngine->translateText(QStringLiteral("Time remaining:"))+QStringLiteral(" "));
+    QString labelTimeRemaining(QStringLiteral(
+                                   "<html><body style=\"white-space:nowrap;\">")+
+                                   QString::fromStdString(facilityEngine->translateText("Time remaining:"))+
+                                   QStringLiteral(" ")
+                               );
     if(remainingSeconds==-1)
         labelTimeRemaining+=QStringLiteral("&#8734;");
     else
@@ -522,9 +540,13 @@ void Themes::errorDetected()
 }
 
 /// \brief new error
-void Themes::errorToRetry(const QString &source,const QString &destination,const QString &error)
+void Themes::errorToRetry(const std::string &source,const std::string &destination,const std::string &error)
 {
-    ui->errorList->addTopLevelItem(new QTreeWidgetItem(QStringList() << source << destination << error));
+    ui->errorList->addTopLevelItem(new QTreeWidgetItem(QStringList()
+                                                       << QString::fromStdString(source)
+                                                       << QString::fromStdString(destination)
+                                                       << QString::fromStdString(error)
+                                                       ));
 }
 
 /** \brief support speed limitation */
@@ -543,7 +565,7 @@ void Themes::setSupportSpeedLimitation(const bool &supportSpeedLimitationBool)
 }
 
 //get information about the copy
-void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
+void Themes::setGeneralProgression(const uint64_t &current,const uint64_t &total)
 {
     currentSize=current;
     totalSize=total;
@@ -561,22 +583,22 @@ void Themes::setGeneralProgression(const quint64 &current,const quint64 &total)
         updateSysTrayIcon();
 }
 
-void Themes::setFileProgression(const QList<Ultracopier::ProgressionItem> &progressionList)
+void Themes::setFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList)
 {
-    QList<Ultracopier::ProgressionItem> progressionListBis=progressionList;
+    std::vector<Ultracopier::ProgressionItem> progressionListBis=progressionList;
     transferModel.setFileProgression(progressionListBis);
     updateCurrentFileInformation();
 }
 
 //edit the transfer list
 /// \todo check and re-enable to selection
-void Themes::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &returnActions)
+void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &returnActions)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, returnActions.size(): ")+QString::number(returnActions.size()));
-    QList<quint64> returnValue=transferModel.synchronizeItems(returnActions);
-    totalFile+=returnValue.first();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, returnActions.size(): "+std::to_string(returnActions.size()));
+    std::vector<uint64_t> returnValue=transferModel.synchronizeItems(returnActions);
+    totalFile+=returnValue.front();
     totalSize+=returnValue.at(1);
-    currentFile+=returnValue.last();
+    currentFile+=returnValue.back();
     if(transferModel.rowCount()==0)
     {
         ui->skipButton->setEnabled(false);
@@ -589,19 +611,19 @@ void Themes::getActionOnList(const QList<Ultracopier::ReturnActionOnCopyList> &r
     else
         ui->skipButton->setEnabled(true);
     updateOverallInformation();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("transferModel.rowCount(): ")+QString::number(transferModel.rowCount()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferModel.rowCount(): "+std::to_string(transferModel.rowCount()));
 }
 
 void Themes::setCopyType(const Ultracopier::CopyType &type)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->type=type;
     updateModeAndType();
 }
 
 void Themes::forceCopyMode(const Ultracopier::CopyMode &mode)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     modeIsForced=true;
     this->mode=mode;
     if(mode==Ultracopier::Copy)
@@ -620,13 +642,13 @@ void Themes::setTransferListOperation(const Ultracopier::TransferListOperation &
 
 void Themes::haveExternalOrder()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
 //	ui->moreButton->toggle();
 }
 
 void Themes::isInPause(const bool &isInPause)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("isInPause: ")+QString::number(isInPause));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"isInPause: "+std::to_string(isInPause));
     //resume in auto the pause
     storeIsInPause=isInPause;
     updatePause();
@@ -638,14 +660,14 @@ void Themes::updatePause()
     {
         ui->pauseButton->setIcon(player_play);
         if(stat == status_started)
-            ui->pauseButton->setText(facilityEngine->translateText(QStringLiteral("Resume")));
+            ui->pauseButton->setText(QString::fromStdString(facilityEngine->translateText("Resume")));
         else
-            ui->pauseButton->setText(facilityEngine->translateText(QStringLiteral("Start")));
+            ui->pauseButton->setText(QString::fromStdString(facilityEngine->translateText("Start")));
     }
     else
     {
         ui->pauseButton->setIcon(player_pause);
-        ui->pauseButton->setText(facilityEngine->translateText(QStringLiteral("Pause")));
+        ui->pauseButton->setText(QString::fromStdString(facilityEngine->translateText("Pause")));
     }
 }
 
@@ -654,15 +676,15 @@ void Themes::updateCurrentFileInformation()
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(transfertItem.haveItem)
     {
-        QString newPath=transfertItem.from;
+        QString newPath=QString::fromStdString(transfertItem.from);
         if(newPath.size()>(64+3))
             newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
         ui->from->setText(newPath);
-        newPath=transfertItem.to;
+        newPath=QString::fromStdString(transfertItem.to);
         if(newPath.size()>(64+3))
             newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
         ui->to->setText(newPath);
-        ui->current_file->setText(transfertItem.current_file);
+        ui->current_file->setText(QString::fromStdString(transfertItem.current_file));
         if(transfertItem.progressBar_read!=-1)
         {
             ui->progressBar_file->setRange(0,65535);
@@ -708,14 +730,14 @@ void Themes::updateCurrentFileInformation()
 
 void Themes::on_putOnTop_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    QList<int> ids;
+    std::vector<int> ids;
     int index=0;
     const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
-        ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
+        ids.push_back(transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong());
         index++;
     }
     if(ids.size()>0)
@@ -724,14 +746,14 @@ void Themes::on_putOnTop_clicked()
 
 void Themes::on_pushUp_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    QList<int> ids;
+    std::vector<int> ids;
     int index=0;
     const int &loop_size=selectedItems.size();
     while(index<loop_size)
     {
-        ids << transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong();
+        ids.push_back(transferModel.data(selectedItems.at(index),Qt::UserRole).toULongLong());
         index++;
     }
     if(ids.size()>0)
@@ -740,9 +762,9 @@ void Themes::on_pushUp_clicked()
 
 void Themes::on_pushDown_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    QList<int> ids;
+    std::vector<int> ids;
     int index=0;
     const int &loop_size=selectedItems.size();
     while(index<loop_size)
@@ -756,9 +778,9 @@ void Themes::on_pushDown_clicked()
 
 void Themes::on_putOnBottom_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    QList<int> ids;
+    std::vector<int> ids;
     int index=0;
     const int &loop_size=selectedItems.size();
     while(index<loop_size)
@@ -772,9 +794,9 @@ void Themes::on_putOnBottom_clicked()
 
 void Themes::on_del_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     selectedItems=selectionModel->selectedRows();
-    QList<int> ids;
+    std::vector<int> ids;
     int index=0;
     const int &loop_size=selectedItems.size();
     while(index<loop_size)
@@ -788,7 +810,7 @@ void Themes::on_del_clicked()
 
 void Themes::on_cancelButton_clicked()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     this->hide();
     emit cancel();
 }
@@ -804,13 +826,13 @@ void Themes::speedWithProgressBar_toggled(bool checked)
 void Themes::showDualProgression_toggled(bool checked)
 {
     Q_UNUSED(checked);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     updateProgressionColorBar();
 }
 
 void Themes::checkBoxShowSpeed_toggled(bool checked)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     Q_UNUSED(checked);
     updateSpeed();
 }

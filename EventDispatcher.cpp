@@ -48,10 +48,6 @@ EventDispatcher::EventDispatcher()
     qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
     qRegisterMetaType<QList<QUrl> >("QList<QUrl>");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
-    #ifdef ULTRACOPIER_CGMINER
-    qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
-    qRegisterMetaType<QProcess::ProcessError>("QProcess::ProcessError");
-    #endif
 
     copyServer=new CopyListener(&optionDialog);
     connect(&localListener, &LocalListener::cli,                    &cliParser,     &CliParser::cli,Qt::QueuedConnection);
@@ -88,9 +84,6 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Application path: "+QCoreApplication::applicationFilePath().toStdString()+" "+std::to_string(QCoreApplication::applicationPid()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Local socket: "+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
-    #ifdef ULTRACOPIER_CGMINER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"With cgminer");
-    #endif
     #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Version as all in one");

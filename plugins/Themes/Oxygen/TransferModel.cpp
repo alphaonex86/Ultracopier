@@ -341,7 +341,7 @@ void TransferModel::setFacilityEngine(FacilityInterface * facilityEngine)
     this->facilityEngine=facilityEngine;
 }
 
-int TransferModel::search(const QString &text,bool searchNext)
+int TransferModel::search(const std::string &text, bool searchNext)
 {
     emit layoutAboutToBeChanged();
     search_text=text;
@@ -408,7 +408,7 @@ int TransferModel::searchPrev(const QString &text)
     return -1;
 }
 
-void TransferModel::setFileProgression(QList<Ultracopier::ProgressionItem> &progressionList)
+void TransferModel::setFileProgression(std::vector<Ultracopier::ProgressionItem> &progressionList)
 {
     loop_size=progressionList.size();
     index_for_loop=0;
