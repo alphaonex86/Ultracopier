@@ -81,9 +81,9 @@ private:
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 utimbuf butime;
             #else
-                quint32 ftCreateL, ftAccessL, ftWriteL;
-                quint32 ftCreateH, ftAccessH, ftWriteH;
-                QRegularExpression regRead;
+                uint64_t ftCreateL, ftAccessL, ftWriteL;
+                uint64_t ftCreateH, ftAccessH, ftWriteH;
+                std::regex regRead;
             #endif
         #endif
     #endif

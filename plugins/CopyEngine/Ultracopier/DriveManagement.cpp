@@ -10,10 +10,10 @@ DriveManagement::DriveManagement()
 {
     tryUpdate();
     #ifdef Q_OS_WIN32
-    reg1=QRegularExpression(QStringLiteral("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+"));
-    reg2=QRegularExpression(QStringLiteral("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$"));
-    reg3=QRegularExpression(QStringLiteral("^[a-zA-Z]:[\\\\/]"));
-    reg4=QRegularExpression(QStringLiteral("^([a-zA-Z]:[\\\\/]).*$"));
+    reg1=std::regex("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+");
+    reg2=std::regex("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$");
+    reg3=std::regex("^[a-zA-Z]:[\\\\/]");
+    reg4=std::regex("^([a-zA-Z]:[\\\\/]).*$");
     #endif
     /// \warn ULTRACOPIER_DEBUGCONSOLE() don't work here because the sinal slot is not connected!
 }
@@ -28,18 +28,18 @@ std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
             return QDir::toNativeSeparators(QString::fromStdString(mountSysPoint.at(i))).toStdString();
     }
     #ifdef Q_OS_WIN32
-    if(fileOrFolder.contains(reg1))
+    if(std::regex_match(fileOrFolder,reg1))
     {
-        QString returnString=fileOrFolder;
-        returnString.replace(reg2,QStringLiteral("\\1"));
+        std::string returnString=fileOrFolder;
+        std::regex_replace(returnString,reg2,"$1");
         return returnString;
     }
     //due to lack of WMI support into mingw, the new drive event is never called, this is a workaround
-    if(fileOrFolder.contains(reg3))
+    if(std::regex_match(fileOrFolder,reg3))
     {
-        QString returnString=fileOrFolder;
-        returnString.replace(reg4,QStringLiteral("\\1"));
-        return QDir::toNativeSeparators(returnString).toUpper();
+        std::string returnString=fileOrFolder;
+        std::regex_replace(returnString,reg4,"$1");
+        return QDir::toNativeSeparators(QString::fromStdString(returnString)).toUpper().toStdString();
     }
     #endif
     //if unable to locate the right mount point
@@ -91,8 +91,8 @@ void DriveManagement::tryUpdate()
     {
         mountSysPoint.push_back(QDir::toNativeSeparators(mountedVolumesList.at(index).rootPath()).toStdString());
         #ifdef Q_OS_WIN32
-        if(mountSysPoint.last()!="A:\\" && mountSysPoint.last()!="A:/" && mountSysPoint.last()!="A:" && mountSysPoint.last()!="A" &&
-                mountSysPoint.last()!="a:\\" && mountSysPoint.last()!="a:/" && mountSysPoint.last()!="a:" && mountSysPoint.last()!="a")
+        if(mountSysPoint.back()!="A:\\" && mountSysPoint.back()!="A:/" && mountSysPoint.back()!="A:" && mountSysPoint.back()!="A" &&
+                mountSysPoint.back()!="a:\\" && mountSysPoint.back()!="a:/" && mountSysPoint.back()!="a:" && mountSysPoint.back()!="a")
             driveType.push_back(mountedVolumesList.at(index).fileSystemType());
         else
             driveType.push_back(QByteArray());

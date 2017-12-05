@@ -12,7 +12,7 @@ std::string ExtraSocket::pathSocket(const std::string &name)
 #ifdef Q_OS_UNIX
     return name+"-"+std::to_string(getuid());
 #else
-    std::string userName;
+    QString userName;
 
     /* bad way for catchcopy compatibility
     char uname[1024];
@@ -37,7 +37,7 @@ std::string ExtraSocket::pathSocket(const std::string &name)
         userName=tempArray.toHex();
     }
     delete userNameW;
-    return name+"-"+userName;
+    return name+"-"+userName.toStdString();
 #endif
 }
 

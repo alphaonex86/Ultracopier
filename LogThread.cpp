@@ -66,16 +66,16 @@ LogThread::LogThread()
     DWORD size=0;
     WCHAR * computerNameW=new WCHAR[size];
     if(GetComputerNameW(computerNameW,&size))
-        computer=QString::fromWCharArray(computerNameW,size-1);
+        computer=QString::fromWCharArray(computerNameW,size-1).toStdString();
     else
-        computer=QStringLiteral("Unknown computer");
+        computer="Unknown computer";
     delete computerNameW;
 
     WCHAR * userNameW=new WCHAR[size];
     if(GetUserNameW(userNameW,&size))
-        user=QString::fromWCharArray(userNameW,size-1);
+        user=QString::fromWCharArray(userNameW,size-1).toStdString();
     else
-        user=QStringLiteral("Unknown user");
+        user="Unknown user";
     delete userNameW;
     #endif
 

@@ -44,7 +44,7 @@ class EventDispatcher : public QObject
         /// \brief return if need be close
         bool shouldBeClosed();
         #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-        static QString GetOSDisplayString();
+        static std::string GetOSDisplayString();
         #endif
     public slots:
         /// \brief Quit ultracopier

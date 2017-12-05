@@ -42,7 +42,7 @@ TransferThread::TransferThread() :
     renameRegex=std::regex("^(.*)(\\.[a-z0-9]+)$");
     #ifdef Q_OS_WIN32
         #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-            regRead=QRegularExpression(QStringLiteral("^[a-z]:"));
+            regRead=std::regex("^[a-z]:");
         #endif
     #endif
 
@@ -1702,21 +1702,21 @@ bool TransferThread::readFileDateTime(const QFileInfo &source)
                 return true;
             #else
                 wchar_t filePath[65535];
-                if(source.absoluteFilePath().contains(regRead))
+                if(std::regex_match(source.absoluteFilePath().toStdString(),regRead))
                     filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
                     filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] open failed to read: ")+QString::fromWCharArray(filePath)+QStringLiteral(", error: ")+QString::number(GetLastError()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
                     return false;
                 }
                 FILETIME ftCreate, ftAccess, ftWrite;
                 if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
                 {
                     CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] unable to get the file time"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time");
                     return false;
                 }
                 this->ftCreateL=ftCreate.dwLowDateTime;
@@ -1751,14 +1751,14 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
                 return utime(destination.toLatin1().data(),&butime)==0;
             #else
                 wchar_t filePath[65535];
-                if(destination.absoluteFilePath().contains(regRead))
+                if(std::regex_match(destination.absoluteFilePath().toStdString(),regRead))
                     filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
                     filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] open failed to write: ")+QString::fromWCharArray(filePath)+QStringLiteral(", error: ")+QString::number(GetLastError()));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
                     return false;
                 }
                 FILETIME ftCreate, ftAccess, ftWrite;
@@ -1771,7 +1771,7 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
                 if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
                 {
                     CloseHandle(hFileDestination);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] unable to set the file time"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to set the file time");
                     return false;
                 }
                 CloseHandle(hFileDestination);

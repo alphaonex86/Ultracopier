@@ -66,7 +66,7 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
             case 0:
                 if(stopId.find(item.id)!=stopId.cend())
                     return *stop;
-                else if(startId.find(item.id).cend())
+                else if(startId.find(item.id)!=startId.cend())
                     return *start;
                 else
                     return QVariant();
@@ -77,8 +77,8 @@ QVariant TransferModel::data( const QModelIndex& index, int role ) const
     }
     else if(role==Qt::BackgroundRole)
     {
-        if(!search_text.empty() && (item.source.find(search_text,0,Qt::CaseInsensitive)!=std::basic_string::npos ||
-                                    item.destination.find(search_text,0,Qt::CaseInsensitive)!=std::basic_string::npos))
+        if(!search_text.empty() && (item.source.find(search_text)!=std::string::npos ||
+                                    item.destination.find(search_text)!=std::string::npos))
         {
             if(haveSearchItem && searchId==item.id)
                 return QColor(255,150,150,100);
@@ -206,7 +206,7 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
-                if(action.userAction.position>(transfertItemList.size()-1))
+                if((unsigned int)action.userAction.position>(transfertItemList.size()-1))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
@@ -216,7 +216,7 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
-                if(action.userAction.moveAt>(transfertItemList.size()-1))
+                if((unsigned int)action.userAction.moveAt>(transfertItemList.size()-1))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, position is wrong: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
@@ -226,7 +226,9 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("id: %1, move at same position: %2").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
-                transfertItemList.move(action.userAction.position,action.userAction.moveAt);
+                const TransfertItem transfertItem=transfertItemList.at(action.userAction.position);
+                transfertItemList.erase(transfertItemList.cbegin()+action.userAction.position);
+                transfertItemList.insert(transfertItemList.cbegin()+action.userAction.moveAt,transfertItem);
                 //newIndexes.move(action.userAction.position,action.userAction.moveAt);
             }
             break;
@@ -239,16 +241,16 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
-                if(action.userAction.position>(transfertItemList.size()-1))
+                if((unsigned int)action.userAction.position>(transfertItemList.size()-1))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, position is wrong: %3").arg(action.addAction.id).arg(action.userAction.position).toStdString());
                     break;
                 }
-                transfertItemList.removeAt(action.userAction.position);
+                transfertItemList.erase(transfertItemList.cbegin()+action.userAction.position);
                 currentFile++;
-                startId.remove(action.addAction.id);
-                stopId.remove(action.addAction.id);
-                internalRunningOperation.remove(action.addAction.id);
+                startId.erase(action.addAction.id);
+                stopId.erase(action.addAction.id);
+                internalRunningOperation.erase(action.addAction.id);
                 //newIndexes.remove(action.userAction.moveAt);
             }
             break;
@@ -264,10 +266,10 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
             break;
             case Ultracopier::Transfer:
             {
-                if(!startId.contains(action.addAction.id))
-                    startId << action.addAction.id;
-                stopId.remove(action.addAction.id);
-                if(internalRunningOperation.contains(action.addAction.id))
+                if(startId.find(action.addAction.id)==startId.cend())
+                    startId.insert(action.addAction.id);
+                stopId.erase(action.addAction.id);
+                if(internalRunningOperation.find(action.addAction.id)!=internalRunningOperation.cend())
                     internalRunningOperation[action.addAction.id].actionType=action.type;
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to found entry for file %1: actionType: Transfer").arg(action.addAction.id).toStdString());
@@ -275,9 +277,9 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
             break;
             case Ultracopier::PostOperation:
             {
-                if(!stopId.contains(action.addAction.id))
-                    stopId << action.addAction.id;
-                startId.remove(action.addAction.id);
+                if(stopId.find(action.addAction.id)==stopId.cend())
+                    stopId.insert(action.addAction.id);
+                startId.erase(action.addAction.id);
             }
             break;
             case Ultracopier::CustomOperation:
@@ -286,18 +288,21 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
                 //without progression
                 if(custom_with_progression)
                 {
-                    if(startId.remove(action.addAction.id))
-                        if(!stopId.contains(action.addAction.id))
-                            stopId << action.addAction.id;
+                    if(startId.find(action.addAction.id)!=startId.cend())
+                    {
+                        startId.erase(action.addAction.id);
+                        if(stopId.find(action.addAction.id)==stopId.cend())
+                            stopId.insert(action.addAction.id);
+                    }
                 }
                 //with progression
                 else
                 {
-                    stopId.remove(action.addAction.id);
-                    if(!startId.contains(action.addAction.id))
-                        startId << action.addAction.id;
+                    stopId.erase(action.addAction.id);
+                    if(startId.find(action.addAction.id)==startId.cend())
+                        startId.insert(action.addAction.id);
                 }
-                if(internalRunningOperation.contains(action.addAction.id))
+                if(internalRunningOperation.find(action.addAction.id)!=internalRunningOperation.cend())
                 {
                     ItemOfCopyListWithMoreInformations &item=internalRunningOperation[action.addAction.id];
                     item.actionType=action.type;
@@ -318,7 +323,7 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
     {
         const QSet<quint64> ids = oldMapping.values().toSet();
 
-        for ( int i = 0; i < transfertItemList.count(); i++ ) {
+        for ( unsigned int i = 0; i < transfertItemList.size(); i++ ) {
             const TransferModel::TransfertItem& item = transfertItemList.at(i);
 
             if ( ids.contains( item.id ) ) {
@@ -335,7 +340,13 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
 
     changePersistentIndexList( oldIndexes, newIndexes );
     emit layoutChanged();
-    return QList<quint64>() << totalFile << totalSize << currentFile;
+    {
+        std::vector<uint64_t> newList;
+        newList[0]=totalFile;
+        newList[1]=totalSize;
+        newList[2]=currentFile;
+        return newList;
+    }
 }
 
 void TransferModel::setFacilityEngine(FacilityInterface * facilityEngine)
@@ -350,7 +361,7 @@ int TransferModel::search(const std::string &text, bool searchNext)
     emit layoutChanged();
     if(transfertItemList.size()==0)
         return -1;
-    if(text.isEmpty())
+    if(text.empty())
         return -1;
     if(searchNext)
     {
@@ -362,7 +373,9 @@ int TransferModel::search(const std::string &text, bool searchNext)
     loop_size=transfertItemList.size();
     while(index_for_loop<loop_size)
     {
-        if(transfertItemList.at(currentIndexSearch).source.indexOf(search_text,0,Qt::CaseInsensitive)!=-1 || transfertItemList.at(currentIndexSearch).destination.indexOf(search_text,0,Qt::CaseInsensitive)!=-1)
+        const TransfertItem &transfertItem=transfertItemList.at(currentIndexSearch);
+        if(transfertItem.source.find(search_text)!=std::string::npos ||
+                transfertItem.destination.find(search_text)!=std::string::npos)
         {
             haveSearchItem=true;
             searchId=transfertItemList.at(currentIndexSearch).id;
@@ -377,14 +390,14 @@ int TransferModel::search(const std::string &text, bool searchNext)
     return -1;
 }
 
-int TransferModel::searchPrev(const QString &text)
+int TransferModel::searchPrev(const std::string &text)
 {
     emit layoutAboutToBeChanged();
     search_text=text;
     emit layoutChanged();
     if(transfertItemList.size()==0)
         return -1;
-    if(text.isEmpty())
+    if(text.empty())
         return -1;
     if(currentIndexSearch==0)
         currentIndexSearch=loop_size-1;
@@ -394,7 +407,9 @@ int TransferModel::searchPrev(const QString &text)
     loop_size=transfertItemList.size();
     while(index_for_loop<loop_size)
     {
-        if(transfertItemList.at(currentIndexSearch).source.indexOf(search_text,0,Qt::CaseInsensitive)!=-1 || transfertItemList.at(currentIndexSearch).destination.indexOf(search_text,0,Qt::CaseInsensitive)!=-1)
+        const TransfertItem &transfertItem=transfertItemList.at(currentIndexSearch);
+        if(transfertItem.source.find(search_text)!=std::string::npos ||
+                transfertItem.destination.find(search_text)!=std::string::npos)
         {
             haveSearchItem=true;
             searchId=transfertItemList.at(currentIndexSearch).id;
@@ -416,13 +431,13 @@ void TransferModel::setFileProgression(std::vector<Ultracopier::ProgressionItem>
     index_for_loop=0;
     while(index_for_loop<loop_size)
     {
-        if(internalRunningOperation.contains(progressionList.at(index_for_loop).id))
+        if(internalRunningOperation.find(progressionList.at(index_for_loop).id)!=internalRunningOperation.cend())
         {
             internalRunningOperation[progressionList.at(index_for_loop).id].generalData.size=progressionList.at(index_for_loop).total;
             internalRunningOperation[progressionList.at(index_for_loop).id].currentReadProgression=progressionList.at(index_for_loop).currentRead;
             internalRunningOperation[progressionList.at(index_for_loop).id].currentWriteProgression=progressionList.at(index_for_loop).currentWrite;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            progressionList.removeAt(index_for_loop);
+            progressionList.erase(progressionList.cbegin()+index_for_loop);
             index_for_loop--;
             loop_size--;
             #endif
@@ -431,7 +446,7 @@ void TransferModel::setFileProgression(std::vector<Ultracopier::ProgressionItem>
     }
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(progressionList.size()>0)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("progression remaning items"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"progression remaning items");
     #endif
 }
 
@@ -443,15 +458,15 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
     returnItem.haveItem=startId.size()>0;
     if(returnItem.haveItem)
     {
-        if(!internalRunningOperation.contains(*startId.constBegin()))
+        if(internalRunningOperation.find(*startId.cbegin())==internalRunningOperation.cend())
         {
             returnItem.haveItem=false;
             return returnItem;
         }
-        const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.value(*startId.constBegin());
+        const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.at(*startId.cbegin());
         returnItem.from=itemTransfer.generalData.sourceFullPath;
         returnItem.to=itemTransfer.generalData.destinationFullPath;
-        returnItem.current_file=itemTransfer.generalData.destinationFileName+QStringLiteral(", ")+facilityEngine->sizeToString(itemTransfer.generalData.size);
+        returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
         returnItem.id=itemTransfer.generalData.id;
         switch(itemTransfer.actionType)
         {
@@ -483,20 +498,20 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
             break;
             //should never pass here
             case Ultracopier::PostOperation:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                 returnItem.progressBar_read=65535;
                 returnItem.progressBar_write=65535;
             break;
             //should never pass here
             case Ultracopier::PreOperation:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                 returnItem.progressBar_read=0;
                 returnItem.progressBar_write=0;
             break;
             default:
                 returnItem.progressBar_read=0;
                 returnItem.progressBar_write=0;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                 break;
         }
     }
@@ -505,15 +520,15 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
         returnItem.haveItem=stopId.size()>0;
         if(returnItem.haveItem)
         {
-            if(!internalRunningOperation.contains(*stopId.constBegin()))
+            if(internalRunningOperation.find(*stopId.cbegin())==internalRunningOperation.cend())
             {
                 returnItem.haveItem=false;
                 return returnItem;
             }
-            const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.value(*stopId.constBegin());
+            const ItemOfCopyListWithMoreInformations &itemTransfer=internalRunningOperation.at(*stopId.cbegin());
             returnItem.from=itemTransfer.generalData.sourceFullPath;
             returnItem.to=itemTransfer.generalData.destinationFullPath;
-            returnItem.current_file=itemTransfer.generalData.destinationFileName+QStringLiteral(", ")+facilityEngine->sizeToString(itemTransfer.generalData.size);
+            returnItem.current_file=itemTransfer.generalData.destinationFileName+", "+facilityEngine->sizeToString(itemTransfer.generalData.size);
             returnItem.id=itemTransfer.generalData.id;
             switch(itemTransfer.actionType)
             {
@@ -544,20 +559,20 @@ TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() con
                 }
                 break;
                 case Ultracopier::PostOperation:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                     returnItem.progressBar_read=65535;
                     returnItem.progressBar_write=65535;
                 break;
                 //should never pass here
                 case Ultracopier::PreOperation:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("wrong action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                     returnItem.progressBar_read=0;
                     returnItem.progressBar_write=0;
                 break;
                 default:
                     returnItem.progressBar_read=65535;
                     returnItem.progressBar_write=65535;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unknow action type for file %1: actionType: %2").arg(itemTransfer.generalData.id).arg(itemTransfer.actionType).toStdString());
                     break;
             }
         }

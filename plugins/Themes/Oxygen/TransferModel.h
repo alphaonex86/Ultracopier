@@ -11,6 +11,7 @@
 #include <QString>
 #include <unordered_map>
 #include <unordered_set>
+#include <set>
 #include <vector>
 
 #include "StructEnumDefinition.h"
@@ -71,7 +72,7 @@ public:
     uint64_t firstId() const;
 protected:
     std::vector<TransfertItem> transfertItemList;///< To have a transfer list for the user
-    std::unordered_set<uint64_t> startId,stopId;///< To show what is started, what is stopped
+    std::set<uint64_t> startId,stopId;///< To show what is started, what is stopped
     std::unordered_map<uint64_t,ItemOfCopyListWithMoreInformations> internalRunningOperation;///< to have progression and stat
 private:
     int loop_size,index_for_loop;

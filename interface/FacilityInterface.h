@@ -8,12 +8,13 @@
 
 #include <string>
 #include <vector>
+#include <QObject>
 
 #include "../StructEnumDefinition.h"
 
 /// \brief To define the interface, to pass the facility object from Ultracopier to the plugins without compatibility problem
 //not possible to be static, because in the plugin it's not resolved
-class FacilityInterface
+class FacilityInterface : public QObject
 {
     public:
         /// \brief To force the text re-translation
