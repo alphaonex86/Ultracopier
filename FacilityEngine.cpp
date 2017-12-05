@@ -243,9 +243,5 @@ std::string FacilityEngine::ultimateUrl() const
 /// \brief Return the software name
 std::string FacilityEngine::softwareName() const
 {
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return "Supercopier";
-    #else
-        return "Ultracopier";
-    #endif
+    return "Ultracopier";
 }

@@ -42,11 +42,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     statePluginLoader=Ultracopier::Uncaught;
 
     setContextMenu(systrayMenu);
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    setToolTip(QStringLiteral("Supercopier"));
-    #else
     setToolTip(QStringLiteral("Ultracopier"));
-    #endif
     #ifdef Q_OS_WIN32
     setIcon(QIcon(QStringLiteral(":/systray_Uncaught_Windows.png")));
     #else
@@ -125,11 +121,7 @@ void SystrayIcon::checkSetTooltip()
 {
     if(isSystemTrayAvailable())
     {
-        #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        setToolTip(QStringLiteral("Supercopier"));
-        #else
         setToolTip(QStringLiteral("Ultracopier"));
-        #endif
         updateSystrayIcon();
     }
     else
@@ -262,11 +254,7 @@ void SystrayIcon::updateSystrayIcon()
     if(theNewSystrayIcon.isNull())
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"All the icon include the default icon remain null");
     setIcon(theNewSystrayIcon);
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    setToolTip(QString::fromStdString("Supercopier - "+toolTip));
-    #else
     setToolTip(QString::fromStdString("Ultracopier - "+toolTip));
-    #endif
 }
 
 /* drag event processing (impossible with Qt on systray)

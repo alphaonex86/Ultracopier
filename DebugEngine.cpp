@@ -58,11 +58,7 @@ DebugEngine::DebugEngine()
     debugHtmlContent+="td {white-space:nowrap;}";
     debugHtmlContent+="</style>";
     debugHtmlContent+="<title>";
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    debugHtmlContent+="Supercopier";
-    #else
     debugHtmlContent+="Ultracopier";
-    #endif
     debugHtmlContent+=" "+std::string(ULTRACOPIER_VERSION)+" "+ULTRACOPIER_PLATFORM_NAME.toStdString()+", debug report</title>";
     debugHtmlContent+="</head>";
     debugHtmlContent+="<body>";
@@ -137,11 +133,7 @@ DebugEngine::DebugEngine()
             {
                 //Ask to the user
                 QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report",
-                                                                              #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-                                                                              QString("Supercopier")+
-                                                                              #else
                                                                               QString("Ultracopier")+
-                                                                              #endif
                         " seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                 if(reply==QMessageBox::Yes)
                     saveBugReport();

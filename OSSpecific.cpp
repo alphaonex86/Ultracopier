@@ -28,9 +28,6 @@ void OSSpecific::updateText()
     #else
     text=tr("The replacement of default copy/move system should be not supported by the file manager.<br />Ask to the developer to support it.<br />You need do the copy/move manually.");
     #endif
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    text+=QStringLiteral("<br />")+tr("Consider Supercopier as deprecated, prefer Ultracopier");
-    #endif
     ui->label->setText(text);
 }
 

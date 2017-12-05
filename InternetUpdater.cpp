@@ -24,11 +24,7 @@ void InternetUpdater::downloadFile()
 {
     if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate")))
         return;
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        QString name=QStringLiteral("Supercopier");
-    #else
-        QString name=QStringLiteral("Ultracopier");
-    #endif
+    QString name=QStringLiteral("Ultracopier");
     QString ultracopierVersion;
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     ultracopierVersion=QStringLiteral("%1 Ultimate/%2").arg(name).arg(ULTRACOPIER_VERSION);
