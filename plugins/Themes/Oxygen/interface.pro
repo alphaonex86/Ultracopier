@@ -5,48 +5,51 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 QT += widgets
 TEMPLATE        = lib
 CONFIG         += plugin
-HEADERS         = ../Oxygen/ThemesFactory.h \
-                ../Oxygen/StructEnumDefinition.h \
-    ../Oxygen/DebugEngineMacro.h \
-    ../Oxygen/Environment.h \
-    ../Oxygen/Variable.h \
-    ../../../interface/PluginInterface_Themes.h \
-    ../../../interface/FacilityInterface.h \
-    ../../../interface/OptionInterface.h \
-    ../Oxygen/TransferModel.h \
-    ../Oxygen/interface.h
-SOURCES         = ../Oxygen/ThemesFactory.cpp \
-    ../Oxygen/TransferModel.cpp \
-    ../Oxygen/interface.cpp
+HEADERS         = \
+    $$PWD/ThemesFactory.h \
+    $$PWD/StructEnumDefinition.h \
+    $$PWD/DebugEngineMacro.h \
+    $$PWD/Environment.h \
+    $$PWD/Variable.h \
+    $$PWD/../../../interface/PluginInterface_Themes.h \
+    $$PWD/../../../interface/FacilityInterface.h \
+    $$PWD/../../../interface/OptionInterface.h \
+    $$PWD/TransferModel.h \
+    $$PWD/interface.h
+SOURCES         = \
+    $$PWD/ThemesFactory.cpp \
+    $$PWD/TransferModel.cpp \
+    $$PWD/interface.cpp
 TARGET          = $$qtLibraryTarget(interface)
-TRANSLATIONS += ../Oxygen/Languages/ar/translation.ts \
-    ../Oxygen/Languages/de/translation.ts \
-    ../Oxygen/Languages/el/translation.ts \
-    ../Oxygen/Languages/en/translation.ts \
-    ../Oxygen/Languages/es/translation.ts \
-    ../Oxygen/Languages/fr/translation.ts \
-    ../Oxygen/Languages/hi/translation.ts \
-    ../Oxygen/Languages/hu/translation.ts \
-    ../Oxygen/Languages/id/translation.ts \
-    ../Oxygen/Languages/it/translation.ts \
-    ../Oxygen/Languages/ja/translation.ts \
-    ../Oxygen/Languages/ko/translation.ts \
-    ../Oxygen/Languages/nl/translation.ts \
-    ../Oxygen/Languages/no/translation.ts \
-    ../Oxygen/Languages/pl/translation.ts \
-    ../Oxygen/Languages/pt/translation.ts \
-    ../Oxygen/Languages/ru/translation.ts \
-    ../Oxygen/Languages/th/translation.ts \
-    ../Oxygen/Languages/tr/translation.ts \
-    ../Oxygen/Languages/zh/translation.ts
+TRANSLATIONS += \
+    $$PWD/Languages/ar/translation.ts \
+    $$PWD/Languages/de/translation.ts \
+    $$PWD/Languages/el/translation.ts \
+    $$PWD/Languages/en/translation.ts \
+    $$PWD/Languages/es/translation.ts \
+    $$PWD/Languages/fr/translation.ts \
+    $$PWD/Languages/hi/translation.ts \
+    $$PWD/Languages/hu/translation.ts \
+    $$PWD/Languages/id/translation.ts \
+    $$PWD/Languages/it/translation.ts \
+    $$PWD/Languages/ja/translation.ts \
+    $$PWD/Languages/ko/translation.ts \
+    $$PWD/Languages/nl/translation.ts \
+    $$PWD/Languages/no/translation.ts \
+    $$PWD/Languages/pl/translation.ts \
+    $$PWD/Languages/pt/translation.ts \
+    $$PWD/Languages/ru/translation.ts \
+    $$PWD/Languages/th/translation.ts \
+    $$PWD/Languages/tr/translation.ts \
+    $$PWD/Languages/zh/translation.ts
 
 !CONFIG(static) {
 RESOURCES	+= \
-    ../Oxygen/interfaceResources.qrc \
-    ../Oxygen/interfaceResources_unix.qrc \
-    ../Oxygen/interfaceResources_windows.qrc
+    $$PWD/interfaceResources.qrc \
+    $$PWD/interfaceResources_unix.qrc \
+    $$PWD/interfaceResources_windows.qrc
 }
 
 FORMS += \
-    ../Oxygen/interface.ui \
-    ../Oxygen/themesOptions.ui
+    $$PWD/interface.ui \
+    $$PWD/themesOptions.ui

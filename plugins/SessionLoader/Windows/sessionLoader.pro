@@ -5,12 +5,12 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 TEMPLATE        = lib
 CONFIG         += plugin
 LIBS += -ladvapi32
-HEADERS         = sessionLoader.h \
-    StructEnumDefinition.h \
-    Variable.h \
-    Environment.h \
-    DebugEngineMacro.h \
-    ../../../interface/PluginInterface_SessionLoader.h
+HEADERS         = \
+    $$PWD/sessionLoader.h \
+    $$PWD/StructEnumDefinition.h \
+    $$PWD/Variable.h \
+    $$PWD/Environment.h \
+    $$PWD/DebugEngineMacro.h \
+    $$PWD/../../../interface/PluginInterface_SessionLoader.h
 SOURCES         = sessionLoader.cpp
 TARGET          = $$qtLibraryTarget(sessionLoader)
-
