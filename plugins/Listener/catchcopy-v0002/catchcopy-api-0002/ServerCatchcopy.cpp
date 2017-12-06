@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-std::string stringimplode(const std::vector<std::string>& elems, const std::string &delim)
+std::string stringimplode2(const std::vector<std::string>& elems, const std::string &delim)
 {
     std::string newString;
     for (std::vector<std::string>::const_iterator ii = elems.begin(); ii != elems.cend(); ++ii)
@@ -405,7 +405,7 @@ void ServerCatchcopy::parseInput(const uint32_t &client,const uint32_t &orderId,
             incorrectArgumentListSize(client,orderId);
         break;
         case UnknowOrder:
-            emit error("Unknown query: "+std::to_string(returnVal)+", with client: "+std::to_string(client)+", orderId: "+std::to_string(orderId)+", returnList: "+stringimplode(returnList,", "));
+            emit error("Unknown query: "+std::to_string(returnVal)+", with client: "+std::to_string(client)+", orderId: "+std::to_string(orderId)+", returnList: "+stringimplode2(returnList,", "));
             qWarning() << "Unknown query";
             unknowOrder(client,orderId);
         break;
