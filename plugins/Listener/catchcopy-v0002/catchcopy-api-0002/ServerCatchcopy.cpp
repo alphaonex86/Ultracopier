@@ -5,10 +5,25 @@
 #include "ServerCatchcopy.h"
 #include "VariablesCatchcopy.h"
 #include "ExtraSocketCatchcopy.h"
-#include "../../../cpp11addition.h"
 
 #include <QFile>
 #include <QDataStream>
+#include <queue>
+#include <vector>
+#include <string>
+
+std::string stringimplode(const std::vector<std::string>& elems, const std::string &delim)
+{
+    std::string newString;
+    for (std::vector<std::string>::const_iterator ii = elems.begin(); ii != elems.cend(); ++ii)
+    {
+        newString += (*ii);
+        if ( ii + 1 != elems.end() ) {
+            newString += delim;
+        }
+    }
+    return newString;
+}
 
 ServerCatchcopy::ServerCatchcopy()
 {
