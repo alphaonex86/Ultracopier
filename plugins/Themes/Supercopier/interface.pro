@@ -1,15 +1,15 @@
 DEFINES+=SUPERCOPIER
 
-include(../Oxygen/interface.pro)
+include($$PWD/../Oxygen/interface.pro)
 
 !CONFIG(static) {
 RESOURCES	-= \
-    ../Oxygen/interfaceResources.qrc \
-    ../Oxygen/interfaceResources_unix.qrc \
-    ../Oxygen/interfaceResources_windows.qrc
+    $$PWD/../Oxygen/interfaceResources.qrc \
+    $$PWD/../Oxygen/interfaceResources_unix.qrc \
+    $$PWD/../Oxygen/interfaceResources_windows.qrc
 
 RESOURCES	+= \
-    ../Supercopier/interfaceResources.qrc \
-    ../Supercopier/interfaceResources_unix.qrc \
-    ../Supercopier/interfaceResources_windows.qrc
+    $$PWD/../Supercopier/interfaceResources.qrc \
+    $$PWD/../Supercopier/interfaceResources_unix.qrc \
+    $$PWD/../Supercopier/interfaceResources_windows.qrc
 }

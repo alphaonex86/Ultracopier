@@ -11,9 +11,7 @@ function compil {
 	ULTIMATE=$8
 	FORPLUGIN=$9
 	STATIC=${10}
-	CGMINER=${11}
-	SUPERCOPIER=${12}
-    ILLEGAL=${13}
+	ILLEGAL=${11}
 	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
 	cd ${BASE_PWD}
 	echo "${TARGET} rsync..."
@@ -21,7 +19,7 @@ function compil {
 	then
 		rsync -aqrt --delete ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/PluginLoader/keybinding/
 	else
-		if [ $ULTIMATE -eq 1 ] || [ $SUPERCOPIER -eq 1 ]
+		if [ $ULTIMATE -eq 1 ]
 		then
 			rsync -aqrt --delete ${ULTRACOPIERSOURCESPATH} ${TEMP_PATH}/${TARGET}/ --exclude=/plugins-alternative/CopyEngine/Rsync/ --exclude=/plugins-alternative/PluginLoader/keybinding/
 		else
@@ -37,18 +35,6 @@ function compil {
 		fi
 		cd ${TEMP_PATH}/${TARGET}/
 	done
-	if [ $SUPERCOPIER -eq 1 ]
-	then
-		find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i "s/=ultracopier/=supercopier/g" {} \;
-		find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/Ultracopier/Supercopier/g" {} \; > /dev/null 2>&1
-		find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/ultracopier.exe/supercopier.exe/g" {} \; > /dev/null 2>&1
-		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-16x16.png ${TEMP_PATH}/${TARGET}/resources/ultracopier-16x16.png
-		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-128x128.png ${TEMP_PATH}/${TARGET}/resources/ultracopier-128x128.png
-		mv ${TEMP_PATH}/${TARGET}/resources/supercopier-all-in-one.ico ${TEMP_PATH}/${TARGET}/resources/ultracopier-all-in-one.ico
-		mv ${TEMP_PATH}/${TARGET}/resources/supercopier.ico ${TEMP_PATH}/${TARGET}/resources/ultracopier.ico
-		mv ${TEMP_PATH}/${TARGET}/resources/supercopier.icns ${TEMP_PATH}/${TARGET}/resources/ultracopier.icns
-		rm -Rf ${TEMP_PATH}/${TARGET}/plugins/Themes/Oxygen/
-	fi
 	find ${TEMP_PATH}/${TARGET}/ -name "*.pro.user" -exec rm {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION_FINAL}<\/version>/g" {} \; > /dev/null 2>&1
@@ -65,30 +51,12 @@ function compil {
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG/\/\/#define ULTRACOPIER_PLUGIN_DEBUG/g" {} \; > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/\/\/#define ULTRACOPIER_PLUGIN_DEBUG_WINDOW/g" {} \; > /dev/null 2>&1
 	fi
-	if [ $SUPERCOPIER -eq 1 ]
-	then
-		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
-	else
-		find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_MODE_SUPERCOPIER/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null 2>&1
-	fi
         if [ $STATIC -eq 1 ]
         then
                 find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
         else
 
                 find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/\/\/#define ULTRACOPIER_PLUGIN_ALL_IN_ONE/g" {} \; > /dev/null 2>&1
-        fi
-        if [ $CGMINER -eq 1 ]
-        then
-                find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_CGMINER/#define ULTRACOPIER_CGMINER/g" {} \; > /dev/null 2>&1
-            if [ $ILLEGAL -eq 1 ]
-            then
-                    find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_ILLEGAL/#define ULTRACOPIER_ILLEGAL/g" {} \; > /dev/null 2>&1
-            else
-                    find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_ILLEGAL/\/\/#define ULTRACOPIER_ILLEGAL/g" {} \; > /dev/null 2>&1
-            fi
-        else
-                find ${TEMP_PATH}/${TARGET}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_CGMINER/\/\/#define ULTRACOPIER_CGMINER/g" {} \; > /dev/null 2>&1
         fi
 	if [ $ULTIMATE -eq 1 ]
 	then
@@ -218,7 +186,7 @@ function compil {
 			cd ${PLUGIN_FOLDER}/
 		fi
 	done
-	if [ $ULTIMATE -eq 1 ] || [ $FORPLUGIN -eq 1 ] || [ $SUPERCOPIER -eq 1 ]
+	if [ $ULTIMATE -eq 1 ] || [ $FORPLUGIN -eq 1 ]
 	then
 		PLUGIN_FOLDER="${REAL_WINEPREFIX}/drive_c/temp/plugins-alternative/"
 		cd ${PLUGIN_FOLDER}/
@@ -294,14 +262,8 @@ function compil {
 	cd ${REAL_WINEPREFIX}/drive_c/temp/
 	if [ ${STATIC} -eq 1 ]
 	then
-		if [ ${SUPERCOPIER} -eq 1 ]
-		then
-			echo "${TARGET} supercopier static application..."
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" supercopier-static.pro
-		else
-			echo "${TARGET} ultracopier static application..."
-			DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
-		fi
+		echo "${TARGET} ultracopier static application..."
+		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-static.pro
 	else
 		echo "${TARGET} application..."
 		DISPLAY="na" WINEPREFIX=${REAL_WINEPREFIX} /usr/bin/nice -n 15 /usr/bin/ionice -c 3 wine qmake QMAKE_CFLAGS_RELEASE+="${CFLAGSCUSTOM}" QMAKE_CFLAGS+="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS_RELEASE="${CFLAGSCUSTOM}" QMAKE_CXXFLAGS="${CFLAGSCUSTOM}" ultracopier-core.pro
@@ -331,11 +293,7 @@ function compil {
 		upx --lzma -9 ultracopier.exe > /dev/null 2>&1
 	fi
 	fi
-	if [ $SUPERCOPIER -eq 1 ]
-	then
-		mv ultracopier.exe supercopier.exe
-	fi
-	if [ $ULTIMATE -ne 1 ] && [ $FORPLUGIN -ne 1 ] && [ $SUPERCOPIER -ne 1 ]
+	if [ $ULTIMATE -ne 1 ] && [ $FORPLUGIN -ne 1 ]
 	then
 		rm -Rf ${TEMP_PATH}/${TARGET}/plugins-alternative/
 	fi
@@ -348,4 +306,4 @@ function compil {
 	find ${TEMP_PATH}/${TARGET}/ -type d -empty -delete > /dev/null 2>&1
 	find ${TEMP_PATH}/${TARGET}/ -type d -empty -delete > /dev/null 2>&1
 	echo "${TARGET} compilation... done"
-} 
+}

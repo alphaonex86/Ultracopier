@@ -2,7 +2,7 @@ CONFIG += c++11
 QMAKE_CXXFLAGS+="-std=c++0x -Wall -Wextra"
 mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
-QT += widgets
+QT += widgets xml
 DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib
 CONFIG         += plugin
@@ -11,91 +11,94 @@ win32 {
 }
 
 HEADERS         = \
-    ../Ultracopier/StructEnumDefinition.h \
-    ../Ultracopier/StructEnumDefinition_CopyEngine.h \
-    ../Ultracopier/DebugEngineMacro.h \
-    ../Ultracopier/Variable.h \
-    ../Ultracopier/TransferThread.h \
-    ../Ultracopier/ReadThread.h \
-    ../Ultracopier/WriteThread.h \
-    ../Ultracopier/MkPath.h \
-    ../Ultracopier/AvancedQFile.h \
-    ../Ultracopier/ListThread.h \
-    ../../../interface/PluginInterface_CopyEngine.h \
-    ../../../interface/OptionInterface.h \
-    ../../../interface/FacilityInterface.h \
-    ../Ultracopier/Filters.h \
-    ../Ultracopier/FilterRules.h \
-    ../Ultracopier/RenamingRules.h \
-    ../Ultracopier/DriveManagement.h \
-    ../Ultracopier/CopyEngine.h \
-    ../Ultracopier/DebugDialog.h \
-    ../Ultracopier/CopyEngineFactory.h \
-    ../Ultracopier/FileErrorDialog.h \
-    ../Ultracopier/FileExistsDialog.h \
-    ../Ultracopier/FileIsSameDialog.h \
-    ../Ultracopier/FolderExistsDialog.h \
-    ../Ultracopier/ScanFileOrFolder.h \
-    ../Ultracopier/DiskSpace.h
+    $$PWD/StructEnumDefinition.h \
+    $$PWD/StructEnumDefinition_CopyEngine.h \
+    $$PWD/DebugEngineMacro.h \
+    $$PWD/Variable.h \
+    $$PWD/TransferThread.h \
+    $$PWD/ReadThread.h \
+    $$PWD/WriteThread.h \
+    $$PWD/MkPath.h \
+    $$PWD/AvancedQFile.h \
+    $$PWD/ListThread.h \
+    $$PWD/../../../interface/PluginInterface_CopyEngine.h \
+    $$PWD/../../../interface/OptionInterface.h \
+    $$PWD/../../../interface/FacilityInterface.h \
+    $$PWD/../../../FacilityEngine.h \
+    $$PWD/Filters.h \
+    $$PWD/FilterRules.h \
+    $$PWD/RenamingRules.h \
+    $$PWD/DriveManagement.h \
+    $$PWD/CopyEngine.h \
+    $$PWD/DebugDialog.h \
+    $$PWD/CopyEngineFactory.h \
+    $$PWD/FileErrorDialog.h \
+    $$PWD/FileExistsDialog.h \
+    $$PWD/FileIsSameDialog.h \
+    $$PWD/FolderExistsDialog.h \
+    $$PWD/ScanFileOrFolder.h \
+    $$PWD/DiskSpace.h
 SOURCES         = \
-    ../Ultracopier/TransferThread.cpp \
-    ../Ultracopier/ReadThread.cpp \
-    ../Ultracopier/WriteThread.cpp \
-    ../Ultracopier/MkPath.cpp \
-    ../Ultracopier/AvancedQFile.cpp \
-    ../Ultracopier/ListThread.cpp \
-    ../Ultracopier/Filters.cpp \
-    ../Ultracopier/FilterRules.cpp \
-    ../Ultracopier/RenamingRules.cpp \
-    ../Ultracopier/ListThread_InodeAction.cpp \
-    ../Ultracopier/DriveManagement.cpp \
-    ../Ultracopier/CopyEngine-collision-and-error.cpp \
-    ../Ultracopier/CopyEngine.cpp \
-    ../Ultracopier/DebugDialog.cpp \
-    ../Ultracopier/CopyEngineFactory.cpp \
-    ../Ultracopier/FileErrorDialog.cpp \
-    ../Ultracopier/FileExistsDialog.cpp \
-    ../Ultracopier/FileIsSameDialog.cpp \
-    ../Ultracopier/FolderExistsDialog.cpp \
-    ../Ultracopier/ScanFileOrFolder.cpp \
-    ../Ultracopier/DiskSpace.cpp
+    $$PWD/TransferThread.cpp \
+    $$PWD/ReadThread.cpp \
+    $$PWD/WriteThread.cpp \
+    $$PWD/MkPath.cpp \
+    $$PWD/AvancedQFile.cpp \
+    $$PWD/ListThread.cpp \
+    $$PWD/Filters.cpp \
+    $$PWD/FilterRules.cpp \
+    $$PWD/RenamingRules.cpp \
+    $$PWD/ListThread_InodeAction.cpp \
+    $$PWD/DriveManagement.cpp \
+    $$PWD/CopyEngine-collision-and-error.cpp \
+    $$PWD/CopyEngine.cpp \
+    $$PWD/DebugDialog.cpp \
+    $$PWD/CopyEngineFactory.cpp \
+    $$PWD/FileErrorDialog.cpp \
+    $$PWD/FileExistsDialog.cpp \
+    $$PWD/FileIsSameDialog.cpp \
+    $$PWD/FolderExistsDialog.cpp \
+    $$PWD/ScanFileOrFolder.cpp \
+    $$PWD/DiskSpace.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
-TRANSLATIONS += ../Ultracopier/Languages/ar/translation.ts \
-    ../Ultracopier/Languages/de/translation.ts \
-    ../Ultracopier/Languages/el/translation.ts \
-    ../Ultracopier/Languages/en/translation.ts \
-    ../Ultracopier/Languages/es/translation.ts \
-    ../Ultracopier/Languages/fr/translation.ts \
-    ../Ultracopier/Languages/hi/translation.ts \
-    ../Ultracopier/Languages/hu/translation.ts \
-    ../Ultracopier/Languages/id/translation.ts \
-    ../Ultracopier/Languages/it/translation.ts \
-    ../Ultracopier/Languages/ja/translation.ts \
-    ../Ultracopier/Languages/ko/translation.ts \
-    ../Ultracopier/Languages/nl/translation.ts \
-    ../Ultracopier/Languages/no/translation.ts \
-    ../Ultracopier/Languages/pl/translation.ts \
-    ../Ultracopier/Languages/pt/translation.ts \
-    ../Ultracopier/Languages/ru/translation.ts \
-    ../Ultracopier/Languages/th/translation.ts \
-    ../Ultracopier/Languages/tr/translation.ts \
-    ../Ultracopier/Languages/zh/translation.ts
+TRANSLATIONS += \
+    $$PWD/Languages/ar/translation.ts \
+    $$PWD/Languages/de/translation.ts \
+    $$PWD/Languages/el/translation.ts \
+    $$PWD/Languages/en/translation.ts \
+    $$PWD/Languages/es/translation.ts \
+    $$PWD/Languages/fr/translation.ts \
+    $$PWD/Languages/hi/translation.ts \
+    $$PWD/Languages/hu/translation.ts \
+    $$PWD/Languages/id/translation.ts \
+    $$PWD/Languages/it/translation.ts \
+    $$PWD/Languages/ja/translation.ts \
+    $$PWD/Languages/ko/translation.ts \
+    $$PWD/Languages/nl/translation.ts \
+    $$PWD/Languages/no/translation.ts \
+    $$PWD/Languages/pl/translation.ts \
+    $$PWD/Languages/pt/translation.ts \
+    $$PWD/Languages/ru/translation.ts \
+    $$PWD/Languages/th/translation.ts \
+    $$PWD/Languages/tr/translation.ts \
+    $$PWD/Languages/zh/translation.ts
 
 FORMS += \
-    ../Ultracopier/fileErrorDialog.ui \
-    ../Ultracopier/fileExistsDialog.ui \
-    ../Ultracopier/fileIsSameDialog.ui \
-    ../Ultracopier/debugDialog.ui \
-    ../Ultracopier/folderExistsDialog.ui \
-    ../Ultracopier/Filters.ui \
-    ../Ultracopier/FilterRules.ui \
-    ../Ultracopier/RenamingRules.ui \
-    ../Ultracopier/copyEngineOptions.ui \
-    ../Ultracopier/DiskSpace.ui
+    $$PWD/fileErrorDialog.ui \
+    $$PWD/fileExistsDialog.ui \
+    $$PWD/fileIsSameDialog.ui \
+    $$PWD/debugDialog.ui \
+    $$PWD/folderExistsDialog.ui \
+    $$PWD/Filters.ui \
+    $$PWD/FilterRules.ui \
+    $$PWD/RenamingRules.ui \
+    $$PWD/copyEngineOptions.ui \
+    $$PWD/DiskSpace.ui
 
-OTHER_FILES += informations.xml
+OTHER_FILES += \
+    $$PWD/informations.xml
 
 !CONFIG(static) {
 RESOURCES += \
-    ../Ultracopier/copyEngineResources.qrc
+    $$PWD/copyEngineResources.qrc
 }

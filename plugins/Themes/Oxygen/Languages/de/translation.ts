@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de" sourcelanguage="en">
+<TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="240"/>
+        <location filename="../../interface.cpp" line="244"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Kaufe die Ultimate Version um die Entwicklung zu finanzieren</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="310"/>
+        <location filename="../../interface.cpp" line="314"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Datei %1/%2, Größe:%3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="524"/>
+        <location filename="../../interface.cpp" line="528"/>
         <source>Copy list</source>
         <translation>Zu kopierende Dateien</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="526"/>
+        <location filename="../../interface.cpp" line="530"/>
         <source>Move list</source>
         <translation>Zu verschiebende Dateien</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="947"/>
+        <location filename="../../interface.cpp" line="951"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Nicht schließen, wenn Fehler aufgetreten sind</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="948"/>
+        <location filename="../../interface.cpp" line="952"/>
         <source>Never close</source>
         <translation>Niemals schließen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="949"/>
+        <location filename="../../interface.cpp" line="953"/>
         <source>Always close</source>
         <translation>Immer schließen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="951"/>
+        <location filename="../../interface.cpp" line="955"/>
         <source>File Name, 0KB</source>
         <translation>Dateiname, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1134"/>
-        <location filename="../../interface.cpp" line="1146"/>
-        <location filename="../../interface.cpp" line="1158"/>
+        <location filename="../../interface.cpp" line="1138"/>
+        <location filename="../../interface.cpp" line="1150"/>
+        <location filename="../../interface.cpp" line="1162"/>
         <source>Select a color</source>
         <translation>Farbe auswählen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1233"/>
         <location filename="../../interface.cpp" line="1237"/>
-        <location filename="../../interface.cpp" line="1239"/>
+        <location filename="../../interface.cpp" line="1241"/>
+        <location filename="../../interface.cpp" line="1243"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,10 +114,6 @@
         <location filename="../../interface.ui" line="271"/>
         <source>&amp;Cancel</source>
         <translation>Abbrechen (&amp;C)</translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">Kopiergeschwindigkeit begrenzen bei:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="329"/>
@@ -293,14 +289,6 @@
         <location filename="../../themesOptions.ui" line="292"/>
         <source>Click to edit the color</source>
         <translation>Zum Bearbeiten der Farbe klicken</translation>
-    </message>
-    <message>
-        <source>At the end of the copy: </source>
-        <translation type="obsolete">Am Ende der Kopie: </translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">Kopiergeschwindigkeit begrenzen bei:</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="147"/>

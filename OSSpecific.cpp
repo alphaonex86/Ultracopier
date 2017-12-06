@@ -28,13 +28,6 @@ void OSSpecific::updateText()
     #else
     text=tr("The replacement of default copy/move system should be not supported by the file manager.<br />Ask to the developer to support it.<br />You need do the copy/move manually.");
     #endif
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    text+=QStringLiteral("<br />")+tr("Consider Supercopier as deprecated, prefer Ultracopier");
-    #endif
-    #if defined(ULTRACOPIER_C) && ! defined(ULTRACOPIER_ILLEGAL)
-    text+=QStringLiteral("<br /><b>")+tr("This version use 100% of you graphic card/GPU (you computer can be noisy, or slow/buggy during the games) at exchange of free access to Ultimate version. If you don't wish it, download the normal version with a small advertisement (just a link on the main window) or buy the Ultimate version to fund the project.")+
-            QStringLiteral("<br /><a href=\"")+tr("http://ultracopier.first-world.info/download.html")+"\""+tr("http://ultracopier.first-world.info/download.html")+QStringLiteral("</a></b>");
-    #endif
     ui->label->setText(text);
 }
 

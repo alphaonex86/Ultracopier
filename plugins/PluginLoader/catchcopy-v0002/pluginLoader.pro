@@ -6,45 +6,45 @@ QT += widgets
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = \
-    StructEnumDefinition.h \
-    pluginLoader.h \
-    DebugEngineMacro.h \
-    Environment.h \
-    Variable.h \
-    PlatformMacro.h \
-    ../../../interface/PluginInterface_PluginLoader.h \
-    OptionsWidget.h
+    $$PWD/StructEnumDefinition.h \
+    $$PWD/pluginLoader.h \
+    $$PWD/DebugEngineMacro.h \
+    $$PWD/Environment.h \
+    $$PWD/Variable.h \
+    $$PWD/PlatformMacro.h \
+    $$PWD/../../../interface/PluginInterface_PluginLoader.h \
+    $$PWD/OptionsWidget.h
 SOURCES         = \
-    pluginLoader.cpp \
-    OptionsWidget.cpp
+    $$PWD/pluginLoader.cpp \
+    $$PWD/OptionsWidget.cpp
 TARGET          = $$qtLibraryTarget(pluginLoader)
-TRANSLATIONS += Languages/ar/translation.ts \
-    Languages/de/translation.ts \
-    Languages/el/translation.ts \
-    Languages/en/translation.ts \
-    Languages/es/translation.ts \
-    Languages/fr/translation.ts \
-    Languages/hi/translation.ts \
-    Languages/hu/translation.ts \
-    Languages/id/translation.ts \
-    Languages/it/translation.ts \
-    Languages/ja/translation.ts \
-    Languages/ko/translation.ts \
-    Languages/nl/translation.ts \
-    Languages/no/translation.ts \
-    Languages/pl/translation.ts \
-    Languages/pt/translation.ts \
-    Languages/ru/translation.ts \
-    Languages/th/translation.ts \
-    Languages/tr/translation.ts \
-    Languages/zh/translation.ts
+TRANSLATIONS += \
+    $$PWD/Languages/ar/translation.ts \
+    $$PWD/Languages/de/translation.ts \
+    $$PWD/Languages/el/translation.ts \
+    $$PWD/Languages/en/translation.ts \
+    $$PWD/Languages/es/translation.ts \
+    $$PWD/Languages/fr/translation.ts \
+    $$PWD/Languages/hi/translation.ts \
+    $$PWD/Languages/hu/translation.ts \
+    $$PWD/Languages/id/translation.ts \
+    $$PWD/Languages/it/translation.ts \
+    $$PWD/Languages/ja/translation.ts \
+    $$PWD/Languages/ko/translation.ts \
+    $$PWD/Languages/nl/translation.ts \
+    $$PWD/Languages/no/translation.ts \
+    $$PWD/Languages/pl/translation.ts \
+    $$PWD/Languages/pt/translation.ts \
+    $$PWD/Languages/ru/translation.ts \
+    $$PWD/Languages/th/translation.ts \
+    $$PWD/Languages/tr/translation.ts \
+    $$PWD/Languages/zh/translation.ts
 
 win32:LIBS += -lole32 -lshell32
 
 FORMS += \
-    OptionsWidget.ui
+    $$PWD/OptionsWidget.ui
 
 CONFIG(static, static|shared) {
 DEFINES += ULTRACOPIER_PLUGIN_ALL_IN_ONE
 }
-

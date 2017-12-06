@@ -124,6 +124,7 @@ SOURCES += $$PWD/../ThemesManager.cpp \
     $$PWD/../DebugModel.cpp \
     $$PWD/../InternetUpdater.cpp \
     $$PWD/../cpp11additionstringtointcpp.cpp
-INCLUDEPATH += lib/qt-tar-xz/
+INCLUDEPATH += \
+    $$PWD/../lib/qt-tar-xz/
 
 OTHER_FILES += $$PWD/../resources/resources-windows.rc

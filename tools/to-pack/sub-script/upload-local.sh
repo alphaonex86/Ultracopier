@@ -8,8 +8,6 @@ fi
 mkdir -p ${TEMP_PATH}
 cd ${TEMP_PATH}/
 
-SUPERCOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
-
 rsync -avrtz --compress-level=9 --rsh='ssh -p54973' --partial --progress /mnt/world/ultracopier-temp/ultracopier-*.dmg root@ssh.first-world.info:/home/first-world.info/files-rw/ultracopier/${ULTRACOPIER_VERSION}/ --timeout=120
 RETURNA=$?
 while [ ${RETURNA} -ne 0 ] && [ ${RETURNA} -ne 20 ] && [ ${RETURNA} -ne 255 ]
@@ -18,18 +16,6 @@ do
 	RETURNA=$?
 	echo ${RETURNA}
 done
-
-
-
-rsync -avrtz --compress-level=9 --rsh='ssh -p54973' --partial --progress /mnt/world/ultracopier-temp/supercopier-*.dmg root@ssh.first-world.info:/home/first-world.info/files-rw/supercopier/${SUPERCOPIER_VERSION}/ --timeout=120
-RETURNA=$?
-while [ ${RETURNA} -ne 0 ] && [ ${RETURNA} -ne 20 ] && [ ${RETURNA} -ne 255 ]
-do
-	rsync -avrtz --compress-level=9 --rsh='ssh -p54973' --partial --progress /mnt/world/ultracopier-temp/supercopier-*.dmg root@ssh.first-world.info:/home/first-world.info/files-rw/supercopier/${SUPERCOPIER_VERSION}/ --timeout=120
-	RETURNA=$?
-	echo ${RETURNA}
-done
-
 
 
 rsync -avrtzu --compress-level=9 --rsh='ssh -p54973' --partial --progress /mnt/world/ultracopier-temp/plugins/ root@ssh.first-world.info:/home/first-world.info/files-rw/ultracopier/plugins/ --timeout=120
@@ -45,4 +31,3 @@ done
 #then
 #	rm -Rf /mnt/world/ultracopier-temp/*.dmg /mnt/world/ultracopier-temp/*.tar.xz /mnt/world/ultracopier-temp/plugins/
 #fi
-
