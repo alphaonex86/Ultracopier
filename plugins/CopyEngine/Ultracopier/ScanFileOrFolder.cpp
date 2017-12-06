@@ -677,7 +677,7 @@ void ScanFileOrFolder::setCopyListOrder(const bool &order)
 /// \brief set rsync
 void ScanFileOrFolder::setRsync(const bool rsync)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+std::to_string(rsync));
     this->rsync=rsync;
 }
 #endif

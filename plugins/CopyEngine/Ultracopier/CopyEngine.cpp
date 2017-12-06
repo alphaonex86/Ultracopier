@@ -992,7 +992,7 @@ void CopyEngine::setAutoStart(const bool autoStart)
 /// \brief set rsync
 void CopyEngine::setRsync(const bool rsync)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+std::to_string(rsync));
     this->rsync=rsync;
     if(uiIsInstalled)
     {

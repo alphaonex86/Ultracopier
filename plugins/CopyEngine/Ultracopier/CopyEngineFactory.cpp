@@ -231,7 +231,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         ui->blockSize->setValue(stringtouint32(options->getOptionValue("blockSize")));//keep before sequentialBuffer and parallelBuffer
         ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));
         #ifdef ULTRACOPIER_PLUGIN_RSYNC
-        ui->rsync->setChecked(options->getOptionValue("rsync").toBool());
+        ui->rsync->setChecked(stringtobool(options->getOptionValue("rsync")));
         #else
         ui->label_rsync->setVisible(false);
         ui->rsync->setVisible(false);
@@ -688,7 +688,7 @@ void CopyEngineFactory::setRsync(bool rsync)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("rsync",rsync);
+        optionsEngine->setOptionValue("rsync",std::to_string(rsync));
 }
 #endif
 
