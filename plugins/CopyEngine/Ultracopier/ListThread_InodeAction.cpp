@@ -26,7 +26,7 @@ switch(currentActionToDoInode.type)
     break;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     case ActionType_RmSync:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmsync, destination: %1").arg(currentActionToDoInode.destination.absoluteFilePath()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmsync, destination: %1").arg(currentActionToDoInode.destination.absoluteFilePath()).toStdString());
         mkPathQueue.addPath(currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;

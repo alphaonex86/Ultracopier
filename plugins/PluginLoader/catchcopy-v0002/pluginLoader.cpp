@@ -4,6 +4,7 @@
 
 #include "pluginLoader.h"
 #include "PlatformMacro.h"
+#include "../../../cpp11addition.h"
 
 #include <QFile>
 #include <QDir>
@@ -74,7 +75,7 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
     }
     if(this->needBeRegistred==needBeRegistred)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Double event dropped: %1").arg(needBeRegistred));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Double event dropped: %1").arg(needBeRegistred).toStdString());
         if(needBeRegistred)
                 emit newState(Ultracopier::Caught);
         else
@@ -82,14 +83,14 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
         return;
     }
     this->needBeRegistred=needBeRegistred;
-    int index=0;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, needBeRegistred: %1, allDllIsImportant: %2").arg(needBeRegistred).arg(allDllIsImportant));
+    unsigned int index=0;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start, needBeRegistred: %1, allDllIsImportant: %2").arg(needBeRegistred).arg(allDllIsImportant).toStdString());
 
     bool oneHaveFound=false;
     index=0;
     while(index<importantDll.size())
     {
-        if(QFile::exists(pluginPath+importantDll.at(index)))
+        if(QFile::exists(QString::fromStdString(pluginPath+importantDll.at(index))))
         {
             oneHaveFound=true;
             break;
@@ -101,7 +102,7 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
         index=0;
         while(index<secondDll.size())
         {
-            if(QFile::exists(pluginPath+secondDll.at(index)))
+            if(QFile::exists(QString::fromStdString(pluginPath+secondDll.at(index))))
             {
                 oneHaveFound=true;
                 break;
@@ -111,7 +112,7 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
     }
     if(!oneHaveFound)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("No dll have found"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"No dll have found");
         emit newState(Ultracopier::Uncaught);
         if(!needBeRegistred)
             correctlyLoaded.clear();
@@ -128,7 +129,7 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
             !(
                 (needBeRegistred)
                 ||
-                (!needBeRegistred && correctlyLoaded.contains(importantDll.at(index)))
+                (!needBeRegistred && correctlyLoaded.find(importantDll.at(index))!=correctlyLoaded.cend())
             )
         ))
         {
@@ -155,7 +156,7 @@ void WindowsExplorerLoader::setEnabled(const bool &needBeRegistred)
             !(
                 (needBeRegistred && allDllIsImportant)
                 ||
-                (!needBeRegistred && correctlyLoaded.contains(secondDll.at(index)))
+                (!needBeRegistred && correctlyLoaded.find(secondDll.at(index))!=correctlyLoaded.cend())
             )
         ))
         {
@@ -234,25 +235,29 @@ bool WindowsExplorerLoader::checkExistsDll()
     if(is64Bits)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"64Bits is important");
-        importantDll << CATCHCOPY_DLL_64;
-        secondDll << CATCHCOPY_DLL_32;
+        importantDll.push_back(CATCHCOPY_DLL_64);
+        secondDll.push_back(CATCHCOPY_DLL_32);
     }
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"32Bits is important");
-        importantDll << CATCHCOPY_DLL_32;
-        secondDll << CATCHCOPY_DLL_64;
+        importantDll.push_back(CATCHCOPY_DLL_32);
+        secondDll.push_back(CATCHCOPY_DLL_64);
     }
 
-    int index=0;
+    unsigned int index=0;
     while(index<importantDll.size())
     {
-        if(!QFile::exists(pluginPath+importantDll.at(index)+NORMAL_EXT))
+        if(!QFile::exists(QString::fromStdString(pluginPath+importantDll.at(index)+NORMAL_EXT)))
         {
-            if(!QFile::exists(pluginPath+importantDll.at(index)+SECOND_EXT))
+            if(!QFile::exists(QString::fromStdString(pluginPath+importantDll.at(index)+SECOND_EXT)))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("file not found, drop to the list: %1 and %2").arg(pluginPath+importantDll.at(index)+NORMAL_EXT).arg(pluginPath+importantDll.at(index)+SECOND_EXT));
-                importantDll.removeAt(index);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"file not found, drop to the list: "+
+                                          pluginPath+importantDll.at(index)+NORMAL_EXT+
+                                         " and "+
+                                         pluginPath+importantDll.at(index)+SECOND_EXT
+                                         );
+                importantDll.erase(importantDll.cbegin()+index);
                 index--;
             }
             else
@@ -265,12 +270,15 @@ bool WindowsExplorerLoader::checkExistsDll()
     index=0;
     while(index<secondDll.size())
     {
-        if(!QFile::exists(pluginPath+secondDll.at(index)+NORMAL_EXT))
+        if(!QFile::exists(QString::fromStdString(pluginPath+secondDll.at(index)+NORMAL_EXT)))
         {
-            if(!QFile::exists(pluginPath+secondDll.at(index)+SECOND_EXT))
+            if(!QFile::exists(QString::fromStdString(pluginPath+secondDll.at(index)+SECOND_EXT)))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("file not found, drop to the list: %1 and %2").arg(pluginPath+secondDll.at(index)+NORMAL_EXT).arg(pluginPath+secondDll.at(index)+SECOND_EXT));
-                secondDll.removeAt(index);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,
+                                         "file not found, drop to the list: "+pluginPath+secondDll.at(index)+NORMAL_EXT+
+                                         " and "+pluginPath+secondDll.at(index)+SECOND_EXT
+                                         );
+                secondDll.erase(secondDll.cbegin()+index);
                 index--;
             }
             else
@@ -286,7 +294,7 @@ bool WindowsExplorerLoader::checkExistsDll()
         return false;
 }
 
-void WindowsExplorerLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
+void WindowsExplorerLoader::setResources(OptionInterface * options, const std::string &writePath, const std::string &pluginPath, const bool &portableVersion)
 {
     Q_UNUSED(options);
     Q_UNUSED(writePath);
@@ -300,35 +308,35 @@ void WindowsExplorerLoader::setResources(OptionInterface * options,const QString
     this->optionsEngine=options;
     if(optionsEngine!=NULL)
     {
-        QList<QPair<QString, QVariant> > KeysList;
-        KeysList.append(qMakePair(QStringLiteral("allDllIsImportant"),QVariant(false)));
-        KeysList.append(qMakePair(QStringLiteral("Debug"),QVariant(false)));
+        std::vector<std::pair<std::string, std::string> > KeysList;
+        KeysList.push_back(std::pair<std::string, std::string>("allDllIsImportant","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("Debug","false"));
         optionsEngine->addOptionGroup(KeysList);
-        allDllIsImportant=optionsEngine->getOptionValue("allDllIsImportant").toBool();
-        Debug=optionsEngine->getOptionValue("Debug").toBool();
+        allDllIsImportant=stringtobool(optionsEngine->getOptionValue("allDllIsImportant"));
+        Debug=stringtobool(optionsEngine->getOptionValue("Debug"));
         optionsWidget->setAllDllIsImportant(allDllIsImportant);
         optionsWidget->setDebug(Debug);
     }
 }
 
-bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bool &bRegister,const bool &quiet)
+bool WindowsExplorerLoader::RegisterShellExtDll(const std::string &dllPath, const bool &bRegister, const bool &quiet)
 {
     if(Debug)
     {
-        QString message;
+        std::string message;
         if(bRegister)
-            message+=QStringLiteral("Try load the dll: %1, and ").arg(dllPath);
+            message+="Try load the dll: %1, and "+dllPath;
         else
-            message+=QStringLiteral("Try unload the dll: %1, and ").arg(dllPath);
+            message+="Try unload the dll: %1, and "+dllPath;
         if(quiet)
-            message+=QStringLiteral("don't open the UAC");
+            message+="don't open the UAC";
         else
-            message+=QStringLiteral("open the UAC if needed");
-        QMessageBox::information(NULL,"Debug",message);
+            message+="open the UAC if needed";
+        QMessageBox::information(NULL,"Debug",QString::fromStdString(message));
     }
-    if(bRegister && correctlyLoaded.contains(dllPath))
+    if(bRegister && correctlyLoaded.find(dllPath)!=correctlyLoaded.cend())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Try dual load: %1").arg(dllPath));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Try dual load: "+dllPath);
         return false;
     }
     ////////////////////////////// First way to load //////////////////////////////
@@ -337,8 +345,8 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
         arguments.append("/s");
     if(!bRegister)
         arguments.append("/u");
-    arguments.append(dllPath);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: regsvr32 "+arguments.join(" "));
+    arguments.append(QString::fromStdString(dllPath));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: regsvr32 "+arguments.join(" ").toStdString());
     int result;
     #ifdef Q_OS_WIN32
     QProcess process;
@@ -364,14 +372,14 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
     if(result==0)
     {
         if(bRegister)
-            correctlyLoaded << dllPath;
+            correctlyLoaded.insert(dllPath);
         ok=true;
     }
     #if ! defined(_M_X64)
     if(result==999 && !changeOfArchDetected)//code of wrong arch for the dll
     {
         changeOfArchDetected=true;
-        QStringList temp;
+        std::vector<std::string> temp;
         temp = importantDll;
         secondDll = importantDll;
         importantDll = temp;
@@ -380,7 +388,7 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
     #endif
     if(result==5)
     {
-        if(!quiet || (!bRegister && correctlyLoaded.contains(dllPath)))
+        if(!quiet || (!bRegister && correctlyLoaded.find(dllPath)!=correctlyLoaded.cend()))
         {
             arguments.last()=QStringLiteral("\"%1\"").arg(arguments.last());
             ////////////////////////////// Last way to load //////////////////////////////
@@ -406,15 +414,15 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const QString &dllPath, const bo
             ok=true;
             #endif
             if(ok && bRegister)
-                correctlyLoaded << dllPath;
+                correctlyLoaded.insert(dllPath);
         }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"not try because need be quiet: "+dllPath);
     }
     else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("regsvr32 terminated with: %1").arg(result));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 terminated with: "+std::to_string(result));
     if(!bRegister)
-        correctlyLoaded.remove(dllPath);
+        correctlyLoaded.erase(dllPath);
     return ok;
 }
 
@@ -432,11 +440,11 @@ void WindowsExplorerLoader::newLanguageLoaded()
 void WindowsExplorerLoader::setAllDllIsImportant(bool allDllIsImportant)
 {
     this->allDllIsImportant=allDllIsImportant;
-    optionsEngine->setOptionValue("allDllIsImportant",allDllIsImportant);
+    optionsEngine->setOptionValue("allDllIsImportant",std::to_string(allDllIsImportant));
 }
 
 void WindowsExplorerLoader::setDebug(bool Debug)
 {
     this->Debug=Debug;
-    optionsEngine->setOptionValue("Debug",Debug);
+    optionsEngine->setOptionValue("Debug",std::to_string(Debug));
 }

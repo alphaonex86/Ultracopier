@@ -17,7 +17,7 @@
 
 void WindowsSessionLoader::setEnabled(const bool &newValue)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, newValue: "+QString::number(newValue));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, newValue: "+std::to_string(newValue));
     //set value into the variable
     HKEY    ultracopier_regkey;
     //for autostart
@@ -30,12 +30,12 @@ void WindowsSessionLoader::setEnabled(const bool &newValue)
         if(newValue)
         {
             if(RegSetValueEx(ultracopier_regkey, TEXT("ultracopier"), 0, REG_SZ, (BYTE*)windowsString, runStringApp.length()*2)!=ERROR_SUCCESS)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"newValue: "+QString::number(newValue)+" failed");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"newValue: "+std::to_string(newValue)+" failed");
         }
         else
         {
             if(RegDeleteValue(ultracopier_regkey, TEXT("ultracopier"))!=ERROR_SUCCESS)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"newValue: "+QString::number(newValue)+" failed");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"newValue: "+std::to_string(newValue)+" failed");
         }
         RegCloseKey(ultracopier_regkey);
     }

@@ -14,7 +14,13 @@
         #include <windows.h>
     #endif
 #endif
-#include "FacilityEngine.h"
+
+#ifdef Q_OS_WIN32
+#define CURRENTSEPARATOR "\\"
+#else
+#define CURRENTSEPARATOR "/"
+#endif
+
 #include "../../../cpp11addition.h"
 
 TransferThread::TransferThread() :
@@ -223,13 +229,13 @@ void TransferThread::setFileRename(const std::string &nameForRename)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] nameForRename: "+nameForRename);
     if(!renameTheOriginalDestination)
-        destination.setFile(destination.absolutePath()+QString::fromStdString(FacilityEngine::separator()+nameForRename));
+        destination.setFile(destination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(nameForRename));
     else
     {
         QString tempDestination=destination.absoluteFilePath();
         QFile destinationFile(tempDestination);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] "+QStringLiteral("rename %1: to: %2").arg(destination.absoluteFilePath()).arg(destination.absolutePath()+QString::fromStdString(FacilityEngine::separator()+nameForRename)).toStdString());
-        if(!destinationFile.rename(destination.absolutePath()+QString::fromStdString(FacilityEngine::separator()+nameForRename)))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] "+QStringLiteral("rename %1: to: %2").arg(destination.absoluteFilePath()).arg(destination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(nameForRename)).toStdString());
+        if(!destinationFile.rename(destination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(nameForRename)))
         {
             if(!destinationFile.exists())
             {
@@ -243,7 +249,7 @@ void TransferThread::setFileRename(const std::string &nameForRename)
             return;
         }
         if(source.absoluteFilePath()==destination.absoluteFilePath())
-            source.setFile(destination.absolutePath()+QString::fromStdString(FacilityEngine::separator()+nameForRename));
+            source.setFile(destination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(nameForRename));
         destination.setFile(tempDestination);
         destination.refresh();
     }
@@ -649,7 +655,7 @@ bool TransferThread::checkAlwaysRename()
                     stringreplaceAll(newFileName,"%number%",std::to_string(num));
                 }
             }
-            newDestination.setFile(newDestination.absolutePath()+QString::fromStdString(FacilityEngine::separator()+newFileName+suffix));
+            newDestination.setFile(newDestination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(newFileName+suffix));
             num++;
         }
         while(newDestination.exists());

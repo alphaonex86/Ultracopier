@@ -1,7 +1,12 @@
 #include "FolderExistsDialog.h"
 #include "ui_folderExistsDialog.h"
 #include "TransferThread.h"
-#include "FacilityEngine.h"
+
+#ifdef Q_OS_WIN32
+#define CURRENTSEPARATOR "\\"
+#else
+#define CURRENTSEPARATOR "/"
+#endif
 
 #include <QMessageBox>
 #include <QFileInfo>
@@ -132,7 +137,7 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
                 newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
-        destination=absolutePath+QString::fromStdString(FacilityEngine::separator())+newFileName+suffix;
+        destination=absolutePath+CURRENTSEPARATOR+newFileName+suffix;
         destinationInfo.setFile(destination);
         num++;
     }

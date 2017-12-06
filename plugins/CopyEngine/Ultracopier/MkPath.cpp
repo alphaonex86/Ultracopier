@@ -79,8 +79,8 @@ void MkPath::internalDoThisPath()
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath()+", error: "+removedFile.errorString());
-                emit errorOnFolder(pathList.first().destination,removedFile.errorString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath().toStdString()+", error: "+removedFile.errorString().toStdString());
+                emit errorOnFolder(pathList.first().destination,removedFile.errorString().toStdString());
                 return;
             }
         }
@@ -89,8 +89,8 @@ void MkPath::internalDoThisPath()
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath());
-            emit errorOnFolder(pathList.first().destination,tr("Unable to remove"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath().toStdString());
+            emit errorOnFolder(pathList.first().destination,tr("Unable to remove").toStdString());
             return;
         }
         pathList.removeFirst();
@@ -352,20 +352,20 @@ bool MkPath::rmpath(const QDir &dir
                         QFile file(fileInfo.absoluteFilePath());
                         if(!file.remove())
                         {
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove a file: "+fileInfo.absoluteFilePath()+", due to: "+file.errorString());
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove a file: "+fileInfo.absoluteFilePath().toStdString()+", due to: "+file.errorString().toStdString());
                             allHaveWork=false;
                         }
                     }
                     else
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName().toStdString());
                         allHaveWork=false;
                     }
                 }
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName().toStdString());
                 allHaveWork=false;
             }
             #else

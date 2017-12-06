@@ -274,7 +274,7 @@ void ListThread::setAutoStart(const bool autoStart)
 /// \brief set rsync
 void ListThread::setRsync(const bool rsync)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+QString::number(rsync));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+std::to_string(rsync));
     this->rsync=rsync;
     int index=0;
     int loop_sub_size_transfer_thread_search=transferThreadList.size();
@@ -283,7 +283,7 @@ void ListThread::setRsync(const bool rsync)
         transferThreadList.at(index)->setRsync(rsync);
         index++;
     }
-    for(int i=0;i<scanFileOrFolderThreadsPool.size();i++)
+    for(unsigned int i=0;i<scanFileOrFolderThreadsPool.size();i++)
         scanFileOrFolderThreadsPool.at(i)->setRsync(rsync);
 }
 #endif
@@ -1006,13 +1006,13 @@ void ListThread::addToRealMove(const QFileInfo& source,const QFileInfo& destinat
 //rsync rm
 void ListThread::addToRmForRsync(const QFileInfo& destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inode: "+destination.absoluteFilePath());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inode: "+destination.absoluteFilePath().toStdString());
     ActionToDoInode temp;
     temp.type	= ActionType_RmSync;
     temp.id		= generateIdNumber();
     temp.destination= destination;
     temp.isRunning	= false;
-    actionToDoListInode << temp;
+    actionToDoListInode.push_back(temp);
 }
 #endif
 
@@ -1963,7 +1963,7 @@ void ListThread::mkPathFirstFolderFinish()
                 //to send to the log
                 #ifdef ULTRACOPIER_PLUGIN_RSYNC
                 if(actionToDoListInode.at(int_for_loop).type!=ActionType_RmSync)
-                    emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath());
+                    emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath().toStdString());
                 #else
                 emit mkPath(actionToDoListInode.at(int_for_loop).destination.absoluteFilePath().toStdString());
                 #endif
