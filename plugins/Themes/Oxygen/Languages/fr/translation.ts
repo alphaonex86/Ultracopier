@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr" sourcelanguage="en">
+<TS version="2.1" language="fr" sourcelanguage="en">
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+240"/>
+        <location filename="../../interface.cpp" line="+244"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
@@ -96,10 +96,6 @@
         <translation>Vers:</translation>
     </message>
     <message>
-        <source>Close at the end of the transfers</source>
-        <translation type="obsolete">Fermer à la fin des transferts</translation>
-    </message>
-    <message>
         <location line="+161"/>
         <source>&amp;More</source>
         <translation>Pl&amp;us</translation>
@@ -118,10 +114,6 @@
         <location line="+11"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Annuler</translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
     </message>
     <message>
         <location line="-153"/>
@@ -297,18 +289,6 @@
         <location line="+116"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
-    </message>
-    <message>
-        <source>At the end of the copy: </source>
-        <translation type="obsolete">À la fin de la copie:</translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
-    </message>
-    <message>
-        <source>Limit copy speed to:</source>
-        <translation type="obsolete">Limiter la vitesse de copie à:</translation>
     </message>
     <message>
         <location line="-145"/>

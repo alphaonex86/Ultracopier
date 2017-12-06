@@ -12,18 +12,10 @@
 #include "LanguagesManager.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-#ifdef ULTRACOPIER_MODE_SUPERCOPIER
-#error, not done
-#else
 #include "plugins/Themes/Oxygen/ThemesFactory.h"
 #endif
-#endif
 
-#ifdef ULTRACOPIER_MODE_SUPERCOPIER
-#define ULTRACOPIER_DEFAULT_STYLE "Supercopier"
-#else
 #define ULTRACOPIER_DEFAULT_STYLE "Oxygen"
-#endif
 
 /// \warning All plugin remain loaded
 /// \todo get the current themes instance

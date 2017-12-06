@@ -16,11 +16,6 @@ function compil {
 	cd ${TEMP_PATH}/
 	TARGET=$1
 	STATIC=$4
-	SUPERCOPIER=${5}
-	if [ $SUPERCOPIER -eq 1 ]
-	then
-		ULTRACOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}" | sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g"`
-	fi
 	FINAL_ARCHIVE="${TARGET}-linux-x86_64-pc-${ULTRACOPIER_VERSION}"
 	if [ ! -e ${FINAL_ARCHIVE}.tar.xz ]
 	then
@@ -28,27 +23,11 @@ function compil {
 
 		rm -Rf ${TEMP_PATH}/${FINAL_ARCHIVE}/
 		/usr/bin/rsync -art --delete ${ULTRACOPIER_SOURCE}/ ${TEMP_PATH}/${FINAL_ARCHIVE}/ --exclude='*build*' --exclude='*Qt_5*' --exclude='*qt5*' --exclude='*.pro.user'
-		if [ $SUPERCOPIER -eq 1 ]
-		then
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1,0,([0-9]+,[0-9]+)/4,0,\1/g" {} \; > /dev/null
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i -r sed -r "s/1.0.([0-9]+\\.[0-9]+)/4.0.\1/g" {} \; > /dev/null
-			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-16x16.png ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-16x16.png
-			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-128x128.png ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-128x128.png
-			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier-all-in-one.ico ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier-all-in-one.ico
-			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier.ico ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier.ico
-			mv ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/supercopier.icns ${TEMP_PATH}/${FINAL_ARCHIVE}/resources/ultracopier.icns
-		fi
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*.pro.user" -exec rm {} \; > /dev/null
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "*-build-desktop" -type d -exec rm -Rf {} \; > /dev/null
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<architecture>.*<\/architecture>/<architecture>linux-x86_64-pc<\/architecture>/g" {} \; > /dev/null
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<version>.*<\/version>/<version>${ULTRACOPIER_VERSION}<\/version>/g" {} \; > /dev/null
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "informations.xml" -exec sed -i -r "s/<pubDate>.*<\pubDate>/<pubDate>`date +%s`<\pubDate>/g" {} \; > /dev/null
-		if [ $SUPERCOPIER -eq 1 ]
-		then
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null
-		else
-			find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_MODE_SUPERCOPIER/\/\/#define ULTRACOPIER_MODE_SUPERCOPIER/g" {} \; > /dev/null
-		fi
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLE/\/\/#define ULTRACOPIER_VERSION_PORTABLE/g" {} \; > /dev/null
 		find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -name "Variable.h" -exec sed -i "s/#define ULTRACOPIER_VERSION_PORTABLEAPPS/\/\/#define ULTRACOPIER_VERSION_PORTABLEAPPS/g" {} \; > /dev/null
 		if [ ${DEBUG} -eq 1 ]
@@ -99,31 +78,14 @@ function compil {
 			echo "make failed on the linux: ${RETURN_CODE}"
 			exit
 		fi
-		if [ $SUPERCOPIER -eq 1 ]
+		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Oxygen/
+		${QMAKE} -config ${QTMODEDEBUGRELEASE}
+		make -j 4 > /dev/null
+		RETURN_CODE=$?
+		if [ $? -ne 0 ]
 		then
-			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/Themes/Supercopier/
-			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 4 > /dev/null
-			RETURN_CODE=$?
-			if [ $? -ne 0 ]
-			then
-				echo "make failed on the linux: ${RETURN_CODE}"
-				exit
-			fi
-			if [ $STATIC -eq 1 ]
-			then
-				cp -aRf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/*/*/*.a ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
-			fi
-		else
-			cd ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/Themes/Oxygen/
-			${QMAKE} -config ${QTMODEDEBUGRELEASE}
-			make -j 4 > /dev/null
-			RETURN_CODE=$?
-			if [ $? -ne 0 ]
-			then
-				echo "make failed on the linux: ${RETURN_CODE}"
-				exit
-			fi
+			echo "make failed on the linux: ${RETURN_CODE}"
+			exit
 		fi
 		if [ ${ULTIMATE} -eq 1 ] && [ $STATIC -ne 1 ]
 		then
@@ -161,14 +123,8 @@ function compil {
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}/
 		if [ $STATIC -eq 1 ]
 		then
-			if [ $SUPERCOPIER -eq 1 ]
-			then
-				cp -aRf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/*/*/*.a ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
-				${QMAKE} -config ${QTMODEDEBUGRELEASE} supercopier-static.pro
-			else
-				cp -aRf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/*/*/*.a ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
-				${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-static.pro
-			fi
+			cp -aRf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/*/*/*.a ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins/
+			${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-static.pro
 		else
 			${QMAKE} -config ${QTMODEDEBUGRELEASE} ultracopier-core.pro
 		fi
@@ -182,10 +138,6 @@ function compil {
 		then
 			echo "make failed on the linux: ${RETURN_CODE}"
 			exit
-		fi
-		if [ $SUPERCOPIER -eq 1 ]
-		then
-			mv ultracopier supercopier
 		fi
 		cd ${TEMP_PATH}/${FINAL_ARCHIVE}
 		for SUBFOLDER in `ls -1`
@@ -219,7 +171,7 @@ function compil {
 		then
 			rm -Rf ${TEMP_PATH}/${FINAL_ARCHIVE}/plugins-alternative/
 		fi
-		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type f -not \( -name "*.xml" -or -name "lib*.so" -or -name "ultracopier" -or -name "supercopier" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
+		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type f -not \( -name "*.xml" -or -name "lib*.so" -or -name "ultracopier" -or -name "*.txt" -or -name "*.qm" \) -exec rm -f {} \;
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d \( -name "*build*" -or -name "Desktop" -or -name "Qt_5" -or -name "qt5" \) -exec rm -Rf {} \;
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null
 		/usr/bin/find ${TEMP_PATH}/${FINAL_ARCHIVE}/ -type d -empty -delete > /dev/null
@@ -319,10 +271,5 @@ compil "ultracopier" 0 0 0 0
 compil "ultracopier-ultimate" 0 1 0 0
 compil "ultracopier-debug" 1 0 0 0
 
-compil "supercopier" 0 0 0 1
-compil "supercopier-ultimate" 0 1 0 1
-compil "supercopier-debug" 1 0 0 1
-
 #compil_plugin "ultracopier" 0 "plugins-alternative"
 #compil_plugin "ultracopier" 0 "plugins"
-

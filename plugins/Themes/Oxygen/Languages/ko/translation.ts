@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ko_KR">
+<TS version="2.1" language="ko_KR">
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+240"/>
+        <location filename="../../interface.cpp" line="+244"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,10 +114,6 @@
         <location line="+11"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished">&amp;취소</translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
         <location line="+58"/>
@@ -293,14 +289,6 @@
         <location line="+116"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>At the end of the copy: </source>
-        <translation type="obsolete">복사 종료시:</translation>
-    </message>
-    <message>
-        <source>Limit copy speed at:</source>
-        <translation type="obsolete">복사 속도 제한:</translation>
     </message>
     <message>
         <location line="-145"/>

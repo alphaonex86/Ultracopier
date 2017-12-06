@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Themes/Supercopier/informations.xml</file>
-	<file>Themes/Supercopier/Languages/fr/translation.qm</file>
-    </qresource>
-</RCC>

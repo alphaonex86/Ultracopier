@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru" sourcelanguage="en">
+<TS version="2.1" language="ru" sourcelanguage="en">
 <context>
     <name>InterfacePlugin</name>
     <message>
@@ -15,10 +15,6 @@
         <location filename="../../interface.ui" line="32"/>
         <source>Action:</source>
         <translation>Действие:</translation>
-    </message>
-    <message>
-        <source>In wait</source>
-        <translation type="obsolete">В ожидании</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="44"/>

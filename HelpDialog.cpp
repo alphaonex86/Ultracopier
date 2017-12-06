@@ -31,11 +31,7 @@ HelpDialog::HelpDialog() :
     #endif // ULTRACOPIER_DEBUG
     //connect the about Qt
     connect(ui->pushButtonAboutQt,&QPushButton::toggled,&QApplication::aboutQt);
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    setWindowTitle(tr("About Supercopier"));
-    #else
     setWindowTitle(tr("About Ultracopier"));
-    #endif
 }
 
 /// \brief Destruct the object
@@ -68,9 +64,6 @@ void HelpDialog::reloadTextValue()
     text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(ULTRACOPIER_VERSION));
     #else
     text=text.replace(QStringLiteral("%1"),ULTRACOPIER_VERSION);
-    #endif
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        text=text.replace(QStringLiteral("Ultracopier"),QStringLiteral("Supercopier"),Qt::CaseInsensitive);
     #endif
     ui->label_ultracopier->setText(text);
 
@@ -106,24 +99,16 @@ void HelpDialog::reloadTextValue()
 
 std::string HelpDialog::getWebSite()
 {
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/").toStdString()+"supercopier.html";
-    #else
-        return tr("http://ultracopier.first-world.info/").toStdString();
-    #endif
+    return tr("http://ultracopier.first-world.info/").toStdString();
 }
 
 
 std::string HelpDialog::getUpdateUrl()
 {
     #if defined(ULTRACOPIER_VERSION_ULTIMATE)
-    return tr("http://ultracopier.first-world.info/shop.html").toStdString();
+        return tr("http://ultracopier.first-world.info/shop.html").toStdString();
     #else
-        #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-        return tr("http://ultracopier.first-world.info/").toStdString()+"supercopier.html";
-        #else
         return tr("http://ultracopier.first-world.info/download.html").toStdString();
-        #endif
     #endif
 }
 

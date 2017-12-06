@@ -8,7 +8,6 @@ if [ "${ULTRACOPIER_VERSION}" = "" ]
 then
         exit;
 fi
-SUPERCOPIER_VERSION=`echo "${ULTRACOPIER_VERSION}"`
 
 cd ${TEMP_PATH}/
 
