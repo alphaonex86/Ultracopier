@@ -14,12 +14,15 @@ HEADERS         = \
     $$PWD/../../../interface/PluginInterface_Themes.h \
     $$PWD/../../../interface/FacilityInterface.h \
     $$PWD/../../../interface/OptionInterface.h \
+    $$PWD/../../../cpp11addition.h \
     $$PWD/TransferModel.h \
     $$PWD/interface.h
 SOURCES         = \
     $$PWD/ThemesFactory.cpp \
     $$PWD/TransferModel.cpp \
-    $$PWD/interface.cpp
+    $$PWD/interface.cpp \
+    $$PWD/../../../cpp11addition.cpp \
+    $$PWD/../../../cpp11additionstringtointcpp.cpp
 TARGET          = $$qtLibraryTarget(interface)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

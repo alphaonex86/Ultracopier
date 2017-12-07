@@ -15,9 +15,12 @@ HEADERS         = \
     $$PWD/Variable.h \
     $$PWD/DebugEngineMacro.h \
     $$PWD/StructEnumDefinition.h \
-    $$PWD/../../../interface/PluginInterface_Listener.h
+    $$PWD/../../../interface/PluginInterface_Listener.h \
+    $$PWD/../../../cpp11addition.h
 SOURCES         = \
     $$PWD/listener.cpp \
     $$PWD/catchcopy-api-0002/ServerCatchcopy.cpp \
-    $$PWD/catchcopy-api-0002/ExtraSocketCatchcopy.cpp
+    $$PWD/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
+    $$PWD/../../../cpp11addition.cpp \
+    $$PWD/../../../cpp11additionstringtointcpp.cpp
 TARGET          = $$qtLibraryTarget(listener)
