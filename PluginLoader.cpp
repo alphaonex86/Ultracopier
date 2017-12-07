@@ -72,8 +72,8 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     if(plugin.category!=PluginType_PluginLoader)
         return;
     LocalPlugin newEntry;
-    QString pluginPath=plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("pluginLoader"));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("try load: ")+pluginPath);
+    std::string pluginPath=plugin.path+PluginsManager::getResolvedPluginName("pluginLoader");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try load: "+pluginPath);
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     PluginInterface_PluginLoader *pluginLoaderInstance;
     QObjectList objectList=QPluginLoader::staticInstances();
@@ -89,22 +89,22 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     }
     if(index==objectList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("static listener not found"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"static listener not found");
         return;
     }
     newEntry.pluginLoader=NULL;
     #else
-    QPluginLoader *pluginLoader= new QPluginLoader(pluginPath);
+    QPluginLoader *pluginLoader= new QPluginLoader(QString::fromStdString(pluginPath));
     QObject *pluginInstance = pluginLoader->instance();
     if(!pluginInstance)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to load the plugin: ")+pluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+pluginLoader->errorString().toStdString());
         return;
     }
     PluginInterface_PluginLoader *pluginLoaderInstance = qobject_cast<PluginInterface_PluginLoader *>(pluginInstance);
     if(!pluginLoaderInstance)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to cast the plugin: ")+pluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to cast the plugin: "+pluginLoader->errorString().toStdString());
         return;
     }
     newEntry.pluginLoader			= pluginLoader;
@@ -115,7 +115,7 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     {
         if(pluginList.at(index).pluginLoaderInterface==pluginLoaderInstance)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Plugin already found"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Plugin already found");
             pluginLoader->unload();
             return;
         }
@@ -126,19 +126,19 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     connect(pluginLoaderInstance,&PluginInterface_PluginLoader::debugInformation,this,&PluginLoader::debugInformation,Qt::DirectConnection);
     #endif // ULTRACOPIER_DEBUG
 
-    newEntry.options=new LocalPluginOptions(QStringLiteral("PluginLoader-")+plugin.name);
+    newEntry.options=new LocalPluginOptions("PluginLoader-"+plugin.name);
     newEntry.pluginLoaderInterface		= pluginLoaderInstance;
     newEntry.path				= plugin.path;
     newEntry.state				= Ultracopier::Uncaught;
     newEntry.inWaitOfReply			= false;
-    pluginList << newEntry;
+    pluginList.push_back(newEntry);
     pluginLoaderInstance->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.pluginLoaderInterface->options());
-    connect(pluginList.last().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoader::newState,Qt::DirectConnection);
+    connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoader::newState,Qt::DirectConnection);
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded,Qt::DirectConnection);
     if(needEnable)
     {
-        pluginList.last().inWaitOfReply=true;
+        pluginList.back().inWaitOfReply=true;
         newEntry.pluginLoaderInterface->setEnabled(needEnable);
     }
     #else
@@ -153,7 +153,7 @@ void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
         return;
     if(plugin.category!=PluginType_PluginLoader)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     const int &loop_size=pluginList.size();
     while(index<loop_size)
@@ -166,7 +166,7 @@ void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
                 if(!pluginList.at(index).pluginLoader->isLoaded() || pluginList.at(index).pluginLoader->unload())
                 {
                     delete pluginList.at(index).options;
-                    pluginList.removeAt(index);
+                    pluginList.erase(pluginList.cbegin()+index);
                 }
             }
             sendState();

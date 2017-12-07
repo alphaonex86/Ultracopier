@@ -9,6 +9,8 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include <iterator>
+
 #include "PluginsManager.h"
 #include "cpp11addition.h"
 #include "FacilityEngine.h"
@@ -254,7 +256,7 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
     if (!domDocument.setContent(xml, false, &errorStr,&errorLine,&errorColumn))
     {
         thePlugin->errorString=tr("%1, parse error at line %2, column %3: %4").arg("informations.xml").arg(errorLine).arg(errorColumn).arg(errorStr).toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("%1, Parse error at line %2, column %3: %4").arg("informations.xml").arg(errorLine).arg(errorColumn).arg(errorStr).toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"informations.xml, Parse error at line "+std::to_string(errorLine)+", column "+std::to_string(errorColumn)+": "+errorStr.toStdString());
     }
     else
     {
@@ -309,8 +311,8 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
                         loadBalise(root,"architecture",&(thePlugin->informations),&(thePlugin->errorString),true,false);
                         if(thePlugin->errorString.empty())
                         {
-                            if(thePlugin->informations.last().last()!=ULTRACOPIER_PLATFORM_CODE)
-                                thePlugin->errorString="Wrong platform code: "+thePlugin->informations.last().last();
+                            if(thePlugin->informations.back().back()!=ULTRACOPIER_PLATFORM_CODE)
+                                thePlugin->errorString="Wrong platform code: "+thePlugin->informations.back().back();
                         }
                         #endif
                     }
@@ -474,52 +476,49 @@ uint32_t PluginsManager::checkDependencies()
         loop_sub_size=pluginsList.at(index).informations.size();
         while(sub_index<loop_sub_size)
         {
-            if(pluginsList.at(index).informations.at(sub_index).size()==2 && pluginsList.at(index).informations.at(sub_index).at(0)==QStringLiteral("dependencies"))
+            if(pluginsList.at(index).informations.at(sub_index).size()==2 && pluginsList.at(index).informations.at(sub_index).at(0)=="dependencies")
             {
-                QString dependencies=pluginsList.at(index).informations.at(sub_index).at(1);
-                dependencies=dependencies.replace(regexp_to_clean_1,QStringLiteral("&&"));
-                dependencies=dependencies.replace(regexp_to_clean_2,QStringLiteral(""));
-                dependencies=dependencies.replace(regexp_to_clean_3,QStringLiteral("&&"));
-                dependencies=dependencies.replace(regexp_to_clean_4,QStringLiteral(""));
-                dependencies=dependencies.replace(regexp_to_clean_5,QStringLiteral(""));
-                QStringList dependenciesToResolv=dependencies.split(regexp_to_dep_1,QString::SkipEmptyParts);
-                indexOfDependencies=0;
-                resolv_size=dependenciesToResolv.size();
-                while(indexOfDependencies<resolv_size)
+                std::string dependencies = pluginsList.at(index).informations.at(sub_index).at(1);
+                dependencies=std::regex_replace(dependencies, regexp_to_clean_1,"&&");
+                dependencies=std::regex_replace(dependencies, regexp_to_clean_2,"");
+                dependencies=std::regex_replace(dependencies, regexp_to_clean_3,"&&");
+                dependencies=std::regex_replace(dependencies, regexp_to_clean_4,"");
+                dependencies=std::regex_replace(dependencies, regexp_to_clean_5,"");
+                std::sregex_token_iterator iter(dependencies.begin(), dependencies.end(), regexp_to_dep_1, -1), end;
+                for ( ; iter != end; ++iter)
                 {
-                    QString dependenciesToParse=dependenciesToResolv.at(indexOfDependencies);
-                    if(!dependenciesToParse.contains(regexp_to_dep_2))
+                    std::string dependenciesToParse=*iter;
+                    if(!std::regex_match(dependenciesToParse, regexp_to_dep_2))
                     {
                         pluginsList[index].informations.clear();
-                        pluginsList[index].errorString=tr("Dependencies part is wrong");
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Dependencies part is wrong: %1").arg(dependenciesToParse));
+                        pluginsList[index].errorString=tr("Dependencies part is wrong").toStdString();
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Dependencies part is wrong: "+dependenciesToParse);
                         emit onePluginInErrorAdded(pluginsList.at(index));
                         errors++;
                         break;
                     }
-                    QString partName=dependenciesToParse;
-                    partName=partName.remove(regexp_to_dep_3);
-                    partName=partName.remove(regexp_to_dep_4);
-                    QString partVersion=dependenciesToParse;
-                    partVersion=partVersion.remove(regexp_to_dep_3);
-                    partVersion=partVersion.remove(regexp_to_dep_5);
-                    QString partComp=dependenciesToParse;
-                    partComp=partComp.remove(regexp_to_dep_6);
+                    std::string partName=dependenciesToParse;
+                    partName=std::regex_replace(partName, regexp_to_dep_3, "");
+                    partName=std::regex_replace(partName, regexp_to_dep_4, "");
+                    std::string partVersion=dependenciesToParse;
+                    partVersion=std::regex_replace(partVersion, regexp_to_dep_3, "");
+                    partVersion=std::regex_replace(partVersion, regexp_to_dep_5, "");
+                    std::string partComp=dependenciesToParse;
+                    partComp=std::regex_replace(partComp, regexp_to_dep_6, "");
                     //current version soft
-                    QString pluginVersion=getPluginVersion(partName);
+                    std::string pluginVersion=getPluginVersion(partName);
                     depCheck=compareVersion(pluginVersion,partComp,partVersion);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("dependencies to resolv, partName: ")+partName+QStringLiteral(", partVersion: ")+partVersion+QStringLiteral(", partComp: ")+partComp+QStringLiteral(", pluginVersion: ")+pluginVersion+QStringLiteral(", depCheck: ")+QString::number(depCheck));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"dependencies to resolv, partName: "+partName+", partVersion: "+partVersion+", partComp: "+partComp+", pluginVersion: "+pluginVersion+", depCheck: "+std::to_string(depCheck));
                     if(!depCheck)
                     {
                         pluginsList[index].informations.clear();
-                        pluginsList[index].errorString=tr("Dependencies %1 are not satisfied, for plugin: %2").arg(dependenciesToParse).arg(pluginsList[index].path);
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Dependencies %1 are not satisfied, for plugin: %2").arg(dependenciesToParse).arg(pluginsList[index].path));
-                        pluginsListIndexed.remove(pluginsList.at(index).category,pluginsList.at(index));
+                        pluginsList[index].errorString=tr("Dependencies %1 are not satisfied, for plugin: %2").arg(QString::fromStdString(dependenciesToParse)).arg(QString::fromStdString(pluginsList[index].path)).toStdString();
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Dependencies "+dependenciesToParse+" are not satisfied, for plugin: "+pluginsList[index].path);
+                        pluginsListIndexed.erase(pluginsListIndexed.find(pluginsList.at(index).category));
                         emit onePluginInErrorAdded(pluginsList.at(index));
                         errors++;
                         break;
                     }
-                    indexOfDependencies++;
                 }
             }
             sub_index++;
@@ -661,9 +660,9 @@ void PluginsManager::showInformationDoubleClick()
 }
 
 #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
-void PluginsManager::removeThePluginSelected(const QString &path)
+void PluginsManager::removeThePluginSelected(const std::string &path)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<pluginsList.size())
     {
@@ -671,7 +670,7 @@ void PluginsManager::removeThePluginSelected(const QString &path)
         {
             QMessageBox::StandardButton reply;
     //		if(pluginsList.at(index).internalVersionAlternative.isEmpty())
-                reply = QMessageBox::question(NULL,tr("Remove %1").arg(pluginsList.at(index).name),tr("Are you sure about removing \"%1\" in version %2?").arg(pluginsList.at(index).name).arg(pluginsList.at(index).version),QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+                reply = QMessageBox::question(NULL,tr("Remove %1").arg(QString::fromStdString(pluginsList.at(index).name)),tr("Are you sure about removing \"%1\" in version %2?").arg(QString::fromStdString(pluginsList.at(index).name)).arg(QString::fromStdString(pluginsList.at(index).version)),QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
     //		else
     //			reply = QMessageBox::question(NULL,tr("Remove %1").arg(getTranslatedText(pluginsList.at(index),"name",mainShortName)),tr("Are you sure to wish remove \"%1\" in version %2 for the internal version %3?").arg(getTranslatedText(pluginsList.at(index),"name",mainShortName)).arg(pluginsList.at(index).version).arg(pluginsList.at(index).internalVersionAlternative),QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
             if(reply==QMessageBox::Yes)
@@ -682,17 +681,17 @@ void PluginsManager::removeThePluginSelected(const QString &path)
                 if(!ResourcesManager::removeFolder(pluginsList.at(index).path))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the plugin");
-                    QMessageBox::critical(NULL,tr("Error"),tr("Error while the removing plugin, please check the rights on the folder: \n%1").arg(pluginsList.at(index).path));
+                    QMessageBox::critical(NULL,tr("Error"),tr("Error while the removing plugin, please check the rights on the folder: \n%1").arg(QString::fromStdString(pluginsList.at(index).path)));
                 }
-                pluginsListIndexed.remove(pluginsList.at(index).category,pluginsList.at(index));
-                pluginsList.removeAt(index);
+                pluginsListIndexed.erase(pluginsListIndexed.find(pluginsList.at(index).category));
+                pluginsList.erase(pluginsList.begin()+index);
                 while(checkDependencies()!=0){};
             }
             return;
         }
         index++;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("item not selected"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"item not selected");
 }
 
 void PluginsManager::addPlugin(const ImportBackend &backend)
@@ -703,20 +702,20 @@ void PluginsManager::addPlugin(const ImportBackend &backend)
 
 void PluginsManager::executeTheFileBackendLoader()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(importingPlugin)
     {
         QMessageBox::information(NULL,tr("Information"),tr("Previous import is in progress..."));
         return;
     }
-    QString fileName = QFileDialog::getOpenFileName(NULL,tr("Open Ultracopier plugin"),QString(),tr("Ultracopier plugin (*.urc)"));
+    std::string fileName = QFileDialog::getOpenFileName(NULL,tr("Open Ultracopier plugin"),QString(),tr("Ultracopier plugin (*.urc)")).toStdString();
     if(fileName!="")
         tryLoadPlugin(fileName);
 }
 
-void PluginsManager::tryLoadPlugin(const QString &file)
+void PluginsManager::tryLoadPlugin(const std::string &file)
 {
-    QFile temp(file);
+    QFile temp(QString::fromStdString(file));
     if(temp.open(QIODevice::ReadOnly))
     {
         importingPlugin=true;
@@ -725,32 +724,32 @@ void PluginsManager::tryLoadPlugin(const QString &file)
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to open the file: "+temp.errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to open the file: "+temp.errorString().toStdString());
         QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to open the plugin: %1").arg(temp.errorString()));
     }
 }
 
 void PluginsManager::lunchDecodeThread(const QByteArray &data)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     decodeThread.setData(data);
     decodeThread.start(QThread::LowestPriority);
 }
 
 void PluginsManager::decodingFinished()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!decodeThread.errorFound())
     {
         QByteArray data=decodeThread.decodedData();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data.size(): "+QString::number(data.size()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"data.size(): "+std::to_string(data.size()));
         QTarDecode tarFile;
         std::vector<char> cppdata;
         cppdata.resize(data.size());
         memcpy(cppdata.data(),data.data(),data.size());
         if(!tarFile.decodeData(cppdata))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"tarFile.errorString(): "+QString::fromStdString(tarFile.errorString()));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"tarFile.errorString(): "+tarFile.errorString());
             QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to load the plugin content, please check it: %1").arg(QString::fromStdString(tarFile.errorString())));
         }
         else
@@ -759,16 +758,16 @@ void PluginsManager::decodingFinished()
             std::vector<std::vector<char> > dataList	= tarFile.getDataList();
             if(fileList.size()>1)
             {
-                QString basePluginArchive=QStringLiteral("");
+                std::string basePluginArchive="";
                 /* block use less for tar?
                 if(fileList.at(0).contains(QRegularExpression("[\\/]")))
                 {
                     bool folderFoundEveryWhere=true;
                     basePluginArchive=fileList.at(0);
-                    basePluginArchive.remove(QRegularExpression("[\\/].*$"));
+                    basePluginArchive=std::regex_replace(basePluginArchive, std::regex("[\\/].*$"), "");
                     for (int i = 0; i < list.size(); ++i)
                     {
-                        if(!fileList.at(i).startsWith(basePluginArchive))
+                        if(!stringStartWith(fileList.at(i),basePluginArchive))
                         {
                             folderFoundEveryWhere=false;
                             break;
@@ -777,13 +776,13 @@ void PluginsManager::decodingFinished()
                     if(folderFoundEveryWhere)
                     {
                         for (int i = 0; i < fileList.size(); ++i)
-                            fileList[i].remove(0,basePluginArchive.size());
+                            fileList[i].substr(basePluginArchive.size());
                     }
                     else
                         basePluginArchive="";
                 }*/
                 PluginsAvailable tempPlugin;
-                QString categoryFinal=QStringLiteral("");
+                std::string categoryFinal="";
                 for (unsigned int i = 0; i < fileList.size(); ++i)
                     if(fileList.at(i)=="informations.xml")
                     {
@@ -795,30 +794,30 @@ void PluginsManager::decodingFinished()
                     categoryFinal=categoryToString(tempPlugin.category);
                     if(categoryFinal!="")
                     {
-                        QString writablePath=ResourcesManager::resourcesManager->getWritablePath();
+                        std::string writablePath=ResourcesManager::resourcesManager->getWritablePath();
                         if(writablePath!="")
                         {
                             QDir dir;
-                            QString finalPluginPath=writablePath+categoryFinal+FacilityEngine::separator()+tempPlugin.name+FacilityEngine::separator();
+                            std::string finalPluginPath=writablePath+categoryFinal+FacilityEngine::separator()+tempPlugin.name+FacilityEngine::separator();
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"writablePath: \""+writablePath+"\"");
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"basePluginArchive: \""+basePluginArchive+"\"");
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"categoryFinal: \""+categoryFinal+"\"");
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"finalPluginPath: \""+finalPluginPath+"\"");
-                            if(!dir.exists(finalPluginPath))
+                            if(!dir.exists(QString::fromStdString(finalPluginPath)))
                             {
                                 bool errorFound=false;
                                 for (unsigned int i = 0; i < fileList.size(); ++i)
                                 {
-                                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"file "+QString::number(i)+": "+finalPluginPath+QString::fromStdString(fileList.at(i)));
-                                    QString fileListEntry=QString::fromStdString(fileList[i]);
-                                    fileListEntry.remove(QRegularExpression("^(..?[\\/])+"));
-                                    QFile currentFile(finalPluginPath+fileListEntry);
+                                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"file "+std::to_string(i)+": "+finalPluginPath+fileList.at(i));
+                                    std::string fileListEntry=fileList[i];
+                                    fileListEntry=std::regex_replace(fileListEntry, std::regex("^(..?[\\/])+"), "");
+                                    QFile currentFile(QString::fromStdString(finalPluginPath+fileListEntry));
                                     QFileInfo info(currentFile);
                                     if(!dir.exists(info.absolutePath()))
                                         if(!dir.mkpath(info.absolutePath()))
                                         {
                                             ResourcesManager::resourcesManager->disableWritablePath();
-                                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the path: "+info.absolutePath());
+                                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the path: "+info.absolutePath().toStdString());
                                             QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to create a folder to install the plugin:\n%1").arg(info.absolutePath()));
                                             errorFound=true;
                                             break;
@@ -831,7 +830,7 @@ void PluginsManager::decodingFinished()
                                     else
                                     {
                                         ResourcesManager::resourcesManager->disableWritablePath();
-                                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the file: "+info.absolutePath()+", error:"+currentFile.errorString());
+                                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the file: "+info.absolutePath().toStdString()+", error:"+currentFile.errorString().toStdString());
                                         QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to create a file to install the plugin:\n%1\nsince:%2").arg(info.absolutePath()).arg(currentFile.errorString()));
                                         errorFound=true;
                                         break;
@@ -851,7 +850,7 @@ void PluginsManager::decodingFinished()
                             else
                             {
                                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Folder with same name is present, skip the plugin installation: "+finalPluginPath);
-                                QMessageBox::critical(NULL,tr("Plugin loader"),tr("Folder with same name is present, skip the plugin installation:\n%1").arg(finalPluginPath));
+                                QMessageBox::critical(NULL,tr("Plugin loader"),tr("Folder with same name is present, skip the plugin installation:\n%1").arg(QString::fromStdString(finalPluginPath)));
                             }
                         }
                         else
@@ -869,7 +868,7 @@ void PluginsManager::decodingFinished()
                 else
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error in the xml: "+tempPlugin.errorString);
-                    QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to load the plugin content, please check it: %1").arg(tempPlugin.errorString));
+                    QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to load the plugin content, please check it: %1").arg(QString::fromStdString(tempPlugin.errorString)));
                 }
             }
             else
@@ -881,7 +880,7 @@ void PluginsManager::decodingFinished()
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"decodeThread.errorFound(), error: "+decodeThread.errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"decodeThread.errorFound(), error: "+decodeThread.errorString().toStdString());
         QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to load the plugin content, please check it: %1").arg(decodeThread.errorString()));
     }
     importingPlugin=false;
@@ -889,9 +888,9 @@ void PluginsManager::decodingFinished()
 #endif
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-void PluginsManager::newAuthPath(const QString &path)
+void PluginsManager::newAuthPath(const std::string &path)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<pluginsList.size())
     {

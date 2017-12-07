@@ -13,10 +13,12 @@ HEADERS         = \
     $$PWD/Variable.h \
     $$PWD/PlatformMacro.h \
     $$PWD/../../../interface/PluginInterface_PluginLoader.h \
+    $$PWD/../../../cpp11addition.h \
     $$PWD/OptionsWidget.h
 SOURCES         = \
     $$PWD/pluginLoader.cpp \
-    $$PWD/OptionsWidget.cpp
+    $$PWD/OptionsWidget.cpp \
+    $$PWD/../../../cpp11addition.cpp
 TARGET          = $$qtLibraryTarget(pluginLoader)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

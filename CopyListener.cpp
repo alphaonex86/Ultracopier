@@ -82,7 +82,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     }
     if(index==objectList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("static listener not found"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"static listener not found");
         return;
     }
     #else
@@ -92,17 +92,17 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
         newPluginListener.pluginLoader=NULL;
         #endif
     #else
-    QPluginLoader *pluginOfPluginLoader=new QPluginLoader(plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("listener")));
+    QPluginLoader *pluginOfPluginLoader=new QPluginLoader(QString::fromStdString(plugin.path+PluginsManager::getResolvedPluginName("listener")));
     QObject *pluginInstance = pluginOfPluginLoader->instance();
     if(!pluginInstance)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to load the plugin: ")+pluginOfPluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+pluginOfPluginLoader->errorString().toStdString());
         return;
     }
     PluginInterface_Listener *listen = qobject_cast<PluginInterface_Listener *>(pluginInstance);
     if(!listen)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to load the plugin: ")+pluginOfPluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+pluginOfPluginLoader->errorString().toStdString());
         return;
     }
     //check if found
@@ -111,7 +111,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
     {
         if(pluginList.at(index).listenInterface==listen)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Plugin already found %1 for %2").arg(pluginList.at(index).path).arg(plugin.path));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Plugin already found "+pluginList.at(index).path+" for "+plugin.path);
             pluginOfPluginLoader->unload();
             return;
         }
@@ -191,7 +191,7 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
                 pluginList.at(indexPlugin).pluginLoader->unload();
                 delete pluginList.at(indexPlugin).options;
             }
-            pluginList.removeAt(indexPlugin);
+            pluginList.erase(pluginList.cbegin()+indexPlugin);
             sendState();
             return;
         }

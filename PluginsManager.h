@@ -121,7 +121,7 @@ class PluginsManager : public QThread
         void decodingFinished();
         #endif
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-        void newAuthPath(const QString &path);
+        void newAuthPath(const std::string &path);
         #endif
         void post_operation();
 /*	public slots:
@@ -145,9 +145,9 @@ class PluginsManager : public QThread
     public slots: //do gui action
         void showInformation(const std::string &path);
         #ifdef ULTRACOPIER_PLUGIN_IMPORT_SUPPORT
-        void removeThePluginSelected(const QString &path);
+        void removeThePluginSelected(const std::string &path);
         void addPlugin(const ImportBackend &backend);
-        void tryLoadPlugin(const QString &file);
+        void tryLoadPlugin(const std::string &file);
         #endif
 };
 

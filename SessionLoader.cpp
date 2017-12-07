@@ -40,7 +40,7 @@ SessionLoader::~SessionLoader()
             if(!pluginList.at(index).pluginLoader->isLoaded() || pluginList.at(index).pluginLoader->unload())
             {
                 delete pluginList.at(index).options;
-                pluginList.removeAt(index);
+                pluginList.erase(pluginList.begin()+index);
             }
         }
         index++;
@@ -55,8 +55,8 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
         return;
     int index=0;
     LocalPlugin newEntry;
-    QString pluginPath=plugin.path+PluginsManager::getResolvedPluginName(QStringLiteral("sessionLoader"));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("try load: ")+pluginPath);
+    std::string pluginPath=plugin.path+PluginsManager::getResolvedPluginName("sessionLoader");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try load: "+pluginPath);
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 
         PluginInterface_SessionLoader *sessionLoader;
@@ -73,23 +73,23 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
         }
         if(index==objectList.size())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("static session loader not found"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"static session loader not found");
             return;
         }
         newEntry.pluginLoader=NULL;
     #else
-    QPluginLoader *pluginLoader= new QPluginLoader(pluginPath);
+    QPluginLoader *pluginLoader= new QPluginLoader(QString::fromStdString(pluginPath));
     newEntry.pluginLoader=pluginLoader;
     QObject *pluginInstance = pluginLoader->instance();
     if(!pluginInstance)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to load the plugin: ")+pluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+pluginLoader->errorString().toStdString());
         return;
     }
     PluginInterface_SessionLoader *sessionLoader = qobject_cast<PluginInterface_SessionLoader *>(pluginInstance);
     if(!sessionLoader)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to cast the plugin: ")+pluginLoader->errorString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to cast the plugin: "+pluginLoader->errorString().toStdString());
         return;
     }
     //check if found
@@ -98,7 +98,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
     {
         if(pluginList.at(index).sessionLoaderInterface==sessionLoader)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Plugin already found"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Plugin already found");
             pluginLoader->unload();
             return;
         }
@@ -108,14 +108,14 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
     #ifdef ULTRACOPIER_DEBUG
     connect(sessionLoader,&PluginInterface_SessionLoader::debugInformation,this,&SessionLoader::debugInformation);
     #endif // ULTRACOPIER_DEBUG
-    newEntry.options=new LocalPluginOptions(QStringLiteral("SessionLoader-")+plugin.name);
+    newEntry.options=new LocalPluginOptions("SessionLoader-"+plugin.name);
     newEntry.sessionLoaderInterface=sessionLoader;
     newEntry.path=plugin.path;
     newEntry.sessionLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     newEntry.sessionLoaderInterface->setEnabled(shouldEnabled);
     optionDialog->addPluginOptionWidget(PluginType_SessionLoader,plugin.name,newEntry.sessionLoaderInterface->options());
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.sessionLoaderInterface,&PluginInterface_SessionLoader::newLanguageLoaded);
-    pluginList << newEntry;
+    pluginList.push_back(newEntry);
     #else
         Q_UNUSED(plugin);
         return;
@@ -127,7 +127,7 @@ void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_SessionLoader)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<pluginList.size())
     {
@@ -138,7 +138,7 @@ void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
                 if(!pluginList.at(index).pluginLoader->isLoaded() || pluginList.at(index).pluginLoader->unload())
                 {
                     delete pluginList.at(index).options;
-                    pluginList.removeAt(index);
+                    pluginList.erase(pluginList.begin()+index);
                 }
             }
             break;

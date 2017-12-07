@@ -82,7 +82,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
         }
         if(index==objectList.size())
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("static themes not found"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"static themes not found");
             emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
             emit theThemeIsReloaded();
             return;
@@ -92,11 +92,11 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
         factory=new ThemesFactory();
     #endif
     #else
-    QPluginLoader *pluginLoader=new QPluginLoader(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"));
+    QPluginLoader *pluginLoader=new QPluginLoader(QString::fromStdString(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")));
     QObject *pluginInstance = pluginLoader->instance();
     if(pluginInstance==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to load the plugin %1: %2").arg(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")).arg(pluginLoader->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin "+newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")+": "+pluginLoader->errorString().toStdString());
         pluginLoader->unload();
         emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
         emit theThemeIsReloaded();
@@ -105,7 +105,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     PluginInterface_ThemesFactory *factory = qobject_cast<PluginInterface_ThemesFactory *>(pluginInstance);
     if(factory==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("unable to cast the plugin: %1").arg(pluginLoader->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to cast the plugin: "+pluginLoader->errorString().toStdString());
         pluginLoader->unload();
         emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
         emit theThemeIsReloaded();
@@ -117,11 +117,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
     {
         if(pluginList.at(indexTemp).factory==factory)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QString("Plugin already found, current: %1, conflit plugin: %2, name: %3")
-            .arg(newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
-            .arg(pluginList.at(indexTemp).plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface"))
-            .arg(newPlugin.plugin.name)
-            );
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Plugin already found, current: "+newPlugin.plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")+", conflit plugin: "+pluginList.at(indexTemp).plugin.path+FacilityEngine::separator()+PluginsManager::pluginsManager->getResolvedPluginName("interface")+", name: "+newPlugin.plugin.name);
             pluginLoader->unload();
             emit newThemeOptions(newPlugin.plugin.name,NULL,false,true);
             emit theThemeIsReloaded();
@@ -173,7 +169,7 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
                 currentPluginIndex=-1;
             if(index<currentPluginIndex)
                 currentPluginIndex--;
-            pluginList.removeAt(index);
+            pluginList.erase(pluginList.begin()+index);
             if(currentPluginIndex>=pluginList.size())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"plugin is out of inder!");

@@ -52,26 +52,26 @@ ResourcesManager::ResourcesManager()
             #ifdef Q_OS_LINUX
                 QDir linuxArchIndepDir(QStringLiteral("/usr/share/ultracopier/"));
                 if(linuxArchIndepDir.exists())
-                    searchPath<<ResourcesManager::AddSlashIfNeeded(linuxArchIndepDir.absolutePath());
+                    searchPath.push_back(ResourcesManager::AddSlashIfNeeded(linuxArchIndepDir.absolutePath().toStdString()));
                 QDir linuxPluginsDir(QStringLiteral("/usr/lib/ultracopier/"));
                 if(linuxPluginsDir.exists())
-                    searchPath<<ResourcesManager::AddSlashIfNeeded(linuxPluginsDir.absolutePath());
+                    searchPath.push_back(ResourcesManager::AddSlashIfNeeded(linuxPluginsDir.absolutePath().toStdString()));
             #endif
             //load the user path but only if exists and writable
             QDir dir(QDir::homePath()+EXTRA_HOME_PATH);
             if(dir.exists())
             {
-                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
+                searchPath.push_back(ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString()));
             } //if not exists try to create it
             else if(dir.mkpath(dir.absolutePath()))
             {
                 //if created, then have write permissions
-                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
+                searchPath.push_back(ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString()));
             }
             //load the ultracopier path
-            searchPath<<ResourcesManager::AddSlashIfNeeded(QApplication::applicationDirPath());
+            searchPath.push_back(ResourcesManager::AddSlashIfNeeded(QApplication::applicationDirPath().toStdString()));
         #endif
     #else
     QDir dir(QApplication::applicationDirPath());

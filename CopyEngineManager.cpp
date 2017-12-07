@@ -43,7 +43,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     /*more IO
     if(!QFile(pluginPath).exists())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("The plugin binary is missing: ")+pluginPath);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The plugin binary is missing: "+pluginPath);
         return;
     }*/
     #endif
@@ -64,7 +64,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     newItem.path=plugin.path;
     newItem.name=plugin.name;
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-    newItem.pointer=new QPluginLoader(newItem.pluginPath);
+    newItem.pointer=new QPluginLoader(QString::fromStdString(newItem.pluginPath));
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
     QObjectList objectList=QPluginLoader::staticInstances();
     index=0;
@@ -79,15 +79,15 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     }
     if(index==objectList.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("static copy engine not found"));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"static copy engine not found");
         return;
     }
     #else
     QObject *pluginObject = newItem.pointer->instance();
     if(pluginObject==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to load the plugin: %1").arg(newItem.pointer->errorString()));
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to load the plugin for %1").arg(newItem.pluginPath));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin: "+newItem.pointer->errorString().toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to load the plugin for "+newItem.pluginPath);
         newItem.pointer->unload();
         return;
     }
@@ -98,7 +98,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     {
         if(pluginList.at(index).factory==newItem.factory)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("Plugin already found"));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Plugin already found");
             newItem.pointer->unload();
             return;
         }
@@ -106,7 +106,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     }
     if(newItem.factory==NULL)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("unable to cast the plugin: %1").arg(newItem.pointer->errorString()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to cast the plugin: "+newItem.pointer->errorString().toStdString());
         newItem.pointer->unload();
         return;
     }
@@ -148,7 +148,7 @@ void CopyEngineManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
             if(pluginList.at(index).intances.size()<=0)
             {
                 emit removeCopyEngine(pluginList.at(index).name);
-                pluginList.removeAt(index);
+                pluginList.erase(pluginList.begin()+index);
                 allPluginIsloaded();
                 return;
             }
@@ -161,7 +161,7 @@ void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_CopyEngine)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("start"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int index=0;
     while(index<pluginList.size())
     {
