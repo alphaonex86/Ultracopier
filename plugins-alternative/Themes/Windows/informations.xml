@@ -17,7 +17,7 @@
 	<description xml:lang="en"><![CDATA[Windows dialog for Ultracopier, to have same copy dialog than windows vista/7/8]]></description>
 	<description xml:lang="fr"><![CDATA[Dialogue de Windows pour Ultracopier, pour avoir une boite de dialogue pour la copie comme windows vista/7/8]]></description>
 	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
-	<version>1.4.0.0</version>
+	<version>1.4.0.0</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>Windows</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->
