@@ -24,30 +24,30 @@ void InternetUpdater::downloadFile()
 {
     if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate")))
         return;
-    QString name=QStringLiteral("Ultracopier");
-    QString ultracopierVersion;
+    std::string name="Ultracopier";
+    std::string ultracopierVersion;
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    ultracopierVersion=QStringLiteral("%1 Ultimate/%2").arg(name).arg(ULTRACOPIER_VERSION);
+    ultracopierVersion=name+" Ultimate/"+ULTRACOPIER_VERSION;
     #else
-    ultracopierVersion=QStringLiteral("%1/%2").arg(name).arg(ULTRACOPIER_VERSION);
+    ultracopierVersion=name+"/"+ULTRACOPIER_VERSION;
     #endif
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-             ultracopierVersion+=QStringLiteral(" portable/all-in-one");
+             ultracopierVersion+=" portable/all-in-one";
         #else
-             ultracopierVersion+=QStringLiteral(" portable");
+             ultracopierVersion+=" portable";
         #endif
     #else
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-            ultracopierVersion+=QStringLiteral(" all-in-one");
+            ultracopierVersion+=" all-in-one";
         #endif
     #endif
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
-    ultracopierVersion+=" (OS: "+QString::fromStdString(EventDispatcher::GetOSDisplayString())+")";
+    ultracopierVersion+=" (OS: "+EventDispatcher::GetOSDisplayString()+")";
     #endif
-    ultracopierVersion+=QStringLiteral(" ")+ULTRACOPIER_PLATFORM_CODE;
+    ultracopierVersion+=" "+std::string(ULTRACOPIER_PLATFORM_CODE);
     QNetworkRequest networkRequest(QStringLiteral(ULTRACOPIER_UPDATER_URL));
-    networkRequest.setHeader(QNetworkRequest::UserAgentHeader,ultracopierVersion);
+    networkRequest.setHeader(QNetworkRequest::UserAgentHeader,QString::fromStdString(ultracopierVersion));
     networkRequest.setRawHeader("Connection", "Close");
     reply = qnam.get(networkRequest);
     connect(reply, &QNetworkReply::finished, this, &InternetUpdater::httpFinished);

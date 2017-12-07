@@ -99,7 +99,7 @@ bool LocalListener::tryConnect()
                 QMessageBox::critical(NULL,"Alert","No arguments send because timeout detected!");
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Block not send correctly");
             }
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"blockToSend: "+QString(blockToSend.toHex()).toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"blockToSend: "+blockToSend.toHex().toStdString());
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"byteWriten: "+std::to_string(byteWriten)+
                                      ", size sending: "+std::to_string(blockToSend.size()));
         }
@@ -150,7 +150,7 @@ void LocalListener::timeoutDectected()
             if(!clientList.at(index).data.isEmpty() || clientList.at(index).haveData)
             {
                 haveData=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Timeout while recomposing data from connected clients: "+QString(clientList.at(index).data.toHex()).toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Timeout while recomposing data from connected clients: "+clientList.at(index).data.toHex().toStdString());
                 clientList.erase(clientList.cbegin());
             }
             else
@@ -207,7 +207,7 @@ void LocalListener::dataIncomming()
                 TimeOutQLocalSocket.start();
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Need wait to recomposite: "+std::to_string(clientList.at(index).data.size())+
                                          ", targeted: "+std::to_string(clientList.at(index).size));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed.data: "+QString(clientList.at(index).data.toHex()).toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempComposed.data: "+clientList.at(index).data.toHex().toStdString());
             }
             else if(socket->bytesAvailable() == clientList.at(index).size) //if the size match
             {
