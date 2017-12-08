@@ -12,7 +12,7 @@
 
 static const std::regex isaunsignednumber("^[0-9]+$",std::regex::optimize);
 static const std::regex isaunoctalnumber("^[0-7]+$",std::regex::optimize);
-static const char* const lut = "0123456789ABCDEF";
+//static const char* const lut = "0123456789ABCDEF";
 
 QTarDecode::QTarDecode()
 {
