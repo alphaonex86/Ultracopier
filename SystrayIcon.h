@@ -81,6 +81,9 @@ class SystrayIcon : public QSystemTrayIcon
         bool haveListenerInfo,havePluginLoaderInfo;
         bool haveListener,havePluginLoader;
         QTimer timerCheckSetTooltip;
+
+        void addEngineAction(const QString &name, const QIcon &icon, const QString &label, QMenu *menu, void (SystrayIcon::*query)());
+
         /** \brief drag event processing (impossible with Qt on systray)
 
         need setAcceptDrops(true); into the constructor
@@ -139,4 +142,3 @@ class SystrayIcon : public QSystemTrayIcon
 };
 
 #endif // SYSTRAY_ICON_H
-

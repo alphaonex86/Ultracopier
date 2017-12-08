@@ -18,7 +18,8 @@ HEADERS         = \
 SOURCES         = \
     $$PWD/pluginLoader.cpp \
     $$PWD/OptionsWidget.cpp \
-    $$PWD/../../../cpp11addition.cpp
+    $$PWD/../../../cpp11addition.cpp \
+    $$PWD/../../../cpp11additionstringtointcpp.cpp
 TARGET          = $$qtLibraryTarget(pluginLoader)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

@@ -40,6 +40,19 @@ std::size_t pairhash::operator()(const std::pair<uint16_t, uint16_t> &x) const
     return (x.first << 16) + x.second;
 }
 
+std::string ltrim(const std::string& str)
+{
+  return std::regex_replace(str, std::regex("^ +"), "");
+}
+std::string rtrim(const std::string& str)
+{
+  return std::regex_replace(str, std::regex(" +$"), "");
+}
+std::string trim(const std::string& str)
+{
+  return std::regex_replace(str, std::regex("^ +| +$"), "");
+}
+
 bool stringreplaceOne(std::string& str, const std::string& from, const std::string& to)
 {
     const size_t start_pos = str.find(from);
