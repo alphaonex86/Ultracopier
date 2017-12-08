@@ -110,7 +110,7 @@ bool LocalListener::tryConnect()
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"connection failed, continu...");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"connection failed, continue...");
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultracopierArguments: "+ultracopierArguments.join(";").toStdString());
         return false;
     }
