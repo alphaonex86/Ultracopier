@@ -487,7 +487,10 @@ uint32_t PluginsManager::checkDependencies()
                 std::sregex_token_iterator iter(dependencies.begin(), dependencies.end(), regexp_to_dep_1, -1), end;
                 for ( ; iter != end; ++iter)
                 {
-                    std::string dependenciesToParse=*iter;
+                    std::string dependenciesToParse=trim(*iter);
+                    if(dependenciesToParse.empty()) {
+                      continue;
+                    }
                     if(!std::regex_match(dependenciesToParse, regexp_to_dep_2))
                     {
                         pluginsList[index].informations.clear();
