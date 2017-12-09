@@ -156,18 +156,22 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
     #ifdef Q_OS_WIN32
     factory=new WindowsExplorerLoader();
     LocalPlugin newEntry;
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     newEntry.pluginLoader=NULL;
-    #ifdef ULTRACOPIER_DEBUG
-    connect(pluginLoaderInstance,&PluginInterface_PluginLoader::debugInformation,this,&PluginLoader::debugInformation,Qt::DirectConnection);
-    #endif // ULTRACOPIER_DEBUG
+    #endif
 
     newEntry.options=new LocalPluginOptions("PluginLoader-"+plugin.name);
-    newEntry.pluginLoaderInterface		= pluginLoaderInstance;
+    newEntry.pluginLoaderInterface		= new WindowsExplorerLoader();
     newEntry.path				= plugin.path;
     newEntry.state				= Ultracopier::Uncaught;
     newEntry.inWaitOfReply			= false;
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
+    #ifdef ULTRACOPIER_DEBUG
+    connect(newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::debugInformation,this,&PluginLoader::debugInformation,Qt::DirectConnection);
+    #endif // ULTRACOPIER_DEBUG
+    #endif
     pluginList.push_back(newEntry);
-    pluginLoaderInstance->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+    newEntry.pluginLoaderInterface->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
     optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.pluginLoaderInterface->options());
     connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoader::newState,Qt::DirectConnection);
     connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded,Qt::DirectConnection);

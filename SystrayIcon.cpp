@@ -522,9 +522,9 @@ void SystrayIcon::reloadEngineList()
         QMenu *menu = nullptr;
         #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
         if(engineEntryList.size()==1)
-            *menu = copyMenu;
+            menu = copyMenu;
         else
-            *menu = new QMenu(name);
+            menu = new QMenu(name);
         #else
         if(engineEntryList.size()!=1) {
             labelCopy     += " ("+name+")";

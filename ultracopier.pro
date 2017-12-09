@@ -121,7 +121,7 @@ SOURCES += \
 win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc
 
-    HEADERS         = \
+    HEADERS         += \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/StructEnumDefinition.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/DebugEngineMacro.h \
@@ -129,7 +129,7 @@ win32 {
         $$PWD/plugins/PluginLoader/catchcopy-v0002/Variable.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/PlatformMacro.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.h
-    SOURCES         = \
+    SOURCES         += \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.cpp \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.cpp
     FORMS += $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.ui
