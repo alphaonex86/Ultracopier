@@ -117,3 +117,21 @@ SOURCES += \
     $$PWD/plugins/Themes/Oxygen/ThemesFactory.cpp \
     $$PWD/plugins/Themes/Oxygen/interface.cpp \
     $$PWD/plugins/Themes/Oxygen/TransferModel.cpp
+
+win32 {
+    RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc
+
+    HEADERS         = \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/StructEnumDefinition.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/DebugEngineMacro.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/Environment.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/Variable.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/PlatformMacro.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.h
+    SOURCES         = \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.cpp \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.cpp
+    FORMS += $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.ui
+    LIBS += -lole32 -lshell32
+}

@@ -6,6 +6,12 @@
 #include "PluginLoader.h"
 #include "LanguagesManager.h"
 
+#ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+#ifdef Q_OS_WIN32
+#include "plugins/PluginLoader/catchcopy-v0002/pluginLoader.h"
+#endif
+#endif
+
 PluginLoader::PluginLoader(OptionDialog *optionDialog)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -66,6 +72,11 @@ void PluginLoader::resendState()
 
 void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
 {
+    #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+    #ifdef Q_OS_WIN32
+    PluginInterface_PluginLoader *factory;
+    #endif
+    #endif
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     if(stopIt)
         return;
@@ -142,6 +153,30 @@ void PluginLoader::onePluginAdded(const PluginsAvailable &plugin)
         newEntry.pluginLoaderInterface->setEnabled(needEnable);
     }
     #else
+    #ifdef Q_OS_WIN32
+    factory=new WindowsExplorerLoader();
+    LocalPlugin newEntry;
+    newEntry.pluginLoader=NULL;
+    #ifdef ULTRACOPIER_DEBUG
+    connect(pluginLoaderInstance,&PluginInterface_PluginLoader::debugInformation,this,&PluginLoader::debugInformation,Qt::DirectConnection);
+    #endif // ULTRACOPIER_DEBUG
+
+    newEntry.options=new LocalPluginOptions("PluginLoader-"+plugin.name);
+    newEntry.pluginLoaderInterface		= pluginLoaderInstance;
+    newEntry.path				= plugin.path;
+    newEntry.state				= Ultracopier::Uncaught;
+    newEntry.inWaitOfReply			= false;
+    pluginList.push_back(newEntry);
+    pluginLoaderInstance->setResources(newEntry.options,plugin.writablePath,plugin.path,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+    optionDialog->addPluginOptionWidget(PluginType_PluginLoader,plugin.name,newEntry.pluginLoaderInterface->options());
+    connect(pluginList.back().pluginLoaderInterface,&PluginInterface_PluginLoader::newState,this,&PluginLoader::newState,Qt::DirectConnection);
+    connect(LanguagesManager::languagesManager,&LanguagesManager::newLanguageLoaded,newEntry.pluginLoaderInterface,&PluginInterface_PluginLoader::newLanguageLoaded,Qt::DirectConnection);
+    if(needEnable)
+    {
+        pluginList.back().inWaitOfReply=true;
+        newEntry.pluginLoaderInterface->setEnabled(needEnable);
+    }
+    #endif
     Q_UNUSED(plugin);
     #endif
 }
