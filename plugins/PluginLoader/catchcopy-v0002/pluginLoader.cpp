@@ -301,7 +301,7 @@ void WindowsExplorerLoader::setResources(OptionInterface * options, const std::s
     Q_UNUSED(pluginPath);
     Q_UNUSED(portableVersion);
     #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    this->pluginPath=QCoreApplication::applicationDirPath()+"/";
+    this->pluginPath=QCoreApplication::applicationDirPath().toStdString()+"/";
     #else
     this->pluginPath=pluginPath;
     #endif
@@ -361,9 +361,9 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const std::string &dllPath, cons
         QString out=QString::fromLocal8Bit(process.readAllStandardOutput());
         QString outError=QString::fromLocal8Bit(process.readAllStandardError());
         if(!out.isEmpty())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 output: "+out);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 output: "+out.toStdString());
         if(!outError.isEmpty())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 error output: "+outError);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"regsvr32 error output: "+outError.toStdString());
     }
     #else
     result=0;
@@ -406,7 +406,7 @@ bool WindowsExplorerLoader::RegisterShellExtDll(const std::string &dllPath, cons
             sei.fMask = SEE_MASK_UNICODE;
             sei.lpVerb = TEXT("runas");
             sei.lpFile = TEXT("regsvr32.exe");
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in win32 mode: arrayArg: "+QString::fromWCharArray(arrayArg,size_lenght).toStdString());
             sei.lpParameters = arrayArg;
             sei.nShow = SW_SHOW;
             ok=ShellExecuteEx(&sei);
