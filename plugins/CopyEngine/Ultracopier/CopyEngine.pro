@@ -24,7 +24,6 @@ HEADERS         = \
     $$PWD/../../../interface/PluginInterface_CopyEngine.h \
     $$PWD/../../../interface/OptionInterface.h \
     $$PWD/../../../interface/FacilityInterface.h \
-    $$PWD/../../../FacilityEngine.h \
     $$PWD/../../../cpp11addition.h \
     $$PWD/Filters.h \
     $$PWD/FilterRules.h \
@@ -46,7 +45,6 @@ SOURCES         = \
     $$PWD/MkPath.cpp \
     $$PWD/AvancedQFile.cpp \
     $$PWD/ListThread.cpp \
-    $$PWD/../../../FacilityEngine.cpp \
     $$PWD/../../../cpp11addition.cpp \
     $$PWD/../../../cpp11additionstringtointcpp.cpp \
     $$PWD/Filters.cpp \

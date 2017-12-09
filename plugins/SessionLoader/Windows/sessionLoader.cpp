@@ -60,7 +60,7 @@ bool WindowsSessionLoader::getEnabled() const
     return temp;
 }
 
-void WindowsSessionLoader::setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion)
+void WindowsSessionLoader::setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,const bool &portableVersion)
 {
     Q_UNUSED(options);
     Q_UNUSED(writePath);

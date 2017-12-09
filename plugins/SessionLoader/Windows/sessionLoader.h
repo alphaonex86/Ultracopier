@@ -22,7 +22,7 @@ public:
 	/// \brief to get if is enabled
 	bool getEnabled() const;
 	/// \brief set the resources for the plugins
-	void setResources(OptionInterface * options,const QString &writePath,const QString &pluginPath,const bool &portableVersion);
+	void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,const bool &portableVersion);
 	/// \brief to get the options widget, NULL if not have
 	QWidget * options();
 public slots:
