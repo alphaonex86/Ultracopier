@@ -133,7 +133,11 @@ DebugEngine::DebugEngine()
             {
                 //Ask to the user
                 QMessageBox::StandardButton reply = QMessageBox::question(NULL,"Save the previous report",
-                                                                              QString("Ultracopier")+
+                                                                              #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+                                                                               QString("Supercopier")+
+                                                                              #else
+                                                                                QString("Ultracopier")+
+                                                                               #endif
                         " seam have crashed, do you want save the previous report for report it to the forum?",QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
                 if(reply==QMessageBox::Yes)
                     saveBugReport();

@@ -15,7 +15,11 @@
 #include "plugins/Themes/Oxygen/ThemesFactory.h"
 #endif
 
+#ifdef ULTRACOPIER_MODE_SUPERCOPIER
+#define ULTRACOPIER_DEFAULT_STYLE "Supercopier"
+#else
 #define ULTRACOPIER_DEFAULT_STYLE "Oxygen"
+#endif
 
 /// \warning All plugin remain loaded
 /// \todo get the current themes instance

@@ -24,7 +24,11 @@ void InternetUpdater::downloadFile()
 {
     if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate")))
         return;
-    std::string name="Ultracopier";
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+         std::string name="Supercopier";
+     #else
+         std::string name="Ultracopier";
+     #endif
     std::string ultracopierVersion;
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     ultracopierVersion=name+" Ultimate/"+ULTRACOPIER_VERSION;

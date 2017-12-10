@@ -535,8 +535,13 @@ uint32_t PluginsManager::checkDependencies()
 /// \brief get the version
 std::string PluginsManager::getPluginVersion(const std::string &pluginName) const
 {
-    if(pluginName=="ultracopier")
-        return ULTRACOPIER_VERSION;
+    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
+     if(pluginName=="supercopier")
+         return ULTRACOPIER_VERSION;
+     #else
+      if(pluginName=="ultracopier")
+          return ULTRACOPIER_VERSION;
+     #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     unsigned int index=0;
     while(index<pluginsList.size())
