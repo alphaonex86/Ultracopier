@@ -79,7 +79,7 @@ void ListThread::transferInodeIsClosed()
 {
     numberOfInodeOperation--;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
     #endif
     TransferThread *temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
     if(temp_transfer_thread==NULL)
@@ -1711,7 +1711,7 @@ void ListThread::doNewActions_start_transfer()
 void ListThread::doNewActions_inode_manipulation()
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoList.size(): %1").arg(actionToDoListTransfer.size()));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionToDoList.size(): "+std::to_string(actionToDoListTransfer.size()));
     #endif
     if(stopIt)
         checkIfReadyToCancel();
@@ -1799,7 +1799,7 @@ void ListThread::doNewActions_inode_manipulation()
                     int_for_transfer_thread_search++;
                     numberOfInodeOperation++;
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
                     #endif
                     break;
                 }
@@ -1814,7 +1814,7 @@ void ListThread::doNewActions_inode_manipulation()
                 break;
             }
             #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
             #endif
             if(numberOfInodeOperation>=inodeThreads)
                 break;
@@ -1949,7 +1949,7 @@ void ListThread::mkPathFirstFolderFinish()
                     updateTheStatus();
                 numberOfInodeOperation--;
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
                 #endif
                 doNewActions_inode_manipulation();
                 return;
@@ -1975,7 +1975,7 @@ void ListThread::mkPathFirstFolderFinish()
                     updateTheStatus();
                 numberOfInodeOperation--;
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("numberOfInodeOperation: %1").arg(numberOfInodeOperation));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
                 #endif
                 doNewActions_inode_manipulation();
                 return;

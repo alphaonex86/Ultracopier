@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ko_KR">
+<TS version="2.0" language="ko_KR">
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+244"/>
+        <location filename="../../interface.cpp" line="+246"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14,7 +14,7 @@
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+214"/>
+        <location line="+234"/>
         <source>Copy list</source>
         <translation type="unfinished">복사 목록</translation>
     </message>
@@ -44,7 +44,7 @@
         <translation type="unfinished">파일명, 0KB</translation>
     </message>
     <message>
-        <location line="+183"/>
+        <location line="+187"/>
         <location line="+12"/>
         <location line="+12"/>
         <source>Select a color</source>
@@ -61,7 +61,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+223"/>
+        <location filename="../../ThemesFactory.cpp" line="+224"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>

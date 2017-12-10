@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr" sourcelanguage="en">
+<TS version="2.0" language="fr" sourcelanguage="en">
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+244"/>
+        <location filename="../../interface.cpp" line="+246"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
@@ -14,7 +14,7 @@
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+214"/>
+        <location line="+234"/>
         <source>Copy list</source>
         <translation>Liste de copies</translation>
     </message>
@@ -44,7 +44,7 @@
         <translation>Nom de fichier, 0Ko</translation>
     </message>
     <message>
-        <location line="+183"/>
+        <location line="+187"/>
         <location line="+12"/>
         <location line="+12"/>
         <source>Select a color</source>
@@ -61,7 +61,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+223"/>
+        <location filename="../../ThemesFactory.cpp" line="+224"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>

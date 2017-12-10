@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru" sourcelanguage="et">
+<TS version="2.0" language="ru" sourcelanguage="et">
 <context>
     <name>Themes</name>
     <message>

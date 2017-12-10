@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<TS version="2.0" language="hu">
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="244"/>
+        <location filename="../../interface.cpp" line="246"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Vásárold meg az Ultimate verziót a fejlesztés támogatásához</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="314"/>
+        <location filename="../../interface.cpp" line="316"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fájl %1/%2, méret: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="528"/>
+        <location filename="../../interface.cpp" line="550"/>
         <source>Copy list</source>
         <translation>Lista másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="530"/>
+        <location filename="../../interface.cpp" line="552"/>
         <source>Move list</source>
         <translation>Lista mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="951"/>
+        <location filename="../../interface.cpp" line="973"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="952"/>
+        <location filename="../../interface.cpp" line="974"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="953"/>
+        <location filename="../../interface.cpp" line="975"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="955"/>
+        <location filename="../../interface.cpp" line="977"/>
         <source>File Name, 0KB</source>
         <translation>Fájlnév, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1138"/>
-        <location filename="../../interface.cpp" line="1150"/>
-        <location filename="../../interface.cpp" line="1162"/>
+        <location filename="../../interface.cpp" line="1164"/>
+        <location filename="../../interface.cpp" line="1176"/>
+        <location filename="../../interface.cpp" line="1188"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1237"/>
-        <location filename="../../interface.cpp" line="1241"/>
-        <location filename="../../interface.cpp" line="1243"/>
+        <location filename="../../interface.cpp" line="1263"/>
+        <location filename="../../interface.cpp" line="1267"/>
+        <location filename="../../interface.cpp" line="1269"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -61,24 +61,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="223"/>
+        <location filename="../../ThemesFactory.cpp" line="224"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="224"/>
+        <location filename="../../ThemesFactory.cpp" line="225"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="225"/>
+        <location filename="../../ThemesFactory.cpp" line="226"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="421"/>
-        <location filename="../../ThemesFactory.cpp" line="436"/>
-        <location filename="../../ThemesFactory.cpp" line="451"/>
+        <location filename="../../ThemesFactory.cpp" line="422"/>
+        <location filename="../../ThemesFactory.cpp" line="437"/>
+        <location filename="../../ThemesFactory.cpp" line="452"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
