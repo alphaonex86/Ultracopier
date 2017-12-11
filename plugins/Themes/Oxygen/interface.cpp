@@ -300,7 +300,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->ad_ultimate->hide();
     #endif
     #else
-    QString ultimateUrl=facilityEngine->ultimateUrl();
+    QString ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
     if(ultimateUrl.isEmpty())
         ui->ad_ultimate->hide();
     else
