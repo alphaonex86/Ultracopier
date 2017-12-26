@@ -8,6 +8,8 @@ function assemble {
 	PORTABLE=$5
 	ULTIMATE=$6
 	STATIC=${7}
+	CGMINER=${8}
+	SUPERCOPIER=${9}
 	ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
     DEBUGANDSETUP=0
 	cd ${TEMP_PATH}/
@@ -36,7 +38,12 @@ function assemble {
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Listener/catchcopy-v0002/
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/PluginLoader/catchcopy-v0002/
 			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/SessionLoader/Windows/
-			mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/
+			if [ $SUPERCOPIER -eq 1 ]
+			then
+				mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/
+			else
+				mkdir -p ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/
+			fi
 
 			if [ -e ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ]
 			then
@@ -52,19 +59,42 @@ function assemble {
 			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/
 			rsync -aqrt ${ULTRACOPIERSOURCESPATH}/plugins/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Languages/ --exclude=*.xml --exclude=*.qm
 			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/CopyEngine/Ultracopier/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/CopyEngine/Ultracopier/Languages/
-			rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+			if [ $SUPERCOPIER -eq 1 ]
+			then
+				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/Themes/Supercopier/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Supercopier/
+			else
+				rsync -aqrt ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/Themes/Oxygen/Languages/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/Themes/Oxygen/Languages/
+			fi
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -iname "*.a" -exec rm {} \; > /dev/null 2>&1
 			rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/plugins-alternative/
 		else
 			find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -mindepth 1 -type d -exec rm -Rf {} \;
 		fi
+		if [ ${CGMINER} -eq 1 ]
+		then
+			if [ "${ARCHITECTURE}" != "x86" ]
+			then
+				rsync -aqrt ${BASE_PWD}/data/windows/miner-win64/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/addon/
+			else
+				rsync -aqrt ${BASE_PWD}/data/windows/miner-win32/ ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/addon/
+			fi
+		fi
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/README ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
 		cp -Rf ${ULTRACOPIERSOURCESPATH}/COPYING ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/COPYING.txt
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			sed -i "s/Ultracopier /Supercopier /g" ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/README.txt
+		fi
         if [ 1 == 2 ]
         then
             if [ "${ARCHITECTURE}" == "x86" ] && [ ${DEBUG_REAL} -ne 1 ]
             then
-                upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier.exe > /dev/null 2>&1
+                if [ $SUPERCOPIER -eq 1 ]
+                then
+                    upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/supercopier.exe > /dev/null 2>&1
+                else
+                    upx --lzma -9 ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier.exe > /dev/null 2>&1
+                fi
             fi
         fi
 		cp -Rf ${BASE_PWD}/data/windows-${ARCHITECTURE}/dll-qt-debug/lib* ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
@@ -115,7 +145,7 @@ function assemble {
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
 		find ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ -type d -empty -delete > /dev/null 2>&1
-
+		
         if [ ${DEBUG_REAL} -eq 1 ]
         then
             mkdir ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/ultracopier/
@@ -164,6 +194,11 @@ function assemble {
 		then
 			sed -i -r "s/PROGRAMFILES/PROGRAMFILES64/g" *.nsi > /dev/null 2>&1
 		fi
+		if [ $SUPERCOPIER -eq 1 ]
+		then
+			sed -i -r "s/Ultracopier/Supercopier/g" *.nsi > /dev/null 2>&1
+			sed -i -r "s/ultracopier/supercopier/g" *.nsi > /dev/null 2>&1
+		fi
         if [ ${DEBUG} -eq 1 ]
         then
             sed -i -r "s/catchcopy32.dll/catchcopy32d.dll/g" *.nsi > /dev/null 2>&1
@@ -180,4 +215,5 @@ function assemble {
 		echo "creating the installer ${TARGET}... done"
 	fi
 	rm -Rf ${TEMP_PATH}/${TARGET}-windows-${ARCHITECTURE}/
-}
+} 
+ 

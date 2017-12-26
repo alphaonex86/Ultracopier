@@ -63,7 +63,7 @@ class ThemesManager : public QObject
             LocalPluginOptions *options;
         };
         std::vector<PluginsAvailableThemes> pluginList;
-        int currentPluginIndex;
+        int currentPluginIndex;//can bne -1
         bool stopIt;
     signals:
         /// \brief send this signal when the themes have changed

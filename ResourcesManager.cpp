@@ -32,15 +32,15 @@ ResourcesManager::ResourcesManager()
                 dir.cdUp();
                 dir.cdUp();
                 dir.cd(QStringLiteral("Data");
-                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                searchPath.push_back(ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString()));
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
             #else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled with the flag: ULTRACOPIER_VERSION_PORTABLE");
                 //load the ultracopier path
                 QDir dir(QApplication::applicationDirPath());
                 dir.cd(QStringLiteral("Data"));
-                searchPath<<ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
-                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath());
+                searchPath.push_back(ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString()));
+                writablePath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
             #endif
         #else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Ultracopier is compiled as user privacy mode");

@@ -2,6 +2,7 @@
 
 export TEMP_PATH="/home/ultracopier-temp/"
 export WINEBASEPATH="/home/wine/"
+export PATH=/home/mxe/usr/bin:$PATH
 export ULTRACOPIERSOURCESPATH="/root/ultracopier/sources/"
 export BASE_PWD=`pwd`
 

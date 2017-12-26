@@ -4,7 +4,7 @@ export WINEBASEPATH="/home/wine/"
 export ULTRACOPIERSOURCESPATH="/root/ultracopier/sources/"
 export BASE_PWD=`pwd`
 
-export ULTRACOPIER_VERSION=`grep -F "ULTRACOPIER_VERSION" ${ULTRACOPIERSOURCESPATH}/Variable.h | grep -F "1.2" | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
+export ULTRACOPIER_VERSION=`grep -F "ULTRACOPIER_VERSION" ${ULTRACOPIERSOURCESPATH}/Variable.h | grep -F "1.4" | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
 function valid_ip()
 {
     local  ip=$1
@@ -38,8 +38,18 @@ cd ${BASE_PWD}
 echo "Do the test folder... done"
 
 ./4-clean-all.sh
-
 rm /home/first-world.info/ultracopier/temp/*
-cp /home/ultracopier-temp/*.zip /home/first-world.info/ultracopier/temp/
-cp /home/ultracopier-temp/*-setup.exe /home/first-world.info/ultracopier/temp/
 
+
+if [ -f ${TEMP_PATH}/*.7z ]
+then
+    cp /home/ultracopier-temp/*.7z /home/first-world.info/ultracopier/temp/
+fi
+if [ -f ${TEMP_PATH}/*.zip ]
+then
+    cp /home/ultracopier-temp/*.zip /home/first-world.info/ultracopier/temp/
+fi
+if [ -f ${TEMP_PATH}/*-setup.exe ]
+then
+    cp /home/ultracopier-temp/*-setup.exe /home/first-world.info/ultracopier/temp/
+fi

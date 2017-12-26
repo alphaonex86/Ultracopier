@@ -46,11 +46,13 @@ TRANSLATIONS += \
     $$PWD/Languages/tr/translation.ts \
     $$PWD/Languages/zh/translation.ts
 
-!CONFIG(static) {
-RESOURCES	+= \
-    $$PWD/interfaceResources.qrc \
-    $$PWD/interfaceResources_unix.qrc \
-    $$PWD/interfaceResources_windows.qrc
+!defined(SUPERCOPIER) {
+    !CONFIG(static) {
+    RESOURCES	+= \
+        $$PWD/../Oxygen/interfaceResources.qrc \
+        $$PWD/../Oxygen/interfaceResources_unix.qrc \
+        $$PWD/../Oxygen/interfaceResources_windows.qrc
+    }
 }
 
 FORMS += \

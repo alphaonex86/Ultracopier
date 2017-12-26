@@ -140,7 +140,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 void CopyEngineManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(pluginList.at(index).path==plugin.path)
@@ -162,7 +162,7 @@ void CopyEngineManager::onePluginWillBeUnloaded(const PluginsAvailable &plugin)
     if(plugin.category!=PluginType_CopyEngine)
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(pluginList.at(index).path==plugin.path)

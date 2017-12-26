@@ -53,7 +53,7 @@ void SessionLoader::onePluginAdded(const PluginsAvailable &plugin)
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     if(plugin.category!=PluginType_SessionLoader)
         return;
-    int index=0;
+    unsigned int index=0;
     LocalPlugin newEntry;
     std::string pluginPath=plugin.path+PluginsManager::getResolvedPluginName("sessionLoader");
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"try load: "+pluginPath);
@@ -128,7 +128,7 @@ void SessionLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     if(plugin.category!=PluginType_SessionLoader)
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(plugin.path==pluginList.at(index).path)

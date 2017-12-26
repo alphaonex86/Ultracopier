@@ -61,8 +61,8 @@ Section "SectionPrincipale" SEC01
   CreateDirectory "$SMPROGRAMS\Ultracopier"
   CreateShortCut "$SMPROGRAMS\Ultracopier\Ultracopier.lnk" "$INSTDIR\ultracopier.exe"
   File /r /x *.nsi /x setup.exe *
-  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED PluginLoader\catchcopy-v0002\catchcopy32.dll $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll $INSTDIR
-  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED PluginLoader\catchcopy-v0002\catchcopy64.dll $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll $INSTDIR
+  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED catchcopy32.dll $INSTDIR\catchcopy32.dll $INSTDIR
+  !insertmacro InstallLib REGDLL NOTSHARED NOREBOOT_PROTECTED catchcopy64.dll $INSTDIR\catchcopy64.dll $INSTDIR
 SectionEnd
 
 Section -AdditionalIcons
@@ -141,18 +141,18 @@ Section Uninstall
 
   NotLaunched:
 
-  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll"'
-  ExecWait 'regsvr32 /s /u "$INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\catchcopy32.dll"'
+  ExecWait 'regsvr32 /s /u "$INSTDIR\catchcopy64.dll"'
 
-; DeleteRegKey HKCU "Software\Ultracopier"
-  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "ultracopier"
+;  DeleteRegKey HKCU "Software\Ultracopier"
+;  DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "ultracopier"
   Delete "$SMPROGRAMS\Ultracopier\Uninstall.lnk"
   Delete "$SMPROGRAMS\Ultracopier\Ultracopier.lnk"
 
-  Delete /REBOOTOK $SMPROGRAMS\PluginLoader\catchcopy-v0002\catchcopy32.dll
-  Delete /REBOOTOK $SMPROGRAMS\PluginLoader\catchcopy-v0002\catchcopy64.dll
-  Delete /REBOOTOK $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy32.dll
-  Delete /REBOOTOK $INSTDIR\PluginLoader\catchcopy-v0002\catchcopy64.dll
+  Delete /REBOOTOK $SMPROGRAMS\catchcopy32.dll
+  Delete /REBOOTOK $SMPROGRAMS\catchcopy64.dll
+  Delete /REBOOTOK $INSTDIR\catchcopy32.dll
+  Delete /REBOOTOK $INSTDIR\catchcopy64.dll
   RMDir /REBOOTOK /r "$SMPROGRAMS\Ultracopier"
   RMDir /REBOOTOK /r "$INSTDIR"
 

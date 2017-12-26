@@ -468,7 +468,7 @@ uint32_t PluginsManager::checkDependencies()
     uint32_t errors=0;
     int index=0;
     const int &loop_size=pluginsList.size();
-    int sub_index,loop_sub_size,resolv_size,indexOfDependencies;
+    int sub_index,loop_sub_size;//,resolv_size,indexOfDependencies
     bool depCheck;
     while(index<loop_size)
     {
@@ -671,7 +671,7 @@ void PluginsManager::showInformationDoubleClick()
 void PluginsManager::removeThePluginSelected(const std::string &path)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=0;
+    unsigned int index=0;
     while(index<pluginsList.size())
     {
         if(pluginsList.at(index).path==path)
@@ -899,7 +899,7 @@ void PluginsManager::decodingFinished()
 void PluginsManager::newAuthPath(const std::string &path)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=0;
+    unsigned int index=0;
     while(index<pluginsList.size())
     {
         if(pluginsList.at(index).path==path)

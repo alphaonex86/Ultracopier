@@ -116,7 +116,7 @@ void ThemesManager::onePluginAdded(const PluginsAvailable &plugin)
         return;
     }
     //check if found
-    int indexTemp=0;
+    unsigned int indexTemp=0;
     while(indexTemp<pluginList.size())
     {
         if(pluginList.at(indexTemp).factory==factory)
@@ -157,7 +157,7 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
     if(plugin.category!=PluginType_Themes)
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+plugin.name);
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(pluginList.at(index).plugin==plugin)
@@ -169,12 +169,12 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
                 pluginList.at(index).pluginLoader->unload();
                 delete pluginList.at(index).pluginLoader;
             }
-            if(currentPluginIndex==index)
+            if(currentPluginIndex==(int)index)
                 currentPluginIndex=-1;
-            if(index<currentPluginIndex)
+            if((int)index<currentPluginIndex)
                 currentPluginIndex--;
             pluginList.erase(pluginList.begin()+index);
-            if(currentPluginIndex>=pluginList.size())
+            if((unsigned int)currentPluginIndex>=pluginList.size())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"plugin is out of inder!");
                 currentPluginIndex=-1;

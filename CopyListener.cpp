@@ -106,7 +106,7 @@ void CopyListener::onePluginAdded(const PluginsAvailable &plugin)
         return;
     }
     //check if found
-    int index=0;
+    unsigned int index=0;
     while(index<pluginList.size())
     {
         if(pluginList.at(index).listenInterface==listen)
@@ -169,12 +169,12 @@ void CopyListener::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(plugin.category!=PluginType_Listener)
         return;
-    int indexPlugin=0;
+    unsigned int indexPlugin=0;
     while(indexPlugin<pluginList.size())
     {
         if((plugin.path+PluginsManager::getResolvedPluginName("listener"))==pluginList.at(indexPlugin).path)
         {
-            int index=0;
+            unsigned int index=0;
             while(index<copyRunningList.size())
             {
                 if(copyRunningList.at(index).listenInterface==pluginList.at(indexPlugin).listenInterface)
