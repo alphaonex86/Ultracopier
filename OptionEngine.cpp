@@ -19,7 +19,7 @@ OptionEngine::OptionEngine()
 {
     //locate the settings
     #ifdef ULTRACOPIER_VERSION_PORTABLE
-        QString settingsFilePath=ResourcesManager::resourcesManager->getWritablePath();
+        QString settingsFilePath=QString::fromStdString(ResourcesManager::resourcesManager->getWritablePath());
         if(settingsFilePath!="")
             settings = new QSettings(settingsFilePath+QStringLiteral("Ultracopier.conf"),QSettings::IniFormat);
         else
