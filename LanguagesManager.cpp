@@ -265,7 +265,7 @@ void LanguagesManager::onePluginAdded(const PluginsAvailable &plugin)
 void LanguagesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=0;
+    unsigned int index=0;
     while(index<LanguagesAvailableList.size())
     {
         if(plugin.path==LanguagesAvailableList.at(index).path)
