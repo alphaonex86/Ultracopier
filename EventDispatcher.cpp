@@ -306,7 +306,7 @@ std::string EventDispatcher::GetOSDisplayString()
    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
    bOsVersionInfoEx = GetVersionEx((OSVERSIONINFO*) &osvi);
 
-   if(bOsVersionInfoEx == NULL)
+   if(bOsVersionInfoEx == 0)
         return "Os detection blocked";
 
    // Call GetNativeSystemInfo if supported or GetSystemInfo otherwise.

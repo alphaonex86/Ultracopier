@@ -1,6 +1,5 @@
 
 #!/bin/bash
-exit
 export TEMP_PATH="/home/ultracopier-temp/"
 export WINEBASEPATH="/home/wine/"
 export ULTRACOPIERSOURCESPATH="/root/ultracopier/sources/"

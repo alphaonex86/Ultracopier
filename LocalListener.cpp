@@ -77,10 +77,12 @@ bool LocalListener::tryConnect()
         do
         {
             QByteArray blockToSend;
-            int byteWriten;
             blockToSend=block.left(32*1024);//32KB
             block.remove(0,blockToSend.size());
-            byteWriten = localSocket.write(blockToSend);
+            #ifdef ULTRACOPIER_DEBUG
+            int byteWriten =
+            #endif
+            localSocket.write(blockToSend);
             #ifdef ULTRACOPIER_DEBUG
             if(!localSocket.isValid())
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"localSocket is not valid!");

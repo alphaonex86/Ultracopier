@@ -34,18 +34,6 @@ function compil {
     done
     if [ $SUPERCOPIER -eq 1 ]
     then
-        cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Ultracopier/
-        if [ $? -ne 0 ]
-        then
-            echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Ultracopier/
-            exit
-        fi
-        cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Supercopier/
-        if [ $? -ne 0 ]
-        then
-            echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Supercopier/
-            exit
-        fi
         find ${TEMP_PATH}/${TARGET}/ -name "informations.xml" -exec sed -i "s/=ultracopier/=supercopier/g" {} \;
         find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/Ultracopier/Supercopier/g" {} \; > /dev/null 2>&1
         find ${TEMP_PATH}/${TARGET}/ -name "resources-windows.rc" -exec sed -i "s/ultracopier.exe/supercopier.exe/g" {} \; > /dev/null 2>&1
@@ -179,7 +167,7 @@ function compil {
                             cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
                             if [ $? -ne 0 ]
                             then
-                                echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/
+                                echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/ $LINENO
                                 exit
                             fi
                             if [ ${STATIC} -ne 1 ] && [[ "${plugins_name}" != "Supercopier" ]]
@@ -187,7 +175,7 @@ function compil {
                                 cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Oxygen/
                                 if [ $? -ne 0 ]
                                 then
-                                    echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Oxygen/
+                                    echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ${PLUGIN_FOLDER}/${plugins_cat}/Oxygen/ $LINENO
                                     exit
                                 fi
                             fi
@@ -196,11 +184,9 @@ function compil {
                             cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ./
                             if [ $? -ne 0 ]
                             then
-                                echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ./
+                                echo error at cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ./ $LINENO
                                 exit
                             fi
-                            pwd
-                            echo cp ${BASE_PWD}/data/windows/resources-windows-ultracopier-plugins.rc ./
                             # replace ULTRACOPIER_PLUGIN_VERSION
                             ULTRACOPIER_PLUGIN_VERSION=`grep -F "<version>" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/informations.xml | sed -r "s/^.*([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$/\1/g"`
                             sed -i "s/ULTRACOPIER_PLUGIN_VERSION/${ULTRACOPIER_PLUGIN_VERSION}/g" ${PLUGIN_FOLDER}/${plugins_cat}/${plugins_name}/resources-windows-ultracopier-plugins.rc
