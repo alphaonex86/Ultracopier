@@ -223,7 +223,7 @@ Themes::Themes(const bool &alwaysOnTop,
     pixmapTop=QPixmap(themePath+QStringLiteral("resources/SystemTrayIcon/systray_Uncaught_Unix.png"));
     pixmapBottom=QPixmap(themePath+QStringLiteral("resources/SystemTrayIcon/systray_Caught_Unix.png"));
     #endif
-    
+
     #ifdef SUPERCOPIER
     /*QIcon icon;
     icon.addFile(themePath+QStringLiteral("resources/main.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -295,7 +295,7 @@ Themes::Themes(const bool &alwaysOnTop,
     #endif*/
     #ifdef ULTRACOPIER_VERSION_ULTIMATE
     #ifdef SUPERCOPIER
-    ui->ad_ultimate->setText(tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a>"));
+    ui->ad_ultimate->setText(tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">Copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a>"));
     #else
     ui->ad_ultimate->hide();
     #endif
@@ -325,7 +325,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral("QProgressBar{color:#fff;font-weight:bold;border:1px solid black;text-align:center;background-image:url(:/Themes/Supercopier/resources/progressbarright.png);}QProgressBar::chunk{background-image: url(:/Themes/Supercopier/resources/progressbarleft.png);}"));
     this->setWindowTitle("Supercopier");
     #endif
-        
+
     show();
 
     sysTrayIcon = new QSystemTrayIcon(this);
