@@ -465,7 +465,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
             return WrongArgumentListSize;
         std::vector<std::string> sourceList=returnList;
         sourceList.erase(sourceList.cbegin());
-        sourceList.erase(sourceList.cend());
+        sourceList.pop_back();
         emitNewCopy(client,orderId,sourceList,returnList.back());
         return Ok;
     }
@@ -484,7 +484,7 @@ ServerCatchcopy::inputReturnType ServerCatchcopy::parseInputCurrentProtocol(cons
             return WrongArgumentListSize;
         std::vector<std::string> sourceList=returnList;
         sourceList.erase(sourceList.cbegin());
-        sourceList.erase(sourceList.cend());
+        sourceList.pop_back();
         emitNewMove(client,orderId,sourceList,returnList.back());
         return Ok;
     }

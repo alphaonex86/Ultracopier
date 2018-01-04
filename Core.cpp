@@ -466,7 +466,7 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
                         {
                             remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(timeUnit.first/timeUnit.second);
                             if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                                remainingTimeLogarithmicColumn.lastProgressionSpeed.erase(remainingTimeLogarithmicColumn.lastProgressionSpeed.cend());
+                                remainingTimeLogarithmicColumn.lastProgressionSpeed.pop_back();
                         }
                     }
                     sub_index++;
