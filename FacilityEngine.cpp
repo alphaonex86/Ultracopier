@@ -98,7 +98,7 @@ std::string FacilityEngine::sizeToString(const double &size) const
 {
     double size_temp=size;
     if(size_temp<1024)
-        return std::to_string(size_temp)+sizeUnitToString(Ultracopier::SizeUnit_byte);
+        return std::to_string((unsigned int)size_temp)+sizeUnitToString(Ultracopier::SizeUnit_byte);
     if((size_temp=size_temp/1024)<1024)
         return adaptString(size_temp)+sizeUnitToString(Ultracopier::SizeUnit_KiloByte);
     if((size_temp=size_temp/1024)<1024)
