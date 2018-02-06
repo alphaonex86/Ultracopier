@@ -169,9 +169,9 @@ void ThemesManager::onePluginWillBeRemoved(const PluginsAvailable &plugin)
                 pluginList.at(index).pluginLoader->unload();
                 delete pluginList.at(index).pluginLoader;
             }
-            if(currentPluginIndex==(int)index)
+            if(currentPluginIndex==static_cast<int>(index))
                 currentPluginIndex=-1;
-            if((int)index<currentPluginIndex)
+            if(static_cast<int>(index)<currentPluginIndex)
                 currentPluginIndex--;
             pluginList.erase(pluginList.begin()+index);
             if((unsigned int)currentPluginIndex>=pluginList.size())
