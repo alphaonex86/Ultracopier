@@ -158,7 +158,7 @@ void Core::addWindowCopyMove(const Ultracopier::CopyMode &mode,const std::string
         QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
         return;
     }
-    ActionOnManualOpen ActionOnManualOpen_value=(ActionOnManualOpen)stringtoint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
+    ActionOnManualOpen ActionOnManualOpen_value=static_cast<ActionOnManualOpen>(stringtoint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen")));
     if(ActionOnManualOpen_value!=ActionOnManualOpen_Nothing)
     {
         if(ActionOnManualOpen_value==ActionOnManualOpen_Folder)
@@ -240,7 +240,7 @@ void Core::loadInterface()
             {
                 if(!copyList.at(index).ignoreMode)
                     copyList.at(index).interface->forceCopyMode(copyList.at(index).mode);
-                connectInterfaceAndSync(copyList.size()-1);
+                connectInterfaceAndSync(static_cast<unsigned int>(copyList.size()-1));
                 copyList.at(index).engine->syncTransferList();
                 index++;
             }
@@ -256,9 +256,8 @@ void Core::loadInterface()
 void Core::unloadInterface()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=0;
-    const int &loop_size=copyList.size();
-    while(index<loop_size)
+    size_t index=0;
+    while(index<copyList.size())
     {
         if(copyList.at(index).interface!=NULL)
         {
@@ -271,7 +270,7 @@ void Core::unloadInterface()
     }
 }
 
-int Core::incrementId()
+unsigned int Core::incrementId()
 {
     do
     {
@@ -379,9 +378,9 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             if(copyList.size()==0)
                 forUpateInformation.start();
             copyList.push_back(newItem);
-            connectEngine(copyList.size()-1);
-            connectInterfaceAndSync(copyList.size()-1);
-            return newItem.id;
+            connectEngine(static_cast<unsigned int>(copyList.size()-1));
+            connectInterfaceAndSync(static_cast<unsigned int>(copyList.size()-1));
+            return static_cast<int>(newItem.id);
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to load the interface, copy aborted");
         delete newItem.engine;
@@ -399,24 +398,25 @@ void Core::resetSpeedDetectedEngine()
 {
     int index=indexCopySenderCopyEngine();
     if(index!=-1)
-        resetSpeedDetected(index);
+        resetSpeedDetected(static_cast<unsigned int>(index));
 }
 
 void Core::resetSpeedDetectedInterface()
 {
     int index=indexCopySenderInterface();
     if(index!=-1)
-        resetSpeedDetected(index);
+        resetSpeedDetected(static_cast<unsigned int>(index));
 }
 
-void Core::resetSpeedDetected(const int &index)
+void Core::resetSpeedDetected(const unsigned int &bindex)
 {
+    const size_t &index=bindex;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start on "+std::to_string(index));
     switch(copyList.at(index).remainingTimeAlgo)
     {
         case Ultracopier::RemainingTimeAlgo_Logarithmic:
         {
-            int sub_index=0;
+            size_t sub_index=0;
             while(sub_index<ULTRACOPIER_MAXREMAININGTIMECOL)
             {
                 copyList[index].remainingTimeLogarithmicValue[sub_index].lastProgressionSpeed.clear();
@@ -425,6 +425,7 @@ void Core::resetSpeedDetected(const int &index)
                 sub_index++;
             }
         }
+        break;
         default:
         case Ultracopier::RemainingTimeAlgo_Traditional:
             copyList[index].lastSpeedDetected.clear();
@@ -448,9 +449,8 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
             else
             {
-                int size=timeList.size();
-                int sub_index=0;
-                while(sub_index<size)
+                unsigned int sub_index=0;
+                while(sub_index<timeList.size())
                 {
                     const std::pair<uint64_t,uint32_t> &timeUnit=timeList.at(sub_index);
                     const uint8_t &col=fileCatNumber(timeUnit.first);
@@ -464,7 +464,7 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
                     {
                         if(timeUnit.second>0)
                         {
-                            remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(timeUnit.first/timeUnit.second);
+                            remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(static_cast<unsigned int>(timeUnit.first/timeUnit.second));
                             if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
                                 remainingTimeLogarithmicColumn.lastProgressionSpeed.pop_back();
                         }
@@ -472,6 +472,7 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
                     sub_index++;
                 }
             }
+            break;
             default:
             case Ultracopier::RemainingTimeAlgo_Traditional:
             break;
@@ -511,9 +512,8 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             copyList.at(index).interface->actionInProgess(action);
         if(action==Ultracopier::Idle)
         {
-            int index_sub_loop=0;
-            const int &loop_size=copyList.at(index).orderId.size();
-            while(index_sub_loop<loop_size)
+            unsigned int index_sub_loop=0;
+            while(index_sub_loop<copyList.at(index).orderId.size())
             {
                 emit copyCanceled(copyList.at(index).orderId.at(index_sub_loop));
                 index_sub_loop++;
@@ -558,9 +558,8 @@ int Core::indexCopySenderCopyEngine()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Qt sender() NULL");
         return -1;
     }
-    int index=0;
-    const int &loop_size=copyList.size();
-    while(index<loop_size)
+    unsigned int index=0;
+    while(index<copyList.size())
     {
         if(copyList.at(index).engine==senderObject)
             return index;
@@ -581,9 +580,8 @@ int Core::indexCopySenderInterface()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Qt sender() NULL");
         return -1;
     }
-    int index=0;
-    const int &loop_size=copyList.size();
-    while(index<loop_size)
+    unsigned int index=0;
+    while(index<copyList.size())
     {
         if(copyList.at(index).interface==senderObject)
             return index;
@@ -598,7 +596,7 @@ int Core::indexCopySenderInterface()
         return -1;
     }
     index=0;
-    while(index<loop_size)
+    while(index<copyList.size())
     {
         if(copyList.at(index).interface==interface)
             return index;
@@ -609,7 +607,7 @@ int Core::indexCopySenderInterface()
     return -1;
 }
 
-void Core::connectEngine(const int &index)
+void Core::connectEngine(const unsigned int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with index: "+std::to_string(index)+": "+std::to_string((uint64_t)sender()));
     //disconnectEngine(index);
@@ -637,7 +635,7 @@ void Core::connectEngine(const int &index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for doneTime()");
 }
 
-void Core::connectInterfaceAndSync(const int &index)
+void Core::connectInterfaceAndSync(const unsigned int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start with index: "+std::to_string(index)+": "+std::to_string((uint64_t)sender()));
     //disconnectInterface(index);
@@ -714,9 +712,8 @@ void Core::connectInterfaceAndSync(const int &index)
 
 void Core::periodicSynchronization()
 {
-    int index_sub_loop=0;
-    const int &loop_size=copyList.size();
-    while(index_sub_loop<loop_size)
+    unsigned int index_sub_loop=0;
+    while(index_sub_loop<copyList.size())
     {
         if(copyList.at(index_sub_loop).action==Ultracopier::Copying || copyList.at(index_sub_loop).action==Ultracopier::CopyingAndListing)
             periodicSynchronizationWithIndex(index_sub_loop);
@@ -778,9 +775,8 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                 double totSpeed=0,totAverageSpeed=0;
 
                 //current speed
-                int index_sub_loop=0;
-                int loop_size=currentCopyInstance.lastSpeedDetected.size();
-                while(index_sub_loop<loop_size)
+                unsigned int index_sub_loop=0;
+                while(index_sub_loop<currentCopyInstance.lastSpeedDetected.size())
                 {
                     totTime+=currentCopyInstance.lastSpeedTime.at(index_sub_loop);
                     totSpeed+=currentCopyInstance.lastSpeedDetected.at(index_sub_loop);
@@ -790,8 +786,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
 
                 //speed to calculate the remaining time
                 index_sub_loop=0;
-                loop_size=currentCopyInstance.lastAverageSpeedDetected.size();
-                while(index_sub_loop<loop_size)
+                while(index_sub_loop<currentCopyInstance.lastAverageSpeedDetected.size())
                 {
                     totAverageTime+=currentCopyInstance.lastAverageSpeedTime.at(index_sub_loop);
                     totAverageSpeed+=currentCopyInstance.lastAverageSpeedDetected.at(index_sub_loop);
@@ -800,11 +795,11 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                 totAverageTime/=1000;
 
                 if(totTime>0)
-                    if(loop_size>=ULTRACOPIER_MINVALUESPEED)
+                    if(currentCopyInstance.lastAverageSpeedDetected.size()>=ULTRACOPIER_MINVALUESPEED)
                         currentCopyInstance.interface->detectedSpeed(totSpeed/totTime);
 
                 if(totAverageTime>0)
-                    if(loop_size>=ULTRACOPIER_MINVALUESPEEDTOREMAININGTIME)
+                    if(currentCopyInstance.lastAverageSpeedDetected.size()>=ULTRACOPIER_MINVALUESPEEDTOREMAININGTIME)
                     {
                         if(currentCopyInstance.remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Traditional)
                         {
@@ -824,8 +819,7 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                             int remainingTimeValue=0;
                             //calculate for each file class
                             index_sub_loop=0;
-                            loop_size=currentCopyInstance.remainingTimeLogarithmicValue.size();
-                            while(index_sub_loop<loop_size)
+                            while(index_sub_loop<currentCopyInstance.remainingTimeLogarithmicValue.size())
                             {
                                 const RemainingTimeLogarithmicColumn &remainingTimeLogarithmicColumn=currentCopyInstance.remainingTimeLogarithmicValue.at(index_sub_loop);
                                 //normal detect
@@ -902,7 +896,7 @@ void Core::copyInstanceCanceledByInterface()
 }
 
 /// \brief the transfer have been canceled
-void Core::copyInstanceCanceledByIndex(const int &index)
+void Core::copyInstanceCanceledByIndex(const unsigned int &index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, remove with the index: "+std::to_string(index));
     //disconnectEngine(index);
@@ -912,9 +906,8 @@ void Core::copyInstanceCanceledByIndex(const int &index)
     currentCopyInstance.engine->cancel();
     delete currentCopyInstance.nextConditionalSync;
     delete currentCopyInstance.interface;
-    int index_sub_loop=0;
-    const int &loop_size=currentCopyInstance.orderId.size();
-    while(index_sub_loop<loop_size)
+    unsigned int index_sub_loop=0;
+    while(index_sub_loop<currentCopyInstance.orderId.size())
     {
         emit copyCanceled(currentCopyInstance.orderId.at(index_sub_loop));
         index_sub_loop++;
@@ -998,12 +991,11 @@ void Core::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList
         if(log.logTransfer() || copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start4");
-            int sub_index=0;
-            const int &size=actionList.size();
+            unsigned int sub_index=0;
             if(log.logTransfer() && copyList.at(index).remainingTimeAlgo==Ultracopier::RemainingTimeAlgo_Logarithmic)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start5");
-                while(sub_index<size)
+                while(sub_index<actionList.size())
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
                     switch(returnAction.type)
@@ -1038,7 +1030,7 @@ void Core::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList
             else if(log.logTransfer())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start6");
-                while(sub_index<size)
+                while(sub_index<actionList.size())
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
                     switch(returnAction.type)
@@ -1066,7 +1058,7 @@ void Core::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList
             else
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start7");
-                while(sub_index<size)
+                while(sub_index<actionList.size())
                 {
                     const Ultracopier::ReturnActionOnCopyList &returnAction=actionList.at(sub_index);
                     switch(returnAction.type)
@@ -1116,9 +1108,10 @@ void Core::pushGeneralProgression(const uint64_t &current,const uint64_t &total)
 void Core::urlDropped(const std::vector<std::string> &urls)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    int index=indexCopySenderInterface();
-    if(index!=-1)
+    int bindex=indexCopySenderInterface();
+    if(bindex!=-1)
     {
+        const unsigned int &index=static_cast<unsigned int>(bindex);
         std::vector<std::string> sources;
         unsigned int index_loop=0;
         while(index_loop<urls.size())

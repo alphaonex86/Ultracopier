@@ -37,26 +37,19 @@ std::string PluginInformation::categoryToTranslation(const PluginType &category)
     {
         case PluginType_CopyEngine:
             return tr("Copy engine").toStdString();
-        break;
         case PluginType_Languages:
             return tr("Languages").toStdString();
-        break;
         case PluginType_Listener:
             return tr("Listener").toStdString();
-        break;
         case PluginType_PluginLoader:
             return tr("Plugin loader").toStdString();
-        break;
         case PluginType_SessionLoader:
             return tr("Session loader").toStdString();
-        break;
         case PluginType_Themes:
             return tr("Themes").toStdString();
-        break;
         default:
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"cat translation not found");
             return tr("Unknown").toStdString();
-        break;
     }
 }
 

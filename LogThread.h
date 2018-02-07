@@ -44,9 +44,9 @@ public slots:
     /** method called when one folder is created */
     void mkPath(const std::string &path);
 private slots:
-    /** \to write the data into the file */
+    /** write the data into the file */
     void realDataWrite(const std::string &text);
-    /** \to update the options value */
+    /** update the options value */
     void newOptionValue(const std::string &group,const std::string &name,const std::string &value);
 signals:
     void newData(const std::string &text) const;

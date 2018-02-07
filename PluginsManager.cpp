@@ -119,9 +119,8 @@ void PluginsManager::run()
         }
     }
     #ifdef ULTRACOPIER_DEBUG
-    int index_debug=0;
-    const int &loop_size=pluginsList.size();
-    while(index_debug<loop_size)
+    unsigned int index_debug=0;
+    while(index_debug<pluginsList.size())
     {
         std::string category=categoryToString(pluginsList.at(index_debug).category);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Plugin "+std::to_string(index_debug)+" loaded ("+category+"): "+pluginsList.at(index_debug).path);
@@ -325,14 +324,11 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
             if(thePlugin->errorString.empty())
             {
                 thePlugin->name=thePlugin->informations.back().back();
-                int index=0;
-                const int &loop_size=pluginsList.size();
-                int sub_index,loop_sub_size;
-                while(index<loop_size)
+                size_t index=0;
+                while(index<pluginsList.size())
                 {
-                    sub_index=0;
-                    loop_sub_size=pluginsList.at(index).informations.size();
-                    while(sub_index<loop_sub_size)
+                    size_t sub_index=0;
+                    while(sub_index<pluginsList.at(index).informations.size())
                     {
                         if(pluginsList.at(index).informations.at(sub_index).front()=="name" &&
                                 pluginsList.at(index).name==thePlugin->name &&
@@ -416,16 +412,14 @@ void PluginsManager::loadBalise(const QDomElement &root,const std::string &name,
 std::string PluginsManager::getDomSpecific(const QDomElement &root,const std::string &name,const std::vector<std::pair<std::string,std::string> > &listChildAttribute) const
 {
     QDomElement child = root.firstChildElement(QString::fromStdString(name));
-    int index,loop_size;
     bool allIsFound;
     while(!child.isNull())
     {
         if(child.isElement())
         {
             allIsFound=true;
-            index=0;
-            loop_size=listChildAttribute.size();
-            while(index<loop_size)
+            size_t index=0;
+            while(index<listChildAttribute.size())
             {
                 const std::pair<std::string,std::string> &entry=listChildAttribute.at(index);
                 if(child.attribute(QString::fromStdString(entry.first))!=QString::fromStdString(entry.second))
@@ -466,15 +460,12 @@ uint32_t PluginsManager::checkDependencies()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     uint32_t errors=0;
-    int index=0;
-    const int &loop_size=pluginsList.size();
-    int sub_index,loop_sub_size;//,resolv_size,indexOfDependencies
+    unsigned int index=0;
     bool depCheck;
-    while(index<loop_size)
+    while(index<pluginsList.size())
     {
-        sub_index=0;
-        loop_sub_size=pluginsList.at(index).informations.size();
-        while(sub_index<loop_sub_size)
+        unsigned int sub_index=0;
+        while(sub_index<pluginsList.at(index).informations.size())
         {
             if(pluginsList.at(index).informations.at(sub_index).size()==2 && pluginsList.at(index).informations.at(sub_index).at(0)=="dependencies")
             {
@@ -794,7 +785,7 @@ void PluginsManager::decodingFinished()
                 for (unsigned int i = 0; i < fileList.size(); ++i)
                     if(fileList.at(i)=="informations.xml")
                     {
-                        loadPluginXml(&tempPlugin,QByteArray(dataList.at(i).data(),dataList.at(i).size()));
+                        loadPluginXml(&tempPlugin,QByteArray(dataList.at(i).data(),static_cast<int>(dataList.at(i).size())));
                         break;
                     }
                 if(tempPlugin.errorString=="")
@@ -832,7 +823,7 @@ void PluginsManager::decodingFinished()
                                         }
                                     if(currentFile.open(QIODevice::ReadWrite))
                                     {
-                                        currentFile.write(QByteArray(dataList.at(i).data(),dataList.at(i).size()));
+                                        currentFile.write(QByteArray(dataList.at(i).data(),static_cast<int>(dataList.at(i).size())));
                                         currentFile.close();
                                     }
                                     else

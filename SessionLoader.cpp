@@ -31,9 +31,8 @@ SessionLoader::SessionLoader(OptionDialog *optionDialog)
 SessionLoader::~SessionLoader()
 {
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-    int index=0;
-    const int &loop_size=pluginList.size();
-    while(index<loop_size)
+    unsigned int index=0;
+    while(index<pluginList.size())
     {
         if(pluginList.at(index).pluginLoader!=NULL)
         {

@@ -56,7 +56,7 @@ private slots:
     \param theErrorDefine The error define */
     void error(const QLocalSocket::LocalSocketError &theErrorDefine);
     #endif
-    /// \can now parse the cli
+    /// can now parse the cli
     void allPluginIsloaded();
 signals:
     void cli(const std::vector<std::string> &ultracopierArguments,const bool &external,const bool &onlyCheck) const;

@@ -48,7 +48,7 @@ class Core : public QObject
 
         struct CopyInstance
         {
-            int id;
+            unsigned int id;
             PluginInterface_CopyEngine * engine;
             PluginInterface_Themes * interface;
             bool ignoreMode;
@@ -107,8 +107,8 @@ class Core : public QObject
         /// \brief get the right copy instance (copy engine + interface), by signal emited from interface
         int indexCopySenderInterface();
 
-        void connectEngine(const int &index);
-        void connectInterfaceAndSync(const int &index);
+        void connectEngine(const unsigned int &index);
+        void connectInterfaceAndSync(const unsigned int &index);
         //void disconnectEngine(const int &index);
         //void disconnectInterface(const int &index);
 
@@ -117,12 +117,12 @@ class Core : public QObject
         void periodicSynchronizationWithIndex(const int &index);
 
         //for the internal management
-        int incrementId();
-        int nextId;
-        std::vector<int> idList;
+        unsigned int incrementId();
+        unsigned int nextId;
+        std::vector<unsigned int> idList;
         QTime lastProgressionTime;
         QTimer forUpateInformation;///< used to call \see periodicSynchronization()
-        void resetSpeedDetected(const int &index);
+        void resetSpeedDetected(const unsigned int &bindex);
 
         /** Connect the copy engine instance provided previously to the management */
         int connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,const CopyEngineManager::returnCopyEngine &returnInformations);
@@ -156,7 +156,7 @@ class Core : public QObject
         /// \brief the interface have canceled the transfer
         void copyInstanceCanceledByInterface();
         /// \brief the transfer have been canceled
-        void copyInstanceCanceledByIndex(const int &index);
+        void copyInstanceCanceledByIndex(const unsigned int &index);
         /// \brief only when the copy engine say it's ready to delete them self, it call this
         void deleteCopyEngine();
 

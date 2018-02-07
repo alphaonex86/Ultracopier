@@ -87,7 +87,7 @@ EventDispatcher::EventDispatcher()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("Qt version: ")+qVersion()+" "+std::to_string(QT_VERSION));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME.toStdString());
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Application path: "+QCoreApplication::applicationFilePath().toStdString()+" "+std::to_string(QCoreApplication::applicationPid()));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Local socket: "+ExtraSocket::pathSocket(ULTRACOPIER_SOCKETNAME));
     #if defined(ULTRACOPIER_DEBUG) && defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE)
         #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
@@ -126,11 +126,11 @@ EventDispatcher::EventDispatcher()
         //then ultracopier have been updated
     }
     OptionEngine::optionEngine->setOptionValue("Ultracopier","Last_version_used",ULTRACOPIER_VERSION);
-    int a=stringtouint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
-    if(a<0 || a>2)
+    unsigned int a=stringtouint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
+    if(a>2)
         OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen","1");
     a=stringtouint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
-    if(a<0 || a>5)
+    if(a>5)
         OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen","0");
 
     #ifdef ULTRACOPIER_VERSION_ULTIMATE

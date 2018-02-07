@@ -79,9 +79,8 @@ ResourcesManager::ResourcesManager()
     #endif
     vectorRemoveDuplicatesForSmallList(searchPath);
     #ifdef ULTRACOPIER_DEBUG
-    int index=0;
-    const int &loop_size=searchPath.size();
-    while(index<loop_size) //look at each val
+    unsigned int index=0;
+    while(index<searchPath.size()) //look at each val
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"searchPath.at("+std::to_string(index)+"): "+searchPath.at(index));
         index++;
@@ -98,9 +97,8 @@ ResourcesManager::~ResourcesManager()
 /// \brief Get folder presence and the path
 std::string ResourcesManager::getFolderReadPath(const std::string &path) const
 {
-    int index=0;
-    const int &loop_size=searchPath.size();
-    while(index<loop_size) //look at each val
+    unsigned int index=0;
+    while(index<searchPath.size()) //look at each val
     {
         QDir dir(QString::fromStdString(searchPath.at(index)+path));
         if(dir.exists()) // if the path have been found, then return the full path
@@ -113,9 +111,8 @@ std::string ResourcesManager::getFolderReadPath(const std::string &path) const
 /// \brief Get folder presence, the path and check in the folder and sub-folder the file presence
 std::string ResourcesManager::getFolderReadPathMultiple(const std::string &path,const std::vector<std::string> &fileToCheck) const
 {
-    int index=0;
-    const int &loop_size=searchPath.size();
-    while(index<loop_size) //look at each val
+    unsigned int index=0;
+    while(index<searchPath.size()) //look at each val
     {
         QDir dir(QString::fromStdString(searchPath.at(index)+path));
         if(checkFolderContent(dir.absolutePath().toStdString(),fileToCheck))
@@ -131,10 +128,9 @@ bool ResourcesManager::checkFolderContent(const std::string &path,const std::vec
     if(dir.exists()) // if the path have been found, then return the full path
     {
         bool allFileToCheckIsFound=true;
-        int index=0;
-        const int &loop_size=fileToCheck.size();
+        unsigned int index=0;
         std::string partialPath=ResourcesManager::AddSlashIfNeeded(dir.absolutePath().toStdString());
-        while(index<loop_size) //look at each val
+        while(index<fileToCheck.size()) //look at each val
         {
             if(!QFile::exists(QString::fromStdString(partialPath+fileToCheck.at(index)))) //if a file have been not found, consider the folder as not suitable
             {

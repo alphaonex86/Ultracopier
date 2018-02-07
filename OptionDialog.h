@@ -109,7 +109,6 @@ private:
     std::vector<std::string> copyEngineStringList() const;
     bool ignoreCopyEngineListEdition;
     PluginsManager::ImportBackend defaultImportBackend;
-    int index,loop_size;
     int loadedCopyEnginePlugin;
     QTreeWidgetItem * treeWidgetItem;
     OSSpecific *oSSpecific;

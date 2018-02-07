@@ -163,7 +163,7 @@ DebugEngine::DebugEngine()
             {
                 logFile.resize(0);
                 currentBackend=File;
-                logFile.write(debugHtmlContent.data(),debugHtmlContent.size());
+                logFile.write(debugHtmlContent.data(),static_cast<qint64>(debugHtmlContent.size()));
             }
         }
     }
@@ -176,7 +176,7 @@ DebugEngine::~DebugEngine()
     {
         removeTheLockFile();
         //Finalize the log file
-        logFile.write(endOfLogFile.data(),endOfLogFile.size());
+        logFile.write(endOfLogFile.data(),static_cast<qint64>(endOfLogFile.size()));
         logFile.close();
     }
 }
@@ -320,7 +320,7 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
             if(logFile.size()<ULTRACOPIER_DEBUG_MAX_ALL_SIZE*1024*1024 || (important && logFile.size()<ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE*1024*1024))
             {
                 std::cout << addDebugInformation_textFormat << std::endl;
-                logFile.write(addDebugInformation_htmlFormat.data(),addDebugInformation_htmlFormat.size());
+                logFile.write(addDebugInformation_htmlFormat.data(),static_cast<qint64>(addDebugInformation_htmlFormat.size()));
             }
         }
         else
@@ -335,7 +335,7 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
         if(addDebugInformationCallNumber<ULTRACOPIER_DEBUG_MAX_GUI_LINE)
         {
             addDebugInformationCallNumber++;
-            DebugModel::debugModel->addDebugInformation(startTime.elapsed(),level,function,text,file,ligne,location);
+            DebugModel::debugModel->addDebugInformation(startTime.elapsed(),level,function,text,file,static_cast<const unsigned int>(ligne),location);
         }
     }
 }
@@ -349,7 +349,7 @@ std::string DebugEngine::getTheDebugHtml()
         if(!logFile.isOpen())
             ULTRACOPIER_DEBUGCONSOLE(DebugLevel_custom_Warning,"The log file is not open");
         const QByteArray &data=logFile.readAll();
-        return std::string(data.constData(),data.size())+endOfLogFile;
+        return std::string(data.constData(),static_cast<size_t>(data.size()))+endOfLogFile;
     }
     else
         return debugHtmlContent+endOfLogFile;

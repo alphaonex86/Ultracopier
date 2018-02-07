@@ -90,10 +90,9 @@ bool OptionEngine::addOptionGroup(const std::string &groupName,const std::vector
     if(currentBackend==File)
         settings->beginGroup(QString::fromStdString(groupName));
     //browse all key, and append it to the key
-    int index=0;
+    unsigned int index=0;
     //QList<OptionEngineGroupKey> KeyListTemp;
-    const int &loop_size=KeysList.size();
-    while(index<loop_size)
+    while(index<KeysList.size())
     {
         OptionEngineGroupKey theCurrentKey;
         theCurrentKey.defaultValue=KeysList.at(index).second;

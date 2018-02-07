@@ -288,7 +288,7 @@ void SystrayIcon::dropEvent(QDropEvent *event)
         unsigned int index=0;
         while(index<(unsigned int)mimeData->urls().size())
         {
-            urls.push_back(mimeData->urls().at(index).toString().toStdString());
+            urls.push_back(mimeData->urls().at(static_cast<int>(index)).toString().toStdString());
             index++;
         }
         emit urlDropped(urls);
