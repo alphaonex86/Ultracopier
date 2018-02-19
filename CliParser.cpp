@@ -23,7 +23,13 @@ void CliParser::cli(const std::vector<std::string> &ultracopierArguments,const b
     if(ultracopierArguments.size()==1)
     {
         if(external)
-            QMessageBox::warning(NULL,tr("Warning"),tr("Ultracopier is already running, right click on its system tray icon (near the clock) to use it"));
+        {
+            #ifdef Q_OS_WIN32
+            QMessageBox::warning(NULL,tr("Warning"),tr("Ultracopier is already running, right click on its system tray icon (near the clock) to use it or just copy and paste"));
+            #else
+            QMessageBox::warning(NULL,tr("Warning"),tr("Ultracopier is already running, view all notification area icons (near the clock), right click on its system tray icon to use it or just copy and paste"));
+            #endif
+        }
         // else do nothing, is normal starting without arguements
         return;
     }
