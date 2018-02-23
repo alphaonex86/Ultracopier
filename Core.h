@@ -97,8 +97,7 @@ class Core : public QObject
         /** open with specific copy engine
         \param move Copy or move
         \param ignoreMode if need ignore the mode
-        \param protocolsUsedForTheSources protocols used for sources
-        \param protocolsUsedForTheDestination protocols used for destination
+        \param name protocols used for sources
         */
         int openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const std::string &name);
 
@@ -150,6 +149,8 @@ class Core : public QObject
         void addWindowTransfer(const std::string &name);
         /** new transfer list pased by the CLI */
         void newTransferList(std::string engine,std::string mode,std::string file);
+
+        bool startNewTransferOneUniqueCopyEngine();
     private slots:
         /// \brief the copy engine have canceled the transfer
         void copyInstanceCanceledByEngine();

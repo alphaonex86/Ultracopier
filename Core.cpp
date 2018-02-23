@@ -220,6 +220,20 @@ void Core::newTransferList(std::string engine,std::string mode,std::string file)
     copyList.back().engine->newTransferList(file);
 }
 
+bool Core::startNewTransferOneUniqueCopyEngine()
+{
+    if(copyList.size()!=1)
+        return false;
+
+    if(openNewCopyEngineInstance(Ultracopier::Copy,true,std::string())==-1)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get a copy engine instance");
+        QMessageBox::critical(NULL,tr("Error"),tr("Unable to get a copy engine instance"));
+        return false;
+    }
+    return true;
+}
+
 void Core::loadInterface()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
@@ -287,7 +301,8 @@ unsigned int Core::incrementId()
 \param protocolsUsedForTheSources protocols used for sources
 \param protocolsUsedForTheDestination protocols used for destination
 */
-int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
+int Core::openNewCopyEngineInstance(const Ultracopier::CopyMode &mode,const bool &ignoreMode,
+    const std::vector<std::string> &protocolsUsedForTheSources,const std::string &protocolsUsedForTheDestination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     CopyEngineManager::returnCopyEngine returnInformations=copyEngineList->getCopyEngine(mode,protocolsUsedForTheSources,protocolsUsedForTheDestination);

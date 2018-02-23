@@ -13,12 +13,13 @@
 
 #include "Environment.h"
 
+class Core;
 /** \brief class to parse all command line options */
 class CliParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit CliParser(QObject *parent = 0);
+    explicit CliParser(/*Core *core,*/QObject *parent = 0);
 public slots:
     /** \brief method to parse the ultracopier arguments
       \param ultracopierArguments the argument list
@@ -40,10 +41,15 @@ signals:
     void tryLoadPlugin(const std::string &file) const;
     /// \brief Show the help option
     void showOptions() const;
+
+    /// \brief For show a message linked to the systray icon
+    void showSystrayMessage(const std::string& text);
 private:
     /** \brief show the help
      *\param incorrectArguments if the help is call because the arguments are wrong */
     void showHelp(const bool &incorrectArguments=true);
+
+    //Core *core;
 };
 
 #endif // CLIPARSER_H
