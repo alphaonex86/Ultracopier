@@ -35,7 +35,7 @@ class ResourcesManager : public QObject
         /// \brief add / or \ in function of the platform at the end of path if both / and \ are not found
         static std::string AddSlashIfNeeded(const std::string &path);
         /// \brief get the writable path
-        const std::__cxx11::string &getWritablePath() const;
+        const std::string &getWritablePath() const;
         /// \brief disable the writable path, if ultracopier is unable to write into
         bool disableWritablePath();
         /// \brief get the read path
