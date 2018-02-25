@@ -907,7 +907,7 @@ void PluginsManager::newAuthPath(const std::string &path)
 /// \brief transfor short plugin name into file name
 std::string PluginsManager::getResolvedPluginName(const std::string &name)
 {
-    #if defined(Q_OS_LINUX)
+    #if defined(Q_OS_LINUX) || defined(Q_OS_HURD)
         return "lib"+name+".so";
     #elif defined(Q_OS_MAC)
         #if defined(QT_DEBUG)
