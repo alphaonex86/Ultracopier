@@ -404,7 +404,6 @@ void OptionDialog::loadOption()
     newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
     newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
     newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
-    newOptionValue("Ultracopier",	"giveGPUTime",              OptionEngine::optionEngine->getOptionValue("Ultracopier","giveGPUTime"));
     newOptionValue("Ultracopier",	"remainingTimeAlgorithm",   OptionEngine::optionEngine->getOptionValue("Ultracopier","remainingTimeAlgorithm"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
@@ -1004,12 +1003,6 @@ void OptionDialog::on_confirmToGroupWindows_clicked()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     OptionEngine::optionEngine->setOptionValue("Ultracopier","confirmToGroupWindows",booltostring(ui->confirmToGroupWindows->isChecked()));
-}
-
-void OptionDialog::on_giveGPUTime_clicked()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","giveGPUTime",booltostring(ui->giveGPUTime->isChecked()));
 }
 
 void OptionDialog::on_remainingTimeAlgorithm_currentIndexChanged(int index)
