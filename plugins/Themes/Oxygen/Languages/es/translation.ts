@@ -5,61 +5,67 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="298"/>
-        <location filename="../../interface.cpp" line="309"/>
+        <location filename="../../interface.cpp" line="313"/>
         <source>%1 is deprecated, Use %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="311"/>
+        <location filename="../../interface.cpp" line="301"/>
+        <location filename="../../interface.cpp" line="316"/>
+        <source>This will be the last version for Mac, but you can compile from source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="318"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="396"/>
+        <location filename="../../interface.cpp" line="403"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="630"/>
+        <location filename="../../interface.cpp" line="637"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="632"/>
+        <location filename="../../interface.cpp" line="639"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1053"/>
+        <location filename="../../interface.cpp" line="1060"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1054"/>
+        <location filename="../../interface.cpp" line="1061"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1055"/>
+        <location filename="../../interface.cpp" line="1062"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1057"/>
+        <location filename="../../interface.cpp" line="1064"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1244"/>
-        <location filename="../../interface.cpp" line="1256"/>
-        <location filename="../../interface.cpp" line="1268"/>
+        <location filename="../../interface.cpp" line="1251"/>
+        <location filename="../../interface.cpp" line="1263"/>
+        <location filename="../../interface.cpp" line="1275"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1343"/>
-        <location filename="../../interface.cpp" line="1347"/>
-        <location filename="../../interface.cpp" line="1349"/>
+        <location filename="../../interface.cpp" line="1350"/>
+        <location filename="../../interface.cpp" line="1354"/>
+        <location filename="../../interface.cpp" line="1356"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -67,24 +73,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="224"/>
+        <location filename="../../ThemesFactory.cpp" line="228"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="225"/>
+        <location filename="../../ThemesFactory.cpp" line="229"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="226"/>
+        <location filename="../../ThemesFactory.cpp" line="230"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="422"/>
-        <location filename="../../ThemesFactory.cpp" line="437"/>
-        <location filename="../../ThemesFactory.cpp" line="452"/>
+        <location filename="../../ThemesFactory.cpp" line="426"/>
+        <location filename="../../ThemesFactory.cpp" line="441"/>
+        <location filename="../../ThemesFactory.cpp" line="456"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>

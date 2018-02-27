@@ -5,8 +5,14 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="+298"/>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>%1 is deprecated, Use %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-12"/>
+        <location line="+15"/>
+        <source>This will be the last version for Mac, but you can compile from source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -67,7 +73,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+224"/>
+        <location filename="../../ThemesFactory.cpp" line="+228"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
