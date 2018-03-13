@@ -16,6 +16,7 @@ class InternetUpdater : public QObject
     Q_OBJECT
 public:
     explicit InternetUpdater(QObject *parent = 0);
+    ~InternetUpdater();
 signals:
     void newUpdate(const std::string &version) const;
 private:

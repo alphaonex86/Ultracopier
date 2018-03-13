@@ -18,6 +18,16 @@ InternetUpdater::InternetUpdater(QObject *parent) :
     newUpdateTimer.start(1000*3600);
     firstUpdateTimer.setSingleShot(true);
     firstUpdateTimer.start(1000*60);
+    reply=NULL;
+}
+
+InternetUpdater::~InternetUpdater()
+{
+    if(reply!=NULL)
+    {
+        delete reply;
+        reply=NULL;
+    }
 }
 
 void InternetUpdater::downloadFile()
@@ -59,11 +69,14 @@ void InternetUpdater::downloadFile()
 
 void InternetUpdater::httpFinished()
 {
+    if(reply==NULL)
+        return;
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (!reply->isFinished())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"get the new update failed: not finished");
         reply->deleteLater();
+        reply=NULL;
         return;
     }
     else if (reply->error())
@@ -72,10 +85,12 @@ void InternetUpdater::httpFinished()
         newUpdateTimer.start(1000*3600*24);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"get the new update failed: "+reply->errorString().toStdString());
         reply->deleteLater();
+        reply=NULL;
         return;
     } else if (!redirectionTarget.isNull()) {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"redirection denied to: "+redirectionTarget.toUrl().toString().toStdString());
         reply->deleteLater();
+        reply=NULL;
         return;
     }
     QString newVersion=QString::fromUtf8(reply->readAll());
@@ -83,6 +98,7 @@ void InternetUpdater::httpFinished()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string is empty");
         reply->deleteLater();
+        reply=NULL;
         return;
     }
     newVersion.remove("\n");
@@ -90,21 +106,25 @@ void InternetUpdater::httpFinished()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"version string don't match: "+newVersion.toStdString());
         reply->deleteLater();
+        reply=NULL;
         return;
     }
     if(newVersion==ULTRACOPIER_VERSION)
     {
         reply->deleteLater();
+        reply=NULL;
         return;
     }
     if(PluginsManager::compareVersion(newVersion.toStdString(),"<=",ULTRACOPIER_VERSION))
     {
         reply->deleteLater();
+        reply=NULL;
         return;
     }
     newUpdateTimer.stop();
     emit newUpdate(newVersion.toStdString());
     reply->deleteLater();
+    reply=NULL;
 }
 
 #endif
