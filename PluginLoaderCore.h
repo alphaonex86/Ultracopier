@@ -32,12 +32,12 @@ namespace Ui {
 
   \see ResourcesManager::ResourcesManager()
   */
-class PluginLoader : public QObject
+class PluginLoaderCore : public QObject
 {
     Q_OBJECT
 public:
-    explicit PluginLoader(OptionDialog *optionDialog);
-    ~PluginLoader();
+    explicit PluginLoaderCore(OptionDialog *optionDialog);
+    ~PluginLoaderCore();
     /** \brief to rended the state */
     void resendState();
     /** \brief should load plugin into file manager if needed */

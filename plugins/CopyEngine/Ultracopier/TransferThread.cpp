@@ -45,10 +45,10 @@ TransferThread::TransferThread() :
     readThread.setWriteThread(&writeThread);
     source.setCaching(false);
     destination.setCaching(false);
-    renameRegex=std::regex("^(.*)(\\.[a-z0-9]+)$");
+    renameRegex=std::regex("^(.*)(\\.[a-zA-Z0-9]+)$");
     #ifdef Q_OS_WIN32
         #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-            regRead=std::regex("^[a-z]:");
+            regRead=std::regex("^[a-zA-Z]:");
         #endif
     #endif
 

@@ -18,7 +18,7 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
 {
     stopIt=false;
     this->optionDialog=optionDialog;
-    pluginLoader=new PluginLoader(optionDialog);
+    pluginLoader=new PluginLoaderCore(optionDialog);
     //load the options
     tryListen=false;
     PluginsManager::pluginsManager->lockPluginListEdition();
@@ -29,7 +29,7 @@ CopyListener::CopyListener(OptionDialog *optionDialog)
     connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,		this,&CopyListener::onePluginWillBeRemoved,Qt::DirectConnection);
     #endif
     connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,			this,&CopyListener::allPluginIsloaded,Qt::QueuedConnection);
-    connect(pluginLoader,&PluginLoader::pluginLoaderReady,			this,&CopyListener::pluginLoaderReady);
+    connect(pluginLoader,&PluginLoaderCore::pluginLoaderReady,			this,&CopyListener::pluginLoaderReady);
     foreach(PluginsAvailable currentPlugin,list)
         emit previouslyPluginAdded(currentPlugin);
     PluginsManager::pluginsManager->unlockPluginListEdition();

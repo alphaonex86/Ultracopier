@@ -14,7 +14,7 @@
 
 #include "interface/PluginInterface_Listener.h"
 #include "Environment.h"
-#include "PluginLoader.h"
+#include "PluginLoaderCore.h"
 #include "OptionDialog.h"
 
 /** \brief to load all the listener and parse all event */
@@ -110,7 +110,7 @@ class CopyListener : public QObject
         std::vector<CopyRunning> copyRunningList;
         uint32_t incrementOrderId();
         bool tryListen;
-        PluginLoader *pluginLoader;
+        PluginLoaderCore *pluginLoader;
         Ultracopier::ListeningState last_state;
         bool last_have_plugin,last_inWaitOfReply;
         void sendState(bool force=false);

@@ -76,7 +76,7 @@ HEADERS += $$PWD/../ResourcesManager.h \
     $$PWD/../interface/PluginInterface_CopyEngine.h \
     $$PWD/../interface/OptionInterface.h \
     $$PWD/../Variable.h \
-    $$PWD/../PluginLoader.h \
+    $$PWD/../PluginLoaderCore.h \
     $$PWD/../interface/PluginInterface_PluginLoader.h \
     $$PWD/../OptionDialog.h \
     $$PWD/../LocalPluginOptions.h \
@@ -113,7 +113,7 @@ SOURCES += $$PWD/../ThemesManager.cpp \
     $$PWD/../CopyListener.cpp \
     $$PWD/../CopyEngineManager.cpp \
     $$PWD/../Core.cpp \
-    $$PWD/../PluginLoader.cpp \
+    $$PWD/../PluginLoaderCore.cpp \
     $$PWD/../OptionDialog.cpp \
     $$PWD/../LocalPluginOptions.cpp \
     $$PWD/../LocalListener.cpp \
