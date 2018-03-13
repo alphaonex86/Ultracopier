@@ -185,7 +185,7 @@ void PluginLoaderCore::onePluginAdded(const PluginsAvailable &plugin)
 }
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-void PluginLoader::onePluginWillBeRemoved(const PluginsAvailable &plugin)
+void PluginLoaderCore::onePluginWillBeRemoved(const PluginsAvailable &plugin)
 {
     if(stopIt)
         return;
