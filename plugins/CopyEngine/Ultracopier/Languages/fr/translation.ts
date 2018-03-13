@@ -762,7 +762,7 @@
         <location filename="../../TransferThread.cpp" line="344"/>
         <location filename="../../TransferThread.cpp" line="361"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactivé le transfert de celui-ci</translation>
+        <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="416"/>

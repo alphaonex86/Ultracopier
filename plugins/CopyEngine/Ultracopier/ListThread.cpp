@@ -1160,21 +1160,20 @@ uint64_t ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& dest
     if(!source.isSymLink())
         size=source.size();
     const std::string &drive=driveManagement.getDrive(destination.absoluteFilePath().toStdString());
-    if(drive.empty())
-        abort();
-    if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source.absoluteFilePath().toStdString()))
-    {
-        if(requiredSpace.find(drive)!=requiredSpace.cend())
+    if(!drive.empty())//can be a network drive
+        if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source.absoluteFilePath().toStdString()))
         {
-            requiredSpace[drive]+=size;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed add: %1, space needed: %2, on: %3").arg(size).arg(requiredSpace.at(drive)).arg(QString::fromStdString(drive)).toStdString());
+            if(requiredSpace.find(drive)!=requiredSpace.cend())
+            {
+                requiredSpace[drive]+=size;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed add: %1, space needed: %2, on: %3").arg(size).arg(requiredSpace.at(drive)).arg(QString::fromStdString(drive)).toStdString());
+            }
+            else
+            {
+                requiredSpace[drive]=size;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set space %1 needed, on: %2").arg(size).arg(QString::fromStdString(drive)).toStdString());
+            }
         }
-        else
-        {
-            requiredSpace[drive]=size;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("set space %1 needed, on: %2").arg(size).arg(QString::fromStdString(drive)).toStdString());
-        }
-    }
     bytesToTransfer+= size;
     ActionToDoTransfer temp;
     temp.id		= generateIdNumber();

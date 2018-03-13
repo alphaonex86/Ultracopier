@@ -19,6 +19,7 @@ DriveManagement::DriveManagement()
 }
 
 //get drive of an file or folder
+/// \todo do network drive support for windows
 std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
 {
     const std::string &inode=QDir::toNativeSeparators(QString::fromStdString(fileOrFolder)).toStdString();
