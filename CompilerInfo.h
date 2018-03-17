@@ -5,11 +5,7 @@
 
 /// \def COMPILERINFO the string to identify the compiler
 #if defined(Q_CC_GNU)
-    #define COMPILERINFO std::string("GCC ")+std::to_string(__GNUC__)+"."+std::to_string(__GNUC_MINOR__)+"."+std::to_string(__GNUC_PATCHLEVEL__)+" build: "+__DATE__+" "+__TIME__
+    #define COMPILERINFO std::string("GCC ")+std::to_string(__GNUC__)+"."+std::to_string(__GNUC_MINOR__)+"."+std::to_string(__GNUC_PATCHLEVEL__)
 #else
-    #if defined(__DATE__) && defined(__TIME__)
-        #define COMPILERINFO std::string("Unknown compiler: ")+__DATE__+" "+__TIME__
-    #else
-        #define COMPILERINFO std::string("Unknown compiler")
-    #endif
+    #define COMPILERINFO std::string("Unknown compiler: ")
 #endif
