@@ -38,7 +38,8 @@ TransferThread::TransferThread() :
     deletePartiallyTransferredFiles (true),
     writeError                      (false),
     readError                       (false),
-    renameTheOriginalDestination    (false)
+    renameTheOriginalDestination    (false),
+    havePermission                  (false)
 {
     start();
     moveToThread(this);
@@ -285,6 +286,7 @@ void TransferThread::resetExtraVariable()
     writeIsOpenVariable         = false;
     readIsOpeningVariable       = false;
     writeIsOpeningVariable      = false;
+    havePermission              = false;
 }
 
 void TransferThread::preOperation()
@@ -409,6 +411,9 @@ void TransferThread::tryOpen()
             readError=false;
             readThread.open(source.absoluteFilePath(),mode);
             readIsOpeningVariable=true;
+
+            if(doRightTransfer)
+                havePermission=readFilePermissions(QFile(source.absoluteFilePath()));
         }
         else
         {
@@ -1253,10 +1258,10 @@ void TransferThread::postOperation()
                 writeError=true;
                 return;
             }
+            //in normal mode, without copy/move syscall
+            if(!doFilePostOperation())
+                return;
         }
-
-        if(!doFilePostOperation())
-            return;
 
         //remove source in moving mode
         if(mode==Ultracopier::Move && !canBeMovedDirectlyVariable)
@@ -1353,23 +1358,20 @@ bool TransferThread::doFilePostOperation()
         }
         if(doRightTransfer)
         {
-            QFile sourceFile(source.absoluteFilePath());
-            QFile destinationFile(destination.absoluteFilePath());
-            if(!destinationFile.setPermissions(sourceFile.permissions()))
+            //should be never used but...
+            source.refresh();
+            if(source.exists())
             {
-                if(sourceFile.error()!=QFile::NoError)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to get the source file permission");
-                    //emit errorOnFile(destination,tr("Unable to get the source file permission"));
-                    //return false;
-                }
-                else
+                QFile destinationFile(destination.absoluteFilePath());
+                if(!writeFilePermissions(destinationFile))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to set the destination file permission");
                     //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
                     //return false;
                 }
             }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try doRightTransfer when source not exists");
         }
     }
     if(stopIt)
@@ -1659,7 +1661,7 @@ void TransferThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgor
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
 }
 
-//fonction to edit the file date time
+//fonction to read the file date time
 bool TransferThread::readFileDateTime(const QFileInfo &source)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+source.absoluteFilePath().toStdString()+")");
@@ -1788,6 +1790,17 @@ bool TransferThread::writeFileDateTime(const QFileInfo &destination)
         #endif
     #endif
     return false;
+}
+
+bool TransferThread::readFilePermissions(const QFile &source)
+{
+    this->permissions=source.permissions();
+    return true;
+}
+
+bool TransferThread::writeFilePermissions(QFile &destination)
+{
+    return destination.setPermissions(this->permissions);
 }
 
 //skip the copy

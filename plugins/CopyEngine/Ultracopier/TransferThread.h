@@ -256,6 +256,8 @@ private:
             #endif
         #endif
     #endif
+    QFileDevice::Permissions permissions;
+    bool havePermission;
     //different pre-operation
     bool isSame();
     bool destinationExists();
@@ -268,6 +270,8 @@ private:
     //fonction to edit the file date time
     bool readFileDateTime(const QFileInfo &source);
     bool writeFileDateTime(const QFileInfo &destination);
+    bool readFilePermissions(const QFile &source);
+    bool writeFilePermissions(QFile &destination);
     void resetExtraVariable();
     //error management function
     void resumeTransferAfterWriteError();
