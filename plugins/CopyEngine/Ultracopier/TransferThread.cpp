@@ -1359,8 +1359,9 @@ bool TransferThread::doFilePostOperation()
         if(doRightTransfer)
         {
             //should be never used but...
-            source.refresh();
-            if(source.exists())
+            /*source.refresh();
+            if(source.exists())*/
+            if(havePermission)
             {
                 QFile destinationFile(destination.absoluteFilePath());
                 if(!writeFilePermissions(destinationFile))
