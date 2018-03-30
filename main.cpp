@@ -56,7 +56,7 @@ void registerTheOptions()
     KeysList.push_back(std::pair<std::string, std::string>("GroupWindowWhen","0"));
     KeysList.push_back(std::pair<std::string, std::string>("displayOSSpecific","true"));
     KeysList.push_back(std::pair<std::string, std::string>("confirmToGroupWindows","true"));
-    KeysList.push_back(std::pair<std::string, std::string>("remainingTimeAlgorithm","0"));
+    KeysList.push_back(std::pair<std::string, std::string>("remainingTimeAlgorithm","1"));
     #ifdef ULTRACOPIER_INTERNET_SUPPORT
     #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
     KeysList.push_back(std::pair<std::string, std::string>("checkTheUpdate","true"));
