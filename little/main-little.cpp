@@ -108,7 +108,7 @@ void connectInterfaceAndSync()
     /*failed|=!QObject::connect(interface,&Themes::newSpeedLimitation,         engine,&CopyEngine::resetSpeedDetectedInterface);
     failed|=!QObject::connect(interface,&Themes::resume,                     engine,&CopyEngine::resetSpeedDetectedInterface);
     failed|=!QObject::connect(interface,&Themes::urlDropped,                 engine,&CopyEngine::urlDropped,Qt::QueuedConnection);*/
-    failed|=!QObject::connect(interface,&Themes::cancel,                     engine,&CopyEngine::cancelAll,Qt::QueuedConnection);
+    failed|=!QObject::connect(interface,&Themes::cancel,                     engine,&CopyEngine::cancel,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::newActionOnList,           engine,&CopyEngine::newActionOnList,	Qt::QueuedConnection);
 
     failed|=!QObject::connect(engine,&CopyEngine::pushFileProgression,		interface,&Themes::setFileProgression,		Qt::QueuedConnection);
@@ -121,6 +121,12 @@ void connectInterfaceAndSync()
         std::cerr << "Little version, connectEngine() failed, abort" << std::endl;
         abort();
     }
+    interface->setSupportSpeedLimitation(engine->supportSpeedLimitation());
+    interface->setCopyType(Ultracopier::CopyType::FileAndFolder);
+    interface->setTransferListOperation(Ultracopier::TransferListOperation::TransferListOperation_None);
+    interface->actionInProgess(Ultracopier::EngineActionInProgress::Idle);
+    //interface->isInPause(currentCopyInstance.isPaused);
+    interface->isInPause(false);
 
     interface->setSupportSpeedLimitation(engine->supportSpeedLimitation());
     QWidget *tempWidget=interface->getOptionsEngineWidget();
