@@ -46,9 +46,11 @@ int main(int argc, char *argv[])
 {
     QApplication ultracopierApplication(argc, argv);
     ultracopierApplication.setApplicationVersion(ULTRACOPIER_VERSION);
-    ultracopierApplication.setQuitOnLastWindowClosed(true);
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
+    qRegisterMetaType<std::string>("std::string");
+    qRegisterMetaType<std::vector<std::string> >("std::vector<std::string>");
+    qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
 
     FacilityEngine facilityEngine;
     ThemesFactory themesFactory;
@@ -72,7 +74,7 @@ void connectEngine()
     failed|=!QObject::connect(engine,&CopyEngine::newFolderListing,			interface,&Themes::newFolderListing,Qt::QueuedConnection);//to check to change
     failed|=!QObject::connect(engine,&CopyEngine::actionInProgess,           interface,&Themes::actionInProgess,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::isInPause,                 interface,&Themes::isInPause,Qt::QueuedConnection);//to check to change
-    //failed|=!QObject::connect(engine,&CopyEngine::cancelAll,					interface,&Themes::copyInstanceCanceledByEngine,Qt::QueuedConnection);
+    failed|=!QObject::connect(engine,&CopyEngine::cancelAll,					QCoreApplication::instance(),&QCoreApplication::quit,Qt::QueuedConnection);
     /*failed|=!QObject::connect(engine,&CopyEngine::error,                     interface,&Themes::error,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::rmPath,                    interface,&Themes::rmPath,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::mkPath,                    interface,&Themes::mkPath,Qt::QueuedConnection);
@@ -105,8 +107,8 @@ void connectInterfaceAndSync()
 
     /*failed|=!QObject::connect(interface,&Themes::newSpeedLimitation,         engine,&CopyEngine::resetSpeedDetectedInterface);
     failed|=!QObject::connect(interface,&Themes::resume,                     engine,&CopyEngine::resetSpeedDetectedInterface);
-    failed|=!QObject::connect(interface,&Themes::cancel,                     engine,&CopyEngine::copyInstanceCanceledByInterface,Qt::QueuedConnection);
     failed|=!QObject::connect(interface,&Themes::urlDropped,                 engine,&CopyEngine::urlDropped,Qt::QueuedConnection);*/
+    failed|=!QObject::connect(interface,&Themes::cancel,                     engine,&CopyEngine::cancelAll,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::newActionOnList,           engine,&CopyEngine::newActionOnList,	Qt::QueuedConnection);
 
     failed|=!QObject::connect(engine,&CopyEngine::pushFileProgression,		interface,&Themes::setFileProgression,		Qt::QueuedConnection);

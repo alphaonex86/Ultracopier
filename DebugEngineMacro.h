@@ -1,5 +1,5 @@
 /** \file DebugEngineMacro.h
-\brief Define the macro for the debug 
+\brief Define the macro for the debug
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
@@ -9,6 +9,8 @@
 #ifdef WIN32
 #	define __func__ __FUNCTION__
 #endif
+
+#include "Variable.h"
 
 /// \brief Macro for the debug log
 #ifdef ULTRACOPIER_DEBUG
@@ -25,4 +27,4 @@
 #endif // DEBUGENGINEMACRO_H
 
 
- 
+

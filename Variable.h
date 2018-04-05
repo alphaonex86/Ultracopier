@@ -7,7 +7,9 @@
 #define VARIABLE_H
 
 /// \brief Un-comment this next line to put ultracopier in debug mode
+#ifndef ULTRACOPIER_NODEBUG
 #define ULTRACOPIER_DEBUG
+#endif
 #define ULTRACOPIER_DEBUG_MAX_GUI_LINE 50000 ///< \brief Max number of ligne show on the GUI
 #define ULTRACOPIER_DEBUG_MAX_ALL_SIZE 128 ///< \brief Max size (in MB) after the console/file output is dropped
 #define ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE 150 ///< \brief Max size (in MB) after the console/file important output is dropped

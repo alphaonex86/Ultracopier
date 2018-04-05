@@ -8,7 +8,9 @@
 
 
 //Un-comment this next line to put ultracopier plugin in debug mode
+#ifndef ULTRACOPIER_NODEBUG
 #define ULTRACOPIER_PLUGIN_DEBUG
+#endif
 
 #define ULTRACOPIER_VERSION_ULTIMATE
 
