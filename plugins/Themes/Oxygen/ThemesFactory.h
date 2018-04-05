@@ -3,8 +3,8 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#ifndef FACTORY_H
-#define FACTORY_H
+#ifndef FACTORYTHEMEOXYGEN_H
+#define FACTORYTHEMEOXYGEN_H
 
 #include <QObject>
 #include <QWidget>

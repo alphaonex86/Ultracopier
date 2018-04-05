@@ -34,6 +34,8 @@ class PluginInterface_PluginLoader : public QObject
         void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 };
 
+#ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
 Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/1.2.4.0");
+#endif
 
 #endif // PLUGININTERFACE_PLUGINLOADER_H

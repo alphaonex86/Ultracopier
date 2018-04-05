@@ -145,7 +145,8 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     return newTransferEngine;
 }
 
-void CopyEngineFactory::setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion)
+void CopyEngineFactory::setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,
+                                     FacilityInterface * facilityInterface,const bool &portableVersion)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, writePath: "+writePath+", pluginPath:"+pluginPath);
     this->facilityEngine=facilityInterface;

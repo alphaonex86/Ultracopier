@@ -5,7 +5,9 @@
 
 #include <string>
 #include <vector>
+#ifndef ULTRACOPIER_LITTLE
 #include <QDomElement>
+#endif
 
 #ifndef STRUCTDEF_ULTRACOPIERSPECIFIC_H
 #define STRUCTDEF_ULTRACOPIERSPECIFIC_H
@@ -28,7 +30,9 @@ struct PluginsAvailable
     std::string path;
     std::string name;
     std::string writablePath;
+    #ifndef ULTRACOPIER_LITTLE
     QDomElement categorySpecific;
+    #endif
     std::string version;
     std::vector<std::vector<std::string> > informations;
     std::string errorString;
