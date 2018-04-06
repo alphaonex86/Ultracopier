@@ -47,7 +47,7 @@ SOURCES += \
     ../plugins/Themes/Oxygen/ThemesFactory.cpp \
     ../plugins/Themes/Oxygen/TransferModel.cpp \
     ../plugins/Themes/Oxygen/interface.cpp \
-    OptionsEngineLittle.cpp \
+    ../little/OptionsEngineLittle.cpp \
     ../FacilityEngine.cpp \
     ../cpp11addition.cpp \
     ../cpp11additionstringtointcpp.cpp
@@ -108,7 +108,7 @@ HEADERS += \
     ../plugins/Themes/Oxygen/interface.h \
     ../plugins/Themes/Oxygen/DebugEngineMacro.h \
     ../plugins/Themes/Oxygen/Environment.h \
-    OptionsEngineLittle.h \
+    ../little/OptionsEngineLittle.h \
     ../FacilityEngine.h \
     ../Variable.h \
     ../interface/FacilityInterface.h \

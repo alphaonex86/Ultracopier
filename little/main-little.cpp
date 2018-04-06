@@ -51,6 +51,10 @@ int main(int argc, char *argv[])
     qRegisterMetaType<std::string>("std::string");
     qRegisterMetaType<std::vector<std::string> >("std::vector<std::string>");
     qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
+    qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");
+    qRegisterMetaType<std::vector<Ultracopier::ReturnActionOnCopyList> >("std::vector<Ultracopier::ReturnActionOnCopyList>");
+    qRegisterMetaType<uint64_t>("uint64_t");
+    qRegisterMetaType<std::vector<Ultracopier::ProgressionItem> >("std::vector<Ultracopier::ProgressionItem>");
 
     FacilityEngine facilityEngine;
     ThemesFactory themesFactory;
@@ -62,10 +66,15 @@ int main(int argc, char *argv[])
     engine=static_cast<CopyEngine *>(copyEngineFactory.getInstance());
 
     connectEngine();
+    connectInterfaceAndSync();
     forUpateInformation.setInterval(ULTRACOPIER_TIME_INTERFACE_UPDATE);
+    forUpateInformation.start();
     QObject::connect(&forUpateInformation,	&QTimer::timeout,						&periodicSynchronization);
 
-    return ultracopierApplication.exec();
+    const int returnVar=ultracopierApplication.exec();
+
+    delete engine;
+    return returnVar;
 }
 
 void connectEngine()
@@ -75,6 +84,7 @@ void connectEngine()
     failed|=!QObject::connect(engine,&CopyEngine::actionInProgess,           interface,&Themes::actionInProgess,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::isInPause,                 interface,&Themes::isInPause,Qt::QueuedConnection);//to check to change
     failed|=!QObject::connect(engine,&CopyEngine::cancelAll,					QCoreApplication::instance(),&QCoreApplication::quit,Qt::QueuedConnection);
+    failed|=!QObject::connect(engine,&CopyEngine::canBeDeleted,					QCoreApplication::instance(),&QCoreApplication::quit,Qt::QueuedConnection);
     /*failed|=!QObject::connect(engine,&CopyEngine::error,                     interface,&Themes::error,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::rmPath,                    interface,&Themes::rmPath,Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::mkPath,                    interface,&Themes::mkPath,Qt::QueuedConnection);
