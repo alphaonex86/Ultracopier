@@ -10,9 +10,9 @@ DriveManagement::DriveManagement()
 {
     tryUpdate();
     #ifdef Q_OS_WIN32
-    reg1=std::regex("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+");
+    reg1=std::regex("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+.*");
     reg2=std::regex("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$");
-    reg3=std::regex("^[a-zA-Z]:[\\\\/]");
+    reg3=std::regex("^[a-zA-Z]:[\\\\/].*");
     reg4=std::regex("^([a-zA-Z]:[\\\\/]).*$");
     #endif
     /// \warn ULTRACOPIER_DEBUGCONSOLE() don't work here because the sinal slot is not connected!
@@ -44,7 +44,7 @@ std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
     }
     #endif
     //if unable to locate the right mount point
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to locate the right mount point for: "+fileOrFolder+", mount point: "+stringimplode(mountSysPoint,";"));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to locate the right mount point for: "+inode+", mount point: "+stringimplode(mountSysPoint,";"));
     return std::string();
 }
 

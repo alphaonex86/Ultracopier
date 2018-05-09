@@ -1,6 +1,7 @@
 #include "ListThread.h"
 #include <QStorageInfo>
 #include <QMutexLocker>
+#include <QtGlobal>
 #include "../../../cpp11addition.h"
 
 ListThread::ListThread(FacilityInterface * facilityInterface)
@@ -483,9 +484,33 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get new thread");
         return false;
     }
-    scanFileOrFolderThread->addToList(sources,destination);
+    std::regex base_regex("^[a-z][a-z][a-z]*:/.*");
+    std::smatch base_match;
+    std::vector<std::string> sourcesClean;
+    unsigned int index=0;
+    while(index<sources.size())
+    {
+        std::string source=sources.at(index);
+        #ifndef Q_OS_WIN
+        if(stringStartWith(source,"file:///"))
+            source.replace(0,7,"");
+        #else
+        if(stringStartWith(source,"file:///"))
+            source.replace(0,8,"");
+        else if(stringStartWith(source,"file://"))
+            source.replace(0,7,"");
+        else if(stringStartWith(source,"file:/"))
+            source.replace(0,6,"");
+        #endif
+        else if (std::regex_match(source, base_match, base_regex))
+            return false;
+        index++;
+        sourcesClean.push_back(source);
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourcesClean: "+stringimplode(sourcesClean,";"));
+    scanFileOrFolderThread->addToList(sourcesClean,destination);
     scanThreadHaveFinish(true);
-    detectDrivesOfCurrentTransfer(sources,destination);
+    detectDrivesOfCurrentTransfer(sourcesClean,destination);
     return true;
 }
 

@@ -30,10 +30,21 @@ InternetUpdater::~InternetUpdater()
     }
 }
 
+void InternetUpdater::checkUpdate()
+{
+    downloadFileInternal(true);
+}
+
 void InternetUpdater::downloadFile()
 {
-    if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate")))
-        return;
+    downloadFileInternal();
+}
+
+void InternetUpdater::downloadFileInternal(const bool force)
+{
+    if(!force)
+        if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate")))
+            return;
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
          std::string name="Supercopier";
      #else
@@ -113,12 +124,14 @@ void InternetUpdater::httpFinished()
     {
         reply->deleteLater();
         reply=NULL;
+        emit noNewUpdate();
         return;
     }
     if(PluginsManager::compareVersion(newVersion.toStdString(),"<=",ULTRACOPIER_VERSION))
     {
         reply->deleteLater();
         reply=NULL;
+        emit noNewUpdate();
         return;
     }
     newUpdateTimer.stop();

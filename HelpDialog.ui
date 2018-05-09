@@ -136,6 +136,16 @@ This version is compiled as version: %1.</string>
       </spacer>
      </item>
      <item>
+      <widget class="QLabel" name="status"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="checkUpdate">
+       <property name="text">
+        <string>Check update</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButtonCrash">
        <property name="text">
         <string>Do a crash</string>

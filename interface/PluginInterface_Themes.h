@@ -77,7 +77,7 @@ class PluginInterface_Themes : public QWidget
         //user ask ask to add folder (add it with interface ask source/destination)
         void userAddFolder(const Ultracopier::CopyMode &mode) const;
         void userAddFile(const Ultracopier::CopyMode &mode) const;
-        void urlDropped(const std::vector<std::string> &urls) const;
+        void urlDropped(const std::vector<std::string> &urls) const;//absolute path, can start by file:/
         //action on the copy
         void pause() const;
         void resume() const;

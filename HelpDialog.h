@@ -29,6 +29,11 @@ class HelpDialog : public QDialog {
         ~HelpDialog();
         static std::string getWebSite();
         static std::string getUpdateUrl();
+
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+        void newUpdate(const std::string &version) const;
+        void noNewUpdate() const;
+        #endif
     protected:
         /// \brief To re-translate the ui
         void changeEvent(QEvent *e);
@@ -43,6 +48,11 @@ class HelpDialog : public QDialog {
         #endif // ULTRACOPIER_DEBUG
         void on_pushButtonAboutQt_clicked();
         void on_pushButtonCrash_clicked();
+        void on_checkUpdate_clicked();
+        #ifdef ULTRACOPIER_INTERNET_SUPPORT
+    signals:
+        void checkUpdate();
+        #endif
 };
 
 #endif // DIALOG_H

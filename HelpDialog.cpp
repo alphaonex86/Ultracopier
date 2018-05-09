@@ -36,6 +36,9 @@ HelpDialog::HelpDialog() :
     #else
     setWindowTitle(tr("About Ultracopier"));
     #endif
+    #ifndef ULTRACOPIER_INTERNET_SUPPORT
+    ui->checkUpdate->hide();
+    #endif
 }
 
 /// \brief Destruct the object
@@ -143,3 +146,22 @@ void HelpDialog::on_pushButtonCrash_clicked()
     int *b=NULL;
     *b=3/a;
 }
+
+#ifdef ULTRACOPIER_INTERNET_SUPPORT
+void HelpDialog::on_checkUpdate_clicked()
+{
+    ui->status->setText(tr("Update checking..."));
+    emit checkUpdate();
+}
+
+void HelpDialog::newUpdate(const std::string &version) const
+{
+    ui->status->setText(tr("Update: %1").arg(QString::fromStdString(version)));
+}
+
+void HelpDialog::noNewUpdate() const
+{
+    if(!ui->status->text().isEmpty())
+        ui->status->setText(tr("No update"));
+}
+#endif

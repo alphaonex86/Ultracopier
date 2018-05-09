@@ -146,85 +146,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="418"/>
-        <location filename="../../CopyEngineFactory.cpp" line="421"/>
-        <location filename="../../CopyEngineFactory.cpp" line="426"/>
-        <location filename="../../CopyEngineFactory.cpp" line="430"/>
+        <location filename="../../CopyEngineFactory.cpp" line="419"/>
+        <location filename="../../CopyEngineFactory.cpp" line="422"/>
+        <location filename="../../CopyEngineFactory.cpp" line="427"/>
+        <location filename="../../CopyEngineFactory.cpp" line="431"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="419"/>
-        <location filename="../../CopyEngineFactory.cpp" line="423"/>
-        <location filename="../../CopyEngineFactory.cpp" line="427"/>
-        <location filename="../../CopyEngineFactory.cpp" line="431"/>
+        <location filename="../../CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngineFactory.cpp" line="424"/>
+        <location filename="../../CopyEngineFactory.cpp" line="428"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="422"/>
+        <location filename="../../CopyEngineFactory.cpp" line="423"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="424"/>
-        <location filename="../../CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngineFactory.cpp" line="425"/>
+        <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="428"/>
+        <location filename="../../CopyEngineFactory.cpp" line="429"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="433"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="434"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngineFactory.cpp" line="435"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="435"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="438"/>
+        <location filename="../../CopyEngineFactory.cpp" line="439"/>
         <source>Automatic</source>
         <translation>Automatikus</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngineFactory.cpp" line="440"/>
         <source>Sequential</source>
         <translation>Szekvenciális</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="440"/>
+        <location filename="../../CopyEngineFactory.cpp" line="441"/>
         <source>Parallel</source>
         <translation>Párhuzamos</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="491"/>
-        <location filename="../../CopyEngineFactory.cpp" line="530"/>
+        <location filename="../../CopyEngineFactory.cpp" line="492"/>
+        <location filename="../../CopyEngineFactory.cpp" line="531"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="491"/>
+        <location filename="../../CopyEngineFactory.cpp" line="492"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="530"/>
+        <location filename="../../CopyEngineFactory.cpp" line="531"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>A beállítási motor nincs betöltve, a szűrők elérése nem lehetséges</translation>
     </message>
@@ -486,49 +486,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1457"/>
-        <location filename="../../ListThread.cpp" line="2389"/>
+        <location filename="../../ListThread.cpp" line="1482"/>
+        <location filename="../../ListThread.cpp" line="2414"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Elem másolása vagy mozgatás nem lehetséges a hibás kényszerített módban: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1464"/>
-        <location filename="../../ListThread.cpp" line="2396"/>
+        <location filename="../../ListThread.cpp" line="1489"/>
+        <location filename="../../ListThread.cpp" line="2421"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Átviteli lista mentése nem lehetséges: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1480"/>
+        <location filename="../../ListThread.cpp" line="1505"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Hiba a fájl olvasásánál vagy a fálméret 0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1487"/>
+        <location filename="../../ListThread.cpp" line="1512"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Hibás fejléc: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1496"/>
+        <location filename="../../ListThread.cpp" line="1521"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista kevert módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1505"/>
+        <location filename="../../ListThread.cpp" line="1530"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista másolás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1511"/>
+        <location filename="../../ListThread.cpp" line="1536"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista mozgatás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1574"/>
+        <location filename="../../ListThread.cpp" line="1599"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Néhány hiba történt a sorelemzés során</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1582"/>
+        <location filename="../../ListThread.cpp" line="1607"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Az átviteli lista megnyitása nem lehetséges: %1</translation>
     </message>

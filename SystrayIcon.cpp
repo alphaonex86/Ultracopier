@@ -172,7 +172,8 @@ void SystrayIcon::showSystrayMessage(const std::string& text)
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 void SystrayIcon::messageClicked()
 {
-    QDesktopServices::openUrl(QString::fromStdString(HelpDialog::getUpdateUrl()));
+    if(!QDesktopServices::openUrl(QString::fromStdString(HelpDialog::getUpdateUrl())))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"start, haveListenerInfo "+std::to_string((int)haveListenerInfo)+", havePluginLoaderInfo: "+std::to_string((int)havePluginLoaderInfo));
 }
 #endif
 
@@ -475,7 +476,7 @@ void SystrayIcon::newUpdate(const std::string &version)
     /*if(version==lastVersion)
         return;*/
     lastVersion=version;
-    showSystrayMessage((tr("New version: %1").arg(QString::fromStdString(version))+"\n"+tr("Click here to go on download page")).toStdString());
+    showSystrayMessage((tr("New version: %1").arg(QString::fromStdString(version))+"\n"+tr("Go to the download page:")).toStdString()+"\n"+HelpDialog::getUpdateUrl());
 }
 #endif
 
