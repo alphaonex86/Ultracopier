@@ -212,7 +212,7 @@ std::string binarytoHexa(const std::vector<char> &data, bool *ok)
     return output;
 }
 
-std::string binarytoHexa(const unsigned char * const data, const uint32_t &size, bool *ok)
+std::string binarytoHexa(const void * const data, const uint32_t &size, bool *ok)
 {
     return binarytoHexa(reinterpret_cast<const char * const>(data),size,ok);
 }
