@@ -52,7 +52,8 @@ public:
            FacilityInterface * facilityEngine,
            const bool &moreButtonPushed,
            const bool &minimizeToSystray,
-           const bool &startMinimized);
+           const bool &startMinimized,
+           const bool &savePosition);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress

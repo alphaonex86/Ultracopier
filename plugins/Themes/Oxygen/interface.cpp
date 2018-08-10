@@ -54,7 +54,8 @@ Themes::Themes(const bool &alwaysOnTop,
                FacilityInterface * facilityEngine,
                const bool &moreButtonPushed,
                const bool &minimizeToSystray,
-               const bool &startMinimized) :
+               const bool &startMinimized,
+               const bool &savePosition) :
     ui(new Ui::interfaceCopy()),
     uiOptions(new Ui::themesOptions())
 {
@@ -89,6 +90,9 @@ Themes::Themes(const bool &alwaysOnTop,
     //uiOptions->setupUi(ui->tabWidget->widget(ui->tabWidget->count()-1));
     uiOptions->labelStartWithMoreButtonPushed->setVisible(false);
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
+    uiOptions->labelSavePosition->setVisible(false);
+    uiOptions->savePosition->setVisible(false);
+    uiOptions->savePosition->setChecked(savePosition);
     uiOptions->label_Slider_speed->setVisible(false);
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
@@ -1495,3 +1499,4 @@ void Themes::on_exportErrorToTransferList_clicked()
 {
     emit exportErrorIntoTransferList();
 }
+

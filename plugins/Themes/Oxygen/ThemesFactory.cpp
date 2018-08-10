@@ -40,13 +40,36 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 facilityEngine,
                 ui->checkBoxStartWithMoreButtonPushed->isChecked(),
                 ui->minimizeToSystray->isChecked(),
-                ui->startMinimized->isChecked()
+                ui->startMinimized->isChecked(),
+                ui->savePosition->isChecked()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation);
+    if(!connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation))
+        abort();
     #endif
-    connect(this,&ThemesFactory::reloadLanguage,newInterface,&Themes::newLanguageLoaded);
+    if(!connect(this,&ThemesFactory::reloadLanguage,newInterface,&Themes::newLanguageLoaded))
+        abort();
+    if(!connect(newInterface,&Themes::destroyed,this,&ThemesFactory::savePositionBeforeClose))
+        abort();
+    newInterface->move(
+                stringtouint32(optionsEngine->getOptionValue("savePositionX")),
+                stringtouint32(optionsEngine->getOptionValue("savePositionY"))
+                );
     return newInterface;
+}
+
+void ThemesFactory::savePositionBeforeClose(QObject *obj)
+{
+    if(!ui->savePosition->isChecked())
+        return;
+    if(obj == nullptr)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"obj == nullptr");
+        return;
+    }
+    const QWidget * const widget=static_cast<QWidget *>(obj);
+    optionsEngine->setOptionValue("savePositionX",std::to_string(widget->x()));
+    optionsEngine->setOptionValue("savePositionY",std::to_string(widget->y()));
 }
 
 void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::string &
@@ -80,6 +103,9 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("alwaysOnTop","false"));
         KeysList.push_back(std::pair<std::string, std::string>("minimizeToSystray","false"));
         KeysList.push_back(std::pair<std::string, std::string>("startMinimized","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("savePosition","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("savePositionX","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
@@ -108,6 +134,7 @@ QWidget * ThemesFactory::options()
         ui->alwaysOnTop->setChecked(stringtobool(optionsEngine->getOptionValue("alwaysOnTop")));
         ui->minimizeToSystray->setChecked(stringtobool(optionsEngine->getOptionValue("minimizeToSystray")));
         ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
+        ui->savePosition->setChecked(stringtobool(optionsEngine->getOptionValue("savePosition")));
 
         progressColorWrite=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorWrite"))).value<QColor>();
         progressColorRead=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorRead"))).value<QColor>();
@@ -123,23 +150,42 @@ QWidget * ThemesFactory::options()
         updateSpeed();
         updateProgressionColorBar();
 
-        connect(ui->alwaysOnTop,&QCheckBox::stateChanged,this,&ThemesFactory::alwaysOnTop);
-        connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed);
-        connect(ui->minimizeToSystray,&QCheckBox::stateChanged,this,&ThemesFactory::minimizeToSystray);
-        connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed);
-        connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged);
-        connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uiUpdateSpeed);
-        connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxShowSpeedHaveChanged);
-        connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged);
-        connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&ThemesFactory::speedWithProgressBar);
-        connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&ThemesFactory::comboBox_copyEnd);
-        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::showDualProgression);
-        connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::updateProgressionColorBar);
-        connect(ui->showProgressionInTheTitle,&QCheckBox::stateChanged,this,&ThemesFactory::setShowProgressionInTheTitle);
-        connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked);
-        connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked);
-        connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked);
-        connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized);
+        if(!connect(ui->alwaysOnTop,&QCheckBox::stateChanged,this,&ThemesFactory::alwaysOnTop))
+            abort();
+        if(!connect(ui->checkBoxShowSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::checkBoxShowSpeed))
+            abort();
+        if(!connect(ui->minimizeToSystray,&QCheckBox::stateChanged,this,&ThemesFactory::minimizeToSystray))
+            abort();
+        if(!connect(ui->checkBox_limitSpeed,&QCheckBox::stateChanged,this,&ThemesFactory::uiUpdateSpeed))
+            abort();
+        if(!connect(ui->SliderSpeed,&QAbstractSlider::valueChanged,this,&ThemesFactory::on_SliderSpeed_valueChanged))
+            abort();
+        if(!connect(ui->limitSpeed,static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&ThemesFactory::uiUpdateSpeed))
+            abort();
+        if(!connect(ui->checkBoxShowSpeed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxShowSpeedHaveChanged))
+            abort();
+        if(!connect(ui->checkBoxStartWithMoreButtonPushed,&QAbstractButton::toggled,this,&ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged))
+            abort();
+        if(!connect(ui->speedWithProgressBar,&QAbstractButton::toggled,this,&ThemesFactory::speedWithProgressBar))
+            abort();
+        if(!connect(ui->comboBox_copyEnd,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&ThemesFactory::comboBox_copyEnd))
+            abort();
+        if(!connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::showDualProgression))
+            abort();
+        if(!connect(ui->showDualProgression,&QCheckBox::stateChanged,this,&ThemesFactory::updateProgressionColorBar))
+            abort();
+        if(!connect(ui->showProgressionInTheTitle,&QCheckBox::stateChanged,this,&ThemesFactory::setShowProgressionInTheTitle))
+            abort();
+        if(!connect(ui->progressColorWrite,&QAbstractButton::clicked,this,&ThemesFactory::progressColorWrite_clicked))
+            abort();
+        if(!connect(ui->progressColorRead,	&QAbstractButton::clicked,this,&ThemesFactory::progressColorRead_clicked))
+            abort();
+        if(!connect(ui->progressColorRemaining,&QAbstractButton::clicked,this,&ThemesFactory::progressColorRemaining_clicked))
+            abort();
+        if(!connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized))
+            abort();
+        if(!connect(ui->savePosition,&QCheckBox::stateChanged,this,&ThemesFactory::savePositionHaveChanged))
+            abort();
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
@@ -184,6 +230,7 @@ void ThemesFactory::resetOptions()
 {
     ui->checkBoxShowSpeed->setChecked(true);
     ui->checkBoxStartWithMoreButtonPushed->setChecked(false);
+    ui->savePosition->setChecked(false);
 }
 
 void ThemesFactory::checkBoxShowSpeedHaveChanged(bool toggled)
@@ -200,6 +247,15 @@ void ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("moreButtonPushed",std::to_string(toggled));
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::savePositionHaveChanged(bool toggled)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("savePosition",std::to_string(toggled));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

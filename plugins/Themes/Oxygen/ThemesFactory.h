@@ -69,6 +69,8 @@ private slots:
     void updateProgressionColorBar();
     void setShowProgressionInTheTitle();
     void startMinimized(bool checked);
+    void savePositionBeforeClose(QObject *obj);
+    void savePositionHaveChanged(bool checked);
 public slots:
     void resetOptions();
     void newLanguageLoaded();
