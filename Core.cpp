@@ -1141,7 +1141,8 @@ void Core::urlDropped(const std::vector<std::string> &urls)
         {
             if(copyList.at(index).ignoreMode)
             {
-                QMessageBox::StandardButton reply=QMessageBox::question(copyList.at(index).interface,tr("Transfer mode"),tr("Do you want to copy? If no, it will be moved."),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Cancel);
+                QMessageBox::StandardButton reply=QMessageBox::question(copyList.at(index).interface,tr("Transfer mode"),
+                           tr("Do you want to copy? If no, it will be moved."),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Cancel);
                 if(reply==QMessageBox::Yes)
                     copyList.at(index).engine->newCopy(sources);
                 if(reply==QMessageBox::No)

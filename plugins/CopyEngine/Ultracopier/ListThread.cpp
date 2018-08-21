@@ -492,18 +492,22 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
     {
         std::string source=sources.at(index);
         #ifndef Q_OS_WIN
+        //can be: file://192.168.0.99/share/file.txt
+        //can be: file:///C:/file.txt
         if(stringStartWith(source,"file:///"))
             source.replace(0,7,"");
         #else
         if(stringStartWith(source,"file:///"))
             source.replace(0,8,"");
         else if(stringStartWith(source,"file://"))
-            source.replace(0,7,"");
+            source.replace(0,5,"");
         else if(stringStartWith(source,"file:/"))
             source.replace(0,6,"");
         #endif
         else if (std::regex_match(source, base_match, base_regex))
             return false;
+        if(index<99)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
         index++;
         sourcesClean.push_back(source);
     }

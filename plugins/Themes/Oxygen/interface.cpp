@@ -1199,8 +1199,15 @@ void Themes::dropEvent(QDropEvent *event)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"hasUrls");
         std::vector<std::string> urls;
+        unsigned int index=0;
         foreach (QUrl url, mimeData->urls())
-            urls.push_back(url.toString().toStdString());
+        {
+            const std::string &urlString=url.toString().toStdString();
+            if(index<99)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,urlString);
+            urls.push_back(urlString);
+            index++;
+        }
         emit urlDropped(urls);
         event->acceptProposedAction();
     }

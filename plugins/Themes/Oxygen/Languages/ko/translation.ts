@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+298"/>
+        <location filename="../../interface.cpp" line="+302"/>
         <location line="+15"/>
         <source>%1 is deprecated, Use %2</source>
         <translation type="unfinished"></translation>
@@ -73,7 +73,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+228"/>
+        <location filename="../../ThemesFactory.cpp" line="+284"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>
@@ -257,7 +257,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+253"/>
+        <location filename="../../themesOptions.ui" line="+267"/>
         <source>Show dual progression</source>
         <translation type="unfinished"></translation>
     </message>
@@ -267,17 +267,17 @@
         <translation type="unfinished">메인 정보에 속도 표시</translation>
     </message>
     <message>
-        <location line="-161"/>
+        <location line="-175"/>
         <source>Use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+129"/>
         <source>Start with the &quot;more button&quot; pushed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="-106"/>
         <source>Minimize on close to systray</source>
         <translation type="unfinished"></translation>
     </message>
@@ -293,22 +293,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="-84"/>
         <source>Start minimized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+253"/>
         <source>Click to edit the color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-145"/>
+        <location line="-159"/>
         <source> KB/s</source>
         <translation type="unfinished"> KB/초</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+43"/>
+        <source>Save position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>Informations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -333,7 +338,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-94"/>
         <source>Always on top</source>
         <translation type="unfinished"></translation>
     </message>

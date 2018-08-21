@@ -30,8 +30,10 @@
 class WindowsExplorerLoader : public PluginInterface_PluginLoader
 {
     Q_OBJECT
+    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
     Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.PluginLoader/1.2.4.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_PluginLoader)
+    #endif
 public:
     WindowsExplorerLoader();
     ~WindowsExplorerLoader();
