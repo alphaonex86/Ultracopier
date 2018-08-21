@@ -491,9 +491,10 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
     while(index<sources.size())
     {
         std::string source=sources.at(index);
-        #ifndef Q_OS_WIN
         //can be: file://192.168.0.99/share/file.txt
         //can be: file:///C:/file.txt
+        //can be: file:///home/user/fileatrootunderunix
+        #ifndef Q_OS_WIN
         if(stringStartWith(source,"file:///"))
             source.replace(0,7,"");
         #else
