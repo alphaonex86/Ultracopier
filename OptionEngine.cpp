@@ -69,6 +69,7 @@ OptionEngine::OptionEngine()
     }
     else
         currentBackend=File;
+    connect(this,&OptionEngine::resetOptions,this,&OptionEngine::internal_resetToDefaultValue);
 }
 
 /// \brief Destroy the option
@@ -230,6 +231,21 @@ void OptionEngine::internal_resetToDefaultValue()
             if(o.currentValue!=o.defaultValue)
             {
                 o.currentValue=o.defaultValue;
+
+                if(currentBackend==File)
+                {
+                    settings->beginGroup(QString::fromStdString(firstKey));
+                    settings->remove(QString::fromStdString(secondKey));
+                    settings->endGroup();
+                    if(settings->status()!=QSettings::NoError)
+                    {
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Have writing error, switch to memory only options");
+                        #ifdef ULTRACOPIER_VERSION_PORTABLE
+                        ResourcesManager::resourcesManager->disableWritablePath();
+                        #endif // ULTRACOPIER_VERSION_PORTABLE
+                        currentBackend=Memory;
+                    }
+                }
                 emit newOptionValue(firstKey,secondKey,o.currentValue);
             }
         }
