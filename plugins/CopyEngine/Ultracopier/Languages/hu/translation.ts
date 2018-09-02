@@ -486,49 +486,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1482"/>
-        <location filename="../../ListThread.cpp" line="2414"/>
+        <location filename="../../ListThread.cpp" line="1487"/>
+        <location filename="../../ListThread.cpp" line="2419"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Elem másolása vagy mozgatás nem lehetséges a hibás kényszerített módban: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1489"/>
-        <location filename="../../ListThread.cpp" line="2421"/>
+        <location filename="../../ListThread.cpp" line="1494"/>
+        <location filename="../../ListThread.cpp" line="2426"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Átviteli lista mentése nem lehetséges: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1505"/>
+        <location filename="../../ListThread.cpp" line="1510"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Hiba a fájl olvasásánál vagy a fálméret 0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1512"/>
+        <location filename="../../ListThread.cpp" line="1517"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Hibás fejléc: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1521"/>
+        <location filename="../../ListThread.cpp" line="1526"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista kevert módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1530"/>
+        <location filename="../../ListThread.cpp" line="1535"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista másolás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1536"/>
+        <location filename="../../ListThread.cpp" line="1541"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista mozgatás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1599"/>
+        <location filename="../../ListThread.cpp" line="1604"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Néhány hiba történt a sorelemzés során</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1607"/>
+        <location filename="../../ListThread.cpp" line="1612"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Az átviteli lista megnyitása nem lehetséges: %1</translation>
     </message>

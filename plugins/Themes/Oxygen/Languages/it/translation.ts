@@ -56,16 +56,16 @@
         <translation>Nome del file, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1255"/>
-        <location filename="../../interface.cpp" line="1267"/>
-        <location filename="../../interface.cpp" line="1279"/>
+        <location filename="../../interface.cpp" line="1262"/>
+        <location filename="../../interface.cpp" line="1274"/>
+        <location filename="../../interface.cpp" line="1286"/>
         <source>Select a color</source>
         <translation>Scegliere un colore</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1354"/>
-        <location filename="../../interface.cpp" line="1358"/>
-        <location filename="../../interface.cpp" line="1360"/>
+        <location filename="../../interface.cpp" line="1361"/>
+        <location filename="../../interface.cpp" line="1365"/>
+        <location filename="../../interface.cpp" line="1367"/>
         <source>%1 %2% of %3</source>
         <translation>%1 %2% di %3</translation>
     </message>

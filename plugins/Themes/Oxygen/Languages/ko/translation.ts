@@ -56,7 +56,7 @@
         <translation type="unfinished">파일명, 0KB</translation>
     </message>
     <message>
-        <location line="+187"/>
+        <location line="+194"/>
         <location line="+12"/>
         <location line="+12"/>
         <source>Select a color</source>

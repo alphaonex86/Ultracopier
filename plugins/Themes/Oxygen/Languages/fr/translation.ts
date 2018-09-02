@@ -7,13 +7,13 @@
         <location filename="../../interface.cpp" line="+302"/>
         <location line="+15"/>
         <source>%1 is deprecated, Use %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 est obsolète, utilisez %2</translation>
     </message>
     <message>
         <location line="-12"/>
         <location line="+15"/>
         <source>This will be the last version for Mac, but you can compile from source</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce sera la dernière version pour Mac, mais vous pouvez compiler à partir des sources</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -56,7 +56,7 @@
         <translation>Nom de fichier, 0Ko</translation>
     </message>
     <message>
-        <location line="+187"/>
+        <location line="+194"/>
         <location line="+12"/>
         <location line="+12"/>
         <source>Select a color</source>
@@ -295,7 +295,7 @@
     <message>
         <location line="-84"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer minimisé</translation>
     </message>
     <message>
         <location line="+253"/>
@@ -310,7 +310,7 @@
     <message>
         <location line="+43"/>
         <source>Save position</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder la position</translation>
     </message>
     <message>
         <location line="+23"/>
