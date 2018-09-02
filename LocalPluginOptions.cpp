@@ -10,7 +10,7 @@ LocalPluginOptions::LocalPluginOptions(const std::string &group)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start(\""+group+"\",[...])");
     groupOptionAdded=false;
     this->group=group;
-    connect(OptionEngine::optionEngine,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);
+    connect(OptionEngine::optionEngine,&OptionEngine::resetOptions,this,&OptionInterface::resetOptions);//unsure
 }
 
 LocalPluginOptions::~LocalPluginOptions()
@@ -50,8 +50,8 @@ void LocalPluginOptions::setOptionValue(const std::string &variableName,const st
     OptionEngine::optionEngine->setOptionValue(group,variableName,value);
 }
 
-/*-> disabled because the value will not externaly changed, then useless notification
-void LocalPluginOptions::newOptionValue(QString group,QString variable,QVariant value)
+// can be externally changed via reset
+/*void LocalPluginOptions::newOptionValue(const std::string &group, const std::string &variable, const std::string &value)
 {
     if(group==this->group)
         emit newOptionValue(variable,value);

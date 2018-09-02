@@ -182,10 +182,12 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         size_t max_memory=getTotalSystemMemory()/1024;
         if(max_memory>0)
         {
+            if(max_memory>2147483648)
+                max_memory=2147483648;
             if(sequentialBuffer>(max_memory/10))
-                    sequentialBuffer=max_memory/10;
+               sequentialBuffer=max_memory/10;
             if(parallelBuffer>(max_memory/100))
-                    parallelBuffer=max_memory/100;
+               parallelBuffer=max_memory/100;
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("detected memory: %1MB").arg(max_memory/1024).toStdString());
         #endif
@@ -223,62 +225,11 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(1)));
         KeysList.push_back(std::pair<std::string, std::string>("copyListOrder","false"));
         options->addOptionGroup(KeysList);
-        #if ! defined (Q_CC_GNU)
-        ui->keepDate->setEnabled(false);
-        ui->keepDate->setToolTip(QStringLiteral("Not supported with this compiler"));
-        #endif
-        ui->doRightTransfer->setChecked(stringtobool(options->getOptionValue("doRightTransfer")));
-        ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
-        ui->blockSize->setValue(stringtouint32(options->getOptionValue("blockSize")));//keep before sequentialBuffer and parallelBuffer
-        ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));
-        #ifdef ULTRACOPIER_PLUGIN_RSYNC
-        ui->rsync->setChecked(stringtobool(options->getOptionValue("rsync")));
-        #else
-        ui->label_rsync->setVisible(false);
-        ui->rsync->setVisible(false);
-        #endif
-        ui->comboBoxFolderError->setCurrentIndex(stringtouint32(options->getOptionValue("folderError")));
-        ui->comboBoxFolderCollision->setCurrentIndex(stringtouint32(options->getOptionValue("folderCollision")));
-        ui->comboBoxFileError->setCurrentIndex(stringtouint32(options->getOptionValue("fileError")));
-        ui->comboBoxFileCollision->setCurrentIndex(stringtouint32(options->getOptionValue("fileCollision")));
-        ui->transferAlgorithm->setCurrentIndex(stringtouint32(options->getOptionValue("transferAlgorithm")));
-        ui->checkBoxDestinationFolderExists->setChecked(stringtobool(options->getOptionValue("checkDestinationFolder")));
-        ui->parallelizeIfSmallerThan->setValue(stringtouint32(options->getOptionValue("parallelizeIfSmallerThan")));
-        ui->sequentialBuffer->setValue(stringtouint32(options->getOptionValue("sequentialBuffer")));
-        ui->parallelBuffer->setValue(stringtouint32(options->getOptionValue("parallelBuffer")));
-        ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
-        ui->parallelBuffer->setSingleStep(ui->blockSize->value());
-        ui->deletePartiallyTransferredFiles->setChecked(stringtobool(options->getOptionValue("deletePartiallyTransferredFiles")));
-        ui->moveTheWholeFolder->setChecked(stringtobool(options->getOptionValue("moveTheWholeFolder")));
-        ui->followTheStrictOrder->setChecked(stringtobool(options->getOptionValue("followTheStrictOrder")));
-        ui->inodeThreads->setValue(stringtouint32(options->getOptionValue("inodeThreads")));
-        ui->renameTheOriginalDestination->setChecked(stringtobool(options->getOptionValue("renameTheOriginalDestination")));
-        ui->checkDiskSpace->setChecked(stringtobool(options->getOptionValue("checkDiskSpace")));
-        ui->defaultDestinationFolder->setText(QString::fromStdString(options->getOptionValue("defaultDestinationFolder")));
 
-        ui->doChecksum->setChecked(stringtobool(options->getOptionValue("doChecksum")));
-        ui->checksumIgnoreIfImpossible->setChecked(stringtobool(options->getOptionValue("checksumIgnoreIfImpossible")));
-        ui->checksumOnlyOnError->setChecked(stringtobool(options->getOptionValue("checksumOnlyOnError")));
-
-        ui->osBuffer->setChecked(stringtobool(options->getOptionValue("osBuffer")));
-        ui->osBufferLimited->setChecked(stringtobool(options->getOptionValue("osBufferLimited")));
-        ui->osBufferLimit->setValue(stringtouint32(options->getOptionValue("osBufferLimit")));
-        //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
-        includeStrings=stringtostringlist(options->getOptionValue("includeStrings"));
-        includeOptions=stringtostringlist(options->getOptionValue("includeOptions"));
-        excludeStrings=stringtostringlist(options->getOptionValue("excludeStrings"));
-        excludeOptions=stringtostringlist(options->getOptionValue("excludeOptions"));
-        filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
-        firstRenamingRule=options->getOptionValue("firstRenamingRule");
-        otherRenamingRule=options->getOptionValue("otherRenamingRule");
-        renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
-
-        ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
-        ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
-        ui->copyListOrder->setChecked(stringtobool(options->getOptionValue("copyListOrder")));
+        optionsEngine=options;
+        resetOptions();
 
         updateBufferCheckbox();
-        optionsEngine=options;
 
         updatedBlockSize();
     }
@@ -315,6 +266,60 @@ bool CopyEngineFactory::canDoOnlyCopy() const
 
 void CopyEngineFactory::resetOptions()
 {
+    auto &options=optionsEngine;
+    #if ! defined (Q_CC_GNU)
+    ui->keepDate->setEnabled(false);
+    ui->keepDate->setToolTip(QStringLiteral("Not supported with this compiler"));
+    #endif
+    ui->doRightTransfer->setChecked(stringtobool(options->getOptionValue("doRightTransfer")));
+    ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
+    ui->blockSize->setValue(stringtouint32(options->getOptionValue("blockSize")));//keep before sequentialBuffer and parallelBuffer
+    ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    ui->rsync->setChecked(stringtobool(options->getOptionValue("rsync")));
+    #else
+    ui->label_rsync->setVisible(false);
+    ui->rsync->setVisible(false);
+    #endif
+    ui->comboBoxFolderError->setCurrentIndex(stringtouint32(options->getOptionValue("folderError")));
+    ui->comboBoxFolderCollision->setCurrentIndex(stringtouint32(options->getOptionValue("folderCollision")));
+    ui->comboBoxFileError->setCurrentIndex(stringtouint32(options->getOptionValue("fileError")));
+    ui->comboBoxFileCollision->setCurrentIndex(stringtouint32(options->getOptionValue("fileCollision")));
+    ui->transferAlgorithm->setCurrentIndex(stringtouint32(options->getOptionValue("transferAlgorithm")));
+    ui->checkBoxDestinationFolderExists->setChecked(stringtobool(options->getOptionValue("checkDestinationFolder")));
+    ui->parallelizeIfSmallerThan->setValue(stringtouint32(options->getOptionValue("parallelizeIfSmallerThan")));
+    ui->sequentialBuffer->setValue(stringtouint32(options->getOptionValue("sequentialBuffer")));
+    ui->parallelBuffer->setValue(stringtouint32(options->getOptionValue("parallelBuffer")));
+    ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
+    ui->parallelBuffer->setSingleStep(ui->blockSize->value());
+    ui->deletePartiallyTransferredFiles->setChecked(stringtobool(options->getOptionValue("deletePartiallyTransferredFiles")));
+    ui->moveTheWholeFolder->setChecked(stringtobool(options->getOptionValue("moveTheWholeFolder")));
+    ui->followTheStrictOrder->setChecked(stringtobool(options->getOptionValue("followTheStrictOrder")));
+    ui->inodeThreads->setValue(stringtouint32(options->getOptionValue("inodeThreads")));
+    ui->renameTheOriginalDestination->setChecked(stringtobool(options->getOptionValue("renameTheOriginalDestination")));
+    ui->checkDiskSpace->setChecked(stringtobool(options->getOptionValue("checkDiskSpace")));
+    ui->defaultDestinationFolder->setText(QString::fromStdString(options->getOptionValue("defaultDestinationFolder")));
+
+    ui->doChecksum->setChecked(stringtobool(options->getOptionValue("doChecksum")));
+    ui->checksumIgnoreIfImpossible->setChecked(stringtobool(options->getOptionValue("checksumIgnoreIfImpossible")));
+    ui->checksumOnlyOnError->setChecked(stringtobool(options->getOptionValue("checksumOnlyOnError")));
+
+    ui->osBuffer->setChecked(stringtobool(options->getOptionValue("osBuffer")));
+    ui->osBufferLimited->setChecked(stringtobool(options->getOptionValue("osBufferLimited")));
+    ui->osBufferLimit->setValue(stringtouint32(options->getOptionValue("osBufferLimit")));
+    //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
+    includeStrings=stringtostringlist(options->getOptionValue("includeStrings"));
+    includeOptions=stringtostringlist(options->getOptionValue("includeOptions"));
+    excludeStrings=stringtostringlist(options->getOptionValue("excludeStrings"));
+    excludeOptions=stringtostringlist(options->getOptionValue("excludeOptions"));
+    filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+    firstRenamingRule=options->getOptionValue("firstRenamingRule");
+    otherRenamingRule=options->getOptionValue("otherRenamingRule");
+    renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
+
+    ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
+    ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
+    ui->copyListOrder->setChecked(stringtobool(options->getOptionValue("copyListOrder")));
 }
 
 QWidget * CopyEngineFactory::options()

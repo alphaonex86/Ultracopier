@@ -120,6 +120,7 @@ void CopyEngineManager::onePluginAdded(const PluginsAvailable &plugin)
     #endif // ULTRACOPIER_DEBUG
     newItem.options=new LocalPluginOptions("CopyEngine-"+newItem.name);
     newItem.factory->setResources(newItem.options,plugin.writablePath,plugin.path,&FacilityEngine::facilityEngine,ULTRACOPIER_VERSION_PORTABLE_BOOL);
+    connect(OptionEngine::optionEngine,&OptionEngine::resetOptions,newItem.factory,&PluginInterface_CopyEngineFactory::resetOptions);
     newItem.optionsWidget=newItem.factory->options();
     newItem.supportedProtocolsForTheSource=newItem.factory->supportedProtocolsForTheSource();
     newItem.supportedProtocolsForTheDestination=newItem.factory->supportedProtocolsForTheDestination();

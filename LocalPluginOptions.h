@@ -31,6 +31,7 @@ public:
     std::string getOptionValue(const std::string &variableName) const;
     /// \brief To set option value
     void setOptionValue(const std::string &variableName,const std::string &value);
+    //void newOptionValue(const std::string&,const std::string&,const std::string&);
 protected:
     //for the options
     std::string group;
