@@ -146,85 +146,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="419"/>
-        <location filename="../../CopyEngineFactory.cpp" line="422"/>
+        <location filename="../../CopyEngineFactory.cpp" line="424"/>
         <location filename="../../CopyEngineFactory.cpp" line="427"/>
-        <location filename="../../CopyEngineFactory.cpp" line="431"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
         <source>Ask</source>
         <translation>Chiedi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="420"/>
-        <location filename="../../CopyEngineFactory.cpp" line="424"/>
-        <location filename="../../CopyEngineFactory.cpp" line="428"/>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="425"/>
+        <location filename="../../CopyEngineFactory.cpp" line="429"/>
+        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="423"/>
+        <location filename="../../CopyEngineFactory.cpp" line="428"/>
         <source>Merge</source>
         <translation>Unisci</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="425"/>
-        <location filename="../../CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngineFactory.cpp" line="430"/>
+        <location filename="../../CopyEngineFactory.cpp" line="442"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="429"/>
+        <location filename="../../CopyEngineFactory.cpp" line="434"/>
         <source>Put at the end</source>
         <translation>Metti in coda</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="438"/>
         <source>Overwrite</source>
         <translation>Sovrascrivi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngineFactory.cpp" line="439"/>
         <source>Overwrite if different</source>
         <translation>Sovrascrivi se differente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="435"/>
+        <location filename="../../CopyEngineFactory.cpp" line="440"/>
         <source>Overwrite if newer</source>
         <translation>Sovrascrivi se più recente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngineFactory.cpp" line="441"/>
         <source>Overwrite if older</source>
         <translation>Sovrascrivi se meno recente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngineFactory.cpp" line="444"/>
         <source>Automatic</source>
         <translation>Automatico</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="440"/>
+        <location filename="../../CopyEngineFactory.cpp" line="445"/>
         <source>Sequential</source>
         <translation>Sequenziale</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="441"/>
+        <location filename="../../CopyEngineFactory.cpp" line="446"/>
         <source>Parallel</source>
         <translation>Parallelo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="492"/>
-        <location filename="../../CopyEngineFactory.cpp" line="531"/>
+        <location filename="../../CopyEngineFactory.cpp" line="497"/>
+        <location filename="../../CopyEngineFactory.cpp" line="536"/>
         <source>Options error</source>
         <translation>Opzioni di errore</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="492"/>
+        <location filename="../../CopyEngineFactory.cpp" line="497"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="531"/>
+        <location filename="../../CopyEngineFactory.cpp" line="536"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Le opzioni del motore per la copia non vengono caricate, impossibile accedere ai filtri</translation>
     </message>

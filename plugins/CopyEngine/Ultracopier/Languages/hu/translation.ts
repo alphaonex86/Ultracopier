@@ -146,85 +146,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="419"/>
-        <location filename="../../CopyEngineFactory.cpp" line="422"/>
+        <location filename="../../CopyEngineFactory.cpp" line="424"/>
         <location filename="../../CopyEngineFactory.cpp" line="427"/>
-        <location filename="../../CopyEngineFactory.cpp" line="431"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="420"/>
-        <location filename="../../CopyEngineFactory.cpp" line="424"/>
-        <location filename="../../CopyEngineFactory.cpp" line="428"/>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="425"/>
+        <location filename="../../CopyEngineFactory.cpp" line="429"/>
+        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="423"/>
+        <location filename="../../CopyEngineFactory.cpp" line="428"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="425"/>
-        <location filename="../../CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngineFactory.cpp" line="430"/>
+        <location filename="../../CopyEngineFactory.cpp" line="442"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="429"/>
+        <location filename="../../CopyEngineFactory.cpp" line="434"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="438"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngineFactory.cpp" line="439"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="435"/>
+        <location filename="../../CopyEngineFactory.cpp" line="440"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngineFactory.cpp" line="441"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngineFactory.cpp" line="444"/>
         <source>Automatic</source>
         <translation>Automatikus</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="440"/>
+        <location filename="../../CopyEngineFactory.cpp" line="445"/>
         <source>Sequential</source>
         <translation>Szekvenciális</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="441"/>
+        <location filename="../../CopyEngineFactory.cpp" line="446"/>
         <source>Parallel</source>
         <translation>Párhuzamos</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="492"/>
-        <location filename="../../CopyEngineFactory.cpp" line="531"/>
+        <location filename="../../CopyEngineFactory.cpp" line="497"/>
+        <location filename="../../CopyEngineFactory.cpp" line="536"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="492"/>
+        <location filename="../../CopyEngineFactory.cpp" line="497"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="531"/>
+        <location filename="../../CopyEngineFactory.cpp" line="536"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>A beállítási motor nincs betöltve, a szűrők elérése nem lehetséges</translation>
     </message>

@@ -14,13 +14,22 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -28,7 +37,7 @@
         <x>0</x>
         <y>0</y>
         <width>791</width>
-        <height>364</height>
+        <height>349</height>
        </rect>
       </property>
       <attribute name="label">
@@ -122,8 +131,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>502</width>
-        <height>218</height>
+        <width>791</width>
+        <height>349</height>
        </rect>
       </property>
       <attribute name="label">
@@ -326,8 +335,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>172</width>
-        <height>119</height>
+        <width>791</width>
+        <height>349</height>
        </rect>
       </property>
       <attribute name="label">
@@ -398,7 +407,7 @@
         <x>0</x>
         <y>0</y>
         <width>791</width>
-        <height>364</height>
+        <height>349</height>
        </rect>
       </property>
       <attribute name="label">
@@ -570,7 +579,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="label_21">
          <property name="text">
-          <string>Inode threads</string>
+          <string>Inode threads (unsafe &gt; 1)</string>
          </property>
         </widget>
        </item>
@@ -601,8 +610,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>449</width>
-        <height>89</height>
+        <width>791</width>
+        <height>349</height>
        </rect>
       </property>
       <attribute name="label">

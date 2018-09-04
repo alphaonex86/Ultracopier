@@ -266,7 +266,8 @@ bool CopyEngineFactory::canDoOnlyCopy() const
 
 void CopyEngineFactory::resetOptions()
 {
-    auto &options=optionsEngine;
+    auto options=optionsEngine;
+    optionsEngine=NULL;
     #if ! defined (Q_CC_GNU)
     ui->keepDate->setEnabled(false);
     ui->keepDate->setToolTip(QStringLiteral("Not supported with this compiler"));
@@ -320,6 +321,8 @@ void CopyEngineFactory::resetOptions()
     ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
     ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
     ui->copyListOrder->setChecked(stringtobool(options->getOptionValue("copyListOrder")));
+
+    optionsEngine=options;
 }
 
 QWidget * CopyEngineFactory::options()

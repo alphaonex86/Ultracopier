@@ -96,25 +96,26 @@ bool OptionEngine::addOptionGroup(const std::string &groupName,const std::vector
     while(index<KeysList.size())
     {
         OptionEngineGroupKey theCurrentKey;
-        theCurrentKey.defaultValue=KeysList.at(index).second;
+        const std::pair<std::string, std::string> &key=KeysList.at(index);
+        theCurrentKey.defaultValue=key.second;
         //if memory backend, load the default value into the current value
         if(currentBackend==Memory)
             theCurrentKey.currentValue=theCurrentKey.defaultValue;
         else
         {
-            if(settings->contains(QString::fromStdString(KeysList.at(index).first)))//if file backend, load the default value from the file
+            if(settings->contains(QString::fromStdString(key.first)))//if file backend, load the default value from the file
             {
-                theCurrentKey.currentValue=settings->value(QString::fromStdString(KeysList.at(index).first)).toString().toStdString();
+                theCurrentKey.currentValue=settings->value(QString::fromStdString(key.first)).toString().toStdString();
                 #ifdef ULTRACOPIER_DEBUG
                 if(theCurrentKey.currentValue!=theCurrentKey.defaultValue)
                 {
                     #ifdef ULTRACOPIER_VERSION_ULTIMATE
-                    if(groupName=="Ultracopier" && KeysList.at(index).first=="key")
+                    if(groupName=="Ultracopier" && key.first=="key")
                     {
                     }
                     else
                     #endif
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"The current key: "+groupName+", group: "+KeysList.at(index).first+", have value: "+theCurrentKey.currentValue);
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"The current key: "+groupName+", group: "+key.first+", have value: "+theCurrentKey.currentValue);
                 }
                 #endif
             }
@@ -122,7 +123,7 @@ bool OptionEngine::addOptionGroup(const std::string &groupName,const std::vector
             {
                 theCurrentKey.currentValue=theCurrentKey.defaultValue;
                 //to switch default value if is unchanged
-                //settings->setValue(KeysList.at(index).first,theCurrentKey.defaultValue);
+                //settings->setValue(key.first,theCurrentKey.defaultValue);
             }
             if(settings->status()!=QSettings::NoError)
             {
@@ -133,7 +134,7 @@ bool OptionEngine::addOptionGroup(const std::string &groupName,const std::vector
                 currentBackend=Memory;
             }
         }
-        GroupKeysList[groupName][KeysList.at(index).first]=theCurrentKey;
+        GroupKeysList[groupName][key.first]=theCurrentKey;
         index++;
     }
     //if the backend is file, leave into the group
