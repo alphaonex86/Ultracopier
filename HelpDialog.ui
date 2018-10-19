@@ -86,6 +86,13 @@ This version is compiled as version: %1.</string>
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Author: BRULE Herman Jacques Roger (alpha_one_x86), company: &lt;a href=&quot;http://www.confiared.com/&quot;&gt;confiared&lt;/a&gt;</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>

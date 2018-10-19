@@ -146,85 +146,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="424"/>
         <location filename="../../CopyEngineFactory.cpp" line="427"/>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
-        <location filename="../../CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngineFactory.cpp" line="430"/>
+        <location filename="../../CopyEngineFactory.cpp" line="435"/>
+        <location filename="../../CopyEngineFactory.cpp" line="439"/>
         <source>Ask</source>
         <translation>Pedir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="425"/>
-        <location filename="../../CopyEngineFactory.cpp" line="429"/>
-        <location filename="../../CopyEngineFactory.cpp" line="433"/>
-        <location filename="../../CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngineFactory.cpp" line="428"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngineFactory.cpp" line="440"/>
         <source>Skip</source>
         <translation>Omitir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="428"/>
+        <location filename="../../CopyEngineFactory.cpp" line="431"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="430"/>
-        <location filename="../../CopyEngineFactory.cpp" line="442"/>
+        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="445"/>
         <source>Rename</source>
         <translation>Cambiar el nombre</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Put at the end</source>
         <translation>Ponga al final</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="438"/>
+        <location filename="../../CopyEngineFactory.cpp" line="441"/>
         <source>Overwrite</source>
         <translation>Sobrescribir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngineFactory.cpp" line="442"/>
         <source>Overwrite if different</source>
         <translation>Sobrescribir si es diferente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="440"/>
+        <location filename="../../CopyEngineFactory.cpp" line="443"/>
         <source>Overwrite if newer</source>
         <translation>Sobrescribir si nuevo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="441"/>
+        <location filename="../../CopyEngineFactory.cpp" line="444"/>
         <source>Overwrite if older</source>
         <translation>Sobrescribir si es mayor</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="444"/>
+        <location filename="../../CopyEngineFactory.cpp" line="447"/>
         <source>Automatic</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="445"/>
+        <location filename="../../CopyEngineFactory.cpp" line="448"/>
         <source>Sequential</source>
         <translation>Secuencial</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="446"/>
+        <location filename="../../CopyEngineFactory.cpp" line="449"/>
         <source>Parallel</source>
         <translation>Paralelo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="497"/>
-        <location filename="../../CopyEngineFactory.cpp" line="536"/>
+        <location filename="../../CopyEngineFactory.cpp" line="500"/>
+        <location filename="../../CopyEngineFactory.cpp" line="539"/>
         <source>Options error</source>
         <translation>error Opciones</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="497"/>
+        <location filename="../../CopyEngineFactory.cpp" line="500"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Opciones del motor no está cargado. No es posible acceder a los filtros</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="536"/>
+        <location filename="../../CopyEngineFactory.cpp" line="539"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Opciones del motor no está cargado, no se puede acceder a los filtros</translation>
     </message>
@@ -814,198 +814,202 @@
 <context>
     <name>copyEngineOptions</name>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="35"/>
+        <location filename="../../copyEngineOptions.ui" line="44"/>
         <source>Transfer</source>
         <translation>Transferencia</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="44"/>
+        <location filename="../../copyEngineOptions.ui" line="53"/>
         <source>Move the whole folder</source>
         <translation>Mueva la carpeta completa</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="51"/>
+        <location filename="../../copyEngineOptions.ui" line="60"/>
         <source>Transfer the file rights</source>
         <translation>Transferencia de los derechos de archivo</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="61"/>
+        <location filename="../../copyEngineOptions.ui" line="70"/>
         <source>Keep the file date</source>
         <translation>Mantener la fecha de archivo</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="74"/>
+        <location filename="../../copyEngineOptions.ui" line="83"/>
         <source>Autostart the transfer</source>
         <translation>Inicio automático de la transferencia</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="81"/>
-        <location filename="../../copyEngineOptions.ui" line="101"/>
+        <location filename="../../copyEngineOptions.ui" line="90"/>
+        <location filename="../../copyEngineOptions.ui" line="110"/>
         <source>Less performance if checked</source>
         <translation>Si comprueba Menos rendimiento</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="104"/>
+        <location filename="../../copyEngineOptions.ui" line="113"/>
         <source>Follow the strict order</source>
         <translation>Siga el orden estricto</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="130"/>
+        <location filename="../../copyEngineOptions.ui" line="139"/>
         <source>Error and collision</source>
         <translation>Error y de la colisión</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="136"/>
+        <location filename="../../copyEngineOptions.ui" line="145"/>
         <source>When folder error</source>
         <translation>Cuando el error carpeta</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="146"/>
+        <location filename="../../copyEngineOptions.ui" line="155"/>
         <source>When file error</source>
         <translation>Cuando archivo error</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="172"/>
+        <location filename="../../copyEngineOptions.ui" line="181"/>
         <source>When file collision</source>
         <translation>Cuando archivo colisión</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="232"/>
+        <location filename="../../copyEngineOptions.ui" line="241"/>
         <source>When folder collision</source>
         <translation>Cuando la colisión carpeta</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="263"/>
+        <location filename="../../copyEngineOptions.ui" line="272"/>
         <source>Check if destination folder exists</source>
         <translation>Compruebe si existe la carpeta de destino</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="270"/>
+        <location filename="../../copyEngineOptions.ui" line="279"/>
         <source>Renaming rules</source>
         <translation>Reglas de Cambio de nombre</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="290"/>
+        <location filename="../../copyEngineOptions.ui" line="299"/>
         <source>Delete partially transferred files</source>
         <translation>Eliminar archivos parcialmente transferidos</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="303"/>
+        <location filename="../../copyEngineOptions.ui" line="312"/>
         <source>Rename the original destination</source>
         <translation>Cambie el nombre del destino original</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="334"/>
+        <location filename="../../copyEngineOptions.ui" line="343"/>
         <source>Control</source>
         <translation>Controlar</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="340"/>
+        <location filename="../../copyEngineOptions.ui" line="349"/>
         <source>Checksum</source>
         <translation>Suma de comprobación</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="349"/>
+        <location filename="../../copyEngineOptions.ui" line="358"/>
         <source>Only after error</source>
         <translation>Sólo después de un error</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="356"/>
+        <location filename="../../copyEngineOptions.ui" line="365"/>
         <source>Ignore if impossible</source>
         <translation>No haga caso si no es posible</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="373"/>
+        <location filename="../../copyEngineOptions.ui" line="382"/>
         <source>Verify checksums</source>
         <translation>Verifique checksums</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="405"/>
+        <location filename="../../copyEngineOptions.ui" line="414"/>
         <source>Performance</source>
         <translation>Rendimiento</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="411"/>
+        <location filename="../../copyEngineOptions.ui" line="420"/>
         <source>Parallel buffer</source>
         <translation>Búfer paralelo</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="418"/>
-        <location filename="../../copyEngineOptions.ui" line="431"/>
-        <location filename="../../copyEngineOptions.ui" line="444"/>
-        <location filename="../../copyEngineOptions.ui" line="481"/>
-        <location filename="../../copyEngineOptions.ui" line="550"/>
+        <location filename="../../copyEngineOptions.ui" line="427"/>
+        <location filename="../../copyEngineOptions.ui" line="440"/>
+        <location filename="../../copyEngineOptions.ui" line="453"/>
+        <location filename="../../copyEngineOptions.ui" line="490"/>
+        <location filename="../../copyEngineOptions.ui" line="559"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="460"/>
+        <location filename="../../copyEngineOptions.ui" line="469"/>
         <source>Block size</source>
         <translation>Tamaño del bloque</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="467"/>
+        <location filename="../../copyEngineOptions.ui" line="476"/>
         <source>Sequential buffer</source>
         <translation>Tampón secuencial</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="474"/>
+        <location filename="../../copyEngineOptions.ui" line="483"/>
         <source>Enable OS buffer</source>
         <translation>Habilitar el OS de amortiguación</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="497"/>
+        <location filename="../../copyEngineOptions.ui" line="506"/>
         <source>OS buffer only if smaller than</source>
         <translation>OS de amortiguación sólo si menor que</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="504"/>
+        <location filename="../../copyEngineOptions.ui" line="513"/>
         <source>Transfer algorithm</source>
         <translation>Algoritmo de transferencia</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="543"/>
+        <location filename="../../copyEngineOptions.ui" line="552"/>
         <source>Parallelize if smaller than</source>
         <translation>Paralelice si más pequeño que</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="573"/>
-        <source>Inode threads</source>
-        <translation>Temas inodo</translation>
+        <location filename="../../copyEngineOptions.ui" line="582"/>
+        <source>Inode threads (unsafe &gt; 1)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="580"/>
-        <location filename="../../copyEngineOptions.ui" line="590"/>
+        <source>Inode threads</source>
+        <translation type="vanished">Temas inodo</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="589"/>
+        <location filename="../../copyEngineOptions.ui" line="599"/>
         <source>More cpu, but better organisation on the disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="593"/>
+        <location filename="../../copyEngineOptions.ui" line="602"/>
         <source>Order the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="609"/>
+        <location filename="../../copyEngineOptions.ui" line="618"/>
         <source>Misc</source>
         <translation>Misc</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="615"/>
+        <location filename="../../copyEngineOptions.ui" line="624"/>
         <source>Check the disk space</source>
         <translation>Compruebe el espacio en disco</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="625"/>
+        <location filename="../../copyEngineOptions.ui" line="634"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="637"/>
+        <location filename="../../copyEngineOptions.ui" line="646"/>
         <source>Browse</source>
         <translation>Busque</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="659"/>
+        <location filename="../../copyEngineOptions.ui" line="668"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
