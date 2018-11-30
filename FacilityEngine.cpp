@@ -230,15 +230,16 @@ std::string FacilityEngine::simplifiedRemainingTime(const uint32_t &seconds) con
 /// \brief Return ultimate url, empty is not found or already ultimate
 std::string FacilityEngine::ultimateUrl() const
 {
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    return std::string();
-    #else
+    if(ProductKey::productKey->isUltimate())
+        return std::string();
+    else
+    {
         #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
         return "http://ultracopier.first-world.info/shop.html";
         #else
         return std::string();
         #endif
-    #endif
+    }
 }
 
 bool FacilityEngine::isUltimate() const

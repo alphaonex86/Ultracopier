@@ -51,9 +51,7 @@ void registerTheOptions()
     //add the options hidden, will not show in options pannel
     KeysList.clear();
     KeysList.push_back(std::pair<std::string, std::string>("Last_version_used","na"));
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
     KeysList.push_back(std::pair<std::string, std::string>("key",""));
-    #endif
     KeysList.push_back(std::pair<std::string, std::string>("ActionOnManualOpen","1"));
     KeysList.push_back(std::pair<std::string, std::string>("GroupWindowWhen","0"));
     KeysList.push_back(std::pair<std::string, std::string>("displayOSSpecific","true"));

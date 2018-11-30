@@ -109,13 +109,11 @@ bool OptionEngine::addOptionGroup(const std::string &groupName,const std::vector
                 #ifdef ULTRACOPIER_DEBUG
                 if(theCurrentKey.currentValue!=theCurrentKey.defaultValue)
                 {
-                    #ifdef ULTRACOPIER_VERSION_ULTIMATE
                     if(groupName=="Ultracopier" && key.first=="key")
                     {
                     }
                     else
-                    #endif
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"The current key: "+groupName+", group: "+key.first+", have value: "+theCurrentKey.currentValue);
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"The current key: "+groupName+", group: "+key.first+", have value: "+theCurrentKey.currentValue);
                 }
                 #endif
             }

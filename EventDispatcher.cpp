@@ -38,10 +38,6 @@
 #include <QDomElement>
 #endif
 
-#ifdef ULTRACOPIER_VERSION_ULTIMATE
-#include <QInputDialog>
-#endif
-
 /// \brief Initiate the ultracopier event dispatcher and check if no other session is running
 EventDispatcher::EventDispatcher()
 {

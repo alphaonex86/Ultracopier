@@ -4,6 +4,7 @@
 \licence GPL3, see the file COPYING */
 
 #include "HelpDialog.h"
+#include "ProductKey.h"
 
 #include <QTreeWidgetItem>
 #include <QApplication>
@@ -67,11 +68,10 @@ void HelpDialog::reloadTextValue()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QString text=ui->label_ultracopier->text();
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(ULTRACOPIER_VERSION));
-    #else
-    text=text.replace(QStringLiteral("%1"),ULTRACOPIER_VERSION);
-    #endif
+    if(ProductKey::productKey->isUltimate())
+        text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(ULTRACOPIER_VERSION));
+    else
+        text=text.replace(QStringLiteral("%1"),ULTRACOPIER_VERSION);
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
     text=text.replace(QStringLiteral("Ultracopier"),QStringLiteral("Supercopier"),Qt::CaseInsensitive);
     #endif
@@ -115,15 +115,7 @@ std::string HelpDialog::getWebSite()
 
 std::string HelpDialog::getUpdateUrl()
 {
-    #if defined(ULTRACOPIER_VERSION_ULTIMATE)
-     return tr("http://ultracopier.first-world.info/shop.html").toStdString();
-      #else
-         #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-         return tr("http://ultracopier.first-world.info/").toStdString()+"supercopier.html";
-         #else
-          return tr("http://ultracopier.first-world.info/download.html").toStdString();
-         #endif
-      #endif
+    return tr("http://ultracopier.first-world.info/download.html").toStdString();
 }
 
 #ifdef ULTRACOPIER_DEBUG

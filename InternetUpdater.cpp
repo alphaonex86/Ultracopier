@@ -2,6 +2,7 @@
 #include "EventDispatcher.h"
 #include "OptionEngine.h"
 #include "cpp11addition.h"
+#include "ProductKey.h"
 
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 
@@ -51,11 +52,10 @@ void InternetUpdater::downloadFileInternal(const bool force)
          std::string name="Ultracopier";
      #endif
     std::string ultracopierVersion;
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    ultracopierVersion=name+" Ultimate/"+ULTRACOPIER_VERSION;
-    #else
-    ultracopierVersion=name+"/"+ULTRACOPIER_VERSION;
-    #endif
+    if(ProductKey::productKey->isUltimate())
+        ultracopierVersion=name+" Ultimate/"+ULTRACOPIER_VERSION;
+    else
+        ultracopierVersion=name+"/"+ULTRACOPIER_VERSION;
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
              ultracopierVersion+=" portable/all-in-one";

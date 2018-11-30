@@ -21,9 +21,7 @@
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
 // define if the version is ultimate, need change only the name in the code
-//#define ULTRACOPIER_VERSION_ULTIMATE
 //#define ULTRACOPIER_PLUGIN_ALL_IN_ONE
-//#define ULTRACOPIER_ILLEGAL
 //#define ULTRACOPIER_MODE_SUPERCOPIER
 /// \brief define time to update the speed detection update ont the interface (in ms)
 #define ULTRACOPIER_TIME_INTERFACE_UPDATE 500

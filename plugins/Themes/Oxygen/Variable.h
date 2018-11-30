@@ -12,8 +12,6 @@
 #define ULTRACOPIER_PLUGIN_DEBUG
 #endif
 
-#define ULTRACOPIER_VERSION_ULTIMATE
-
 #endif // VARIABLE_H
 
 
