@@ -2,6 +2,7 @@
 #include "ui_ProductKey.h"
 #include "DebugEngine.h"
 #include "OptionEngine.h"
+#include "SystrayIcon.h"
 #include <QMessageBox>
 #include <QCryptographicHash>
 
@@ -18,10 +19,12 @@ ProductKey::~ProductKey()
     delete ui;
 }
 
-bool ProductKey::parseKey()
+bool ProductKey::parseKey(QString orgkey)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultimate key");
-    QString key=QString::fromStdString(OptionEngine::optionEngine->getOptionValue("Ultracopier","key"));
+    QString key=orgkey;
+    if(orgkey.isEmpty())
+        key=QString::fromStdString(OptionEngine::optionEngine->getOptionValue("Ultracopier","key"));
     if(!key.isEmpty())
     {
         QCryptographicHash hash(QCryptographicHash::Sha224);
@@ -29,7 +32,11 @@ bool ProductKey::parseKey()
         hash.addData(key.toUtf8());
         const QByteArray &result=hash.result();
         if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
+        {
+            if(!orgkey.isEmpty())
+            OptionEngine::optionEngine->setOptionValue("Ultracopier","key",key.toStdString());
             ultimate=true;
+        }
         else
             ultimate=false;
     }
@@ -45,8 +52,13 @@ bool ProductKey::isUltimate() const
 
 void ProductKey::on_buttonBox_accepted()
 {
-    if(!ProductKey::parseKey())
-        QMessageBox::critical(this,tr("Error"),tr("Your product key was rejected.\nIf you buy key, unmark check your spam and unmark the mail as spam\nIf you have not buy your key, go to <a href=\"https://shop.first-world.info/\">https://shop.first-world.info/</a>"));
+    if(!ProductKey::parseKey(ui->productkey->text()))
+        QMessageBox::critical(this,tr("Error"),"<br />"+tr("Your product key was rejected.<br />If you buy key, unmark check your spam and unmark the mail as spam<br />If you have not buy your key, go to <a href=\"https://shop.first-world.info/\">https://shop.first-world.info/</a>"));
+    else
+    {
+        changeToUltimate();
+        hide();
+    }
 }
 
 void ProductKey::on_buttonBox_rejected()

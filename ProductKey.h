@@ -16,15 +16,15 @@ public:
     ~ProductKey();
     bool isUltimate() const;
     static ProductKey *productKey;
-    bool parseKey();
+    bool parseKey(QString orgkey=QString());
 private slots:
     void on_buttonBox_accepted();
-
     void on_buttonBox_rejected();
-
 private:
     Ui::ProductKey *ui;
     bool ultimate;
+signals:
+    void changeToUltimate();
 };
 
 #endif // PRODUCTKEY_H

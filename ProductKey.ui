@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Product key</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="plugins/Themes/Oxygen/interfaceResources_unix.qrc">
+    <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Unix.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/systray_Caught_Unix.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLineEdit" name="productkey">
@@ -30,6 +34,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="plugins/Themes/Oxygen/interfaceResources_unix.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -567,3 +567,8 @@ void SystrayIcon::reloadEngineList()
     }
     setContextMenu(systrayMenu);
 }
+
+void SystrayIcon::changeToUltimate()
+{
+    systrayMenu->removeAction(actionProductKey);
+}

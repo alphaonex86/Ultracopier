@@ -43,6 +43,7 @@ class SystrayIcon : public QSystemTrayIcon
         #ifdef ULTRACOPIER_INTERNET_SUPPORT
         void newUpdate(const std::string &version);
         #endif
+        void changeToUltimate();
     private:
         #ifdef ULTRACOPIER_INTERNET_SUPPORT
         std::string lastVersion;
