@@ -59,6 +59,7 @@ class SystrayIcon : public QSystemTrayIcon
         #endif
         QAction* actionMenuAbout;		///< Pointer on the About action
         QAction* actionOptions;			///< Pointer on the Options action
+        QAction* actionProductKey;			///< Pointer on the Options action
         QIcon IconQuit;			///< Pointer on the icon for quit
         #ifdef ULTRACOPIER_DEBUG
         QIcon IconSaveBugReport;
@@ -132,6 +133,8 @@ class SystrayIcon : public QSystemTrayIcon
         void showHelp() const;
         /// \brief Show the help option
         void showOptions() const;
+        /// \brief Show the help option
+        void showProductKey() const;
         /** \brief Add window copy or window move
         \param mode Can be CopyMode::Copy or CopyMode::Move
         \return The core object of the new window created */

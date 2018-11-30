@@ -39,6 +39,8 @@ class FacilityInterface : public QObject
         virtual std::string ultimateUrl() const = 0;
         /// \brief Return the software name
         virtual std::string softwareName() const = 0;
+        /// \brief return if is ultimate
+        virtual bool isUltimate() const = 0;
 };
 
 #endif // FACILITY_INTERFACE_H

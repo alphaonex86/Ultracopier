@@ -45,6 +45,8 @@ public:
     std::string softwareName() const;
     /// \brief separator native to the current OS
     static std::string separator();
+    /// \brief return if is ultimate
+    bool isUltimate() const;
 
     static FacilityEngine facilityEngine;
 private:

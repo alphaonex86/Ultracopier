@@ -297,7 +297,8 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->labelAlwaysOnTop->hide();
     uiOptions->alwaysOnTop->hide();
     #endif*/
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
+    if(facilityEngine->isUltimate())
+    {
         #ifdef SUPERCOPIER
             ui->ad_ultimate->setText(tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">Copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a>"));
         #else
@@ -307,12 +308,14 @@ Themes::Themes(const bool &alwaysOnTop,
                 ui->ad_ultimate->hide();
             #endif
         #endif
-    #else
-    QString ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
-    if(ultimateUrl.isEmpty())
-        ui->ad_ultimate->hide();
+    }
     else
-        ui->ad_ultimate->setText(
+    {
+        QString ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
+        if(ultimateUrl.isEmpty())
+            ui->ad_ultimate->hide();
+        else
+            ui->ad_ultimate->setText(
                     #ifdef SUPERCOPIER
                     tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a><br />")+
                     #endif
@@ -320,7 +323,7 @@ Themes::Themes(const bool &alwaysOnTop,
                     tr("This will be the last version for Mac, but you can compile from source")+
                     #endif
                     QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")));
-    #endif
+    }
 
     #ifdef SUPERCOPIER
     uiOptions->labelDualProgression->hide();

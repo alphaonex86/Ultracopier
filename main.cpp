@@ -14,6 +14,7 @@
 #include "ResourcesManager.h"
 #include "OptionEngine.h"
 #include "PluginsManager.h"
+#include "ProductKey.h"
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
@@ -38,6 +39,7 @@ OptionEngine *OptionEngine::optionEngine=NULL;
 PluginsManager *PluginsManager::pluginsManager=NULL;
 LanguagesManager *LanguagesManager::languagesManager=NULL;
 ThemesManager *ThemesManager::themesManager=NULL;
+ProductKey *ProductKey::productKey=NULL;
 
 void registerTheOptions()
 {
@@ -117,6 +119,7 @@ int main(int argc, char *argv[])
     PluginsManager::pluginsManager=new PluginsManager();
     LanguagesManager::languagesManager=new LanguagesManager();
     ThemesManager::themesManager=new ThemesManager();
+    ProductKey::productKey=new ProductKey();
 
     //the main code, event loop of Qt and event dispatcher of ultracopier
     {
@@ -127,6 +130,8 @@ int main(int argc, char *argv[])
             returnCode=ultracopierApplication.exec();
     }
 
+    delete ProductKey::productKey;
+    ProductKey::productKey=NULL;
     delete ThemesManager::themesManager;
     ThemesManager::themesManager=NULL;
     delete LanguagesManager::languagesManager;

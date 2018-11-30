@@ -12,6 +12,7 @@
 #include "ThemesManager.h"
 #include "LanguagesManager.h"
 #include "HelpDialog.h"
+#include "ProductKey.h"
 
 #ifdef Q_OS_MAC
 //extern void qt_mac_set_dock_menu(QMenu *menu);
@@ -33,6 +34,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     #endif
     actionMenuQuit		= new QAction(this);
     actionOptions		= new QAction(this);
+    actionProductKey    = new QAction(this);
     //actionTransfer		= new QAction(this);
     #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
     copyMenu		= NULL;
@@ -61,6 +63,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     connect(actionMenuQuit,		&QAction::triggered,					this,	&SystrayIcon::quit);
     connect(actionMenuAbout,	&QAction::triggered,					this,	&SystrayIcon::showHelp);
     connect(actionOptions,		&QAction::triggered,					this,	&SystrayIcon::showOptions);
+    connect(actionProductKey,	&QAction::triggered,					this,	&SystrayIcon::showProductKey);
     connect(this,			&SystrayIcon::activated,                    this,	&SystrayIcon::CatchAction);
     #ifdef ULTRACOPIER_INTERNET_SUPPORT
     connect(this,			&QSystemTrayIcon::messageClicked,           this,	&SystrayIcon::messageClicked);
@@ -77,6 +80,8 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     #ifdef ULTRACOPIER_DEBUG
     systrayMenu->addAction(actionSaveBugReport);
     #endif
+    if(!ProductKey::productKey->isUltimate())
+        systrayMenu->addAction(actionProductKey);
     systrayMenu->addAction(actionMenuQuit);
     #ifndef Q_OS_MAC
     systrayMenu->insertSeparator(actionOptions);
@@ -111,6 +116,7 @@ SystrayIcon::~SystrayIcon()
     #endif
     delete actionMenuAbout;
     delete actionOptions;
+    delete actionProductKey;
     delete systrayMenu;
     #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
     if(copyMenu!=NULL)
@@ -347,6 +353,8 @@ void SystrayIcon::updateCurrentTheme()
         IconOptions=QIcon("");
     actionOptions->setIcon(IconOptions);
 
+    actionProductKey->setIcon(IconInfo);
+
     tempIcon=ThemesManager::themesManager->loadIcon("SystemTrayIcon/add.png");
     if(!tempIcon.isNull())
         IconAdd=QIcon(tempIcon);
@@ -439,6 +447,7 @@ void SystrayIcon::retranslateTheUI()
     #endif
     actionMenuQuit		->setText(tr("&Quit"));
     actionOptions		->setText(tr("&Options"));
+    actionProductKey		->setText(tr("&Product key"));
     reloadEngineList();
     updateSystrayIcon();
 }

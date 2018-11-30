@@ -35,7 +35,8 @@ macx {
 FORMS += $$PWD/../HelpDialog.ui \
     $$PWD/../PluginInformation.ui \
     $$PWD/../OptionDialog.ui \
-    $$PWD/../OSSpecific.ui
+    $$PWD/../OSSpecific.ui \
+    $$PWD/../ProductKey.ui
 RESOURCES += \
     $$PWD/../resources/ultracopier-resources.qrc \
     $$PWD/../resources/ultracopier-resources_unix.qrc \
@@ -89,7 +90,8 @@ HEADERS += $$PWD/../ResourcesManager.h \
     $$PWD/../StructEnumDefinition_UltracopierSpecific.h \
     $$PWD/../OSSpecific.h \
     $$PWD/../cpp11addition.h \
-    $$PWD/../InternetUpdater.h
+    $$PWD/../InternetUpdater.h \
+    $$PWD/../ProductKey.h
 SOURCES += $$PWD/../ThemesManager.cpp \
     $$PWD/../ResourcesManager.cpp \
     $$PWD/../main.cpp \
@@ -124,7 +126,8 @@ SOURCES += $$PWD/../ThemesManager.cpp \
     $$PWD/../cpp11addition.cpp \
     $$PWD/../DebugModel.cpp \
     $$PWD/../InternetUpdater.cpp \
-    $$PWD/../cpp11additionstringtointcpp.cpp
+    $$PWD/../cpp11additionstringtointcpp.cpp \
+    $$PWD/../ProductKey.cpp
 INCLUDEPATH += \
     $$PWD/../lib/qt-tar-xz/
 

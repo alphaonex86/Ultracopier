@@ -5,6 +5,7 @@
 \licence GPL3, see the file COPYING */
 
 #include "FacilityEngine.h"
+#include "ProductKey.h"
 
 #if defined (Q_OS_WIN32)
     #ifndef NOMINMAX
@@ -238,6 +239,11 @@ std::string FacilityEngine::ultimateUrl() const
         return std::string();
         #endif
     #endif
+}
+
+bool FacilityEngine::isUltimate() const
+{
+    return ProductKey::productKey->isUltimate();
 }
 
 /// \brief Return the software name

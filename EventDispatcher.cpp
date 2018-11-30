@@ -14,6 +14,7 @@
 #include "CompilerInfo.h"
 #include "ThemesManager.h"
 #include "cpp11addition.h"
+#include "ProductKey.h"
 
 #ifdef Q_OS_UNIX
     #include <unistd.h>
@@ -166,49 +167,6 @@ EventDispatcher::EventDispatcher()
     if(a>5)
         OptionEngine::optionEngine->setOptionValue("Ultracopier","GroupWindowWhen","0");
 
-    #ifdef ULTRACOPIER_VERSION_ULTIMATE
-    #ifdef  ULTRACOPIER_ILLEGAL
-    static bool crackedVersion=true;
-    #else
-    static bool crackedVersion=false;
-    #endif
-    if(!crackedVersion)
-    {
-        while(1)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"ultimate key");
-            QString key=QString::fromStdString(OptionEngine::optionEngine->getOptionValue("Ultracopier","key"));
-            if(!key.isEmpty())
-            {
-                QCryptographicHash hash(QCryptographicHash::Sha224);
-                hash.addData(QStringLiteral("U2NgvbKVrVwlaXnx").toUtf8());
-                hash.addData(key.toUtf8());
-                const QByteArray &result=hash.result();
-                if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
-                    break;
-            }
-            key=QInputDialog::getText(NULL,tr("Key"),tr("Give the key of this software, more information on <a href=\"http://ultracopier.first-world.info/\">ultracopier.first-world.info</a>"));
-            if(key.isEmpty())
-            {
-                QCoreApplication::quit();
-                stopIt=true;
-                return;
-            }
-            {
-                QCryptographicHash hash(QCryptographicHash::Sha224);
-                hash.addData(QStringLiteral("U2NgvbKVrVwlaXnx").toUtf8());
-                hash.addData(key.toUtf8());
-                const QByteArray &result=hash.result();
-                if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)
-                {
-                    OptionEngine::optionEngine->setOptionValue("Ultracopier","key",key.toStdString());
-                    break;
-                }
-            }
-        }
-    }
-    #endif
-
     connect(&cliParser,	&CliParser::newTransferList,core,	&Core::newTransferList);
 }
 
@@ -318,6 +276,11 @@ void EventDispatcher::initFunction()
         }
         //show option is for OptionEngine object
         if(!connect(backgroundIcon,	&SystrayIcon::showOptions,					&optionDialog,	&OptionDialog::show,Qt::DirectConnection))
+        {
+            std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
+            abort();
+        }
+        if(!connect(backgroundIcon,	&SystrayIcon::showProductKey,					ProductKey::productKey,	&ProductKey::show,Qt::DirectConnection))
         {
             std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
             abort();
