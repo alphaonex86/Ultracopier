@@ -405,6 +405,7 @@ void OptionDialog::loadOption()
     newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
     newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
     newOptionValue("Ultracopier",	"remainingTimeAlgorithm",   OptionEngine::optionEngine->getOptionValue("Ultracopier","remainingTimeAlgorithm"));
+    newOptionValue("Ultracopier",	"portable",                 OptionEngine::optionEngine->getOptionValue("Ultracopier","portable"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
     #ifndef ULTRACOPIER_VERSION_PORTABLE
@@ -594,6 +595,11 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
             const uint32_t &valueInt=stringtouint32(value,&ok);
             if(ok)
                 ui->remainingTimeAlgorithm->setCurrentIndex(static_cast<int>(valueInt));
+        }
+        else if(name=="portable")
+        {
+            QString settingsFilePath=QString::fromStdString(ResourcesManager::resourcesManager->getWritablePath());
+            ui->portable->setChecked(QFile::exists(settingsFilePath+"/Ultracopier.conf"));
         }
     }
 }
@@ -1012,4 +1018,21 @@ void OptionDialog::on_remainingTimeAlgorithm_currentIndexChanged(int index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
         OptionEngine::optionEngine->setOptionValue("Ultracopier","remainingTimeAlgorithm",std::to_string(index));
     }
+}
+
+void OptionDialog::on_portable_toggled(bool)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    const bool portable=ui->portable->isChecked();
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","portable",booltostring(portable));
+
+    QString settingsFilePath=QString::fromStdString(ResourcesManager::resourcesManager->getWritablePath());
+    if(portable)
+    {
+        QFile file(settingsFilePath+"/Ultracopier.conf");
+        file.open(QIODevice::ReadWrite);
+        file.close();
+    }
+    else
+        QFile::remove(settingsFilePath+"/Ultracopier.conf");
 }

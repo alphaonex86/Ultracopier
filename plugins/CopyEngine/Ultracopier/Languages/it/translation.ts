@@ -984,10 +984,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Inode threads</source>
-        <translation type="vanished">Inode threads</translation>
-    </message>
-    <message>
         <location filename="../../copyEngineOptions.ui" line="589"/>
         <location filename="../../copyEngineOptions.ui" line="599"/>
         <source>More cpu, but better organisation on the disk</source>

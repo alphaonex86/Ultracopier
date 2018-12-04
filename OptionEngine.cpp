@@ -18,15 +18,16 @@
 OptionEngine::OptionEngine()
 {
     //locate the settings
-    #ifdef ULTRACOPIER_VERSION_PORTABLE
-        QString settingsFilePath=QString::fromStdString(ResourcesManager::resourcesManager->getWritablePath());
+    QString settingsFilePath=QString::fromStdString(ResourcesManager::resourcesManager->getWritablePath());
+    if(QFile::exists(settingsFilePath+"/Ultracopier.conf"))
+    {
         if(settingsFilePath!="")
             settings = new QSettings(settingsFilePath+QStringLiteral("Ultracopier.conf"),QSettings::IniFormat);
         else
             settings = NULL;
-    #else // ULTRACOPIER_VERSION_PORTABLE
+    }
+    else
         settings = new QSettings(QStringLiteral("Ultracopier"),QStringLiteral("Ultracopier"));
-    #endif // ULTRACOPIER_VERSION_PORTABLE
     if(settings!=NULL)
     {
         //do some write test

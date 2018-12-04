@@ -81,7 +81,7 @@ private slots:
     void on_confirmToGroupWindows_clicked();
     void oSSpecificClosed();
     void on_remainingTimeAlgorithm_currentIndexChanged(int index);
-
+    void on_portable_toggled(bool);
 private:
     bool quit;
     Ui::OptionDialog *ui;

@@ -4,14 +4,14 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+302"/>
-        <location line="+15"/>
+        <location filename="../../interface.cpp" line="+303"/>
+        <location line="+17"/>
         <source>%1 is deprecated, Use %2</source>
         <translation>%1 est obsolète, utilisez %2</translation>
     </message>
     <message>
-        <location line="-12"/>
-        <location line="+15"/>
+        <location line="-14"/>
+        <location line="+17"/>
         <source>This will be the last version for Mac, but you can compile from source</source>
         <translation>Ce sera la dernière version pour Mac, mais vous pouvez compiler à partir des sources</translation>
     </message>
