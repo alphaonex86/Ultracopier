@@ -26,25 +26,35 @@ LanguagesManager::LanguagesManager()
         index++;
     }
     //load the plugins
-    PluginsManager::pluginsManager->lockPluginListEdition();
-    connect(this,&LanguagesManager::previouslyPluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
-    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
-    #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-    connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
-    #endif
-    connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
-    std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Languages);
-    foreach(PluginsAvailable currentPlugin,list)
-        emit previouslyPluginAdded(currentPlugin);
-    PluginsManager::pluginsManager->unlockPluginListEdition();
+    if(PluginsManager::pluginsManager!=NULL)
+    {
+        PluginsManager::pluginsManager->lockPluginListEdition();
+        connect(this,&LanguagesManager::previouslyPluginAdded,		this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+        connect(PluginsManager::pluginsManager,&PluginsManager::onePluginAdded,this,	&LanguagesManager::onePluginAdded,Qt::QueuedConnection);
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
+        connect(PluginsManager::pluginsManager,&PluginsManager::onePluginWillBeRemoved,	this,	&LanguagesManager::onePluginWillBeRemoved,Qt::DirectConnection);
+        #endif
+        connect(PluginsManager::pluginsManager,&PluginsManager::pluginListingIsfinish,		this,	&LanguagesManager::allPluginIsLoaded,Qt::QueuedConnection);
+        std::vector<PluginsAvailable> list=PluginsManager::pluginsManager->getPluginsByCategory(PluginType_Languages);
+        foreach(PluginsAvailable currentPlugin,list)
+            emit previouslyPluginAdded(currentPlugin);
+        PluginsManager::pluginsManager->unlockPluginListEdition();
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"plugin manager null");
     //load the GUI option
-    std::vector<std::pair<std::string, std::string> > KeysList;
-    KeysList.push_back(std::pair<std::string, std::string>("Language","en"));
-    KeysList.push_back(std::pair<std::string, std::string>("Language_force","false"));
-    OptionEngine::optionEngine->addOptionGroup("Language",KeysList);
-//	connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::refreshPluginList);
-//	connect(this,	&LanguagesManager::newLanguageLoaded,			this,&LanguagesManager::retranslateTheUI);
-    connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,				this,	&LanguagesManager::newOptionValue,Qt::QueuedConnection);
+    if(OptionEngine::optionEngine!=NULL)
+    {
+        std::vector<std::pair<std::string, std::string> > KeysList;
+        KeysList.push_back(std::pair<std::string, std::string>("Language","en"));
+        KeysList.push_back(std::pair<std::string, std::string>("Language_force","false"));
+        OptionEngine::optionEngine->addOptionGroup("Language",KeysList);
+    //	connect(this,	&LanguagesManager::newLanguageLoaded,			plugins,&PluginsManager::refreshPluginList);
+    //	connect(this,	&LanguagesManager::newLanguageLoaded,			this,&LanguagesManager::retranslateTheUI);
+        connect(OptionEngine::optionEngine,&OptionEngine::newOptionValue,				this,	&LanguagesManager::newOptionValue,Qt::QueuedConnection);
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"option engine null");
     connect(this,	&LanguagesManager::newLanguageLoaded,			PluginsManager::pluginsManager,&PluginsManager::newLanguageLoaded,Qt::QueuedConnection);
 }
 
