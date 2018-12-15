@@ -647,6 +647,7 @@ bool TransferThread::checkAlwaysRename()
                 {
                     newFileName=firstRenamingRule;
                     stringreplaceAll(newFileName,"%name%",fileName);
+                    stringreplaceAll(newFileName,"%file%",fileName+"."+suffix);
                 }
             }
             else
@@ -658,6 +659,7 @@ bool TransferThread::checkAlwaysRename()
                     newFileName=otherRenamingRule;
                     stringreplaceAll(newFileName,"%name%",fileName);
                     stringreplaceAll(newFileName,"%number%",std::to_string(num));
+                    stringreplaceAll(newFileName,"%file%",fileName+"."+suffix);
                 }
             }
             newDestination.setFile(newDestination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(newFileName+suffix));

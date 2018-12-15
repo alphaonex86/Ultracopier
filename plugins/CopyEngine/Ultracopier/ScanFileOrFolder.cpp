@@ -340,6 +340,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                             {
                                 destinationSuffixPath=firstRenamingRule;
                                 stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                                stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
                             }
                         }
                         else
@@ -350,6 +351,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                             {
                                 destinationSuffixPath=otherRenamingRule;
                                 stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                                stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
                                 stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                             }
                         }
@@ -406,6 +408,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                                 {
                                     destinationSuffixPath=firstRenamingRule;
                                     stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                                    stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
                                 }
                             }
                             else
@@ -416,6 +419,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                                 {
                                     destinationSuffixPath=otherRenamingRule;
                                     stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                                    stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
                                     stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                                 }
                             }

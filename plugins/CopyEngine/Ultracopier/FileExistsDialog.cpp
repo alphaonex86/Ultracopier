@@ -139,6 +139,7 @@ void FileExistsDialog::on_SuggestNewName_clicked()
             {
                 newFileName=QString::fromStdString(firstRenamingRule);
                 newFileName.replace("%name%",fileName);
+                newFileName.replace(QStringLiteral("%file%"),fileName+"."+suffix);
             }
         }
         else
@@ -149,6 +150,7 @@ void FileExistsDialog::on_SuggestNewName_clicked()
             {
                 newFileName=QString::fromStdString(otherRenamingRule);
                 newFileName.replace(QStringLiteral("%name%"),fileName);
+                newFileName.replace(QStringLiteral("%file%"),fileName+"."+suffix);
                 newFileName.replace(QStringLiteral("%number%"),QString::number(num));
             }
         }
