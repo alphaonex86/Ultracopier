@@ -18,6 +18,11 @@ void OptionsWidget::setAllDllIsImportant(bool allDllIsImportant)
     ui->allDllIsImportant->setChecked(allDllIsImportant);
 }
 
+void OptionsWidget::setAllUserIsImportant(bool allDllIsImportant)
+{
+    ui->allDllIsImportant->setChecked(allDllIsImportant);
+}
+
 void OptionsWidget::setDebug(bool Debug)
 {
     ui->Debug->setChecked(Debug);
@@ -26,6 +31,11 @@ void OptionsWidget::setDebug(bool Debug)
 void OptionsWidget::on_allDllIsImportant_toggled(bool checked)
 {
     emit sendAllDllIsImportant(checked);
+}
+
+void OptionsWidget::on_allUserIsImportant_toggled(bool checked)
+{
+    emit sendAllUserIsImportant(checked);
 }
 
 void OptionsWidget::retranslate()

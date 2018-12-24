@@ -56,10 +56,11 @@ private:
     bool needBeRegistred;
     OptionInterface * optionsEngine;
     OptionsWidget *optionsWidget;
-    bool allDllIsImportant,Debug;
+    bool allDllIsImportant,allUserIsImportant,Debug;
     bool changeOfArchDetected,is64Bits;
 private slots:
     void setAllDllIsImportant(bool allDllIsImportant);
+    void setAllUserIsImportant(bool allDllIsImportant);
     void setDebug(bool Debug);
 };
 

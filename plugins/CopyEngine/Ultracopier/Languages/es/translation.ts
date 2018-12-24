@@ -278,17 +278,17 @@
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="147"/>
+        <location filename="../../FileExistsDialog.cpp" line="148"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="232"/>
+        <location filename="../../FileExistsDialog.cpp" line="234"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="232"/>
+        <location filename="../../FileExistsDialog.cpp" line="234"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -301,17 +301,17 @@
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="121"/>
+        <location filename="../../FileIsSameDialog.cpp" line="122"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="188"/>
+        <location filename="../../FileIsSameDialog.cpp" line="190"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="188"/>
+        <location filename="../../FileIsSameDialog.cpp" line="190"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -468,17 +468,17 @@
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="132"/>
+        <location filename="../../FolderExistsDialog.cpp" line="133"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="193"/>
+        <location filename="../../FolderExistsDialog.cpp" line="195"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="193"/>
+        <location filename="../../FolderExistsDialog.cpp" line="195"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -595,38 +595,38 @@
 <context>
     <name>RenamingRules</name>
     <message>
-        <location filename="../../RenamingRules.ui" line="26"/>
+        <location filename="../../RenamingRules.ui" line="35"/>
         <source>First renaming</source>
         <translation>En primer lugar el cambio de nombre</translation>
     </message>
     <message>
-        <location filename="../../RenamingRules.ui" line="32"/>
+        <location filename="../../RenamingRules.ui" line="41"/>
         <source>%name% - copy</source>
         <extracomment>%name% should not be translated</extracomment>
         <translation>%name% - copia</translation>
     </message>
     <message>
-        <location filename="../../RenamingRules.ui" line="39"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../RenamingRules.ui" line="48"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; for the original file full name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment> should not be translated</extracomment>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; para el nombre del archivo original&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../RenamingRules.ui" line="49"/>
+        <location filename="../../RenamingRules.ui" line="71"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; for the original file full name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <extracomment>%name%, %number% should not be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../RenamingRules.ui" line="58"/>
         <source>Second renaming</source>
         <translation>En segundo lugar el cambio de nombre</translation>
     </message>
     <message>
-        <location filename="../../RenamingRules.ui" line="55"/>
+        <location filename="../../RenamingRules.ui" line="64"/>
         <source>%name% - copy (%number%)</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
         <translation>%name% - copia (%number%)</translation>
-    </message>
-    <message>
-        <location filename="../../RenamingRules.ui" line="62"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; para el nombre del archivo original&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; para el número adicional&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="39"/>
@@ -655,33 +655,33 @@
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="338"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="404"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="406"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="348"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="414"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="349"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="417"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="452"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="456"/>
         <source>This is not a folder</source>
         <translation>Esto no es una carpeta</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="454"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="458"/>
         <source>The folder does exists</source>
         <translation>La carpeta no existe</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="456"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="460"/>
         <source>The folder is not readable</source>
         <translation>La carpeta no se puede leer</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="467"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="471"/>
         <source>Problem with name encoding</source>
         <translation>Problema con codificación de nombres</translation>
     </message>
@@ -690,9 +690,9 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="244"/>
-        <location filename="../../TransferThread.cpp" line="677"/>
-        <location filename="../../TransferThread.cpp" line="749"/>
-        <location filename="../../TransferThread.cpp" line="1319"/>
+        <location filename="../../TransferThread.cpp" line="679"/>
+        <location filename="../../TransferThread.cpp" line="751"/>
+        <location filename="../../TransferThread.cpp" line="1321"/>
         <source>File not found</source>
         <translation>Archivo no encontrado</translation>
     </message>
@@ -729,41 +729,41 @@
         <translation type="unfinished">%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="655"/>
+        <location filename="../../TransferThread.cpp" line="656"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished">%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="791"/>
+        <location filename="../../TransferThread.cpp" line="793"/>
         <source>The source doesn&apos;t exist</source>
         <translation type="unfinished">La fuente no existe</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1319"/>
-        <location filename="../../TransferThread.cpp" line="1337"/>
-        <location filename="../../TransferThread.cpp" line="1352"/>
+        <location filename="../../TransferThread.cpp" line="1321"/>
+        <location filename="../../TransferThread.cpp" line="1339"/>
+        <location filename="../../TransferThread.cpp" line="1354"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="715"/>
-        <location filename="../../TransferThread.cpp" line="830"/>
+        <location filename="../../TransferThread.cpp" line="717"/>
+        <location filename="../../TransferThread.cpp" line="832"/>
         <source>The source file doesn&apos;t exist</source>
         <translation type="unfinished">El archivo de origen no existe</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1138"/>
+        <location filename="../../TransferThread.cpp" line="1140"/>
         <source>The checksums do not match</source>
         <translation type="unfinished">Las sumas de comprobación no coinciden</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1243"/>
+        <location filename="../../TransferThread.cpp" line="1245"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
         <translation type="unfinished">Error interno: El tamaño transferido no coincide</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="755"/>
-        <location filename="../../TransferThread.cpp" line="842"/>
+        <location filename="../../TransferThread.cpp" line="757"/>
+        <location filename="../../TransferThread.cpp" line="844"/>
         <source>Unable to do the folder</source>
         <translation type="unfinished">Incapaz de hacer la carpeta</translation>
     </message>
@@ -773,17 +773,17 @@
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="836"/>
+        <location filename="../../TransferThread.cpp" line="838"/>
         <source>Another file exists at same place</source>
         <translation type="unfinished">Otro archivo existe en el mismo lugar</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1228"/>
+        <location filename="../../TransferThread.cpp" line="1230"/>
         <source>Internal error: The destination is not closed</source>
         <translation type="unfinished">Error interno: El destino no está cerrado</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1254"/>
+        <location filename="../../TransferThread.cpp" line="1256"/>
         <source>Internal error: The buffer is not empty</source>
         <translation type="unfinished">Error interno: El buffer no está vacío</translation>
     </message>
