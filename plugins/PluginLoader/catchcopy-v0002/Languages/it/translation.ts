@@ -13,5 +13,10 @@
         <source>All the dlls are importants</source>
         <translation>Tutte le dll sono necessarie</translation>
     </message>
+    <message>
+        <location filename="../../OptionsWidget.ui" line="34"/>
+        <source>Rregister for all users</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

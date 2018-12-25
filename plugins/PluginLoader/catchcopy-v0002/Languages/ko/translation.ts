@@ -13,5 +13,10 @@
         <source>All the dlls are importants</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+14"/>
+        <source>Rregister for all users</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

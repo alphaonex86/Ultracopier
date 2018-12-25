@@ -50,7 +50,7 @@ private:
     std::string pluginPath;
     std::vector<std::string> importantDll,secondDll;
     std::unordered_set<std::string> correctlyLoaded;
-    bool RegisterShellExtDll(const std::string &dllPath, const bool &bRegister,const bool &quiet);
+    bool RegisterShellExtDll(std::string dllPath, const bool &bRegister, const bool &quiet);
     bool checkExistsDll();
     bool dllChecked;
     bool needBeRegistred;

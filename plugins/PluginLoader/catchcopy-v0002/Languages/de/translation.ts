@@ -14,5 +14,10 @@
         <translatorcomment>fix english</translatorcomment>
         <translation>Alle DLLs sind wichtig (32Bit + 64Bit)</translation>
     </message>
+    <message>
+        <location filename="../../OptionsWidget.ui" line="34"/>
+        <source>Rregister for all users</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

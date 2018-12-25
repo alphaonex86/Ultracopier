@@ -323,7 +323,7 @@ void WindowsExplorerLoader::setResources(OptionInterface * options, const std::s
     }
 }
 
-bool WindowsExplorerLoader::RegisterShellExtDll(const std::string &dllPath, const bool &bRegister, const bool &quiet)
+bool WindowsExplorerLoader::RegisterShellExtDll(std::string dllPath, const bool &bRegister, const bool &quiet)
 {
     if(allUserIsImportant)
         stringreplaceOne(dllPath,".dll","all.dll");

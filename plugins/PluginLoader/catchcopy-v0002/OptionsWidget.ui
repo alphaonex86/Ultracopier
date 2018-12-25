@@ -31,7 +31,7 @@
    <item>
     <widget class="QCheckBox" name="allUserIsImportant">
      <property name="text">
-      <string>Rregister for all users</string>
+      <string>Register for all users</string>
      </property>
     </widget>
    </item>

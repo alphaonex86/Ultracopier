@@ -1560,6 +1560,11 @@ Cette version est compilée comme version : %1.</translation>
         <source>All the dlls are importants</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="34"/>
+        <source>Rregister for all users</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PluginInformation</name>
