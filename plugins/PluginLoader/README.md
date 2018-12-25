@@ -1,3 +1,3 @@
 # Plugin Loader
 
-TODO
+To load the plugin as file explorer plugin

@@ -1,3 +1,3 @@
 # PluginLoader: catchcopy-v0002
 
-TODO
+To load the dll as file explorer plugin (explorer.exe)

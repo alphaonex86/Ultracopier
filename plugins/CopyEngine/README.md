@@ -1,4 +1,3 @@
 # Copy Engine
 
-This plugin type allows to replace the default copy engine which is used for
-the actual file operations.
+This plugin type execute the copy/move to do

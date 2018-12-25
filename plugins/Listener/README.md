@@ -1,3 +1,3 @@
 # Listener
 
-TODO
+Listen and wait new copy to do
