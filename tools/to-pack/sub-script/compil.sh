@@ -13,7 +13,6 @@ function compil {
     STATIC=${10}
     CGMINER=${11}
     SUPERCOPIER=${12}
-    ILLEGAL=${13}
     ULTRACOPIER_VERSION_FINAL=${ULTRACOPIER_VERSION}
     cd ${BASE_PWD}
     rsync -artq --delete ${ULTRACOPIERSOURCESPATH}/ ${TEMP_PATH}/${TARGET}/
