@@ -15,7 +15,7 @@
     </message>
     <message>
         <location line="+14"/>
-        <source>Rregister for all users</source>
+        <source>Register for all users</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

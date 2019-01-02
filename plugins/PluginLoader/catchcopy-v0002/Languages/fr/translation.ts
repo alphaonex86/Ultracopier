@@ -15,8 +15,8 @@
     </message>
     <message>
         <location filename="../../OptionsWidget.ui" line="34"/>
-        <source>Rregister for all users</source>
-        <translation type="unfinished"></translation>
+        <source>Register for all users</source>
+        <translation>Enregistrer pour tous les utilisateurs</translation>
     </message>
 </context>
 </TS>

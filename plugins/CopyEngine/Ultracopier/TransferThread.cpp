@@ -642,27 +642,21 @@ bool TransferThread::checkAlwaysRename()
             if(num==1)
             {
                 if(firstRenamingRule.empty())
-                    newFileName=tr("%1 - copy").arg(QString::fromStdString(fileName)).toStdString();
+                    newFileName=tr("%name% - copy").toStdString();
                 else
-                {
                     newFileName=firstRenamingRule;
-                    stringreplaceAll(newFileName,"%name%",fileName);
-                    stringreplaceAll(newFileName,"%file%",fileName+"."+suffix);
-                }
             }
             else
             {
                 if(otherRenamingRule.empty())
-                    newFileName=tr("%1 - copy (%2)").arg(QString::fromStdString(fileName)).arg(num).toStdString();
+                    newFileName=tr("%name% - copy (%number%)").toStdString();
                 else
-                {
                     newFileName=otherRenamingRule;
-                    stringreplaceAll(newFileName,"%name%",fileName);
-                    stringreplaceAll(newFileName,"%number%",std::to_string(num));
-                    stringreplaceAll(newFileName,"%file%",fileName+"."+suffix);
-                }
+                stringreplaceAll(newFileName,"%number%",std::to_string(num));
             }
-            newDestination.setFile(newDestination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(newFileName+suffix));
+            stringreplaceAll(newFileName,"%name%",fileName);
+            stringreplaceAll(newFileName,"%suffix%",suffix);
+            newDestination.setFile(newDestination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(newFileName));
             num++;
         }
         while(newDestination.exists());

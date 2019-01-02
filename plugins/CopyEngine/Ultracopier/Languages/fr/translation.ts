@@ -611,13 +611,13 @@
         <location filename="../../RenamingRules.ui" line="48"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; for the original file full name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment> should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom de fichier d&apos;origine, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; pour le nom complet du fichier d&apos;origine&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="71"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; for the original file full name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom de fichier d&apos;origine, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; pour le nom complet du fichier d&apos;origine&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; pour le numéro supplémentaire&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="58"/>
@@ -974,7 +974,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="582"/>
         <source>Inode threads (unsafe &gt; 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Inode threads (non sécurisé&gt; 1)</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="589"/>

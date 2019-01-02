@@ -337,11 +337,7 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                             if(firstRenamingRule.empty())
                                 destinationSuffixPath=tr("%1 - copy").arg(destination.baseName()).toStdString();
                             else
-                            {
                                 destinationSuffixPath=firstRenamingRule;
-                                stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
-                                stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
-                            }
                         }
                         else
                         {
@@ -350,11 +346,10 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                             else
                             {
                                 destinationSuffixPath=otherRenamingRule;
-                                stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
-                                stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
                                 stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                             }
                         }
+                        stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
                         num++;
                         if(destination.completeSuffix().isEmpty())
                             destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
@@ -403,26 +398,19 @@ void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
                             if(num==1)
                             {
                                 if(firstRenamingRule.empty())
-                                    destinationSuffixPath=tr("%1 - copy").arg(destination.baseName()).toStdString();
+                                    destinationSuffixPath=tr("%name% - copy").toStdString();
                                 else
-                                {
                                     destinationSuffixPath=firstRenamingRule;
-                                    stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
-                                    stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
-                                }
                             }
                             else
                             {
                                 if(otherRenamingRule.empty())
-                                    destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num).toStdString();
+                                    destinationSuffixPath=tr("%name% - copy (%number%)").toStdString();
                                 else
-                                {
                                     destinationSuffixPath=otherRenamingRule;
-                                    stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
-                                    stringreplaceAll(destinationSuffixPath,"%file%",destination.fileName().toStdString());
-                                    stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
-                                }
+                                stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                             }
+                            stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
                             destinationInfo.setFile(destinationInfo.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
                             num++;
                         }

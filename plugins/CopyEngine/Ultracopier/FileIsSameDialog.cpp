@@ -108,32 +108,26 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
         if(num==1)
         {
             if(firstRenamingRule.empty())
-                newFileName=tr("%1 - copy").arg(fileName);
+                newFileName=tr("%name% - copy");
             else
-            {
                 newFileName=QString::fromStdString(firstRenamingRule);
-                newFileName.replace(QStringLiteral("%name%"),fileName);
-                newFileName.replace(QStringLiteral("%file%"),fileName+"."+suffix);
-            }
         }
         else
         {
             if(otherRenamingRule.empty())
-                newFileName=tr("%1 - copy (%2)").arg(fileName).arg(num);
+                newFileName=tr("%name% - copy (%number%)");
             else
-            {
                 newFileName=QString::fromStdString(otherRenamingRule);
-                newFileName.replace(QStringLiteral("%name%"),fileName);
-                newFileName.replace(QStringLiteral("%file%"),fileName+"."+suffix);
-                newFileName.replace(QStringLiteral("%number%"),QString::number(num));
-            }
+            newFileName.replace(QStringLiteral("%number%"),QString::number(num));
         }
+        newFileName.replace(QStringLiteral("%name%"),fileName);
+        newFileName.replace(QStringLiteral("%suffix%"),suffix);
         destination=absolutePath+CURRENTSEPARATOR+newFileName+suffix;
         destinationInfo.setFile(destination);
         num++;
     }
     while(destinationInfo.exists());
-    ui->lineEditNewName->setText(newFileName+suffix);
+    ui->lineEditNewName->setText(newFileName);
 }
 
 void FileIsSameDialog::on_Rename_clicked()
