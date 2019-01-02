@@ -20,83 +20,83 @@ source ${BASE_PWD}/sub-script/assemble.sh
 
 if [ ${COMPIL_DEBUGREAL} -eq 1 ]
 then
-        compil "ultracopier-debug-real-windows-x86_64" 1 1 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0 0
+        compil "ultracopier-debug-real-windows-x86_64" 1 1 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0
 	assemble "ultracopier-debug-real" "${ARCHITECTURE}" 1 1 0 0 0 0 0
 fi
 if [ ${COMPIL_NORMAL} -eq 1 ]
 then
-	#compil "supercopier-debug-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 1 0
+	#compil "supercopier-debug-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 1
 	#assemble "supercopier-debug" "${ARCHITECTURE}" 1 0 0 0 0 0 1
-	#compil "supercopier-portable-windows-x86_64" 0 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 0 1 0
+	#compil "supercopier-portable-windows-x86_64" 0 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 0 1
 	#assemble "supercopier-portable" "${ARCHITECTURE}" 0 0 1 0 0 0 1
-	compil "supercopier-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 1 0
+	compil "supercopier-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 1
 	assemble "supercopier" "${ARCHITECTURE}" 0 0 0 0 0 0 1
 
-	#compil "ultracopier-debug-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0 0
+	#compil "ultracopier-debug-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0
 	#assemble "ultracopier-debug" "${ARCHITECTURE}" 1 0 0 0 0 0 0
-	#compil "ultracopier-debug-portable-windows-x86_64" 1 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0 0
+	#compil "ultracopier-debug-portable-windows-x86_64" 1 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0
 	#assemble "ultracopier-debug-portable" "${ARCHITECTURE}" 1 0 1 0 0 0 0
-	#compil "ultracopier-portable-windows-x86_64" 0 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0 0
+	#compil "ultracopier-portable-windows-x86_64" 0 0 1 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0
 	#assemble "ultracopier-portable" "${ARCHITECTURE}" 0 0 1 0 0 0 0
-	compil "ultracopier-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0 0
+	compil "ultracopier-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 0 0 0 0
 	assemble "ultracopier" "${ARCHITECTURE}" 0 0 0 0 0 0 0
-	#compil "ultracopier-debug-static-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0 0
+	#compil "ultracopier-debug-static-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0
 	#assemble "ultracopier-debug-static" "${ARCHITECTURE}" 1 0 0 0 1 0 0
-	#compil "ultracopier-debug-portable-static-windows-x86_64" 1 0 1 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0 0
+	#compil "ultracopier-debug-portable-static-windows-x86_64" 1 0 1 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0
 	#assemble "ultracopier-debug-portable-static" "${ARCHITECTURE}" 1 0 1 0 1 0 0
-	#compil "ultracopier-portable-static-windows-x86_64" 0 0 1 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0 0
+	#compil "ultracopier-portable-static-windows-x86_64" 0 0 1 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0
 	#assemble "ultracopier-portable-static" "${ARCHITECTURE}" 0 0 1 0 1 0 0
-	#compil "ultracopier-static-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0 0
+	#compil "ultracopier-static-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 0 1 0 0
 	#assemble "ultracopier-static" "${ARCHITECTURE}" 0 0 0 0 1 0 0
 fi
 
 if [ ${COMPIL_ULTIMATE} -eq 1 ]
 then
-	compil "supercopier-ultimate-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 0 1 0
+	compil "supercopier-ultimate-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 0 1
 	assemble "supercopier-ultimate" "${ARCHITECTURE}" 0 0 0 1 0 0 1
-	compil "supercopier-ultimate-cgminer-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 1 1 0
+	compil "supercopier-ultimate-cgminer-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 1 1
 	assemble "supercopier-ultimate-cgminer" "${ARCHITECTURE}" 0 0 0 1 0 1 1
-	#compil "supercopier-ultimate-cgminer-static-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 1 1 1 0
+	#compil "supercopier-ultimate-cgminer-static-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 1 1 1
 	#assemble "supercopier-ultimate-cgminer-static" "${ARCHITECTURE}" 0 0 0 1 1 1 1
 
-	compil "ultracopier-ultimate-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 0 0 0
+	compil "ultracopier-ultimate-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 0 0
 	assemble "ultracopier-ultimate" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	compil "ultracopier-ultimate-cgminer-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 1 0 0
+	compil "ultracopier-ultimate-cgminer-windows-x86_64" 0 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 1 0
 	assemble "ultracopier-ultimate-cgminer" "${ARCHITECTURE}" 0 0 0 1 0 1 0
-	#compil "ultracopier-debug-ultimate-cgminer-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 1 0 0
+	#compil "ultracopier-debug-ultimate-cgminer-windows-x86_64" 1 0 0 0 64 "-mtune=generic -march=nocona" 1 0 0 1 0
 	#assemble "ultracopier-debug-ultimate-cgminer" "${ARCHITECTURE}" 1 0 0 1 0 1 0
-	#compil "ultracopier-ultimate-sse2-windows-x86_64" 0 0 0 0 64 "-msse -msse2" 1 0 0 0 0 0
+	#compil "ultracopier-ultimate-sse2-windows-x86_64" 0 0 0 0 64 "-msse -msse2" 1 0 0 0 0
 	#assemble "ultracopier-ultimate-sse2" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	#compil "ultracopier-ultimate-sse3-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3" 1 0 0 0 0 0
+	#compil "ultracopier-ultimate-sse3-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3" 1 0 0 0 0
 	#assemble "ultracopier-ultimate-sse3" "${ARCHITECTURE}" 0 0 0 1 0 0 0
 
-    compil "ultracopier-ultimate-core2-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0 0
+    compil "ultracopier-ultimate-core2-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0
     assemble "ultracopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-    compil "ultracopier-ultimate-core-i-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0 0
+    compil "ultracopier-ultimate-core-i-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 0
     assemble "ultracopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-    compil "ultracopier-ultimate-k8-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -march=k8" 1 0 0 0 0 0
+    compil "ultracopier-ultimate-k8-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -march=k8" 1 0 0 0 0
     assemble "ultracopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1 0 0 0
 
-    compil "supercopier-ultimate-core2-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 1 0
+    compil "supercopier-ultimate-core2-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 1
     assemble "supercopier-ultimate-core2" "${ARCHITECTURE}" 0 0 0 1 0 0 1
-    compil "supercopier-ultimate-core-i-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 1 0
+    compil "supercopier-ultimate-core-i-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -msse3 -march=core2" 1 0 0 0 1
     assemble "supercopier-ultimate-core-i" "${ARCHITECTURE}" 0 0 0 1 0 0 1
-    compil "supercopier-ultimate-k8-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -march=k8" 1 0 0 0 1 0
+    compil "supercopier-ultimate-k8-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -march=k8" 1 0 0 0 1
     assemble "supercopier-ultimate-k8" "${ARCHITECTURE}" 0 0 0 1 0 0 1
 
-	#compil "ultracopier-ultimate-barcelona-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -march=k8" 1 0 0 0 0 0
+	#compil "ultracopier-ultimate-barcelona-windows-x86_64" 0 0 0 0 64 "-msse -msse2 -march=k8" 1 0 0 0 0
 	#assemble "ultracopier-ultimate-barcelona" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	#compil "ultracopier-ultimate-bobcat-windows-x86_64" 0 0 0 0 64 "-march=amdfam10 -mno-3dnow -mcx16 -mpopcnt -mssse3 -mmmx" 1 0 0 0 0 0
+	#compil "ultracopier-ultimate-bobcat-windows-x86_64" 0 0 0 0 64 "-march=amdfam10 -mno-3dnow -mcx16 -mpopcnt -mssse3 -mmmx" 1 0 0 0 0
 	#assemble "ultracopier-ultimate-bobcat" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	#compil "ultracopier-ultimate-llano-windows-x86_64" 0 0 0 0 64 "-march=amdfam10 -mcx16 -mpopcnt" 1 0 0 0 0 0
+	#compil "ultracopier-ultimate-llano-windows-x86_64" 0 0 0 0 64 "-march=amdfam10 -mcx16 -mpopcnt" 1 0 0 0 0
 	#assemble "ultracopier-ultimate-llano" "${ARCHITECTURE}" 0 0 0 1 0 0 0
-	#compil "ultracopier-ultimate-bulldozer-windows-x86_64" 0 0 0 0 64 "-march=amdfam10 -mcx16 -msahf -maes -mpclmul -mpopcnt -mabm" 1 0 0 0 0 0
+	#compil "ultracopier-ultimate-bulldozer-windows-x86_64" 0 0 0 0 64 "-march=amdfam10 -mcx16 -msahf -maes -mpclmul -mpopcnt -mabm" 1 0 0 0 0
 	#assemble "ultracopier-ultimate-bulldozer" "${ARCHITECTURE}" 0 0 0 1 0 0 0
 fi
 
 if [ ${COMPIL_PLUGIN} -eq 1 ]
 then
-	compil "ultracopier-windows-x86_64-for-plugins" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 1 0 0 0
+	compil "ultracopier-windows-x86_64-for-plugins" 0 0 0 0 64 "-mtune=generic -march=nocona" 0 1 0 0
 	#compil "ultracopier-debug-windows-x86_64-for-plugins" 1 0 0 0 64 "-mtune=generic -march=nocona" 0 1 0 0 0
 
 	TARGET="ultracopier"
