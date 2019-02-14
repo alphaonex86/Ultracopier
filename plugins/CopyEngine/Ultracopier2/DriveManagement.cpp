@@ -48,7 +48,7 @@ std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
     return std::string();
 }
 
-QByteArray DriveManagement::getDriveType(const std::string &drive) const
+std::string DriveManagement::getDriveType(const std::string &drive) const
 {
     int index=vectorindexOf(mountSysPoint,drive);
     if(index!=-1)

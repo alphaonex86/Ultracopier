@@ -21,6 +21,7 @@ WriteThread::WriteThread()
     buffer                          = false;
     needRemoveTheFile               = false;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
+    blockArraySize                  = 0;
 }
 
 WriteThread::~WriteThread()
@@ -230,7 +231,7 @@ bool WriteThread::internalOpen()
     }
 }
 
-void WriteThread::open(const QFileInfo &file,const uint64_t &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential)
+void WriteThread::open(const QFileInfo &file,const uint64_t &startSize)
 {
     if(this->file.isOpen())
     {
@@ -509,7 +510,6 @@ void WriteThread::flushAndSeekToZero()
 
 void WriteThread::checkSum()
 {
-    //QByteArray blockArray;
     QCryptographicHash hash(QCryptographicHash::Sha1);
     endDetected=false;
     lastGoodPosition=0;
@@ -594,7 +594,7 @@ void WriteThread::setDeletePartiallyTransferredFiles(const bool &deletePartially
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
 }
 
-bool WriteThread::write(const QByteArray &data)
+bool WriteThread::write(const void * const data,const size_t &size)
 {
     if(stopIt)
         return false;

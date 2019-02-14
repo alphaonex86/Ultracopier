@@ -32,13 +32,6 @@ enum FileErrorAction
     FileError_PutToEndOfTheList=5
 };
 
-enum TransferAlgorithm
-{
-    TransferAlgorithm_Automatic=0,
-    TransferAlgorithm_Sequential=1,
-    TransferAlgorithm_Parallel=2
-};
-
 /// \brief to have the transfer status
 enum TransferStat
 {
@@ -46,7 +39,6 @@ enum TransferStat
     TransferStat_PreOperation=1,
     TransferStat_WaitForTheTransfer=2,
     TransferStat_Transfer=3,
-    TransferStat_Checksum=4,
     TransferStat_PostTransfer=5,
     TransferStat_PostOperation=6
 };

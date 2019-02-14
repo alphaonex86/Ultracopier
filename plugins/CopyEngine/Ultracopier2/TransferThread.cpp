@@ -84,8 +84,6 @@ void TransferThread::run()
     connect(&readThread,&ReadThread::closed,                    this,					&TransferThread::readIsClosed,          Qt::QueuedConnection);
     connect(&writeThread,&WriteThread::closed,                  this,					&TransferThread::writeIsClosed,         Qt::QueuedConnection);
     connect(&writeThread,&WriteThread::reopened,                this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::checksumFinish,            this,					&TransferThread::readChecksumFinish,	Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::checksumFinish,          this,					&TransferThread::writeChecksumFinish,	Qt::QueuedConnection);
     //error management
     connect(&readThread,&ReadThread::isSeekToZeroAndWait,       this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection);
     connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,this,	&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
@@ -169,7 +167,6 @@ bool TransferThread::setFiles(const QFileInfo& source, const int64_t &size, cons
     canBeMovedDirectlyVariable      = false;
     canBeCopiedDirectlyVariable     = false;
     fileContentError                = false;
-    real_doChecksum                 = false;
     writeError                      = false;
     writeError_source_seeked        = false;
     writeError_destination_reopened = false;
@@ -378,22 +375,6 @@ void TransferThread::preOperation()
 void TransferThread::tryOpen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start source and destination: "+source.absoluteFilePath().toStdString()+" and "+destination.absoluteFilePath().toStdString());
-    TransferAlgorithm transferAlgorithm=this->transferAlgorithm;
-    if(transferAlgorithm==TransferAlgorithm_Automatic)
-    {
-        #ifdef Q_OS_LINUX
-        if(driveManagement.isSameDrive(destination.absoluteFilePath().toStdString(),source.absoluteFilePath().toStdString()))
-        {
-            const QByteArray &type=driveManagement.getDriveType(driveManagement.getDrive(source.absoluteFilePath().toStdString()));
-            if(type=="nfs" || type=="smb")
-                transferAlgorithm=TransferAlgorithm_Parallel;
-            else
-                transferAlgorithm=TransferAlgorithm_Sequential;
-        }
-        else
-        #endif
-            transferAlgorithm=TransferAlgorithm_Parallel;
-    }
     if(!readIsOpenVariable)
     {
         if(!readIsOpeningVariable)
@@ -417,15 +398,8 @@ void TransferThread::tryOpen()
     {
         if(!writeIsOpeningVariable)
         {
-            if(transferAlgorithm==TransferAlgorithm_Sequential)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Sequential");
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
             writeError=false;
-            if(transferAlgorithm==TransferAlgorithm_Sequential)
-                writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),sequentialBuffer,true);
-            else
-                writeThread.open(destination.absoluteFilePath(),size,osBuffer && (!osBufferLimited || (osBufferLimited && size<osBufferLimit)),parallelBuffer,false);
+            writeThread.open(destination.absoluteFilePath(),size);
             writeIsOpeningVariable=true;
         }
         else
@@ -997,24 +971,11 @@ void TransferThread::readIsFinish()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     readIsFinishVariable=true;
     canStartTransfer=false;
-    //check here if need start checksuming or not
-    real_doChecksum=doChecksum && (!checksumOnlyOnError || fileContentError) && (!canBeMovedDirectlyVariable && !canBeCopiedDirectlyVariable);
-    if(real_doChecksum)
-    {
-        readIsFinishVariable=false;
-        transfer_stat=TransferStat_Checksum;
-        sourceChecksum=QByteArray();
-        destinationChecksum=QByteArray();
-        readThread.startCheckSum();
-    }
+    transfer_stat=TransferStat_PostTransfer;
+    if(!needSkip || (canBeCopiedDirectlyVariable || canBeMovedDirectlyVariable))//if skip, stop call, then readIsClosed() already call
+        readThread.postOperation();
     else
-    {
-        transfer_stat=TransferStat_PostTransfer;
-        if(!needSkip || (canBeCopiedDirectlyVariable || canBeMovedDirectlyVariable))//if skip, stop call, then readIsClosed() already call
-            readThread.postOperation();
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
-    }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
     emit pushStat(transfer_stat,transferId);
 }
 
@@ -1027,60 +988,10 @@ void TransferThread::writeIsFinish()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     writeIsFinishVariable=true;
-    //check here if need start checksuming or not
-    if(real_doChecksum)
-    {
-        writeIsFinishVariable=false;
-        transfer_stat=TransferStat_Checksum;
-        writeThread.startCheckSum();
-    }
-    else
-    {
-        if(!needSkip || (canBeCopiedDirectlyVariable || canBeMovedDirectlyVariable))//if skip, stop call, then writeIsClosed() already call
-            writeThread.postOperation();
-        else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
-    }
-}
-
-void TransferThread::readChecksumFinish(const QByteArray& checksum)
-{
-    sourceChecksum=checksum;
-    compareChecksum();
-}
-
-void TransferThread::writeChecksumFinish(const QByteArray& checksum)
-{
-    destinationChecksum=checksum;
-    compareChecksum();
-}
-
-void TransferThread::compareChecksum()
-{
-    if(sourceChecksum.size()==0)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] the checksum of source is missing");
-        return;
-    }
-    if(destinationChecksum.size()==0)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] the checksum of destination is missing");
-        return;
-    }
-    if(sourceChecksum==destinationChecksum)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] the checksum match");
-        readThread.postOperation();
+    if(!needSkip || (canBeCopiedDirectlyVariable || canBeMovedDirectlyVariable))//if skip, stop call, then writeIsClosed() already call
         writeThread.postOperation();
-        transfer_stat=TransferStat_PostTransfer;
-        emit pushStat(transfer_stat,transferId);
-    }
     else
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] the checksum not match"));
-        //emit error here, and wait to resume
-        emit errorOnFile(destination,tr("The checksums do not match").toStdString());
-    }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
 }
 
 void TransferThread::readIsClosed()
@@ -1392,7 +1303,7 @@ void TransferThread::retryAfterError()
         return;
     }
     //data streaming error
-    if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer && transfer_stat!=TransferStat_Checksum)
+    if(transfer_stat!=TransferStat_PostOperation && transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] is not in right stat, source: ")+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString()+", stat: "+std::to_string(transfer_stat));
         return;
@@ -1422,26 +1333,6 @@ void TransferThread::retryAfterError()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retry the copy directly");
         tryCopyDirectly();
-        return;
-    }
-    if(transfer_stat==TransferStat_Checksum)
-    {
-        if(writeError)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start and resume the write error");
-            writeThread.reopen();
-        }
-        else if(readError)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start and resume the read error");
-            readThread.reopen();
-        }
-        else //only checksum difference
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] retry all the transfer");
-            canStartTransfer=true;
-            ifCanStartTransfer();
-        }
         return;
     }
     //can have error on source and destination at the same time
@@ -1474,11 +1365,6 @@ void TransferThread::writeThreadIsReopened()
         return;
     }
     writeError_destination_reopened=true;
-    if(transfer_stat==TransferStat_Checksum)
-    {
-        writeThread.startCheckSum();
-        return;
-    }
     if(writeError_source_seeked && writeError_destination_reopened)
         resumeTransferAfterWriteError();
 }
@@ -1557,45 +1443,6 @@ void TransferThread::writeIsStopped()
         return;
     }
     writeIsFinish();
-}
-
-bool TransferThread::setParallelBuffer(const int &parallelBuffer)
-{
-    if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] wrong parallelBuffer: "+std::to_string(parallelBuffer));
-        return false;
-    }
-    else
-    {
-        this->parallelBuffer=parallelBuffer;
-        return true;
-    }
-}
-
-bool TransferThread::setSequentialBuffer(const int &sequentialBuffer)
-{
-    if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] wrong sequentialBuffer: "+std::to_string(sequentialBuffer));
-        return false;
-    }
-    else
-    {
-        this->sequentialBuffer=sequentialBuffer;
-        return true;
-    }
-}
-
-void TransferThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm)
-{
-    this->transferAlgorithm=transferAlgorithm;
-    if(transferAlgorithm==TransferAlgorithm_Sequential)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Sequential");
-    else if(transferAlgorithm==TransferAlgorithm_Automatic)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Automatic");
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transferAlgorithm==TransferAlgorithm_Parallel");
 }
 
 //fonction to read the file date time
@@ -1803,27 +1650,6 @@ void TransferThread::skip()
             emit internalStartPostOperation();
         }
         break;
-    case TransferStat_Checksum:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        //needRemove=true;never put that's here, can product destruction of the file
-        needSkip=true;
-        if(remainFileOpen())
-        {
-            if(remainSourceOpen())
-                readThread.stop();
-            if(remainDestinationOpen())
-                writeThread.stop();
-        }
-        else // wait nothing, just quit
-        {
-            transfer_stat=TransferStat_PostOperation;
-            emit internalStartPostOperation();
-        }
-        break;
     case TransferStat_PostOperation:
         if(needSkip)
         {
@@ -1850,8 +1676,6 @@ int64_t TransferThread::copiedSize()
     case TransferStat_PostOperation:
     case TransferStat_PostTransfer:
         return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
-    case TransferStat_Checksum:
-        return transferSize;
     default:
         return 0;
     }
@@ -1870,11 +1694,6 @@ void TransferThread::setRsync(const bool rsync)
     this->rsync=rsync;
 }
 #endif
-
-void TransferThread::set_osBufferLimit(const unsigned int &osBufferLimit)
-{
-    this->osBufferLimit=osBufferLimit;
-}
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
 //to set the id
@@ -1901,9 +1720,6 @@ char TransferThread::readingLetter() const
     case ReadThread::WaitWritePipe:
         return 'W';
     break;
-    case ReadThread::Checksum:
-        return 'S';
-    break;
     default:
         return '?';
     }
@@ -1928,9 +1744,6 @@ char TransferThread::writingLetter() const
     case WriteThread::Read:
         return 'R';
     break;
-    case WriteThread::Checksum:
-        return 'S';
-    break;
     default:
         return '?';
     }
@@ -1938,39 +1751,12 @@ char TransferThread::writingLetter() const
 
 #endif
 
-void TransferThread::set_doChecksum(bool doChecksum)
-{
-    this->doChecksum=doChecksum;
-}
-
-void TransferThread::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
-{
-    this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
-}
-
-void TransferThread::set_checksumOnlyOnError(bool checksumOnlyOnError)
-{
-    this->checksumOnlyOnError=checksumOnlyOnError;
-}
-
-void TransferThread::set_osBuffer(bool osBuffer)
-{
-    this->osBuffer=osBuffer;
-}
-
-void TransferThread::set_osBufferLimited(bool osBufferLimited)
-{
-    this->osBufferLimited=osBufferLimited;
-}
-
-//not copied size, because that's count to the checksum, ...
+//not copied size, ...
 uint64_t TransferThread::realByteTransfered() const
 {
     switch(transfer_stat)
     {
     case TransferStat_Transfer:
-    case TransferStat_Checksum:
-        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_PostTransfer:
         return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     case TransferStat_PostOperation:
@@ -1991,10 +1777,6 @@ std::pair<uint64_t, uint64_t> TransferThread::progression() const
         returnVar.second=writeThread.getLastGoodPosition();
         /*if(returnVar.first<returnVar.second)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
-    break;
-    case TransferStat_Checksum:
-        returnVar.first=readThread.getLastGoodPosition();
-        returnVar.second=writeThread.getLastGoodPosition();
     break;
     case TransferStat_PostTransfer:
         returnVar.first=transferSize;

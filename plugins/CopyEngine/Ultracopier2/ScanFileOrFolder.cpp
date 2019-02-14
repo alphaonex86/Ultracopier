@@ -1,7 +1,6 @@
 #include "ScanFileOrFolder.h"
 #include "TransferThread.h"
 #include <QtGlobal>
-#include <QDateTime>
 #include <regex>
 #include "../../../cpp11addition.h"
 
@@ -111,6 +110,7 @@ std::vector<std::string> ScanFileOrFolder::parseWildcardSources(const std::vecto
                         QFileInfo info(QString::fromStdString(stringimplode(recomposedSource.at(index_recomposedSource),text_slash)));
                         if(info.isDir() && !info.isSymLink())
                         {
+                            replace with C
                             QDir folder(info.absoluteFilePath());
                             QFileInfoList fileFile=folder.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//QStringList() << toResolv
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list the folder: "+info.absoluteFilePath().toStdString()+", with the wildcard: "+toParseFirst);
@@ -297,7 +297,7 @@ bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
     return false;
 }
 
-void ScanFileOrFolder::listFolder(QFileInfo source,QFileInfo destination)
+void ScanFileOrFolder::listFolder(std::string source,std::string destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath().toStdString()+
                              " ("+std::to_string(source.isSymLink())+"), destination: "+destination.absoluteFilePath().toStdString()+

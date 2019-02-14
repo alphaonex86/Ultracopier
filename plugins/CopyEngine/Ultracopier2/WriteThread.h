@@ -7,13 +7,11 @@
 #define WRITETHREAD_H
 
 #include <QThread>
-#include <QByteArray>
 #include <QString>
 #include <QCryptographicHash>
 
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
-#include "AvancedQFile.h"
 
 /// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QObject
@@ -26,13 +24,13 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const QFileInfo &file,const uint64_t &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential);
+    void open(const QFileInfo &file, const uint64_t &startSize);
     /// \brief to return the error string
     std::string errorString() const;
     /// \brief to stop all
     void stop();
     /// \brief to write data
-    bool write(const QByteArray &data);
+    bool write(const void * const data, const size_t &size);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief to set the id
     void setId(int id);
@@ -43,8 +41,7 @@ public:
         InodeOperation=1,
         Write=2,
         Close=3,
-        Read=5,
-        Checksum=6
+        Read=5
     };
     WriteStat stat;
     #endif
@@ -54,8 +51,6 @@ public:
     void fakeWriteIsStarted();
     /// \brief do the fake writeIsStopped
     void fakeWriteIsStopped();
-    /// do the checksum
-    void startCheckSum();
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
     /// \brief get the last good position
@@ -74,8 +69,6 @@ public slots:
     void reopen();
     /// \brief flush and seek to zero
     void flushAndSeekToZero();
-    /// do the checksum
-    void checkSum();
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     /// \brief executed at regular interval to do a speed throling
     void timeOfTheBlockCopyFinished();
@@ -89,10 +82,8 @@ signals:
     void writeIsStopped() const;
     void flushedAndSeekedToZero() const;
     void closed() const;
-    void checksumFinish(const QByteArray&) const;
     //internal signals
     void internalStartOpen() const;
-    void internalStartChecksum() const;
     void internalStartReopen() const;
     void internalStartWrite() const;
     void internalStartClose() const;
@@ -102,15 +93,13 @@ signals:
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 private:
     std::string             errorString_internal;
-    AvancedQFile		file;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
-    volatile int		blockSize;//only used in checksum
-    int                 numberOfBlock;
     static QMultiHash<QString,WriteThread *> writeFileList;
     volatile bool       writeFullBlocked;
     uint64_t             lastGoodPosition;
-    QByteArray          blockArray;		///< temp data for block writing, the data
+    char          blockArray[1024*1024];		///< temp data for block writing, the data
+    size_t blockArraySize;
     int64_t              bytesWriten;		///< temp data for block writing, the bytes writen
     int                 id;
     volatile bool       endDetected;

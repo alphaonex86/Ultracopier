@@ -101,9 +101,6 @@ public:
     std::pair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
     Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine() const;
 
-    void set_doChecksum(bool doChecksum);
-    void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
-    void set_checksumOnlyOnError(bool checksumOnlyOnError);
     void set_osBuffer(bool osBuffer);
     void set_osBufferLimited(bool osBufferLimited);
     void autoStartIfNeeded();
@@ -231,11 +228,6 @@ private:
     int                 maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
     FolderExistsAction	alwaysDoThisActionForFolderExists;
     bool				checkDestinationFolderExists;
-    bool				doChecksum;
-    bool				checksumIgnoreIfImpossible;
-    bool				checksumOnlyOnError;
-    bool				osBuffer;
-    bool				osBufferLimited;
     unsigned int        parallelizeIfSmallerThan;
     bool                moveTheWholeFolder;
     bool                followTheStrictOrder;

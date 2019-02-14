@@ -70,9 +70,8 @@ private:
     std::vector<std::string>         sources;
     std::string             destination;
     volatile bool		stopIt;
-    void                listFolder(QFileInfo source, QFileInfo destination);
-    bool                isBlackListed(const QFileInfo &destination);
-    QFileInfo           resolvDestination(const QFileInfo &destination);
+    void                listFolder(std::string source, std::string destination);
+    QFileInfo           resolvDestination(const std::string &destination);
     volatile bool		stopped;
     QSemaphore          waitOneAction;
     FolderExistsAction	folderExistsAction;

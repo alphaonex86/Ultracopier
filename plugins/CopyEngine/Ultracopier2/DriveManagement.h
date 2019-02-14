@@ -18,7 +18,7 @@ public:
     bool isSameDrive(const std::string &file1, const std::string &file2) const;
     /// \brief get drive of an file or folder
     std::string getDrive(const std::string &fileOrFolder) const;
-    QByteArray getDriveType(const std::string &drive) const;
+    std::string getDriveType(const std::string &drive) const;
     void tryUpdate();
 protected:
     std::vector<std::string>		mountSysPoint;

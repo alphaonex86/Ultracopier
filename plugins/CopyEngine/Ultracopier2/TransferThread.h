@@ -132,12 +132,8 @@ public slots:
     void setRsync(const bool rsync);
     #endif
 
-    void set_osBufferLimit(const unsigned int &osBufferLimit);
     void setRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule);
 
-    bool setParallelBuffer(const int &parallelBuffer);
-    bool setSequentialBuffer(const int &sequentialBuffer);
-    void setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void set_updateMount();
@@ -152,8 +148,8 @@ private slots:
     void postOperation();
     void getWriteError();
     void getReadError();
-    void readChecksumFinish(const QByteArray&);
-    void writeChecksumFinish(const QByteArray&);
+    void readChecksumFinish(const void * const data,const size_t &size);
+    void writeChecksumFinish(const void * const data,const size_t &size);
     void compareChecksum();
     //void syncAfterErrorAndReadFinish();
     void readThreadIsSeekToZeroAndWait();
@@ -196,7 +192,6 @@ private:
     bool			writeIsClosedVariable;
     bool			canBeMovedDirectlyVariable,canBeCopiedDirectlyVariable;
     DriveManagement driveManagement;
-    QByteArray		sourceChecksum,destinationChecksum;
     volatile bool	stopIt;
     volatile bool	canStartTransfer;
     bool			retry;
@@ -208,13 +203,7 @@ private:
     bool			needSkip,needRemove;
     QDateTime		minTime;
     int             id;
-    bool			doChecksum,real_doChecksum;
-    bool			checksumIgnoreIfImpossible;
-    bool			checksumOnlyOnError;
     bool            deletePartiallyTransferredFiles;
-    bool			osBuffer;
-    bool			osBufferLimited;
-    unsigned int	osBufferLimit;
     std::string			firstRenamingRule;
     std::string			otherRenamingRule;
     //error management
@@ -223,11 +212,8 @@ private:
     bool            renameTheOriginalDestination;
     bool			fileContentError;
     bool            doTheDateTransfer;
-    int             parallelBuffer;
-    int             sequentialBuffer;
     int             parallelizeIfSmallerThan;
     std::regex renameRegex;
-    TransferAlgorithm transferAlgorithm;
     #ifdef Q_OS_UNIX
             utimbuf butime;
     #else

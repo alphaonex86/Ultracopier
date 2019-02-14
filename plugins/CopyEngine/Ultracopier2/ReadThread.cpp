@@ -32,10 +32,9 @@ void ReadThread::run()
     connect(this,&ReadThread::internalStartRead,		this,&ReadThread::internalRead,         Qt::QueuedConnection);
     connect(this,&ReadThread::internalStartClose,		this,&ReadThread::internalCloseSlot,	Qt::QueuedConnection);
     connect(this,&ReadThread::checkIfIsWait,            this,&ReadThread::isInWait,             Qt::QueuedConnection);
-    connect(this,&ReadThread::internalStartChecksum,	this,&ReadThread::checkSum,             Qt::QueuedConnection);
 }
 
-void ReadThread::open(const QFileInfo &file, const Ultracopier::CopyMode &mode)
+void ReadThread::open(const std::string &file, const Ultracopier::CopyMode &mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] open source: "+file.absoluteFilePath().toStdString());
     if(this->file.isOpen())
@@ -92,78 +91,6 @@ int64_t ReadThread::size() const
 void ReadThread::postOperation()
 {
     emit internalStartClose();
-}
-
-void ReadThread::checkSum()
-{
-    QByteArray blockArray;
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    isInReadLoop=true;
-    lastGoodPosition=0;
-    seek(0);
-    int sizeReaden=0;
-    do
-    {
-        //read one block
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Read;
-        #endif
-        blockArray=file.read(blockSize);
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Idle;
-        #endif
-
-        //can be smaller than min block size to do correct speed limitation
-        if(blockArray.size()>ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
-        {
-            errorString_internal=tr("Internal error reading the source file:block size out of range").toStdString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Internal error reading the source file:block size out of range");
-            emit error();
-            isInReadLoop=false;
-            return;
-        }
-        if(file.error()!=QFile::NoError)
-        {
-            errorString_internal=tr("Unable to read the source file: ").toStdString()+file.errorString().toStdString()+" ("+std::to_string(file.error())+")";
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("file.error()!=QFile::NoError: %1, error: ").arg(QString::number(file.error())).toStdString()+errorString_internal);
-            emit error();
-            isInReadLoop=false;
-            return;
-        }
-        sizeReaden=blockArray.size();
-        if(sizeReaden>0)
-        {
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Checksum;
-            #endif
-            hash.addData(blockArray);
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Idle;
-            #endif
-
-            if(stopIt)
-                break;
-
-            lastGoodPosition+=blockArray.size();
-        }
-    }
-    while(sizeReaden>0 && !stopIt);
-    if(lastGoodPosition>file.size())
-    {
-        errorString_internal=tr("File truncated during the read, possible data change").toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())).toStdString());
-        emit error();
-        isInReadLoop=false;
-        return;
-    }
-    isInReadLoop=false;
-    if(stopIt)
-    {
-        stopIt=false;
-        return;
-    }
-    emit checksumFinish(hash.result());
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
 
 bool ReadThread::internalOpenSlot()
@@ -283,7 +210,6 @@ void ReadThread::internalRead()
         isInReadLoop=false;
         return;
     }
-    QByteArray blockArray;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start the copy");
     emit readIsStarted();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -447,12 +373,6 @@ void ReadThread::fakeReadIsStarted()
 void ReadThread::fakeReadIsStopped()
 {
     emit readIsStopped();
-}
-
-/// do the checksum
-void ReadThread::startCheckSum()
-{
-    emit internalStartChecksum();
 }
 
 int64_t ReadThread::getLastGoodPosition() const
