@@ -274,21 +274,21 @@
     <name>FileExistsDialog</name>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="137"/>
-        <source>%1 - copy</source>
+        <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="148"/>
-        <source>%1 - copy (%2)</source>
+        <location filename="../../FileExistsDialog.cpp" line="144"/>
+        <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="234"/>
+        <location filename="../../FileExistsDialog.cpp" line="228"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="234"/>
+        <location filename="../../FileExistsDialog.cpp" line="228"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,21 +297,21 @@
     <name>FileIsSameDialog</name>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="111"/>
-        <source>%1 - copy</source>
+        <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="122"/>
-        <source>%1 - copy (%2)</source>
+        <location filename="../../FileIsSameDialog.cpp" line="118"/>
+        <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="190"/>
+        <location filename="../../FileIsSameDialog.cpp" line="184"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="190"/>
+        <location filename="../../FileIsSameDialog.cpp" line="184"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -464,21 +464,21 @@
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="122"/>
-        <source>%1 - copy</source>
+        <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="133"/>
-        <source>%1 - copy (%2)</source>
+        <location filename="../../FolderExistsDialog.cpp" line="131"/>
+        <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="195"/>
+        <location filename="../../FolderExistsDialog.cpp" line="190"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="195"/>
+        <location filename="../../FolderExistsDialog.cpp" line="190"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -570,24 +570,24 @@
 <context>
     <name>ReadThread</name>
     <message>
-        <location filename="../../ReadThread.cpp" line="55"/>
+        <location filename="../../ReadThread.cpp" line="59"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="184"/>
+        <location filename="../../ReadThread.cpp" line="188"/>
         <source>Internal error reading the source file:block size out of range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="192"/>
-        <location filename="../../ReadThread.cpp" line="408"/>
+        <location filename="../../ReadThread.cpp" line="196"/>
+        <location filename="../../ReadThread.cpp" line="420"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ReadThread.cpp" line="233"/>
-        <location filename="../../ReadThread.cpp" line="456"/>
+        <location filename="../../ReadThread.cpp" line="237"/>
+        <location filename="../../ReadThread.cpp" line="468"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,31 +606,25 @@
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="41"/>
-        <source>%name% - copy</source>
+        <source>%name% - copy%suffix%</source>
         <extracomment>%name% should not be translated</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../RenamingRules.ui" line="48"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; for the original file full name&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <extracomment> should not be translated</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../RenamingRules.ui" line="71"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%file%&lt;/span&gt; for the original file full name&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../RenamingRules.ui" line="57"/>
+        <source>%name% - copy (%number%)%suffix%</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../RenamingRules.ui" line="58"/>
+        <location filename="../../RenamingRules.ui" line="67"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <extracomment>%name%, %number% should not be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../RenamingRules.ui" line="51"/>
         <source>Second renaming</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../RenamingRules.ui" line="64"/>
-        <source>%name% - copy (%number%)</source>
-        <extracomment>%name%, %number% should not be translated</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -655,33 +649,41 @@
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="338"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="406"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="349"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="417"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="345"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="456"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="401"/>
+        <source>%name% - copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ScanFileOrFolder.cpp" line="408"/>
+        <source>%name% - copy (%number%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ScanFileOrFolder.cpp" line="444"/>
         <source>This is not a folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="458"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="446"/>
         <source>The folder does exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="460"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="448"/>
         <source>The folder is not readable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="471"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="459"/>
         <source>Problem with name encoding</source>
         <translation type="unfinished"></translation>
     </message>
@@ -690,9 +692,9 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="244"/>
-        <location filename="../../TransferThread.cpp" line="679"/>
-        <location filename="../../TransferThread.cpp" line="751"/>
-        <location filename="../../TransferThread.cpp" line="1321"/>
+        <location filename="../../TransferThread.cpp" line="673"/>
+        <location filename="../../TransferThread.cpp" line="745"/>
+        <location filename="../../TransferThread.cpp" line="1315"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -725,60 +727,60 @@
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="645"/>
-        <source>%1 - copy</source>
+        <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="656"/>
-        <source>%1 - copy (%2)</source>
+        <location filename="../../TransferThread.cpp" line="652"/>
+        <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="717"/>
-        <location filename="../../TransferThread.cpp" line="832"/>
+        <location filename="../../TransferThread.cpp" line="711"/>
+        <location filename="../../TransferThread.cpp" line="826"/>
         <source>The source file doesn&apos;t exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="757"/>
-        <location filename="../../TransferThread.cpp" line="844"/>
+        <location filename="../../TransferThread.cpp" line="751"/>
+        <location filename="../../TransferThread.cpp" line="838"/>
         <source>Unable to do the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="793"/>
+        <location filename="../../TransferThread.cpp" line="787"/>
         <source>The source doesn&apos;t exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="838"/>
+        <location filename="../../TransferThread.cpp" line="832"/>
         <source>Another file exists at same place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1140"/>
+        <location filename="../../TransferThread.cpp" line="1134"/>
         <source>The checksums do not match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1230"/>
+        <location filename="../../TransferThread.cpp" line="1224"/>
         <source>Internal error: The destination is not closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1245"/>
+        <location filename="../../TransferThread.cpp" line="1239"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1256"/>
+        <location filename="../../TransferThread.cpp" line="1250"/>
         <source>Internal error: The buffer is not empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1321"/>
-        <location filename="../../TransferThread.cpp" line="1339"/>
-        <location filename="../../TransferThread.cpp" line="1354"/>
+        <location filename="../../TransferThread.cpp" line="1315"/>
+        <location filename="../../TransferThread.cpp" line="1333"/>
+        <location filename="../../TransferThread.cpp" line="1348"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -791,22 +793,22 @@
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../WriteThread.cpp" line="80"/>
+        <location filename="../../WriteThread.cpp" line="83"/>
         <source>Path resolution error (Empty path)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="269"/>
+        <location filename="../../WriteThread.cpp" line="277"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="672"/>
+        <location filename="../../WriteThread.cpp" line="680"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../WriteThread.cpp" line="697"/>
+        <location filename="../../WriteThread.cpp" line="705"/>
         <source>File truncated during read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>

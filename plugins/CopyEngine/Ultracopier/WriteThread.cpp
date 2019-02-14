@@ -1,5 +1,8 @@
 #include "WriteThread.h"
 
+#ifdef Q_OS_LINUX
+#include <fcntl.h>
+#endif
 #include <QDir>
 
 QMultiHash<QString,WriteThread *> WriteThread::writeFileList;
@@ -174,6 +177,11 @@ bool WriteThread::internalOpen()
             }
         }
         pauseMutex.tryAcquire(pauseMutex.available());
+        #ifdef Q_OS_LINUX
+        const int intfd=file.handle();
+        if(intfd!=-1)
+            posix_fadvise(intfd, 0, 0, POSIX_FADV_SEQUENTIAL);
+        #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the pause mutex");
         if(stopIt)
         {

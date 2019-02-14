@@ -22,7 +22,32 @@ void Listener::listen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+ExtraSocketCatchcopy::pathSocket());
     if(server.listen())
+    {
+#ifdef Q_OS_WIN32
+        //ConvertStringSecurityDescriptorToSecurityDescriptor and pass this string descriptor: D:(A;OICI;GRGW;;;AU)
+        //WRITE_DAC | FILE_FLAG_FIRST_PIPE_INSTANCE
+        /*HANDLE hPipe = CreateNamedPipe(
+    (const wchar_t *)_Server->fullServerName().utf16(), // pipe name
+    PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,       // read/write access
+    PIPE_TYPE_BYTE |          // byte type pipe
+    PIPE_READMODE_BYTE |      // byte-read mode
+    PIPE_WAIT,                // blocking mode
+    PIPE_UNLIMITED_INSTANCES, // max. instances
+    0,                  // output buffer size
+    0,                  // input buffer size
+    3000,                     // client time-out
+    0 // Default Security
+);
+// Same call to open/create pipe as in qlocalserver_win.cpp
+// Code here to add/change ACEs
+if (SetSecurityInfo(hPipe, SE_KERNEL_OBJECT, DACL_SECURITY_INFORMATION,
+    0, 0, NewAcl, 0) == ERROR_SUCCESS) {
+    // Success
+}*/
+        //socketDescriptor()
+        #endif
         emit newState(Ultracopier::FullListening);
+    }
     else
         emit newState(Ultracopier::NotListening);
 }

@@ -1,5 +1,9 @@
 #include "ReadThread.h"
 
+#ifdef Q_OS_LINUX
+#include <fcntl.h>
+#endif
+
 ReadThread::ReadThread()
 {
     start();
@@ -286,6 +290,16 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             return false;
         }
         pauseMutex.tryAcquire(pauseMutex.available());
+        #ifdef Q_OS_LINUX
+        const int intfd=file.handle();
+        if(intfd!=-1)
+        {
+            posix_fadvise(intfd, 0, 0, POSIX_FADV_WILLNEED);
+            posix_fadvise(intfd, 0, 0, POSIX_FADV_SEQUENTIAL);
+            /*int flags = fcntl(intfd, F_GETFL, 0);
+            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);*/
+        }
+        #endif
         if(stopIt)
         {
             file.close();

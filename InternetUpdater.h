@@ -24,7 +24,7 @@ signals:
 private:
     QTimer newUpdateTimer;
     QTimer firstUpdateTimer;
-    QNetworkAccessManager qnam;
+    QNetworkAccessManager *qnam;//destroy to close connection
     QNetworkReply *reply;
 
     void downloadFileInternal(const bool force=false);

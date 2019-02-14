@@ -16,10 +16,11 @@ InternetUpdater::InternetUpdater(QObject *parent) :
 {
     connect(&newUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
     connect(&firstUpdateTimer,&QTimer::timeout,this,&InternetUpdater::downloadFile);
-    newUpdateTimer.start(1000*3600);
+    newUpdateTimer.start(1000*3600*72);
     firstUpdateTimer.setSingleShot(true);
-    firstUpdateTimer.start(1000*60);
+    firstUpdateTimer.start(1000*600);
     reply=NULL;
+    qnam=new QNetworkAccessManager();
 }
 
 InternetUpdater::~InternetUpdater()
@@ -29,6 +30,7 @@ InternetUpdater::~InternetUpdater()
         delete reply;
         reply=NULL;
     }
+    delete qnam;
 }
 
 void InternetUpdater::checkUpdate()
@@ -74,7 +76,7 @@ void InternetUpdater::downloadFileInternal(const bool force)
     QNetworkRequest networkRequest(QStringLiteral(ULTRACOPIER_UPDATER_URL));
     networkRequest.setHeader(QNetworkRequest::UserAgentHeader,QString::fromStdString(ultracopierVersion));
     networkRequest.setRawHeader("Connection", "Close");
-    reply = qnam.get(networkRequest);
+    reply = qnam->get(networkRequest);
     connect(reply, &QNetworkReply::finished, this, &InternetUpdater::httpFinished);
 }
 
@@ -138,6 +140,9 @@ void InternetUpdater::httpFinished()
     emit newUpdate(newVersion.toStdString());
     reply->deleteLater();
     reply=NULL;
+    //regen to force close the connection
+    delete qnam;
+    qnam=new QNetworkAccessManager();
 }
 
 #endif
