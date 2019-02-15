@@ -6,13 +6,12 @@
 #ifndef TRANSFERTHREAD_H
 #define TRANSFERTHREAD_H
 
-#include <QThread>
-#include <QFileInfo>
+#include <QObject>
+#include <QTime>
+
 #include <regex>
 #include <vector>
 #include <string>
-#include <QDateTime>
-#include <QDir>
 #include <utility>
 
 #ifdef Q_OS_UNIX
@@ -70,11 +69,11 @@ public:
     //not copied size, because that's count to the checksum, ...
     uint64_t realByteTransfered() const;
     std::pair<uint64_t, uint64_t> progression() const;
-    static std::string resolvedName(const QFileInfo &inode);
+    static std::string resolvedName(const std::string &inode);
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
-    QFileInfo getSourceInode() const;
-    QFileInfo getDestinationInode() const;
+    std::string getSourceInode() const;
+    std::string getDestinationInode() const;
     Ultracopier::CopyMode getMode() const;
 protected:
     void run();
@@ -87,8 +86,8 @@ signals:
     void writeStopped() const;
     void postOperationStopped() const;
     //get dialog
-    void fileAlreadyExists(const QFileInfo &info,const QFileInfo &info2,const bool &isSame) const;
-    void errorOnFile(const QFileInfo &info,const std::string &string,const ErrorType &errorType=ErrorType_Normal) const;
+    void fileAlreadyExists(const std::string &info,const std::string &info2,const bool &isSame) const;
+    void errorOnFile(const std::string &info,const std::string &string,const ErrorType &errorType=ErrorType_Normal) const;
     //internal signal
     void internalStartPostOperation() const;
     void internalStartPreOperation() const;
@@ -104,7 +103,7 @@ public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
     /// \brief to set files to transfer
-    bool setFiles(const QFileInfo& source,const int64_t &size,const QFileInfo& destination,const Ultracopier::CopyMode &mode);
+    bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
     /// \brief to set file exists action to do
     void setFileExistsAction(const FileExistsAction &action);
     /// \brief to set the new name of the destination
@@ -170,8 +169,7 @@ private:
     TransferStat	transfer_stat;
     ReadThread		readThread;
     WriteThread		writeThread;
-    /*QString			source;
-    QString			destination;*/
+
     Ultracopier::CopyMode		mode;
     bool			doRightTransfer;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -195,13 +193,13 @@ private:
     volatile bool	stopIt;
     volatile bool	canStartTransfer;
     bool			retry;
-    QFileInfo		source;
-    QFileInfo		destination;
+    std::string		source;
+    std::string		destination;
     int64_t			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
     bool			needSkip,needRemove;
-    QDateTime		minTime;
+    uint64_t		minTime;
     int             id;
     bool            deletePartiallyTransferredFiles;
     std::string			firstRenamingRule;
@@ -239,10 +237,11 @@ private:
     void tryCopyDirectly();
     void ifCanStartTransfer();
     //fonction to edit the file date time
-    bool readFileDateTime(const QFileInfo &source);
-    bool writeFileDateTime(const QFileInfo &destination);
-    bool readFilePermissions(const QFile &source);
-    bool writeFilePermissions(QFile &destination);
+    static int64_t readFileMDateTime(const std::string &source);
+    bool readSourceFileDateTime(const std::string &source);
+    bool writeDestinationFileDateTime(const std::string &destination);
+    bool readSourceFilePermissions(const std::string &source);
+    bool writeDestinationFilePermissions(const std::string &destination);
     void resetExtraVariable();
     //error management function
     void resumeTransferAfterWriteError();
@@ -258,6 +257,10 @@ private:
     bool remainFileOpen() const;
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
+    static bool is_symlink(const char * const filename);
+    static bool is_symlink(const std::string &filename);
+    static bool is_file(const char * const filename);
+    static bool is_file(const std::string &filename);
 };
 
 #endif // TRANSFERTHREAD_H

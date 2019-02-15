@@ -231,7 +231,7 @@ bool WriteThread::internalOpen()
     }
 }
 
-void WriteThread::open(const QFileInfo &file,const uint64_t &startSize)
+void WriteThread::open(const std::string &file, const uint64_t &startSize)
 {
     if(this->file.isOpen())
     {

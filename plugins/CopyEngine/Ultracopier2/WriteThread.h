@@ -6,10 +6,6 @@
 #ifndef WRITETHREAD_H
 #define WRITETHREAD_H
 
-#include <QThread>
-#include <QString>
-#include <QCryptographicHash>
-
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
 
@@ -24,7 +20,7 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const QFileInfo &file, const uint64_t &startSize);
+    void open(const std::string &file, const uint64_t &startSize);
     /// \brief to return the error string
     std::string errorString() const;
     /// \brief to stop all

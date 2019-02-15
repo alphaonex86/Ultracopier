@@ -6,11 +6,6 @@
 #ifndef READTHREAD_H
 #define READTHREAD_H
 
-#include <QThread>
-#include <QDateTime>
-#include <QFileInfo>
-#include <QCryptographicHash>
-
 #include "WriteThread.h"
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
