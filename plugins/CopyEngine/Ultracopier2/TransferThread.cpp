@@ -2,24 +2,7 @@
 //then do overwrite node function to not re-set the file name
 
 #include "TransferThread.h"
-#ifdef Q_OS_WIN32
-#include <windows.h>
-#endif
-
-#ifdef Q_OS_WIN32
-    #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-        #ifndef NOMINMAX
-            #define NOMINMAX
-        #endif
-        #include <windows.h>
-    #endif
-#endif
-
-#ifdef Q_OS_WIN32
-#define CURRENTSEPARATOR "\\"
-#else
-#define CURRENTSEPARATOR "/"
-#endif
+#include <string>
 
 #include "../../../cpp11addition.h"
 
@@ -224,12 +207,12 @@ void TransferThread::setFileRename(const std::string &nameForRename)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] nameForRename: "+nameForRename);
     if(!renameTheOriginalDestination)
-        destination=destination+CURRENTSEPARATOR+nameForRename;
+        destination=destination+'/'+nameForRename;
     else
     {
         std::string tempDestination=destination;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] rename "+destination+": to: "+destination+CURRENTSEPARATOR+nameForRename);
-        if(!rename(destination.c_str(),(destination+CURRENTSEPARATOR+nameForRename).c_str()))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] rename "+destination+": to: "+destination+'/'+nameForRename);
+        if(!rename(destination.c_str(),(destination+'/'+nameForRename).c_str()))
         {
             if(!is_file(destination))
             {
@@ -243,7 +226,7 @@ void TransferThread::setFileRename(const std::string &nameForRename)
             return;
         }
         if(source==destination)
-            source=destination+CURRENTSEPARATOR+nameForRename;
+            source=destination+'/'+nameForRename;
         destination=tempDestination;
     }
     fileExistsAction	= FileExists_NotSet;
@@ -514,34 +497,25 @@ bool TransferThread::destinationExists()
     return false;
 }
 
+/** \example /dir1/dir2/file -> file
+ * /dir1/dir2/file -> file
+ * /dir1/dir2/ -> dir2
+ * /dir1/ -> dir1
+ * / -> root */
 std::string TransferThread::resolvedName(const std::string &inode)
 {
-    QString fileName=inode.fileName();
-    if(fileName.isEmpty())
+    const std::string::size_type &lastPos=inode.rfind('/');
+    if(lastPos == std::string::npos || lastPos==0)
+        return tr("root").toStdString();
+    if(lastPos!=inode.size())
+        return inode.substr(lastPos);
+    const std::string::size_type &previousLastPos=inode.rfind('/',inode.size()-1);
+    if((lastPos-1)==previousLastPos)
     {
-        QDir absoluteDir=inode.absoluteDir();
-        fileName=absoluteDir.dirName();
-        if(fileName.isEmpty())
-        {
-            fileName=absoluteDir.cdUp();
-            fileName=absoluteDir.dirName();
-        }
+        //emit errorOnFile(inode,"Internal bug: "+inode);
+        return tr("root").toStdString();
     }
-    #ifdef Q_OS_WIN32
-    if(fileName.isEmpty())
-    {
-        fileName=inode.absolutePath();
-        fileName.replace(QRegularExpression(QStringLiteral("^([a-zA-Z]+):.*$")),QStringLiteral("\\1"));
-        if(inode.absolutePath().contains(QRegularExpression(QStringLiteral("^[a-zA-Z]+:[/\\\\]?$"))))
-            fileName=tr("Drive %1").arg(fileName);
-        else
-            fileName=tr("Unknown folder");
-    }
-    #else
-    if(fileName.isEmpty())
-        fileName=tr("root");
-    #endif
-    return fileName.toStdString();
+    return inode.substr(previousLastPos,lastPos);
 }
 
 std::string TransferThread::getSourcePath() const
@@ -550,16 +524,6 @@ std::string TransferThread::getSourcePath() const
 }
 
 std::string TransferThread::getDestinationPath() const
-{
-    return destination;
-}
-
-QFileInfo TransferThread::getSourceInode() const
-{
-    return source;
-}
-
-QFileInfo TransferThread::getDestinationInode() const
 {
     return destination;
 }
@@ -574,7 +538,7 @@ bool TransferThread::checkAlwaysRename()
 {
     if(alwaysDoFileExistsAction==FileExists_Rename)
     {
-        QFileInfo newDestination=destination;
+        std::string newDestination=destination;
         std::string fileName=resolvedName(newDestination);
         std::string suffix;
         std::string newFileName;
@@ -606,28 +570,27 @@ bool TransferThread::checkAlwaysRename()
             }
             stringreplaceAll(newFileName,"%name%",fileName);
             stringreplaceAll(newFileName,"%suffix%",suffix);
-            newDestination.setFile(newDestination.absolutePath()+CURRENTSEPARATOR+QString::fromStdString(newFileName));
+            newDestination=FSabsolutePath(newDestination)+'/'+newFileName;
             num++;
         }
-        while(newDestination.exists());
+        while(is_file(newDestination));
         if(!renameTheOriginalDestination)
             destination=newDestination;
         else
         {
-            QFile destinationFile(destination.absoluteFilePath());
-            if(!destinationFile.rename(newDestination.absoluteFilePath()))
+            if(rename(destination.c_str(),newDestination.c_str())!=0)
             {
-                if(!destinationFile.exists())
+                if(!is_file(destination))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()).toStdString());
-                    emit errorOnFile(destinationFile,tr("File not found").toStdString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+destination+": destination: "+newDestination+", error: "+std::to_string(errno));
+                    emit errorOnFile(destination,tr("File not found").toStdString());
                     readError=true;
                     return true;
                 }
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("unable to do real move %1: %2, error: %3").arg(destinationFile.fileName()).arg(destinationFile.fileName()).arg(destinationFile.errorString()).toStdString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+": "+newDestination+", error: "+std::to_string(errno));
                 readError=true;
-                emit errorOnFile(destinationFile,destinationFile.errorString().toStdString());
+                emit errorOnFile(destination,"errno: "+std::to_string(errno));
                 return true;
             }
         }
@@ -636,9 +599,34 @@ bool TransferThread::checkAlwaysRename()
     return false;
 }
 
+int TransferThread::mkpath(const std::string &file_path, const mode_t &mode)
+{
+    if(is_dir(file_path))
+        return 0;
+    char path[file_path.size()+1];
+    memcpy(path,file_path.c_str(),file_path.size());
+    path[file_path.size()+1]='\0';
+    assert(path && *path);
+    char* p;
+    for(p=strchr(path+1, '/'); p; p=strchr(p+1, '/'))
+    {
+        *p='\0';
+        if(mkdir(path, mode)==-1)
+        {
+            if(errno!=EEXIST)
+            {
+                *p='/';
+                return -1;
+            }
+        }
+        *p='/';
+    }
+    return 0;
+}
+
 void TransferThread::tryMoveDirectly()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+QStringLiteral("need moved directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] need moved directly: "+source+" to "+destination);
 
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
@@ -649,31 +637,33 @@ void TransferThread::tryMoveDirectly()
     readIsClosedVariable		= false;
     writeIsClosedVariable		= false;
     //move if on same mount point
-    QFile sourceFile(source.absoluteFilePath());
-    QFile destinationFile(destination.absoluteFilePath());
     #ifndef Q_OS_WIN32
-    if(destinationFile.exists() || destination.isSymLink())
+    if(is_file(destination) || is_symlink(destination))
     {
-        if(!sourceFile.exists() && !source.isSymLink())
+        if(!is_file(source) && !is_symlink(source))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", source not exists");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", source not exists");
             readError=true;
             emit errorOnFile(destination,tr("The source file doesn't exist").toStdString());
             return;
         }
-        else if(!destinationFile.remove())
+        else if(unlink(destination.c_str())!=0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", error: "+destinationFile.errorString().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", error: "+std::to_string(errno));
             readError=true;
-            emit errorOnFile(destination,destinationFile.errorString().toStdString());
+            emit errorOnFile(destination,std::to_string(errno));
             return;
         }
     }
     #endif
-    QDir dir(destination.absolutePath());
     {
-        if(!dir.exists())
-            dir.mkpath(destination.absolutePath());
+        const std::string &dir=FSabsolutePath(destination);
+        if(!mkpath(dir.c_str()))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
+            emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
+            return;
+        }
     }
     #ifdef Q_OS_WIN32
     //if(!sourceFile.copy(destinationFile.fileName()))
@@ -683,25 +673,26 @@ void TransferThread::tryMoveDirectly()
             MOVEFILE_COPY_ALLOWED|MOVEFILE_REPLACE_EXISTING
         )==0)
     #else
-    if(!sourceFile.rename(destinationFile.fileName()))
+    if(rename(source.c_str(),destination.c_str())!=0)
     #endif
     {
+        const std::string &dir=FSabsolutePath(destination);
         readError=true;
-        if(!sourceFile.exists() && !source.isSymLink())
+        if(!is_file(source) && !is_symlink(source))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("source not exists %1: destination: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).toStdString());
-            emit errorOnFile(sourceFile,tr("File not found").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+source+", error: "+std::to_string(errno));
+            emit errorOnFile(source,tr("File not found").toStdString());
             return;
         }
-        else if(!dir.exists())
+        else if(!is_dir(dir))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("destination folder not exists %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).toStdString());
-            emit errorOnFile(destination.absolutePath(),tr("Unable to do the folder").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder not exists "+destination+", error: "+std::to_string(errno));
+            emit errorOnFile(destination,tr("Unable to do the folder").toStdString());
             return;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("unable to do real move %1: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).toStdString());
-        emit errorOnFile(sourceFile,sourceFile.errorString().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+", error: "+std::to_string(errno));
+        emit errorOnFile(source,std::to_string(errno));
         return;
     }
     readThread.fakeReadIsStarted();
@@ -712,7 +703,7 @@ void TransferThread::tryMoveDirectly()
 
 void TransferThread::tryCopyDirectly()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+QStringLiteral("need copied directly: %1 to %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] need copied directly: "+source+" to "+destination);
 
     sended_state_readStopped	= false;
     sended_state_writeStopped	= false;
@@ -723,8 +714,6 @@ void TransferThread::tryCopyDirectly()
     readIsClosedVariable		= false;
     writeIsClosedVariable		= false;
     //move if on same mount point
-    QFile sourceFile(source.absoluteFilePath());
-    QFile destinationFile(destination.absoluteFilePath());
     #ifndef Q_OS_WIN32
     if(destinationFile.exists() || destination.isSymLink())
     {
@@ -1879,6 +1868,22 @@ bool TransferThread::is_file(const char * const filename)
         //if error or file not exists, considere as regular file
         return false;
     if (S_ISREG(p_statbuf.st_mode) == 1)
+        return true;
+    return true;
+}
+
+bool TransferThread::is_dir(const std::string &filename)
+{
+    return is_dir(filename.c_str());
+}
+
+bool TransferThread::is_dir(const char * const filename)
+{
+    struct stat p_statbuf;
+    if (lstat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return false;
+    if (S_ISDIR(p_statbuf.st_mode) == 1)
         return true;
     return true;
 }

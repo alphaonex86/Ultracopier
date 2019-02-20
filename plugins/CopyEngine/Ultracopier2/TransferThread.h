@@ -72,9 +72,8 @@ public:
     static std::string resolvedName(const std::string &inode);
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
-    std::string getSourceInode() const;
-    std::string getDestinationInode() const;
     Ultracopier::CopyMode getMode() const;
+    int mkpath(const std::string &file_path, const mode_t &mode=0777);
 protected:
     void run();
 signals:
@@ -261,6 +260,8 @@ private:
     static bool is_symlink(const std::string &filename);
     static bool is_file(const char * const filename);
     static bool is_file(const std::string &filename);
+    static bool is_dir(const char * const filename);
+    static bool is_dir(const std::string &filename);
 };
 
 #endif // TRANSFERTHREAD_H
