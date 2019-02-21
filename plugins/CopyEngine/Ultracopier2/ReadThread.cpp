@@ -15,6 +15,7 @@ ReadThread::ReadThread()
     isInReadLoop=false;
     tryStartRead=false;
     lastGoodPosition=0;
+    file=NULL;
 }
 
 ReadThread::~ReadThread()
@@ -36,29 +37,29 @@ void ReadThread::run()
 
 void ReadThread::open(const std::string &file, const Ultracopier::CopyMode &mode)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] open source: "+file.absoluteFilePath().toStdString());
-    if(this->file.isOpen())
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] open source: "+file);
+    if(this->file!=NULL)
     {
-        if(file.absoluteFilePath()==this->file.fileName())
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+file.absoluteFilePath().toStdString());
+        if(file==this->fileName)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+this->fileName);
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already open: "+file.absoluteFilePath().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already open: "+this->fileName);
         emit internalStartClose();
     }
     if(isInReadLoop)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already readding: "+file.absoluteFilePath().toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already readding: "+this->fileName);
         return;
     }
     if(tryStartRead)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already try read: "+file.absoluteFilePath().toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already try read: "+this->fileName);
         return;
     }
     stopIt=false;
     fakeMode=false;
     lastGoodPosition=0;
-    this->file.setFileName(file.absoluteFilePath());
+    this->fileName=file;
     this->mode=mode;
     emit internalStartOpen();
 }

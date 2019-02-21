@@ -88,6 +88,8 @@ signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 private:
+    FILE * file;
+    std::string fileName;
     std::string             errorString_internal;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
@@ -101,7 +103,6 @@ private:
     volatile bool       endDetected;
     uint64_t             startSize;
     bool                fakeMode;
-    bool                buffer;
     bool                needRemoveTheFile;
     volatile bool       sequential;
     bool                deletePartiallyTransferredFiles;

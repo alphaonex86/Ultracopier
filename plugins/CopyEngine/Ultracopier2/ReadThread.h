@@ -82,6 +82,8 @@ signals:
     void debugInformation(const Ultracopier::DebugLevel &level,std::string fonction,std::string text,std::string file,int ligne) const;
 
 private:
+    FILE * file;
+    std::string fileName;
     std::string         errorString_internal;
     volatile bool	stopIt;
     Ultracopier::CopyMode	mode;

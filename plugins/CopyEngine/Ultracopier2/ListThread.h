@@ -189,10 +189,6 @@ public slots:
     //send progression
     void sendProgression();
 
-    void setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm);
-    void setParallelBuffer(int parallelBuffer);
-    void setSequentialBuffer(int sequentialBuffer);
-    void setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan);
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
@@ -225,15 +221,12 @@ private:
     std::vector<Ultracopier::ReturnActionOnCopyList>	actionDone;///< to action to send to the interface
     uint64_t				idIncrementNumber;///< to store the last id returned
     int64_t				actualRealByteTransfered;
-    int                 maxSpeed;///< in KB/s, assume as 0KB/s as default like every where
     FolderExistsAction	alwaysDoThisActionForFolderExists;
     bool				checkDestinationFolderExists;
     unsigned int        parallelizeIfSmallerThan;
     bool                moveTheWholeFolder;
     bool                followTheStrictOrder;
     bool                deletePartiallyTransferredFiles;
-    int                 sequentialBuffer;
-    int                 parallelBuffer;
     int                 inodeThreads;
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
@@ -241,7 +234,6 @@ private:
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
     unsigned int        putAtBottom;
-    unsigned int		osBufferLimit;
     std::vector<Filters_rules>		include,exclude;
     Ultracopier::CopyMode		mode;
     bool				forcedMode;
@@ -284,7 +276,6 @@ private:
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
-    int blockSize;//in Bytes
     std::vector<std::string> drives;
     FileExistsAction alwaysDoThisActionForFileExists;
     //to return value to the copyEngine

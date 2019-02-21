@@ -20,7 +20,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     numberOfTransferIntoToDoList    = 0;
     numberOfInodeOperation          = 0;
     putAtBottom                     = 0;
-    maxSpeed                        = 0;
     inodeThreads                    = 1;
     renameTheOriginalDestination    = false;
     doRightTransfer                 = false;
@@ -29,16 +28,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     #endif
     keepDate                        = false;
     checkDiskSpace                  = true;
-    blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
-    sequentialBuffer                = ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
-    parallelBuffer                  = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
-    osBufferLimit                   = 512;
     alwaysDoThisActionForFileExists = FileExists_NotSet;
-    doChecksum                      = false;
-    checksumIgnoreIfImpossible      = true;
-    checksumOnlyOnError             = true;
-    osBuffer                        = false;
-    osBufferLimited                 = false;
     forcedMode                      = false;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
@@ -2096,47 +2086,6 @@ void ListThread::deleteTransferThread()
         if(loop_size==inodeThreads)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inodeThreads is lowered to the right value: "+std::to_string(inodeThreads));
     }
-}
-
-void ListThread::setTransferAlgorithm(const TransferAlgorithm &transferAlgorithm)
-{
-    if(transferAlgorithm==TransferAlgorithm_Sequential)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Sequential");
-    else if(transferAlgorithm==TransferAlgorithm_Automatic)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Automatic");
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Parallel");
-    emit send_setTransferAlgorithm(transferAlgorithm);
-}
-
-void ListThread::setParallelBuffer(int parallelBuffer)
-{
-    if(parallelBuffer<1 || parallelBuffer>ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"wrong number of block: "+std::to_string(parallelBuffer));
-        return;
-    }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in number of block: "+std::to_string(parallelBuffer));
-    this->parallelBuffer=parallelBuffer;
-    emit send_parallelBuffer(parallelBuffer);
-}
-
-void ListThread::setSequentialBuffer(int sequentialBuffer)
-{
-    if(sequentialBuffer<1 || sequentialBuffer>ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"wrong number of block: "+std::to_string(sequentialBuffer));
-        return;
-    }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"in number of block: "+std::to_string(sequentialBuffer));
-    this->sequentialBuffer=sequentialBuffer;
-    emit send_sequentialBuffer(sequentialBuffer);
-}
-
-void ListThread::setParallelizeIfSmallerThan(const unsigned int &parallelizeIfSmallerThan)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"parallelizeIfSmallerThan in Bytes: "+std::to_string(parallelizeIfSmallerThan));
-    this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
 }
 
 void ListThread::setMoveTheWholeFolder(const bool &moveTheWholeFolder)

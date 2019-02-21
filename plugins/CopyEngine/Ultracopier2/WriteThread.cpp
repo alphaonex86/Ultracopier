@@ -17,11 +17,10 @@ WriteThread::WriteThread()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat                            = Idle;
     #endif
-    numberOfBlock                   = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     buffer                          = false;
     needRemoveTheFile               = false;
-    blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     blockArraySize                  = 0;
+    file=NULL;
 }
 
 WriteThread::~WriteThread()

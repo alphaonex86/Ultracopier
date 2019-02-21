@@ -29,7 +29,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -37,17 +37,70 @@
         <x>0</x>
         <y>0</y>
         <width>791</width>
-        <height>349</height>
+        <height>378</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Transfer</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="doRightTransfer"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Keep the file date</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_rsync">
+         <property name="text">
+          <string notr="true">Rsync</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="rsync"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="keepDate"/>
+       </item>
        <item row="3" column="2">
-        <widget class="QCheckBox" name="moveTheWholeFolder"/>
+        <widget class="QCheckBox" name="followTheStrictOrder">
+         <property name="toolTip">
+          <string>Less performance if checked</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>278</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="3" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="toolTip">
+          <string>Less performance if checked</string>
+         </property>
+         <property name="text">
+          <string>Follow the strict order</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="moveTheWholeFolder"/>
+       </item>
+       <item row="2" column="0">
         <widget class="QLabel" name="label_18">
          <property name="text">
           <string>Move the whole folder</string>
@@ -61,69 +114,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="doRightTransfer"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Keep the file date</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="autoStart"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="keepDate"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Autostart the transfer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QCheckBox" name="followTheStrictOrder">
-         <property name="toolTip">
-          <string>Less performance if checked</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>278</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_19">
-         <property name="toolTip">
-          <string>Less performance if checked</string>
-         </property>
-         <property name="text">
-          <string>Follow the strict order</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_rsync">
-         <property name="text">
-          <string notr="true">Rsync</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QCheckBox" name="rsync"/>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_error_collision">
@@ -132,7 +122,7 @@
         <x>0</x>
         <y>0</y>
         <width>791</width>
-        <height>349</height>
+        <height>378</height>
        </rect>
       </property>
       <attribute name="label">
@@ -330,210 +320,20 @@
       <zorder>renameTheOriginalDestination</zorder>
       <zorder>label_22</zorder>
      </widget>
-     <widget class="QWidget" name="page_control">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>791</width>
-        <height>349</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Control</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="title">
-          <string>Checksum</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="checksumOnlyOnError"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Only after error</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Ignore if impossible</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QCheckBox" name="checksumIgnoreIfImpossible"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="doChecksum">
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Verify checksums</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>242</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="page_performance">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>791</width>
-        <height>349</height>
+        <height>378</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Performance</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>Parallel buffer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QSpinBox" name="sequentialBuffer">
-         <property name="suffix">
-          <string>KB</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>999999999</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="blockSize">
-         <property name="suffix">
-          <string>KB</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>65536</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QSpinBox" name="parallelBuffer">
-         <property name="suffix">
-          <string>KB</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>999999999</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="osBuffer"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Block size</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>Sequential buffer</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Enable OS buffer</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
-        <widget class="QSpinBox" name="osBufferLimit">
-         <property name="suffix">
-          <string>KB</string>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>2048</number>
-         </property>
-         <property name="value">
-          <number>512</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="osBufferLimited">
-         <property name="text">
-          <string>OS buffer only if smaller than</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_14">
-         <property name="text">
-          <string>Transfer algorithm</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QComboBox" name="transferAlgorithm">
-         <item>
-          <property name="text">
-           <string notr="true">Automatic</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">Sequential</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">Parallel</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="9" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -546,24 +346,7 @@
          </property>
         </spacer>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_17">
-         <property name="text">
-          <string>Parallelize if smaller than</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QSpinBox" name="parallelizeIfSmallerThan">
-         <property name="suffix">
-          <string>KB</string>
-         </property>
-         <property name="maximum">
-          <number>1024</number>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
+       <item row="0" column="1">
         <widget class="QSpinBox" name="inodeThreads">
          <property name="minimum">
           <number>1</number>
@@ -576,14 +359,14 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="0" column="0">
         <widget class="QLabel" name="label_21">
          <property name="text">
           <string>Inode threads (unsafe &gt; 1)</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="1" column="1">
         <widget class="QCheckBox" name="copyListOrder">
          <property name="toolTip">
           <string>More cpu, but better organisation on the disk</string>
@@ -593,7 +376,7 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
+       <item row="1" column="0">
         <widget class="QLabel" name="label_25">
          <property name="toolTip">
           <string>More cpu, but better organisation on the disk</string>
@@ -611,7 +394,7 @@
         <x>0</x>
         <y>0</y>
         <width>791</width>
-        <height>349</height>
+        <height>378</height>
        </rect>
       </property>
       <attribute name="label">
@@ -702,70 +485,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>doChecksum</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>label_9</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>583</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>109</x>
-     <y>161</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doChecksum</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>checksumOnlyOnError</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>594</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>586</x>
-     <y>161</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doChecksum</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>label_10</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>641</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>132</x>
-     <y>186</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>doChecksum</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>checksumIgnoreIfImpossible</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>665</x>
-     <y>136</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>609</x>
-     <y>186</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
