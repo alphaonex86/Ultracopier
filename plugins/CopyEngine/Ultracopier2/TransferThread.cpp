@@ -715,28 +715,32 @@ void TransferThread::tryCopyDirectly()
     writeIsClosedVariable		= false;
     //move if on same mount point
     #ifndef Q_OS_WIN32
-    if(destinationFile.exists() || destination.isSymLink())
+    if(is_file(destination) || is_symlink(destination))
     {
-        if(!sourceFile.exists() && !source.isSymLink())
+        if(!is_file(source) && !is_symlink(source))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", source not exists");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", source not exists");
             readError=true;
-            emit errorOnFile(destination,tr("The source doesn't exist").toStdString());
+            emit errorOnFile(destination,tr("The source file doesn't exist").toStdString());
             return;
         }
-        else if(!destinationFile.remove())
+        else if(unlink(destination.c_str())!=0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destinationFile.fileName().toStdString()+", error: "+destinationFile.errorString().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", error: "+std::to_string(errno));
             readError=true;
-            emit errorOnFile(destination,destinationFile.errorString().toStdString());
+            emit errorOnFile(destination,std::to_string(errno));
             return;
         }
     }
     #endif
-    QDir dir(destination.absolutePath());
     {
-        if(!dir.exists())
-            dir.mkpath(destination.absolutePath());
+        const std::string &dir=FSabsolutePath(destination);
+        if(!mkpath(dir.c_str()))
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
+            emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
+            return;
+        }
     }
     /** on windows, symLink is normal file, can be copied
      * on unix not, should be created **/
@@ -751,31 +755,40 @@ void TransferThread::tryCopyDirectly()
             0
         )==0)
     #else
-    if(!QFile::link(sourceFile.symLinkTarget(),destinationFile.fileName()))
+    char buf[PATH_MAX];
+    const ssize_t &sizeLink=readlink(source.c_str(),buf,sizeof(buf));
+    if(sizeLink!=0)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source resolution failerd "+source+", error: "+std::to_string(errno));
+        emit errorOnFile(source,tr("The source symlink can't be read").toStdString());
+        return;
+    }
+    if(!symlink(destination.c_str(),buf))
     #endif
     {
+        const std::string &dir=FSabsolutePath(destination);
         readError=true;
-        if(!sourceFile.exists() && !source.isSymLink())
+        if(!is_file(source) && !is_symlink(source))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("source not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
-            emit errorOnFile(sourceFile,tr("The source file doesn't exist").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+source+", error: "+std::to_string(errno));
+            emit errorOnFile(source,tr("The source file doesn't exist").toStdString());
             return;
         }
-        else if(destinationFile.exists() || destination.isSymLink())
+        else if(is_file(destination) || is_symlink(destination))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("destination already exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
-            emit errorOnFile(sourceFile,tr("Another file exists at same place").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination already exists "+source+", error: "+std::to_string(errno));
+            emit errorOnFile(source,tr("Another file exists at same place").toStdString());
             return;
         }
-        else if(!dir.exists())
+        else if(!is_dir(dir))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("destination folder not exists %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
-            emit errorOnFile(sourceFile,tr("Unable to do the folder").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder not exists "+source+", error: "+std::to_string(errno));
+            emit errorOnFile(source,tr("Unable to do the folder").toStdString());
             return;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("unable to do sym link copy %1 -> %4: %2, error: %3").arg(sourceFile.fileName()).arg(destinationFile.fileName()).arg(sourceFile.errorString()).arg(sourceFile.symLinkTarget()).toStdString());
-        emit errorOnFile(sourceFile,sourceFile.errorString().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do sym link copy "+source+", error: "+std::to_string(errno));
+        emit errorOnFile(source,"errno: "+std::to_string(errno));
         return;
     }
     readThread.fakeReadIsStarted();
@@ -791,12 +804,12 @@ bool TransferThread::canBeMovedDirectly() const
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] mode!=Ultracopier::Move");
         return false;
     }
-    return source.isSymLink() || driveManagement.isSameDrive(destination,source);
+    return is_symlink(source) || driveManagement.isSameDrive(destination,source);
 }
 
 bool TransferThread::canBeCopiedDirectly() const
 {
-    return source.isSymLink();
+    return is_symlink(source);
 }
 
 void TransferThread::readIsReady()
@@ -907,10 +920,13 @@ void TransferThread::stop()
     if(!remainFileOpen())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
-        if(needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
+        if(needRemove && source!=destination)
         {
-            if(source.exists())
-                QFile(destination.absoluteFilePath()).remove();
+            if(is_file(source))
+            {
+                if(!unlink(destination.c_str()))
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] destination: "+destination+", errno: "+std::to_string(errno)));
+            }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try destroy the destination when the source don't exists"));
         }
@@ -992,10 +1008,13 @@ void TransferThread::writeIsClosed()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     writeIsClosedVariable=true;
     writeIsOpeningVariable=false;
-    if(stopIt && needRemove && source.absoluteFilePath()!=destination.absoluteFilePath())
+    if(stopIt && needRemove && source!=destination)
     {
-        if(source.exists())
-            QFile(destination.absoluteFilePath()).remove();
+        if(is_file(source))
+        {
+            if(unlink(destination.c_str())!=-1)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try destroy the destination "+destination+"failed, errno: "+std::to_string(errno)));
+        }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try destroy the destination when the source don't exists"));
     }
@@ -1096,13 +1115,12 @@ void TransferThread::postOperation()
         //remove source in moving mode
         if(mode==Ultracopier::Move && !canBeMovedDirectlyVariable)
         {
-            if(destination.exists() && destination.isFile())
+            if(is_file(destination))
             {
-                QFile sourceFile(source.absoluteFilePath());
-                if(!sourceFile.remove())
+                if(unlink(source.c_str())!=0)
                 {
                     needSkip=false;
-                    emit errorOnFile(source,sourceFile.errorString().toStdString());
+                    emit errorOnFile(source,"errno: "+std::to_string(errno));
                     return;
                 }
             }
@@ -1112,11 +1130,11 @@ void TransferThread::postOperation()
     }
     else//do difference skip a file and skip this error case
     {
-        if(needRemove && destination.exists() && source.exists() && source.absoluteFilePath()!=destination.absoluteFilePath() && destination.isFile())
+        if(needRemove && is_file(destination) && exists(source) && source!=destination)
         {
-            QFile destinationFile(destination.absoluteFilePath());
-            if(!destinationFile.remove())
+            if(!unlink(destination.c_str()))
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] try remove destination "+destination+" failed: errno"+std::to_string(errno)));
                 //emit errorOnFile(source,destinationFile.errorString());
                 //return;
             }
@@ -1124,8 +1142,8 @@ void TransferThread::postOperation()
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] try remove destination but not exists!");
     }
-    source.setFile(QStringLiteral(""));
-    destination.setFile(QStringLiteral(""));
+    source.clear();
+    destination.clear();
     //don't need remove because have correctly finish (it's not in: have started)
     needRemove=false;
     needSkip=false;
@@ -1139,11 +1157,10 @@ bool TransferThread::doFilePostOperation()
     //do operation needed by copy
     //set the time if no write thread used
 
-    destination.refresh();
-    if(!destination.exists() && !destination.isSymLink())
+    if(!exists(destination) && !is_symlink(destination))
     {
         if(!stopIt)
-            if(/*true when the destination have been remove but not the symlink:*/!source.isSymLink())
+            if(/*true when the destination have been remove but not the symlink:*/!is_symlink(source))
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date: File not found");
                 emit errorOnFile(destination,tr("Unable to change the date").toStdString()+": "+tr("File not found").toStdString());
@@ -1152,11 +1169,29 @@ bool TransferThread::doFilePostOperation()
     }
     else
     {
+        if(doRightTransfer)
+        {
+            //should be never used but...
+            /*source.refresh();
+            if(source.exists())*/
+            if(havePermission)
+            {
+                if(!writeDestinationFilePermissions(destination))
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to set the destination file permission");
+                    //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
+                    //return false;
+                }
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try doRightTransfer when source not exists");
+        }
+        //date at end because previous change can touch the file
         if(doTheDateTransfer)
         {
             if(!writeDestinationFileDateTime(destination))
             {
-                if(!destination.isFile())
+                if(!is_file(destination))
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date (is not a file)");
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date");
@@ -1169,10 +1204,9 @@ bool TransferThread::doFilePostOperation()
                 }
                 #endif
             }
-            else
+            /*else -> need be done at source m time read
             {
                 #ifndef Q_OS_WIN32
-                destination.refresh();
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] read the destination time: "+destination.lastModified().toString().toStdString());
                 if(destination.lastModified()<minTime)
                 {
@@ -1184,26 +1218,9 @@ bool TransferThread::doFilePostOperation()
                     }
                 }
                 #endif
-            }
+            }*/
         }
-        if(doRightTransfer)
-        {
-            //should be never used but...
-            /*source.refresh();
-            if(source.exists())*/
-            if(havePermission)
-            {
-                QFile destinationFile(destination.absoluteFilePath());
-                if(!writeDestinationFilePermissions(destinationFile))
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to set the destination file permission");
-                    //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
-                    //return false;
-                }
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try doRightTransfer when source not exists");
-        }
+
     }
     if(stopIt)
         return false;
@@ -1422,12 +1439,12 @@ void TransferThread::writeIsStopped()
 
 int64_t TransferThread::readFileMDateTime(const std::string &source)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+source+")");
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
             struct stat info;
-            if(stat(source.absoluteFilePath().toLatin1().data(),&info)!=0)
+            if(stat(source.c_str(),&info)!=0)
                 return -1;
             return info.st_mtim.tv_sec;
         #else //mainly for mac
@@ -1473,16 +1490,11 @@ int64_t TransferThread::readFileMDateTime(const std::string &source)
 bool TransferThread::readSourceFileDateTime(const std::string &source)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+source+")");
-    if(source.lastModified()<minTime)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());
-        return false;
-    }
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
             struct stat info;
-            if(stat(source.absoluteFilePath().toLatin1().data(),&info)!=0)
+            if(stat(source.c_str(),&info)!=0)
                 return false;
             time_t ctime=info.st_ctim.tv_sec;
             time_t actime=info.st_atim.tv_sec;
@@ -1490,6 +1502,11 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
             //this function avalaible on unix and mingw
             butime.actime=actime;
             butime.modtime=modtime;
+            if((uint64_t)modtime<minTime)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
+                return false;
+            }
             Q_UNUSED(ctime);
             return true;
         #else //mainly for mac
@@ -1499,6 +1516,11 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
             //this function avalaible on unix and mingw
             butime.actime=actime;
             butime.modtime=modtime;
+            if((uint64_t)modtime<minTime)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
+                return false;
+            }
             Q_UNUSED(ctime);
             return true;
         #endif
@@ -1506,7 +1528,7 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 struct stat info;
-                if(stat(source.toLatin1().data(),&info)!=0)
+                if(stat(source.c_str(),&info)!=0)
                     return false;
                 time_t ctime=info.st_ctim.tv_sec;
                 time_t actime=info.st_atim.tv_sec;
@@ -1514,6 +1536,11 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
                 //this function avalaible on unix and mingw
                 butime.actime=actime;
                 butime.modtime=modtime;
+                if((uint64_t)modtime<minTime)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
+                    return false;
+                }
                 Q_UNUSED(ctime);
                 return true;
             #else
@@ -1542,6 +1569,12 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
                 this->ftWriteL=ftWrite.dwLowDateTime;
                 this->ftWriteH=ftWrite.dwHighDateTime;
                 CloseHandle(hFileSouce);
+                const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + (uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime;
+                if(modtime<minTime)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());
+                    return false;
+                }
                 return true;
             #endif
         #else
@@ -1551,15 +1584,15 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
     return false;
 }
 
-bool TransferThread::writeDestinationFileDateTime(const std::string &source)
+bool TransferThread::writeDestinationFileDateTime(const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeFileDateTime("+destination+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
-            return utime(destination.absoluteFilePath().toLatin1().data(),&butime)==0;
+            return utime(destination.c_str(),&butime)==0;
         #else //mainly for mac
-            return utime(destination.absoluteFilePath().toLatin1().data(),&butime)==0;
+            return utime(destination.c_str(),&butime)==0;
         #endif
     #else
         #ifdef Q_OS_WIN32
@@ -1602,13 +1635,28 @@ bool TransferThread::writeDestinationFileDateTime(const std::string &source)
 
 bool TransferThread::readSourceFilePermissions(const std::string &source)
 {
+    #ifdef Q_OS_UNIX
+    if(stat(source.c_str(), &permissions)!=0)
+        return false;
+    else
+        return true;
+    #else
     this->permissions=source.permissions();
     return true;
+    #endif
 }
 
-bool TransferThread::writeDestinationFilePermissions(const std::string &source)
+bool TransferThread::writeDestinationFilePermissions(const std::string &destination)
 {
+    #ifdef Q_OS_UNIX
+    if(chmod(destination.c_str(), permissions.st_mode)!=0)
+        return false;
+    if(chown(destination.c_str(), permissions.st_uid, permissions.st_gid)!=0)
+        return false;
+    return true;
+    #else
     return destination.setPermissions(this->permissions);
+    #endif
 }
 
 //skip the copy
@@ -1885,5 +1933,19 @@ bool TransferThread::is_dir(const char * const filename)
         return false;
     if (S_ISDIR(p_statbuf.st_mode) == 1)
         return true;
+    return true;
+}
+
+bool TransferThread::exists(const std::string &filename)
+{
+    return is_dir(filename.c_str());
+}
+
+bool TransferThread::exists(const char * const filename)
+{
+    struct stat p_statbuf;
+    if (lstat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return false;
     return true;
 }

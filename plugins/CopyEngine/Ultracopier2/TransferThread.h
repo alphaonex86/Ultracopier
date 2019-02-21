@@ -73,7 +73,7 @@ public:
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
-    int mkpath(const std::string &file_path, const mode_t &mode=0777);
+    int mkpath(const std::string &file_path, const mode_t &mode=0755);
 protected:
     void run();
 signals:
@@ -224,7 +224,11 @@ private:
             #endif
         #endif
     #endif
+    #ifdef Q_OS_UNIX
+    struct stat permissions;
+    #else
     QFileDevice::Permissions permissions;
+    #endif
     bool havePermission;
     //different pre-operation
     bool isSame();
@@ -262,6 +266,8 @@ private:
     static bool is_file(const std::string &filename);
     static bool is_dir(const char * const filename);
     static bool is_dir(const std::string &filename);
+    static bool exists(const char * const filename);
+    static bool exists(const std::string &filename);
 };
 
 #endif // TRANSFERTHREAD_H
