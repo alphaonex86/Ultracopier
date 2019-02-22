@@ -74,6 +74,16 @@ public:
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
     int mkpath(const std::string &file_path, const mode_t &mode=0755);
+
+    static int64_t readFileMDateTime(const std::string &source);
+    static bool is_symlink(const char * const filename);
+    static bool is_symlink(const std::string &filename);
+    static bool is_file(const char * const filename);
+    static bool is_file(const std::string &filename);
+    static bool is_dir(const char * const filename);
+    static bool is_dir(const std::string &filename);
+    static bool exists(const char * const filename);
+    static bool exists(const std::string &filename);
 protected:
     void run();
 signals:
@@ -240,7 +250,6 @@ private:
     void tryCopyDirectly();
     void ifCanStartTransfer();
     //fonction to edit the file date time
-    static int64_t readFileMDateTime(const std::string &source);
     bool readSourceFileDateTime(const std::string &source);
     bool writeDestinationFileDateTime(const std::string &destination);
     bool readSourceFilePermissions(const std::string &source);
@@ -260,14 +269,6 @@ private:
     bool remainFileOpen() const;
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
-    static bool is_symlink(const char * const filename);
-    static bool is_symlink(const std::string &filename);
-    static bool is_file(const char * const filename);
-    static bool is_file(const std::string &filename);
-    static bool is_dir(const char * const filename);
-    static bool is_dir(const std::string &filename);
-    static bool exists(const char * const filename);
-    static bool exists(const std::string &filename);
 };
 
 #endif // TRANSFERTHREAD_H

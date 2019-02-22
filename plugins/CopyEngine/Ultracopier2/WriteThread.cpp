@@ -19,8 +19,9 @@ WriteThread::WriteThread()
     #endif
     buffer                          = false;
     needRemoveTheFile               = false;
-    blockArraySize                  = 0;
-    file=NULL;
+    blockArrayStart                 = 0;
+    blockArrayStop                  = 0;
+    file                            = NULL;
 }
 
 WriteThread::~WriteThread()
@@ -56,7 +57,7 @@ bool WriteThread::internalOpen()
         emit closed();
         return false;
     }
-    if(file.isOpen())
+    if(file!=NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already open! destination: "+file.fileName().toStdString());
         return false;
@@ -159,7 +160,7 @@ bool WriteThread::internalOpen()
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
-            errorString_internal=file.errorString().toStdString();
+            errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -181,7 +182,7 @@ bool WriteThread::internalOpen()
             file.close();
             resumeNotStarted();
             file.setFileName(QStringLiteral(""));
-            errorString_internal=file.errorString().toStdString();
+            errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to resize to %1 after open: %2, error: %3").arg(startSize).arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -220,7 +221,7 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        errorString_internal=file.errorString().toStdString();
+        errorString_internal="errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -232,7 +233,7 @@ bool WriteThread::internalOpen()
 
 void WriteThread::open(const std::string &file, const uint64_t &startSize)
 {
-    if(this->file.isOpen())
+    if(this->file!=NULL)
     {
         if(file.absoluteFilePath()==this->file.fileName())
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+file.absoluteFilePath().toStdString());
@@ -369,7 +370,7 @@ void WriteThread::internalClose(bool emitSignal)
     bool emit_closed=false;
     if(!fakeMode)
     {
-        if(file.isOpen())
+        if(file!=NULL)
         {
             if(!needRemoveTheFile)
             {
@@ -378,7 +379,7 @@ void WriteThread::internalClose(bool emitSignal)
                     {
                         if(emitSignal)
                         {
-                            errorString_internal=file.errorString().toStdString();
+                            errorString_internal="errno: "+std::to_string(errno);
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
                             emit error();
                         }
@@ -514,7 +515,7 @@ void WriteThread::checkSum()
     lastGoodPosition=0;
     if(!file.seek(0))
     {
-        errorString_internal=file.errorString().toStdString();
+        errorString_internal="errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         return;
@@ -533,7 +534,7 @@ void WriteThread::checkSum()
 
         if(file.error()!=QFile::NoError)
         {
-            errorString_internal=tr("Unable to read the source file: ").toStdString()+file.errorString().toStdString()+" ("+std::to_string(file.error())+")";
+            errorString_internal=tr("Unable to read the source file: ").toStdString()+"errno: "+std::to_string(errno)+" ("+std::to_string(file.error())+")";
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("file.error()!=QFile::NoError: %1, error: %2").arg(QString::number(file.error())).arg(QString::fromStdString(errorString_internal)).toStdString());
             emit error();
             return;
@@ -579,7 +580,7 @@ void WriteThread::internalFlushAndSeekToZero()
     flushBuffer();
     if(!file.seek(0))
     {
-        errorString_internal=file.errorString().toStdString();
+        errorString_internal="errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
         emit error();
         return;

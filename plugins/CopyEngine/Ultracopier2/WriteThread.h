@@ -8,6 +8,7 @@
 
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
+#include <cstdint>
 
 /// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QObject
@@ -54,6 +55,11 @@ public:
     /// \brief buffer is empty
     bool bufferIsEmpty();
     void reemitStartOpen();
+
+    //buffer cannot be directly writen
+    char   blockArray[1024*1024];		///< temp data for block writing, the data
+    uint32_t blockArrayStart;
+    uint32_t blockArrayStop;
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -96,8 +102,6 @@ private:
     static QMultiHash<QString,WriteThread *> writeFileList;
     volatile bool       writeFullBlocked;
     uint64_t             lastGoodPosition;
-    char          blockArray[1024*1024];		///< temp data for block writing, the data
-    size_t blockArraySize;
     int64_t              bytesWriten;		///< temp data for block writing, the bytes writen
     int                 id;
     volatile bool       endDetected;

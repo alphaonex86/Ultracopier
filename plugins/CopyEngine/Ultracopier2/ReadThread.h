@@ -95,7 +95,7 @@ private:
     volatile bool	seekToZero;
     volatile bool	tryStartRead;
     int64_t          size_at_open;
-    uint64_t       mtime_at_open;
+    int64_t       mtime_at_open;
     bool            fakeMode;
     //internal function
     bool seek(const int64_t &position);/// \todo search if is use full
