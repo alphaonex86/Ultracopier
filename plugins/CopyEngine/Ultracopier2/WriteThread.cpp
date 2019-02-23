@@ -594,7 +594,7 @@ void WriteThread::setDeletePartiallyTransferredFiles(const bool &deletePartially
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
 }
 
-bool WriteThread::write(const void * const data,const size_t &size)
+bool WriteThread::write()
 {
     if(stopIt)
         return false;

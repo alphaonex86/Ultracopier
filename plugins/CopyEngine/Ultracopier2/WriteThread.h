@@ -27,7 +27,7 @@ public:
     /// \brief to stop all
     void stop();
     /// \brief to write data
-    bool write(const void * const data, const size_t &size);
+    bool write();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief to set the id
     void setId(int id);
@@ -57,9 +57,10 @@ public:
     void reemitStartOpen();
 
     //buffer cannot be directly writen
-    char   blockArray[1024*1024];		///< temp data for block writing, the data
-    uint32_t blockArrayStart;
-    uint32_t blockArrayStop;
+    char   blockArray[1024*1024];		///< temp data for block writing, type: ring buffer
+    // if writeThread->blockArrayStart == writeThread->blockArrayStop then is empty
+    std::atomic<std::uint32_t> blockArrayStart;//where start used block
+    std::atomic<std::uint32_t> blockArrayStop;//where stop used block
 public slots:
     /// \brief start the operation
     void postOperation();

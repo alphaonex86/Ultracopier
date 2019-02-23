@@ -247,24 +247,33 @@ void ReadThread::internalRead()
         readSize=-1;
         const size_t blockSize=sizeof(writeThread->blockArray);
         // if writeThread->blockArrayStart == writeThread->blockArrayStop then is empty
-        if(writeThread->blockArrayStart<=writeThread->blockArrayStop)
+        uint32_t blockArrayStart=writeThread->blockArrayStart;//load value out of atomic
+        if(blockArrayStart<=writeThread->blockArrayStop)
         {
             if(writeThread->blockArrayStop==blockSize)
             {
-                readSize=fread(writeThread->blockArray+writeThread->blockArrayStop,blockSize-writeThread->blockArrayStop,1,file);
-                if(readSize>=0)
-                    writeThread->blockArrayStop+=readSize;
-            }
-            else
-            {
-                if(writeThread->blockArrayStart==0)
+                if(blockArrayStart==0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] writeThread->blockArrayStart==0, buffer full");
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
                     readSize=0;
                 }
                 else
                 {
-                    readSize=fread(writeThread->blockArray,writeThread->blockArrayStart-1,1,file);
+                    readSize=fread(writeThread->blockArray,blockArrayStart-1,1,file);
+                    if(readSize>=0)
+                        writeThread->blockArrayStop=readSize;
+                }
+            }
+            else
+            {
+                if(blockArrayStart==(writeThread->blockArrayStop+1))
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                    readSize=0;
+                }
+                else
+                {
+                    readSize=fread(writeThread->blockArray+writeThread->blockArrayStop+1,blockSize-(writeThread->blockArrayStop+1),1,file);
                     if(readSize>=0)
                         writeThread->blockArrayStop=readSize;
                 }
@@ -272,7 +281,17 @@ void ReadThread::internalRead()
         }
         else
         {
-            blockArray=file.fread(1024*1024);
+            if(blockArrayStart==(writeThread->blockArrayStop+1))
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                readSize=0;
+            }
+            else
+            {
+                readSize=fread(writeThread->blockArray+writeThread->blockArrayStop+1,(writeThread->blockArrayStop+1)-(blockArrayStart-1),1,file);
+                if(readSize>=0)
+                    writeThread->blockArrayStop+=readSize;
+            }
         }
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -281,18 +300,17 @@ void ReadThread::internalRead()
         if(readSize<0)
         {
             errorString_internal=tr("Unable to read the source file: ").toStdString()+", errno: "+std::to_string(errno);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("file.error()!=QFile::NoError: %1, error: ").arg(QString::number(file.error())).toStdString()+errorString_internal);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"]  errno: "+std::to_string(errno));
             isInReadLoop=false;
             emit error();
             return;
         }
-        readSize=blockArray.size();
         if(readSize>0)
         {
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=WaitWritePipe;
             #endif
-            if(!writeThread->write(blockArray))//speed limitation here
+            if(!writeThread->write())
             {
                 if(!stopIt)
                 {
@@ -312,7 +330,7 @@ void ReadThread::internalRead()
                 internalClose();//need re-open the destination and then the source
                 return;
             }
-            lastGoodPosition+=blockArray.size();
+            lastGoodPosition+=readSize;
         }
         /*
         if(lastGoodPosition>16*1024)
@@ -326,14 +344,14 @@ void ReadThread::internalRead()
         */
     }
     while(readSize>0 && !stopIt);
-    if(lastGoodPosition>file.size())
+/*    if(lastGoodPosition>file.size())
     {
         errorString_internal=tr("File truncated during the read, possible data change").toStdString();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())).toStdString());
         isInReadLoop=false;
         emit error();
         return;
-    }
+    }*/
     isInReadLoop=false;
     if(stopIt)
     {
@@ -450,7 +468,7 @@ bool ReadThread::internalReopen()
     stopIt=false;
     if(file!=NULL)
         fclose(file);
-    if(size_at_open!=file.size() && mtime_at_open!=(uint64_t)QFileInfo(file).lastModified().toMSecsSinceEpoch()/1000)
+    if(size_at_open!=fseek(file, 0, SEEK_END) && mtime_at_open!=TransferThread::readFileMDateTime(fileName))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source file have changed since the last open, restart all");
         //fix this function like the close function
