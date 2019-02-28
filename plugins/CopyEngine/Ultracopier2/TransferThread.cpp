@@ -1799,7 +1799,7 @@ char TransferThread::readingLetter() const
 
 char TransferThread::writingLetter() const
 {
-    switch(writeThread.stat)
+    switch(writeThread.status)
     {
     case WriteThread::Idle:
         return '_';

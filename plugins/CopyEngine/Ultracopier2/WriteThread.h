@@ -40,7 +40,7 @@ public:
         Close=3,
         Read=5
     };
-    WriteStat stat;
+    WriteStat status;
     #endif
     /// \brief do the fake open
     void fakeOpen();
@@ -75,8 +75,6 @@ public slots:
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     /// \brief executed at regular interval to do a speed throling
     void timeOfTheBlockCopyFinished();
-
-    void resumeNotStarted();
 signals:
     void error() const;
     void opened() const;
@@ -100,7 +98,6 @@ private:
     std::string             errorString_internal;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
-    static QMultiHash<QString,WriteThread *> writeFileList;
     volatile bool       writeFullBlocked;
     uint64_t             lastGoodPosition;
     int64_t              bytesWriten;		///< temp data for block writing, the bytes writen
@@ -109,7 +106,6 @@ private:
     uint64_t             startSize;
     bool                fakeMode;
     bool                needRemoveTheFile;
-    volatile bool       sequential;
     bool                deletePartiallyTransferredFiles;
 private slots:
     bool internalOpen();
