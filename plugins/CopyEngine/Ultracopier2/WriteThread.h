@@ -49,8 +49,6 @@ public:
     /// \brief do the fake writeIsStopped
     void fakeWriteIsStopped();
     /// \brief set block size in KB
-    bool setBlockSize(const int blockSize);
-    /// \brief get the last good position
     int64_t getLastGoodPosition() const;
     /// \brief buffer is empty
     bool bufferIsEmpty();
@@ -100,7 +98,6 @@ private:
     volatile bool       postOperationRequested;
     volatile bool       writeFullBlocked;
     uint64_t             lastGoodPosition;
-    int64_t              bytesWriten;		///< temp data for block writing, the bytes writen
     int                 id;
     volatile bool       endDetected;
     uint64_t             startSize;

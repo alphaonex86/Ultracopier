@@ -19,7 +19,6 @@ HEADERS         = \
     $$PWD/ReadThread.h \
     $$PWD/WriteThread.h \
     $$PWD/MkPath.h \
-    $$PWD/AvancedQFile.h \
     $$PWD/ListThread.h \
     $$PWD/../../../interface/PluginInterface_CopyEngine.h \
     $$PWD/../../../interface/OptionInterface.h \
@@ -43,7 +42,6 @@ SOURCES         = \
     $$PWD/ReadThread.cpp \
     $$PWD/WriteThread.cpp \
     $$PWD/MkPath.cpp \
-    $$PWD/AvancedQFile.cpp \
     $$PWD/ListThread.cpp \
     $$PWD/../../../cpp11addition.cpp \
     $$PWD/../../../cpp11additionstringtointcpp.cpp \

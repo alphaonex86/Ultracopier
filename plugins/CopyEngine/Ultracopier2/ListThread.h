@@ -393,9 +393,6 @@ signals:
     void send_sendNewRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule) const;
     void send_realBytesTransfered(const uint64_t &) const;
 
-    void send_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
-    void send_parallelBuffer(const int &parallelBuffer) const;
-    void send_sequentialBuffer(const int &sequentialBuffer) const;
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
     void send_updateMount();
     void missingDiskSpace(std::vector<Diskspace> list) const;

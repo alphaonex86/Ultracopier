@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <fcntl.h>           /* Definition of AT_* constants */
 #include <sys/stat.h>
+#include <stdio.h>
 
 WriteThread::WriteThread()
 {
@@ -325,7 +326,7 @@ void WriteThread::internalClose(bool emitSignal)
             if(!needRemoveTheFile)
             {
                 if(startSize!=lastGoodPosition)
-                    if(!file.resize(lastGoodPosition))
+                    if(ftruncate(fileno(file),lastGoodPosition)!=0)
                     {
                         if(emitSignal)
                         {
@@ -342,7 +343,7 @@ void WriteThread::internalClose(bool emitSignal)
             {
                 if(deletePartiallyTransferredFiles)
                 {
-                    if(!file.remove())
+                    if(unlink(fileName.c_str())!=0)
                         if(emitSignal)
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] unable to remove the destination file");
                 }
@@ -373,12 +374,12 @@ void WriteThread::internalClose(bool emitSignal)
 void WriteThread::internalReopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
-    QString tempFile=file.fileName();
+    std::string tempFile=fileName;
     internalClose(false);
     flushBuffer();
     stopIt=false;
     lastGoodPosition=0;
-    file.setFileName(tempFile);
+    fileName=tempFile;
     if(internalOpen())
         emit reopened();
 }
@@ -419,30 +420,6 @@ void WriteThread::fakeWriteIsStopped()
     emit writeIsStopped();
 }
 
-/// do the checksum
-void WriteThread::startCheckSum()
-{
-    emit internalStartChecksum();
-}
-
-/** \brief set block size
-\param block the new block size in B
-\return Return true if succes */
-bool WriteThread::setBlockSize(const int blockSize)
-{
-    //can be smaller than min block size to do correct speed limitation
-    if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
-    {
-        this->blockSize=blockSize;
-        return true;
-    }
-    else
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"block size out of range: "+std::to_string(blockSize));
-        return false;
-    }
-}
-
 /// \brief get the last good position
 int64_t WriteThread::getLastGoodPosition() const
 {
@@ -451,7 +428,7 @@ int64_t WriteThread::getLastGoodPosition() const
 
 void WriteThread::flushAndSeekToZero()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flushAndSeekToZero: "+std::to_string(blockSize));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flushAndSeekToZero");
     stopIt=true;
     emit internalStartFlushAndSeekToZero();
 }
@@ -479,35 +456,9 @@ bool WriteThread::write()
 {
     if(stopIt)
         return false;
-    bool atMax;
-    if(sequential)
-    {
-        if(stopIt)
-            return false;
-        {
-            blockArray.append(data);
-            atMax=(blockArray.size()>=numberOfBlock);
-        }
-        if(atMax)
-            emit internalStartWrite();
-    }
-    else
-    {
-        if(stopIt)
-            return false;
-        {
-            blockArray.append(data);
-            atMax=(blockArray.size()>=numberOfBlock);
-        }
-        emit internalStartWrite();
-    }
-    if(atMax)
-    {
-        writeFullBlocked=true;
-        writeFullBlocked=false;
-    }
     if(stopIt)
         return false;
+    emit internalStartWrite();
     if(stopIt)
         return false;
     return true;
@@ -515,7 +466,7 @@ bool WriteThread::write()
 
 void WriteThread::internalWrite()
 {
-    bool haveBlock;
+    int32_t              bytesWriten=0;		///< temp data for block writing, the bytes writen
     do
     {
         if(stopIt)
@@ -523,32 +474,37 @@ void WriteThread::internalWrite()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt");
             return;
         }
-        if(stopIt)
-            return;
         //read one block
-        {
-            blockArray.clear();
-            haveBlock=true;
-        }
-        if(stopIt)
+        const size_t blockSize=sizeof(blockArray);
+        uint32_t blockArrayStop=this->blockArrayStop;//load value out of atomic
+        if(blockArrayStart==blockArrayStop)
             return;
-        if(!haveBlock)
-        {
-            if(sequential)
-            {
-                if(endDetected)
-                    internalEndOfFile();
-                return;
-            }
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] End detected of the file");
-            return;
-        }
         if(stopIt)
             return;
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Write;
         #endif
-        bytesWriten=file.write(blockArray);
+        if(blockArrayStop>blockArrayStart)
+        {
+            bytesWriten=fwrite(blockArray+blockArrayStart,blockArrayStop-blockArrayStart,1,file);
+            if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
+                blockArrayStart+=bytesWriten;
+        }
+        else //blockArrayStop<blockArrayStart because == is previously checked
+        {
+            if(blockArrayStart>=blockSize)
+            {
+                bytesWriten=fwrite(blockArray,blockArrayStop,1,file);
+                if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
+                    blockArrayStart=bytesWriten;
+            }
+            else
+            {
+                bytesWriten=fwrite(blockArray+blockArrayStart,blockSize-blockArrayStart,1,file);
+                if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
+                    blockArrayStart+=bytesWriten;
+            }
+        }
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
         #endif
@@ -560,22 +516,14 @@ void WriteThread::internalWrite()
         }
         if(stopIt)
             return;
-        if(file.error()!=QFile::NoError)
+        if(errno!=0 && errno!=EAGAIN)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Error in writing: "+fileName+" (%2)").arg(file.errorString()).arg(file.error()).toStdString());
-            errorString_internal=QStringLiteral("Error in writing: %1 (%2)").arg(file.errorString()).arg(file.error()).toStdString();
-            stopIt=true;
-            emit error();
-            return;
-        }
-        if(bytesWriten!=blockArray.size())
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Error in writing, bytesWriten: "+fileName+", blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString());
-            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Error in writing: "+fileName+", errno: "+std::to_string(errno));
+            errorString_internal="Error in writing: "+fileName+" ("+std::to_string(errno)+")";
             stopIt=true;
             emit error();
             return;
         }
         lastGoodPosition+=bytesWriten;
-    } while(sequential);
+    } while(bytesWriten>0);
 }

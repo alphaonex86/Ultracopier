@@ -276,7 +276,7 @@ void ReadThread::internalRead()
         uint32_t blockArrayStart=writeThread->blockArrayStart;//load value out of atomic
         if(blockArrayStart<=writeThread->blockArrayStop)
         {
-            if(writeThread->blockArrayStop==blockSize)
+            if(writeThread->blockArrayStop>=blockSize)
             {
                 if(blockArrayStart==0)
                 {
@@ -286,7 +286,7 @@ void ReadThread::internalRead()
                 else
                 {
                     readSize=fread(writeThread->blockArray,blockArrayStart-1,1,file);
-                    if(readSize>=0)
+                    if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop=readSize;
                 }
             }
@@ -300,8 +300,8 @@ void ReadThread::internalRead()
                 else
                 {
                     readSize=fread(writeThread->blockArray+writeThread->blockArrayStop+1,blockSize-(writeThread->blockArrayStop+1),1,file);
-                    if(readSize>=0)
-                        writeThread->blockArrayStop=readSize;
+                    if(readSize>=0 && (errno==0 || errno==EAGAIN))
+                        writeThread->blockArrayStop+=readSize;
                 }
             }
         }
@@ -315,7 +315,7 @@ void ReadThread::internalRead()
             else
             {
                 readSize=fread(writeThread->blockArray+writeThread->blockArrayStop+1,(writeThread->blockArrayStop+1)-(blockArrayStart-1),1,file);
-                if(readSize>=0)
+                if(readSize>=0 && (errno==0 || errno==EAGAIN))
                     writeThread->blockArrayStop+=readSize;
             }
         }
@@ -323,7 +323,7 @@ void ReadThread::internalRead()
         stat=Idle;
         #endif
 
-        if(readSize<0)
+        if(errno!=0 && errno!=EAGAIN)
         {
             errorString_internal=tr("Unable to read the source file: ").toStdString()+", errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"]  errno: "+std::to_string(errno));
@@ -369,7 +369,7 @@ void ReadThread::internalRead()
         }
         */
     }
-    while(readSize>0 && !stopIt);
+    while(readSize>0 && errno!=EAGAIN && !stopIt);
 /*    if(lastGoodPosition>file.size())
     {
         errorString_internal=tr("File truncated during the read, possible data change").toStdString();
@@ -384,7 +384,8 @@ void ReadThread::internalRead()
         stopIt=false;
         return;
     }
-    emit readIsStopped();//will product by signal connection writeThread->endIsDetected();
+    if(errno!=EAGAIN)
+        emit readIsStopped();//will product by signal connection writeThread->endIsDetected();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
 

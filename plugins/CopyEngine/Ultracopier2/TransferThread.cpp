@@ -889,14 +889,6 @@ void TransferThread::setKeepDate(const bool keepDate)
     this->keepDate=keepDate;
 }
 
-//set block size in Bytes
-bool TransferThread::setBlockSize(const unsigned int blockSize)
-{
-    bool read=readThread.setBlockSize(blockSize);
-    bool write=writeThread.setBlockSize(blockSize);
-    return (read && write);
-}
-
 //stop the current copy
 void TransferThread::stop()
 {

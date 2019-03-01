@@ -123,8 +123,6 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
-    /// \brief set block size in KB
-    bool setBlockSize(const unsigned int blockSize);
     /// \brief stop the copy
     void stop();
     /// \brief skip the copy
