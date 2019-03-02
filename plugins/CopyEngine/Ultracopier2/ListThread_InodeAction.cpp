@@ -9,16 +9,16 @@ ActionToDoInode& currentActionToDoInode=actionToDoListInode[int_for_internal_loo
 switch(currentActionToDoInode.type)
 {
     case ActionType_RealMove:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("launch real move, source: %1, destination: %2").arg(currentActionToDoInode.source.absoluteFilePath()).arg(currentActionToDoInode.destination.absoluteFilePath()).toStdString());
-        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch real move, source: "+currentActionToDoInode.source+", destination: "+currentActionToDoInode.destination);
+        mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=inodeThreads)
             return;
     break;
     case ActionType_MkPath:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("launch mkpath, source: %1, destination: %2").arg(currentActionToDoInode.source.absoluteFilePath()).arg(currentActionToDoInode.destination.absoluteFilePath()).toStdString());
-        mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch mkpath, source: "+currentActionToDoInode.source+", destination: "+currentActionToDoInode.destination);
+        mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=inodeThreads)
@@ -26,8 +26,8 @@ switch(currentActionToDoInode.type)
     break;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     case ActionType_RmSync:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QString("launch rmsync, destination: %1").arg(currentActionToDoInode.destination.absoluteFilePath()).toStdString());
-        mkPathQueue.addPath(currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmsync, destination: "+currentActionToDoInode.destination);
+        mkPathQueue.addPath(currentActionToDoInode.destination,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
         if(numberOfInodeOperation>=inodeThreads)
@@ -38,7 +38,7 @@ switch(currentActionToDoInode.type)
         //then empty (no file), can try remove it
         if(currentActionToDoInode.size==0 || actionToDoListTransfer.empty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("launch rmpath: %1").arg(currentActionToDoInode.source.absoluteFilePath()).toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmpath: "+currentActionToDoInode.source);
             mkPathQueue.addPath(currentActionToDoInode.source.absoluteFilePath(),currentActionToDoInode.destination.absoluteFilePath(),currentActionToDoInode.type);
             currentActionToDoInode.isRunning=true;
             numberOfInodeOperation++;

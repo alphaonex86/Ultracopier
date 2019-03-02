@@ -7,7 +7,6 @@
 #define MKPATH_H
 
 #include <QThread>
-#include <QFileInfo>
 #include <string>
 #include <QSemaphore>
 #include <vector>
@@ -40,13 +39,13 @@ public:
     explicit MkPath();
     ~MkPath();
     /// \brief add path to make
-    void addPath(const QFileInfo& source,const QFileInfo& destination,const ActionType &actionType);
+    void addPath(const std::string& source,const std::string& destination,const ActionType &actionType);
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
 signals:
-    void errorOnFolder(const QFileInfo &,const std::string &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void errorOnFolder(const std::string &,const std::string &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void firstFolderFinish();
-    void internalStartAddPath(const QFileInfo& source,const QFileInfo& destination, const ActionType &actionType) const;
+    void internalStartAddPath(const std::string& source,const std::string& destination, const ActionType &actionType) const;
     void internalStartDoThisPath() const;
     void internalStartSkip() const;
     void internalStartRetry() const;
@@ -61,16 +60,15 @@ private:
     bool waitAction;
     bool stopIt;
     bool skipIt;
-    QDateTime		maxTime;
+    uint64_t		minTime;
     struct Item
     {
-        QFileInfo source;
-        QFileInfo destination;
+        std::string source;
+        std::string destination;
         ActionType actionType;
     };
-    QList<Item> pathList;
+    std::vector<Item> pathList;
     void checkIfCanDoTheNext();
-    QDir dir;
     bool doRightTransfer;
     bool keepDate;
     bool doTheDateTransfer;
@@ -88,15 +86,15 @@ private:
         #endif
     #endif
     //fonction to edit the file date time
-    bool readFileDateTime(const QFileInfo &source);
-    bool writeFileDateTime(const QFileInfo &destination);
+    bool readFileDateTime(const std::string &source);
+    bool writeFileDateTime(const std::string &destination);
     static std::string text_slash;
 private slots:
     void internalDoThisPath();
-    void internalAddPath(const QFileInfo& source, const QFileInfo& destination,const ActionType &actionType);
+    void internalAddPath(const std::string& source, const std::string& destination,const ActionType &actionType);
     void internalSkip();
     void internalRetry();
-    bool rmpath(const QDir &dir
+    bool rmpath(const std::string &dir
                 #ifdef ULTRACOPIER_PLUGIN_RSYNC
                 , const bool &toSync=false
                 #endif

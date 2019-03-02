@@ -1,4 +1,5 @@
 #include "MkPath.h"
+#include "TransferThread.h"
 
 #ifdef Q_OS_WIN32
     #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -16,7 +17,16 @@ MkPath::MkPath()
     stopIt=false;
     waitAction=false;
     doRightTransfer=false;
-    maxTime=QDateTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
+    tm t;
+    t.tm_gmtoff=0;
+    t.tm_hour=0;
+    t.tm_isdst=0;
+    t.tm_mday=1;
+    t.tm_min=0;
+    t.tm_mon=1;
+    t.tm_sec=0;
+    t.tm_year=ULTRACOPIER_PLUGIN_MINIMALYEAR;
+    minTime=mktime(&t);
     setObjectName("MkPath");
     moveToThread(this);
     start();
@@ -34,9 +44,9 @@ MkPath::~MkPath()
     wait();
 }
 
-void MkPath::addPath(const QFileInfo& source, const QFileInfo& destination, const ActionType &actionType)
+void MkPath::addPath(const std::string& source, const std::string& destination, const ActionType &actionType)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination);
     if(stopIt)
         return;
     emit internalStartAddPath(source,destination,actionType);
@@ -65,32 +75,33 @@ void MkPath::run()
 
 void MkPath::internalDoThisPath()
 {
-    if(waitAction || pathList.isEmpty())
+    if(waitAction || pathList.empty())
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, move: %3").arg(pathList.first().source.absoluteFilePath()).arg(pathList.first().destination.absoluteFilePath()).arg(pathList.first().actionType).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+pathList.front().source+", destination: "+
+                             pathList.front().destination+", move: "+std::to_string(pathList.front().actionType));
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    if(pathList.first().actionType==ActionType_RmSync)
+    if(pathList.front().actionType==ActionType_RmSync)
     {
-        if(pathList.first().destination.isFile())
+        if(pathList.front().destination.isFile())
         {
-            QFile removedFile(pathList.first().destination.absoluteFilePath());
+            QFile removedFile(pathList.front().destination.absoluteFilePath());
             if(!removedFile.remove())
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath().toStdString()+", error: "+removedFile.errorString().toStdString());
-                emit errorOnFolder(pathList.first().destination,removedFile.errorString().toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.front().destination.absoluteFilePath().toStdString()+", error: "+removedFile.errorString().toStdString());
+                emit errorOnFolder(pathList.front().destination,removedFile.errorString().toStdString());
                 return;
             }
         }
-        else if(!rmpath(pathList.first().destination.absoluteFilePath()))
+        else if(!rmpath(pathList.front().destination.absoluteFilePath()))
         {
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.first().destination.absoluteFilePath().toStdString());
-            emit errorOnFolder(pathList.first().destination,tr("Unable to remove").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the inode: "+pathList.front().destination.absoluteFilePath().toStdString());
+            emit errorOnFolder(pathList.front().destination,tr("Unable to remove").toStdString());
             return;
         }
         pathList.removeFirst();
@@ -102,108 +113,111 @@ void MkPath::internalDoThisPath()
     doTheDateTransfer=false;
     if(keepDate)
     {
-        if(!pathList.first().source.exists())
+        const int64_t &sourceLastModified=TransferThread::readFileMDateTime(pathList.front().source);
+        if(!TransferThread::exists(pathList.front().source))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources not exists: "+pathList.first().source.absoluteFilePath().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources not exists: "+pathList.front().source);
             doTheDateTransfer=false;
         }
-        else if(maxTime>=pathList.first().source.lastModified())
+        else if((int64_t)minTime>=sourceLastModified)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+pathList.first().source.absoluteFilePath().toStdString()+": "+maxTime.toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+">="+pathList.first().source.lastModified().toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+pathList.front().source+
+                                     ": "+QDateTime::fromSecsSinceEpoch(minTime).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+
+                                     ">="+QDateTime::fromSecsSinceEpoch(sourceLastModified).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString());
             doTheDateTransfer=false;
         }
         else
         {
-            doTheDateTransfer=readFileDateTime(pathList.first().source);
+            doTheDateTransfer=readFileDateTime(pathList.front().source);
             /*if(!doTheDateTransfer)
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.first().source.absoluteFilePath());
-                emit errorOnFolder(pathList.first().source,tr("Unable to get time"));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get source folder time: "+pathList.front().source.absoluteFilePath());
+                emit errorOnFolder(pathList.front().source,tr("Unable to get time"));
                 return;
             }*/
         }
     }
-    if(dir.exists(pathList.first().destination.absoluteFilePath()) && pathList.first().actionType==ActionType_RealMove)
-        pathList.first().actionType=ActionType_MovePath;
-    if(pathList.first().actionType!=ActionType_RealMove)
+    if(dir.exists(pathList.front().destination.absoluteFilePath()) && pathList.front().actionType==ActionType_RealMove)
+        pathList.front().actionType=ActionType_MovePath;
+    if(pathList.front().actionType!=ActionType_RealMove)
     {
-        if(!dir.exists(pathList.first().destination.absoluteFilePath()))
-            if(!dir.mkpath(pathList.first().destination.absoluteFilePath()))
+        if(!dir.exists(pathList.front().destination.absoluteFilePath()))
+            if(!dir.mkpath(pathList.front().destination.absoluteFilePath()))
             {
-                if(!dir.exists(pathList.first().destination.absoluteFilePath()))
+                if(!dir.exists(pathList.front().destination.absoluteFilePath()))
                 {
                     if(stopIt)
                         return;
                     waitAction=true;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath().toStdString());
-                    emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder").toStdString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.front().destination.absoluteFilePath().toStdString());
+                    emit errorOnFolder(pathList.front().destination,tr("Unable to create the folder").toStdString());
                     return;
                 }
             }
     }
     else
     {
-        if(!pathList.first().source.exists())
+        if(!pathList.front().source.exists())
         {
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source folder don't exists: "+pathList.first().source.absoluteFilePath().toStdString());
-            emit errorOnFolder(pathList.first().destination,tr("The source folder don't exists").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source folder don't exists: "+pathList.front().source.absoluteFilePath().toStdString());
+            emit errorOnFolder(pathList.front().destination,tr("The source folder don't exists").toStdString());
             return;
         }
-        if(!pathList.first().source.isDir())//it's really an error?
+        if(!pathList.front().source.isDir())//it's really an error?
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source is not a folder: "+pathList.first().source.absoluteFilePath().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source is not a folder: "+pathList.front().source.absoluteFilePath().toStdString());
             /*if(stopIt)
                 return;
             waitAction=true;
-            emit errorOnFolder(pathList.first().destination,tr("The source is not a folder"));
+            emit errorOnFolder(pathList.front().destination,tr("The source is not a folder"));
             return;*/
         }
-        if(pathList.first().destination.absoluteFilePath().startsWith(pathList.first().source.absoluteFilePath()+QString::fromStdString(text_slash)))
+        if(pathList.front().destination.absoluteFilePath().startsWith(pathList.front().source.absoluteFilePath()+QString::fromStdString(text_slash)))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+pathList.first().destination.absoluteFilePath().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+pathList.front().destination.absoluteFilePath().toStdString());
             int random=rand();
-            QFileInfo tempFolder=pathList.first().source.absolutePath()+QString::fromStdString(text_slash)+QString::number(random);
+            std::string tempFolder=pathList.front().source.absolutePath()+QString::fromStdString(text_slash)+QString::number(random);
             while(tempFolder.exists())
             {
                 random=rand();
-                tempFolder=pathList.first().source.absolutePath()+QString::fromStdString(text_slash)+QString::number(random);
+                tempFolder=pathList.front().source.absolutePath()+QString::fromStdString(text_slash)+QString::number(random);
             }
-            if(!dir.rename(pathList.first().source.absoluteFilePath(),tempFolder.absoluteFilePath()))
+            if(!dir.rename(pathList.front().source.absoluteFilePath(),tempFolder.absoluteFilePath()))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: "+pathList.first().destination.absoluteFilePath().toStdString());
-                emit errorOnFolder(pathList.first().destination,tr("Unable to temporary rename the folder").toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: "+pathList.front().destination.absoluteFilePath().toStdString());
+                emit errorOnFolder(pathList.front().destination,tr("Unable to temporary rename the folder").toStdString());
                 return;
             }
             /* http://doc.qt.io/qt-5/qdir.html#rename
              * On most file systems, rename() fails only if oldName does not exist, or if a file with the new name already exists.
-            if(!dir.mkpath(pathList.first().destination.absolutePath()))
+            if(!dir.mkpath(pathList.front().destination.absolutePath()))
             {
-                if(!dir.exists(pathList.first().destination.absolutePath()))
+                if(!dir.exists(pathList.front().destination.absolutePath()))
                 {
                     if(stopIt)
                         return;
                     waitAction=true;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
-                    emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.front().destination.absoluteFilePath());
+                    emit errorOnFolder(pathList.front().destination,tr("Unable to create the folder"));
                     return;
                 }
             }*/
-            if(!dir.rename(tempFolder.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
+            if(!dir.rename(tempFolder.absoluteFilePath(),pathList.front().destination.absoluteFilePath()))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to do the final real move the folder: "+pathList.first().destination.absoluteFilePath().toStdString());
-                emit errorOnFolder(pathList.first().destination,tr("Unable to do the final real move the folder").toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to do the final real move the folder: "+pathList.front().destination.absoluteFilePath().toStdString());
+                emit errorOnFolder(pathList.front().destination,tr("Unable to do the final real move the folder").toStdString());
                 return;
             }
         }
@@ -211,69 +225,69 @@ void MkPath::internalDoThisPath()
         {
             /* http://doc.qt.io/qt-5/qdir.html#rename
              * On most file systems, rename() fails only if oldName does not exist, or if a file with the new name already exists.
-            if(!dir.mkpath(pathList.first().destination.absolutePath()))
+            if(!dir.mkpath(pathList.front().destination.absolutePath()))
             {
-                if(!dir.exists(pathList.first().destination.absolutePath()))
+                if(!dir.exists(pathList.front().destination.absolutePath()))
                 {
                     if(stopIt)
                         return;
                     waitAction=true;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.first().destination.absoluteFilePath());
-                    emit errorOnFolder(pathList.first().destination,tr("Unable to create the folder"));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+pathList.front().destination.absoluteFilePath());
+                    emit errorOnFolder(pathList.front().destination,tr("Unable to create the folder"));
                     return;
                 }
             }*/
-            if(!dir.rename(pathList.first().source.absoluteFilePath(),pathList.first().destination.absoluteFilePath()))
+            if(!dir.rename(pathList.front().source.absoluteFilePath(),pathList.front().destination.absoluteFilePath()))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+pathList.first().source.absoluteFilePath().toStdString()+", soruce exists: "+std::to_string(QDir(pathList.first().source.absoluteFilePath()).exists())+", to: "+pathList.first().destination.absoluteFilePath().toStdString()
-                                         +", destination exist: "+std::to_string(QDir(pathList.first().destination.absoluteFilePath()).exists()));
-                emit errorOnFolder(pathList.first().destination,tr("Unable to move the folder").toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+pathList.front().source.absoluteFilePath().toStdString()+", soruce exists: "+std::to_string(QDir(pathList.front().source.absoluteFilePath()).exists())+", to: "+pathList.front().destination.absoluteFilePath().toStdString()
+                                         +", destination exist: "+std::to_string(QDir(pathList.front().destination.absoluteFilePath()).exists()));
+                emit errorOnFolder(pathList.front().destination,tr("Unable to move the folder").toStdString());
                 return;
             }
         }
     }
     if(doTheDateTransfer)
-        if(!writeFileDateTime(pathList.first().destination))
+        if(!writeFileDateTime(pathList.front().destination))
         {
-            if(!pathList.first().destination.exists())
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+pathList.first().destination.absoluteFilePath().toStdString());
-            else if(!pathList.first().destination.isDir())
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+pathList.first().destination.absoluteFilePath().toStdString());
+            if(!pathList.front().destination.exists())
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+pathList.front().destination.absoluteFilePath().toStdString());
+            else if(!pathList.front().destination.isDir())
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+pathList.front().destination.absoluteFilePath().toStdString());
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+pathList.first().destination.absoluteFilePath().toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+pathList.front().destination.absoluteFilePath().toStdString());
             /*if(stopIt)
                 return;
             waitAction=true;
 
-            emit errorOnFolder(pathList.first().source,tr("Unable to set time"));
+            emit errorOnFolder(pathList.front().source,tr("Unable to set time"));
             return;*/
         }
-    if(doRightTransfer && pathList.first().actionType!=ActionType_RealMove)
+    if(doRightTransfer && pathList.front().actionType!=ActionType_RealMove)
     {
-        QFile source(pathList.first().source.absoluteFilePath());
-        QFile destination(pathList.first().destination.absoluteFilePath());
+        QFile source(pathList.front().source.absoluteFilePath());
+        QFile destination(pathList.front().destination.absoluteFilePath());
         if(!destination.setPermissions(source.permissions()))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set the right: "+pathList.first().destination.absoluteFilePath().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set the right: "+pathList.front().destination.absoluteFilePath().toStdString());
             /*if(stopIt)
                 return;
             waitAction=true;
-            emit errorOnFolder(pathList.first().source,tr("Unable to set the access-right"));
+            emit errorOnFolder(pathList.front().source,tr("Unable to set the access-right"));
             return;*/
         }
     }
-    if(pathList.first().actionType==ActionType_MovePath)
+    if(pathList.front().actionType==ActionType_MovePath)
     {
-        if(!rmpath(pathList.first().source.absoluteFilePath()))
+        if(!rmpath(pathList.front().source.absoluteFilePath()))
         {
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the source folder: "+pathList.first().destination.absoluteFilePath().toStdString());
-            emit errorOnFolder(pathList.first().source,tr("Unable to remove").toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the source folder: "+pathList.front().destination.absoluteFilePath().toStdString());
+            emit errorOnFolder(pathList.front().source,tr("Unable to remove").toStdString());
             return;
         }
     }
@@ -282,7 +296,7 @@ void MkPath::internalDoThisPath()
     checkIfCanDoTheNext();
 }
 
-void MkPath::internalAddPath(const QFileInfo& source, const QFileInfo& destination, const ActionType &actionType)
+void MkPath::internalAddPath(const std::string& source, const std::string& destination, const ActionType &actionType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
     Item tempPath;
@@ -335,10 +349,10 @@ bool MkPath::rmpath(const QDir &dir
     if(!dir.exists())
         return true;
     bool allHaveWork=true;
-    QFileInfoList list = dir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);
+    std::stringList list = dir.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst);
     for (int i = 0; i < list.size(); ++i)
     {
-        QFileInfo fileInfo(list.at(i));
+        std::string fileInfo(list.at(i));
         if(!fileInfo.isDir())
         {
             #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -389,7 +403,7 @@ bool MkPath::rmpath(const QDir &dir
 }
 
 //fonction to edit the file date time
-bool MkPath::readFileDateTime(const QFileInfo &source)
+bool MkPath::readFileDateTime(const std::string &source)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source.absoluteFilePath().toStdString()+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
@@ -407,7 +421,7 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
             Q_UNUSED(ctime);
             return true;
         #else //mainly for mac
-            QFileInfo fileInfo(source);
+            std::string fileInfo(source);
             time_t ctime=fileInfo.created().toTime_t();
             time_t actime=fileInfo.lastRead().toTime_t();
             time_t modtime=fileInfo.lastModified().toTime_t();
@@ -467,7 +481,7 @@ bool MkPath::readFileDateTime(const QFileInfo &source)
     return false;
 }
 
-bool MkPath::writeFileDateTime(const QFileInfo &destination)
+bool MkPath::writeFileDateTime(const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"writeFileDateTime("+destination.absoluteFilePath().toStdString()+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */

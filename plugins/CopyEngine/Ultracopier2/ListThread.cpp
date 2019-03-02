@@ -231,25 +231,6 @@ void ListThread::setKeepDate(const bool keepDate)
     }
 }
 
-//set block size in KB
-void ListThread::setBlockSize(const int blockSize)
-{
-    this->blockSize=blockSize*1024;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->setBlockSize(this->blockSize);
-        index++;
-    }
-}
-
-//set auto start
-void ListThread::setAutoStart(const bool autoStart)
-{
-    this->autoStart=autoStart;
-}
-
 #ifdef ULTRACOPIER_PLUGIN_RSYNC
 /// \brief set rsync
 void ListThread::setRsync(const bool rsync)
@@ -276,7 +257,7 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
         scanFileOrFolderThreadsPool.at(i)->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
 }
 
-void ListThread::fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode)
+void ListThread::fileTransfer(const std::string &sourceFileInfo,const std::string &destinationFileInfo,const Ultracopier::CopyMode &mode)
 {
     if(stopIt)
         return;
@@ -435,15 +416,8 @@ void ListThread::autoStartAndCheckSpace()
 
 void ListThread::autoStartIfNeeded()
 {
-    if(autoStart)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
-        startGeneralTransfer();
-    }
-    else
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Put the copy engine in pause");
-    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
+    startGeneralTransfer();
 }
 
 void ListThread::startGeneralTransfer()
@@ -595,66 +569,6 @@ std::pair<quint64, quint64> ListThread::getReturnPairQuint64ToCopyEngine() const
 Ultracopier::ItemOfCopyList ListThread::getReturnItemOfCopyListToCopyEngine() const
 {
     return returnItemOfCopyListToCopyEngine;
-}
-
-void ListThread::set_doChecksum(bool doChecksum)
-{
-    this->doChecksum=doChecksum;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->set_doChecksum(doChecksum);
-        index++;
-    }
-}
-
-void ListThread::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
-{
-    this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
-        index++;
-    }
-}
-
-void ListThread::set_checksumOnlyOnError(bool checksumOnlyOnError)
-{
-    this->checksumOnlyOnError=checksumOnlyOnError;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->set_checksumOnlyOnError(checksumOnlyOnError);
-        index++;
-    }
-}
-
-void ListThread::set_osBuffer(bool osBuffer)
-{
-    this->osBuffer=osBuffer;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->set_osBuffer(osBuffer);
-        index++;
-    }
-}
-
-void ListThread::set_osBufferLimited(bool osBufferLimited)
-{
-    this->osBufferLimited=osBufferLimited;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
-    {
-        transferThreadList.at(index)->set_osBufferLimited(osBufferLimited);
-        index++;
-    }
 }
 
 void ListThread::realByteTransfered()
@@ -826,13 +740,13 @@ void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisA
 }
 
 //mk path to do
-uint64_t ListThread::addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode)
+uint64_t ListThread::addToMkPath(const std::string& source,const std::string& destination, const int& inode)
 {
     if(stopIt)
         return 0;
     if(inode!=0 && (!keepDate && !doRightTransfer))
         return 0;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination);
     ActionToDoInode temp;
     temp.type       = ActionType_MkPath;
     temp.id         = generateIdNumber();
@@ -844,11 +758,11 @@ uint64_t ListThread::addToMkPath(const QFileInfo& source,const QFileInfo& destin
 }
 
 //add rm path to do
-void ListThread::addToMovePath(const QFileInfo& source, const QFileInfo &destination, const int& inodeToRemove)
+void ListThread::addToMovePath(const std::string &source, const std::string &destination, const int& inodeToRemove)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, inodeToRemove: %3").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(inodeToRemove).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination+", inodeToRemove: "+std::to_string(inodeToRemove));
     ActionToDoInode temp;
     temp.type	= ActionType_MovePath;
     temp.id		= generateIdNumber();
@@ -859,11 +773,11 @@ void ListThread::addToMovePath(const QFileInfo& source, const QFileInfo &destina
     actionToDoListInode.push_back(temp);
 }
 
-void ListThread::addToRealMove(const QFileInfo& source,const QFileInfo& destination)
+void ListThread::addToRealMove(const std::string& source,const std::string& destination)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination);
     ActionToDoInode temp;
     temp.type	= ActionType_RealMove;
     temp.id		= generateIdNumber();
@@ -876,7 +790,7 @@ void ListThread::addToRealMove(const QFileInfo& source,const QFileInfo& destinat
 
 #ifdef ULTRACOPIER_PLUGIN_RSYNC
 //rsync rm
-void ListThread::addToRmForRsync(const QFileInfo& destination)
+void ListThread::addToRmForRsync(const std::string& destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"inode: "+destination.absoluteFilePath().toStdString());
     ActionToDoInode temp;
@@ -919,7 +833,6 @@ void ListThread::sendProgression()
         {
             case TransferStat_Transfer:
             case TransferStat_PostTransfer:
-            case TransferStat_Checksum:
             case TransferStat_PostOperation:
             {
                 copiedSize=temp_transfer_thread->copiedSize();
@@ -974,14 +887,33 @@ void ListThread::syncTransferList_internal()
         Ultracopier::ReturnActionOnCopyList newAction;
         newAction.type				= Ultracopier::PreOperation;
         newAction.addAction.id			= item.id;
-        newAction.addAction.sourceFullPath	= item.source.absoluteFilePath().toStdString();
-        newAction.addAction.sourceFileName	= item.source.fileName().toStdString();
-        newAction.addAction.destinationFullPath	= item.destination.absoluteFilePath().toStdString();
-        newAction.addAction.destinationFileName	= item.destination.fileName().toStdString();
+        const size_t sourceIndex=item.source.rfind('/');
+        if(sourceIndex == std::string::npos)
+        {
+            newAction.addAction.sourceFullPath	= '/';
+            newAction.addAction.sourceFileName	= item.source;
+        }
+        else
+        {
+            newAction.addAction.sourceFullPath	= item.source;
+            newAction.addAction.sourceFileName	= item.source.substr(sourceIndex);
+        }
+        const size_t destinationIndex=item.destination.rfind('/');
+        if(destinationIndex == std::string::npos)
+        {
+            newAction.addAction.destinationFullPath	= '/';
+            newAction.addAction.destinationFileName	= item.destination;
+        }
+        else
+        {
+            newAction.addAction.destinationFullPath	= item.destination;
+            newAction.addAction.destinationFileName	= item.destination.substr(destinationIndex);
+        }
         newAction.addAction.size		= item.size;
         newAction.addAction.mode		= item.mode;
         actionDone.push_back(newAction);
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("id: %1, size: %2, name: %3, size2: %4").arg(item.id).arg(item.size).arg(item.source.absoluteFilePath()).arg(newAction.addAction.size).toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"id: "+std::to_string(item.id)+", size: "+std::to_string(item.size)+
+                                 ", name: "+item.source+", size2: "+std::to_string(newAction.addAction.size));
         if(item.isRunning)
         {
             for(int_for_internal_loop=0; int_for_internal_loop<loop_sub_size; ++int_for_internal_loop) {
@@ -989,10 +921,28 @@ void ListThread::syncTransferList_internal()
                 Ultracopier::ReturnActionOnCopyList newAction;
                 newAction.type				= Ultracopier::PreOperation;
                 newAction.addAction.id			= item.id;
-                newAction.addAction.sourceFullPath	= item.source.absoluteFilePath().toStdString();
-                newAction.addAction.sourceFileName	= item.source.fileName().toStdString();
-                newAction.addAction.destinationFullPath	= item.destination.absoluteFilePath().toStdString();
-                newAction.addAction.destinationFileName	= item.destination.fileName().toStdString();
+                const size_t sourceIndex=item.source.rfind('/');
+                if(sourceIndex == std::string::npos)
+                {
+                    newAction.addAction.sourceFullPath	= item.source;
+                    newAction.addAction.sourceFileName	= item.source;
+                }
+                else
+                {
+                    newAction.addAction.sourceFullPath	= item.source;
+                    newAction.addAction.sourceFileName	= item.source.substr(sourceIndex);
+                }
+                const size_t destinationIndex=item.destination.rfind('/');
+                if(destinationIndex == std::string::npos)
+                {
+                    newAction.addAction.destinationFullPath	= item.destination;
+                    newAction.addAction.destinationFileName	= item.destination;
+                }
+                else
+                {
+                    newAction.addAction.destinationFullPath	= item.destination;
+                    newAction.addAction.destinationFileName	= item.destination.substr(destinationIndex);
+                }
                 newAction.addAction.size		= item.size;
                 newAction.addAction.mode		= item.mode;
                 actionDone.push_back(newAction);
@@ -1022,18 +972,18 @@ void ListThread::syncTransferList_internal()
 }
 
 //add file transfer to do
-uint64_t ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode)
+uint64_t ListThread::addToTransfer(const std::string& source,const std::string& destination,const Ultracopier::CopyMode& mode)
 {
     if(stopIt)
         return 0;
     //add to transfer list
     numberOfTransferIntoToDoList++;
     quint64 size=0;
-    if(!source.isSymLink())
+    if(!TransferThread::is_symlink(source))
         size=source.size();
-    const std::string &drive=driveManagement.getDrive(destination.absoluteFilePath().toStdString());
+    const std::string &drive=driveManagement.getDrive(destination);
     if(!drive.empty())//can be a network drive
-        if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source.absoluteFilePath().toStdString()))
+        if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source))
         {
             if(requiredSpace.find(drive)!=requiredSpace.cend())
             {
@@ -1060,7 +1010,8 @@ uint64_t ListThread::addToTransfer(const QFileInfo& source,const QFileInfo& dest
     newAction.type				= Ultracopier::AddingItem;
     newAction.addAction=actionToDoTransferToItemOfCopyList(temp);
     actionDone.push_back(newAction);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source: %1, destination: %2, add entry: %3, size: %4, size2: %5, isSymLink: %6").arg(source.absoluteFilePath()).arg(destination.absoluteFilePath()).arg(temp.id).arg(temp.size).arg(size).arg(source.isSymLink()).toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination+", add entry: "+std::to_string(temp.id)+", size: "+
+                             std::to_string(temp.size)+", size2: "+std::to_string(size)+", isSymLink: "+std::to_string(TransferThread::is_symlink(source)));
     return temp.id;
 }
 
@@ -1068,10 +1019,28 @@ Ultracopier::ItemOfCopyList ListThread::actionToDoTransferToItemOfCopyList(const
 {
     Ultracopier::ItemOfCopyList itemOfCopyList;
     itemOfCopyList.id			= actionToDoTransfer.id;
-    itemOfCopyList.sourceFullPath	= actionToDoTransfer.source.absoluteFilePath().toStdString();
-    itemOfCopyList.sourceFileName	= actionToDoTransfer.source.fileName().toStdString();
-    itemOfCopyList.destinationFullPath	= actionToDoTransfer.destination.absoluteFilePath().toStdString();
-    itemOfCopyList.destinationFileName	= actionToDoTransfer.destination.fileName().toStdString();
+    const size_t sourceIndex=actionToDoTransfer.source.rfind('/');
+    if(sourceIndex == std::string::npos)
+    {
+        itemOfCopyList.sourceFullPath	= actionToDoTransfer.source;
+        itemOfCopyList.sourceFileName	= actionToDoTransfer.source;
+    }
+    else
+    {
+        itemOfCopyList.sourceFullPath	= actionToDoTransfer.source;
+        itemOfCopyList.sourceFileName	= actionToDoTransfer.source.substr(sourceIndex);
+    }
+    const size_t destinationIndex=actionToDoTransfer.destination.rfind('/');
+    if(destinationIndex == std::string::npos)
+    {
+        itemOfCopyList.destinationFullPath	= actionToDoTransfer.destination;
+        itemOfCopyList.destinationFileName	= actionToDoTransfer.destination;
+    }
+    else
+    {
+        itemOfCopyList.destinationFullPath	= actionToDoTransfer.destination;
+        itemOfCopyList.destinationFileName	= actionToDoTransfer.destination.substr(destinationIndex);
+    }
     itemOfCopyList.size		= actionToDoTransfer.size;
     itemOfCopyList.mode		= actionToDoTransfer.mode;
     return itemOfCopyList;
@@ -1303,9 +1272,9 @@ void ListThread::exportTransferList(const std::string &fileName)
                 if(!forcedMode || mode==Ultracopier::Copy)
                 {
                     if(forcedMode)
-                        transferFile.write(QStringLiteral("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write((actionToDoListTransfer.at(index).source+";"+actionToDoListTransfer.at(index).destination+"\n").c_str());
                     else
-                        transferFile.write(QStringLiteral("Copy;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(("Copy;"+actionToDoListTransfer.at(index).source+";"+actionToDoListTransfer.at(index).destination+"\n").c_str());
                 }
                 else
                     haveError=true;
@@ -1315,9 +1284,9 @@ void ListThread::exportTransferList(const std::string &fileName)
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write(QStringLiteral("%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write((actionToDoListTransfer.at(index).source+";"+actionToDoListTransfer.at(index).destination+"\n").c_str());
                     else
-                        transferFile.write(QStringLiteral("Move;%1;%2\n").arg(actionToDoListTransfer.at(index).source.absoluteFilePath()).arg(actionToDoListTransfer.at(index).destination.absoluteFilePath()).toUtf8());
+                        transferFile.write(("Move;"+actionToDoListTransfer.at(index).source+";"+actionToDoListTransfer.at(index).destination+"\n").c_str());
                 }
                 else
                     haveError=true;
@@ -1417,7 +1386,7 @@ void ListThread::importTransferList(const std::string &fileName)
                                                  .arg(QString::fromStdString(args.at(0)))
                                                       .arg(QString::fromStdString(args.at(1)))
                                                       .toStdString());
-                        addToTransfer(QFileInfo(QString::fromStdString(args.at(0))),QFileInfo(QString::fromStdString(args.at(1))),mode);
+                        addToTransfer(args.at(0),args.at(1),mode);
                     }
                     else
                     {
@@ -1430,7 +1399,7 @@ void ListThread::importTransferList(const std::string &fileName)
                             tempMode=Ultracopier::Copy;
                         else
                             tempMode=Ultracopier::Move;
-                        addToTransfer(QFileInfo(QString::fromStdString(args.at(1))),QFileInfo(QString::fromStdString(args.at(2))),tempMode);
+                        addToTransfer(args.at(1),args.at(2),tempMode);
                     }
                 }
                 else
@@ -1634,8 +1603,8 @@ void ListThread::doNewActions_inode_manipulation()
                 currentTransferThread=transferThreadList.at(int_for_transfer_thread_search);
                 if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0) // /!\ important!
                 {
-                    std::string drive=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).destination.absoluteFilePath().toStdString());
-                    if(requiredSpace.find(drive)!=requiredSpace.cend() && (actionToDoListTransfer.at(int_for_internal_loop).mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).source.absoluteFilePath().toStdString())))
+                    std::string drive=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).destination);
+                    if(requiredSpace.find(drive)!=requiredSpace.cend() && (actionToDoListTransfer.at(int_for_internal_loop).mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).source)))
                     {
                         requiredSpace[drive]-=actionToDoListTransfer.at(int_for_internal_loop).size;
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(actionToDoListTransfer.at(int_for_internal_loop).size).arg(requiredSpace.at(drive)).arg(QString::fromStdString(drive)).toStdString());
@@ -1649,12 +1618,18 @@ void ListThread::doNewActions_inode_manipulation()
                         currentActionToDoTransfer.mode
                         ))
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] id: %2 is idle, but seam busy at set name: %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()).toStdString());
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(int_for_loop)+"] id: "+
+                                                 std::to_string(currentTransferThread->transferId)+
+                                                 " is idle, but seam busy at set name: "+currentActionToDoTransfer.destination
+                                                 );
                         break;
                     }
                     currentActionToDoTransfer.isRunning=true;
 
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("[%1] id: %2 is idle, use it for %3").arg(int_for_loop).arg(currentTransferThread->transferId).arg(currentActionToDoTransfer.destination.absoluteFilePath()).toStdString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(int_for_loop)+"] id: "+
+                                             std::to_string(currentTransferThread->transferId)+
+                                             " is idle, use it for "+currentActionToDoTransfer.destination
+                                             );
 
                     /// \note wrong position? Else write why it's here
                     Ultracopier::ReturnActionOnCopyList newAction;
@@ -1928,13 +1903,13 @@ void ListThread::timedUpdateDebugDialog()
 #endif
 
 /// \note Can be call without queue because all call will be serialized
-void ListThread::fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame)
+void ListThread::fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame)
 {
     emit send_fileAlreadyExists(source,destination,isSame,qobject_cast<TransferThread *>(sender()));
 }
 
 /// \note Can be call without queue because all call will be serialized
-void ListThread::errorOnFile(const QFileInfo &fileInfo, const std::string &errorString, const ErrorType &errorType)
+void ListThread::errorOnFile(const std::string &fileInfo, const std::string &errorString, const ErrorType &errorType)
 {
     TransferThread * transferThread=qobject_cast<TransferThread *>(sender());
     if(transferThread==NULL)
@@ -1953,14 +1928,14 @@ void ListThread::errorOnFile(const QFileInfo &fileInfo, const std::string &error
 }
 
 /// \note Can be call without queue because all call will be serialized
-void ListThread::folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame)
+void ListThread::folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame)
 {
     emit send_folderAlreadyExists(source,destination,isSame,qobject_cast<ScanFileOrFolder *>(sender()));
 }
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void ListThread::errorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,const ErrorType &errorType)
+void ListThread::errorOnFolder(const std::string &fileInfo,const std::string &errorString,const ErrorType &errorType)
 {
     emit send_errorOnFolder(fileInfo,errorString,qobject_cast<ScanFileOrFolder *>(sender()),errorType);
 }
@@ -1971,7 +1946,7 @@ void ListThread::run()
     exec();
 }
 
-void ListThread::getNeedPutAtBottom(const QFileInfo &fileInfo, const std::string &errorString, TransferThread *thread, const ErrorType &errorType)
+void ListThread::getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThread *thread, const ErrorType &errorType)
 {
     if(actionToDoListTransfer.empty())
     {

@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <QFileInfo>
+#include <string>
 #include <QSemaphore>
 #include <QTextStream>
 #include <QFile>
@@ -66,8 +66,8 @@ public:
     {
         uint64_t id;
         uint64_t size;///< Used to set: used in case of transfer or remainingInode for drop folder
-        QFileInfo source;///< Used to set: source for transfer, folder to create, folder to drop
-        QFileInfo destination;
+        std::string source;///< Used to set: source for transfer, folder to create, folder to drop
+        std::string destination;
         Ultracopier::CopyMode mode;
         bool isRunning;///< store if the action si running
         //TransferThread * transfer; // -> see transferThreadList
@@ -79,8 +79,8 @@ public:
         ActionType type;///< \see ActionType
         uint64_t id;
         int64_t size;///< Used to set: used in case of transfer or remainingInode for drop folder
-        QFileInfo source;///< Keep to copy the right/date, to remove (for move)
-        QFileInfo destination;///< Used to set: folder to create, folder to drop
+        std::string source;///< Keep to copy the right/date, to remove (for move)
+        std::string destination;///< Used to set: folder to create, folder to drop
         bool isRunning;///< store if the action si running
     };
     std::vector<ActionToDoInode> actionToDoListInode;
@@ -88,8 +88,8 @@ public:
     int numberOfInodeOperation;
     struct ErrorLogEntry
     {
-        QFileInfo source;
-        QFileInfo destination;
+        std::string source;
+        std::string destination;
         std::string error;
         Ultracopier::CopyMode mode;
     };
@@ -151,10 +151,6 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
-    /// \brief set block size in KB
-    void setBlockSize(const int blockSize);
-    /// \brief set auto start
-    void setAutoStart(const bool autoStart);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     /// \brief set rsync
     void setRsync(const bool rsync);
@@ -174,7 +170,7 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
-    void getNeedPutAtBottom(const QFileInfo &fileInfo, const std::string &errorString, TransferThread *thread,const ErrorType &errorType);
+    void getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThread *thread,const ErrorType &errorType);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
@@ -214,7 +210,6 @@ private:
     ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
     uint64_t				bytesToTransfer;
     uint64_t				bytesTransfered;
-    bool				autoStart;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool                rsync;
     #endif
@@ -245,7 +240,7 @@ private:
 
     inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
-    uint64_t addToTransfer(const QFileInfo& source,const QFileInfo& destination,const Ultracopier::CopyMode& mode);
+    uint64_t addToTransfer(const std::string& source,const std::string& destination,const Ultracopier::CopyMode& mode);
     //generate id number
     uint64_t generateIdNumber();
     //warning the first entry is accessible will copy
@@ -293,7 +288,7 @@ private slots:
     void scanThreadHaveFinish(bool skipFirstRemove=false);
     void autoStartAndCheckSpace();
     void updateTheStatus();
-    void fileTransfer(const QFileInfo &sourceFileInfo,const QFileInfo &destinationFileInfo,const Ultracopier::CopyMode &mode);
+    void fileTransfer(const std::string &sourceFileInfo,const std::string &destinationFileInfo,const Ultracopier::CopyMode &mode);
     //mkpath event
     void mkPathFirstFolderFinish();
     /** \brief put the current file at bottom in case of error
@@ -307,27 +302,27 @@ private slots:
     #endif
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
+    void fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(const QFileInfo &fileInfo,const std::string &errorString, const ErrorType &errorType);
+    void errorOnFile(const std::string &fileInfo,const std::string &errorString, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame);
+    void folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(const QFileInfo &fileInfo, const std::string &errorString, const ErrorType &errorType);
+    void errorOnFolder(const std::string &fileInfo, const std::string &errorString, const ErrorType &errorType);
     //to run the thread
     void run();
     /// \to create transfer thread
     void createTransferThread();
     void deleteTransferThread();
     //mk path to do
-    uint64_t addToMkPath(const QFileInfo& source, const QFileInfo& destination, const int &inode);
+    uint64_t addToMkPath(const std::string &source, const std::string &destination, const int &inode);
     //add rm path to do
-    void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove);
+    void addToMovePath(const std::string& source,const std::string& destination, const int& inodeToRemove);
     //add to real move
-    void addToRealMove(const QFileInfo& source,const QFileInfo& destination);
+    void addToRealMove(const std::string& source,const std::string& destination);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     //rsync rm
-    void addToRmForRsync(const QFileInfo& destination);
+    void addToRmForRsync(const std::string& destination);
     #endif
     //send the progression, after full reset of the interface (then all is empty)
     void syncTransferList_internal();
@@ -354,7 +349,7 @@ signals:
 
     //when can be deleted
     void canBeDeleted() const;
-    void haveNeedPutAtBottom(bool needPutAtBottom,const QFileInfo &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
+    void haveNeedPutAtBottom(bool needPutAtBottom,const std::string &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
 
     //send error occurred
     void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error) const;
@@ -372,17 +367,17 @@ signals:
 
     //other signal
     /// \note Can be call without queue because all call will be serialized
-    void send_fileAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,TransferThread * thread) const;
+    void send_fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,TransferThread * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const QFileInfo &fileInfo,const std::string &errorString,TransferThread * thread, const ErrorType &errorType) const;
+    void send_errorOnFile(const std::string &fileInfo,const std::string &errorString,TransferThread * thread, const ErrorType &errorType) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame,ScanFileOrFolder * thread) const;
+    void send_folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,ScanFileOrFolder * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
+    void send_errorOnFolder(const std::string &fileInfo,const std::string &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
     //send the progression
     void send_syncTransferList() const;
     //mkpath error event
-    void mkPathErrorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,const ErrorType &errorType) const;
+    void mkPathErrorOnFolder(const std::string &fileInfo,const std::string &errorString,const ErrorType &errorType) const;
     //to close
     void tryCancel() const;
     //to ask new transfer thread
