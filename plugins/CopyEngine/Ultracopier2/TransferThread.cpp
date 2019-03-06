@@ -3,6 +3,7 @@
 
 #include "TransferThread.h"
 #include <string>
+#include <dirent.h>
 
 #include "../../../cpp11addition.h"
 
@@ -1940,4 +1941,38 @@ bool TransferThread::exists(const char * const filename)
         //if error or file not exists, considere as regular file
         return false;
     return true;
+}
+
+bool TransferThread::entryInfoList(const std::string &path,std::vector<std::string> &list)
+{
+    DIR *dp;
+    struct dirent *ep;
+    dp=opendir(path.c_str());
+    if(dp!=NULL)
+    {
+        do {
+            ep=readdir(dp);
+            list.push_back(ep->d_name);
+        } while(ep);
+        (void) closedir(dp);
+        return true;
+    }
+    return false;
+}
+
+bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent> &list)
+{
+    DIR *dp;
+    struct dirent *ep;
+    dp=opendir(path.c_str());
+    if(dp!=NULL)
+    {
+        do {
+            ep=readdir(dp);
+            list.push_back(*ep);
+        } while(ep);
+        (void) closedir(dp);
+        return true;
+    }
+    return false;
 }

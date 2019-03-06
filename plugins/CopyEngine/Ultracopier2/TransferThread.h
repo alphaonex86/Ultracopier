@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <dirent.h>
 
 #ifdef Q_OS_UNIX
     #include <utime.h>
@@ -73,7 +74,7 @@ public:
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
-    int mkpath(const std::string &file_path, const mode_t &mode=0755);
+    static int mkpath(const std::string &file_path, const mode_t &mode=0755);
 
     static int64_t readFileMDateTime(const std::string &source);
     static bool is_symlink(const char * const filename);
@@ -84,6 +85,8 @@ public:
     static bool is_dir(const std::string &filename);
     static bool exists(const char * const filename);
     static bool exists(const std::string &filename);
+    static bool entryInfoList(const std::string &path, std::vector<std::string> &list);
+    static bool entryInfoList(const std::string &path, std::vector<dirent> &list);
 protected:
     void run();
 signals:
