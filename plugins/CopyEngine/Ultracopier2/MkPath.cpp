@@ -365,8 +365,8 @@ bool MkPath::rmpath(const std::string &dir
     }
     for (unsigned int i = 0; i < list.size(); ++i)
     {
-        std::string fileInfo(list.at(i));
-        if(!fileInfo.isDir())
+        dirent fileInfo=list.at(i);
+        if(fileInfo.d_type!=DT_DIR)
         {
             #ifdef ULTRACOPIER_PLUGIN_RSYNC
             if(toSync)
@@ -396,20 +396,20 @@ bool MkPath::rmpath(const std::string &dir
                 allHaveWork=false;
             }
             #else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+std::string(fileInfo.d_name));
             allHaveWork=false;
             #endif
         }
         else
         {
             //return the fonction for scan the new folder
-            if(!rmpath(FSabsolutePath(dir)+'/'+fileInfo.fileName()+'/'))
+            if(!rmpath(FSabsolutePath(dir)+'/'+fileInfo.d_name+'/'))
                 allHaveWork=false;
         }
     }
     if(!allHaveWork)
         return false;
-    allHaveWork=dir.rmdir(FSabsolutePath(dir));
+    allHaveWork=rmdir(FSabsolutePath(dir).c_str())==0;
     if(!allHaveWork)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+FSabsolutePath(dir));
     return allHaveWork;
@@ -423,7 +423,7 @@ bool MkPath::readFileDateTime(const std::string &source)
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
             struct stat info;
-            if(stat(source.absoluteFilePath().toLatin1().data(),&info)!=0)
+            if(stat(source.c_str(),&info)!=0)
                 return false;
             time_t ctime=info.st_ctim.tv_sec;
             time_t actime=info.st_atim.tv_sec;
@@ -500,14 +500,14 @@ bool MkPath::writeFileDateTime(const std::string &destination)
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
-            return utime(destination.absoluteFilePath().toLatin1().data(),&butime)==0;
+            return utime(destination.c_str(),&butime)==0;
         #else //mainly for mac
-            return utime(destination.absoluteFilePath().toLatin1().data(),&butime)==0;
+            return utime(destination.c_str(),&butime)==0;
         #endif
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                return utime(destination.toLatin1().data(),&butime)==0;
+                return utime(destination.c_str(),&butime)==0;
             #else
                 wchar_t filePath[65535];
                 if(std::regex_match(destination,regRead))
