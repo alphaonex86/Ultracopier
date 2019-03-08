@@ -175,7 +175,6 @@ public slots:
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
 
-    void set_osBufferLimit(const unsigned int &osBufferLimit);
     void set_setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude);
     void set_sendNewRenamingRules(const std::string &firstRenamingRule,const std::string &otherRenamingRule);
     void set_updateMount();
