@@ -21,8 +21,8 @@ public:
     std::string getDriveType(const std::string &drive) const;
     void tryUpdate();
 protected:
-    std::vector<std::string>		mountSysPoint;
-    std::vector<QByteArray> driveType;
+    std::vector<std::string> mountSysPoint;
+    std::vector<std::string> driveType;
     #ifdef Q_OS_WIN32
     std::regex reg1,reg2,reg3,reg4;
     #endif

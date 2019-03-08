@@ -101,8 +101,6 @@ public:
     std::pair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
     Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine() const;
 
-    void set_osBuffer(bool osBuffer);
-    void set_osBufferLimited(bool osBufferLimited);
     void autoStartIfNeeded();
 public slots:
     //action on the copy

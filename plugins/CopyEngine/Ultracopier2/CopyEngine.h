@@ -8,7 +8,6 @@
 #include <QList>
 #include <vector>
 #include <string>
-#include <QFileInfo>
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -77,7 +76,6 @@ private:
     FileErrorAction			alwaysDoThisActionForFileError;
     FileErrorAction			alwaysDoThisActionForFolderError;
     FolderExistsAction		alwaysDoThisActionForFolderExists;
-    TransferAlgorithm       transferAlgorithm;
     bool                    dialogIsOpen;
     volatile bool			stopIt;
     std::string                 defaultDestinationFolder;
@@ -88,7 +86,7 @@ private:
         ScanFileOrFolder * scan;	///< NULL if send by transfer thread
         bool mkPath;
         bool rmPath;
-        QFileInfo inode;
+        std::string inode;
         std::string errorString;
         ErrorType errorType;
     };
@@ -98,8 +96,8 @@ private:
     {
         TransferThread * transfer;	///< NULL if send by scan thread
         ScanFileOrFolder * scan;	///< NULL if send by transfer thread
-        QFileInfo source;
-        QFileInfo destination;
+        std::string source;
+        std::string destination;
         bool isSame;
     };
     std::vector<alreadyExistsQueueItem> alreadyExistsQueue;
@@ -133,46 +131,38 @@ private slots:
     /************* External  call ********************/
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread);
+    void fileAlreadyExistsSlot(std::string source, std::string destination, bool isSame, TransferThread * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFileSlot(QFileInfo fileInfo, std::string errorString, TransferThread * thread, const ErrorType &errorType);
+    void errorOnFileSlot(std::string fileInfo, std::string errorString, TransferThread * thread, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread);
+    void folderAlreadyExistsSlot(std::string source,std::string destination,bool isSame,ScanFileOrFolder * thread);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolderSlot(QFileInfo fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType);
+    void errorOnFolderSlot(std::string fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType);
     //mkpath event
-    void mkPathErrorOnFolderSlot(QFileInfo, std::string, ErrorType errorType);
+    void mkPathErrorOnFolderSlot(std::string, std::string, ErrorType errorType);
 
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
+    void fileAlreadyExists(std::string source,std::string destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(QFileInfo fileInfo, std::string errorString, TransferThread * thread, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
+    void errorOnFile(std::string fileInfo, std::string errorString, TransferThread * thread, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
+    void folderAlreadyExists(std::string source,std::string destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog=false);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(QFileInfo fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog=false);
+    void errorOnFolder(std::string fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog=false);
     //mkpath event
-    void mkPathErrorOnFolder(QFileInfo, std::string, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
+    void mkPathErrorOnFolder(std::string, std::string, const ErrorType &errorType, bool isCalledByShowOneNewDialog=false);
 
     //show one new dialog if needed
     void showOneNewDialog();
     void sendNewFilters();
 
-    void doChecksum_toggled(bool);
-    void checksumOnlyOnError_toggled(bool);
-    void checksumIgnoreIfImpossible_toggled(bool);
-    void osBuffer_toggled(bool);
-    void osBufferLimited_toggled(bool);
-    void osBufferLimit_editingFinished();
     void showFilterDialog();
     void sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule);
     void showRenamingRules();
     void get_realBytesTransfered(quint64 realBytesTransfered);
     void newActionInProgess(Ultracopier::EngineActionInProgress);
-    void updatedBlockSize();
-    void updateBufferCheckbox();
-    void haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const std::string &errorString, TransferThread *thread, const ErrorType &errorType);
+    void haveNeedPutAtBottom(bool needPutAtBottom, const std::string &fileInfo, const std::string &errorString, TransferThread *thread, const ErrorType &errorType);
     void missingDiskSpace(std::vector<Diskspace> list);
     void exportErrorIntoTransferList();
 public:
@@ -228,12 +218,6 @@ public:
      * Used when the interface is changed, useful to minimize the memory size */
     void syncTransferList();
 
-    void set_doChecksum(bool doChecksum);
-    void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
-    void set_checksumOnlyOnError(bool checksumOnlyOnError);
-    void set_osBuffer(bool osBuffer);
-    void set_osBufferLimited(bool osBufferLimited);
-    void set_osBufferLimit(unsigned int osBufferLimit);
     void set_setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions);
     void setRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -347,14 +331,13 @@ signals:
     void signal_exportErrorIntoTransferList(const std::string &fileName) const;
 
     //action
-    void signal_setTransferAlgorithm(TransferAlgorithm transferAlgorithm) const;
     void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) const;
     void signal_setComboBoxFolderCollision(FolderExistsAction action) const;
     void signal_setFolderCollision(FolderExistsAction action) const;
 
     //internal cancel
     void tryCancel() const;
-    void getNeedPutAtBottom(const QFileInfo &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
+    void getNeedPutAtBottom(const std::string &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source

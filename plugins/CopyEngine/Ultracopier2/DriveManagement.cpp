@@ -53,7 +53,7 @@ std::string DriveManagement::getDriveType(const std::string &drive) const
     int index=vectorindexOf(mountSysPoint,drive);
     if(index!=-1)
         return driveType.at(index);
-    return QByteArray();
+    return std::string();
 }
 
 bool DriveManagement::isSameDrive(const std::string &file1,const std::string &file2) const
@@ -94,11 +94,15 @@ void DriveManagement::tryUpdate()
         #ifdef Q_OS_WIN32
         if(mountSysPoint.back()!="A:\\" && mountSysPoint.back()!="A:/" && mountSysPoint.back()!="A:" && mountSysPoint.back()!="A" &&
                 mountSysPoint.back()!="a:\\" && mountSysPoint.back()!="a:/" && mountSysPoint.back()!="a:" && mountSysPoint.back()!="a")
-            driveType.push_back(mountedVolumesList.at(index).fileSystemType());
+        {
+            const QByteArray &data=mountedVolumesList.at(index).fileSystemType();
+            driveType.push_back(std::string(data.constData(),data.size()));
+        }
         else
-            driveType.push_back(QByteArray());
+            driveType.push_back(std::string());
         #else
-        driveType.push_back(mountedVolumesList.at(index).fileSystemType());
+        const QByteArray &data=mountedVolumesList.at(index).fileSystemType();
+        driveType.push_back(std::string(data.constData(),data.size()));
         #endif
         index++;
     }

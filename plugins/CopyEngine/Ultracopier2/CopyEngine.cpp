@@ -141,8 +141,6 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_skip()");
     if(!connect(this,&CopyEngine::signal_setCollisionAction,		listThread,&ListThread::setAlwaysFileExistsAction,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
-    if(!connect(this,&CopyEngine::signal_setTransferAlgorithm,		listThread,&ListThread::setTransferAlgorithm,	Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setCollisionAction()");
     if(!connect(this,&CopyEngine::signal_setFolderCollision,		listThread,&ListThread::setFolderCollision,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_setFolderCollision()");
     if(!connect(this,&CopyEngine::signal_removeItems,				listThread,&ListThread::removeItems,		Qt::QueuedConnection))
@@ -161,16 +159,6 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_importTransferList()");
     if(!connect(this,&CopyEngine::signal_forceMode,				listThread,&ListThread::forceMode,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_forceMode()");
-    if(!connect(this,&CopyEngine::send_osBufferLimit,					listThread,&ListThread::set_osBufferLimit,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_osBufferLimit()");
-    if(!connect(this,&CopyEngine::send_blockSize,					listThread,&ListThread::setBlockSize,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_blockSize()");
-    if(!connect(this,&CopyEngine::send_parallelBuffer,					listThread,&ListThread::setParallelBuffer,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setParallelBuffer()");
-    if(!connect(this,&CopyEngine::send_sequentialBuffer,					listThread,&ListThread::setSequentialBuffer,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setSequentialBuffer()");
-    if(!connect(this,&CopyEngine::send_parallelizeIfSmallerThan,					listThread,&ListThread::setParallelizeIfSmallerThan,		Qt::QueuedConnection))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setParallelizeIfSmallerThan()");
     if(!connect(this,&CopyEngine::send_moveTheWholeFolder,					listThread,&ListThread::setMoveTheWholeFolder,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect moveTheWholeFolder()");
     if(!connect(this,&CopyEngine::send_deletePartiallyTransferredFiles,					listThread,&ListThread::setDeletePartiallyTransferredFiles,		Qt::QueuedConnection))
@@ -216,7 +204,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     this->tempWidget=tempWidget;
     ui->setupUi(tempWidget);
     ui->toolBox->setCurrentIndex(0);
-    ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     connect(tempWidget,		&QWidget::destroyed,		this,			&CopyEngine::resetTempWidget);
 
     //here else, the default settings can't be loaded
@@ -233,12 +220,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     ui->rsync->setVisible(false);
     #endif
     setCheckDestinationFolderExists(checkDestinationFolderExists);
-    set_doChecksum(doChecksum);
-    set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
-    set_checksumOnlyOnError(checksumOnlyOnError);
-    set_osBuffer(osBuffer);
-    set_osBufferLimited(osBufferLimited);
-    set_osBufferLimit(osBufferLimit);
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
     setParallelizeIfSmallerThan(parallelizeIfSmallerThan);
@@ -326,22 +307,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->comboBoxFolderError->setCurrentIndex(0);
         break;
     }
-    switch(transferAlgorithm)
-    {
-        case TransferAlgorithm_Automatic:
-            ui->transferAlgorithm->setCurrentIndex(0);
-        break;
-        case TransferAlgorithm_Sequential:
-            ui->transferAlgorithm->setCurrentIndex(1);
-        break;
-        case TransferAlgorithm_Parallel:
-            ui->transferAlgorithm->setCurrentIndex(2);
-        break;
-        default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
-            ui->transferAlgorithm->setCurrentIndex(0);
-        break;
-    }
     return true;
 }
 
@@ -356,14 +321,6 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
     {
         connect(ui->doRightTransfer,                    &QCheckBox::toggled,		this,&CopyEngine::setRightTransfer);
         connect(ui->keepDate,                           &QCheckBox::toggled,		this,&CopyEngine::setKeepDate);
-        connect(ui->blockSize,                          static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setBlockSize);
-        connect(ui->autoStart,                          &QCheckBox::toggled,		this,&CopyEngine::setAutoStart);
-        connect(ui->doChecksum,                         &QCheckBox::toggled,		this,&CopyEngine::doChecksum_toggled);
-        connect(ui->checksumIgnoreIfImpossible,         &QCheckBox::toggled,		this,&CopyEngine::checksumIgnoreIfImpossible_toggled);
-        connect(ui->checksumOnlyOnError,                &QCheckBox::toggled,		this,&CopyEngine::checksumOnlyOnError_toggled);
-        connect(ui->osBuffer,                           &QCheckBox::toggled,		this,&CopyEngine::osBuffer_toggled);
-        connect(ui->osBufferLimited,                    &QCheckBox::toggled,		this,&CopyEngine::osBufferLimited_toggled);
-        connect(ui->osBufferLimit,                      &QSpinBox::editingFinished,	this,&CopyEngine::osBufferLimit_editingFinished);
         connect(ui->moveTheWholeFolder,                 &QCheckBox::toggled,		this,&CopyEngine::setMoveTheWholeFolder);
         connect(ui->deletePartiallyTransferredFiles,    &QCheckBox::toggled,		this,&CopyEngine::setDeletePartiallyTransferredFiles);
         connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
@@ -378,14 +335,10 @@ void CopyEngine::setInterfacePointer(QWidget * interface)
         connect(ui->inodeThreads,                       static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngine::setInodeThreads);
         connect(ui->defaultDestinationFolderBrowse,     &QPushButton::clicked,      this,&CopyEngine::defaultDestinationFolderBrowse);
 
-        connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setSequentialBuffer);
-        connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setParallelBuffer);
-        connect(ui->parallelizeIfSmallerThan,	static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),               this,&CopyEngine::setParallelizeIfSmallerThan);
         connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFolderError);
         connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFolderCollision);
         connect(ui->comboBoxFileError,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFileError);
         connect(ui->comboBoxFileCollision,      static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setFileCollision);
-        connect(ui->transferAlgorithm,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngine::setTransferAlgorithm);
 
         if(!connect(renamingRules,&RenamingRules::sendNewRenamingRules,this,&CopyEngine::sendNewRenamingRules))
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect sendNewRenamingRules()");
@@ -526,70 +479,6 @@ bool CopyEngine::supportSpeedLimitation() const
 void CopyEngine::syncTransferList()
 {
     listThread->syncTransferList();
-}
-
-void CopyEngine::set_doChecksum(bool doChecksum)
-{
-    listThread->set_doChecksum(doChecksum);
-    if(uiIsInstalled)
-    {
-        ui->doChecksum->setChecked(doChecksum);
-        ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
-        ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
-    }
-    this->doChecksum=doChecksum;
-}
-
-void CopyEngine::set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible)
-{
-    listThread->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
-    if(uiIsInstalled)
-        ui->checksumIgnoreIfImpossible->setChecked(checksumIgnoreIfImpossible);
-    this->checksumIgnoreIfImpossible=checksumIgnoreIfImpossible;
-}
-
-void CopyEngine::set_checksumOnlyOnError(bool checksumOnlyOnError)
-{
-    listThread->set_checksumOnlyOnError(checksumOnlyOnError);
-    if(uiIsInstalled)
-        ui->checksumOnlyOnError->setChecked(checksumOnlyOnError);
-    this->checksumOnlyOnError=checksumOnlyOnError;
-}
-
-void CopyEngine::set_osBuffer(bool osBuffer)
-{
-    listThread->set_osBuffer(osBuffer);
-    if(uiIsInstalled)
-    {
-        ui->osBuffer->setChecked(osBuffer);
-        updateBufferCheckbox();
-    }
-    this->osBuffer=osBuffer;
-}
-
-void CopyEngine::set_osBufferLimited(bool osBufferLimited)
-{
-    listThread->set_osBufferLimited(osBufferLimited);
-    if(uiIsInstalled)
-    {
-        ui->osBufferLimited->setChecked(osBufferLimited);
-        updateBufferCheckbox();
-    }
-    this->osBufferLimited=osBufferLimited;
-}
-
-void CopyEngine::set_osBufferLimit(unsigned int osBufferLimit)
-{
-    emit send_osBufferLimit(osBufferLimit);
-    if(uiIsInstalled)
-        ui->osBufferLimit->setValue(osBufferLimit);
-    this->osBufferLimit=osBufferLimit;
-}
-
-void CopyEngine::updateBufferCheckbox()
-{
-    ui->osBufferLimited->setEnabled(ui->osBuffer->isChecked());
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
 }
 
 void CopyEngine::set_setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions)
@@ -830,37 +719,6 @@ void CopyEngine::setFileError(int index)
     emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
-void CopyEngine::setTransferAlgorithm(int index)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
-    if(uiIsInstalled)
-        if(index!=ui->transferAlgorithm->currentIndex())
-            ui->transferAlgorithm->setCurrentIndex(index);
-    switch(index)
-    {
-        case 0:
-            transferAlgorithm=TransferAlgorithm_Automatic;
-        break;
-        case 1:
-            transferAlgorithm=TransferAlgorithm_Sequential;
-        break;
-        case 2:
-            transferAlgorithm=TransferAlgorithm_Parallel;
-        break;
-        default:
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
-            transferAlgorithm=TransferAlgorithm_Automatic;
-        break;
-    }
-    if(transferAlgorithm==TransferAlgorithm_Sequential)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Sequential");
-    else if(transferAlgorithm==TransferAlgorithm_Automatic)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Automatic");
-    else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferAlgorithm==TransferAlgorithm_Parallel");
-    emit signal_setTransferAlgorithm(transferAlgorithm);
-}
-
 void CopyEngine::setRightTransfer(const bool doRightTransfer)
 {
     this->doRightTransfer=doRightTransfer;
@@ -876,46 +734,6 @@ void CopyEngine::setKeepDate(const bool keepDate)
     if(uiIsInstalled)
         ui->keepDate->setChecked(keepDate);
     listThread->setKeepDate(keepDate);
-}
-
-//set block size in KB
-void CopyEngine::setBlockSize(const int blockSize)
-{
-    this->blockSize=blockSize;
-    if(uiIsInstalled)
-    {
-        ui->blockSize->setValue(blockSize);
-        ui->sequentialBuffer->setSingleStep(blockSize);
-        ui->parallelBuffer->setSingleStep(blockSize);
-    }
-    emit send_blockSize(blockSize);
-    updatedBlockSize();
-}
-
-void CopyEngine::setParallelBuffer(int parallelBuffer)
-{
-    parallelBuffer=round((float)parallelBuffer/(float)blockSize)*blockSize;
-    this->parallelBuffer=parallelBuffer;
-    if(uiIsInstalled)
-        ui->parallelBuffer->setValue(parallelBuffer);
-    emit send_parallelBuffer(parallelBuffer/blockSize);
-}
-
-void CopyEngine::setSequentialBuffer(int sequentialBuffer)
-{
-    sequentialBuffer=round((float)sequentialBuffer/(float)blockSize)*blockSize;
-    this->sequentialBuffer=sequentialBuffer;
-    if(uiIsInstalled)
-        ui->sequentialBuffer->setValue(sequentialBuffer);
-    emit send_sequentialBuffer(sequentialBuffer/blockSize);
-}
-
-void CopyEngine::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
-{
-    this->parallelizeIfSmallerThan=parallelizeIfSmallerThan;
-    if(uiIsInstalled)
-        ui->parallelizeIfSmallerThan->setValue(parallelizeIfSmallerThan);
-    emit send_parallelizeIfSmallerThan(parallelizeIfSmallerThan*1024);
 }
 
 void CopyEngine::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
@@ -962,15 +780,6 @@ void CopyEngine::inodeThreadsFinished()
 {
     this->inodeThreads=ui->inodeThreads->value();
     emit send_setInodeThreads(inodeThreads);
-}
-
-//set auto start
-void CopyEngine::setAutoStart(const bool autoStart)
-{
-    this->autoStart=autoStart;
-    if(uiIsInstalled)
-        ui->autoStart->setChecked(autoStart);
-    listThread->setAutoStart(autoStart);
 }
 
 #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -1063,10 +872,6 @@ void CopyEngine::newLanguageLoaded()
         ui->comboBoxFileCollision->setItemText(4,tr("Overwrite if newer"));
         ui->comboBoxFileCollision->setItemText(5,tr("Overwrite if older"));
         ui->comboBoxFileCollision->setItemText(6,tr("Rename"));
-
-        ui->transferAlgorithm->setItemText(0,tr("Automatic"));
-        ui->transferAlgorithm->setItemText(1,tr("Sequential"));
-        ui->transferAlgorithm->setItemText(2,tr("Parallel"));
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"ui not loaded!");
@@ -1111,37 +916,6 @@ void CopyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboB
     }
 }
 
-void CopyEngine::doChecksum_toggled(bool doChecksum)
-{
-    listThread->set_doChecksum(doChecksum);
-}
-
-void CopyEngine::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
-{
-    listThread->set_checksumOnlyOnError(checksumOnlyOnError);
-}
-
-void CopyEngine::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
-{
-    listThread->set_checksumIgnoreIfImpossible(checksumIgnoreIfImpossible);
-}
-
-void CopyEngine::osBuffer_toggled(bool osBuffer)
-{
-    listThread->set_osBuffer(osBuffer);
-    updateBufferCheckbox();
-}
-
-void CopyEngine::osBufferLimited_toggled(bool osBufferLimited)
-{
-    listThread->set_osBufferLimited(osBufferLimited);
-    updateBufferCheckbox();
-}
-
-void CopyEngine::osBufferLimit_editingFinished()
-{
-    emit send_osBufferLimit(ui->osBufferLimit->value());
-}
 
 void CopyEngine::showFilterDialog()
 {
@@ -1191,21 +965,6 @@ void CopyEngine::newActionInProgess(Ultracopier::EngineActionInProgress action)
         timerProgression.start();
         timerActionDone.start();
     }
-}
-
-void CopyEngine::updatedBlockSize()
-{
-    if(uiIsInstalled)
-    {
-        ui->sequentialBuffer->setMinimum(ui->blockSize->value());
-        ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
-        ui->sequentialBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK);
-        ui->parallelBuffer->setMinimum(ui->blockSize->value());
-        ui->parallelBuffer->setSingleStep(ui->blockSize->value());
-        ui->parallelBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK);
-    }
-    setParallelBuffer(parallelBuffer);
-    setSequentialBuffer(sequentialBuffer);
 }
 
 void CopyEngine::setCheckDiskSpace(const bool &checkDiskSpace)

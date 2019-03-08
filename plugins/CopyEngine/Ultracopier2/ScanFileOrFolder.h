@@ -43,19 +43,19 @@ public:
     void setRsync(const bool rsync);
     #endif
 signals:
-    void fileTransfer(const QFileInfo &source,const QFileInfo &destination,const Ultracopier::CopyMode &mode) const;
+    void fileTransfer(const std::string &source,const std::string &destination,const Ultracopier::CopyMode &mode) const;
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
-    void folderAlreadyExists(const QFileInfo &source,const QFileInfo &destination,const bool &isSame) const;
-    void errorOnFolder(const QFileInfo &fileInfo,const std::string &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame) const;
+    void errorOnFolder(const std::string &fileInfo,const std::string &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void finishedTheListing() const;
 
     void newFolderListing(const std::string &path) const;
-    void addToMkPath(const QFileInfo& source,const QFileInfo& destination, const int& inode) const;
-    void addToMovePath(const QFileInfo& source,const QFileInfo& destination, const int& inodeToRemove) const;
-    void addToRealMove(const QFileInfo& source,const QFileInfo& destination) const;
+    void addToMkPath(const std::string& source,const std::string& destination, const int& inode) const;
+    void addToMovePath(const std::string& source,const std::string& destination, const int& inodeToRemove) const;
+    void addToRealMove(const std::string& source,const std::string& destination) const;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    void addToRmForRsync(const QFileInfo& destination) const;
+    void addToRmForRsync(const std::string& destination) const;
     #endif
 public slots:
     void addToList(const std::vector<std::string>& sources,const std::string& destination);
@@ -71,7 +71,7 @@ private:
     std::string             destination;
     volatile bool		stopIt;
     void                listFolder(std::string source, std::string destination);
-    QFileInfo           resolvDestination(const std::string &destination);
+    //std::string           resolvDestination(const std::string &destination);
     volatile bool		stopped;
     QSemaphore          waitOneAction;
     FolderExistsAction	folderExistsAction;

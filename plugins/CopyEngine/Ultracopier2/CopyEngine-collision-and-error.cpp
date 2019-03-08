@@ -8,37 +8,37 @@
 
 //dialog message
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread)
+void CopyEngine::fileAlreadyExistsSlot(std::string source,std::string destination,bool isSame,TransferThread * thread)
 {
     fileAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFileSlot(QFileInfo fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType)
+void CopyEngine::errorOnFileSlot(std::string fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType)
 {
     errorOnFile(fileInfo,errorString,thread,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::folderAlreadyExistsSlot(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread)
+void CopyEngine::folderAlreadyExistsSlot(std::string source,std::string destination,bool isSame,ScanFileOrFolder * thread)
 {
     folderAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFolderSlot(QFileInfo fileInfo,std::string errorString,ScanFileOrFolder * thread,ErrorType errorType)
+void CopyEngine::errorOnFolderSlot(std::string fileInfo,std::string errorString,ScanFileOrFolder * thread,ErrorType errorType)
 {
     errorOnFolder(fileInfo,errorString,thread,errorType);
 }
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolderSlot(QFileInfo folder,std::string error,ErrorType errorType)
+void CopyEngine::mkPathErrorOnFolderSlot(std::string folder,std::string error,ErrorType errorType)
 {
     mkPathErrorOnFolder(folder,error,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -202,7 +202,7 @@ void CopyEngine::fileAlreadyExists(QFileInfo source,QFileInfo destination,bool i
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const QFileInfo &fileInfo, const std::string &errorString,TransferThread *thread,const ErrorType &errorType)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const std::string &fileInfo, const std::string &errorString,TransferThread *thread,const ErrorType &errorType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
@@ -239,7 +239,7 @@ void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(QFileInfo fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -334,7 +334,7 @@ void CopyEngine::errorOnFile(QFileInfo fileInfo,std::string errorString,Transfer
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::folderAlreadyExists(std::string source,std::string destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -392,7 +392,7 @@ void CopyEngine::folderAlreadyExists(QFileInfo source,QFileInfo destination,bool
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void CopyEngine::errorOnFolder(QFileInfo fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -455,7 +455,7 @@ void CopyEngine::errorOnFolder(QFileInfo fileInfo, std::string errorString, Scan
 // -----------------------------------------------------
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolder(QFileInfo folder,std::string errorString,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
