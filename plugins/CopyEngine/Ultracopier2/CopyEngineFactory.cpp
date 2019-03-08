@@ -23,22 +23,17 @@ CopyEngineFactory::CopyEngineFactory() :
 {
     qRegisterMetaType<FolderExistsAction>("FolderExistsAction");
     qRegisterMetaType<FileExistsAction>("FileExistsAction");
-    qRegisterMetaType<QList<Filters_rules> >("QList<Filters_rules>");
+    qRegisterMetaType<std::vector<Filters_rules> >("std::vector<Filters_rules>");
     qRegisterMetaType<TransferStat>("TransferStat");
-    qRegisterMetaType<QList<QByteArray> >("QList<QByteArray>");
-    qRegisterMetaType<TransferAlgorithm>("TransferAlgorithm");
     qRegisterMetaType<ActionType>("ActionType");
     qRegisterMetaType<ErrorType>("ErrorType");
     qRegisterMetaType<Diskspace>("Diskspace");
-    qRegisterMetaType<QList<Diskspace> >("QList<Diskspace>");
-    qRegisterMetaType<QFileInfo>("QFileInfo");
+    qRegisterMetaType<std::vector<Diskspace> >("std::vector<Diskspace>");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
-    qRegisterMetaType<std::vector<Filters_rules> >("std::vector<Filters_rules>");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);
     ui->toolBox->setCurrentIndex(0);
-    ui->blockSize->setMaximum(ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE);
     errorFound=false;
     optionsEngine=NULL;
     filters=new Filters(tempWidget);
@@ -46,30 +41,16 @@ CopyEngineFactory::CopyEngineFactory() :
 
     connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
     connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
-    connect(ui->blockSize,                  static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setBlockSize);
-    connect(ui->sequentialBuffer,           static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setSequentialBuffer);
-    connect(ui->parallelBuffer,             static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setParallelBuffer);
-    connect(ui->parallelizeIfSmallerThan,	static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::setParallelizeIfSmallerThan);
     connect(ui->inodeThreads,               static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::on_inodeThreads_editingFinished);
-    connect(ui->autoStart,                  &QCheckBox::toggled,                                            this,&CopyEngineFactory::setAutoStart);
-    connect(ui->doChecksum,                 &QCheckBox::toggled,                                            this,&CopyEngineFactory::doChecksum_toggled);
     connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
     connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderCollision);
     connect(ui->comboBoxFileError,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileError);
     connect(ui->comboBoxFileCollision,      static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileCollision);
-    connect(ui->transferAlgorithm,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setTransferAlgorithm);
     connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&CopyEngineFactory::setCheckDestinationFolder);
-    connect(ui->checksumIgnoreIfImpossible,	&QCheckBox::toggled,                this,&CopyEngineFactory::checksumIgnoreIfImpossible_toggled);
-    connect(ui->checksumOnlyOnError,        &QCheckBox::toggled,                this,&CopyEngineFactory::checksumOnlyOnError_toggled);
-    connect(ui->osBuffer,                   &QCheckBox::toggled,                this,&CopyEngineFactory::osBuffer_toggled);
-    connect(ui->osBufferLimited,            &QCheckBox::toggled,                this,&CopyEngineFactory::osBufferLimited_toggled);
-    connect(ui->osBufferLimit,              &QSpinBox::editingFinished,         this,&CopyEngineFactory::osBufferLimit_editingFinished);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     connect(ui->rsync,                      &QCheckBox::toggled,                this,&CopyEngineFactory::setRsync);
     #endif
     connect(ui->inodeThreads,               &QSpinBox::editingFinished,         this,&CopyEngineFactory::on_inodeThreads_editingFinished);
-    connect(ui->osBufferLimited,            &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
-    connect(ui->osBuffer,                   &QAbstractButton::toggled,          this,&CopyEngineFactory::updateBufferCheckbox);
     connect(ui->moveTheWholeFolder,         &QCheckBox::toggled,                this,&CopyEngineFactory::moveTheWholeFolder);
     connect(ui->followTheStrictOrder,       &QCheckBox::toggled,                this,&CopyEngineFactory::followTheStrictOrder);
     connect(ui->deletePartiallyTransferredFiles,&QCheckBox::toggled,            this,&CopyEngineFactory::deletePartiallyTransferredFiles);
@@ -112,8 +93,6 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
     realObject->setKeepDate(ui->keepDate->isChecked());
-    realObject->setBlockSize(ui->blockSize->value());
-    realObject->setAutoStart(ui->autoStart->isChecked());
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     realObject->setRsync(ui->rsync->isChecked());
     #endif
@@ -121,19 +100,9 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setFolderError(ui->comboBoxFolderError->currentIndex());
     realObject->setFileCollision(ui->comboBoxFileCollision->currentIndex());
     realObject->setFileError(ui->comboBoxFileError->currentIndex());
-    realObject->setTransferAlgorithm(ui->transferAlgorithm->currentIndex());
     realObject->setCheckDestinationFolderExists(ui->checkBoxDestinationFolderExists->isChecked());
-    realObject->set_doChecksum(ui->doChecksum->isChecked());
-    realObject->set_checksumIgnoreIfImpossible(ui->checksumIgnoreIfImpossible->isChecked());
-    realObject->set_checksumOnlyOnError(ui->checksumOnlyOnError->isChecked());
-    realObject->set_osBuffer(ui->osBuffer->isChecked());
-    realObject->set_osBufferLimited(ui->osBufferLimited->isChecked());
-    realObject->set_osBufferLimit(ui->osBufferLimit->value());
     realObject->set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
     realObject->setRenamingRules(firstRenamingRule,otherRenamingRule);
-    realObject->setSequentialBuffer(ui->sequentialBuffer->value());
-    realObject->setParallelBuffer(ui->parallelBuffer->value());
-    realObject->setParallelizeIfSmallerThan(ui->parallelizeIfSmallerThan->value());
     realObject->setMoveTheWholeFolder(ui->moveTheWholeFolder->isChecked());
     realObject->setFollowTheStrictOrder(ui->followTheStrictOrder->isChecked());
     realObject->setDeletePartiallyTransferredFiles(ui->deletePartiallyTransferredFiles->isChecked());
@@ -230,8 +199,6 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         resetOptions();
 
         updateBufferCheckbox();
-
-        updatedBlockSize();
     }
 }
 
@@ -274,8 +241,6 @@ void CopyEngineFactory::resetOptions()
     #endif
     ui->doRightTransfer->setChecked(stringtobool(options->getOptionValue("doRightTransfer")));
     ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
-    ui->blockSize->setValue(stringtouint32(options->getOptionValue("blockSize")));//keep before sequentialBuffer and parallelBuffer
-    ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     ui->rsync->setChecked(stringtobool(options->getOptionValue("rsync")));
     #else
@@ -286,13 +251,7 @@ void CopyEngineFactory::resetOptions()
     ui->comboBoxFolderCollision->setCurrentIndex(stringtouint32(options->getOptionValue("folderCollision")));
     ui->comboBoxFileError->setCurrentIndex(stringtouint32(options->getOptionValue("fileError")));
     ui->comboBoxFileCollision->setCurrentIndex(stringtouint32(options->getOptionValue("fileCollision")));
-    ui->transferAlgorithm->setCurrentIndex(stringtouint32(options->getOptionValue("transferAlgorithm")));
     ui->checkBoxDestinationFolderExists->setChecked(stringtobool(options->getOptionValue("checkDestinationFolder")));
-    ui->parallelizeIfSmallerThan->setValue(stringtouint32(options->getOptionValue("parallelizeIfSmallerThan")));
-    ui->sequentialBuffer->setValue(stringtouint32(options->getOptionValue("sequentialBuffer")));
-    ui->parallelBuffer->setValue(stringtouint32(options->getOptionValue("parallelBuffer")));
-    ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
-    ui->parallelBuffer->setSingleStep(ui->blockSize->value());
     ui->deletePartiallyTransferredFiles->setChecked(stringtobool(options->getOptionValue("deletePartiallyTransferredFiles")));
     ui->moveTheWholeFolder->setChecked(stringtobool(options->getOptionValue("moveTheWholeFolder")));
     ui->followTheStrictOrder->setChecked(stringtobool(options->getOptionValue("followTheStrictOrder")));
@@ -301,13 +260,6 @@ void CopyEngineFactory::resetOptions()
     ui->checkDiskSpace->setChecked(stringtobool(options->getOptionValue("checkDiskSpace")));
     ui->defaultDestinationFolder->setText(QString::fromStdString(options->getOptionValue("defaultDestinationFolder")));
 
-    ui->doChecksum->setChecked(stringtobool(options->getOptionValue("doChecksum")));
-    ui->checksumIgnoreIfImpossible->setChecked(stringtobool(options->getOptionValue("checksumIgnoreIfImpossible")));
-    ui->checksumOnlyOnError->setChecked(stringtobool(options->getOptionValue("checksumOnlyOnError")));
-
-    ui->osBuffer->setChecked(stringtobool(options->getOptionValue("osBuffer")));
-    ui->osBufferLimited->setChecked(stringtobool(options->getOptionValue("osBufferLimited")));
-    ui->osBufferLimit->setValue(stringtouint32(options->getOptionValue("osBufferLimit")));
     //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
     includeStrings=stringtostringlist(options->getOptionValue("includeStrings"));
     includeOptions=stringtostringlist(options->getOptionValue("includeOptions"));
@@ -318,8 +270,6 @@ void CopyEngineFactory::resetOptions()
     otherRenamingRule=options->getOptionValue("otherRenamingRule");
     renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
 
-    ui->checksumOnlyOnError->setEnabled(ui->doChecksum->isChecked());
-    ui->checksumIgnoreIfImpossible->setEnabled(ui->doChecksum->isChecked());
     ui->copyListOrder->setChecked(stringtobool(options->getOptionValue("copyListOrder")));
 
     optionsEngine=options;
@@ -344,52 +294,6 @@ void CopyEngineFactory::setKeepDate(bool keepDate)
         optionsEngine->setOptionValue("keepDate",booltostring(keepDate));
 }
 
-void CopyEngineFactory::setBlockSize(int blockSize)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("blockSize",std::to_string(blockSize));
-    updatedBlockSize();
-}
-
-void CopyEngineFactory::setParallelBuffer(int parallelBuffer)
-{
-    if(optionsEngine!=NULL)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-        parallelBuffer=round((float)parallelBuffer/(float)ui->blockSize->value())*ui->blockSize->value();
-        ui->parallelBuffer->setValue(parallelBuffer);
-        optionsEngine->setOptionValue("parallelBuffer",std::to_string(parallelBuffer));
-    }
-}
-
-void CopyEngineFactory::setSequentialBuffer(int sequentialBuffer)
-{
-    if(optionsEngine!=NULL)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-        sequentialBuffer=round((float)sequentialBuffer/(float)ui->blockSize->value())*ui->blockSize->value();
-        ui->sequentialBuffer->setValue(sequentialBuffer);
-        optionsEngine->setOptionValue("sequentialBuffer",std::to_string(sequentialBuffer));
-    }
-}
-
-void CopyEngineFactory::setParallelizeIfSmallerThan(int parallelizeIfSmallerThan)
-{
-    if(optionsEngine!=NULL)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-        optionsEngine->setOptionValue("parallelizeIfSmallerThan",std::to_string(parallelizeIfSmallerThan));
-    }
-}
-
-void CopyEngineFactory::setAutoStart(bool autoStart)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("autoStart",booltostring(autoStart));
-}
-
 void CopyEngineFactory::setFolderCollision(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
@@ -402,13 +306,6 @@ void CopyEngineFactory::setFolderError(int index)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("folderError",std::to_string(index));
-}
-
-void CopyEngineFactory::setTransferAlgorithm(int index)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("transferAlgorithm",std::to_string(index));
 }
 
 void CopyEngineFactory::setCheckDestinationFolder()
@@ -444,9 +341,6 @@ void CopyEngineFactory::newLanguageLoaded()
     ui->comboBoxFileCollision->setItemText(5,tr("Overwrite if older"));
     ui->comboBoxFileCollision->setItemText(6,tr("Rename"));
 
-    ui->transferAlgorithm->setItemText(0,tr("Automatic"));
-    ui->transferAlgorithm->setItemText(1,tr("Sequential"));
-    ui->transferAlgorithm->setItemText(2,tr("Parallel"));
     if(optionsEngine!=NULL)
     {
         filters->newLanguageLoaded();
@@ -454,43 +348,6 @@ void CopyEngineFactory::newLanguageLoaded()
     }
     emit reloadLanguage();
     this->optionsEngine=optionsEngine;
-}
-
-void CopyEngineFactory::doChecksum_toggled(bool doChecksum)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("doChecksum",booltostring(doChecksum));
-}
-
-void CopyEngineFactory::checksumOnlyOnError_toggled(bool checksumOnlyOnError)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("checksumOnlyOnError",booltostring(checksumOnlyOnError));
-}
-
-void CopyEngineFactory::osBuffer_toggled(bool osBuffer)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("osBuffer",booltostring(osBuffer));
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
-}
-
-void CopyEngineFactory::osBufferLimited_toggled(bool osBufferLimited)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("osBufferLimited",booltostring(osBufferLimited));
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
-}
-
-void CopyEngineFactory::osBufferLimit_editingFinished()
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the spinbox have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("osBufferLimit",std::to_string(ui->osBufferLimit->value()));
 }
 
 void CopyEngineFactory::showFilterDialog()
@@ -543,19 +400,6 @@ void CopyEngineFactory::showRenamingRules()
     renamingRules->exec();
 }
 
-void CopyEngineFactory::updateBufferCheckbox()
-{
-    ui->osBufferLimited->setEnabled(ui->osBuffer->isChecked());
-    ui->osBufferLimit->setEnabled(ui->osBuffer->isChecked() && ui->osBufferLimited->isChecked());
-}
-
-void CopyEngineFactory::checksumIgnoreIfImpossible_toggled(bool checksumIgnoreIfImpossible)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("checksumIgnoreIfImpossible",booltostring(checksumIgnoreIfImpossible));
-}
-
 void CopyEngineFactory::setFileCollision(int index)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
@@ -594,18 +438,6 @@ void CopyEngineFactory::setFileError(int index)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Error, unknow index, ignored");
         break;
     }
-}
-
-void CopyEngineFactory::updatedBlockSize()
-{
-    ui->sequentialBuffer->setMinimum(ui->blockSize->value());
-    ui->sequentialBuffer->setSingleStep(ui->blockSize->value());
-    ui->sequentialBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK);
-    ui->parallelBuffer->setMinimum(ui->blockSize->value());
-    ui->parallelBuffer->setSingleStep(ui->blockSize->value());
-    ui->parallelBuffer->setMaximum(ui->blockSize->value()*ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK);
-    setParallelBuffer(ui->parallelBuffer->value());
-    setSequentialBuffer(ui->sequentialBuffer->value());
 }
 
 void CopyEngineFactory::deletePartiallyTransferredFiles(bool checked)

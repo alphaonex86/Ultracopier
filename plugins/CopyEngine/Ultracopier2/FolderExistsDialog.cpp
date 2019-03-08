@@ -1,6 +1,7 @@
 #include "FolderExistsDialog.h"
 #include "ui_folderExistsDialog.h"
 #include "TransferThread.h"
+#include "../../../cpp11addition.h"
 
 #ifdef Q_OS_WIN32
 #define CURRENTSEPARATOR "\\"
@@ -9,10 +10,8 @@
 #endif
 
 #include <QMessageBox>
-#include <QFileInfo>
-#include <QMessageBox>
 
-FolderExistsDialog::FolderExistsDialog(QWidget *parent, QFileInfo source, bool isSame, QFileInfo destination, std::string firstRenamingRule, std::string otherRenamingRule) :
+FolderExistsDialog::FolderExistsDialog(QWidget *parent, std::string source, bool isSame, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::folderExistsDialog)
 {
@@ -28,12 +27,19 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, QFileInfo source, bool i
     oldName=TransferThread::resolvedName(destination);
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
-    ui->label_content_source_modified->setText(source.lastModified().toString());
-    ui->label_content_source_folder_name->setText(source.fileName());
-    QString folder=source.absolutePath();
+    struct stat source_statbuf;
+    if(lstat(source.c_str(), &source_statbuf)==0)
+    {
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+        ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+    }
+    else
+        ui->label_content_source_modified->hide();
+    ui->label_content_source_folder_name->setText(QString::fromStdString(TransferThread::resolvedName(source)));
+    std::string folder=FSabsolutePath(source);
     if(folder.size()>80)
-        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
-    ui->label_content_source_folder->setText(folder);
+        folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
+    ui->label_content_source_folder->setText(QString::fromStdString(folder));
     if(ui->label_content_source_folder_name->text().isEmpty())
     {
         ui->label_source_folder_name->hide();
@@ -55,12 +61,19 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, QFileInfo source, bool i
     {
         this->destinationInfo=destination;
         this->setWindowTitle(tr("Folder already exists"));
-        ui->label_content_destination_modified->setText(destination.lastModified().toString());
-        ui->label_content_destination_folder_name->setText(destination.fileName());
-        QString folder=destination.absolutePath();
+        struct stat destination_statbuf;
+        if(lstat(destination.c_str(), &destination_statbuf)==0)
+        {
+            const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtim);
+            ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+        }
+        else
+            ui->label_content_destination_modified->hide();
+        ui->label_content_destination_folder_name->setText(QString::fromStdString(TransferThread::resolvedName(destination)));
+        std::string folder=FSabsolutePath(destination);
         if(folder.size()>80)
-            folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
-        ui->label_content_destination_folder->setText(folder);
+            folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
+        ui->label_content_destination_folder->setText(QString::fromStdString(folder));
         if(ui->label_content_destination_folder_name->text().isEmpty())
         {
             ui->label_destination_folder_name->hide();
@@ -99,8 +112,9 @@ std::string FolderExistsDialog::getNewName()
 
 void FolderExistsDialog::on_SuggestNewName_clicked()
 {
-    QFileInfo destinationInfo=this->destinationInfo;
-    QString absolutePath=destinationInfo.absolutePath();
+    struct stat p_statbuf;
+    std::string destinationInfo=this->destinationInfo;
+    QString absolutePath=QString::fromStdString(FSabsolutePath(destinationInfo));
     QString fileName=QString::fromStdString(TransferThread::resolvedName(destinationInfo));
     QString suffix;
     QString destination;
@@ -135,10 +149,10 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
         }
         newFileName.replace(QStringLiteral("%name%"),fileName);
         destination=absolutePath+CURRENTSEPARATOR+newFileName+suffix;
-        destinationInfo.setFile(destination);
+        destinationInfo=destination.toStdString();
         num++;
     }
-    while(destinationInfo.exists());
+    while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
     ui->lineEditNewName->setText(newFileName);
 }
 

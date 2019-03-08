@@ -50,7 +50,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
     //load the action
     if(isSame)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source.absoluteFilePath().toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source);
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
@@ -114,7 +114,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+source+", destination: "+destination);
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         switch(tempFileExistsAction)
         {
@@ -130,10 +130,8 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
             default:
                 if(dialogIsOpen)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("dialog open, put in queue: %1 %2")
-                                 .arg(source.absoluteFilePath())
-                                 .arg(destination.absoluteFilePath())
-                                 .toStdString()
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"dialog open, put in queue: "+
+                                             source+" "+destination
                                  );
                     alreadyExistsQueueItem newItem;
                     newItem.source=source;
@@ -243,7 +241,7 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo.absoluteFilePath().toStdString()+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo+", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -280,7 +278,17 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(fileInfo.absoluteFilePath().toStdString(),fileInfo.size(),fileInfo.lastModified().toMSecsSinceEpoch()/1000,errorString);
+
+            uint64_t size=0;
+            uint64_t mdate=0;
+            struct stat p_statbuf;
+            if (lstat(fileInfo.c_str(), &p_statbuf)==0)
+            {
+                size=p_statbuf.st_size;
+                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+            }
+
+            emit error(fileInfo,size,mdate,errorString);
             FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
@@ -338,7 +346,7 @@ void CopyEngine::folderAlreadyExists(std::string source,std::string destination,
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+source.absoluteFilePath().toStdString()+", destination: "+destination.absoluteFilePath().toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+source+", destination: "+destination);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -396,7 +404,7 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo.absoluteFilePath().toStdString()+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo+", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -426,8 +434,18 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
                 return;
             }
             dialogIsOpen=true;
+
+            uint64_t size=0;
+            uint64_t mdate=0;
+            struct stat p_statbuf;
+            if (lstat(fileInfo.c_str(), &p_statbuf)==0)
+            {
+                size=p_statbuf.st_size;
+                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+            }
+
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(fileInfo.absoluteFilePath().toStdString(),fileInfo.size(),fileInfo.lastModified().toMSecsSinceEpoch()/1000,errorString);
+            emit error(fileInfo,size,mdate,errorString);
             FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -459,7 +477,7 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+folder.absoluteFilePath().toStdString()+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+folder+", error: "+errorString);
     //load the always action
     FileErrorAction tempFileErrorAction=alwaysDoThisActionForFolderError;
     switch(tempFileErrorAction)
@@ -486,7 +504,17 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(folder.absoluteFilePath().toStdString(),folder.size(),folder.lastModified().toMSecsSinceEpoch()/1000,errorString);
+
+            uint64_t size=0;
+            uint64_t mdate=0;
+            struct stat p_statbuf;
+            if (lstat(folder.c_str(), &p_statbuf)==0)
+            {
+                size=p_statbuf.st_size;
+                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+            }
+
+            emit error(folder,size,mdate,errorString);
             FileErrorDialog dialog(interface,folder,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();

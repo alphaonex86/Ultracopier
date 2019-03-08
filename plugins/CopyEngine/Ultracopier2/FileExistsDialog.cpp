@@ -1,6 +1,7 @@
 #include "FileExistsDialog.h"
 #include "ui_fileExistsDialog.h"
 #include "TransferThread.h"
+#include "../../../cpp11addition.h"
 
 #ifdef Q_OS_WIN32
 #define CURRENTSEPARATOR "\\"
@@ -8,11 +9,9 @@
 #define CURRENTSEPARATOR "/"
 #endif
 
-#include <QRegularExpression>
-#include <QFileInfo>
 #include <QMessageBox>
 
-FileExistsDialog::FileExistsDialog(QWidget *parent, QFileInfo source, QFileInfo destination, std::string firstRenamingRule, std::string otherRenamingRule) :
+FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::fileExistsDialog)
 {
@@ -32,51 +31,49 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, QFileInfo source, QFileInfo 
     ui->Overwrite->addAction(ui->actionOverwrite_if_newer);
     ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_modification_date);
     ui->label_content_source_size->setText(QString::number(source.size()));
-    ui->label_content_source_modified->setText(source.lastModified().toString());
+    ui->label_content_source_modified->setText(QString::fromStdString(source));
     ui->label_content_source_file_name->setText(QString::fromStdString(TransferThread::resolvedName(source)));
-    QString folder=source.absolutePath();
+    std::string folder=FSabsolutePath(source);
     if(folder.size()>80)
-        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
-    ui->label_content_source_folder->setText(folder);
+        folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
+    ui->label_content_source_folder->setText(QString::fromStdString(folder));
     ui->label_content_destination_size->setText(QString::number(destination.size()));
-    ui->label_content_destination_modified->setText(destination.lastModified().toString());
+    ui->label_content_destination_modified->setText(QString::fromStdString(destination));
     ui->label_content_destination_file_name->setText(QString::fromStdString(TransferThread::resolvedName(destination)));
-    folder=destination.absolutePath();
+    folder==FSabsolutePath(destination);
     if(folder.size()>80)
-        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
-    ui->label_content_destination_folder->setText(folder);
-    QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
-    if(maxTime<source.lastModified())
+        folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
+    ui->label_content_destination_folder->setText(QString::fromStdString(folder));
+    //QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
+    struct stat source_statbuf;
+    if(lstat(source.c_str(), &source_statbuf)==0)
     {
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
         ui->label_source_modified->setVisible(true);
         ui->label_content_source_modified->setVisible(true);
-        ui->label_content_source_modified->setText(source.lastModified().toString());
+        ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
     }
     else
-    {
-        ui->label_source_modified->setVisible(false);
-        ui->label_content_source_modified->setVisible(false);
-    }
-    if(maxTime<destination.lastModified())
-    {
-        ui->label_destination_modified->setVisible(true);
-        ui->label_content_destination_modified->setVisible(true);
-        ui->label_content_destination_modified->setText(destination.lastModified().toString());
-    }
-    else
-    {
-        ui->label_destination_modified->setVisible(false);
-        ui->label_content_destination_modified->setVisible(false);
-    }
-    if(!source.exists())
     {
         ui->label_content_source_size->setVisible(false);
         ui->label_source_size->setVisible(false);
         ui->label_source_modified->setVisible(false);
         ui->label_content_source_modified->setVisible(false);
+        ui->label_source_modified->setVisible(false);
+        ui->label_content_source_modified->setVisible(false);
     }
-    if(!destination.exists())
+    struct stat destination_statbuf;
+    if(lstat(destination.c_str(), &destination_statbuf)==0)
     {
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtim);
+        ui->label_destination_modified->setVisible(true);
+        ui->label_content_destination_modified->setVisible(true);
+        ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+    }
+    else
+    {
+        ui->label_destination_modified->setVisible(false);
+        ui->label_content_destination_modified->setVisible(false);
         ui->label_content_destination_size->setVisible(false);
         ui->label_destination_size->setVisible(false);
         ui->label_destination_modified->setVisible(false);
@@ -114,8 +111,9 @@ std::string FileExistsDialog::getNewName()
 
 void FileExistsDialog::on_SuggestNewName_clicked()
 {
-    QFileInfo destinationInfo=this->destinationInfo;
-    QString absolutePath=destinationInfo.absolutePath();
+    struct stat p_statbuf;
+    std::string destinationInfo=this->destinationInfo;
+    QString absolutePath=QString::fromStdString(FSabsolutePath(destinationInfo));
     QString fileName=QString::fromStdString(TransferThread::resolvedName(destinationInfo));
     QString suffix="";
     QString destination;
@@ -149,10 +147,10 @@ void FileExistsDialog::on_SuggestNewName_clicked()
         newFileName.replace(QStringLiteral("%name%"),fileName);
         newFileName.replace(QStringLiteral("%suffix%"),suffix);
         destination=absolutePath+CURRENTSEPARATOR+newFileName;
-        destinationInfo.setFile(destination);
+        destinationInfo=destination.toStdString();
         num++;
     }
-    while(destinationInfo.exists());
+    while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
     ui->lineEditNewName->setText(newFileName);
 }
 

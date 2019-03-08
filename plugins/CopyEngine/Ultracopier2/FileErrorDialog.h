@@ -7,7 +7,7 @@
 #include <QWidget>
 #include <QString>
 #include <QDateTime>
-#include <QFileInfo>
+#include <string>
 #include "Environment.h"
 
 #ifndef FILEERRORDIALOG_H
@@ -25,7 +25,7 @@ class FileErrorDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileErrorDialog(QWidget *parent,QFileInfo fileInfo,std::string errorString,const ErrorType &errorType);
+    explicit FileErrorDialog(QWidget *parent, std::string fileInfo, std::string errorString, const ErrorType &errorType);
     ~FileErrorDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

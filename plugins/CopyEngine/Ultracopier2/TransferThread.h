@@ -85,6 +85,8 @@ public:
     static bool is_dir(const std::string &filename);
     static bool exists(const char * const filename);
     static bool exists(const std::string &filename);
+    static int64_t file_stat_size(const std::string &filename);
+    static int64_t file_stat_size(const char * const filename);
     static bool entryInfoList(const std::string &path, std::vector<std::string> &list);
     static bool entryInfoList(const std::string &path, std::vector<dirent> &list);
 protected:

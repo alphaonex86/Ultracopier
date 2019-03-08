@@ -7,10 +7,7 @@
 #define FOLDERISSAMEDIALOG_H
 
 #include <QDialog>
-#include <QFileInfo>
-#include <QString>
-#include <QDateTime>
-#include <QDir>
+#include <string>
 
 #include "Environment.h"
 
@@ -25,7 +22,7 @@ class FolderExistsDialog : public QDialog
 
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FolderExistsDialog(QWidget *parent,QFileInfo source,bool isSame,QFileInfo destination,std::string firstRenamingRule,std::string otherRenamingRule);
+    explicit FolderExistsDialog(QWidget *parent,std::string source,bool isSame,std::string destination,std::string firstRenamingRule,std::string otherRenamingRule);
     ~FolderExistsDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();
@@ -51,7 +48,7 @@ private:
     std::string oldName;
     std::string firstRenamingRule;
     std::string otherRenamingRule;
-    QFileInfo destinationInfo;
+    std::string destinationInfo;
 };
 
 #endif // FOLDERISSAMEDIALOG_H

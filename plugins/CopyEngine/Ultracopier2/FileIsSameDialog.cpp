@@ -1,6 +1,7 @@
 #include "FileIsSameDialog.h"
 #include "ui_fileIsSameDialog.h"
 #include "TransferThread.h"
+#include "../../../cpp11addition.h"
 
 #ifdef Q_OS_WIN32
 #define CURRENTSEPARATOR "\\"
@@ -8,11 +9,9 @@
 #define CURRENTSEPARATOR "/"
 #endif
 
-#include <QRegularExpression>
-#include <QFileInfo>
 #include <QMessageBox>
 
-FileIsSameDialog::FileIsSameDialog(QWidget *parent, QFileInfo fileInfo, std::string firstRenamingRule, std::string otherRenamingRule) :
+FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::string firstRenamingRule, std::string otherRenamingRule) :
     QDialog(parent),
     ui(new Ui::fileIsSameDialog)
 {
@@ -30,26 +29,30 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, QFileInfo fileInfo, std::str
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     ui->label_content_size->setText(QString::number(fileInfo.size()));
-    ui->label_content_modified->setText(fileInfo.lastModified().toString());
     ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
-    QString folder=fileInfo.absolutePath();
+    std::string folder=FSabsolutePath(fileInfo);
     if(folder.size()>80)
-        folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
-    ui->label_content_folder->setText(folder);
+        folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
+    ui->label_content_folder->setText(QString::fromStdString(folder));
     updateRenameButton();
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
-    if(maxTime<fileInfo.lastModified())
+    struct stat source_statbuf;
+    if(lstat(fileInfo.c_str(), &source_statbuf)==0)
     {
-        ui->label_modified->setVisible(true);
-        ui->label_content_modified->setVisible(true);
-        ui->label_content_modified->setText(fileInfo.lastModified().toString());
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+        if((uint64_t)maxTime.toSecsSinceEpoch()<mdate)
+        {
+            ui->label_modified->setVisible(true);
+            ui->label_content_modified->setVisible(true);
+            ui->label_content_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+        }
+        else
+        {
+            ui->label_modified->setVisible(false);
+            ui->label_content_modified->setVisible(false);
+        }
     }
     else
-    {
-        ui->label_modified->setVisible(false);
-        ui->label_content_modified->setVisible(false);
-    }
-    if(!fileInfo.exists())
     {
         ui->label_content_size->setVisible(false);
         ui->label_size->setVisible(false);
@@ -88,8 +91,9 @@ std::string FileIsSameDialog::getNewName()
 
 void FileIsSameDialog::on_SuggestNewName_clicked()
 {
-    QFileInfo destinationInfo=this->destinationInfo;
-    QString absolutePath=destinationInfo.absolutePath();
+    struct stat p_statbuf;
+    std::string destinationInfo=this->destinationInfo;
+    QString absolutePath=QString::fromStdString(FSabsolutePath(destinationInfo));
     QString fileName=QString::fromStdString(TransferThread::resolvedName(destinationInfo));
     QString suffix="";
     QString destination;
@@ -123,10 +127,10 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
         newFileName.replace(QStringLiteral("%name%"),fileName);
         newFileName.replace(QStringLiteral("%suffix%"),suffix);
         destination=absolutePath+CURRENTSEPARATOR+newFileName+suffix;
-        destinationInfo.setFile(destination);
+        destinationInfo=destination.toStdString();
         num++;
     }
-    while(destinationInfo.exists());
+    while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
     ui->lineEditNewName->setText(newFileName);
 }
 

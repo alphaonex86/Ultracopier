@@ -87,33 +87,20 @@ private slots:
     void init();
     void setDoRightTransfer(bool doRightTransfer);
     void setKeepDate(bool keepDate);
-    void setBlockSize(int blockSize);
-    void setParallelBuffer(int parallelBuffer);
-    void setSequentialBuffer(int sequentialBuffer);
-    void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
-    void setAutoStart(bool autoStart);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     void setRsync(bool rsync);
     #endif
     void setFolderCollision(int index);
     void setFolderError(int index);
-    void setTransferAlgorithm(int index);
     void setCheckDestinationFolder();
     void showFilterDialog();
     void sendNewFilters(const std::vector<std::string> &includeStrings,const std::vector<std::string> &includeOptions,
                         const std::vector<std::string> &excludeStrings,const std::vector<std::string> &excludeOptions);
-    void doChecksum_toggled(bool);
-    void checksumOnlyOnError_toggled(bool);
-    void osBuffer_toggled(bool);
-    void osBufferLimited_toggled(bool);
-    void osBufferLimit_editingFinished();
-    void checksumIgnoreIfImpossible_toggled(bool);
     void sendNewRenamingRules(const std::string &firstRenamingRule, const std::string &otherRenamingRule);
     void showRenamingRules();
     void updateBufferCheckbox();
     void setFileCollision(int index);
     void setFileError(int index);
-    void updatedBlockSize();
     void deletePartiallyTransferredFiles(bool checked);
     void renameTheOriginalDestination(bool checked);
     void checkDiskSpace(bool checked);

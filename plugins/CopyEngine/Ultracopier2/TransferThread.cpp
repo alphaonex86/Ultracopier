@@ -1943,6 +1943,20 @@ bool TransferThread::exists(const char * const filename)
     return true;
 }
 
+int64_t TransferThread::file_stat_size(const std::string &filename)
+{
+    return file_stat_size(filename.c_str());
+}
+
+int64_t TransferThread::file_stat_size(const char * const filename)
+{
+    struct stat p_statbuf;
+    if (lstat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return -1;
+    return p_statbuf.st_size;
+}
+
 bool TransferThread::entryInfoList(const std::string &path,std::vector<std::string> &list)
 {
     DIR *dp;

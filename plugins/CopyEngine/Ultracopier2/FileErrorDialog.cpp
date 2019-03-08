@@ -1,12 +1,13 @@
 #include "FileErrorDialog.h"
 #include "ui_fileErrorDialog.h"
 #include "TransferThread.h"
+#include "../../../cpp11addition.h"
 
 #include <QString>
 
 bool FileErrorDialog::isInAdmin=false;
 
-FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, std::string errorString, const ErrorType &errorType) :
+FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::string errorString, const ErrorType &errorType) :
     QDialog(parent),
     ui(new Ui::fileErrorDialog)
 {
@@ -20,58 +21,68 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, QFileInfo fileInfo, std::strin
     ui->setupUi(this);
     action=FileError_Cancel;
     ui->label_error->setText(QString::fromStdString(errorString));
-    if(fileInfo.exists())
+    struct stat p_statbuf;
+    if(lstat(fileInfo.c_str(), &p_statbuf)==0)
     {
+        uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
         ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
         if(ui->label_content_file_name->text().isEmpty())
         {
-            ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
+            ui->label_content_file_name->setText(QString::fromStdString(fileInfo));
             ui->label_folder->setVisible(false);
             ui->label_content_folder->setVisible(false);
         }
         else
         {
-            QString folder=fileInfo.absolutePath();
+            std::string folder=fileInfo;
             if(folder.size()>80)
-                folder=folder.mid(0,38)+"..."+folder.mid(folder.size()-38);
-            ui->label_content_folder->setText(fileInfo.absolutePath());
+                folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
+            ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(fileInfo)));
         }
         ui->label_content_size->setText(QString::number(fileInfo.size()));
         QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
-        if(maxTime<fileInfo.lastModified())
+        if((uint64_t)maxTime.toSecsSinceEpoch()<mdate)
         {
             ui->label_modified->setVisible(true);
             ui->label_content_modified->setVisible(true);
-            ui->label_content_modified->setText(fileInfo.lastModified().toString());
+            ui->label_content_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
         }
         else
         {
             ui->label_modified->setVisible(false);
             ui->label_content_modified->setVisible(false);
         }
-        if(fileInfo.isDir())
+        if(p_statbuf.st_mode==S_IFDIR)
         {
             this->setWindowTitle(tr("Error on folder"));
             ui->label_size->hide();
             ui->label_content_size->hide();
             ui->label_file_name->setText(tr("Folder name"));
         }
-        ui->label_file_destination->setVisible(fileInfo.isSymLink());
-        ui->label_content_file_destination->setVisible(fileInfo.isSymLink());
-        if(fileInfo.isSymLink())
-            ui->label_content_file_destination->setText(fileInfo.symLinkTarget());
+        ui->label_file_destination->setVisible(p_statbuf.st_mode==S_IFLNK);
+        ui->label_content_file_destination->setVisible(p_statbuf.st_mode==S_IFLNK);
+        if(p_statbuf.st_mode==S_IFLNK)
+        {
+            char buf[1024];
+            ssize_t len;
+            if ((len = readlink(fileInfo.c_str(), buf, sizeof(buf)-1)) != -1)
+            {
+                buf[len] = '\0';
+                ui->label_content_file_destination->setText(buf);
+            }
+        }
     }
     else
     {
         ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
         if(ui->label_content_file_name->text().isEmpty())
         {
-            ui->label_content_file_name->setText(fileInfo.absoluteFilePath());
+            ui->label_content_file_name->setText(QString::fromStdString(fileInfo));
             ui->label_folder->setVisible(false);
             ui->label_content_folder->setVisible(false);
         }
         else
-            ui->label_content_folder->setText(fileInfo.absolutePath());
+            ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(fileInfo)));
 
         ui->label_file_destination->hide();
         ui->label_content_file_destination->hide();
