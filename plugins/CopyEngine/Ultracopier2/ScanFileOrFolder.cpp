@@ -26,17 +26,17 @@ ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
     this->mode          = mode;
     folder_isolation    = std::regex("^(.*/)?([^/]+)/$");
     setObjectName(QStringLiteral("ScanFileOrFolder"));
-    #ifdef Q_OS_WIN32
+    /*#ifdef Q_OS_WIN32
     QString userName;
     DWORD size=255;
     WCHAR * userNameW=new WCHAR[size];
     if(GetUserNameW(userNameW,&size))
     {
         userName=QString::fromWCharArray(userNameW,size-1);
-        blackList.push_back(QFileInfo(QStringLiteral("C:/Users/%1/AppData/Roaming/").arg(userName)).absoluteFilePath().toStdString());
+        blackList.push_back(QFileInfo(QStringLiteral("C:/Users/%1/AppData/Roaming/").arg(userName)));
     }
     delete userNameW;
-    #endif
+    #endif*/
 }
 
 ScanFileOrFolder::~ScanFileOrFolder()
@@ -107,24 +107,26 @@ std::vector<std::string> ScanFileOrFolder::parseWildcardSources(const std::vecto
                     unsigned int index_recomposedSource=0;
                     while(index_recomposedSource<recomposedSource.size())//parse each url part
                     {
-                        QFileInfo info(QString::fromStdString(stringimplode(recomposedSource.at(index_recomposedSource),text_slash)));
-                        if(info.isDir() && !info.isSymLink())
+                        std::string fileInfo(stringimplode(recomposedSource.at(index_recomposedSource),text_slash));
+                        std::vector<dirent> list;
+                        struct stat p_statbuf;
+                        if(lstat(fileInfo.c_str(), &p_statbuf)==0)
                         {
-                            replace with C
-                            QDir folder(info.absoluteFilePath());
-                            QFileInfoList fileFile=folder.entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//QStringList() << toResolv
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list the folder: "+info.absoluteFilePath().toStdString()+", with the wildcard: "+toParseFirst);
-                            int index_fileList=0;
-                            while(index_fileList<fileFile.size())
+                            if(S_ISDIR(p_statbuf.st_mode) && TransferThread::entryInfoList(fileInfo,list))
                             {
-                                const std::string &fileName=fileFile.at(index_fileList).fileName().toStdString();
-                                if(std::regex_match(fileName,toResolv))
+                                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list the folder: "+fileInfo+", with the wildcard: "+toParseFirst);
+                                unsigned int index_fileList=0;
+                                while(index_fileList<list.size())
                                 {
-                                    std::vector<std::string> tempList=recomposedSource.at(index_recomposedSource);
-                                    tempList.push_back(fileName);
-                                    newRecomposedSource.push_back(tempList);
+                                    const std::string &fileName=list.at(index_fileList).d_name;
+                                    if(std::regex_match(fileName,toResolv))
+                                    {
+                                        std::vector<std::string> tempList=recomposedSource.at(index_recomposedSource);
+                                        tempList.push_back(fileName);
+                                        newRecomposedSource.push_back(tempList);
+                                    }
+                                    index_fileList++;
                                 }
-                                index_fileList++;
                             }
                         }
                         index_recomposedSource++;
@@ -196,7 +198,7 @@ void ScanFileOrFolder::run()
 {
     stopped=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+std::to_string(mode));
-    destination=resolvDestination(QString::fromStdString(destination)).absoluteFilePath().toStdString();
+    destination=resolvDestination(destination);
     if(stopIt)
     {
         stopped=true;
@@ -216,35 +218,37 @@ void ScanFileOrFolder::run()
             stopped=true;
             return;
         }
-        QFileInfo source=QString::fromStdString(sources.at(sourceIndex));
-        if(source.isDir() && !source.isSymLink())
+        std::string source=sources.at(sourceIndex);
+        struct stat p_statbuf;
+        if(lstat(source.c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
         {
             /* Bad way; when you copy c:\source\folder into d:\destination, you wait it create the folder d:\destination\folder
             //listFolder(source.absoluteFilePath()+QDir::separator(),destination);
             listFolder(source.absoluteFilePath()+text_slash,destination);//put unix separator because it's transformed into that's under windows too
             */
             //put unix separator because it's transformed into that's under windows too
-            std::string tempString=QFileInfo(QString::fromStdString(destination)).absoluteFilePath().toStdString();
+            std::string tempString=destination;
             if(!stringEndsWith(tempString,text_slash) && !stringEndsWith(tempString,text_antislash))
                 tempString+=text_slash;
             tempString+=TransferThread::resolvedName(source);
             if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(QString::fromStdString(tempString)).exists() &&
-                    driveManagement.isSameDrive(source.absoluteFilePath().toStdString(),tempString))
+                    driveManagement.isSameDrive(source,tempString))
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: move and not exists: "+tempString);
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"do real move: "+source.absoluteFilePath().toStdString()+" to "+tempString);
-                emit addToRealMove(source.absoluteFilePath(),QString::fromStdString(tempString));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"do real move: "+source+" to "+tempString);
+                emit addToRealMove(source,tempString);
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing, blacklist size: "+std::to_string(blackList.size()));
-                listFolder(source.absoluteFilePath(),QString::fromStdString(tempString));
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing, blacklist size: "+std::to_string(blackList.size()));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing");
+                listFolder(source,tempString);
             }
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath().toStdString()+" is file or symblink");
-            emit fileTransfer(source,QString::fromStdString(destination+text_slash)+source.fileName(),mode);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+" is file or symblink");
+            emit fileTransfer(source,destination+text_slash+TransferThread::resolvedName(source),mode);
         }
         sourceIndex++;
     }
@@ -254,54 +258,56 @@ void ScanFileOrFolder::run()
     emit finishedTheListing();
 }
 
-QFileInfo ScanFileOrFolder::resolvDestination(const QFileInfo &destination)
+std::string ScanFileOrFolder::resolvDestination(const std::string &destination)
 {
-    QFileInfo newDestination=destination;
-    while(newDestination.isSymLink())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"resolv destination to: "+newDestination.symLinkTarget().toStdString());
-        if(QFileInfo(newDestination.symLinkTarget()).isAbsolute())
-            newDestination.setFile(newDestination.symLinkTarget());
-        else
-            newDestination.setFile(newDestination.absolutePath()+QString::fromStdString(text_slash)+newDestination.symLinkTarget());
+    std::string temp(destination);
+    char buf[PATH_MAX];
+    ssize_t nbytes=0;
+    nbytes=readlink(destination.c_str(), buf, sizeof(buf));
+    while(nbytes!=-1) {
+        temp=FSabsolutePath(temp)+'/'+std::string(buf,nbytes);
+        /// \todo change for pure c++ code
+        temp=QFileInfo(QString::fromStdString(temp)).absoluteFilePath().toStdString();
+        nbytes=readlink(temp.c_str(), buf, sizeof(buf));
     }
-    do
+    return temp;
+    /*do
     {
         fileErrorAction=FileError_NotSet;
         if(isBlackListed(destination))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"isBlackListed: "+destination.absoluteFilePath().toStdString());
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"isBlackListed: "+destination);
             emit errorOnFolder(destination,tr("Blacklisted folder").toStdString(),ErrorType_Folder);
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
         }
     } while(fileErrorAction==FileError_Retry || fileErrorAction==FileError_PutToEndOfTheList);
-    return newDestination;
+    return newDestination;*/
 }
 
-bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
+/*bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
 {
     int index=0;
     int size=blackList.size();
     while(index<size)
     {
-        if(stringStartWith(destination.absoluteFilePath().toStdString(),blackList.at(index)))
+        if(stringStartWith(destination,blackList.at(index)))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,destination.absoluteFilePath().toStdString()+" start with: "+blackList.at(index));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,destination+" start with: "+blackList.at(index));
             return true;
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,destination.absoluteFilePath().toStdString()+" not start with: "+blackList.at(index));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,destination+" not start with: "+blackList.at(index));
         index++;
     }
     return false;
-}
+}*/
 
 void ScanFileOrFolder::listFolder(std::string source,std::string destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath().toStdString()+
-                             " ("+std::to_string(source.isSymLink())+"), destination: "+destination.absoluteFilePath().toStdString()+
-                             " ("+std::to_string(destination.isSymLink())+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+
+                             ", destination: "+destination
+                             );
     if(stopIt)
         return;
     destination=resolvDestination(destination);
@@ -310,7 +316,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     if(fileErrorAction==FileError_Skip)
         return;
     //if is same
-    if(source.absoluteFilePath()==destination.absoluteFilePath())
+    if(source==destination)
     {
         emit folderAlreadyExists(source,destination,true);
         waitOneAction.acquire();
@@ -323,48 +329,56 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                 return;
             break;
             case FolderExists_Rename:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination.absoluteFilePath().toStdString());
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination);
                 if(newName.empty())
                 {
                     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pattern: "+folder_isolation.str());
                     //resolv the new name
-                    destinationSuffixPath=destination.baseName().toStdString();
+                    destinationSuffixPath=TransferThread::resolvedName(destination);
                     int num=1;
+                    struct stat source_statbuf;
                     do
                     {
                         if(num==1)
                         {
                             if(firstRenamingRule.empty())
-                                destinationSuffixPath=tr("%1 - copy").arg(destination.baseName()).toStdString();
+                                destinationSuffixPath=tr("%1 - copy").arg(QString::fromStdString(TransferThread::resolvedName(destination))).toStdString();
                             else
                                 destinationSuffixPath=firstRenamingRule;
                         }
                         else
                         {
                             if(otherRenamingRule.empty())
-                                destinationSuffixPath=tr("%1 - copy (%2)").arg(destination.baseName()).arg(num).toStdString();
+                                destinationSuffixPath=tr("%1 - copy (%2)").arg(QString::fromStdString(TransferThread::resolvedName(destination))).arg(num).toStdString();
                             else
                             {
                                 destinationSuffixPath=otherRenamingRule;
                                 stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                             }
                         }
-                        stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                        stringreplaceAll(destinationSuffixPath,"%name%",TransferThread::resolvedName(destination));
                         num++;
-                        if(destination.completeSuffix().isEmpty())
-                            destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
-                        else
-                            destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath)+QString::fromStdString(text_dot)+destination.completeSuffix());
+                        {
+                            std::string::size_type n=destination.rfind('/');
+                            if(n == std::string::npos)
+                                n=destination.rfind('.');
+                            else
+                                n=destination.rfind(n,'.');
+                            if(n == std::string::npos)
+                                destination=FSabsolutePath(destination)+'/'+destinationSuffixPath;
+                            else
+                                destination=FSabsolutePath(destination)+'/'+destinationSuffixPath+'.'+destination.substr(n);
+                        }
                     }
-                    while(destination.exists());
+                    while(lstat(destination.c_str(), &source_statbuf)==0);
                 }
                 else
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+newName);
                     destinationSuffixPath = newName;
                 }
-                destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash+destinationSuffixPath));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination.absoluteFilePath().toStdString());
+                destination=FSabsolutePath(destination)+text_slash+destinationSuffixPath;
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination);
             break;
             default:
                 return;
@@ -374,7 +388,8 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     //check if destination exists
     if(checkDestinationExists)
     {
-        if(destination.exists())
+        struct stat source_statbuf;
+        if(lstat(destination.c_str(), &source_statbuf)==0)
         {
             emit folderAlreadyExists(source,destination,false);
             waitOneAction.acquire();
@@ -387,7 +402,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                     return;
                 break;
                 case FolderExists_Rename:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination.absoluteFilePath().toStdString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+destination);
                     if(newName.empty())
                     {
                         //resolv the new name
@@ -410,7 +425,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                                     destinationSuffixPath=otherRenamingRule;
                                 stringreplaceAll(destinationSuffixPath,"%number%",std::to_string(num));
                             }
-                            stringreplaceAll(destinationSuffixPath,"%name%",destination.baseName().toStdString());
+                            stringreplaceAll(destinationSuffixPath,"%name%",TransferThread::resolvedName(destination));
                             destinationInfo.setFile(destinationInfo.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
                             num++;
                         }
@@ -421,11 +436,18 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+newName);
                         destinationSuffixPath = newName;
                     }
-                    if(destination.completeSuffix().isEmpty())
-                        destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
-                    else
-                        destination.setFile(destination.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath)+QStringLiteral(".")+destination.completeSuffix());
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination.absoluteFilePath().toStdString());
+                    {
+                        std::string::size_type n=destination.rfind('/');
+                        if(n == std::string::npos)
+                            n=destination.rfind('.');
+                        else
+                            n=destination.rfind(n,'.');
+                        if(n == std::string::npos)
+                            destination=FSabsolutePath(destination)+'/'+destinationSuffixPath;
+                        else
+                            destination=FSabsolutePath(destination)+'/'+destinationSuffixPath+'.'+destination.substr(n);
+                    }
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination);
                 break;
                 default:
                     return;
@@ -472,7 +494,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     if(stopIt)
         return;
     int sizeEntryList=entryList.size();
-    emit newFolderListing(source.absoluteFilePath().toStdString());
+    emit newFolderListing(source);
     if(mode!=Ultracopier::Move)
         emit addToMkPath(source,destination,sizeEntryList);
     for (int index=0;index<sizeEntryList;++index)
@@ -638,7 +660,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     #endif
     if(mode==Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source.absoluteFilePath().toStdString()+", sizeEntryList: "+std::to_string(sizeEntryList));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", sizeEntryList: "+std::to_string(sizeEntryList));
         emit addToMovePath(source,destination,sizeEntryList);
     }
 }

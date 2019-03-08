@@ -71,7 +71,7 @@ private:
     std::string             destination;
     volatile bool		stopIt;
     void                listFolder(std::string source, std::string destination);
-    //std::string           resolvDestination(const std::string &destination);
+    std::string           resolvDestination(const std::string &destination);
     volatile bool		stopped;
     QSemaphore          waitOneAction;
     FolderExistsAction	folderExistsAction;
@@ -91,7 +91,7 @@ private:
     QMutex			filtersMutex;
     std::string			firstRenamingRule;
     std::string			otherRenamingRule;
-    std::vector<std::string>     blackList;
+    //std::vector<std::string>     blackList;
     /** Parse the multiple wildcard source, it allow resolv multiple wildcard with Qt into their path
      * The string: /toto/f*a/yy*a/toto.mp3
      * Will give: /toto/f1a/yy*a/toto.mp3, /toto/f2a/yy*a/toto.mp3
