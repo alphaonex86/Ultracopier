@@ -455,51 +455,33 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
             }
         }
     }
-    //do source check
-    //check of source is readable
-    do
-    {
-        fileErrorAction=FileError_NotSet;
-        if(!source.isReadable() || !source.isExecutable() || !source.exists() || !source.isDir())
-        {
-            if(!source.isDir())
-                emit errorOnFolder(source,tr("This is not a folder").toStdString());
-            else if(!source.exists())
-                emit errorOnFolder(source,tr("The folder does exists").toStdString());
-            else
-                emit errorOnFolder(source,tr("The folder is not readable").toStdString());
-            waitOneAction.acquire();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
-        }
-    } while(fileErrorAction==FileError_Retry);
-    do
-    {
-        QDir tempDir(source.absoluteFilePath());
-        fileErrorAction=FileError_NotSet;
-        if(!tempDir.isReadable() || !tempDir.exists())
-        {
-            emit errorOnFolder(source,tr("Problem with name encoding").toStdString());
-            waitOneAction.acquire();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
-        }
-    } while(fileErrorAction==FileError_Retry);
     if(stopIt)
         return;
-    /// \todo check here if the folder is not readable or not exists
-    QFileInfoList entryList;
+    std::vector<dirent> entryList;
+    do
+    {
+        fileErrorAction=FileError_NotSet;
+        if(!TransferThread::entryInfoList(source,entryList))
+        {
+            emit errorOnFolder(source,tr("Problem with folder read").toStdString());
+            waitOneAction.acquire();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
+        }
+    } while(fileErrorAction==FileError_Retry);
+
     if(copyListOrder)
-        entryList=QDir(source.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System,QDir::DirsFirst|QDir::Name|QDir::IgnoreCase);//possible wait time here
-    else
-        entryList=QDir(source.absoluteFilePath()).entryInfoList(QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden|QDir::System);//possible wait time here
+        std::sort(entryList.begin(), entryList.end(), [](dirent a, dirent b) {
+                return strcmp(a.d_name,b.d_name);
+        });
     if(stopIt)
         return;
-    int sizeEntryList=entryList.size();
+    const unsigned int sizeEntryList=entryList.size();
     emit newFolderListing(source);
     if(mode!=Ultracopier::Move)
         emit addToMkPath(source,destination,sizeEntryList);
-    for (int index=0;index<sizeEntryList;++index)
+    for(unsigned int index=0;index<sizeEntryList;++index)
     {
-        QFileInfo fileInfo=entryList.at(index);
+        const dirent fileInfo=entryList.at(index);
         if(stopIt)
             return;
         if(haveFilters)
@@ -512,8 +494,8 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                 this->include=this->include_send;
                 this->exclude=this->exclude_send;
             }
-            std::string fileName=fileInfo.fileName().toStdString();
-            if(fileInfo.isDir() && !fileInfo.isSymLink())
+            const std::string &fileName=fileInfo.d_name;
+            if(fileInfo.d_type==DT_DIR)
             {
                 bool excluded=false,included=(include.size()==0);
                 unsigned int filters_index=0;
@@ -549,7 +531,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                     if(!included)
                     {}
                     else
-                        listFolder(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName());
+                        listFolder(source+'/'+fileName,destination+'/'+fileName);
                 }
             }
             else
@@ -589,7 +571,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                     {}
                     else
                         #ifndef ULTRACOPIER_PLUGIN_RSYNC
-                        emit fileTransfer(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName(),mode);
+                        emit fileTransfer(source+'/'+fileName,destination+'/'+fileName,mode);
                         #else
                         {
                             bool sendToTransfer=false;
@@ -608,12 +590,13 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
         }
         else
         {
-            if(fileInfo.isDir() && !fileInfo.isSymLink())//possible wait time here
+            const std::string fileName(fileInfo.d_name);
+            if(fileInfo.d_type==DT_DIR)//possible wait time here
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
-                listFolder(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName());//put unix separator because it's transformed into that's under windows too
+                listFolder(source+'/'+fileName,destination+'/'+fileName);
             else
                 #ifndef ULTRACOPIER_PLUGIN_RSYNC
-                emit fileTransfer(fileInfo,destination.absoluteFilePath()+QString::fromStdString(text_slash)+fileInfo.fileName(),mode);
+                emit fileTransfer(source+'/'+fileName,destination+'/'+fileName,mode);
                 #else
                 {
                     bool sendToTransfer=false;

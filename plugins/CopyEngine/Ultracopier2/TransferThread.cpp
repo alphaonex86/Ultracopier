@@ -1966,7 +1966,9 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<std::stri
     {
         do {
             ep=readdir(dp);
-            list.push_back(ep->d_name);
+            const std::string name(ep->d_name);
+            if(name!="." && name!="..")
+                list.push_back(ep->d_name);
         } while(ep);
         (void) closedir(dp);
         return true;
@@ -1983,7 +1985,9 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent> &
     {
         do {
             ep=readdir(dp);
-            list.push_back(*ep);
+            const std::string name(ep->d_name);
+            if(name!="." && name!="..")
+                list.push_back(*ep);
         } while(ep);
         (void) closedir(dp);
         return true;
