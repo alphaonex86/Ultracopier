@@ -197,8 +197,6 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
 
         optionsEngine=options;
         resetOptions();
-
-        updateBufferCheckbox();
     }
 }
 

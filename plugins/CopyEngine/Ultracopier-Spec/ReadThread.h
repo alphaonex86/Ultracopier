@@ -32,8 +32,6 @@ public:
     int64_t getLastGoodPosition() const;
     /// \brief start the reading of the source file
     void startRead();
-    /// \brief set block size in KB
-    bool setBlockSize(const int blockSize);
     /// \brief reopen after an error
     void reopen();
     /// \brief set the write thread

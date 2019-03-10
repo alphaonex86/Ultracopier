@@ -55,19 +55,13 @@ private:
     Filters *               filters;
     RenamingRules *			renamingRules;
     FacilityInterface *		facilityEngine;
-    uint32_t                 maxSpeed;
     bool                    doRightTransfer;
     bool                    keepDate;
-    int                     blockSize;
-    int                     parallelBuffer;
-    int                     sequentialBuffer;
-    int                     parallelizeIfSmallerThan;
     bool                    followTheStrictOrder;
     bool                    deletePartiallyTransferredFiles;
     int                     inodeThreads;
     bool                    renameTheOriginalDestination;
     bool                    moveTheWholeFolder;
-    bool                    autoStart;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool                    rsync;
     #endif
@@ -105,11 +99,6 @@ private:
     Ultracopier::CopyMode			mode;
     bool				forcedMode;
 
-    bool doChecksum;
-    bool checksumIgnoreIfImpossible;
-    bool checksumOnlyOnError;
-    bool osBuffer;
-    bool osBufferLimited;
     bool checkDiskSpace;
     unsigned int osBufferLimit;
     std::vector<std::string> includeStrings,includeOptions,excludeStrings,excludeOptions;
@@ -280,12 +269,7 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
-    /// \brief set block size in KB
-    void setBlockSize(const int blockSize);
 
-    void setParallelBuffer(int parallelBuffer);
-    void setSequentialBuffer(int sequentialBuffer);
-    void setParallelizeIfSmallerThan(int parallelizeIfSmallerThan);
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
@@ -293,8 +277,6 @@ public slots:
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void inodeThreadsFinished();
 
-    /// \brief set auto start
-    void setAutoStart(const bool autoStart);
     /// \brief set if need check if the destination folder exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
     /// \brief reset widget
@@ -347,14 +329,8 @@ signals:
     //other signals
     void queryOneNewDialog() const;
 
-    void send_speedLimitation(const uint64_t &speedLimitation) const;
-    void send_blockSize(const int &blockSize) const;
-    void send_osBufferLimit(const unsigned int &osBufferLimit) const;
     void send_setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude) const;
     void send_sendNewRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule) const;
-    void send_parallelBuffer(const int &parallelBuffer) const;
-    void send_sequentialBuffer(const int &sequentialBuffer) const;
-    void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
     void send_followTheStrictOrder(const bool &followTheStrictOrder) const;
     void send_deletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles) const;
     void send_setInodeThreads(const int &inodeThreads) const;

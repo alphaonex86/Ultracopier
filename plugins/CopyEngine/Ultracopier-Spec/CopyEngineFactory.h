@@ -98,7 +98,6 @@ private slots:
                         const std::vector<std::string> &excludeStrings,const std::vector<std::string> &excludeOptions);
     void sendNewRenamingRules(const std::string &firstRenamingRule, const std::string &otherRenamingRule);
     void showRenamingRules();
-    void updateBufferCheckbox();
     void setFileCollision(int index);
     void setFileError(int index);
     void deletePartiallyTransferredFiles(bool checked);

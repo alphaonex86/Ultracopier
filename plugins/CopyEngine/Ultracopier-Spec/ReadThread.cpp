@@ -427,25 +427,6 @@ void ReadThread::internalClose(bool callByTheDestructor)
         emit closed();
 }
 
-/** \brief set block size
-\param block the new block size in B
-\return Return true if succes */
-bool ReadThread::setBlockSize(const int blockSize)
-{
-    //can be smaller than min block size to do correct speed limitation
-    if(blockSize>1 && blockSize<ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE*1024)
-    {
-        this->blockSize=blockSize;
-        //set the new max speed because the timer have changed
-        return true;
-    }
-    else
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"block size out of range: "+std::to_string(blockSize));
-        return false;
-    }
-}
-
 /// \brief do the fake open
 void ReadThread::fakeOpen()
 {

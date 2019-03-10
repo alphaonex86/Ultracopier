@@ -25,15 +25,11 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     filters                         = NULL;
     renamingRules                   = NULL;
 
-    blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE;
-    sequentialBuffer                = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
-    parallelBuffer                  = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     interface                       = NULL;
     tempWidget                      = NULL;
     uiIsInstalled                   = false;
     dialogIsOpen                    = false;
     renameTheOriginalDestination    = false;
-    maxSpeed                        = 0;
     alwaysDoThisActionForFileExists	= FileExists_NotSet;
     alwaysDoThisActionForFileError	= FileError_NotSet;
     checkDestinationFolderExists	= false;
@@ -209,10 +205,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     //here else, the default settings can't be loaded
     uiIsInstalled=true;
 
-    setBlockSize(blockSize);
-    setSequentialBuffer(sequentialBuffer);
-    setParallelBuffer(parallelBuffer);
-    setAutoStart(autoStart);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     setRsync(rsync);
     #else
@@ -222,7 +214,6 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setCheckDestinationFolderExists(checkDestinationFolderExists);
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
-    setParallelizeIfSmallerThan(parallelizeIfSmallerThan);
     setFollowTheStrictOrder(followTheStrictOrder);
     setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     setInodeThreads(inodeThreads);
@@ -652,9 +643,7 @@ void CopyEngine::errorTransferList(const std::string &error)
 bool CopyEngine::setSpeedLimitation(const int64_t &speedLimitation)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+std::to_string(speedLimitation));
-    maxSpeed=speedLimitation;
-    emit send_speedLimitation(speedLimitation);
-    return true;
+    return false;
 }
 
 void CopyEngine::setFileCollision(int index)
