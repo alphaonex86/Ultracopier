@@ -36,11 +36,11 @@ void RenamingRules::setRenamingRules(std::string firstRenamingRule,std::string o
     if(!firstRenamingRule.empty())
         ui->firstRenamingRule->setText(QString::fromStdString(firstRenamingRule));
     else
-        ui->firstRenamingRule->setText(tr("%1 - copy").arg(QStringLiteral("%name%")));
+        ui->firstRenamingRule->setText(tr("%1 - copy%2").arg(QStringLiteral("%name%")).arg(QStringLiteral("%suffix%")));
     if(!otherRenamingRule.empty())
         ui->otherRenamingRule->setText(QString::fromStdString(otherRenamingRule));
     else
-        ui->otherRenamingRule->setText(tr("%1 - copy (%2)").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")));
+        ui->otherRenamingRule->setText(tr("%1 - copy (%2)%3").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")).arg(QStringLiteral("%suffix%")));
     connectUI();
 }
 
@@ -59,7 +59,7 @@ void RenamingRules::disconnectUI()
 void RenamingRules::firstRenamingRule_haveChanged()
 {
     QString newValue=ui->firstRenamingRule->text();
-    if(newValue==tr("%1 - copy").arg(QStringLiteral("%name%")))
+    if(newValue==tr("%1 - copy%2").arg(QStringLiteral("%name%")).arg(QStringLiteral("%name%")))
         newValue=QStringLiteral("");
     if(newValue.toStdString()==firstRenamingRule)
         return;
@@ -70,7 +70,7 @@ void RenamingRules::firstRenamingRule_haveChanged()
 void RenamingRules::otherRenamingRule_haveChanged()
 {
     QString newValue=ui->otherRenamingRule->text();
-    if(newValue==tr("%1 - copy (%2)").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")))
+    if(newValue==tr("%1 - copy (%2)%3").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")).arg(QStringLiteral("%name%")))
         newValue=QStringLiteral("");
     if(newValue.toStdString()==otherRenamingRule)
         return;
