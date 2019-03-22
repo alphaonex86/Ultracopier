@@ -34,7 +34,9 @@ TransferThread::TransferThread() :
     #endif
 
     tm t;
+    #ifdef Q_OS_UNIX
     t.tm_gmtoff=0;
+    #endif
     t.tm_hour=0;
     t.tm_isdst=0;
     t.tm_mday=1;
@@ -303,7 +305,7 @@ void TransferThread::preOperation()
     }*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before keep date");
     #ifdef Q_OS_WIN32
-    doTheDateTransfer=!source.isSymLink();
+    doTheDateTransfer=!is_symlink(source);
     #else
     doTheDateTransfer=true;
     #endif
@@ -600,19 +602,26 @@ bool TransferThread::checkAlwaysRename()
     return false;
 }
 
+#ifdef Q_OS_UNIX
 int TransferThread::mkpath(const std::string &file_path, const mode_t &mode)
+#else
+int TransferThread::mkpath(const std::string &file_path)
+#endif
 {
     if(is_dir(file_path))
         return 0;
     char path[file_path.size()+1];
     memcpy(path,file_path.c_str(),file_path.size());
     path[file_path.size()+1]='\0';
-    assert(path && *path);
     char* p;
     for(p=strchr(path+1, '/'); p; p=strchr(p+1, '/'))
     {
         *p='\0';
+        #ifdef Q_OS_UNIX
         if(mkdir(path, mode)==-1)
+        #else
+        if(mkdir(path)==-1)
+        #endif
         {
             if(errno!=EEXIST)
             {
@@ -667,10 +676,11 @@ void TransferThread::tryMoveDirectly()
         }
     }
     #ifdef Q_OS_WIN32
-    //if(!sourceFile.copy(destinationFile.fileName()))
-    if(MoveFileEx(
-            reinterpret_cast<const wchar_t*>(sourceFile.fileName().utf16()),
-            reinterpret_cast<const wchar_t*>(destinationFile.fileName().utf16()),
+    std::wstring wsource=std::wstring(source.cbegin(),source.cend());
+    std::wstring wdestination=std::wstring(destination.cbegin(),destination.cend());
+    if(MoveFileExW(
+            wsource.c_str(),
+            wdestination.c_str(),
             MOVEFILE_COPY_ALLOWED|MOVEFILE_REPLACE_EXISTING
         )==0)
     #else
@@ -746,10 +756,11 @@ void TransferThread::tryCopyDirectly()
     /** on windows, symLink is normal file, can be copied
      * on unix not, should be created **/
     #ifdef Q_OS_WIN32
-    //if(!sourceFile.copy(destinationFile.fileName()))
-    if(CopyFileEx(
-                reinterpret_cast<const wchar_t*>(sourceFile.fileName().utf16()),
-                reinterpret_cast<const wchar_t*>(destinationFile.fileName().utf16()),
+    std::wstring wsource=std::wstring(source.cbegin(),source.cend());
+    std::wstring wdestination=std::wstring(destination.cbegin(),destination.cend());
+    if(CopyFileExW(
+                wsource.c_str(),
+                wdestination.c_str(),
             NULL,
             NULL,
             FALSE,
@@ -1447,21 +1458,19 @@ int64_t TransferThread::readFileMDateTime(const std::string &source)
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 struct stat info;
-                if(stat(source.absoluteFilePath().toLatin1().data(),&info)!=0)
+                if(stat(source.c_str(),&info)!=0)
                     return -1;
-                return info.st_mtim.tv_sec;
+                return info.st_mtime;
             #else
-                wchar_t filePath[65535];
-                if(std::regex_match(source,regRead))
+                /*wchar_t filePath[65535];
+                if(std::regex_match(source,std::regex("^[a-zA-Z]:")))
                     filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
                 else
-                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
+                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';*/
+                std::wstring wsource=std::wstring(source.cbegin(),source.cend());
+                HANDLE hFileSouce = CreateFileW(wsource.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
                     return -1;
-                }
                 FILETIME ftCreate, ftAccess, ftWrite;
                 if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
                 {
@@ -1523,9 +1532,9 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
                 struct stat info;
                 if(stat(source.c_str(),&info)!=0)
                     return false;
-                time_t ctime=info.st_ctim.tv_sec;
-                time_t actime=info.st_atim.tv_sec;
-                time_t modtime=info.st_mtim.tv_sec;
+                time_t ctime=info.st_ctime;
+                time_t actime=info.st_atime;
+                time_t modtime=info.st_mtime;
                 //this function avalaible on unix and mingw
                 butime.actime=actime;
                 butime.modtime=modtime;
@@ -1590,7 +1599,7 @@ bool TransferThread::writeDestinationFileDateTime(const std::string &destination
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                return utime(destination.toLatin1().data(),&butime)==0;
+                return utime(destination.c_str(),&butime)==0;
             #else
                 wchar_t filePath[65535];
                 if(std::regex_match(destination,regRead))

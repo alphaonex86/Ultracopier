@@ -15,20 +15,26 @@
 #include <utility>
 #include <dirent.h>
 
+//defore the next define
+#include "Variable.h"
+
 #ifdef Q_OS_UNIX
     #include <utime.h>
     #include <time.h>
     #include <unistd.h>
     #include <sys/stat.h>
-#else
-    #ifdef Q_OS_WIN32
-        #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-            #include <utime.h>
-            #include <time.h>
-            #include <unistd.h>
-            #include <sys/stat.h>
-        #endif
+#endif
+#ifdef Q_OS_WIN32
+    #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
+        #include <utime.h>
+        #include <time.h>
+        #include <unistd.h>
+        #include <sys/stat.h>
     #endif
+#endif
+
+#ifdef Q_OS_WIN32
+#include <windows.h>
 #endif
 
 #include "ReadThread.h"
@@ -74,7 +80,11 @@ public:
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
+    #ifdef Q_OS_UNIX
     static int mkpath(const std::string &file_path, const mode_t &mode=0755);
+    #else
+    static int mkpath(const std::string &file_path);
+    #endif
 
     static int64_t readFileMDateTime(const std::string &source);
     static bool is_symlink(const char * const filename);
@@ -225,7 +235,7 @@ private:
     int             parallelizeIfSmallerThan;
     std::regex renameRegex;
     #ifdef Q_OS_UNIX
-            utimbuf butime;
+        utimbuf butime;
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY

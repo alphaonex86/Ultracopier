@@ -582,13 +582,13 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="196"/>
-        <location filename="../../ReadThread.cpp" line="420"/>
+        <location filename="../../ReadThread.cpp" line="422"/>
         <source>Unable to read the source file: </source>
         <translation>Die Quelldatei kann nicht gelesen werden: </translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="237"/>
-        <location filename="../../ReadThread.cpp" line="468"/>
+        <location filename="../../ReadThread.cpp" line="470"/>
         <source>File truncated during the read, possible data change</source>
         <translation>Datei während des Lesevorgangs abgeschnitten, Daten wurden möglicherweise verändert</translation>
     </message>
@@ -624,21 +624,21 @@
         <translation>Zweite Umbenennung</translation>
     </message>
     <message>
+        <location filename="../../RenamingRules.ui" line="14"/>
+        <source>Renaming rules</source>
+        <translation>Umbennungsregeln</translation>
+    </message>
+    <message>
         <location filename="../../RenamingRules.cpp" line="39"/>
         <location filename="../../RenamingRules.cpp" line="62"/>
-        <source>%1 - copy</source>
-        <translation>%1 - Kopie</translation>
+        <source>%1 - copy%2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="43"/>
         <location filename="../../RenamingRules.cpp" line="73"/>
-        <source>%1 - copy (%2)</source>
-        <translation>%1 - Kopie (%2)</translation>
-    </message>
-    <message>
-        <location filename="../../RenamingRules.ui" line="14"/>
-        <source>Renaming rules</source>
-        <translation>Umbennungsregeln</translation>
+        <source>%1 - copy (%2)%3</source>
+        <translation type="unfinished">%1 - Kopie (%2) {1 ?} {2)%3?}</translation>
     </message>
 </context>
 <context>

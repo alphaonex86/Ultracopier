@@ -581,13 +581,13 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="196"/>
-        <location filename="../../ReadThread.cpp" line="420"/>
+        <location filename="../../ReadThread.cpp" line="422"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="237"/>
-        <location filename="../../ReadThread.cpp" line="468"/>
+        <location filename="../../ReadThread.cpp" line="470"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -630,13 +630,13 @@
     <message>
         <location filename="../../RenamingRules.cpp" line="39"/>
         <location filename="../../RenamingRules.cpp" line="62"/>
-        <source>%1 - copy</source>
+        <source>%1 - copy%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="43"/>
         <location filename="../../RenamingRules.cpp" line="73"/>
-        <source>%1 - copy (%2)</source>
+        <source>%1 - copy (%2)%3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

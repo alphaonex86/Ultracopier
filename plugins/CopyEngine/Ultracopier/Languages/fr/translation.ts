@@ -581,13 +581,13 @@
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="196"/>
-        <location filename="../../ReadThread.cpp" line="420"/>
+        <location filename="../../ReadThread.cpp" line="422"/>
         <source>Unable to read the source file: </source>
         <translation>Impossible de lire le fichier source: </translation>
     </message>
     <message>
         <location filename="../../ReadThread.cpp" line="237"/>
-        <location filename="../../ReadThread.cpp" line="468"/>
+        <location filename="../../ReadThread.cpp" line="470"/>
         <source>File truncated during the read, possible data change</source>
         <translatorcomment>La taille du fichier a diminué durant -&gt; changé le texte original</translatorcomment>
         <translation>Fichier a diminué durant la lecture, possible changement de données</translation>
@@ -624,21 +624,21 @@
         <translation>Second renommage</translation>
     </message>
     <message>
+        <location filename="../../RenamingRules.ui" line="14"/>
+        <source>Renaming rules</source>
+        <translation>Règles de renommage</translation>
+    </message>
+    <message>
         <location filename="../../RenamingRules.cpp" line="39"/>
         <location filename="../../RenamingRules.cpp" line="62"/>
-        <source>%1 - copy</source>
-        <translation>%1 - copie</translation>
+        <source>%1 - copy%2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="43"/>
         <location filename="../../RenamingRules.cpp" line="73"/>
-        <source>%1 - copy (%2)</source>
-        <translation>%1 - copie (%2)</translation>
-    </message>
-    <message>
-        <location filename="../../RenamingRules.ui" line="14"/>
-        <source>Renaming rules</source>
-        <translation>Règles de renommage</translation>
+        <source>%1 - copy (%2)%3</source>
+        <translation type="unfinished">%1 - copie (%2) {1 ?} {2)%3?}</translation>
     </message>
 </context>
 <context>
