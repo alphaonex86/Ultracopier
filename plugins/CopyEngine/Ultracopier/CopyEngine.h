@@ -46,8 +46,10 @@ public:
     void connectTheSignalsSlots();
 private:
     ListThread *            listThread;
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     DebugDialog             debugDialogWindow;
+    #endif
     #endif
     QWidget *               tempWidget;
     Ui::copyEngineOptions *	ui;
@@ -126,8 +128,10 @@ private:
     QTimer timerUpdateMount;
     int putAtBottom;//to keep how many automatic put at bottom have been used
 private slots:
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     void updateTheDebugInfo(const std::vector<std::string> &newList, const std::vector<std::string> &newList2, const int &numberOfInodeOperation);
+    #endif
     #endif
 
     /************* External  call ********************/

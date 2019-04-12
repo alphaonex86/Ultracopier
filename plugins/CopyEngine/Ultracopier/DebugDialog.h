@@ -8,6 +8,7 @@
 
 #include "Environment.h"
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 #include <QWidget>
 
@@ -35,5 +36,6 @@ private:
 };
 
 #endif // ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+#endif // ULTRACOPIER_PLUGIN_DEBUG
 
 #endif // DEBUGDAILOG_H

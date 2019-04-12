@@ -848,8 +848,12 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                                         average_speed+=remainingTimeLogarithmicColumn.lastProgressionSpeed.at(temp_loop_index);
                                         temp_loop_index++;
                                     }
-                                    average_speed/=remainingTimeLogarithmicColumn.lastProgressionSpeed.size();
-                                    remainingTimeValue+=remainingSize/average_speed;
+                                    if(!remainingTimeLogarithmicColumn.lastProgressionSpeed.empty())
+                                    {
+                                        average_speed/=remainingTimeLogarithmicColumn.lastProgressionSpeed.size();
+                                        if(average_speed!=0)
+                                            remainingTimeValue+=remainingSize/average_speed;
+                                    }
                                 }
                                 //fallback
                                 else
@@ -860,7 +864,10 @@ void Core::periodicSynchronizationWithIndex(const int &index)
                                         if(currentCopyInstance.totalProgression==0 || currentCopyInstance.currentProgression==0)
                                             remainingTimeValue+=1;
                                         else if((currentCopyInstance.totalProgression-currentCopyInstance.currentProgression)>1024)
-                                            remainingTimeValue+=remainingSize/totAverageSpeed;
+                                        {
+                                            if(totAverageSpeed!=0)
+                                                remainingTimeValue+=remainingSize/totAverageSpeed;
+                                        }
                                     }
                                     else
                                         remainingTimeValue+=1;

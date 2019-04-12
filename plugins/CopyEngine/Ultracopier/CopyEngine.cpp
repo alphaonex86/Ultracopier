@@ -70,8 +70,10 @@ CopyEngine::~CopyEngine()
 
 void CopyEngine::connectTheSignalsSlots()
 {
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     debugDialogWindow.show();
+    #endif
     #endif
     if(!connect(listThread,&ListThread::actionInProgess,	this,&CopyEngine::actionInProgess,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess()");
@@ -99,9 +101,11 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect syncReady()");
     if(!connect(listThread,&ListThread::canBeDeleted,						this,&CopyEngine::canBeDeleted,					Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect canBeDeleted()");
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(listThread,&ListThread::debugInformation,			this,&CopyEngine::debugInformation,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect debugInformation()");
+    #endif
     #endif
 
     if(!connect(listThread,&ListThread::send_fileAlreadyExists,		this,&CopyEngine::fileAlreadyExistsSlot,	Qt::QueuedConnection))
@@ -112,9 +116,11 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_folderAlreadyExists()");
     if(!connect(listThread,&ListThread::send_errorOnFolder,			this,&CopyEngine::errorOnFolderSlot,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect send_errorOnFolder()");
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(listThread,&ListThread::updateTheDebugInfo,				this,&CopyEngine::updateTheDebugInfo,			Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect updateTheDebugInfo()");
+    #endif
     #endif
     if(!connect(listThread,&ListThread::errorTransferList,							this,&CopyEngine::errorTransferList,						Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect errorTransferList()");
@@ -207,6 +213,7 @@ void CopyEngine::connectTheSignalsSlots()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect set_updateMount()");
 }
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 void CopyEngine::updateTheDebugInfo(const std::vector<std::string> &newList, const std::vector<std::string> &newList2, const int &numberOfInodeOperation)
 {
@@ -214,6 +221,7 @@ void CopyEngine::updateTheDebugInfo(const std::vector<std::string> &newList, con
     debugDialogWindow.setTransferList(newList2);
     debugDialogWindow.setInodeUsage(numberOfInodeOperation);
 }
+#endif
 #endif
 
 //to send the options panel

@@ -329,8 +329,10 @@ private slots:
     //transfer is finished
     void transferInodeIsClosed();
     //debug windows if needed
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     void timedUpdateDebugDialog();
+    #endif
     #endif
     //dialog message
     /// \note Can be call without queue because all call will be serialized

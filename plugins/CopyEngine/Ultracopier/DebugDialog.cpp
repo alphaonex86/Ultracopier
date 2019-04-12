@@ -3,9 +3,10 @@
 \author alpha_one_x86 */
 
 #include "DebugDialog.h"
-#include "ui_debugDialog.h"
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
+#include "ui_debugDialog.h"
 
 DebugDialog::DebugDialog(QWidget *parent) :
     QWidget(parent),
@@ -51,4 +52,5 @@ void DebugDialog::setTransferThreadList(const std::vector<std::string> &list)
     }
 }
 
+#endif
 #endif

@@ -49,9 +49,11 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     multiForBigSpeed                = 0;
     #endif
 
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog);
     timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
+    #endif
     #endif
     connect(this,           &ListThread::tryCancel,							this,&ListThread::cancel,                               Qt::QueuedConnection);
     connect(this,           &ListThread::askNewTransferThread,				this,&ListThread::createTransferThread,					Qt::QueuedConnection);
@@ -2016,8 +2018,8 @@ void ListThread::mkPathFirstFolderFinish()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to found item into the todo list");
 }
 
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-
 void ListThread::timedUpdateDebugDialog()
 {
     std::vector<std::string> newList;
@@ -2082,7 +2084,7 @@ void ListThread::timedUpdateDebugDialog()
     }
     emit updateTheDebugInfo(newList,newList2,numberOfInodeOperation);
 }
-
+#endif
 #endif
 
 /// \note Can be call without queue because all call will be serialized
