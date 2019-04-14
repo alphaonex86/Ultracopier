@@ -19,7 +19,9 @@ MkPath::MkPath()
     waitAction=false;
     doRightTransfer=false;
     tm t;
+    #ifdef Q_OS_UNIX
     t.tm_gmtoff=0;
+    #endif
     t.tm_hour=0;
     t.tm_isdst=0;
     t.tm_mday=1;

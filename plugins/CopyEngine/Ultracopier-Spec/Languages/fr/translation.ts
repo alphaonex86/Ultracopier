@@ -541,21 +541,21 @@
         <translation>Second renommage</translation>
     </message>
     <message>
+        <location filename="../../RenamingRules.ui" line="14"/>
+        <source>Renaming rules</source>
+        <translation>Règles de renommage</translation>
+    </message>
+    <message>
         <location filename="../../RenamingRules.cpp" line="39"/>
         <location filename="../../RenamingRules.cpp" line="62"/>
-        <source>%1 - copy</source>
-        <translation>%1 - copie</translation>
+        <source>%1 - copy%2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="43"/>
         <location filename="../../RenamingRules.cpp" line="73"/>
-        <source>%1 - copy (%2)</source>
-        <translation>%1 - copie (%2)</translation>
-    </message>
-    <message>
-        <location filename="../../RenamingRules.ui" line="14"/>
-        <source>Renaming rules</source>
-        <translation>Règles de renommage</translation>
+        <source>%1 - copy (%2)%3</source>
+        <translation type="unfinished">%1 - copie (%2) {1 ?} {2)%3?}</translation>
     </message>
 </context>
 <context>
@@ -589,88 +589,88 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="221"/>
-        <location filename="../../TransferThread.cpp" line="587"/>
-        <location filename="../../TransferThread.cpp" line="685"/>
-        <location filename="../../TransferThread.cpp" line="1159"/>
+        <location filename="../../TransferThread.cpp" line="223"/>
+        <location filename="../../TransferThread.cpp" line="589"/>
+        <location filename="../../TransferThread.cpp" line="695"/>
+        <location filename="../../TransferThread.cpp" line="1170"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="510"/>
-        <location filename="../../TransferThread.cpp" line="517"/>
+        <location filename="../../TransferThread.cpp" line="512"/>
+        <location filename="../../TransferThread.cpp" line="519"/>
         <source>root</source>
         <translation>racine</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="648"/>
-        <location filename="../../TransferThread.cpp" line="725"/>
-        <location filename="../../TransferThread.cpp" line="775"/>
+        <location filename="../../TransferThread.cpp" line="657"/>
+        <location filename="../../TransferThread.cpp" line="735"/>
+        <location filename="../../TransferThread.cpp" line="786"/>
         <source>The source file doesn&apos;t exist</source>
         <translation>Le fichier source n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1085"/>
+        <location filename="../../TransferThread.cpp" line="1096"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
         <translation>Erreur interne: La taille transféré ne corresponds pas</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="665"/>
-        <location filename="../../TransferThread.cpp" line="691"/>
-        <location filename="../../TransferThread.cpp" line="742"/>
-        <location filename="../../TransferThread.cpp" line="787"/>
+        <location filename="../../TransferThread.cpp" line="674"/>
+        <location filename="../../TransferThread.cpp" line="701"/>
+        <location filename="../../TransferThread.cpp" line="752"/>
+        <location filename="../../TransferThread.cpp" line="798"/>
         <source>Unable to do the folder</source>
         <translation>Impossible de créer le dossier</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="206"/>
+        <location filename="../../TransferThread.cpp" line="208"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="322"/>
+        <location filename="../../TransferThread.cpp" line="324"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="363"/>
-        <location filename="../../TransferThread.cpp" line="379"/>
+        <location filename="../../TransferThread.cpp" line="365"/>
+        <location filename="../../TransferThread.cpp" line="381"/>
         <source>Internal error: Already opening</source>
         <translation>Erreur interne: Déjà ouvert</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="560"/>
+        <location filename="../../TransferThread.cpp" line="562"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - copie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="567"/>
+        <location filename="../../TransferThread.cpp" line="569"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="764"/>
+        <location filename="../../TransferThread.cpp" line="775"/>
         <source>The source symlink can&apos;t be read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="781"/>
+        <location filename="../../TransferThread.cpp" line="792"/>
         <source>Another file exists at same place</source>
         <translation>Un autre fichier exists à la même place</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1070"/>
+        <location filename="../../TransferThread.cpp" line="1081"/>
         <source>Internal error: The destination is not closed</source>
         <translation>Erreur interne: La destination n&apos;est pas fermé</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1096"/>
+        <location filename="../../TransferThread.cpp" line="1107"/>
         <source>Internal error: The buffer is not empty</source>
         <translation>Erreur interne: Le buffer n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1159"/>
-        <location filename="../../TransferThread.cpp" line="1195"/>
+        <location filename="../../TransferThread.cpp" line="1170"/>
+        <location filename="../../TransferThread.cpp" line="1206"/>
         <source>Unable to change the date</source>
         <translation>Impossible de changer la date</translation>
     </message>

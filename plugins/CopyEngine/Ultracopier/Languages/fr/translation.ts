@@ -39,106 +39,106 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="429"/>
-        <location filename="../../CopyEngine.cpp" line="451"/>
+        <location filename="../../CopyEngine.cpp" line="437"/>
+        <location filename="../../CopyEngine.cpp" line="459"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>Le moteur est forcé en déplacement, vous ne pouvez pas copier avec</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="462"/>
-        <location filename="../../CopyEngine.cpp" line="484"/>
+        <location filename="../../CopyEngine.cpp" line="470"/>
+        <location filename="../../CopyEngine.cpp" line="492"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>Le moteur est forcé en copie, vous ne pouvez pas déplacer avec</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="508"/>
+        <location filename="../../CopyEngine.cpp" line="516"/>
         <source>Destination</source>
         <translation>Destination</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="508"/>
+        <location filename="../../CopyEngine.cpp" line="516"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>Utiliser la destination actuelle &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="732"/>
+        <location filename="../../CopyEngine.cpp" line="740"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>Le mode a été forcé. C&apos;est une erreur interne, merci de la repporter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1062"/>
-        <location filename="../../CopyEngine.cpp" line="1065"/>
         <location filename="../../CopyEngine.cpp" line="1070"/>
-        <location filename="../../CopyEngine.cpp" line="1074"/>
+        <location filename="../../CopyEngine.cpp" line="1073"/>
+        <location filename="../../CopyEngine.cpp" line="1078"/>
+        <location filename="../../CopyEngine.cpp" line="1082"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1063"/>
-        <location filename="../../CopyEngine.cpp" line="1067"/>
         <location filename="../../CopyEngine.cpp" line="1071"/>
         <location filename="../../CopyEngine.cpp" line="1075"/>
+        <location filename="../../CopyEngine.cpp" line="1079"/>
+        <location filename="../../CopyEngine.cpp" line="1083"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1066"/>
+        <location filename="../../CopyEngine.cpp" line="1074"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1068"/>
-        <location filename="../../CopyEngine.cpp" line="1080"/>
+        <location filename="../../CopyEngine.cpp" line="1076"/>
+        <location filename="../../CopyEngine.cpp" line="1088"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1072"/>
+        <location filename="../../CopyEngine.cpp" line="1080"/>
         <source>Put at the end</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1076"/>
+        <location filename="../../CopyEngine.cpp" line="1084"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1077"/>
+        <location filename="../../CopyEngine.cpp" line="1085"/>
         <source>Overwrite if different</source>
         <translation>Écraser si différent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1078"/>
+        <location filename="../../CopyEngine.cpp" line="1086"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1079"/>
+        <location filename="../../CopyEngine.cpp" line="1087"/>
         <source>Overwrite if older</source>
         <translation>Écraser si plus vieux</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1082"/>
+        <location filename="../../CopyEngine.cpp" line="1090"/>
         <source>Automatic</source>
         <translation>Automatique</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1083"/>
+        <location filename="../../CopyEngine.cpp" line="1091"/>
         <source>Sequential</source>
         <translation>Séquentiel</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1084"/>
+        <location filename="../../CopyEngine.cpp" line="1092"/>
         <source>Parallel</source>
         <translation>Parallèle</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1185"/>
+        <location filename="../../CopyEngine.cpp" line="1193"/>
         <source>Options error</source>
         <translation>Erreur d&apos;options</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1185"/>
+        <location filename="../../CopyEngine.cpp" line="1193"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accédé aux filtres</translation>
     </message>
@@ -486,49 +486,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1487"/>
-        <location filename="../../ListThread.cpp" line="2419"/>
+        <location filename="../../ListThread.cpp" line="1489"/>
+        <location filename="../../ListThread.cpp" line="2421"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Impossible de faire un déplacement ou une copie dans le mauvais mode forcé: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1494"/>
-        <location filename="../../ListThread.cpp" line="2426"/>
+        <location filename="../../ListThread.cpp" line="1496"/>
+        <location filename="../../ListThread.cpp" line="2428"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Impossible de sauvegarder la liste de transfert: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1510"/>
+        <location filename="../../ListThread.cpp" line="1512"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Problem durant la lecture, ou taille de fichier est 0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1517"/>
+        <location filename="../../ListThread.cpp" line="1519"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Mauvais en-tête: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1526"/>
+        <location filename="../../ListThread.cpp" line="1528"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>La liste de transfert est en mode mixte, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1535"/>
+        <location filename="../../ListThread.cpp" line="1537"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>La liste de transfert est en mode copie, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1541"/>
+        <location filename="../../ListThread.cpp" line="1543"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>La liste de transfert est en mode déplacement, mais l&apos;instance n&apos;est pas dans ce mode</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1604"/>
+        <location filename="../../ListThread.cpp" line="1606"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Certaine erreur ont été trouvé durant l&apos;analise de la line</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1612"/>
+        <location filename="../../ListThread.cpp" line="1614"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Impossible d&apos;ouvrir la list de transfert: %1</translation>
     </message>

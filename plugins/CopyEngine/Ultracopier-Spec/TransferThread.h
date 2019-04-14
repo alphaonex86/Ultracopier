@@ -250,7 +250,8 @@ private:
     #ifdef Q_OS_UNIX
     struct stat permissions;
     #else
-    QFileDevice::Permissions permissions;
+    PSECURITY_DESCRIPTOR PSecurityD;
+    PACL dacl;
     #endif
     bool havePermission;
     //different pre-operation

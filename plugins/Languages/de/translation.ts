@@ -189,7 +189,7 @@
         <translation>Die Parameter sind in diesem Modus ungültig</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1145"/>
+        <location filename="../../../Core.cpp" line="1152"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Möchten Sie kopieren? Wenn nicht, wird verschoben.</translation>
     </message>
@@ -205,7 +205,7 @@
         <translation>Konnte Kopier-Engine nicht laden. Kopiervorgang abgebrochen</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1144"/>
+        <location filename="../../../Core.cpp" line="1151"/>
         <source>Transfer mode</source>
         <translation>Transfermodus</translation>
     </message>

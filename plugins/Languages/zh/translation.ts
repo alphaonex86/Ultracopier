@@ -187,7 +187,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1145"/>
+        <location filename="../../../Core.cpp" line="1152"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -203,7 +203,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1144"/>
+        <location filename="../../../Core.cpp" line="1151"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>

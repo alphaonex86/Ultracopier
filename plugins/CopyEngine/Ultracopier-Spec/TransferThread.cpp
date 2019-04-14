@@ -5,6 +5,11 @@
 #include <string>
 #include <dirent.h>
 
+#ifdef Q_OS_WIN32
+#include <accctrl.h>
+#include <aclapi.h>
+#endif
+
 #include "../../../cpp11addition.h"
 
 TransferThread::TransferThread() :
@@ -36,6 +41,9 @@ TransferThread::TransferThread() :
     tm t;
     #ifdef Q_OS_UNIX
     t.tm_gmtoff=0;
+    #else
+    PSecurityD=NULL;
+    dacl=NULL;
     #endif
     t.tm_hour=0;
     t.tm_isdst=0;
@@ -53,6 +61,18 @@ TransferThread::~TransferThread()
     //else cash without this disconnect
     //disconnect(&readThread);
     //disconnect(&writeThread);
+    #ifndef Q_OS_UNIX
+    if(PSecurityD!=NULL)
+    {
+        free(PSecurityD);
+        PSecurityD=NULL;
+    }
+    if(dacl!=NULL)
+    {
+        free(dacl);
+        dacl=NULL;
+    }
+    #endif
 }
 
 void TransferThread::run()
@@ -1643,7 +1663,19 @@ bool TransferThread::readSourceFilePermissions(const std::string &source)
     else
         return true;
     #else
-    this->permissions=source.permissions();
+    HANDLE hFile = CreateFileA(source.c_str(), READ_CONTROL | ACCESS_SYSTEM_SECURITY ,
+            FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+      return false;
+    }
+    DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
+                                NULL, NULL, &dacl, NULL, &PSecurityD);
+    if (lasterror != ERROR_SUCCESS) {
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] GetSecurityInfo() failed. Error"+std::to_string(lasterror));
+      return false;
+    }
+    CloseHandle(hFile);
     return true;
     #endif
 }
@@ -1657,7 +1689,28 @@ bool TransferThread::writeDestinationFilePermissions(const std::string &destinat
         return false;
     return true;
     #else
-    return destination.setPermissions(this->permissions);
+    HANDLE hFile = CreateFileA(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    if (hFile == INVALID_HANDLE_VALUE) {
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+      return false;
+    }
+    DWORD lasterror = SetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION , NULL, NULL, dacl, NULL);
+    if (lasterror != ERROR_SUCCESS) {
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] SetSecurityInfo() failed. Error"+std::to_string(lasterror));
+      return false;
+    }
+    CloseHandle(hFile);
+    if(PSecurityD!=NULL)
+    {
+        free(PSecurityD);
+        PSecurityD=NULL;
+    }
+    if(dacl!=NULL)
+    {
+        free(dacl);
+        dacl=NULL;
+    }
+    return true;
     #endif
 }
 
@@ -1897,12 +1950,17 @@ bool TransferThread::is_symlink(const std::string &filename)
 
 bool TransferThread::is_symlink(const char * const filename)
 {
+    #ifdef Q_OS_WIN32
+    (void)filename;
+    return true;
+    #else
     struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
     if (S_ISLNK(p_statbuf.st_mode) == 1)
         return true;
+    #endif
     return false;
 }
 
@@ -1914,9 +1972,15 @@ bool TransferThread::is_file(const std::string &filename)
 bool TransferThread::is_file(const char * const filename)
 {
     struct stat p_statbuf;
+    #ifdef Q_OS_WIN32
+    if (stat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return false;
+    #else
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
+    #endif
     if (S_ISREG(p_statbuf.st_mode) == 1)
         return true;
     return true;
@@ -1930,9 +1994,15 @@ bool TransferThread::is_dir(const std::string &filename)
 bool TransferThread::is_dir(const char * const filename)
 {
     struct stat p_statbuf;
+    #ifdef Q_OS_WIN32
+    if (stat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return false;
+    #else
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
+    #endif
     if (S_ISDIR(p_statbuf.st_mode) == 1)
         return true;
     return true;
@@ -1946,9 +2016,15 @@ bool TransferThread::exists(const std::string &filename)
 bool TransferThread::exists(const char * const filename)
 {
     struct stat p_statbuf;
+    #ifdef Q_OS_WIN32
+    if (stat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return false;
+    #else
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
+    #endif
     return true;
 }
 
@@ -1960,9 +2036,15 @@ int64_t TransferThread::file_stat_size(const std::string &filename)
 int64_t TransferThread::file_stat_size(const char * const filename)
 {
     struct stat p_statbuf;
+    #ifdef Q_OS_WIN32
+    if (stat(filename, &p_statbuf) < 0)
+        //if error or file not exists, considere as regular file
+        return -1;
+    #else
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return -1;
+    #endif
     return p_statbuf.st_size;
 }
 

@@ -188,7 +188,7 @@
         <translation>L&apos;argument pour le mode n&apos;est pas valide</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1145"/>
+        <location filename="../../../Core.cpp" line="1152"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Voulez vous faire une copie? Si vous repondez non alors il sera déplacé.</translation>
     </message>
@@ -204,7 +204,7 @@
         <translation>Impossible de charger le moteur de copie, copie annulée</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1144"/>
+        <location filename="../../../Core.cpp" line="1151"/>
         <source>Transfer mode</source>
         <translation>Mode de transfert</translation>
     </message>
