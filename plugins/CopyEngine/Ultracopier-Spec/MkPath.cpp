@@ -3,6 +3,11 @@
 #include "../../../cpp11addition.h"
 
 #ifdef Q_OS_WIN32
+#include <accctrl.h>
+#include <aclapi.h>
+#endif
+
+#ifdef Q_OS_WIN32
     #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
         #ifndef NOMINMAX
             #define NOMINMAX
@@ -284,9 +289,38 @@ void MkPath::internalDoThisPath()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to chown the right: "+pathList.front().destination);
         }
         #else
-        this->permissions=source.permissions();
-        return true;
-        return destination.setPermissions(this->permissions);
+        PSECURITY_DESCRIPTOR PSecurityD;
+        PACL dacl;
+
+        HANDLE hFile = CreateFileA(pathList.front().source.c_str(), READ_CONTROL | ACCESS_SYSTEM_SECURITY ,
+                FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+        if (hFile == INVALID_HANDLE_VALUE)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+        else
+        {
+            DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
+                                        NULL, NULL, &dacl, NULL, &PSecurityD);
+            CloseHandle(hFile);
+            if (lasterror != ERROR_SUCCESS)
+              ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"GetSecurityInfo() failed. Error"+std::to_string(lasterror));
+            else
+            {
+                CloseHandle(hFile);
+                hFile = CreateFileA(pathList.front().destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY ,
+                                   0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+                if (hFile == INVALID_HANDLE_VALUE)
+                  ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+                else
+                {
+                    lasterror = SetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION , NULL, NULL, dacl, NULL);
+                    if (lasterror != ERROR_SUCCESS)
+                      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"GetSecurityInfo() failed. Error"+std::to_string(lasterror));
+                }
+                free(dacl);
+                free(PSecurityD);
+                CloseHandle(hFile);
+            }
+        }
         #endif
     }
     if(pathList.front().actionType==ActionType_MovePath)
@@ -451,7 +485,7 @@ bool MkPath::readFileDateTime(const std::string &source)
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 struct stat info;
-                if(stat(source.toLatin1().data(),&info)!=0)
+                if(stat(source.c_str(),&info)!=0)
                     return false;
                 time_t ctime=info.st_ctim.tv_sec;
                 time_t actime=info.st_atim.tv_sec;
