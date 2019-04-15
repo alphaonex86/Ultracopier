@@ -2067,6 +2067,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<std::stri
     return false;
 }
 
+#ifdef Q_OS_UNIX
 bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent> &list)
 {
     DIR *dp;
@@ -2085,3 +2086,4 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent> &
     }
     return false;
 }
+#endif

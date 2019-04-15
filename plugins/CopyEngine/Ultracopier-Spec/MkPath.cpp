@@ -393,6 +393,7 @@ bool MkPath::rmpath(const std::string &dir
     if(!TransferThread::is_dir(dir))
         return true;
     bool allHaveWork=true;
+    #ifdef Q_OS_UNIX
     std::vector<dirent> list;
     if(!TransferThread::entryInfoList(dir,list))
     {
@@ -410,18 +411,10 @@ bool MkPath::rmpath(const std::string &dir
                 QFile file(fileInfo.absoluteFilePath());
                 if(!file.remove())
                 {
-                    if(toSync)
+                    QFile file(fileInfo.absoluteFilePath());
+                    if(!file.remove())
                     {
-                        QFile file(fileInfo.absoluteFilePath());
-                        if(!file.remove())
-                        {
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove a file: "+fileInfo+", due to: "+file.errorString().toStdString());
-                            allHaveWork=false;
-                        }
-                    }
-                    else
-                    {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName().toStdString());
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove a file: "+fileInfo+", due to: "+file.errorString().toStdString());
                         allHaveWork=false;
                     }
                 }
@@ -443,6 +436,62 @@ bool MkPath::rmpath(const std::string &dir
                 allHaveWork=false;
         }
     }
+    #else
+    WIN32_FIND_DATAA fdFile;
+    HANDLE hFind = NULL;
+    char finalpath[MAX_PATH];
+    strcpy(finalpath,dir.c_str());
+    strcat(finalpath,"\\*");
+
+    allHaveWork=true;
+    if((hFind = FindFirstFileA(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+dir+", errno: "+std::to_string(errno));
+        return false;
+    }
+
+    if(allHaveWork)
+    do
+    {
+        if(strcmp(fdFile.cFileName, ".")!=0 && strcmp(fdFile.cFileName, "..")!=0)
+        {
+            if(fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            {
+                //return the fonction for scan the new folder
+                if(!rmpath(dir+'\\'+fdFile.cFileName+'/'))
+                    allHaveWork=false;
+            }
+            else
+            {
+                #ifdef ULTRACOPIER_PLUGIN_RSYNC
+                if(toSync)
+                {
+                    QFile file(fileInfo.absoluteFilePath());
+                    if(!file.remove())
+                    {
+                        QFile file(fileInfo.absoluteFilePath());
+                        if(!file.remove())
+                        {
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove a file: "+fileInfo+", due to: "+file.errorString().toStdString());
+                            allHaveWork=false;
+                        }
+                    }
+                }
+                else
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+fileInfo.fileName().toStdString());
+                    allHaveWork=false;
+                }
+                #else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+std::string(fdFile.cFileName));
+                allHaveWork=false;
+                #endif
+            }
+        }
+    }
+    while(FindNextFileA(hFind, &fdFile));
+    FindClose(hFind);
+    #endif
     if(!allHaveWork)
         return false;
     allHaveWork=rmdir(FSabsolutePath(dir).c_str())==0;
@@ -487,9 +536,9 @@ bool MkPath::readFileDateTime(const std::string &source)
                 struct stat info;
                 if(stat(source.c_str(),&info)!=0)
                     return false;
-                time_t ctime=info.st_ctim.tv_sec;
-                time_t actime=info.st_atim.tv_sec;
-                time_t modtime=info.st_mtim.tv_sec;
+                time_t ctime=info.st_ctime;
+                time_t actime=info.st_atime;
+                time_t modtime=info.st_mtime;
                 //this function avalaible on unix and mingw
                 butime.actime=actime;
                 butime.modtime=modtime;

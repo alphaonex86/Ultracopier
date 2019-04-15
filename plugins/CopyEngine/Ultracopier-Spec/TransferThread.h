@@ -98,7 +98,9 @@ public:
     static int64_t file_stat_size(const std::string &filename);
     static int64_t file_stat_size(const char * const filename);
     static bool entryInfoList(const std::string &path, std::vector<std::string> &list);
+    #ifdef Q_OS_UNIX
     static bool entryInfoList(const std::string &path, std::vector<dirent> &list);
+    #endif
 protected:
     void run();
 signals:
