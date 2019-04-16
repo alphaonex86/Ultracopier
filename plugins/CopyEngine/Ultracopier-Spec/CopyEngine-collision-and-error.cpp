@@ -74,7 +74,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
                 }
                 dialogIsOpen=true;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-                FileIsSameDialog dialog(interface,source,firstRenamingRule,otherRenamingRule);
+                FileIsSameDialog dialog(uiinterface,source,firstRenamingRule,otherRenamingRule);
                 emit isInPause(true);
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
@@ -144,7 +144,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
                 }
                 dialogIsOpen=true;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-                FileExistsDialog dialog(interface,source,destination,firstRenamingRule,otherRenamingRule);
+                FileExistsDialog dialog(uiinterface,source,destination,firstRenamingRule,otherRenamingRule);
                 emit isInPause(true);
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
@@ -224,7 +224,7 @@ void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const std::string &fi
 void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-    DiskSpace dialog(facilityEngine,list,interface);
+    DiskSpace dialog(facilityEngine,list,uiinterface);
     emit isInPause(true);
     dialog.exec();/// \bug crash when external close
     bool ok=dialog.getAction();
@@ -282,14 +282,18 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if (lstat(fileInfo.c_str(), &p_statbuf)==0)
+            if(stat(fileInfo.c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
+                #ifdef Q_OS_UNIX
                 mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                #else
+                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+                #endif
             }
 
             emit error(fileInfo,size,mdate,errorString);
-            FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
+            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -375,7 +379,7 @@ void CopyEngine::folderAlreadyExists(std::string source,std::string destination,
             }
             dialogIsOpen=true;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            FolderExistsDialog dialog(interface,source,isSame,destination,firstRenamingRule,otherRenamingRule);
+            FolderExistsDialog dialog(uiinterface,source,isSame,destination,firstRenamingRule,otherRenamingRule);
             dialog.exec();/// \bug crash when external close
             FolderExistsAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
@@ -438,15 +442,19 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if (lstat(fileInfo.c_str(), &p_statbuf)==0)
+            if(stat(fileInfo.c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
+                #ifdef Q_OS_UNIX
                 mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                #else
+                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+                #endif
             }
 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(fileInfo,size,mdate,errorString);
-            FileErrorDialog dialog(interface,fileInfo,errorString,errorType);
+            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
@@ -508,14 +516,18 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if (lstat(folder.c_str(), &p_statbuf)==0)
+            if(stat(folder.c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
+                #ifdef Q_OS_UNIX
                 mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                #else
+                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+                #endif
             }
 
             emit error(folder,size,mdate,errorString);
-            FileErrorDialog dialog(interface,folder,errorString,errorType);
+            FileErrorDialog dialog(uiinterface,folder,errorString,errorType);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));

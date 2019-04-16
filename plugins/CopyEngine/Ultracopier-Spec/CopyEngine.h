@@ -51,7 +51,7 @@ private:
     QWidget *               tempWidget;
     Ui::copyEngineOptions *	ui;
     bool                    uiIsInstalled;
-    QWidget *               interface;
+    QWidget *               uiinterface;
     Filters *               filters;
     RenamingRules *			renamingRules;
     FacilityInterface *		facilityEngine;
@@ -161,7 +161,7 @@ public:
     bool getOptionsEngine(QWidget * tempWidget);
     /** \brief to have interface widget to do modal dialog
      * \param interface to have the widget of the interface, useful for modal dialog */
-    void setInterfacePointer(QWidget * interface);
+    void setInterfacePointer(QWidget * uiinterface);
     //return empty if multiple
     /** \brief compare the current sources of the copy, with the passed arguments
      * \param sources the sources list to compares with the current sources list

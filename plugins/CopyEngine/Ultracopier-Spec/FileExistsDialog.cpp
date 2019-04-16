@@ -46,9 +46,17 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
     ui->label_content_destination_folder->setText(QString::fromStdString(folder));
     //QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     struct stat source_statbuf;
+    #ifdef Q_OS_UNIX
     if(lstat(source.c_str(), &source_statbuf)==0)
+    #else
+    if(stat(source.c_str(), &source_statbuf)==0)
+    #endif
     {
+        #ifdef Q_OS_UNIX
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+        #else
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
+        #endif
         ui->label_source_modified->setVisible(true);
         ui->label_content_source_modified->setVisible(true);
         ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
@@ -63,9 +71,17 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
         ui->label_content_source_modified->setVisible(false);
     }
     struct stat destination_statbuf;
+    #ifdef Q_OS_UNIX
     if(lstat(destination.c_str(), &destination_statbuf)==0)
+    #else
+    if(stat(destination.c_str(), &destination_statbuf)==0)
+    #endif
     {
+        #ifdef Q_OS_UNIX
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtim);
+        #else
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
+        #endif
         ui->label_destination_modified->setVisible(true);
         ui->label_content_destination_modified->setVisible(true);
         ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
@@ -150,7 +166,11 @@ void FileExistsDialog::on_SuggestNewName_clicked()
         destinationInfo=destination.toStdString();
         num++;
     }
+    #ifdef Q_OS_UNIX
     while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
+    #else
+    while(stat(destinationInfo.c_str(), &p_statbuf)==0);
+    #endif
     ui->lineEditNewName->setText(newFileName);
 }
 

@@ -110,7 +110,11 @@ std::vector<std::string> ScanFileOrFolder::parseWildcardSources(const std::vecto
                         std::string fileInfo(stringimplode(recomposedSource.at(index_recomposedSource),text_slash));
                         std::vector<dirent> list;
                         struct stat p_statbuf;
+                        #ifdef Q_OS_UNIX
                         if(lstat(fileInfo.c_str(), &p_statbuf)==0)
+                        #else
+                        if(stat(fileInfo.c_str(), &p_statbuf)==0)
+                        #endif
                         {
                             if(S_ISDIR(p_statbuf.st_mode) && TransferThread::entryInfoList(fileInfo,list))
                             {
@@ -198,7 +202,9 @@ void ScanFileOrFolder::run()
 {
     stopped=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start the listing with destination: "+destination+", mode: "+std::to_string(mode));
+    #ifdef Q_OS_UNIX
     destination=resolvDestination(destination);
+    #endif
     if(stopIt)
     {
         stopped=true;
@@ -220,7 +226,11 @@ void ScanFileOrFolder::run()
         }
         std::string source=sources.at(sourceIndex);
         struct stat p_statbuf;
+        #ifdef Q_OS_UNIX
         if(lstat(source.c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
+        #else
+        if(stat(source.c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
+        #endif
         {
             /* Bad way; when you copy c:\source\folder into d:\destination, you wait it create the folder d:\destination\folder
             //listFolder(source.absoluteFilePath()+QDir::separator(),destination);
@@ -258,6 +268,7 @@ void ScanFileOrFolder::run()
     emit finishedTheListing();
 }
 
+#ifdef Q_OS_UNIX
 std::string ScanFileOrFolder::resolvDestination(const std::string &destination)
 {
     std::string temp(destination);
@@ -284,6 +295,7 @@ std::string ScanFileOrFolder::resolvDestination(const std::string &destination)
     } while(fileErrorAction==FileError_Retry || fileErrorAction==FileError_PutToEndOfTheList);
     return newDestination;*/
 }
+#endif
 
 /*bool ScanFileOrFolder::isBlackListed(const QFileInfo &destination)
 {
@@ -310,7 +322,9 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                              );
     if(stopIt)
         return;
+    #ifdef Q_OS_UNIX
     destination=resolvDestination(destination);
+    #endif
     if(stopIt)
         return;
     if(fileErrorAction==FileError_Skip)
@@ -370,7 +384,11 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                                 destination=FSabsolutePath(destination)+'/'+destinationSuffixPath+'.'+destination.substr(n);
                         }
                     }
+                    #ifdef Q_OS_UNIX
                     while(lstat(destination.c_str(), &source_statbuf)==0);
+                    #else
+                    while(stat(destination.c_str(), &source_statbuf)==0);
+                    #endif
                 }
                 else
                 {
@@ -389,7 +407,11 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     if(checkDestinationExists)
     {
         struct stat source_statbuf;
+        #ifdef Q_OS_UNIX
         if(lstat(destination.c_str(), &source_statbuf)==0)
+        #else
+        if(stat(destination.c_str(), &source_statbuf)==0)
+        #endif
         {
             emit folderAlreadyExists(source,destination,false);
             waitOneAction.acquire();

@@ -37,9 +37,17 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
     updateRenameButton();
     QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     struct stat source_statbuf;
+    #ifdef Q_OS_UNIX
     if(lstat(fileInfo.c_str(), &source_statbuf)==0)
+    #else
+    if(stat(fileInfo.c_str(), &source_statbuf)==0)
+    #endif
     {
+        #ifdef Q_OS_UNIX
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+        #else
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
+        #endif
         if((uint64_t)maxTime.toSecsSinceEpoch()<mdate)
         {
             ui->label_modified->setVisible(true);
@@ -130,7 +138,11 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
         destinationInfo=destination.toStdString();
         num++;
     }
+    #ifdef Q_OS_UNIX
     while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
+    #else
+    while(stat(destinationInfo.c_str(), &p_statbuf)==0);
+    #endif
     ui->lineEditNewName->setText(newFileName);
 }
 

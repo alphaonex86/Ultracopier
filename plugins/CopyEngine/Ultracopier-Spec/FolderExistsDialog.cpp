@@ -28,9 +28,17 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, std::string source, bool
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     struct stat source_statbuf;
+    #ifdef Q_OS_UNIX
     if(lstat(source.c_str(), &source_statbuf)==0)
+    #else
+    if(stat(source.c_str(), &source_statbuf)==0)
+    #endif
     {
+        #ifdef Q_OS_UNIX
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+        #else
+        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
+        #endif
         ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
     }
     else
@@ -62,9 +70,17 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, std::string source, bool
         this->destinationInfo=destination;
         this->setWindowTitle(tr("Folder already exists"));
         struct stat destination_statbuf;
+        #ifdef Q_OS_UNIX
         if(lstat(destination.c_str(), &destination_statbuf)==0)
+        #else
+        if(stat(destination.c_str(), &destination_statbuf)==0)
+        #endif
         {
+            #ifdef Q_OS_UNIX
             const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtim);
+            #else
+            const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
+            #endif
             ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
         }
         else
@@ -152,7 +168,11 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
         destinationInfo=destination.toStdString();
         num++;
     }
+    #ifdef Q_OS_UNIX
     while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
+    #else
+    while(stat(destinationInfo.c_str(), &p_statbuf)==0);
+    #endif
     ui->lineEditNewName->setText(newFileName);
 }
 

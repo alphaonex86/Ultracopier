@@ -22,9 +22,13 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::str
     action=FileError_Cancel;
     ui->label_error->setText(QString::fromStdString(errorString));
     struct stat p_statbuf;
-    if(lstat(fileInfo.c_str(), &p_statbuf)==0)
+    if(stat(fileInfo.c_str(), &p_statbuf)==0)
     {
+        #ifdef Q_OS_UNIX
         uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+        #else
+        uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+        #endif
         ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
         if(ui->label_content_file_name->text().isEmpty())
         {
@@ -59,6 +63,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::str
             ui->label_content_size->hide();
             ui->label_file_name->setText(tr("Folder name"));
         }
+        #ifdef Q_OS_UNIX
         ui->label_file_destination->setVisible(p_statbuf.st_mode==S_IFLNK);
         ui->label_content_file_destination->setVisible(p_statbuf.st_mode==S_IFLNK);
         if(p_statbuf.st_mode==S_IFLNK)
@@ -71,6 +76,10 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::str
                 ui->label_content_file_destination->setText(buf);
             }
         }
+        #else
+        ui->label_file_destination->setVisible(false);
+        ui->label_content_file_destination->setVisible(false);
+        #endif
     }
     else
     {

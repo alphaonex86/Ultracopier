@@ -25,7 +25,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     filters                         = NULL;
     renamingRules                   = NULL;
 
-    interface                       = NULL;
+    uiinterface                       = NULL;
     tempWidget                      = NULL;
     uiIsInstalled                   = false;
     dialogIsOpen                    = false;
@@ -302,9 +302,9 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
 }
 
 //to have interface widget to do modal dialog
-void CopyEngine::setInterfacePointer(QWidget * interface)
+void CopyEngine::setInterfacePointer(QWidget * uiinterface)
 {
-    this->interface=interface;
+    this->uiinterface=uiinterface;
     filters=new Filters(tempWidget);
     renamingRules=new RenamingRules(tempWidget);
 
@@ -438,13 +438,13 @@ std::string CopyEngine::askDestination()
     std::string destination = listThread->getUniqueDestinationFolder();
     if(!destination.empty())
     {
-        QMessageBox::StandardButton button=QMessageBox::question(interface,tr("Destination"),tr("Use the actual destination \"%1\"?")
+        QMessageBox::StandardButton button=QMessageBox::question(uiinterface,tr("Destination"),tr("Use the actual destination \"%1\"?")
                                                                  .arg(QString::fromStdString(destination)),
                                                                  QMessageBox::Yes | QMessageBox::No,QMessageBox::Yes);
         if(button==QMessageBox::Yes)
             return destination;
     }
-    destination=QFileDialog::getExistingDirectory(interface,QString::fromStdString(facilityEngine->translateText("Select destination directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks).toStdString();
+    destination=QFileDialog::getExistingDirectory(uiinterface,QString::fromStdString(facilityEngine->translateText("Select destination directory")),QStringLiteral(""),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks).toStdString();
     return destination;
 }
 
@@ -492,7 +492,7 @@ void CopyEngine::setRenamingRules(std::string firstRenamingRule,std::string othe
 
 bool CopyEngine::userAddFolder(const Ultracopier::CopyMode &mode)
 {
-    std::string source = QFileDialog::getExistingDirectory(interface,QString::fromStdString(facilityEngine->translateText("Select source directory")),
+    std::string source = QFileDialog::getExistingDirectory(uiinterface,QString::fromStdString(facilityEngine->translateText("Select source directory")),
                                                            QStringLiteral(""),
                                                            QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks).toStdString();
     if(source.empty() || source=="")
@@ -509,7 +509,7 @@ bool CopyEngine::userAddFile(const Ultracopier::CopyMode &mode)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QStringList sources = QFileDialog::getOpenFileNames(
-        interface,
+        uiinterface,
         QString::fromStdString(facilityEngine->translateText("Select one or more files to open")),
         QStringLiteral(""),
         QString::fromStdString(facilityEngine->translateText("All files"))+QStringLiteral(" (*)"));
@@ -616,7 +616,7 @@ void CopyEngine::forceMode(const Ultracopier::CopyMode &mode)
 
 void CopyEngine::exportTransferList()
 {
-    std::string fileName = QFileDialog::getSaveFileName(interface,QString::fromStdString(facilityEngine->translateText("Save transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
+    std::string fileName = QFileDialog::getSaveFileName(uiinterface,QString::fromStdString(facilityEngine->translateText("Save transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
     if(fileName.empty())
         return;
     emit signal_exportTransferList(fileName);
@@ -624,7 +624,7 @@ void CopyEngine::exportTransferList()
 
 void CopyEngine::importTransferList()
 {
-    std::string fileName = QFileDialog::getOpenFileName(interface,QString::fromStdString(facilityEngine->translateText("Open transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
+    std::string fileName = QFileDialog::getOpenFileName(uiinterface,QString::fromStdString(facilityEngine->translateText("Open transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
     if(fileName.empty())
         return;
     emit signal_importTransferList(fileName);
@@ -632,12 +632,12 @@ void CopyEngine::importTransferList()
 
 void CopyEngine::warningTransferList(const std::string &warning)
 {
-    QMessageBox::warning(interface,QString::fromStdString(facilityEngine->translateText("Error")),QString::fromStdString(warning));
+    QMessageBox::warning(uiinterface,QString::fromStdString(facilityEngine->translateText("Error")),QString::fromStdString(warning));
 }
 
 void CopyEngine::errorTransferList(const std::string &error)
 {
-    QMessageBox::critical(interface,QString::fromStdString(facilityEngine->translateText("Error")),QString::fromStdString(error));
+    QMessageBox::critical(uiinterface,QString::fromStdString(facilityEngine->translateText("Error")),QString::fromStdString(error));
 }
 
 bool CopyEngine::setSpeedLimitation(const int64_t &speedLimitation)
@@ -979,7 +979,7 @@ void CopyEngine::setCopyListOrder(const bool &order)
 void CopyEngine::exportErrorIntoTransferList()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"exportErrorIntoTransferList");
-    std::string fileName = QFileDialog::getSaveFileName(interface,QString::fromStdString(facilityEngine->translateText("Save transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
+    std::string fileName = QFileDialog::getSaveFileName(uiinterface,QString::fromStdString(facilityEngine->translateText("Save transfer list")),QStringLiteral("transfer-list.lst"),QString::fromStdString(facilityEngine->translateText("Transfer list"))+QStringLiteral(" (*.lst)")).toStdString();
     if(fileName.empty())
         return;
     emit signal_exportErrorIntoTransferList(fileName);

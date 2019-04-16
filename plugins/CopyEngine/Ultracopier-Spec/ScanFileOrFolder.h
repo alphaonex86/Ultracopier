@@ -71,7 +71,9 @@ private:
     std::string             destination;
     volatile bool		stopIt;
     void                listFolder(std::string source, std::string destination);
+    #ifdef Q_OS_UNIX
     std::string           resolvDestination(const std::string &destination);
+    #endif
     volatile bool		stopped;
     QSemaphore          waitOneAction;
     FolderExistsAction	folderExistsAction;
