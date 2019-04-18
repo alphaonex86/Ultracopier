@@ -394,7 +394,7 @@ bool MkPath::rmpath(const std::string &dir
         return true;
     bool allHaveWork=true;
     #ifdef Q_OS_UNIX
-    std::vector<dirent> list;
+    std::vector<TransferThread::dirent_uc> list;
     if(!TransferThread::entryInfoList(dir,list))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+dir+", errno: "+std::to_string(errno));
@@ -402,8 +402,8 @@ bool MkPath::rmpath(const std::string &dir
     }
     for (unsigned int i = 0; i < list.size(); ++i)
     {
-        dirent fileInfo=list.at(i);
-        if(fileInfo.d_type!=DT_DIR)
+        TransferThread::dirent_uc fileInfo=list.at(i);
+        if(!fileInfo.isFolder)
         {
             #ifdef ULTRACOPIER_PLUGIN_RSYNC
             if(toSync)

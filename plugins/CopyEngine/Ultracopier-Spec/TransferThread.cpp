@@ -2068,7 +2068,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<std::stri
 }
 
 #ifdef Q_OS_UNIX
-bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent> &list)
+bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc> &list)
 {
     DIR *dp;
     struct dirent *ep;
@@ -2079,11 +2079,38 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent> &
             ep=readdir(dp);
             const std::string name(ep->d_name);
             if(name!="." && name!="..")
-                list.push_back(*ep);
+            {
+                dirent_uc tempValue;
+                tempValue.isFolder=ep->d_type==DT_DIR;
+                strcat(tempValue.d_name,ep->d_name);
+                list.push_back(tempValue);
+            }
         } while(ep);
         (void) closedir(dp);
         return true;
     }
     return false;
+}
+#else
+bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc> &list)
+{
+    WIN32_FIND_DATAA fdFile;
+    HANDLE hFind = NULL;
+    char finalpath[MAX_PATH];
+    strcpy(finalpath,dir.c_str());
+    strcat(finalpath,"\\*");
+    if((hFind = FindFirstFileA(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
+        return false;
+    do
+    {
+        if(strcmp(fdFile.cFileName, ".")!=0 && strcmp(fdFile.cFileName, "..")!=0)
+        {
+            dirent_uc tempValue;
+            tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+            strcat(tempValue.d_name,fdFile.cFileName);
+        }
+    }
+    while(FindNextFileA(hFind, &fdFile));
+    FindClose(hFind);
 }
 #endif

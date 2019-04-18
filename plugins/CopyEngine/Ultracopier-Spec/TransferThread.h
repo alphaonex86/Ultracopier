@@ -98,9 +98,12 @@ public:
     static int64_t file_stat_size(const std::string &filename);
     static int64_t file_stat_size(const char * const filename);
     static bool entryInfoList(const std::string &path, std::vector<std::string> &list);
-    #ifdef Q_OS_UNIX
-    static bool entryInfoList(const std::string &path, std::vector<dirent> &list);
-    #endif
+    struct dirent_uc
+    {
+        bool isFolder;
+        char d_name[256];
+    };
+    static bool entryInfoList(const std::string &path, std::vector<dirent_uc> &list);
 protected:
     void run();
 signals:

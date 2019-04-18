@@ -108,7 +108,7 @@ std::vector<std::string> ScanFileOrFolder::parseWildcardSources(const std::vecto
                     while(index_recomposedSource<recomposedSource.size())//parse each url part
                     {
                         std::string fileInfo(stringimplode(recomposedSource.at(index_recomposedSource),text_slash));
-                        std::vector<dirent> list;
+                        std::vector<TransferThread::dirent_uc> list;
                         struct stat p_statbuf;
                         #ifdef Q_OS_UNIX
                         if(lstat(fileInfo.c_str(), &p_statbuf)==0)
@@ -479,7 +479,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     }
     if(stopIt)
         return;
-    std::vector<dirent> entryList;
+    std::vector<TransferThread::dirent_uc> entryList;
     do
     {
         fileErrorAction=FileError_NotSet;
@@ -492,7 +492,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     } while(fileErrorAction==FileError_Retry);
 
     if(copyListOrder)
-        std::sort(entryList.begin(), entryList.end(), [](dirent a, dirent b) {
+        std::sort(entryList.begin(), entryList.end(), [](TransferThread::dirent_uc a, TransferThread::dirent_uc b) {
                 return strcmp(a.d_name,b.d_name);
         });
     if(stopIt)
@@ -503,7 +503,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
         emit addToMkPath(source,destination,sizeEntryList);
     for(unsigned int index=0;index<sizeEntryList;++index)
     {
-        const dirent fileInfo=entryList.at(index);
+        const TransferThread::dirent_uc fileInfo=entryList.at(index);
         if(stopIt)
             return;
         if(haveFilters)
@@ -517,7 +517,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                 this->exclude=this->exclude_send;
             }
             const std::string &fileName=fileInfo.d_name;
-            if(fileInfo.d_type==DT_DIR)
+            if(fileInfo.isFolder)
             {
                 bool excluded=false,included=(include.size()==0);
                 unsigned int filters_index=0;
@@ -613,7 +613,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
         else
         {
             const std::string fileName(fileInfo.d_name);
-            if(fileInfo.d_type==DT_DIR)//possible wait time here
+            if(fileInfo.isFolder)//possible wait time here
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
                 listFolder(source+'/'+fileName,destination+'/'+fileName);
             else
