@@ -2097,7 +2097,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
     WIN32_FIND_DATAA fdFile;
     HANDLE hFind = NULL;
     char finalpath[MAX_PATH];
-    strcpy(finalpath,dir.c_str());
+    strcpy(finalpath,path.c_str());
     strcat(finalpath,"\\*");
     if((hFind = FindFirstFileA(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
         return false;
@@ -2108,9 +2108,11 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
             dirent_uc tempValue;
             tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
             strcat(tempValue.d_name,fdFile.cFileName);
+            list.push_back(tempValue);
         }
     }
     while(FindNextFileA(hFind, &fdFile));
     FindClose(hFind);
+    return true;
 }
 #endif

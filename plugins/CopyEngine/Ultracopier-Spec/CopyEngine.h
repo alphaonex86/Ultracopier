@@ -286,7 +286,6 @@ public slots:
     void setFolderError(int index);
     void setFileCollision(int index);
     void setFileError(int index);
-    void setTransferAlgorithm(int index);
     /// \brief need retranslate the insterface
     void newLanguageLoaded();
 private slots:

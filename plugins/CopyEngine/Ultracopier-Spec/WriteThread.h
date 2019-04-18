@@ -71,8 +71,6 @@ public slots:
     /// \brief flush and seek to zero
     void flushAndSeekToZero();
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
-    /// \brief executed at regular interval to do a speed throling
-    void timeOfTheBlockCopyFinished();
 signals:
     void error() const;
     void opened() const;

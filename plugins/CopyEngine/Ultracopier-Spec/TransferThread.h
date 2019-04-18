@@ -67,13 +67,7 @@ public:
     bool haveStartTime;
     QTime startTransferTime;
 
-    void set_doChecksum(bool doChecksum);
-    void set_checksumIgnoreIfImpossible(bool checksumIgnoreIfImpossible);
-    void set_checksumOnlyOnError(bool checksumOnlyOnError);
-    void set_osBuffer(bool osBuffer);
-    void set_osBufferLimited(bool osBufferLimited);
-
-    //not copied size, because that's count to the checksum, ...
+    //not copied size, ...
     uint64_t realByteTransfered() const;
     std::pair<uint64_t, uint64_t> progression() const;
     static std::string resolvedName(const std::string &inode);
@@ -174,9 +168,6 @@ private slots:
     void postOperation();
     void getWriteError();
     void getReadError();
-    void readChecksumFinish(const void * const data,const size_t &size);
-    void writeChecksumFinish(const void * const data,const size_t &size);
-    void compareChecksum();
     //void syncAfterErrorAndReadFinish();
     void readThreadIsSeekToZeroAndWait();
     void writeThreadIsReopened();
