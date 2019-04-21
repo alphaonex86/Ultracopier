@@ -15,7 +15,20 @@ std::string ScanFileOrFolder::text_slash="/";
 std::string ScanFileOrFolder::text_antislash="\\";
 std::string ScanFileOrFolder::text_dot=".";
 
-ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode)
+ScanFileOrFolder::ScanFileOrFolder(const Ultracopier::CopyMode &mode) :
+    moveTheWholeFolder(false),
+    stopIt(false),
+    stopped(false),
+    folderExistsAction(FolderExistsAction::FolderExists_NotSet),
+    fileErrorAction(FileErrorAction::FileError_NotSet),
+    checkDestinationExists(false),
+    copyListOrder(false),
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync(false),
+    #endif
+    mode(Ultracopier::CopyMode::Copy),
+    reloadTheNewFilters(false),
+    haveFilters(false)
 {
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     rsync               = false;

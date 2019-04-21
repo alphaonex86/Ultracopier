@@ -2077,15 +2077,18 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
     {
         do {
             ep=readdir(dp);
-            const std::string name(ep->d_name);
-            if(name!="." && name!="..")
+            if(ep!=NULL)
             {
-                dirent_uc tempValue;
-                tempValue.isFolder=ep->d_type==DT_DIR;
-                strcat(tempValue.d_name,ep->d_name);
-                list.push_back(tempValue);
+                const std::string name(ep->d_name);
+                if(name!="." && name!="..")
+                {
+                    dirent_uc tempValue;
+                    tempValue.isFolder=ep->d_type==DT_DIR;
+                    strcpy(tempValue.d_name,ep->d_name);
+                    list.push_back(tempValue);
+                }
             }
-        } while(ep);
+        } while(ep!=NULL);
         (void) closedir(dp);
         return true;
     }
@@ -2107,7 +2110,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
         {
             dirent_uc tempValue;
             tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
-            strcat(tempValue.d_name,fdFile.cFileName);
+            strcpy(tempValue.d_name,fdFile.cFileName);
             list.push_back(tempValue);
         }
     }

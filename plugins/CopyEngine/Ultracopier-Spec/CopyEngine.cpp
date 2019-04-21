@@ -18,7 +18,37 @@ inline double round(double d) {
 #endif
 
 CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
-    ui(new Ui::copyEngineOptions())
+    listThread(NULL),
+    tempWidget(NULL),
+    ui(new Ui::copyEngineOptions()),
+    uiIsInstalled(false),
+    uiinterface(NULL),
+    filters(NULL),
+    renamingRules(NULL),
+    facilityEngine(NULL),
+    doRightTransfer(false),
+    keepDate(false),
+    followTheStrictOrder(false),
+    deletePartiallyTransferredFiles(false),
+    inodeThreads(0),
+    renameTheOriginalDestination(false),
+    moveTheWholeFolder(false),
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync(false),
+    #endif
+    checkDestinationFolderExists(false),
+    alwaysDoThisActionForFileExists(FileExistsAction::FileExists_NotSet),
+    alwaysDoThisActionForFileError(FileErrorAction::FileError_NotSet),
+    alwaysDoThisActionForFolderError(FileErrorAction::FileError_NotSet),
+    alwaysDoThisActionForFolderExists(FolderExistsAction::FolderExists_NotSet),
+    dialogIsOpen(false),
+    stopIt(false),
+    size_for_speed(0),
+    mode(Ultracopier::CopyMode::Copy),
+    forcedMode(false),
+    checkDiskSpace(false),
+    osBufferLimit(0),
+    putAtBottom(0)
 {
     listThread=new ListThread(facilityEngine);
     this->facilityEngine            = facilityEngine;

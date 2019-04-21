@@ -56,8 +56,25 @@ Themes::Themes(const bool &alwaysOnTop,
                const bool &minimizeToSystray,
                const bool &startMinimized,
                const bool &savePosition) :
+    duration(0),
+    durationStarted(false),
     ui(new Ui::interfaceCopy()),
-    uiOptions(new Ui::themesOptions())
+    uiOptions(new Ui::themesOptions()),
+    currentFile(0),
+    totalFile(0),
+    currentSize(0),
+    totalSize(0),
+    getOldProgression(0),
+    sysTrayIcon(NULL),
+    menu(NULL),
+    action(Ultracopier::EngineActionInProgress::Idle),
+    currentSpeed(0),
+    storeIsInPause(false),
+    modeIsForced(false),
+    type(Ultracopier::CopyType::FileAndFolder),
+    mode(Ultracopier::CopyMode::Copy),
+    haveStarted(false),
+    haveError(false)
 {
     this->facilityEngine=facilityEngine;
     ui->setupUi(this);
