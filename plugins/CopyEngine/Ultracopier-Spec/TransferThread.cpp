@@ -520,7 +520,7 @@ bool TransferThread::destinationExists()
     return false;
 }
 
-/** \example /dir1/dir2/file -> file
+/** \example
  * /dir1/dir2/file -> file
  * /dir1/dir2/ -> dir2
  * /dir1/ -> dir1
@@ -529,16 +529,15 @@ std::string TransferThread::resolvedName(const std::string &inode)
 {
     const std::string::size_type &lastPos=inode.rfind('/');
     if(lastPos == std::string::npos || lastPos==0)
-        return tr("root").toStdString();
-    if(lastPos!=inode.size())
-        return inode.substr(lastPos);
-    const std::string::size_type &previousLastPos=inode.rfind('/',inode.size()-1);
-    if((lastPos-1)==previousLastPos)
-    {
-        //emit errorOnFile(inode,"Internal bug: "+inode);
-        return tr("root").toStdString();
-    }
-    return inode.substr(previousLastPos,lastPos);
+        return "root";
+    if((lastPos+1)!=inode.size())
+        return inode.substr(lastPos+1);
+    if(inode.size()==1)
+        return "root";
+    const std::string::size_type &previousLastPos=inode.rfind('/',inode.size()-2);
+    if((lastPos-2)==previousLastPos || previousLastPos == std::string::npos)
+        return "root";
+    return inode.substr(previousLastPos+1,lastPos-previousLastPos-1);
 }
 
 std::string TransferThread::getSourcePath() const
@@ -622,14 +621,15 @@ bool TransferThread::checkAlwaysRename()
     return false;
 }
 
+/// \warning not check if path have double //, if have do bug return failed
 #ifdef Q_OS_UNIX
-int TransferThread::mkpath(const std::string &file_path, const mode_t &mode)
+bool TransferThread::mkpath(const std::string &file_path, const mode_t &mode)
 #else
-int TransferThread::mkpath(const std::string &file_path)
+bool TransferThread::mkpath(const std::string &file_path)
 #endif
 {
     if(is_dir(file_path))
-        return 0;
+        return true;
     char path[file_path.size()+1];
     memcpy(path,file_path.c_str(),file_path.size());
     path[file_path.size()+1]='\0';
@@ -646,12 +646,12 @@ int TransferThread::mkpath(const std::string &file_path)
             if(errno!=EEXIST)
             {
                 *p='/';
-                return -1;
+                return false;
             }
         }
         *p='/';
     }
-    return 0;
+    return true;
 }
 
 void TransferThread::tryMoveDirectly()

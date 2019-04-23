@@ -343,6 +343,12 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
     if(fileErrorAction==FileError_Skip)
         return;
     //if is same
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(destination.find("//") != std::string::npos)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+    if(source.find("//") != std::string::npos)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+    #endif
     if(source==destination)
     {
         emit folderAlreadyExists(source,destination,true);
@@ -416,6 +422,12 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
             break;
         }
     }
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(destination.find("//") != std::string::npos)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+    if(source.find("//") != std::string::npos)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+    #endif
     //check if destination exists
     if(checkDestinationExists)
     {
@@ -510,6 +522,12 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
         });
     if(stopIt)
         return;
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(destination.find("//") != std::string::npos)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+    if(source.find("//") != std::string::npos)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+    #endif
     const unsigned int sizeEntryList=entryList.size();
     emit newFolderListing(source);
     if(mode!=Ultracopier::Move)

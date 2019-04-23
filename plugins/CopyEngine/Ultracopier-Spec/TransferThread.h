@@ -75,9 +75,9 @@ public:
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
     #ifdef Q_OS_UNIX
-    static int mkpath(const std::string &file_path, const mode_t &mode=0755);
+    static bool mkpath(const std::string &file_path, const mode_t &mode=0755);
     #else
-    static int mkpath(const std::string &file_path);
+    static bool mkpath(const std::string &file_path);
     #endif
 
     static int64_t readFileMDateTime(const std::string &source);
