@@ -622,37 +622,86 @@ bool TransferThread::checkAlwaysRename()
 }
 
 /// \warning not check if path have double //, if have do bug return failed
+/// \warning check mkpath() call should not exists because only existing dest is allowed now
+/*
 #ifdef Q_OS_UNIX
-bool TransferThread::mkpath(const std::string &file_path, const mode_t &mode)
+bool TransferThread::mkpath(const std::string &path, const mode_t &mode)
 #else
-bool TransferThread::mkpath(const std::string &file_path)
+bool TransferThread::mkpath(const std::string &path)
 #endif
 {
-    if(is_dir(file_path))
-        return true;
-    char path[file_path.size()+1];
-    memcpy(path,file_path.c_str(),file_path.size());
-    path[file_path.size()+1]='\0';
-    char* p;
-    for(p=strchr(path+1, '/'); p; p=strchr(p+1, '/'))
+    char pathC[PATH_MAX];
+    strcpy(pathC,path.c_str());
+    #ifdef Q_OS_UNIX
+    if(mkdir(pathC, mode)==-1)
+    #else
+    if(mkdir(pathC)==-1)
+    #endif
+        if(errno==EEXIST)
+            return true;
+
+    printf("%i",errno);
+    //use reverse method to performance, more complex to code but less system call/fs call
+    std::string::size_type previouspos=path.size();
+    std::string::size_type lastpos=std::string::npos;
+
+    char pathCedit[PATH_MAX];
+    strcpy(pathCedit,pathC);
+    std::vector<std::string::size_type> pathSplit;
+    pathSplit.push_back(path.size());
+    do
     {
-        *p='\0';
-        #ifdef Q_OS_UNIX
-        if(mkdir(path, mode)==-1)
-        #else
-        if(mkdir(path)==-1)
-        #endif
-        {
-            if(errno!=EEXIST)
-            {
-                *p='/';
+        lastpos=path.rfind('/',previouspos-1);
+        if(lastpos == std::string::npos)
+            return false;
+
+        while(pathC[lastpos-1]=='/')
+            if(lastpos>0)
+                lastpos--;
+            else
                 return false;
-            }
-        }
-        *p='/';
-    }
+
+        //buggy case?
+        #ifdef Q_OS_UNIX
+        if(lastpos<2)
+            return false;
+        #else
+        if(lastpos<4)
+            return false;
+        #endif
+
+        pathCedit[lastpos]='\0';
+        previouspos=lastpos;
+
+        errno=0;
+        #ifdef Q_OS_UNIX
+        if(mkdir(pathCedit, mode)==-1)
+        #else
+        if(mkdir(pathCedit)==-1)
+        #endif
+            if(errno!=EEXIST && errno!=ENOENT)
+                return false;
+        //here errno can be: EEXIST, ENOENT, 0
+        if(errno==ENOENT)
+            pathSplit.push_back(lastpos);
+    } while(lastpos>0 && errno==ENOENT);
+
+    do
+    {
+        strcpy(pathCedit,pathC);
+        lastpos=pathSplit.back();
+        pathSplit.pop_back();
+        pathCedit[lastpos]='\0';
+        #ifdef Q_OS_UNIX
+        if(mkdir(pathCedit, mode)==-1)
+        #else
+        if(mkdir(pathCedit)==-1)
+        #endif
+            if(errno!=EEXIST)
+                return false;
+    } while(!pathSplit.empty());
     return true;
-}
+}*/
 
 void TransferThread::tryMoveDirectly()
 {

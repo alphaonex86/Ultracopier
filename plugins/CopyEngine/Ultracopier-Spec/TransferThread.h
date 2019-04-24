@@ -74,11 +74,12 @@ public:
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
+    /** \warning check mkpath() call should not exists because only existing dest is allowed now
     #ifdef Q_OS_UNIX
     static bool mkpath(const std::string &file_path, const mode_t &mode=0755);
     #else
     static bool mkpath(const std::string &file_path);
-    #endif
+    #endif*/
 
     static int64_t readFileMDateTime(const std::string &source);
     static bool is_symlink(const char * const filename);
