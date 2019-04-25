@@ -42,6 +42,7 @@ public:
     void addPath(const std::string& source,const std::string& destination,const ActionType &actionType);
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
+    void setMkFullPath(const bool mkFullPath);
 signals:
     void errorOnFolder(const std::string &,const std::string &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void firstFolderFinish();
@@ -71,6 +72,7 @@ private:
     void checkIfCanDoTheNext();
     bool doRightTransfer;
     bool keepDate;
+    bool mkFullPath;
     bool doTheDateTransfer;
     #ifdef Q_OS_UNIX
             utimbuf butime;

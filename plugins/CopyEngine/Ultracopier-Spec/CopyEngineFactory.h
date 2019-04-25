@@ -93,6 +93,7 @@ private slots:
     void setFolderCollision(int index);
     void setFolderError(int index);
     void setCheckDestinationFolder();
+    void setMkFullPath();
     void showFilterDialog();
     void sendNewFilters(const std::vector<std::string> &includeStrings,const std::vector<std::string> &includeOptions,
                         const std::vector<std::string> &excludeStrings,const std::vector<std::string> &excludeOptions);

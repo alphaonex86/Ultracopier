@@ -18,11 +18,14 @@
 
 std::string MkPath::text_slash="/";
 
-MkPath::MkPath()
+MkPath::MkPath() :
+    waitAction(false),
+    stopIt(false),
+    doRightTransfer(false),
+    keepDate(false),
+    mkFullPath(false),
+    doTheDateTransfer(false)
 {
-    stopIt=false;
-    waitAction=false;
-    doRightTransfer=false;
     tm t;
     #ifdef Q_OS_UNIX
     t.tm_gmtoff=0;
@@ -166,18 +169,38 @@ void MkPath::internalDoThisPath()
     if(item.actionType!=ActionType_RealMove)
     {
         if(!TransferThread::is_dir(item.destination))
-            if(!TransferThread::mkpath(item.destination))
+        {
+            if(mkFullPath)
             {
-                if(!TransferThread::is_dir(item.destination))
+                if(!TransferThread::mkpath(item.destination))
                 {
-                    if(stopIt)
+                    if(!TransferThread::is_dir(item.destination))
+                    {
+                        if(stopIt)
+                            return;
+                        waitAction=true;
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination+", errno: "+std::to_string(errno));
+                        emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
                         return;
-                    waitAction=true;
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination+", errno: "+std::to_string(errno));
-                    emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
-                    return;
+                    }
                 }
             }
+            else
+            {
+                if(!TransferThread::mkdir(item.destination))
+                {
+                    if(!TransferThread::is_dir(item.destination))
+                    {
+                        if(stopIt)
+                            return;
+                        waitAction=true;
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination+", errno: "+std::to_string(errno));
+                        emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
+                        return;
+                    }
+                }
+            }
+        }
     }
     else
     {
@@ -401,6 +424,11 @@ void MkPath::setRightTransfer(const bool doRightTransfer)
 void MkPath::setKeepDate(const bool keepDate)
 {
     this->keepDate=keepDate;
+}
+
+void MkPath::setMkFullPath(const bool mkFullPath)
+{
+    this->mkFullPath=mkFullPath;
 }
 
 bool MkPath::rmpath(const std::string &dir

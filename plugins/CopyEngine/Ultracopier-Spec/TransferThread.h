@@ -74,12 +74,13 @@ public:
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
-    /** \warning check mkpath() call should not exists because only existing dest is allowed now
+    // \warning check mkpath() call should not exists because only existing dest is allowed now
     #ifdef Q_OS_UNIX
     static bool mkpath(const std::string &file_path, const mode_t &mode=0755);
     #else
     static bool mkpath(const std::string &file_path);
-    #endif*/
+    #endif
+    static bool mkdir(const std::string &file_path, const mode_t &mode=0755);
 
     static int64_t readFileMDateTime(const std::string &source);
     static bool is_symlink(const char * const filename);
@@ -99,6 +100,7 @@ public:
         char d_name[256];
     };
     static bool entryInfoList(const std::string &path, std::vector<dirent_uc> &list);
+    void setMkFullPath(const bool mkFullPath);
 protected:
     void run();
 signals:
@@ -195,6 +197,7 @@ private:
     bool            rsync;
     #endif
     bool			keepDate;
+    bool            mkFullPath;
     //ready = open + ready to operation (no error to resolv)
     bool			readIsReadyVariable;
     bool			writeIsReadyVariable;

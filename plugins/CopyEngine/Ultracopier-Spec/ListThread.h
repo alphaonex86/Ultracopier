@@ -100,6 +100,7 @@ public:
     bool getReturnBoolToCopyEngine() const;
     std::pair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
     Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine() const;
+    void setMkFullPath(const bool mkFullPath);
 
     void autoStartIfNeeded();
 public slots:
@@ -268,6 +269,7 @@ private:
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
+    bool mkFullPath;
     std::vector<std::string> drives;
     FileExistsAction alwaysDoThisActionForFileExists;
     //to return value to the copyEngine

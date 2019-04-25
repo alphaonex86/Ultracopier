@@ -19,6 +19,8 @@ TransferThread::TransferThread() :
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     rsync                           (false),
     #endif
+    keepDate                        (false),
+    mkFullPath                      (false),
     stopIt                          (false),
     fileExistsAction                (FileExists_NotSet),
     alwaysDoFileExistsAction        (FileExists_NotSet),
@@ -623,7 +625,6 @@ bool TransferThread::checkAlwaysRename()
 
 /// \warning not check if path have double //, if have do bug return failed
 /// \warning check mkpath() call should not exists because only existing dest is allowed now
-/*
 #ifdef Q_OS_UNIX
 bool TransferThread::mkpath(const std::string &path, const mode_t &mode)
 #else
@@ -633,9 +634,9 @@ bool TransferThread::mkpath(const std::string &path)
     char pathC[PATH_MAX];
     strcpy(pathC,path.c_str());
     #ifdef Q_OS_UNIX
-    if(mkdir(pathC, mode)==-1)
+    if(::mkdir(pathC, mode)==-1)
     #else
-    if(mkdir(pathC)==-1)
+    if(::mkdir(pathC)==-1)
     #endif
         if(errno==EEXIST)
             return true;
@@ -675,9 +676,9 @@ bool TransferThread::mkpath(const std::string &path)
 
         errno=0;
         #ifdef Q_OS_UNIX
-        if(mkdir(pathCedit, mode)==-1)
+        if(::mkdir(pathCedit, mode)==-1)
         #else
-        if(mkdir(pathCedit)==-1)
+        if(::mkdir(pathCedit)==-1)
         #endif
             if(errno!=EEXIST && errno!=ENOENT)
                 return false;
@@ -693,15 +694,24 @@ bool TransferThread::mkpath(const std::string &path)
         pathSplit.pop_back();
         pathCedit[lastpos]='\0';
         #ifdef Q_OS_UNIX
-        if(mkdir(pathCedit, mode)==-1)
+        if(::mkdir(pathCedit, mode)==-1)
         #else
-        if(mkdir(pathCedit)==-1)
+        if(::mkdir(pathCedit)==-1)
         #endif
             if(errno!=EEXIST)
                 return false;
     } while(!pathSplit.empty());
     return true;
-}*/
+}
+
+bool TransferThread::mkdir(const std::string &file_path, const mode_t &mode)
+{
+    #ifdef Q_OS_UNIX
+    return ::mkdir(file_path.c_str(),mode);
+    #else
+    return ::mkdir(file_path.c_str());
+    #endif
+}
 
 void TransferThread::tryMoveDirectly()
 {
@@ -737,11 +747,23 @@ void TransferThread::tryMoveDirectly()
     #endif
     {
         const std::string &dir=FSabsolutePath(destination);
-        if(!mkpath(dir.c_str()))
+        if(mkFullPath)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
-            emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
-            return;
+            if(!mkpath(dir.c_str()))
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
+                emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
+                return;
+            }
+        }
+        else
+        {
+            if(!mkdir(dir.c_str()))
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
+                emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
+                return;
+            }
         }
     }
     #ifdef Q_OS_WIN32
@@ -815,11 +837,23 @@ void TransferThread::tryCopyDirectly()
     #endif
     {
         const std::string &dir=FSabsolutePath(destination);
-        if(!mkpath(dir.c_str()))
+        if(mkFullPath)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
-            emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
-            return;
+            if(!mkpath(dir.c_str()))
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
+                emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
+                return;
+            }
+        }
+        else
+        {
+            if(!mkdir(dir.c_str()))
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination folder can't be created: "+dir+", error: "+std::to_string(errno));
+                emit errorOnFile(dir,tr("Unable to do the folder").toStdString());
+                return;
+            }
         }
     }
     /** on windows, symLink is normal file, can be copied
@@ -2168,3 +2202,8 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
     return true;
 }
 #endif
+
+void TransferThread::setMkFullPath(const bool mkFullPath)
+{
+    this->mkFullPath=mkFullPath;
+}

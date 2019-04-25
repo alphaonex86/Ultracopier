@@ -4,32 +4,49 @@
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 
-ListThread::ListThread(FacilityInterface * facilityInterface)
+ListThread::ListThread(FacilityInterface * facilityInterface) :
+    sourceDriveMultiple(false),
+    destinationDriveMultiple(false),
+    destinationFolderMultiple(false),
+    stopIt(false),
+    numberOfTransferIntoToDoList(0),
+    bytesToTransfer(0),
+    bytesTransfered(0),
+    #ifdef ULTRACOPIER_PLUGIN_RSYNC
+    rsync(false),
+    #endif
+    idIncrementNumber(1),
+    actualRealByteTransfered(0),
+    checkDestinationFolderExists(false),
+    parallelizeIfSmallerThan(1024),
+    moveTheWholeFolder(false),
+    followTheStrictOrder(false),
+    deletePartiallyTransferredFiles(true),
+    inodeThreads(1),
+    renameTheOriginalDestination(false),
+    checkDiskSpace(true),
+    copyListOrder(true),
+    putAtBottom(0),
+    mode(Ultracopier::CopyMode::Copy),
+    forcedMode(false),
+    actionToDoListTransfer_count(0),
+    actionToDoListInode_count(0),
+    doTransfer(false),
+    doInode(false),
+    oversize(0),
+    currentProgression(0),
+    copiedSize(0),
+    totalSize(0),
+    localOverSize(0),
+    doRightTransfer(false),
+    keepDate(false),
+    mkFullPath(false),
+    alwaysDoThisActionForFileExists(FileExists_NotSet),
+    returnBoolToCopyEngine(true)
 {
     moveToThread(this);
     start(HighPriority);
-    this->facilityInterface         = facilityInterface;
-    sourceDriveMultiple             = false;
-    destinationDriveMultiple        = false;
-    destinationFolderMultiple       = false;
-    stopIt                          = false;
-    bytesToTransfer                 = 0;
-    bytesTransfered                 = 0;
-    idIncrementNumber               = 1;
-    actualRealByteTransfered        = 0;
-    numberOfTransferIntoToDoList    = 0;
-    numberOfInodeOperation          = 0;
-    putAtBottom                     = 0;
-    inodeThreads                    = 1;
-    renameTheOriginalDestination    = false;
-    doRightTransfer                 = false;
-    #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    rsync                           = false;
-    #endif
-    keepDate                        = false;
-    checkDiskSpace                  = true;
-    alwaysDoThisActionForFileExists = FileExists_NotSet;
-    forcedMode                      = false;
+    this->facilityInterface=facilityInterface;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog);
@@ -208,9 +225,8 @@ void ListThread::setRightTransfer(const bool doRightTransfer)
 {
     mkPathQueue.setRightTransfer(doRightTransfer);
     this->doRightTransfer=doRightTransfer;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
+    unsigned int index=0;
+    while(index<transferThreadList.size())
     {
         transferThreadList.at(index)->setRightTransfer(doRightTransfer);
         index++;
@@ -222,9 +238,8 @@ void ListThread::setKeepDate(const bool keepDate)
 {
     mkPathQueue.setKeepDate(keepDate);
     this->keepDate=keepDate;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
+    unsigned int index=0;
+    while(index<transferThreadList.size())
     {
         transferThreadList.at(index)->setKeepDate(keepDate);
         index++;
@@ -237,9 +252,8 @@ void ListThread::setRsync(const bool rsync)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"set rsync: "+std::to_string(rsync));
     this->rsync=rsync;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
+    unsigned int index=0;
+    while(index<transferThreadList.size())
     {
         transferThreadList.at(index)->setRsync(rsync);
         index++;
@@ -2153,5 +2167,17 @@ void ListThread::exportErrorIntoTransferList(const std::string &fileName)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to save the transfer list: "+transferFile.errorString().toStdString());
         emit errorTransferList(tr("Unable to save the transfer list: %1").arg(transferFile.errorString()).toStdString());
         return;
+    }
+}
+
+void ListThread::setMkFullPath(const bool mkFullPath)
+{
+    this->mkFullPath=mkFullPath;
+    mkPathQueue.setMkFullPath(mkFullPath);
+    unsigned int index=0;
+    while(index<transferThreadList.size())
+    {
+        transferThreadList.at(index)->setMkFullPath(mkFullPath);
+        index++;
     }
 }

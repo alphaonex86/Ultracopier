@@ -66,6 +66,7 @@ private:
     bool                    rsync;
     #endif
     bool                    checkDestinationFolderExists;
+    bool                    mkFullPath;
     FileExistsAction		alwaysDoThisActionForFileExists;
     FileErrorAction			alwaysDoThisActionForFileError;
     FileErrorAction			alwaysDoThisActionForFolderError;
@@ -279,6 +280,7 @@ public slots:
 
     /// \brief set if need check if the destination folder exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
+    void setMkFullPath(const bool mkFullPath);
     /// \brief reset widget
     void resetTempWidget();
     //autoconnect
