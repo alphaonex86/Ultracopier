@@ -35,7 +35,6 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_folder->setText(QString::fromStdString(folder));
     updateRenameButton();
-    QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
     if(lstat(fileInfo.c_str(), &source_statbuf)==0)
@@ -48,7 +47,7 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
-        if((uint64_t)maxTime.toSecsSinceEpoch()<mdate)
+        if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS<mdate)
         {
             ui->label_modified->setVisible(true);
             ui->label_content_modified->setVisible(true);

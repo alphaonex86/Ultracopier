@@ -44,8 +44,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::str
             ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(fileInfo)));
         }
         ui->label_content_size->setText(QString::number(fileInfo.size()));
-        QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
-        if((uint64_t)maxTime.toSecsSinceEpoch()<mdate)
+        if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS<mdate)
         {
             ui->label_modified->setVisible(true);
             ui->label_content_modified->setVisible(true);

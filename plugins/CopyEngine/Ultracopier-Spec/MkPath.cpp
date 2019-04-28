@@ -26,18 +26,6 @@ MkPath::MkPath() :
     mkFullPath(false),
     doTheDateTransfer(false)
 {
-    tm t;
-    #ifdef Q_OS_UNIX
-    t.tm_gmtoff=0;
-    #endif
-    t.tm_hour=0;
-    t.tm_isdst=0;
-    t.tm_mday=1;
-    t.tm_min=0;
-    t.tm_mon=1;
-    t.tm_sec=0;
-    t.tm_year=ULTRACOPIER_PLUGIN_MINIMALYEAR;
-    minTime=mktime(&t);
     setObjectName("MkPath");
     moveToThread(this);
     start();
@@ -143,10 +131,10 @@ void MkPath::internalDoThisPath()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources not exists: "+item.source);
             doTheDateTransfer=false;
         }
-        else if((int64_t)minTime>=sourceLastModified)
+        else if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS>=sourceLastModified)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+item.source+
-                                     ": "+QDateTime::fromSecsSinceEpoch(minTime).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+
+                                     ": "+QDateTime::fromSecsSinceEpoch(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+
                                      ">="+QDateTime::fromSecsSinceEpoch(sourceLastModified).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString());
             doTheDateTransfer=false;
         }

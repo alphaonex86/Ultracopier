@@ -11,78 +11,78 @@
 
 namespace Ultracopier {
 /// \brief Define the mode of the copy window/request, if need be copy or move
-enum CopyMode
+enum CopyMode : uint8_t
 {
-    Copy=0x00000000,
-    Move=0x00000001
+    Copy=0x00,
+    Move=0x01
 };
 
-enum RemainingTimeAlgo
+enum RemainingTimeAlgo : uint8_t
 {
-    RemainingTimeAlgo_Traditional=0x00000000,
-    RemainingTimeAlgo_Logarithmic=0x00000001
+    RemainingTimeAlgo_Traditional=0x00,
+    RemainingTimeAlgo_Logarithmic=0x01
 };
 
 /// \brief Define the catching state, if the copy is totally catch of the explorer, partially or nothing
-enum CatchState
+enum CatchState : uint8_t
 {
-    Uncaught=0x00000000,
-    Semiuncaught=0x00000001,
-    Caught=0x00000002
+    Uncaught=0x00,
+    Semiuncaught=0x01,
+    Caught=0x02
 };
 
 /// \brief Define the listening state
-enum ListeningState
+enum ListeningState : uint8_t
 {
-    NotListening=0x00000000,///< 0 listener is listening
-    SemiListening=0x00000001,///< only part of listeners are listening
-    FullListening=0x00000002///< all the listeners are listening
+    NotListening=0x00,///< 0 listener is listening
+    SemiListening=0x01,///< only part of listeners are listening
+    FullListening=0x02///< all the listeners are listening
 };
 
 /// \brief Define the copy type, if folder, file or both
-enum CopyType
+enum CopyType : uint8_t
 {
-    File			= 0x00000001,
-    FileAndFolder		= 0x00000002
+    File			= 0x01,
+    FileAndFolder		= 0x02
 };
 
 /// \brief transfer list operation, can define nothing, the import/export or both
-enum TransferListOperation
+enum TransferListOperation : uint8_t
 {
-    TransferListOperation_None		= 0x00000000,
-    TransferListOperation_Import		= 0x00000001,
-    TransferListOperation_Export		= 0x00000002,
+    TransferListOperation_None		= 0x00,
+    TransferListOperation_Import		= 0x01,
+    TransferListOperation_Export		= 0x02,
     TransferListOperation_ImportExport	= TransferListOperation_Import | TransferListOperation_Export
 };
 
-enum EngineActionInProgress
+enum EngineActionInProgress : uint8_t
 {
-    Idle			= 0x00000000,
-    Listing			= 0x00000001,
-    Copying			= 0x00000002,
+    Idle			= 0x00,
+    Listing			= 0x01,
+    Copying			= 0x02,
     CopyingAndListing	= Listing | Copying
 };
 
 /// \brief the level of information
-enum DebugLevel
+enum DebugLevel : uint8_t
 {
-    DebugLevel_Information=0x00000001,	///< Information like the compiler, OS, Qt version, all to know in witch condition ultracopier is launched
-    DebugLevel_Critical=0x00000002,		///< Critical error, where it don't know how skip it
-    DebugLevel_Warning=0x00000003,		///< Error, but have way to skip it
-    DebugLevel_Notice=0x00000004		///< General information to debug, what file is open, what event is received, ...
+    DebugLevel_Information=0x01,	///< Information like the compiler, OS, Qt version, all to know in witch condition ultracopier is launched
+    DebugLevel_Critical=0x02,		///< Critical error, where it don't know how skip it
+    DebugLevel_Warning=0x03,		///< Error, but have way to skip it
+    DebugLevel_Notice=0x04		///< General information to debug, what file is open, what event is received, ...
 };
 
-enum SizeUnit
+enum SizeUnit : uint8_t
 {
-    SizeUnit_byte=0x00000000,
-    SizeUnit_KiloByte=0x00000001,
-    SizeUnit_MegaByte=0x00000002,
-    SizeUnit_GigaByte=0x00000003,
-    SizeUnit_TeraByte=0x00000004,
-    SizeUnit_PetaByte=0x00000005,
-    SizeUnit_ExaByte=0x00000006,
-    SizeUnit_ZettaByte=0x00000007,
-    SizeUnit_YottaByte=0x00000008
+    SizeUnit_byte=0x00,
+    SizeUnit_KiloByte=0x01,
+    SizeUnit_MegaByte=0x02,
+    SizeUnit_GigaByte=0x03,
+    SizeUnit_TeraByte=0x04,
+    SizeUnit_PetaByte=0x05,
+    SizeUnit_ExaByte=0x06,
+    SizeUnit_ZettaByte=0x07,
+    SizeUnit_YottaByte=0x08
 };
 
 /// \brief structure for decompossed time
@@ -94,17 +94,17 @@ struct TimeDecomposition
 };
 
 //////////////////////////// Return list //////////////////////////////
-enum ActionTypeCopyList
+enum ActionTypeCopyList : uint8_t
 {
     //playlist action
-    MoveItem=0x00000000,
-    RemoveItem=0x00000001,
-    AddingItem=0x00000002,
+    MoveItem=0x00,
+    RemoveItem=0x01,
+    AddingItem=0x02,
     //Item action, to inform the stat of one entry
-    PreOperation=0x00000003,
-    Transfer=0x00000004,
-    PostOperation=0x00000005,
-    CustomOperation=0x00000006 /// \note this need be used after preoperation and before postoperation
+    PreOperation=0x03,
+    Transfer=0x04,
+    PostOperation=0x05,
+    CustomOperation=0x06 /// \note this need be used after preoperation and before postoperation
 };
 
 /// \brief structure for progression item

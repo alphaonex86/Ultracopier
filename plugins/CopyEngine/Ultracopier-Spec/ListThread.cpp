@@ -993,8 +993,19 @@ uint64_t ListThread::addToTransfer(const std::string& source,const std::string& 
     //add to transfer list
     numberOfTransferIntoToDoList++;
     quint64 size=0;
-    if(!TransferThread::is_symlink(source))
-        size=source.size();
+
+    #ifdef Q_OS_WIN32
+    get from X
+            DWORD    nFileSizeHigh;
+              DWORD    nFileSizeLow;
+              bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc> &list)
+                      if ! IO_REPARSE_TAG_SYMLINK
+    #else
+    struct stat p_statbuf;
+    if (lstat(source.c_str(), &p_statbuf)>=0 && S_ISREG(p_statbuf.st_mode)==1)
+        //if error or file not exists, considere as regular file
+        size=p_statbuf.st_size;
+    #endif
     const std::string &drive=driveManagement.getDrive(destination);
     if(!drive.empty())//can be a network drive
         if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source))

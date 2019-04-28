@@ -221,7 +221,6 @@ private:
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
     bool			needSkip,needRemove;
-    uint64_t		minTime;
     int             id;
     bool            deletePartiallyTransferredFiles;
     std::string			firstRenamingRule;

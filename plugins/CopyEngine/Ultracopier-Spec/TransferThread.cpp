@@ -40,21 +40,10 @@ TransferThread::TransferThread() :
         #endif
     #endif
 
-    tm t;
-    #ifdef Q_OS_UNIX
-    t.tm_gmtoff=0;
-    #else
+    #ifndef Q_OS_UNIX
     PSecurityD=NULL;
     dacl=NULL;
     #endif
-    t.tm_hour=0;
-    t.tm_isdst=0;
-    t.tm_mday=1;
-    t.tm_min=0;
-    t.tm_mon=1;
-    t.tm_sec=0;
-    t.tm_year=ULTRACOPIER_PLUGIN_MINIMALYEAR;
-    minTime=mktime(&t);
 }
 
 TransferThread::~TransferThread()
@@ -1607,7 +1596,7 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
             //this function avalaible on unix and mingw
             butime.actime=actime;
             butime.modtime=modtime;
-            if((uint64_t)modtime<minTime)
+            if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
                 return false;

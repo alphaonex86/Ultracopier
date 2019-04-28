@@ -61,7 +61,6 @@ private:
     bool waitAction;
     bool stopIt;
     bool skipIt;
-    uint64_t		minTime;
     struct Item
     {
         std::string source;
