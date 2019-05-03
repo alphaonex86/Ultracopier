@@ -20,6 +20,8 @@ ReadThread::ReadThread()
     tryStartRead=false;
     lastGoodPosition=0;
     file=NULL;
+    //if not QThread
+    run();
 }
 
 ReadThread::~ReadThread()

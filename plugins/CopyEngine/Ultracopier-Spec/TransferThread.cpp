@@ -44,6 +44,8 @@ TransferThread::TransferThread() :
     PSecurityD=NULL;
     dacl=NULL;
     #endif
+    //if not QThread
+    run();
 }
 
 TransferThread::~TransferThread()
@@ -70,8 +72,8 @@ void TransferThread::run()
 {
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
     transfer_stat			= TransferStat_Idle;
-    stopIt			= false;
-    fileExistsAction	= FileExists_NotSet;
+    stopIt                  = false;
+    fileExistsAction        = FileExists_NotSet;
     alwaysDoFileExistsAction= FileExists_NotSet;
     //the error push
     connect(&readThread,&ReadThread::error,                     this,					&TransferThread::getReadError,      	Qt::QueuedConnection);

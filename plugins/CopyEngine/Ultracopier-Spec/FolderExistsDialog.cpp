@@ -224,7 +224,7 @@ void FolderExistsDialog::on_lineEditNewName_returnPressed()
         QMessageBox::warning(this,tr("Error"),tr("Try rename with using special characters"));
 }
 
-void FolderExistsDialog::on_lineEditNewName_textChanged(const std::string &arg1)
+void FolderExistsDialog::on_lineEditNewName_textChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
     updateRenameButton();

@@ -41,7 +41,7 @@ private slots:
     void on_Merge_clicked();
     void on_lineEditNewName_editingFinished();
     void on_lineEditNewName_returnPressed();
-    void on_lineEditNewName_textChanged(const std::string &arg1);
+    void on_lineEditNewName_textChanged(const QString &arg1);
 private:
     Ui::folderExistsDialog *ui;
     FolderExistsAction action;

@@ -22,6 +22,8 @@ WriteThread::WriteThread()
     blockArrayStart                 = 0;
     blockArrayStop                  = 0;
     file                            = NULL;
+    //if not QThread
+    run();
 }
 
 WriteThread::~WriteThread()
