@@ -142,6 +142,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         if(stopIt)
         {
             fclose(file);
+            file=NULL;
             emit closed();
             return false;
         }
@@ -158,12 +159,14 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         if(stopIt)
         {
             fclose(file);
+            file=NULL;
             emit closed();
             return false;
         }
         if(fseek(file, 0, SEEK_END)!=0)
         {
             fclose(file);
+            file=NULL;
             errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+std::to_string(errno));
             emit error();
@@ -176,6 +179,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         if(fseek(file, 0, SEEK_SET)!=0)
         {
             fclose(file);
+            file=NULL;
             errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+std::to_string(errno));
             emit error();
@@ -192,6 +196,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         if(!seek(lastGoodPosition))
         {
             fclose(file);
+            file=NULL;
             errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+std::to_string(errno));
             emit error();
@@ -422,6 +427,7 @@ void ReadThread::internalClose(bool callByTheDestructor)
         if(file!=NULL)
         {
             fclose(file);
+            file=NULL;
             isInReadLoop=false;
         }
     }
@@ -477,7 +483,10 @@ bool ReadThread::internalReopen()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     stopIt=false;
     if(file!=NULL)
+    {
         fclose(file);
+        file=NULL;
+    }
     //to fix 64Bits
     if(size_at_open!=fseek(file, 0, SEEK_END) && mtime_at_open!=TransferThread::readFileMDateTime(fileName))
     {

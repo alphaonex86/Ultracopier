@@ -123,7 +123,10 @@ bool WriteThread::internalOpen()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] General file corruption detected");
                 stopIt=true;
                 if(file!=NULL)
+                {
                     fclose(file);
+                    file=NULL;
+                }
                 fileName.clear();
                 return false;
             }
@@ -138,7 +141,10 @@ bool WriteThread::internalOpen()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             if(file!=NULL)
+            {
                 fclose(file);
+                file=NULL;
+            }
             fileName.clear();
             emit closed();
             return false;
@@ -146,6 +152,7 @@ bool WriteThread::internalOpen()
         if(fseek(file, 0, SEEK_SET)!=0)
         {
             fclose(file);
+            file=NULL;
             fileName.clear();
             errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+errorString_internal);
@@ -159,6 +166,7 @@ bool WriteThread::internalOpen()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             fclose(file);
+            file=NULL;
             fileName.clear();
             emit closed();
             return false;
@@ -166,6 +174,7 @@ bool WriteThread::internalOpen()
         if(!fseek(file,startSize,SEEK_SET))
         {
             fclose(file);
+            file=NULL;
             fileName.clear();
             errorString_internal="errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to resize to "+std::to_string(startSize)+" after open: "+fileName+", error: "+errorString_internal);
@@ -179,6 +188,7 @@ bool WriteThread::internalOpen()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
             fclose(file);
+            file=NULL;
             fileName.clear();
             emit closed();
             return false;
@@ -341,6 +351,7 @@ void WriteThread::internalClose(bool emitSignal)
                     }
             }
             fclose(file);
+            file=NULL;
             if(needRemoveTheFile || stopIt)
             {
                 if(deletePartiallyTransferredFiles)

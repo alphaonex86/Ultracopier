@@ -87,6 +87,11 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
         return;
     }
+    if(ignoreCloseInode.find(temp_transfer_thread)!=ignoreCloseInode.cend())
+    {
+        ignoreCloseInode.erase(temp_transfer_thread);
+        return;
+    }
     bool isFound=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     int countLocalParse=0;
@@ -202,6 +207,7 @@ void ListThread::transferPutAtBottom()
             countLocalParse++;
             #endif
             isFound=true;
+            ignoreCloseInode.insert(transfer);
             break;
         }
         indexAction++;
@@ -211,6 +217,7 @@ void ListThread::transferPutAtBottom()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(transfer->transferId).toStdString());
         transfer->transferId=0;
         transfer->transferSize=0;
+        ignoreCloseInode.insert(transfer);
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"countLocalParse: "+std::to_string(countLocalParse));
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -1636,6 +1643,7 @@ void ListThread::doNewActions_inode_manipulation()
                     }
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
+                    ignoreCloseInode.erase(currentTransferThread);
                     if(!currentTransferThread->setFiles(
                         currentActionToDoTransfer.source,
                         currentActionToDoTransfer.size,
