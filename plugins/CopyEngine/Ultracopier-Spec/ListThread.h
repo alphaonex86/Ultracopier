@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <unordered_set>
 #include <string>
 #include <QSemaphore>
 #include <QTextStream>
@@ -225,7 +224,6 @@ private:
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
     bool                copyListOrder;
-    std::unordered_set<TransferThread *> ignoreCloseInode;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
     unsigned int        putAtBottom;
