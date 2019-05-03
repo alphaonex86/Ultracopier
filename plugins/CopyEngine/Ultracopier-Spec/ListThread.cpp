@@ -193,7 +193,8 @@ void ListThread::transferPutAtBottom()
             Ultracopier::ReturnActionOnCopyList newAction;
             newAction.type=Ultracopier::MoveItem;
             newAction.addAction.id=transfer->transferId;
-            newAction.userAction.position=actionToDoListTransfer.size()-1;
+            newAction.userAction.position=0;
+            newAction.userAction.moveAt=actionToDoListTransfer.size()-1;
             actionDone.push_back(newAction);
             //do the wait stat
             actionToDoListTransfer[indexAction].isRunning=false;
