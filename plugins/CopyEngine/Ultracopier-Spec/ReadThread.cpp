@@ -85,12 +85,13 @@ void ReadThread::stop()
 bool ReadThread::seek(const int64_t &position)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with: "+std::to_string(position));
-    if(fseek(file, 0, SEEK_END)!=0)
+    struct stat p_statbuf;
+    if(fstat(fileno(file), &p_statbuf)<0)
         return false;
-    const off_t fsize = ftell(file);
+    const off_t fsize = p_statbuf.st_size;
     if(position>fsize)
         return false;
-    return (fseek(file, position, SEEK_SET)==position);
+    return (fseeko64(file, position, SEEK_SET)==0);
 }
 
 int64_t ReadThread::size() const
@@ -100,9 +101,10 @@ int64_t ReadThread::size() const
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] file not open to size it");
         return -1;
     }
-    if(fseek(file, 0, SEEK_END)==0)
+    struct stat p_statbuf;
+    if(fstat(fileno(file), &p_statbuf)<0)
         return -1;
-    return ftell(file);
+    return p_statbuf.st_size;
 }
 
 void ReadThread::postOperation()
@@ -163,11 +165,12 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             emit closed();
             return false;
         }
-        if(fseek(file, 0, SEEK_END)!=0)
+        struct stat p_statbuf;
+        if(fstat(fileno(file), &p_statbuf)<0)
         {
             fclose(file);
             file=NULL;
-            errorString_internal="errno: "+std::to_string(errno);
+            errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+std::to_string(errno));
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -175,19 +178,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             #endif
             return false;
         }
-        size_at_open=ftell(file);
-        if(fseek(file, 0, SEEK_SET)!=0)
-        {
-            fclose(file);
-            file=NULL;
-            errorString_internal="errno: "+std::to_string(errno);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+std::to_string(errno));
-            emit error();
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Idle;
-            #endif
-            return false;
-        }
+        size_at_open=p_statbuf.st_size;
         mtime_at_open=TransferThread::readFileMDateTime(fileName);
         if(mtime_at_open<0)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to read source mtime: "+fileName+", error: "+std::to_string(errno));
@@ -197,7 +188,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         {
             fclose(file);
             file=NULL;
-            errorString_internal="errno: "+std::to_string(errno);
+            errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+std::to_string(errno));
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -213,7 +204,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     }
     else
     {
-        errorString_internal="errno: "+std::to_string(errno);
+        errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to open: "+fileName+", error: "+std::to_string(errno));
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -233,7 +224,7 @@ void ReadThread::internalRead()
         {
             stopIt=false;
             lastGoodPosition=0;
-            if(fseek(file,0,SEEK_SET)!=0)
+            if(fseeko64(file,0,SEEK_SET)!=0)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] seek to 0 failed");
                 isInReadLoop=false;
@@ -332,8 +323,8 @@ void ReadThread::internalRead()
 
         if(errno!=0 && errno!=EAGAIN)
         {
-            errorString_internal=tr("Unable to read the source file: ").toStdString()+", errno: "+std::to_string(errno);
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"]  errno: "+std::to_string(errno));
+            errorString_internal=tr("Unable to read the source file: ").toStdString()+std::string(strerror(errno))+", errno: "+std::to_string(errno);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] errno: "+std::to_string(errno));
             isInReadLoop=false;
             emit error();
             return;
@@ -488,7 +479,7 @@ bool ReadThread::internalReopen()
         file=NULL;
     }
     //to fix 64Bits
-    if(size_at_open!=fseek(file, 0, SEEK_END) && mtime_at_open!=TransferThread::readFileMDateTime(fileName))
+    if(size_at_open!=fseeko64(file, 0, SEEK_END) && mtime_at_open!=TransferThread::readFileMDateTime(fileName))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source file have changed since the last open, restart all");
         //fix this function like the close function

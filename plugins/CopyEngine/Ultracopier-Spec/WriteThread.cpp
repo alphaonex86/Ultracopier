@@ -149,12 +149,12 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(fseek(file, 0, SEEK_SET)!=0)
+        if(fseeko64(file, 0, SEEK_SET)!=0)
         {
             fclose(file);
             file=NULL;
             fileName.clear();
-            errorString_internal="errno: "+std::to_string(errno);
+            errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+errorString_internal);
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -171,12 +171,12 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(!fseek(file,startSize,SEEK_SET))
+        if(fseeko64(file,startSize,SEEK_SET)!=0)
         {
             fclose(file);
             file=NULL;
             fileName.clear();
-            errorString_internal="errno: "+std::to_string(errno);
+            errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to resize to "+std::to_string(startSize)+" after open: "+fileName+", error: "+errorString_internal);
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -215,7 +215,7 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        errorString_internal="errno: "+std::to_string(errno);
+        errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to open: "+fileName+", error: "+errorString_internal);
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -239,7 +239,7 @@ void WriteThread::open(const std::string &file, const uint64_t &startSize)
     stopIt=false;
     fakeMode=false;
     lastGoodPosition=0;
-    this->fileName.clear();
+    this->fileName=file;
     this->startSize=startSize;
     endDetected=false;
     writeFullBlocked=false;
@@ -342,7 +342,7 @@ void WriteThread::internalClose(bool emitSignal)
                     {
                         if(emitSignal)
                         {
-                            errorString_internal="errno: "+std::to_string(errno);
+                            errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
                             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+errorString_internal);
                             emit error();
                         }
@@ -449,9 +449,9 @@ void WriteThread::flushAndSeekToZero()
 void WriteThread::internalFlushAndSeekToZero()
 {
     flushBuffer();
-    if(fseek(file, 0, SEEK_SET)!=0)
+    if(fseeko64(file, 0, SEEK_SET)!=0)
     {
-        errorString_internal="errno: "+std::to_string(errno);
+        errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+errorString_internal);
         emit error();
         return;
@@ -532,7 +532,7 @@ void WriteThread::internalWrite()
         if(errno!=0 && errno!=EAGAIN)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Error in writing: "+fileName+", errno: "+std::to_string(errno));
-            errorString_internal="Error in writing: "+fileName+" ("+std::to_string(errno)+")";
+            errorString_internal="Error in writing: "+fileName+" ("+std::string(strerror(errno))+", errno: "+std::to_string(errno)+")";
             stopIt=true;
             emit error();
             return;

@@ -605,7 +605,7 @@ bool TransferThread::checkAlwaysRename()
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+": "+newDestination+", error: "+std::to_string(errno));
                 readError=true;
-                emit errorOnFile(destination,"errno: "+std::to_string(errno));
+                emit errorOnFile(destination,std::string(strerror(errno))+", errno: "+std::to_string(errno));
                 return true;
             }
         }
@@ -729,9 +729,9 @@ void TransferThread::tryMoveDirectly()
         }
         else if(unlink(destination.c_str())!=0)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", error: "+std::to_string(errno));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", "+std::string(strerror(errno))+", error: "+std::to_string(errno));
             readError=true;
-            emit errorOnFile(destination,std::to_string(errno));
+            emit errorOnFile(destination,std::string(strerror(errno))+", errno: "+std::to_string(errno));
             return;
         }
     }
@@ -785,7 +785,7 @@ void TransferThread::tryMoveDirectly()
         }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+", error: "+std::to_string(errno));
-        emit errorOnFile(source,std::to_string(errno));
+        emit errorOnFile(source,std::string(strerror(errno))+", errno: "+std::to_string(errno));
         return;
     }
     readThread.fakeReadIsStarted();
@@ -821,7 +821,7 @@ void TransferThread::tryCopyDirectly()
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+destination+", error: "+std::to_string(errno));
             readError=true;
-            emit errorOnFile(destination,std::to_string(errno));
+            emit errorOnFile(destination,std::string(strerror(errno))+", errno: "+std::to_string(errno));
             return;
         }
     }
@@ -894,7 +894,7 @@ void TransferThread::tryCopyDirectly()
         }
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do sym link copy "+source+", error: "+std::to_string(errno));
-        emit errorOnFile(source,"errno: "+std::to_string(errno));
+        emit errorOnFile(source,std::string(strerror(errno))+", errno: "+std::to_string(errno));
         return;
     }
     readThread.fakeReadIsStarted();
@@ -1218,7 +1218,7 @@ void TransferThread::postOperation()
                 if(unlink(source.c_str())!=0)
                 {
                     needSkip=false;
-                    emit errorOnFile(source,"errno: "+std::to_string(errno));
+                    emit errorOnFile(source,std::string(strerror(errno))+", errno: "+std::to_string(errno));
                     return;
                 }
             }
