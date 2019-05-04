@@ -76,31 +76,51 @@ void TransferThread::run()
     fileExistsAction        = FileExists_NotSet;
     alwaysDoFileExistsAction= FileExists_NotSet;
     //the error push
-    connect(&readThread,&ReadThread::error,                     this,					&TransferThread::getReadError,      	Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::error,                   this,					&TransferThread::getWriteError,         Qt::QueuedConnection);
+    if(!connect(&readThread,&ReadThread::error,                     this,					&TransferThread::getReadError,      	Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::error,                   this,					&TransferThread::getWriteError,         Qt::QueuedConnection))
+        abort();
     //the thread change operation
-    connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,          Qt::QueuedConnection);
-    connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,         Qt::QueuedConnection);
+    if(!connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,          Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,         Qt::QueuedConnection))
+        abort();
     //the state change operation
-    connect(&readThread,&ReadThread::opened,                    this,					&TransferThread::readIsReady,           Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::opened,                  this,					&TransferThread::writeIsReady,          Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::readIsStopped,             this,					&TransferThread::readIsStopped,         Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::writeIsStopped,          this,                   &TransferThread::writeIsStopped,		Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::readIsStopped,             &writeThread,			&WriteThread::endIsDetected,            Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::closed,                    this,					&TransferThread::readIsClosed,          Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::closed,                  this,					&TransferThread::writeIsClosed,         Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::reopened,                this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection);
+    if(!connect(&readThread,&ReadThread::opened,                    this,					&TransferThread::readIsReady,           Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::opened,                  this,					&TransferThread::writeIsReady,          Qt::QueuedConnection))
+        abort();
+    if(!connect(&readThread,&ReadThread::readIsStopped,             this,					&TransferThread::readIsStopped,         Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::writeIsStopped,          this,                   &TransferThread::writeIsStopped,		Qt::QueuedConnection))
+        abort();
+    if(!connect(&readThread,&ReadThread::readIsStopped,             &writeThread,			&WriteThread::endIsDetected,            Qt::QueuedConnection))
+        abort();
+    if(!connect(&readThread,&ReadThread::closed,                    this,					&TransferThread::readIsClosed,          Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::closed,                  this,					&TransferThread::writeIsClosed,         Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::reopened,                this,					&TransferThread::writeThreadIsReopened,	Qt::QueuedConnection))
+        abort();
     //error management
-    connect(&readThread,&ReadThread::isSeekToZeroAndWait,       this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,this,	&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
-    connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,&writeThread,         &WriteThread::flushAndSeekToZero,               Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::flushedAndSeekedToZero,  this,                   &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection);
-    connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,      Qt::QueuedConnection);
+    if(!connect(&readThread,&ReadThread::isSeekToZeroAndWait,       this,					&TransferThread::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection))
+        abort();
+    if(!connect(&readThread,&ReadThread::resumeAfterErrorByRestartAtTheLastPosition,this,	&TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection))
+        abort();
+    if(!connect(&readThread,&ReadThread::resumeAfterErrorByRestartAll,&writeThread,         &WriteThread::flushAndSeekToZero,               Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::flushedAndSeekedToZero,  this,                   &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,      Qt::QueuedConnection))
+        abort();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThread::debugInformation,  Qt::QueuedConnection);
-    connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThread::debugInformation,  Qt::QueuedConnection);
-    connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThread::debugInformation,	Qt::QueuedConnection);
+    if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThread::debugInformation,  Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThread::debugInformation,  Qt::QueuedConnection))
+        abort();
+    if(!connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThread::debugInformation,	Qt::QueuedConnection))
+        abort();
     #endif
 }
 
@@ -1065,6 +1085,7 @@ void TransferThread::readIsFinish()
         readThread.postOperation();
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] in skip, don't start postOperation");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] pushStat("+std::to_string((int)transfer_stat)+","+std::to_string(transferId)+")");
     emit pushStat(transfer_stat,transferId);
 }
 
@@ -1504,6 +1525,7 @@ void TransferThread::readThreadResumeAfterError()
 
 void TransferThread::readIsStopped()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] TransferThread::readIsStopped()");
     if(!sended_state_readStopped)
     {
         sended_state_readStopped=true;

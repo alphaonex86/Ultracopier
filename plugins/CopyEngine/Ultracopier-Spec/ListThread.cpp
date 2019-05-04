@@ -49,17 +49,25 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     this->facilityInterface=facilityInterface;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
-    connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog);
+    if(!connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog))
+        abort();
     timerUpdateDebugDialog.start(ULTRACOPIER_PLUGIN_DEBUG_WINDOW_TIMER);
     #endif
-    connect(this,           &ListThread::tryCancel,							this,&ListThread::cancel,                               Qt::QueuedConnection);
-    connect(this,           &ListThread::askNewTransferThread,				this,&ListThread::createTransferThread,					Qt::QueuedConnection);
-    connect(&mkPathQueue,	&MkPath::firstFolderFinish,						this,&ListThread::mkPathFirstFolderFinish,				Qt::QueuedConnection);
-    connect(&mkPathQueue,	&MkPath::errorOnFolder,							this,&ListThread::mkPathErrorOnFolder,                  Qt::QueuedConnection);
-    connect(this,           &ListThread::send_syncTransferList,				this,&ListThread::syncTransferList_internal,			Qt::QueuedConnection);
+    if(!connect(this,           &ListThread::tryCancel,							this,&ListThread::cancel,                               Qt::QueuedConnection))
+        abort();
+    if(!connect(this,           &ListThread::askNewTransferThread,				this,&ListThread::createTransferThread,					Qt::QueuedConnection))
+        abort();
+    if(!connect(&mkPathQueue,	&MkPath::firstFolderFinish,						this,&ListThread::mkPathFirstFolderFinish,				Qt::QueuedConnection))
+        abort();
+    if(!connect(&mkPathQueue,	&MkPath::errorOnFolder,							this,&ListThread::mkPathErrorOnFolder,                  Qt::QueuedConnection))
+        abort();
+    if(!connect(this,           &ListThread::send_syncTransferList,				this,&ListThread::syncTransferList_internal,			Qt::QueuedConnection))
+        abort();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(&mkPathQueue,	&MkPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection);
-    connect(&driveManagement,&DriveManagement::debugInformation,			this,&ListThread::debugInformation,	Qt::QueuedConnection);
+    if(!connect(&mkPathQueue,	&MkPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection))
+        abort();
+    if(!connect(&driveManagement,&DriveManagement::debugInformation,			this,&ListThread::debugInformation,	Qt::QueuedConnection))
+        abort();
     #endif // ULTRACOPIER_PLUGIN_DEBUG
 
     emit askNewTransferThread();
@@ -364,23 +372,34 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 
     //create new thread because is auto-detroyed
     scanFileOrFolderThreadsPool.push_back(new ScanFileOrFolder(mode));
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,             Qt::QueuedConnection);
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection))
+        abort();
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,             Qt::QueuedConnection))
+        abort();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,         Qt::QueuedConnection);
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,         Qt::QueuedConnection))
+        abort();
     #endif
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing);
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection);
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing))
+        abort();
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection))
+        abort();
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection))
+        abort();
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection))
+        abort();
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToRmForRsync,                  this,&ListThread::addToRmForRsync,          Qt::QueuedConnection);
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToRmForRsync,                  this,&ListThread::addToRmForRsync,          Qt::QueuedConnection))
+        abort();
     #endif
 
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection);
-    connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection);
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection))
+        abort();
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection))
+        abort();
 
-    connect(this,&ListThread::send_updateMount,                 scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::set_updateMount,          Qt::QueuedConnection);
+    if(!connect(this,&ListThread::send_updateMount,                 scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::set_updateMount,          Qt::QueuedConnection))
+        abort();
 
     scanFileOrFolderThreadsPool.back()->setFilters(include,exclude);
     scanFileOrFolderThreadsPool.back()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
@@ -2033,20 +2052,31 @@ void ListThread::createTransferThread()
     #endif
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection);
+    if(!connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection))
+        abort();
     #endif // ULTRACOPIER_PLUGIN_DEBUG
-    connect(last,&TransferThread::errorOnFile,                  this,&ListThread::errorOnFile,                  Qt::QueuedConnection);
-    connect(last,&TransferThread::fileAlreadyExists,            this,&ListThread::fileAlreadyExists,            Qt::QueuedConnection);
-    connect(last,&TransferThread::tryPutAtBottom,               this,&ListThread::transferPutAtBottom,          Qt::QueuedConnection);
-    connect(last,&TransferThread::readStopped,                  this,&ListThread::doNewActions_start_transfer,  Qt::QueuedConnection);
-    connect(last,&TransferThread::preOperationStopped,          this,&ListThread::doNewActions_start_transfer,	Qt::QueuedConnection);
-    connect(last,&TransferThread::postOperationStopped,         this,&ListThread::transferInodeIsClosed,        Qt::QueuedConnection);
-    connect(last,&TransferThread::checkIfItCanBeResumed,		this,&ListThread::restartTransferIfItCan,       Qt::QueuedConnection);
-    connect(last,&TransferThread::pushStat,                     this,&ListThread::newTransferStat,              Qt::QueuedConnection);
+    if(!connect(last,&TransferThread::errorOnFile,                  this,&ListThread::errorOnFile,                  Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::fileAlreadyExists,            this,&ListThread::fileAlreadyExists,            Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::tryPutAtBottom,               this,&ListThread::transferPutAtBottom,          Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::readStopped,                  this,&ListThread::doNewActions_start_transfer,  Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::preOperationStopped,          this,&ListThread::doNewActions_start_transfer,	Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::postOperationStopped,         this,&ListThread::transferInodeIsClosed,        Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::checkIfItCanBeResumed,		this,&ListThread::restartTransferIfItCan,       Qt::QueuedConnection))
+        abort();
+    if(!connect(last,&TransferThread::pushStat,                     this,&ListThread::newTransferStat,              Qt::QueuedConnection))
+        abort();
 
-    connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,         Qt::QueuedConnection);
+    if(!connect(this,&ListThread::send_sendNewRenamingRules,		last,&TransferThread::setRenamingRules,         Qt::QueuedConnection))
+        abort();
 
-    connect(this,&ListThread::send_updateMount,                 last,&TransferThread::set_updateMount,          Qt::QueuedConnection);
+    if(!connect(this,&ListThread::send_updateMount,                 last,&TransferThread::set_updateMount,          Qt::QueuedConnection))
+        abort();
 
     last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));
     last->setRenamingRules(firstRenamingRule,otherRenamingRule);
