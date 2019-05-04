@@ -87,6 +87,11 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
         return;
     }
+    if(putAtBottomAfterError.find(temp_transfer_thread)!=putAtBottomAfterError.cend())
+    {
+        doNewActions_inode_manipulation();
+        return;
+    }
     bool isFound=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     int countLocalParse=0;
@@ -96,9 +101,8 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not idle!");
         return;
     }
-    int int_for_internal_loop=0;
-    const int &loop_size=actionToDoListTransfer.size();
-    while(int_for_internal_loop<loop_size)
+    unsigned int int_for_internal_loop=0;
+    while(int_for_internal_loop<actionToDoListTransfer.size())
     {
         if(actionToDoListTransfer.at(int_for_internal_loop).id==temp_transfer_thread->transferId)
         {
@@ -166,7 +170,14 @@ void ListThread::transferInodeIsClosed()
 
 /** \brief put the current file at bottom in case of error
 \note ONLY IN CASE OF ERROR
- transferInodeIsClosed() will be call after */
+
+transferInodeIsClosed() will be call after, then will do:
+
+BUT
+
+this function call transfer->skip();
+not put at bottom, remove from to do list
+*/
 void ListThread::transferPutAtBottom()
 {
     TransferThread *transfer=qobject_cast<TransferThread *>(QObject::sender());
@@ -197,15 +208,13 @@ void ListThread::transferPutAtBottom()
             //move at the end
             actionToDoListTransfer.push_back(actionToDoListTransfer.at(indexAction));
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+indexAction);
-            /*reset the thread list stat
-             * this function call transfer->skip();
-            transferInodeIsClosed()  will be call after, then will do:
             transfer->transferId=0;
-            transfer->transferSize=0;*/
+            transfer->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             countLocalParse++;
             #endif
             isFound=true;
+            putAtBottomAfterError.insert(transfer);
             break;
         }
         indexAction++;
@@ -213,11 +222,9 @@ void ListThread::transferPutAtBottom()
     if(!isFound)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,QStringLiteral("unable to found item into the todo list, id: %1, index: %2").arg(transfer->transferId).toStdString());
-        /*reset the thread list stat
-         * this function call transfer->skip();
-        transferInodeIsClosed()  will be call after, then will do:
         transfer->transferId=0;
-        transfer->transferSize=0;*/
+        transfer->transferSize=0;
+        putAtBottomAfterError.insert(transfer);
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"countLocalParse: "+std::to_string(countLocalParse));
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -870,6 +877,7 @@ void ListThread::sendProgression()
                 //the current size copied
                 totalSize=temp_transfer_thread->transferSize+localOverSize;
                 std::pair<uint64_t,uint64_t> progression=temp_transfer_thread->progression();
+                Ultracopier::ProgressionItem tempItem;
                 tempItem.currentRead=progression.first;
                 tempItem.currentWrite=progression.second;
                 tempItem.id=temp_transfer_thread->transferId;
@@ -1643,6 +1651,7 @@ void ListThread::doNewActions_inode_manipulation()
                     }
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
+                    putAtBottomAfterError.erase(currentTransferThread);
                     if(!currentTransferThread->setFiles(
                         currentActionToDoTransfer.source,
                         currentActionToDoTransfer.size,

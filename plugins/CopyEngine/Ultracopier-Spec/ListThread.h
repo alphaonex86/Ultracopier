@@ -10,6 +10,7 @@
 #include <QObject>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <unordered_map>
 #include <string>
 #include <QSemaphore>
@@ -224,6 +225,7 @@ private:
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
     bool                copyListOrder;
+    std::unordered_set<TransferThread *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
     unsigned int        putAtBottom;
@@ -277,7 +279,6 @@ private:
     std::pair<quint64,quint64> returnPairQuint64ToCopyEngine;
     std::vector<Ultracopier::ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
     Ultracopier::ItemOfCopyList returnItemOfCopyListToCopyEngine;
-    Ultracopier::ProgressionItem tempItem;
 
     void realByteTransfered();
     int getNumberOfTranferRuning() const;
