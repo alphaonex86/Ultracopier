@@ -7,6 +7,7 @@
 #include <fcntl.h>           /* Definition of AT_* constants */
 #include <sys/stat.h>
 #include <stdio.h>
+#include "EventLoop.h"
 
 WriteThread::WriteThread()
 {
@@ -140,7 +141,11 @@ bool WriteThread::internalOpen()
         #ifdef Q_OS_LINUX
         const int intfd=fileno(file);
         if(intfd!=-1)
+        {
             posix_fadvise(intfd, 0, 0, POSIX_FADV_SEQUENTIAL);
+            int flags = fcntl(intfd, F_GETFL, 0);
+            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);
+        }
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the pause mutex");
         if(stopIt)
@@ -203,6 +208,9 @@ bool WriteThread::internalOpen()
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
+        #endif
+        #ifdef Q_OS_LINUX
+        EventLoop::eventLoop.watchSource(this,fileno(file));
         #endif
         needRemoveTheFile=false;
         postOperationRequested=false;
@@ -546,3 +554,10 @@ void WriteThread::internalWrite()
         lastGoodPosition+=bytesWriten;
     } while(bytesWriten>0);
 }
+
+#ifdef Q_OS_LINUX
+void WriteThread::callBack()
+{
+    emit internalStartWrite();
+}
+#endif

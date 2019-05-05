@@ -70,6 +70,8 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/Variable.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/WriteThread.h \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/EventLoop.h \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/CallBackEventLoop.h \
     $$PWD/plugins/Listener/catchcopy-v0002/Variable.h \
     $$PWD/plugins/Listener/catchcopy-v0002/StructEnumDefinition.h \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.h \
@@ -108,6 +110,7 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/WriteThread.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/EventLoop.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \

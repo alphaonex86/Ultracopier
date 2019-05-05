@@ -8,10 +8,11 @@
 
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
+#include "CallBackEventLoop.h"
 #include <cstdint>
 
 /// \brief Thread changed to open/close and write the destination file
-class WriteThread : public QObject
+class WriteThread : public QObject, public CallBackEventLoop
 {
     Q_OBJECT
 public:
@@ -59,6 +60,10 @@ public:
     // if writeThread->blockArrayStart == writeThread->blockArrayStop then is empty
     std::atomic<std::uint32_t> blockArrayStart;//where start used block
     std::atomic<std::uint32_t> blockArrayStop;//where stop used block
+
+    #ifdef Q_OS_LINUX
+    void callBack();
+    #endif
 public slots:
     /// \brief start the operation
     void postOperation();

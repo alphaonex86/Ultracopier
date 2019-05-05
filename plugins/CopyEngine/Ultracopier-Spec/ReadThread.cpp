@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "TransferThread.h"
 #include "WriteThread.h"
+#include "EventLoop.h"
 
 ReadThread::ReadThread()
 {
@@ -159,8 +160,8 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         {
             posix_fadvise(intfd, 0, 0, POSIX_FADV_WILLNEED);
             posix_fadvise(intfd, 0, 0, POSIX_FADV_SEQUENTIAL);
-            /*int flags = fcntl(intfd, F_GETFL, 0);
-            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);*/
+            int flags = fcntl(intfd, F_GETFL, 0);
+            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);
         }
         #endif
         if(stopIt)
@@ -202,6 +203,9 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             return false;
         }
         emit opened();
+        #ifdef Q_OS_LINUX
+        EventLoop::eventLoop.watchSource(this,fileno(file));
+        #endif
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
         #endif
@@ -559,3 +563,9 @@ bool ReadThread::isReading() const
     return isInReadLoop;
 }
 
+#ifdef Q_OS_LINUX
+void ReadThread::callBack()
+{
+    emit internalStartRead();
+}
+#endif
