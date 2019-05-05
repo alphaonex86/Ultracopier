@@ -8,11 +8,16 @@
 
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
-#include "CallBackEventLoop.h"
 #include <cstdint>
+#ifdef Q_OS_LINUX
+#include "CallBackEventLoop.h"
+#endif
 
 /// \brief Thread changed to open/close and write the destination file
-class WriteThread : public QObject, public CallBackEventLoop
+class WriteThread : public QObject
+        #ifdef Q_OS_LINUX
+        , public CallBackEventLoop
+        #endif
 {
     Q_OBJECT
 public:

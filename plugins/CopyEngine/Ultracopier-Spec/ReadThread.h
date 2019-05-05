@@ -9,10 +9,15 @@
 #include "WriteThread.h"
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
+#ifdef Q_OS_LINUX
 #include "CallBackEventLoop.h"
+#endif
 
 /// \brief Thread changed to open/close and read the source file
-class ReadThread : public QObject, public CallBackEventLoop
+class ReadThread : public QObject
+        #ifdef Q_OS_LINUX
+        , public CallBackEventLoop
+        #endif
 {
     Q_OBJECT
 public:
