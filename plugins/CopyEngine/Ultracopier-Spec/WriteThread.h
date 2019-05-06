@@ -13,6 +13,7 @@
 #include "CallBackEventLoop.h"
 #endif
 
+class ReadThread;
 /// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QObject
         #ifdef Q_OS_LINUX
@@ -66,6 +67,7 @@ public:
     std::atomic<std::uint32_t> blockArrayStart;//where start used block
     std::atomic<std::uint32_t> blockArrayStop;//where stop used block
 
+    void setReadThread(ReadThread * readThread);
     #ifdef Q_OS_LINUX
     void callBack();
     #endif
@@ -112,6 +114,7 @@ private:
     bool                fakeMode;
     bool                needRemoveTheFile;
     bool                deletePartiallyTransferredFiles;
+    ReadThread *        readThread;
 private slots:
     bool internalOpen();
     void internalWrite();

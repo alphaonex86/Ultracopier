@@ -5,6 +5,7 @@
 #include "../../../cpp11addition.h"
 
 ListThread::ListThread(FacilityInterface * facilityInterface) :
+    numberOfInodeOperation(0),
     sourceDriveMultiple(false),
     destinationDriveMultiple(false),
     destinationFolderMultiple(false),

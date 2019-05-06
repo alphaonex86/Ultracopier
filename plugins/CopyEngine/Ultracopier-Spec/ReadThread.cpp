@@ -158,10 +158,11 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         const int intfd=fileno(file);
         if(intfd!=-1)
         {
-            posix_fadvise(intfd, 0, 0, POSIX_FADV_WILLNEED);
+            //posix_fadvise(intfd, 0, 0, POSIX_FADV_WILLNEED);
             posix_fadvise(intfd, 0, 0, POSIX_FADV_SEQUENTIAL);
-            int flags = fcntl(intfd, F_GETFL, 0);
-            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);
+            /*int flags = fcntl(intfd, F_GETFL, 0);
+            if(fcntl(intfd, F_SETFL, flags | O_NONBLOCK)<0)
+                abort();*/
         }
         #endif
         if(stopIt)
@@ -271,6 +272,7 @@ void ReadThread::internalRead()
         internalClose();
         return;
     }
+    const size_t blockSize=sizeof(writeThread->blockArray);
     do
     {
         //read one block
@@ -278,9 +280,9 @@ void ReadThread::internalRead()
         stat=Read;
         #endif
         readSize=-1;
-        const size_t blockSize=sizeof(writeThread->blockArray);
         // if writeThread->blockArrayStart == writeThread->blockArrayStop then is empty
         uint32_t blockArrayStart=writeThread->blockArrayStart;//load value out of atomic
+        errno=0;
         if(blockArrayStart<=writeThread->blockArrayStop)
         {
             if(writeThread->blockArrayStop>=blockSize)
@@ -289,10 +291,11 @@ void ReadThread::internalRead()
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
                     readSize=0;
+                    errno=EAGAIN;
                 }
                 else
                 {
-                    readSize=fread(writeThread->blockArray,blockArrayStart-1,1,file);
+                    readSize=fread(writeThread->blockArray,1,blockArrayStart-1,file);
                     if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop=readSize;
                 }
@@ -303,10 +306,13 @@ void ReadThread::internalRead()
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
                     readSize=0;
+                    errno=EAGAIN;
                 }
                 else
                 {
-                    readSize=fread(writeThread->blockArray+writeThread->blockArrayStop+1,blockSize-(writeThread->blockArrayStop+1),1,file);
+                    void * ptr=writeThread->blockArray+writeThread->blockArrayStop+1;
+                    const size_t size=blockSize-(writeThread->blockArrayStop+1);
+                    readSize=fread(ptr,1,size,file);
                     if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop+=readSize;
                 }
@@ -317,11 +323,14 @@ void ReadThread::internalRead()
             if(blockArrayStart==(writeThread->blockArrayStop+1))
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                errno=EAGAIN;
                 readSize=0;
             }
             else
             {
-                readSize=fread(writeThread->blockArray+writeThread->blockArrayStop+1,(writeThread->blockArrayStop+1)-(blockArrayStart-1),1,file);
+                void * ptr=writeThread->blockArray+writeThread->blockArrayStop+1;
+                const size_t size=(writeThread->blockArrayStop+1)-(blockArrayStart-1);
+                readSize=fread(ptr,1,size,file);
                 if(readSize>=0 && (errno==0 || errno==EAGAIN))
                     writeThread->blockArrayStop+=readSize;
             }
@@ -397,7 +406,10 @@ void ReadThread::internalRead()
         emit readIsStopped();//will product by signal connection writeThread->endIsDetected();
     }
     else
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] errno==EAGAIN");
+        writeThread->callBack();
+    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
 

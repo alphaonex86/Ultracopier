@@ -12,14 +12,17 @@ class EventLoop : public QThread
 {
 public:
     EventLoop();
+    ~EventLoop();
      static EventLoop eventLoop;
      void watchSource(CallBackEventLoop * const object,const int &fd);
      void watchDestination(CallBackEventLoop * const object,const int &fd);
 protected:
     void run();
+    void stop();
 private:
     epoll_event events[MAXEVENTS];
     int efd;
+    bool stopIt;
 };
 #endif
 

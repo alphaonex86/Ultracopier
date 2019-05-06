@@ -7,7 +7,10 @@
 #include <fcntl.h>           /* Definition of AT_* constants */
 #include <sys/stat.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include "EventLoop.h"
+#include "ReadThread.h"
 
 WriteThread::WriteThread()
 {
@@ -23,6 +26,7 @@ WriteThread::WriteThread()
     blockArrayStart                 = 0;
     blockArrayStop                  = 0;
     file                            = NULL;
+    readThread=NULL;
     //if not QThread
     run();
 }
@@ -138,13 +142,13 @@ bool WriteThread::internalOpen()
                 return false;
             }
         }
-        #ifdef Q_OS_LINUX
         const int intfd=fileno(file);
+        #ifdef Q_OS_LINUX
         if(intfd!=-1)
         {
             posix_fadvise(intfd, 0, 0, POSIX_FADV_SEQUENTIAL);
-            int flags = fcntl(intfd, F_GETFL, 0);
-            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);
+            /*int flags = fcntl(intfd, F_GETFL, 0);
+            fcntl(intfd, F_SETFL, flags | O_NONBLOCK);*/
         }
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the pause mutex");
@@ -160,7 +164,7 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(fseeko64(file, 0, SEEK_SET)!=0)
+        if(ftruncate64(intfd, startSize)!=0)
         {
             fclose(file);
             file=NULL;
@@ -182,7 +186,7 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(fseeko64(file,startSize,SEEK_SET)!=0)
+        if(fseeko64(file,0,SEEK_SET)!=0)
         {
             fclose(file);
             file=NULL;
@@ -505,15 +509,21 @@ void WriteThread::internalWrite()
         const size_t blockSize=sizeof(blockArray);
         uint32_t blockArrayStop=this->blockArrayStop;//load value out of atomic
         if(blockArrayStart==blockArrayStop)
+        {
+            readThread->callBack();
             return;
+        }
         if(stopIt)
             return;
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Write;
         #endif
+        errno=0;
         if(blockArrayStop>blockArrayStart)
         {
-            bytesWriten=fwrite(blockArray+blockArrayStart,blockArrayStop-blockArrayStart,1,file);
+            void * ptr=blockArray+blockArrayStart;
+            const size_t size=blockArrayStop-blockArrayStart;
+            bytesWriten=fwrite(ptr,1,size,file);
             if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
                 blockArrayStart+=bytesWriten;
         }
@@ -521,13 +531,15 @@ void WriteThread::internalWrite()
         {
             if(blockArrayStart>=blockSize)
             {
-                bytesWriten=fwrite(blockArray,blockArrayStop,1,file);
+                bytesWriten=fwrite(blockArray,1,blockArrayStop,file);
                 if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
                     blockArrayStart=bytesWriten;
             }
             else
             {
-                bytesWriten=fwrite(blockArray+blockArrayStart,blockSize-blockArrayStart,1,file);
+                void * ptr=blockArray+blockArrayStart;
+                const size_t size=blockSize-blockArrayStart;
+                bytesWriten=fwrite(ptr,1,size,file);
                 if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
                     blockArrayStart+=bytesWriten;
             }
@@ -553,6 +565,12 @@ void WriteThread::internalWrite()
         }
         lastGoodPosition+=bytesWriten;
     } while(bytesWriten>0);
+}
+
+//set the read thread
+void WriteThread::setReadThread(ReadThread * readThread)
+{
+    this->readThread=readThread;
 }
 
 #ifdef Q_OS_LINUX

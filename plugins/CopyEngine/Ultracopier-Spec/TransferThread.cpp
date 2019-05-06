@@ -33,6 +33,7 @@ TransferThread::TransferThread() :
     havePermission                  (false)
 {
     readThread.setWriteThread(&writeThread);
+    writeThread.setReadThread(&readThread);
     renameRegex=std::regex("^(.*)(\\.[a-zA-Z0-9]+)$");
     #ifdef Q_OS_WIN32
         #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
