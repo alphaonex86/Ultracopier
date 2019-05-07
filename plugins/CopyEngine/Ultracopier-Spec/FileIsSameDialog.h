@@ -9,6 +9,7 @@
 #include <QDateTime>
 #include <string>
 #include "Environment.h"
+#include "../../../interface/FacilityInterface.h"
 
 #ifndef FILEISSAMEDIALOG_H
 #define FILEISSAMEDIALOG_H
@@ -23,7 +24,7 @@ class FileIsSameDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileIsSameDialog(QWidget *parent,std::string fileInfo,std::string firstRenamingRule,std::string otherRenamingRule);
+    explicit FileIsSameDialog(QWidget *parent, std::string fileInfo, std::string firstRenamingRule, std::string otherRenamingRule, FacilityInterface *facilityEngine);
     ~FileIsSameDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

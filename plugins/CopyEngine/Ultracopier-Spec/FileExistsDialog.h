@@ -9,6 +9,7 @@
 #include <QDateTime>
 #include <string>
 #include "Environment.h"
+#include "../../../interface/FacilityInterface.h"
 
 #ifndef FILEEXISTSDIALOG_H
 #define FILEEXISTSDIALOG_H
@@ -23,7 +24,7 @@ class FileExistsDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileExistsDialog(QWidget *parent,std::string source,std::string destination,std::string firstRenamingRule,std::string otherRenamingRule);
+    explicit FileExistsDialog(QWidget *parent, std::string source, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule, FacilityInterface *facilityEngine);
     ~FileExistsDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

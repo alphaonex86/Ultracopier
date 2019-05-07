@@ -9,11 +9,10 @@
 #include <QDateTime>
 #include <string>
 #include "Environment.h"
+#include "../../../interface/FacilityInterface.h"
 
 #ifndef FILEERRORDIALOG_H
 #define FILEERRORDIALOG_H
-
-
 
 namespace Ui {
     class fileErrorDialog;
@@ -25,7 +24,7 @@ class FileErrorDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileErrorDialog(QWidget *parent, std::string fileInfo, std::string errorString, const ErrorType &errorType);
+    explicit FileErrorDialog(QWidget *parent, std::string fileInfo, std::string errorString, const ErrorType &errorType, FacilityInterface *facilityEngine);
     ~FileErrorDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

@@ -62,7 +62,7 @@ public:
     void reemitStartOpen();
 
     //buffer cannot be directly writen
-    char   blockArray[1024*1024];		///< temp data for block writing, type: ring buffer
+    char   blockArray[/*1024**/1024];		///< temp data for block writing, type: ring buffer
     // if writeThread->blockArrayStart == writeThread->blockArrayStop then is empty
     std::atomic<std::uint32_t> blockArrayStart;//where start used block
     std::atomic<std::uint32_t> blockArrayStop;//where stop used block

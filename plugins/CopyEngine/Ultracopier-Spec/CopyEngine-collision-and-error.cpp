@@ -74,7 +74,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
                 }
                 dialogIsOpen=true;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-                FileIsSameDialog dialog(uiinterface,source,firstRenamingRule,otherRenamingRule);
+                FileIsSameDialog dialog(uiinterface,source,firstRenamingRule,otherRenamingRule,facilityEngine);
                 emit isInPause(true);
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
@@ -144,7 +144,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
                 }
                 dialogIsOpen=true;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-                FileExistsDialog dialog(uiinterface,source,destination,firstRenamingRule,otherRenamingRule);
+                FileExistsDialog dialog(uiinterface,source,destination,firstRenamingRule,otherRenamingRule,facilityEngine);
                 emit isInPause(true);
                 dialog.exec();/// \bug crash when external close
                 FileExistsAction newAction=dialog.getAction();
@@ -293,7 +293,7 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
             }
 
             emit error(fileInfo,size,mdate,errorString);
-            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType);
+            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -454,7 +454,7 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(fileInfo,size,mdate,errorString);
-            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType);
+            FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));
@@ -527,7 +527,7 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
             }
 
             emit error(folder,size,mdate,errorString);
-            FileErrorDialog dialog(uiinterface,folder,errorString,errorType);
+            FileErrorDialog dialog(uiinterface,folder,errorString,errorType,facilityEngine);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"close dialog: "+std::to_string(newAction));

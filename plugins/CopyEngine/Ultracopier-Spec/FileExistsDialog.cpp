@@ -11,7 +11,7 @@
 
 #include <QMessageBox>
 
-FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule) :
+FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule,FacilityInterface * facilityEngine) :
     QDialog(parent),
     ui(new Ui::fileExistsDialog)
 {
@@ -30,15 +30,11 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     ui->Overwrite->addAction(ui->actionOverwrite_if_newer);
     ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_modification_date);
-    ui->label_content_source_size->setText(QString::number(source.size()));
-    ui->label_content_source_modified->setText(QString::fromStdString(source));
     ui->label_content_source_file_name->setText(QString::fromStdString(TransferThread::resolvedName(source)));
     std::string folder=FSabsolutePath(source);
     if(folder.size()>80)
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_source_folder->setText(QString::fromStdString(folder));
-    ui->label_content_destination_size->setText(QString::number(destination.size()));
-    ui->label_content_destination_modified->setText(QString::fromStdString(destination));
     ui->label_content_destination_file_name->setText(QString::fromStdString(TransferThread::resolvedName(destination)));
     folder==FSabsolutePath(destination);
     if(folder.size()>80)
@@ -57,7 +53,10 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
+        const uint64_t size=*reinterpret_cast<int64_t*>(&source_statbuf.st_size);
         ui->label_source_modified->setVisible(true);
+        ui->label_content_source_size->setVisible(true);
+        ui->label_content_source_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         ui->label_content_source_modified->setVisible(true);
         ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
     }
@@ -82,7 +81,10 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
         #endif
+        const uint64_t size=*reinterpret_cast<int64_t*>(&destination_statbuf.st_size);
         ui->label_destination_modified->setVisible(true);
+        ui->label_content_destination_size->setVisible(true);
+        ui->label_content_destination_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         ui->label_content_destination_modified->setVisible(true);
         ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
     }

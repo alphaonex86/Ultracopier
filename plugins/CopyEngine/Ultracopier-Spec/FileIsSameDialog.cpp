@@ -11,7 +11,7 @@
 
 #include <QMessageBox>
 
-FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::string firstRenamingRule, std::string otherRenamingRule) :
+FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::string firstRenamingRule, std::string otherRenamingRule,FacilityInterface * facilityEngine) :
     QDialog(parent),
     ui(new Ui::fileIsSameDialog)
 {
@@ -28,7 +28,6 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
     destinationInfo=fileInfo;
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
-    ui->label_content_size->setText(QString::number(fileInfo.size()));
     ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
     std::string folder=FSabsolutePath(fileInfo);
     if(folder.size()>80)
@@ -47,6 +46,9 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
+        const uint64_t size=*reinterpret_cast<int64_t*>(&source_statbuf.st_size);
+        ui->label_content_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
+        ui->label_content_size->setVisible(true);
         if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS<mdate)
         {
             ui->label_modified->setVisible(true);
