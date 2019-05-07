@@ -314,6 +314,7 @@ void WriteThread::internalEndOfFile()
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeIsStopped");
+        flushBuffer();
         emit writeIsStopped();
     }
 }
@@ -485,8 +486,6 @@ void WriteThread::setDeletePartiallyTransferredFiles(const bool &deletePartially
 
 bool WriteThread::write()
 {
-    if(stopIt)
-        return false;
     if(stopIt)
         return false;
     emit internalStartWrite();

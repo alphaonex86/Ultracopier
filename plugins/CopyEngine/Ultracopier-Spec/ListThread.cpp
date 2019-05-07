@@ -945,7 +945,7 @@ void ListThread::syncTransferList_internal()
         else
         {
             newAction.addAction.sourceFullPath	= item.source;
-            newAction.addAction.sourceFileName	= item.source.substr(sourceIndex);
+            newAction.addAction.sourceFileName	= item.source.substr(sourceIndex+1);
         }
         const size_t destinationIndex=item.destination.rfind('/');
         if(destinationIndex == std::string::npos)
@@ -956,7 +956,7 @@ void ListThread::syncTransferList_internal()
         else
         {
             newAction.addAction.destinationFullPath	= item.destination;
-            newAction.addAction.destinationFileName	= item.destination.substr(destinationIndex);
+            newAction.addAction.destinationFileName	= item.destination.substr(destinationIndex+1);
         }
         newAction.addAction.size		= item.size;
         newAction.addAction.mode		= item.mode;
@@ -979,7 +979,7 @@ void ListThread::syncTransferList_internal()
                 else
                 {
                     newAction.addAction.sourceFullPath	= item.source;
-                    newAction.addAction.sourceFileName	= item.source.substr(sourceIndex);
+                    newAction.addAction.sourceFileName	= item.source.substr(sourceIndex+1);
                 }
                 const size_t destinationIndex=item.destination.rfind('/');
                 if(destinationIndex == std::string::npos)
@@ -990,7 +990,7 @@ void ListThread::syncTransferList_internal()
                 else
                 {
                     newAction.addAction.destinationFullPath	= item.destination;
-                    newAction.addAction.destinationFileName	= item.destination.substr(destinationIndex);
+                    newAction.addAction.destinationFileName	= item.destination.substr(destinationIndex+1);
                 }
                 newAction.addAction.size		= item.size;
                 newAction.addAction.mode		= item.mode;
@@ -1088,7 +1088,7 @@ Ultracopier::ItemOfCopyList ListThread::actionToDoTransferToItemOfCopyList(const
     else
     {
         itemOfCopyList.sourceFullPath	= actionToDoTransfer.source;
-        itemOfCopyList.sourceFileName	= actionToDoTransfer.source.substr(sourceIndex);
+        itemOfCopyList.sourceFileName	= actionToDoTransfer.source.substr(sourceIndex+1);
     }
     const size_t destinationIndex=actionToDoTransfer.destination.rfind('/');
     if(destinationIndex == std::string::npos)
@@ -1099,7 +1099,7 @@ Ultracopier::ItemOfCopyList ListThread::actionToDoTransferToItemOfCopyList(const
     else
     {
         itemOfCopyList.destinationFullPath	= actionToDoTransfer.destination;
-        itemOfCopyList.destinationFileName	= actionToDoTransfer.destination.substr(destinationIndex);
+        itemOfCopyList.destinationFileName	= actionToDoTransfer.destination.substr(destinationIndex+1);
     }
     itemOfCopyList.size		= actionToDoTransfer.size;
     itemOfCopyList.mode		= actionToDoTransfer.mode;
@@ -1705,7 +1705,7 @@ void ListThread::doNewActions_inode_manipulation()
                     else
                     {
                         newAction.addAction.sourceFullPath	= currentActionToDoTransfer.source;
-                        newAction.addAction.sourceFileName	= currentActionToDoTransfer.source.substr(sourceIndex);
+                        newAction.addAction.sourceFileName	= currentActionToDoTransfer.source.substr(sourceIndex+1);
                     }
                     const size_t destinationIndex=currentActionToDoTransfer.destination.rfind('/');
                     if(destinationIndex == std::string::npos)
@@ -1716,7 +1716,7 @@ void ListThread::doNewActions_inode_manipulation()
                     else
                     {
                         newAction.addAction.destinationFullPath	= currentActionToDoTransfer.destination;
-                        newAction.addAction.destinationFileName	= currentActionToDoTransfer.destination.substr(destinationIndex);
+                        newAction.addAction.destinationFileName	= currentActionToDoTransfer.destination.substr(destinationIndex+1);
                     }
                     newAction.addAction.size		= currentActionToDoTransfer.size;
                     newAction.addAction.mode		= currentActionToDoTransfer.mode;

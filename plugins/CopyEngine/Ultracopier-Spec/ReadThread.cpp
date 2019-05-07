@@ -273,6 +273,7 @@ void ReadThread::internalRead()
         return;
     }
     const size_t blockSize=sizeof(writeThread->blockArray);
+    ssize_t requestedSize=-1;
     do
     {
         //read one block
@@ -295,7 +296,8 @@ void ReadThread::internalRead()
                 }
                 else
                 {
-                    readSize=fread(writeThread->blockArray,1,blockArrayStart-1,file);
+                    requestedSize=blockArrayStart-1;
+                    readSize=fread(writeThread->blockArray,1,requestedSize,file);
                     if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop=readSize;
                 }
@@ -311,8 +313,8 @@ void ReadThread::internalRead()
                 else
                 {
                     void * ptr=writeThread->blockArray+writeThread->blockArrayStop+1;
-                    const size_t size=blockSize-(writeThread->blockArrayStop+1);
-                    readSize=fread(ptr,1,size,file);
+                    requestedSize=blockSize-(writeThread->blockArrayStop+1);
+                    readSize=fread(ptr,1,requestedSize,file);
                     if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop+=readSize;
                 }
@@ -329,12 +331,13 @@ void ReadThread::internalRead()
             else
             {
                 void * ptr=writeThread->blockArray+writeThread->blockArrayStop+1;
-                const size_t size=(writeThread->blockArrayStop+1)-(blockArrayStart-1);
-                readSize=fread(ptr,1,size,file);
+                requestedSize=(writeThread->blockArrayStop+1)-(blockArrayStart-1);
+                readSize=fread(ptr,1,requestedSize,file);
                 if(readSize>=0 && (errno==0 || errno==EAGAIN))
                     writeThread->blockArrayStop+=readSize;
             }
         }
+        lastGoodPosition+=readSize;
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
         #endif
@@ -347,69 +350,29 @@ void ReadThread::internalRead()
             emit error();
             return;
         }
-        if(readSize>0)
-        {
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=WaitWritePipe;
-            #endif
-            if(!writeThread->write())
-            {
-                if(!stopIt)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopped because the write is stopped: "+std::to_string(lastGoodPosition));
-                    stopIt=true;
-                }
-            }
-
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Idle;
-            #endif
-
-            if(stopIt)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt == true, then quit");
-                isInReadLoop=false;
-                internalClose();//need re-open the destination and then the source
-                return;
-            }
-            lastGoodPosition+=readSize;
-        }
-        /*
-        if(lastGoodPosition>16*1024)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,QStringLiteral("[")+QString::number(id)+QStringLiteral("] ")+QStringLiteral("Test error in reading: %1 (%2)").arg(file.errorString()).arg(file.error()));
-            errorString_internal=QStringLiteral("Test error in reading: %1 (%2)").arg(file.errorString()).arg(file.error());
-            isInReadLoop=false;
-            emit error();
-            return;
-        }
-        */
     }
-    while(readSize>0 && errno!=EAGAIN && !stopIt);
-/*    if(lastGoodPosition>file.size())
+    while(readSize>0 && errno!=EAGAIN && !stopIt && requestedSize<=readSize);
+    if(lastGoodPosition>size())
     {
         errorString_internal=tr("File truncated during the read, possible data change").toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())).toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Source truncated during the read: "+std::to_string(lastGoodPosition)+">"+std::to_string(size()));
         isInReadLoop=false;
         emit error();
         return;
-    }*/
+    }
     isInReadLoop=false;
     if(stopIt)
     {
         stopIt=false;
         return;
     }
-    if(errno!=EAGAIN)
+    if(readSize==0 || requestedSize>readSize)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsStopped");
         emit readIsStopped();//will product by signal connection writeThread->endIsDetected();
     }
-    else
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] errno==EAGAIN");
+    if(readSize>0)
         writeThread->callBack();
-    }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
 
@@ -578,6 +541,7 @@ bool ReadThread::isReading() const
 #ifdef Q_OS_LINUX
 void ReadThread::callBack()
 {
-    emit internalStartRead();
+    if(isInReadLoop)
+        emit internalStartRead();
 }
 #endif

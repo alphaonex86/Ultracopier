@@ -94,7 +94,7 @@ private:
     std::string         errorString_internal;
     volatile bool	stopIt;
     Ultracopier::CopyMode	mode;
-    int64_t          lastGoodPosition;
+    int64_t          lastGoodPosition;//to restaure and reopen after file disconnected (eg NAS)
     volatile int	blockSize;//in Bytes
     WriteThread*	writeThread;
     int		id;
