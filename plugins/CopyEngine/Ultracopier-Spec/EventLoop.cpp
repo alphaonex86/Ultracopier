@@ -14,7 +14,7 @@ EventLoop::EventLoop()
         fprintf(stderr,"%s, errno %i\n", strerror(errno), errno);
         abort();
     }
-    start();
+    //start();->put cpu at 100%
     stopIt=false;
 }
 

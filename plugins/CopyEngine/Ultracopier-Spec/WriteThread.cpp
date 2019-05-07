@@ -25,6 +25,7 @@ WriteThread::WriteThread()
     needRemoveTheFile               = false;
     blockArrayStart                 = 0;
     blockArrayStop                  = 0;
+    blockArrayIsFull                = false;
     file                            = NULL;
     readThread=NULL;
     //if not QThread
@@ -296,6 +297,7 @@ void WriteThread::flushBuffer()
 {
     blockArrayStart=0;
     blockArrayStop=0;
+    blockArrayIsFull=false;
 }
 
 /// \brief buffer is empty
@@ -388,7 +390,6 @@ void WriteThread::internalClose(bool emitSignal)
     else
     {
         //here and not after, because the transferThread don't need try close if not open
-
         if(emitSignal)
             emit_closed=true;
     }
@@ -496,6 +497,7 @@ bool WriteThread::write()
 
 void WriteThread::internalWrite()
 {
+    const size_t blockSize=sizeof(blockArray);
     int32_t              bytesWriten=0;		///< temp data for block writing, the bytes writen
     do
     {
@@ -504,13 +506,13 @@ void WriteThread::internalWrite()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt");
             return;
         }
-        //read one block
-        const size_t blockSize=sizeof(blockArray);
+        //get one block
         uint32_t blockArrayStop=this->blockArrayStop;//load value out of atomic
-        if(blockArrayStart==blockArrayStop)
+        if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
         {
+            //is empty
             readThread->callBack();
-            return;
+            break;
         }
         if(stopIt)
             return;
@@ -526,32 +528,27 @@ void WriteThread::internalWrite()
             if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
                 blockArrayStart+=bytesWriten;
         }
-        else //blockArrayStop<blockArrayStart because == is previously checked
+        else //if(blockArrayStart==blockSize || blockArrayStop<blockArrayStart)//and then blockArrayIsFull
         {
-            if(blockArrayStart>=blockSize)
-            {
-                bytesWriten=fwrite(blockArray,1,blockArrayStop,file);
-                if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
-                    blockArrayStart=bytesWriten;
-            }
-            else
-            {
-                void * ptr=blockArray+blockArrayStart;
-                const size_t size=blockSize-blockArrayStart;
-                bytesWriten=fwrite(ptr,1,size,file);
-                if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
-                    blockArrayStart+=bytesWriten;
-            }
+            void * ptr=blockArray+blockArrayStart;
+            const size_t size=blockSize-blockArrayStart;
+            bytesWriten=fwrite(ptr,1,size,file);
+            if(bytesWriten>0 && (errno==0 || errno==EAGAIN))
+                blockArrayStart+=bytesWriten;
         }
+        if(blockArrayStart==blockSize)
+            blockArrayStart=0;
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
         #endif
-        //mutex for stream this data
         if(lastGoodPosition==0)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit writeIsStarted()");
             emit writeIsStarted();
         }
+        lastGoodPosition+=bytesWriten;
+        if(bytesWriten>0)
+            blockArrayIsFull=false;
         if(stopIt)
             return;
         if(errno!=0 && errno!=EAGAIN)
@@ -562,8 +559,9 @@ void WriteThread::internalWrite()
             emit error();
             return;
         }
-        lastGoodPosition+=bytesWriten;
     } while(bytesWriten>0);
+    if(endDetected && bufferIsEmpty())
+        internalEndOfFile();
 }
 
 //set the read thread

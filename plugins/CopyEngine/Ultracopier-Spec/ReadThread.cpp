@@ -261,7 +261,6 @@ void ReadThread::internalRead()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start the copy");
-    emit readIsStarted();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;
     #endif
@@ -272,6 +271,7 @@ void ReadThread::internalRead()
         internalClose();
         return;
     }
+    isInReadLoop=true;
     const size_t blockSize=sizeof(writeThread->blockArray);
     ssize_t requestedSize=-1;
     do
@@ -296,7 +296,7 @@ void ReadThread::internalRead()
                 }
                 else
                 {
-                    requestedSize=blockArrayStart-1;
+                    requestedSize=blockArrayStart;
                     readSize=fread(writeThread->blockArray,1,requestedSize,file);
                     if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop=readSize;
@@ -304,7 +304,8 @@ void ReadThread::internalRead()
             }
             else
             {
-                if(blockArrayStart==(writeThread->blockArrayStop+1))
+                requestedSize=blockSize-writeThread->blockArrayStop;
+                if(requestedSize==0)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
                     readSize=0;
@@ -312,8 +313,11 @@ void ReadThread::internalRead()
                 }
                 else
                 {
-                    void * ptr=writeThread->blockArray+writeThread->blockArrayStop+1;
-                    requestedSize=blockSize-(writeThread->blockArrayStop+1);
+                    void * ptr=NULL;
+                    if(writeThread->blockArrayStop<blockSize)
+                        ptr=writeThread->blockArray+writeThread->blockArrayStop;
+                    else
+                        ptr=writeThread->blockArray;
                     readSize=fread(ptr,1,requestedSize,file);
                     if(readSize>=0 && (errno==0 || errno==EAGAIN))
                         writeThread->blockArrayStop+=readSize;
@@ -322,22 +326,35 @@ void ReadThread::internalRead()
         }
         else
         {
-            if(blockArrayStart==(writeThread->blockArrayStop+1))
+            if(blockArrayStart==writeThread->blockArrayStop)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
-                errno=EAGAIN;
                 readSize=0;
+                errno=EAGAIN;
             }
             else
             {
-                void * ptr=writeThread->blockArray+writeThread->blockArrayStop+1;
-                requestedSize=(writeThread->blockArrayStop+1)-(blockArrayStart-1);
+                void * ptr=NULL;
+                if(writeThread->blockArrayStop<blockSize)
+                    ptr=writeThread->blockArray+writeThread->blockArrayStop;
+                else
+                    ptr=writeThread->blockArray;
+                requestedSize=writeThread->blockArrayStop-blockArrayStart;
                 readSize=fread(ptr,1,requestedSize,file);
                 if(readSize>=0 && (errno==0 || errno==EAGAIN))
                     writeThread->blockArrayStop+=readSize;
             }
         }
         lastGoodPosition+=readSize;
+        if(writeThread->blockArrayStop==blockSize)
+        {
+            writeThread->blockArrayStop=0;
+            if(blockArrayStart==0 && readSize>0)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                errno=EAGAIN;
+            }
+        }
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
         #endif
@@ -352,26 +369,31 @@ void ReadThread::internalRead()
         }
     }
     while(readSize>0 && errno!=EAGAIN && !stopIt && requestedSize<=readSize);
-    if(lastGoodPosition>size())
-    {
-        errorString_internal=tr("File truncated during the read, possible data change").toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Source truncated during the read: "+std::to_string(lastGoodPosition)+">"+std::to_string(size()));
-        isInReadLoop=false;
-        emit error();
-        return;
-    }
-    isInReadLoop=false;
     if(stopIt)
     {
         stopIt=false;
         return;
     }
+    if(errno==EAGAIN)
+        writeThread->blockArrayIsFull=true;
     if(readSize==0 || requestedSize>readSize)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsStopped");
-        emit readIsStopped();//will product by signal connection writeThread->endIsDetected();
+        if(lastGoodPosition>size())
+        {
+            errorString_internal=tr("File truncated during the read, possible data change").toStdString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Source truncated during the read: "+std::to_string(lastGoodPosition)+">"+std::to_string(size()));
+            isInReadLoop=false;
+            emit error();
+            return;
+        }
+        if(errno!=EAGAIN)//if not buffer full (errno=EAGAIN set in case of buffer full, see above)
+        {
+            isInReadLoop=false;
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsStopped");
+            emit readIsStopped();//will product by signal connection writeThread->endIsDetected();
+        }
     }
-    if(readSize>0)
+    if(readSize>0 || errno==EAGAIN)
         writeThread->callBack();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
@@ -390,6 +412,7 @@ void ReadThread::startRead()
     {
         tryStartRead=true;
         emit internalStartRead();
+        emit readIsStarted();
     }
 }
 

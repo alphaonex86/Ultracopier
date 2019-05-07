@@ -61,11 +61,27 @@ public:
     bool bufferIsEmpty();
     void reemitStartOpen();
 
-    //buffer cannot be directly writen
-    char   blockArray[/*1024**/1024];		///< temp data for block writing, type: ring buffer
-    // if writeThread->blockArrayStart == writeThread->blockArrayStop then is empty
-    std::atomic<std::uint32_t> blockArrayStart;//where start used block
-    std::atomic<std::uint32_t> blockArrayStop;//where stop used block
+    /* temp data for block writing, type: ring buffer
+     * bool to view diff then Max content start/stop==empty */
+    char blockArray[/*1024**/1024];
+    std::atomic<bool> blockArrayIsFull;
+    /* posible start stop pair with blockArray[1024]:
+     * 0 1023: all the block, [0], [1], ... [1021], [1022]
+     * 0 1024: all the block, [0], [1], ... [1022], [1023]
+     * 1 1024: all the block, [1], [2], ... [1022], [1023]
+     * 2 1: all the block, [2], [3], ... [1023], [0]
+     * 200 199: all the block but start read byte at [200], [201], ... [1023] (or 824 bytes to the end), [0], [1], [2] ... [197], [198] (or 199 bytes to the end) is 824+199=1023 content max
+     * 0 0: empty block,
+     * 0 1: only the [0] have content
+     * 7 9: only the [7][8] have content
+     * 328 328: empty block too
+    */
+
+    //where start used block, include
+    std::atomic<std::uint32_t> blockArrayStart;
+
+    /* where stop used block, exclude */
+    std::atomic<std::uint32_t> blockArrayStop;
 
     void setReadThread(ReadThread * readThread);
     #ifdef Q_OS_LINUX
