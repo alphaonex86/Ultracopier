@@ -501,6 +501,8 @@ void WriteThread::internalWrite()
 {
     const size_t blockSize=sizeof(blockArray);
     int32_t              bytesWriten=0;		///< temp data for block writing, the bytes writen
+    uint32_t blockArrayStop=this->blockArrayStop;//load value out of atomic
+    uint32_t blockArrayStart=this->blockArrayStart;//load value out of atomic
     do
     {
         if(stopIt)
@@ -509,7 +511,6 @@ void WriteThread::internalWrite()
             return;
         }
         //get one block
-        uint32_t blockArrayStop=this->blockArrayStop;//load value out of atomic
         if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
         {
             //is empty
@@ -562,6 +563,13 @@ void WriteThread::internalWrite()
             return;
         }
     } while(bytesWriten>0);
+    //improve the performance due to drop block split
+    if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
+    {
+        blockArrayStart=BLOCKDEFAULTINITVAL;
+        blockArrayStop=BLOCKDEFAULTINITVAL;
+    }
+    this->blockArrayStart=blockArrayStart;
     if(endDetected && bufferIsEmpty())
         internalEndOfFile();
 }
