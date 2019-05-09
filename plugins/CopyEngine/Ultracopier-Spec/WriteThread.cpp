@@ -12,6 +12,8 @@
 #include "EventLoop.h"
 #include "ReadThread.h"
 
+#define BLOCKDEFAULTINITVAL 125
+
 WriteThread::WriteThread()
 {
     deletePartiallyTransferredFiles = true;
@@ -23,8 +25,8 @@ WriteThread::WriteThread()
     status                            = Idle;
     #endif
     needRemoveTheFile               = false;
-    blockArrayStart                 = 0;
-    blockArrayStop                  = 0;
+    blockArrayStart                 = BLOCKDEFAULTINITVAL;
+    blockArrayStop                  = BLOCKDEFAULTINITVAL;
     blockArrayIsFull                = false;
     file                            = NULL;
     readThread=NULL;
@@ -130,7 +132,7 @@ bool WriteThread::internalOpen()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the open");
         {
-            if(blockArrayStart!=0 || blockArrayStop!=0)
+            if(blockArrayStart!=BLOCKDEFAULTINITVAL || blockArrayStop!=BLOCKDEFAULTINITVAL)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] General file corruption detected");
                 stopIt=true;
@@ -295,15 +297,15 @@ void WriteThread::stop()
 
 void WriteThread::flushBuffer()
 {
-    blockArrayStart=0;
-    blockArrayStop=0;
+    blockArrayStart=BLOCKDEFAULTINITVAL;
+    blockArrayStop=BLOCKDEFAULTINITVAL;
     blockArrayIsFull=false;
 }
 
 /// \brief buffer is empty
 bool WriteThread::bufferIsEmpty()
 {
-    return blockArrayStart==blockArrayStop;
+    return blockArrayStart==blockArrayStop && !blockArrayIsFull;
 }
 
 void WriteThread::internalEndOfFile()

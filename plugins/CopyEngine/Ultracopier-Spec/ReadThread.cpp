@@ -260,7 +260,7 @@ void ReadThread::internalRead()
         isInReadLoop=false;
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start the copy");
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start the copy");
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=Idle;
     #endif
@@ -290,7 +290,7 @@ void ReadThread::internalRead()
             {
                 if(blockArrayStart==0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full at "+std::to_string(lastGoodPosition));
                     readSize=0;
                     errno=EAGAIN;
                 }
@@ -307,7 +307,7 @@ void ReadThread::internalRead()
                 requestedSize=blockSize-writeThread->blockArrayStop;
                 if(requestedSize==0)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full at "+std::to_string(lastGoodPosition));
                     readSize=0;
                     errno=EAGAIN;
                 }
@@ -328,7 +328,7 @@ void ReadThread::internalRead()
         {
             if(blockArrayStart==writeThread->blockArrayStop)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full at "+std::to_string(lastGoodPosition));
                 readSize=0;
                 errno=EAGAIN;
             }
@@ -351,7 +351,7 @@ void ReadThread::internalRead()
             writeThread->blockArrayStop=0;
             if(blockArrayStart==0 && readSize>0)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full");
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full at "+std::to_string(lastGoodPosition));
                 errno=EAGAIN;
             }
         }
@@ -395,7 +395,7 @@ void ReadThread::internalRead()
     }
     if(readSize>0 || errno==EAGAIN)
         writeThread->callBack();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read at "+std::to_string(lastGoodPosition));
 }
 
 void ReadThread::startRead()
