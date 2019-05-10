@@ -2,8 +2,9 @@
 #define CALLBACKEVENTLOOP_H
 
 #include <QObject>
+#include "Variable.h"
 
-#ifdef Q_OS_LINUX
+#ifdef POSIXFILEMANIP
 class CallBackEventLoop
 {
 public:

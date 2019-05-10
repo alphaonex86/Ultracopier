@@ -1,9 +1,10 @@
 #ifndef EVENTLOOP_H
 #define EVENTLOOP_H
 
-#include <QThread>
+#include "Variable.h"
 
-#ifdef Q_OS_LINUX
+#ifdef ASYNCFILEMANIP
+#include <QThread>
 #include "CallBackEventLoop.h"
 #include <sys/epoll.h>
 #define MAXEVENTS 64

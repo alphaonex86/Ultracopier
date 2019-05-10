@@ -240,7 +240,7 @@ private:
 
     inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
-    uint64_t addToTransfer(const std::string& source,const std::string& destination,const Ultracopier::CopyMode& mode);
+    uint64_t addToTransfer(const std::string& source, const std::string& destination, const Ultracopier::CopyMode& mode, const int64_t sendedsize=-1);
     //generate id number
     uint64_t generateIdNumber();
     //warning the first entry is accessible will copy
@@ -288,7 +288,8 @@ private slots:
     void scanThreadHaveFinish(bool skipFirstRemove=false);
     void autoStartAndCheckSpace();
     void updateTheStatus();
-    void fileTransfer(const std::string &sourceFileInfo,const std::string &destinationFileInfo,const Ultracopier::CopyMode &mode);
+    void fileTransfer(const std::string &sourceFileInfo, const std::string &destinationFileInfo, const Ultracopier::CopyMode &mode);
+    void fileTransferWithInode(const std::string &sourceFileInfo, const std::string &destinationFileInfo, const Ultracopier::CopyMode &mode, const TransferThread::dirent_uc &inode);
     //mkpath event
     void mkPathFirstFolderFinish();
     /** \brief put the current file at bottom in case of error

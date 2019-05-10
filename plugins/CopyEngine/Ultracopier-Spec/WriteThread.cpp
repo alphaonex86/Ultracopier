@@ -1,5 +1,7 @@
 #include "WriteThread.h"
 
+#ifdef POSIXFILEMANIP
+
 #ifdef Q_OS_LINUX
 #include <fcntl.h>
 #endif
@@ -214,7 +216,7 @@ bool WriteThread::internalOpen()
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
         #endif
-        #ifdef Q_OS_LINUX
+        #ifdef ASYNCFILEMANIP
         EventLoop::eventLoop.watchSource(this,fileno(file));
         #endif
         needRemoveTheFile=false;
@@ -583,7 +585,6 @@ void WriteThread::setReadThread(ReadThread * readThread)
     this->readThread=readThread;
 }
 
-#ifdef Q_OS_LINUX
 void WriteThread::callBack()
 {
     emit internalStartWrite();

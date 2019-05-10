@@ -1328,7 +1328,7 @@ bool TransferThread::doFilePostOperation()
             {
                 #ifndef Q_OS_WIN32
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] read the destination time: "+destination.lastModified().toString().toStdString());
-                if(destination.lastModified()<minTime)
+                if(destination.lastModified()<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] read the destination time lower than min time: "+destination.lastModified().toString().toStdString());
                     if(keepDate)
@@ -1635,7 +1635,7 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
             //this function avalaible on unix and mingw
             butime.actime=actime;
             butime.modtime=modtime;
-            if((uint64_t)modtime<minTime)
+            if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
                 return false;
@@ -1655,7 +1655,7 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
                 //this function avalaible on unix and mingw
                 butime.actime=actime;
                 butime.modtime=modtime;
-                if((uint64_t)modtime<minTime)
+                if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
                     return false;
@@ -1689,7 +1689,7 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
                 this->ftWriteH=ftWrite.dwHighDateTime;
                 CloseHandle(hFileSouce);
                 const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + (uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime;
-                if(modtime<minTime)
+                if(modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());
                     return false;
@@ -2208,6 +2208,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
             dirent_uc tempValue;
             tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
             strcpy(tempValue.d_name,fdFile.cFileName);
+            tempValue.size=(fdFile.nFileSizeHigh*(MAXDWORD+1))+fdFile.nFileSizeLow;
             list.push_back(tempValue);
         }
     }

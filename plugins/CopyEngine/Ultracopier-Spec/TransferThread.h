@@ -96,6 +96,9 @@ public:
     static bool entryInfoList(const std::string &path, std::vector<std::string> &list);
     struct dirent_uc
     {
+        #ifdef Q_OS_WIN32
+        size_t size;
+        #endif
         bool isFolder;
         char d_name[256];
     };

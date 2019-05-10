@@ -1,5 +1,6 @@
 #include "ReadThread.h"
 
+#ifdef POSIXFILEMANIP
 #ifdef Q_OS_LINUX
 #include <fcntl.h>
 #endif
@@ -204,7 +205,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             return false;
         }
         emit opened();
-        #ifdef Q_OS_LINUX
+        #ifdef ASYNCFILEMANIP
         EventLoop::eventLoop.watchSource(this,fileno(file));
         #endif
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -563,7 +564,6 @@ bool ReadThread::isReading() const
     return isInReadLoop;
 }
 
-#ifdef Q_OS_LINUX
 void ReadThread::callBack()
 {
     if(isInReadLoop)

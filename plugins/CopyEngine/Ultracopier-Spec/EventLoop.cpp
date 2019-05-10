@@ -1,9 +1,13 @@
 #include "EventLoop.h"
 #include "CallBackEventLoop.h"
-#include <sys/epoll.h>
-#include <signal.h>
+
+#ifdef ASYNCFILEMANIP
 
 #ifdef Q_OS_LINUX
+#include <sys/epoll.h>
+#include <signal.h>
+#endif
+
 EventLoop EventLoop::eventLoop;
 
 EventLoop::EventLoop()

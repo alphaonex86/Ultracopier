@@ -11,16 +11,14 @@
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
 #include <cstdint>
-#ifdef Q_OS_LINUX
+#include "Variable.h"
+#ifdef POSIXFILEMANIP
 #include "CallBackEventLoop.h"
-#endif
 
 class ReadThread;
 /// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QObject
-        #ifdef Q_OS_LINUX
         , public CallBackEventLoop
-        #endif
 {
     Q_OBJECT
 public:
@@ -86,9 +84,7 @@ public:
     std::atomic<std::uint32_t> blockArrayStop;
 
     void setReadThread(ReadThread * readThread);
-    #ifdef Q_OS_LINUX
     void callBack();
-    #endif
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -142,5 +138,6 @@ private slots:
     void internalEndOfFile();
     void internalFlushAndSeekToZero();
 };
+#endif
 
 #endif // WRITETHREAD_H

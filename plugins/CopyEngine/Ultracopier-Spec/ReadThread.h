@@ -9,15 +9,13 @@
 #include "WriteThread.h"
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
-#ifdef Q_OS_LINUX
+#include "Variable.h"
+#ifdef POSIXFILEMANIP
 #include "CallBackEventLoop.h"
-#endif
 
 /// \brief Thread changed to open/close and read the source file
 class ReadThread : public QObject
-        #ifdef Q_OS_LINUX
         , public CallBackEventLoop
-        #endif
 {
     Q_OBJECT
 public:
@@ -63,9 +61,7 @@ public:
     void fakeReadIsStarted();
     /// \brief do the fake readIsStopped
     void fakeReadIsStopped();
-    #ifdef Q_OS_LINUX
     void callBack();
-    #endif
 public slots:
     /// \brief to reset the copy, and put at the same state when it just open
     void seekToZeroAndWait();
@@ -115,5 +111,6 @@ private slots:
     void internalCloseSlot();
     void isInWait();
 };
+#endif
 
 #endif // READTHREAD_H

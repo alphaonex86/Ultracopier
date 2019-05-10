@@ -301,6 +301,18 @@ void ListThread::fileTransfer(const std::string &sourceFileInfo,const std::strin
     addToTransfer(sourceFileInfo,destinationFileInfo,mode);
 }
 
+void ListThread::fileTransferWithInode(const std::string &sourceFileInfo,const std::string &destinationFileInfo,const Ultracopier::CopyMode &mode,const TransferThread::dirent_uc &inode)
+{
+    if(stopIt)
+        return;
+    #ifdef Q_OS_WIN32
+    addToTransfer(sourceFileInfo,destinationFileInfo,mode,inode.size);
+    #else
+    (void)inode;
+    addToTransfer(sourceFileInfo,destinationFileInfo,mode);
+    #endif
+}
+
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameSource(const std::vector<std::string> &sources)
 {
@@ -376,6 +388,8 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
     if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection))
         abort();
     if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,             Qt::QueuedConnection))
+        abort();
+    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::fileTransferWithInode,            this,&ListThread::fileTransferWithInode,             Qt::QueuedConnection))
         abort();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,         Qt::QueuedConnection))
@@ -1021,26 +1035,22 @@ void ListThread::syncTransferList_internal()
 }
 
 //add file transfer to do
-uint64_t ListThread::addToTransfer(const std::string& source,const std::string& destination,const Ultracopier::CopyMode& mode)
+uint64_t ListThread::addToTransfer(const std::string& source,const std::string& destination,const Ultracopier::CopyMode& mode,const int64_t sendedsize)
 {
     if(stopIt)
         return 0;
     //add to transfer list
     numberOfTransferIntoToDoList++;
-    quint64 size=0;
-
-    #ifdef Q_OS_WIN32
-    get from X
-            DWORD    nFileSizeHigh;
-              DWORD    nFileSizeLow;
-              bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc> &list)
-                      if ! IO_REPARSE_TAG_SYMLINK
-    #else
-    struct stat p_statbuf;
-    if (lstat(source.c_str(), &p_statbuf)>=0 && S_ISREG(p_statbuf.st_mode)==1)
-        //if error or file not exists, considere as regular file
-        size=p_statbuf.st_size;
-    #endif
+    uint64_t size=0;
+    if(sendedsize>=0)
+        size=sendedsize;
+    else
+    {
+        struct stat p_statbuf;
+        if (lstat(source.c_str(), &p_statbuf)>=0 && S_ISREG(p_statbuf.st_mode)==1)
+            //if error or file not exists, considere as regular file
+            size=p_statbuf.st_size;
+    }
     const std::string &drive=driveManagement.getDrive(destination);
     if(!drive.empty())//can be a network drive
         if(mode!=Ultracopier::Move || drive!=driveManagement.getDrive(source))

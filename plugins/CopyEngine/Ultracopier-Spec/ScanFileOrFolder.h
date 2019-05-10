@@ -16,6 +16,7 @@
 
 #include "Environment.h"
 #include "DriveManagement.h"
+#include "TransferThread.h"
 
 #ifndef SCANFILEORFOLDER_H
 #define SCANFILEORFOLDER_H
@@ -44,6 +45,7 @@ public:
     #endif
 signals:
     void fileTransfer(const std::string &source,const std::string &destination,const Ultracopier::CopyMode &mode) const;
+    void fileTransferWithInode(const std::string &source,const std::string &destination,const Ultracopier::CopyMode &mode,const TransferThread::dirent_uc &inode) const;
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
     void folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame) const;
