@@ -907,7 +907,7 @@ void PluginsManager::newAuthPath(const std::string &path)
 /// \brief transfor short plugin name into file name
 std::string PluginsManager::getResolvedPluginName(const std::string &name)
 {
-    #if defined(Q_OS_LINUX) || defined(Q_OS_HURD)
+    #if defined(Q_OS_LINUX) || defined(Q_OS_HURD) || defined(__HAIKU__)
         return "lib"+name+".so";
     #elif defined(Q_OS_MAC)
         #if defined(QT_DEBUG)
@@ -922,7 +922,11 @@ std::string PluginsManager::getResolvedPluginName(const std::string &name)
             return name+".dll";
         #endif
     #else
+        #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
         #error "Platform not supported"
+        #else
+        return std::string();
+        #endif
     #endif
 }
 

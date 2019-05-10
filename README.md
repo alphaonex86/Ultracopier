@@ -17,6 +17,7 @@ Main features include:
 
 Building an all-in-one version is as easy as compiling the main Qt project:
 
+    find ./ -name '*.ts' -exec lrelease {} \;
     qmake ultracopier.pro
 
 
