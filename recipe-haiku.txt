@@ -1,0 +1,35 @@
+SUMMARY="Ultracopier"
+DESCRIPTION="Ultracopier is free and open source software licensed under GPL3 that acts as a replacement for files copy dialogs. "
+HOMEPAGE="https://ultracopier.first-world.info/"
+COPYRIGHT="GNU GPL v3"
+LICENSE="GNU GPL v3"
+REVISION="1"
+SOURCE_URI="https://github.com/alphaonex86/Ultracopier.git"
+#PATCHES=""
+
+ARCHITECTURES="!x86_gcc2 x86 x86_64"
+SECONDARY_ARCHITECTURES="x86"
+
+PROVIDES="
+	Ultracopier = $portVersion
+	"
+REQUIRES="
+        haiku
+		qt
+        "
+
+BUILD_REQUIRES="
+        haiku_devel
+        "
+
+BUILD()
+{
+	qmake ultracopier.pro
+	find ./ -name '*.ts' -exec lrelease {} \;
+	make $jobArgs
+}
+
+INSTALL()
+{
+	make install
+}
