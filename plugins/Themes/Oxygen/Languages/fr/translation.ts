@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+303"/>
+        <location filename="../../interface.cpp" line="+320"/>
         <location line="+17"/>
         <source>%1 is deprecated, Use %2</source>
         <translation>%1 est obsolète, utilisez %2</translation>

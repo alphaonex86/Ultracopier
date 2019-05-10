@@ -496,27 +496,27 @@ Cette version est compilée comme version : %1.</translation>
         <translation>Auteur: BRULE Herman Jacques Roger (alpha_one_x86), société: &lt;a href=&quot;http://www.confiared.com/&quot;&gt; confiared &lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="128"/>
+        <location filename="../../../HelpDialog.ui" line="131"/>
         <source>About Qt</source>
         <translation>À propos de Qt</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="151"/>
+        <location filename="../../../HelpDialog.ui" line="154"/>
         <source>Check update</source>
         <translation>Vérifier la mise à jour</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="158"/>
+        <location filename="../../../HelpDialog.ui" line="161"/>
         <source>Do a crash</source>
         <translation>Faire un crash</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="165"/>
+        <location filename="../../../HelpDialog.ui" line="168"/>
         <source>Save bug report</source>
         <translation>Sauver le rapport</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="172"/>
+        <location filename="../../../HelpDialog.ui" line="175"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

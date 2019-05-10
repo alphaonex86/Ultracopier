@@ -498,27 +498,27 @@ This version is compiled as version: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="128"/>
+        <location filename="../../../HelpDialog.ui" line="131"/>
         <source>About Qt</source>
         <translation>Qt에 대해</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="151"/>
+        <location filename="../../../HelpDialog.ui" line="154"/>
         <source>Check update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="158"/>
+        <location filename="../../../HelpDialog.ui" line="161"/>
         <source>Do a crash</source>
         <translation>충돌 발생시</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="165"/>
+        <location filename="../../../HelpDialog.ui" line="168"/>
         <source>Save bug report</source>
         <translation>버그 보고서 저장</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="172"/>
+        <location filename="../../../HelpDialog.ui" line="175"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>

@@ -507,28 +507,28 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="128"/>
+        <location filename="../../../HelpDialog.ui" line="131"/>
         <source>About Qt</source>
         <translation>Über Qt</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="151"/>
+        <location filename="../../../HelpDialog.ui" line="154"/>
         <source>Check update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="158"/>
+        <location filename="../../../HelpDialog.ui" line="161"/>
         <source>Do a crash</source>
         <translatorcomment>Clumsy... depends on context</translatorcomment>
         <translation>Absturz ausführen</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="165"/>
+        <location filename="../../../HelpDialog.ui" line="168"/>
         <source>Save bug report</source>
         <translation>Fehlerbericht speichern</translation>
     </message>
     <message>
-        <location filename="../../../HelpDialog.ui" line="172"/>
+        <location filename="../../../HelpDialog.ui" line="175"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
