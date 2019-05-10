@@ -12,8 +12,6 @@
 #include "EventLoop.h"
 #include "ReadThread.h"
 
-#define BLOCKDEFAULTINITVAL 125
-
 WriteThread::WriteThread()
 {
     deletePartiallyTransferredFiles = true;
@@ -503,19 +501,19 @@ void WriteThread::internalWrite()
     int32_t              bytesWriten=0;		///< temp data for block writing, the bytes writen
     uint32_t blockArrayStop=this->blockArrayStop;//load value out of atomic
     uint32_t blockArrayStart=this->blockArrayStart;//load value out of atomic
+    bool bytesWasWriten=false;
+    if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
+    {
+        if(!endDetected)
+            readThread->callBack();
+        return;
+    }
     do
     {
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt");
             return;
-        }
-        //get one block
-        if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
-        {
-            //is empty
-            readThread->callBack();
-            break;
         }
         if(stopIt)
             return;
@@ -551,7 +549,7 @@ void WriteThread::internalWrite()
         }
         lastGoodPosition+=bytesWriten;
         if(bytesWriten>0)
-            blockArrayIsFull=false;
+            bytesWasWriten=true;
         if(stopIt)
             return;
         if(errno!=0 && errno!=EAGAIN)
@@ -562,13 +560,18 @@ void WriteThread::internalWrite()
             emit error();
             return;
         }
-    } while(bytesWriten>0);
+    } while(bytesWriten>0 && blockArrayStart!=blockArrayStop);
+    if(bytesWasWriten)
+        blockArrayIsFull=false;
+    //is empty
+    if(!endDetected)
+        readThread->callBack();
     //improve the performance due to drop block split
-    if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
+    /*if(blockArrayStart==blockArrayStop && !blockArrayIsFull)
     {
         blockArrayStart=BLOCKDEFAULTINITVAL;
         blockArrayStop=BLOCKDEFAULTINITVAL;
-    }
+    } if manipulate the read thread var, need mutex and lower the performance*/
     this->blockArrayStart=blockArrayStart;
     if(endDetected && bufferIsEmpty())
         internalEndOfFile();

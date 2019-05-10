@@ -340,13 +340,24 @@ void ReadThread::internalRead()
         lastGoodPosition+=readSize;
         if(blockArrayStop==blockSize)
         {
+            #if BLOCKDEFAULTINITVAL == 0
             blockArrayStop=0;
             if(blockArrayStart==0 && readSize>0)
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full at "+std::to_string(lastGoodPosition));
                 errno=EAGAIN;
+                writeThread->blockArrayIsFull=true;
             }
+            #endif
         }
+        #if BLOCKDEFAULTINITVAL > 0
+        if(blockArrayStart==blockArrayStop && readSize>0)
+        {
+            //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] blockArrayStart==0, buffer full at "+std::to_string(lastGoodPosition));
+            errno=EAGAIN;
+            writeThread->blockArrayIsFull=true;
+        }
+        #endif
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
         #endif
@@ -367,8 +378,6 @@ void ReadThread::internalRead()
         stopIt=false;
         return;
     }
-    if(errno==EAGAIN)
-        writeThread->blockArrayIsFull=true;
     if(readSize==0 || requestedSize>readSize)
     {
         if(lastGoodPosition>size())
