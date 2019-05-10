@@ -10,6 +10,7 @@
 
 #include "../../../cpp11addition.h"
 #include "CopyEngineFactory.h"
+#include "TransferThread.h"
 
 // The cmath header from MSVC does not contain round()
 #if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
@@ -30,6 +31,7 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<Diskspace>("Diskspace");
     qRegisterMetaType<std::vector<Diskspace> >("std::vector<Diskspace>");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
+    qRegisterMetaType<TransferThread::dirent_uc>("TransferThread::dirent_uc");
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);

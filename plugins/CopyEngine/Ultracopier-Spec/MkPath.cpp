@@ -319,7 +319,9 @@ void MkPath::internalDoThisPath()
         HANDLE hFile = CreateFileA(item.source.c_str(), READ_CONTROL | ACCESS_SYSTEM_SECURITY ,
                 FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,
+                                     std::string("CreateFile() failed. Error: INVALID_HANDLE_VALUE ")+item.source.c_str()+", GetLastError(): "+std::to_string(GetLastError())
+                                     );
         else
         {
             DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
