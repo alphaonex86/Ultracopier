@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include "EventLoop.h"
 #include "ReadThread.h"
+#include "TransferThread.h"
 
 WriteThread::WriteThread()
 {
@@ -167,7 +168,7 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(ftruncate64(intfd, startSize)!=0)
+        if(TransferThread::ftruncate64(intfd, startSize)!=0)
         {
             fclose(file);
             file=NULL;
@@ -189,7 +190,7 @@ bool WriteThread::internalOpen()
             emit closed();
             return false;
         }
-        if(fseeko64(file,0,SEEK_SET)!=0)
+        if(TransferThread::fseeko64(file,0,SEEK_SET)!=0)
         {
             fclose(file);
             file=NULL;
@@ -471,7 +472,7 @@ void WriteThread::flushAndSeekToZero()
 void WriteThread::internalFlushAndSeekToZero()
 {
     flushBuffer();
-    if(fseeko64(file, 0, SEEK_SET)!=0)
+    if(TransferThread::fseeko64(file, 0, SEEK_SET)!=0)
     {
         errorString_internal=std::string(strerror(errno))+", errno: "+std::to_string(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to seek after open: "+fileName+", error: "+errorString_internal);

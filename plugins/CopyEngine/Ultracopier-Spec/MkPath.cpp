@@ -543,30 +543,17 @@ bool MkPath::readFileDateTime(const std::string &source)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
-        #ifdef Q_OS_LINUX
-            struct stat info;
-            if(stat(source.c_str(),&info)!=0)
-                return false;
-            time_t ctime=info.st_ctim.tv_sec;
-            time_t actime=info.st_atim.tv_sec;
-            time_t modtime=info.st_mtim.tv_sec;
-            //this function avalaible on unix and mingw
-            butime.actime=actime;
-            butime.modtime=modtime;
-            Q_UNUSED(ctime);
-            return true;
-        #else //mainly for mac
-            std::string fileInfo(source);
-            time_t ctime=fileInfo.created().toTime_t();
-            time_t actime=fileInfo.lastRead().toTime_t();
-            time_t modtime=fileInfo.lastModified().toTime_t();
-            //this function avalaible on unix and mingw
-            utimbuf butime;
-            butime.actime=actime;
-            butime.modtime=modtime;
-            Q_UNUSED(ctime);
-            return true;
-        #endif
+        struct stat info;
+        if(stat(source.c_str(),&info)!=0)
+            return false;
+        time_t ctime=info.st_ctim.tv_sec;
+        time_t actime=info.st_atim.tv_sec;
+        time_t modtime=info.st_mtim.tv_sec;
+        //this function avalaible on unix and mingw
+        butime.actime=actime;
+        butime.modtime=modtime;
+        Q_UNUSED(ctime);
+        return true;
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY

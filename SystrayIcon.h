@@ -15,6 +15,10 @@
 #include <QList>
 #include <QUrl>
 
+#ifdef Q_OS_WIN32
+#define TREEMENU
+#endif
+
 #include "Environment.h"
 
 /** \brief The systray icon
@@ -49,7 +53,7 @@ class SystrayIcon : public QSystemTrayIcon
         std::string lastVersion;
         #endif
         QMenu* systrayMenu;			///< Pointer on the menu
-        #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+        #ifdef TREEMENU
         QMenu* copyMenu;			///< Pointer on the copy menu (move or copy)
         #else
         std::vector<QAction*> actions;

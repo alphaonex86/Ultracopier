@@ -721,6 +721,7 @@ bool TransferThread::mkdir(const std::string &file_path, const mode_t &mode)
     #ifdef Q_OS_UNIX
     return ::mkdir(file_path.c_str(),mode);
     #else
+    (void)mode;
     return ::mkdir(file_path.c_str());
     #endif
 }
@@ -1563,14 +1564,10 @@ int64_t TransferThread::readFileMDateTime(const std::string &source)
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
-        #ifdef Q_OS_LINUX
-            struct stat info;
-            if(stat(source.c_str(),&info)!=0)
-                return -1;
-            return info.st_mtim.tv_sec;
-        #else //mainly for mac
-            return source.lastModified().toTime_t();
-        #endif
+        struct stat info;
+        if(stat(source.c_str(),&info)!=0)
+            return -1;
+        return info.st_mtim.tv_sec;
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -1611,38 +1608,22 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+source+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
-        #ifdef Q_OS_LINUX
-            struct stat info;
-            if(stat(source.c_str(),&info)!=0)
-                return false;
-            time_t ctime=info.st_ctim.tv_sec;
-            time_t actime=info.st_atim.tv_sec;
-            time_t modtime=info.st_mtim.tv_sec;
-            //this function avalaible on unix and mingw
-            butime.actime=actime;
-            butime.modtime=modtime;
-            if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
-                return false;
-            }
-            Q_UNUSED(ctime);
-            return true;
-        #else //mainly for mac
-            time_t ctime=source.created().toTime_t();
-            time_t actime=source.lastRead().toTime_t();
-            time_t modtime=source.lastModified().toTime_t();
-            //this function avalaible on unix and mingw
-            butime.actime=actime;
-            butime.modtime=modtime;
-            if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
-                return false;
-            }
-            Q_UNUSED(ctime);
-            return true;
-        #endif
+        struct stat info;
+        if(stat(source.c_str(),&info)!=0)
+            return false;
+        time_t ctime=info.st_ctim.tv_sec;
+        time_t actime=info.st_atim.tv_sec;
+        time_t modtime=info.st_mtim.tv_sec;
+        //this function avalaible on unix and mingw
+        butime.actime=actime;
+        butime.modtime=modtime;
+        if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
+            return false;
+        }
+        Q_UNUSED(ctime);
+        return true;
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -1708,11 +1689,7 @@ bool TransferThread::writeDestinationFileDateTime(const std::string &destination
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeFileDateTime("+destination+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
-        #ifdef Q_OS_LINUX
-            return utime(destination.c_str(),&butime)==0;
-        #else //mainly for mac
-            return utime(destination.c_str(),&butime)==0;
-        #endif
+        return utime(destination.c_str(),&butime)==0;
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -2180,7 +2157,16 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
                 if(name!="." && name!="..")
                 {
                     dirent_uc tempValue;
+                    #if defined(__HAIKU__)
+                    struct stat sp;
+                    memset(&sp,0,sizeof(sp));
+                    if(stat(ep->d_name, &sp))
+                        tempValue.isFolder=S_ISDIR(sp.st_mode);
+                    else
+                        tempValue.isFolder=false;
+                    #else
                     tempValue.isFolder=ep->d_type==DT_DIR;
+                    #endif
                     strcpy(tempValue.d_name,ep->d_name);
                     list.push_back(tempValue);
                 }
@@ -2221,4 +2207,22 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
 void TransferThread::setMkFullPath(const bool mkFullPath)
 {
     this->mkFullPath=mkFullPath;
+}
+
+int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
+{
+    #ifdef __HAIKU__
+    return ::fseeko(__stream,__off,__whence);
+    #else
+    return ::fseeko64(__stream,__off,__whence);
+    #endif
+}
+
+int TransferThread::ftruncate64(int __fd, uint64_t __length)
+{
+    #ifdef __HAIKU__
+    return ftruncate(__fd,__length);
+    #else
+    return ftruncate64(__fd,__length);
+    #endif
 }

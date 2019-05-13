@@ -98,7 +98,7 @@ bool ReadThread::seek(const int64_t &position)
     const off_t fsize = p_statbuf.st_size;
     if(position>fsize)
         return false;
-    return (fseeko64(file, position, SEEK_SET)==0);
+    return (TransferThread::fseeko64(file, position, SEEK_SET)==0);
 }
 
 int64_t ReadThread::size() const
@@ -235,7 +235,7 @@ void ReadThread::internalRead()
         {
             stopIt=false;
             lastGoodPosition=0;
-            if(fseeko64(file,0,SEEK_SET)!=0)
+            if(TransferThread::fseeko64(file,0,SEEK_SET)!=0)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] seek to 0 failed");
                 isInReadLoop=false;
@@ -494,7 +494,11 @@ bool ReadThread::internalReopen()
         file=NULL;
     }
     //to fix 64Bits
-    if(size_at_open!=fseeko64(file, 0, SEEK_END) && mtime_at_open!=TransferThread::readFileMDateTime(fileName))
+    int64_t newSize=-1;
+    struct stat p_statbuf;
+    if(::stat(fileName.c_str(), &p_statbuf)==0)
+        newSize=p_statbuf.st_size;
+    if(size_at_open!=newSize && mtime_at_open!=TransferThread::readFileMDateTime(fileName))
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source file have changed since the last open, restart all");
         //fix this function like the close function

@@ -31,64 +31,64 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="886"/>
-        <location filename="../../CopyEngine.cpp" line="889"/>
-        <location filename="../../CopyEngine.cpp" line="894"/>
-        <location filename="../../CopyEngine.cpp" line="898"/>
+        <location filename="../../CopyEngine.cpp" line="887"/>
+        <location filename="../../CopyEngine.cpp" line="890"/>
+        <location filename="../../CopyEngine.cpp" line="895"/>
+        <location filename="../../CopyEngine.cpp" line="899"/>
         <source>Ask</source>
         <translation type="unfinished">просить</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="887"/>
-        <location filename="../../CopyEngine.cpp" line="891"/>
-        <location filename="../../CopyEngine.cpp" line="895"/>
-        <location filename="../../CopyEngine.cpp" line="899"/>
+        <location filename="../../CopyEngine.cpp" line="888"/>
+        <location filename="../../CopyEngine.cpp" line="892"/>
+        <location filename="../../CopyEngine.cpp" line="896"/>
+        <location filename="../../CopyEngine.cpp" line="900"/>
         <source>Skip</source>
         <translation type="unfinished">пропускать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="890"/>
+        <location filename="../../CopyEngine.cpp" line="891"/>
         <source>Merge</source>
         <translation type="unfinished">слияние</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="892"/>
-        <location filename="../../CopyEngine.cpp" line="904"/>
+        <location filename="../../CopyEngine.cpp" line="893"/>
+        <location filename="../../CopyEngine.cpp" line="905"/>
         <source>Rename</source>
         <translation type="unfinished">переименовать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="896"/>
+        <location filename="../../CopyEngine.cpp" line="897"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="900"/>
+        <location filename="../../CopyEngine.cpp" line="901"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="901"/>
+        <location filename="../../CopyEngine.cpp" line="902"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="902"/>
+        <location filename="../../CopyEngine.cpp" line="903"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">Заменить, если новее</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="903"/>
+        <location filename="../../CopyEngine.cpp" line="904"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="974"/>
+        <location filename="../../CopyEngine.cpp" line="975"/>
         <source>Options error</source>
         <translation type="unfinished">Опции ошибке</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="974"/>
+        <location filename="../../CopyEngine.cpp" line="975"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -421,49 +421,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1368"/>
-        <location filename="../../ListThread.cpp" line="2229"/>
+        <location filename="../../ListThread.cpp" line="1372"/>
+        <location filename="../../ListThread.cpp" line="2233"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Невозможно сделать, чтобы скопировать или переместить элемент в неправильном форсированном режиме: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1375"/>
-        <location filename="../../ListThread.cpp" line="2236"/>
+        <location filename="../../ListThread.cpp" line="1379"/>
+        <location filename="../../ListThread.cpp" line="2240"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Невозможно сохранить трансфер: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1391"/>
+        <location filename="../../ListThread.cpp" line="1395"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1398"/>
+        <location filename="../../ListThread.cpp" line="1402"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Неправильный заголовок: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1407"/>
+        <location filename="../../ListThread.cpp" line="1411"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Трансфер в смешанном режиме, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1416"/>
+        <location filename="../../ListThread.cpp" line="1420"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Передача списка в режиме копирования, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1422"/>
+        <location filename="../../ListThread.cpp" line="1426"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Трансфер в режим перемещения, но этот экземпляр не в этом режиме</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1485"/>
+        <location filename="../../ListThread.cpp" line="1489"/>
         <source>Some errors have been found during the line parsing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1493"/>
+        <location filename="../../ListThread.cpp" line="1497"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Не удается открыть трансфер: %1</translation>
     </message>
@@ -597,8 +597,8 @@
     <message>
         <location filename="../../TransferThread.cpp" line="257"/>
         <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="798"/>
-        <location filename="../../TransferThread.cpp" line="1286"/>
+        <location filename="../../TransferThread.cpp" line="799"/>
+        <location filename="../../TransferThread.cpp" line="1287"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -624,50 +624,50 @@
         <translation type="unfinished">%name% - копия (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="748"/>
-        <location filename="../../TransferThread.cpp" line="838"/>
-        <location filename="../../TransferThread.cpp" line="901"/>
+        <location filename="../../TransferThread.cpp" line="749"/>
+        <location filename="../../TransferThread.cpp" line="839"/>
+        <location filename="../../TransferThread.cpp" line="902"/>
         <source>The source file doesn&apos;t exist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="767"/>
-        <location filename="../../TransferThread.cpp" line="776"/>
-        <location filename="../../TransferThread.cpp" line="804"/>
-        <location filename="../../TransferThread.cpp" line="857"/>
-        <location filename="../../TransferThread.cpp" line="866"/>
-        <location filename="../../TransferThread.cpp" line="913"/>
+        <location filename="../../TransferThread.cpp" line="768"/>
+        <location filename="../../TransferThread.cpp" line="777"/>
+        <location filename="../../TransferThread.cpp" line="805"/>
+        <location filename="../../TransferThread.cpp" line="858"/>
+        <location filename="../../TransferThread.cpp" line="867"/>
+        <location filename="../../TransferThread.cpp" line="914"/>
         <source>Unable to do the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="890"/>
+        <location filename="../../TransferThread.cpp" line="891"/>
         <source>The source symlink can&apos;t be read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="907"/>
+        <location filename="../../TransferThread.cpp" line="908"/>
         <source>Another file exists at same place</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1197"/>
+        <location filename="../../TransferThread.cpp" line="1198"/>
         <source>Internal error: The destination is not closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1212"/>
+        <location filename="../../TransferThread.cpp" line="1213"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1223"/>
+        <location filename="../../TransferThread.cpp" line="1224"/>
         <source>Internal error: The buffer is not empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1286"/>
-        <location filename="../../TransferThread.cpp" line="1322"/>
+        <location filename="../../TransferThread.cpp" line="1287"/>
+        <location filename="../../TransferThread.cpp" line="1323"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>

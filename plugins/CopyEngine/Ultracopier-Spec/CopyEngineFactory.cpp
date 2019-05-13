@@ -177,7 +177,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("fileCollision",std::to_string(0)));
         KeysList.push_back(std::pair<std::string, std::string>("transferAlgorithm",std::to_string(0)));
         KeysList.push_back(std::pair<std::string, std::string>("checkDestinationFolder","true"));
-        KeysList.push_back(std::pair<std::string, std::string>("mkpath","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("mkpath","true"));
         KeysList.push_back(std::pair<std::string, std::string>("includeStrings",""));
         KeysList.push_back(std::pair<std::string, std::string>("includeOptions",""));
         KeysList.push_back(std::pair<std::string, std::string>("excludeStrings",""));

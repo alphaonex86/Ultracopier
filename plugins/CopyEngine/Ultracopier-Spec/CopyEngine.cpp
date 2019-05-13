@@ -675,7 +675,8 @@ void CopyEngine::errorTransferList(const std::string &error)
 
 bool CopyEngine::setSpeedLimitation(const int64_t &speedLimitation)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+std::to_string(speedLimitation));
+    (void)speedLimitation;
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+std::to_string(speedLimitation));
     return false;
 }
 

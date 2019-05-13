@@ -36,7 +36,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     actionOptions		= new QAction(this);
     actionProductKey    = new QAction(this);
     //actionTransfer		= new QAction(this);
-    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    #ifdef TREEMENU
     copyMenu		= NULL;
     #endif
     //to prevent init bug
@@ -118,7 +118,7 @@ SystrayIcon::~SystrayIcon()
     delete actionOptions;
     delete actionProductKey;
     delete systrayMenu;
-    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    #ifdef TREEMENU
     if(copyMenu!=NULL)
     {
         delete copyMenu;
@@ -494,7 +494,7 @@ void SystrayIcon::addEngineAction(const QString &name, const QIcon &icon, const 
     QAction *copy = new QAction(icon, label, menu);
     connect(copy,&QAction::triggered, this, query);
     copy->setData(name);
-    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    #ifdef TREEMENU
     copyMenu->addAction(copy);
     #else
     actions.push_back(copy);
@@ -505,7 +505,7 @@ void SystrayIcon::addEngineAction(const QString &name, const QIcon &icon, const 
 void SystrayIcon::reloadEngineList()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+    #ifdef TREEMENU
     if(copyMenu!=NULL)
     {
         delete copyMenu;
@@ -542,7 +542,7 @@ void SystrayIcon::reloadEngineList()
         QString labelTransfer = tr("Add &transfer");
         QString labelMove     = tr("Add &move");
         QMenu *menu = nullptr;
-        #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+        #ifdef TREEMENU
         if(engineEntryList.size()==1)
             menu = copyMenu;
         else
@@ -560,7 +560,7 @@ void SystrayIcon::reloadEngineList()
             addEngineAction(name, IconAdd, labelTransfer, menu, &SystrayIcon::CatchTransferQuery);
             addEngineAction(name, IconAdd, labelMove, menu, &SystrayIcon::CatchMoveQuery);
         }
-        #if ! defined(Q_OS_LINUX) || (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+        #ifdef TREEMENU
         if(engineEntryList.size()!=1)
             copyMenu->addMenu(menu);
         #endif

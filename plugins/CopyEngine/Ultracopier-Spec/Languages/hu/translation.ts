@@ -31,64 +31,64 @@
         <translation>Ezt a módot már korábban kényszerítették. Belső hiba történt, kérlek jelentsd be</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="886"/>
-        <location filename="../../CopyEngine.cpp" line="889"/>
-        <location filename="../../CopyEngine.cpp" line="894"/>
-        <location filename="../../CopyEngine.cpp" line="898"/>
+        <location filename="../../CopyEngine.cpp" line="887"/>
+        <location filename="../../CopyEngine.cpp" line="890"/>
+        <location filename="../../CopyEngine.cpp" line="895"/>
+        <location filename="../../CopyEngine.cpp" line="899"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="887"/>
-        <location filename="../../CopyEngine.cpp" line="891"/>
-        <location filename="../../CopyEngine.cpp" line="895"/>
-        <location filename="../../CopyEngine.cpp" line="899"/>
+        <location filename="../../CopyEngine.cpp" line="888"/>
+        <location filename="../../CopyEngine.cpp" line="892"/>
+        <location filename="../../CopyEngine.cpp" line="896"/>
+        <location filename="../../CopyEngine.cpp" line="900"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="890"/>
+        <location filename="../../CopyEngine.cpp" line="891"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="892"/>
-        <location filename="../../CopyEngine.cpp" line="904"/>
+        <location filename="../../CopyEngine.cpp" line="893"/>
+        <location filename="../../CopyEngine.cpp" line="905"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="896"/>
+        <location filename="../../CopyEngine.cpp" line="897"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="900"/>
+        <location filename="../../CopyEngine.cpp" line="901"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="901"/>
+        <location filename="../../CopyEngine.cpp" line="902"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="902"/>
+        <location filename="../../CopyEngine.cpp" line="903"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="903"/>
+        <location filename="../../CopyEngine.cpp" line="904"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="974"/>
+        <location filename="../../CopyEngine.cpp" line="975"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="974"/>
+        <location filename="../../CopyEngine.cpp" line="975"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
@@ -421,49 +421,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1368"/>
-        <location filename="../../ListThread.cpp" line="2229"/>
+        <location filename="../../ListThread.cpp" line="1372"/>
+        <location filename="../../ListThread.cpp" line="2233"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Elem másolása vagy mozgatás nem lehetséges a hibás kényszerített módban: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1375"/>
-        <location filename="../../ListThread.cpp" line="2236"/>
+        <location filename="../../ListThread.cpp" line="1379"/>
+        <location filename="../../ListThread.cpp" line="2240"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Átviteli lista mentése nem lehetséges: %1</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1391"/>
+        <location filename="../../ListThread.cpp" line="1395"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Hiba a fájl olvasásánál vagy a fálméret 0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1398"/>
+        <location filename="../../ListThread.cpp" line="1402"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Hibás fejléc: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1407"/>
+        <location filename="../../ListThread.cpp" line="1411"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista kevert módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1416"/>
+        <location filename="../../ListThread.cpp" line="1420"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista másolás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1422"/>
+        <location filename="../../ListThread.cpp" line="1426"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Az átviteli lista mozgatás módban van, de ez a példány nincs</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1485"/>
+        <location filename="../../ListThread.cpp" line="1489"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Néhány hiba történt a sorelemzés során</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1493"/>
+        <location filename="../../ListThread.cpp" line="1497"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Az átviteli lista megnyitása nem lehetséges: %1</translation>
     </message>
@@ -597,18 +597,18 @@
     <message>
         <location filename="../../TransferThread.cpp" line="257"/>
         <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="798"/>
-        <location filename="../../TransferThread.cpp" line="1286"/>
+        <location filename="../../TransferThread.cpp" line="799"/>
+        <location filename="../../TransferThread.cpp" line="1287"/>
         <source>File not found</source>
         <translation>Fájl nem található</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="767"/>
-        <location filename="../../TransferThread.cpp" line="776"/>
-        <location filename="../../TransferThread.cpp" line="804"/>
-        <location filename="../../TransferThread.cpp" line="857"/>
-        <location filename="../../TransferThread.cpp" line="866"/>
-        <location filename="../../TransferThread.cpp" line="913"/>
+        <location filename="../../TransferThread.cpp" line="768"/>
+        <location filename="../../TransferThread.cpp" line="777"/>
+        <location filename="../../TransferThread.cpp" line="805"/>
+        <location filename="../../TransferThread.cpp" line="858"/>
+        <location filename="../../TransferThread.cpp" line="867"/>
+        <location filename="../../TransferThread.cpp" line="914"/>
         <source>Unable to do the folder</source>
         <translation type="unfinished">Mappaművelet nem lehetséges</translation>
     </message>
@@ -639,40 +639,40 @@
         <translation type="unfinished">%name% - másolás (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="748"/>
-        <location filename="../../TransferThread.cpp" line="838"/>
-        <location filename="../../TransferThread.cpp" line="901"/>
+        <location filename="../../TransferThread.cpp" line="749"/>
+        <location filename="../../TransferThread.cpp" line="839"/>
+        <location filename="../../TransferThread.cpp" line="902"/>
         <source>The source file doesn&apos;t exist</source>
         <translation type="unfinished">A forrásfájl nem létezik</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="890"/>
+        <location filename="../../TransferThread.cpp" line="891"/>
         <source>The source symlink can&apos;t be read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="907"/>
+        <location filename="../../TransferThread.cpp" line="908"/>
         <source>Another file exists at same place</source>
         <translation type="unfinished">Egy másik fájl létezik ugyanazon a helyen</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1197"/>
+        <location filename="../../TransferThread.cpp" line="1198"/>
         <source>Internal error: The destination is not closed</source>
         <translation type="unfinished">Belső hiba: a cél nincs bezárva</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1212"/>
+        <location filename="../../TransferThread.cpp" line="1213"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
         <translation type="unfinished">Belső hiba: az átvitt méret nem egyezik meg</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1223"/>
+        <location filename="../../TransferThread.cpp" line="1224"/>
         <source>Internal error: The buffer is not empty</source>
         <translation type="unfinished">Belső hiba: a puffer nem üres</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="1286"/>
-        <location filename="../../TransferThread.cpp" line="1322"/>
+        <location filename="../../TransferThread.cpp" line="1287"/>
+        <location filename="../../TransferThread.cpp" line="1323"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
