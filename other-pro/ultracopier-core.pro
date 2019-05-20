@@ -31,6 +31,7 @@ TARGET = ultracopier
 macx {
     ICON = $$PWD/../resources/ultracopier.icns
     #QT += macextras
+    VERSION = 2.0.0.1
 }
 FORMS += $$PWD/../HelpDialog.ui \
     $$PWD/../PluginInformation.ui \

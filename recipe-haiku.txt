@@ -2,12 +2,12 @@ SUMMARY="A replacement for files copy dialogs"
 DESCRIPTION="Ultracopier is free and open source software licensed under \
 GPL3 that acts as a replacement for files copy dialogs. "
 HOMEPAGE="https://ultracopier.first-world.info/"
-COPYRIGHT="GNU GPL v3"
+COPYRIGHT="2007-2019 BRULE Herman Jacques Roger (alpha_one_x86)"
 LICENSE="GNU GPL v3"
 REVISION="1"
-srcGitRev="779b65ab9038661f918e9055493df8883e26fda6"
+srcGitRev="a59a486b8b67f8f26c4849e9fbe74fd1e8fe6b90"
 SOURCE_URI="https://github.com/alphaonex86/Ultracopier/archive/$srcGitRev.tar.gz"
-CHECKSUM_SHA256="2824b62c702805a274f59cbc1eed710a3e31cbd24560dd334e71c453e3a4b5fc"
+CHECKSUM_SHA256="780bac14291c6bc69ead080643fe5773bb9dece6bc551d3715bb29f859cd09bc"
 SOURCE_FILENAME="ultracopier-$portVersion.tar.gz"
 SOURCE_DIR="Ultracopier-$srcGitRev"
 
@@ -20,30 +20,29 @@ PROVIDES="
 	"
 REQUIRES="
 	haiku$secondaryArchSuffix
-	lib:libQt5Network$secondaryArchSuffix
-	lib:libQt5Gui$secondaryArchSuffix
-	lib:libQt5Xml$secondaryArchSuffix
 	lib:libGL$secondaryArchSuffix
 	lib:libQt5Core$secondaryArchSuffix
+	lib:libQt5Gui$secondaryArchSuffix
+	lib:libQt5Network$secondaryArchSuffix
 	lib:libQt5Widgets$secondaryArchSuffix
+	lib:libQt5Xml$secondaryArchSuffix
 	"
 
 BUILD_REQUIRES="
 	haiku${secondaryArchSuffix}_devel
-	devel:libQt5Network$secondaryArchSuffix
-	devel:libQt5Gui$secondaryArchSuffix
-	devel:libQt5Xml$secondaryArchSuffix
 	devel:libGL$secondaryArchSuffix
 	devel:libQt5Core$secondaryArchSuffix
+	devel:libQt5Gui$secondaryArchSuffix
+	devel:libQt5Network$secondaryArchSuffix
 	devel:libQt5Widgets$secondaryArchSuffix
+	devel:libQt5Xml$secondaryArchSuffix
 	"
-
 BUILD_PREREQUIRES="
 	cmd:find
 	cmd:gcc$secondaryArchSuffix
-	cmd:lrelease$secondaryArchSuffix
+	cmd:lrelease$secondaryArchSuffix >= 5
 	cmd:make
-	cmd:qmake$secondaryArchSuffix
+	cmd:qmake$secondaryArchSuffix >= 5
 	"
 
 BUILD()
@@ -57,4 +56,5 @@ INSTALL()
 {
 	mkdir -p $appsDir
 	cp ultracopier $appsDir/UltraCopier
+	addAppDeskbarSymlink $appsDir/UltraCopier
 }
