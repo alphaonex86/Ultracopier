@@ -480,16 +480,6 @@ void TransferThreadSync::tryCopyDirectly()
     writeThread.fakeWriteIsStopped();
 }
 
-bool TransferThreadSync::canBeMovedDirectly() const
-{
-    if(mode!=Ultracopier::Move)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] mode!=Ultracopier::Move");
-        return false;
-    }
-    return is_symlink(source) || driveManagement.isSameDrive(destination,source);
-}
-
 void TransferThreadSync::readIsReady()
 {
     if(readIsReadyVariable)
@@ -558,7 +548,6 @@ void TransferThreadSync::writeIsReady()
 void TransferThreadSync::stop()
 {
     stopIt=true;
-    haveStartTime=false;
     if(transfer_stat==TransferStat_Idle)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
@@ -810,82 +799,6 @@ void TransferThreadSync::postOperation()
     emit postOperationStopped();
 }
 
-bool TransferThreadSync::doFilePostOperation()
-{
-    //do operation needed by copy
-    //set the time if no write thread used
-
-    if(!exists(destination) && !is_symlink(destination))
-    {
-        if(!stopIt)
-            if(/*true when the destination have been remove but not the symlink:*/!is_symlink(source))
-            {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date: File not found");
-                emit errorOnFile(destination,tr("Unable to change the date").toStdString()+": "+tr("File not found").toStdString());
-                return false;
-            }
-    }
-    else
-    {
-        if(doRightTransfer)
-        {
-            //should be never used but...
-            /*source.refresh();
-            if(source.exists())*/
-            if(havePermission)
-            {
-                if(!writeDestinationFilePermissions(destination))
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to set the destination file permission");
-                    //emit errorOnFile(destination,tr("Unable to set the destination file permission"));
-                    //return false;
-                }
-            }
-            else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try doRightTransfer when source not exists");
-        }
-        //date at end because previous change can touch the file
-        if(doTheDateTransfer)
-        {
-            if(!writeDestinationFileDateTime(destination))
-            {
-                if(!is_file(destination))
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date (is not a file)");
-                else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to change the date");
-                /* error with virtual folder under windows */
-                #ifndef Q_OS_WIN32
-                if(keepDate)
-                {
-                    emit errorOnFile(destination,tr("Unable to change the date").toStdString());
-                    return false;
-                }
-                #endif
-            }
-            /*else -> need be done at source m time read
-            {
-                #ifndef Q_OS_WIN32
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] read the destination time: "+destination.lastModified().toString().toStdString());
-                if(destination.lastModified()<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] read the destination time lower than min time: "+destination.lastModified().toString().toStdString());
-                    if(keepDate)
-                    {
-                        emit errorOnFile(destination,tr("Unable to change the date").toStdString());
-                        return false;
-                    }
-                }
-                #endif
-            }*/
-        }
-
-    }
-    if(stopIt)
-        return false;
-
-    return true;
-}
-
 //////////////////////////////////////////////////////////////////
 /////////////////////// Error management /////////////////////////
 //////////////////////////////////////////////////////////////////
@@ -1014,19 +927,13 @@ void TransferThreadSync::writeThreadIsReopened()
         return;
     }
     writeError_destination_reopened=true;
-    if(writeError_source_seeked && writeError_destination_reopened)
+    if(writeError_destination_reopened)
         resumeTransferAfterWriteError();
 }
 
 void TransferThreadSync::readThreadIsSeekToZeroAndWait()
 {
-    if(writeError_source_seeked)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] double event dropped");
-        return;
-    }
-    writeError_source_seeked=true;
-    if(writeError_source_seeked && writeError_destination_reopened)
+    if(writeError_destination_reopened)
         resumeTransferAfterWriteError();
 }
 

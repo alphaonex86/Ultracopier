@@ -104,6 +104,8 @@ private slots:
     void writeIsStopped();
     /// \brief to set files to transfer
     bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
+    bool checkIfAllIsClosedAndDoOperations();
+    void resumeTransferAfterWriteError();
 private:
     ReadThread		readThread;
     WriteThread		writeThread;

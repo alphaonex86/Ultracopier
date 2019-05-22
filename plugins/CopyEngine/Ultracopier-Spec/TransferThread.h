@@ -242,12 +242,11 @@ protected:
     PACL dacl;
     #endif
     bool havePermission;
-private:
     //to send state
     bool sended_state_preOperationStopped;
     //different post-operation
     bool doFilePostOperation();
-
+private:
     QTime startTransferTime;
     bool haveTransferTime;
 };
