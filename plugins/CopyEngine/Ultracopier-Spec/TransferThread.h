@@ -167,22 +167,28 @@ public slots:
     void set_updateMount();
 private slots:
     void preOperation();
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     void readIsReady();
     void writeIsReady();
     void readIsFinish();
     void writeIsFinish();
     void readIsClosed();
     void writeIsClosed();
+    #endif
     void postOperation();
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     void getWriteError();
     void getReadError();
+    #endif
     //void syncAfterErrorAndReadFinish();
     void readThreadIsSeekToZeroAndWait();
     void writeThreadIsReopened();
     void readThreadResumeAfterError();
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     //to filter the emition of signal
     void readIsStopped();
     void writeIsStopped();
+    #endif
     //force into the right thread
     void internalStartTheTransfer();
 private:
@@ -193,8 +199,10 @@ private:
         MoveReturn_error=2
     };
     TransferStat	transfer_stat;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     ReadThread		readThread;
     WriteThread		writeThread;
+    #endif
 
     Ultracopier::CopyMode		mode;
     bool			doRightTransfer;
@@ -203,6 +211,7 @@ private:
     #endif
     bool			keepDate;
     bool            mkFullPath;
+    #ifndef FSCOPYASYNC
     //ready = open + ready to operation (no error to resolv)
     bool			readIsReadyVariable;
     bool			writeIsReadyVariable;
@@ -215,6 +224,7 @@ private:
     bool			writeIsFinishVariable;
     bool			readIsClosedVariable;
     bool			writeIsClosedVariable;
+    #endif
     bool			canBeMovedDirectlyVariable,canBeCopiedDirectlyVariable;
     DriveManagement driveManagement;
     volatile bool	stopIt;
@@ -264,8 +274,10 @@ private:
     bool checkAlwaysRename();///< return true if has been renamed
     bool canBeMovedDirectly() const;
     bool canBeCopiedDirectly() const;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     void tryMoveDirectly();
     void tryCopyDirectly();
+    #endif
     void ifCanStartTransfer();
     //fonction to edit the file date time
     bool readSourceFileDateTime(const std::string &source);
@@ -283,10 +295,12 @@ private:
     bool checkIfAllIsClosedAndDoOperations();// return true if all is closed, and do some operations, don't use into condition to check if is closed!
     bool doFilePostOperation();
     //different pre-operation
+    #ifndef FSCOPYASYNC
     void tryOpen();
     bool remainFileOpen() const;
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
+    #endif
 };
 
 #endif // TRANSFERTHREAD_H

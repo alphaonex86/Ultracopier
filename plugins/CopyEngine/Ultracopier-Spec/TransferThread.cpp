@@ -32,8 +32,10 @@ TransferThread::TransferThread() :
     renameTheOriginalDestination    (false),
     havePermission                  (false)
 {
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     readThread.setWriteThread(&writeThread);
     writeThread.setReadThread(&readThread);
+    #endif
     renameRegex=std::regex("^(.*)(\\.[a-zA-Z0-9]+)$");
     #ifdef Q_OS_WIN32
         #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -76,16 +78,19 @@ void TransferThread::run()
     stopIt                  = false;
     fileExistsAction        = FileExists_NotSet;
     alwaysDoFileExistsAction= FileExists_NotSet;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     //the error push
     if(!connect(&readThread,&ReadThread::error,                     this,					&TransferThread::getReadError,      	Qt::QueuedConnection))
         abort();
     if(!connect(&writeThread,&WriteThread::error,                   this,					&TransferThread::getWriteError,         Qt::QueuedConnection))
         abort();
+    #endif
     //the thread change operation
     if(!connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,          Qt::QueuedConnection))
         abort();
     if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,         Qt::QueuedConnection))
         abort();
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     //the state change operation
     if(!connect(&readThread,&ReadThread::opened,                    this,					&TransferThread::readIsReady,           Qt::QueuedConnection))
         abort();
@@ -112,14 +117,17 @@ void TransferThread::run()
         abort();
     if(!connect(&writeThread,&WriteThread::flushedAndSeekedToZero,  this,                   &TransferThread::readThreadResumeAfterError,	Qt::QueuedConnection))
         abort();
+    #endif
     if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,      Qt::QueuedConnection))
         abort();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThread::debugInformation,  Qt::QueuedConnection))
         abort();
     if(!connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThread::debugInformation,  Qt::QueuedConnection))
         abort();
+    #endif
     if(!connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThread::debugInformation,	Qt::QueuedConnection))
         abort();
     #endif
@@ -163,6 +171,7 @@ void TransferThread::internalStartTheTransfer()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] check how start the transfer"));
     canStartTransfer=true;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     if(readIsReadyVariable && writeIsReadyVariable)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start directly the transfer"));
@@ -170,6 +179,9 @@ void TransferThread::internalStartTheTransfer()
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start the transfer as delayed"));
+    #else
+    ifCanStartTransfer();
+    #endif
 }
 
 bool TransferThread::setFiles(const std::string& source, const int64_t &size, const std::string& destination, const Ultracopier::CopyMode &mode)
@@ -285,19 +297,23 @@ void TransferThread::resetExtraVariable()
     sended_state_writeStopped	= false;
     writeError                  = false;
     readError                   = false;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     readIsReadyVariable         = false;
     writeIsReadyVariable		= false;
     readIsFinishVariable		= false;
     writeIsFinishVariable		= false;
     readIsClosedVariable		= false;
     writeIsClosedVariable		= false;
+    #endif
     needRemove                  = false;
     needSkip                    = false;
     retry                       = false;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     readIsOpenVariable          = false;
     writeIsOpenVariable         = false;
     readIsOpeningVariable       = false;
     writeIsOpeningVariable      = false;
+    #endif
     havePermission              = false;
 }
 
@@ -364,19 +380,31 @@ void TransferThread::preOperation()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] need moved directly: "+source+" to "+destination);
         canBeMovedDirectlyVariable=true;
+        #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
         readThread.fakeOpen();
         writeThread.fakeOpen();
+        #else
+        MoveFileExA();
+        #endif
         return;
     }
-    if(canBeCopiedDirectly())
+    if(canBeCopiedDirectly())// is is_symlink(source);
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] need copied directly: "+source+" to "+destination);
         canBeCopiedDirectlyVariable=true;
+        #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
         readThread.fakeOpen();
         writeThread.fakeOpen();
+        #else
+        CopyFileExA();//copy symblink
+        #endif
         return;
     }
+#ifdef FSCOPYASYNC
+    CopyFileExA();
+#else
     tryOpen();
+#endif
 }
 
 void TransferThread::tryOpen()
@@ -734,10 +762,12 @@ void TransferThread::tryMoveDirectly()
     sended_state_writeStopped	= false;
     writeError                  = false;
     readError                   = false;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     readIsFinishVariable		= false;
     writeIsFinishVariable		= false;
     readIsClosedVariable		= false;
     writeIsClosedVariable		= false;
+    #endif
     //move if on same mount point
     #ifndef Q_OS_WIN32
     if(is_file(destination) || is_symlink(destination))
@@ -816,6 +846,7 @@ void TransferThread::tryMoveDirectly()
     writeThread.fakeWriteIsStopped();
 }
 
+#if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
 void TransferThread::tryCopyDirectly()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] need copied directly: "+source+" to "+destination);
@@ -824,10 +855,12 @@ void TransferThread::tryCopyDirectly()
     sended_state_writeStopped	= false;
     writeError                  = false;
     readError                   = false;
+    #if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
     readIsFinishVariable		= false;
     writeIsFinishVariable		= false;
     readIsClosedVariable		= false;
     writeIsClosedVariable		= false;
+    #endif
     //move if on same mount point
     #ifndef Q_OS_WIN32
     if(is_file(destination) || is_symlink(destination))
@@ -924,6 +957,7 @@ void TransferThread::tryCopyDirectly()
     readThread.fakeReadIsStopped();
     writeThread.fakeWriteIsStopped();
 }
+endif
 
 bool TransferThread::canBeMovedDirectly() const
 {

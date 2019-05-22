@@ -10,7 +10,7 @@
 #include "Environment.h"
 #include "StructEnumDefinition_CopyEngine.h"
 #include "Variable.h"
-#ifdef POSIXFILEMANIP
+#if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
 #include "CallBackEventLoop.h"
 
 /// \brief Thread changed to open/close and read the source file

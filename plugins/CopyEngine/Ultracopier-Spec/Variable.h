@@ -25,8 +25,13 @@
 #define ULTRACOPIER_PLUGIN_MAX_BLOCK_SIZE   16*1024 //in KB
 #define ULTRACOPIER_PLUGIN_MAX_SEQUENTIAL_NUMBER_OF_BLOCK   2048
 #define ULTRACOPIER_PLUGIN_MAX_PARALLEL_NUMBER_OF_BLOCK   128 //in KB
-#define POSIXFILEMANIP
-#define SYNCFILEMANIP
+#if defined(_WIN32) || defined(WIN32)
+    #define POSIXFILEMANIP
+    #define FSCOPYASYNC
+#else
+    #define POSIXFILEMANIP
+    #define SYNCFILEMANIP
+#endif
 
 //if set, check the inode type at scanFileOrFolder, deprecated into the new algorithm and not used
 #define ULTRACOPIER_PLUGIN_CHECKLISTTYPE

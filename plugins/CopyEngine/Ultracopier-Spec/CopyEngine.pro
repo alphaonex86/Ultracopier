@@ -38,8 +38,7 @@ HEADERS         = \
     $$PWD/ScanFileOrFolder.h \
     $$PWD/DiskSpace.h \
     $$PWD/EventLoop.h \
-    $$PWD/CallBackEventLoop.h \
-    $$PWD/ports.h
+    $$PWD/CallBackEventLoop.h
 SOURCES         = \
     $$PWD/TransferThread.cpp \
     $$PWD/ReadThread.cpp \

@@ -12,7 +12,7 @@
 #include "StructEnumDefinition_CopyEngine.h"
 #include <cstdint>
 #include "Variable.h"
-#ifdef POSIXFILEMANIP
+#if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
 #include "CallBackEventLoop.h"
 
 class ReadThread;

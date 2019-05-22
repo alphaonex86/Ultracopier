@@ -1,6 +1,6 @@
 #include "ReadThread.h"
 
-#ifdef POSIXFILEMANIP
+#if defined(POSIXFILEMANIP) && defined(SYNCFILEMANIP)
 #ifdef Q_OS_LINUX
 #include <fcntl.h>
 #endif
