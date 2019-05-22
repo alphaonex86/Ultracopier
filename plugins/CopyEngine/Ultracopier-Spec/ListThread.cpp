@@ -4,6 +4,16 @@
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 
+#if defined(SYNCFILEMANIP)
+#include "sync/TransferThreadSync.h"
+#else
+    #if defined(SYNCFILEMANIP)
+    #include "async/TransferThreadAsync.h"
+    #else
+    #error not sync and async set
+    #endif
+#endif
+
 ListThread::ListThread(FacilityInterface * facilityInterface) :
     numberOfInodeOperation(0),
     sourceDriveMultiple(false),
@@ -123,6 +133,9 @@ void ListThread::transferInodeIsClosed()
             newAction.userAction.position=int_for_internal_loop;
             actionDone.push_back(newAction);
             /// \todo check if item is at the right thread
+            const int64_t transferTime=temp_transfer_thread->transferTime();
+            if(transferTime>=0)
+                timeToTransfer.push_back(std::pair<uint64_t,uint32_t>(temp_transfer_thread->transferSize,transferTime));
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+int_for_internal_loop);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
             if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
@@ -139,11 +152,6 @@ void ListThread::transferInodeIsClosed()
             }
             bytesTransfered+=temp_transfer_thread->transferSize;
 
-            if(temp_transfer_thread->haveStartTime)
-            {
-                timeToTransfer.push_back(std::pair<uint64_t,uint32_t>(temp_transfer_thread->transferSize,temp_transfer_thread->startTransferTime.elapsed()));
-                temp_transfer_thread->haveStartTime=false;
-            }
             temp_transfer_thread->transferId=0;
             temp_transfer_thread->transferSize=0;
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -2054,7 +2062,11 @@ void ListThread::createTransferThread()
         return;
     if(transferThreadList.size()>=(unsigned int)inodeThreads)
         return;
-    transferThreadList.push_back(new TransferThread());
+    #if defined(SYNCFILEMANIP)
+    transferThreadList.push_back(new TransferThreadSync());
+    #else
+    transferThreadList.push_back(new TransferThreadAsync());
+    #endif
     TransferThread * last=transferThreadList.back();
     last->transferId=0;
     last->transferSize=0;

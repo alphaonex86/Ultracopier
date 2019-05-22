@@ -6,18 +6,13 @@ QT += widgets xml
 DEFINES += UNICODE _UNICODE
 TEMPLATE        = lib
 CONFIG         += plugin
-win32 {
-    LIBS += -ladvapi32
-}
 
-HEADERS         = \
+HEADERS         += \
     $$PWD/StructEnumDefinition.h \
     $$PWD/StructEnumDefinition_CopyEngine.h \
     $$PWD/DebugEngineMacro.h \
     $$PWD/Variable.h \
     $$PWD/TransferThread.h \
-    $$PWD/ReadThread.h \
-    $$PWD/WriteThread.h \
     $$PWD/MkPath.h \
     $$PWD/ListThread.h \
     $$PWD/../../../interface/PluginInterface_CopyEngine.h \
@@ -39,10 +34,8 @@ HEADERS         = \
     $$PWD/DiskSpace.h \
     $$PWD/EventLoop.h \
     $$PWD/CallBackEventLoop.h
-SOURCES         = \
+SOURCES         += \
     $$PWD/TransferThread.cpp \
-    $$PWD/ReadThread.cpp \
-    $$PWD/WriteThread.cpp \
     $$PWD/MkPath.cpp \
     $$PWD/ListThread.cpp \
     $$PWD/../../../cpp11addition.cpp \
@@ -104,4 +97,19 @@ OTHER_FILES += \
 !CONFIG(static) {
 RESOURCES += \
     $$PWD/copyEngineResources.qrc
+}
+
+win32 {
+    LIBS += -ladvapi32
+    HEADERS         += $$PWD/async/TransferThreadAsync.h
+    SOURCES         += $$PWD/async/TransferThreadAsync.cpp
+}
+else
+{
+    HEADERS         += $$PWD/sync/TransferThreadSync.h \
+        $$PWD/sync/ReadThread.h \
+        $$PWD/sync/WriteThread.h
+    SOURCES         += $$PWD/sync/TransferThreadSync.cpp \
+        $$PWD/sync/ReadThread.cpp \
+        $$PWD/sync/WriteThread.cpp
 }
