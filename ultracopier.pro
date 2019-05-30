@@ -62,16 +62,12 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/MkPath.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/ReadThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/RenamingRules.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition_CopyEngine.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/Variable.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/WriteThread.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/EventLoop.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/CallBackEventLoop.h \
     $$PWD/plugins/Listener/catchcopy-v0002/Variable.h \
     $$PWD/plugins/Listener/catchcopy-v0002/StructEnumDefinition.h \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.h \
@@ -104,13 +100,10 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread_InodeAction.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/MkPath.cpp \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/ReadThread.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/RenamingRules.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/WriteThread.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/EventLoop.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
@@ -136,3 +129,7 @@ win32 {
     FORMS += $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.ui
     LIBS += -lole32 -lshell32
 }
+
+#temp
+HEADERS += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h
+SOURCES += $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp

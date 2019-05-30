@@ -32,8 +32,8 @@ HEADERS         += \
     $$PWD/FolderExistsDialog.h \
     $$PWD/ScanFileOrFolder.h \
     $$PWD/DiskSpace.h \
-    $$PWD/EventLoop.h \
-    $$PWD/CallBackEventLoop.h
+    $$PWD/sync/EventLoop.h \
+    $$PWD/sync/CallBackEventLoop.h
 SOURCES         += \
     $$PWD/TransferThread.cpp \
     $$PWD/MkPath.cpp \
@@ -55,7 +55,7 @@ SOURCES         += \
     $$PWD/FolderExistsDialog.cpp \
     $$PWD/ScanFileOrFolder.cpp \
     $$PWD/DiskSpace.cpp \
-    $$PWD/EventLoop.cpp
+    $$PWD/sync/EventLoop.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

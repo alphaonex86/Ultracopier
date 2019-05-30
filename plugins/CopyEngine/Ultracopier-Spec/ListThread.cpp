@@ -7,7 +7,7 @@
 #if defined(SYNCFILEMANIP)
 #include "sync/TransferThreadSync.h"
 #else
-    #if defined(SYNCFILEMANIP)
+    #if defined(FSCOPYASYNC)
     #include "async/TransferThreadAsync.h"
     #else
     #error not sync and async set

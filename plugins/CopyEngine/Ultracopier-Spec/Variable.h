@@ -30,7 +30,8 @@
     #define FSCOPYASYNC
 #else
     #define POSIXFILEMANIP
-    #define SYNCFILEMANIP
+    //#define SYNCFILEMANIP
+    #define FSCOPYASYNC
 #endif
 
 //if set, check the inode type at scanFileOrFolder, deprecated into the new algorithm and not used

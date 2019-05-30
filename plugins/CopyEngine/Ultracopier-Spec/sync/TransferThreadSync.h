@@ -41,8 +41,8 @@
 #include "WriteThread.h"
 #include "../TransferThread.h"
 #include "Environment.h"
-#include "DriveManagement.h"
-#include "StructEnumDefinition_CopyEngine.h"
+#include "../DriveManagement.h"
+#include "../StructEnumDefinition_CopyEngine.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
 class TransferThreadSync : public TransferThread
@@ -111,6 +111,7 @@ private:
     WriteThread		writeThread;
     bool sended_state_readStopped;
     bool sended_state_writeStopped;
+    bool			canBeMovedDirectlyVariable,canBeCopiedDirectlyVariable;
 
     //ready = open + ready to operation (no error to resolv)
     bool			readIsReadyVariable;

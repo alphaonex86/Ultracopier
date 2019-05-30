@@ -40,6 +40,7 @@
 #include "Environment.h"
 #include "DriveManagement.h"
 #include "StructEnumDefinition_CopyEngine.h"
+#include "Variable.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
 class TransferThread : public QObject
@@ -199,7 +200,6 @@ protected:
     bool			keepDate;
     bool            mkFullPath;
     volatile bool	stopIt;
-    bool			canBeMovedDirectlyVariable,canBeCopiedDirectlyVariable;
     DriveManagement driveManagement;
     volatile bool	canStartTransfer;
     bool			retry;

@@ -37,19 +37,21 @@
 #include <windows.h>
 #endif
 
-#include "Environment.h"
-#include "DriveManagement.h"
-#include "StructEnumDefinition_CopyEngine.h"
 #include "../TransferThread.h"
+#include "Environment.h"
+#include "../DriveManagement.h"
+#include "../StructEnumDefinition_CopyEngine.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
-class TransferThreadAsync : public TransferThread
+class TransferThreadAsync : public TransferThread, public QThread
 {
     Q_OBJECT
 public:
     explicit TransferThreadAsync();
     ~TransferThreadAsync();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    /// \brief to set the id
+    void setId(int id);
     /// \brief get the reading letter
     char readingLetter() const;
     /// \brief get the writing letter
@@ -61,6 +63,14 @@ public:
     std::pair<uint64_t, uint64_t> progression() const;
 protected:
     void run();
+private slots:
+    void preOperation();
+    void postOperation();
+    //force into the right thread
+    void internalStartTheTransfer();
+signals:
+    //internal signal
+    void internalStartResumeAfterErrorAndSeek() const;
 public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
@@ -75,10 +85,21 @@ public slots:
     /// \brief put the current file at bottom
     void putAtBottom();
 private slots:
-    void preOperation();
-    void postOperation();
-    //force into the right thread
-    void internalStartTheTransfer();
+    //void syncAfterErrorAndReadFinish();
+    void readThreadIsSeekToZeroAndWait();
+    void writeThreadIsReopened();
+    void readThreadResumeAfterError();
+    /// \brief to set files to transfer
+    bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
+    bool checkIfAllIsClosedAndDoOperations();
+    void resumeTransferAfterWriteError();
+private:
+    //ready = open + ready to operation (no error to resolv)
+    bool			transferIsReadyVariable;
+    bool remainFileOpen() const;
+    bool remainSourceOpen() const;
+    bool remainDestinationOpen() const;
+    void resetExtraVariable();
     void ifCanStartTransfer();
 };
 

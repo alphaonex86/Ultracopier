@@ -9,7 +9,7 @@
 #define BLOCKDEFAULTINITVAL 0//to test and debug, in production should be at 0
 
 #include "Environment.h"
-#include "StructEnumDefinition_CopyEngine.h"
+#include "../StructEnumDefinition_CopyEngine.h"
 #include <cstdint>
 #include "Variable.h"
 #include "CallBackEventLoop.h"

@@ -8,7 +8,7 @@
 
 #include "WriteThread.h"
 #include "Environment.h"
-#include "StructEnumDefinition_CopyEngine.h"
+#include "../StructEnumDefinition_CopyEngine.h"
 #include "Variable.h"
 #include "CallBackEventLoop.h"
 
