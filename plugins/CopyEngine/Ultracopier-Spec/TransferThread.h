@@ -44,12 +44,7 @@
 #include "Variable.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
-class TransferThread : public
-        #ifdef FSCOPYASYNC
-            QThread
-        #else
-            QObject
-        #endif
+class TransferThread : public QThread
 {
     Q_OBJECT
 public:
