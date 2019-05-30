@@ -141,6 +141,8 @@ bool TransferThreadSync::setFiles(const std::string& source, const int64_t &size
     if(!TransferThread::setFiles(source,size,destination,mode))
         return false;
     writeError_destination_reopened = false;
+    canBeMovedDirectlyVariable      = false;
+    canBeCopiedDirectlyVariable     = false;
     return true;
 }
 

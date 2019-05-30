@@ -120,8 +120,6 @@ bool TransferThread::setFiles(const std::string& source, const int64_t &size, co
     fileExistsAction                = FileExists_NotSet;
     canStartTransfer                = false;
     sended_state_preOperationStopped= false;
-    canBeMovedDirectlyVariable      = false;
-    canBeCopiedDirectlyVariable     = false;
     fileContentError                = false;
     writeError                      = false;
     readError                       = false;

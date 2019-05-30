@@ -43,7 +43,7 @@
 #include "../StructEnumDefinition_CopyEngine.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
-class TransferThreadAsync : public TransferThread, public QThread
+class TransferThreadAsync : public TransferThread
 {
     Q_OBJECT
 public:

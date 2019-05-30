@@ -8,6 +8,7 @@
 
 #include <QObject>
 #include <QTime>
+#include <QThread>
 
 #include <regex>
 #include <vector>
@@ -43,7 +44,12 @@
 #include "Variable.h"
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
-class TransferThread : public QObject
+class TransferThread : public
+        #ifdef FSCOPYASYNC
+            QThread
+        #else
+            QObject
+        #endif
 {
     Q_OBJECT
 public:
