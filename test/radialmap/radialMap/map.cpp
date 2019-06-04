@@ -46,6 +46,8 @@ RadialMap::Map::Map(bool summary)
     const int fmh   = QFontMetrics(QFont()).height();
     const int fmhD4 = fmh / 4;
     MAP_2MARGIN = 2 * (fmh - (fmhD4 - LABEL_MAP_SPACER)); //margin is dependent on fitting in labels at top and bottom
+
+    m_minSize=27300;
 }
 
 RadialMap::Map::~Map()
@@ -63,6 +65,8 @@ void RadialMap::Map::invalidate()
 
 void RadialMap::Map::make(const Folder *tree, bool refresh)
 {
+    if(height()<1)
+        abort();
     //slow operation so set the wait cursor
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -78,7 +82,11 @@ void RadialMap::Map::make(const Folder *tree, bool refresh)
         m_root = tree;
 
         if (!refresh) {
-            m_minSize = (tree->size() * 3) / (PI * height() - MAP_2MARGIN);
+            quint64 varSize=tree->size();
+            quint64 varHeight=height();
+            quint64 varA=(varSize * 3);
+            quint64 varB=(PI * varHeight - MAP_2MARGIN);
+            m_minSize = varA / varB;
             findVisibleDepth(tree);
         }
 
@@ -325,16 +333,9 @@ void RadialMap::Map::colorise()
 
 
             //color from previous switch
-            int a = segment->start();
-
-            if (a > 2880) a = 2880 - (a - 2880);
-
-            h  = (int)(deltaRed   * a) + kdeColour[1].red();
-            s1 = (int)(deltaGreen * a) + kdeColour[1].green();
-            v1 = (int)(deltaBlue  * a) + kdeColour[1].blue();
-
-            cb.setRgb(h, s1, v1);
-            cb.getHsv(&h, &s1, &v1);
+            h  = int(segment->start() / 16);
+            s1 = 160;
+            v1 = (int)(255.0 / darkness); //doing this more often than once seems daft!
 
 
 

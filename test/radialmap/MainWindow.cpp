@@ -14,12 +14,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     //m_map->hide();
     ui->verticalLayout->addWidget(m_map);
-    m_map->create(tree);
+    connect(&treeTimer,&QTimer::timeout,this,&MainWindow::create);
+    treeTimer.setSingleShot(true);
+    treeTimer.start(1);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::create()
+{
+    m_map->create(tree);
 }
 
 void MainWindow::recursiveTreeLoad(Folder * tree,QString folder)
