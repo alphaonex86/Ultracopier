@@ -209,7 +209,7 @@ protected:
     int64_t			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
-    bool			needSkip,needRemove;
+    bool			needRemove;
     int             id;
     bool            deletePartiallyTransferredFiles;
     std::string			firstRenamingRule;

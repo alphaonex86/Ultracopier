@@ -71,6 +71,7 @@ private slots:
 signals:
     //internal signal
     void internalStartResumeAfterErrorAndSeek() const;
+    void internalStartPostOperation() const;
 public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();
@@ -96,6 +97,7 @@ private slots:
 private:
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;
+    uint64_t transferProgression;
     bool remainFileOpen() const;
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;

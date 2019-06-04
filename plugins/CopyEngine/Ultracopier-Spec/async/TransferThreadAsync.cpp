@@ -12,12 +12,26 @@
 
 #include "../../../../cpp11addition.h"
 
-TransferThreadAsync::TransferThreadAsync()
+TransferThreadAsync::TransferThreadAsync() :
+    transferProgression(0)
 {
     #ifndef Q_OS_UNIX
     PSecurityD=NULL;
     dacl=NULL;
     #endif
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
+    //the error push
+
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
+        abort();
+    #endif
+    TransferThread::run();
+    if(!connect(this,&TransferThreadAsync::internalStartPostOperation,        this,                   &TransferThreadAsync::doFilePostOperation,  Qt::QueuedConnection))
+        abort();
+
     start();
 }
 
@@ -43,18 +57,6 @@ TransferThreadAsync::~TransferThreadAsync()
 
 void TransferThreadAsync::run()
 {
-    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
-    //the error push
-
-    #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
-        abort();
-    if(!connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
-        abort();
-    #endif
-    TransferThread::run();
-    if(!connect(this,&TransferThreadAsync::internalStartPostOperation,        this,                   &TransferThreadAsync::doFilePostOperation,  Qt::QueuedConnection))
-        abort();
     exec();
 }
 
@@ -110,6 +112,7 @@ bool TransferThreadAsync::setFiles(const std::string& source, const int64_t &siz
 
 void TransferThreadAsync::resetExtraVariable()
 {
+    transferProgression=0;
     TransferThread::resetExtraVariable();
 }
 
@@ -207,8 +210,6 @@ void TransferThreadAsync::ifCanStartTransfer()
     emit postOperationStopped();
 }
 
-internalStartPostOperation
-
 //stop the current copy
 void TransferThreadAsync::stop()
 {
@@ -218,7 +219,9 @@ void TransferThreadAsync::stop()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
         return;
     }
-    wait.thread stop
+    exit();
+    wait();
+    start();
 }
 
 //retry after error
@@ -265,6 +268,10 @@ void TransferThreadAsync::retryAfterError()
 //skip the copy
 void TransferThreadAsync::skip()
 {
+    stopIt=true;
+    exit();
+    wait();
+    start();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with stat: "+std::to_string(transfer_stat));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsOpeningVariable: "+std::to_string(readIsOpeningVariable)+", readIsOpenVariable: "+std::to_string(readIsOpenVariable)+", readIsReadyVariable: "+std::to_string(readIsReadyVariable)+", readIsFinishVariable: "+std::to_string(readIsFinishVariable)+", readIsClosedVariable: "+std::to_string(readIsClosedVariable));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeIsOpeningVariable: "+std::to_string(writeIsOpeningVariable)+", writeIsOpenVariable: "+std::to_string(writeIsOpenVariable)+", writeIsReadyVariable: "+std::to_string(writeIsReadyVariable)+", writeIsFinishVariable: "+std::to_string(writeIsFinishVariable)+", writeIsClosedVariable: "+std::to_string(writeIsClosedVariable));
@@ -350,7 +357,7 @@ int64_t TransferThreadAsync::copiedSize()
     case TransferStat_Transfer:
     case TransferStat_PostOperation:
     case TransferStat_PostTransfer:
-        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+        return transferProgression;
     default:
         return 0;
     }
@@ -433,7 +440,7 @@ uint64_t TransferThreadAsync::realByteTransfered() const
     {
     case TransferStat_Transfer:
     case TransferStat_PostTransfer:
-        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
+        return transferProgression;
     case TransferStat_PostOperation:
         return transferSize;
     default:
@@ -448,14 +455,14 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
     switch(transfer_stat)
     {
     case TransferStat_Transfer:
-        returnVar.first=readThread.getLastGoodPosition();
-        returnVar.second=writeThread.getLastGoodPosition();
+        returnVar.first=transferProgression;
+        returnVar.second=transferProgression;
         /*if(returnVar.first<returnVar.second)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
     case TransferStat_PostTransfer:
         returnVar.first=transferSize;
-        returnVar.second=writeThread.getLastGoodPosition();
+        returnVar.second=transferSize;
         /*if(returnVar.first<returnVar.second)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
