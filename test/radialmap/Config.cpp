@@ -26,6 +26,6 @@
 bool Config::varyLabelFontSizes=true;
 bool Config::showSmallFiles=false;
 bool Config::antialias=true;
-uint Config::contrast=75;
+uint Config::contrast=94;
 int Config::minFontPitch=QFont().pointSize() - 3;
 uint Config::defaultRingDepth=4;

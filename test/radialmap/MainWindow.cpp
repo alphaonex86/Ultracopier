@@ -32,10 +32,18 @@ void MainWindow::create()
 void MainWindow::recursiveTreeLoad(Folder * tree,QString folder)
 {
     QDir dir(folder);
-    QFileInfoList list=dir.entryInfoList();
+    QFileInfoList list=dir.entryInfoList(QDir::NoFilter, QDir::Name);
     foreach (QFileInfo finfo, list) {
         const char * const c_name=finfo.fileName().toStdString().c_str();
-        if(c_name[0]!=0x00 && c_name[0]!='.')
+        bool skip=false;
+        if(c_name[0]=='.')
+        {
+            if(c_name[1]==0x00)
+                skip=true;
+            else if(c_name[1]=='.' && c_name[2]==0x00)
+                skip=true;
+        }
+        if(!skip)
         {
             if(finfo.isDir())
             {
