@@ -6,7 +6,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    m_map(new RadialMap::Widget(this)),
+    m_map(new RadialMap::Widget(this,false)),
     tree(new Folder(""))
 {
     recursiveTreeLoad(tree,"/etc/");

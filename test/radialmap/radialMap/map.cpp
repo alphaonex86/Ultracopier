@@ -293,7 +293,7 @@ void RadialMap::Map::colorise()
     for (uint i = 0; i <= m_visibleDepth; ++i, darkness += 0.04) {
         for (Segment *segment : m_signature[i]) {
             /*switch (Config::scheme) {
-                case Filelight::KDE: {*/
+                case Filelight::KDE: {
                         //gradient will work by figuring out rgb delta values for 360 degrees
                         //then each component is angle*delta
 
@@ -309,7 +309,7 @@ void RadialMap::Map::colorise()
                         cb.getHsv(&h, &s1, &v1);
 
                         break;
-                /*    }
+                    }
 
                 case Filelight::HighContrast:
                     cp.setHsv(0, 0, 0); //values of h, s and v are irrelevant
@@ -322,6 +322,22 @@ void RadialMap::Map::colorise()
                     s1 = 160;
                     v1 = (int)(255.0 / darkness); //doing this more often than once seems daft!
             }*/
+
+
+            //color from previous switch
+            int a = segment->start();
+
+            if (a > 2880) a = 2880 - (a - 2880);
+
+            h  = (int)(deltaRed   * a) + kdeColour[1].red();
+            s1 = (int)(deltaGreen * a) + kdeColour[1].green();
+            v1 = (int)(deltaBlue  * a) + kdeColour[1].blue();
+
+            cb.setRgb(h, s1, v1);
+            cb.getHsv(&h, &s1, &v1);
+
+
+
 
             v2 = v1 - int(contrast * v1);
             s2 = s1 + int(contrast * (255 - s1));

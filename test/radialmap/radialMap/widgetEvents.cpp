@@ -140,28 +140,24 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
 
             QString string;
 
-            /*if (isSummary()) {
+            if (isSummary()) {
                 if (strcmp("used", m_focus->file()->name8Bit()) == 0) {
-                    string = QObject::tr("Tooltip of used space on the partition, %1 is path, %2 is size",
-                                   "%1\nUsed: %2",
-                                   m_focus->file()->parent()->displayPath(),
-                                   m_focus->file()->humanReadableSize());
+                    string = QObject::tr("Tooltip of used space on the partition, %1 is path, %2 is size")
+                                   .arg(m_focus->file()->parent()->displayPath())
+                                   .arg(m_focus->file()->humanReadableSize());
                 } else if (strcmp("free", m_focus->file()->name8Bit()) == 0) {
-                    string = QObject::tr("Tooltip of free space on the partition, %1 is path, %2 is size",
-                                   "%1\nFree: %2",
-                                   m_focus->file()->parent()->displayPath(),
-                                   m_focus->file()->humanReadableSize());
+                    string = QObject::tr("Tooltip of free space on the partition, %1 is path, %2 is size")
+                                   .arg(m_focus->file()->parent()->displayPath())
+                                   .arg(m_focus->file()->humanReadableSize());
                 } else {
-                    string = QObject::tr("Tooltip of file/folder, %1 is path, %2 is size",
-                                   "%1\n%2",
-                                   m_focus->file()->displayPath(),
-                                   m_focus->file()->humanReadableSize());
+                    string = QObject::tr("Tooltip of size on the partition, %1 is path, %2 is size")
+                                   .arg(m_focus->file()->parent()->displayPath())
+                                   .arg(m_focus->file()->humanReadableSize());
                 }
             } else {
-                string = QObject::tr("Tooltip of file/folder, %1 is path, %2 is size",
-                               "%1\n%2",
-                               m_focus->file()->displayPath(),
-                               m_focus->file()->humanReadableSize());
+                string = QObject::tr("Tooltip of file/folder, %1 is path, %2 is size")
+                               .arg(m_focus->file()->displayPath())
+                               .arg(m_focus->file()->humanReadableSize());
 
                 if (m_focus->file()->isFolder()) {
                     int files = static_cast<const Folder*>(m_focus->file())->children();
@@ -169,21 +165,19 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
 
                     string += QLatin1Char('\n');
                     if (percent > 0) {
-                        string += i18ncp("Tooltip of folder, %1 is number of files",
-                                         "%1 File (%2%)", "%1 Files (%2%)",
-                                         files, percent);
+                        string += QObject::tr("Tooltip of folder, %1 File (%2%)")
+                                         .arg(files).arg(percent);
                     } else {
-                        string += i18ncp("Tooltip of folder, %1 is number of files",
-                                         "%1 File", "%1 Files",
-                                         files);
+                        string += QObject::tr("Tooltip of folder, %1 File")
+                                         .arg(files);
                     }
                 }
 
-                const QUrl url = Widget::url(m_focus->file());
+                /*const QUrl url = Widget::url(m_focus->file());
                 if (m_focus == m_rootSegment && url != KIO::upUrl(url)) {
-                    string += i18n("\nClick to go up to parent directory");
-                }
-            }*/
+                    string += QObject::tr("\nClick to go up to parent directory");
+                }*/
+            }
 
             // Calculate a semi-sane size for the tooltip
             QFontMetrics fontMetrics(font());
