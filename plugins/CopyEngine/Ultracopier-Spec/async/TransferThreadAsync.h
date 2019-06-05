@@ -86,14 +86,8 @@ public slots:
     /// \brief put the current file at bottom
     void putAtBottom();
 private slots:
-    //void syncAfterErrorAndReadFinish();
-    void readThreadIsSeekToZeroAndWait();
-    void writeThreadIsReopened();
-    void readThreadResumeAfterError();
     /// \brief to set files to transfer
     bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
-    bool checkIfAllIsClosedAndDoOperations();
-    void resumeTransferAfterWriteError();
 private:
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;

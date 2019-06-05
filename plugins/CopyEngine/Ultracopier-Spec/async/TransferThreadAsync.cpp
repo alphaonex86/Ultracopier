@@ -12,6 +12,71 @@
 
 #include "../../../../cpp11addition.h"
 
+#ifndef Q_OS_WIN32
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int copy(const char *to, const char *from)
+{
+    int fd_to, fd_from;
+    char buf[4096];
+    ssize_t nread;
+    int saved_errno;
+
+    fd_from = open(from, O_RDONLY);
+    if (fd_from < 0)
+        return -1;
+
+    fd_to = open(to, O_WRONLY | O_CREAT | O_EXCL, 0666);
+    if (fd_to < 0)
+        goto out_error;
+
+    while (nread = read(fd_from, buf, sizeof buf), nread > 0)
+    {
+        char *out_ptr = buf;
+        ssize_t nwritten;
+
+        do {
+            nwritten = write(fd_to, out_ptr, nread);
+
+            if (nwritten >= 0)
+            {
+                nread -= nwritten;
+                out_ptr += nwritten;
+            }
+            else if (errno != EINTR)
+            {
+                goto out_error;
+            }
+        } while (nread > 0);
+    }
+
+    if (nread == 0)
+    {
+        if (close(fd_to) < 0)
+        {
+            fd_to = -1;
+            goto out_error;
+        }
+        close(fd_from);
+
+        /* Success! */
+        return 0;
+    }
+
+  out_error:
+    saved_errno = errno;
+
+    close(fd_from);
+    if (fd_to >= 0)
+        close(fd_to);
+
+    errno = saved_errno;
+    return -1;
+}
+#endif
+
 TransferThreadAsync::TransferThreadAsync() :
     transferProgression(0)
 {
@@ -179,21 +244,34 @@ void TransferThreadAsync::preOperation()
     ifCanStartTransfer();
 }
 
+void TransferThreadAsync::postOperation()
+{
+ to write
+}
+
 void TransferThreadAsync::ifCanStartTransfer()
 {
     if(transfer_stat!=TransferStat_WaitForTheTransfer /*wait preoperation*/ || !canStartTransfer/*wait start call*/)
         return;
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
-    if(!copy/move())
+    if(!copy(source.c_str(),destination.c_str()))
     {
         if(stopIt)
+        {
+            if(source!="")
+                if(exists(source))
+                    unlink(destination.c_str());
+            resetExtraVariable();
             return;//and reset?
+        }
         readError=true;
         writeError=true;
-        emit errorOnFile(destination,writeThread.errorString());
-        remove();
+        emit errorOnFile(destination,std::to_string(errno));
     }
+    if(mode==Ultracopier::Move)
+        if(exists(destination))
+            unlink(source.c_str());
     transfer_stat=TransferStat_PostTransfer;
     emit pushStat(transfer_stat,transferId);
     transfer_stat=TransferStat_PostOperation;
@@ -222,6 +300,9 @@ void TransferThreadAsync::stop()
     exit();
     wait();
     start();
+    if(source!="")
+        if(exists(source))
+            unlink(destination.c_str());
 }
 
 //retry after error
@@ -262,7 +343,7 @@ void TransferThreadAsync::retryAfterError()
         emit internalStartPostOperation();
         return;
     }
-    async ifCanStartTransfer();
+    emit internalTryStartTheTransfer();
 }
 
 //skip the copy
@@ -280,68 +361,16 @@ void TransferThreadAsync::skip()
     case TransferStat_WaitForTheTransfer:
         //needRemove=true;never put that's here, can product destruction of the file
     case TransferStat_PreOperation:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        needSkip=true;
-        //check if all is source and destination is closed
-        if(remainFileOpen())
-        {
-            if(remainSourceOpen())
-                readThread.stop();
-            if(remainDestinationOpen())
-                writeThread.stop();
-        }
-        else // wait nothing, just quit
-        {
-            transfer_stat=TransferStat_PostOperation;
-            emit internalStartPostOperation();
-        }
+        resetExtraVariable();
         break;
     case TransferStat_Transfer:
+        if(source!="")
+            if(exists(source))
+                unlink(destination.c_str());
+        break;
     case TransferStat_PostTransfer:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        //needRemove=true;never put that's here, can product destruction of the file
-        needSkip=true;
-        if(canBeMovedDirectlyVariable || canBeCopiedDirectlyVariable)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] Do the direct FS fake close, canBeMovedDirectlyVariable: "+std::to_string(canBeMovedDirectlyVariable)+", canBeCopiedDirectlyVariable: "+std::to_string(canBeCopiedDirectlyVariable));
-            readThread.fakeReadIsStarted();
-            writeThread.fakeWriteIsStarted();
-            readThread.fakeReadIsStopped();
-            writeThread.fakeWriteIsStopped();
-            return;
-        }
-        writeThread.flushBuffer();
-        if(remainFileOpen())
-        {
-            if(remainSourceOpen())
-                readThread.stop();
-            if(remainDestinationOpen())
-                writeThread.stop();
-        }
-        else // wait nothing, just quit
-        {
-            transfer_stat=TransferStat_PostOperation;
-            emit internalStartPostOperation();
-        }
         break;
     case TransferStat_PostOperation:
-        if(needSkip)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
-            return;
-        }
-        //needRemove=true;never put that's here, can product destruction of the file
-        needSkip=true;
-        writeThread.flushBuffer();
-        emit internalStartPostOperation();
         break;
     default:
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] can skip in this state: "+std::to_string(transfer_stat));

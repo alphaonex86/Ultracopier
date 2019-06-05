@@ -126,6 +126,7 @@ bool TransferThread::setFiles(const std::string& source, const int64_t &size, co
     haveTransferTime                = false;
     resetExtraVariable();
     emit internalStartPreOperation();
+    startTransferTime.restart();
     return true;
 }
 
@@ -1108,4 +1109,9 @@ int TransferThread::ftruncate64(int __fd, uint64_t __length)
     #else
     return ftruncate64(__fd,__length);
     #endif
+}
+
+int64_t TransferThread::transferTime() const
+{
+    return startTransferTime.elapsed();
 }

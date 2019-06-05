@@ -60,7 +60,7 @@ public:
     /// \brief get the writing letter
     virtual char writingLetter() const = 0;
     #endif
-    /// \brief get the writing letter
+    /// \brief get the transfer time in ms
     int64_t transferTime() const;
     /// \brief to store the transfer id
     uint64_t			transferId;
@@ -209,7 +209,7 @@ protected:
     int64_t			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;
-    bool			needRemove;
+    bool			needSkip,needRemove;
     int             id;
     bool            deletePartiallyTransferredFiles;
     std::string			firstRenamingRule;
