@@ -23,7 +23,7 @@ private:
     Folder * tree;
     QTimer treeTimer;
 
-    void recursiveTreeLoad(Folder * tree,QString folder);
+    uint64_t recursiveTreeLoad(Folder * tree, std::string folder);
 };
 
 #endif // MAINWINDOW_H

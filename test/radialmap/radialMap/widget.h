@@ -50,17 +50,13 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    explicit Widget(QWidget* = nullptr, bool = false);
+    explicit Widget(QWidget* = nullptr);
     ~Widget() override;
     QString path() const;
     QUrl url(File const * const = nullptr) const;
 
     bool isValid() const {
         return m_tree != nullptr;
-    }
-
-    bool isSummary() const {
-        return m_isSummary;
     }
 
     friend class Label; //FIXME badness
@@ -110,7 +106,6 @@ private:
     QTimer           m_timer;
     Map              m_map;
     Segment          *m_rootSegment;
-    const bool       m_isSummary;
     const Segment    *m_toBeDeleted;
     QLabel           m_tooltip;
 };

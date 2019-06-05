@@ -140,21 +140,7 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
 
             QString string;
 
-            if (isSummary()) {
-                if (strcmp("used", m_focus->file()->name8Bit()) == 0) {
-                    string = QObject::tr("Tooltip of used space on the partition, %1 is path, %2 is size")
-                                   .arg(m_focus->file()->parent()->displayPath())
-                                   .arg(m_focus->file()->humanReadableSize());
-                } else if (strcmp("free", m_focus->file()->name8Bit()) == 0) {
-                    string = QObject::tr("Tooltip of free space on the partition, %1 is path, %2 is size")
-                                   .arg(m_focus->file()->parent()->displayPath())
-                                   .arg(m_focus->file()->humanReadableSize());
-                } else {
-                    string = QObject::tr("Tooltip of size on the partition, %1 is path, %2 is size")
-                                   .arg(m_focus->file()->parent()->displayPath())
-                                   .arg(m_focus->file()->humanReadableSize());
-                }
-            } else {
+
                 string = QObject::tr("Tooltip of file/folder, %1 is path, %2 is size")
                                .arg(m_focus->file()->displayPath())
                                .arg(m_focus->file()->humanReadableSize());
@@ -173,11 +159,6 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
                     }
                 }
 
-                /*const QUrl url = Widget::url(m_focus->file());
-                if (m_focus == m_rootSegment && url != KIO::upUrl(url)) {
-                    string += QObject::tr("\nClick to go up to parent directory");
-                }*/
-            }
 
             // Calculate a semi-sane size for the tooltip
             QFontMetrics fontMetrics(font());

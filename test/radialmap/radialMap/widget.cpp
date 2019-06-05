@@ -35,13 +35,12 @@
 #include <QWidget>
 
 
-RadialMap::Widget::Widget(QWidget *parent, bool isSummary)
+RadialMap::Widget::Widget(QWidget *parent)
         : QWidget(parent)
         , m_tree(nullptr)
         , m_focus(nullptr)
-        , m_map(isSummary)
+        , m_map()
         , m_rootSegment(nullptr) //TODO we don't delete it, *shrug*
-        , m_isSummary(isSummary)
         , m_toBeDeleted(nullptr)
 {
     setAcceptDrops(true);

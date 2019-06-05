@@ -34,7 +34,7 @@ class Segment;
 class Map
 {
 public:
-    explicit Map(bool summary);
+    explicit Map();
     ~Map();
 
     void make(const Folder *, bool = false);
@@ -76,7 +76,6 @@ private:
     int m_ringBreadth;
     uint m_innerRadius;  ///radius of inner circle
     QString m_centerText;
-    bool m_summary;
 
     uint MAP_2MARGIN;
 };
