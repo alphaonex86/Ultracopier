@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/Themes/Oxygen">
+        <file>resources/SystemTrayIcon/systray_Caught_Unix.png</file>
+        <file>resources/SystemTrayIcon/systray_Semiuncaught_Unix.png</file>
+        <file>resources/SystemTrayIcon/systray_Uncaught_Unix.png</file>
+    </qresource>
+</RCC>

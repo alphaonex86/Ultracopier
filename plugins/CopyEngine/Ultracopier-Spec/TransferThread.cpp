@@ -33,6 +33,7 @@ TransferThread::TransferThread() :
     havePermission                  (false),
     haveTransferTime                (false)
 {
+    id=0;
     renameRegex=std::regex("^(.*)(\\.[a-zA-Z0-9]+)$");
     #ifdef Q_OS_WIN32
         #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -264,7 +265,7 @@ bool TransferThread::destinationExists()
     bool destinationExists;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] time to first FS access");
     destinationExists=is_file(destination);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] finish first FS access");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] finish first FS access: "+std::to_string(destinationExists));
     if(destinationExists)
     {
         if(fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_Skip)
@@ -274,10 +275,13 @@ bool TransferThread::destinationExists()
             //quit
             return true;
         }
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
         if(checkAlwaysRename())
             return false;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
         if(is_file(source))
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNewer || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNewer))
             {
                 if(readFileMDateTime(destination)<readFileMDateTime(source))
@@ -289,6 +293,7 @@ bool TransferThread::destinationExists()
                     return true;
                 }
             }
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfOlder || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfOlder))
             {
                 if(readFileMDateTime(destination)>readFileMDateTime(source))
@@ -300,6 +305,7 @@ bool TransferThread::destinationExists()
                     return true;
                 }
             }
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNotSame || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
             {
                 if(readFileMDateTime(destination)!=readFileMDateTime(source) || destination.size()!=source.size())
@@ -311,9 +317,11 @@ bool TransferThread::destinationExists()
                     return true;
                 }
             }
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
         }
         else
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction!=FileExists_NotSet)
             {
                 transfer_stat=TransferStat_Idle;
@@ -323,6 +331,7 @@ bool TransferThread::destinationExists()
         }
         if(fileExistsAction==FileExists_NotSet)
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             emit fileAlreadyExists(source,destination,false);
             return true;
         }

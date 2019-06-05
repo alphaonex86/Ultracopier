@@ -31,9 +31,7 @@ HEADERS         += \
     $$PWD/FileIsSameDialog.h \
     $$PWD/FolderExistsDialog.h \
     $$PWD/ScanFileOrFolder.h \
-    $$PWD/DiskSpace.h \
-    $$PWD/sync/EventLoop.h \
-    $$PWD/sync/CallBackEventLoop.h
+    $$PWD/DiskSpace.h
 SOURCES         += \
     $$PWD/TransferThread.cpp \
     $$PWD/MkPath.cpp \
@@ -54,8 +52,7 @@ SOURCES         += \
     $$PWD/FileIsSameDialog.cpp \
     $$PWD/FolderExistsDialog.cpp \
     $$PWD/ScanFileOrFolder.cpp \
-    $$PWD/DiskSpace.cpp \
-    $$PWD/sync/EventLoop.cpp
+    $$PWD/DiskSpace.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \
@@ -101,15 +98,6 @@ RESOURCES += \
 
 win32 {
     LIBS += -ladvapi32
-    HEADERS         += $$PWD/async/TransferThreadAsync.h
-    SOURCES         += $$PWD/async/TransferThreadAsync.cpp
 }
-else
-{
-    HEADERS         += $$PWD/sync/TransferThreadSync.h \
-        $$PWD/sync/ReadThread.h \
-        $$PWD/sync/WriteThread.h
-    SOURCES         += $$PWD/sync/TransferThreadSync.cpp \
-        $$PWD/sync/ReadThread.cpp \
-        $$PWD/sync/WriteThread.cpp
-}
+HEADERS         += $$PWD/async/TransferThreadAsync.h
+SOURCES         += $$PWD/async/TransferThreadAsync.cpp

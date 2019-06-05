@@ -85,7 +85,6 @@ public slots:
     int64_t copiedSize();
     /// \brief put the current file at bottom
     void putAtBottom();
-private slots:
     /// \brief to set files to transfer
     bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
 private:

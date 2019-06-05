@@ -24,6 +24,7 @@
 #include "MkPath.h"
 #include "Environment.h"
 #include "DriveManagement.h"
+#include "async/TransferThreadAsync.h"
 
 /// \brief Define the list thread, and management to the action to do
 class ListThread : public QThread
@@ -71,7 +72,7 @@ public:
         std::string destination;
         Ultracopier::CopyMode mode;
         bool isRunning;///< store if the action si running
-        //TransferThread * transfer; // -> see transferThreadList
+        //TTHREAD * transfer; // -> see transferThreadList
     };
     std::vector<ActionToDoTransfer> actionToDoListTransfer;
     /// \brief to store one action to do
@@ -170,7 +171,7 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
-    void getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThread *thread,const ErrorType &errorType);
+    void getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
@@ -205,7 +206,7 @@ private:
     bool                stopIt;
     std::vector<ScanFileOrFolder *> scanFileOrFolderThreadsPool;
     int                 numberOfTransferIntoToDoList;
-    std::vector<TransferThread *>		transferThreadList;
+    std::vector<TransferThreadAsync *>		transferThreadList;
     ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
     uint64_t				bytesToTransfer;
     uint64_t				bytesTransfered;
@@ -225,7 +226,7 @@ private:
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
     bool                copyListOrder;
-    std::unordered_set<TransferThread *> putAtBottomAfterError;
+    std::unordered_set<TransferThreadAsync *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
     unsigned int        putAtBottom;
@@ -350,7 +351,7 @@ signals:
 
     //when can be deleted
     void canBeDeleted() const;
-    void haveNeedPutAtBottom(bool needPutAtBottom,const std::string &fileInfo,const std::string &errorString,TransferThread * thread,const ErrorType &errorType) const;
+    void haveNeedPutAtBottom(bool needPutAtBottom,const std::string &fileInfo,const std::string &errorString,TransferThreadAsync * thread,const ErrorType &errorType) const;
 
     //send error occurred
     void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error) const;
@@ -368,9 +369,9 @@ signals:
 
     //other signal
     /// \note Can be call without queue because all call will be serialized
-    void send_fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,TransferThread * thread) const;
+    void send_fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,TransferThreadAsync * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const std::string &fileInfo,const std::string &errorString,TransferThread * thread, const ErrorType &errorType) const;
+    void send_errorOnFile(const std::string &fileInfo,const std::string &errorString,TransferThreadAsync * thread, const ErrorType &errorType) const;
     /// \note Can be call without queue because all call will be serialized
     void send_folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,ScanFileOrFolder * thread) const;
     /// \note Can be call without queue because all call will be serialized

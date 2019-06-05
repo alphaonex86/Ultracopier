@@ -62,8 +62,6 @@ public:
     friend class Label; //FIXME badness
 
 public Q_SLOTS:
-    void zoomIn();
-    void zoomOut();
     void create(const Folder*);
     void invalidate();
     void refresh(int);

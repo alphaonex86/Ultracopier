@@ -182,31 +182,6 @@ RadialMap::Widget::refresh(int filth)
     }
 }
 
-void
-RadialMap::Widget::zoomIn() //slot
-{
-    if (m_map.m_visibleDepth > MIN_RING_DEPTH)
-    {
-        --m_map.m_visibleDepth;
-        m_focus = nullptr;
-        m_map.make(m_tree);
-        Config::defaultRingDepth = m_map.m_visibleDepth;
-        update();
-    }
-}
-
-void
-RadialMap::Widget::zoomOut() //slot
-{
-    m_focus = nullptr;
-    ++m_map.m_visibleDepth;
-    m_map.make(m_tree);
-    if (m_map.m_visibleDepth > Config::defaultRingDepth)
-        Config::defaultRingDepth = m_map.m_visibleDepth;
-    update();
-}
-
-
 RadialMap::Segment::~Segment()
 {
     if (isFake())

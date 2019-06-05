@@ -8,13 +8,13 @@
 
 //dialog message
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExistsSlot(std::string source,std::string destination,bool isSame,TransferThread * thread)
+void CopyEngine::fileAlreadyExistsSlot(std::string source,std::string destination,bool isSame,TransferThreadAsync * thread)
 {
     fileAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFileSlot(std::string fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType)
+void CopyEngine::errorOnFileSlot(std::string fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType)
 {
     errorOnFile(fileInfo,errorString,thread,errorType);
 }
@@ -38,7 +38,7 @@ void CopyEngine::mkPathErrorOnFolderSlot(std::string folder,std::string error,Er
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bool isSame,TransferThread * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bool isSame,TransferThreadAsync * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -200,7 +200,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const std::string &fileInfo, const std::string &errorString,TransferThread *thread,const ErrorType &errorType)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const std::string &fileInfo, const std::string &errorString,TransferThreadAsync *thread,const ErrorType &errorType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
@@ -237,7 +237,7 @@ void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,TransferThread * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;

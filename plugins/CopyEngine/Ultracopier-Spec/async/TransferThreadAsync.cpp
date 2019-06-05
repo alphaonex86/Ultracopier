@@ -87,12 +87,6 @@ TransferThreadAsync::TransferThreadAsync() :
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
     //the error push
 
-    #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(!connect(&readThread,&ReadThread::debugInformation,          this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
-        abort();
-    if(!connect(&writeThread,&WriteThread::debugInformation,        this,                   &TransferThreadAsync::debugInformation,  Qt::QueuedConnection))
-        abort();
-    #endif
     TransferThread::run();
     if(!connect(this,&TransferThreadAsync::internalStartPostOperation,        this,                   &TransferThreadAsync::doFilePostOperation,  Qt::QueuedConnection))
         abort();
@@ -103,6 +97,8 @@ TransferThreadAsync::TransferThreadAsync() :
 TransferThreadAsync::~TransferThreadAsync()
 {
     stopIt=true;
+    exit(0);
+    wait();
     //else cash without this disconnect
     //disconnect(&readThread);
     //disconnect(&writeThread);
@@ -246,7 +242,7 @@ void TransferThreadAsync::preOperation()
 
 void TransferThreadAsync::postOperation()
 {
- to write
+    doFilePostOperation();
 }
 
 void TransferThreadAsync::ifCanStartTransfer()
@@ -354,8 +350,6 @@ void TransferThreadAsync::skip()
     wait();
     start();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with stat: "+std::to_string(transfer_stat));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readIsOpeningVariable: "+std::to_string(readIsOpeningVariable)+", readIsOpenVariable: "+std::to_string(readIsOpenVariable)+", readIsReadyVariable: "+std::to_string(readIsReadyVariable)+", readIsFinishVariable: "+std::to_string(readIsFinishVariable)+", readIsClosedVariable: "+std::to_string(readIsClosedVariable));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeIsOpeningVariable: "+std::to_string(writeIsOpeningVariable)+", writeIsOpenVariable: "+std::to_string(writeIsOpenVariable)+", writeIsReadyVariable: "+std::to_string(writeIsReadyVariable)+", writeIsFinishVariable: "+std::to_string(writeIsFinishVariable)+", writeIsClosedVariable: "+std::to_string(writeIsClosedVariable));
     switch(transfer_stat)
     {
     case TransferStat_WaitForTheTransfer:
@@ -411,12 +405,11 @@ void TransferThreadAsync::setRsync(const bool rsync)
 void TransferThreadAsync::setId(int id)
 {
     TransferThread::setId(id);
-    readThread.setId(id);
-    writeThread.setId(id);
 }
 
 char TransferThreadAsync::readingLetter() const
 {
+    return '?';/*
     switch(readThread.stat)
     {
     case ReadThread::Idle:
@@ -433,11 +426,12 @@ char TransferThreadAsync::readingLetter() const
     break;
     default:
         return '?';
-    }
+    }*/
 }
 
 char TransferThreadAsync::writingLetter() const
 {
+    return '?';/*
     switch(writeThread.status)
     {
     case WriteThread::Idle:
@@ -457,7 +451,7 @@ char TransferThreadAsync::writingLetter() const
     break;
     default:
         return '?';
-    }
+    }*/
 }
 
 #endif

@@ -100,7 +100,7 @@ void ListThread::transferInodeIsClosed()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
     #endif
-    TransferThread *temp_transfer_thread=qobject_cast<TransferThread *>(QObject::sender());
+    TransferThreadAsync *temp_transfer_thread=qobject_cast<TransferThreadAsync *>(QObject::sender());
     if(temp_transfer_thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
@@ -197,7 +197,7 @@ not put at bottom, remove from to do list
 */
 void ListThread::transferPutAtBottom()
 {
-    TransferThread *transfer=qobject_cast<TransferThread *>(QObject::sender());
+    TransferThreadAsync *transfer=qobject_cast<TransferThreadAsync *>(QObject::sender());
     if(transfer==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
@@ -487,7 +487,7 @@ void ListThread::autoStartAndCheckSpace()
 void ListThread::autoStartIfNeeded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
-    startGeneralTransfer();
+    //startGeneralTransfer();
 }
 
 void ListThread::startGeneralTransfer()
@@ -648,7 +648,8 @@ void ListThread::realByteTransfered()
     int loop_sub_size_transfer_thread_search=transferThreadList.size();
     while(index<loop_sub_size_transfer_thread_search)
     {
-        totalRealByteTransfered+=transferThreadList.at(index)->realByteTransfered();
+        const TransferThreadAsync * thread=transferThreadList.at(index);
+        totalRealByteTransfered+=thread->realByteTransfered();
         index++;
     }
     emit send_realBytesTransfered(totalRealByteTransfered);
@@ -898,7 +899,7 @@ void ListThread::sendProgression()
     const int &loop_size=transferThreadList.size();
     while(int_for_loop<loop_size)
     {
-        TransferThread * temp_transfer_thread=transferThreadList.at(int_for_loop);
+        TransferThreadAsync * temp_transfer_thread=transferThreadList.at(int_for_loop);
         switch(temp_transfer_thread->getStat())
         {
             case TransferStat_Transfer:
@@ -948,7 +949,7 @@ void ListThread::syncTransferList_internal()
     emit syncReady();
     actionDone.clear();
     //do list operation
-    TransferThread *transferThread;
+    TransferThreadAsync *transferThread;
     const int &loop_size=actionToDoListTransfer.size();
     int loop_sub_size=transferThreadList.size();
     //this loop to have at max inodeThreads*inodeThreads, not inodeThreads*transferThreadList.size()
@@ -1643,7 +1644,7 @@ void ListThread::doNewActions_inode_manipulation()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     #endif
     //lunch the pre-op or inode op
-    TransferThread *currentTransferThread;
+    TransferThreadAsync *currentTransferThread;
     int int_for_loop=0;
     int int_for_internal_loop=0;
     int int_for_transfer_thread_search=0;
@@ -1793,7 +1794,7 @@ void ListThread::doNewActions_inode_manipulation()
 void ListThread::restartTransferIfItCan()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    TransferThread *transfer=qobject_cast<TransferThread *>(QObject::sender());
+    TransferThreadAsync *transfer=qobject_cast<TransferThreadAsync *>(QObject::sender());
     if(transfer==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
@@ -1987,13 +1988,13 @@ void ListThread::timedUpdateDebugDialog()
 /// \note Can be call without queue because all call will be serialized
 void ListThread::fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame)
 {
-    emit send_fileAlreadyExists(source,destination,isSame,qobject_cast<TransferThread *>(sender()));
+    emit send_fileAlreadyExists(source,destination,isSame,qobject_cast<TransferThreadAsync *>(sender()));
 }
 
 /// \note Can be call without queue because all call will be serialized
 void ListThread::errorOnFile(const std::string &fileInfo, const std::string &errorString, const ErrorType &errorType)
 {
-    TransferThread * transferThread=qobject_cast<TransferThread *>(sender());
+    TransferThreadAsync * transferThread=qobject_cast<TransferThreadAsync *>(sender());
     if(transferThread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Thread locating error");
@@ -2028,7 +2029,7 @@ void ListThread::run()
     exec();
 }
 
-void ListThread::getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThread *thread, const ErrorType &errorType)
+void ListThread::getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType)
 {
     if(actionToDoListTransfer.empty())
     {
@@ -2067,7 +2068,7 @@ void ListThread::createTransferThread()
     #else
     transferThreadList.push_back(new TransferThreadAsync());
     #endif
-    TransferThread * last=transferThreadList.back();
+    TransferThreadAsync * last=transferThreadList.back();
     last->transferId=0;
     last->transferSize=0;
     last->setRightTransfer(doRightTransfer);

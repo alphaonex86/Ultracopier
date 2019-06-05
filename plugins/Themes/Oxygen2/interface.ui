@@ -1,0 +1,848 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>interfaceCopy</class>
+ <widget class="QWidget" name="interfaceCopy">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>508</width>
+    <height>448</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Ultracopier</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="interfaceResources.qrc">
+    <normaloff>:/Themes/Oxygen/resources/main.png</normaloff>:/Themes/Oxygen/resources/main.png</iconset>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <property name="margin">
+    <number>1</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="from_label">
+       <property name="text">
+        <string>From:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="from">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="to_label">
+       <property name="text">
+        <string>To:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="to">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="overall">
+       <property name="text">
+        <string notr="true">File 0/0, Total: 0KB</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::PlainText</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelTimeRemaining">
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="shutdown">
+       <property name="maximumSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Close on transfer completion</string>
+       </property>
+       <property name="icon">
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progressBar_all">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="maximum">
+      <number>65535</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="current_file">
+     <property name="text">
+      <string notr="true">File Name, 0KB</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progressBar_file">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="maximum">
+      <number>65535</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="ad_ultimate">
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>4</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="currentSpeed">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string notr="true">0KB/sec</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="progressBarCurrentSpeed">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="maximum">
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="format">
+        <string notr="true">0KB/sec</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="moreButton">
+       <property name="text">
+        <string>&amp;More</string>
+       </property>
+       <property name="icon">
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pauseButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>&amp;Pause</string>
+       </property>
+       <property name="icon">
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/player_pause.png</normaloff>:/Themes/Oxygen/resources/player_pause.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="skipButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>&amp;Skip</string>
+       </property>
+       <property name="icon">
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/player_end.png</normaloff>:/Themes/Oxygen/resources/player_end.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="interfaceResources.qrc">
+         <normaloff>:/Themes/Oxygen/resources/cancel.png</normaloff>:/Themes/Oxygen/resources/cancel.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="limitSpeedAsMain">
+     <item>
+      <widget class="QLabel" name="label_Slider_speed">
+       <property name="text">
+        <string>Limit copy speed to:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="SliderSpeed">
+       <property name="maximum">
+        <number>5</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_SpeedMaxValue">
+       <property name="text">
+        <string notr="true">Unlimited</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>1</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab_main">
+      <attribute name="title">
+       <string>Transfer list</string>
+      </attribute>
+      <layout class="QHBoxLayout">
+       <item>
+        <layout class="QVBoxLayout">
+         <property name="spacing">
+          <number>1</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="putOnTop">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Move the selected items to the top</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/putOnTop.png</normaloff>:/Themes/Oxygen/resources/putOnTop.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="pushUp">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Move up the selected items</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/moveUp.png</normaloff>:/Themes/Oxygen/resources/moveUp.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="pushDown">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Move down the selected items</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="putOnBottom">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Move the selected items to the bottom</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/putOnBottom.png</normaloff>:/Themes/Oxygen/resources/putOnBottom.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="add">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Add file/folder</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+           </property>
+           <property name="popupMode">
+            <enum>QToolButton::InstantPopup</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="del">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Delete the selected items</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/remove.png</normaloff>:/Themes/Oxygen/resources/remove.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="searchButton">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Search</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/search.png</normaloff>:/Themes/Oxygen/resources/search.png</iconset>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="exportTransferList">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Export the transfer list</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="importTransferList">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Import the transfer list</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/import-transfer-list.png</normaloff>:/Themes/Oxygen/resources/import-transfer-list.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTreeView" name="TransferList">
+           <property name="selectionMode">
+            <enum>QAbstractItemView::ExtendedSelection</enum>
+           </property>
+           <property name="rootIsDecorated">
+            <bool>false</bool>
+           </property>
+           <property name="uniformRowHeights">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayoutSearch">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="lineEditSearch"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonSearchPrev">
+             <property name="text">
+              <string>Previous</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonSearchNext">
+             <property name="text">
+              <string>Next</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonCloseSearch">
+             <property name="minimumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>25</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="icon">
+              <iconset resource="interfaceResources.qrc">
+               <normaloff>:/Themes/Oxygen/resources/remove.png</normaloff>:/Themes/Oxygen/resources/remove.png</iconset>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_error">
+      <attribute name="title">
+       <string>Error</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QToolButton" name="exportErrorToTransferList">
+           <property name="minimumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>22</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Export the errors into transfer list</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTreeWidget" name="errorList">
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
+         </property>
+         <property name="rootIsDecorated">
+          <bool>false</bool>
+         </property>
+         <property name="uniformRowHeights">
+          <bool>true</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Source</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Destination</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Error</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_interface">
+      <attribute name="title">
+       <string>Interface</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QScrollArea" name="optionsTab">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>492</width>
+            <height>227</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+  <action name="actionAddFile">
+   <property name="icon">
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add file</string>
+   </property>
+  </action>
+  <action name="actionAddFolder">
+   <property name="icon">
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add folder</string>
+   </property>
+  </action>
+  <action name="actionAddFileToMove">
+   <property name="icon">
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move file(s)</string>
+   </property>
+  </action>
+  <action name="actionAddFolderToMove">
+   <property name="icon">
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move folder</string>
+   </property>
+  </action>
+  <action name="actionAddFileToCopy">
+   <property name="icon">
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy file(s)</string>
+   </property>
+  </action>
+  <action name="actionAddFolderToCopy">
+   <property name="icon">
+    <iconset resource="interfaceResources.qrc">
+     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy folder</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="interfaceResources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>moreButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>tabWidget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>218</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
