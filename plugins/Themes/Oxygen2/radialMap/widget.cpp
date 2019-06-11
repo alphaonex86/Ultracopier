@@ -43,8 +43,7 @@ RadialMap::Widget::Widget(QWidget *parent)
         , m_toBeDeleted(nullptr)
         , minFontPitch(QFont().pointSize() - 3)
 {
-    setAcceptDrops(true);
-    setMinimumSize(350, 250);
+    //setMinimumSize(350, 250);
 
     connect(this, &Widget::folderCreated, this, &Widget::sendFakeMouseEvent);
     connect(&m_timer, &QTimer::timeout, this, &Widget::resizeTimeout);

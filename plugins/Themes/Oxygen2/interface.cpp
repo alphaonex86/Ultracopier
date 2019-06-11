@@ -12,12 +12,7 @@
 #include <cmath>
 #include <chrono>
 #include <ctime>
-#ifdef Q_OS_WIN
-    #ifndef NOMINMAX
-        #define NOMINMAX
-    #endif
-    #include <windows.h>
-#endif
+
 
 #include "interface.h"
 #include "ui_interface.h"
@@ -301,8 +296,8 @@ Themes::Themes(const bool &alwaysOnTop,
 
     shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
-    radial=new RadialMap::Widget(ui);
-    ui->ddfdf
+    radial=new RadialMap::Widget(this);
+    ui->verticalLayouMiddle->addWidget(radial);
 
     selectionModel=ui->TransferList->selectionModel();
 
@@ -533,7 +528,7 @@ void Themes::newFolderListing(const std::string &path)
 
 void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
 {
-    if(uiOptions->speedWithProgressBar->isChecked())
+    /*if(uiOptions->speedWithProgressBar->isChecked())
     {
         quint64 tempSpeed=speed;
         if(tempSpeed>999999999)
@@ -547,7 +542,7 @@ void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
         ui->progressBarCurrentSpeed->setFormat(QString::fromStdString(facilityEngine->speedToString(speed)));
     }
     else
-        ui->currentSpeed->setText(QString::fromStdString(facilityEngine->speedToString(speed)));
+        ui->currentSpeed->setText(QString::fromStdString(facilityEngine->speedToString(speed)));*/
 }
 
 void Themes::remainingTime(const int &remainingSeconds)
@@ -717,7 +712,7 @@ void Themes::updateCurrentFileInformation()
         newPath=QString::fromStdString(transfertItem.to);
         if(newPath.size()>(64+3))
             newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
-        ui->to->setText(newPath);
+        //ui->to->setText(newPath);
         ui->current_file->setText(QString::fromStdString(transfertItem.current_file));
         if(transfertItem.progressBar_read!=-1)
         {
@@ -752,7 +747,7 @@ void Themes::updateCurrentFileInformation()
     else
     {
         ui->from->setText(QStringLiteral(""));
-        ui->to->setText(QStringLiteral(""));
+        //ui->to->setText(QStringLiteral(""));
         ui->current_file->setText(QStringLiteral("-"));
         if(haveStarted && transferModel.rowCount()==0)
             ui->progressBar_file->setValue(65535);
@@ -853,8 +848,8 @@ void Themes::on_cancelButton_clicked()
 void Themes::speedWithProgressBar_toggled(bool checked)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-    ui->progressBarCurrentSpeed->setVisible(checked);
-    ui->currentSpeed->setVisible(!checked);
+    /*ui->progressBarCurrentSpeed->setVisible(checked);
+    ui->currentSpeed->setVisible(!checked);*/
 }
 
 void Themes::showDualProgression_toggled(bool checked)
@@ -1196,10 +1191,11 @@ void Themes::on_lineEditSearch_textChanged(QString text)
 
 void Themes::on_moreButton_toggled(bool checked)
 {
-    if(checked)
+    Q_UNUSED(checked);
+    /*if(checked)
         this->setMaximumHeight(16777215);
     else
-        this->setMaximumHeight(130);
+        this->setMaximumHeight(130);*/
     // usefull under windows
     this->updateGeometry();
     this->update();
@@ -1355,7 +1351,7 @@ void Themes::updateProgressionColorBar()
     {
         ui->progressBar_all->setStyleSheet(QStringLiteral(""));
         ui->progressBar_file->setStyleSheet(QStringLiteral(""));
-        ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral(""));
+        //ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral(""));
     }
     else
     {
@@ -1367,10 +1363,10 @@ void Themes::updateProgressionColorBar()
                                             .arg(progressColorRemaining.name())
                                             .arg(progressColorWrite.name())
                                             );
-        ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+        /*ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
                                            .arg(progressColorRemaining.name())
                                            .arg(progressColorWrite.name())
-                                           );
+                                           );*/
     }
     if(stat==status_never_started)
         updateCurrentFileInformation();

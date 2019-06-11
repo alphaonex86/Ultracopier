@@ -60,7 +60,7 @@ void RadialMap::Widget::paintEvent(QPaintEvent*)
         paint.drawPixmap(m_offset, m_map.pixmap());
     else
     {
-        paint.drawText(rect(), 0, tr("We messed up, the user needs to initiate a rescan."));
+        //paint.drawText(rect(), 0, tr(""));
         return;
     }
 

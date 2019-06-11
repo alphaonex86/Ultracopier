@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
-    <height>448</height>
+    <width>478</width>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,154 +21,259 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
     <number>1</number>
    </property>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>2</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="from_label">
-       <property name="text">
-        <string>From:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="from">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>5</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="to_label">
-       <property name="text">
-        <string>To:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="to">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="overall">
-       <property name="text">
-        <string notr="true">File 0/0, Total: 0KB</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelTimeRemaining">
-       <property name="textFormat">
-        <enum>Qt::RichText</enum>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="shutdown">
-       <property name="maximumSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Close on transfer completion</string>
-       </property>
-       <property name="icon">
-        <iconset resource="interfaceResources.qrc">
-         <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</iconset>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QProgressBar" name="progressBar_all">
-     <property name="maximumSize">
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
       <size>
-       <width>16777215</width>
-       <height>16</height>
+       <width>300</width>
+       <height>100</height>
       </size>
      </property>
-     <property name="maximum">
-      <number>65535</number>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(240, 240, 240);</string>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="current_file">
-     <property name="text">
-      <string notr="true">File Name, 0KB</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QProgressBar" name="progressBar_file">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16</height>
-      </size>
-     </property>
-     <property name="maximum">
-      <number>65535</number>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="frameLeft">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>100</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayoutLeft">
+         <item>
+          <widget class="QLabel" name="labelTimeRemaining">
+           <property name="text">
+            <string>Remaining: 5min</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_all">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximum">
+            <number>65535</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QPushButton" name="moreButton">
+             <property name="text">
+              <string>&amp;More</string>
+             </property>
+             <property name="icon">
+              <iconset resource="interfaceResources.qrc">
+               <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pauseButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>&amp;Pause</string>
+             </property>
+             <property name="icon">
+              <iconset resource="interfaceResources.qrc">
+               <normaloff>:/Themes/Oxygen/resources/player_pause.png</normaloff>:/Themes/Oxygen/resources/player_pause.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frameMiddle">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>100</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayouMiddle">
+         <item>
+          <widget class="QLabel" name="overall">
+           <property name="text">
+            <string notr="true">File 0/0, Total: 0KB</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::PlainText</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frameRight">
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>100</height>
+         </size>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayoutRight">
+         <item>
+          <widget class="QToolButton" name="shutdown">
+           <property name="maximumSize">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Close on transfer completion</string>
+           </property>
+           <property name="icon">
+            <iconset resource="interfaceResources.qrc">
+             <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</iconset>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLabel" name="from_label">
+             <property name="text">
+              <string>From:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="from">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::PlainText</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="current_file">
+           <property name="text">
+            <string notr="true">File Name, 0KB</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::PlainText</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar_file">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximum">
+            <number>65535</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QPushButton" name="skipButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>&amp;Skip</string>
+             </property>
+             <property name="icon">
+              <iconset resource="interfaceResources.qrc">
+               <normaloff>:/Themes/Oxygen/resources/player_end.png</normaloff>:/Themes/Oxygen/resources/player_end.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="cancelButton">
+             <property name="text">
+              <string>&amp;Cancel</string>
+             </property>
+             <property name="icon">
+              <iconset resource="interfaceResources.qrc">
+               <normaloff>:/Themes/Oxygen/resources/cancel.png</normaloff>:/Themes/Oxygen/resources/cancel.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="ad_ultimate">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(240, 240, 240);</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Ad or warning here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>
      </property>
@@ -176,107 +281,6 @@
       <bool>true</bool>
      </property>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>4</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="currentSpeed">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string notr="true">0KB/sec</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QProgressBar" name="progressBarCurrentSpeed">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="maximum">
-        <number>1</number>
-       </property>
-       <property name="value">
-        <number>0</number>
-       </property>
-       <property name="format">
-        <string notr="true">0KB/sec</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="moreButton">
-       <property name="text">
-        <string>&amp;More</string>
-       </property>
-       <property name="icon">
-        <iconset resource="interfaceResources.qrc">
-         <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pauseButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>&amp;Pause</string>
-       </property>
-       <property name="icon">
-        <iconset resource="interfaceResources.qrc">
-         <normaloff>:/Themes/Oxygen/resources/player_pause.png</normaloff>:/Themes/Oxygen/resources/player_pause.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="skipButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>&amp;Skip</string>
-       </property>
-       <property name="icon">
-        <iconset resource="interfaceResources.qrc">
-         <normaloff>:/Themes/Oxygen/resources/player_end.png</normaloff>:/Themes/Oxygen/resources/player_end.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>&amp;Cancel</string>
-       </property>
-       <property name="icon">
-        <iconset resource="interfaceResources.qrc">
-         <normaloff>:/Themes/Oxygen/resources/cancel.png</normaloff>:/Themes/Oxygen/resources/cancel.png</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout" name="limitSpeedAsMain">
@@ -744,7 +748,16 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -757,8 +770,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>492</width>
-            <height>227</height>
+            <width>464</width>
+            <height>373</height>
            </rect>
           </property>
          </widget>
