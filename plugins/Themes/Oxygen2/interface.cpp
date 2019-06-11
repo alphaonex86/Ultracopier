@@ -301,6 +301,8 @@ Themes::Themes(const bool &alwaysOnTop,
 
     shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
+    radial=new RadialMap::Widget(ui);
+    ui->ddfdf
 
     selectionModel=ui->TransferList->selectionModel();
 
@@ -368,6 +370,7 @@ Themes::~Themes()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //disconnect(ui->actionAddFile);
     //disconnect(ui->actionAddFolder);
+    delete radial;
     delete selectionModel;
     delete menu;
     delete sysTrayIcon;

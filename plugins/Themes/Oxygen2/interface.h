@@ -18,6 +18,7 @@
 #include <QPixmap>
 
 #include "../../../interface/PluginInterface_Themes.h"
+#include "radialMap/widget.h"
 
 #include "ui_interface.h"
 #include "ui_themesOptions.h"
@@ -188,6 +189,7 @@ private:
     QModelIndexList selectedItems;
     /// \brief the custom transfer model
     TransferModel transferModel;
+    RadialMap::Widget *radial;
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;

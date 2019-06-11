@@ -118,11 +118,21 @@ TransferThreadAsync::~TransferThreadAsync()
 
 void TransferThreadAsync::run()
 {
+    //the thread change operation
+    if(!connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThreadAsync::preOperation,          Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThreadAsync::postOperation,         Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThreadAsync::internalStartTheTransfer,      Qt::QueuedConnection))
+        abort();
+
     exec();
 }
 
 void TransferThreadAsync::startTheTransfer()
 {
+    startTransferTime.restart();
+    haveTransferTime=true;
     emit internalTryStartTheTransfer();
 }
 
@@ -500,3 +510,27 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
     return returnVar;
 }
 
+void TransferThreadAsync::setFileExistsAction(const FileExistsAction &action)
+{
+    if(transfer_stat!=TransferStat_PreOperation)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+source+(", destination: ")+destination);
+        return;
+    }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] action: ")+std::to_string(action));
+    if(action!=FileExists_Rename)
+        fileExistsAction	= action;
+    else
+    {
+        //always rename pass here
+        fileExistsAction	= action;
+        alwaysDoFileExistsAction=action;
+    }
+    if(action==FileExists_Skip)
+    {
+        skip();
+        return;
+    }
+    resetExtraVariable();
+    emit internalStartPreOperation();
+}

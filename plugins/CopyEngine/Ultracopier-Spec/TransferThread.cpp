@@ -76,13 +76,6 @@ void TransferThread::run()
     stopIt                  = false;
     fileExistsAction        = FileExists_NotSet;
     alwaysDoFileExistsAction= FileExists_NotSet;
-    //the thread change operation
-    if(!connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThread::preOperation,          Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThread::postOperation,         Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThread::internalStartTheTransfer,      Qt::QueuedConnection))
-        abort();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(&driveManagement,&DriveManagement::debugInformation,this,                   &TransferThread::debugInformation,	Qt::QueuedConnection))
@@ -93,13 +86,6 @@ void TransferThread::run()
 TransferStat TransferThread::getStat() const
 {
     return transfer_stat;
-}
-
-void TransferThread::startTheTransfer()
-{
-    startTransferTime.restart();
-    haveTransferTime=true;
-    emit internalTryStartTheTransfer();
 }
 
 bool TransferThread::setFiles(const std::string& source, const int64_t &size, const std::string& destination, const Ultracopier::CopyMode &mode)
@@ -129,31 +115,6 @@ bool TransferThread::setFiles(const std::string& source, const int64_t &size, co
     emit internalStartPreOperation();
     startTransferTime.restart();
     return true;
-}
-
-void TransferThread::setFileExistsAction(const FileExistsAction &action)
-{
-    if(transfer_stat!=TransferStat_PreOperation)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+source+(", destination: ")+destination);
-        return;
-    }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] action: ")+std::to_string(action));
-    if(action!=FileExists_Rename)
-        fileExistsAction	= action;
-    else
-    {
-        //always rename pass here
-        fileExistsAction	= action;
-        alwaysDoFileExistsAction=action;
-    }
-    if(action==FileExists_Skip)
-    {
-        skip();
-        return;
-    }
-    resetExtraVariable();
-    emit internalStartPreOperation();
 }
 
 void TransferThread::setFileRename(const std::string &nameForRename)
@@ -1114,9 +1075,9 @@ int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
 int TransferThread::ftruncate64(int __fd, uint64_t __length)
 {
     #ifdef __HAIKU__
-    return ftruncate(__fd,__length);
+    return ::ftruncate(__fd,__length);
     #else
-    return ftruncate64(__fd,__length);
+    return ::ftruncate64(__fd,__length);
     #endif
 }
 

@@ -20,7 +20,6 @@
 
 #include "../../../interface/PluginInterface_CopyEngine.h"
 #include "ScanFileOrFolder.h"
-#include "TransferThread.h"
 #include "MkPath.h"
 #include "Environment.h"
 #include "DriveManagement.h"

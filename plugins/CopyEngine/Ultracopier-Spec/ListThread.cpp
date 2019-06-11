@@ -2063,11 +2063,7 @@ void ListThread::createTransferThread()
         return;
     if(transferThreadList.size()>=(unsigned int)inodeThreads)
         return;
-    #if defined(SYNCFILEMANIP)
-    transferThreadList.push_back(new TransferThreadSync());
-    #else
     transferThreadList.push_back(new TransferThreadAsync());
-    #endif
     TransferThreadAsync * last=transferThreadList.back();
     last->transferId=0;
     last->transferSize=0;

@@ -3,9 +3,6 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#ifndef TRANSFERTHREAD_H
-#define TRANSFERTHREAD_H
-
 #include <QObject>
 #include <QTime>
 #include <QThread>
@@ -41,7 +38,9 @@
 #include "Environment.h"
 #include "DriveManagement.h"
 #include "StructEnumDefinition_CopyEngine.h"
-#include "Variable.h"
+
+#ifndef TRANSFERTHREAD_H
+#define TRANSFERTHREAD_H
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
 class TransferThread : public QThread
@@ -54,11 +53,7 @@ public:
     TransferStat getStat() const;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief to set the id
-    virtual void setId(int id);
-    /// \brief get the reading letter
-    virtual char readingLetter() const = 0;
-    /// \brief get the writing letter
-    virtual char writingLetter() const = 0;
+    void setId(int id);
     #endif
     /// \brief get the transfer time in ms
     int64_t transferTime() const;
@@ -68,8 +63,6 @@ public:
     uint64_t			transferSize;
 
     //not copied size, ...
-    virtual uint64_t realByteTransfered() const = 0;
-    virtual std::pair<uint64_t, uint64_t> progression() const = 0;
     static std::string resolvedName(const std::string &inode);
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
@@ -107,17 +100,16 @@ public:
     static int fseeko64(FILE *__stream, uint64_t __off, int __whence);
     static int ftruncate64(int __fd, uint64_t __length);
 protected:
-    virtual void run();
-    virtual void resetExtraVariable();
+    void run();
+    void resetExtraVariable();
     bool isSame();
-    virtual bool destinationExists();
+    bool destinationExists();
 
     //different pre-operation
     bool checkAlwaysRename();///< return true if has been renamed
     bool canBeMovedDirectly() const;
     bool canBeCopiedDirectly() const;
 
-    virtual void ifCanStartTransfer() = 0;
     //fonction to edit the file date time
     bool readSourceFileDateTime(const std::string &source);
     bool writeDestinationFileDateTime(const std::string &destination);
@@ -145,12 +137,8 @@ signals:
     /// \brief update the transfer stat
     void pushStat(const TransferStat &stat,const uint64_t &pos) const;
 public slots:
-    /// \brief to start the transfer of data
-    virtual void startTheTransfer() = 0;
     /// \brief to set files to transfer
-    virtual bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
-    /// \brief to set file exists action to do
-    void setFileExistsAction(const FileExistsAction &action);
+    bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
     /// \brief to set the new name of the destination
     void setFileRename(const std::string &nameForRename);
     /// \brief to start the transfer of data
@@ -159,14 +147,6 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
-    /// \brief stop the copy
-    virtual void stop() = 0;
-    /// \brief skip the copy
-    virtual void skip() = 0;
-    /// \brief retry after error
-    virtual void retryAfterError() = 0;
-    /// \brief return info about the copied size
-    virtual int64_t copiedSize() = 0;
     /// \brief put the current file at bottom
     void putAtBottom();
 
@@ -178,12 +158,7 @@ public slots:
 
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
-    virtual void set_updateMount();
-private slots:
-    virtual void preOperation() = 0;
-    virtual void postOperation() = 0;
-    //force into the right thread
-    virtual void internalStartTheTransfer() = 0;
+    void set_updateMount();
 protected:
     enum MoveReturn
     {
@@ -247,7 +222,7 @@ protected:
     bool sended_state_preOperationStopped;
     //different post-operation
     bool doFilePostOperation();
-private:
+protected:
     QTime startTransferTime;
     bool haveTransferTime;
 };

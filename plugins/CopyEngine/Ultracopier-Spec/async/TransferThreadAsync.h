@@ -3,9 +3,6 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#ifndef TransferThreadAsync_H
-#define TransferThreadAsync_H
-
 #include <QObject>
 #include <QTime>
 
@@ -41,6 +38,9 @@
 #include "Environment.h"
 #include "../DriveManagement.h"
 #include "../StructEnumDefinition_CopyEngine.h"
+
+#ifndef TransferThreadAsync_H
+#define TransferThreadAsync_H
 
 /// \brief Thread changed to manage the inode operation, the signals, canceling, pre and post operations
 class TransferThreadAsync : public TransferThread
@@ -87,6 +87,8 @@ public slots:
     void putAtBottom();
     /// \brief to set files to transfer
     bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
+    /// \brief to set file exists action to do
+    void setFileExistsAction(const FileExistsAction &action);
 private:
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;

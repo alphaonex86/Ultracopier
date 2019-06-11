@@ -36,7 +36,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_source_folder->setText(QString::fromStdString(folder));
     ui->label_content_destination_file_name->setText(QString::fromStdString(TransferThread::resolvedName(destination)));
-    folder==FSabsolutePath(destination);
+    folder=FSabsolutePath(destination);
     if(folder.size()>80)
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_destination_folder->setText(QString::fromStdString(folder));
