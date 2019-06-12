@@ -125,6 +125,13 @@ public:
         append((File*)d); //will add 1 to filecount for the dir itself
     }
 
+    void append(Folder *d)
+    {
+        m_children += d->children(); //doesn't include the dir itself
+        d->m_parent = this;
+        append((File*)d); //will add 1 to filecount for the dir itself
+    }
+
     ///appends a File
     void append(const std::string &name, FileSize size)
     {

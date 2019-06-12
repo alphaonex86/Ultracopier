@@ -1,5 +1,6 @@
 #include "TransferModel.h"
 #include "../../../cpp11addition.h"
+#include <iostream>
 
 #define COLUMN_COUNT 3
 
@@ -163,7 +164,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
     return false;
 }
 
-Folder * appendToTreeR(Folder * const tree, const std::string &subPath,Folder * const oldTree)
+Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &subPath,Folder * const oldTree)
 {
     const std::string::size_type n=subPath.find('/');
     std::string name;
@@ -188,10 +189,17 @@ Folder * appendToTreeR(Folder * const tree, const std::string &subPath,Folder * 
         }
         else
             folder=new Folder(name.c_str());
+        if(!folder->isFolder())
+            return nullptr;
         tree->append(folder);
     }
     else
-        folder=tree->files.at(search);
+    {
+        File * file=tree->files.at(search);
+        if(!file->isFolder())
+            return nullptr;
+        folder=static_cast<Folder *>(file);
+    }
     if(n+1==subPath.size())
         return folder;
     else
@@ -254,11 +262,16 @@ void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
 uint64_t TransferModel::checkIntegrity(const Folder * const tree)
 {
     uint64_t size=0;
-    list;
-    if(file)
-        size+=file.size();
-    else
-        size+=checkIntegrity(folder);
+    unsigned int index=0;
+    while(index<tree->files.size())
+    {
+        File * file=tree->files.at(index);
+        if(file->isFolder())
+            size+=checkIntegrity(static_cast<Folder *>(file));
+        else
+            size+=file->size();
+        index++;
+    }
     if(size!=tree->size())
     {
         std::cerr << "tree corrupted" << std::endl;
