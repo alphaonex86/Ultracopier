@@ -16,6 +16,7 @@
 
 CopyListener::CopyListener(OptionDialog *optionDialog)
 {
+    nextOrderId=1;
     stopIt=false;
     this->optionDialog=optionDialog;
     pluginLoader=new PluginLoaderCore(optionDialog);

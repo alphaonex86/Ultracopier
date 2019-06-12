@@ -182,7 +182,7 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
     Folder * folder=nullptr;
     if(search>=tree->files.size())
     {
-        if(n+1==subPath.size())
+        if(n+1==subPath.size() && oldTree!=NULL)
         {
             oldTree->setName(subPath.substr(0,n).c_str());
             folder=oldTree;

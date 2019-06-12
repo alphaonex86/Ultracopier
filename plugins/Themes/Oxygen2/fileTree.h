@@ -93,7 +93,7 @@ protected:
     File(const char *name, FileSize size, Folder *parent) : m_parent(parent), m_name(qstrdup(name)), m_size(size) {}
 
     Folder *m_parent; //0 if this is treeRoot
-    std::string m_name;
+    std::string m_name;//speed boost with std::string in compare with char * due to string size defined without read all
     FileSize   m_size;   //in units of KiB
 
 private:
