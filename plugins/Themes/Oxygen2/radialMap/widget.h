@@ -64,10 +64,10 @@ public:
 public Q_SLOTS:
     void create(const Folder*);
     void invalidate();
+    void resizeTimeout();
     void refresh(int);
 
 private Q_SLOTS:
-    void resizeTimeout();
     void sendFakeMouseEvent();
     void createFromCache(const Folder*);
 

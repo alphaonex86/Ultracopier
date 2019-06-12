@@ -22,11 +22,13 @@
 
 #include "fileTree.h"
 
+FacilityInterface *File::facilityEngine=NULL;
+
 #include <QDir>
 #include <QUrl>
 
 QString File::displayName() const {
-    const QString decodedName = QFile::decodeName(m_name);
+    const QString decodedName = QString::fromStdString(m_name);
     return url().isLocalFile() ? QDir::toNativeSeparators(decodedName) : decodedName;
 }
 
@@ -47,7 +49,7 @@ QUrl File::url(const Folder *root) const
         root = nullptr; //prevent returning empty string when there is something we could return
 
     for (const Folder *d = (Folder*)this; d != root && d; d = d->parent()) {
-        path.prepend(QFile::decodeName(d->name8Bit()));
+        path.prepend(QString::fromStdString(d->name()));
     }
 
     return QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);

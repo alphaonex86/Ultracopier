@@ -72,6 +72,7 @@ Themes::Themes(const bool &alwaysOnTop,
     haveError(false)
 {
     this->facilityEngine=facilityEngine;
+    File::facilityEngine=facilityEngine;
     ui->setupUi(this);
     uiOptions->setupUi(ui->optionsTab);
 
@@ -118,6 +119,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->progressColorRead->setIcon(pixmap);
     pixmap.fill(progressColorRemaining);
     uiOptions->progressColorRemaining->setIcon(pixmap);
+    ui->labelTimeRemaining->setText(QString());
 
     transferModel.setFacilityEngine(facilityEngine);//need be before ui->TransferList->setModel(&transferModel); due to call of TransferModel::headerData()
     ui->TransferList->setModel(&transferModel);
@@ -150,6 +152,8 @@ Themes::Themes(const bool &alwaysOnTop,
     connect(ui->actionAddFolderToMove,&QAction::triggered,this,&Themes::forcedModeAddFolderToMove);
     connect(ui->actionAddFolder,&QAction::triggered,this,&Themes::forcedModeAddFolder);
     connect(ui->exportErrorToTransferList,&QToolButton::triggered,this,&Themes::exportErrorIntoTransferList);
+
+    ui->overall->hide();
 
     //setup the search part
     closeTheSearchBox();
@@ -624,6 +628,11 @@ void Themes::setFileProgression(const std::vector<Ultracopier::ProgressionItem> 
 void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &returnActions)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, returnActions.size(): "+std::to_string(returnActions.size()));
+    if(transferModel.tree==NULL)
+    {
+        transferModel.tree=new Folder("");
+        radial->create(transferModel.tree);
+    }
     std::vector<uint64_t> returnValue=transferModel.synchronizeItems(returnActions);
     totalFile+=returnValue.front();
     totalSize+=returnValue.at(1);

@@ -24,6 +24,8 @@ TransferModel::TransferModel()
     currentIndexSearch=0;
     haveSearchItem=false;
     searchId=0;
+
+    tree=NULL;
 }
 
 int TransferModel::columnCount( const QModelIndex& parent ) const
@@ -161,6 +163,111 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
     return false;
 }
 
+Folder * appendToTreeR(Folder * const tree, const std::string &subPath,Folder * const oldTree)
+{
+    const std::string::size_type n=subPath.find('/');
+    std::string name;
+    if(n == std::string::npos)
+        name=subPath;
+    else
+        name=subPath.substr(0,n);
+    unsigned int search=0;
+    while(search<tree->files.size())
+    {
+        if(tree->files.at(search)->name()==name)
+            break;
+        search++;
+    }
+    Folder * folder=nullptr;
+    if(search>=tree->files.size())
+    {
+        if(n+1==subPath.size())
+        {
+            oldTree->setName(subPath.substr(0,n).c_str());
+            folder=oldTree;
+        }
+        else
+            folder=new Folder(name.c_str());
+        tree->append(folder);
+    }
+    else
+        folder=tree->files.at(search);
+    if(n+1==subPath.size())
+        return folder;
+    else
+        return appendToTreeR(folder,subPath.substr(n+1));
+}
+
+void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
+{
+    if(size==0)
+        return;
+    const std::string::size_type n=path.rfind('/');
+    if(n == std::string::npos)
+        return;
+    if(treePath.empty())
+    {
+        treePath=path.substr(0,n+1);
+        tree->append(path.c_str()+n+1,size);
+    }
+    else
+    {
+        const std::string &newPath=path.substr(0,n+1);
+        unsigned int index=0;
+        while(index<newPath.size() && index<treePath.size())
+        {
+            if(treePath.at(index)!=newPath.at(index))
+                break;
+            index++;
+        }
+        //append to current path
+        if(index==treePath.size())
+        {
+            //get the next path, found or create
+            const std::string &subPath=path.substr(0,n+1);
+            Folder * const finalTree=appendToTreeR(tree,subPath);
+            finalTree->append(path.c_str()+n+1,size);
+        }
+        else //new root is to be created
+        {
+            //save the old values
+            const std::string oldTreePath=treePath;
+            Folder * const oldTree=tree;
+            tree=new Folder("");
+            treePath=path.substr(0,index);
+
+            if(oldTreePath.size()>index)
+                appendToTreeR(tree,oldTreePath.substr(index),oldTree);
+
+            Folder * const finalTree=appendToTreeR(tree,path.substr(index));
+            finalTree->append(path.c_str()+n+1,size);
+        }
+    }
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    //check the integrity of tree
+    checkIntegrity(tree);
+    #endif
+}
+
+#ifdef ULTRACOPIER_PLUGIN_DEBUG
+//check the integrity of tree
+uint64_t TransferModel::checkIntegrity(const Folder * const tree)
+{
+    uint64_t size=0;
+    list;
+    if(file)
+        size+=file.size();
+    else
+        size+=checkIntegrity(folder);
+    if(size!=tree->size())
+    {
+        std::cerr << "tree corrupted" << std::endl;
+        abort();
+    }
+    return tree->size();
+}
+#endif
+
 /*
   Return[0]: totalFile
   Return[1]: totalSize
@@ -196,6 +303,8 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
                 transfertItemList.push_back(newItem);
                 totalFile++;
                 totalSize+=action.addAction.size;
+
+                appendToTree(action.addAction.sourceFullPath,action.addAction.size);
             }
             break;
             case Ultracopier::MoveItem:

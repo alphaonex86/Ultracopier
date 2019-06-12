@@ -29,6 +29,7 @@
 #include <QLocale>
 
 #include <stdlib.h>
+#include "FacilityEngine.h"
 
 typedef quint64 FileSize;
 typedef quint64 Dirsize;  //**** currently unused
@@ -39,11 +40,12 @@ class File
 {
 public:
     friend class Folder;
+    static FacilityInterface *facilityEngine;
 
 public:
-    File(const char *name, FileSize size) : m_parent(nullptr), m_name(qstrdup(name)), m_size(size) {}
+    File(const std::string &name, FileSize size) : m_parent(nullptr), m_name(name), m_size(size) {}
+    File(const std::string &name, FileSize size, Folder * parent) : m_parent(parent), m_name(name), m_size(size) {}
     virtual ~File() {
-        delete [] m_name;
     }
 
     Folder *parent() const {
@@ -51,12 +53,15 @@ public:
     }
 
     /** Do not use for user visible strings. Use name instead. */
-    const char *name8Bit() const {
+    const std::string name() const {
         return m_name;
+    }
+    void setName(const std::string &name) {
+        m_name=name;
     }
     /** Decoded name. Use when you need a QString. */
     QString decodedName() const {
-        return QFile::decodeName(m_name);
+        return QString::fromStdString(m_name);
     }
     /**
      * Human readable name (including native separators where applicable).
@@ -78,7 +83,7 @@ public:
      */
     QString displayPath(const Folder * = nullptr) const;
     QString humanReadableSize() const {
-        return QString::number(m_size);
+        return QString::fromStdString(facilityEngine->speedToString(m_size));
     }
 
     /** Builds a complete QUrl by walking up to root. */
@@ -88,7 +93,7 @@ protected:
     File(const char *name, FileSize size, Folder *parent) : m_parent(parent), m_name(qstrdup(name)), m_size(size) {}
 
     Folder *m_parent; //0 if this is treeRoot
-    char      *m_name;
+    std::string m_name;
     FileSize   m_size;   //in units of KiB
 
 private:
@@ -100,7 +105,7 @@ private:
 class Folder : public File
 {
 public:
-    Folder(const char *name) : File(name, 0), m_children(0) {} //DON'T pass the full path!
+    Folder(const std::string &name) : File(name, 0), m_children(0) {} //DON'T pass the full path!
 
     uint children() const {
         return m_children;
@@ -110,12 +115,10 @@ public:
     }
 
     ///appends a Folder
-    void append(Folder *d, const char *name=nullptr)
+    void append(Folder *d, const std::string &name)
     {
-        if (name) {
-            delete [] d->m_name;
-            d->m_name = qstrdup(name);
-        } //directories that had a fullpath copy just their names this way
+        if (!name.empty())
+            m_name=name;
 
         m_children += d->children(); //doesn't include the dir itself
         d->m_parent = this;
@@ -123,28 +126,38 @@ public:
     }
 
     ///appends a File
-    void append(const char *name, FileSize size)
+    void append(const std::string &name, FileSize size)
     {
         append(new File(name, size, this));
     }
 
     /// removes a file
     void remove(const File *f) {
-        files.removeAll(const_cast<File*>(f));
+        uint64_t sizeToRemove=0;
+        for (unsigned int i = 0; i < files.size();)
+        {
+            if(files.at(i)==f)
+            {
+                delete f;
+                sizeToRemove+=f->size();
+            }
+            else
+                i++;
+        }
 
         for (Folder *d = this; d; d = d->parent()) {
-            d->m_size -= f->size();
+            d->m_size -= sizeToRemove;
         }
     }
 
-    QList<File *> files;
+    std::vector<File *> files;
 
 private:
     void append(File *p)
     {
         m_children++;
         m_size += p->size();
-        files.append(p);
+        files.push_back(p);
     }
 
     uint m_children;

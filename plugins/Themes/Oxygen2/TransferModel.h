@@ -18,6 +18,7 @@
 #include "Environment.h"
 
 #include "../../../interface/FacilityInterface.h"
+#include "fileTree.h"
 
 /// \brief model to store the transfer list
 class TransferModel : public QAbstractTableModel
@@ -60,6 +61,8 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     std::vector<uint64_t> synchronizeItems(const std::vector<Ultracopier::ReturnActionOnCopyList>& returnActions);
+    void appendToTree(const std::string &path, const uint64_t &size);
+    Folder * appendToTreeR(Folder * const tree, const std::string &subPath,Folder * const oldTree=NULL);
     void setFacilityEngine(FacilityInterface * facilityEngine);
 
     int search(const std::string &text,bool searchNext);
@@ -70,6 +73,11 @@ public:
     currentTransfertItem getCurrentTransfertItem() const;
 
     uint64_t firstId() const;
+    Folder * tree;
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    //check the integrity of tree
+    uint64_t checkIntegrity(const Folder * const tree);
+    #endif
 protected:
     std::vector<TransfertItem> transfertItemList;///< To have a transfer list for the user
     std::set<uint64_t> startId,stopId;///< To show what is started, what is stopped
@@ -86,6 +94,7 @@ private:
     uint64_t searchId;
     static QIcon *start;
     static QIcon *stop;
+    std::string treePath;
 signals:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief To debug source

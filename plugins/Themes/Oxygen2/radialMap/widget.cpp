@@ -43,7 +43,7 @@ RadialMap::Widget::Widget(QWidget *parent)
         , m_toBeDeleted(nullptr)
         , minFontPitch(QFont().pointSize() - 3)
 {
-    //setMinimumSize(350, 250);
+    setMinimumSize(150, 100);
 
     connect(this, &Widget::folderCreated, this, &Widget::sendFakeMouseEvent);
     connect(&m_timer, &QTimer::timeout, this, &Widget::resizeTimeout);
@@ -53,7 +53,8 @@ RadialMap::Widget::Widget(QWidget *parent)
 
 RadialMap::Widget::~Widget()
 {
-    delete m_rootSegment;
+    if(m_rootSegment!=nullptr)
+        delete m_rootSegment;
 }
 
 
@@ -112,6 +113,8 @@ RadialMap::Widget::create(const Folder *tree)
         m_map.make(tree);
 
         //this is the inner circle in the center
+        if(m_rootSegment!=nullptr)
+            delete m_rootSegment;
         m_rootSegment = new Segment(tree, 0, 16*360);
 
         setMouseTracking(true);
