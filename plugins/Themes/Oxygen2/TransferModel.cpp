@@ -204,7 +204,7 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
             return nullptr;
         folder=static_cast<Folder *>(file);
     }
-    if(n+1==subPath.size())
+    if(n == std::string::npos || n+1==subPath.size())
         return folder;
     else
         return appendToTreeR(folder,subPath.substr(n+1));
@@ -252,10 +252,16 @@ void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
             tree=new Folder("");
             treePath=path.substr(0,index);
 
+            //path switch to rebase the root
             if(oldTreePath.size()>index)
                 appendToTreeR(tree,oldTreePath.substr(index),oldTree);
 
-            Folder * const finalTree=appendToTreeR(tree,path.substr(index));
+            Folder * finalTree=tree;
+            //make the new sub path if have
+            if((n+1)>index)
+                finalTree=appendToTreeR(tree,path.substr(index));
+
+            //do the file
             finalTree->append(path.c_str()+n+1,size);
         }
     }

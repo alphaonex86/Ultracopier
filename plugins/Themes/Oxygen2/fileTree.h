@@ -83,7 +83,7 @@ public:
      */
     QString displayPath(const Folder * = nullptr) const;
     QString humanReadableSize() const {
-        return QString::fromStdString(facilityEngine->speedToString(m_size));
+        return QString::fromStdString(facilityEngine->sizeToString(m_size));
     }
 
     /** Builds a complete QUrl by walking up to root. */
