@@ -190,7 +190,6 @@ public slots:
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
-    void setCopyListOrder(const bool &order);
     void exportErrorIntoTransferList(const std::string &fileName);
 private:
     QSemaphore          mkpathTransfer;
@@ -219,12 +218,11 @@ private:
     bool				checkDestinationFolderExists;
     unsigned int        parallelizeIfSmallerThan;
     bool                moveTheWholeFolder;
-    bool                followTheStrictOrder;
     bool                deletePartiallyTransferredFiles;
     int                 inodeThreads;
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
-    bool                copyListOrder;
+    bool                followTheStrictOrder;
     std::unordered_set<TransferThreadAsync *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;

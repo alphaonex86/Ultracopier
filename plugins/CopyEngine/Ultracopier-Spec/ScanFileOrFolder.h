@@ -62,7 +62,7 @@ signals:
 public slots:
     void addToList(const std::vector<std::string>& sources,const std::string& destination);
     void setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude);
-    void setCopyListOrder(const bool &order);
+    void setFollowTheStrictOrder(const bool &order);
     void set_updateMount();
 protected:
     void run();

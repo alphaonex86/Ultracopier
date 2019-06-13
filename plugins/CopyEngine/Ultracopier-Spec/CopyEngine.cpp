@@ -772,6 +772,7 @@ void CopyEngine::setFollowTheStrictOrder(const bool &followTheStrictOrder)
     this->followTheStrictOrder=followTheStrictOrder;
     if(uiIsInstalled)
         ui->followTheStrictOrder->setChecked(followTheStrictOrder);
+    listThread->setFollowTheStrictOrder(followTheStrictOrder);
     emit send_followTheStrictOrder(followTheStrictOrder);
 }
 
@@ -1011,11 +1012,6 @@ void CopyEngine::setDefaultDestinationFolder(const std::string &defaultDestinati
     this->defaultDestinationFolder=defaultDestinationFolder;
     if(uiIsInstalled)
         ui->defaultDestinationFolder->setText(QString::fromStdString(defaultDestinationFolder));
-}
-
-void CopyEngine::setCopyListOrder(const bool &order)
-{
-    listThread->setCopyListOrder(order);
 }
 
 void CopyEngine::exportErrorIntoTransferList()

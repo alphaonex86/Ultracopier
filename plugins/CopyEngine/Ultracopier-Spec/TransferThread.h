@@ -93,7 +93,7 @@ public:
         size_t size;
         #endif
         bool isFolder;
-        char d_name[256];
+        std::string d_name;
     };
     static bool entryInfoList(const std::string &path, std::vector<dirent_uc> &list);
     void setMkFullPath(const bool mkFullPath);

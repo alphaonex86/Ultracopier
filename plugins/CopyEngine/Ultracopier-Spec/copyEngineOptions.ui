@@ -29,7 +29,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -347,7 +347,14 @@
        <string>Performance</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="2" column="1">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Inode threads (unsafe &gt; 1)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -370,33 +377,6 @@
          </property>
          <property name="value">
           <number>16</number>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_21">
-         <property name="text">
-          <string>Inode threads (unsafe &gt; 1)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="copyListOrder">
-         <property name="toolTip">
-          <string>More cpu, but better organisation on the disk</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_25">
-         <property name="toolTip">
-          <string>More cpu, but better organisation on the disk</string>
-         </property>
-         <property name="text">
-          <string>Order the list</string>
          </property>
         </widget>
        </item>

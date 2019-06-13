@@ -518,7 +518,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
 
     if(copyListOrder)
         std::sort(entryList.begin(), entryList.end(), [](TransferThread::dirent_uc a, TransferThread::dirent_uc b) {
-                return strcmp(a.d_name,b.d_name);
+                return a.d_name<b.d_name;
         });
     if(stopIt)
         return;
@@ -734,7 +734,7 @@ void ScanFileOrFolder::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
     this->moveTheWholeFolder=moveTheWholeFolder;
 }
 
-void ScanFileOrFolder::setCopyListOrder(const bool &order)
+void ScanFileOrFolder::setFollowTheStrictOrder(const bool &order)
 {
     this->copyListOrder=order;
 }

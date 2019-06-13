@@ -31,12 +31,11 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     checkDestinationFolderExists(false),
     parallelizeIfSmallerThan(1024),
     moveTheWholeFolder(false),
-    followTheStrictOrder(false),
     deletePartiallyTransferredFiles(true),
     inodeThreads(1),
     renameTheOriginalDestination(false),
     checkDiskSpace(true),
-    copyListOrder(true),
+    followTheStrictOrder(true),
     putAtBottom(0),
     mode(Ultracopier::CopyMode::Copy),
     forcedMode(false),
@@ -393,47 +392,49 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
 
     //create new thread because is auto-detroyed
     scanFileOrFolderThreadsPool.push_back(new ScanFileOrFolder(mode));
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection))
+    ScanFileOrFolder * scanFileOrFolderThreads=scanFileOrFolderThreadsPool.back();
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::finishedTheListing,				this,&ListThread::scanThreadHaveFinishSlot,	Qt::QueuedConnection))
         abort();
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,             Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::fileTransfer,                     this,&ListThread::fileTransfer,             Qt::QueuedConnection))
         abort();
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::fileTransferWithInode,            this,&ListThread::fileTransferWithInode,             Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::fileTransferWithInode,            this,&ListThread::fileTransferWithInode,             Qt::QueuedConnection))
         abort();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,         Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::debugInformation,					this,&ListThread::debugInformation,         Qt::QueuedConnection))
         abort();
     #endif
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::newFolderListing,					this,&ListThread::newFolderListing))
         abort();
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection))
         abort();
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection))
         abort();
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection))
         abort();
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::addToRmForRsync,                  this,&ListThread::addToRmForRsync,          Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToRmForRsync,                  this,&ListThread::addToRmForRsync,          Qt::QueuedConnection))
         abort();
     #endif
 
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::errorOnFolder,					this,&ListThread::errorOnFolder,            Qt::QueuedConnection))
         abort();
-    if(!connect(scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection))
-        abort();
-
-    if(!connect(this,&ListThread::send_updateMount,                 scanFileOrFolderThreadsPool.back(),&ScanFileOrFolder::set_updateMount,          Qt::QueuedConnection))
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::folderAlreadyExists,				this,&ListThread::folderAlreadyExists,		Qt::QueuedConnection))
         abort();
 
-    scanFileOrFolderThreadsPool.back()->setFilters(include,exclude);
-    scanFileOrFolderThreadsPool.back()->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
-    scanFileOrFolderThreadsPool.back()->setMoveTheWholeFolder(moveTheWholeFolder);
+    if(!connect(this,&ListThread::send_updateMount,                 scanFileOrFolderThreads,&ScanFileOrFolder::set_updateMount,          Qt::QueuedConnection))
+        abort();
+
+    scanFileOrFolderThreads->setFilters(include,exclude);
+    scanFileOrFolderThreads->setCheckDestinationFolderExists(checkDestinationFolderExists && alwaysDoThisActionForFolderExists!=FolderExists_Merge);
+    scanFileOrFolderThreads->setMoveTheWholeFolder(moveTheWholeFolder);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    scanFileOrFolderThreadsPool.back()->setRsync(rsync);
+    scanFileOrFolderThreads->setRsync(rsync);
     #endif
     if(scanFileOrFolderThreadsPool.size()==1)
         updateTheStatus();
-    scanFileOrFolderThreadsPool.back()->setRenamingRules(firstRenamingRule,otherRenamingRule);
-    return scanFileOrFolderThreadsPool.back();
+    scanFileOrFolderThreads->setRenamingRules(firstRenamingRule,otherRenamingRule);
+    scanFileOrFolderThreads->setFollowTheStrictOrder(followTheStrictOrder);
+    return scanFileOrFolderThreads;
 }
 
 void ListThread::scanThreadHaveFinishSlot()
@@ -2149,11 +2150,6 @@ void ListThread::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
     this->moveTheWholeFolder=moveTheWholeFolder;
 }
 
-void ListThread::setFollowTheStrictOrder(const bool &followTheStrictOrder)
-{
-    this->followTheStrictOrder=followTheStrictOrder;
-}
-
 void ListThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
 {
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
@@ -2197,11 +2193,11 @@ void ListThread::setCheckDiskSpace(const bool &checkDiskSpace)
     this->checkDiskSpace=checkDiskSpace;
 }
 
-void ListThread::setCopyListOrder(const bool &order)
+void ListThread::setFollowTheStrictOrder(const bool &order)
 {
-    this->copyListOrder=order;
+    this->followTheStrictOrder=order;
     for(unsigned int i=0;i<scanFileOrFolderThreadsPool.size();i++)
-        scanFileOrFolderThreadsPool.at(i)->setCopyListOrder(this->copyListOrder);
+        scanFileOrFolderThreadsPool.at(i)->setFollowTheStrictOrder(this->followTheStrictOrder);
 }
 
 void ListThread::exportErrorIntoTransferList(const std::string &fileName)

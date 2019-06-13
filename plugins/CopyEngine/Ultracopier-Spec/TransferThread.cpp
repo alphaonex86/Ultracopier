@@ -1021,7 +1021,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
                     #else
                     tempValue.isFolder=ep->d_type==DT_DIR;
                     #endif
-                    strcpy(tempValue.d_name,ep->d_name);
+                    tempValue.d_name=ep->d_name;
                     list.push_back(tempValue);
                 }
             }

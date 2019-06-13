@@ -61,7 +61,6 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->checkDiskSpace,             &QCheckBox::toggled,                this,&CopyEngineFactory::checkDiskSpace);
     connect(ui->defaultDestinationFolderBrowse,&QPushButton::clicked,           this,&CopyEngineFactory::defaultDestinationFolderBrowse);
     connect(ui->defaultDestinationFolder,&QLineEdit::editingFinished,           this,&CopyEngineFactory::defaultDestinationFolder);
-    connect(ui->copyListOrder,              &QCheckBox::toggled,                this,&CopyEngineFactory::copyListOrder);
 
     connect(filters,&Filters::sendNewFilters,this,&CopyEngineFactory::sendNewFilters);
     connect(ui->filters,&QPushButton::clicked,this,&CopyEngineFactory::showFilterDialog);
@@ -114,7 +113,6 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
     realObject->setCheckDiskSpace(ui->checkDiskSpace->isChecked());
     realObject->setDefaultDestinationFolder(ui->defaultDestinationFolder->text().toStdString());
-    realObject->setCopyListOrder(ui->copyListOrder->isChecked());
     return newTransferEngine;
 }
 
@@ -197,7 +195,6 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
         KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(1)));
-        KeysList.push_back(std::pair<std::string, std::string>("copyListOrder","false"));
         options->addOptionGroup(KeysList);
 
         optionsEngine=options;
@@ -273,8 +270,6 @@ void CopyEngineFactory::resetOptions()
     firstRenamingRule=options->getOptionValue("firstRenamingRule");
     otherRenamingRule=options->getOptionValue("otherRenamingRule");
     renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
-
-    ui->copyListOrder->setChecked(stringtobool(options->getOptionValue("copyListOrder")));
 
     optionsEngine=options;
 }
@@ -543,10 +538,3 @@ void CopyEngineFactory::setRsync(bool rsync)
         optionsEngine->setOptionValue("rsync",std::to_string(rsync));
 }
 #endif
-
-void CopyEngineFactory::copyListOrder(bool checked)
-{
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
-    if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("copyListOrder",booltostring(checked));
-}

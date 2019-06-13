@@ -215,7 +215,6 @@ public:
     #endif
     void setCheckDiskSpace(const bool &checkDiskSpace);
     void setDefaultDestinationFolder(const std::string &defaultDestinationFolder);
-    void setCopyListOrder(const bool &order);
     void defaultDestinationFolderBrowse();
     std::string askDestination();
 public slots:

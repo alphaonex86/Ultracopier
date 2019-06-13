@@ -109,7 +109,6 @@ private slots:
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
-    void copyListOrder(bool checked);
 public slots:
     void resetOptions();
     void newLanguageLoaded();
