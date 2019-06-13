@@ -167,11 +167,13 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
 Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &subPath,Folder * const oldTree)
 {
     const std::string::size_type n=subPath.find('/');
+    //isolate the name
     std::string name;
     if(n == std::string::npos)
         name=subPath;
     else
         name=subPath.substr(0,n);
+    //search
     unsigned int search=0;
     while(search<tree->files.size())
     {
@@ -182,19 +184,21 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
     Folder * folder=nullptr;
     if(search>=tree->files.size())
     {
-        if(n+1==subPath.size() && oldTree!=NULL)
+        //append or remplace the existing
+        if(oldTree!=NULL && (n+1)==subPath.size())
         {
             oldTree->setName(subPath.substr(0,n).c_str());
             folder=oldTree;
         }
         else
-            folder=new Folder(name.c_str());
+            folder=new Folder(name);
         if(!folder->isFolder())
             return nullptr;
         tree->append(folder);
     }
     else
     {
+        //create a new leaf
         File * file=tree->files.at(search);
         if(!file->isFolder())
             return nullptr;
@@ -232,8 +236,12 @@ void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
         if(index==treePath.size())
         {
             //get the next path, found or create
-            const std::string &subPath=path.substr(0,n+1);
-            Folder * const finalTree=appendToTreeR(tree,subPath);
+            Folder * finalTree=tree;
+            if((n+1)>index)
+            {
+                const std::string &subPath=path.substr(index,(n+1)-index);
+                finalTree=appendToTreeR(tree,subPath);
+            }
             finalTree->append(path.c_str()+n+1,size);
         }
         else //new root is to be created

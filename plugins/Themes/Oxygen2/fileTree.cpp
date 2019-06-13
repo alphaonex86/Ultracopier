@@ -54,3 +54,59 @@ QUrl File::url(const Folder *root) const
 
     return QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
 }
+
+void Folder::append(File *p)
+{
+    files.push_back(p);
+    Folder *d = this;
+    while(d != nullptr) {
+        d->m_children++;
+        d->m_size += p->size();
+        d=d->m_parent;
+    }
+}
+
+///appends a Folder
+void Folder::append(Folder *d, const std::string &name)
+{
+    if (!name.empty())
+        m_name=name;
+
+    m_children += d->children(); //doesn't include the dir itself
+    d->m_parent = this;
+    append((File*)d); //will add 1 to filecount for the dir itself
+}
+
+void Folder::append(Folder *d)
+{
+    m_children += d->children(); //doesn't include the dir itself
+    d->m_parent = this;
+    append((File*)d); //will add 1 to filecount for the dir itself
+}
+
+///appends a File
+void Folder::append(const std::string &name, FileSize size)
+{
+    append(new File(name, size, this));
+}
+
+/// removes a file
+void Folder::remove(const File *f) {
+    uint64_t sizeToRemove=0;
+    for (unsigned int i = 0; i < files.size();)
+    {
+        if(files.at(i)==f)
+        {
+            delete f;
+            sizeToRemove+=f->size();
+        }
+        else
+            i++;
+    }
+    Folder *d = this;
+    while(d != nullptr) {
+        d->m_size -= sizeToRemove;
+        d->m_children--;
+        d=d->m_parent;
+    }
+}

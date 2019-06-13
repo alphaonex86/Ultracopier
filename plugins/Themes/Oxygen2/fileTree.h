@@ -115,57 +115,16 @@ public:
     }
 
     ///appends a Folder
-    void append(Folder *d, const std::string &name)
-    {
-        if (!name.empty())
-            m_name=name;
-
-        m_children += d->children(); //doesn't include the dir itself
-        d->m_parent = this;
-        append((File*)d); //will add 1 to filecount for the dir itself
-    }
-
-    void append(Folder *d)
-    {
-        m_children += d->children(); //doesn't include the dir itself
-        d->m_parent = this;
-        append((File*)d); //will add 1 to filecount for the dir itself
-    }
-
+    void append(Folder *d, const std::string &name);
+    void append(Folder *d);
     ///appends a File
-    void append(const std::string &name, FileSize size)
-    {
-        append(new File(name, size, this));
-    }
-
+    void append(const std::string &name, FileSize size);
     /// removes a file
-    void remove(const File *f) {
-        uint64_t sizeToRemove=0;
-        for (unsigned int i = 0; i < files.size();)
-        {
-            if(files.at(i)==f)
-            {
-                delete f;
-                sizeToRemove+=f->size();
-            }
-            else
-                i++;
-        }
-
-        for (Folder *d = this; d; d = d->parent()) {
-            d->m_size -= sizeToRemove;
-        }
-    }
-
+    void remove(const File *f);
     std::vector<File *> files;
 
 private:
-    void append(File *p)
-    {
-        m_children++;
-        m_size += p->size();
-        files.push_back(p);
-    }
+    void append(File *p);
 
     uint m_children;
 
