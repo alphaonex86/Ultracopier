@@ -80,8 +80,10 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     #ifdef ULTRACOPIER_DEBUG
     systrayMenu->addAction(actionSaveBugReport);
     #endif
+    #ifndef Q_OS_LINUX
     if(!ProductKey::productKey->isUltimate())
         systrayMenu->addAction(actionProductKey);
+    #endif
     systrayMenu->addAction(actionMenuQuit);
     #ifndef Q_OS_MAC
     systrayMenu->insertSeparator(actionOptions);
