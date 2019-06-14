@@ -94,7 +94,7 @@ private:
 #define M_PI 3.14159265358979323846264338327
 #endif
 
-#define MIN_RING_BREADTH 20
+#define MIN_RING_BREADTH 7
 #define MAX_RING_BREADTH 60
 #define DEFAULT_RING_DEPTH 4 //first level = 0
 #define MIN_RING_DEPTH 0

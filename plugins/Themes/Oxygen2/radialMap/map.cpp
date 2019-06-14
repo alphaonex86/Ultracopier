@@ -65,7 +65,7 @@ void RadialMap::Map::invalidate()
 void RadialMap::Map::make(const Folder *tree, bool refresh)
 {
     if(height()<1)
-        abort();
+        return;
     //slow operation so set the wait cursor
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -194,8 +194,8 @@ bool RadialMap::Map::build(const Folder * const dir, const uint depth, uint a_st
 
     if (depth == 0 && hiddenSize >= m_limits[depth] && hiddenFileCount > 0) {
         //append a segment for unrepresented space - a "fake" segment
-        const QString s = QObject::tr("1 file, with an average size of %2",
-                "%1 files, with an average size of %2").arg(hiddenFileCount)
+        const QString s = QObject::tr("%1 file, with an average size of %2")
+                .arg(hiddenFileCount)
                 .arg(QString::number(hiddenSize/hiddenFileCount));
 
 
@@ -209,10 +209,10 @@ bool RadialMap::Map::resize(const QRect &rect)
 {
     //there's a MAP_2MARGIN border
 
-#define mw width()
-#define mh height()
-#define cw rect.width()
-#define ch rect.height()
+    const int mw=width();
+    const int mh=height();
+    const int cw=rect.width();
+    const int ch=rect.height();
 
     if (cw < mw || ch < mh || (cw > mw && ch > mh))
     {
@@ -243,11 +243,6 @@ bool RadialMap::Map::resize(const QRect &rect)
 
         return true;
     }
-
-#undef mw
-#undef mh
-#undef cw
-#undef ch
 
     return false;
 }
@@ -297,7 +292,7 @@ void RadialMap::Map::paint(bool antialias)
     QRect rect = m_rect;
 
     rect.adjust(5, 5, -5, -5);
-    m_pixmap.fill(QColor(240,240,240));
+    m_pixmap.fill(Qt::transparent);
 
     //m_rect.moveRight(1); // Uncommenting this breaks repainting when recreating map from cache
 
@@ -326,7 +321,6 @@ void RadialMap::Map::paint(bool antialias)
         excess = rect.width() % m_ringBreadth;
         ++step;
     }
-
 
     for (int x = m_visibleDepth; x >= 0; --x)
     {
@@ -372,6 +366,7 @@ void RadialMap::Map::paint(bool antialias)
                 paint.drawPolygon(pts);
             }
 
+            paint.setPen(QColor(120,120,120));
             paint.setBrush(segment->brush());
             paint.drawPie(rect, segment->start(), segment->length());
 
@@ -402,12 +397,17 @@ void RadialMap::Map::paint(bool antialias)
 
     //  if(excess > 0) rect.addCoords(excess, excess, 0, 0); //ugly
 
-    paint.setPen(QColor(0,0,0));
+    paint.setPen(QColor(120,120,120));
     paint.setBrush(QColor(255,255,255));
     paint.drawEllipse(rect);
-    paint.drawText(rect, Qt::AlignCenter, m_centerText);
+    if(width()>200)
+    {
+        paint.setPen(QColor(0,0,0));
+        paint.drawText(rect, Qt::AlignCenter, m_centerText);
+    }
 
     m_innerRadius = rect.width() / 2; //rect.width should be multiple of 2
 
     paint.end();
 }
+

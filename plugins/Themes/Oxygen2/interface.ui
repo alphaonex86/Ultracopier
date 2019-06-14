@@ -147,6 +147,9 @@
           <height>100</height>
          </size>
         </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayouMiddle">
          <item>
           <widget class="QLabel" name="overall">

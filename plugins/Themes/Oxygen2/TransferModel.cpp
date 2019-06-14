@@ -280,6 +280,11 @@ uint64_t TransferModel::checkIntegrity(const Folder * const tree)
     while(index<tree->files.size())
     {
         File * file=tree->files.at(index);
+        if(file->parent()!=tree)
+        {
+            std::cerr << "tree parrent corrupted" << std::endl;
+            abort();
+        }
         if(file->isFolder())
             size+=checkIntegrity(static_cast<Folder *>(file));
         else

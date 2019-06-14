@@ -24,27 +24,22 @@
 #include "widget.h"
 
 #include <QMenu>  //::mousePressEvent()
-#include <QUrl>
 
-#include <QApplication> //QApplication::setOverrideCursor()
-#include <QClipboard>
 #include <QPainter>
 #include <QTimer>      //::resizeEvent()
 #include <QDropEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <QToolTip>
-#include <QMimeData>
 
 #include <cmath>         //::segmentAt()
 
 void RadialMap::Widget::resizeEvent(QResizeEvent*)
 {
-    if (m_map.resize(rect()))
+    QRect rectTemp(rect());
+    if (m_map.resize(rectTemp))
         m_timer.setSingleShot(true);
-    m_timer.start(500); //will cause signature to rebuild for new size
+    m_timer.start(100); //will cause signature to rebuild for new size
 
     //always do these as they need to be initialised on creation
     m_offset.rx() = (width() - m_map.width()) / 2;
@@ -57,7 +52,23 @@ void RadialMap::Widget::paintEvent(QPaintEvent*)
     paint.begin(this);
 
     if (!m_map.isNull())
-        paint.drawPixmap(m_offset, m_map.pixmap());
+    {
+        QPixmap p(m_map.pixmap());
+
+        int margin=((p.width() < p.height()) ? p.width() : p.height())/50;
+        if(margin<1)
+            margin=1;
+        paint.setRenderHint(QPainter::Antialiasing);
+        QRect rect = p.rect();
+        rect.moveTo(m_offset);
+        rect.adjust(-margin, -margin, margin, margin);
+        paint.setPen(QColor(200,200,200));
+        paint.setBrush(QColor(255,255,255));
+        paint.drawEllipse(rect);
+        paint.setPen(QColor(0,0,0));
+
+        paint.drawPixmap(m_offset,p);
+    }
     else
     {
         //paint.drawText(rect(), 0, tr(""));
@@ -85,11 +96,13 @@ const RadialMap::Segment* RadialMap::Widget::segmentAt(QPoint &e) const
     if (!m_map.m_signature)
         return nullptr;
 
-    if (e.x() <= m_map.width() && e.y() <= m_map.height())
+    const int m_map_width=m_map.width();
+    const int m_map_height=m_map.height();
+    if (e.x() <= m_map_width && e.y() <= m_map_height)
     {
         //transform to cartesian coords
-        e.rx() -= m_map.width() / 2; //should be an int
-        e.ry()  = m_map.height() / 2 - e.y();
+        e.rx() -= m_map_width / 2; //should be an int
+        e.ry()  = m_map_height / 2 - e.y();
 
         double length = hypot(e.x(), e.y());
 

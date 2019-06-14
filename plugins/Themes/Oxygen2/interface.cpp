@@ -629,10 +629,7 @@ void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyLi
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start, returnActions.size(): "+std::to_string(returnActions.size()));
     if(transferModel.tree==NULL)
-    {
         transferModel.tree=new Folder(std::string());
-        radial->create(transferModel.tree);
-    }
     std::vector<uint64_t> returnValue=transferModel.synchronizeItems(returnActions);
     totalFile+=returnValue.front();
     totalSize+=returnValue.at(1);
@@ -649,6 +646,7 @@ void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyLi
     else
         ui->skipButton->setEnabled(true);
     updateOverallInformation();
+    radial->create(transferModel.tree);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferModel.rowCount(): "+std::to_string(transferModel.rowCount()));
 }
 
