@@ -1048,7 +1048,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
         {
             dirent_uc tempValue;
             tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
-            strcpy(tempValue.d_name,fdFile.cFileName);
+            tempValue.d_name=fdFile.cFileName;
             tempValue.size=(fdFile.nFileSizeHigh*(MAXDWORD+1))+fdFile.nFileSizeLow;
             list.push_back(tempValue);
         }

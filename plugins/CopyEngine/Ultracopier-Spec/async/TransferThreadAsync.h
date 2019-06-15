@@ -101,6 +101,17 @@ private:
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
     void resetExtraVariable();
+    #ifdef Q_OS_WIN32
+    DWORD LpprogressRoutine( LARGE_INTEGER TotalFileSize,
+                             LARGE_INTEGER TotalBytesTransferred,
+                             LARGE_INTEGER StreamSize,
+                             LARGE_INTEGER StreamBytesTransferred,
+                             DWORD dwStreamNumber,
+                             DWORD dwCallbackReason,
+                             HANDLE hSourceFile,
+                             HANDLE hDestinationFile,
+                             LPVOID lpData);
+    #endif
     void ifCanStartTransfer();
 };
 

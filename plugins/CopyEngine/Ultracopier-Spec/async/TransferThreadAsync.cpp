@@ -8,6 +8,7 @@
 #ifdef Q_OS_WIN32
 #include <accctrl.h>
 #include <aclapi.h>
+#include <winbase.h>
 #endif
 
 #include "../../../../cpp11addition.h"
@@ -197,13 +198,37 @@ void TransferThreadAsync::postOperation()
     doFilePostOperation();
 }
 
+#ifdef Q_OS_WIN32
+DWORD TransferThreadAsync::LpprogressRoutine(
+  LARGE_INTEGER TotalFileSize,
+  LARGE_INTEGER TotalBytesTransferred,
+  LARGE_INTEGER StreamSize,
+  LARGE_INTEGER StreamBytesTransferred,
+  DWORD dwStreamNumber,
+  DWORD dwCallbackReason,
+  HANDLE hSourceFile,
+  HANDLE hDestinationFile,
+  LPVOID lpData
+)
+{
+    transferProgression=TotalBytesTransferred.QuadPart;
+    return PROGRESS_CONTINUE;
+}
+#endif
+
 void TransferThreadAsync::ifCanStartTransfer()
 {
     if(transfer_stat!=TransferStat_WaitForTheTransfer /*wait preoperation*/ || !canStartTransfer/*wait start call*/)
         return;
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
+#ifdef Q_OS_WIN32
+    if(CopyFileExA(source.c_str(),destination.c_str(),&TransferThreadAsync::LpprogressRoutine,NULL,stopIt,
+                   COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
+                   )!=0)
+#else
     if(copy(source.c_str(),destination.c_str())<0)
+#endif
     {
         if(stopIt)
         {
