@@ -31,6 +31,8 @@ ChartArea::Widget::Widget(QWidget *parent)
         : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Preferred,QSizePolicy::MinimumExpanding);
+    setMinimumHeight(20);
+    setMinimumWidth(100);
 }
 
 ChartArea::Widget::~Widget()

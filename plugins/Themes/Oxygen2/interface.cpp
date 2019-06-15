@@ -110,6 +110,12 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
     uiOptions->comboBox_copyEnd->setCurrentIndex(comboBox_copyEnd);
+    ui->progressBar->setValue(0);
+    ui->progressBar_2->setValue(0);
+    ui->progressBar_3->setValue(0);
+    ui->progressBar_4->setValue(0);
+    ui->progressBar_5->setValue(0);
+    ui->progressBar_6->setValue(0);
     speedWithProgressBar_toggled(speedWithProgressBar);
     showDualProgression_toggled(showDualProgression);
     QPixmap pixmap(75,20);
@@ -1539,23 +1545,10 @@ void Themes::on_exportErrorToTransferList_clicked()
 
 void Themes::resizeEvent(QResizeEvent*)
 {
-    /*if(width()<height() && !ui->moreButton->isChecked())
-    {
-        QVBoxLayout *l = qobject_cast<QVBoxLayout *>(ui->frame->layout());
-        if(l==NULL)
-        {
-            QObjectList list=ui->frame->layout()->children();
-            QVBoxLayout *newLayout=new QVBoxLayout(ui->frame);
-            int index=0;
-            while(index<list.size())
-            {
-                newLayout->addWidget(qobject_cast<QWidget *>(list.at(index)));
-                index++;
-            }
-            delete ui->frame->layout();
-            ui->frame->setLayout(newLayout);
-        }
-    }*/
+    if(width()<height() && !ui->moreButton->isChecked())
+        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
+    else
+        ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
 }
 
 void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)

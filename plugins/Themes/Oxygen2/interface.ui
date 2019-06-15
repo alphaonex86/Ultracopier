@@ -311,7 +311,7 @@
       <item>
        <widget class="QFrame" name="frameMiddle">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -441,6 +441,9 @@
            </property>
            <property name="textFormat">
             <enum>Qt::PlainText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
