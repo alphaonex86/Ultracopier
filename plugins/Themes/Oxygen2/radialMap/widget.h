@@ -19,8 +19,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef RadialMapWIDGET_H
+#define RadialMapWIDGET_H
 
 #include <QUrl>
 

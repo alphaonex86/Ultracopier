@@ -104,6 +104,8 @@ public:
 public slots:
     /// \brief set the translate
     void newLanguageLoaded();
+    /// to get by file speed
+    void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &);
 private slots:
     void on_putOnTop_clicked();
     void on_pushUp_clicked();

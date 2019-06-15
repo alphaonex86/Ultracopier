@@ -1527,3 +1527,6 @@ void Themes::on_exportErrorToTransferList_clicked()
     emit exportErrorIntoTransferList();
 }
 
+void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &)
+{
+}

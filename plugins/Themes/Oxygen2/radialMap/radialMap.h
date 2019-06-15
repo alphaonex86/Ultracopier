@@ -19,8 +19,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef RADIALMAP_H
-#define RADIALMAP_H
+#ifndef RadialMapRADIALMAP_H
+#define RadialMapRADIALMAP_H
 
 #include <QColor>
 

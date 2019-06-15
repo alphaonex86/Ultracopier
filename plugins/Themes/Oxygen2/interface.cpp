@@ -303,6 +303,9 @@ Themes::Themes(const bool &alwaysOnTop,
     radial=new RadialMap::Widget(this);
     ui->verticalLayouMiddle->addWidget(radial);
 
+    chartarea=new ChartArea::Widget(this);
+    ui->verticalLayoutRight->insertWidget(0,chartarea);
+
     selectionModel=ui->TransferList->selectionModel();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -547,6 +550,7 @@ void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
     }
     else
         ui->currentSpeed->setText(QString::fromStdString(facilityEngine->speedToString(speed)));*/
+    chartarea->addValue(speed);
 }
 
 void Themes::remainingTime(const int &remainingSeconds)
@@ -1533,3 +1537,126 @@ void Themes::on_exportErrorToTransferList_clicked()
     emit exportErrorIntoTransferList();
 }
 
+void Themes::resizeEvent(QResizeEvent*)
+{
+    /*if(width()<height() && !ui->moreButton->isChecked())
+    {
+        QVBoxLayout *l = qobject_cast<QVBoxLayout *>(ui->frame->layout());
+        if(l==NULL)
+        {
+            QObjectList list=ui->frame->layout()->children();
+            QVBoxLayout *newLayout=new QVBoxLayout(ui->frame);
+            int index=0;
+            while(index<list.size())
+            {
+                newLayout->addWidget(qobject_cast<QWidget *>(list.at(index)));
+                index++;
+            }
+            delete ui->frame->layout();
+            ui->frame->setLayout(newLayout);
+        }
+    }*/
+}
+
+void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
+{
+    if(remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
+    else
+    {
+        unsigned int sub_index=0;
+        while(sub_index<timeList.size())
+        {
+            const std::pair<uint64_t,uint32_t> &timeUnit=timeList.at(sub_index);
+            const uint8_t &col=fileCatNumber(timeUnit.first);
+            RemainingTimeLogarithmicColumn &remainingTimeLogarithmicColumn=remainingTimeLogarithmicValue[col];
+            if(remainingTimeLogarithmicValue.size()<=col)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" < col %2"+std::to_string(col));
+                break;
+            }
+            else
+            {
+                if(timeUnit.second>0)
+                {
+                    remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(static_cast<unsigned int>(timeUnit.first/timeUnit.second));
+                    if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+                        remainingTimeLogarithmicColumn.lastProgressionSpeed.erase(remainingTimeLogarithmicColumn.lastProgressionSpeed.begin());
+
+                }
+            }
+            sub_index++;
+        }
+        unsigned int max=0;
+        sub_index=0;
+        while(sub_index<remainingTimeLogarithmicValue.size())
+        {
+            const RemainingTimeLogarithmicColumn &col=remainingTimeLogarithmicValue.at(sub_index);
+            unsigned int tot=0;
+            unsigned int index=0;
+            while(index<col.lastProgressionSpeed.size())
+            {
+                tot+=col.lastProgressionSpeed.at(index);
+                index++;
+            }
+            unsigned int res=0;
+            if(!col.lastProgressionSpeed.empty())
+                res=tot/col.lastProgressionSpeed.size();
+            if(max<res)
+                max=res;
+            sub_index++;
+        }
+        sub_index=0;
+        while(sub_index<remainingTimeLogarithmicValue.size())
+        {
+            const RemainingTimeLogarithmicColumn &col=remainingTimeLogarithmicValue.at(sub_index);
+            unsigned int tot=0;
+            unsigned int index=0;
+            while(index<col.lastProgressionSpeed.size())
+            {
+                tot+=col.lastProgressionSpeed.at(index);
+                index++;
+            }
+            unsigned int res=0;
+            if(!col.lastProgressionSpeed.empty())
+                res=tot/col.lastProgressionSpeed.size();
+            QProgressBar *p=nullptr;
+            switch (sub_index) {
+            case 0:
+                p=ui->progressBar;
+                break;
+            case 1:
+                p=ui->progressBar_2;
+                break;
+            case 2:
+                p=ui->progressBar_3;
+                break;
+            case 3:
+                p=ui->progressBar_4;
+                break;
+            case 4:
+                p=ui->progressBar_5;
+                break;
+            case 5:
+                p=ui->progressBar_6;
+                break;
+            default:
+                break;
+            }
+            p->setValue(res);
+            p->setMaximum(max);
+            p->setToolTip(QString::fromStdString(facilityEngine->speedToString(res)));
+            sub_index++;
+        }
+    }
+}
+
+uint8_t Themes::fileCatNumber(uint64_t size)
+{
+    //all is in base 10 to understand more easily
+    //drop the big value
+    if(size>64*1000*1000)
+        size=64*1000*1000;
+    size=size/100;//to group all the too small file into the value 0
+    return round(log10(size)*6/8);
+}

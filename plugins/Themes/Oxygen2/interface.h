@@ -19,6 +19,7 @@
 
 #include "../../../interface/PluginInterface_Themes.h"
 #include "radialMap/widget.h"
+#include "chartarea.h"
 
 #include "ui_interface.h"
 #include "ui_themesOptions.h"
@@ -94,6 +95,8 @@ public:
     /** \brief set if the order is external (like file manager copy)
      * to notify the interface, which can hide add folder/filer button */
     void haveExternalOrder();
+    /// to get by file speed
+    void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList);
     /// \brief set if is in pause
     void isInPause(const bool &);
     /// \brief get the widget for the copy engine
@@ -190,9 +193,17 @@ private:
     /// \brief the custom transfer model
     TransferModel transferModel;
     RadialMap::Widget *radial;
+    ChartArea::Widget *chartarea;
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;
+
+    struct RemainingTimeLogarithmicColumn
+    {
+        std::vector<int> lastProgressionSpeed;
+    };
+    /** for RemainingTimeAlgo_Logarithmic **/
+    std::vector<RemainingTimeLogarithmicColumn> remainingTimeLogarithmicValue;
 
     /** \brief drag event processing
 
@@ -217,6 +228,8 @@ private:
     void updatePause();
     QIcon dynaIcon(int percent,std::string text="") const;
     void updateSysTrayIcon();
+    void resizeEvent(QResizeEvent*) override;
+    uint8_t fileCatNumber(uint64_t size);
 signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;

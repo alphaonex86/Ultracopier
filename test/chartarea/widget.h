@@ -35,6 +35,7 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget* = nullptr);
     ~Widget() override;
+    void addValue(uint64_t value);
 public Q_SLOTS:
     void invalidate();
 protected:

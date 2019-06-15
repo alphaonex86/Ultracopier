@@ -10,9 +10,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     //m_map->hide();
     ui->verticalLayout->addWidget(m_map);
+
+    connect(&timer,&QTimer::timeout,this,&MainWindow::addValue);
+    timer.start(1000);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::addValue()
+{
+    m_map->addValue(rand()%5000);
 }

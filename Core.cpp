@@ -481,7 +481,7 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
                         {
                             remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(static_cast<unsigned int>(timeUnit.first/timeUnit.second));
                             if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
-                                remainingTimeLogarithmicColumn.lastProgressionSpeed.pop_back();
+                                remainingTimeLogarithmicColumn.lastProgressionSpeed.erase(remainingTimeLogarithmicColumn.lastProgressionSpeed.begin());
                         }
                     }
                     sub_index++;
@@ -702,8 +702,10 @@ void Core::connectInterfaceAndSync(const unsigned int &index)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pushGeneralProgression()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		this,&Core::pushGeneralProgression,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pushGeneralProgression() for this");
-    if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::errorToRetry,		currentCopyInstance.interface,&PluginInterface_Themes::errorToRetry,		Qt::QueuedConnection))
+    if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::errorToRetry,               currentCopyInstance.interface,&PluginInterface_Themes::errorToRetry,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for errorToRetry() for this");
+    if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::doneTime,					currentCopyInstance.interface,&PluginInterface_Themes::doneTime,Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the engine can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for doneTime()");
 
     currentCopyInstance.interface->setSupportSpeedLimitation(currentCopyInstance.engine->supportSpeedLimitation());
     currentCopyInstance.interface->setCopyType(currentCopyInstance.type);
