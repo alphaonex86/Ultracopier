@@ -147,7 +147,7 @@ void TransferThread::setFileRename(const std::string &nameForRename)
             }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+": "+destination+", error: "+std::to_string(errno));
-            emit errorOnFile(destination,"errno: "+std::to_string(errno));
+            emit errorOnFile(destination,"errno: "+std::string(strerror(errno)));
             return;
         }
         if(source==destination)
@@ -392,7 +392,7 @@ bool TransferThread::checkAlwaysRename()
                 else
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+": "+newDestination+", error: "+std::to_string(errno));
                 readError=true;
-                emit errorOnFile(destination,std::string(strerror(errno))+", errno: "+std::to_string(errno));
+                emit errorOnFile(destination,std::string(strerror(errno))+", errno: "+std::string(strerror(errno)));
                 return true;
             }
         }
