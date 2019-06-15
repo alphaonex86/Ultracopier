@@ -265,6 +265,10 @@ void ScanFileOrFolder::run()
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing, blacklist size: "+std::to_string(blackList.size()));
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing");
+                if(stringEndsWith(source,'/'))
+                    source.erase(source.end()-1);
+                if(stringEndsWith(tempString,'/'))
+                    tempString.erase(tempString.end()-1);
                 listFolder(source,tempString);
             }
         }
@@ -584,7 +588,17 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                     if(!included)
                     {}
                     else
-                        listFolder(source+'/'+fileName,destination+'/'+fileName);
+                    {
+                        std::string fullSource=source;
+                        if(!stringEndsWith(fullSource,'/'))
+                            fullSource+='/';
+                        fullSource+=fileName;
+                        std::string fullDestination=destination;
+                        if(!stringEndsWith(fullDestination,'/'))
+                            fullDestination+='/';
+                        fullDestination+=fileName;
+                        listFolder(fullSource,fullDestination);
+                    }
                 }
             }
             else
@@ -623,11 +637,16 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                     if(!included)
                     {}
                     else
+                    {
+                        std::string fullSource=source;
+                        if(!stringEndsWith(fullSource,'/'))
+                            fullSource+='/';
+                        fullSource+=fileName;
                         #ifndef ULTRACOPIER_PLUGIN_RSYNC
                             #ifdef Q_OS_WIN32
-                            emit fileTransferWithInode(source+'/'+fileName,destination+'/'+fileName,mode,fileInfo);
+                            emit fileTransferWithInode(fullSource,destination+'/'+fileName,mode,fileInfo);
                             #else
-                            emit fileTransfer(source+'/'+fileName,destination+'/'+fileName,mode);
+                            emit fileTransfer(fullSource,destination+'/'+fileName,mode);
                             #endif
                         #else
                         {
@@ -646,6 +665,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                                 #endif
                         }
                         #endif
+                    }
                 }
             }
         }
@@ -653,14 +673,29 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
         {
             const std::string fileName(fileInfo.d_name);
             if(fileInfo.isFolder)//possible wait time here
+            {
                 //listFolder(source,destination,suffixPath+fileInfo.fileName()+QDir::separator());
-                listFolder(source+'/'+fileName,destination+'/'+fileName);
+                std::string fullSource=source;
+                if(!stringEndsWith(fullSource,'/'))
+                    fullSource+='/';
+                fullSource+=fileName;
+                std::string fullDestination=destination;
+                if(!stringEndsWith(fullDestination,'/'))
+                    fullDestination+='/';
+                fullDestination+=fileName;
+                listFolder(fullSource,fullDestination);
+            }
             else
+            {
+                std::string fullSource=source;
+                if(!stringEndsWith(fullSource,'/'))
+                    fullSource+='/';
+                fullSource+=fileName;
                 #ifndef ULTRACOPIER_PLUGIN_RSYNC
                     #ifdef Q_OS_WIN32
-                    emit fileTransferWithInode(source+'/'+fileName,destination+'/'+fileName,mode,fileInfo);
+                    emit fileTransferWithInode(fullSource,destination+'/'+fileName,mode,fileInfo);
                     #else
-                    emit fileTransfer(source+'/'+fileName,destination+'/'+fileName,mode);
+                    emit fileTransfer(fullSource,destination+'/'+fileName,mode);
                     #endif
                 #else
                 {
@@ -679,6 +714,7 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                         #endif
                 }
                 #endif
+            }
         }
     }
     #ifdef ULTRACOPIER_PLUGIN_RSYNC

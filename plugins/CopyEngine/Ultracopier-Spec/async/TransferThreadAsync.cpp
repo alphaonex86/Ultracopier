@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-int copy(const char *to, const char *from)
+int copy(const char *from,const char *to)
 {
     int fd_to, fd_from;
     char buf[4096];
@@ -28,7 +28,7 @@ int copy(const char *to, const char *from)
     if (fd_from < 0)
         return -1;
 
-    fd_to = open(to, O_WRONLY | O_CREAT | O_EXCL, 0666);
+    fd_to = open(to, O_WRONLY | O_EXCL, 0666);
     if (fd_to < 0)
         goto out_error;
 
@@ -248,6 +248,7 @@ void TransferThreadAsync::preOperation()
         havePermission=readSourceFilePermissions(source);
     transfer_stat=TransferStat_WaitForTheTransfer;
     ifCanStartTransfer();
+    emit preOperationStopped();
 }
 
 void TransferThreadAsync::postOperation()
@@ -261,7 +262,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         return;
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
-    if(!copy(source.c_str(),destination.c_str()))
+    if(copy(source.c_str(),destination.c_str())<0)
     {
         if(stopIt)
         {
@@ -274,7 +275,9 @@ void TransferThreadAsync::ifCanStartTransfer()
         readError=true;
         writeError=true;
         emit errorOnFile(destination,std::to_string(errno));
+        return;
     }
+    emit readStopped();
     if(mode==Ultracopier::Move)
         if(exists(destination))
             unlink(source.c_str());

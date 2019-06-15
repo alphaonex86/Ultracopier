@@ -524,7 +524,8 @@ bool TransferThread::doFilePostOperation()
     //do operation needed by copy
     //set the time if no write thread used
 
-    if(!exists(destination) && !is_symlink(destination))
+    if(/*not implied by is_symlink, exist can be false because symlink dest not exists*/
+            !exists(destination) && !is_symlink(destination))
     {
         if(!stopIt)
             if(/*true when the destination have been remove but not the symlink:*/!is_symlink(source))

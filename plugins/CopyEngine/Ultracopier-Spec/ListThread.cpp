@@ -488,7 +488,7 @@ void ListThread::autoStartAndCheckSpace()
 void ListThread::autoStartIfNeeded()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
-    //startGeneralTransfer();
+    startGeneralTransfer();
 }
 
 void ListThread::startGeneralTransfer()
