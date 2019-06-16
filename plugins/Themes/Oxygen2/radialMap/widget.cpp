@@ -43,7 +43,8 @@ RadialMap::Widget::Widget(QWidget *parent)
         , m_toBeDeleted(nullptr)
         , minFontPitch(QFont().pointSize() - 3)
 {
-    setMinimumSize(150, 100);
+    setMinimumSize(0, 0);
+    setMaximumSize(1, 1);
 
     connect(this, &Widget::folderCreated, this, &Widget::sendFakeMouseEvent);
     connect(&m_timer, &QTimer::timeout, this, &Widget::resizeTimeout);
@@ -105,6 +106,8 @@ RadialMap::Widget::create(const Folder *tree)
     //skip invalidation at your own risk
 
     //FIXME make it the responsibility of create to invalidate first
+    setMaximumSize(16777215, 16777215);
+    setMinimumSize(150, 100);
 
     if (tree)
     {

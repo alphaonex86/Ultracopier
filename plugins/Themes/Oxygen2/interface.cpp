@@ -12,7 +12,9 @@
 #include <cmath>
 #include <chrono>
 #include <ctime>
-
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 #include "interface.h"
 #include "ui_interface.h"
@@ -28,13 +30,6 @@ QIcon Themes::documentOpen;
 QIcon Themes::documentSave;
 QIcon Themes::listAdd;
 bool Themes::iconLoaded=false;
-
-// The cmath header from MSVC does not contain round()
-#if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
-inline double round(double d) {
-    return floor( d + 0.5 );
-}
-#endif
 
 Themes::Themes(const bool &alwaysOnTop,
                const bool &showProgressionInTheTitle,
@@ -70,7 +65,11 @@ Themes::Themes(const bool &alwaysOnTop,
     mode(Ultracopier::CopyMode::Copy),
     haveStarted(false),
     haveError(false)
+    #ifdef Q_OS_WIN32
+    ,winTaskbarProgress(this)
+    #endif
 {
+    darkUi=true;
     this->facilityEngine=facilityEngine;
     File::facilityEngine=facilityEngine;
     ui->setupUi(this);
@@ -371,6 +370,33 @@ Themes::Themes(const bool &alwaysOnTop,
 
     sysTrayIcon = new QSystemTrayIcon(this);
     connect(sysTrayIcon,&QSystemTrayIcon::activated,this,&Themes::catchAction);
+    #ifdef Q_OS_WIN32
+    winTaskbarProgress.show();
+    #endif
+
+    if(darkUi)
+    {
+        ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");
+        ui->labelTimeRemaining->setStyleSheet("color:#fff;");
+        ui->labelSPStart->setStyleSheet("color:#aaa;");
+        ui->labelSPStop->setStyleSheet("color:#aaa;");
+        ui->from_label->setStyleSheet("color:#aaa;");
+        ui->current_file->setStyleSheet("color:#fff;");
+        ui->from->setStyleSheet("color:#fff;");
+
+        ui->ad_ultimate->setStyleSheet("color:#fff;background-color:rgb(50, 50, 50);");
+
+        QString labelTimeRemaining;
+        labelTimeRemaining+="<html><body style=\"white-space:nowrap;\"><small style=\"color:#aaa\">";
+        labelTimeRemaining+=QString::fromStdString(facilityEngine->translateText("Remaining:"));
+        labelTimeRemaining+="</small>";
+        labelTimeRemaining+=QStringLiteral(" <b>");
+        labelTimeRemaining+=QStringLiteral("&#8734;");
+        labelTimeRemaining+=QStringLiteral("</b></body></html>");
+        ui->labelTimeRemaining->setText(labelTimeRemaining);
+
+        ui->frameS->setStyleSheet("#frameS{border: 1px solid #b0c0f0;} QProgressBar{background-color: rgba(160,180,240,100);border: 0 solid grey; } QProgressBar::chunk {background-color: rgba(160,180,240,200);}");
+    }
 }
 
 Themes::~Themes()
@@ -453,12 +479,24 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         case Ultracopier::CopyingAndListing:
             ui->progressBar_all->setMaximum(65535);
             ui->progressBar_all->setMinimum(0);
+            #ifdef Q_OS_WIN32
+            winTaskbarProgress.setMaximum(65535);
+            winTaskbarProgress.setMinimum(0);
+            #endif
         break;
         case Ultracopier::Listing:
             ui->progressBar_all->setMaximum(0);
             ui->progressBar_all->setMinimum(0);
+            #ifdef Q_OS_WIN32
+            winTaskbarProgress.setMaximum(0);
+            winTaskbarProgress.setMinimum(0);
+            #endif
         break;
         case Ultracopier::Idle:
+            #ifdef Q_OS_WIN32
+            winTaskbarProgress.setMaximum(65535);
+            winTaskbarProgress.setMinimum(0);
+            #endif
             ui->progressBar_all->setMaximum(65535);
             ui->progressBar_all->setMinimum(0);
             if(haveStarted && transferModel.rowCount()<=0)
@@ -561,11 +599,15 @@ void Themes::detectedSpeed(const uint64_t &speed)//in byte per seconds
 
 void Themes::remainingTime(const int &remainingSeconds)
 {
-    QString labelTimeRemaining(QStringLiteral(
-                                   "<html><body style=\"white-space:nowrap;\">")+
-                                   QString::fromStdString(facilityEngine->translateText("Time remaining:"))+
-                                   QStringLiteral(" ")
-                               );
+    QString labelTimeRemaining;
+    if(darkUi)
+        labelTimeRemaining+="<html><body style=\"white-space:nowrap;\"><small style=\"color:#aaa\">";
+    else
+        labelTimeRemaining+="<html><body style=\"white-space:nowrap;\">";
+    labelTimeRemaining+=QString::fromStdString(facilityEngine->translateText("Remaining:"));
+    if(darkUi)
+        labelTimeRemaining+="</small>";
+    labelTimeRemaining+=QStringLiteral(" <b>");
     if(remainingSeconds==-1)
         labelTimeRemaining+=QStringLiteral("&#8734;");
     else
@@ -573,7 +615,7 @@ void Themes::remainingTime(const int &remainingSeconds)
         Ultracopier::TimeDecomposition time=facilityEngine->secondsToTimeDecomposition(remainingSeconds);
         labelTimeRemaining+=QString::number(time.hour)+QStringLiteral(":")+QString::number(time.minute).rightJustified(2,'0')+QStringLiteral(":")+QString::number(time.second).rightJustified(2,'0');
     }
-    labelTimeRemaining+=QStringLiteral("</body></html>");
+    labelTimeRemaining+=QStringLiteral("</b></body></html>");
     ui->labelTimeRemaining->setText(labelTimeRemaining);
 }
 
@@ -616,9 +658,17 @@ void Themes::setGeneralProgression(const uint64_t &current,const uint64_t &total
     {
         int newIndicator=((double)current/total)*65535;
         ui->progressBar_all->setValue(newIndicator);
+        #ifdef Q_OS_WIN32
+        winTaskbarProgress.setValue(newIndicator);
+        #endif
     }
     else
+    {
         ui->progressBar_all->setValue(0);
+        #ifdef Q_OS_WIN32
+        winTaskbarProgress.setValue(0);
+        #endif
+    }
     if(current>0)
         stat = status_started;
     updateOverallInformation();
@@ -649,6 +699,9 @@ void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyLi
         ui->skipButton->setEnabled(false);
         ui->progressBar_all->setValue(65535);
         ui->progressBar_file->setValue(65535);
+        #ifdef Q_OS_WIN32
+        winTaskbarProgress.setValue(65535);
+        #endif
         currentSize=totalSize;
         if(isHidden())
             updateSysTrayIcon();
@@ -864,6 +917,7 @@ void Themes::on_cancelButton_clicked()
 
 void Themes::speedWithProgressBar_toggled(bool checked)
 {
+    (void)checked;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     /*ui->progressBarCurrentSpeed->setVisible(checked);
     ui->currentSpeed->setVisible(!checked);*/
@@ -1549,6 +1603,17 @@ void Themes::resizeEvent(QResizeEvent*)
         ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
     else
         ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
+    if(ui->frameS->width()>300)
+    {
+        int space=ui->frameS->width()/20;
+        ui->horizontalLayoutS->setContentsMargins(space,space/2,space,space/2);
+        ui->horizontalLayoutS->setSpacing(space);
+    }
+    else
+    {
+        ui->horizontalLayoutS->setMargin(6);
+        ui->horizontalLayoutS->setSpacing(6);
+    }
 }
 
 void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)

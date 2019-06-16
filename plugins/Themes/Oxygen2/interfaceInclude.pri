@@ -62,3 +62,7 @@ TRANSLATIONS += \
 FORMS += \
     $$PWD/interface.ui \
     $$PWD/themesOptions.ui
+
+win32: {
+QT += winextras
+}

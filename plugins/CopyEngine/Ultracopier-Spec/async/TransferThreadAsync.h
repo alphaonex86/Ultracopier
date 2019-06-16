@@ -93,6 +93,9 @@ public slots:
     //fake copy for no win32
     int copy(const char *from,const char *to);
     #endif
+    #ifdef Q_OS_WIN32
+    void setProgression(const uint64_t &pos);
+    #endif
 private:
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;
@@ -101,17 +104,6 @@ private:
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
     void resetExtraVariable();
-    #ifdef Q_OS_WIN32
-    DWORD LpprogressRoutine( LARGE_INTEGER TotalFileSize,
-                             LARGE_INTEGER TotalBytesTransferred,
-                             LARGE_INTEGER StreamSize,
-                             LARGE_INTEGER StreamBytesTransferred,
-                             DWORD dwStreamNumber,
-                             DWORD dwCallbackReason,
-                             HANDLE hSourceFile,
-                             HANDLE hDestinationFile,
-                             LPVOID lpData);
-    #endif
     void ifCanStartTransfer();
 };
 

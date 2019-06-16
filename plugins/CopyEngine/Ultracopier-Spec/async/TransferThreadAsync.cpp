@@ -38,6 +38,9 @@ TransferThreadAsync::TransferThreadAsync() :
 
 TransferThreadAsync::~TransferThreadAsync()
 {
+    #ifdef Q_OS_WIN32
+    stopItWin=1;
+    #endif
     stopIt=true;
     exit(0);
     wait();
@@ -199,7 +202,7 @@ void TransferThreadAsync::postOperation()
 }
 
 #ifdef Q_OS_WIN32
-DWORD TransferThreadAsync::LpprogressRoutine(
+DWORD progressRoutine(
   LARGE_INTEGER TotalFileSize,
   LARGE_INTEGER TotalBytesTransferred,
   LARGE_INTEGER StreamSize,
@@ -211,8 +214,14 @@ DWORD TransferThreadAsync::LpprogressRoutine(
   LPVOID lpData
 )
 {
-    transferProgression=TotalBytesTransferred.QuadPart;
+    static_cast<TransferThreadAsync *>(lpData)->setProgression(TotalBytesTransferred.QuadPart);
     return PROGRESS_CONTINUE;
+}
+
+void TransferThreadAsync::setProgression(const uint64_t &pos)
+{
+    if(transfer_stat==TransferStat_Transfer)
+        transferProgression=pos;
 }
 #endif
 
@@ -223,7 +232,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
 #ifdef Q_OS_WIN32
-    if(CopyFileExA(source.c_str(),destination.c_str(),&TransferThreadAsync::LpprogressRoutine,NULL,stopIt,
+    if(CopyFileExA(source.c_str(),destination.c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
                    COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
                    )!=0)
 #else
@@ -266,6 +275,9 @@ void TransferThreadAsync::ifCanStartTransfer()
 //stop the current copy
 void TransferThreadAsync::stop()
 {
+    #ifdef Q_OS_WIN32
+    stopItWin=1;
+    #endif
     stopIt=true;
     if(transfer_stat==TransferStat_Idle)
     {
@@ -324,6 +336,9 @@ void TransferThreadAsync::retryAfterError()
 //skip the copy
 void TransferThreadAsync::skip()
 {
+    #ifdef Q_OS_WIN32
+    stopItWin=1;
+    #endif
     stopIt=true;
     exit();
     wait();

@@ -133,3 +133,7 @@ INCLUDEPATH += \
     $$PWD/../lib/qt-tar-xz/
 
 OTHER_FILES += $$PWD/../resources/resources-windows.rc
+
+win32: {
+QT += winextras
+}

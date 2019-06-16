@@ -38,6 +38,7 @@ void ChartArea::Widget::paintEvent(QPaintEvent*)
 {
     QPainter painter;
     painter.begin(this);
+    painter.setBrush(QColor(160,160,160,30));
     painter.drawRect(0,0,width()-1,height()-1);
     painter.setRenderHint(QPainter::Antialiasing,true);
     painter.setRenderHint(QPainter::SmoothPixmapTransform,true);

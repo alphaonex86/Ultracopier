@@ -176,6 +176,9 @@ protected:
     bool			keepDate;
     bool            mkFullPath;
     volatile bool	stopIt;
+    #ifdef Q_OS_WIN32
+    int stopItWin;
+    #endif
     DriveManagement driveManagement;
     volatile bool	canStartTransfer;
     bool			retry;

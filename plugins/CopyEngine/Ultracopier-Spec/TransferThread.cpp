@@ -45,12 +45,18 @@ TransferThread::TransferThread() :
     PSecurityD=NULL;
     dacl=NULL;
     #endif
+    #ifdef Q_OS_Win32
+    stopItWin=0;
+    #endif
     //if not QThread
     run();
 }
 
 TransferThread::~TransferThread()
 {
+    #ifdef Q_OS_WIN32
+    stopItWin=1;
+    #endif
     stopIt=true;
     //else cash without this disconnect
     //disconnect(&readThread);
@@ -104,6 +110,9 @@ bool TransferThread::setFiles(const std::string& source, const int64_t &size, co
     this->mode                      = mode;
     this->size                      = size;
     stopIt                          = false;
+    #ifdef Q_OS_WIN32
+    stopItWin=0;
+    #endif
     fileExistsAction                = FileExists_NotSet;
     canStartTransfer                = false;
     sended_state_preOperationStopped= false;

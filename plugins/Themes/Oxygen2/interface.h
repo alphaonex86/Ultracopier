@@ -16,6 +16,9 @@
 #include <QTime>
 #include <QSystemTrayIcon>
 #include <QPixmap>
+#ifdef Q_OS_WIN32
+#include <QWinTaskbarProgress>
+#endif
 
 #include "../../../interface/PluginInterface_Themes.h"
 #include "radialMap/widget.h"
@@ -194,6 +197,7 @@ private:
     TransferModel transferModel;
     RadialMap::Widget *radial;
     ChartArea::Widget *chartarea;
+    bool darkUi;
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;
@@ -230,6 +234,10 @@ private:
     void updateSysTrayIcon();
     void resizeEvent(QResizeEvent*) override;
     uint8_t fileCatNumber(uint64_t size);
+
+    #ifdef Q_OS_WIN32
+    QWinTaskbarProgress winTaskbarProgress;
+    #endif
 signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
