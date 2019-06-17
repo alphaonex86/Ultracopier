@@ -408,6 +408,11 @@ Themes::Themes(const bool &alwaysOnTop,
         progressBar_file->setValue(ui->progressBar_file->value());
         ui->progressBar_file->hide();
         ui->verticalLayoutRight->insertWidget(tempIndex,progressBar_file);
+
+        QIcon i;
+        i.addFile(QString(":/Themes/Oxygen/resources/cancelDarkE.png"),QSize(),QIcon::Normal,QIcon::On);
+        i.addFile(QString(":/Themes/Oxygen/resources/cancelDarkD.png"),QSize(),QIcon::Normal,QIcon::Off);
+        ui->shutdown->setIcon(i);
     }
     else
     {

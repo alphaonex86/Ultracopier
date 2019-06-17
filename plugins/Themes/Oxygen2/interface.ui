@@ -373,6 +373,9 @@
              <property name="toolTip">
               <string>Close on transfer completion</string>
              </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgba(255, 0, 255, 0);</string>
+             </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
                <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</iconset>
@@ -995,8 +998,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>96</width>
-            <height>26</height>
+            <width>446</width>
+            <height>223</height>
            </rect>
           </property>
          </widget>
