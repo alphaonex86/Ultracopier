@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>darkButton.png</file>
+        <file>darkButtonPushed.png</file>
+        <file>cancelDarkE.png</file>
+        <file>cancelDarkD.png</file>
+    </qresource>
+</RCC>
