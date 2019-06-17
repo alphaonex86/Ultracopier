@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>progressBarin.png</file>
+        <file>progressBarout.png</file>
+    </qresource>
+</RCC>
