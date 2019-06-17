@@ -87,6 +87,7 @@ HEADERS += \
     $$PWD/plugins/Themes/Oxygen2/chartarea.h \
     $$PWD/plugins/Themes/Oxygen2/fileTree.h \
     $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.h \
+    $$PWD/plugins/Themes/Oxygen2/DarkButton.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widget.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h \
@@ -121,6 +122,7 @@ SOURCES += \
     $$PWD/plugins/Themes/Oxygen2/chartarea.cpp \
     $$PWD/plugins/Themes/Oxygen2/fileTree.cpp \
     $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.cpp \
+    $$PWD/plugins/Themes/Oxygen2/DarkButton.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/labels.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \

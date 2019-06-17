@@ -409,15 +409,76 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->progressBar_file->hide();
         ui->verticalLayoutRight->insertWidget(tempIndex,progressBar_file);
 
-        QIcon i;
-        i.addFile(QString(":/Themes/Oxygen/resources/cancelDarkE.png"),QSize(),QIcon::Normal,QIcon::On);
-        i.addFile(QString(":/Themes/Oxygen/resources/cancelDarkD.png"),QSize(),QIcon::Normal,QIcon::Off);
-        ui->shutdown->setIcon(i);
+        tempIndex=ui->horizontalLayoutLeft->indexOf(ui->moreButton);
+        moreButton=new DarkButton(ui->frameLeft);
+        moreButton->setText(ui->moreButton->text());
+        moreButton->setCheckable(ui->moreButton->isCheckable());
+        moreButton->setMinimumWidth(60);
+        ui->moreButton->hide();
+        ui->horizontalLayoutLeft->insertWidget(tempIndex,moreButton);
+        {
+            QIcon i;
+            i.addFile(QString::fromUtf8(":/Themes/Oxygen/resources/darkmoveUp.png"), QSize(), QIcon::Normal, QIcon::Off);
+            i.addFile(QString::fromUtf8(":/Themes/Oxygen/resources/darkmoveDown.png"), QSize(), QIcon::Normal, QIcon::On);
+            moreButton->setIcon(i);
+        }
+        connect(moreButton,&QPushButton::toggled,ui->moreButton,&QPushButton::toggled);
+
+        tempIndex=ui->horizontalLayoutLeft->indexOf(ui->pauseButton);
+        pauseButton=new DarkButton(ui->frameLeft);
+        pauseButton->setText(ui->pauseButton->text());
+        pauseButton->setCheckable(ui->pauseButton->isCheckable());
+        pauseButton->setMinimumWidth(60);
+        ui->pauseButton->hide();
+        ui->horizontalLayoutLeft->insertWidget(tempIndex,pauseButton);
+        {
+            QIcon i;
+            i.addFile(QString::fromUtf8(":/Themes/Oxygen/resources/darkplayer_pause.png"), QSize(), QIcon::Normal, QIcon::Off);
+            i.addFile(QString::fromUtf8(":/Themes/Oxygen/resources/darkplayer_play.png"), QSize(), QIcon::Normal, QIcon::On);
+            pauseButton->setIcon(i);
+        }
+        connect(pauseButton,&QPushButton::toggled,ui->pauseButton,&QPushButton::toggled);
+        connect(pauseButton,&QPushButton::clicked,ui->pauseButton,&QPushButton::clicked);
+
+        tempIndex=ui->horizontalLayoutRight->indexOf(ui->skipButton);
+        skipButton=new DarkButton(ui->frameLeft);
+        skipButton->setText(ui->skipButton->text());
+        skipButton->setCheckable(ui->skipButton->isCheckable());
+        skipButton->setMinimumWidth(60);
+        ui->skipButton->hide();
+        ui->horizontalLayoutRight->insertWidget(tempIndex,skipButton);
+        {
+            QIcon i;
+            i.addFile(QString::fromUtf8(":/Themes/Oxygen/resources/darkplayer_end.png"));
+            skipButton->setIcon(i);
+        }
+        connect(skipButton,&QPushButton::toggled,ui->skipButton,&QPushButton::toggled);
+        connect(skipButton,&QPushButton::clicked,ui->skipButton,&QPushButton::clicked);
+
+        tempIndex=ui->horizontalLayoutRight->indexOf(ui->cancelButton);
+        cancelButton=new DarkButton(ui->frameLeft);
+        cancelButton->setText(ui->cancelButton->text());
+        cancelButton->setCheckable(ui->cancelButton->isCheckable());
+        cancelButton->setMinimumWidth(60);
+        ui->cancelButton->hide();
+        ui->horizontalLayoutRight->insertWidget(tempIndex,cancelButton);
+        {
+            QIcon i;
+            i.addFile(QString::fromUtf8(":/Themes/Oxygen/resources/cancelDarkE.png"));
+            cancelButton->setIcon(i);
+        }
+        connect(cancelButton,&QPushButton::toggled,ui->cancelButton,&QPushButton::toggled);
+        connect(cancelButton,&QPushButton::clicked,ui->cancelButton,&QPushButton::clicked);
     }
     else
     {
         progressBar_all=nullptr;
         progressBar_file=nullptr;
+
+        moreButton=nullptr;
+        pauseButton=nullptr;
+        skipButton=nullptr;
+        cancelButton=nullptr;
     }
     showDualProgression_toggled(showDualProgression);
 
@@ -433,6 +494,14 @@ Themes::~Themes()
         delete progressBar_all;
     if(progressBar_file!=nullptr)
         delete progressBar_file;
+    if(moreButton!=nullptr)
+        delete moreButton;
+    if(pauseButton!=nullptr)
+        delete pauseButton;
+    if(skipButton!=nullptr)
+        delete skipButton;
+    if(cancelButton!=nullptr)
+        delete cancelButton;
     delete radial;
     delete selectionModel;
     delete menu;
@@ -1698,7 +1767,7 @@ void Themes::on_exportErrorToTransferList_clicked()
 
 void Themes::resizeEvent(QResizeEvent*)
 {
-    if(width()<height() && !ui->moreButton->isChecked())
+    if(width()<height() && !ui->moreButton->isChecked() && (moreButton==NULL || !moreButton->isChecked()))
         ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
     else
         ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);

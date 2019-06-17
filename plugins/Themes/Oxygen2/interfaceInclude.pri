@@ -20,6 +20,7 @@ HEADERS         = \
     $$PWD/chartarea.h \
     $$PWD/fileTree.h \
     $$PWD/ProgressBarDark.h \
+    $$PWD/DarkButton.h \
     $$PWD/radialMap/map.h \
     $$PWD/radialMap/widget.h \
     $$PWD/radialMap/radialMap.h \
@@ -29,6 +30,7 @@ SOURCES += \
     $$PWD/chartarea.cpp \
     $$PWD/fileTree.cpp \
     $$PWD/ProgressBarDark.cpp \
+    $$PWD/DarkButton.cpp \
     $$PWD/radialMap/labels.cpp \
     $$PWD/radialMap/map.cpp \
     $$PWD/radialMap/widgetEvents.cpp \

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>486</height>
+    <width>550</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>460</width>
+    <width>550</width>
     <height>0</height>
    </size>
   </property>
@@ -66,16 +66,10 @@
       <item>
        <widget class="QFrame" name="frameLeft">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>100</height>
-         </size>
         </property>
         <layout class="QVBoxLayout" name="verticalLayoutLeft">
          <item>
@@ -273,7 +267,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <layout class="QHBoxLayout" name="horizontalLayoutLeft">
            <item>
             <widget class="QPushButton" name="moreButton">
              <property name="text">
@@ -335,16 +329,10 @@
       <item>
        <widget class="QFrame" name="frameRight">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>150</width>
-          <height>100</height>
-         </size>
         </property>
         <layout class="QVBoxLayout" name="verticalLayoutRight">
          <item>
@@ -463,7 +451,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <layout class="QHBoxLayout" name="horizontalLayoutRight">
            <item>
             <widget class="QPushButton" name="skipButton">
              <property name="enabled">
@@ -998,8 +986,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>446</width>
-            <height>223</height>
+            <width>536</width>
+            <height>242</height>
            </rect>
           </property>
          </widget>

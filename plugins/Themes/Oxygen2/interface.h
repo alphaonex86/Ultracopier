@@ -24,16 +24,12 @@
 #include "radialMap/widget.h"
 #include "chartarea.h"
 #include "ProgressBarDark.h"
+#include "DarkButton.h"
 
 #include "ui_interface.h"
 #include "ui_themesOptions.h"
 #include "Environment.h"
 #include "TransferModel.h"
-
-// for windows progress bar
-#ifndef __GNUC__
-#	include <shobjidl.h>
-#endif
 
 namespace Ui {
     class interfaceCopy;
@@ -232,6 +228,10 @@ private:
     bool shutdown;
     ProgressBarDark * progressBar_all;
     ProgressBarDark * progressBar_file;
+    DarkButton * moreButton;
+    DarkButton * pauseButton;
+    DarkButton * skipButton;
+    DarkButton * cancelButton;
     void updatePause();
     QIcon dynaIcon(int percent,std::string text="") const;
     void updateSysTrayIcon();
