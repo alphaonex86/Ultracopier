@@ -18,5 +18,7 @@
         <file>resources/SystemTrayIcon/exit.png</file>
         <file>resources/SystemTrayIcon/informations.png</file>
         <file>resources/SystemTrayIcon/options.png</file>
+        <file>resources/progressBarout.png</file>
+        <file>resources/progressBarin.png</file>
     </qresource>
 </RCC>

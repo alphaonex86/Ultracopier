@@ -19,6 +19,7 @@
 #include "interface.h"
 #include "ui_interface.h"
 #include "ThemesFactory.h"
+#include "ProgressBarDark.h"
 
 QIcon Themes::player_play;
 QIcon Themes::player_pause;
@@ -116,7 +117,6 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->progressBar_5->setValue(0);
     ui->progressBar_6->setValue(0);
     speedWithProgressBar_toggled(speedWithProgressBar);
-    showDualProgression_toggled(showDualProgression);
     QPixmap pixmap(75,20);
     pixmap.fill(progressColorWrite);
     uiOptions->progressColorWrite->setIcon(pixmap);
@@ -366,8 +366,6 @@ Themes::Themes(const bool &alwaysOnTop,
     this->setWindowTitle("Supercopier");
     #endif
 
-    show();
-
     sysTrayIcon = new QSystemTrayIcon(this);
     connect(sysTrayIcon,&QSystemTrayIcon::activated,this,&Themes::catchAction);
     #ifdef Q_OS_WIN32
@@ -396,7 +394,29 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->labelTimeRemaining->setText(labelTimeRemaining);
 
         ui->frameS->setStyleSheet("#frameS{border: 1px solid #b0c0f0;} QProgressBar{background-color: rgba(160,180,240,100);border: 0 solid grey; } QProgressBar::chunk {background-color: rgba(160,180,240,200);}");
+
+        int tempIndex=ui->verticalLayoutLeft->indexOf(ui->progressBar_all);
+        progressBar_all=new ProgressBarDark(ui->frameLeft);
+        progressBar_all->setMaximum(ui->progressBar_all->maximum());
+        progressBar_all->setValue(ui->progressBar_all->value());
+        ui->progressBar_all->hide();
+        ui->verticalLayoutLeft->insertWidget(tempIndex,progressBar_all);
+
+        tempIndex=ui->verticalLayoutRight->indexOf(ui->progressBar_file);
+        progressBar_file=new ProgressBarDark(ui->frameRight);
+        progressBar_file->setMaximum(ui->progressBar_file->maximum());
+        progressBar_file->setValue(ui->progressBar_file->value());
+        ui->progressBar_file->hide();
+        ui->verticalLayoutRight->insertWidget(tempIndex,progressBar_file);
     }
+    else
+    {
+        progressBar_all=nullptr;
+        progressBar_file=nullptr;
+    }
+    showDualProgression_toggled(showDualProgression);
+
+    show();
 }
 
 Themes::~Themes()
@@ -404,6 +424,10 @@ Themes::~Themes()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     //disconnect(ui->actionAddFile);
     //disconnect(ui->actionAddFolder);
+    if(progressBar_all!=nullptr)
+        delete progressBar_all;
+    if(progressBar_file!=nullptr)
+        delete progressBar_file;
     delete radial;
     delete selectionModel;
     delete menu;
@@ -477,16 +501,32 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
     {
         case Ultracopier::Copying:
         case Ultracopier::CopyingAndListing:
-            ui->progressBar_all->setMaximum(65535);
-            ui->progressBar_all->setMinimum(0);
+            if(darkUi)
+            {
+                progressBar_all->setMaximum(65535);
+                progressBar_all->setMinimum(0);
+            }
+            else
+            {
+                ui->progressBar_all->setMaximum(65535);
+                ui->progressBar_all->setMinimum(0);
+            }
             #ifdef Q_OS_WIN32
             winTaskbarProgress.setMaximum(65535);
             winTaskbarProgress.setMinimum(0);
             #endif
         break;
         case Ultracopier::Listing:
-            ui->progressBar_all->setMaximum(0);
-            ui->progressBar_all->setMinimum(0);
+            if(darkUi)
+            {
+                progressBar_all->setMaximum(0);
+                progressBar_all->setMinimum(0);
+            }
+            else
+            {
+                ui->progressBar_all->setMaximum(0);
+                ui->progressBar_all->setMinimum(0);
+            }
             #ifdef Q_OS_WIN32
             winTaskbarProgress.setMaximum(0);
             winTaskbarProgress.setMinimum(0);
@@ -497,8 +537,16 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             winTaskbarProgress.setMaximum(65535);
             winTaskbarProgress.setMinimum(0);
             #endif
-            ui->progressBar_all->setMaximum(65535);
-            ui->progressBar_all->setMinimum(0);
+            if(darkUi)
+            {
+                progressBar_all->setMaximum(65535);
+                progressBar_all->setMinimum(0);
+            }
+            else
+            {
+                ui->progressBar_all->setMaximum(65535);
+                ui->progressBar_all->setMinimum(0);
+            }
             if(haveStarted && transferModel.rowCount()<=0)
             {
                 if(shutdown && ui->shutdown->isChecked())
@@ -657,14 +705,20 @@ void Themes::setGeneralProgression(const uint64_t &current,const uint64_t &total
     if(total>0)
     {
         int newIndicator=((double)current/total)*65535;
-        ui->progressBar_all->setValue(newIndicator);
+        if(darkUi)
+            progressBar_all->setValue(newIndicator);
+        else
+            ui->progressBar_all->setValue(newIndicator);
         #ifdef Q_OS_WIN32
         winTaskbarProgress.setValue(newIndicator);
         #endif
     }
     else
     {
-        ui->progressBar_all->setValue(0);
+        if(darkUi)
+            progressBar_all->setValue(0);
+        else
+            ui->progressBar_all->setValue(0);
         #ifdef Q_OS_WIN32
         winTaskbarProgress.setValue(0);
         #endif
@@ -697,8 +751,16 @@ void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyLi
     if(transferModel.rowCount()==0)
     {
         ui->skipButton->setEnabled(false);
-        ui->progressBar_all->setValue(65535);
-        ui->progressBar_file->setValue(65535);
+        if(darkUi)
+        {
+            progressBar_all->setValue(65535);
+            progressBar_file->setValue(65535);
+        }
+        else
+        {
+            ui->progressBar_all->setValue(65535);
+            ui->progressBar_file->setValue(65535);
+        }
         #ifdef Q_OS_WIN32
         winTaskbarProgress.setValue(65535);
         #endif
@@ -786,33 +848,52 @@ void Themes::updateCurrentFileInformation()
         ui->current_file->setText(QString::fromStdString(transfertItem.current_file));
         if(transfertItem.progressBar_read!=-1)
         {
-            ui->progressBar_file->setRange(0,65535);
+            if(darkUi)
+                progressBar_file->setRange(0,65535);
+            else
+                ui->progressBar_file->setRange(0,65535);
             if(uiOptions->showDualProgression->isChecked())
             {
-                if(transfertItem.progressBar_read!=transfertItem.progressBar_write)
+                if(!darkUi)
                 {
-                    float permilleread=round((float)transfertItem.progressBar_read/65535*1000)/1000;
-                    float permillewrite=permilleread-0.001;
-                    ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border: 1px solid grey;text-align: center;background-color: qlineargradient(spread:pad, x1:%1, y1:0, x2:%2, y2:0, stop:0 %3, stop:1 %4);}QProgressBar::chunk{background-color:%5;}")
-                        .arg(permilleread)
-                        .arg(permillewrite)
-                        .arg(progressColorRemaining.name())
-                        .arg(progressColorRead.name())
-                        .arg(progressColorWrite.name())
-                        );
+                    if(transfertItem.progressBar_read!=transfertItem.progressBar_write)
+                    {
+                        float permilleread=round((float)transfertItem.progressBar_read/65535*1000)/1000;
+                        float permillewrite=permilleread-0.001;
+                        ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border: 1px solid grey;text-align: center;background-color: qlineargradient(spread:pad, x1:%1, y1:0, x2:%2, y2:0, stop:0 %3, stop:1 %4);}QProgressBar::chunk{background-color:%5;}")
+                            .arg(permilleread)
+                            .arg(permillewrite)
+                            .arg(progressColorRemaining.name())
+                            .arg(progressColorRead.name())
+                            .arg(progressColorWrite.name())
+                            );
+                    }
+                    else
+                        ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                            .arg(progressColorRemaining.name())
+                            .arg(progressColorWrite.name())
+                            );
                 }
+                if(darkUi)
+                    progressBar_file->setValue(transfertItem.progressBar_write);
                 else
-                    ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
-                        .arg(progressColorRemaining.name())
-                        .arg(progressColorWrite.name())
-                        );
-                ui->progressBar_file->setValue(transfertItem.progressBar_write);
+                    ui->progressBar_file->setValue(transfertItem.progressBar_write);
             }
             else
-                ui->progressBar_file->setValue((transfertItem.progressBar_read+transfertItem.progressBar_write)/2);
+            {
+                if(darkUi)
+                    progressBar_file->setValue((transfertItem.progressBar_read+transfertItem.progressBar_write)/2);
+                else
+                    ui->progressBar_file->setValue((transfertItem.progressBar_read+transfertItem.progressBar_write)/2);
+            }
         }
         else
-            ui->progressBar_file->setRange(0,0);
+        {
+            if(darkUi)
+                progressBar_file->setRange(0,0);
+            else
+                ui->progressBar_file->setRange(0,0);
+        }
     }
     else
     {
@@ -820,9 +901,19 @@ void Themes::updateCurrentFileInformation()
         //ui->to->setText(QStringLiteral(""));
         ui->current_file->setText(QStringLiteral("-"));
         if(haveStarted && transferModel.rowCount()==0)
-            ui->progressBar_file->setValue(65535);
+        {
+            if(darkUi)
+                progressBar_file->setValue(65535);
+            else
+                ui->progressBar_file->setValue(65535);
+        }
         else if(!haveStarted)
-            ui->progressBar_file->setValue(0);
+        {
+            if(darkUi)
+                progressBar_file->setValue(0);
+            else
+                ui->progressBar_file->setValue(0);
+        }
     }
 }
 
@@ -1418,26 +1509,29 @@ void Themes::updateProgressionColorBar()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     uiOptions->labelProgressionColor->setVisible(uiOptions->showDualProgression->isChecked());
     uiOptions->frameProgressionColor->setVisible(uiOptions->showDualProgression->isChecked());
-    if(!uiOptions->showDualProgression->isChecked())
+    if(!darkUi)
     {
-        ui->progressBar_all->setStyleSheet(QStringLiteral(""));
-        ui->progressBar_file->setStyleSheet(QStringLiteral(""));
-        //ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral(""));
-    }
-    else
-    {
-        ui->progressBar_all->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
-                                           .arg(progressColorRemaining.name())
-                                           .arg(progressColorWrite.name())
-                                           );
-        ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
-                                            .arg(progressColorRemaining.name())
-                                            .arg(progressColorWrite.name())
-                                            );
-        /*ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
-                                           .arg(progressColorRemaining.name())
-                                           .arg(progressColorWrite.name())
-                                           );*/
+        if(!uiOptions->showDualProgression->isChecked())
+        {
+            ui->progressBar_all->setStyleSheet(QStringLiteral(""));
+            ui->progressBar_file->setStyleSheet(QStringLiteral(""));
+            //ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral(""));
+        }
+        else
+        {
+            ui->progressBar_all->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                                               .arg(progressColorRemaining.name())
+                                               .arg(progressColorWrite.name())
+                                               );
+            ui->progressBar_file->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                                                .arg(progressColorRemaining.name())
+                                                .arg(progressColorWrite.name())
+                                                );
+            /*ui->progressBarCurrentSpeed->setStyleSheet(QStringLiteral("QProgressBar{border:1px solid grey;text-align:center;background-color:%1;}QProgressBar::chunk{background-color:%2;}")
+                                               .arg(progressColorRemaining.name())
+                                               .arg(progressColorWrite.name())
+                                               );*/
+        }
     }
     if(stat==status_never_started)
         updateCurrentFileInformation();

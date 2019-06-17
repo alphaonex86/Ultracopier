@@ -29,7 +29,7 @@
 #include <QLocale>
 
 #include <stdlib.h>
-#include "FacilityEngine.h"
+#include "../../../FacilityEngine.h"
 
 typedef quint64 FileSize;
 typedef quint64 Dirsize;  //**** currently unused

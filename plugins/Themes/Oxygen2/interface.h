@@ -23,6 +23,7 @@
 #include "../../../interface/PluginInterface_Themes.h"
 #include "radialMap/widget.h"
 #include "chartarea.h"
+#include "ProgressBarDark.h"
 
 #include "ui_interface.h"
 #include "ui_themesOptions.h"
@@ -229,6 +230,8 @@ private:
     void dragLeaveEvent(QDragLeaveEvent* event);
     //have functionality
     bool shutdown;
+    ProgressBarDark * progressBar_all;
+    ProgressBarDark * progressBar_file;
     void updatePause();
     QIcon dynaIcon(int percent,std::string text="") const;
     void updateSysTrayIcon();

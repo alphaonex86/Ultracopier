@@ -2,7 +2,7 @@ CONFIG += c++11
 QMAKE_CXXFLAGS+="-std=c++0x -Wall -Wextra"
 mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
-QT += widgets
+QT += widgets xml
 TEMPLATE        = lib
 CONFIG         += plugin
 HEADERS         = \
@@ -19,6 +19,7 @@ HEADERS         = \
     $$PWD/interface.h \
     $$PWD/chartarea.h \
     $$PWD/fileTree.h \
+    $$PWD/ProgressBarDark.h \
     $$PWD/radialMap/map.h \
     $$PWD/radialMap/widget.h \
     $$PWD/radialMap/radialMap.h \
@@ -27,6 +28,7 @@ HEADERS         = \
 SOURCES += \
     $$PWD/chartarea.cpp \
     $$PWD/fileTree.cpp \
+    $$PWD/ProgressBarDark.cpp \
     $$PWD/radialMap/labels.cpp \
     $$PWD/radialMap/map.cpp \
     $$PWD/radialMap/widgetEvents.cpp \
