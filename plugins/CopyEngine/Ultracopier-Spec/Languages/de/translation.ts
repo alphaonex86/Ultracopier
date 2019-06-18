@@ -31,64 +31,64 @@
         <translation>Der Modus wurde vorher erzwungen. Interner Fehler - Bitte bei mir melden! </translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="887"/>
-        <location filename="../../CopyEngine.cpp" line="890"/>
-        <location filename="../../CopyEngine.cpp" line="895"/>
-        <location filename="../../CopyEngine.cpp" line="899"/>
+        <location filename="../../CopyEngine.cpp" line="888"/>
+        <location filename="../../CopyEngine.cpp" line="891"/>
+        <location filename="../../CopyEngine.cpp" line="896"/>
+        <location filename="../../CopyEngine.cpp" line="900"/>
         <source>Ask</source>
         <translation>Fragen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="888"/>
-        <location filename="../../CopyEngine.cpp" line="892"/>
-        <location filename="../../CopyEngine.cpp" line="896"/>
-        <location filename="../../CopyEngine.cpp" line="900"/>
+        <location filename="../../CopyEngine.cpp" line="889"/>
+        <location filename="../../CopyEngine.cpp" line="893"/>
+        <location filename="../../CopyEngine.cpp" line="897"/>
+        <location filename="../../CopyEngine.cpp" line="901"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="891"/>
+        <location filename="../../CopyEngine.cpp" line="892"/>
         <source>Merge</source>
         <translation>Fusionieren</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="893"/>
-        <location filename="../../CopyEngine.cpp" line="905"/>
+        <location filename="../../CopyEngine.cpp" line="894"/>
+        <location filename="../../CopyEngine.cpp" line="906"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="897"/>
+        <location filename="../../CopyEngine.cpp" line="898"/>
         <source>Put at the end</source>
         <translation>Ans Ende verschieben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="901"/>
+        <location filename="../../CopyEngine.cpp" line="902"/>
         <source>Overwrite</source>
         <translation>Überschreiben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="902"/>
+        <location filename="../../CopyEngine.cpp" line="903"/>
         <source>Overwrite if different</source>
         <translation>Überschreiben, falls verschieden</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="903"/>
+        <location filename="../../CopyEngine.cpp" line="904"/>
         <source>Overwrite if newer</source>
         <translation>Überschreiben, falls neuer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="904"/>
+        <location filename="../../CopyEngine.cpp" line="905"/>
         <source>Overwrite if older</source>
         <translation>Überschreiben, falls älter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="975"/>
+        <location filename="../../CopyEngine.cpp" line="976"/>
         <source>Options error</source>
         <translation>Fehlerhafte Optionen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="975"/>
+        <location filename="../../CopyEngine.cpp" line="976"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Optionen nicht geladen - Kein Zugriff auf Filter</translation>
     </message>
@@ -96,70 +96,70 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="335"/>
+        <location filename="../../CopyEngineFactory.cpp" line="330"/>
+        <location filename="../../CopyEngineFactory.cpp" line="333"/>
         <location filename="../../CopyEngineFactory.cpp" line="338"/>
-        <location filename="../../CopyEngineFactory.cpp" line="343"/>
-        <location filename="../../CopyEngineFactory.cpp" line="347"/>
+        <location filename="../../CopyEngineFactory.cpp" line="342"/>
         <source>Ask</source>
         <translation>Fragen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="336"/>
-        <location filename="../../CopyEngineFactory.cpp" line="340"/>
-        <location filename="../../CopyEngineFactory.cpp" line="344"/>
-        <location filename="../../CopyEngineFactory.cpp" line="348"/>
+        <location filename="../../CopyEngineFactory.cpp" line="331"/>
+        <location filename="../../CopyEngineFactory.cpp" line="335"/>
+        <location filename="../../CopyEngineFactory.cpp" line="339"/>
+        <location filename="../../CopyEngineFactory.cpp" line="343"/>
         <source>Skip</source>
         <translation>Überspringen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="339"/>
+        <location filename="../../CopyEngineFactory.cpp" line="334"/>
         <source>Merge</source>
         <translation>Fusionieren</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="341"/>
-        <location filename="../../CopyEngineFactory.cpp" line="353"/>
+        <location filename="../../CopyEngineFactory.cpp" line="336"/>
+        <location filename="../../CopyEngineFactory.cpp" line="348"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="345"/>
+        <location filename="../../CopyEngineFactory.cpp" line="340"/>
         <source>Put at the end</source>
         <translation>Ans Ende verschieben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="349"/>
+        <location filename="../../CopyEngineFactory.cpp" line="344"/>
         <source>Overwrite</source>
         <translation>Überschreiben</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="350"/>
+        <location filename="../../CopyEngineFactory.cpp" line="345"/>
         <source>Overwrite if different</source>
         <translation>Überschreiben, falls verschieden</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="351"/>
+        <location filename="../../CopyEngineFactory.cpp" line="346"/>
         <source>Overwrite if newer</source>
         <translation>Überschreiben, falls neuer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="352"/>
+        <location filename="../../CopyEngineFactory.cpp" line="347"/>
         <source>Overwrite if older</source>
         <translation>Überschreiben, falls älter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="368"/>
-        <location filename="../../CopyEngineFactory.cpp" line="407"/>
+        <location filename="../../CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngineFactory.cpp" line="402"/>
         <source>Options error</source>
         <translation>Fehlerhafte Optionen</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="368"/>
+        <location filename="../../CopyEngineFactory.cpp" line="363"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Option nicht geladen - Kein Zugriff auf Filter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="407"/>
+        <location filename="../../CopyEngineFactory.cpp" line="402"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Option nicht geladen - Kann nicht auf Filter zugreifen</translation>
     </message>
@@ -209,21 +209,21 @@
     <name>FileExistsDialog</name>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="153"/>
-        <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <source>%name% - copy</source>
+        <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="160"/>
-        <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <source>%name% - copy (%number%)</source>
+        <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="248"/>
+        <location filename="../../FileExistsDialog.cpp" line="247"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="248"/>
+        <location filename="../../FileExistsDialog.cpp" line="247"/>
         <source>Try rename with using special characters</source>
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
@@ -421,49 +421,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1372"/>
-        <location filename="../../ListThread.cpp" line="2233"/>
+        <location filename="../../ListThread.cpp" line="1382"/>
+        <location filename="../../ListThread.cpp" line="2253"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation>Falscher Modus: %1 - Kann Element nicht verschieben oder kopieren</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1379"/>
-        <location filename="../../ListThread.cpp" line="2240"/>
+        <location filename="../../ListThread.cpp" line="1389"/>
+        <location filename="../../ListThread.cpp" line="2260"/>
         <source>Unable to save the transfer list: %1</source>
         <translation>Konnte die Transferliste: %1 nicht speichern</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1395"/>
+        <location filename="../../ListThread.cpp" line="1405"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation>Lesefehler, oder Dateigröße=0</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1402"/>
+        <location filename="../../ListThread.cpp" line="1412"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation>Falscher Header: &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1411"/>
+        <location filename="../../ListThread.cpp" line="1421"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation>Die Transferliste ist im gemischten Modus, aber diese Instanz ist nicht im selben Modus</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1420"/>
+        <location filename="../../ListThread.cpp" line="1430"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation>Die Transferliste ist im Kopiermodus, aber diese Instanz ist nicht im selben Modus</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1426"/>
+        <location filename="../../ListThread.cpp" line="1436"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation>Die Transferliste ist im Verschiebe-Modus, aber diese Instanz ist nicht im selben Modus</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1489"/>
+        <location filename="../../ListThread.cpp" line="1499"/>
         <source>Some errors have been found during the line parsing</source>
         <translation>Bei der Zeilenanalyse sind Fehler aufgetreten</translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1497"/>
+        <location filename="../../ListThread.cpp" line="1507"/>
         <source>Unable to open the transfer list: %1</source>
         <translation>Transferliste: %1 kann nicht geöffnet werden</translation>
     </message>
@@ -501,19 +501,6 @@
         <location filename="../../MkPath.cpp" line="360"/>
         <source>Unable to remove</source>
         <translation>Kann nicht löschen</translation>
-    </message>
-</context>
-<context>
-    <name>ReadThread</name>
-    <message>
-        <location filename="../../ReadThread.cpp" line="368"/>
-        <source>Unable to read the source file: </source>
-        <translation>Die Quelldatei kann nicht gelesen werden: </translation>
-    </message>
-    <message>
-        <location filename="../../ReadThread.cpp" line="386"/>
-        <source>File truncated during the read, possible data change</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -567,27 +554,27 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="378"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="382"/>
         <source>%1 - copy</source>
         <translation>%1 - Kopie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="385"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="389"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - Kopie (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="463"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="467"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="470"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="474"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="513"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="517"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -595,94 +582,40 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="257"/>
-        <location filename="../../TransferThread.cpp" line="622"/>
-        <location filename="../../TransferThread.cpp" line="799"/>
-        <location filename="../../TransferThread.cpp" line="1287"/>
+        <location filename="../../TransferThread.cpp" line="156"/>
+        <location filename="../../TransferThread.cpp" line="399"/>
+        <location filename="../../TransferThread.cpp" line="545"/>
         <source>File not found</source>
         <translation>Datei nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="358"/>
-        <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="399"/>
-        <location filename="../../TransferThread.cpp" line="415"/>
-        <source>Internal error: Already opening</source>
-        <translation type="unfinished">Interner Fehler: Bereits geöffnet</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1287"/>
-        <location filename="../../TransferThread.cpp" line="1323"/>
+        <location filename="../../TransferThread.cpp" line="545"/>
+        <location filename="../../TransferThread.cpp" line="581"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="749"/>
-        <location filename="../../TransferThread.cpp" line="839"/>
-        <location filename="../../TransferThread.cpp" line="902"/>
-        <source>The source file doesn&apos;t exist</source>
-        <translation type="unfinished">Quelldatei existiert nicht</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1213"/>
-        <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation type="unfinished">Interner Fehler: Ubertragene Größe ungleich</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="768"/>
-        <location filename="../../TransferThread.cpp" line="777"/>
-        <location filename="../../TransferThread.cpp" line="805"/>
-        <location filename="../../TransferThread.cpp" line="858"/>
-        <location filename="../../TransferThread.cpp" line="867"/>
-        <location filename="../../TransferThread.cpp" line="914"/>
-        <source>Unable to do the folder</source>
-        <translation type="unfinished">Ordner kann nicht erstellt werden</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="242"/>
+        <location filename="../../TransferThread.cpp" line="141"/>
         <source>Try rename with using special characters</source>
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="595"/>
+        <location filename="../../TransferThread.cpp" line="372"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="602"/>
+        <location filename="../../TransferThread.cpp" line="379"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="891"/>
-        <source>The source symlink can&apos;t be read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="908"/>
-        <source>Another file exists at same place</source>
-        <translation type="unfinished">Andere Datei befindet sich am selben Ort</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1198"/>
-        <source>Internal error: The destination is not closed</source>
-        <translation type="unfinished">Interner Fehler: Ziel ist nicht geschlossen</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="1224"/>
-        <source>Internal error: The buffer is not empty</source>
-        <translation type="unfinished">Interner Fehler: Puffer ist nicht leer</translation>
-    </message>
 </context>
 <context>
-    <name>WriteThread</name>
+    <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../WriteThread.cpp" line="80"/>
-        <source>Path resolution error (Empty path)</source>
-        <translation>Pfad-Auflösungsfehler (leerer Pfad)</translation>
+        <location filename="../../async/TransferThreadAsync.cpp" line="198"/>
+        <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -774,43 +707,32 @@
         <translation>Leistung</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="379"/>
+        <location filename="../../copyEngineOptions.ui" line="353"/>
         <source>Inode threads (unsafe &gt; 1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="386"/>
-        <location filename="../../copyEngineOptions.ui" line="396"/>
-        <source>More cpu, but better organisation on the disk</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../copyEngineOptions.ui" line="399"/>
-        <source>Order the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../copyEngineOptions.ui" line="415"/>
+        <location filename="../../copyEngineOptions.ui" line="395"/>
         <source>Misc</source>
         <translation>Verschiedenes</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="421"/>
+        <location filename="../../copyEngineOptions.ui" line="401"/>
         <source>Check the disk space</source>
         <translation>Auf freien Speicherplatz überprüfen</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="431"/>
+        <location filename="../../copyEngineOptions.ui" line="411"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="443"/>
+        <location filename="../../copyEngineOptions.ui" line="423"/>
         <source>Browse</source>
         <translation>Wählen</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="465"/>
+        <location filename="../../copyEngineOptions.ui" line="445"/>
         <source>Filters</source>
         <translation>Filter</translation>
     </message>

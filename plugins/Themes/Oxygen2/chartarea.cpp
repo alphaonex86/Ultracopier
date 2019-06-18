@@ -6,9 +6,10 @@
 #include <QPointF>
 #include <iostream>
 
-ChartArea::Widget::Widget(QWidget *parent)
+ChartArea::Widget::Widget(FacilityInterface * facilityEngine,QWidget *parent)
         : QWidget(parent)
 {
+    this->facilityEngine=facilityEngine;
     setSizePolicy(QSizePolicy::Preferred,QSizePolicy::MinimumExpanding);
     setMinimumHeight(20);
     setMinimumWidth(100);
@@ -104,7 +105,13 @@ void ChartArea::Widget::paintEvent(QPaintEvent*)
         painter.setFont(font);
 
         painter.setPen(QPen(QColor(140,140,140), 3));
-        painter.drawText(0,0,width(),height(),Qt::AlignHCenter | Qt::AlignBottom,tr("%1B/s").arg(m_values.back()));
+        painter.drawText(0,0,width(),height(),Qt::AlignHCenter | Qt::AlignBottom,
+                         QString::fromStdString(
+                             facilityEngine->speedToString(
+                                 m_values.back()
+                                 )
+                             )
+                         );
     }
     painter.end();
 }

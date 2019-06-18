@@ -124,12 +124,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="159"/>
+        <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="159"/>
+        <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Hiba a másolási/mozgatási lista fogadásakor
@@ -188,7 +188,7 @@
         <translation>A mód argumentuma nem érvényes</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1152"/>
+        <location filename="../../../Core.cpp" line="1154"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Szeretnél másolni? Ha nem, akkor átmozgatva lesz.</translation>
     </message>
@@ -204,7 +204,7 @@
         <translation>Másoló motor betöltése nem lehetséges, másolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1151"/>
+        <location filename="../../../Core.cpp" line="1153"/>
         <source>Transfer mode</source>
         <translation>Átviteli mód</translation>
     </message>
@@ -326,7 +326,7 @@
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="64"/>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>Skip</source>
         <translation>Kihagyás</translation>
     </message>
@@ -382,87 +382,92 @@
         <translation>Listázás és másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <source>Remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Ask</source>
         <translation>Rákérdez</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Overwrite</source>
         <translation>Felülírás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Overwrite if newer</source>
         <translation>Felülírás, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="81"/>
+        <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Overwrite if the last modification dates are different</source>
         <translation>Felülír, ha az legutóbbi módosítás dátumai különböznek</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="82"/>
+        <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Rename</source>
         <translation>Átnevezés</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="83"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Put to the end of the list</source>
         <translation>Helyezze a lista végére</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="84"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Select source directory</source>
         <translation>Válassz forrásmappát</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="85"/>
+        <location filename="../../../FacilityEngine.cpp" line="86"/>
         <source>Select destination directory</source>
         <translation>Válassz célmappát</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="86"/>
+        <location filename="../../../FacilityEngine.cpp" line="87"/>
         <source>Internal error</source>
         <translation>Belső hiba</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="87"/>
+        <location filename="../../../FacilityEngine.cpp" line="88"/>
         <source>Select one or more files to open</source>
         <translation>Válassz egy vagy több fájlt megnyitásra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="88"/>
+        <location filename="../../../FacilityEngine.cpp" line="89"/>
         <source>All files</source>
         <translation>Minden fájl</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="89"/>
+        <location filename="../../../FacilityEngine.cpp" line="90"/>
         <source>Save transfer list</source>
         <translation>Átviteli lista mentése</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="90"/>
+        <location filename="../../../FacilityEngine.cpp" line="91"/>
         <source>Open transfer list</source>
         <translation>Átviteli lista megnyitása</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="91"/>
+        <location filename="../../../FacilityEngine.cpp" line="92"/>
         <source>Transfer list</source>
         <translation>Átviteli lista</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="92"/>
+        <location filename="../../../FacilityEngine.cpp" line="93"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="93"/>
+        <location filename="../../../FacilityEngine.cpp" line="94"/>
         <source>Not supported on this platform</source>
         <translation>Ezen a platformon nem támogatott</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="94"/>
+        <location filename="../../../FacilityEngine.cpp" line="95"/>
         <source>Completed in %1</source>
         <translation>Befejezve %1 alatt</translation>
     </message>
@@ -1273,102 +1278,102 @@ since:%2</source>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="169"/>
+        <location filename="../../../SystrayIcon.cpp" line="171"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation type="unfinished">Nem található másoló figyelő. Végezd el manuálisan a másolást a jobb egérgombbal a tálcaikonra kattintva.</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="175"/>
+        <location filename="../../../SystrayIcon.cpp" line="177"/>
         <source>Information</source>
         <translation type="unfinished">Információ</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="194"/>
+        <location filename="../../../SystrayIcon.cpp" line="196"/>
         <source>Searching information...</source>
         <translation type="unfinished">Információ keresése...</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="207"/>
+        <location filename="../../../SystrayIcon.cpp" line="209"/>
         <source>Do not replace the explorer copy/move</source>
         <translation type="unfinished">Ne cserélje le az Intéző másolását/mozgatását</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="212"/>
+        <location filename="../../../SystrayIcon.cpp" line="214"/>
         <source>Semi replace the explorer copy/move</source>
         <translation type="unfinished">Az Intéző másolás/mozgatás félig lecserélése</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="217"/>
+        <location filename="../../../SystrayIcon.cpp" line="219"/>
         <source>Replace the explorer copy/move</source>
         <translation type="unfinished">Az Intéző másolás/mozgatás lecserélése</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="393"/>
+        <location filename="../../../SystrayIcon.cpp" line="395"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="393"/>
+        <location filename="../../../SystrayIcon.cpp" line="395"/>
         <source>The action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="441"/>
+        <location filename="../../../SystrayIcon.cpp" line="443"/>
         <source>&amp;About/Debug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="443"/>
+        <location filename="../../../SystrayIcon.cpp" line="445"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="446"/>
+        <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>&amp;Save bug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="448"/>
+        <location filename="../../../SystrayIcon.cpp" line="450"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="449"/>
+        <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="450"/>
+        <location filename="../../../SystrayIcon.cpp" line="452"/>
         <source>&amp;Product key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="488"/>
+        <location filename="../../../SystrayIcon.cpp" line="490"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="488"/>
+        <location filename="../../../SystrayIcon.cpp" line="490"/>
         <source>Go to the download page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="515"/>
+        <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>A&amp;dd copy/moving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="541"/>
+        <location filename="../../../SystrayIcon.cpp" line="543"/>
         <source>Add &amp;copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="542"/>
+        <location filename="../../../SystrayIcon.cpp" line="544"/>
         <source>Add &amp;transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="543"/>
+        <location filename="../../../SystrayIcon.cpp" line="545"/>
         <source>Add &amp;move</source>
         <translation type="unfinished"></translation>
     </message>

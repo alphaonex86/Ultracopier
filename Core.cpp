@@ -461,7 +461,7 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
         {
             case Ultracopier::RemainingTimeAlgo_Logarithmic:
             if(copyInstance.remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
             else
             {
                 unsigned int sub_index=0;
@@ -472,7 +472,7 @@ void Core::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
                     RemainingTimeLogarithmicColumn &remainingTimeLogarithmicColumn=copyInstance.remainingTimeLogarithmicValue[col];
                     if(copyInstance.remainingTimeLogarithmicValue.size()<=col)
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" < col %2"+std::to_string(col));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, copyInstance.remainingTimeLogarithmicValue.size() "+std::to_string(copyInstance.remainingTimeLogarithmicValue.size())+" < col %2"+std::to_string(col));
                         break;
                     }
                     else

@@ -2,9 +2,32 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr" sourcelanguage="en">
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../radialMap/map.cpp" line="+197"/>
+        <source>%1 file, with an average size of %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../radialMap/widgetEvents.cpp" line="+156"/>
+        <source>Tooltip of file/folder, %1 is path, %2 is size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tooltip of folder, %1 File (%2%)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Tooltip of folder, %1 File</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+320"/>
+        <location filename="../../interface.cpp" line="+340"/>
         <location line="+17"/>
         <source>%1 is deprecated, Use %2</source>
         <translation>%1 est obsolète, utilisez %2</translation>
@@ -21,12 +44,12 @@
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+211"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+304"/>
         <source>Copy list</source>
         <translation>Liste de copies</translation>
     </message>
@@ -36,7 +59,7 @@
         <translation>Liste de déplacements</translation>
     </message>
     <message>
-        <location line="+421"/>
+        <location line="+451"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
@@ -56,14 +79,14 @@
         <translation>Nom de fichier, 0Ko</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+195"/>
         <location line="+12"/>
         <location line="+12"/>
         <source>Select a color</source>
         <translation>Selectionner une coleur</translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+78"/>
         <location line="+4"/>
         <location line="+2"/>
         <source>%1 %2% of %3</source>
@@ -98,17 +121,12 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+35"/>
+        <location filename="../../interface.ui" line="+393"/>
         <source>From:</source>
         <translation>Depuis:</translation>
     </message>
     <message>
-        <location line="+30"/>
-        <source>To:</source>
-        <translation>Vers:</translation>
-    </message>
-    <message>
-        <location line="+161"/>
+        <location line="-119"/>
         <source>&amp;More</source>
         <translation>Pl&amp;us</translation>
     </message>
@@ -118,7 +136,7 @@
         <translation>&amp;Pause</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+167"/>
         <source>&amp;Skip</source>
         <translation>&amp;Passer</translation>
     </message>
@@ -128,12 +146,32 @@
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location line="-153"/>
+        <location line="-110"/>
         <source>Close on transfer completion</source>
         <translation>Fermer à la fin des transferts</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-157"/>
+        <source>0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>100MB+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Remaining: 5min</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+242"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Ad or warning here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
@@ -224,7 +262,7 @@
         <translation>Interface</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+46"/>
         <source>Add file</source>
         <translation>Ajouter un fichier</translation>
     </message>

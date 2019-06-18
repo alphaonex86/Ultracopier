@@ -49,7 +49,11 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
     #endif
     {
         #ifdef Q_OS_UNIX
-        const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+            #ifdef Q_OS_MAC
+            const uint64_t mdate=source_statbuf.st_mtimespec.tv_sec;
+            #else
+            const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
+            #endif
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
@@ -77,7 +81,11 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
     #endif
     {
         #ifdef Q_OS_UNIX
-        const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtim);
+            #ifdef Q_OS_MAC
+            const uint64_t mdate=destination_statbuf.st_mtimespec.tv_sec;
+            #else
+            const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtim);
+            #endif
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
         #endif

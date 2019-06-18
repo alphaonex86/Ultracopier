@@ -124,12 +124,12 @@
 <context>
     <name>CopyListener</name>
     <message>
-        <location filename="../../../CopyListener.cpp" line="159"/>
+        <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../CopyListener.cpp" line="159"/>
+        <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error during the reception of the copy/move list
 %1</source>
         <translation>Errore durante la ricezione della lista di copia/spostamento
@@ -188,7 +188,7 @@
         <translation>L&apos;argomento per la modalità non è valido</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1152"/>
+        <location filename="../../../Core.cpp" line="1154"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Vuoi copiarlo? se no, verrà spostato.</translation>
     </message>
@@ -204,7 +204,7 @@
         <translation>Impossibile avviare il motore per la copia, copia interrotta</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1151"/>
+        <location filename="../../../Core.cpp" line="1153"/>
         <source>Transfer mode</source>
         <translation>Modalità di trasferimento</translation>
     </message>
@@ -240,7 +240,7 @@
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="64"/>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
@@ -383,87 +383,92 @@
         <translation>Elenca e copia</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="77"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <source>Remaining:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Ask</source>
         <translation>Chiedi</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Overwrite</source>
         <translation>Sovrascrivi</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Overwrite if newer</source>
         <translation>Sovrascrivi se più recente</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="81"/>
+        <location filename="../../../FacilityEngine.cpp" line="82"/>
         <source>Overwrite if the last modification dates are different</source>
         <translation>Sovrascrivi se sono diverse le date dell&apos;ultima modifica</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="82"/>
+        <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="83"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Put to the end of the list</source>
         <translation>Metti in coda alla lista</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="94"/>
+        <location filename="../../../FacilityEngine.cpp" line="95"/>
         <source>Completed in %1</source>
         <translation>Completato in %1</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="84"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Select source directory</source>
         <translation>Selezionare la cartella di origine</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="85"/>
+        <location filename="../../../FacilityEngine.cpp" line="86"/>
         <source>Select destination directory</source>
         <translation>Selezionare la cartella di destinazione</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="86"/>
+        <location filename="../../../FacilityEngine.cpp" line="87"/>
         <source>Internal error</source>
         <translation>Errore interno</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="87"/>
+        <location filename="../../../FacilityEngine.cpp" line="88"/>
         <source>Select one or more files to open</source>
         <translation>Selezionare uno o più file da aprire</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="88"/>
+        <location filename="../../../FacilityEngine.cpp" line="89"/>
         <source>All files</source>
         <translation>Tutti i file</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="89"/>
+        <location filename="../../../FacilityEngine.cpp" line="90"/>
         <source>Save transfer list</source>
         <translation>Salvare la lista dei trasferimenti</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="90"/>
+        <location filename="../../../FacilityEngine.cpp" line="91"/>
         <source>Open transfer list</source>
         <translation>Aprire lista dei trasferimenti</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="91"/>
+        <location filename="../../../FacilityEngine.cpp" line="92"/>
         <source>Transfer list</source>
         <translation>Lista dei trasferimenti</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="92"/>
+        <location filename="../../../FacilityEngine.cpp" line="93"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="93"/>
+        <location filename="../../../FacilityEngine.cpp" line="94"/>
         <source>Not supported on this platform</source>
         <translation>Non supportato su questa piattaforma</translation>
     </message>
@@ -1280,102 +1285,102 @@ da: %2</translation>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="169"/>
+        <location filename="../../../SystrayIcon.cpp" line="171"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation>Nessuna copia del rilevatore trovata. Fare una copia manualmente cliccando col tasto destro del mouse sull&apos;icona nella barra di sistema.</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="175"/>
+        <location filename="../../../SystrayIcon.cpp" line="177"/>
         <source>Information</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="194"/>
+        <location filename="../../../SystrayIcon.cpp" line="196"/>
         <source>Searching information...</source>
         <translation>Ricerca informazioni...</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="207"/>
+        <location filename="../../../SystrayIcon.cpp" line="209"/>
         <source>Do not replace the explorer copy/move</source>
         <translation>Non ripristinare la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="212"/>
+        <location filename="../../../SystrayIcon.cpp" line="214"/>
         <source>Semi replace the explorer copy/move</source>
         <translation>Ripristinare parzialmente la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="217"/>
+        <location filename="../../../SystrayIcon.cpp" line="219"/>
         <source>Replace the explorer copy/move</source>
         <translation>Ripristina la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="393"/>
+        <location filename="../../../SystrayIcon.cpp" line="395"/>
         <source>Warning</source>
         <translation type="unfinished">Avviso</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="393"/>
+        <location filename="../../../SystrayIcon.cpp" line="395"/>
         <source>The action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="441"/>
+        <location filename="../../../SystrayIcon.cpp" line="443"/>
         <source>&amp;About/Debug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="443"/>
+        <location filename="../../../SystrayIcon.cpp" line="445"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="446"/>
+        <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>&amp;Save bug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="448"/>
+        <location filename="../../../SystrayIcon.cpp" line="450"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="449"/>
+        <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="450"/>
+        <location filename="../../../SystrayIcon.cpp" line="452"/>
         <source>&amp;Product key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="488"/>
+        <location filename="../../../SystrayIcon.cpp" line="490"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="488"/>
+        <location filename="../../../SystrayIcon.cpp" line="490"/>
         <source>Go to the download page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="515"/>
+        <location filename="../../../SystrayIcon.cpp" line="517"/>
         <source>A&amp;dd copy/moving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="541"/>
+        <location filename="../../../SystrayIcon.cpp" line="543"/>
         <source>Add &amp;copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="542"/>
+        <location filename="../../../SystrayIcon.cpp" line="544"/>
         <source>Add &amp;transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="543"/>
+        <location filename="../../../SystrayIcon.cpp" line="545"/>
         <source>Add &amp;move</source>
         <translation type="unfinished"></translation>
     </message>

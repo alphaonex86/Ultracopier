@@ -25,7 +25,11 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::str
     if(stat(fileInfo.c_str(), &p_statbuf)==0)
     {
         #ifdef Q_OS_UNIX
-        uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+            #ifdef Q_OS_MAC
+            uint64_t mdate=p_statbuf.st_mtimespec.tv_sec;
+            #else
+            uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+            #endif
         #else
         uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
         #endif

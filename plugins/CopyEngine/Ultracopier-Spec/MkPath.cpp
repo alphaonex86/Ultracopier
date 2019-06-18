@@ -546,12 +546,21 @@ bool MkPath::readFileDateTime(const std::string &source)
         struct stat info;
         if(stat(source.c_str(),&info)!=0)
             return false;
+        #ifdef Q_OS_MAC
+        time_t ctime=info.st_ctimespec.tv_sec;
+        time_t actime=info.st_atimespec.tv_sec;
+        time_t modtime=info.st_mtimespec.tv_sec;
+        //this function avalaible on unix and mingw
+        butime.actime=actime;
+        butime.modtime=modtime;
+        #else
         time_t ctime=info.st_ctim.tv_sec;
         time_t actime=info.st_atim.tv_sec;
         time_t modtime=info.st_mtim.tv_sec;
         //this function avalaible on unix and mingw
         butime.actime=actime;
         butime.modtime=modtime;
+        #endif
         Q_UNUSED(ctime);
         return true;
     #else

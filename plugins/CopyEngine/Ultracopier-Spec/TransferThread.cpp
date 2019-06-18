@@ -77,6 +77,8 @@ TransferThread::~TransferThread()
 
 void TransferThread::run()
 {
+    moveToThread(this);
+
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
     transfer_stat			= TransferStat_Idle;
     stopIt                  = false;
@@ -617,7 +619,11 @@ int64_t TransferThread::readFileMDateTime(const std::string &source)
         struct stat info;
         if(stat(source.c_str(),&info)!=0)
             return -1;
+        #ifdef Q_OS_MAC
+        return info.st_mtimespec.tv_sec;
+        #else
         return info.st_mtim.tv_sec;
+        #endif
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -661,12 +667,21 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
         struct stat info;
         if(stat(source.c_str(),&info)!=0)
             return false;
+        #ifdef Q_OS_MAC
+        time_t ctime=info.st_ctimespec.tv_sec;
+        time_t actime=info.st_atimespec.tv_sec;
+        time_t modtime=info.st_mtimespec.tv_sec;
+        //this function avalaible on unix and mingw
+        butime.actime=actime;
+        butime.modtime=modtime;
+        #else
         time_t ctime=info.st_ctim.tv_sec;
         time_t actime=info.st_atim.tv_sec;
         time_t modtime=info.st_mtim.tv_sec;
         //this function avalaible on unix and mingw
         butime.actime=actime;
         butime.modtime=modtime;
+        #endif
         if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
@@ -1075,7 +1090,7 @@ void TransferThread::setMkFullPath(const bool mkFullPath)
 
 int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
 {
-    #ifdef __HAIKU__
+    #if defined(__HAIKU__) || defined(Q_OS_MAC)
     return ::fseeko(__stream,__off,__whence);
     #else
     return ::fseeko64(__stream,__off,__whence);
@@ -1084,7 +1099,7 @@ int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
 
 int TransferThread::ftruncate64(int __fd, uint64_t __length)
 {
-    #ifdef __HAIKU__
+    #if defined(__HAIKU__) || defined(Q_OS_MAC)
     return ::ftruncate(__fd,__length);
     #else
     return ::ftruncate64(__fd,__length);

@@ -71,11 +71,13 @@ void TransferThreadAsync::run()
     if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThreadAsync::internalStartTheTransfer,      Qt::QueuedConnection))
         abort();
 
+    moveToThread(this);
     exec();
 }
 
 void TransferThreadAsync::startTheTransfer()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     startTransferTime.restart();
     haveTransferTime=true;
     emit internalTryStartTheTransfer();
@@ -83,6 +85,11 @@ void TransferThreadAsync::startTheTransfer()
 
 void TransferThreadAsync::internalStartTheTransfer()
 {
+    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+    if(QThread::currentThread()!=this)
+        abort();
+    #endif
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(transfer_stat==TransferStat_Idle)
     {
         if(mode!=Ultracopier::Move)
@@ -92,16 +99,19 @@ void TransferThreadAsync::internalStartTheTransfer()
         }
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(transfer_stat==TransferStat_PostOperation)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert at PostOperation"));
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(transfer_stat==TransferStat_Transfer)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert at Transfer"));
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(canStartTransfer)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] canStartTransfer is already set to true"));
@@ -175,6 +185,7 @@ void TransferThreadAsync::preOperation()
     if(doTheDateTransfer)
     {
         doTheDateTransfer=readSourceFileDateTime(source);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after keep date");
         #ifdef Q_OS_MAC
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] read the source time: "+std::to_string(butime.modtime));
         #endif
@@ -189,8 +200,10 @@ void TransferThreadAsync::preOperation()
             }
         }
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before perm");
     if(doRightTransfer)
         havePermission=readSourceFilePermissions(source);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after perm");
     transfer_stat=TransferStat_WaitForTheTransfer;
     ifCanStartTransfer();
     emit preOperationStopped();
@@ -227,8 +240,14 @@ void TransferThreadAsync::setProgression(const uint64_t &pos)
 
 void TransferThreadAsync::ifCanStartTransfer()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     if(transfer_stat!=TransferStat_WaitForTheTransfer /*wait preoperation*/ || !canStartTransfer/*wait start call*/)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
+                                 "] transfer_stat:"+std::to_string(transfer_stat)+
+                                 ", wait start call: "+std::to_string(canStartTransfer));
         return;
+    }
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
 #ifdef Q_OS_WIN32
@@ -236,9 +255,11 @@ void TransferThreadAsync::ifCanStartTransfer()
                    COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
                    )!=0)
 #else
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
     if(copy(source.c_str(),destination.c_str())<0)
 #endif
     {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error");
         if(stopIt)
         {
             if(source!="")
@@ -252,6 +273,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         emit errorOnFile(destination,std::string(strerror(errno)));
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
     emit readStopped();
     if(mode==Ultracopier::Move)
         if(exists(destination))
@@ -403,51 +425,57 @@ void TransferThreadAsync::setId(int id)
 
 char TransferThreadAsync::readingLetter() const
 {
-    return '?';/*
-    switch(readThread.stat)
+    switch(transfer_stat)
     {
-    case ReadThread::Idle:
+    case TransferStat_Idle:
         return '_';
     break;
-    case ReadThread::InodeOperation:
+    case TransferStat_PreOperation:
         return 'I';
     break;
-    case ReadThread::Read:
+    case TransferStat_WaitForTheTransfer:
+        return 'W';
+    break;
+    case TransferStat_Transfer:
+        return 'C';
+    break;
+    case TransferStat_PostTransfer:
         return 'R';
     break;
-    case ReadThread::WaitWritePipe:
-        return 'W';
+    case TransferStat_PostOperation:
+        return 'P';
     break;
     default:
         return '?';
-    }*/
+    }
 }
 
 char TransferThreadAsync::writingLetter() const
 {
-    return '?';/*
-    switch(writeThread.status)
+    switch(transfer_stat)
     {
-    case WriteThread::Idle:
+    case TransferStat_Idle:
         return '_';
     break;
-    case WriteThread::InodeOperation:
+    case TransferStat_PreOperation:
         return 'I';
     break;
-    case WriteThread::Write:
+    case TransferStat_WaitForTheTransfer:
         return 'W';
     break;
-    case WriteThread::Close:
+    case TransferStat_Transfer:
         return 'C';
     break;
-    case WriteThread::Read:
+    case TransferStat_PostTransfer:
         return 'R';
+    break;
+    case TransferStat_PostOperation:
+        return 'P';
     break;
     default:
         return '?';
-    }*/
+    }
 }
-
 #endif
 
 //not copied size, ...
@@ -531,10 +559,20 @@ int TransferThreadAsync::copy(const char *from,const char *to)
     fd_from = open(from, O_RDONLY);
     if (fd_from < 0)
         return -1;
+    #ifdef Q_OS_LINUX
+    posix_fadvise(fd_from, 0, 0, POSIX_FADV_WILLNEED);
+    posix_fadvise(fd_from, 0, 0, POSIX_FADV_SEQUENTIAL);
+    posix_fadvise(fd_from, 0, 0, POSIX_FADV_NOREUSE);
+    #endif
 
-    fd_to = open(to, O_WRONLY | O_CREAT | O_DSYNC);
+    fd_to = open(to, O_WRONLY | O_CREAT/* | O_DSYNC slow down*//* | O_DIRECT*/, 0666);
     if (fd_to < 0)
         goto out_error;
+    #ifdef Q_OS_LINUX
+    posix_fadvise(fd_to, 0, 0, POSIX_FADV_WILLNEED);
+    posix_fadvise(fd_to, 0, 0, POSIX_FADV_SEQUENTIAL);
+    posix_fadvise(fd_to, 0, 0, POSIX_FADV_NOREUSE);
+    #endif
 
     while (nread = read(fd_from, buf, sizeof buf), nread > 0)
     {

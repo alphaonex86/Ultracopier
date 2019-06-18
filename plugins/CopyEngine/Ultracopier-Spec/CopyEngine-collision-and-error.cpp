@@ -286,7 +286,11 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
-                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    #ifdef Q_OS_MAC
+                    mdate=p_statbuf.st_mtimespec.tv_sec;
+                    #else
+                    mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    #endif
                 #else
                 mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
                 #endif
@@ -446,7 +450,11 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
-                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    #ifdef Q_OS_MAC
+                    mdate=p_statbuf.st_mtimespec.tv_sec;
+                    #else
+                    mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    #endif
                 #else
                 mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
                 #endif
@@ -520,7 +528,11 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
-                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    #ifdef Q_OS_MAC
+                    mdate=p_statbuf.st_mtimespec.tv_sec;
+                    #else
+                    mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    #endif
                 #else
                 mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
                 #endif

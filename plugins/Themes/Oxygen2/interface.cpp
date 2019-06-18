@@ -176,6 +176,17 @@ Themes::Themes(const bool &alwaysOnTop,
     connect(ui->pushButtonCloseSearch,	&QPushButton::clicked,	this,	&Themes::closeTheSearchBox);
     connect(searchShortcut3,		&QShortcut::activated,	this,	&Themes::closeTheSearchBox);
 
+    //remaining time
+    {
+        int index=0;
+        while(index<ULTRACOPIER_MAXREMAININGTIMECOL)
+        {
+            RemainingTimeLogarithmicColumn newEntry;
+            remainingTimeLogarithmicValue.push_back(newEntry);
+            index++;
+        }
+    }
+
     //reload directly untranslatable text
     newLanguageLoaded();
 
@@ -308,7 +319,7 @@ Themes::Themes(const bool &alwaysOnTop,
     radial=new RadialMap::Widget(this);
     ui->verticalLayouMiddle->addWidget(radial);
 
-    chartarea=new ChartArea::Widget(this);
+    chartarea=new ChartArea::Widget(facilityEngine,this);
     ui->verticalLayoutRight->insertWidget(0,chartarea);
 
     selectionModel=ui->TransferList->selectionModel();
@@ -382,7 +393,7 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->current_file->setStyleSheet("color:#fff;");
         ui->from->setStyleSheet("color:#fff;");
 
-        ui->ad_ultimate->setStyleSheet("color:#fff;background-color:rgb(50, 50, 50);");
+        //ui->ad_ultimate->setStyleSheet("color:#fff;background-color:rgb(50, 50, 50);");
 
         QString labelTimeRemaining;
         labelTimeRemaining+="<html><body style=\"white-space:nowrap;\"><small style=\"color:#aaa\">";
@@ -845,6 +856,7 @@ void Themes::getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyLi
     else
         ui->skipButton->setEnabled(true);
     updateOverallInformation();
+    radial->invalidate();
     radial->create(transferModel.tree);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"transferModel.rowCount(): "+std::to_string(transferModel.rowCount()));
 }
@@ -1787,7 +1799,7 @@ void Themes::resizeEvent(QResizeEvent*)
 void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
 {
     if(remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
     else
     {
         unsigned int sub_index=0;
@@ -1798,7 +1810,7 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
             RemainingTimeLogarithmicColumn &remainingTimeLogarithmicColumn=remainingTimeLogarithmicValue[col];
             if(remainingTimeLogarithmicValue.size()<=col)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" < col %2"+std::to_string(col));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" < col %2"+std::to_string(col));
                 break;
             }
             else
@@ -1815,7 +1827,7 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
         }
         unsigned int max=0;
         sub_index=0;
-        while(sub_index<remainingTimeLogarithmicValue.size())
+        while(sub_index<remainingTimeLogarithmicValue.size() && sub_index<6)
         {
             const RemainingTimeLogarithmicColumn &col=remainingTimeLogarithmicValue.at(sub_index);
             unsigned int tot=0;
@@ -1833,7 +1845,7 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
             sub_index++;
         }
         sub_index=0;
-        while(sub_index<remainingTimeLogarithmicValue.size())
+        while(sub_index<remainingTimeLogarithmicValue.size() && sub_index<6)
         {
             const RemainingTimeLogarithmicColumn &col=remainingTimeLogarithmicValue.at(sub_index);
             unsigned int tot=0;

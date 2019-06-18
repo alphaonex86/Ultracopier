@@ -73,6 +73,7 @@ void FacilityEngine::retranslate()
     translations["Copying"]=tr("Copying").toStdString();
     translations["Listing and copying"]=tr("Listing and copying").toStdString();
     translations["Time remaining:"]=tr("Time remaining:").toStdString();
+    translations["Remaining:"]=tr("Remaining:").toStdString();
     //for copy engine
     translations["Ask"]=tr("Ask").toStdString();
     translations["Skip"]=tr("Skip").toStdString();
