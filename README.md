@@ -12,6 +12,8 @@ Main features include:
 - collision management
 - plugin support
 
+# Dependency
+- libogg and libopus if audio support is enabled
 
 # Building
 
