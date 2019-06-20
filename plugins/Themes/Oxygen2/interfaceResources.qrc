@@ -29,5 +29,7 @@
         <file>resources/progressBarin.png</file>
         <file>resources/darkButton.png</file>
         <file>resources/darkButtonPushed.png</file>
+        <file>resources/click.opus</file>
+        <file>resources/over.opus</file>
     </qresource>
 </RCC>
