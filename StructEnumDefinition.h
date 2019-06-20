@@ -102,7 +102,7 @@ enum ActionTypeCopyList : uint8_t
     AddingItem=0x02,
     //Item action, to inform the stat of one entry
     PreOperation=0x03,
-    Transfer=0x04,
+    Transfer=0x04,//need send PreOperation before
     PostOperation=0x05,
     CustomOperation=0x06 /// \note this need be used after preoperation and before postoperation
 };

@@ -6,7 +6,11 @@
 #include <QApplication>
 #include <QtPlugin>
 #include "../Variable.h"
+#ifndef ULTRACOPIER_LITTLE_RANDOM
 #include "../plugins/CopyEngine/Ultracopier-Spec/CopyEngineFactory.h"
+#else
+#include "../plugins/CopyEngine/Random/CopyEngineFactory.h"
+#endif
 #include "../plugins/Themes/Oxygen2/ThemesFactory.h"
 #include "OptionsEngineLittle.h"
 #include "../FacilityEngine.h"
@@ -119,11 +123,10 @@ void connectInterfaceAndSync()
     failed|=!QObject::connect(interface,&Themes::resume,                     engine,&CopyEngine::resetSpeedDetectedInterface);
     failed|=!QObject::connect(interface,&Themes::urlDropped,                 engine,&CopyEngine::urlDropped,Qt::QueuedConnection);*/
     failed|=!QObject::connect(interface,&Themes::cancel,                     engine,&CopyEngine::cancel,Qt::QueuedConnection);
-    failed|=!QObject::connect(engine,&CopyEngine::newActionOnList,           engine,&CopyEngine::newActionOnList,	Qt::QueuedConnection);
 
+    failed|=!QObject::connect(engine,&CopyEngine::newActionOnList,           interface,&Themes::getActionOnList,	Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::pushFileProgression,		interface,&Themes::setFileProgression,		Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::pushGeneralProgression,	interface,&Themes::setGeneralProgression,		Qt::QueuedConnection);
-    failed|=!QObject::connect(engine,&CopyEngine::pushGeneralProgression,    engine,&CopyEngine::pushGeneralProgression,		Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::errorToRetry,              interface,&Themes::errorToRetry,		Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::doneTime,                 interface,&Themes::doneTime,		Qt::QueuedConnection);
 

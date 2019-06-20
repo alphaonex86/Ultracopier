@@ -1825,7 +1825,7 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
             }
             sub_index++;
         }
-        unsigned int max=0;
+        unsigned int max=1;
         sub_index=0;
         while(sub_index<remainingTimeLogarithmicValue.size() && sub_index<6)
         {
