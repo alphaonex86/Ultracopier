@@ -6,8 +6,8 @@
 #include <QApplication>
 #include <QtPlugin>
 #include "../Variable.h"
-#include "../plugins/CopyEngine/Ultracopier/CopyEngineFactory.h"
-#include "../plugins/Themes/Oxygen/ThemesFactory.h"
+#include "../plugins/CopyEngine/Ultracopier-Spec/CopyEngineFactory.h"
+#include "../plugins/Themes/Oxygen2/ThemesFactory.h"
 #include "OptionsEngineLittle.h"
 #include "../FacilityEngine.h"
 #include <iostream>
@@ -125,6 +125,7 @@ void connectInterfaceAndSync()
     failed|=!QObject::connect(engine,&CopyEngine::pushGeneralProgression,	interface,&Themes::setGeneralProgression,		Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::pushGeneralProgression,    engine,&CopyEngine::pushGeneralProgression,		Qt::QueuedConnection);
     failed|=!QObject::connect(engine,&CopyEngine::errorToRetry,              interface,&Themes::errorToRetry,		Qt::QueuedConnection);
+    failed|=!QObject::connect(engine,&CopyEngine::doneTime,                 interface,&Themes::doneTime,		Qt::QueuedConnection);
 
     if(failed)
     {

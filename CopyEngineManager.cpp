@@ -10,7 +10,7 @@
 #include "cpp11addition.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-#include "plugins/CopyEngine/Ultracopier/CopyEngineFactory.h"
+#include "plugins/CopyEngine/Ultracopier-Spec/CopyEngineFactory.h"
 #endif
 
 CopyEngineManager::CopyEngineManager(OptionDialog *optionDialog)

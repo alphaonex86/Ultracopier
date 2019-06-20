@@ -13,7 +13,7 @@
 #include <dirent.h>
 
 //defore the next define
-#include "Variable.h"
+#include "../Variable.h"
 
 #ifdef Q_OS_UNIX
     #include <utime.h>
@@ -35,7 +35,7 @@
 #endif
 
 #include "../TransferThread.h"
-#include "Environment.h"
+#include "../Environment.h"
 #include "../DriveManagement.h"
 #include "../StructEnumDefinition_CopyEngine.h"
 

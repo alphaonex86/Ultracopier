@@ -23,8 +23,7 @@ HEADERS         = \
     $$PWD/DarkButton.h \
     $$PWD/radialMap/map.h \
     $$PWD/radialMap/widget.h \
-    $$PWD/radialMap/radialMap.h \
-    $$PWD/radialMap/sincos.h
+    $$PWD/radialMap/radialMap.h
 
 SOURCES += \
     $$PWD/chartarea.cpp \

@@ -12,13 +12,13 @@
 #include "LanguagesManager.h"
 
 #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-#include "plugins/Themes/Oxygen/ThemesFactory.h"
+#include "plugins/Themes/Oxygen2/ThemesFactory.h"
 #endif
 
 #ifdef ULTRACOPIER_MODE_SUPERCOPIER
 #define ULTRACOPIER_DEFAULT_STYLE "Supercopier"
 #else
-#define ULTRACOPIER_DEFAULT_STYLE "Oxygen"
+#define ULTRACOPIER_DEFAULT_STYLE "Oxygen2"
 #endif
 
 /// \warning All plugin remain loaded

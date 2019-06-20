@@ -23,91 +23,102 @@ OTHER_FILES += $$PWD/../resources/resources-windows.rc
 
 SOURCES += \
     ../little/main-little.cpp \
-    ../plugins/CopyEngine/Ultracopier/AvancedQFile.cpp \
-    ../plugins/CopyEngine/Ultracopier/TransferThread.cpp \
-    ../plugins/CopyEngine/Ultracopier/WriteThread.cpp \
-    ../plugins/CopyEngine/Ultracopier/ReadThread.cpp \
-    ../plugins/CopyEngine/Ultracopier/RenamingRules.cpp \
-    ../plugins/CopyEngine/Ultracopier/ScanFileOrFolder.cpp \
-    ../plugins/CopyEngine/Ultracopier/CopyEngine-collision-and-error.cpp \
-    ../plugins/CopyEngine/Ultracopier/CopyEngine.cpp \
-    ../plugins/CopyEngine/Ultracopier/CopyEngineFactory.cpp \
-    ../plugins/CopyEngine/Ultracopier/DebugDialog.cpp \
-    ../plugins/CopyEngine/Ultracopier/DiskSpace.cpp \
-    ../plugins/CopyEngine/Ultracopier/DriveManagement.cpp \
-    ../plugins/CopyEngine/Ultracopier/FileErrorDialog.cpp \
-    ../plugins/CopyEngine/Ultracopier/FileExistsDialog.cpp \
-    ../plugins/CopyEngine/Ultracopier/FileIsSameDialog.cpp \
-    ../plugins/CopyEngine/Ultracopier/FilterRules.cpp \
-    ../plugins/CopyEngine/Ultracopier/Filters.cpp \
-    ../plugins/CopyEngine/Ultracopier/FolderExistsDialog.cpp \
-    ../plugins/CopyEngine/Ultracopier/ListThread_InodeAction.cpp \
-    ../plugins/CopyEngine/Ultracopier/ListThread.cpp \
-    ../plugins/CopyEngine/Ultracopier/MkPath.cpp \
-    ../plugins/Themes/Oxygen/ThemesFactory.cpp \
-    ../plugins/Themes/Oxygen/TransferModel.cpp \
-    ../plugins/Themes/Oxygen/interface.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/CopyEngine-collision-and-error.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/CopyEngine.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/DebugDialog.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/DiskSpace.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/DriveManagement.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/FilterRules.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/Filters.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThread_InodeAction.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/MkPath.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/RenamingRules.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp \
+    ../plugins/Themes/Oxygen2/ThemesFactory.cpp \
+    ../plugins/Themes/Oxygen2/interface.cpp \
+    ../plugins/Themes/Oxygen2/TransferModel.cpp \
+    ../plugins/Themes/Oxygen2/chartarea.cpp \
+    ../plugins/Themes/Oxygen2/fileTree.cpp \
+    ../plugins/Themes/Oxygen2/ProgressBarDark.cpp \
+    ../plugins/Themes/Oxygen2/DarkButton.cpp \
+    ../plugins/Themes/Oxygen2/radialMap/labels.cpp \
+    ../plugins/Themes/Oxygen2/radialMap/map.cpp \
+    ../plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \
+    ../plugins/Themes/Oxygen2/radialMap/widget.cpp \
     ../little/OptionsEngineLittle.cpp \
     ../FacilityEngine.cpp \
     ../cpp11addition.cpp \
     ../cpp11additionstringtointcpp.cpp
 
 RESOURCES += \
-    ../plugins/CopyEngine/Ultracopier/copyEngineResources.qrc \
-    ../plugins/Themes/Oxygen/interfaceResources_unix.qrc \
-    ../plugins/Themes/Oxygen/interfaceResources_windows.qrc \
-    ../plugins/Themes/Oxygen/interfaceResources.qrc
+    ../plugins/CopyEngine/Ultracopier-Spec/copyEngineResources.qrc \
+    ../plugins/Themes/Oxygen2/interfaceResources_unix.qrc \
+    ../plugins/Themes/Oxygen2/interfaceResources_windows.qrc \
+    ../plugins/Themes/Oxygen2/interfaceResources.qrc
 
 FORMS += \
-    ../plugins/CopyEngine/Ultracopier/RenamingRules.ui \
-    ../plugins/CopyEngine/Ultracopier/copyEngineOptions.ui \
-    ../plugins/CopyEngine/Ultracopier/debugDialog.ui \
-    ../plugins/CopyEngine/Ultracopier/DiskSpace.ui \
-    ../plugins/CopyEngine/Ultracopier/fileErrorDialog.ui \
-    ../plugins/CopyEngine/Ultracopier/fileExistsDialog.ui \
-    ../plugins/CopyEngine/Ultracopier/fileIsSameDialog.ui \
-    ../plugins/CopyEngine/Ultracopier/FilterRules.ui \
-    ../plugins/CopyEngine/Ultracopier/Filters.ui \
-    ../plugins/CopyEngine/Ultracopier/folderExistsDialog.ui \
-    ../plugins/Themes/Oxygen/interface.ui \
-    ../plugins/Themes/Oxygen/themesOptions.ui \
-    ../plugins/Themes/Oxygen/options.ui
+    ../plugins/CopyEngine/Ultracopier-Spec/copyEngineOptions.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/debugDialog.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/DiskSpace.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/fileErrorDialog.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/fileExistsDialog.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/FilterRules.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/Filters.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/folderExistsDialog.ui \
+    ../plugins/CopyEngine/Ultracopier-Spec/RenamingRules.ui \
+    ../plugins/Themes/Oxygen2/themesOptions.ui \
+    ../plugins/Themes/Oxygen2/options.ui \
+    ../plugins/Themes/Oxygen2/interface.ui
 
 DISTFILES +=
 
 HEADERS += \
-    ../plugins/CopyEngine/Ultracopier/AvancedQFile.h \
-    ../plugins/CopyEngine/Ultracopier/CompilerInfo.h \
-    ../plugins/CopyEngine/Ultracopier/TransferThread.h \
-    ../plugins/CopyEngine/Ultracopier/Variable.h \
-    ../plugins/CopyEngine/Ultracopier/WriteThread.h \
-    ../plugins/CopyEngine/Ultracopier/ReadThread.h \
-    ../plugins/CopyEngine/Ultracopier/RenamingRules.h \
-    ../plugins/CopyEngine/Ultracopier/ScanFileOrFolder.h \
-    ../plugins/CopyEngine/Ultracopier/StructEnumDefinition_CopyEngine.h \
-    ../plugins/CopyEngine/Ultracopier/StructEnumDefinition.h \
-    ../plugins/CopyEngine/Ultracopier/CopyEngine.h \
-    ../plugins/CopyEngine/Ultracopier/CopyEngineFactory.h \
-    ../plugins/CopyEngine/Ultracopier/DebugDialog.h \
-    ../plugins/CopyEngine/Ultracopier/DebugEngineMacro.h \
-    ../plugins/CopyEngine/Ultracopier/DiskSpace.h \
-    ../plugins/CopyEngine/Ultracopier/DriveManagement.h \
-    ../plugins/CopyEngine/Ultracopier/Environment.h \
-    ../plugins/CopyEngine/Ultracopier/FileErrorDialog.h \
-    ../plugins/CopyEngine/Ultracopier/FileExistsDialog.h \
-    ../plugins/CopyEngine/Ultracopier/FileIsSameDialog.h \
-    ../plugins/CopyEngine/Ultracopier/FilterRules.h \
-    ../plugins/CopyEngine/Ultracopier/Filters.h \
-    ../plugins/CopyEngine/Ultracopier/FolderExistsDialog.h \
-    ../plugins/CopyEngine/Ultracopier/ListThread.h \
-    ../plugins/CopyEngine/Ultracopier/MkPath.h \
-    ../plugins/Themes/Oxygen/ThemesFactory.h \
-    ../plugins/Themes/Oxygen/TransferModel.h \
-    ../plugins/Themes/Oxygen/Variable.h \
-    ../plugins/Themes/Oxygen/StructEnumDefinition.h \
-    ../plugins/Themes/Oxygen/interface.h \
-    ../plugins/Themes/Oxygen/DebugEngineMacro.h \
-    ../plugins/Themes/Oxygen/Environment.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/CompilerInfo.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/CopyEngine.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/DebugDialog.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/DebugEngineMacro.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/DiskSpace.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/DriveManagement.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/Environment.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/CopyEngineFactory.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/FileErrorDialog.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/FileExistsDialog.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/FileIsSameDialog.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/FilterRules.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/Filters.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/FolderExistsDialog.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/MkPath.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThread.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/RenamingRules.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition_CopyEngine.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/Variable.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h \
+    ../plugins/Themes/Oxygen2/DebugEngineMacro.h \
+    ../plugins/Themes/Oxygen2/Environment.h \
+    ../plugins/Themes/Oxygen2/ThemesFactory.h \
+    ../plugins/Themes/Oxygen2/interface.h \
+    ../plugins/Themes/Oxygen2/Variable.h \
+    ../plugins/Themes/Oxygen2/TransferModel.h \
+    ../plugins/Themes/Oxygen2/StructEnumDefinition.h \
+    ../plugins/Themes/Oxygen2/chartarea.h \
+    ../plugins/Themes/Oxygen2/fileTree.h \
+    ../plugins/Themes/Oxygen2/ProgressBarDark.h \
+    ../plugins/Themes/Oxygen2/DarkButton.h \
+    ../plugins/Themes/Oxygen2/radialMap/map.h \
+    ../plugins/Themes/Oxygen2/radialMap/widget.h \
+    ../plugins/Themes/Oxygen2/radialMap/radialMap.h \
     ../little/OptionsEngineLittle.h \
     ../FacilityEngine.h \
     ../Variable.h \

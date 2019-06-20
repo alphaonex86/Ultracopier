@@ -231,6 +231,7 @@ std::string FacilityEngine::simplifiedRemainingTime(const uint32_t &seconds) con
 /// \brief Return ultimate url, empty is not found or already ultimate
 std::string FacilityEngine::ultimateUrl() const
 {
+    #ifndef ULTRACOPIER_LITTLE
     if(ProductKey::productKey->isUltimate())
         return std::string();
     else
@@ -241,11 +242,18 @@ std::string FacilityEngine::ultimateUrl() const
         return std::string();
         #endif
     }
+    #else
+    return std::string();
+    #endif
 }
 
 bool FacilityEngine::isUltimate() const
 {
+    #ifndef ULTRACOPIER_LITTLE
     return ProductKey::productKey->isUltimate();
+    #else
+    return true;
+    #endif
 }
 
 /// \brief Return the software name

@@ -29,9 +29,9 @@
 #include "radialMap.h" // defines
 
 #include "../fileTree.h"
-#define SINCOS_H_IMPLEMENTATION (1)
-#include "sincos.h"
 #include "widget.h"
+#include <cmath>
+#include <qmath.h>
 
 RadialMap::Map::Map()
         : m_signature(nullptr)
@@ -356,7 +356,8 @@ void RadialMap::Map::paint(bool antialias)
 
                     if (i == 2)
                         radius += 5;
-                    sincos(ra, &sinra, &cosra);
+                    sinra = qSin(ra);
+                    cosra = qCos(ra);
                     pos.rx() = cpos.x() + static_cast<int>(cosra * radius);
                     pos.ry() = cpos.y() - static_cast<int>(sinra * radius);
                     pts.setPoint(i, pos);

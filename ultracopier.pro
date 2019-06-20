@@ -90,8 +90,7 @@ HEADERS += \
     $$PWD/plugins/Themes/Oxygen2/DarkButton.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widget.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/sincos.h
+    $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h
 
 SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngine-collision-and-error.cpp \
