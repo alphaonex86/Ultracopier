@@ -406,6 +406,8 @@ void OptionDialog::loadOption()
     newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
     newOptionValue("Ultracopier",	"remainingTimeAlgorithm",   OptionEngine::optionEngine->getOptionValue("Ultracopier","remainingTimeAlgorithm"));
     newOptionValue("Ultracopier",	"portable",                 OptionEngine::optionEngine->getOptionValue("Ultracopier","portable"));
+    newOptionValue("Ultracopier",	"soundFile",                OptionEngine::optionEngine->getOptionValue("Ultracopier","soundFile"));
+    newOptionValue("Ultracopier",	"soundWhenFinish",          OptionEngine::optionEngine->getOptionValue("Ultracopier","soundWhenFinish"));
     newOptionValue("Language",	"Language",                     OptionEngine::optionEngine->getOptionValue("Language","Language"));
     newOptionValue("Language",	"Language_force",               OptionEngine::optionEngine->getOptionValue("Language","Language_force"));
     #ifndef ULTRACOPIER_VERSION_PORTABLE
@@ -589,6 +591,10 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
             ui->DisplayOSWarning->setChecked(stringtobool(value));
         else if(name=="checkTheUpdate")
             ui->checkTheUpdate->setChecked(stringtobool(value));
+        else if(name=="soundFile")
+            ui->soundFile->setText(QString::fromStdString(value));
+        else if(name=="soundWhenFinish")
+            ui->soundWhenFinish->setChecked(stringtobool(value));
         else if(name=="remainingTimeAlgorithm")
         {
             bool ok;
@@ -1035,4 +1041,22 @@ void OptionDialog::on_portable_toggled(bool)
     }
     else
         QFile::remove(settingsFilePath+"/Ultracopier.conf");
+}
+
+void OptionDialog::on_soundFile_editingFinished()
+{
+    if(allPluginsIsLoaded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","soundFile",ui->soundFile->text().toStdString());
+    }
+}
+
+void OptionDialog::on_soundWhenFinish_toggled(bool checked)
+{
+    if(allPluginsIsLoaded)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","on_soundWhenFinish_toggled",std::to_string(checked));
+    }
 }

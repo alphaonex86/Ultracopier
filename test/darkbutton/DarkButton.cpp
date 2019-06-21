@@ -7,6 +7,7 @@ DarkButton::DarkButton(QWidget *parent) :
     setMinimumHeight(36);
     setMaximumHeight(36);
     setStyleSheet("border:none;color:#afb;");
+    over=false;
 }
 
 void DarkButton::paintEvent(QPaintEvent * event)
@@ -15,6 +16,7 @@ void DarkButton::paintEvent(QPaintEvent * event)
     {
         QPixmap background(":/darkButton.png");
         QPixmap backgroundPushed(":/darkButtonPushed.png");
+        QPixmap over(":/darkButtonOver.png");
         if(height()==background.height())
         {
             backgroundLeft=background.copy(0,0,10,36);
@@ -23,6 +25,9 @@ void DarkButton::paintEvent(QPaintEvent * event)
             backgroundPushedLeft=backgroundPushed.copy(0,0,10,36);
             backgroundPushedMiddle=backgroundPushed.copy(10,0,46,36);
             backgroundPushedRight=backgroundPushed.copy(56,0,10,36);
+            overLeft=over.copy(0,0,10,36);
+            overMiddle=over.copy(10,0,46,36);
+            overRight=over.copy(56,0,10,36);
         }
         else
         {
@@ -32,6 +37,9 @@ void DarkButton::paintEvent(QPaintEvent * event)
             backgroundPushedLeft=backgroundPushed.copy(0,0,10,36).scaledToHeight(height(),Qt::SmoothTransformation);
             backgroundPushedMiddle=backgroundPushed.copy(10,0,46,36).scaledToHeight(height(),Qt::SmoothTransformation);
             backgroundPushedRight=backgroundPushed.copy(56,0,10,36).scaledToHeight(height(),Qt::SmoothTransformation);
+            overLeft=over.copy(0,0,10,36).scaledToHeight(height(),Qt::SmoothTransformation);
+            overMiddle=over.copy(10,0,46,36).scaledToHeight(height(),Qt::SmoothTransformation);
+            overRight=over.copy(56,0,10,36).scaledToHeight(height(),Qt::SmoothTransformation);
         }
     }
     QPainter paint;
@@ -51,5 +59,25 @@ void DarkButton::paintEvent(QPaintEvent * event)
                          width()-backgroundLeft.width()-backgroundRight.width(),    backgroundLeft.height(),backgroundMiddle);
         paint.drawPixmap(width()-backgroundRight.width(),0,                         backgroundRight.width(),    backgroundRight.height(),backgroundRight);
     }
+    if(over)
+    {
+        paint.drawPixmap(0,0,overLeft.width(),    overLeft.height(),    overLeft);
+        paint.drawPixmap(overLeft.width(),        0,
+                         width()-overLeft.width()-overRight.width(),    overLeft.height(),overMiddle);
+        paint.drawPixmap(width()-overRight.width(),0,                         overRight.width(),    overRight.height(),overRight);
+    }
     QPushButton::paintEvent(event);
+}
+
+void DarkButton::enterEvent(QEvent *e)
+{
+    over=true;
+    QWidget::enterEvent(e);
+    update();
+}
+void DarkButton::leaveEvent(QEvent *e)
+{
+    over=false;
+    QWidget::leaveEvent(e);
+    update();
 }

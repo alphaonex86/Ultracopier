@@ -11,6 +11,5 @@
         <file>Languages/en/translation.qm</file>
         <file>options.png</file>
         <file>warning.png</file>
-        <file>finish.opus</file>
     </qresource>
 </RCC>

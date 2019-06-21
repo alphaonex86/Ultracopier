@@ -4,6 +4,24 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 #QMAKE_CXXFLAGS+="-Wall -Wextra -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-unused-macros -Wno-newline-eof -Wno-exit-time-destructors -Wno-global-constructors -Wno-gnu-zero-variadic-macro-arguments -Wno-documentation -Wno-shadow -Wno-missing-prototypes -Wno-padded -Wno-covered-switch-default -Wno-old-style-cast -Wno-documentation-unknown-command -Wno-switch-enum -Wno-undefined-reinterpret-cast -Wno-unreachable-code-break -Wno-sign-conversion -Wno-float-conversion"
 QMAKE_CXXFLAGS+="-Wall -Wextra"
 
+wasm: DEFINES += NOAUDIO
+#DEFINES += NOAUDIO
+!contains(DEFINES, NOAUDIO) {
+QT += multimedia
+linux:LIBS += -logg -lopus
+macx:LIBS += -logg -lopus
+win32:LIBS += -logg -lopus
+SOURCES += \
+    $$PWD/../opusfile/info.c \
+    $$PWD/../opusfile/internal.c \
+    $$PWD/../opusfile/opusfile.c \
+    $$PWD/../opusfile/stream.c \
+
+HEADERS  += \
+    $$PWD/../opusfile/internal.h \
+    $$PWD/../opusfile/opusfile.h \
+}
+
 TEMPLATE = app
 QT += network xml widgets
 TRANSLATIONS += $$PWD/../plugins/Languages/ar/translation.ts \

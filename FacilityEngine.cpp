@@ -13,6 +13,10 @@
     #endif
     #include <windows.h>
 #endif
+#ifndef NOAUDIO
+#include "opusfile/opusfile.h"
+#include <QAudioOutput>
+#endif
 
 FacilityEngine FacilityEngine::facilityEngine;
 
@@ -263,5 +267,92 @@ std::string FacilityEngine::softwareName() const
     return "Supercopier";
     #else
     return "Ultracopier";
+    #endif
+}
+
+/// \brief return audio if created from opus file, nullptr if failed
+void *FacilityEngine::prepareOpusAudio(const std::string &file,QBuffer &buffer) const
+{
+    #ifndef NOAUDIO
+    if(file.empty())
+        return nullptr;
+
+    QAudioOutput* audio;
+    QAudioFormat format;
+    format.setSampleRate(48000);
+    format.setChannelCount(2);
+    format.setSampleSize(16);
+    format.setCodec("audio/pcm");
+    format.setByteOrder(QAudioFormat::LittleEndian);
+    format.setSampleType(QAudioFormat::SignedInt);
+
+    QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
+    if (!info.isFormatSupported(format)) {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"raw audio format not supported by backend, cannot play audio.");
+        return nullptr;
+    }
+    audio = new QAudioOutput(format);
+    buffer.open(QBuffer::ReadWrite);
+
+    int           ret;
+    std::string path=file;
+    if(path.find("/") == std::string::npos && path.find("\\") == std::string::npos)
+    {
+        QString appPath=QCoreApplication::applicationDirPath();
+        if(appPath.endsWith("/") || appPath.endsWith("\\"))
+            path=appPath.toStdString()+path;
+        else
+            path=appPath.toStdString()+"/"+path;
+    }
+    OggOpusFile  *of=op_open_file(file.c_str(),&ret);
+    if(of==NULL) {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Failed to open file"+file+", "+std::to_string(ret));
+        return nullptr;
+    }
+    ogg_int64_t pcm_offset;
+    ogg_int64_t nsamples;
+    nsamples=0;
+    pcm_offset=op_pcm_tell(of);
+    if(pcm_offset!=0)
+        fprintf(stderr,"Non-zero starting PCM offset: %li\n",(long)pcm_offset);
+    for(;;) {
+        ogg_int64_t   next_pcm_offset;
+        opus_int16    pcm[120*48*2];
+        unsigned char out[120*48*2*2];
+        int           si;
+        ret=op_read_stereo(of,pcm,sizeof(pcm)/sizeof(*pcm));
+        if(ret==OP_HOLE) {
+            fprintf(stderr,"\nHole detected! Corrupt file segment?\n");
+            continue;
+        }
+        else if(ret<0) {
+            fprintf(stderr,"\nError decoding '%s': %i\n","file.opus",ret);
+            ret=EXIT_FAILURE;
+            break;
+        }
+        next_pcm_offset=op_pcm_tell(of);
+        pcm_offset=next_pcm_offset;
+        if(ret<=0) {
+            ret=EXIT_SUCCESS;
+            break;
+        }
+        for(si=0;si<2*ret;si++) { /// Ensure the data is little-endian before writing it out.
+            out[2*si+0]=(unsigned char)(pcm[si]&0xFF);
+            out[2*si+1]=(unsigned char)(pcm[si]>>8&0xFF);
+        }
+        buffer.write(reinterpret_cast<char *>(out),sizeof(*out)*4*ret);
+        nsamples+=ret;
+    }
+    if(ret==EXIT_SUCCESS)
+        fprintf(stderr,"\nDone: played ");
+    op_free(of);
+
+    buffer.seek(0);
+    return audio;
+    // audio->start(&buffer); -> do out of this function
+    #else
+    (void)file;
+    (void)buffer;
+    return nullptr;
     #endif
 }

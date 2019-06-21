@@ -32,7 +32,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     parallelizeIfSmallerThan(1024),
     moveTheWholeFolder(false),
     deletePartiallyTransferredFiles(true),
-    inodeThreads(1),
+    inodeThreads(16),
     renameTheOriginalDestination(false),
     checkDiskSpace(true),
     followTheStrictOrder(true),

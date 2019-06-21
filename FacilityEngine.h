@@ -47,6 +47,8 @@ public:
     static std::string separator();
     /// \brief return if is ultimate
     bool isUltimate() const;
+    /// \brief return audio if created from opus file, nullptr if failed
+    void/*casted to #ifndef QAudioOutput*/* prepareOpusAudio(const std::string &file,QBuffer &buffer) const;
 
     static FacilityEngine facilityEngine;
 private:

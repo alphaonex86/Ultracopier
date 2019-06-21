@@ -35,6 +35,13 @@ Core::~Core()
         delete copyList.at(index).engine;
         index++;
     }
+    #ifndef NOAUDIO
+    if(audio!=nullptr)
+    {
+        audio->stop();
+        delete audio;
+    }
+    #endif
 }
 
 void Core::newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources)
@@ -536,6 +543,25 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             copyList[index].orderId.clear();
             resetSpeedDetected(index);
         }
+        #ifndef NOAUDIO
+        if(action==Ultracopier::Idle)
+            if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","soundWhenFinish")))
+            {
+                const std::string newSoundFile=OptionEngine::optionEngine->getOptionValue("Ultracopier","soundFile");
+                if(newSoundFile!=soundFile)
+                {
+                    if(audio!=nullptr)
+                        delete audio;
+                    audio=static_cast<QAudioOutput *>(FacilityEngine::facilityEngine.prepareOpusAudio(newSoundFile,buffer));
+                    soundFile=newSoundFile;
+                }
+                if(audio!=nullptr)
+                {
+                    buffer.seek(0);
+                    audio->start(&buffer);
+                }
+            }
+        #endif
     }
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to locate the interface sender");

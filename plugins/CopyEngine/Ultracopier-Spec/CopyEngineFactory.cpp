@@ -194,7 +194,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("renameTheOriginalDestination","false"));
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
-        KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(1)));
+        KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(16)));
         options->addOptionGroup(KeysList);
 
         optionsEngine=options;

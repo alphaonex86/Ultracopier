@@ -290,6 +290,30 @@
              </property>
             </widget>
            </item>
+           <item row="10" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QCheckBox" name="soundWhenFinish"/>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="soundFile">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="placeholderText">
+                <string>default: finish.opus</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>Sound when finish</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
@@ -877,12 +901,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>313</x>
-     <y>13</y>
+     <x>301</x>
+     <y>7</y>
     </hint>
     <hint type="destinationlabel">
-     <x>533</x>
-     <y>44</y>
+     <x>252</x>
+     <y>11</y>
     </hint>
    </hints>
   </connection>
@@ -893,12 +917,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>583</x>
-     <y>20</y>
+     <x>301</x>
+     <y>7</y>
     </hint>
     <hint type="destinationlabel">
-     <x>584</x>
-     <y>40</y>
+     <x>300</x>
+     <y>11</y>
     </hint>
    </hints>
   </connection>
@@ -909,12 +933,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>345</x>
-     <y>21</y>
+     <x>301</x>
+     <y>7</y>
     </hint>
     <hint type="destinationlabel">
-     <x>582</x>
-     <y>105</y>
+     <x>301</x>
+     <y>14</y>
     </hint>
    </hints>
   </connection>
@@ -925,12 +949,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>348</x>
-     <y>25</y>
+     <x>301</x>
+     <y>7</y>
     </hint>
     <hint type="destinationlabel">
-     <x>557</x>
-     <y>156</y>
+     <x>301</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
@@ -941,12 +965,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>537</x>
-     <y>105</y>
+     <x>301</x>
+     <y>14</y>
     </hint>
     <hint type="destinationlabel">
-     <x>533</x>
-     <y>131</y>
+     <x>301</x>
+     <y>16</y>
     </hint>
    </hints>
   </connection>
@@ -957,12 +981,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>501</x>
-     <y>156</y>
+     <x>301</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
-     <x>501</x>
-     <y>182</y>
+     <x>301</x>
+     <y>22</y>
     </hint>
    </hints>
   </connection>
@@ -973,12 +997,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>269</x>
-     <y>15</y>
+     <x>301</x>
+     <y>7</y>
     </hint>
     <hint type="destinationlabel">
-     <x>456</x>
-     <y>207</y>
+     <x>301</x>
+     <y>27</y>
     </hint>
    </hints>
   </connection>
@@ -989,12 +1013,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>12</y>
+     <x>301</x>
+     <y>7</y>
     </hint>
     <hint type="destinationlabel">
-     <x>304</x>
-     <y>69</y>
+     <x>301</x>
+     <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>soundWhenFinish</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>soundFile</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>632</x>
+     <y>346</y>
     </hint>
    </hints>
   </connection>

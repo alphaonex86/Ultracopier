@@ -14,6 +14,10 @@
 #include <QTime>
 #include <QFile>
 #include <QUrl>
+#ifndef NOAUDIO
+#include <QBuffer>
+#include <QAudioOutput>
+#endif
 
 #include "Environment.h"
 #include "StructEnumDefinition.h"
@@ -128,6 +132,12 @@ class Core : public QObject
 
         LogThread log;///< To save the log like mkpath, rmpath, error, copy, ...
         uint64_t realByteTransfered;
+
+        #ifndef NOAUDIO
+        QBuffer buffer;
+        QAudioOutput *audio;
+        std::string soundFile;
+        #endif
 
         static uint8_t fileCatNumber(uint64_t size);
     signals:
