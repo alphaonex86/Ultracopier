@@ -195,12 +195,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="61"/>
+        <location filename="../../FileErrorDialog.cpp" line="65"/>
         <source>Error on folder</source>
         <translation>Error en la carpeta</translation>
     </message>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="64"/>
+        <location filename="../../FileErrorDialog.cpp" line="68"/>
         <source>Folder name</source>
         <translation>Nombre de la carpeta</translation>
     </message>
@@ -208,22 +208,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="153"/>
+        <location filename="../../FileExistsDialog.cpp" line="161"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - copia</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="160"/>
+        <location filename="../../FileExistsDialog.cpp" line="168"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - copia (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="247"/>
+        <location filename="../../FileExistsDialog.cpp" line="255"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="247"/>
+        <location filename="../../FileExistsDialog.cpp" line="255"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -231,22 +231,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="124"/>
+        <location filename="../../FileIsSameDialog.cpp" line="128"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - copia</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="131"/>
+        <location filename="../../FileIsSameDialog.cpp" line="135"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - copia (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="201"/>
+        <location filename="../../FileIsSameDialog.cpp" line="205"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="201"/>
+        <location filename="../../FileIsSameDialog.cpp" line="205"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>
@@ -393,27 +393,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="71"/>
+        <location filename="../../FolderExistsDialog.cpp" line="75"/>
         <source>Folder already exists</source>
         <translation>Carpeta ya existe</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="152"/>
+        <location filename="../../FolderExistsDialog.cpp" line="160"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - copia</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="161"/>
+        <location filename="../../FolderExistsDialog.cpp" line="169"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - copia (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="224"/>
+        <location filename="../../FolderExistsDialog.cpp" line="232"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="224"/>
+        <location filename="../../FolderExistsDialog.cpp" line="232"/>
         <source>Try rename with using special characters</source>
         <translation>Trate de cambiar el nombre con el uso de caracteres especiales</translation>
     </message>

@@ -139,72 +139,72 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../../Core.cpp" line="46"/>
-        <location filename="../../../Core.cpp" line="117"/>
-        <location filename="../../../Core.cpp" line="143"/>
-        <location filename="../../../Core.cpp" line="158"/>
-        <location filename="../../../Core.cpp" line="178"/>
-        <location filename="../../../Core.cpp" line="192"/>
-        <location filename="../../../Core.cpp" line="201"/>
-        <location filename="../../../Core.cpp" line="210"/>
-        <location filename="../../../Core.cpp" line="217"/>
-        <location filename="../../../Core.cpp" line="231"/>
-        <location filename="../../../Core.cpp" line="265"/>
-        <location filename="../../../Core.cpp" line="402"/>
-        <location filename="../../../Core.cpp" line="407"/>
+        <location filename="../../../Core.cpp" line="56"/>
+        <location filename="../../../Core.cpp" line="127"/>
+        <location filename="../../../Core.cpp" line="153"/>
+        <location filename="../../../Core.cpp" line="168"/>
+        <location filename="../../../Core.cpp" line="188"/>
+        <location filename="../../../Core.cpp" line="202"/>
+        <location filename="../../../Core.cpp" line="211"/>
+        <location filename="../../../Core.cpp" line="220"/>
+        <location filename="../../../Core.cpp" line="227"/>
+        <location filename="../../../Core.cpp" line="241"/>
+        <location filename="../../../Core.cpp" line="275"/>
+        <location filename="../../../Core.cpp" line="412"/>
+        <location filename="../../../Core.cpp" line="417"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="46"/>
-        <location filename="../../../Core.cpp" line="143"/>
-        <location filename="../../../Core.cpp" line="158"/>
-        <location filename="../../../Core.cpp" line="178"/>
-        <location filename="../../../Core.cpp" line="192"/>
-        <location filename="../../../Core.cpp" line="201"/>
-        <location filename="../../../Core.cpp" line="210"/>
-        <location filename="../../../Core.cpp" line="231"/>
+        <location filename="../../../Core.cpp" line="56"/>
+        <location filename="../../../Core.cpp" line="153"/>
+        <location filename="../../../Core.cpp" line="168"/>
+        <location filename="../../../Core.cpp" line="188"/>
+        <location filename="../../../Core.cpp" line="202"/>
+        <location filename="../../../Core.cpp" line="211"/>
+        <location filename="../../../Core.cpp" line="220"/>
+        <location filename="../../../Core.cpp" line="241"/>
         <source>Unable to get a copy engine instance</source>
         <translation>Nem lehetséges másoló motor példány észlelése</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="94"/>
+        <location filename="../../../Core.cpp" line="104"/>
         <source>Group window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="94"/>
+        <location filename="../../../Core.cpp" line="104"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="117"/>
+        <location filename="../../../Core.cpp" line="127"/>
         <source>Unable to get a engine instance</source>
         <translation>Motor állapot lekérése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="217"/>
+        <location filename="../../../Core.cpp" line="227"/>
         <source>The argument for the mode is not valid</source>
         <translation>A mód argumentuma nem érvényes</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1154"/>
+        <location filename="../../../Core.cpp" line="1183"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Szeretnél másolni? Ha nem, akkor átmozgatva lesz.</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="265"/>
-        <location filename="../../../Core.cpp" line="402"/>
+        <location filename="../../../Core.cpp" line="275"/>
+        <location filename="../../../Core.cpp" line="412"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>Kezelőfelület betöltése nem lehetséges, másolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="407"/>
+        <location filename="../../../Core.cpp" line="417"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>Másoló motor betöltése nem lehetséges, másolás megszakítva</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1153"/>
+        <location filename="../../../Core.cpp" line="1182"/>
         <source>Transfer mode</source>
         <translation>Átviteli mód</translation>
     </message>
@@ -212,262 +212,262 @@
 <context>
     <name>FacilityEngine</name>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="38"/>
+        <location filename="../../../FacilityEngine.cpp" line="43"/>
         <source>s</source>
         <translation>mp</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="39"/>
+        <location filename="../../../FacilityEngine.cpp" line="44"/>
         <source>Too big</source>
         <translation>Túl nagy</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="40"/>
+        <location filename="../../../FacilityEngine.cpp" line="45"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="41"/>
+        <location filename="../../../FacilityEngine.cpp" line="46"/>
         <source>KB</source>
         <translation>KB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="42"/>
+        <location filename="../../../FacilityEngine.cpp" line="47"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="43"/>
+        <location filename="../../../FacilityEngine.cpp" line="48"/>
         <source>GB</source>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="44"/>
+        <location filename="../../../FacilityEngine.cpp" line="49"/>
         <source>TB</source>
         <translation>TB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="45"/>
+        <location filename="../../../FacilityEngine.cpp" line="50"/>
         <source>PB</source>
         <translation>PB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="46"/>
+        <location filename="../../../FacilityEngine.cpp" line="51"/>
         <source>EB</source>
         <translation>EB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="47"/>
+        <location filename="../../../FacilityEngine.cpp" line="52"/>
         <source>ZB</source>
         <translation>ZB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="48"/>
+        <location filename="../../../FacilityEngine.cpp" line="53"/>
         <source>YB</source>
         <translation>YB</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="49"/>
+        <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>Less than %10 seconds</source>
         <translation>Kevesebb mint %10 másodperc</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="50"/>
+        <location filename="../../../FacilityEngine.cpp" line="55"/>
         <source>About %10 seconds remaining</source>
         <translation>Körülbelül %10 másodperc van hátra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="51"/>
+        <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>About %1 minutes remaining</source>
         <translation>Körülbelül %1 perc van hátra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="52"/>
+        <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>About %1 hours remaining</source>
         <translation>Körülbelül %1 óra van hátra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="54"/>
+        <location filename="../../../FacilityEngine.cpp" line="59"/>
         <source>Copy engine</source>
         <translation>Másoló motor</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="56"/>
+        <location filename="../../../FacilityEngine.cpp" line="61"/>
         <source>Copy</source>
         <extracomment>a copy</extracomment>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="58"/>
+        <location filename="../../../FacilityEngine.cpp" line="63"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
         <translation>Átvitel</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="60"/>
+        <location filename="../../../FacilityEngine.cpp" line="65"/>
         <source>Move</source>
         <extracomment>a move</extracomment>
         <translation>Mozgatás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="61"/>
+        <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Start</source>
         <translation>Indítás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="62"/>
+        <location filename="../../../FacilityEngine.cpp" line="67"/>
         <source>Pause</source>
         <translation>Szünet</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="63"/>
+        <location filename="../../../FacilityEngine.cpp" line="68"/>
         <source>Resume</source>
         <translation>Folytatás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="64"/>
-        <location filename="../../../FacilityEngine.cpp" line="79"/>
+        <location filename="../../../FacilityEngine.cpp" line="69"/>
+        <location filename="../../../FacilityEngine.cpp" line="84"/>
         <source>Skip</source>
         <translation>Kihagyás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="65"/>
+        <location filename="../../../FacilityEngine.cpp" line="70"/>
         <source>Unlimited</source>
         <translation>Korlátlan</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="66"/>
+        <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Source</source>
         <translation>Forrás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="67"/>
+        <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Size</source>
         <translation>Méret</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="68"/>
+        <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Destination</source>
         <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="69"/>
+        <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Quit</source>
         <translation>Kilépés</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="70"/>
+        <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Target</source>
         <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="71"/>
-        <location filename="../../../FacilityEngine.cpp" line="75"/>
+        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Time remaining:</source>
         <translation>Hátralévő idő:</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="72"/>
+        <location filename="../../../FacilityEngine.cpp" line="77"/>
         <source>Listing</source>
         <translation>Listázás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="73"/>
+        <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Copying</source>
         <translation>Másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="74"/>
+        <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>Listing and copying</source>
         <translation>Listázás és másolás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="76"/>
+        <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Remaining:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="78"/>
+        <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Ask</source>
         <translation>Rákérdez</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="80"/>
+        <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Overwrite</source>
         <translation>Felülírás</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="81"/>
+        <location filename="../../../FacilityEngine.cpp" line="86"/>
         <source>Overwrite if newer</source>
         <translation>Felülírás, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="82"/>
+        <location filename="../../../FacilityEngine.cpp" line="87"/>
         <source>Overwrite if the last modification dates are different</source>
         <translation>Felülír, ha az legutóbbi módosítás dátumai különböznek</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="83"/>
+        <location filename="../../../FacilityEngine.cpp" line="88"/>
         <source>Rename</source>
         <translation>Átnevezés</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="84"/>
+        <location filename="../../../FacilityEngine.cpp" line="89"/>
         <source>Put to the end of the list</source>
         <translation>Helyezze a lista végére</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="85"/>
+        <location filename="../../../FacilityEngine.cpp" line="90"/>
         <source>Select source directory</source>
         <translation>Válassz forrásmappát</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="86"/>
+        <location filename="../../../FacilityEngine.cpp" line="91"/>
         <source>Select destination directory</source>
         <translation>Válassz célmappát</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="87"/>
+        <location filename="../../../FacilityEngine.cpp" line="92"/>
         <source>Internal error</source>
         <translation>Belső hiba</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="88"/>
+        <location filename="../../../FacilityEngine.cpp" line="93"/>
         <source>Select one or more files to open</source>
         <translation>Válassz egy vagy több fájlt megnyitásra</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="89"/>
+        <location filename="../../../FacilityEngine.cpp" line="94"/>
         <source>All files</source>
         <translation>Minden fájl</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="90"/>
+        <location filename="../../../FacilityEngine.cpp" line="95"/>
         <source>Save transfer list</source>
         <translation>Átviteli lista mentése</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="91"/>
+        <location filename="../../../FacilityEngine.cpp" line="96"/>
         <source>Open transfer list</source>
         <translation>Átviteli lista megnyitása</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="92"/>
+        <location filename="../../../FacilityEngine.cpp" line="97"/>
         <source>Transfer list</source>
         <translation>Átviteli lista</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="93"/>
+        <location filename="../../../FacilityEngine.cpp" line="98"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="94"/>
+        <location filename="../../../FacilityEngine.cpp" line="99"/>
         <source>Not supported on this platform</source>
         <translation>Ezen a platformon nem támogatott</translation>
     </message>
     <message>
-        <location filename="../../../FacilityEngine.cpp" line="95"/>
+        <location filename="../../../FacilityEngine.cpp" line="100"/>
         <source>Completed in %1</source>
         <translation>Befejezve %1 alatt</translation>
     </message>
@@ -683,35 +683,35 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="75"/>
-        <location filename="../../../OptionDialog.ui" line="335"/>
+        <location filename="../../../OptionDialog.ui" line="359"/>
         <location filename="../../../OptionDialog.cpp" line="283"/>
         <source>Copy engine</source>
         <translation>Másoló motor</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="80"/>
-        <location filename="../../../OptionDialog.ui" line="348"/>
+        <location filename="../../../OptionDialog.ui" line="372"/>
         <location filename="../../../OptionDialog.cpp" line="284"/>
         <source>Listener</source>
         <translation>Figyelő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="85"/>
-        <location filename="../../../OptionDialog.ui" line="353"/>
+        <location filename="../../../OptionDialog.ui" line="377"/>
         <location filename="../../../OptionDialog.cpp" line="285"/>
         <source>Plugin loader</source>
         <translation>Beépüő betöltő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="93"/>
-        <location filename="../../../OptionDialog.ui" line="358"/>
+        <location filename="../../../OptionDialog.ui" line="382"/>
         <location filename="../../../OptionDialog.cpp" line="286"/>
         <source>Session loader</source>
         <translation>Folyamat betöltő</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="101"/>
-        <location filename="../../../OptionDialog.ui" line="363"/>
+        <location filename="../../../OptionDialog.ui" line="387"/>
         <source>Themes</source>
         <translation>Témák</translation>
     </message>
@@ -736,12 +736,12 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="741"/>
+        <location filename="../../../OptionDialog.ui" line="765"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
         <translation>Írás közvetlenül a fájlba, ha új bejegyzést kap (akár 50%-kos teljesítménycsökkenést is okozhat)</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="325"/>
+        <location filename="../../../OptionDialog.ui" line="349"/>
         <source>Name</source>
         <translation>Név</translation>
     </message>
@@ -791,104 +791,114 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="330"/>
+        <location filename="../../../OptionDialog.ui" line="304"/>
+        <source>default: finish.opus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="313"/>
+        <source>Sound when finish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OptionDialog.ui" line="354"/>
         <source>Version</source>
         <translation>Verzió</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="340"/>
+        <location filename="../../../OptionDialog.ui" line="364"/>
         <source>Language</source>
         <translation>Nyelv</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="371"/>
+        <location filename="../../../OptionDialog.ui" line="395"/>
         <source>Plugin</source>
         <translation>Beépülő</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="390"/>
+        <location filename="../../../OptionDialog.ui" line="414"/>
         <source>Add</source>
         <translation>Hozzáadás</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="403"/>
+        <location filename="../../../OptionDialog.ui" line="427"/>
         <source>Remove</source>
         <translation>Eltávolítás</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="413"/>
+        <location filename="../../../OptionDialog.ui" line="437"/>
         <source>Information</source>
         <translation>Információ</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="440"/>
+        <location filename="../../../OptionDialog.ui" line="464"/>
         <source>Copy engine by order of preference:</source>
         <translation>Másoló motor tulajdonság szerint:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="511"/>
+        <location filename="../../../OptionDialog.ui" line="535"/>
         <source>Client connected</source>
         <translation>Kliens kapcsolódva</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="567"/>
+        <location filename="../../../OptionDialog.ui" line="591"/>
         <source>Themes:</source>
         <translation>Témák:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="629"/>
+        <location filename="../../../OptionDialog.ui" line="653"/>
         <source>Unable to load the themes plugin</source>
         <translation>A témák beépülő betöltése nem lehetséges</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="679"/>
+        <location filename="../../../OptionDialog.ui" line="703"/>
         <source>No option for this plugin</source>
         <translation>Nincs beállítás ehhez a beépülőhöz</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="710"/>
+        <location filename="../../../OptionDialog.ui" line="734"/>
         <source>Write the log file into:</source>
         <translation>Napló írása ide:</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="729"/>
+        <location filename="../../../OptionDialog.ui" line="753"/>
         <source>Browse</source>
         <translation>Tallózás</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="744"/>
+        <location filename="../../../OptionDialog.ui" line="768"/>
         <source>Synchronized log</source>
         <translation>Szinkronizált napló</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="754"/>
+        <location filename="../../../OptionDialog.ui" line="778"/>
         <source>Write the transfers</source>
         <translation>Átvitelek írása</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="784"/>
+        <location filename="../../../OptionDialog.ui" line="808"/>
         <source>Write the errors</source>
         <translation>Hibák írása</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="814"/>
+        <location filename="../../../OptionDialog.ui" line="838"/>
         <source>Write the folder operations</source>
         <translation>Mappa műveletek írása</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="761"/>
+        <location filename="../../../OptionDialog.ui" line="785"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
         <translation>A változók: %time%, %source%, %size%, %destination%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="791"/>
+        <location filename="../../../OptionDialog.ui" line="815"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
         <translation>A változók: %time%, %path%, %size%, %mtime%, %error%</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.ui" line="824"/>
+        <location filename="../../../OptionDialog.ui" line="848"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
         <translation>A változók: %path%, %operation%</translation>
@@ -962,7 +972,7 @@ Ez a verzió a következő verzióként került lefordításra: %1.</translation
         <translation>A változók: %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="945"/>
+        <location filename="../../../OptionDialog.cpp" line="951"/>
         <source>Save logs as: </source>
         <translation>Napló mentése mint:</translation>
     </message>

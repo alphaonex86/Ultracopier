@@ -14,7 +14,7 @@ HEADERS         = \
     $$PWD/StructEnumDefinition.h \
     $$PWD/StructEnumDefinition_CopyEngine.h \
     $$PWD/DebugEngineMacro.h \
-    $$PWD/Variable.h \
+    $$PWD/CopyEngineUltracopierVariable.h \
     $$PWD/TransferThread.h \
     $$PWD/ReadThread.h \
     $$PWD/WriteThread.h \

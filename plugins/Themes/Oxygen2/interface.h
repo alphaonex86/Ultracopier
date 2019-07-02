@@ -25,10 +25,11 @@
 #include "chartarea.h"
 #include "ProgressBarDark.h"
 #include "DarkButton.h"
+#include "VerticalLabel.h"
 
 #include "ui_interface.h"
 #include "ui_themesOptions.h"
-#include "Environment.h"
+#include "Oxygen2Environment.h"
 #include "TransferModel.h"
 
 namespace Ui {
@@ -232,6 +233,7 @@ private:
     DarkButton * pauseButton;
     DarkButton * skipButton;
     DarkButton * cancelButton;
+    VerticalLabel *verticalLabel;
     void updatePause();
     QIcon dynaIcon(int percent,std::string text="") const;
     void updateSysTrayIcon();

@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "StructEnumDefinition.h"
-#include "Environment.h"
+#include "Oxygen2Environment.h"
 
 #include "../../../interface/FacilityInterface.h"
 #include "fileTree.h"

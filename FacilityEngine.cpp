@@ -16,6 +16,7 @@
 #ifndef NOAUDIO
 #include "opusfile/opusfile.h"
 #include <QAudioOutput>
+#include <QCoreApplication>
 #endif
 
 FacilityEngine FacilityEngine::facilityEngine;

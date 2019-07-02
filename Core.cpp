@@ -22,6 +22,9 @@ Core::Core(CopyEngineManager *copyEngineList)
     connect(ThemesManager::themesManager,			&ThemesManager::theThemeNeedBeUnloaded,				this,	&Core::unloadInterface);
     connect(ThemesManager::themesManager,			&ThemesManager::theThemeIsReloaded,				this,	&Core::loadInterface, Qt::QueuedConnection);
     connect(&forUpateInformation,	&QTimer::timeout,						this,	&Core::periodicSynchronization);
+    #ifndef NOAUDIO
+    audio=nullptr;
+    #endif
 }
 
 Core::~Core()

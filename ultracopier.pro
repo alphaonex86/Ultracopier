@@ -67,8 +67,8 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition_CopyEngine.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/Variable.h \
-    $$PWD/plugins/Listener/catchcopy-v0002/Variable.h \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
+    $$PWD/plugins/Listener/catchcopy-v0002/Listenercatchcopy-v0002Variable.h \
     $$PWD/plugins/Listener/catchcopy-v0002/StructEnumDefinition.h \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.h \
     $$PWD/plugins/Listener/catchcopy-v0002/Environment.h \
@@ -78,16 +78,17 @@ HEADERS += \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.h \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/VariablesCatchcopy.h \
     $$PWD/plugins/Themes/Oxygen2/DebugEngineMacro.h \
-    $$PWD/plugins/Themes/Oxygen2/Environment.h \
+    $$PWD/plugins/Themes/Oxygen2/Oxygen2Environment.h \
     $$PWD/plugins/Themes/Oxygen2/ThemesFactory.h \
     $$PWD/plugins/Themes/Oxygen2/interface.h \
-    $$PWD/plugins/Themes/Oxygen2/Variable.h \
+    $$PWD/plugins/Themes/Oxygen2/Oxygen2Variable.h \
     $$PWD/plugins/Themes/Oxygen2/TransferModel.h \
     $$PWD/plugins/Themes/Oxygen2/StructEnumDefinition.h \
     $$PWD/plugins/Themes/Oxygen2/chartarea.h \
     $$PWD/plugins/Themes/Oxygen2/fileTree.h \
     $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.h \
     $$PWD/plugins/Themes/Oxygen2/DarkButton.h \
+    $$PWD/plugins/Themes/Oxygen2/radialMap/VerticalLabel.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widget.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h
@@ -122,6 +123,7 @@ SOURCES += \
     $$PWD/plugins/Themes/Oxygen2/fileTree.cpp \
     $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.cpp \
     $$PWD/plugins/Themes/Oxygen2/DarkButton.cpp \
+    $$PWD/plugins/Themes/Oxygen2/VerticalLabel.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/labels.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \
@@ -143,6 +145,7 @@ win32 {
         $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.cpp
     FORMS += $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.ui
     LIBS += -lole32 -lshell32
+    QT += winextras
 }
 
 #temp

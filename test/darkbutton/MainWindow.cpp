@@ -31,5 +31,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::create()
 {
-    darkButton->setChecked(!darkButton->isChecked());
+    if(darkButton->isChecked())
+    {
+        darkButton->setEnabled(!darkButton->isEnabled());
+        darkButton->setChecked(false);
+    }
+    else
+        darkButton->setChecked(true);
 }

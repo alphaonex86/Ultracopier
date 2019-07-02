@@ -3,8 +3,8 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#ifndef VARIABLE_H
-#define VARIABLE_H
+#ifndef VARIABLEINTERFACEO2_H
+#define VARIABLEINTERFACEO2_H
 
 
 //Un-comment this next line to put ultracopier plugin in debug mode
@@ -12,7 +12,7 @@
 #define ULTRACOPIER_PLUGIN_DEBUG
 #endif
 
-#endif // VARIABLE_H
+#endif // VARIABLEINTERFACEO2_H
 
 
 

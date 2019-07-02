@@ -3,7 +3,7 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#include "Listenercatchcopy-v0002Variable.h"
+#include "Oxygen2Variable.h"
 /// \brief The global include
 #include "StructEnumDefinition.h"
 #include "DebugEngineMacro.h"

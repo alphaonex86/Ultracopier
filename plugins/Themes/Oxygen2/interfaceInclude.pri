@@ -9,8 +9,8 @@ HEADERS         = \
     $$PWD/ThemesFactory.h \
     $$PWD/StructEnumDefinition.h \
     $$PWD/DebugEngineMacro.h \
-    $$PWD/Environment.h \
-    $$PWD/Variable.h \
+    $$PWD/Oxygen2Environment.h \
+    $$PWD/Oxygen2Variable.h \
     $$PWD/../../../interface/PluginInterface_Themes.h \
     $$PWD/../../../interface/FacilityInterface.h \
     $$PWD/../../../interface/OptionInterface.h \
@@ -21,6 +21,7 @@ HEADERS         = \
     $$PWD/fileTree.h \
     $$PWD/ProgressBarDark.h \
     $$PWD/DarkButton.h \
+    $$PWD/VerticalLabel.h \
     $$PWD/radialMap/map.h \
     $$PWD/radialMap/widget.h \
     $$PWD/radialMap/radialMap.h
@@ -30,6 +31,7 @@ SOURCES += \
     $$PWD/fileTree.cpp \
     $$PWD/ProgressBarDark.cpp \
     $$PWD/DarkButton.cpp \
+    $$PWD/VerticalLabel.cpp \
     $$PWD/radialMap/labels.cpp \
     $$PWD/radialMap/map.cpp \
     $$PWD/radialMap/widgetEvents.cpp \

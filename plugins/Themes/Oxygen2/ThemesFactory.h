@@ -18,7 +18,7 @@
 #include "../../../interface/PluginInterface_Themes.h"
 #include "ui_themesOptions.h"
 #include "interface.h"
-#include "Environment.h"
+#include "Oxygen2Environment.h"
 
 namespace Ui {
     class themesOptions;

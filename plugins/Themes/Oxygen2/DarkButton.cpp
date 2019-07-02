@@ -8,6 +8,7 @@ DarkButton::DarkButton(QWidget *parent) :
     setMaximumHeight(36);
     setStyleSheet("border:none;color:#afb;");
     over=false;
+    enabled=true;
 }
 
 void DarkButton::paintEvent(QPaintEvent * event)
@@ -44,8 +45,17 @@ void DarkButton::paintEvent(QPaintEvent * event)
     }
     QPainter paint;
     paint.begin(this);
-
-    if(isDown())
+    if(enabled && !isEnabled())
+    {
+        setStyleSheet("border:none;color:#fab;");
+        enabled=false;
+    }
+    if(!enabled && isEnabled())
+    {
+        setStyleSheet("border:none;color:#afb;");
+        enabled=true;
+    }
+    if(isDown() && isEnabled())
     {
         paint.drawPixmap(0,0,backgroundPushedLeft.width(),    backgroundPushedLeft.height(),    backgroundPushedLeft);
         paint.drawPixmap(backgroundPushedLeft.width(),        0,
@@ -59,7 +69,7 @@ void DarkButton::paintEvent(QPaintEvent * event)
                          width()-backgroundLeft.width()-backgroundRight.width(),    backgroundLeft.height(),backgroundMiddle);
         paint.drawPixmap(width()-backgroundRight.width(),0,                         backgroundRight.width(),    backgroundRight.height(),backgroundRight);
     }
-    if(over)
+    if(over && isEnabled())
     {
         paint.drawPixmap(0,0,overLeft.width(),    overLeft.height(),    overLeft);
         paint.drawPixmap(overLeft.width(),        0,

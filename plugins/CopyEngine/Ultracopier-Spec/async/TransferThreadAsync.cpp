@@ -227,6 +227,16 @@ DWORD progressRoutine(
   LPVOID lpData
 )
 {
+    (void)TotalFileSize;
+    (void)TotalBytesTransferred;
+    (void)StreamSize;
+    (void)StreamBytesTransferred;
+    (void)dwStreamNumber;
+    (void)dwCallbackReason;
+    (void)hSourceFile;
+    (void)hDestinationFile;
+    (void)lpData;
+
     static_cast<TransferThreadAsync *>(lpData)->setProgression(TotalBytesTransferred.QuadPart);
     return PROGRESS_CONTINUE;
 }

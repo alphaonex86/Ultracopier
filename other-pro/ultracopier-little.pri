@@ -30,6 +30,7 @@ SOURCES += \
     ../plugins/Themes/Oxygen2/fileTree.cpp \
     ../plugins/Themes/Oxygen2/ProgressBarDark.cpp \
     ../plugins/Themes/Oxygen2/DarkButton.cpp \
+    ../plugins/Themes/Oxygen2/VerticalLabel.cpp \
     ../plugins/Themes/Oxygen2/radialMap/labels.cpp \
     ../plugins/Themes/Oxygen2/radialMap/map.cpp \
     ../plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \
@@ -53,16 +54,17 @@ DISTFILES +=
 
 HEADERS += \
     ../plugins/Themes/Oxygen2/DebugEngineMacro.h \
-    ../plugins/Themes/Oxygen2/Environment.h \
+    ../plugins/Themes/Oxygen2/Oxygen2Environment.h \
     ../plugins/Themes/Oxygen2/ThemesFactory.h \
     ../plugins/Themes/Oxygen2/interface.h \
-    ../plugins/Themes/Oxygen2/Variable.h \
+    ../plugins/Themes/Oxygen2/Oxygen2Variable.h \
     ../plugins/Themes/Oxygen2/TransferModel.h \
     ../plugins/Themes/Oxygen2/StructEnumDefinition.h \
     ../plugins/Themes/Oxygen2/chartarea.h \
     ../plugins/Themes/Oxygen2/fileTree.h \
     ../plugins/Themes/Oxygen2/ProgressBarDark.h \
     ../plugins/Themes/Oxygen2/DarkButton.h \
+    ../plugins/Themes/Oxygen2/VerticalLabel.h \
     ../plugins/Themes/Oxygen2/radialMap/map.h \
     ../plugins/Themes/Oxygen2/radialMap/widget.h \
     ../plugins/Themes/Oxygen2/radialMap/radialMap.h \

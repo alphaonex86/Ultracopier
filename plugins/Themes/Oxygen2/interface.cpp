@@ -16,6 +16,9 @@
 #include <windows.h>
 #endif
 
+#define ULTRACOPIERO2_MAXREMAININGTIMECOL 10
+#define ULTRACOPIERO2_MAXVALUESPEEDSTORED 5
+
 #include "interface.h"
 #include "ui_interface.h"
 #include "ThemesFactory.h"
@@ -179,7 +182,7 @@ Themes::Themes(const bool &alwaysOnTop,
     //remaining time
     {
         int index=0;
-        while(index<ULTRACOPIER_MAXREMAININGTIMECOL)
+        while(index<ULTRACOPIERO2_MAXREMAININGTIMECOL)
         {
             RemainingTimeLogarithmicColumn newEntry;
             remainingTimeLogarithmicValue.push_back(newEntry);
@@ -383,6 +386,10 @@ Themes::Themes(const bool &alwaysOnTop,
     winTaskbarProgress.show();
     #endif
 
+    verticalLabel=new VerticalLabel();
+    verticalLabel->setText(QString::fromStdString(facilityEngine->speedToString(50*1000*1000)));
+    ui->verticalLayoutVL->insertWidget(0,verticalLabel);
+
     if(darkUi)
     {
         ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");
@@ -392,6 +399,7 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->from_label->setStyleSheet("color:#aaa;");
         ui->current_file->setStyleSheet("color:#fff;");
         ui->from->setStyleSheet("color:#fff;");
+        verticalLabel->setColor(QColor(160,160,160));
 
         //ui->ad_ultimate->setStyleSheet("color:#fff;background-color:rgb(50, 50, 50);");
 
@@ -1798,8 +1806,8 @@ void Themes::resizeEvent(QResizeEvent*)
 
 void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList)
 {
-    if(remainingTimeLogarithmicValue.size()<ULTRACOPIER_MAXREMAININGTIMECOL)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" <ULTRACOPIER_MAXREMAININGTIMECOL");
+    if(remainingTimeLogarithmicValue.size()<ULTRACOPIERO2_MAXREMAININGTIMECOL)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"bug, remainingTimeLogarithmicValue.size() "+std::to_string(remainingTimeLogarithmicValue.size())+" <ULTRACOPIERO2_MAXREMAININGTIMECOL");
     else
     {
         unsigned int sub_index=0;
@@ -1818,7 +1826,7 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
                 if(timeUnit.second>0)
                 {
                     remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(static_cast<unsigned int>(timeUnit.first/timeUnit.second));
-                    if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIER_MAXVALUESPEEDSTORED)
+                    if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIERO2_MAXVALUESPEEDSTORED)
                         remainingTimeLogarithmicColumn.lastProgressionSpeed.erase(remainingTimeLogarithmicColumn.lastProgressionSpeed.begin());
 
                 }
@@ -1844,6 +1852,8 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
                 max=res;
             sub_index++;
         }
+        if(max>1)
+            verticalLabel->setText(QString::fromStdString(facilityEngine->speedToString(max)));
         sub_index=0;
         while(sub_index<remainingTimeLogarithmicValue.size() && sub_index<6)
         {

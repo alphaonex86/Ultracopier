@@ -70,7 +70,7 @@ void registerTheOptions()
     OptionEngine::optionEngine->addOptionGroup("Ultracopier",KeysList);
 
     KeysList.clear();
-    KeysList.push_back(std::pair<std::string, std::string>("List","Ultracopier"));
+    KeysList.push_back(std::pair<std::string, std::string>("List","Ultracopier-Spec"));
     OptionEngine::optionEngine->addOptionGroup("CopyEngine",KeysList);
 
     //load the GUI option

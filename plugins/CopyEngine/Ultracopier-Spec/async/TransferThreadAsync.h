@@ -13,7 +13,7 @@
 #include <dirent.h>
 
 //defore the next define
-#include "../Variable.h"
+#include "../CopyEngineUltracopier-SpecVariable.h"
 
 #ifdef Q_OS_UNIX
     #include <utime.h>

@@ -11,7 +11,7 @@ HEADERS         += \
     $$PWD/StructEnumDefinition.h \
     $$PWD/StructEnumDefinition_CopyEngine.h \
     $$PWD/DebugEngineMacro.h \
-    $$PWD/Variable.h \
+    $$PWD/CopyEngineUltracopier-SpecVariable.h \
     $$PWD/TransferThread.h \
     $$PWD/MkPath.h \
     $$PWD/ListThread.h \

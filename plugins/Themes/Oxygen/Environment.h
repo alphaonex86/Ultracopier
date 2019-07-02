@@ -3,7 +3,7 @@
 \author alpha_one_x86
 \licence GPL3, see the file COPYING */
 
-#include "Variable.h"
+#include "OxygenVariable.h"
 /// \brief The global include
 #include "StructEnumDefinition.h"
 #include "DebugEngineMacro.h"

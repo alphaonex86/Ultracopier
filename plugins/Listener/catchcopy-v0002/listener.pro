@@ -12,7 +12,7 @@ HEADERS         = \
     $$PWD/catchcopy-api-0002/ServerCatchcopy.h \
     $$PWD/catchcopy-api-0002/ExtraSocketCatchcopy.h \
     $$PWD/Environment.h \
-    $$PWD/Variable.h \
+    $$PWD/Listenercatchcopy-v0002Variable.h \
     $$PWD/DebugEngineMacro.h \
     $$PWD/StructEnumDefinition.h \
     $$PWD/../../../interface/PluginInterface_Listener.h \

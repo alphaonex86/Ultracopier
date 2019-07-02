@@ -16,6 +16,7 @@ private:
     QPixmap backgroundPushedLeft,backgroundPushedMiddle,backgroundPushedRight;
     QPixmap overLeft,overMiddle,overRight;
     bool over;
+    bool enabled;
 };
 
 #endif // PROGRESSBARDARK_H

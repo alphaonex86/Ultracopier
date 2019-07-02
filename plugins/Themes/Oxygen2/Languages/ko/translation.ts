@@ -44,7 +44,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+211"/>
+        <location line="+216"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
@@ -121,7 +121,7 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+393"/>
+        <location filename="../../interface.ui" line="+420"/>
         <source>From:</source>
         <translation type="unfinished">원본:</translation>
     </message>

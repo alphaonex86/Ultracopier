@@ -44,7 +44,7 @@
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="+211"/>
+        <location line="+216"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
@@ -121,7 +121,7 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+393"/>
+        <location filename="../../interface.ui" line="+420"/>
         <source>From:</source>
         <translation>Depuis:</translation>
     </message>

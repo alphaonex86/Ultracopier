@@ -1,3 +1,21 @@
+wasm: DEFINES += NOAUDIO
+#DEFINES += NOAUDIO
+!contains(DEFINES, NOAUDIO) {
+QT += multimedia
+linux:LIBS += -logg -lopus
+macx:LIBS += -logg -lopus
+win32:LIBS += -logg -lopus
+SOURCES += \
+    $$PWD/../opusfile/info.c \
+    $$PWD/../opusfile/internal.c \
+    $$PWD/../opusfile/opusfile.c \
+    $$PWD/../opusfile/stream.c \
+
+HEADERS  += \
+    $$PWD/../opusfile/internal.h \
+    $$PWD/../opusfile/opusfile.h \
+}
+
 include(ultracopier-little.pri)
 
 SOURCES += \
