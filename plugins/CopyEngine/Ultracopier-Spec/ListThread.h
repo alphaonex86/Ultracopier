@@ -226,7 +226,7 @@ private:
     std::unordered_set<TransferThreadAsync *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;
     std::vector<std::pair<uint64_t,uint32_t> > timeToTransfer;
-    unsigned int        putAtBottom;
+    //unsigned int        putAtBottom;//why here? more correct into CopyEngine(), then translated to CopyEngine
     std::vector<Filters_rules>		include,exclude;
     Ultracopier::CopyMode		mode;
     bool				forcedMode;

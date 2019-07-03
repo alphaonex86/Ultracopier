@@ -36,7 +36,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     renameTheOriginalDestination(false),
     checkDiskSpace(true),
     followTheStrictOrder(true),
-    putAtBottom(0),
     mode(Ultracopier::CopyMode::Copy),
     forcedMode(false),
     actionToDoListTransfer_count(0),
@@ -2045,31 +2044,13 @@ void ListThread::run()
     exec();
 }
 
-void ListThread::getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType)
+void ListThread::getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThreadAsync *thread,
+                                    const ErrorType &errorType)
 {
-    if(actionToDoListTransfer.empty())
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"can't try put at bottom if empty");
-        this->alwaysDoThisActionForFileExists=FileExists_NotSet;
-        putAtBottom=0;
-        emit haveNeedPutAtBottom(false,fileInfo,errorString,thread,errorType);
-        return;
-    }
-    bool needPutAtBottom=(putAtBottom<(quint32)actionToDoListTransfer.size());
-    if(!needPutAtBottom)
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Reset put at bottom");
-        this->alwaysDoThisActionForFileExists=FileExists_NotSet;
-        putAtBottom=0;
-    }
-    else
-    {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Put at bottom for later try");
-        thread->putAtBottom();
-        putAtBottom++;
-        return;
-    }
-    emit haveNeedPutAtBottom(needPutAtBottom,fileInfo,errorString,thread,errorType);
+    (void)fileInfo;
+    (void)errorString;
+    (void)errorType;
+    thread->putAtBottom();
 }
 
 /// \to create transfer thread

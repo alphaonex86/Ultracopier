@@ -437,6 +437,10 @@ void TransferThreadAsync::skip()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] can skip in this state: "+std::to_string(transfer_stat));
         return;
     }
+    //can be reset
+    transfer_stat=TransferStat_Idle;
+    //emit to manager with List Thread
+    emit postOperationStopped();
 }
 
 //return info about the copied size

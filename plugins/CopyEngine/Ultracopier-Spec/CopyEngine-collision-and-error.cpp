@@ -260,7 +260,7 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
         case FileError_PutToEndOfTheList:
             errorPutAtEnd++;
             emit getNeedPutAtBottom(fileInfo,errorString,thread,errorType);
-            if(errorPutAtEnd>listThread->actionToDoListInode.size())
+            if(errorPutAtEnd>listThread->actionToDoListInode.size() || listThread->actionToDoListInode.size()==0)
             {
                 alwaysDoThisActionForFileError=FileError_NotSet;
                 errorPutAtEnd=0;

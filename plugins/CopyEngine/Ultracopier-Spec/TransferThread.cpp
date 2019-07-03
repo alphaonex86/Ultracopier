@@ -313,6 +313,7 @@ bool TransferThread::destinationExists()
 
 /** \example
  * /dir1/dir2/file -> file
+ * /file -> file
  * /dir1/dir2/ -> dir2
  * /dir1/ -> dir1
  * / -> root */
@@ -326,7 +327,7 @@ std::string TransferThread::resolvedName(const std::string &inode)
     stringreplaceAll(inode,"\\","/");
     #endif
     const std::string::size_type &lastPos=inode.rfind('/');
-    if(lastPos == std::string::npos || lastPos==0)
+    if(lastPos == std::string::npos || (lastPos==0 && inode.size()==1))
         return "root";
     if((lastPos+1)!=inode.size())
         return inode.substr(lastPos+1);

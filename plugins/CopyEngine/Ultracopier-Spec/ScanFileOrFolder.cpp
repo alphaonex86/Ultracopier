@@ -218,6 +218,7 @@ void ScanFileOrFolder::run()
     #ifdef Q_OS_UNIX
     destination=resolvDestination(destination);
     #endif
+    stringreplaceAll(destination,"\\","/");
     if(stopIt)
     {
         stopped=true;
@@ -238,6 +239,7 @@ void ScanFileOrFolder::run()
             return;
         }
         std::string source=sources.at(sourceIndex);
+        stringreplaceAll(source,"\\","/");
         struct stat p_statbuf;
         #ifdef Q_OS_UNIX
         if(lstat(source.c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
