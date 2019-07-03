@@ -219,11 +219,7 @@ QIcon ThemesFactory::getIcon(const std::string &fileName) const
         if(!tempIcon.isNull())
             return tempIcon;
     }
-    #ifdef SUPERCOPIER
-    return QIcon(":/Themes/Supercopier/resources/"+QString::fromStdString(fileName));
-    #else
-    return QIcon(":/Themes/Oxygen/resources/"+QString::fromStdString(fileName));
-    #endif
+    return QIcon(":/Themes/Oxygen2/resources/"+QString::fromStdString(fileName));
 }
 
 void ThemesFactory::resetOptions()

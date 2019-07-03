@@ -33,7 +33,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, std::string fileInfo, std::str
         #else
         uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
         #endif
-        const uint64_t size=*reinterpret_cast<int64_t*>(&p_statbuf.st_size);
+        const uint64_t size=p_statbuf.st_size;
         ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
         if(ui->label_content_file_name->text().isEmpty())
         {

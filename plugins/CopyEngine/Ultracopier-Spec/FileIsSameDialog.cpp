@@ -50,7 +50,7 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
-        const uint64_t size=*reinterpret_cast<int64_t*>(&source_statbuf.st_size);
+        const uint64_t size=source_statbuf.st_size;
         ui->label_content_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         ui->label_content_size->setVisible(true);
         if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS<mdate)

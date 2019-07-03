@@ -16,10 +16,10 @@ void ProgressBarDark::paintEvent(QPaintEvent *)
 {
     if(backgroundLeft.isNull() || backgroundLeft.height()!=height())
     {
-        QPixmap background(":/Themes/Oxygen/resources/progressBarout.png");
+        QPixmap background(":/Themes/Oxygen2/resources/progressBarout.png");
         if(background.isNull())
             abort();
-        QPixmap bar(":/Themes/Oxygen/resources/progressBarin.png");
+        QPixmap bar(":/Themes/Oxygen2/resources/progressBarin.png");
         if(bar.isNull())
             abort();
         if(height()==background.height())

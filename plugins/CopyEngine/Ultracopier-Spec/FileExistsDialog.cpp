@@ -57,7 +57,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
-        const uint64_t size=*reinterpret_cast<int64_t*>(&source_statbuf.st_size);
+        const uint64_t size=source_statbuf.st_size;
         ui->label_source_modified->setVisible(true);
         ui->label_content_source_size->setVisible(true);
         ui->label_content_source_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
@@ -89,7 +89,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
         #endif
-        const uint64_t size=*reinterpret_cast<int64_t*>(&destination_statbuf.st_size);
+        const uint64_t size=destination_statbuf.st_size;
         ui->label_destination_modified->setVisible(true);
         ui->label_content_destination_size->setVisible(true);
         ui->label_content_destination_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));

@@ -16,8 +16,14 @@ void DarkButton::paintEvent(QPaintEvent * event)
     if(backgroundLeft.isNull() || backgroundLeft.height()!=height())
     {
         QPixmap background(":/darkButton.png");
+        if(background.isNull())
+            abort();
         QPixmap backgroundPushed(":/darkButtonPushed.png");
+        if(backgroundPushed.isNull())
+            abort();
         QPixmap over(":/darkButtonOver.png");
+        if(over.isNull())
+            abort();
         if(height()==background.height())
         {
             backgroundLeft=background.copy(0,0,10,36);

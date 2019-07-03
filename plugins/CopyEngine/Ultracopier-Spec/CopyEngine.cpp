@@ -49,6 +49,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     forcedMode(false),
     checkDiskSpace(false),
     osBufferLimit(0),
+    errorPutAtEnd(0),
     putAtBottom(0)
 {
     listThread=new ListThread(facilityEngine);

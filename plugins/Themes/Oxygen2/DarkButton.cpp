@@ -15,9 +15,15 @@ void DarkButton::paintEvent(QPaintEvent * event)
 {
     if(backgroundLeft.isNull() || backgroundLeft.height()!=height())
     {
-        QPixmap background(":/Themes/Oxygen/resources/darkButton.png");
-        QPixmap backgroundPushed(":/Themes/Oxygen/resources/darkButtonPushed.png");
-        QPixmap over(":/Themes/Oxygen/resources/darkButtonOver.png");
+        QPixmap background(":/Themes/Oxygen2/resources/darkButton.png");
+        if(background.isNull())
+            abort();
+        QPixmap backgroundPushed(":/Themes/Oxygen2/resources/darkButtonPushed.png");
+        if(backgroundPushed.isNull())
+            abort();
+        QPixmap over(":/Themes/Oxygen2/resources/darkButtonOver.png");
+        if(over.isNull())
+            abort();
         if(height()==background.height())
         {
             backgroundLeft=background.copy(0,0,10,36);

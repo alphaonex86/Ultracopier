@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/CopyEngine/Ultracopier">
+    <qresource prefix="/CopyEngine/Ultracopier-Spec">
         <file>resources/add.png</file>
         <file>resources/edit.png</file>
         <file>resources/remove.png</file>

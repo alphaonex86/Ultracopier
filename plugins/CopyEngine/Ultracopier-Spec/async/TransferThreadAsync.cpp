@@ -296,7 +296,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     readError=false;
     writeError=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
-    //commented to debug: if(copy(source.c_str(),destination.c_str())<0)
+    if(copy(source.c_str(),destination.c_str())<0)
 #endif
     {
         #ifdef Q_OS_WIN32

@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/Themes/Oxygen">
+    <qresource prefix="/Themes/Oxygen2">
         <file>resources/add.png</file>
         <file>resources/cancel.png</file>
         <file>resources/main.png</file>

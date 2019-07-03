@@ -258,7 +258,13 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
             thread->retryAfterError();
         return;
         case FileError_PutToEndOfTheList:
+            errorPutAtEnd++;
             emit getNeedPutAtBottom(fileInfo,errorString,thread,errorType);
+            if(errorPutAtEnd>listThread->actionToDoListInode.size())
+            {
+                alwaysDoThisActionForFileError=FileError_NotSet;
+                errorPutAtEnd=0;
+            }
         return;
         case FileError_Cancel:
         return;
@@ -332,6 +338,7 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
                     thread->retryAfterError();
                 break;
                 case FileError_PutToEndOfTheList:
+                    errorPutAtEnd++;
                     thread->putAtBottom();
                 break;
                 default:
