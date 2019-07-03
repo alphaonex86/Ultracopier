@@ -25,7 +25,7 @@ class CopyEngineFactory : public PluginInterface_CopyEngineFactory
 {
     Q_OBJECT
     #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE_DIRECT
-    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.0.0.0" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID "first-world.info.ultracopier.PluginInterface.CopyEngineFactory/2.0.0.0" FILE "plugin.json")
     Q_INTERFACES(PluginInterface_CopyEngineFactory)
     #endif
 public:
@@ -48,6 +48,8 @@ public:
     std::vector<std::string> supportedProtocolsForTheDestination() const override;
     /// \brief to get the options of the copy engine
     QWidget * options() override;
+    /// \brief to get if have pause
+    bool havePause() override;
 public slots:
     void resetOptions() override;
     void newLanguageLoaded() override;

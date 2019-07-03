@@ -45,6 +45,8 @@ void connectEngine();
 void connectInterfaceAndSync();
 void periodicSynchronization();
 
+bool havePause=false;
+
 /// \brief Define the main() for the point entry
 int main(int argc, char *argv[])
 {
@@ -68,6 +70,7 @@ int main(int argc, char *argv[])
 
     interface=static_cast<Themes *>(themesFactory.getInstance());
     engine=static_cast<CopyEngine *>(copyEngineFactory.getInstance());
+    havePause=copyEngineFactory.havePause();
 
     connectEngine();
     connectInterfaceAndSync();
@@ -137,6 +140,7 @@ void connectInterfaceAndSync()
     }
     interface->setSupportSpeedLimitation(engine->supportSpeedLimitation());
     interface->setCopyType(Ultracopier::CopyType::FileAndFolder);
+    interface->havePause(havePause);
     interface->setTransferListOperation(Ultracopier::TransferListOperation::TransferListOperation_None);
     interface->actionInProgess(Ultracopier::EngineActionInProgress::Idle);
     //interface->isInPause(currentCopyInstance.isPaused);

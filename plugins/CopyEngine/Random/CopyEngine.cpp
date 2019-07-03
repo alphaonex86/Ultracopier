@@ -85,15 +85,15 @@ void CopyEngine::timerSlot()
 
     {
         std::vector<std::pair<uint64_t,uint32_t> > progressionList;
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(100,         1+         rand()%2));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(1000,        10+        rand()%5));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(10000,       100+       rand()%25));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(100000,      1000+      rand()%200));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(1000000,     10000+     rand()%2000));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(10000000,    80000+    rand()%20000));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(100000000,   700000+   rand()%200000));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(1000000000,  6000000+  rand()%2000000));
-        progressionList.push_back(std::pair<uint64_t,uint32_t>(10000000000, 50000000+ rand()%2000000));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(100,         2));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(1000,        2));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(10000,       2+       rand()%2));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(100000,      5+      rand()%3));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(1000000,     15+     rand()%3));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(10000000,    50+    rand()%10));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(100000000,   800+   rand()%100));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(1000000000,  6000+  rand()%500));
+        progressionList.push_back(std::pair<uint64_t,uint32_t>(10000000000, 50000+ rand()%1000));
         emit doneTime(progressionList);
     }
 

@@ -47,7 +47,7 @@ class PluginInterface_Themes : public QWidget
         virtual void setGeneralProgression(const uint64_t &current,const uint64_t &total) = 0;
         /// \brief show the file progression
         virtual void setFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList) = 0;
-        /// to get by file speed
+        /// to get by file speed, size and ms
         virtual void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList) = 0;
     public:
         /// \brief get the widget for the copy engine

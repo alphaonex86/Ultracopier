@@ -96,7 +96,7 @@ public:
     /** \brief set if the order is external (like file manager copy)
      * to notify the interface, which can hide add folder/filer button */
     void haveExternalOrder();
-    /// to get by file speed
+    /// to get by file speed, size and ms
     void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList);
     /// \brief set if is in pause
     void isInPause(const bool &);

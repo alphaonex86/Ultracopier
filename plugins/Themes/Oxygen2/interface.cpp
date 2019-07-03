@@ -1789,7 +1789,7 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
             {
                 if(timeUnit.second>0)
                 {
-                    remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(static_cast<unsigned int>(timeUnit.first/timeUnit.second));
+                    remainingTimeLogarithmicColumn.lastProgressionSpeed.push_back(static_cast<uint64_t>(timeUnit.first/timeUnit.second)*1000);
                     if(remainingTimeLogarithmicColumn.lastProgressionSpeed.size()>ULTRACOPIERO2_MAXVALUESPEEDSTORED)
                         remainingTimeLogarithmicColumn.lastProgressionSpeed.erase(remainingTimeLogarithmicColumn.lastProgressionSpeed.begin());
 
@@ -1863,12 +1863,16 @@ void Themes::doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList
     }
 }
 
+/* return 0 to 5 */
 uint8_t Themes::fileCatNumber(uint64_t size)
 {
     //all is in base 10 to understand more easily
     //drop the big value
-    if(size>64*1000*1000)
-        size=64*1000*1000;
+    if(size>100*1000*1000)
+        size=100*1000*1000;
     size=size/100;//to group all the too small file into the value 0
-    return round(log10(size)*6/8);
+    const double rlog=round(log10(size));
+    if(rlog>5)
+        return 5;
+    return rlog;
 }

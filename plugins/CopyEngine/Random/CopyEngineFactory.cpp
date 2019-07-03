@@ -67,6 +67,12 @@ QWidget * CopyEngineFactory::options()
     return nullptr;
 }
 
+/// \brief to get if have pause
+bool CopyEngineFactory::havePause()
+{
+    return false;
+}
+
 void CopyEngineFactory::newLanguageLoaded()
 {
 }
