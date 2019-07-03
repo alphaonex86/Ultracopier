@@ -66,6 +66,8 @@ public:
     std::vector<std::string> supportedProtocolsForTheDestination() const;
     /// \brief to get the options of the copy engine
     QWidget * options();
+    /// \brief to get if have pause
+    bool havePause();
 
 private:
     Ui::copyEngineOptions *ui;

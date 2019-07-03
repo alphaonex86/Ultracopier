@@ -65,6 +65,8 @@ class PluginInterface_Themes : public QWidget
         virtual void haveExternalOrder() = 0;
         /// \brief set if is in pause
         virtual void isInPause(const bool &isInPause) = 0;
+        /// \brief set if is in pause
+        virtual void havePause(const bool &havePause) = 0;
     // signal to implement
     signals:
         //set the transfer list
@@ -113,7 +115,7 @@ class PluginInterface_ThemesFactory : public QObject
 };
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/1.2.4.0");
+Q_DECLARE_INTERFACE(PluginInterface_ThemesFactory,"first-world.info.ultracopier.PluginInterface.ThemesFactory/2.0.0.0");
 #endif
 
 #endif // PLUGININTERFACE_THEMES_H

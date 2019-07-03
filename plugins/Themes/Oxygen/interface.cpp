@@ -685,6 +685,12 @@ void Themes::isInPause(const bool &isInPause)
     updatePause();
 }
 
+/// \brief set have pause
+void Themes::havePause(const bool &havePause)
+{
+    ui->pauseButton->setEnabled(havePause);
+}
+
 void Themes::updatePause()
 {
     if(storeIsInPause)

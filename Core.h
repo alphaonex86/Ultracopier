@@ -68,6 +68,7 @@ class Core : public QObject
             std::string collisionAction;
             std::string errorAction;
             bool isPaused;
+            bool havePause;
             bool isRunning;
             Ultracopier::CopyType type;
             Ultracopier::TransferListOperation transferListOperation;

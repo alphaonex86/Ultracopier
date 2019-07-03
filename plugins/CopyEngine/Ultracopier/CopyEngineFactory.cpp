@@ -330,6 +330,12 @@ QWidget * CopyEngineFactory::options()
     return tempWidget;
 }
 
+/// \brief to get if have pause
+bool CopyEngineFactory::havePause()
+{
+    return true;
+}
+
 void CopyEngineFactory::setDoRightTransfer(bool doRightTransfer)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");

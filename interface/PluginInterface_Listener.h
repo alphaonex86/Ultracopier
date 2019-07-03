@@ -52,7 +52,7 @@ class PluginInterface_Listener : public QObject
 };
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/1.2.4.0");
+Q_DECLARE_INTERFACE(PluginInterface_Listener,"first-world.info.ultracopier.PluginInterface.Listener/2.0.0.0");
 #endif
 
 #endif // PLUGININTERFACE_LISTENER_H

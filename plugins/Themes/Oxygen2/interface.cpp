@@ -829,6 +829,15 @@ void Themes::isInPause(const bool &isInPause)
     updatePause();
 }
 
+/// \brief set have pause
+void Themes::havePause(const bool &havePause)
+{
+    if(darkUi)
+        pauseButton->setEnabled(havePause);
+    else
+        ui->pauseButton->setEnabled(havePause);
+}
+
 void Themes::updatePause()
 {
     if(storeIsInPause)
@@ -851,7 +860,42 @@ void Themes::updateCurrentFileInformation()
     TransferModel::currentTransfertItem transfertItem=transferModel.getCurrentTransfertItem();
     if(transfertItem.haveItem)
     {
-        QString newPath=QString::fromStdString(transfertItem.from);
+        std::string from=transfertItem.from;
+        std::string::size_type pos=from.rfind('/');
+        if(pos == std::string::npos)
+        {
+            #ifdef Q_OS_WIN32
+            std::string::size_type pos=from.rfind('\\');
+            if(pos != std::string::npos)
+                if(pos < from.size()-1)
+                    from=from.substr(0,pos);
+            #endif
+        }
+        else if(pos < from.size()-1)
+        {
+            #ifdef Q_OS_WIN32
+            std::string::size_type pos2=from.rfind('\\');
+            if(pos2 != std::string::npos)
+            {
+                std::string::size_type pos=from.rfind('\\');
+                if(pos != std::string::npos)
+                {
+                    if(pos2 < from.size()-1)
+                    {
+                        if(pos<pos2)
+                            from=from.substr(0,pos2);
+                        else
+                            from=from.substr(0,pos);
+                    }
+                }
+                else
+                    from=from.substr(0,pos);
+            }
+            else
+            #endif
+            from=from.substr(0,pos);
+        }
+        QString newPath=QString::fromStdString(from);
         if(newPath.size()>(64+3))
             newPath=newPath.mid(0,32)+QStringLiteral("...")+newPath.mid(newPath.size()-32,32);
         ui->from->setText(newPath);

@@ -35,7 +35,7 @@ class PluginInterface_PluginLoader : public QObject
 };
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/1.2.4.0");
+Q_DECLARE_INTERFACE(PluginInterface_PluginLoader,"first-world.info.ultracopier.PluginInterface.PluginLoader/2.0.0.0");
 #endif
 
 #endif // PLUGININTERFACE_PLUGINLOADER_H

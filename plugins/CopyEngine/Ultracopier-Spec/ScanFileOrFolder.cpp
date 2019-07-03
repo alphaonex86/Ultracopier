@@ -275,7 +275,10 @@ void ScanFileOrFolder::run()
         else
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+" is file or symblink");
-            emit fileTransfer(source,destination+text_slash+TransferThread::resolvedName(source),mode);
+            if(stringEndsWith(destination,'/') || stringEndsWith(destination,'\\'))
+                emit fileTransfer(source,destination+TransferThread::resolvedName(source),mode);
+            else
+                emit fileTransfer(source,destination+text_slash+TransferThread::resolvedName(source),mode);
         }
         sourceIndex++;
     }

@@ -193,6 +193,8 @@ class PluginInterface_CopyEngineFactory : public QObject
         virtual std::vector<std::string> supportedProtocolsForTheDestination() const = 0;
         /// \brief to get the options of the copy engine
         virtual QWidget * options() = 0;
+        /// \brief to get if have pause
+        virtual bool havePause() = 0;
     public slots:
         /// \brief to reset the options
         virtual void resetOptions() = 0;
@@ -204,7 +206,7 @@ class PluginInterface_CopyEngineFactory : public QObject
 };
 
 #ifndef ULTRACOPIER_PLUGIN_ALL_IN_ONE
-Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/1.2.4.0");
+Q_DECLARE_INTERFACE(PluginInterface_CopyEngineFactory,"first-world.info.ultracopier.PluginInterface.CopyEngineFactory/2.0.0.0");
 #endif
 
 #endif // PLUGININTERFACE_COPYENGINE_H

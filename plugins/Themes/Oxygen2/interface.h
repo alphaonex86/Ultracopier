@@ -100,6 +100,8 @@ public:
     void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList);
     /// \brief set if is in pause
     void isInPause(const bool &);
+    /// \brief set if have pause
+    void havePause(const bool &);
     /// \brief get the widget for the copy engine
     QWidget * getOptionsEngineWidget();
     /// \brief to set if the copy engine is found

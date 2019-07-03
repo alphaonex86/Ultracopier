@@ -231,6 +231,12 @@ bool CopyEngineFactory::canDoOnlyCopy() const
     return false;
 }
 
+/// \brief to get if have pause
+bool CopyEngineFactory::havePause()
+{
+    return false;
+}
+
 void CopyEngineFactory::resetOptions()
 {
     auto options=optionsEngine;

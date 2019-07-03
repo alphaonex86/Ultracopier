@@ -365,6 +365,7 @@ int Core::connectCopyEngine(const Ultracopier::CopyMode &mode,bool ignoreMode,co
             newItem.action=Ultracopier::Idle;
             newItem.lastProgression=0;//store the real byte transfered, used in time remaining calculation
             newItem.isPaused=false;
+            newItem.havePause=returnInformations.havePause;
             newItem.isRunning=false;
             newItem.haveError=false;
             newItem.lastConditionalSync.start();
@@ -741,6 +742,7 @@ void Core::connectInterfaceAndSync(const unsigned int &index)
     currentCopyInstance.interface->setTransferListOperation(currentCopyInstance.transferListOperation);
     currentCopyInstance.interface->actionInProgess(currentCopyInstance.action);
     currentCopyInstance.interface->isInPause(currentCopyInstance.isPaused);
+    currentCopyInstance.interface->havePause(currentCopyInstance.havePause);
     if(currentCopyInstance.haveError)
         currentCopyInstance.interface->errorDetected();
     QWidget *tempWidget=currentCopyInstance.interface->getOptionsEngineWidget();

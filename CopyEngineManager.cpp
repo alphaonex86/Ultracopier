@@ -221,6 +221,7 @@ CopyEngineManager::returnCopyEngine CopyEngineManager::getCopyEngine(const Ultra
             pluginList[index].intances.push_back(pluginList.at(index).factory->getInstance());
             temp.engine=pluginList.at(index).intances.back();
             temp.canDoOnlyCopy=pluginList.at(index).canDoOnlyCopy;
+            temp.havePause=pluginList.at(index).factory->havePause();
             temp.type=pluginList.at(index).type;
             temp.transferListOperation=pluginList.at(index).transferListOperation;
             return temp;

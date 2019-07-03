@@ -34,6 +34,7 @@ public:
     {
         PluginInterface_CopyEngine * engine;	///< The copy engine instance
         bool canDoOnlyCopy;			///< true if can do only the copy (not move)
+        bool havePause;
         Ultracopier::CopyType type;				///< Kind of copy what it can do
         Ultracopier::TransferListOperation transferListOperation;
     };
