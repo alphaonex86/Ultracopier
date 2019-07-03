@@ -316,8 +316,15 @@ bool TransferThread::destinationExists()
  * /dir1/dir2/ -> dir2
  * /dir1/ -> dir1
  * / -> root */
+#ifdef Q_OS_WIN32
+std::string TransferThread::resolvedName(std::string inode)
+#else
 std::string TransferThread::resolvedName(const std::string &inode)
+#endif
 {
+    #ifdef Q_OS_WIN32
+    stringreplaceAll(inode,"\\","/");
+    #endif
     const std::string::size_type &lastPos=inode.rfind('/');
     if(lastPos == std::string::npos || lastPos==0)
         return "root";
@@ -645,7 +652,7 @@ int64_t TransferThread::readFileMDateTime(const std::string &source)
                 if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
                 {
                     CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time");
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time: "+std::to_string(GetLastError()));
                     return -1;
                 }
                 CloseHandle(hFileSouce);
@@ -802,10 +809,10 @@ bool TransferThread::readSourceFilePermissions(const std::string &source)
     else
         return true;
     #else
-    HANDLE hFile = CreateFileA(source.c_str(), READ_CONTROL | ACCESS_SYSTEM_SECURITY ,
+    HANDLE hFile = CreateFileA(source.c_str(), GENERIC_READ ,
             FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+std::to_string(GetLastError()));
       return false;
     }
     DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
@@ -830,7 +837,7 @@ bool TransferThread::writeDestinationFilePermissions(const std::string &destinat
     #else
     HANDLE hFile = CreateFileA(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE");
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+std::to_string(GetLastError()));
       return false;
     }
     DWORD lasterror = SetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION , NULL, NULL, dacl, NULL);

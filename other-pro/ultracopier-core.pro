@@ -62,7 +62,9 @@ RESOURCES += \
     $$PWD/../resources/ultracopier-resources_unix.qrc \
     $$PWD/../resources/ultracopier-resources_windows.qrc
 win32 {
-    RESOURCES += $$PWD/../resources/resources-windows-qt-plugin.qrc
+    !contains(DEFINES, ULTRACOPIER_PLUGIN_ALL_IN_ONE) {
+        RESOURCES += $$PWD/../resources/resources-windows-qt-plugin.qrc
+    }
     RC_FILE += $$PWD/../resources/resources-windows.rc
     #LIBS += -lpdh
         LIBS += -ladvapi32

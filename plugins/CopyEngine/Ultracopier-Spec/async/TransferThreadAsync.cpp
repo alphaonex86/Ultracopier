@@ -50,7 +50,7 @@ TransferThreadAsync::~TransferThreadAsync()
     #ifndef Q_OS_UNIX
     if(PSecurityD!=NULL)
     {
-        free(PSecurityD);
+        //free(PSecurityD);
         PSecurityD=NULL;
     }
     if(dacl!=NULL)
@@ -246,6 +246,34 @@ void TransferThreadAsync::setProgression(const uint64_t &pos)
     if(transfer_stat==TransferStat_Transfer)
         transferProgression=pos;
 }
+
+std::string GetLastErrorStdStr()
+{
+  DWORD error = GetLastError();
+  if (error)
+  {
+    LPVOID lpMsgBuf;
+    DWORD bufLen = FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        error,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (LPTSTR) &lpMsgBuf,
+        0, NULL );
+    if (bufLen)
+    {
+      LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
+      std::string result(lpMsgStr, lpMsgStr+bufLen);
+
+      LocalFree(lpMsgBuf);
+
+      return result;
+    }
+  }
+  return std::string();
+}
 #endif
 
 void TransferThreadAsync::ifCanStartTransfer()
@@ -263,13 +291,19 @@ void TransferThreadAsync::ifCanStartTransfer()
 #ifdef Q_OS_WIN32
     if(CopyFileExA(source.c_str(),destination.c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
                    COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
-                   )!=0)
+                   )==0)
 #else
+    readError=false;
+    writeError=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
-    if(copy(source.c_str(),destination.c_str())<0)
+    //commented to debug: if(copy(source.c_str(),destination.c_str())<0)
 #endif
     {
+        #ifdef Q_OS_WIN32
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+GetLastErrorStdStr());
+        #else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error");
+        #endif
         if(stopIt)
         {
             if(source!="")
@@ -278,9 +312,16 @@ void TransferThreadAsync::ifCanStartTransfer()
             resetExtraVariable();
             return;//and reset?
         }
+        #ifdef Q_OS_WIN32
         readError=true;
         writeError=true;
-        emit errorOnFile(destination,std::string(strerror(errno)));
+        emit errorOnFile(source,std::string(strerror(errno)));
+        #else
+        if(readError)
+            emit errorOnFile(source,std::string(strerror(errno)));
+        else
+            emit errorOnFile(destination,std::string(strerror(errno)));
+        #endif
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
@@ -568,7 +609,10 @@ int TransferThreadAsync::copy(const char *from,const char *to)
 
     fd_from = open(from, O_RDONLY);
     if (fd_from < 0)
+    {
+        readError=true;
         return -1;
+    }
     #ifdef Q_OS_LINUX
     posix_fadvise(fd_from, 0, 0, POSIX_FADV_WILLNEED);
     posix_fadvise(fd_from, 0, 0, POSIX_FADV_SEQUENTIAL);
@@ -577,7 +621,10 @@ int TransferThreadAsync::copy(const char *from,const char *to)
 
     fd_to = open(to, O_WRONLY | O_CREAT/* | O_DSYNC slow down*//* | O_DIRECT*/, 0666);
     if (fd_to < 0)
+    {
+        writeError=true;
         goto out_error;
+    }
     #ifdef Q_OS_LINUX
     posix_fadvise(fd_to, 0, 0, POSIX_FADV_WILLNEED);
     posix_fadvise(fd_to, 0, 0, POSIX_FADV_SEQUENTIAL);
@@ -612,6 +659,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
             }
             else if (errno != EINTR)
             {
+                writeError=true;
                 goto out_error;
             }
         } while (nread > 0);
@@ -622,6 +670,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
         if (close(fd_to) < 0)
         {
             fd_to = -1;
+            readError=true;
             goto out_error;
         }
         if (close(fd_from) < 0)

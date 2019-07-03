@@ -63,7 +63,11 @@ public:
     uint64_t			transferSize;
 
     //not copied size, ...
+    #ifdef Q_OS_WIN32
+    static std::string resolvedName(std::string inode);
+    #else
     static std::string resolvedName(const std::string &inode);
+    #endif
     std::string getSourcePath() const;
     std::string getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;

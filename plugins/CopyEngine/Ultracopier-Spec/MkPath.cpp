@@ -316,7 +316,7 @@ void MkPath::internalDoThisPath()
         PSECURITY_DESCRIPTOR PSecurityD;
         PACL dacl;
 
-        HANDLE hFile = CreateFileA(item.source.c_str(), READ_CONTROL | ACCESS_SYSTEM_SECURITY ,
+        HANDLE hFile = CreateFileA(item.source.c_str(), GENERIC_READ ,
                 FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,
@@ -331,7 +331,6 @@ void MkPath::internalDoThisPath()
               ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"GetSecurityInfo() failed. Error"+std::to_string(lasterror));
             else
             {
-                CloseHandle(hFile);
                 hFile = CreateFileA(item.destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY ,
                                    0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if (hFile == INVALID_HANDLE_VALUE)
@@ -343,7 +342,7 @@ void MkPath::internalDoThisPath()
                       ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"GetSecurityInfo() failed. Error"+std::to_string(lasterror));
                 }
                 free(dacl);
-                free(PSecurityD);
+                //free(PSecurityD);
                 CloseHandle(hFile);
             }
         }

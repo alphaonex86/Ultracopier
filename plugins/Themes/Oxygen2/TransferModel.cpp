@@ -586,10 +586,6 @@ void TransferModel::setFileProgression(std::vector<Ultracopier::ProgressionItem>
         }
         index_for_loop++;
     }
-    #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(progressionList.size()>0)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"progression remaning items");
-    #endif
 }
 
 TransferModel::currentTransfertItem TransferModel::getCurrentTransfertItem() const
