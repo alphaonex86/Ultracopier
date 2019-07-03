@@ -42,8 +42,10 @@ void RadialMap::Widget::resizeEvent(QResizeEvent*)
     m_timer.start(100); //will cause signature to rebuild for new size
 
     //always do these as they need to be initialised on creation
-    m_offset.rx() = (width() - m_map.width()) / 2;
-    m_offset.ry() = (height() - m_map.height()) / 2;
+    const unsigned int w=width();
+    const unsigned int h=height();
+    m_offset.rx() = (w - m_map.width()) / 2;
+    m_offset.ry() = (h - m_map.height()) / 2;
 }
 
 void RadialMap::Widget::paintEvent(QPaintEvent*)
@@ -71,7 +73,28 @@ void RadialMap::Widget::paintEvent(QPaintEvent*)
     }
     else
     {
-        //paint.drawText(rect(), 0, tr(""));
+        const unsigned int w=width();
+        const unsigned int h=height();
+        unsigned int min=w;
+        unsigned int x=0;
+        unsigned int y=0;
+        if(h<w)
+        {
+            min=h;
+            x=(width()-min)/2;
+        }
+        else
+            y=(height()-min)/2;
+
+        paint.setRenderHint(QPainter::Antialiasing);
+        QRect rect(x,y,min,min);
+        //rect.moveTo(m_offset);
+        paint.setPen(QColor(200,200,200));
+        paint.setBrush(QColor(255,255,255));
+        paint.drawEllipse(rect);
+        paint.setPen(QColor(0,0,0));
+
+        paint.drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, "...");
         return;
     }
 
