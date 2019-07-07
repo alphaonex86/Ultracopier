@@ -5,7 +5,7 @@ ProgressBarDark::ProgressBarDark(QWidget *parent) :
     QProgressBar(parent)
 {
     setMinimumHeight(22);
-    setMaximumHeight(22);
+    setMaximumHeight(55);
 }
 
 ProgressBarDark::~ProgressBarDark()

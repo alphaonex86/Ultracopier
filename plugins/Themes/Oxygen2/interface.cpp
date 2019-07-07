@@ -408,6 +408,10 @@ Themes::Themes(const bool &alwaysOnTop,
         }
         connect(cancelButton,&QPushButton::toggled,ui->cancelButton,&QPushButton::toggled);
         connect(cancelButton,&QPushButton::clicked,ui->cancelButton,&QPushButton::clicked);
+
+        #if defined(__EMSCRIPTEN__) && defined(ULTRACOPIER_LITTLE_RANDOM)
+        cancelButton->setEnabled(false);
+        #endif
     }
     else
     {
@@ -418,6 +422,9 @@ Themes::Themes(const bool &alwaysOnTop,
         pauseButton=nullptr;
         skipButton=nullptr;
         cancelButton=nullptr;
+        #if defined(__EMSCRIPTEN__) && defined(ULTRACOPIER_LITTLE_RANDOM)
+        ui->cancelButton->setEnabled(false);
+        #endif
     }
     showDualProgression_toggled(showDualProgression);
 

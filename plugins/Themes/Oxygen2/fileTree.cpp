@@ -49,10 +49,13 @@ QUrl File::url(const Folder *root) const
         root = nullptr; //prevent returning empty string when there is something we could return
 
     for (const Folder *d = (Folder*)this; d != root && d; d = d->parent()) {
-        path.prepend(QString::fromStdString(d->name()));
+        const QString &name=QString::fromStdString(d->name());
+        if(!name.isEmpty() && !path.isEmpty())
+            path.prepend(QDir::separator());
+        path.prepend(name);
     }
 
-    return QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
+    return path;
 }
 
 void Folder::append(File *p)

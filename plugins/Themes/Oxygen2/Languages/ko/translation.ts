@@ -8,33 +8,21 @@
         <source>%1 file, with an average size of %2</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>RadialMap::Widget</name>
     <message>
-        <location filename="../../radialMap/widgetEvents.cpp" line="+156"/>
-        <source>Tooltip of file/folder, %1 is path, %2 is size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Tooltip of folder, %1 File (%2%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Tooltip of folder, %1 File</source>
+        <location filename="../../radialMap/widgetEvents.cpp" line="+184"/>
+        <location line="+2"/>
+        <source> into %1 childrens</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+340"/>
-        <location line="+17"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-14"/>
-        <location line="+17"/>
+        <location filename="../../interface.cpp" line="+285"/>
+        <location line="+13"/>
         <source>This will be the last version for Mac, but you can compile from source</source>
         <translation type="unfinished"></translation>
     </message>
@@ -44,7 +32,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+216"/>
+        <location line="+208"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
@@ -59,7 +47,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+451"/>
+        <location line="+495"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>
@@ -96,7 +84,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+284"/>
+        <location filename="../../ThemesFactory.cpp" line="+280"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>

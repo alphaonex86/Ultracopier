@@ -176,24 +176,17 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
             QString string;
 
 
-                string = QObject::tr("Tooltip of file/folder, %1 is path, %2 is size")
-                               .arg(m_focus->file()->displayPath())
-                               .arg(m_focus->file()->humanReadableSize());
-
-                if (m_focus->file()->isFolder()) {
-                    int files = static_cast<const Folder*>(m_focus->file())->children();
-                    const uint percent = uint((100 * files) / (double)m_tree->children());
-
-                    string += QLatin1Char('\n');
-                    if (percent > 0) {
-                        string += QObject::tr("Tooltip of folder, %1 File (%2%)")
-                                         .arg(files).arg(percent);
-                    } else {
-                        string += QObject::tr("Tooltip of folder, %1 File")
-                                         .arg(files);
-                    }
+                const QString &path=m_focus->file()->displayPath();
+                if (m_focus->file()->isFolder())
+                {
+                    const Folder* folder=static_cast<const Folder*>(m_focus->file());
+                    if(path.isEmpty())
+                        string += m_focus->file()->humanReadableSize()+tr(" into %1 childrens").arg(folder->children());
+                    else
+                        string += path+"\n"+m_focus->file()->humanReadableSize()+tr(" into %1 childrens").arg(folder->children());
                 }
-
+                else
+                    string += path+" "+m_focus->file()->humanReadableSize();
 
             // Calculate a semi-sane size for the tooltip
             QFontMetrics fontMetrics(font());

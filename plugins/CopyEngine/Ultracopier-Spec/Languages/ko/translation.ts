@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="395"/>
-        <location filename="../../CopyEngine.cpp" line="417"/>
+        <location filename="../../CopyEngine.cpp" line="396"/>
+        <location filename="../../CopyEngine.cpp" line="418"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="428"/>
-        <location filename="../../CopyEngine.cpp" line="450"/>
+        <location filename="../../CopyEngine.cpp" line="429"/>
+        <location filename="../../CopyEngine.cpp" line="451"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="474"/>
+        <location filename="../../CopyEngine.cpp" line="475"/>
         <source>Destination</source>
         <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="474"/>
+        <location filename="../../CopyEngine.cpp" line="475"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="630"/>
+        <location filename="../../CopyEngine.cpp" line="631"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="888"/>
-        <location filename="../../CopyEngine.cpp" line="891"/>
-        <location filename="../../CopyEngine.cpp" line="896"/>
-        <location filename="../../CopyEngine.cpp" line="900"/>
+        <location filename="../../CopyEngine.cpp" line="889"/>
+        <location filename="../../CopyEngine.cpp" line="892"/>
+        <location filename="../../CopyEngine.cpp" line="897"/>
+        <location filename="../../CopyEngine.cpp" line="901"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="889"/>
-        <location filename="../../CopyEngine.cpp" line="893"/>
-        <location filename="../../CopyEngine.cpp" line="897"/>
-        <location filename="../../CopyEngine.cpp" line="901"/>
+        <location filename="../../CopyEngine.cpp" line="890"/>
+        <location filename="../../CopyEngine.cpp" line="894"/>
+        <location filename="../../CopyEngine.cpp" line="898"/>
+        <location filename="../../CopyEngine.cpp" line="902"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="892"/>
+        <location filename="../../CopyEngine.cpp" line="893"/>
         <source>Merge</source>
         <translation type="unfinished">합치기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="894"/>
-        <location filename="../../CopyEngine.cpp" line="906"/>
+        <location filename="../../CopyEngine.cpp" line="895"/>
+        <location filename="../../CopyEngine.cpp" line="907"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="898"/>
+        <location filename="../../CopyEngine.cpp" line="899"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="902"/>
+        <location filename="../../CopyEngine.cpp" line="903"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="903"/>
+        <location filename="../../CopyEngine.cpp" line="904"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="904"/>
+        <location filename="../../CopyEngine.cpp" line="905"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어씌우기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="905"/>
+        <location filename="../../CopyEngine.cpp" line="906"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="976"/>
+        <location filename="../../CopyEngine.cpp" line="977"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="976"/>
+        <location filename="../../CopyEngine.cpp" line="977"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -96,70 +96,70 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="330"/>
-        <location filename="../../CopyEngineFactory.cpp" line="333"/>
-        <location filename="../../CopyEngineFactory.cpp" line="338"/>
-        <location filename="../../CopyEngineFactory.cpp" line="342"/>
+        <location filename="../../CopyEngineFactory.cpp" line="336"/>
+        <location filename="../../CopyEngineFactory.cpp" line="339"/>
+        <location filename="../../CopyEngineFactory.cpp" line="344"/>
+        <location filename="../../CopyEngineFactory.cpp" line="348"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="331"/>
-        <location filename="../../CopyEngineFactory.cpp" line="335"/>
-        <location filename="../../CopyEngineFactory.cpp" line="339"/>
-        <location filename="../../CopyEngineFactory.cpp" line="343"/>
+        <location filename="../../CopyEngineFactory.cpp" line="337"/>
+        <location filename="../../CopyEngineFactory.cpp" line="341"/>
+        <location filename="../../CopyEngineFactory.cpp" line="345"/>
+        <location filename="../../CopyEngineFactory.cpp" line="349"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="334"/>
+        <location filename="../../CopyEngineFactory.cpp" line="340"/>
         <source>Merge</source>
         <translation type="unfinished">합치기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="336"/>
-        <location filename="../../CopyEngineFactory.cpp" line="348"/>
+        <location filename="../../CopyEngineFactory.cpp" line="342"/>
+        <location filename="../../CopyEngineFactory.cpp" line="354"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="340"/>
+        <location filename="../../CopyEngineFactory.cpp" line="346"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="344"/>
+        <location filename="../../CopyEngineFactory.cpp" line="350"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="345"/>
+        <location filename="../../CopyEngineFactory.cpp" line="351"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="346"/>
+        <location filename="../../CopyEngineFactory.cpp" line="352"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어씌우기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="347"/>
+        <location filename="../../CopyEngineFactory.cpp" line="353"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="363"/>
-        <location filename="../../CopyEngineFactory.cpp" line="402"/>
+        <location filename="../../CopyEngineFactory.cpp" line="369"/>
+        <location filename="../../CopyEngineFactory.cpp" line="408"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngineFactory.cpp" line="369"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="402"/>
+        <location filename="../../CopyEngineFactory.cpp" line="408"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -421,49 +421,49 @@
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../ListThread.cpp" line="1382"/>
-        <location filename="../../ListThread.cpp" line="2253"/>
+        <location filename="../../ListThread.cpp" line="1381"/>
+        <location filename="../../ListThread.cpp" line="2234"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1389"/>
-        <location filename="../../ListThread.cpp" line="2260"/>
+        <location filename="../../ListThread.cpp" line="1388"/>
+        <location filename="../../ListThread.cpp" line="2241"/>
         <source>Unable to save the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1405"/>
+        <location filename="../../ListThread.cpp" line="1404"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1412"/>
+        <location filename="../../ListThread.cpp" line="1411"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1421"/>
+        <location filename="../../ListThread.cpp" line="1420"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1430"/>
+        <location filename="../../ListThread.cpp" line="1429"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1436"/>
+        <location filename="../../ListThread.cpp" line="1435"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1499"/>
+        <location filename="../../ListThread.cpp" line="1498"/>
         <source>Some errors have been found during the line parsing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ListThread.cpp" line="1507"/>
+        <location filename="../../ListThread.cpp" line="1506"/>
         <source>Unable to open the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -498,7 +498,7 @@
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="116"/>
-        <location filename="../../MkPath.cpp" line="360"/>
+        <location filename="../../MkPath.cpp" line="359"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -554,27 +554,27 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="382"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="387"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="389"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="394"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="467"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="472"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="474"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="479"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="517"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="522"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -583,24 +583,24 @@
     <name>TransferThread</name>
     <message>
         <location filename="../../TransferThread.cpp" line="156"/>
-        <location filename="../../TransferThread.cpp" line="399"/>
-        <location filename="../../TransferThread.cpp" line="545"/>
+        <location filename="../../TransferThread.cpp" line="407"/>
+        <location filename="../../TransferThread.cpp" line="553"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="372"/>
+        <location filename="../../TransferThread.cpp" line="380"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="379"/>
+        <location filename="../../TransferThread.cpp" line="387"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="545"/>
-        <location filename="../../TransferThread.cpp" line="581"/>
+        <location filename="../../TransferThread.cpp" line="553"/>
+        <location filename="../../TransferThread.cpp" line="589"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>

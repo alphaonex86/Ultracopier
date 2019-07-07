@@ -269,8 +269,11 @@ void SystrayIcon::updateSystrayIcon()
         #endif
     }
     if(theNewSystrayIcon.isNull())
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"All the icon include the default icon remain null");
-    setIcon(theNewSystrayIcon);
+    }
+    else
+        setIcon(theNewSystrayIcon);
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
     setToolTip(QString::fromStdString("Supercopier - "+toolTip));
     #else

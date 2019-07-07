@@ -199,7 +199,7 @@ void CopyEngine::skip(const uint64_t &id)
 
 void CopyEngine::cancel()
 {
-    //QCoreApplication::exit(0);->crash, not need for demo
+    emit canBeDeleted();
 }
 
 void CopyEngine::removeItems(const std::vector<uint64_t> &ids)

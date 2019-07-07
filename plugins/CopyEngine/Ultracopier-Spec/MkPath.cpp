@@ -341,7 +341,7 @@ void MkPath::internalDoThisPath()
                     if (lasterror != ERROR_SUCCESS)
                       ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"GetSecurityInfo() failed. Error"+std::to_string(lasterror));
                 }
-                free(dacl);
+                //free(dacl);
                 //free(PSecurityD);
                 CloseHandle(hFile);
             }

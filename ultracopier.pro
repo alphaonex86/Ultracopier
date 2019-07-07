@@ -88,7 +88,7 @@ HEADERS += \
     $$PWD/plugins/Themes/Oxygen2/fileTree.h \
     $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.h \
     $$PWD/plugins/Themes/Oxygen2/DarkButton.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/VerticalLabel.h \
+    $$PWD/plugins/Themes/Oxygen2/VerticalLabel.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widget.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h
@@ -137,7 +137,7 @@ win32 {
         $$PWD/plugins/PluginLoader/catchcopy-v0002/pluginLoader.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/DebugEngineMacro.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/Environment.h \
-        $$PWD/plugins/PluginLoader/catchcopy-v0002/Variable.h \
+        $$PWD/plugins/PluginLoader/catchcopy-v0002/PluginLoadercatchcopy-v0002Variable.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/PlatformMacro.h \
         $$PWD/plugins/PluginLoader/catchcopy-v0002/OptionsWidget.h
     SOURCES         += \

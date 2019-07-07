@@ -93,30 +93,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="233"/>
-        <location filename="../../../CopyEngineManager.cpp" line="238"/>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
-        <location filename="../../../CopyEngineManager.cpp" line="275"/>
+        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="239"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="276"/>
         <source>Warning</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="233"/>
+        <location filename="../../../CopyEngineManager.cpp" line="234"/>
         <source>Cannot find any copy engine with move support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>This copy engine does not support move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="238"/>
+        <location filename="../../../CopyEngineManager.cpp" line="239"/>
         <source>Cannot find any compatible engine!</source>
         <translation>호환되는 엔진을 찾을 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="275"/>
+        <location filename="../../../CopyEngineManager.cpp" line="276"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,8 +149,8 @@
         <location filename="../../../Core.cpp" line="227"/>
         <location filename="../../../Core.cpp" line="241"/>
         <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="412"/>
-        <location filename="../../../Core.cpp" line="417"/>
+        <location filename="../../../Core.cpp" line="413"/>
+        <location filename="../../../Core.cpp" line="418"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
@@ -187,23 +187,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1183"/>
+        <location filename="../../../Core.cpp" line="1185"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="412"/>
+        <location filename="../../../Core.cpp" line="413"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>인터페이스를 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="417"/>
+        <location filename="../../../Core.cpp" line="418"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>복사 엔진을 불러올 수 없음, 복사가 취소되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1182"/>
+        <location filename="../../../Core.cpp" line="1184"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1081,33 +1081,33 @@ This version is compiled as version: %1.</source>
         <translation>informations.xml 파일에 연결할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="488"/>
+        <location filename="../../../PluginsManager.cpp" line="489"/>
         <source>Dependencies part is wrong</source>
         <translation>종속된 부분이 잘못되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="509"/>
+        <location filename="../../../PluginsManager.cpp" line="510"/>
         <source>Dependencies %1 are not satisfied, for plugin: %2</source>
         <translation>플러그인 %2에 대한 %1 종속성이 충족되지 않습니다</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="672"/>
+        <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Remove %1</source>
         <translation>%1 제거</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="683"/>
+        <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="683"/>
+        <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error while the removing plugin, please check the rights on the folder: 
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="707"/>
+        <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Information</source>
         <translation>정보</translation>
     </message>
@@ -1127,75 +1127,75 @@ This version is compiled as version: %1.</source>
         <translation>xml 파일을 위한 &quot;패키지&quot; 루트 태그를 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="338"/>
+        <location filename="../../../PluginsManager.cpp" line="339"/>
         <source>Duplicated plugin found, already loaded!</source>
         <translation>중복된 플러그인 발견, 이미 호출되었습니다!</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="399"/>
+        <location filename="../../../PluginsManager.cpp" line="400"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="407"/>
+        <location filename="../../../PluginsManager.cpp" line="408"/>
         <source>Tag not found: %1</source>
         <translation>태그를 찾을 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="672"/>
+        <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
         <translation>%2 버전에서 %1을 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="707"/>
+        <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Previous import is in progress...</source>
         <translation>이전의 가져오기가 진행중입니다...</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="710"/>
+        <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Open Ultracopier plugin</source>
         <translation>Ultracopier 플러그인 열기</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="710"/>
+        <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Ultracopier plugin (*.urc)</source>
         <translation>Ultracopier (*.urc)</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="727"/>
-        <location filename="../../../PluginsManager.cpp" line="752"/>
-        <location filename="../../../PluginsManager.cpp" line="820"/>
-        <location filename="../../../PluginsManager.cpp" line="833"/>
-        <location filename="../../../PluginsManager.cpp" line="852"/>
-        <location filename="../../../PluginsManager.cpp" line="858"/>
-        <location filename="../../../PluginsManager.cpp" line="864"/>
-        <location filename="../../../PluginsManager.cpp" line="870"/>
-        <location filename="../../../PluginsManager.cpp" line="876"/>
-        <location filename="../../../PluginsManager.cpp" line="883"/>
+        <location filename="../../../PluginsManager.cpp" line="728"/>
+        <location filename="../../../PluginsManager.cpp" line="753"/>
+        <location filename="../../../PluginsManager.cpp" line="821"/>
+        <location filename="../../../PluginsManager.cpp" line="834"/>
+        <location filename="../../../PluginsManager.cpp" line="853"/>
+        <location filename="../../../PluginsManager.cpp" line="859"/>
+        <location filename="../../../PluginsManager.cpp" line="865"/>
+        <location filename="../../../PluginsManager.cpp" line="871"/>
+        <location filename="../../../PluginsManager.cpp" line="877"/>
+        <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Plugin loader</source>
         <translation>플러그인 로더</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="727"/>
+        <location filename="../../../PluginsManager.cpp" line="728"/>
         <source>Unable to open the plugin: %1</source>
         <translation>플러그인 열기 불가: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="752"/>
-        <location filename="../../../PluginsManager.cpp" line="870"/>
-        <location filename="../../../PluginsManager.cpp" line="883"/>
+        <location filename="../../../PluginsManager.cpp" line="753"/>
+        <location filename="../../../PluginsManager.cpp" line="871"/>
+        <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Unable to load the plugin content, please check it: %1</source>
         <translation>플러그인 내용을 불러올 수 없습니다. 확인해주십시오: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="820"/>
+        <location filename="../../../PluginsManager.cpp" line="821"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
         <translation>플러그인을 설치할 폴더를 생성할 수 없음:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="833"/>
+        <location filename="../../../PluginsManager.cpp" line="834"/>
         <source>Unable to create a file to install the plugin:
 %1
 since:%2</source>
@@ -1204,16 +1204,16 @@ since:%2</source>
 since:%2</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="852"/>
+        <location filename="../../../PluginsManager.cpp" line="853"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
         <translation>동일한 이름의 폴더가 존재합니다. 플러그인 설치 건너뛰기:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="858"/>
-        <location filename="../../../PluginsManager.cpp" line="864"/>
-        <location filename="../../../PluginsManager.cpp" line="876"/>
+        <location filename="../../../PluginsManager.cpp" line="859"/>
+        <location filename="../../../PluginsManager.cpp" line="865"/>
+        <location filename="../../../PluginsManager.cpp" line="877"/>
         <source>Unable to load the plugin content, please check it</source>
         <translation>플러그인 컨태츠를 불러올 수 없습니다. 확인해주십시오</translation>
     </message>
@@ -1315,72 +1315,72 @@ since:%2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="395"/>
+        <location filename="../../../SystrayIcon.cpp" line="398"/>
         <source>Warning</source>
         <translation type="unfinished">알림</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="395"/>
+        <location filename="../../../SystrayIcon.cpp" line="398"/>
         <source>The action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="443"/>
+        <location filename="../../../SystrayIcon.cpp" line="446"/>
         <source>&amp;About/Debug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="445"/>
+        <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="448"/>
+        <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Save bug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="450"/>
+        <location filename="../../../SystrayIcon.cpp" line="453"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="451"/>
+        <location filename="../../../SystrayIcon.cpp" line="454"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="452"/>
+        <location filename="../../../SystrayIcon.cpp" line="455"/>
         <source>&amp;Product key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="490"/>
+        <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="490"/>
+        <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>Go to the download page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="517"/>
+        <location filename="../../../SystrayIcon.cpp" line="520"/>
         <source>A&amp;dd copy/moving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="543"/>
+        <location filename="../../../SystrayIcon.cpp" line="546"/>
         <source>Add &amp;copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="544"/>
+        <location filename="../../../SystrayIcon.cpp" line="547"/>
         <source>Add &amp;transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="545"/>
+        <location filename="../../../SystrayIcon.cpp" line="548"/>
         <source>Add &amp;move</source>
         <translation type="unfinished"></translation>
     </message>

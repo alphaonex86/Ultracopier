@@ -93,30 +93,30 @@
 <context>
     <name>CopyEngineManager</name>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="233"/>
-        <location filename="../../../CopyEngineManager.cpp" line="238"/>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
-        <location filename="../../../CopyEngineManager.cpp" line="275"/>
+        <location filename="../../../CopyEngineManager.cpp" line="234"/>
+        <location filename="../../../CopyEngineManager.cpp" line="239"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
+        <location filename="../../../CopyEngineManager.cpp" line="276"/>
         <source>Warning</source>
         <translation>Avviso</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="233"/>
+        <location filename="../../../CopyEngineManager.cpp" line="234"/>
         <source>Cannot find any copy engine with move support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="261"/>
+        <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>This copy engine does not support move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="238"/>
+        <location filename="../../../CopyEngineManager.cpp" line="239"/>
         <source>Cannot find any compatible engine!</source>
         <translation>Impossibile trovare un motore per la copia compatibile!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="275"/>
+        <location filename="../../../CopyEngineManager.cpp" line="276"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Impossibile trovare un motore per la copia con questo nome: %1</translation>
     </message>
@@ -150,8 +150,8 @@
         <location filename="../../../Core.cpp" line="227"/>
         <location filename="../../../Core.cpp" line="241"/>
         <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="412"/>
-        <location filename="../../../Core.cpp" line="417"/>
+        <location filename="../../../Core.cpp" line="413"/>
+        <location filename="../../../Core.cpp" line="418"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
@@ -188,23 +188,23 @@
         <translation>L&apos;argomento per la modalità non è valido</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1183"/>
+        <location filename="../../../Core.cpp" line="1185"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation>Vuoi copiarlo? se no, verrà spostato.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="275"/>
-        <location filename="../../../Core.cpp" line="412"/>
+        <location filename="../../../Core.cpp" line="413"/>
         <source>Unable to load the interface, copy aborted</source>
         <translation>Impossibile avviare l&apos;interfaccia, copia interrotta</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="417"/>
+        <location filename="../../../Core.cpp" line="418"/>
         <source>Unable to load the copy engine, copy aborted</source>
         <translation>Impossibile avviare il motore per la copia, copia interrotta</translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1182"/>
+        <location filename="../../../Core.cpp" line="1184"/>
         <source>Transfer mode</source>
         <translation>Modalità di trasferimento</translation>
     </message>
@@ -1091,33 +1091,33 @@ Compilata come versione: %1.</translation>
         <translation>informations.xml non è accessibile</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="488"/>
+        <location filename="../../../PluginsManager.cpp" line="489"/>
         <source>Dependencies part is wrong</source>
         <translation>Alcune dipendenze non sono idonee</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="509"/>
+        <location filename="../../../PluginsManager.cpp" line="510"/>
         <source>Dependencies %1 are not satisfied, for plugin: %2</source>
         <translation>Le dipendenze %1 per il plug-in: %2, non sono soddisfatte</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="672"/>
+        <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Remove %1</source>
         <translation>Elimina %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="683"/>
+        <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="683"/>
+        <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error while the removing plugin, please check the rights on the folder: 
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="707"/>
+        <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Information</source>
         <translation>Informazioni</translation>
     </message>
@@ -1137,75 +1137,75 @@ Compilata come versione: %1.</translation>
         <translation>Tag root &quot;package&quot; non trovato nel file xml</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="338"/>
+        <location filename="../../../PluginsManager.cpp" line="339"/>
         <source>Duplicated plugin found, already loaded!</source>
         <translation>Trovato plug-in duplicato, già caricato!</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="399"/>
+        <location filename="../../../PluginsManager.cpp" line="400"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
         <translation>Testo in inglese mancante in informations.xml per il tag: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="407"/>
+        <location filename="../../../PluginsManager.cpp" line="408"/>
         <source>Tag not found: %1</source>
         <translation>Tag non trovato: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="672"/>
+        <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
         <translation>Si desidera eliminare &quot;%1&quot; nella versione %2?</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="707"/>
+        <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Previous import is in progress...</source>
         <translation>Importazione precedente in corso ...</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="710"/>
+        <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Open Ultracopier plugin</source>
         <translation>Apri plug-in di Ultracopier</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="710"/>
+        <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Ultracopier plugin (*.urc)</source>
         <translation>Plug-in di Ultracopier (*.urc)</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="727"/>
-        <location filename="../../../PluginsManager.cpp" line="752"/>
-        <location filename="../../../PluginsManager.cpp" line="820"/>
-        <location filename="../../../PluginsManager.cpp" line="833"/>
-        <location filename="../../../PluginsManager.cpp" line="852"/>
-        <location filename="../../../PluginsManager.cpp" line="858"/>
-        <location filename="../../../PluginsManager.cpp" line="864"/>
-        <location filename="../../../PluginsManager.cpp" line="870"/>
-        <location filename="../../../PluginsManager.cpp" line="876"/>
-        <location filename="../../../PluginsManager.cpp" line="883"/>
+        <location filename="../../../PluginsManager.cpp" line="728"/>
+        <location filename="../../../PluginsManager.cpp" line="753"/>
+        <location filename="../../../PluginsManager.cpp" line="821"/>
+        <location filename="../../../PluginsManager.cpp" line="834"/>
+        <location filename="../../../PluginsManager.cpp" line="853"/>
+        <location filename="../../../PluginsManager.cpp" line="859"/>
+        <location filename="../../../PluginsManager.cpp" line="865"/>
+        <location filename="../../../PluginsManager.cpp" line="871"/>
+        <location filename="../../../PluginsManager.cpp" line="877"/>
+        <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Plugin loader</source>
         <translation>Caricatore di plug-in</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="727"/>
+        <location filename="../../../PluginsManager.cpp" line="728"/>
         <source>Unable to open the plugin: %1</source>
         <translation>Impossibile aprire il plug-in: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="752"/>
-        <location filename="../../../PluginsManager.cpp" line="870"/>
-        <location filename="../../../PluginsManager.cpp" line="883"/>
+        <location filename="../../../PluginsManager.cpp" line="753"/>
+        <location filename="../../../PluginsManager.cpp" line="871"/>
+        <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Unable to load the plugin content, please check it: %1</source>
         <translation>Impossibile caricare il contenuto del plug-in, si prega di controllare: %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="820"/>
+        <location filename="../../../PluginsManager.cpp" line="821"/>
         <source>Unable to create a folder to install the plugin:
 %1</source>
         <translation>Impossibile creare una cartella per installare il plug-in:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="833"/>
+        <location filename="../../../PluginsManager.cpp" line="834"/>
         <source>Unable to create a file to install the plugin:
 %1
 since:%2</source>
@@ -1214,16 +1214,16 @@ since:%2</source>
 da: %2</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="852"/>
+        <location filename="../../../PluginsManager.cpp" line="853"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
         <translation>E&apos; presente una cartella con lo stesso nome, non sarà installato il plug-in:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../PluginsManager.cpp" line="858"/>
-        <location filename="../../../PluginsManager.cpp" line="864"/>
-        <location filename="../../../PluginsManager.cpp" line="876"/>
+        <location filename="../../../PluginsManager.cpp" line="859"/>
+        <location filename="../../../PluginsManager.cpp" line="865"/>
+        <location filename="../../../PluginsManager.cpp" line="877"/>
         <source>Unable to load the plugin content, please check it</source>
         <translation>Impossibile caricare il contenuto del plug-in, si prega di controllare</translation>
     </message>
@@ -1325,72 +1325,72 @@ da: %2</translation>
         <translation>Ripristina la copia/spostamento di Windows explorer</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="395"/>
+        <location filename="../../../SystrayIcon.cpp" line="398"/>
         <source>Warning</source>
         <translation type="unfinished">Avviso</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="395"/>
+        <location filename="../../../SystrayIcon.cpp" line="398"/>
         <source>The action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="443"/>
+        <location filename="../../../SystrayIcon.cpp" line="446"/>
         <source>&amp;About/Debug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="445"/>
+        <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="448"/>
+        <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Save bug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="450"/>
+        <location filename="../../../SystrayIcon.cpp" line="453"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="451"/>
+        <location filename="../../../SystrayIcon.cpp" line="454"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="452"/>
+        <location filename="../../../SystrayIcon.cpp" line="455"/>
         <source>&amp;Product key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="490"/>
+        <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="490"/>
+        <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>Go to the download page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="517"/>
+        <location filename="../../../SystrayIcon.cpp" line="520"/>
         <source>A&amp;dd copy/moving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="543"/>
+        <location filename="../../../SystrayIcon.cpp" line="546"/>
         <source>Add &amp;copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="544"/>
+        <location filename="../../../SystrayIcon.cpp" line="547"/>
         <source>Add &amp;transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="545"/>
+        <location filename="../../../SystrayIcon.cpp" line="548"/>
         <source>Add &amp;move</source>
         <translation type="unfinished"></translation>
     </message>

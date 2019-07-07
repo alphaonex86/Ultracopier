@@ -55,7 +55,7 @@ TransferThreadAsync::~TransferThreadAsync()
     }
     if(dacl!=NULL)
     {
-        free(dacl);
+        //free(dacl);
         dacl=NULL;
     }
     #endif

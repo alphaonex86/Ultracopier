@@ -8,87 +8,75 @@
         <source>%1 file, with an average size of %2</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>RadialMap::Widget</name>
     <message>
-        <location filename="../../radialMap/widgetEvents.cpp" line="156"/>
-        <source>Tooltip of file/folder, %1 is path, %2 is size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../radialMap/widgetEvents.cpp" line="166"/>
-        <source>Tooltip of folder, %1 File (%2%)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../radialMap/widgetEvents.cpp" line="169"/>
-        <source>Tooltip of folder, %1 File</source>
+        <location filename="../../radialMap/widgetEvents.cpp" line="184"/>
+        <location filename="../../radialMap/widgetEvents.cpp" line="186"/>
+        <source> into %1 childrens</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="340"/>
-        <location filename="../../interface.cpp" line="357"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="343"/>
-        <location filename="../../interface.cpp" line="360"/>
+        <location filename="../../interface.cpp" line="285"/>
+        <location filename="../../interface.cpp" line="298"/>
         <source>This will be the last version for Mac, but you can compile from source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="362"/>
+        <location filename="../../interface.cpp" line="300"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="578"/>
+        <location filename="../../interface.cpp" line="508"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="882"/>
+        <location filename="../../interface.cpp" line="812"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="884"/>
+        <location filename="../../interface.cpp" line="814"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1335"/>
+        <location filename="../../interface.cpp" line="1309"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1336"/>
+        <location filename="../../interface.cpp" line="1310"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1337"/>
+        <location filename="../../interface.cpp" line="1311"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1339"/>
+        <location filename="../../interface.cpp" line="1313"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1534"/>
-        <location filename="../../interface.cpp" line="1546"/>
-        <location filename="../../interface.cpp" line="1558"/>
+        <location filename="../../interface.cpp" line="1508"/>
+        <location filename="../../interface.cpp" line="1520"/>
+        <location filename="../../interface.cpp" line="1532"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1636"/>
-        <location filename="../../interface.cpp" line="1640"/>
-        <location filename="../../interface.cpp" line="1642"/>
+        <location filename="../../interface.cpp" line="1610"/>
+        <location filename="../../interface.cpp" line="1614"/>
+        <location filename="../../interface.cpp" line="1616"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -96,24 +84,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="284"/>
+        <location filename="../../ThemesFactory.cpp" line="280"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="285"/>
+        <location filename="../../ThemesFactory.cpp" line="281"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="286"/>
+        <location filename="../../ThemesFactory.cpp" line="282"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="482"/>
-        <location filename="../../ThemesFactory.cpp" line="497"/>
-        <location filename="../../ThemesFactory.cpp" line="512"/>
+        <location filename="../../ThemesFactory.cpp" line="478"/>
+        <location filename="../../ThemesFactory.cpp" line="493"/>
+        <location filename="../../ThemesFactory.cpp" line="508"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>

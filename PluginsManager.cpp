@@ -310,8 +310,9 @@ void PluginsManager::loadPluginXml(PluginsAvailable * thePlugin,const QByteArray
                         loadBalise(root,"architecture",&(thePlugin->informations),&(thePlugin->errorString),true,false);
                         if(thePlugin->errorString.empty())
                         {
-                            if(thePlugin->informations.back().back()!=ULTRACOPIER_PLATFORM_CODE)
-                                thePlugin->errorString="Wrong platform code: "+thePlugin->informations.back().back();
+                            const std::string &platform=thePlugin->informations.back().back();
+                            if(platform!=ULTRACOPIER_PLATFORM_CODE)
+                                thePlugin->errorString="Wrong platform code: "+platform+std::string(" should be ")+ULTRACOPIER_PLATFORM_CODE;
                         }
                         #endif
                     }

@@ -146,85 +146,85 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="427"/>
-        <location filename="../../CopyEngineFactory.cpp" line="430"/>
-        <location filename="../../CopyEngineFactory.cpp" line="435"/>
-        <location filename="../../CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngineFactory.cpp" line="441"/>
+        <location filename="../../CopyEngineFactory.cpp" line="445"/>
         <source>Ask</source>
         <translation type="unfinished">просить</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="428"/>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
-        <location filename="../../CopyEngineFactory.cpp" line="436"/>
-        <location filename="../../CopyEngineFactory.cpp" line="440"/>
+        <location filename="../../CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngineFactory.cpp" line="438"/>
+        <location filename="../../CopyEngineFactory.cpp" line="442"/>
+        <location filename="../../CopyEngineFactory.cpp" line="446"/>
         <source>Skip</source>
         <translation type="unfinished">пропускать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="431"/>
+        <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Merge</source>
         <translation type="unfinished">слияние</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="433"/>
-        <location filename="../../CopyEngineFactory.cpp" line="445"/>
+        <location filename="../../CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngineFactory.cpp" line="451"/>
         <source>Rename</source>
         <translation type="unfinished">переименовать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngineFactory.cpp" line="443"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="441"/>
+        <location filename="../../CopyEngineFactory.cpp" line="447"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="442"/>
+        <location filename="../../CopyEngineFactory.cpp" line="448"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="443"/>
+        <location filename="../../CopyEngineFactory.cpp" line="449"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">Заменить, если новее</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="444"/>
+        <location filename="../../CopyEngineFactory.cpp" line="450"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="447"/>
+        <location filename="../../CopyEngineFactory.cpp" line="453"/>
         <source>Automatic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="448"/>
+        <location filename="../../CopyEngineFactory.cpp" line="454"/>
         <source>Sequential</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="449"/>
+        <location filename="../../CopyEngineFactory.cpp" line="455"/>
         <source>Parallel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="500"/>
-        <location filename="../../CopyEngineFactory.cpp" line="539"/>
+        <location filename="../../CopyEngineFactory.cpp" line="506"/>
+        <location filename="../../CopyEngineFactory.cpp" line="545"/>
         <source>Options error</source>
         <translation type="unfinished">Опции ошибке</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="500"/>
+        <location filename="../../CopyEngineFactory.cpp" line="506"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="539"/>
+        <location filename="../../CopyEngineFactory.cpp" line="545"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished">Параметры двигателя не загружается, не может получить доступ к фильтрам</translation>
     </message>

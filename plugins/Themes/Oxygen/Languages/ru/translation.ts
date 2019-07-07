@@ -36,36 +36,36 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1084"/>
+        <location filename="../../interface.cpp" line="1090"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">Не закрывать, если найдены ошибки</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1085"/>
+        <location filename="../../interface.cpp" line="1091"/>
         <source>Never close</source>
         <translation type="unfinished">Никогда не закрывать</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1086"/>
+        <location filename="../../interface.cpp" line="1092"/>
         <source>Always close</source>
         <translation type="unfinished">Всегда закрывайте</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1088"/>
+        <location filename="../../interface.cpp" line="1094"/>
         <source>File Name, 0KB</source>
         <translation>Имя файла, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1282"/>
-        <location filename="../../interface.cpp" line="1294"/>
-        <location filename="../../interface.cpp" line="1306"/>
+        <location filename="../../interface.cpp" line="1288"/>
+        <location filename="../../interface.cpp" line="1300"/>
+        <location filename="../../interface.cpp" line="1312"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1381"/>
-        <location filename="../../interface.cpp" line="1385"/>
         <location filename="../../interface.cpp" line="1387"/>
+        <location filename="../../interface.cpp" line="1391"/>
+        <location filename="../../interface.cpp" line="1393"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>

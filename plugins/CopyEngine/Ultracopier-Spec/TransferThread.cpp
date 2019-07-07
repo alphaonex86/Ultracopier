@@ -69,7 +69,7 @@ TransferThread::~TransferThread()
     }
     if(dacl!=NULL)
     {
-        free(dacl);
+        //free(dacl);
         dacl=NULL;
     }
     #endif
@@ -854,7 +854,7 @@ bool TransferThread::writeDestinationFilePermissions(const std::string &destinat
     }
     if(dacl!=NULL)
     {
-        free(dacl);
+        //free(dacl);
         dacl=NULL;
     }
     return true;
