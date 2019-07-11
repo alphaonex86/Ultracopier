@@ -1,4 +1,5 @@
 wasm: DEFINES += NOAUDIO
+android: DEFINES += NOAUDIO
 #DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
@@ -76,5 +77,5 @@ HEADERS += \
     ../plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition_CopyEngine.h \
     ../plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
-    ../plugins/CopyEngine/Ultracopier-Spec/Variable.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
     ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h

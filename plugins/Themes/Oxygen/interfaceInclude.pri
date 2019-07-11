@@ -10,7 +10,7 @@ HEADERS         = \
     $$PWD/StructEnumDefinition.h \
     $$PWD/DebugEngineMacro.h \
     $$PWD/Environment.h \
-    $$PWD/Variable.h \
+    $$PWD/OxygenVariable.h \
     $$PWD/../../../interface/PluginInterface_Themes.h \
     $$PWD/../../../interface/FacilityInterface.h \
     $$PWD/../../../interface/OptionInterface.h \

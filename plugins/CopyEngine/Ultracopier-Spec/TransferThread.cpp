@@ -1098,7 +1098,7 @@ void TransferThread::setMkFullPath(const bool mkFullPath)
 
 int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
 {
-    #if defined(__HAIKU__) || defined(Q_OS_MAC)
+    #if defined(__HAIKU__) || defined(Q_OS_MAC) || defined(ANDROID) || defined(__ANDROID_API__)
     return ::fseeko(__stream,__off,__whence);
     #else
     return ::fseeko64(__stream,__off,__whence);
@@ -1107,7 +1107,7 @@ int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
 
 int TransferThread::ftruncate64(int __fd, uint64_t __length)
 {
-    #if defined(__HAIKU__) || defined(Q_OS_MAC)
+    #if defined(__HAIKU__) || defined(Q_OS_MAC) || defined(ANDROID) || defined(__ANDROID_API__)
     return ::ftruncate(__fd,__length);
     #else
     return ::ftruncate64(__fd,__length);
