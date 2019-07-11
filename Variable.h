@@ -14,9 +14,9 @@
 #define ULTRACOPIER_DEBUG_MAX_ALL_SIZE 128 ///< \brief Max size (in MB) after the console/file output is dropped
 #define ULTRACOPIER_DEBUG_MAX_IMPORTANT_SIZE 150 ///< \brief Max size (in MB) after the console/file important output is dropped
 /// \brief the version
-#define ULTRACOPIER_VERSION		"2.0.2.1"
+#define ULTRACOPIER_VERSION		"2.0.2.2"
 /// \brief the windows version
-#define ULTRACOPIER_WINDOWS_VERSION	2,0,2,1
+#define ULTRACOPIER_WINDOWS_VERSION	2,0,2,2
 // define if the version is portable or not
 //#define ULTRACOPIER_VERSION_PORTABLE
 //#define ULTRACOPIER_VERSION_PORTABLEAPPS
