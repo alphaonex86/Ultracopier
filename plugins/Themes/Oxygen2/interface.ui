@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="interfaceResources.qrc">
-    <normaloff>:/Themes/Oxygen/resources/main.png</normaloff>:/Themes/Oxygen/resources/main.png</iconset>
+    <normaloff>:/Themes/Oxygen2/resources/main.png</normaloff>:/Themes/Oxygen2/resources/main.png</iconset>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -302,7 +302,7 @@
              </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
-               <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
+               <normaloff>:/Themes/Oxygen2/resources/moveDown.png</normaloff>:/Themes/Oxygen2/resources/moveDown.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -322,7 +322,7 @@
              </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
-               <normaloff>:/Themes/Oxygen/resources/player_pause.png</normaloff>:/Themes/Oxygen/resources/player_pause.png</iconset>
+               <normaloff>:/Themes/Oxygen2/resources/player_pause.png</normaloff>:/Themes/Oxygen2/resources/player_pause.png</iconset>
              </property>
             </widget>
            </item>
@@ -393,7 +393,7 @@
              </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
-               <normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen/resources/SystemTrayIcon/exit.png</iconset>
+               <normaloff>:/Themes/Oxygen2/resources/SystemTrayIcon/exit.png</normaloff>:/Themes/Oxygen2/resources/SystemTrayIcon/exit.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -489,7 +489,7 @@
              </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
-               <normaloff>:/Themes/Oxygen/resources/player_end.png</normaloff>:/Themes/Oxygen/resources/player_end.png</iconset>
+               <normaloff>:/Themes/Oxygen2/resources/player_end.png</normaloff>:/Themes/Oxygen2/resources/player_end.png</iconset>
              </property>
             </widget>
            </item>
@@ -500,7 +500,7 @@
              </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
-               <normaloff>:/Themes/Oxygen/resources/cancel.png</normaloff>:/Themes/Oxygen/resources/cancel.png</iconset>
+               <normaloff>:/Themes/Oxygen2/resources/cancel.png</normaloff>:/Themes/Oxygen2/resources/cancel.png</iconset>
              </property>
             </widget>
            </item>
@@ -600,7 +600,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/putOnTop.png</normaloff>:/Themes/Oxygen/resources/putOnTop.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/putOnTop.png</normaloff>:/Themes/Oxygen2/resources/putOnTop.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -626,7 +626,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/moveUp.png</normaloff>:/Themes/Oxygen/resources/moveUp.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/moveUp.png</normaloff>:/Themes/Oxygen2/resources/moveUp.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -652,7 +652,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/moveDown.png</normaloff>:/Themes/Oxygen/resources/moveDown.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/moveDown.png</normaloff>:/Themes/Oxygen2/resources/moveDown.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -678,7 +678,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/putOnBottom.png</normaloff>:/Themes/Oxygen/resources/putOnBottom.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/putOnBottom.png</normaloff>:/Themes/Oxygen2/resources/putOnBottom.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -704,7 +704,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
            </property>
            <property name="popupMode">
             <enum>QToolButton::InstantPopup</enum>
@@ -733,7 +733,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/remove.png</normaloff>:/Themes/Oxygen/resources/remove.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/remove.png</normaloff>:/Themes/Oxygen2/resources/remove.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -759,7 +759,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/search.png</normaloff>:/Themes/Oxygen/resources/search.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/search.png</normaloff>:/Themes/Oxygen2/resources/search.png</iconset>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -788,7 +788,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen2/resources/export-transfer-list.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -814,7 +814,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/import-transfer-list.png</normaloff>:/Themes/Oxygen/resources/import-transfer-list.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/import-transfer-list.png</normaloff>:/Themes/Oxygen2/resources/import-transfer-list.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -892,7 +892,7 @@
              </property>
              <property name="icon">
               <iconset resource="interfaceResources.qrc">
-               <normaloff>:/Themes/Oxygen/resources/remove.png</normaloff>:/Themes/Oxygen/resources/remove.png</iconset>
+               <normaloff>:/Themes/Oxygen2/resources/remove.png</normaloff>:/Themes/Oxygen2/resources/remove.png</iconset>
              </property>
              <property name="flat">
               <bool>true</bool>
@@ -931,7 +931,7 @@
            </property>
            <property name="icon">
             <iconset resource="interfaceResources.qrc">
-             <normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen/resources/export-transfer-list.png</iconset>
+             <normaloff>:/Themes/Oxygen2/resources/export-transfer-list.png</normaloff>:/Themes/Oxygen2/resources/export-transfer-list.png</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -1028,7 +1028,7 @@
   <action name="actionAddFile">
    <property name="icon">
     <iconset resource="interfaceResources.qrc">
-     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+     <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add file</string>
@@ -1037,7 +1037,7 @@
   <action name="actionAddFolder">
    <property name="icon">
     <iconset resource="interfaceResources.qrc">
-     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+     <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Add folder</string>
@@ -1046,7 +1046,7 @@
   <action name="actionAddFileToMove">
    <property name="icon">
     <iconset resource="interfaceResources.qrc">
-     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+     <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move file(s)</string>
@@ -1055,7 +1055,7 @@
   <action name="actionAddFolderToMove">
    <property name="icon">
     <iconset resource="interfaceResources.qrc">
-     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+     <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Move folder</string>
@@ -1064,7 +1064,7 @@
   <action name="actionAddFileToCopy">
    <property name="icon">
     <iconset resource="interfaceResources.qrc">
-     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+     <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy file(s)</string>
@@ -1073,7 +1073,7 @@
   <action name="actionAddFolderToCopy">
    <property name="icon">
     <iconset resource="interfaceResources.qrc">
-     <normaloff>:/Themes/Oxygen/resources/add.png</normaloff>:/Themes/Oxygen/resources/add.png</iconset>
+     <normaloff>:/Themes/Oxygen2/resources/add.png</normaloff>:/Themes/Oxygen2/resources/add.png</iconset>
    </property>
    <property name="text">
     <string>Copy folder</string>
