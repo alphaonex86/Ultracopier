@@ -7,22 +7,25 @@ QMAKE_CXXFLAGS+="-Wall -Wextra"
 wasm: DEFINES += NOAUDIO
 macx {
     DEFINES += NOAUDIO
-    LIBS += /usr/local/Cellar/libogg/1.3.3/lib/libogg.a /usr/local/Cellar/opus/1.3.1/lib/libopus.a
-    INCLUDEPATH += /usr/local/Cellar/libogg/1.3.3/include/
+    LIBS += /usr/local/Cellar/opus/1.3.1/lib/libopus.a
     INCLUDEPATH += /usr/local/Cellar/opus/1.3.1/include/
 }
 #DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
-linux:LIBS += -logg -lopus
-win32:LIBS += -logg -lopus
+linux:LIBS += -lopus
+win32:LIBS += -lopus
 SOURCES += \
+    $$PWD/../libogg/bitwise.c \
+    $$PWD/../libogg/framing.c \
     $$PWD/../opusfile/info.c \
     $$PWD/../opusfile/internal.c \
     $$PWD/../opusfile/opusfile.c \
     $$PWD/../opusfile/stream.c \
 
 HEADERS  += \
+    $$PWD/../libogg/ogg.h \
+    $$PWD/../libogg/os_types.h \
     $$PWD/../opusfile/internal.h \
     $$PWD/../opusfile/opusfile.h \
 }

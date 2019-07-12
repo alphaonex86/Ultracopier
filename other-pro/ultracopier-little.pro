@@ -3,16 +3,20 @@ android: DEFINES += NOAUDIO
 #DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
-linux:LIBS += -logg -lopus
-macx:LIBS += -logg -lopus
-win32:LIBS += -logg -lopus
+linux:LIBS += -lopus
+macx:LIBS += -lopus
+win32:LIBS += -lopus
 SOURCES += \
+    $$PWD/../libogg/bitwise.c \
+    $$PWD/../libogg/framing.c \
     $$PWD/../opusfile/info.c \
     $$PWD/../opusfile/internal.c \
     $$PWD/../opusfile/opusfile.c \
     $$PWD/../opusfile/stream.c \
 
 HEADERS  += \
+    $$PWD/../libogg/ogg.h \
+    $$PWD/../libogg/os_types.h \
     $$PWD/../opusfile/internal.h \
     $$PWD/../opusfile/opusfile.h \
 }

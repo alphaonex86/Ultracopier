@@ -13,7 +13,7 @@ Main features include:
 - plugin support
 
 # Dependency
-- libogg and libopus if audio support is enabled
+- libopus if audio support is enabled
 
 # Building
 
