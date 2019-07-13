@@ -1424,9 +1424,9 @@ void Themes::on_moreButton_toggled(bool checked)
     else
         this->setMaximumHeight(130);*/
     // usefull under windows
-    this->updateGeometry();
-    this->update();
+    #if ! defined(__ANDROID__) && ! defined(ANDROID) && ! defined(__ANDROID_API__)
     this->adjustSize();
+    #endif
 }
 
 /* drag event processing
@@ -1758,10 +1758,37 @@ void Themes::on_exportErrorToTransferList_clicked()
 
 void Themes::resizeEvent(QResizeEvent*)
 {
-    if(width()<height() && !ui->moreButton->isChecked() && (moreButton==NULL || !moreButton->isChecked()))
-        ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
-    else
-        ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
+    if(!ui->moreButton->isChecked() && (moreButton==NULL || !moreButton->isChecked()))
+    {
+        if(width()<height())
+        {
+            ui->horizontalLayout_3->setDirection(QBoxLayout::TopToBottom);
+            ui->frameLeft->setMaximumHeight(height()/3);
+            ui->frameLeft->setMaximumWidth(1000000);
+            ui->frameMiddle->setMaximumHeight(height()/3);
+            ui->frameMiddle->setMaximumWidth(1000000);
+            ui->frameRight->setMaximumHeight(height()/3);
+            ui->frameRight->setMaximumWidth(1000000);
+        }
+        else
+        {
+            ui->horizontalLayout_3->setDirection(QBoxLayout::LeftToRight);
+            ui->frameLeft->setMaximumHeight(1000000);
+            ui->frameLeft->setMaximumWidth(width()/3);
+            ui->frameMiddle->setMaximumHeight(1000000);
+            ui->frameMiddle->setMaximumWidth(width()/3);
+            ui->frameRight->setMaximumHeight(1000000);
+            ui->frameRight->setMaximumWidth(width()/3);
+        }
+    }
+    else {
+        ui->frameLeft->setMaximumHeight(1000000);
+        ui->frameLeft->setMaximumWidth(1000000);
+        ui->frameMiddle->setMaximumHeight(1000000);
+        ui->frameMiddle->setMaximumWidth(1000000);
+        ui->frameRight->setMaximumHeight(1000000);
+        ui->frameRight->setMaximumWidth(1000000);
+    }
     if(ui->frameS->width()>300)
     {
         int space=ui->frameS->width()/20;

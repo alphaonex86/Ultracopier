@@ -83,3 +83,8 @@ HEADERS += \
     ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     ../plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
     ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-sources
+
+DISTFILES += \
+    ../android-sources/AndroidManifest.xml
