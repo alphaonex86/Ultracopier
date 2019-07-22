@@ -1057,9 +1057,9 @@ uint64_t ListThread::addToTransfer(const std::string& source,const std::string& 
     {
         struct stat p_statbuf;
         #ifdef Q_OS_WIN32
-        if(stat(source.c_str(), &p_statbuf)>=0 && S_ISREG(p_statbuf.st_mode)==1)
+        if(stat(source.c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
         #else
-        if(lstat(source.c_str(), &p_statbuf)>=0 && S_ISREG(p_statbuf.st_mode)==1)
+        if(lstat(source.c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
         #endif
             //if error or file not exists, considere as regular file
             size=p_statbuf.st_size;

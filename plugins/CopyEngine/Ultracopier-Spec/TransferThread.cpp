@@ -4,6 +4,7 @@
 #include "TransferThread.h"
 #include <string>
 #include <dirent.h>
+#include <limits.h>
 
 #ifdef Q_OS_WIN32
 #include <accctrl.h>
