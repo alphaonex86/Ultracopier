@@ -14,6 +14,12 @@
 #ifndef FILEISSAMEDIALOG_H
 #define FILEISSAMEDIALOG_H
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 namespace Ui {
     class fileIsSameDialog;
 }
@@ -24,7 +30,7 @@ class FileIsSameDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileIsSameDialog(QWidget *parent, std::string fileInfo, std::string firstRenamingRule, std::string otherRenamingRule, FacilityInterface *facilityEngine);
+    explicit FileIsSameDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std::string firstRenamingRule, std::string otherRenamingRule, FacilityInterface *facilityEngine);
     ~FileIsSameDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

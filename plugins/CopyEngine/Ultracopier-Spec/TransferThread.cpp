@@ -5,6 +5,10 @@
 #include <string>
 #include <dirent.h>
 #include <limits.h>
+#ifdef WIDESTRING
+#include <locale>
+#include <codecvt>
+#endif
 
 #ifdef Q_OS_WIN32
 #include <accctrl.h>
@@ -97,17 +101,33 @@ TransferStat TransferThread::getStat() const
     return transfer_stat;
 }
 
-bool TransferThread::setFiles(const std::string& source, const int64_t &size, const std::string& destination, const Ultracopier::CopyMode &mode)
+#ifdef WIDESTRING
+std::wstring TransferThread::stringToWstring(const std::string& utf8)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    return converter.from_bytes(utf8);
+}
+
+std::string TransferThread::wstringTostring(const std::wstring& utf16)
+{
+
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
+    return conv1.to_bytes(utf16);
+}
+#endif
+
+bool TransferThread::setFiles(const INTERNALTYPEPATH& source, const int64_t &size, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode &mode)
 {
     if(transfer_stat!=TransferStat_Idle)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+source+", destination: "+destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+
+                                 TransferThread::wstringTostring(source)+", destination: "+TransferThread::wstringTostring(destination));
         return false;
     }
     //to prevent multiple file alocation into ListThread::doNewActions_inode_manipulation()
     transfer_stat			= TransferStat_PreOperation;
     //emit pushStat(stat,transferId);
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, source: "+source+", destination: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, source: "+TransferThread::wstringTostring(source)+", destination: "+TransferThread::wstringTostring(destination));
     this->source                    = source;
     this->destination               = destination;
     this->mode                      = mode;
@@ -133,7 +153,8 @@ void TransferThread::setFileRename(const std::string &nameForRename)
 {
     if(transfer_stat!=TransferStat_PreOperation)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+source+(", destination: ")+destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+
+                                 TransferThread::wstringTostring(source)+(", destination: ")+TransferThread::wstringTostring(destination));
         return;
     }
     if(QString::fromStdString(nameForRename).contains(QRegularExpression(QStringLiteral("[/\\\\\\*]"))))
@@ -144,32 +165,41 @@ void TransferThread::setFileRename(const std::string &nameForRename)
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] nameForRename: "+nameForRename);
     if(!renameTheOriginalDestination)
-        destination=destination+'/'+nameForRename;
+        destination=destination+TransferThread::stringToWstring("/")+TransferThread::stringToWstring(nameForRename);
     else
     {
-        std::string tempDestination=destination;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] rename "+destination+": to: "+destination+'/'+nameForRename);
-        if(!rename(destination.c_str(),(destination+'/'+nameForRename).c_str()))
+        INTERNALTYPEPATH tempDestination=destination;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] rename "+TransferThread::wstringTostring(destination)+
+                                 ": to: "+TransferThread::wstringTostring(destination)+"/"+nameForRename);
+        if(!rename(destination,(destination+TransferThread::stringToWstring("/")+TransferThread::stringToWstring(nameForRename))))
         {
             if(!is_file(destination))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+destination+": destination: "+destination+", error: "+std::to_string(errno));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+TransferThread::wstringTostring(destination)+
+                                         ": destination: "+TransferThread::wstringTostring(destination)+", error: "+std::to_string(errno));
                 emit errorOnFile(destination,tr("File not found").toStdString());
                 return;
             }
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+": "+destination+", error: "+std::to_string(errno));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+TransferThread::wstringTostring(destination)+
+                                         ": "+TransferThread::wstringTostring(destination)+", error: "+std::to_string(errno));
             emit errorOnFile(destination,"errno: "+std::string(strerror(errno)));
             return;
         }
         if(source==destination)
-            source=destination+'/'+nameForRename;
+            source=destination+TransferThread::stringToWstring("/")+TransferThread::stringToWstring(nameForRename);
         destination=tempDestination;
     }
     fileExistsAction	= FileExists_NotSet;
     resetExtraVariable();
     emit internalStartPreOperation();
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination is: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] destination is: "+TransferThread::wstringTostring(destination));
+}
+
+bool TransferThread::rename(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination)
+{
+    return ::rename(TransferThread::wstringTostring(source).c_str(),
+                    TransferThread::wstringTostring(destination).c_str())==0;
 }
 
 void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
@@ -197,11 +227,11 @@ bool TransferThread::isSame()
     {
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         if(!is_file(destination))
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start source: "+source+" not exists");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start source: "+TransferThread::wstringTostring(source)+" not exists");
         if(is_symlink(source))
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start source: "+source+" isSymLink");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start source: "+TransferThread::wstringTostring(source)+" isSymLink");
         if(is_symlink(destination))
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start destination: "+destination+" isSymLink");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start destination: "+TransferThread::wstringTostring(destination)+" isSymLink");
         #endif
         if(fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_Skip)
         {
@@ -340,12 +370,12 @@ std::string TransferThread::resolvedName(const std::string &inode)
     return inode.substr(previousLastPos+1,lastPos-previousLastPos-1);
 }
 
-std::string TransferThread::getSourcePath() const
+INTERNALTYPEPATH TransferThread::getSourcePath() const
 {
     return source;
 }
 
-std::string TransferThread::getDestinationPath() const
+INTERNALTYPEPATH TransferThread::getDestinationPath() const
 {
     return destination;
 }
@@ -360,8 +390,8 @@ bool TransferThread::checkAlwaysRename()
 {
     if(alwaysDoFileExistsAction==FileExists_Rename)
     {
-        std::string newDestination=destination;
-        std::string fileName=resolvedName(newDestination);
+        INTERNALTYPEPATH newDestination=destination;
+        std::string fileName=resolvedName(TransferThread::wstringTostring(newDestination));
         std::string suffix;
         std::string newFileName;
         //resolv the suffix
@@ -392,7 +422,8 @@ bool TransferThread::checkAlwaysRename()
             }
             stringreplaceAll(newFileName,"%name%",fileName);
             stringreplaceAll(newFileName,"%suffix%",suffix);
-            newDestination=FSabsolutePath(newDestination)+'/'+newFileName;
+            newDestination=FSabsolutePath(newDestination)+
+                    TransferThread::stringToWstring("/")+TransferThread::stringToWstring(newFileName);
             num++;
         }
         while(is_file(newDestination));
@@ -404,13 +435,15 @@ bool TransferThread::checkAlwaysRename()
             {
                 if(!is_file(destination))
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+destination+": destination: "+newDestination+", error: "+std::to_string(errno));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source not exists "+TransferThread::wstringTostring(destination)+
+                                             ": destination: "+TransferThread::wstringTostring(newDestination)+", error: "+std::to_string(errno));
                     emit errorOnFile(destination,tr("File not found").toStdString());
                     readError=true;
                     return true;
                 }
                 else
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+destination+": "+newDestination+", error: "+std::to_string(errno));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to do real move "+TransferThread::wstringTostring(destination)+
+                                             ": "+TransferThread::wstringTostring(newDestination)+", error: "+std::to_string(errno));
                 readError=true;
                 emit errorOnFile(destination,std::string(strerror(errno))+", errno: "+std::string(strerror(errno)));
                 return true;
@@ -424,18 +457,14 @@ bool TransferThread::checkAlwaysRename()
 /// \warning not check if path have double //, if have do bug return failed
 /// \warning check mkpath() call should not exists because only existing dest is allowed now
 #ifdef Q_OS_UNIX
-bool TransferThread::mkpath(const std::string &path, const mode_t &mode)
+bool TransferThread::mkpath(const INTERNALTYPEPATH &path, const mode_t &mode)
 #else
-bool TransferThread::mkpath(const std::string &path)
+bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
 #endif
 {
     char pathC[PATH_MAX];
-    strcpy(pathC,path.c_str());
-    #ifdef Q_OS_UNIX
-    if(::mkdir(pathC, mode)==-1)
-    #else
-    if(::mkdir(pathC)==-1)
-    #endif
+    strcpy(pathC,TransferThread::wstringTostring(path).c_str());
+    if(!mkdir(path))
         if(errno==EEXIST)
             return true;
 
@@ -502,13 +531,13 @@ bool TransferThread::mkpath(const std::string &path)
     return true;
 }
 
-bool TransferThread::mkdir(const std::string &file_path, const mode_t &mode)
+bool TransferThread::mkdir(const INTERNALTYPEPATH &file_path, const mode_t &mode)
 {
     #ifdef Q_OS_UNIX
-    return ::mkdir(file_path.c_str(),mode);
+    return ::mkdir(TransferThread::wstringTostring(file_path).c_str(),mode)==0;
     #else
     (void)mode;
-    return ::mkdir(file_path.c_str());
+    return ::mkdir(TransferThread::wstringTostring(file_path).c_str())==0;
     #endif
 }
 
@@ -519,7 +548,10 @@ bool TransferThread::canBeMovedDirectly() const
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] mode!=Ultracopier::Move");
         return false;
     }
-    return is_symlink(source) || driveManagement.isSameDrive(destination,source);
+    return is_symlink(source) || driveManagement.isSameDrive(
+                TransferThread::wstringTostring(destination),
+                TransferThread::wstringTostring(source)
+                );
 }
 
 bool TransferThread::canBeCopiedDirectly() const
@@ -620,13 +652,13 @@ bool TransferThread::doFilePostOperation()
 ///////////////////////// Normal event ///////////////////////////
 //////////////////////////////////////////////////////////////////
 
-int64_t TransferThread::readFileMDateTime(const std::string &source)
+int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
 {
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         struct stat info;
-        if(stat(source.c_str(),&info)!=0)
+        if(stat(TransferThread::wstringTostring(source).c_str(),&info)!=0)
             return -1;
         #ifdef Q_OS_MAC
         return info.st_mtimespec.tv_sec;
@@ -668,13 +700,13 @@ int64_t TransferThread::readFileMDateTime(const std::string &source)
 }
 
 //fonction to read the file date time
-bool TransferThread::readSourceFileDateTime(const std::string &source)
+bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+source+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileDateTime("+TransferThread::wstringTostring(source)+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         struct stat info;
-        if(stat(source.c_str(),&info)!=0)
+        if(stat(TransferThread::wstringTostring(source).c_str(),&info)!=0)
             return false;
         #ifdef Q_OS_MAC
         time_t ctime=info.st_ctimespec.tv_sec;
@@ -693,7 +725,7 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
         #endif
         if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+TransferThread::wstringTostring(source));
             return false;
         }
         Q_UNUSED(ctime);
@@ -758,12 +790,12 @@ bool TransferThread::readSourceFileDateTime(const std::string &source)
     return false;
 }
 
-bool TransferThread::writeDestinationFileDateTime(const std::string &destination)
+bool TransferThread::writeDestinationFileDateTime(const INTERNALTYPEPATH &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeFileDateTime("+destination+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeFileDateTime("+TransferThread::wstringTostring(destination)+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
-        return utime(destination.c_str(),&butime)==0;
+        return utime(TransferThread::wstringTostring(destination).c_str(),&butime)==0;
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
@@ -803,10 +835,10 @@ bool TransferThread::writeDestinationFileDateTime(const std::string &destination
     return false;
 }
 
-bool TransferThread::readSourceFilePermissions(const std::string &source)
+bool TransferThread::readSourceFilePermissions(const INTERNALTYPEPATH &source)
 {
     #ifdef Q_OS_UNIX
-    if(stat(source.c_str(), &permissions)!=0)
+    if(stat(TransferThread::wstringTostring(source).c_str(), &permissions)!=0)
         return false;
     else
         return true;
@@ -828,12 +860,12 @@ bool TransferThread::readSourceFilePermissions(const std::string &source)
     #endif
 }
 
-bool TransferThread::writeDestinationFilePermissions(const std::string &destination)
+bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &destination)
 {
     #ifdef Q_OS_UNIX
-    if(chmod(destination.c_str(), permissions.st_mode)!=0)
+    if(chmod(TransferThread::wstringTostring(destination).c_str(), permissions.st_mode)!=0)
         return false;
-    if(chown(destination.c_str(), permissions.st_uid, permissions.st_gid)!=0)
+    if(chown(TransferThread::wstringTostring(destination).c_str(), permissions.st_uid, permissions.st_gid)!=0)
         return false;
     return true;
     #else
@@ -905,7 +937,7 @@ void TransferThread::set_updateMount()
     driveManagement.tryUpdate();
 }
 
-bool TransferThread::is_symlink(const std::string &filename)
+bool TransferThread::is_symlink(const INTERNALTYPEPATH &filename)
 {
     return is_symlink(filename.c_str());
 }
@@ -926,7 +958,7 @@ bool TransferThread::is_symlink(const char * const filename)
     return false;
 }
 
-bool TransferThread::is_file(const std::string &filename)
+bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 {
     return is_file(filename.c_str());
 }
@@ -948,7 +980,7 @@ bool TransferThread::is_file(const char * const filename)
     return true;
 }
 
-bool TransferThread::is_dir(const std::string &filename)
+bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 {
     return is_dir(filename.c_str());
 }
@@ -970,7 +1002,7 @@ bool TransferThread::is_dir(const char * const filename)
     return true;
 }
 
-bool TransferThread::exists(const std::string &filename)
+bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 {
     return is_dir(filename.c_str());
 }
@@ -990,7 +1022,7 @@ bool TransferThread::exists(const char * const filename)
     return true;
 }
 
-int64_t TransferThread::file_stat_size(const std::string &filename)
+int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 {
     return file_stat_size(filename.c_str());
 }
@@ -1010,31 +1042,27 @@ int64_t TransferThread::file_stat_size(const char * const filename)
     return p_statbuf.st_size;
 }
 
-bool TransferThread::entryInfoList(const std::string &path,std::vector<std::string> &list)
+bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<INTERNALTYPEPATH> &list)
 {
-    DIR *dp;
-    struct dirent *ep;
-    dp=opendir(path.c_str());
-    if(dp!=NULL)
-    {
-        do {
-            ep=readdir(dp);
-            const std::string name(ep->d_name);
-            if(name!="." && name!="..")
-                list.push_back(ep->d_name);
-        } while(ep);
-        (void) closedir(dp);
-        return true;
-    }
-    return false;
+    std::vector<dirent_uc> listTemp;
+    if(!TransferThread::entryInfoList(path,listTemp))
+        return false;
+    for(const dirent_uc &u : listTemp)
+        list.push_back(u.d_name);
+    return true;
+}
+
+bool TransferThread::rmdir(const INTERNALTYPEPATH &path)
+{
+    return ::rmdir(TransferThread::wstringTostring(path).c_str())==0;
 }
 
 #ifdef Q_OS_UNIX
-bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc> &list)
+bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dirent_uc> &list)
 {
     DIR *dp;
     struct dirent *ep;
-    dp=opendir(path.c_str());
+    dp=opendir(TransferThread::wstringTostring(path).c_str());
     if(dp!=NULL)
     {
         do {
@@ -1055,7 +1083,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
                     #else
                     tempValue.isFolder=ep->d_type==DT_DIR;
                     #endif
-                    tempValue.d_name=ep->d_name;
+                    tempValue.d_name=TransferThread::stringToWstring(ep->d_name);
                     list.push_back(tempValue);
                 }
             }
@@ -1066,7 +1094,7 @@ bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc
     return false;
 }
 #else
-bool TransferThread::entryInfoList(const std::string &path,std::vector<dirent_uc> &list)
+bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dirent_uc> &list)
 {
     WIN32_FIND_DATAA fdFile;
     HANDLE hFind = NULL;

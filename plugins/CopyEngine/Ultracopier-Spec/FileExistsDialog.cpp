@@ -11,7 +11,9 @@
 
 #include <QMessageBox>
 
-FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule,FacilityInterface * facilityEngine) :
+FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
+                                   INTERNALTYPEPATH destination, std::string firstRenamingRule,
+                                   std::string otherRenamingRule,FacilityInterface * facilityEngine) :
     QDialog(parent),
     ui(new Ui::fileExistsDialog)
 {
@@ -24,28 +26,28 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
 
     ui->setupUi(this);
     action=FileExists_Cancel;
-    destinationInfo=destination;
-    oldName=TransferThread::resolvedName(destination);
+    destinationInfo=TransferThread::wstringTostring(destination);
+    oldName=TransferThread::resolvedName(TransferThread::wstringTostring(destination));
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     ui->Overwrite->addAction(ui->actionOverwrite_if_newer);
     ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_modification_date);
-    ui->label_content_source_file_name->setText(QString::fromStdString(TransferThread::resolvedName(source)));
-    std::string folder=FSabsolutePath(source);
+    ui->label_content_source_file_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::wstringTostring(source))));
+    std::string folder=TransferThread::wstringTostring(FSabsolutePath(source));
     if(folder.size()>80)
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_source_folder->setText(QString::fromStdString(folder));
-    ui->label_content_destination_file_name->setText(QString::fromStdString(TransferThread::resolvedName(destination)));
-    folder=FSabsolutePath(destination);
+    ui->label_content_destination_file_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::wstringTostring(destination))));
+    folder=TransferThread::wstringTostring(FSabsolutePath(destination));
     if(folder.size()>80)
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_destination_folder->setText(QString::fromStdString(folder));
     //QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
-    if(lstat(source.c_str(), &source_statbuf)==0)
+    if(lstat(TransferThread::wstringTostring(source).c_str(), &source_statbuf)==0)
     #else
-    if(stat(source.c_str(), &source_statbuf)==0)
+    if(stat(TransferThread::wstringTostring(source).c_str(), &source_statbuf)==0)
     #endif
     {
         #ifdef Q_OS_UNIX
@@ -75,9 +77,9 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, std::string source, std::str
     }
     struct stat destination_statbuf;
     #ifdef Q_OS_UNIX
-    if(lstat(destination.c_str(), &destination_statbuf)==0)
+    if(lstat(TransferThread::wstringTostring(destination).c_str(), &destination_statbuf)==0)
     #else
-    if(stat(destination.c_str(), &destination_statbuf)==0)
+    if(stat(TransferThread::wstringTostring(destination.c_str()), &destination_statbuf)==0)
     #endif
     {
         #ifdef Q_OS_UNIX

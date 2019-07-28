@@ -31,8 +31,15 @@ void RenamingRules::on_buttonBox_clicked(QAbstractButton *button)
 void RenamingRules::setRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule)
 {
     disconnectUI();
+    if(firstRenamingRule.find("%name%")==std::string::npos || firstRenamingRule.find("%suffix%")==std::string::npos)
+        firstRenamingRule.clear();
+    if(otherRenamingRule.find("%name%")==std::string::npos || otherRenamingRule.find("%suffix%")==std::string::npos
+             || otherRenamingRule.find("%number%")==std::string::npos)
+        otherRenamingRule.clear();
+
     this->firstRenamingRule=firstRenamingRule;
     this->otherRenamingRule=otherRenamingRule;
+
     if(!firstRenamingRule.empty())
         ui->firstRenamingRule->setText(QString::fromStdString(firstRenamingRule));
     else
@@ -59,6 +66,8 @@ void RenamingRules::disconnectUI()
 void RenamingRules::firstRenamingRule_haveChanged()
 {
     QString newValue=ui->firstRenamingRule->text();
+    if(!newValue.contains("%name%") || !newValue.contains("%suffix%"))
+        newValue.clear();
     if(newValue==tr("%1 - copy%2").arg(QStringLiteral("%name%")).arg(QStringLiteral("%name%")))
         newValue=QStringLiteral("");
     if(newValue.toStdString()==firstRenamingRule)
@@ -70,6 +79,8 @@ void RenamingRules::firstRenamingRule_haveChanged()
 void RenamingRules::otherRenamingRule_haveChanged()
 {
     QString newValue=ui->otherRenamingRule->text();
+    if(!newValue.contains("%name%") || !newValue.contains("%suffix%") || !newValue.contains("%number%"))
+        newValue.clear();
     if(newValue==tr("%1 - copy (%2)%3").arg(QStringLiteral("%name%")).arg(QStringLiteral("%number%")).arg(QStringLiteral("%name%")))
         newValue=QStringLiteral("");
     if(newValue.toStdString()==otherRenamingRule)

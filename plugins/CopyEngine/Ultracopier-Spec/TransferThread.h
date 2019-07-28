@@ -13,6 +13,12 @@
 #include <utility>
 #include <dirent.h>
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 //defore the next define
 #include "CopyEngineUltracopier-SpecVariable.h"
 
@@ -68,41 +74,47 @@ public:
     #else
     static std::string resolvedName(const std::string &inode);
     #endif
-    std::string getSourcePath() const;
-    std::string getDestinationPath() const;
+    INTERNALTYPEPATH getSourcePath() const;
+    INTERNALTYPEPATH getDestinationPath() const;
     Ultracopier::CopyMode getMode() const;
     // \warning check mkpath() call should not exists because only existing dest is allowed now
     #ifdef Q_OS_UNIX
-    static bool mkpath(const std::string &file_path, const mode_t &mode=0755);
+    static bool mkpath(const INTERNALTYPEPATH &file_path, const mode_t &mode=0755);
     #else
-    static bool mkpath(const std::string &file_path);
+    static bool mkpath(const INTERNALTYPEPATH &file_path);
     #endif
-    static bool mkdir(const std::string &file_path, const mode_t &mode=0755);
+    static bool mkdir(const INTERNALTYPEPATH &file_path, const mode_t &mode=0755);
+    #ifdef WIDESTRING
+    static std::wstring stringToWstring(const std::string& utf8);
+    static std::string wstringTostring(const std::wstring& utf16);
+    #endif
 
-    static int64_t readFileMDateTime(const std::string &source);
+    static int64_t readFileMDateTime(const INTERNALTYPEPATH &source);
     static bool is_symlink(const char * const filename);
-    static bool is_symlink(const std::string &filename);
+    static bool is_symlink(const INTERNALTYPEPATH &filename);
     static bool is_file(const char * const filename);
-    static bool is_file(const std::string &filename);
+    static bool is_file(const INTERNALTYPEPATH &filename);
     static bool is_dir(const char * const filename);
-    static bool is_dir(const std::string &filename);
+    static bool is_dir(const INTERNALTYPEPATH &filename);
     static bool exists(const char * const filename);
-    static bool exists(const std::string &filename);
-    static int64_t file_stat_size(const std::string &filename);
+    static bool exists(const INTERNALTYPEPATH &filename);
+    static int64_t file_stat_size(const INTERNALTYPEPATH &filename);
     static int64_t file_stat_size(const char * const filename);
-    static bool entryInfoList(const std::string &path, std::vector<std::string> &list);
+    static bool entryInfoList(const INTERNALTYPEPATH &path, std::vector<INTERNALTYPEPATH> &list);
+    static bool rmdir(const INTERNALTYPEPATH &path);
     struct dirent_uc
     {
         #ifdef Q_OS_WIN32
         size_t size;
         #endif
+        INTERNALTYPEPATH d_name;
         bool isFolder;
-        std::string d_name;
     };
-    static bool entryInfoList(const std::string &path, std::vector<dirent_uc> &list);
+    static bool entryInfoList(const INTERNALTYPEPATH &path, std::vector<dirent_uc> &list);
     void setMkFullPath(const bool mkFullPath);
     static int fseeko64(FILE *__stream, uint64_t __off, int __whence);
     static int ftruncate64(int __fd, uint64_t __length);
+    static bool rename(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination);
 protected:
     void run();
     void resetExtraVariable();
@@ -115,10 +127,10 @@ protected:
     bool canBeCopiedDirectly() const;
 
     //fonction to edit the file date time
-    bool readSourceFileDateTime(const std::string &source);
-    bool writeDestinationFileDateTime(const std::string &destination);
-    bool readSourceFilePermissions(const std::string &source);
-    bool writeDestinationFilePermissions(const std::string &destination);
+    bool readSourceFileDateTime(const INTERNALTYPEPATH &source);
+    bool writeDestinationFileDateTime(const INTERNALTYPEPATH &destination);
+    bool readSourceFilePermissions(const INTERNALTYPEPATH &source);
+    bool writeDestinationFilePermissions(const INTERNALTYPEPATH &destination);
 signals:
     //internal signal
     void internalStartPostOperation() const;
@@ -133,8 +145,8 @@ signals:
     void writeStopped() const;
     void postOperationStopped() const;
     //get dialog
-    void fileAlreadyExists(const std::string &info,const std::string &info2,const bool &isSame) const;
-    void errorOnFile(const std::string &info,const std::string &string,const ErrorType &errorType=ErrorType_Normal) const;
+    void fileAlreadyExists(const INTERNALTYPEPATH &info,const INTERNALTYPEPATH &info2,const bool &isSame) const;
+    void errorOnFile(const INTERNALTYPEPATH &info,const std::string &string,const ErrorType &errorType=ErrorType_Normal) const;
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,std::string fonction,std::string text,std::string file,int ligne) const;
     void tryPutAtBottom() const;
@@ -142,7 +154,7 @@ signals:
     void pushStat(const TransferStat &stat,const uint64_t &pos) const;
 public slots:
     /// \brief to set files to transfer
-    bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
+    bool setFiles(const INTERNALTYPEPATH& source,const int64_t &size,const INTERNALTYPEPATH& destination,const Ultracopier::CopyMode &mode);
     /// \brief to set the new name of the destination
     void setFileRename(const std::string &nameForRename);
     /// \brief to start the transfer of data
@@ -186,8 +198,8 @@ protected:
     DriveManagement driveManagement;
     volatile bool	canStartTransfer;
     bool			retry;
-    std::string		source;
-    std::string		destination;
+    INTERNALTYPEPATH	source;
+    INTERNALTYPEPATH		destination;
     int64_t			size;
     FileExistsAction	fileExistsAction;
     FileExistsAction	alwaysDoFileExistsAction;

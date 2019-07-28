@@ -15,6 +15,12 @@ namespace Ui {
     class folderExistsDialog;
 }
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 /// \brief to show file exists dialog, and ask what do
 class FolderExistsDialog : public QDialog
 {
@@ -22,7 +28,7 @@ class FolderExistsDialog : public QDialog
 
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FolderExistsDialog(QWidget *parent,std::string source,bool isSame,std::string destination,std::string firstRenamingRule,std::string otherRenamingRule);
+    explicit FolderExistsDialog(QWidget *parent,INTERNALTYPEPATH source,bool isSame,INTERNALTYPEPATH destination,std::string firstRenamingRule,std::string otherRenamingRule);
     ~FolderExistsDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

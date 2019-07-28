@@ -582,30 +582,30 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="156"/>
-        <location filename="../../TransferThread.cpp" line="407"/>
-        <location filename="../../TransferThread.cpp" line="553"/>
+        <location filename="../../TransferThread.cpp" line="157"/>
+        <location filename="../../TransferThread.cpp" line="408"/>
+        <location filename="../../TransferThread.cpp" line="554"/>
         <source>File not found</source>
         <translation>Fájl nem található</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="141"/>
+        <location filename="../../TransferThread.cpp" line="142"/>
         <source>Try rename with using special characters</source>
         <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="380"/>
+        <location filename="../../TransferThread.cpp" line="381"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - másolás</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="387"/>
+        <location filename="../../TransferThread.cpp" line="388"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - másolás (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="553"/>
-        <location filename="../../TransferThread.cpp" line="589"/>
+        <location filename="../../TransferThread.cpp" line="554"/>
+        <location filename="../../TransferThread.cpp" line="590"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>

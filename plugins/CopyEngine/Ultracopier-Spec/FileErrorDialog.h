@@ -14,6 +14,12 @@
 #ifndef FILEERRORDIALOG_H
 #define FILEERRORDIALOG_H
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 namespace Ui {
     class fileErrorDialog;
 }
@@ -24,7 +30,7 @@ class FileErrorDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileErrorDialog(QWidget *parent, std::string fileInfo, std::string errorString, const ErrorType &errorType, FacilityInterface *facilityEngine);
+    explicit FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std::string errorString, const ErrorType &errorType, FacilityInterface *facilityEngine);
     ~FileErrorDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();

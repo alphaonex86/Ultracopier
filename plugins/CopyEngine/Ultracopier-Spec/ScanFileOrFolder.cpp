@@ -64,33 +64,33 @@ bool ScanFileOrFolder::isFinished() const
     return stopped;
 }
 
-void ScanFileOrFolder::addToList(const std::vector<std::string>& sources,const std::string& destination)
+void ScanFileOrFolder::addToList(const std::vector<INTERNALTYPEPATH>& sources,const INTERNALTYPEPATH& destination)
 {
     stopIt=false;
     this->sources=parseWildcardSources(sources);
     this->destination=destination;
-    QFileInfo destinationInfo(QString::fromStdString(this->destination));
+    QFileInfo destinationInfo(QString::fromStdWString(this->destination));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"check symblink: "+destinationInfo.absoluteFilePath().toStdString());
     while(destinationInfo.isSymLink())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"resolv destination to: "+destinationInfo.symLinkTarget().toStdString());
         if(QFileInfo(destinationInfo.symLinkTarget()).isAbsolute())
-            this->destination=destinationInfo.symLinkTarget().toStdString();
+            this->destination=TransferThread::stringTowstring(destinationInfo.symLinkTarget().toStdString());
         else
-            this->destination=destinationInfo.absolutePath().toStdString()+text_slash+destinationInfo.symLinkTarget().toStdString();
-        destinationInfo.setFile(QString::fromStdString(this->destination));
+            this->destination=TransferThread::stringTowstring(destinationInfo.absolutePath().toStdString()+text_slash+destinationInfo.symLinkTarget().toStdString());
+        destinationInfo.setFile(QString::fromStdWString(this->destination));
     }
-    if(sources.size()>1 || QFileInfo(QString::fromStdString(destination)).isDir())
+    if(sources.size()>1 || QFileInfo(QString::fromStdWString(destination)).isDir())
         /* Disabled because the separator transformation product bug
          * if(!destination.endsWith(QDir::separator()))
             this->destination+=QDir::separator();*/
         if(!stringEndsWith(destination,'/') && !stringEndsWith(destination,'\\'))
-            this->destination+=text_slash;//put unix separator because it's transformed into that's under windows too
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+stringimplode(sources,";")+","+this->destination+")");
+            this->destination+=TransferThread::stringTowstring(text_slash);//put unix separator because it's transformed into that's under windows too
+    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+stringimplode(sources,";")+","+this->destination+")");
 }
 
 
-std::vector<std::string> ScanFileOrFolder::parseWildcardSources(const std::vector<std::string> &sources) const
+std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::vector<INTERNALTYPEPATH> &sources) const
 {
     std::regex splitFolder("[/\\\\]");
     std::vector<std::string> returnList;
@@ -298,7 +298,7 @@ std::string ScanFileOrFolder::resolvDestination(const std::string &destination)
     ssize_t nbytes=0;
     nbytes=readlink(destination.c_str(), buf, sizeof(buf));
     while(nbytes!=-1) {
-        temp=FSabsolutePath(temp)+'/'+std::string(buf,nbytes);
+        temp=FSabsolutePath(temp)+TransferThread::stringToWstring("/")+std::string(buf,nbytes);
         /// \todo change for pure c++ code
         temp=QFileInfo(QString::fromStdString(temp)).absoluteFilePath().toStdString();
         nbytes=readlink(temp.c_str(), buf, sizeof(buf));
@@ -407,9 +407,9 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                             else
                                 n=destination.rfind(n,'.');
                             if(n == std::string::npos)
-                                destination=FSabsolutePath(destination)+'/'+destinationSuffixPath;
+                                destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath;
                             else
-                                destination=FSabsolutePath(destination)+'/'+destinationSuffixPath+'.'+destination.substr(n);
+                                destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath+'.'+destination.substr(n);
                         }
                     }
                     #ifdef Q_OS_UNIX
@@ -499,9 +499,9 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                         else
                             n=destination.rfind(n,'.');
                         if(n == std::string::npos)
-                            destination=FSabsolutePath(destination)+'/'+destinationSuffixPath;
+                            destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath;
                         else
-                            destination=FSabsolutePath(destination)+'/'+destinationSuffixPath+'.'+destination.substr(n);
+                            destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath+'.'+destination.substr(n);
                     }
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+destination);
                 break;
@@ -649,9 +649,9 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                         fullSource+=fileName;
                         #ifndef ULTRACOPIER_PLUGIN_RSYNC
                             #ifdef Q_OS_WIN32
-                            emit fileTransferWithInode(fullSource,destination+'/'+fileName,mode,fileInfo);
+                            emit fileTransferWithInode(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode,fileInfo);
                             #else
-                            emit fileTransfer(fullSource,destination+'/'+fileName,mode);
+                            emit fileTransfer(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode);
                             #endif
                         #else
                         {
@@ -698,9 +698,9 @@ void ScanFileOrFolder::listFolder(std::string source,std::string destination)
                 fullSource+=fileName;
                 #ifndef ULTRACOPIER_PLUGIN_RSYNC
                     #ifdef Q_OS_WIN32
-                    emit fileTransferWithInode(fullSource,destination+'/'+fileName,mode,fileInfo);
+                    emit fileTransferWithInode(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode,fileInfo);
                     #else
-                    emit fileTransfer(fullSource,destination+'/'+fileName,mode);
+                    emit fileTransfer(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode);
                     #endif
                 #else
                 {

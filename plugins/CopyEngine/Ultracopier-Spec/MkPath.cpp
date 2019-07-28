@@ -16,7 +16,11 @@
     #endif
 #endif
 
-std::string MkPath::text_slash="/";
+#ifdef WIDESTRING
+INTERNALTYPEPATH MkPath::text_slash=L"/";
+#else
+INTERNALTYPEPATH MkPath::text_slash="/";
+#endif
 
 MkPath::MkPath() :
     waitAction(false),
@@ -43,15 +47,23 @@ MkPath::~MkPath()
     wait();
 }
 
-void MkPath::addPath(const std::string& source, const std::string& destination, const ActionType &actionType)
+void MkPath::addPath(const INTERNALTYPEPATH& source, const INTERNALTYPEPATH& destination, const ActionType &actionType)
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(destination.find("//") != std::string::npos)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
-    if(source.find("//") != std::string::npos)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+        #ifdef WIDESTRING
+        if(destination.find(L"//") != std::wstring::npos)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+        if(source.find(L"//") != std::wstring::npos)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+        #else
+        if(destination.find("//") != std::string::npos)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+        if(source.find("//") != std::string::npos)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+        #endif
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::wstringTostring(source)+
+                             ", destination: "+TransferThread::wstringTostring(destination));
     if(stopIt)
         return;
     emit internalStartAddPath(source,destination,actionType);
@@ -84,13 +96,14 @@ void MkPath::internalDoThisPath()
         return;
     const Item &item=pathList.front();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(item.destination.find("//") != std::string::npos)
+    if(item.destination.find(TransferThread::stringToWstring("//")) != std::string::npos)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
-    if(item.source.find("//") != std::string::npos)
+    if(item.source.find(TransferThread::stringToWstring("//")) != std::string::npos)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+item.source+", destination: "+
-                             item.destination+", move: "+std::to_string(item.actionType));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::wstringTostring(item.source)+
+                             ", destination: "+TransferThread::wstringTostring(item.destination)+
+                             ", move: "+std::to_string(item.actionType));
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     if(item.actionType==ActionType_RmSync)
     {
@@ -128,12 +141,12 @@ void MkPath::internalDoThisPath()
         const int64_t &sourceLastModified=TransferThread::readFileMDateTime(item.source);
         if(!TransferThread::exists(item.source))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources not exists: "+item.source);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources not exists: "+TransferThread::wstringTostring(item.source));
             doTheDateTransfer=false;
         }
         else if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS>=sourceLastModified)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+item.source+
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+TransferThread::wstringTostring(item.source)+
                                      ": "+QDateTime::fromSecsSinceEpoch(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+
                                      ">="+QDateTime::fromSecsSinceEpoch(sourceLastModified).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString());
             doTheDateTransfer=false;
@@ -167,7 +180,8 @@ void MkPath::internalDoThisPath()
                         if(stopIt)
                             return;
                         waitAction=true;
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination+", errno: "+std::to_string(errno));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+
+                                                 TransferThread::wstringTostring(item.destination)+", errno: "+std::to_string(errno));
                         emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
                         return;
                     }
@@ -182,7 +196,8 @@ void MkPath::internalDoThisPath()
                         if(stopIt)
                             return;
                         waitAction=true;
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+item.destination+", errno: "+std::to_string(errno));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+
+                                                 TransferThread::wstringTostring(item.destination)+", errno: "+std::to_string(errno));
                         emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
                         return;
                     }
@@ -197,13 +212,13 @@ void MkPath::internalDoThisPath()
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source folder don't exists: "+item.source);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source folder don't exists: "+TransferThread::wstringTostring(item.source));
             emit errorOnFolder(item.destination,tr("The source folder don't exists").toStdString());
             return;
         }
         if(!TransferThread::is_dir(item.source))//it's really an error?
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source is not a folder: "+item.source);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The source is not a folder: "+TransferThread::wstringTostring(item.source));
             /*if(stopIt)
                 return;
             waitAction=true;
@@ -212,20 +227,20 @@ void MkPath::internalDoThisPath()
         }
         if(stringStartWith(item.destination,(item.source+text_slash)))
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+item.destination);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"move into it self: "+TransferThread::wstringTostring(item.destination));
             int random=rand();
-            std::string tempFolder=FSabsolutePath(item.source)+text_slash+std::to_string(random);
+            INTERNALTYPEPATH tempFolder=FSabsolutePath(item.source)+text_slash+TransferThread::stringToWstring(std::to_string(random));
             while(TransferThread::is_dir(tempFolder))
             {
                 random=rand();
-                tempFolder=FSabsolutePath(item.source)+text_slash+std::to_string(random);
+                tempFolder=FSabsolutePath(item.source)+text_slash+TransferThread::stringToWstring(std::to_string(random));
             }
-            if(rename(item.source.c_str(),tempFolder.c_str())!=0)
+            if(!TransferThread::rename(item.source,tempFolder))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: "+item.destination);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to temporary rename the folder: "+TransferThread::wstringTostring(item.destination));
                 emit errorOnFolder(item.destination,tr("Unable to temporary rename the folder").toStdString());
                 return;
             }
@@ -243,12 +258,12 @@ void MkPath::internalDoThisPath()
                     return;
                 }
             }*/
-            if(rename(tempFolder.c_str(),item.destination.c_str())!=0)
+            if(!TransferThread::rename(tempFolder,item.destination))
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to do the final real move the folder: "+item.destination);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to do the final real move the folder: "+TransferThread::wstringTostring(item.destination));
                 emit errorOnFolder(item.destination,tr("Unable to do the final real move the folder").toStdString());
                 return;
             }
@@ -269,13 +284,13 @@ void MkPath::internalDoThisPath()
                     return;
                 }
             }*/
-            if(rename(item.source.c_str(),item.destination.c_str())!=0)
+            if(!TransferThread::rename(item.source,item.destination)!=0)
             {
                 if(stopIt)
                     return;
                 waitAction=true;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+item.source+", soruce exists: "+
-                                         std::to_string(TransferThread::is_dir(item.source))+", to: "+item.destination
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+TransferThread::wstringTostring(item.source)+", soruce exists: "+
+                                         std::to_string(TransferThread::is_dir(item.source))+", to: "+TransferThread::wstringTostring(item.destination)
                                          +", destination exist: "+std::to_string(TransferThread::is_dir(item.destination))
                                          );
                 emit errorOnFolder(item.destination,tr("Unable to move the folder").toStdString());
@@ -287,11 +302,11 @@ void MkPath::internalDoThisPath()
         if(!writeFileDateTime(item.destination))
         {
             if(!TransferThread::exists(item.destination))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+item.destination);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not exists): "+TransferThread::wstringTostring(item.destination));
             else if(!TransferThread::is_dir(item.destination))
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+item.destination);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time (not a dir): "+TransferThread::wstringTostring(item.destination));
             else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+item.destination);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to set destination folder time: "+TransferThread::wstringTostring(item.destination));
             /*if(stopIt)
                 return;
             waitAction=true;
@@ -303,14 +318,14 @@ void MkPath::internalDoThisPath()
     {
         #ifdef Q_OS_UNIX
         struct stat permissions;
-        if(stat(item.source.c_str(), &permissions)!=0)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get the right: "+item.destination);
+        if(stat(TransferThread::wstringTostring(item.source).c_str(), &permissions)!=0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to get the right: "+TransferThread::wstringTostring(item.destination));
         else
         {
-            if(chmod(item.destination.c_str(), permissions.st_mode)!=0)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to chmod the right: "+item.destination);
-            if(chown(item.destination.c_str(), permissions.st_uid, permissions.st_gid)!=0)
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to chown the right: "+item.destination);
+            if(chmod(TransferThread::wstringTostring(item.destination).c_str(), permissions.st_mode)!=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to chmod the right: "+TransferThread::wstringTostring(item.destination));
+            if(chown(TransferThread::wstringTostring(item.destination).c_str(), permissions.st_uid, permissions.st_gid)!=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to chown the right: "+TransferThread::wstringTostring(item.destination));
         }
         #else
         PSECURITY_DESCRIPTOR PSecurityD;
@@ -355,7 +370,7 @@ void MkPath::internalDoThisPath()
             if(stopIt)
                 return;
             waitAction=true;
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the source folder: "+item.destination);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to remove the source folder: "+TransferThread::wstringTostring(item.destination));
             emit errorOnFolder(item.source,tr("Unable to remove").toStdString());
             return;
         }
@@ -365,15 +380,22 @@ void MkPath::internalDoThisPath()
     checkIfCanDoTheNext();
 }
 
-void MkPath::internalAddPath(const std::string& source, const std::string& destination, const ActionType &actionType)
+void MkPath::internalAddPath(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination, const ActionType &actionType)
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(destination.find("//") != std::string::npos)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
-    if(source.find("//") != std::string::npos)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+        #ifdef WIDESTRING
+            if(destination.find(L"//") != std::wstring::npos)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+            if(source.find(L"//") != std::wstring::npos)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+        #else
+        if(destination.find("//") != std::string::npos)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path destination contains error");
+        if(source.find("//") != std::string::npos)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"path source contains error");
+        #endif
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+source+", destination: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::wstringTostring(source)+", destination: "+TransferThread::wstringTostring(destination));
     Item tempPath;
     tempPath.source=source;
     tempPath.destination=destination;
@@ -420,7 +442,7 @@ void MkPath::setMkFullPath(const bool mkFullPath)
     this->mkFullPath=mkFullPath;
 }
 
-bool MkPath::rmpath(const std::string &dir
+bool MkPath::rmpath(const INTERNALTYPEPATH &dir
                     #ifdef ULTRACOPIER_PLUGIN_RSYNC
                     ,const bool &toSync
                     #endif
@@ -433,7 +455,7 @@ bool MkPath::rmpath(const std::string &dir
     std::vector<TransferThread::dirent_uc> list;
     if(!TransferThread::entryInfoList(dir,list))
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+dir+", errno: "+std::to_string(errno));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+TransferThread::wstringTostring(dir)+", errno: "+std::to_string(errno));
         return false;
     }
     for (unsigned int i = 0; i < list.size(); ++i)
@@ -461,14 +483,14 @@ bool MkPath::rmpath(const std::string &dir
                 allHaveWork=false;
             }
             #else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+std::string(fileInfo.d_name));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+TransferThread::wstringTostring(fileInfo.d_name));
             allHaveWork=false;
             #endif
         }
         else
         {
             //return the fonction for scan the new folder
-            if(!rmpath(FSabsolutePath(dir)+'/'+fileInfo.d_name+'/'))
+            if(!rmpath(FSabsolutePath(dir)+TransferThread::stringToWstring("/")+fileInfo.d_name+TransferThread::stringToWstring("/")))
                 allHaveWork=false;
         }
     }
@@ -530,20 +552,20 @@ bool MkPath::rmpath(const std::string &dir
     #endif
     if(!allHaveWork)
         return false;
-    allHaveWork=rmdir(FSabsolutePath(dir).c_str())==0;
+    allHaveWork=TransferThread::rmdir(FSabsolutePath(dir));
     if(!allHaveWork)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+FSabsolutePath(dir));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+TransferThread::wstringTostring(FSabsolutePath(dir)));
     return allHaveWork;
 }
 
 //fonction to edit the file date time
-bool MkPath::readFileDateTime(const std::string &source)
+bool MkPath::readFileDateTime(const INTERNALTYPEPATH &source)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+source+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"readFileDateTime("+TransferThread::wstringTostring(source)+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         struct stat info;
-        if(stat(source.c_str(),&info)!=0)
+        if(stat(TransferThread::wstringTostring(source).c_str(),&info)!=0)
             return false;
         #ifdef Q_OS_MAC
         time_t ctime=info.st_ctimespec.tv_sec;
@@ -611,15 +633,15 @@ bool MkPath::readFileDateTime(const std::string &source)
     return false;
 }
 
-bool MkPath::writeFileDateTime(const std::string &destination)
+bool MkPath::writeFileDateTime(const INTERNALTYPEPATH &destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"writeFileDateTime("+destination+")");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"writeFileDateTime("+TransferThread::wstringTostring(destination)+")");
     /** Why not do it with Qt? Because it not support setModificationTime(), and get the time with Qt, that's mean use local time where in C is UTC time */
     #ifdef Q_OS_UNIX
         #ifdef Q_OS_LINUX
-            return utime(destination.c_str(),&butime)==0;
+            return utime(TransferThread::wstringTostring(destination).c_str(),&butime)==0;
         #else //mainly for mac
-            return utime(destination.c_str(),&butime)==0;
+            return utime(TransferThread::wstringTostring(destination).c_str(),&butime)==0;
         #endif
     #else
         #ifdef Q_OS_WIN32

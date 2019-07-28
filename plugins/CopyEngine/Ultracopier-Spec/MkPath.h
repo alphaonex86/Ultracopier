@@ -13,6 +13,12 @@
 #include <QDir>
 #include <QDateTime>
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 #include "Environment.h"
 
 #ifdef Q_OS_UNIX
@@ -39,14 +45,14 @@ public:
     explicit MkPath();
     ~MkPath();
     /// \brief add path to make
-    void addPath(const std::string& source,const std::string& destination,const ActionType &actionType);
+    void addPath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination,const ActionType &actionType);
     void setRightTransfer(const bool doRightTransfer);
     void setKeepDate(const bool keepDate);
     void setMkFullPath(const bool mkFullPath);
 signals:
-    void errorOnFolder(const std::string &,const std::string &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void errorOnFolder(const INTERNALTYPEPATH &,const std::string &,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void firstFolderFinish();
-    void internalStartAddPath(const std::string& source,const std::string& destination, const ActionType &actionType) const;
+    void internalStartAddPath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const ActionType &actionType) const;
     void internalStartDoThisPath() const;
     void internalStartSkip() const;
     void internalStartRetry() const;
@@ -63,8 +69,8 @@ private:
     bool skipIt;
     struct Item
     {
-        std::string source;
-        std::string destination;
+        INTERNALTYPEPATH source;
+        INTERNALTYPEPATH destination;
         ActionType actionType;
     };
     std::vector<Item> pathList;
@@ -87,15 +93,15 @@ private:
         #endif
     #endif
     //fonction to edit the file date time
-    bool readFileDateTime(const std::string &source);
-    bool writeFileDateTime(const std::string &destination);
-    static std::string text_slash;
+    bool readFileDateTime(const INTERNALTYPEPATH &source);
+    bool writeFileDateTime(const INTERNALTYPEPATH &destination);
+    static INTERNALTYPEPATH text_slash;
 private slots:
     void internalDoThisPath();
-    void internalAddPath(const std::string& source, const std::string& destination,const ActionType &actionType);
+    void internalAddPath(const INTERNALTYPEPATH& source, const INTERNALTYPEPATH& destination,const ActionType &actionType);
     void internalSkip();
     void internalRetry();
-    bool rmpath(const std::string &dir
+    bool rmpath(const INTERNALTYPEPATH &dir
                 #ifdef ULTRACOPIER_PLUGIN_RSYNC
                 , const bool &toSync=false
                 #endif

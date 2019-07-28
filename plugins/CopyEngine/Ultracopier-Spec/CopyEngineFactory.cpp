@@ -199,6 +199,14 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
 
         optionsEngine=options;
         resetOptions();
+
+        std::string firstRenamingRule=options->getOptionValue("firstRenamingRule");
+        if(firstRenamingRule.find("%name%")==std::string::npos || firstRenamingRule.find("%suffix%")==std::string::npos)
+            options->setOptionValue("firstRenamingRule","");
+        std::string otherRenamingRule=options->getOptionValue("otherRenamingRule");
+        if(otherRenamingRule.find("%name%")==std::string::npos || otherRenamingRule.find("%suffix%")==std::string::npos
+                 || otherRenamingRule.find("%number%")==std::string::npos)
+            options->setOptionValue("otherRenamingRule","");
     }
 }
 

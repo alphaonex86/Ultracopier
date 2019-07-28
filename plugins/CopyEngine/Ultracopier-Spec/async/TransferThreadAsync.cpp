@@ -124,7 +124,7 @@ void TransferThreadAsync::internalStartTheTransfer()
     ifCanStartTransfer();
 }
 
-bool TransferThreadAsync::setFiles(const std::string& source, const int64_t &size, const std::string& destination, const Ultracopier::CopyMode &mode)
+bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t &size, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode &mode)
 {
     if(transfer_stat!=TransferStat_Idle)
     {

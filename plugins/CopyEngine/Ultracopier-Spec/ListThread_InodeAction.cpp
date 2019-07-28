@@ -9,7 +9,8 @@ ActionToDoInode& currentActionToDoInode=actionToDoListInode[int_for_internal_loo
 switch(currentActionToDoInode.type)
 {
     case ActionType_RealMove:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch real move, source: "+currentActionToDoInode.source+", destination: "+currentActionToDoInode.destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch real move, source: "+TransferThread::wstringTostring(currentActionToDoInode.source)+
+                                 ", destination: "+TransferThread::wstringTostring(currentActionToDoInode.destination));
         mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
@@ -17,7 +18,8 @@ switch(currentActionToDoInode.type)
             return;
     break;
     case ActionType_MkPath:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch mkpath, source: "+currentActionToDoInode.source+", destination: "+currentActionToDoInode.destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch mkpath, source: "+TransferThread::wstringTostring(currentActionToDoInode.source)+
+                                 ", destination: "+TransferThread::wstringTostring(currentActionToDoInode.destination));
         mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
@@ -26,7 +28,8 @@ switch(currentActionToDoInode.type)
     break;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     case ActionType_RmSync:
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmsync, destination: "+currentActionToDoInode.destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmsync, source: "+TransferThread::wstringTostring(currentActionToDoInode.source)+
+                                 ", destination: "+TransferThread::wstringTostring(currentActionToDoInode.destination));
         mkPathQueue.addPath(currentActionToDoInode.destination,currentActionToDoInode.destination,currentActionToDoInode.type);
         currentActionToDoInode.isRunning=true;
         numberOfInodeOperation++;
@@ -38,7 +41,8 @@ switch(currentActionToDoInode.type)
         //then empty (no file), can try remove it
         if(currentActionToDoInode.size==0 || actionToDoListTransfer.empty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmpath: "+currentActionToDoInode.source);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmpath: source: "+TransferThread::wstringTostring(currentActionToDoInode.source)+
+                                     ", destination: "+TransferThread::wstringTostring(currentActionToDoInode.destination));
             mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
             currentActionToDoInode.isRunning=true;
             numberOfInodeOperation++;

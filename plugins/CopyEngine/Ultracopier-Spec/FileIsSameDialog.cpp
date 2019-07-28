@@ -11,7 +11,8 @@
 
 #include <QMessageBox>
 
-FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::string firstRenamingRule, std::string otherRenamingRule,FacilityInterface * facilityEngine) :
+FileIsSameDialog::FileIsSameDialog(QWidget *parent, INTERNALTYPEPATH fileInfo,
+                                   std::string firstRenamingRule, std::string otherRenamingRule,FacilityInterface * facilityEngine) :
     QDialog(parent),
     ui(new Ui::fileIsSameDialog)
 {
@@ -24,21 +25,21 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, std::string fileInfo, std::s
 
     ui->setupUi(this);
     action=FileExists_Cancel;
-    oldName=TransferThread::resolvedName(fileInfo);
-    destinationInfo=fileInfo;
+    oldName=TransferThread::resolvedName(TransferThread::wstringTostring(fileInfo));
+    destinationInfo=TransferThread::wstringTostring(fileInfo);
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
-    ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(fileInfo)));
-    std::string folder=FSabsolutePath(fileInfo);
+    ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::wstringTostring(fileInfo))));
+    std::string folder=FSabsolutePath(TransferThread::wstringTostring(fileInfo));
     if(folder.size()>80)
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_folder->setText(QString::fromStdString(folder));
     updateRenameButton();
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
-    if(lstat(fileInfo.c_str(), &source_statbuf)==0)
+    if(lstat(TransferThread::wstringTostring(fileInfo).c_str(), &source_statbuf)==0)
     #else
-    if(stat(fileInfo.c_str(), &source_statbuf)==0)
+    if(stat(TransferThread::wstringTostring(fileInfo).c_str(), &source_statbuf)==0)
     #endif
     {
         #ifdef Q_OS_UNIX

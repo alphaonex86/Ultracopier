@@ -8,37 +8,37 @@
 
 //dialog message
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExistsSlot(std::string source,std::string destination,bool isSame,TransferThreadAsync * thread)
+void CopyEngine::fileAlreadyExistsSlot(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadAsync * thread)
 {
     fileAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFileSlot(std::string fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType)
+void CopyEngine::errorOnFileSlot(INTERNALTYPEPATH fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType)
 {
     errorOnFile(fileInfo,errorString,thread,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::folderAlreadyExistsSlot(std::string source,std::string destination,bool isSame,ScanFileOrFolder * thread)
+void CopyEngine::folderAlreadyExistsSlot(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread)
 {
     folderAlreadyExists(source,destination,isSame,thread);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFolderSlot(std::string fileInfo,std::string errorString,ScanFileOrFolder * thread,ErrorType errorType)
+void CopyEngine::errorOnFolderSlot(INTERNALTYPEPATH fileInfo,std::string errorString,ScanFileOrFolder * thread,ErrorType errorType)
 {
     errorOnFolder(fileInfo,errorString,thread,errorType);
 }
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolderSlot(std::string folder,std::string error,ErrorType errorType)
+void CopyEngine::mkPathErrorOnFolderSlot(INTERNALTYPEPATH folder,std::string error,ErrorType errorType)
 {
     mkPathErrorOnFolder(folder,error,errorType);
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bool isSame,TransferThreadAsync * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,TransferThreadAsync * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
@@ -50,7 +50,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
     //load the action
     if(isSame)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+source);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+TransferThread::wstringTostring(source));
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
@@ -114,7 +114,8 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+source+", destination: "+destination);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+TransferThread::wstringTostring(source)+
+                                 ", destination: "+TransferThread::wstringTostring(destination));
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         switch(tempFileExistsAction)
         {
@@ -131,7 +132,8 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
                 if(dialogIsOpen)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"dialog open, put in queue: "+
-                                             source+" "+destination
+                                             TransferThread::wstringTostring(source)+" "+
+                                             TransferThread::wstringTostring(destination)
                                  );
                     alreadyExistsQueueItem newItem;
                     newItem.source=source;
@@ -200,7 +202,7 @@ void CopyEngine::fileAlreadyExists(std::string source,std::string destination,bo
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop");
 }
 
-void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const std::string &fileInfo, const std::string &errorString,TransferThreadAsync *thread,const ErrorType &errorType)
+void CopyEngine::haveNeedPutAtBottom(bool needPutAtBottom, const INTERNALTYPEPATH &fileInfo, const std::string &errorString,TransferThreadAsync *thread,const ErrorType &errorType)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!needPutAtBottom)
@@ -237,11 +239,12 @@ void CopyEngine::missingDiskSpace(std::vector<Diskspace> list)
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,TransferThreadAsync * thread,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::wstringTostring(fileInfo)+
+                             ", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -288,7 +291,7 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if(stat(fileInfo.c_str(), &p_statbuf)==0)
+            if(stat(TransferThread::wstringTostring(fileInfo).c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
@@ -302,7 +305,7 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
                 #endif
             }
 
-            emit error(fileInfo,size,mdate,errorString);
+            emit error(TransferThread::wstringTostring(fileInfo),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
@@ -357,11 +360,12 @@ void CopyEngine::errorOnFile(std::string fileInfo,std::string errorString,Transf
 }
 
 /// \note Can be call without queue because all call will be serialized
-void CopyEngine::folderAlreadyExists(std::string source,std::string destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
+void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH destination,bool isSame,ScanFileOrFolder * thread,bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+source+", destination: "+destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+TransferThread::wstringTostring(source)+
+                             ", destination: "+TransferThread::wstringTostring(destination));
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -415,11 +419,11 @@ void CopyEngine::folderAlreadyExists(std::string source,std::string destination,
 
 /// \note Can be call without queue because all call will be serialized
 /// \todo all this part
-void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
+void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorString, ScanFileOrFolder * thread, ErrorType errorType, bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+fileInfo+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::wstringTostring(fileInfo)+", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -453,7 +457,7 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if(stat(fileInfo.c_str(), &p_statbuf)==0)
+            if(stat(TransferThread::wstringTostring(fileInfo).c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
@@ -468,7 +472,7 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
             }
 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(fileInfo,size,mdate,errorString);
+            emit error(TransferThread::wstringTostring(fileInfo),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -496,11 +500,11 @@ void CopyEngine::errorOnFolder(std::string fileInfo, std::string errorString, Sc
 // -----------------------------------------------------
 
 //mkpath event
-void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,const ErrorType &errorType,bool isCalledByShowOneNewDialog)
+void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorString, const ErrorType &errorType, bool isCalledByShowOneNewDialog)
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+folder+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::wstringTostring(folder)+", error: "+errorString);
     //load the always action
     FileErrorAction tempFileErrorAction=alwaysDoThisActionForFolderError;
     switch(tempFileErrorAction)
@@ -531,7 +535,7 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if(stat(folder.c_str(), &p_statbuf)==0)
+            if(stat(TransferThread::wstringTostring(folder).c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
@@ -545,7 +549,7 @@ void CopyEngine::mkPathErrorOnFolder(std::string folder,std::string errorString,
                 #endif
             }
 
-            emit error(folder,size,mdate,errorString);
+            emit error(TransferThread::wstringTostring(folder),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,folder,errorString,errorType,facilityEngine);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();

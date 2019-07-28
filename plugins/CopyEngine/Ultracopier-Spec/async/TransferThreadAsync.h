@@ -86,7 +86,7 @@ public slots:
     /// \brief put the current file at bottom
     void putAtBottom();
     /// \brief to set files to transfer
-    bool setFiles(const std::string& source,const int64_t &size,const std::string& destination,const Ultracopier::CopyMode &mode);
+    bool setFiles(const INTERNALTYPEPATH &source, const int64_t &size, const INTERNALTYPEPATH &destination, const Ultracopier::CopyMode &mode);
     /// \brief to set file exists action to do
     void setFileExistsAction(const FileExistsAction &action);
     #ifndef Q_OS_WIN32

@@ -39,6 +39,14 @@ std::string stringimplode(const std::vector<std::string>& elems, char delim);
 std::string stringimplode(const std::queue<std::string>& elems, char delim);
 std::string stringimplode(const std::vector<std::string>& elems, const std::string &delim);
 
+bool stringreplaceOne(std::wstring& str, const std::wstring& from, const std::wstring& to);
+uint8_t stringreplaceAll(std::wstring& str, const std::wstring& from, const std::wstring& to);
+bool stringEndsWith(std::wstring const &fullString, std::wstring const &ending);
+bool stringEndsWith(std::wstring const &fullString, char const &ending);
+bool stringStartWith(std::wstring const &fullString, std::wstring const &starting);
+bool stringStartWith(std::wstring const &fullString, char const &starting);
+std::vector<std::wstring> stringsplit(const std::wstring &s, wchar_t delim);
+
 uint8_t stringtouint8(const std::string &string,bool *ok=NULL);
 uint16_t stringtouint16(const std::string &string,bool *ok=NULL);
 uint32_t stringtouint32(const std::string &string,bool *ok=NULL);
@@ -65,6 +73,8 @@ void binaryAppend(std::vector<char> &data, const char * const add, const uint32_
 std::vector<char> base64toBinary(const std::string &string);
 std::string FSabsoluteFilePath(const std::string &string);
 std::string FSabsolutePath(const std::string &string);
+std::wstring FSabsoluteFilePath(const std::wstring &string);
+std::wstring FSabsolutePath(const std::wstring &string);
 uint64_t msFrom1970();
 uint64_t sFrom1970();
 

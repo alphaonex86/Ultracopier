@@ -67,8 +67,13 @@ public:
     {
         uint64_t id;
         uint64_t size;///< Used to set: used in case of transfer or remainingInode for drop folder
+        #ifdef WIDESTRING
+        std::wstring source;///< Used to set: source for transfer, folder to create, folder to drop
+        std::wstring destination;
+        #else
         std::string source;///< Used to set: source for transfer, folder to create, folder to drop
         std::string destination;
+        #endif
         Ultracopier::CopyMode mode;
         bool isRunning;///< store if the action si running
         //TTHREAD * transfer; // -> see transferThreadList
@@ -80,8 +85,13 @@ public:
         ActionType type;///< \see ActionType
         uint64_t id;
         int64_t size;///< Used to set: used in case of transfer or remainingInode for drop folder
+        #ifdef WIDESTRING
+        std::wstring source;///< Keep to copy the right/date, to remove (for move)
+        std::wstring destination;///< Used to set: folder to create, folder to drop
+        #else
         std::string source;///< Keep to copy the right/date, to remove (for move)
         std::string destination;///< Used to set: folder to create, folder to drop
+        #endif
         bool isRunning;///< store if the action si running
     };
     std::vector<ActionToDoInode> actionToDoListInode;
@@ -170,7 +180,7 @@ public slots:
     void doNewActions_inode_manipulation();
     /// \brief restart transfer if it can
     void restartTransferIfItCan();
-    void getNeedPutAtBottom(const std::string &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType);
+    void getNeedPutAtBottom(const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType);
 
     /// \brief update the transfer stat
     void newTransferStat(const TransferStat &stat,const quint64 &id);
@@ -196,7 +206,7 @@ private:
     std::string             sourceDrive;
     bool                sourceDriveMultiple;
     std::string             destinationDrive;
-    std::string             destinationFolder;
+    INTERNALTYPEPATH             destinationFolder;
     bool                destinationDriveMultiple;
     bool                destinationFolderMultiple;
     DriveManagement     driveManagement;
@@ -238,7 +248,7 @@ private:
 
     inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
-    uint64_t addToTransfer(const std::string& source, const std::string& destination, const Ultracopier::CopyMode& mode, const int64_t sendedsize=-1);
+    uint64_t addToTransfer(const INTERNALTYPEPATH& source, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode& mode, const int64_t sendedsize=-1);
     //generate id number
     uint64_t generateIdNumber();
     //warning the first entry is accessible will copy
@@ -257,7 +267,7 @@ private:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     QTimer timerUpdateDebugDialog;
     #endif
-    void detectDrivesOfCurrentTransfer(const std::vector<std::string> &sources,const std::string &destination);
+    void detectDrivesOfCurrentTransfer(const std::vector<INTERNALTYPEPATH> &sources, const INTERNALTYPEPATH &destination);
     FacilityInterface * facilityInterface;
     QSemaphore waitConstructor,waitCancel;
     int actionToDoListTransfer_count,actionToDoListInode_count;
@@ -286,8 +296,10 @@ private slots:
     void scanThreadHaveFinish(bool skipFirstRemove=false);
     void autoStartAndCheckSpace();
     void updateTheStatus();
-    void fileTransfer(const std::string &sourceFileInfo, const std::string &destinationFileInfo, const Ultracopier::CopyMode &mode);
-    void fileTransferWithInode(const std::string &sourceFileInfo, const std::string &destinationFileInfo, const Ultracopier::CopyMode &mode, const TransferThread::dirent_uc &inode);
+    void fileTransfer(const INTERNALTYPEPATH &sourceFileInfo, const INTERNALTYPEPATH &destinationFileInfo,
+                      const Ultracopier::CopyMode &mode);
+    void fileTransferWithInode(const INTERNALTYPEPATH &sourceFileInfo, const INTERNALTYPEPATH &destinationFileInfo,
+                               const Ultracopier::CopyMode &mode, const TransferThread::dirent_uc &inode);
     //mkpath event
     void mkPathFirstFolderFinish();
     /** \brief put the current file at bottom in case of error
@@ -301,24 +313,24 @@ private slots:
     #endif
     //dialog message
     /// \note Can be call without queue because all call will be serialized
-    void fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame);
+    void fileAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFile(const std::string &fileInfo,const std::string &errorString, const ErrorType &errorType);
+    void errorOnFile(const INTERNALTYPEPATH &fileInfo,const std::string &errorString, const ErrorType &errorType);
     /// \note Can be call without queue because all call will be serialized
-    void folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame);
+    void folderAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame);
     /// \note Can be call without queue because all call will be serialized
-    void errorOnFolder(const std::string &fileInfo, const std::string &errorString, const ErrorType &errorType);
+    void errorOnFolder(const INTERNALTYPEPATH &fileInfo, const std::string &errorString, const ErrorType &errorType);
     //to run the thread
     void run();
     /// \to create transfer thread
     void createTransferThread();
     void deleteTransferThread();
     //mk path to do
-    uint64_t addToMkPath(const std::string &source, const std::string &destination, const int &inode);
+    uint64_t addToMkPath(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination, const int &inode);
     //add rm path to do
-    void addToMovePath(const std::string& source,const std::string& destination, const int& inodeToRemove);
+    void addToMovePath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inodeToRemove);
     //add to real move
-    void addToRealMove(const std::string& source,const std::string& destination);
+    void addToRealMove(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     //rsync rm
     void addToRmForRsync(const std::string& destination);
@@ -348,7 +360,7 @@ signals:
 
     //when can be deleted
     void canBeDeleted() const;
-    void haveNeedPutAtBottom(bool needPutAtBottom,const std::string &fileInfo,const std::string &errorString,TransferThreadAsync * thread,const ErrorType &errorType) const;
+    void haveNeedPutAtBottom(bool needPutAtBottom,const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadAsync * thread,const ErrorType &errorType) const;
 
     //send error occurred
     void error(const std::string &path,const uint64_t &size,const uint64_t &mtime,const std::string &error) const;
@@ -366,17 +378,17 @@ signals:
 
     //other signal
     /// \note Can be call without queue because all call will be serialized
-    void send_fileAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,TransferThreadAsync * thread) const;
+    void send_fileAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame,TransferThreadAsync * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFile(const std::string &fileInfo,const std::string &errorString,TransferThreadAsync * thread, const ErrorType &errorType) const;
+    void send_errorOnFile(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,TransferThreadAsync * thread, const ErrorType &errorType) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame,ScanFileOrFolder * thread) const;
+    void send_folderAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame,ScanFileOrFolder * thread) const;
     /// \note Can be call without queue because all call will be serialized
-    void send_errorOnFolder(const std::string &fileInfo,const std::string &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
+    void send_errorOnFolder(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,ScanFileOrFolder * thread, const ErrorType &errorType) const;
     //send the progression
     void send_syncTransferList() const;
     //mkpath error event
-    void mkPathErrorOnFolder(const std::string &fileInfo,const std::string &errorString,const ErrorType &errorType) const;
+    void mkPathErrorOnFolder(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,const ErrorType &errorType) const;
     //to close
     void tryCancel() const;
     //to ask new transfer thread

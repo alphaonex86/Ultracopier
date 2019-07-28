@@ -476,6 +476,71 @@ std::string FSabsolutePath(const std::string &string)
         return tempFile;
 }
 
+std::wstring FSabsoluteFilePath(const std::wstring &string)
+{
+    std::wstring newstring=string;
+    stringreplaceAll(newstring,L"//",L"/");
+    #ifdef _WIN32
+    stringreplaceAll(newstring,L"\\\\",L"\\");
+    std::vector<std::wstring> parts=stringregexsplit(newstring,regexseparators);
+    #else
+    std::vector<std::wstring> parts=stringsplit(newstring,'/');
+    #endif
+
+    #ifndef _WIN32
+    unsigned int index=1;
+    #else
+    unsigned int index=2;
+    #endif
+    while(index<parts.size())
+    {
+        if(parts.at(index)==L"..")
+        {
+            parts.erase(parts.begin()+index);
+            #ifndef _WIN32
+            if(index>0 && (index>1 || !parts.at(index-1).empty()))
+            #else
+            if(index>1)
+            #endif
+            {
+                parts.erase(parts.begin()+index-1);
+                index--;
+            }
+        }
+        else
+            index++;
+    }
+
+    #ifndef _WIN32
+    if(parts.empty() || (parts.size()==1 && parts.at(0).empty()))
+        return L"/";
+    #endif
+
+    std::wstring newString;
+    std::vector<std::wstring> copy=parts;
+    unsigned int count=0;
+    while(!copy.empty())
+    {
+        if(count>0)
+            newString+=L'/';
+        newString+=copy.front();
+        copy.erase(copy.begin());
+        ++count;
+    }
+
+    return newString;
+}
+
+std::wstring FSabsolutePath(const std::wstring &string)
+{
+    const std::wstring &tempFile=FSabsoluteFilePath(string);
+    const std::size_t &found=tempFile.find_last_of(L"/\\");
+    if(found!=std::wstring::npos)
+        return tempFile.substr(0,found)+L'/';
+    else
+        return tempFile;
+}
+
 uint64_t msFrom1970()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -528,4 +593,90 @@ std::string stringlisttostring(const std::vector<std::string> &stringlist)
         index++;
     }
     return returnedString;
+}
+
+bool stringreplaceOne(std::wstring& str, const std::wstring& from, const std::wstring& to)
+{
+    const size_t start_pos = str.find(from);
+    if(start_pos == std::wstring::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+uint8_t stringreplaceAll(std::wstring& str, const std::wstring& from, const std::wstring& to)
+{
+    if(from.empty())
+        return 0;
+    size_t start_pos = 0;
+    uint8_t count=0;
+    while((start_pos = str.find(from, start_pos)) != std::wstring::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+        count++;
+    }
+    return count;
+}
+
+bool stringEndsWith(std::wstring const &fullString, std::wstring const &ending)
+{
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
+    }
+}
+
+bool stringEndsWith(std::wstring const &fullString, char const &ending)
+{
+    if (fullString.length()>0) {
+        return fullString[fullString.size()-1]==ending;
+    } else {
+        return false;
+    }
+}
+
+bool stringStartWith(std::wstring const &fullString, std::wstring const &starting)
+{
+    if (fullString.length() >= starting.length()) {
+        return (fullString.substr(0,starting.length())==starting);
+    } else {
+        return false;
+    }
+}
+
+bool stringStartWith(std::wstring const &fullString, char const &starting)
+{
+    if (fullString.length()>0) {
+        return fullString[0]==starting;
+    } else {
+        return false;
+    }
+}
+
+std::vector<std::wstring> stringsplit(const std::wstring &s, wchar_t delim)
+{
+    std::vector<std::wstring> elems;
+
+    std::wstring::size_type i = 0;
+    std::wstring::size_type j = s.find(delim);
+
+    if(j == std::wstring::npos)
+    {
+        if(!s.empty())
+            elems.push_back(s);
+        return elems;
+    }
+    else
+    {
+        while (j != std::wstring::npos) {
+           elems.push_back(s.substr(i, j-i));
+           i = ++j;
+           j = s.find(delim, j);
+
+           if (j == std::wstring::npos)
+              elems.push_back(s.substr(i, s.length()));
+        }
+        return elems;
+    }
 }

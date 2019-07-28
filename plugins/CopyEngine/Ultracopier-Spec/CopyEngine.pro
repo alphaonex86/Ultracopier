@@ -3,7 +3,7 @@ QMAKE_CXXFLAGS+="-std=c++0x -Wall -Wextra"
 mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 QT += widgets xml
-DEFINES += UNICODE _UNICODE
+DEFINES += _FILE_OFFSET_BITS=64 UNICODE _UNICODE WIDESTRING
 TEMPLATE        = lib
 CONFIG         += plugin
 

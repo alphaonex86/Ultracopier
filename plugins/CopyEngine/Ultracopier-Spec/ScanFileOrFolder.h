@@ -21,6 +21,12 @@
 #ifndef SCANFILEORFOLDER_H
 #define SCANFILEORFOLDER_H
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 /// \brief Thread changed to list recursively the folder
 class ScanFileOrFolder : public QThread
 {
@@ -33,7 +39,7 @@ public:
     /// \brief to get if is finished
     bool isFinished() const;
     /// \brief set action if Folder are same or exists
-    void setFolderExistsAction(const FolderExistsAction &action, const std::string &newName="");
+    void setFolderExistsAction(const FolderExistsAction &action, const std::string &newName=std::string());
     /// \brief set action if error
     void setFolderErrorAction(const FileErrorAction &action);
     /// \brief set if need check if the destination exists
@@ -44,23 +50,23 @@ public:
     void setRsync(const bool rsync);
     #endif
 signals:
-    void fileTransfer(const std::string &source,const std::string &destination,const Ultracopier::CopyMode &mode) const;
-    void fileTransferWithInode(const std::string &source,const std::string &destination,const Ultracopier::CopyMode &mode,const TransferThread::dirent_uc &inode) const;
+    void fileTransfer(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const Ultracopier::CopyMode &mode) const;
+    void fileTransferWithInode(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const Ultracopier::CopyMode &mode,const TransferThread::dirent_uc &inode) const;
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
-    void folderAlreadyExists(const std::string &source,const std::string &destination,const bool &isSame) const;
-    void errorOnFolder(const std::string &fileInfo,const std::string &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
+    void folderAlreadyExists(const INTERNALTYPEPATH &source,const INTERNALTYPEPATH &destination,const bool &isSame) const;
+    void errorOnFolder(const INTERNALTYPEPATH &fileInfo,const std::string &errorString,const ErrorType &errorType=ErrorType_FolderWithRety) const;
     void finishedTheListing() const;
 
     void newFolderListing(const std::string &path) const;
-    void addToMkPath(const std::string& source,const std::string& destination, const int& inode) const;
-    void addToMovePath(const std::string& source,const std::string& destination, const int& inodeToRemove) const;
-    void addToRealMove(const std::string& source,const std::string& destination) const;
+    void addToMkPath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inode) const;
+    void addToMovePath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inodeToRemove) const;
+    void addToRealMove(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination) const;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    void addToRmForRsync(const std::string& destination) const;
+    void addToRmForRsync(const INTERNALTYPEPATH& destination) const;
     #endif
 public slots:
-    void addToList(const std::vector<std::string>& sources,const std::string& destination);
+    void addToList(const std::vector<INTERNALTYPEPATH>& sources,const INTERNALTYPEPATH& destination);
     void setFilters(const std::vector<Filters_rules> &include,const std::vector<Filters_rules> &exclude);
     void setFollowTheStrictOrder(const bool &order);
     void set_updateMount();
@@ -69,19 +75,19 @@ protected:
 private:
     DriveManagement     driveManagement;
     bool                moveTheWholeFolder;
-    std::vector<std::string>         sources;
-    std::string             destination;
+    std::vector<INTERNALTYPEPATH>         sources;
+    INTERNALTYPEPATH             destination;
     volatile bool		stopIt;
-    void                listFolder(std::string source, std::string destination);
+    void                listFolder(INTERNALTYPEPATH source, INTERNALTYPEPATH destination);
     #ifdef Q_OS_UNIX
-    std::string           resolvDestination(const std::string &destination);
+    INTERNALTYPEPATH           resolvDestination(const INTERNALTYPEPATH &destination);
     #endif
     volatile bool		stopped;
     QSemaphore          waitOneAction;
     FolderExistsAction	folderExistsAction;
     FileErrorAction		fileErrorAction;
     volatile bool		checkDestinationExists;
-    std::string             newName;
+    INTERNALTYPEPATH             newName;
     bool                copyListOrder;
     std::regex	folder_isolation;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -101,7 +107,7 @@ private:
      * Will give: /toto/f1a/yy*a/toto.mp3, /toto/f2a/yy*a/toto.mp3
      * Will give: /toto/f2a/yy1a/toto.mp3, /toto/f2a/yy2a/toto.mp3
     */
-    std::vector<std::string>		parseWildcardSources(const std::vector<std::string> &sources) const;
+    std::vector<INTERNALTYPEPATH>		parseWildcardSources(const std::vector<INTERNALTYPEPATH> &sources) const;
 
     static std::string text_slash;
     static std::string text_antislash;

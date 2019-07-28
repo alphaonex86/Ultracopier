@@ -14,6 +14,12 @@
 #ifndef FILEEXISTSDIALOG_H
 #define FILEEXISTSDIALOG_H
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#else
+#define INTERNALTYPEPATH std::string
+#endif
+
 namespace Ui {
     class fileExistsDialog;
 }
@@ -24,7 +30,7 @@ class FileExistsDialog : public QDialog
     Q_OBJECT
 public:
     /// \brief create the object and pass all the informations to it
-    explicit FileExistsDialog(QWidget *parent, std::string source, std::string destination, std::string firstRenamingRule, std::string otherRenamingRule, FacilityInterface *facilityEngine);
+    explicit FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source, INTERNALTYPEPATH destination, std::string firstRenamingRule, std::string otherRenamingRule, FacilityInterface *facilityEngine);
     ~FileExistsDialog();
     /// \brief return the the always checkbox is checked
     bool getAlways();
