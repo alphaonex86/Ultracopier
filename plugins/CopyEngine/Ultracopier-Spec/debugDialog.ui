@@ -4,6 +4,8 @@
  <widget class="QWidget" name="debugDialog">
   <property name="geometry">
    <rect>
+    <x>0</x>
+    <y>0</y>
     <width>665</width>
     <height>392</height>
    </rect>
@@ -61,6 +63,19 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="alreadyExistsQueue"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spinBoxNumberOfInode">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="maximum">
+         <number>9999</number>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="1">
        <widget class="QSpinBox" name="spinBoxActiveTransfer">
         <property name="readOnly">
@@ -78,13 +93,20 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="spinBoxNumberOfInode">
-        <property name="readOnly">
-         <bool>true</bool>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="errorQueue"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>alreadyExistsQueueItem:</string>
         </property>
-        <property name="maximum">
-         <number>9999</number>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>errorQueueItem:</string>
         </property>
        </widget>
       </item>

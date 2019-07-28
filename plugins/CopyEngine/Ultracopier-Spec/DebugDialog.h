@@ -10,10 +10,13 @@
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 #include <QWidget>
+#include <QTimer>
 
 namespace Ui {
     class debugDialog;
 }
+
+class CopyEngine;
 
 /// \brief class to the dialog to have debug information
 class DebugDialog : public QWidget
@@ -30,8 +33,14 @@ public:
     void setActiveTransfer(const int &activeTransfer);
     /// \brief show many many inode is manipulated
     void setInodeUsage(const int &inodeUsage);
+
+    CopyEngine *copyEngine;
 private:
     Ui::debugDialog *ui;
+    QTimer timer;
+
+private slots:
+    void updateOnTimer();
 };
 
 #endif // ULTRACOPIER_PLUGIN_DEBUG_WINDOW

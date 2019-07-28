@@ -49,12 +49,12 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
         if(index<99)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
         index++;
-        sourcesClean.push_back(TransferThread::stringToWstring(source));
+        sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourcesClean: "+stringimplode(sourcesClean,";"));
-    scanFileOrFolderThread->addToList(sourcesClean,TransferThread::stringToWstring(destination));
+    scanFileOrFolderThread->addToList(sourcesClean,TransferThread::stringToInternalString(destination));
     scanThreadHaveFinish(true);
-    detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToWstring(destination));
+    detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToInternalString(destination));
     return true;
 }
 
@@ -94,10 +94,10 @@ bool ListThread::newMove(const std::vector<std::string> &sources,const std::stri
         if(index<99)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
         index++;
-        sourcesClean.push_back(TransferThread::stringToWstring(source));
+        sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
-    scanFileOrFolderThread->addToList(sourcesClean,TransferThread::stringToWstring(destination));
+    scanFileOrFolderThread->addToList(sourcesClean,TransferThread::stringToInternalString(destination));
     scanThreadHaveFinish(true);
-    detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToWstring(destination));
+    detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToInternalString(destination));
     return true;
 }

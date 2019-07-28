@@ -22,7 +22,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
     action=FileError_Cancel;
     ui->label_error->setText(QString::fromStdString(errorString));
     struct stat p_statbuf;
-    if(stat(TransferThread::wstringTostring(fileInfo).c_str(), &p_statbuf)==0)
+    if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
     {
         #ifdef Q_OS_UNIX
             #ifdef Q_OS_MAC
@@ -37,22 +37,22 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         ui->label_content_file_name->setText(
                     QString::fromStdString(
                         TransferThread::resolvedName(
-                            TransferThread::wstringTostring(fileInfo)
+                            TransferThread::internalStringTostring(fileInfo)
                             )
                         )
                     );
         if(ui->label_content_file_name->text().isEmpty())
         {
-            ui->label_content_file_name->setText(QString::fromStdString(TransferThread::wstringTostring(fileInfo)));
+            ui->label_content_file_name->setText(QString::fromStdString(TransferThread::internalStringTostring(fileInfo)));
             ui->label_folder->setVisible(false);
             ui->label_content_folder->setVisible(false);
         }
         else
         {
-            std::string folder=TransferThread::wstringTostring(fileInfo);
+            std::string folder=TransferThread::internalStringTostring(fileInfo);
             if(folder.size()>80)
                 folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
-            ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(TransferThread::wstringTostring(fileInfo))));
+            ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(TransferThread::internalStringTostring(fileInfo))));
         }
         ui->label_content_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS<mdate)
@@ -80,7 +80,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         {
             char buf[1024];
             ssize_t len;
-            if ((len = readlink(TransferThread::wstringTostring(fileInfo).c_str(), buf, sizeof(buf)-1)) != -1)
+            if ((len = readlink(TransferThread::internalStringTostring(fileInfo).c_str(), buf, sizeof(buf)-1)) != -1)
             {
                 buf[len] = '\0';
                 ui->label_content_file_destination->setText(buf);
@@ -93,15 +93,15 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
     }
     else
     {
-        ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::wstringTostring(fileInfo))));
+        ui->label_content_file_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::internalStringTostring(fileInfo))));
         if(ui->label_content_file_name->text().isEmpty())
         {
-            ui->label_content_file_name->setText(QString::fromStdString(TransferThread::wstringTostring(fileInfo)));
+            ui->label_content_file_name->setText(QString::fromStdString(TransferThread::internalStringTostring(fileInfo)));
             ui->label_folder->setVisible(false);
             ui->label_content_folder->setVisible(false);
         }
         else
-            ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(TransferThread::wstringTostring(fileInfo))));
+            ui->label_content_folder->setText(QString::fromStdString(FSabsolutePath(TransferThread::internalStringTostring(fileInfo))));
 
         ui->label_file_destination->hide();
         ui->label_content_file_destination->hide();

@@ -76,7 +76,7 @@ std::string ListThread::getUniqueDestinationFolder() const
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destinationDriveMultiple");
         return std::string();
     }
-    return TransferThread::wstringTostring(destinationFolder);
+    return TransferThread::internalStringTostring(destinationFolder);
 }
 
 void ListThread::detectDrivesOfCurrentTransfer(const std::vector<INTERNALTYPEPATH> &sources,const INTERNALTYPEPATH &destination)
@@ -87,7 +87,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const std::vector<INTERNALTYPEPAT
         unsigned int index=0;
         while(index<sources.size())
         {
-            const std::string &tempDrive=driveManagement.getDrive(TransferThread::wstringTostring(sources.at(index)));
+            const std::string &tempDrive=driveManagement.getDrive(TransferThread::internalStringTostring(sources.at(index)));
             //if have not already source, set the source
             if(sourceDrive.empty())
                 sourceDrive=tempDrive;
@@ -103,7 +103,7 @@ void ListThread::detectDrivesOfCurrentTransfer(const std::vector<INTERNALTYPEPAT
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("source informations, sourceDrive: %1, sourceDriveMultiple: %2").arg(QString::fromStdString(sourceDrive)).arg(sourceDriveMultiple).toStdString());
     if(!destinationDriveMultiple)
     {
-        const std::string &tempDrive=driveManagement.getDrive(TransferThread::wstringTostring(destination));
+        const std::string &tempDrive=driveManagement.getDrive(TransferThread::internalStringTostring(destination));
         //if have not already destination, set the destination
         if(destinationDrive.empty())
             destinationDrive=tempDrive;

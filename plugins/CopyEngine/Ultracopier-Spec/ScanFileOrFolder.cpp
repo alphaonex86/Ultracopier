@@ -123,7 +123,7 @@ std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::
     unsigned int index=0;
     while(index<(unsigned int)sources.size())
     {
-        std::string sourceAt=TransferThread::wstringTostring(sources.at(index));
+        std::string sourceAt=TransferThread::internalStringTostring(sources.at(index));
         if(sourceAt.find("*") != std::string::npos)
         {
             std::vector<std::string> toParse=stringregexsplit(sourceAt,splitFolder);
@@ -140,14 +140,14 @@ std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::
                 {
                     std::string toParseFirst=toParse.front();
                     if(toParseFirst.empty())
-                        toParseFirst=TransferThread::wstringTostring(text_slash);
+                        toParseFirst=TransferThread::internalStringTostring(text_slash);
                     std::vector<std::vector<std::string> > newRecomposedSource;
                     stringreplaceAll(toParseFirst,"*","[^/\\\\]*");
                     std::regex toResolv=std::regex(toParseFirst);
                     unsigned int index_recomposedSource=0;
                     while(index_recomposedSource<recomposedSource.size())//parse each url part
                     {
-                        std::string fileInfo(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::wstringTostring(text_slash)));
+                        std::string fileInfo(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::internalStringTostring(text_slash)));
                         std::vector<TransferThread::dirent_uc> list;
                         struct stat p_statbuf;
                         #ifdef Q_OS_UNIX
@@ -156,13 +156,13 @@ std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::
                         if(stat(fileInfo.c_str(), &p_statbuf)==0)
                         #endif
                         {
-                            if(S_ISDIR(p_statbuf.st_mode) && TransferThread::entryInfoList(TransferThread::stringToWstring(fileInfo),list))
+                            if(S_ISDIR(p_statbuf.st_mode) && TransferThread::entryInfoList(TransferThread::stringToInternalString(fileInfo),list))
                             {
                                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list the folder: "+fileInfo+", with the wildcard: "+toParseFirst);
                                 unsigned int index_fileList=0;
                                 while(index_fileList<list.size())
                                 {
-                                    const std::string &fileName=TransferThread::wstringTostring(list.at(index_fileList).d_name);
+                                    const std::string &fileName=TransferThread::internalStringTostring(list.at(index_fileList).d_name);
                                     if(std::regex_match(fileName,toResolv))
                                     {
                                         std::vector<std::string> tempList=recomposedSource.at(index_recomposedSource);
@@ -179,12 +179,12 @@ std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::
                 }
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"add toParse: "+stringimplode(toParse,TransferThread::wstringTostring(text_slash)));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"add toParse: "+stringimplode(toParse,TransferThread::internalStringTostring(text_slash)));
                     unsigned int index_recomposedSource=0;
                     while(index_recomposedSource<recomposedSource.size())
                     {
                         recomposedSource[index_recomposedSource].push_back(toParse.front());
-                        if(!QFileInfo(QString::fromStdString(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::wstringTostring(text_slash)))).exists())
+                        if(!QFileInfo(QString::fromStdString(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::internalStringTostring(text_slash)))).exists())
                             recomposedSource.erase(recomposedSource.cbegin()+index_recomposedSource);
                         else
                             index_recomposedSource++;
@@ -195,12 +195,12 @@ std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::
             unsigned int index_recomposedSource=0;
             while(index_recomposedSource<recomposedSource.size())
             {
-                returnList.push_back(TransferThread::stringToWstring(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::wstringTostring(text_slash))));
+                returnList.push_back(TransferThread::stringToInternalString(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::internalStringTostring(text_slash))));
                 index_recomposedSource++;
             }
         }
         else
-            returnList.push_back(TransferThread::stringToWstring(sourceAt));
+            returnList.push_back(TransferThread::stringToInternalString(sourceAt));
         index++;
     }
     return returnList;
@@ -220,7 +220,7 @@ void ScanFileOrFolder::setFilters(const std::vector<Filters_rules> &include, con
 //set action if Folder are same or exists
 void ScanFileOrFolder::setFolderExistsAction(const FolderExistsAction &action, const std::string &newName)
 {
-    this->newName=TransferThread::stringToWstring(newName);
+    this->newName=TransferThread::stringToInternalString(newName);
     folderExistsAction=action;
     waitOneAction.release();
 }
@@ -242,7 +242,7 @@ void ScanFileOrFolder::run()
 {
     stopped=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,
-        "start the listing with destination: "+TransferThread::wstringTostring(destination)+", mode: "+std::to_string(mode));
+        "start the listing with destination: "+TransferThread::internalStringTostring(destination)+", mode: "+std::to_string(mode));
     #ifdef Q_OS_UNIX
     destination=resolvDestination(destination);
     #endif
@@ -264,7 +264,7 @@ void ScanFileOrFolder::run()
     unsigned int sourceIndex=0;
     while(sourceIndex<sources.size())
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"size source to list: "+std::to_string(sourceIndex)+TransferThread::wstringTostring(text_slash)+std::to_string(sources.size()));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"size source to list: "+std::to_string(sourceIndex)+TransferThread::internalStringTostring(text_slash)+std::to_string(sources.size()));
         if(stopIt)
         {
             stopped=true;
@@ -278,9 +278,9 @@ void ScanFileOrFolder::run()
         #endif
         struct stat p_statbuf;
         #ifdef Q_OS_UNIX
-        if(lstat(TransferThread::wstringTostring(source).c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
+        if(lstat(TransferThread::internalStringTostring(source).c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
         #else
-        if(stat(TransferThread::wstringTostring(source).c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
+        if(stat(TransferThread::internalStringTostring(source).c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
         #endif
         {
             /* Bad way; when you copy c:\source\folder into d:\destination, you wait it create the folder d:\destination\folder
@@ -299,16 +299,16 @@ void ScanFileOrFolder::run()
                         QString::fromStdString(tempString)
                         #endif
                         ).exists() &&
-                    driveManagement.isSameDrive(TransferThread::wstringTostring(source),TransferThread::wstringTostring(tempString)))
+                    driveManagement.isSameDrive(TransferThread::internalStringTostring(source),TransferThread::internalStringTostring(tempString)))
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: move and not exists: "+TransferThread::wstringTostring(tempString));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"do real move: "+TransferThread::wstringTostring(source)+" to "+TransferThread::wstringTostring(tempString));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: move and not exists: "+TransferThread::internalStringTostring(tempString));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"do real move: "+TransferThread::internalStringTostring(source)+" to "+TransferThread::internalStringTostring(tempString));
                 emit addToRealMove(source,tempString);
             }
             else
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+tempString+" normal listing, blacklist size: "+std::to_string(blackList.size()));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+TransferThread::wstringTostring(tempString)+" normal listing");
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: "+TransferThread::internalStringTostring(tempString)+" normal listing");
                 if(stringEndsWith(source,'/'))
                     source.erase(source.end()-1);
                 if(stringEndsWith(tempString,'/'))
@@ -318,7 +318,7 @@ void ScanFileOrFolder::run()
         }
         else
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::wstringTostring(source)+" is file or symblink");
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+" is file or symblink");
             if(stringEndsWith(destination,'/') || stringEndsWith(destination,'\\'))
                 emit fileTransfer(source,destination+TransferThread::resolvedName(source),mode);
             else
@@ -338,16 +338,16 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
     INTERNALTYPEPATH temp(destination);
     char buf[PATH_MAX];
     ssize_t nbytes=0;
-    nbytes=readlink(TransferThread::wstringTostring(destination).c_str(), buf, sizeof(buf));
+    nbytes=readlink(TransferThread::internalStringTostring(destination).c_str(), buf, sizeof(buf));
     while(nbytes!=-1) {
-        temp=FSabsolutePath(temp)+TransferThread::stringToWstring("/")+TransferThread::stringToWstring(std::string(buf,nbytes));
+        temp=FSabsolutePath(temp)+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(std::string(buf,nbytes));
         /// \todo change for pure c++ code
         #ifdef WIDESTRING
         temp=QFileInfo(QString::fromStdWString(temp)).absoluteFilePath().toStdWString();
         #else
         temp=QFileInfo(QString::fromStdString(temp)).absoluteFilePath().toStdString();
         #endif
-        nbytes=readlink(TransferThread::wstringTostring(temp).c_str(), buf, sizeof(buf));
+        nbytes=readlink(TransferThread::internalStringTostring(temp).c_str(), buf, sizeof(buf));
     }
     return temp;
     /*do
@@ -385,8 +385,8 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
 
 void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH destination)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::wstringTostring(source)+
-                             ", destination: "+TransferThread::wstringTostring(destination)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+
+                             ", destination: "+TransferThread::internalStringTostring(destination)
                              );
     if(stopIt)
         return;
@@ -424,7 +424,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                 return;
             break;
             case FolderExists_Rename:
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+TransferThread::wstringTostring(destination));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+TransferThread::internalStringTostring(destination));
                 if(newName.empty())
                 {
                     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"pattern: "+folder_isolation.str());
@@ -443,7 +443,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                                 destinationSuffixPath=tr("%1 - copy").arg(QString::fromStdString(TransferThread::resolvedName(destination))).toStdString();
                                 #endif
                             else
-                                destinationSuffixPath=TransferThread::stringToWstring(firstRenamingRule);
+                                destinationSuffixPath=TransferThread::stringToInternalString(firstRenamingRule);
                         }
                         else
                         {
@@ -455,7 +455,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                                 #endif
                             else
                             {
-                                destinationSuffixPath=TransferThread::stringToWstring(otherRenamingRule);
+                                destinationSuffixPath=TransferThread::stringToInternalString(otherRenamingRule);
                                 #ifdef WIDESTRING
                                 stringreplaceAll(destinationSuffixPath,L"%number%",std::to_wstring(num));
                                 #else
@@ -476,24 +476,24 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                             else
                                 n=destination.rfind(n,'.');
                             if(n == std::string::npos)
-                                destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath;
+                                destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath;
                             else
-                                destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath+TransferThread::stringToWstring(".")+destination.substr(n);
+                                destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath+TransferThread::stringToInternalString(".")+destination.substr(n);
                         }
                     }
                     #ifdef Q_OS_UNIX
-                    while(lstat(TransferThread::wstringTostring(destination).c_str(), &source_statbuf)==0);
+                    while(lstat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0);
                     #else
-                    while(stat(TransferThread::wstringTostring(destination).c_str(), &source_statbuf)==0);
+                    while(stat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0);
                     #endif
                 }
                 else
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+TransferThread::wstringTostring(newName));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+TransferThread::internalStringTostring(newName));
                     destinationSuffixPath = newName;
                 }
                 destination=FSabsolutePath(destination)+text_slash+destinationSuffixPath;
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+TransferThread::wstringTostring(destination));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+TransferThread::internalStringTostring(destination));
             break;
             default:
                 return;
@@ -518,9 +518,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
     {
         struct stat source_statbuf;
         #ifdef Q_OS_UNIX
-        if(lstat(TransferThread::wstringTostring(destination).c_str(), &source_statbuf)==0)
+        if(lstat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0)
         #else
-        if(stat(TransferThread::wstringTostring(destination).c_str(), &source_statbuf)==0)
+        if(stat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0)
         #endif
         {
             emit folderAlreadyExists(source,destination,false);
@@ -534,7 +534,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     return;
                 break;
                 case FolderExists_Rename:
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+TransferThread::wstringTostring(destination));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination before rename: "+TransferThread::internalStringTostring(destination));
                     if(newName.empty())
                     {
                         //resolv the new name
@@ -551,7 +551,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                                     destinationSuffixPath=tr("%name% - copy").toStdString();
                                     #endif
                                 else
-                                    destinationSuffixPath=TransferThread::stringToWstring(firstRenamingRule);
+                                    destinationSuffixPath=TransferThread::stringToInternalString(firstRenamingRule);
                             }
                             else
                             {
@@ -562,7 +562,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                                     destinationSuffixPath=tr("%name% - copy (%number%)").toStdString();
                                     #endif
                                 else
-                                    destinationSuffixPath=TransferThread::stringToWstring(otherRenamingRule);
+                                    destinationSuffixPath=TransferThread::stringToInternalString(otherRenamingRule);
                                 #ifdef WIDESTRING
                                 stringreplaceAll(destinationSuffixPath,L"%number%",std::to_wstring(num));
                                 #else
@@ -582,7 +582,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     }
                     else
                     {
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+TransferThread::wstringTostring(newName));
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+TransferThread::internalStringTostring(newName));
                         destinationSuffixPath = newName;
                     }
                     {
@@ -592,12 +592,12 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                         else
                             n=destination.rfind(n,'.');
                         if(n == std::string::npos)
-                            destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath;
+                            destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath;
                         else
-                            destination=FSabsolutePath(destination)+TransferThread::stringToWstring("/")+destinationSuffixPath+
-                                    TransferThread::stringToWstring(".")+destination.substr(n);
+                            destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath+
+                                    TransferThread::stringToInternalString(".")+destination.substr(n);
                     }
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+TransferThread::wstringTostring(destination));
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+TransferThread::internalStringTostring(destination));
                 break;
                 default:
                     return;
@@ -641,7 +641,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
         #endif
     #endif
     const unsigned int sizeEntryList=entryList.size();
-    emit newFolderListing(TransferThread::wstringTostring(source));
+    emit newFolderListing(TransferThread::internalStringTostring(source));
     if(mode!=Ultracopier::Move)
         emit addToMkPath(source,destination,sizeEntryList);
     for(unsigned int index=0;index<sizeEntryList;++index)
@@ -668,7 +668,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                 {
                     if(exclude.at(filters_index).apply_on==ApplyOn_folder || exclude.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                     {
-                        if(std::regex_match(TransferThread::wstringTostring(fileName),exclude.at(filters_index).regex))
+                        if(std::regex_match(TransferThread::internalStringTostring(fileName),exclude.at(filters_index).regex))
                         {
                             excluded=true;
                             break;
@@ -685,7 +685,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     {
                         if(include.at(filters_index).apply_on==ApplyOn_folder || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                         {
-                            if(std::regex_match(TransferThread::wstringTostring(fileName),include.at(filters_index).regex))
+                            if(std::regex_match(TransferThread::internalStringTostring(fileName),include.at(filters_index).regex))
                             {
                                 included=true;
                                 break;
@@ -717,7 +717,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                 {
                     if(exclude.at(filters_index).apply_on==ApplyOn_file || exclude.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                     {
-                        if(std::regex_match(TransferThread::wstringTostring(fileName),exclude.at(filters_index).regex))
+                        if(std::regex_match(TransferThread::internalStringTostring(fileName),exclude.at(filters_index).regex))
                         {
                             excluded=true;
                             break;
@@ -734,7 +734,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     {
                         if(include.at(filters_index).apply_on==ApplyOn_file || include.at(filters_index).apply_on==ApplyOn_fileAndFolder)
                         {
-                            if(std::regex_match(TransferThread::wstringTostring(fileName),include.at(filters_index).regex))
+                            if(std::regex_match(TransferThread::internalStringTostring(fileName),include.at(filters_index).regex))
                             {
                                 included=true;
                                 break;
@@ -752,9 +752,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                         fullSource+=fileName;
                         #ifndef ULTRACOPIER_PLUGIN_RSYNC
                             #ifdef Q_OS_WIN32
-                            emit fileTransferWithInode(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode,fileInfo);
+                            emit fileTransferWithInode(fullSource,destination+TransferThread::stringToInternalString("/")+fileName,mode,fileInfo);
                             #else
-                            emit fileTransfer(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode);
+                            emit fileTransfer(fullSource,destination+TransferThread::stringToInternalString("/")+fileName,mode);
                             #endif
                         #else
                         {
@@ -801,9 +801,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                 fullSource+=fileName;
                 #ifndef ULTRACOPIER_PLUGIN_RSYNC
                     #ifdef Q_OS_WIN32
-                    emit fileTransferWithInode(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode,fileInfo);
+                    emit fileTransferWithInode(fullSource,destination+TransferThread::stringToInternalString("/")+fileName,mode,fileInfo);
                     #else
-                    emit fileTransfer(fullSource,destination+TransferThread::stringToWstring("/")+fileName,mode);
+                    emit fileTransfer(fullSource,destination+TransferThread::stringToInternalString("/")+fileName,mode);
                     #endif
                 #else
                 {
@@ -856,7 +856,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
     #endif
     if(mode==Ultracopier::Move)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::wstringTostring(source)+", sizeEntryList: "+std::to_string(sizeEntryList));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+", sizeEntryList: "+std::to_string(sizeEntryList));
         emit addToMovePath(source,destination,sizeEntryList);
     }
 }

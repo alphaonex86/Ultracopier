@@ -11,7 +11,7 @@ macx {
     LIBS += /usr/local/Cellar/opus/1.3.1/lib/libopus.a
     INCLUDEPATH += /usr/local/Cellar/opus/1.3.1/include/
 }
-DEFINES += NOAUDIO
+#DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
 linux:LIBS += -lopus
@@ -168,3 +168,4 @@ win32: {
 DEFINES += WIDESTRING
 QT += winextras
 }
+DEFINES += WIDESTRING

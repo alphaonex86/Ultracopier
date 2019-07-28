@@ -100,6 +100,7 @@ void CopyEngine::connectTheSignalsSlots()
 {
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     debugDialogWindow.show();
+    debugDialogWindow.copyEngine=this;
     #endif
     if(!connect(listThread,&ListThread::actionInProgess,	this,&CopyEngine::actionInProgess,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess()");

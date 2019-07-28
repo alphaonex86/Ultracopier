@@ -4,6 +4,7 @@
 
 #include "DebugDialog.h"
 #include "ui_debugDialog.h"
+#include "CopyEngine.h"
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
 
@@ -12,6 +13,8 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ui(new Ui::debugDialog)
 {
     ui->setupUi(this);
+    connect(&timer,&QTimer::timeout,this,&DebugDialog::updateOnTimer);
+    timer.start(200);
 }
 
 DebugDialog::~DebugDialog()
@@ -49,6 +52,12 @@ void DebugDialog::setTransferThreadList(const std::vector<std::string> &list)
         ui->transferThreadList->addItem(QString::fromStdString(list.at(index)));
         index++;
     }
+}
+
+void DebugDialog::updateOnTimer()
+{
+    ui->alreadyExistsQueue->setValue(copyEngine->alreadyExistsQueue.size());
+    ui->errorQueue->setValue(copyEngine->errorQueue.size());
 }
 
 #endif

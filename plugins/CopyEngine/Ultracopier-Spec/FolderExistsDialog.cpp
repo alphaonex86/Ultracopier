@@ -25,14 +25,14 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
 
     ui->setupUi(this);
     action=FolderExists_Cancel;
-    oldName=TransferThread::resolvedName(TransferThread::wstringTostring(destination));
+    oldName=TransferThread::resolvedName(TransferThread::internalStringTostring(destination));
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
-    if(lstat(TransferThread::wstringTostring(source).c_str(), &source_statbuf)==0)
+    if(lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
     #else
-    if(stat(TransferThread::wstringTostring(source).c_str(), &source_statbuf)==0)
+    if(stat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
     #endif
     {
         #ifdef Q_OS_UNIX
@@ -48,8 +48,8 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     }
     else
         ui->label_content_source_modified->hide();
-    ui->label_content_source_folder_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::wstringTostring(source))));
-    std::string folder=TransferThread::wstringTostring(FSabsolutePath(source));
+    ui->label_content_source_folder_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::internalStringTostring(source))));
+    std::string folder=TransferThread::internalStringTostring(FSabsolutePath(source));
     if(folder.size()>80)
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_source_folder->setText(QString::fromStdString(folder));
@@ -60,7 +60,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     }
     if(isSame)
     {
-        this->destinationInfo=TransferThread::wstringTostring(source);
+        this->destinationInfo=TransferThread::internalStringTostring(source);
         ui->label_source->hide();
         ui->label_destination->hide();
         ui->label_destination_modified->hide();
@@ -72,13 +72,13 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     }
     else
     {
-        this->destinationInfo=TransferThread::wstringTostring(destination);
+        this->destinationInfo=TransferThread::internalStringTostring(destination);
         this->setWindowTitle(tr("Folder already exists"));
         struct stat destination_statbuf;
         #ifdef Q_OS_UNIX
-        if(lstat(TransferThread::wstringTostring(destination).c_str(), &destination_statbuf)==0)
+        if(lstat(TransferThread::internalStringTostring(destination).c_str(), &destination_statbuf)==0)
         #else
-        if(stat(TransferThread::wstringTostring(destination).c_str(), &destination_statbuf)==0)
+        if(stat(TransferThread::internalStringTostring(destination).c_str(), &destination_statbuf)==0)
         #endif
         {
             #ifdef Q_OS_UNIX
@@ -94,8 +94,8 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         }
         else
             ui->label_content_destination_modified->hide();
-        ui->label_content_destination_folder_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::wstringTostring(destination))));
-        std::string folder=TransferThread::wstringTostring(FSabsolutePath(destination));
+        ui->label_content_destination_folder_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::internalStringTostring(destination))));
+        std::string folder=TransferThread::internalStringTostring(FSabsolutePath(destination));
         if(folder.size()>80)
             folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
         ui->label_content_destination_folder->setText(QString::fromStdString(folder));

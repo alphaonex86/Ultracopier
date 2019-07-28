@@ -89,11 +89,11 @@ public:
     #endif
     static bool mkdir(const INTERNALTYPEPATH &file_path, const mode_t &mode=0755);
     #ifdef WIDESTRING
-    static std::wstring stringToWstring(const std::string& utf8);
-    static std::string wstringTostring(const std::wstring& utf16);
+    static INTERNALTYPEPATH stringToInternalString(const std::string& utf8);
+    static std::string internalStringTostring(const INTERNALTYPEPATH& utf16);
     #else
-    static std::string stringToWstring(const std::string& utf8);
-    static std::string wstringTostring(const std::string& utf16);
+    static std::string stringToInternalString(const std::string& utf8);
+    static std::string internalStringTostring(const std::string& utf16);
     #endif
 
     static int64_t readFileMDateTime(const INTERNALTYPEPATH &source);

@@ -215,11 +215,11 @@ void ListThread::exportTransferList(const std::string &fileName)
                 if(!forcedMode || mode==Ultracopier::Copy)
                 {
                     if(forcedMode)
-                        transferFile.write((TransferThread::wstringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::wstringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
                     else
-                        transferFile.write(("Copy;"+TransferThread::wstringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::wstringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write(("Copy;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
                 }
                 else
                     haveError=true;
@@ -229,11 +229,11 @@ void ListThread::exportTransferList(const std::string &fileName)
                 if(!forcedMode || mode==Ultracopier::Move)
                 {
                     if(forcedMode)
-                        transferFile.write((TransferThread::wstringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::wstringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write((TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
                     else
-                        transferFile.write(("Move;"+TransferThread::wstringTostring(actionToDoListTransfer.at(index).source)+
-                                            ";"+TransferThread::wstringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
+                        transferFile.write(("Move;"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).source)+
+                                            ";"+TransferThread::internalStringTostring(actionToDoListTransfer.at(index).destination)+"\n").c_str());
                 }
                 else
                     haveError=true;
@@ -333,8 +333,8 @@ void ListThread::importTransferList(const std::string &fileName)
                                                  .arg(QString::fromStdString(args.at(0)))
                                                       .arg(QString::fromStdString(args.at(1)))
                                                       .toStdString());
-                        addToTransfer(TransferThread::stringToWstring(args.at(0)),
-                                      TransferThread::stringToWstring(args.at(1)),mode);
+                        addToTransfer(TransferThread::stringToInternalString(args.at(0)),
+                                      TransferThread::stringToInternalString(args.at(1)),mode);
                     }
                     else
                     {
@@ -347,7 +347,7 @@ void ListThread::importTransferList(const std::string &fileName)
                             tempMode=Ultracopier::Copy;
                         else
                             tempMode=Ultracopier::Move;
-                        addToTransfer(TransferThread::stringToWstring(args.at(1)),TransferThread::stringToWstring(args.at(2)),tempMode);
+                        addToTransfer(TransferThread::stringToInternalString(args.at(1)),TransferThread::stringToInternalString(args.at(2)),tempMode);
                     }
                 }
                 else

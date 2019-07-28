@@ -50,7 +50,7 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
     //load the action
     if(isSame)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+TransferThread::wstringTostring(source));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+TransferThread::internalStringTostring(source));
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
@@ -107,15 +107,20 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                     thread->setFileRename(dialog.getNewName());
                 dialogIsOpen=false;
                 if(!isCalledByShowOneNewDialog)
+                {
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
                     emit queryOneNewDialog();
+                }
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
                 return;
             break;
         }
     }
     else
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+TransferThread::wstringTostring(source)+
-                                 ", destination: "+TransferThread::wstringTostring(destination));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file already exists: "+TransferThread::internalStringTostring(source)+
+                                 ", destination: "+TransferThread::internalStringTostring(destination));
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
         switch(tempFileExistsAction)
         {
@@ -132,8 +137,8 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                 if(dialogIsOpen)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"dialog open, put in queue: "+
-                                             TransferThread::wstringTostring(source)+" "+
-                                             TransferThread::wstringTostring(destination)
+                                             TransferThread::internalStringTostring(source)+" "+
+                                             TransferThread::internalStringTostring(destination)
                                  );
                     alreadyExistsQueueItem newItem;
                     newItem.source=source;
@@ -195,6 +200,8 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
                     emit queryOneNewDialog();
                 }
+                else
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
                 return;
             break;
         }
@@ -243,7 +250,7 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::wstringTostring(fileInfo)+
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::internalStringTostring(fileInfo)+
                              ", error: "+errorString);
     if(thread==NULL)
     {
@@ -291,7 +298,7 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if(stat(TransferThread::wstringTostring(fileInfo).c_str(), &p_statbuf)==0)
+            if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
@@ -305,7 +312,7 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
                 #endif
             }
 
-            emit error(TransferThread::wstringTostring(fileInfo),size,mdate,errorString);
+            emit error(TransferThread::internalStringTostring(fileInfo),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             emit isInPause(true);
             dialog.exec();/// \bug crash when external close
@@ -350,7 +357,10 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
             }
             dialogIsOpen=false;
             if(!isCalledByShowOneNewDialog)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
                 emit queryOneNewDialog();
+            }
             else
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"isCalledByShowOneNewDialog==true then not show other dial");
             return;
@@ -364,8 +374,8 @@ void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH de
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+TransferThread::wstringTostring(source)+
-                             ", destination: "+TransferThread::wstringTostring(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"folder already exists: "+TransferThread::internalStringTostring(source)+
+                             ", destination: "+TransferThread::internalStringTostring(destination));
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -411,7 +421,12 @@ void CopyEngine::folderAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH de
                 thread->setFolderExistsAction(newAction);
             dialogIsOpen=false;
             if(!isCalledByShowOneNewDialog)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
                 emit queryOneNewDialog();
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
             return;
         break;
     }
@@ -423,7 +438,7 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::wstringTostring(fileInfo)+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::internalStringTostring(fileInfo)+", error: "+errorString);
     if(thread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to locate the thread");
@@ -457,7 +472,7 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if(stat(TransferThread::wstringTostring(fileInfo).c_str(), &p_statbuf)==0)
+            if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
@@ -472,7 +487,7 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
             }
 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
-            emit error(TransferThread::wstringTostring(fileInfo),size,mdate,errorString);
+            emit error(TransferThread::internalStringTostring(fileInfo),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -490,7 +505,12 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
             dialogIsOpen=false;
             thread->setFolderErrorAction(newAction);
             if(!isCalledByShowOneNewDialog)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
                 emit queryOneNewDialog();
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
             return;
         break;
     }
@@ -504,7 +524,7 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
 {
     if(stopIt)
         return;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::wstringTostring(folder)+", error: "+errorString);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file have error: "+TransferThread::internalStringTostring(folder)+", error: "+errorString);
     //load the always action
     FileErrorAction tempFileErrorAction=alwaysDoThisActionForFolderError;
     switch(tempFileErrorAction)
@@ -535,7 +555,7 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
             uint64_t size=0;
             uint64_t mdate=0;
             struct stat p_statbuf;
-            if(stat(TransferThread::wstringTostring(folder).c_str(), &p_statbuf)==0)
+            if(stat(TransferThread::internalStringTostring(folder).c_str(), &p_statbuf)==0)
             {
                 size=p_statbuf.st_size;
                 #ifdef Q_OS_UNIX
@@ -549,7 +569,7 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
                 #endif
             }
 
-            emit error(TransferThread::wstringTostring(folder),size,mdate,errorString);
+            emit error(TransferThread::internalStringTostring(folder),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,folder,errorString,errorType,facilityEngine);
             dialog.exec();/// \bug crash when external close
             FileErrorAction newAction=dialog.getAction();
@@ -578,7 +598,12 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
                 break;
             }
             if(!isCalledByShowOneNewDialog)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"emit queryOneNewDialog()");
                 emit queryOneNewDialog();
+            }
+            else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"NOT emit queryOneNewDialog(), !isCalledByShowOneNewDialog");
             return;
         break;
     }
@@ -592,6 +617,8 @@ void CopyEngine::showOneNewDialog()
         return;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"alreadyExistsQueue.size(): "+std::to_string(alreadyExistsQueue.size()));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"errorQueue.size(): "+std::to_string(errorQueue.size()));
+    //reset to always show the dialog
+    dialogIsOpen=false;
     int loop_size=alreadyExistsQueue.size();
     while(loop_size>0)
     {
@@ -628,4 +655,6 @@ void CopyEngine::showOneNewDialog()
         errorQueue.erase(errorQueue.cbegin());
         loop_size--;
     }
+    //no more to show then reset
+    dialogIsOpen=false;
 }

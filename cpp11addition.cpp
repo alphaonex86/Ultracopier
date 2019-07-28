@@ -479,13 +479,11 @@ std::string FSabsolutePath(const std::string &string)
 std::wstring FSabsoluteFilePath(const std::wstring &string)
 {
     std::wstring newstring=string;
-    stringreplaceAll(newstring,L"//",L"/");
     #ifdef _WIN32
-    stringreplaceAll(newstring,L"\\\\",L"\\");
-    std::vector<std::wstring> parts=stringregexsplit(newstring,regexseparators);
-    #else
-    std::vector<std::wstring> parts=stringsplit(newstring,'/');
+    stringreplaceAll(newstring,L"\\",L"/");
     #endif
+    stringreplaceAll(newstring,L"//",L"/");
+    std::vector<std::wstring> parts=stringsplit(newstring,'/');
 
     #ifndef _WIN32
     unsigned int index=1;

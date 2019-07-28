@@ -117,6 +117,7 @@ private:
 private slots:
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     void updateTheDebugInfo(const std::vector<std::string> &newList, const std::vector<std::string> &newList2, const int &numberOfInodeOperation);
+    friend class DebugDialog;
     #endif
 
     /************* External  call ********************/
