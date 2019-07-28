@@ -32,6 +32,10 @@ CopyEngineFactory::CopyEngineFactory() :
     qRegisterMetaType<std::vector<Diskspace> >("std::vector<Diskspace>");
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
     qRegisterMetaType<TransferThread::dirent_uc>("TransferThread::dirent_uc");
+    #ifdef WIDESTRING
+    qRegisterMetaType<std::wstring>("std::wstring");
+    qRegisterMetaType<wchar_t *>("wchar_t *");
+    #endif
 
     tempWidget=new QWidget();
     ui->setupUi(tempWidget);

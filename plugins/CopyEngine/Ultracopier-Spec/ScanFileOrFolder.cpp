@@ -604,6 +604,8 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                 break;
             }
         }
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"checkDestinationExists but stat failed");
     }
     if(stopIt)
         return;
