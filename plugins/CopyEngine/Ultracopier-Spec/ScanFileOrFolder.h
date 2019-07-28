@@ -109,9 +109,9 @@ private:
     */
     std::vector<INTERNALTYPEPATH>		parseWildcardSources(const std::vector<INTERNALTYPEPATH> &sources) const;
 
-    static std::string text_slash;
-    static std::string text_antislash;
-    static std::string text_dot;
+    static INTERNALTYPEPATH text_slash;
+    static INTERNALTYPEPATH text_antislash;
+    static INTERNALTYPEPATH text_dot;
 };
 
 #endif // SCANFILEORFOLDER_H

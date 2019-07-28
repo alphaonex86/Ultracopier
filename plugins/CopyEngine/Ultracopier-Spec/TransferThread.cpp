@@ -370,6 +370,28 @@ std::string TransferThread::resolvedName(const std::string &inode)
     return inode.substr(previousLastPos+1,lastPos-previousLastPos-1);
 }
 
+#ifdef Q_OS_WIN32
+std::wstring TransferThread::resolvedName(std::wstring inode)
+#else
+std::wstring TransferThread::resolvedName(const std::wstring &inode)
+#endif
+{
+    #ifdef Q_OS_WIN32
+    stringreplaceAll(inode,L"\\",L"/");
+    #endif
+    const std::wstring::size_type &lastPos=inode.rfind(L'/');
+    if(lastPos == std::wstring::npos || (lastPos==0 && inode.size()==1))
+        return L"root";
+    if((lastPos+1)!=inode.size())
+        return inode.substr(lastPos+1);
+    if(inode.size()==1)
+        return L"root";
+    const std::wstring::size_type &previousLastPos=inode.rfind(L'/',inode.size()-2);
+    if((lastPos-2)==previousLastPos || previousLastPos == std::wstring::npos)
+        return L"root";
+    return inode.substr(previousLastPos+1,lastPos-previousLastPos-1);
+}
+
 INTERNALTYPEPATH TransferThread::getSourcePath() const
 {
     return source;

@@ -1,6 +1,5 @@
 #include "ListThread.h"
 #include <QStorageInfo>
-#include <QMutexLocker>
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 

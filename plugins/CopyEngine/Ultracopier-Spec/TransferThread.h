@@ -71,8 +71,10 @@ public:
     //not copied size, ...
     #ifdef Q_OS_WIN32
     static std::string resolvedName(std::string inode);
+    static std::wstring resolvedName(std::wstring inode);
     #else
     static std::string resolvedName(const std::string &inode);
+    static std::wstring resolvedName(const std::wstring &inode);
     #endif
     INTERNALTYPEPATH getSourcePath() const;
     INTERNALTYPEPATH getDestinationPath() const;
