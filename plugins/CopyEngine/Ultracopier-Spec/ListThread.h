@@ -246,7 +246,7 @@ private:
     QObject::killTimer: timers cannot be stopped from another thread
     QObject::startTimer: timers cannot be started from another thread */
 
-    inline static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
+    static Ultracopier::ItemOfCopyList actionToDoTransferToItemOfCopyList(const ActionToDoTransfer &actionToDoTransfer);
     //add file transfer to do
     uint64_t addToTransfer(const INTERNALTYPEPATH& source, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode& mode, const int64_t sendedsize=-1);
     //generate id number

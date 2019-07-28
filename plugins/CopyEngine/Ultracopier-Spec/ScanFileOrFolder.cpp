@@ -75,6 +75,7 @@ void ScanFileOrFolder::addToList(const std::vector<INTERNALTYPEPATH>& sources,co
     stopIt=false;
     this->sources=parseWildcardSources(sources);
     this->destination=destination;
+    #ifdef WIDESTRING
     QFileInfo destinationInfo(QString::fromStdWString(this->destination));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"check symblink: "+destinationInfo.absoluteFilePath().toStdString());
     while(destinationInfo.isSymLink())
@@ -92,6 +93,25 @@ void ScanFileOrFolder::addToList(const std::vector<INTERNALTYPEPATH>& sources,co
             this->destination+=QDir::separator();*/
         if(!stringEndsWith(destination,'/') && !stringEndsWith(destination,'\\'))
             this->destination+=text_slash;//put unix separator because it's transformed into that's under windows too
+    #else
+    QFileInfo destinationInfo(QString::fromStdString(this->destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"check symblink: "+destinationInfo.absoluteFilePath().toStdString());
+    while(destinationInfo.isSymLink())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"resolv destination to: "+destinationInfo.symLinkTarget().toStdString());
+        if(QFileInfo(destinationInfo.symLinkTarget()).isAbsolute())
+            this->destination=destinationInfo.symLinkTarget().toStdString();
+        else
+            this->destination=destinationInfo.absolutePath().toStdString()+text_slash+destinationInfo.symLinkTarget().toStdString();
+        destinationInfo.setFile(QString::fromStdString(this->destination));
+    }
+    if(sources.size()>1 || QFileInfo(QString::fromStdString(destination)).isDir())
+        /* Disabled because the separator transformation product bug
+         * if(!destination.endsWith(QDir::separator()))
+            this->destination+=QDir::separator();*/
+        if(!stringEndsWith(destination,'/') && !stringEndsWith(destination,'\\'))
+            this->destination+=text_slash;//put unix separator because it's transformed into that's under windows too
+    #endif
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"addToList("+stringimplode(sources,";")+","+this->destination+")");
 }
 
@@ -272,7 +292,13 @@ void ScanFileOrFolder::run()
             if(!stringEndsWith(tempString,text_slash) && !stringEndsWith(tempString,text_antislash))
                 tempString+=text_slash;
             tempString+=TransferThread::resolvedName(source);
-            if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(QString::fromStdWString(tempString)).exists() &&
+            if(moveTheWholeFolder && mode==Ultracopier::Move && !QFileInfo(
+                        #ifdef WIDESTRING
+                        QString::fromStdWString(tempString)
+                        #else
+                        QString::fromStdString(tempString)
+                        #endif
+                        ).exists() &&
                     driveManagement.isSameDrive(TransferThread::wstringTostring(source),TransferThread::wstringTostring(tempString)))
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"tempString: move and not exists: "+TransferThread::wstringTostring(tempString));

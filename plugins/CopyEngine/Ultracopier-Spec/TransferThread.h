@@ -89,6 +89,9 @@ public:
     #ifdef WIDESTRING
     static std::wstring stringToWstring(const std::string& utf8);
     static std::string wstringTostring(const std::wstring& utf16);
+    #else
+    static std::string stringToWstring(const std::string& utf8);
+    static std::string wstringTostring(const std::string& utf16);
     #endif
 
     static int64_t readFileMDateTime(const INTERNALTYPEPATH &source);

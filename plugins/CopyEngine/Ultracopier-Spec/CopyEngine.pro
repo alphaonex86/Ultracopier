@@ -52,7 +52,14 @@ SOURCES         += \
     $$PWD/FileIsSameDialog.cpp \
     $$PWD/FolderExistsDialog.cpp \
     $$PWD/ScanFileOrFolder.cpp \
-    $$PWD/DiskSpace.cpp
+    $$PWD/DiskSpace.cpp \
+    ListThreadActions.cpp \
+    ListThreadListChange.cpp \
+    ListThreadMedia.cpp \
+    ListThreadNew.cpp \
+    ListThreadOptions.cpp \
+    ListThreadScan.cpp \
+    ListThreadStat.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

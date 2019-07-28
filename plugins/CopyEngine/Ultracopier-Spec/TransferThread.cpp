@@ -114,6 +114,17 @@ std::string TransferThread::wstringTostring(const std::wstring& utf16)
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
     return conv1.to_bytes(utf16);
 }
+#else
+std::string TransferThread::stringToWstring(const std::string& utf8)
+{
+    return utf8;
+}
+
+std::string TransferThread::wstringTostring(const std::string& utf16)
+{
+
+    return utf16;
+}
 #endif
 
 bool TransferThread::setFiles(const INTERNALTYPEPATH& source, const int64_t &size, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode &mode)
