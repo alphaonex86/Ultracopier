@@ -972,7 +972,7 @@ void TransferThread::set_updateMount()
 
 bool TransferThread::is_symlink(const INTERNALTYPEPATH &filename)
 {
-    return is_symlink(filename.c_str());
+    return is_symlink(TransferThread::wstringTostring(filename).c_str());
 }
 
 bool TransferThread::is_symlink(const char * const filename)
@@ -993,7 +993,7 @@ bool TransferThread::is_symlink(const char * const filename)
 
 bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 {
-    return is_file(filename.c_str());
+    return is_file(TransferThread::wstringTostring(filename).c_str());
 }
 
 bool TransferThread::is_file(const char * const filename)
@@ -1015,7 +1015,7 @@ bool TransferThread::is_file(const char * const filename)
 
 bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 {
-    return is_dir(filename.c_str());
+    return is_dir(TransferThread::wstringTostring(filename).c_str());
 }
 
 bool TransferThread::is_dir(const char * const filename)
@@ -1037,7 +1037,7 @@ bool TransferThread::is_dir(const char * const filename)
 
 bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 {
-    return is_dir(filename.c_str());
+    return is_dir(TransferThread::wstringTostring(filename).c_str());
 }
 
 bool TransferThread::exists(const char * const filename)
@@ -1057,7 +1057,7 @@ bool TransferThread::exists(const char * const filename)
 
 int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 {
-    return file_stat_size(filename.c_str());
+    return file_stat_size(TransferThread::wstringTostring(filename).c_str());
 }
 
 int64_t TransferThread::file_stat_size(const char * const filename)

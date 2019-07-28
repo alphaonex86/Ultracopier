@@ -15,8 +15,10 @@
 
 #ifdef WIDESTRING
 #define INTERNALTYPEPATH std::wstring
+#define INTERNALTYPECHAR wchar_t
 #else
 #define INTERNALTYPEPATH std::string
+#define INTERNALTYPECHAR char
 #endif
 
 //defore the next define
