@@ -557,7 +557,7 @@ uint64_t ListThread::addToTransfer(const INTERNALTYPEPATH &source, const INTERNA
     {
         struct stat p_statbuf;
         #ifdef Q_OS_WIN32
-        if(stat(TransferThread::wstringTostring(source.)c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
+        if(stat(TransferThread::wstringTostring(source).c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
         #else
         if(lstat(TransferThread::wstringTostring(source).c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
         #endif

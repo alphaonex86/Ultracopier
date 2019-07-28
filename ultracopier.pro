@@ -127,7 +127,14 @@ SOURCES += \
     $$PWD/plugins/Themes/Oxygen2/radialMap/labels.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.cpp \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/widget.cpp
+    $$PWD/plugins/Themes/Oxygen2/radialMap/widget.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadActions.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadMedia.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadNew.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp
 
 win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc

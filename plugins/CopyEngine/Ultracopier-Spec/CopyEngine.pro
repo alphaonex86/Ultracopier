@@ -105,6 +105,7 @@ RESOURCES += \
 
 win32 {
     LIBS += -ladvapi32
+    DEFINES += WIDESTRING
 }
 HEADERS         += $$PWD/async/TransferThreadAsync.h
 SOURCES         += $$PWD/async/TransferThreadAsync.cpp

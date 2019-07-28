@@ -292,7 +292,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
 #ifdef Q_OS_WIN32
-    if(CopyFileExA(source.c_str(),destination.c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
+    if(CopyFileExW(source.c_str(),destination.c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
                    COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
                    )==0)
 #else

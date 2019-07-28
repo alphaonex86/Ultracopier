@@ -702,7 +702,7 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 struct stat info;
-                if(stat(source.c_str(),&info)!=0)
+                if(stat(TransferThread::wstringTostring(source).c_str(),&info)!=0)
                     return -1;
                 return info.st_mtime;
             #else
@@ -767,7 +767,7 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 struct stat info;
-                if(stat(source.c_str(),&info)!=0)
+                if(stat(TransferThread::wstringTostring(source).c_str(),&info)!=0)
                     return false;
                 time_t ctime=info.st_ctime;
                 time_t actime=info.st_atime;
@@ -777,7 +777,7 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
                 butime.modtime=modtime;
                 if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
                 {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source);
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+TransferThread::wstringTostring(source));
                     return false;
                 }
                 Q_UNUSED(ctime);
@@ -832,7 +832,7 @@ bool TransferThread::writeDestinationFileDateTime(const INTERNALTYPEPATH &destin
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                return utime(destination.c_str(),&butime)==0;
+                return utime(TransferThread::wstringTostring(destination).c_str(),&butime)==0;
             #else
                 wchar_t filePath[65535];
                 if(std::regex_match(destination,regRead))
@@ -876,7 +876,7 @@ bool TransferThread::readSourceFilePermissions(const INTERNALTYPEPATH &source)
     else
         return true;
     #else
-    HANDLE hFile = CreateFileA(source.c_str(), GENERIC_READ ,
+    HANDLE hFile = CreateFileW(source.c_str(), GENERIC_READ ,
             FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
       ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+std::to_string(GetLastError()));
@@ -902,7 +902,7 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
         return false;
     return true;
     #else
-    HANDLE hFile = CreateFileA(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    HANDLE hFile = CreateFileW(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
       ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+std::to_string(GetLastError()));
       return false;
@@ -1129,16 +1129,27 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
 #else
 bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dirent_uc> &list)
 {
-    WIN32_FIND_DATAA fdFile;
     HANDLE hFind = NULL;
+    #ifdef WIDESTRING
+    WIN32_FIND_DATAW fdFile;
+    wchar_t finalpath[MAX_PATH];
+    wcscpy(finalpath,path.c_str());
+    wcscat(finalpath,L"\\*");
+    #else
+    WIN32_FIND_DATAA fdFile;
     char finalpath[MAX_PATH];
     strcpy(finalpath,path.c_str());
     strcat(finalpath,"\\*");
-    if((hFind = FindFirstFileA(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
+    #endif
+    if((hFind = FindFirstFileW(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
         return false;
     do
     {
+        #ifdef WIDESTRING
+        if(wcscmp(fdFile.cFileName, L".")!=0 && wcscmp(fdFile.cFileName, L"..")!=0)
+        #else
         if(strcmp(fdFile.cFileName, ".")!=0 && strcmp(fdFile.cFileName, "..")!=0)
+        #endif
         {
             dirent_uc tempValue;
             tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
@@ -1147,7 +1158,7 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
             list.push_back(tempValue);
         }
     }
-    while(FindNextFileA(hFind, &fdFile));
+    while(FindNextFileW(hFind, &fdFile));
     FindClose(hFind);
     return true;
 }

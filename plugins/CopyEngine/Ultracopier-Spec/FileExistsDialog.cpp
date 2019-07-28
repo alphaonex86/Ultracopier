@@ -79,7 +79,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::wstringTostring(destination).c_str(), &destination_statbuf)==0)
     #else
-    if(stat(TransferThread::wstringTostring(destination.c_str()), &destination_statbuf)==0)
+    if(stat(TransferThread::wstringTostring(destination).c_str(), &destination_statbuf)==0)
     #endif
     {
         #ifdef Q_OS_UNIX

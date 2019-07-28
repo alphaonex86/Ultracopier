@@ -331,11 +331,11 @@ void MkPath::internalDoThisPath()
         PSECURITY_DESCRIPTOR PSecurityD;
         PACL dacl;
 
-        HANDLE hFile = CreateFileA(item.source.c_str(), GENERIC_READ ,
+        HANDLE hFile = CreateFileW(item.source.c_str(), GENERIC_READ ,
                 FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,
-                                     std::string("CreateFile() failed. Error: INVALID_HANDLE_VALUE ")+item.source.c_str()+", GetLastError(): "+std::to_string(GetLastError())
+                                     std::string("CreateFile() failed. Error: INVALID_HANDLE_VALUE ")+TransferThread::wstringTostring(item.source).c_str()+", GetLastError(): "+std::to_string(GetLastError())
                                      );
         else
         {
@@ -346,7 +346,7 @@ void MkPath::internalDoThisPath()
               ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"GetSecurityInfo() failed. Error"+std::to_string(lasterror));
             else
             {
-                hFile = CreateFileA(item.destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY ,
+                hFile = CreateFileW(item.destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY ,
                                    0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if (hFile == INVALID_HANDLE_VALUE)
                   ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"CreateFile() failed. Error: INVALID_HANDLE_VALUE");
@@ -495,28 +495,43 @@ bool MkPath::rmpath(const INTERNALTYPEPATH &dir
         }
     }
     #else
-    WIN32_FIND_DATAA fdFile;
     HANDLE hFind = NULL;
+    #ifdef WIDESTRING
+    WIN32_FIND_DATAW fdFile;
+    wchar_t finalpath[MAX_PATH];
+    wcscpy(finalpath,dir.c_str());
+    wcscat(finalpath,L"\\*");
+    #else
+    WIN32_FIND_DATAA fdFile;
     char finalpath[MAX_PATH];
     strcpy(finalpath,dir.c_str());
     strcat(finalpath,"\\*");
+    #endif
 
     allHaveWork=true;
-    if((hFind = FindFirstFileA(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
+    if((hFind = FindFirstFileW(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+dir+", errno: "+std::to_string(errno));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+TransferThread::wstringTostring(dir)+", errno: "+std::to_string(errno));
         return false;
     }
 
     if(allHaveWork)
     do
     {
+        #ifdef WIDESTRING
+        if(wcscmp(fdFile.cFileName, L".")!=0 && wcscmp(fdFile.cFileName, L"..")!=0)
+        #else
         if(strcmp(fdFile.cFileName, ".")!=0 && strcmp(fdFile.cFileName, "..")!=0)
+        #endif
         {
             if(fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 //return the fonction for scan the new folder
+                #ifdef WIDESTRING
+                if(!rmpath(dir+L'\\'+fdFile.cFileName+L'/'))
+                #else
                 if(!rmpath(dir+'\\'+fdFile.cFileName+'/'))
+                #endif
                     allHaveWork=false;
             }
             else
@@ -541,13 +556,13 @@ bool MkPath::rmpath(const INTERNALTYPEPATH &dir
                     allHaveWork=false;
                 }
                 #else
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+std::string(fdFile.cFileName));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"found a file: "+TransferThread::wstringTostring(fdFile.cFileName));
                 allHaveWork=false;
                 #endif
             }
         }
     }
-    while(FindNextFileA(hFind, &fdFile));
+    while(FindNextFileW(hFind, &fdFile));
     FindClose(hFind);
     #endif
     if(!allHaveWork)
@@ -588,7 +603,7 @@ bool MkPath::readFileDateTime(const INTERNALTYPEPATH &source)
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 struct stat info;
-                if(stat(source.c_str(),&info)!=0)
+                if(stat(TransferThread::wstringTostring(source).c_str(),&info)!=0)
                     return false;
                 time_t ctime=info.st_ctime;
                 time_t actime=info.st_atime;
@@ -646,7 +661,7 @@ bool MkPath::writeFileDateTime(const INTERNALTYPEPATH &destination)
     #else
         #ifdef Q_OS_WIN32
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                return utime(destination.c_str(),&butime)==0;
+                return utime(TransferThread::wstringTostring(destination).c_str(),&butime)==0;
             #else
                 wchar_t filePath[65535];
                 if(std::regex_match(destination,regRead))
