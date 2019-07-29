@@ -280,13 +280,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->alwaysOnTop->hide();
     #endif*/
     if(facilityEngine->isUltimate())
-    {
-        #ifdef Q_OS_MACOS
-            ui->ad_ultimate->setText(tr("This will be the last version for Mac, but you can compile from source"));
-        #else
-            ui->ad_ultimate->hide();
-        #endif
-    }
+        ui->ad_ultimate->hide();
     else
     {
         QString ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
@@ -294,10 +288,12 @@ Themes::Themes(const bool &alwaysOnTop,
             ui->ad_ultimate->hide();
         else
             ui->ad_ultimate->setText(
-                    #ifdef Q_OS_MACOS
-                    tr("This will be the last version for Mac, but you can compile from source")+
+                    #ifdef SUPERCOPIER
+                    tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a><br />")+
                     #endif
-                    QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")));
+                    QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development"))+", "
+                        +QStringLiteral("Follow us: ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
+                        );
     }
 
     sysTrayIcon = new QSystemTrayIcon(this);
