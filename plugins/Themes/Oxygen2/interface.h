@@ -108,6 +108,8 @@ public:
     void getOptionsEngineEnabled(const bool &isEnabled);
     enum status{status_never_started,status_started,status_stopped};
     status stat;
+
+    static QString simplifiedBigNum(const uint64_t &num);
 public slots:
     /// \brief set the translate
     void newLanguageLoaded();
@@ -198,6 +200,7 @@ private:
     RadialMap::Widget *radial;
     ChartArea::Widget *chartarea;
     bool darkUi;
+    bool m_havePause;
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;

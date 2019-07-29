@@ -181,9 +181,9 @@ void RadialMap::Widget::mouseMoveEvent(QMouseEvent *e)
                 {
                     const Folder* folder=static_cast<const Folder*>(m_focus->file());
                     if(path.isEmpty())
-                        string += m_focus->file()->humanReadableSize()+tr(" into %1 childrens").arg(folder->children());
+                        string += m_focus->file()->humanReadableSize()+tr(" into %1 files").arg(folder->children());
                     else
-                        string += path+"\n"+m_focus->file()->humanReadableSize()+tr(" into %1 childrens").arg(folder->children());
+                        string += path+"\n"+m_focus->file()->humanReadableSize()+tr(" into %1 files").arg(folder->children());
                 }
                 else
                     string += path+" "+m_focus->file()->humanReadableSize();

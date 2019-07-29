@@ -79,6 +79,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->setupUi(this);
     uiOptions->setupUi(ui->optionsTab);
 
+    m_havePause=false;
     currentFile     = 0;
     totalFile       = 0;
     currentSize     = 0;
@@ -147,8 +148,6 @@ Themes::Themes(const bool &alwaysOnTop,
     connect(uiOptions->progressColorRead,	&QAbstractButton::clicked,this,&Themes::progressColorRead_clicked);
     connect(uiOptions->progressColorRemaining,&QAbstractButton::clicked,this,&Themes::progressColorRemaining_clicked);
     connect(uiOptions->alwaysOnTop,&QAbstractButton::clicked,this,&Themes::alwaysOnTop_clickedSlot);
-
-    isInPause(false);
 
     connect(uiOptions->limitSpeed,		static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,	&Themes::uiUpdateSpeed);
     connect(uiOptions->checkBox_limitSpeed,&QAbstractButton::toggled,		this,	&Themes::uiUpdateSpeed);
@@ -422,6 +421,7 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->cancelButton->setEnabled(false);
         #endif
     }
+    isInPause(false);
     showDualProgression_toggled(showDualProgression);
 
     show();
@@ -609,7 +609,8 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
     {
         case Ultracopier::Copying:
         case Ultracopier::CopyingAndListing:
-            ui->pauseButton->setEnabled(true);
+            if(m_havePause)
+                ui->pauseButton->setEnabled(true);
             if(!durationStarted)
             {
                 duration=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -620,11 +621,13 @@ void Themes::actionInProgess(const Ultracopier::EngineActionInProgress &action)
             updatePause();
         break;
         case Ultracopier::Listing:
-            ui->pauseButton->setEnabled(false);
+            if(m_havePause)
+                ui->pauseButton->setEnabled(false);
             haveStarted=true;//to close if skip at root folder collision
         break;
         case Ultracopier::Idle:
-            ui->pauseButton->setEnabled(false);
+            if(m_havePause)
+                ui->pauseButton->setEnabled(false);
         break;
         default:
         break;
@@ -839,22 +842,28 @@ void Themes::havePause(const bool &havePause)
         pauseButton->setEnabled(havePause);
     else
         ui->pauseButton->setEnabled(havePause);
+    m_havePause=havePause;
 }
 
 void Themes::updatePause()
 {
+    QPushButton *tempPauseButton=ui->pauseButton;
+    if(darkUi)
+        tempPauseButton=pauseButton;
     if(storeIsInPause)
     {
-        ui->pauseButton->setIcon(player_play);
+        if(!darkUi)
+            ui->pauseButton->setIcon(player_play);
         if(stat == status_started)
-            ui->pauseButton->setText(QString::fromStdString(facilityEngine->translateText("Resume")));
+            tempPauseButton->setText(QString::fromStdString(facilityEngine->translateText("Resume")));
         else
-            ui->pauseButton->setText(QString::fromStdString(facilityEngine->translateText("Start")));
+            tempPauseButton->setText(QString::fromStdString(facilityEngine->translateText("Start")));
     }
     else
     {
-        ui->pauseButton->setIcon(player_pause);
-        ui->pauseButton->setText(QString::fromStdString(facilityEngine->translateText("Pause")));
+        if(!darkUi)
+            tempPauseButton->setIcon(player_pause);
+        tempPauseButton->setText(QString::fromStdString(facilityEngine->translateText("Pause")));
     }
 }
 
@@ -1598,30 +1607,73 @@ void Themes::updateProgressionColorBar()
         updateCurrentFileInformation();
 }
 
+QString Themes::simplifiedBigNum(const uint64_t &num)
+{
+    if(num<1000)
+        return QString::number(num);
+    else if(num<1000000)
+        return QString::number(num/1000)+QStringLiteral("k");
+    else
+        return QString::number(num/1000000)+QStringLiteral("M");
+}
+
 void Themes::updateTitle()
 {
     if(uiOptions->showProgressionInTheTitle->isChecked() && totalSize>0)
     {
         if(!modeIsForced)
-            this->setWindowTitle(tr("%1 %2% of %3").arg(QString::fromStdString(facilityEngine->translateText("Transfer"))).arg((currentSize*100)/totalSize).arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))+QStringLiteral(" - ")+QString::fromStdString(facilityEngine->softwareName()));
+            this->setWindowTitle(tr("%1 %2% of %3 into %4 files")
+                                .arg(QString::fromStdString(facilityEngine->translateText("Transfer")))
+                                .arg((currentSize*100)/totalSize)
+                                .arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))
+                                .arg(simplifiedBigNum(totalFile))+
+                                 QStringLiteral(" - ")+
+                                 QString::fromStdString(facilityEngine->softwareName())
+                                 );
         else
         {
             if(mode==Ultracopier::Copy)
-                this->setWindowTitle(tr("%1 %2% of %3").arg(QString::fromStdString(facilityEngine->translateText("Copy"))).arg((currentSize*100)/totalSize).arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))+QStringLiteral(" - ")+QString::fromStdString(facilityEngine->softwareName()));
+                this->setWindowTitle(tr("%1 %2% of %3 into %4 files")
+                                     .arg(QString::fromStdString(facilityEngine->translateText("Copy")))
+                                     .arg((currentSize*100)/totalSize)
+                                     .arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))
+                                     .arg(simplifiedBigNum(totalFile))+
+                                      QStringLiteral(" - ")+
+                                      QString::fromStdString(facilityEngine->softwareName())
+                                     );
             else
-                this->setWindowTitle(tr("%1 %2% of %3").arg(QString::fromStdString(facilityEngine->translateText("Move"))).arg((currentSize*100)/totalSize).arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))+QStringLiteral(" - ")+QString::fromStdString(facilityEngine->softwareName()));
+                this->setWindowTitle(tr("%1 %2% of %3 into %4 files")
+                                     .arg(QString::fromStdString(facilityEngine->translateText("Move")))
+                                     .arg((currentSize*100)/totalSize)
+                                     .arg(QString::fromStdString(facilityEngine->sizeToString(totalSize)))
+                                     .arg(simplifiedBigNum(totalFile))+
+                                      QStringLiteral(" - ")+
+                                      QString::fromStdString(facilityEngine->softwareName())
+                                     );
         }
     }
     else
     {
         if(!modeIsForced)
-            this->setWindowTitle(QStringLiteral("%1").arg(QString::fromStdString(facilityEngine->translateText("Transfer")))+QStringLiteral(" - ")+QString::fromStdString(facilityEngine->softwareName()));
+            this->setWindowTitle(
+                    QString::fromStdString(facilityEngine->translateText("Transfer"))+
+                                 QStringLiteral(" - ")+
+                                 QString::fromStdString(facilityEngine->softwareName())
+                        );
         else
         {
             if(mode==Ultracopier::Copy)
-                this->setWindowTitle(QStringLiteral("%1").arg(QString::fromStdString(facilityEngine->translateText("Copy")))+QStringLiteral(" - ")+QString::fromStdString(facilityEngine->softwareName()));
+                this->setWindowTitle(
+                        QString::fromStdString(facilityEngine->translateText("Copy"))+
+                                     QStringLiteral(" - ")+
+                                     QString::fromStdString(facilityEngine->softwareName())
+                        );
             else
-                this->setWindowTitle(QStringLiteral("%1").arg(QString::fromStdString(facilityEngine->translateText("Move")))+QStringLiteral(" - ")+QString::fromStdString(facilityEngine->softwareName()));
+                this->setWindowTitle(
+                        QString::fromStdString(facilityEngine->translateText("Move"))+
+                                     QStringLiteral(" - ")+
+                                     QString::fromStdString(facilityEngine->softwareName())
+                        );
         }
     }
 }

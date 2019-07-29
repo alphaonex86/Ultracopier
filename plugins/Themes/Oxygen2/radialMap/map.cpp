@@ -27,7 +27,7 @@
 #include <QBrush>
 
 #include "radialMap.h" // defines
-
+#include "../interface.h"
 #include "../fileTree.h"
 #include "widget.h"
 #include <cmath>
@@ -105,7 +105,7 @@ void RadialMap::Map::make(const Folder *tree, bool refresh)
     //colour the segments
     colorise();
 
-    m_centerText = tree->humanReadableSize();
+    m_centerText = tree->humanReadableSize()+"\n"+QObject::tr("%1 files").arg(Themes::simplifiedBigNum(tree->children()));
 
     //paint the pixmap
     paint();

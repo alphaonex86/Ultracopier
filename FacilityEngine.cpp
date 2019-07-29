@@ -241,7 +241,7 @@ std::string FacilityEngine::ultimateUrl() const
         return std::string();
     else
     {
-        #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+        #if ! defined(Q_OS_LINUX)
         return "https://shop.first-world.info/";
         #else
         return std::string();
