@@ -96,7 +96,7 @@
         <location filename="../../../CopyEngineManager.cpp" line="234"/>
         <location filename="../../../CopyEngineManager.cpp" line="239"/>
         <location filename="../../../CopyEngineManager.cpp" line="262"/>
-        <location filename="../../../CopyEngineManager.cpp" line="276"/>
+        <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Warning</source>
         <translation>Avviso</translation>
     </message>
@@ -116,7 +116,7 @@
         <translation>Impossibile trovare un motore per la copia compatibile!</translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="276"/>
+        <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation>Impossibile trovare un motore per la copia con questo nome: %1</translation>
     </message>

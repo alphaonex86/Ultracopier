@@ -96,7 +96,7 @@
         <location filename="../../../CopyEngineManager.cpp" line="234"/>
         <location filename="../../../CopyEngineManager.cpp" line="239"/>
         <location filename="../../../CopyEngineManager.cpp" line="262"/>
-        <location filename="../../../CopyEngineManager.cpp" line="276"/>
+        <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -116,7 +116,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../CopyEngineManager.cpp" line="276"/>
+        <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Cannot find any engine with this name: %1</source>
         <translation type="unfinished"></translation>
     </message>

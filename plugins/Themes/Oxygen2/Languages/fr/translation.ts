@@ -4,9 +4,14 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../radialMap/map.cpp" line="+197"/>
+        <location filename="../../radialMap/map.cpp" line="+108"/>
+        <source>%1 files</source>
+        <translation>%1 fichiers</translation>
+    </message>
+    <message>
+        <location line="+89"/>
         <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 fichiers, avec une taille moyenne de %2</translation>
     </message>
 </context>
 <context>
@@ -14,17 +19,16 @@
     <message>
         <location filename="../../radialMap/widgetEvents.cpp" line="+184"/>
         <location line="+2"/>
-        <source> into %1 childrens</source>
-        <translation type="unfinished"></translation>
+        <source> into %1 files</source>
+        <translation> dans %1 fichiers</translation>
     </message>
 </context>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+285"/>
-        <location line="+13"/>
-        <source>This will be the last version for Mac, but you can compile from source</source>
-        <translation>Ce sera la dernière version pour Mac, mais vous pouvez compiler à partir des sources</translation>
+        <location filename="../../interface.cpp" line="+291"/>
+        <source>%1 is deprecated, Use %2</source>
+        <translation>%1 est obsolète, utilisez %2</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -32,12 +36,12 @@
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="+208"/>
+        <location line="+211"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
     <message>
-        <location line="+304"/>
+        <location line="+307"/>
         <source>Copy list</source>
         <translation>Liste de copies</translation>
     </message>
@@ -47,7 +51,7 @@
         <translation>Liste de déplacements</translation>
     </message>
     <message>
-        <location line="+495"/>
+        <location line="+501"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
@@ -74,11 +78,11 @@
         <translation>Selectionner une coleur</translation>
     </message>
     <message>
-        <location line="+78"/>
-        <location line="+4"/>
-        <location line="+2"/>
-        <source>%1 %2% of %3</source>
-        <translation>%1 de %2% de %3</translation>
+        <location line="+88"/>
+        <location line="+11"/>
+        <location line="+9"/>
+        <source>%1 %2% of %3 into %4 files</source>
+        <translation>%1 %2% de %3 dans %4 fichiers</translation>
     </message>
 </context>
 <context>
@@ -141,25 +145,15 @@
     <message>
         <location line="-157"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>100MB+</source>
-        <translation type="unfinished"></translation>
+        <translation>100Mo+</translation>
     </message>
     <message>
-        <location line="+24"/>
-        <source>Remaining: 5min</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+242"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Ad or warning here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+15"/>
+        <location line="+281"/>
         <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>

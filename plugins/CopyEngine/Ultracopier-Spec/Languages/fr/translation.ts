@@ -210,12 +210,12 @@
     <message>
         <location filename="../../FileExistsDialog.cpp" line="163"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% - copie</translation>
+        <translation>%name% - copie</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="170"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - copie (%number%)</translation>
+        <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="257"/>
@@ -233,12 +233,12 @@
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="129"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% - copie</translation>
+        <translation>%name% - copie</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="136"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - copie (%number%)</translation>
+        <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="206"/>
@@ -400,12 +400,12 @@
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="161"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% - copie</translation>
+        <translation>%name% - copie</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="170"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - copie (%number%)</translation>
+        <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="233"/>
@@ -514,19 +514,19 @@
         <location filename="../../RenamingRules.ui" line="41"/>
         <source>%name% - copy%suffix%</source>
         <extracomment>%name% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="57"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="67"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; pour le nom original, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; pour le numero extra, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="51"/>
@@ -542,13 +542,13 @@
         <location filename="../../RenamingRules.cpp" line="46"/>
         <location filename="../../RenamingRules.cpp" line="71"/>
         <source>%1 - copy%2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - copie%2</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="50"/>
         <location filename="../../RenamingRules.cpp" line="84"/>
         <source>%1 - copy (%2)%3</source>
-        <translation type="unfinished">%1 - copie (%2) {1 ?} {2)%3?}</translation>
+        <translation>%1 - copie (%2) {1 ?} {2)%3?}</translation>
     </message>
 </context>
 <context>
@@ -569,18 +569,18 @@
         <location filename="../../ScanFileOrFolder.cpp" line="549"/>
         <location filename="../../ScanFileOrFolder.cpp" line="551"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% - copie</translation>
+        <translation>%name% - copie</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="560"/>
         <location filename="../../ScanFileOrFolder.cpp" line="562"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - copie (%number%)</translation>
+        <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="618"/>
         <source>Problem with folder read</source>
-        <translation type="unfinished"></translation>
+        <translation>Probléme avec la lecture du dossier</translation>
     </message>
 </context>
 <context>
@@ -600,12 +600,12 @@
     <message>
         <location filename="../../TransferThread.cpp" line="451"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% - copie</translation>
+        <translation>%name% - copie</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="458"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - copie (%number%)</translation>
+        <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="626"/>
@@ -619,7 +619,7 @@
     <message>
         <location filename="../../async/TransferThreadAsync.cpp" line="201"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished">Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
+        <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
 </context>
 <context>
@@ -658,7 +658,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="127"/>
         <source>Create full path if not exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Créer le dossier complet si il n&apos;existe pas</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="143"/>
@@ -739,19 +739,6 @@
         <location filename="../../copyEngineOptions.ui" line="445"/>
         <source>Filters</source>
         <translation>Filtres</translation>
-    </message>
-</context>
-<context>
-    <name>debugDialog</name>
-    <message>
-        <location filename="../../debugDialog.ui" line="102"/>
-        <source>alreadyExistsQueueItem:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../debugDialog.ui" line="109"/>
-        <source>errorQueueItem:</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

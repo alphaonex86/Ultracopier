@@ -273,7 +273,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Remaining: 5min</string>
+            <string notr="true">Remaining: 5min</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -515,7 +515,7 @@
    <item>
     <widget class="QLabel" name="ad_ultimate">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Ad or warning here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Ad or warning here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>
@@ -1013,8 +1013,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>536</width>
-            <height>241</height>
+            <width>98</width>
+            <height>28</height>
            </rect>
           </property>
          </widget>

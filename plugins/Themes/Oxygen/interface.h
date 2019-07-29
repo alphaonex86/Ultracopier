@@ -192,6 +192,7 @@ private:
     QModelIndexList selectedItems;
     /// \brief the custom transfer model
     TransferModel transferModel;
+    bool m_havePause;
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;

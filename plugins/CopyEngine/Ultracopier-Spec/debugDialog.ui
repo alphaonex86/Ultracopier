@@ -99,14 +99,14 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>alreadyExistsQueueItem:</string>
+         <string notr="true">alreadyExistsQueueItem:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>errorQueueItem:</string>
+         <string notr="true">errorQueueItem:</string>
         </property>
        </widget>
       </item>

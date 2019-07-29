@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+320"/>
+        <location filename="../../interface.cpp" line="+321"/>
         <location line="+17"/>
         <source>%1 is deprecated, Use %2</source>
         <translation>%1 est obsolète, utilisez %2</translation>
@@ -36,7 +36,7 @@
         <translation>Liste de déplacements</translation>
     </message>
     <message>
-        <location line="+427"/>
+        <location line="+428"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>

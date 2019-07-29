@@ -4,7 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+320"/>
+        <location filename="../../interface.cpp" line="+321"/>
         <location line="+17"/>
         <source>%1 is deprecated, Use %2</source>
         <translation type="unfinished"></translation>
@@ -36,7 +36,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+427"/>
+        <location line="+428"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>

@@ -80,6 +80,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ui->setupUi(this);
     uiOptions->setupUi(ui->optionsTab);
 
+    m_havePause=false;
     currentFile     = 0;
     totalFile       = 0;
     currentSize     = 0;
@@ -689,6 +690,7 @@ void Themes::isInPause(const bool &isInPause)
 void Themes::havePause(const bool &havePause)
 {
     ui->pauseButton->setEnabled(havePause);
+    m_havePause=havePause;
 }
 
 void Themes::updatePause()

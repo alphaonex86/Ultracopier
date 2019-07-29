@@ -4,7 +4,12 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../radialMap/map.cpp" line="+197"/>
+        <location filename="../../radialMap/map.cpp" line="+108"/>
+        <source>%1 files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+89"/>
         <source>%1 file, with an average size of %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14,16 +19,15 @@
     <message>
         <location filename="../../radialMap/widgetEvents.cpp" line="+184"/>
         <location line="+2"/>
-        <source> into %1 childrens</source>
+        <source> into %1 files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+285"/>
-        <location line="+13"/>
-        <source>This will be the last version for Mac, but you can compile from source</source>
+        <location filename="../../interface.cpp" line="+291"/>
+        <source>%1 is deprecated, Use %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -32,12 +36,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+208"/>
+        <location line="+211"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>
     <message>
-        <location line="+304"/>
+        <location line="+307"/>
         <source>Copy list</source>
         <translation type="unfinished">복사 목록</translation>
     </message>
@@ -47,7 +51,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+495"/>
+        <location line="+501"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished">오류 발견시 종료 안함</translation>
     </message>
@@ -74,10 +78,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+78"/>
-        <location line="+4"/>
-        <location line="+2"/>
-        <source>%1 %2% of %3</source>
+        <location line="+88"/>
+        <location line="+11"/>
+        <location line="+9"/>
+        <source>%1 %2% of %3 into %4 files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -184,22 +188,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
-        <source>Remaining: 5min</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+113"/>
+        <location line="+137"/>
         <source>Close on transfer completion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+129"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ff0000;&quot;&gt;Ad or warning here&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+15"/>
+        <location line="+144"/>
         <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>

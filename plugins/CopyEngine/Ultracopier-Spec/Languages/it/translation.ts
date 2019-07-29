@@ -748,19 +748,6 @@
     </message>
 </context>
 <context>
-    <name>debugDialog</name>
-    <message>
-        <location filename="../../debugDialog.ui" line="102"/>
-        <source>alreadyExistsQueueItem:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../debugDialog.ui" line="109"/>
-        <source>errorQueueItem:</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>fileErrorDialog</name>
     <message>
         <location filename="../../fileErrorDialog.ui" line="14"/>
