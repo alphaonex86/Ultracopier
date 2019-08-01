@@ -5,6 +5,7 @@
 
 #include "HelpDialog.h"
 #include "ProductKey.h"
+#include "FacilityEngine.h"
 
 #include <QTreeWidgetItem>
 #include <QApplication>
@@ -69,9 +70,9 @@ void HelpDialog::reloadTextValue()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QString text=ui->label_ultracopier->text();
     if(ProductKey::productKey->isUltimate())
-        text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(ULTRACOPIER_VERSION));
+        text=text.replace(QStringLiteral("%1"),QStringLiteral("Ultimate %1").arg(QString::fromStdString(FacilityEngine::version())));
     else
-        text=text.replace(QStringLiteral("%1"),ULTRACOPIER_VERSION);
+        text=text.replace(QStringLiteral("%1"),QString::fromStdString(FacilityEngine::version()));
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
     text=text.replace(QStringLiteral("Ultracopier"),QStringLiteral("Supercopier"),Qt::CaseInsensitive);
     #endif

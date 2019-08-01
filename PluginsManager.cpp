@@ -529,10 +529,10 @@ std::string PluginsManager::getPluginVersion(const std::string &pluginName) cons
 {
     #ifdef ULTRACOPIER_MODE_SUPERCOPIER
      if(pluginName=="supercopier")
-         return ULTRACOPIER_VERSION;
+         return FacilityEngine::version();
      #else
       if(pluginName=="ultracopier")
-          return ULTRACOPIER_VERSION;
+          return FacilityEngine::version();
      #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     unsigned int index=0;

@@ -72,6 +72,7 @@ bool ListThread::skipInternal(const uint64_t &id)
 //executed in this thread
 void ListThread::cancel()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(stopIt)
     {
         waitCancel.release();
@@ -83,6 +84,7 @@ void ListThread::cancel()
     while(index<loop_size)
     {
         transferThreadList.at(index)->stop();
+        transferThreadList.at(index)->transferId=0;
         index++;
     }
     index=0;

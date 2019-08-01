@@ -14,6 +14,7 @@
 #include "DebugEngine.h"
 #include "ExtraSocket.h"
 #include "cpp11addition.h"
+#include "FacilityEngine.h"
 
 #ifdef WIN32
 #	define __func__ __FUNCTION__
@@ -59,7 +60,7 @@ DebugEngine::DebugEngine()
     debugHtmlContent+="</style>";
     debugHtmlContent+="<title>";
     debugHtmlContent+="Ultracopier";
-    debugHtmlContent+=" "+std::string(ULTRACOPIER_VERSION)+" "+ULTRACOPIER_PLATFORM_NAME.toStdString()+", debug report</title>";
+    debugHtmlContent+=" "+FacilityEngine::version()+" "+ULTRACOPIER_PLATFORM_NAME.toStdString()+", debug report</title>";
     debugHtmlContent+="</head>";
     debugHtmlContent+="<body>";
     debugHtmlContent+="<table>";

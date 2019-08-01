@@ -104,15 +104,19 @@ TransferStat TransferThread::getStat() const
 #ifdef WIDESTRING
 INTERNALTYPEPATH TransferThread::stringToInternalString(const std::string& utf8)
 {
+    /* buggy on MXE
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-    return converter.from_bytes(utf8);
+    return converter.from_bytes(utf8);*/
+    return QString::fromUtf8(utf8.data(),utf8.size()).toStdWString();
 }
 
 std::string TransferThread::internalStringTostring(const INTERNALTYPEPATH& utf16)
 {
-
+    /* buggy on MXE
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
-    return conv1.to_bytes(utf16);
+    return conv1.to_bytes(utf16);*/
+    const QByteArray &data=QString::fromStdWString(utf16).toUtf8();
+    return std::string(data.constData(),data.size());
 }
 #else
 std::string TransferThread::stringToInternalString(const std::string& utf8)

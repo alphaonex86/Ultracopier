@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 {
     int returnCode;
     QApplication ultracopierApplication(argc, argv);
-    ultracopierApplication.setApplicationVersion(ULTRACOPIER_VERSION);
+    ultracopierApplication.setApplicationVersion(QString::fromStdString(FacilityEngine::version()));
     ultracopierApplication.setQuitOnLastWindowClosed(false);
     qRegisterMetaType<PluginsAvailable>("PluginsAvailable");
     qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");

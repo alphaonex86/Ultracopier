@@ -331,6 +331,7 @@ void ListThread::realByteTransfered()
 
 void ListThread::checkIfReadyToCancel()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     if(!stopIt)
         return;
     int index=0;
@@ -1094,6 +1095,7 @@ void ListThread::createTransferThread()
 
 void ListThread::deleteTransferThread()
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     int loop_size=transferThreadList.size();
     if(loop_size>inodeThreads)
     {

@@ -108,6 +108,7 @@ HEADERS += $$PWD/../ResourcesManager.h \
     $$PWD/../interface/PluginInterface_CopyEngine.h \
     $$PWD/../interface/OptionInterface.h \
     $$PWD/../Variable.h \
+    $$PWD/../Version.h \
     $$PWD/../PluginLoaderCore.h \
     $$PWD/../interface/PluginInterface_PluginLoader.h \
     $$PWD/../OptionDialog.h \
@@ -152,6 +153,7 @@ SOURCES += $$PWD/../ThemesManager.cpp \
     $$PWD/../LocalListener.cpp \
     $$PWD/../CliParser.cpp \
     $$PWD/../FacilityEngine.cpp \
+    $$PWD/../FacilityEngineVersion.cpp \
     $$PWD/../LogThread.cpp \
     $$PWD/../OSSpecific.cpp \
     $$PWD/../cpp11addition.cpp \

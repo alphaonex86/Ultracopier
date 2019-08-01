@@ -77,7 +77,7 @@ void ScanFileOrFolder::addToList(const std::vector<INTERNALTYPEPATH>& sources,co
     this->destination=destination;
     #ifdef WIDESTRING
     QFileInfo destinationInfo(QString::fromStdWString(this->destination));
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"check symblink: "+destinationInfo.absoluteFilePath().toStdString());
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"check symblink: "+destinationInfo.absoluteFilePath().toStdString()+", destination: "+TransferThread::internalStringTostring(destination));
     while(destinationInfo.isSymLink())
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"resolv destination to: "+destinationInfo.symLinkTarget().toStdString());

@@ -47,12 +47,18 @@ bool ListThread::newCopy(const std::vector<std::string> &sources,const std::stri
         else if (std::regex_match(source, base_match, base_regex))
             return false;
         if(index<99)
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
+        {
+            if(sources.at(index)!=source)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,sources.at(index)+" -> "+source);
+        }
         index++;
         sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"sourcesClean: "+stringimplode(sourcesClean,";"));
-    scanFileOrFolderThread->addToList(sourcesClean,TransferThread::stringToInternalString(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destination);
+    const INTERNALTYPEPATH &Wdest=TransferThread::stringToInternalString(destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+TransferThread::internalStringTostring(Wdest));
+    scanFileOrFolderThread->addToList(sourcesClean,Wdest);
     scanThreadHaveFinish(true);
     detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToInternalString(destination));
     return true;
@@ -96,7 +102,10 @@ bool ListThread::newMove(const std::vector<std::string> &sources,const std::stri
         index++;
         sourcesClean.push_back(TransferThread::stringToInternalString(source));
     }
-    scanFileOrFolderThread->addToList(sourcesClean,TransferThread::stringToInternalString(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+destination);
+    const INTERNALTYPEPATH &Wdest=TransferThread::stringToInternalString(destination);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination: "+TransferThread::internalStringTostring(Wdest));
+    scanFileOrFolderThread->addToList(sourcesClean,Wdest);
     scanThreadHaveFinish(true);
     detectDrivesOfCurrentTransfer(sourcesClean,TransferThread::stringToInternalString(destination));
     return true;

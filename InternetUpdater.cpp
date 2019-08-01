@@ -3,6 +3,7 @@
 #include "OptionEngine.h"
 #include "cpp11addition.h"
 #include "ProductKey.h"
+#include "Version.h"
 
 #ifdef ULTRACOPIER_INTERNET_SUPPORT
 
@@ -55,9 +56,9 @@ void InternetUpdater::downloadFileInternal(const bool force)
      #endif
     std::string ultracopierVersion;
     if(ProductKey::productKey->isUltimate())
-        ultracopierVersion=name+" Ultimate/"+ULTRACOPIER_VERSION;
+        ultracopierVersion=name+" Ultimate/"+FacilityEngine::version();
     else
-        ultracopierVersion=name+"/"+ULTRACOPIER_VERSION;
+        ultracopierVersion=name+"/"+FacilityEngine::version();
     #ifdef ULTRACOPIER_VERSION_PORTABLE
         #ifdef ULTRACOPIER_PLUGIN_ALL_IN_ONE
              ultracopierVersion+=" portable/all-in-one";
@@ -122,14 +123,14 @@ void InternetUpdater::httpFinished()
         reply=NULL;
         return;
     }
-    if(newVersion==ULTRACOPIER_VERSION)
+    if(newVersion.toStdString()==FacilityEngine::version())
     {
         reply->deleteLater();
         reply=NULL;
         emit noNewUpdate();
         return;
     }
-    if(PluginsManager::compareVersion(newVersion.toStdString(),"<=",ULTRACOPIER_VERSION))
+    if(PluginsManager::compareVersion(newVersion.toStdString(),"<=",FacilityEngine::version()))
     {
         reply->deleteLater();
         reply=NULL;

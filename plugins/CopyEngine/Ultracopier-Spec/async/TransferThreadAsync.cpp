@@ -367,6 +367,8 @@ void TransferThreadAsync::stop()
     if(!source.empty())
         if(exists(source))
             unlink(TransferThread::internalStringTostring(destination).c_str());
+    transfer_stat=TransferStat_Idle;
+    resetExtraVariable();
 }
 
 //retry after error

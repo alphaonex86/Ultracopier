@@ -113,7 +113,7 @@ EventDispatcher::EventDispatcher()
     #ifdef __STDC_VERSION__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__STDC_VERSION__: "+std::to_string(__STDC_VERSION__));
     #endif
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("ULTRACOPIER_VERSION: ")+ULTRACOPIER_VERSION);
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("ULTRACOPIER_VERSION: ")+FacilityEngine::version());
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("Qt version: ")+qVersion()+" "+std::to_string(QT_VERSION));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,std::string("ULTRACOPIER_PLATFORM_NAME: ")+ULTRACOPIER_PLATFORM_NAME.toStdString());
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Application path: "+QCoreApplication::applicationFilePath().toStdString()+" "+std::to_string(QCoreApplication::applicationPid()));
@@ -151,11 +151,11 @@ EventDispatcher::EventDispatcher()
     lunchInitFunction.setSingleShot(true);
     connect(&lunchInitFunction,&QTimer::timeout,this,&EventDispatcher::initFunction,Qt::QueuedConnection);
     lunchInitFunction.start();
-    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!="na" && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=ULTRACOPIER_VERSION)
+    if(OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!="na" && OptionEngine::optionEngine->getOptionValue("Ultracopier","Last_version_used")!=FacilityEngine::version())
     {
         //then ultracopier have been updated
     }
-    OptionEngine::optionEngine->setOptionValue("Ultracopier","Last_version_used",ULTRACOPIER_VERSION);
+    OptionEngine::optionEngine->setOptionValue("Ultracopier","Last_version_used",FacilityEngine::version());
     unsigned int a=stringtouint32(OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     if(a>2)
         OptionEngine::optionEngine->setOptionValue("Ultracopier","ActionOnManualOpen","1");

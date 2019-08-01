@@ -92,7 +92,7 @@ SystrayIcon::SystrayIcon(QObject * parent) :
     updateSystrayIcon();
 
     #ifdef ULTRACOPIER_INTERNET_SUPPORT
-    lastVersion=ULTRACOPIER_VERSION;
+    lastVersion=FacilityEngine::version();
     #endif
 
     timerCheckSetTooltip.setSingleShot(true);
