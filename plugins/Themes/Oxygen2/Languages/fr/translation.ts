@@ -26,7 +26,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+291"/>
+        <location filename="../../interface.cpp" line="+292"/>
         <source>%1 is deprecated, Use %2</source>
         <translation>%1 est obsolète, utilisez %2</translation>
     </message>
@@ -88,7 +88,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+280"/>
+        <location filename="../../ThemesFactory.cpp" line="+295"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
@@ -128,7 +128,7 @@
         <translation>&amp;Pause</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+161"/>
         <source>&amp;Skip</source>
         <translation>&amp;Passer</translation>
     </message>
@@ -138,7 +138,7 @@
         <translation>&amp;Annuler</translation>
     </message>
     <message>
-        <location line="-110"/>
+        <location line="-104"/>
         <source>Close on transfer completion</source>
         <translation>Fermer à la fin des transferts</translation>
     </message>
@@ -153,7 +153,7 @@
         <translation>100Mo+</translation>
     </message>
     <message>
-        <location line="+281"/>
+        <location line="+275"/>
         <source>Limit copy speed to:</source>
         <translation>Limiter la vitesse de copie à:</translation>
     </message>
@@ -277,7 +277,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+267"/>
+        <location filename="../../themesOptions.ui" line="+281"/>
         <source>Show dual progression</source>
         <translation>Afficher une double progression</translation>
     </message>
@@ -287,53 +287,58 @@
         <translation>Afficher la vitesse comme information principale</translation>
     </message>
     <message>
-        <location line="-175"/>
+        <location line="-189"/>
         <source>Use</source>
         <translation>Utilisation</translation>
     </message>
     <message>
-        <location line="+129"/>
+        <location line="+73"/>
         <source>Start with the &quot;more button&quot; pushed</source>
         <translation>Déplier automatiquement les détails</translation>
     </message>
     <message>
-        <location line="-106"/>
+        <location line="-60"/>
         <source>Minimize on close to systray</source>
         <translation>Minimiser à la fermeture dans le systray</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+30"/>
         <source>At the end of the copy</source>
         <translation>À la fin de la copie</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+34"/>
+        <location line="-10"/>
+        <location line="+17"/>
         <source>Limit copy speed to</source>
         <translation>Limiter la vitesse de copie à</translation>
     </message>
     <message>
-        <location line="-84"/>
+        <location line="+30"/>
         <source>Start minimized</source>
         <translation>Démarrer minimisé</translation>
     </message>
     <message>
-        <location line="+253"/>
+        <location line="+196"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
     </message>
     <message>
-        <location line="-159"/>
+        <location line="-216"/>
         <source> KB/s</source>
         <translation> Ko/s</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+47"/>
         <source>Save position</source>
         <translation>Sauvegarder la position</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+60"/>
+        <source>Dark UI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
         <source>Informations</source>
         <translation>Informations</translation>
     </message>
@@ -358,7 +363,7 @@
         <translation>Afficher la progression dans le titre</translation>
     </message>
     <message>
-        <location line="-94"/>
+        <location line="-147"/>
         <source>Always on top</source>
         <translation>Toujours au 1er plan</translation>
     </message>

@@ -5,7 +5,6 @@
 
 #include <QApplication>
 #include <QtPlugin>
-#include "../Variable.h"
 #ifndef ULTRACOPIER_LITTLE_RANDOM
 #include "../plugins/CopyEngine/Ultracopier-Spec/CopyEngineFactory.h"
 #else
@@ -14,6 +13,7 @@
 #include "../plugins/Themes/Oxygen2/ThemesFactory.h"
 #include "OptionsEngineLittle.h"
 #include "../FacilityEngine.h"
+#include "../Version.h"
 #include <iostream>
 
 Themes * interface=NULL;
@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Ultracopier::CopyMode>("Ultracopier::CopyMode");
     qRegisterMetaType<Ultracopier::ItemOfCopyList>("Ultracopier::ItemOfCopyList");
     qRegisterMetaType<std::string>("std::string");
+    qRegisterMetaType<std::wstring>("std::wstring");
     qRegisterMetaType<std::vector<std::string> >("std::vector<std::string>");
     qRegisterMetaType<Ultracopier::DebugLevel>("Ultracopier::DebugLevel");
     qRegisterMetaType<Ultracopier::EngineActionInProgress>("Ultracopier::EngineActionInProgress");

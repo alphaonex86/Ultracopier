@@ -71,6 +71,7 @@ private slots:
     void startMinimized(bool checked);
     void savePositionBeforeClose(QObject *obj);
     void savePositionHaveChanged(bool checked);
+    void setDark(bool toggled);
 public slots:
     void resetOptions();
     void newLanguageLoaded();

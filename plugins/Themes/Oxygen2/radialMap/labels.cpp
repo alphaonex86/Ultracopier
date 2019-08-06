@@ -302,6 +302,11 @@ void RadialMap::Widget::paintExplodedLabels(QPainter &paint) const
             paint.setFont(font);
         }
 
+        paint.setPen(QPen(QColor(0,0,0),2));
+        paint.drawLine(label->targetX, label->targetY, label->middleX, label->startY);
+        paint.drawLine(label->middleX, label->startY, label->startX, label->startY);
+
+        paint.setPen(QPen(QColor(255,255,255),1));
         paint.drawLine(label->targetX, label->targetY, label->middleX, label->startY);
         paint.drawLine(label->middleX, label->startY, label->startX, label->startY);
 

@@ -41,7 +41,8 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 ui->checkBoxStartWithMoreButtonPushed->isChecked(),
                 ui->minimizeToSystray->isChecked(),
                 ui->startMinimized->isChecked(),
-                ui->savePosition->isChecked()
+                ui->savePosition->isChecked(),
+                ui->dark->isChecked()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(newInterface,&Themes::debugInformation,this,&PluginInterface_ThemesFactory::debugInformation))
@@ -106,9 +107,22 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("savePosition","false"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionX","0"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
+        KeysList.push_back(std::pair<std::string, std::string>("dark","true"));
         optionsEngine->addOptionGroup(KeysList);
         connect(optionsEngine,&OptionInterface::resetOptions,this,&ThemesFactory::resetOptions);
         updateSpeed();
+
+        ui->comboBox_copyEnd->setCurrentIndex(stringtouint32(optionsEngine->getOptionValue("comboBox_copyEnd")));
+        ui->speedWithProgressBar->setChecked(stringtobool(optionsEngine->getOptionValue("speedWithProgressBar")));
+        ui->checkBoxShowSpeed->setChecked(stringtobool(optionsEngine->getOptionValue("checkBoxShowSpeed")));
+        ui->checkBoxStartWithMoreButtonPushed->setChecked(stringtobool(optionsEngine->getOptionValue("moreButtonPushed")));
+        ui->showDualProgression->setChecked(stringtobool(optionsEngine->getOptionValue("showDualProgression")));
+        ui->showProgressionInTheTitle->setChecked(stringtobool(optionsEngine->getOptionValue("showProgressionInTheTitle")));
+        ui->alwaysOnTop->setChecked(stringtobool(optionsEngine->getOptionValue("alwaysOnTop")));
+        ui->minimizeToSystray->setChecked(stringtobool(optionsEngine->getOptionValue("minimizeToSystray")));
+        ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
+        ui->savePosition->setChecked(stringtobool(optionsEngine->getOptionValue("savePosition")));
+        ui->dark->setChecked(stringtobool(optionsEngine->getOptionValue("dark")));
     }
     #ifndef __GNUC__
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"__GNUC__ is not set");
@@ -125,16 +139,6 @@ QWidget * ThemesFactory::options()
         currentSpeed=stringtouint32(optionsEngine->getOptionValue("currentSpeed"),&ok);
         if(!ok)
             currentSpeed=0;
-        ui->comboBox_copyEnd->setCurrentIndex(stringtouint32(optionsEngine->getOptionValue("comboBox_copyEnd")));
-        ui->speedWithProgressBar->setChecked(stringtobool(optionsEngine->getOptionValue("speedWithProgressBar")));
-        ui->checkBoxShowSpeed->setChecked(stringtobool(optionsEngine->getOptionValue("checkBoxShowSpeed")));
-        ui->checkBoxStartWithMoreButtonPushed->setChecked(stringtobool(optionsEngine->getOptionValue("moreButtonPushed")));
-        ui->showDualProgression->setChecked(stringtobool(optionsEngine->getOptionValue("showDualProgression")));
-        ui->showProgressionInTheTitle->setChecked(stringtobool(optionsEngine->getOptionValue("showProgressionInTheTitle")));
-        ui->alwaysOnTop->setChecked(stringtobool(optionsEngine->getOptionValue("alwaysOnTop")));
-        ui->minimizeToSystray->setChecked(stringtobool(optionsEngine->getOptionValue("minimizeToSystray")));
-        ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
-        ui->savePosition->setChecked(stringtobool(optionsEngine->getOptionValue("savePosition")));
 
         progressColorWrite=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorWrite"))).value<QColor>();
         progressColorRead=QVariant(QString::fromStdString(optionsEngine->getOptionValue("progressColorRead"))).value<QColor>();
@@ -185,6 +189,8 @@ QWidget * ThemesFactory::options()
         if(!connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized))
             abort();
         if(!connect(ui->savePosition,&QCheckBox::stateChanged,this,&ThemesFactory::savePositionHaveChanged))
+            abort();
+        if(!connect(ui->dark,&QCheckBox::stateChanged,this,&ThemesFactory::setDark))
             abort();
     }
     else
@@ -252,6 +258,15 @@ void ThemesFactory::savePositionHaveChanged(bool toggled)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("savePosition",std::to_string(toggled));
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
+}
+
+void ThemesFactory::setDark(bool toggled)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("dark",std::to_string(toggled));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

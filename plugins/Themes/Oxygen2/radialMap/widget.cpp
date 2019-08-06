@@ -34,7 +34,7 @@
 #include <QWidget>
 
 
-RadialMap::Widget::Widget(QWidget *parent)
+RadialMap::Widget::Widget(const bool dark, QWidget *parent)
         : QWidget(parent)
         , m_tree(nullptr)
         , m_focus(nullptr)
@@ -50,6 +50,7 @@ RadialMap::Widget::Widget(QWidget *parent)
     connect(&m_timer, &QTimer::timeout, this, &Widget::resizeTimeout);
     m_tooltip.setFrameShape(QFrame::StyledPanel);
     m_tooltip.setWindowFlags(Qt::ToolTip | Qt::WindowTransparentForInput);
+    this->dark=dark;
 }
 
 RadialMap::Widget::~Widget()

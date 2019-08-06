@@ -49,7 +49,8 @@ Themes::Themes(const bool &alwaysOnTop,
                const bool &moreButtonPushed,
                const bool &minimizeToSystray,
                const bool &startMinimized,
-               const bool &savePosition) :
+               const bool &savePosition,
+               const bool &dark) :
     duration(0),
     durationStarted(false),
     ui(new Ui::interfaceCopy()),
@@ -73,7 +74,7 @@ Themes::Themes(const bool &alwaysOnTop,
     ,winTaskbarProgress(this)
     #endif
 {
-    darkUi=true;
+    darkUi=dark;
     this->facilityEngine=facilityEngine;
     File::facilityEngine=facilityEngine;
     ui->setupUi(this);
@@ -260,7 +261,7 @@ Themes::Themes(const bool &alwaysOnTop,
 
     shutdown=facilityEngine->haveFunctionality("shutdown");
     ui->shutdown->setVisible(shutdown);
-    radial=new RadialMap::Widget(this);
+    radial=new RadialMap::Widget(dark,this);
     ui->verticalLayouMiddle->addWidget(radial);
 
     chartarea=new ChartArea::Widget(facilityEngine,this);

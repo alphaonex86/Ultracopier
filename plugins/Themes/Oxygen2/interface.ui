@@ -423,12 +423,6 @@
            </item>
            <item>
             <widget class="QLabel" name="from">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="font">
               <font>
                <weight>75</weight>
@@ -1013,8 +1007,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>98</width>
-            <height>28</height>
+            <width>542</width>
+            <height>249</height>
            </rect>
           </property>
          </widget>

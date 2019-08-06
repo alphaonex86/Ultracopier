@@ -218,7 +218,7 @@ void TransferThreadAsync::postOperation()
 }
 
 #ifdef Q_OS_WIN32
-DWORD progressRoutine(
+DWORD CALLBACK progressRoutine(
   LARGE_INTEGER TotalFileSize,
   LARGE_INTEGER TotalBytesTransferred,
   LARGE_INTEGER StreamSize,

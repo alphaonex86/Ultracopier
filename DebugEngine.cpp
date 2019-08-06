@@ -20,6 +20,9 @@
 #	define __func__ __FUNCTION__
 #endif
 
+#ifdef ULTRACOPIER_DEBUGCONSOLE
+#undef ULTRACOPIER_DEBUGCONSOLE
+#endif
 /// \brief The local macro: ULTRACOPIER_DEBUGCONSOLE
 #if defined (__FILE__) && defined (__LINE__)
 #	define ULTRACOPIER_DEBUGCONSOLE(a,b) addDebugInformation(a,__func__,b,__FILE__,__LINE__)

@@ -50,7 +50,7 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    explicit Widget(QWidget* = nullptr);
+    explicit Widget(const bool dark,QWidget* = nullptr);
     ~Widget() override;
     QString path() const;
     QUrl url(File const * const = nullptr) const;
@@ -106,6 +106,7 @@ private:
     Segment          *m_rootSegment;
     const Segment    *m_toBeDeleted;
     QLabel           m_tooltip;
+    bool            dark;
     int minFontPitch;
 };
 }

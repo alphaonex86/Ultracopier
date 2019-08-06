@@ -30,3 +30,10 @@ All the files in this package have been written by Lasse Collin
 and/or Igor Pavlov. All these files have been put into the
 public domain. You can do whatever you want with these files.
 As usual, this software is provided "as is", without any warranty.
+
+======================================================
+MXE ==================================================
+======================================================
+
+To compile for windows I use MXE:
+make MXE_TARGETS='i686-w64-mingw32.shared' QT5_BUILD_TYPE=-debug-and-release MXE_PLUGIN_DIRS=plugins/gcc7 qt5 opus ogg zstd

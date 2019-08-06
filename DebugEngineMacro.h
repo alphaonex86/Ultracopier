@@ -12,6 +12,9 @@
 
 #include "Variable.h"
 
+#ifdef ULTRACOPIER_DEBUGCONSOLE
+#undef ULTRACOPIER_DEBUGCONSOLE
+#endif
 /// \brief Macro for the debug log
 #ifdef ULTRACOPIER_DEBUG
 #	include "DebugEngine.h"

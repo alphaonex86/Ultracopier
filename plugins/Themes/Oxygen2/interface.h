@@ -56,7 +56,8 @@ public:
            const bool &moreButtonPushed,
            const bool &minimizeToSystray,
            const bool &startMinimized,
-           const bool &savePosition);
+           const bool &savePosition,
+           const bool &dark);
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
