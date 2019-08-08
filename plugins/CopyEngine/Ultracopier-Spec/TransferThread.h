@@ -84,10 +84,11 @@ public:
     // \warning check mkpath() call should not exists because only existing dest is allowed now
     #ifdef Q_OS_UNIX
     static bool mkpath(const INTERNALTYPEPATH &file_path, const mode_t &mode=0755);
+    static bool mkdir(const INTERNALTYPEPATH &file_path, const mode_t &mode=0755);
     #else
     static bool mkpath(const INTERNALTYPEPATH &file_path);
+    static bool mkdir(const INTERNALTYPEPATH &file_path);
     #endif
-    static bool mkdir(const INTERNALTYPEPATH &file_path, const mode_t &mode=0755);
     #ifdef WIDESTRING
     static INTERNALTYPEPATH stringToInternalString(const std::string& utf8);
     static std::string internalStringTostring(const INTERNALTYPEPATH& utf16);

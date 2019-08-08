@@ -276,12 +276,7 @@ void ScanFileOrFolder::run()
         #else
         stringreplaceAll(source,"\\","/");
         #endif
-        struct stat p_statbuf;
-        #ifdef Q_OS_UNIX
-        if(lstat(TransferThread::internalStringTostring(source).c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
-        #else
-        if(stat(TransferThread::internalStringTostring(source).c_str(), &p_statbuf)==0 && S_ISDIR(p_statbuf.st_mode))
-        #endif
+        if(TransferThread::is_dir(source))
         {
             /* Bad way; when you copy c:\source\folder into d:\destination, you wait it create the folder d:\destination\folder
             //listFolder(source.absoluteFilePath()+QDir::separator(),destination);

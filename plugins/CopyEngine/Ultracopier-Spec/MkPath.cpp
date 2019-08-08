@@ -173,6 +173,7 @@ void MkPath::internalDoThisPath()
         {
             if(mkFullPath)
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"TransferThread::mkpath: "+TransferThread::internalStringTostring(item.destination));
                 if(!TransferThread::mkpath(item.destination))
                 {
                     if(!TransferThread::is_dir(item.destination))
@@ -189,6 +190,7 @@ void MkPath::internalDoThisPath()
             }
             else
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"TransferThread::mkdir: "+TransferThread::internalStringTostring(item.destination));
                 if(!TransferThread::mkdir(item.destination))
                 {
                     if(!TransferThread::is_dir(item.destination))
@@ -204,6 +206,8 @@ void MkPath::internalDoThisPath()
                 }
             }
         }
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"TransferThread::mkpath ignore exists: "+TransferThread::internalStringTostring(item.destination));
     }
     else
     {

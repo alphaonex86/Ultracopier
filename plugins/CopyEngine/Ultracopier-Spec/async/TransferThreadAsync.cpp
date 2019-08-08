@@ -147,7 +147,8 @@ void TransferThreadAsync::preOperation()
     if(transfer_stat!=TransferStat_PreOperation)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+
-                                 TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+                                 TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination)
+                                 +" transfer_stat: "+std::to_string(transfer_stat));
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: source: "+
@@ -262,7 +263,7 @@ std::string GetLastErrorStdStr()
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         error,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
         (LPTSTR) &lpMsgBuf,
         0, NULL );
     if (bufLen)
@@ -272,7 +273,7 @@ std::string GetLastErrorStdStr()
 
       LocalFree(lpMsgBuf);
 
-      return result;
+      return result+" "+std::to_string(error);
     }
   }
   return std::string();
@@ -281,7 +282,7 @@ std::string GetLastErrorStdStr()
 
 void TransferThreadAsync::ifCanStartTransfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start "+internalStringTostring(source)+"->"+internalStringTostring(destination));
     if(transfer_stat!=TransferStat_WaitForTheTransfer /*wait preoperation*/ || !canStartTransfer/*wait start call*/)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
@@ -290,6 +291,23 @@ void TransferThreadAsync::ifCanStartTransfer()
         preOperationStopped();//tiger to seam maybe is can be started
         return;
     }
+    #ifdef WIDESTRING
+    const size_t destinationIndex=destination.rfind(L'/');
+    if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
+    {
+        const std::wstring &path=destination.substr(0,destinationIndex);
+        if(is_dir(path))
+            TransferThread::mkpath(path);
+    }
+    #else
+    const size_t destinationIndex=destination.rfind('/');
+    if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
+    {
+        const std::string &path=destination.substr(0,destinationIndex);
+        if(is_dir(path))
+            TransferThread::mkpath(path);
+    }
+    #endif
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
 #ifdef Q_OS_WIN32
@@ -304,9 +322,11 @@ void TransferThreadAsync::ifCanStartTransfer()
 #endif
     {
         #ifdef Q_OS_WIN32
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+GetLastErrorStdStr());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
+                                 GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination));
         #else
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
+                                 TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination));
         #endif
         if(stopIt)
         {

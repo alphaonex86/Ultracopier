@@ -108,6 +108,7 @@ INTERNALTYPEPATH TransferThread::stringToInternalString(const std::string& utf8)
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     return converter.from_bytes(utf8);*/
     return QString::fromUtf8(utf8.data(),utf8.size()).toStdWString();
+    //return widen(utf8);
 }
 
 std::string TransferThread::internalStringTostring(const INTERNALTYPEPATH& utf16)
@@ -117,6 +118,7 @@ std::string TransferThread::internalStringTostring(const INTERNALTYPEPATH& utf16
     return conv1.to_bytes(utf16);*/
     const QByteArray &data=QString::fromStdWString(utf16).toUtf8();
     return std::string(data.constData(),data.size());
+    //return narrow(utf16);
 }
 #else
 std::string TransferThread::stringToInternalString(const std::string& utf8)
@@ -126,7 +128,6 @@ std::string TransferThread::stringToInternalString(const std::string& utf8)
 
 std::string TransferThread::internalStringTostring(const std::string& utf16)
 {
-
     return utf16;
 }
 #endif
@@ -506,6 +507,73 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path, const mode_t &mode)
 bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
 #endif
 {
+    #ifdef Q_OS_WIN32
+    if(!mkdir(path))
+        if(errno==EEXIST)
+            return true;
+
+    printf("%i",errno);
+    #ifndef WIDESTRING
+    #error if windows, WIDESTRING need be enabled
+    #endif
+    //use reverse method to performance, more complex to code but less system call/fs call
+    std::wstring::size_type previouspos=path.size();
+    std::wstring::size_type lastpos=std::string::npos;
+
+    const wchar_t *pathC=path.c_str();
+    wchar_t pathCedit[32000];
+    wcscpy(pathCedit,pathC);
+    std::vector<std::wstring::size_type> pathSplit;
+    pathSplit.push_back(path.size());
+    do
+    {
+        lastpos=path.rfind(L'/',previouspos-1);
+        if(lastpos == std::wstring::npos)
+            return false;
+
+        while(pathC[lastpos-1]==L'/')
+            if(lastpos>0)
+                lastpos--;
+            else
+                return false;
+
+        //buggy case?
+        #ifdef Q_OS_UNIX
+        if(lastpos<2)
+            return false;
+        #else
+        if(lastpos<4)
+            return false;
+        #endif
+
+        pathCedit[lastpos]=L'\0';
+        previouspos=lastpos;
+
+        errno=0;
+        if(mkdir(pathCedit))
+            if(errno!=EEXIST && errno!=ENOENT)
+                return false;
+        //here errno can be: EEXIST, ENOENT, 0
+        if(errno==ENOENT)
+            pathSplit.push_back(lastpos);
+    } while(lastpos>0 && errno==ENOENT);
+
+    do
+    {
+        wcscpy(pathCedit,pathC);
+        lastpos=pathSplit.back();
+        pathSplit.pop_back();
+        pathCedit[lastpos]=L'\0';
+        #ifdef Q_OS_UNIX
+        if(mkdir(pathCedit, mode)==-1)
+        #else
+        if(!mkdir(pathCedit))
+        #endif
+            if(errno!=EEXIST)
+                return false;
+    } while(!pathSplit.empty());
+    return true;
+    #else
     char pathC[PATH_MAX];
     strcpy(pathC,TransferThread::internalStringTostring(path).c_str());
     if(!mkdir(path))
@@ -573,16 +641,28 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
                 return false;
     } while(!pathSplit.empty());
     return true;
+    #endif
 }
 
+#ifdef Q_OS_UNIX
 bool TransferThread::mkdir(const INTERNALTYPEPATH &file_path, const mode_t &mode)
+#else
+bool TransferThread::mkdir(const INTERNALTYPEPATH &file_path)
+#endif
 {
+#ifdef Q_OS_WIN32
+    const bool r = CreateDirectory(file_path.c_str(),NULL);
+    const DWORD &t=GetLastError();
+    if(!r && t==183/*is_dir(file_path) performance impact*/)
+        errno=EEXIST;
+    return r;
+#else
     #ifdef Q_OS_UNIX
     return ::mkdir(TransferThread::internalStringTostring(file_path).c_str(),mode)==0;
     #else
-    (void)mode;
     return ::mkdir(TransferThread::internalStringTostring(file_path).c_str())==0;
     #endif
+#endif
 }
 
 bool TransferThread::canBeMovedDirectly() const
@@ -996,7 +1076,7 @@ bool TransferThread::is_symlink(const char * const filename)
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
-    if (S_ISLNK(p_statbuf.st_mode) == 1)
+    if (S_ISLNK(p_statbuf.st_mode))
         return true;
     #endif
     return false;
@@ -1004,61 +1084,77 @@ bool TransferThread::is_symlink(const char * const filename)
 
 bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 {
+    #ifdef Q_OS_WIN32
+    DWORD dwAttrib = GetFileAttributesW(filename.c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+           (dwAttrib & FILE_ATTRIBUTE_NORMAL));
+    #else
     return is_file(TransferThread::internalStringTostring(filename).c_str());
+    #endif
 }
 
 bool TransferThread::is_file(const char * const filename)
 {
-    struct stat p_statbuf;
     #ifdef Q_OS_WIN32
-    if (stat(filename, &p_statbuf) < 0)
-        //if error or file not exists, considere as regular file
-        return false;
+    DWORD dwAttrib = GetFileAttributesA(filename);
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+           (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
+    struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
-    #endif
-    if (S_ISREG(p_statbuf.st_mode) == 1)
+    if (S_ISREG(p_statbuf.st_mode))
         return true;
-    return true;
+    return false;
+    #endif
 }
 
 bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 {
+    #ifdef Q_OS_WIN32
+    DWORD dwAttrib = GetFileAttributesW(filename.c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+       (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+    #else
     return is_dir(TransferThread::internalStringTostring(filename).c_str());
+    #endif
 }
 
 bool TransferThread::is_dir(const char * const filename)
 {
-    struct stat p_statbuf;
     #ifdef Q_OS_WIN32
-    if (stat(filename, &p_statbuf) < 0)
-        //if error or file not exists, considere as regular file
-        return false;
+    DWORD dwAttrib = GetFileAttributesA(filename);
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+           (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
+    struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
-    #endif
-    if (S_ISDIR(p_statbuf.st_mode) == 1)
+    if (S_ISDIR(p_statbuf.st_mode))
         return true;
-    return true;
+    return false;
+    #endif
 }
 
 bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 {
+    #ifdef Q_OS_WIN32
+    DWORD dwAttrib = GetFileAttributesW(filename.c_str());
+    return dwAttrib != INVALID_FILE_ATTRIBUTES;
+    #else
     return is_dir(TransferThread::internalStringTostring(filename).c_str());
+    #endif
 }
 
 bool TransferThread::exists(const char * const filename)
 {
-    struct stat p_statbuf;
     #ifdef Q_OS_WIN32
-    if (stat(filename, &p_statbuf) < 0)
-        //if error or file not exists, considere as regular file
-        return false;
+    DWORD dwAttrib = GetFileAttributesA(filename);
+    return dwAttrib != INVALID_FILE_ATTRIBUTES;
     #else
+    struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return false;
@@ -1068,22 +1164,41 @@ bool TransferThread::exists(const char * const filename)
 
 int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 {
+    #ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA fileInfo;
+    BOOL r = GetFileAttributesExW(filename.c_str(), GetFileExInfoStandard, &fileInfo);
+    if(r == FALSE)
+        return -1;
+    int64_t size=fileInfo.nFileSizeHigh;
+    size<<=32;
+    size|=fileInfo.nFileSizeLow;
+    return size;
+    #else
     return file_stat_size(TransferThread::internalStringTostring(filename).c_str());
+    #endif
 }
 
 int64_t TransferThread::file_stat_size(const char * const filename)
 {
-    struct stat p_statbuf;
     #ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA fileInfo;
+    BOOL r = GetFileAttributesExA(filename, GetFileExInfoStandard, &fileInfo);
+    if(r == FALSE)
+        return -1;
+    int64_t size=fileInfo.nFileSizeHigh;
+    size<<=32;
+    size|=fileInfo.nFileSizeLow;
+    return size;
+    #else
+    struct stat p_statbuf;
     if (stat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return -1;
-    #else
     if (lstat(filename, &p_statbuf) < 0)
         //if error or file not exists, considere as regular file
         return -1;
-    #endif
     return p_statbuf.st_size;
+    #endif
 }
 
 bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<INTERNALTYPEPATH> &list)

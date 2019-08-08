@@ -134,8 +134,20 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("Unable to change date time of files, only gcc is supported"));
     #endif
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,COMPILERINFO);
+    #if defined (UNICODE)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"UNICODE set");
+    #endif
+    #if defined (_FILE_OFFSET_BITS)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"_FILE_OFFSET_BITS set to "+std::to_string(_FILE_OFFSET_BITS));
+    #endif
+    #if defined (WIDESTRING)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"WIDESTRING set");
+    #endif
+    #if defined (_LARGE_FILE_SOURCE)
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"_LARGE_FILE_SOURCE set to "+std::to_string(_LARGE_FILE_SOURCE));
+    #endif
     #if defined (ULTRACOPIER_PLUGIN_CHECKLISTTYPE)
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE set");
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE set");
     #else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE not set");
     #endif

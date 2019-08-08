@@ -1763,14 +1763,15 @@ void ListThread::doNewActions_inode_manipulation()
     //search the next transfer action to do
     while(int_for_loop<actionToDoListTransfer_count)
     {
-        if(!actionToDoListTransfer.at(int_for_loop).isRunning)
+        ActionToDoTransfer& currentActionToDoTransfer=actionToDoListTransfer[int_for_loop];
+        if(!currentActionToDoTransfer.isRunning)
         {
             //search the next inode action to do
             while(int_for_internal_loop<actionToDoListInode_count)
             {
                 if(!actionToDoListInode.at(int_for_internal_loop).isRunning)
                 {
-                    if(actionToDoListTransfer.at(int_for_loop).id<actionToDoListInode.at(int_for_internal_loop).id)
+                    if(currentActionToDoTransfer.id<actionToDoListInode.at(int_for_internal_loop).id)
                     {
                         //do the tranfer action in the next code
                         break;
@@ -1783,7 +1784,6 @@ void ListThread::doNewActions_inode_manipulation()
                 }
                 int_for_internal_loop++;
             }
-            ActionToDoTransfer& currentActionToDoTransfer=actionToDoListTransfer[int_for_loop];
             //do the tranfer action
             while(int_for_transfer_thread_search<loop_sub_size_transfer_thread_search)
             {
@@ -1795,11 +1795,11 @@ void ListThread::doNewActions_inode_manipulation()
                 currentTransferThread=transferThreadList.at(int_for_transfer_thread_search);
                 if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0) // /!\ important!
                 {
-                    std::string drive=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).destination.absoluteFilePath().toStdString());
-                    if(requiredSpace.find(drive)!=requiredSpace.cend() && (actionToDoListTransfer.at(int_for_internal_loop).mode!=Ultracopier::Move || drive!=driveManagement.getDrive(actionToDoListTransfer.at(int_for_internal_loop).source.absoluteFilePath().toStdString())))
+                    std::string drive=driveManagement.getDrive(currentActionToDoTransfer.destination.absoluteFilePath().toStdString());
+                    if(requiredSpace.find(drive)!=requiredSpace.cend() && (currentActionToDoTransfer.mode!=Ultracopier::Move || drive!=driveManagement.getDrive(currentActionToDoTransfer.source.absoluteFilePath().toStdString())))
                     {
-                        requiredSpace[drive]-=actionToDoListTransfer.at(int_for_internal_loop).size;
-                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(actionToDoListTransfer.at(int_for_internal_loop).size).arg(requiredSpace.at(drive)).arg(QString::fromStdString(drive)).toStdString());
+                        requiredSpace[drive]-=currentActionToDoTransfer.size;
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("space needed removed: %1, space needed: %2, on: %3").arg(currentActionToDoTransfer.size).arg(requiredSpace.at(drive)).arg(QString::fromStdString(drive)).toStdString());
                     }
                     currentTransferThread->transferId=currentActionToDoTransfer.id;
                     currentTransferThread->transferSize=currentActionToDoTransfer.size;
