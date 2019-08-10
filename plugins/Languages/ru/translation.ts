@@ -185,70 +185,70 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="348"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="351"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="356"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="360"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="368"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="372"/>
         <source>Ask</source>
         <translation type="unfinished">просить</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="349"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="353"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="357"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="361"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="365"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="369"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="373"/>
         <source>Skip</source>
         <translation type="unfinished">пропускать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="352"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="364"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="354"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="366"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="378"/>
         <source>Rename</source>
         <translation type="unfinished">переименовать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="358"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="370"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="362"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="374"/>
         <source>Overwrite</source>
         <translation type="unfinished">переписывать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="375"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="364"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="376"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">Заменить, если новее</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="365"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="377"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="381"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="393"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="432"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="381"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="393"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="432"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1096,33 +1096,33 @@ This version is compiled as version: %1.</source>
     <name>MkPath</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="129"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="374"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="378"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="185"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="201"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="186"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="203"/>
         <source>Unable to create the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="216"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="220"/>
         <source>The source folder don&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="244"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="248"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="267"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="271"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="296"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="300"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1883,31 +1883,31 @@ since:%2</source>
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="441"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="443"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="436"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="438"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="452"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="454"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="447"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="449"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="549"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="551"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="544"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="546"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="560"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="562"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="555"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="557"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="618"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="613"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2105,30 +2105,30 @@ since:%2</source>
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="179"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="180"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="196"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="484"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="630"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="197"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="710"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="455"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="456"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="462"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="463"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="630"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="666"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="710"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2136,7 +2136,7 @@ since:%2</source>
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="201"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="202"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>

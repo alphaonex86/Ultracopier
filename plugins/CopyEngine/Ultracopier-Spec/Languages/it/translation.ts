@@ -96,70 +96,70 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="348"/>
-        <location filename="../../CopyEngineFactory.cpp" line="351"/>
-        <location filename="../../CopyEngineFactory.cpp" line="356"/>
         <location filename="../../CopyEngineFactory.cpp" line="360"/>
+        <location filename="../../CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngineFactory.cpp" line="368"/>
+        <location filename="../../CopyEngineFactory.cpp" line="372"/>
         <source>Ask</source>
         <translation>Chiedi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="349"/>
-        <location filename="../../CopyEngineFactory.cpp" line="353"/>
-        <location filename="../../CopyEngineFactory.cpp" line="357"/>
         <location filename="../../CopyEngineFactory.cpp" line="361"/>
+        <location filename="../../CopyEngineFactory.cpp" line="365"/>
+        <location filename="../../CopyEngineFactory.cpp" line="369"/>
+        <location filename="../../CopyEngineFactory.cpp" line="373"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="352"/>
+        <location filename="../../CopyEngineFactory.cpp" line="364"/>
         <source>Merge</source>
         <translation>Unisci</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="354"/>
         <location filename="../../CopyEngineFactory.cpp" line="366"/>
+        <location filename="../../CopyEngineFactory.cpp" line="378"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="358"/>
+        <location filename="../../CopyEngineFactory.cpp" line="370"/>
         <source>Put at the end</source>
         <translation>Metti in coda</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="362"/>
+        <location filename="../../CopyEngineFactory.cpp" line="374"/>
         <source>Overwrite</source>
         <translation>Sovrascrivi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngineFactory.cpp" line="375"/>
         <source>Overwrite if different</source>
         <translation>Sovrascrivi se differente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="364"/>
+        <location filename="../../CopyEngineFactory.cpp" line="376"/>
         <source>Overwrite if newer</source>
         <translation>Sovrascrivi se più recente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="365"/>
+        <location filename="../../CopyEngineFactory.cpp" line="377"/>
         <source>Overwrite if older</source>
         <translation>Sovrascrivi se meno recente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="381"/>
-        <location filename="../../CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngineFactory.cpp" line="393"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
         <source>Options error</source>
         <translation>Opzioni di errore</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="381"/>
+        <location filename="../../CopyEngineFactory.cpp" line="393"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Le opzioni del motore per la copia non vengono caricate, impossibile accedere ai filtri</translation>
     </message>
@@ -475,34 +475,34 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="185"/>
-        <location filename="../../MkPath.cpp" line="201"/>
+        <location filename="../../MkPath.cpp" line="186"/>
+        <location filename="../../MkPath.cpp" line="203"/>
         <source>Unable to create the folder</source>
         <translation>Impossibile creare la cartella</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="216"/>
+        <location filename="../../MkPath.cpp" line="220"/>
         <source>The source folder don&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="244"/>
+        <location filename="../../MkPath.cpp" line="248"/>
         <source>Unable to temporary rename the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="267"/>
+        <location filename="../../MkPath.cpp" line="271"/>
         <source>Unable to do the final real move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="296"/>
+        <location filename="../../MkPath.cpp" line="300"/>
         <source>Unable to move the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="129"/>
-        <location filename="../../MkPath.cpp" line="374"/>
+        <location filename="../../MkPath.cpp" line="378"/>
         <source>Unable to remove</source>
         <translation>Impossibile eliminare</translation>
     </message>
@@ -560,31 +560,31 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="441"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="443"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="436"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="438"/>
         <source>%1 - copy</source>
         <translation>%1 - copia</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="452"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="454"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="447"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="449"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="549"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="551"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="544"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="546"/>
         <source>%name% - copy</source>
         <translation type="unfinished">Copia di %name%</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="560"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="562"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="555"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="557"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">Copia di %name% (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="618"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="613"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -592,30 +592,30 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="196"/>
-        <location filename="../../TransferThread.cpp" line="484"/>
-        <location filename="../../TransferThread.cpp" line="630"/>
+        <location filename="../../TransferThread.cpp" line="197"/>
+        <location filename="../../TransferThread.cpp" line="485"/>
+        <location filename="../../TransferThread.cpp" line="710"/>
         <source>File not found</source>
         <translation>File non trovato</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="179"/>
+        <location filename="../../TransferThread.cpp" line="180"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="455"/>
+        <location filename="../../TransferThread.cpp" line="456"/>
         <source>%name% - copy</source>
         <translation type="unfinished">Copia di %name%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="462"/>
+        <location filename="../../TransferThread.cpp" line="463"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">Copia di %name% (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="630"/>
-        <location filename="../../TransferThread.cpp" line="666"/>
+        <location filename="../../TransferThread.cpp" line="710"/>
+        <location filename="../../TransferThread.cpp" line="746"/>
         <source>Unable to change the date</source>
         <translation type="unfinished">Impossibile cambiare la data</translation>
     </message>
@@ -623,7 +623,7 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="201"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="202"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>

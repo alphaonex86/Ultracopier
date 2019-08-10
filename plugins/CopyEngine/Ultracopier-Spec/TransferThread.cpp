@@ -283,7 +283,7 @@ bool TransferThread::destinationExists()
             #endif
             )
         return false;
-    bool destinationExists;
+    bool destinationExists=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] time to first FS access");
     destinationExists=is_file(destination);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] finish first FS access: "+std::to_string(destinationExists));
@@ -651,7 +651,9 @@ bool TransferThread::mkdir(const INTERNALTYPEPATH &file_path)
 #endif
 {
 #ifdef Q_OS_WIN32
-    const bool r = CreateDirectory(file_path.c_str(),NULL);
+    INTERNALTYPEPATH file_pathW=L"\\\\?\\"+file_path;
+    stringreplaceAll(file_pathW,L"/",L"\\");
+    const bool r = CreateDirectory(file_pathW.c_str(),NULL);
     const DWORD &t=GetLastError();
     if(!r && t==183/*is_dir(file_path) performance impact*/)
         errno=EEXIST;
@@ -1085,9 +1087,12 @@ bool TransferThread::is_symlink(const char * const filename)
 bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    DWORD dwAttrib = GetFileAttributesW(filename.c_str());
+    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
+    stringreplaceAll(filenameW,L"/",L"\\");
+    DWORD dwAttrib = GetFileAttributesW(filenameW.c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
-           (dwAttrib & FILE_ATTRIBUTE_NORMAL));
+           (dwAttrib & FILE_ATTRIBUTE_NORMAL || dwAttrib & FILE_ATTRIBUTE_ARCHIVE)
+            );
     #else
     return is_file(TransferThread::internalStringTostring(filename).c_str());
     #endif
@@ -1096,7 +1101,9 @@ bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 bool TransferThread::is_file(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    DWORD dwAttrib = GetFileAttributesA(filename);
+    std::string filenameW="\\\\?\\"+std::string(filename);
+    stringreplaceAll(filenameW,"/","\\");
+    DWORD dwAttrib = GetFileAttributesA(filenameW.c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
@@ -1113,7 +1120,9 @@ bool TransferThread::is_file(const char * const filename)
 bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    DWORD dwAttrib = GetFileAttributesW(filename.c_str());
+    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
+    stringreplaceAll(filenameW,L"/",L"\\");
+    DWORD dwAttrib = GetFileAttributesW(filenameW.c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
        (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
@@ -1124,7 +1133,9 @@ bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 bool TransferThread::is_dir(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    DWORD dwAttrib = GetFileAttributesA(filename);
+    std::string filenameW="\\\\?\\"+std::string(filename);
+    stringreplaceAll(filenameW,"/","\\");
+    DWORD dwAttrib = GetFileAttributesA(filenameW.c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
@@ -1141,7 +1152,9 @@ bool TransferThread::is_dir(const char * const filename)
 bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    DWORD dwAttrib = GetFileAttributesW(filename.c_str());
+    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
+    stringreplaceAll(filenameW,L"/",L"\\");
+    DWORD dwAttrib = GetFileAttributesW(filenameW.c_str());
     return dwAttrib != INVALID_FILE_ATTRIBUTES;
     #else
     return is_dir(TransferThread::internalStringTostring(filename).c_str());
@@ -1151,7 +1164,9 @@ bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 bool TransferThread::exists(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    DWORD dwAttrib = GetFileAttributesA(filename);
+    std::string filenameW="\\\\?\\"+std::string(filename);
+    stringreplaceAll(filenameW,"/","\\");
+    DWORD dwAttrib = GetFileAttributesA(filenameW.c_str());
     return dwAttrib != INVALID_FILE_ATTRIBUTES;
     #else
     struct stat p_statbuf;
@@ -1165,8 +1180,10 @@ bool TransferThread::exists(const char * const filename)
 int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
+    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
+    stringreplaceAll(filenameW,L"/",L"\\");
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    BOOL r = GetFileAttributesExW(filename.c_str(), GetFileExInfoStandard, &fileInfo);
+    BOOL r = GetFileAttributesExW(filenameW.c_str(), GetFileExInfoStandard, &fileInfo);
     if(r == FALSE)
         return -1;
     int64_t size=fileInfo.nFileSizeHigh;
@@ -1181,8 +1198,10 @@ int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 int64_t TransferThread::file_stat_size(const char * const filename)
 {
     #ifdef Q_OS_WIN32
+    std::string filenameW="\\\\?\\"+std::string(filename);
+    stringreplaceAll(filenameW,"/","\\");
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    BOOL r = GetFileAttributesExA(filename, GetFileExInfoStandard, &fileInfo);
+    BOOL r = GetFileAttributesExA(filenameW.c_str(), GetFileExInfoStandard, &fileInfo);
     if(r == FALSE)
         return -1;
     int64_t size=fileInfo.nFileSizeHigh;
@@ -1258,7 +1277,8 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
     HANDLE hFind = NULL;
     #ifdef WIDESTRING
     WIN32_FIND_DATAW fdFile;
-    wchar_t finalpath[MAX_PATH];
+    wchar_t finalpath[32000];
+    wcscat(finalpath,L"\\\\?\\");
     wcscpy(finalpath,path.c_str());
     wcscat(finalpath,L"\\*");
     #else
