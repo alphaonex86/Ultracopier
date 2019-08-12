@@ -651,9 +651,7 @@ bool TransferThread::mkdir(const INTERNALTYPEPATH &file_path)
 #endif
 {
 #ifdef Q_OS_WIN32
-    INTERNALTYPEPATH file_pathW=L"\\\\?\\"+file_path;
-    stringreplaceAll(file_pathW,L"/",L"\\");
-    const bool r = CreateDirectory(file_pathW.c_str(),NULL);
+    const bool r = CreateDirectory(TransferThread::toFinalPath(file_path).c_str(),NULL);
     const DWORD &t=GetLastError();
     if(!r && t==183/*is_dir(file_path) performance impact*/)
         errno=EEXIST;
@@ -799,13 +797,7 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
                     return -1;
                 return info.st_mtime;
             #else
-                /*wchar_t filePath[65535];
-                if(std::regex_match(source,std::regex("^[a-zA-Z]:")))
-                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                else
-                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';*/
-                std::wstring wsource=std::wstring(source.cbegin(),source.cend());
-                HANDLE hFileSouce = CreateFileW(wsource.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
+                HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                     return -1;
                 FILETIME ftCreate, ftAccess, ftWrite;
@@ -876,12 +868,7 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
                 Q_UNUSED(ctime);
                 return true;
             #else
-                wchar_t filePath[65535];
-                if(std::regex_match(source,regRead))
-                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                else
-                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
+                HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
@@ -927,12 +914,7 @@ bool TransferThread::writeDestinationFileDateTime(const INTERNALTYPEPATH &destin
             #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
                 return utime(TransferThread::internalStringTostring(destination).c_str(),&butime)==0;
             #else
-                wchar_t filePath[65535];
-                if(std::regex_match(destination,regRead))
-                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                else
-                    filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+                HANDLE hFileDestination = CreateFileW(TransferThread::toFinalPath(source), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
                 if(hFileDestination == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
@@ -1087,9 +1069,7 @@ bool TransferThread::is_symlink(const char * const filename)
 bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
-    stringreplaceAll(filenameW,L"/",L"\\");
-    DWORD dwAttrib = GetFileAttributesW(filenameW.c_str());
+    DWORD dwAttrib = GetFileAttributesW(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            (dwAttrib & FILE_ATTRIBUTE_NORMAL || dwAttrib & FILE_ATTRIBUTE_ARCHIVE)
             );
@@ -1101,9 +1081,7 @@ bool TransferThread::is_file(const INTERNALTYPEPATH &filename)
 bool TransferThread::is_file(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    std::string filenameW="\\\\?\\"+std::string(filename);
-    stringreplaceAll(filenameW,"/","\\");
-    DWORD dwAttrib = GetFileAttributesA(filenameW.c_str());
+    DWORD dwAttrib = GetFileAttributesA(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
@@ -1120,9 +1098,7 @@ bool TransferThread::is_file(const char * const filename)
 bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
-    stringreplaceAll(filenameW,L"/",L"\\");
-    DWORD dwAttrib = GetFileAttributesW(filenameW.c_str());
+    DWORD dwAttrib = GetFileAttributesW(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
        (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
@@ -1133,9 +1109,7 @@ bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
 bool TransferThread::is_dir(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    std::string filenameW="\\\\?\\"+std::string(filename);
-    stringreplaceAll(filenameW,"/","\\");
-    DWORD dwAttrib = GetFileAttributesA(filenameW.c_str());
+    DWORD dwAttrib = GetFileAttributesA(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
     #else
@@ -1152,9 +1126,7 @@ bool TransferThread::is_dir(const char * const filename)
 bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
-    stringreplaceAll(filenameW,L"/",L"\\");
-    DWORD dwAttrib = GetFileAttributesW(filenameW.c_str());
+    DWORD dwAttrib = GetFileAttributesW(TransferThread::toFinalPath(filename).c_str());
     return dwAttrib != INVALID_FILE_ATTRIBUTES;
     #else
     return is_dir(TransferThread::internalStringTostring(filename).c_str());
@@ -1164,9 +1136,7 @@ bool TransferThread::exists(const INTERNALTYPEPATH &filename)
 bool TransferThread::exists(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    std::string filenameW="\\\\?\\"+std::string(filename);
-    stringreplaceAll(filenameW,"/","\\");
-    DWORD dwAttrib = GetFileAttributesA(filenameW.c_str());
+    DWORD dwAttrib = GetFileAttributesA(TransferThread::toFinalPath(filename).c_str());
     return dwAttrib != INVALID_FILE_ATTRIBUTES;
     #else
     struct stat p_statbuf;
@@ -1180,10 +1150,8 @@ bool TransferThread::exists(const char * const filename)
 int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 {
     #ifdef Q_OS_WIN32
-    INTERNALTYPEPATH filenameW=L"\\\\?\\"+filename;
-    stringreplaceAll(filenameW,L"/",L"\\");
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    BOOL r = GetFileAttributesExW(filenameW.c_str(), GetFileExInfoStandard, &fileInfo);
+    BOOL r = GetFileAttributesExW(TransferThread::toFinalPath(filename).c_str(), GetFileExInfoStandard, &fileInfo);
     if(r == FALSE)
         return -1;
     int64_t size=fileInfo.nFileSizeHigh;
@@ -1198,10 +1166,8 @@ int64_t TransferThread::file_stat_size(const INTERNALTYPEPATH &filename)
 int64_t TransferThread::file_stat_size(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    std::string filenameW="\\\\?\\"+std::string(filename);
-    stringreplaceAll(filenameW,"/","\\");
     WIN32_FILE_ATTRIBUTE_DATA fileInfo;
-    BOOL r = GetFileAttributesExA(filenameW.c_str(), GetFileExInfoStandard, &fileInfo);
+    BOOL r = GetFileAttributesExA(TransferThread::toFinalPath(filename).c_str(), GetFileExInfoStandard, &fileInfo);
     if(r == FALSE)
         return -1;
     int64_t size=fileInfo.nFileSizeHigh;
@@ -1232,7 +1198,11 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<INTE
 
 bool TransferThread::rmdir(const INTERNALTYPEPATH &path)
 {
+    #ifdef Q_OS_WIN32
+    return RemoveDirectoryW(TransferThread::toFinalPath(path).c_str());
+    #else
     return ::rmdir(TransferThread::internalStringTostring(path).c_str())==0;
+    #endif
 }
 
 #ifdef Q_OS_UNIX
@@ -1277,17 +1247,14 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
     HANDLE hFind = NULL;
     #ifdef WIDESTRING
     WIN32_FIND_DATAW fdFile;
-    wchar_t finalpath[32000];
-    wcscat(finalpath,L"\\\\?\\");
-    wcscpy(finalpath,path.c_str());
-    wcscat(finalpath,L"\\*");
+    if((hFind = FindFirstFileW((TransferThread::toFinalPath(path)+L"\\*").c_str(), &fdFile)) == INVALID_HANDLE_VALUE)
     #else
     WIN32_FIND_DATAA fdFile;
     char finalpath[MAX_PATH];
     strcpy(finalpath,path.c_str());
     strcat(finalpath,"\\*");
-    #endif
     if((hFind = FindFirstFileW(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
+    #endif
         return false;
     do
     {
@@ -1337,3 +1304,37 @@ int64_t TransferThread::transferTime() const
 {
     return startTransferTime.elapsed();
 }
+
+#ifdef Q_OS_WIN32
+std::wstring TransferThread::toFinalPath(std::wstring path)
+{
+    stringreplaceAll(path,L"/",L"\\");
+    std::wstring pathW;
+    if(path.size()>2 && path.substr(0,2)==L"\\\\")//nas
+        pathW=L"\\\\?\\UNC\\"+path.substr(2);
+    else
+        pathW=L"\\\\?\\"+path;
+    return pathW;
+}
+
+std::string TransferThread::toFinalPath(std::string path)
+{
+    stringreplaceAll(path,"/","\\");
+    std::string pathW;
+    if(path.size()>2 && path.substr(0,2)=="\\\\")//nas
+        pathW="\\\\?\\UNC\\"+path.substr(2);
+    else
+        pathW="\\\\?\\"+path;
+    return pathW;
+}
+
+bool TransferThread::unlink(const std::wstring &path)
+{
+    return DeleteFileW(TransferThread::toFinalPath(path).c_str()) || RemoveDirectoryW(TransferThread::toFinalPath(path).c_str());
+}
+#else
+bool TransferThread::unlink(const INTERNALTYPEPATH &path)
+{
+    return ::unlink(internalStringTostring(path).c_str());
+}
+#endif

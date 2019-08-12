@@ -618,12 +618,7 @@ bool MkPath::readFileDateTime(const INTERNALTYPEPATH &source)
                 Q_UNUSED(ctime);
                 return true;
             #else
-                wchar_t filePath[65535];
-                if(std::regex_match(source,regRead))
-                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                else
-                    filePath[QDir::toNativeSeparators(source.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                HANDLE hFileSouce = CreateFileW(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
+                HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
                 if(hFileSouce == INVALID_HANDLE_VALUE)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));

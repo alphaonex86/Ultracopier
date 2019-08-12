@@ -96,6 +96,13 @@ public:
     static std::string stringToInternalString(const std::string& utf8);
     static std::string internalStringTostring(const std::string& utf16);
     #endif
+    #ifdef Q_OS_WIN32
+    static std::wstring toFinalPath(std::wstring path);
+    static std::string toFinalPath(std::string path);
+    static bool unlink(const std::wstring &path);
+    #else
+    static bool unlink(const INTERNALTYPEPATH &path);
+    #endif
 
     static int64_t readFileMDateTime(const INTERNALTYPEPATH &source);
     static bool is_symlink(const char * const filename);

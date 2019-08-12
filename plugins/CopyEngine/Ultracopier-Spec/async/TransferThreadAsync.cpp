@@ -311,11 +311,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
 #ifdef Q_OS_WIN32
-    INTERNALTYPEPATH sourceW=L"\\\\?\\"+source;
-    stringreplaceAll(sourceW,L"/",L"\\");
-    INTERNALTYPEPATH destinationW=L"\\\\?\\"+destination;
-    stringreplaceAll(destinationW,L"/",L"\\");
-    if(CopyFileExW(sourceW.c_str(),destinationW.c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
+    if(CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
                    COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
                    )==0)
 #else
@@ -336,7 +332,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         {
             if(!source.empty())
                 if(exists(source))
-                    unlink(TransferThread::internalStringTostring(destination).c_str());
+                    unlink(destination);
             resetExtraVariable();
             return;//and reset?
         }
@@ -356,7 +352,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     emit readStopped();
     if(mode==Ultracopier::Move)
         if(exists(destination))
-            unlink(TransferThread::internalStringTostring(source).c_str());
+            unlink(source);
     transfer_stat=TransferStat_PostTransfer;
     emit pushStat(transfer_stat,transferId);
     transfer_stat=TransferStat_PostOperation;
@@ -390,7 +386,7 @@ void TransferThreadAsync::stop()
     start();
     if(!source.empty())
         if(exists(source))
-            unlink(TransferThread::internalStringTostring(destination).c_str());
+            unlink(destination);
     transfer_stat=TransferStat_Idle;
     resetExtraVariable();
 }
@@ -462,7 +458,7 @@ void TransferThreadAsync::skip()
     case TransferStat_Transfer:
         if(!source.empty())
             if(exists(source))
-                unlink(TransferThread::internalStringTostring(destination).c_str());
+                unlink(destination);
         break;
     case TransferStat_PostTransfer:
         break;

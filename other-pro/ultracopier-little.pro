@@ -42,7 +42,14 @@ SOURCES += \
     ../plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp \
     ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp \
     ../plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp \
-    ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp
+    ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadActions.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadNew.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadMedia.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp
 
 RESOURCES += \
     ../plugins/CopyEngine/Ultracopier-Spec/copyEngineResources.qrc

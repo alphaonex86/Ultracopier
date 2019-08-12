@@ -2118,7 +2118,7 @@ depuis:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="197"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="710"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="712"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2133,8 +2133,8 @@ depuis:%2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="710"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="712"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="748"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
