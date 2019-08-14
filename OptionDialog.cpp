@@ -1057,6 +1057,6 @@ void OptionDialog::on_soundWhenFinish_toggled(bool checked)
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","on_soundWhenFinish_toggled",std::to_string(checked));
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","soundWhenFinish",std::to_string(checked));
     }
 }

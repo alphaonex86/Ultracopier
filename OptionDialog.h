@@ -83,9 +83,7 @@ private slots:
     void on_remainingTimeAlgorithm_currentIndexChanged(int index);
     void on_portable_toggled(bool);
     void on_soundFile_editingFinished();
-
     void on_soundWhenFinish_toggled(bool checked);
-
 private:
     bool quit;
     Ui::OptionDialog *ui;

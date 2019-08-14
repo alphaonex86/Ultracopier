@@ -173,6 +173,7 @@ void FileExistsDialog::on_SuggestNewName_clicked()
             newFileName.replace(QStringLiteral("%number%"),QString::number(num));
         }
         newFileName.replace(QStringLiteral("%name%"),fileName);
+        newFileName.replace(QStringLiteral("%suffix%"),suffix);
         destination=absolutePath+CURRENTSEPARATOR+newFileName;
         destinationInfo=destination.toStdString();
         num++;

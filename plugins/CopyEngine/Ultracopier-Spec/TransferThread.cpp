@@ -181,12 +181,33 @@ void TransferThread::setFileRename(const std::string &nameForRename)
         emit errorOnFile(destination,tr("Try rename with using special characters").toStdString());
         return;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] nameForRename: "+nameForRename);
+    #ifdef WIDESTRING
+    std::string::size_type n=destination.rfind(L'/');
+    #else
+    std::string::size_type n=destination.rfind('/');
+    #endif
+    #ifdef Q_OS_WINDOWS
+    const std::wstring::size_type n2=destination.rfind(L'\\');
+    if(n2>n && (n2!=std::wstring::npos || n==std::wstring::npos))
+        n=n2;
+    #endif
+    #ifdef WIDESTRING
+    if(n != std::wstring::npos)
+    #else
+    if(n != std::string::npos)
+    #endif
+    {
+        INTERNALTYPEPATH destinationPath=destination.substr(0,n+1);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] nameForRename: "+nameForRename+", destinationPath: "+internalStringTostring(destinationPath));
+        destination=destinationPath+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(nameForRename);
+    }
+
+    /*why all this code?
     if(!renameTheOriginalDestination)
         destination=destination+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(nameForRename);
     else
     {
-        INTERNALTYPEPATH tempDestination=destination;
+        //INTERNALTYPEPATH tempDestination=destination;
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] rename "+TransferThread::internalStringTostring(destination)+
                                  ": to: "+TransferThread::internalStringTostring(destination)+"/"+nameForRename);
         if(!rename(destination,(destination+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(nameForRename))))
@@ -207,7 +228,7 @@ void TransferThread::setFileRename(const std::string &nameForRename)
         if(source==destination)
             source=destination+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(nameForRename);
         destination=tempDestination;
-    }
+    }*/
     fileExistsAction	= FileExists_NotSet;
     resetExtraVariable();
     emit internalStartPreOperation();

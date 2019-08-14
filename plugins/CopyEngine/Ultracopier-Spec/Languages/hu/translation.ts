@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="399"/>
-        <location filename="../../CopyEngine.cpp" line="422"/>
+        <location filename="../../CopyEngine.cpp" line="411"/>
+        <location filename="../../CopyEngine.cpp" line="434"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>A motort mozgatásra kényszerítik, nem másolhatsz vele</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="434"/>
-        <location filename="../../CopyEngine.cpp" line="457"/>
+        <location filename="../../CopyEngine.cpp" line="446"/>
+        <location filename="../../CopyEngine.cpp" line="469"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>A motort másolásra kényszerítik, nem mozgathatsz vele</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="481"/>
+        <location filename="../../CopyEngine.cpp" line="493"/>
         <source>Destination</source>
         <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="481"/>
+        <location filename="../../CopyEngine.cpp" line="493"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>Használja a jelenlegi célt: &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="637"/>
+        <location filename="../../CopyEngine.cpp" line="649"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>Ezt a módot már korábban kényszerítették. Belső hiba történt, kérlek jelentsd be</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="895"/>
-        <location filename="../../CopyEngine.cpp" line="898"/>
-        <location filename="../../CopyEngine.cpp" line="903"/>
         <location filename="../../CopyEngine.cpp" line="907"/>
+        <location filename="../../CopyEngine.cpp" line="910"/>
+        <location filename="../../CopyEngine.cpp" line="915"/>
+        <location filename="../../CopyEngine.cpp" line="919"/>
         <source>Ask</source>
         <translation>Kérdezzen rá</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="896"/>
-        <location filename="../../CopyEngine.cpp" line="900"/>
-        <location filename="../../CopyEngine.cpp" line="904"/>
         <location filename="../../CopyEngine.cpp" line="908"/>
+        <location filename="../../CopyEngine.cpp" line="912"/>
+        <location filename="../../CopyEngine.cpp" line="916"/>
+        <location filename="../../CopyEngine.cpp" line="920"/>
         <source>Skip</source>
         <translation>Kihagy</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="899"/>
+        <location filename="../../CopyEngine.cpp" line="911"/>
         <source>Merge</source>
         <translation>Összeolvaszt</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="901"/>
         <location filename="../../CopyEngine.cpp" line="913"/>
+        <location filename="../../CopyEngine.cpp" line="925"/>
         <source>Rename</source>
         <translation>Nevezze át</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="905"/>
+        <location filename="../../CopyEngine.cpp" line="917"/>
         <source>Put at the end</source>
         <translation>Helyezze a végére</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="909"/>
+        <location filename="../../CopyEngine.cpp" line="921"/>
         <source>Overwrite</source>
         <translation>Felülír</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="910"/>
+        <location filename="../../CopyEngine.cpp" line="922"/>
         <source>Overwrite if different</source>
         <translation>Felülír, ha különbözik</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="911"/>
+        <location filename="../../CopyEngine.cpp" line="923"/>
         <source>Overwrite if newer</source>
         <translation>Felülír, ha újabb</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="912"/>
+        <location filename="../../CopyEngine.cpp" line="924"/>
         <source>Overwrite if older</source>
         <translation>Felülír, ha régebbi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="983"/>
+        <location filename="../../CopyEngine.cpp" line="995"/>
         <source>Options error</source>
         <translation>Beállítási hiba</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="983"/>
+        <location filename="../../CopyEngine.cpp" line="995"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>A beállítási motor nincs betöltve. A szűrők elérése nem lehetséges</translation>
     </message>
