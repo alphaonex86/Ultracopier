@@ -594,7 +594,7 @@
     <message>
         <location filename="../../TransferThread.cpp" line="197"/>
         <location filename="../../TransferThread.cpp" line="485"/>
-        <location filename="../../TransferThread.cpp" line="712"/>
+        <location filename="../../TransferThread.cpp" line="710"/>
         <source>File not found</source>
         <translation>File non trovato</translation>
     </message>
@@ -614,8 +614,8 @@
         <translation type="unfinished">Copia di %name% (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="712"/>
-        <location filename="../../TransferThread.cpp" line="748"/>
+        <location filename="../../TransferThread.cpp" line="710"/>
+        <location filename="../../TransferThread.cpp" line="746"/>
         <source>Unable to change the date</source>
         <translation type="unfinished">Impossibile cambiare la data</translation>
     </message>

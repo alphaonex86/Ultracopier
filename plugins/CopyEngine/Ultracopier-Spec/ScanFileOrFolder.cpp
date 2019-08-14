@@ -511,12 +511,7 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
     //check if destination exists
     if(checkDestinationExists)
     {
-        struct stat source_statbuf;
-        #ifdef Q_OS_UNIX
-        if(lstat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0)
-        #else
-        if(stat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0)
-        #endif
+        if(TransferThread::exists(destination))
         {
             emit folderAlreadyExists(source,destination,false);
             waitOneAction.acquire();

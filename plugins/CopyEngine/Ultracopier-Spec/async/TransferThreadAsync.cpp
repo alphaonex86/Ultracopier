@@ -250,34 +250,6 @@ void TransferThreadAsync::setProgression(const uint64_t &pos)
     if(transfer_stat==TransferStat_Transfer)
         transferProgression=pos;
 }
-
-std::string GetLastErrorStdStr()
-{
-  DWORD error = GetLastError();
-  if (error)
-  {
-    LPVOID lpMsgBuf;
-    DWORD bufLen = FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        error,
-        MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
-        (LPTSTR) &lpMsgBuf,
-        0, NULL );
-    if (bufLen)
-    {
-      LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
-      std::string result(lpMsgStr, lpMsgStr+bufLen);
-
-      LocalFree(lpMsgBuf);
-
-      return result+" "+std::to_string(error);
-    }
-  }
-  return std::string();
-}
 #endif
 
 void TransferThreadAsync::ifCanStartTransfer()
@@ -296,16 +268,32 @@ void TransferThreadAsync::ifCanStartTransfer()
     if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
     {
         const std::wstring &path=destination.substr(0,destinationIndex);
-        if(is_dir(path))
-            TransferThread::mkpath(path);
+        if(!is_dir(path))
+            if(!TransferThread::mkpath(path))
+            {
+                #ifdef Q_OS_WIN32
+                emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+                #else
+                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
+                #endif
+                return;
+            }
     }
     #else
     const size_t destinationIndex=destination.rfind('/');
     if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
     {
         const std::string &path=destination.substr(0,destinationIndex);
-        if(is_dir(path))
-            TransferThread::mkpath(path);
+        if(!is_dir(path))
+            if(!TransferThread::mkpath(path))
+            {
+                #ifdef Q_OS_WIN32
+                emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+                #else
+                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
+                #endif
+                return;
+            }
     }
     #endif
     transfer_stat=TransferStat_Transfer;
@@ -331,7 +319,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         if(stopIt)
         {
             if(!source.empty())
-                if(exists(source))
+                if(exists(source) && source!=destination)
                     unlink(destination);
             resetExtraVariable();
             return;//and reset?
@@ -339,7 +327,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         #ifdef Q_OS_WIN32
         readError=true;
         writeError=true;
-        emit errorOnFile(source,std::string(strerror(errno)));
+        emit errorOnFile(source,TransferThread::GetLastErrorStdStr());
         #else
         if(readError)
             emit errorOnFile(source,std::string(strerror(errno)));
@@ -385,7 +373,7 @@ void TransferThreadAsync::stop()
     wait();
     start();
     if(!source.empty())
-        if(exists(source))
+        if(exists(source) && source!=destination)
             unlink(destination);
     transfer_stat=TransferStat_Idle;
     resetExtraVariable();
@@ -457,7 +445,7 @@ void TransferThreadAsync::skip()
         break;
     case TransferStat_Transfer:
         if(!source.empty())
-            if(exists(source))
+            if(exists(source) && source!=destination)
                 unlink(destination);
         break;
     case TransferStat_PostTransfer:

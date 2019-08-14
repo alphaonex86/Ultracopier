@@ -9,6 +9,7 @@
 #include "CopyEngine.h"
 #include "FolderExistsDialog.h"
 #include "../../../interface/PluginInterface_CopyEngine.h"
+#include "cpp11addition.h"
 
 // The cmath header from MSVC does not contain round()
 #if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
@@ -391,6 +392,7 @@ bool CopyEngine::haveSameDestination(const std::string &destination)
 
 bool CopyEngine::newCopy(const std::vector<std::string> &sources)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,stringimplode(sources,", "));
     if(forcedMode && mode!=Ultracopier::Copy)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
@@ -413,6 +415,7 @@ bool CopyEngine::newCopy(const std::vector<std::string> &sources)
 
 bool CopyEngine::newCopy(const std::vector<std::string> &sources,const std::string &destination)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,stringimplode(sources,", ")+" "+destination);
     if(forcedMode && mode!=Ultracopier::Copy)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to move, you can't copy with it");
@@ -424,6 +427,7 @@ bool CopyEngine::newCopy(const std::vector<std::string> &sources,const std::stri
 
 bool CopyEngine::newMove(const std::vector<std::string> &sources)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,stringimplode(sources,", "));
     if(forcedMode && mode!=Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");
@@ -446,6 +450,7 @@ bool CopyEngine::newMove(const std::vector<std::string> &sources)
 
 bool CopyEngine::newMove(const std::vector<std::string> &sources,const std::string &destination)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,stringimplode(sources,", ")+" "+destination);
     if(forcedMode && mode!=Ultracopier::Move)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"The engine is forced to copy, you can't move with it");

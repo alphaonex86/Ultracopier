@@ -100,6 +100,7 @@ public:
     static std::wstring toFinalPath(std::wstring path);
     static std::string toFinalPath(std::string path);
     static bool unlink(const std::wstring &path);
+    static std::string GetLastErrorStdStr();
     #else
     static bool unlink(const INTERNALTYPEPATH &path);
     #endif

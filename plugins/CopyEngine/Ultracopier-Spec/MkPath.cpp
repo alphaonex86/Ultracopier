@@ -173,7 +173,7 @@ void MkPath::internalDoThisPath()
         {
             if(mkFullPath)
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"TransferThread::mkpath: "+TransferThread::internalStringTostring(item.destination));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"TransferThread::mkpath: "+TransferThread::internalStringTostring(item.destination));
                 if(!TransferThread::mkpath(item.destination))
                 {
                     if(!TransferThread::is_dir(item.destination))
@@ -182,7 +182,13 @@ void MkPath::internalDoThisPath()
                             return;
                         waitAction=true;
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+
-                                                 TransferThread::internalStringTostring(item.destination)+", errno: "+std::to_string(errno));
+                                                 TransferThread::internalStringTostring(item.destination)+
+                                                 #ifdef Q_OS_WIN32
+                                                 ", LastError: "+TransferThread::GetLastErrorStdStr()
+                                                 #else
+                                                 ", errno: "+std::to_string(errno)
+                                                 #endif
+                                                 );
                         emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
                         return;
                     }
@@ -190,7 +196,7 @@ void MkPath::internalDoThisPath()
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"TransferThread::mkdir: "+TransferThread::internalStringTostring(item.destination));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"TransferThread::mkdir: "+TransferThread::internalStringTostring(item.destination));
                 if(!TransferThread::mkdir(item.destination))
                 {
                     if(!TransferThread::is_dir(item.destination))
@@ -199,7 +205,13 @@ void MkPath::internalDoThisPath()
                             return;
                         waitAction=true;
                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: "+
-                                                 TransferThread::internalStringTostring(item.destination)+", errno: "+std::to_string(errno));
+                                                 TransferThread::internalStringTostring(item.destination)+
+                                                 #ifdef Q_OS_WIN32
+                                                 ", LastError: "+TransferThread::GetLastErrorStdStr()
+                                                 #else
+                                                 ", errno: "+std::to_string(errno)
+                                                 #endif
+                                                 );
                         emit errorOnFolder(item.destination,tr("Unable to create the folder").toStdString());
                         return;
                     }
@@ -453,7 +465,7 @@ bool MkPath::rmpath(const INTERNALTYPEPATH &dir
                     )
 {
     if(!TransferThread::is_dir(dir))
-        return true;
+        return false;
     bool allHaveWork=true;
     #ifdef Q_OS_UNIX
     std::vector<TransferThread::dirent_uc> list;
@@ -500,20 +512,9 @@ bool MkPath::rmpath(const INTERNALTYPEPATH &dir
     }
     #else
     HANDLE hFind = NULL;
-    #ifdef WIDESTRING
-    WIN32_FIND_DATAW fdFile;
-    wchar_t finalpath[MAX_PATH];
-    wcscpy(finalpath,dir.c_str());
-    wcscat(finalpath,L"\\*");
-    #else
-    WIN32_FIND_DATAA fdFile;
-    char finalpath[MAX_PATH];
-    strcpy(finalpath,dir.c_str());
-    strcat(finalpath,"\\*");
-    #endif
-
     allHaveWork=true;
-    if((hFind = FindFirstFileW(finalpath, &fdFile)) == INVALID_HANDLE_VALUE)
+    WIN32_FIND_DATAW fdFile;
+    if((hFind = FindFirstFileW((TransferThread::toFinalPath(dir)+L"\\*").c_str(), &fdFile)) == INVALID_HANDLE_VALUE)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"folder list error: "+TransferThread::internalStringTostring(dir)+", errno: "+std::to_string(errno));
         return false;
@@ -571,7 +572,7 @@ bool MkPath::rmpath(const INTERNALTYPEPATH &dir
     #endif
     if(!allHaveWork)
         return false;
-    allHaveWork=TransferThread::rmdir(FSabsolutePath(dir));
+    allHaveWork=TransferThread::rmdir(dir);
     if(!allHaveWork)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to remove the folder: "+TransferThread::internalStringTostring(FSabsolutePath(dir)));
     return allHaveWork;

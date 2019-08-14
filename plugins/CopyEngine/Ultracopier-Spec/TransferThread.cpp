@@ -550,7 +550,7 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
         previouspos=lastpos;
 
         errno=0;
-        if(mkdir(pathCedit))
+        if(!mkdir(pathCedit))
             if(errno!=EEXIST && errno!=ENOENT)
                 return false;
         //here errno can be: EEXIST, ENOENT, 0
@@ -1331,6 +1331,34 @@ std::string TransferThread::toFinalPath(std::string path)
 bool TransferThread::unlink(const std::wstring &path)
 {
     return DeleteFileW(TransferThread::toFinalPath(path).c_str()) || RemoveDirectoryW(TransferThread::toFinalPath(path).c_str());
+}
+
+std::string TransferThread::GetLastErrorStdStr()
+{
+  DWORD error = GetLastError();
+  if (error)
+  {
+    LPVOID lpMsgBuf;
+    DWORD bufLen = FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        error,
+        MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+        (LPTSTR) &lpMsgBuf,
+        0, NULL );
+    if (bufLen)
+    {
+      LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
+      std::string result(lpMsgStr, lpMsgStr+bufLen);
+
+      LocalFree(lpMsgBuf);
+
+      return result+" "+std::to_string(error);
+    }
+  }
+  return std::string();
 }
 #else
 bool TransferThread::unlink(const INTERNALTYPEPATH &path)
