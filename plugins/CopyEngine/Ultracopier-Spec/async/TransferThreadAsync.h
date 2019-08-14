@@ -94,7 +94,7 @@ public slots:
     int copy(const char *from,const char *to);
     #endif
     #ifdef Q_OS_WIN32
-    void setProgression(const uint64_t &pos);
+    void setProgression(const uint64_t &pos,const uint64_t &size);
     #endif
 private:
     //ready = open + ready to operation (no error to resolv)

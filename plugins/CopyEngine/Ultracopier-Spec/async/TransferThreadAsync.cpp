@@ -241,14 +241,18 @@ DWORD CALLBACK progressRoutine(
     (void)hDestinationFile;
     (void)lpData;
 
-    static_cast<TransferThreadAsync *>(lpData)->setProgression(TotalBytesTransferred.QuadPart);
+    static_cast<TransferThreadAsync *>(lpData)->setProgression(TotalBytesTransferred.QuadPart,TotalFileSize.QuadPart);
     return PROGRESS_CONTINUE;
 }
 
-void TransferThreadAsync::setProgression(const uint64_t &pos)
+void TransferThreadAsync::setProgression(const uint64_t &pos, const uint64_t &size)
 {
     if(transfer_stat==TransferStat_Transfer)
+    {
+        if(pos==size)
+            emit readStopped();
         transferProgression=pos;
+    }
 }
 #endif
 
@@ -274,7 +278,7 @@ void TransferThreadAsync::ifCanStartTransfer()
                 #ifdef Q_OS_WIN32
                 emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
                 #else
-                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
+                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(errno));
                 #endif
                 return;
             }
@@ -288,9 +292,9 @@ void TransferThreadAsync::ifCanStartTransfer()
             if(!TransferThread::mkpath(path))
             {
                 #ifdef Q_OS_WIN32
-                emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+                emit errorOnFile(destination,tr("Unable to create the destination folder: ")+TransferThread::GetLastErrorStdStr());
                 #else
-                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
+                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(errno));
                 #endif
                 return;
             }
@@ -337,7 +341,6 @@ void TransferThreadAsync::ifCanStartTransfer()
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
-    emit readStopped();
     if(mode==Ultracopier::Move)
         if(exists(destination))
             unlink(source);
@@ -703,6 +706,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
         if(stopIt)
             return -1;
 
+        emit readStopped();
         /* Success! */
         return 0;
     }

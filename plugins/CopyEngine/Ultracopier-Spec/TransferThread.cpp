@@ -45,6 +45,7 @@ TransferThread::TransferThread() :
             regRead=std::regex("^[a-zA-Z]:");
         #endif
     #endif
+    transferSize                    = 0;//external set by ListThread
 
     #ifndef Q_OS_UNIX
     PSecurityD=NULL;
@@ -1267,7 +1268,9 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
             dirent_uc tempValue;
             tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
             tempValue.d_name=fdFile.cFileName;
-            tempValue.size=(fdFile.nFileSizeHigh*(MAXDWORD+1))+fdFile.nFileSizeLow;
+            tempValue.size=fdFile.nFileSizeHigh;
+            tempValue.size<<=32;
+            tempValue.size|=fdFile.nFileSizeLow;
             list.push_back(tempValue);
         }
     }

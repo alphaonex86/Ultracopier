@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="399"/>
-        <location filename="../../CopyEngine.cpp" line="422"/>
+        <location filename="../../CopyEngine.cpp" line="397"/>
+        <location filename="../../CopyEngine.cpp" line="419"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>El motor se ve obligado a moverse, no se puede copiar con ella</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="434"/>
-        <location filename="../../CopyEngine.cpp" line="457"/>
+        <location filename="../../CopyEngine.cpp" line="430"/>
+        <location filename="../../CopyEngine.cpp" line="452"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>El motor se ve obligado a copiar, no te puedes mover con él</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="481"/>
+        <location filename="../../CopyEngine.cpp" line="476"/>
         <source>Destination</source>
         <translation>Destino</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="481"/>
+        <location filename="../../CopyEngine.cpp" line="476"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>Utilice el destino &quot;%1&quot; actual?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="637"/>
+        <location filename="../../CopyEngine.cpp" line="632"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>El modo se ha visto obligado previamente. Este es un error interno, por favor repórtelo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="895"/>
+        <location filename="../../CopyEngine.cpp" line="890"/>
+        <location filename="../../CopyEngine.cpp" line="893"/>
         <location filename="../../CopyEngine.cpp" line="898"/>
-        <location filename="../../CopyEngine.cpp" line="903"/>
-        <location filename="../../CopyEngine.cpp" line="907"/>
+        <location filename="../../CopyEngine.cpp" line="902"/>
         <source>Ask</source>
         <translation>Pedir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="896"/>
-        <location filename="../../CopyEngine.cpp" line="900"/>
-        <location filename="../../CopyEngine.cpp" line="904"/>
-        <location filename="../../CopyEngine.cpp" line="908"/>
+        <location filename="../../CopyEngine.cpp" line="891"/>
+        <location filename="../../CopyEngine.cpp" line="895"/>
+        <location filename="../../CopyEngine.cpp" line="899"/>
+        <location filename="../../CopyEngine.cpp" line="903"/>
         <source>Skip</source>
         <translation>Omitir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="899"/>
+        <location filename="../../CopyEngine.cpp" line="894"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="901"/>
-        <location filename="../../CopyEngine.cpp" line="913"/>
+        <location filename="../../CopyEngine.cpp" line="896"/>
+        <location filename="../../CopyEngine.cpp" line="908"/>
         <source>Rename</source>
         <translation>Cambiar el nombre</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="905"/>
+        <location filename="../../CopyEngine.cpp" line="900"/>
         <source>Put at the end</source>
         <translation>Ponga al final</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="909"/>
+        <location filename="../../CopyEngine.cpp" line="904"/>
         <source>Overwrite</source>
         <translation>Sobrescribir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="910"/>
+        <location filename="../../CopyEngine.cpp" line="905"/>
         <source>Overwrite if different</source>
         <translation>Sobrescribir si es diferente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="911"/>
+        <location filename="../../CopyEngine.cpp" line="906"/>
         <source>Overwrite if newer</source>
         <translation>Sobrescribir si nuevo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="912"/>
+        <location filename="../../CopyEngine.cpp" line="907"/>
         <source>Overwrite if older</source>
         <translation>Sobrescribir si es mayor</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="983"/>
+        <location filename="../../CopyEngine.cpp" line="978"/>
         <source>Options error</source>
         <translation>error Opciones</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="983"/>
+        <location filename="../../CopyEngine.cpp" line="978"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Opciones del motor no está cargado. No es posible acceder a los filtros</translation>
     </message>
@@ -471,34 +471,34 @@
 <context>
     <name>MkPath</name>
     <message>
-        <location filename="../../MkPath.cpp" line="192"/>
-        <location filename="../../MkPath.cpp" line="215"/>
+        <location filename="../../MkPath.cpp" line="186"/>
+        <location filename="../../MkPath.cpp" line="203"/>
         <source>Unable to create the folder</source>
         <translation>No se puede crear la carpeta</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="232"/>
+        <location filename="../../MkPath.cpp" line="220"/>
         <source>The source folder don&apos;t exists</source>
         <translation>La carpeta de origen no existe</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="260"/>
+        <location filename="../../MkPath.cpp" line="248"/>
         <source>Unable to temporary rename the folder</source>
         <translation>No es posible cambiar el nombre de la carpeta temporal</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="283"/>
+        <location filename="../../MkPath.cpp" line="271"/>
         <source>Unable to do the final real move the folder</source>
         <translation>No se puede hacer el movimiento final real de la carpeta</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="312"/>
+        <location filename="../../MkPath.cpp" line="300"/>
         <source>Unable to move the folder</source>
         <translation>No se puede mover la carpeta</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="129"/>
-        <location filename="../../MkPath.cpp" line="390"/>
+        <location filename="../../MkPath.cpp" line="378"/>
         <source>Unable to remove</source>
         <translation>No se puede eliminar</translation>
     </message>
@@ -566,19 +566,19 @@
         <translation>%1 - copia (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="539"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="541"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="544"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="546"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - copia</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="550"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="552"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="555"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="557"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - copia (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="608"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="613"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -619,18 +619,6 @@
     <message>
         <location filename="../../async/TransferThreadAsync.cpp" line="202"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="275"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="291"/>
-        <source>Unable to create the destination folder: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="277"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="293"/>
-        <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
