@@ -219,6 +219,7 @@ public:
     void setDefaultDestinationFolder(const std::string &defaultDestinationFolder);
     void defaultDestinationFolderBrowse();
     std::string askDestination();
+    static std::string stringimplode(const std::vector<std::string>& elems, const std::string &delim);
 public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface

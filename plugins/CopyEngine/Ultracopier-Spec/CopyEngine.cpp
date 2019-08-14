@@ -9,7 +9,6 @@
 #include "CopyEngine.h"
 #include "FolderExistsDialog.h"
 #include "../../../interface/PluginInterface_CopyEngine.h"
-#include "cpp11addition.h"
 
 // The cmath header from MSVC does not contain round()
 #if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
@@ -388,6 +387,19 @@ bool CopyEngine::haveSameSource(const std::vector<std::string> &sources)
 bool CopyEngine::haveSameDestination(const std::string &destination)
 {
     return listThread->haveSameDestination(destination);
+}
+
+std::string CopyEngine::stringimplode(const std::vector<std::string>& elems, const std::string &delim)
+{
+    std::string newString;
+    for (std::vector<std::string>::const_iterator ii = elems.begin(); ii != elems.cend(); ++ii)
+    {
+        newString += (*ii);
+        if ( ii + 1 != elems.end() ) {
+            newString += delim;
+        }
+    }
+    return newString;
 }
 
 bool CopyEngine::newCopy(const std::vector<std::string> &sources)

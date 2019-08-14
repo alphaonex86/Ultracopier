@@ -278,7 +278,7 @@ void TransferThreadAsync::ifCanStartTransfer()
                 #ifdef Q_OS_WIN32
                 emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
                 #else
-                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(errno));
+                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
                 #endif
                 return;
             }
@@ -294,7 +294,7 @@ void TransferThreadAsync::ifCanStartTransfer()
                 #ifdef Q_OS_WIN32
                 emit errorOnFile(destination,tr("Unable to create the destination folder: ")+TransferThread::GetLastErrorStdStr());
                 #else
-                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(errno));
+                emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
                 #endif
                 return;
             }
