@@ -156,59 +156,59 @@ private slots:
     void newActionInProgess(Ultracopier::EngineActionInProgress);
     void haveNeedPutAtBottom(bool needPutAtBottom, const INTERNALTYPEPATH &fileInfo, const std::string &errorString, TransferThreadAsync *thread, const ErrorType &errorType);
     void missingDiskSpace(std::vector<Diskspace> list);
-    void exportErrorIntoTransferList();
+    void exportErrorIntoTransferList() override;
 public:
     /** \brief to send the options panel
      * \return return false if have not the options
      * \param tempWidget the widget to generate on it the options */
-    bool getOptionsEngine(QWidget * tempWidget);
+    bool getOptionsEngine(QWidget * tempWidget) override;
     /** \brief to have interface widget to do modal dialog
      * \param interface to have the widget of the interface, useful for modal dialog */
-    void setInterfacePointer(QWidget * uiinterface);
+    void setInterfacePointer(QWidget * uiinterface) override;
     //return empty if multiple
     /** \brief compare the current sources of the copy, with the passed arguments
      * \param sources the sources list to compares with the current sources list
      * \return true if have same sources, else false (or empty) */
-    bool haveSameSource(const std::vector<std::string> &sources);
+    bool haveSameSource(const std::vector<std::string> &sources) override;
     /** \brief compare the current destination of the copy, with the passed arguments
      * \param destination the destination to compares with the current destination
      * \return true if have same destination, else false (or empty) */
-    bool haveSameDestination(const std::string &destination);
+    bool haveSameDestination(const std::string &destination) override;
     //external soft like file browser have send copy/move list to do
     /** \brief send copy without destination, ask the destination
      * \param sources the sources list to copy
      * \return true if the copy have been accepted */
-    bool newCopy(const std::vector<std::string> &sources);
+    bool newCopy(const std::vector<std::string> &sources) override;
     /** \brief send copy with destination
      * \param sources the sources list to copy
      * \param destination the destination to copy
      * \return true if the copy have been accepted */
-    bool newCopy(const std::vector<std::string> &sources,const std::string &destination);
+    bool newCopy(const std::vector<std::string> &sources,const std::string &destination) override;
     /** \brief send move without destination, ask the destination
      * \param sources the sources list to move
      * \return true if the move have been accepted */
-    bool newMove(const std::vector<std::string> &sources);
+    bool newMove(const std::vector<std::string> &sources) override;
     /** \brief send move without destination, ask the destination
      * \param sources the sources list to move
      * \param destination the destination to move
      * \return true if the move have been accepted */
-    bool newMove(const std::vector<std::string> &sources,const std::string &destination);
+    bool newMove(const std::vector<std::string> &sources,const std::string &destination) override;
     /** \brief send the new transfer list
      * \param file the transfer list */
-    void newTransferList(const std::string &file);
+    void newTransferList(const std::string &file) override;
 
     /** \brief to get byte read, use by Ultracopier for the speed calculation
      * real size transfered to right speed calculation */
-    uint64_t realByteTransfered();
+    uint64_t realByteTransfered() override;
     /** \brief support speed limitation */
-    bool supportSpeedLimitation() const;
+    bool supportSpeedLimitation() const override;
 
     /** \brief to set drives detected
      * specific to this copy engine */
 
     /** \brief to sync the transfer list
      * Used when the interface is changed, useful to minimize the memory size */
-    void syncTransferList();
+    void syncTransferList() override;
 
     void set_setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions);
     void setRenamingRules(std::string firstRenamingRule,std::string otherRenamingRule);
@@ -224,47 +224,47 @@ public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface
      * Used by manual adding */
-    bool userAddFolder(const Ultracopier::CopyMode &mode);
+    bool userAddFolder(const Ultracopier::CopyMode &mode) override;
     /** \brief add file called on the interface
      * Used by manual adding */
-    bool userAddFile(const Ultracopier::CopyMode &mode);
+    bool userAddFile(const Ultracopier::CopyMode &mode) override;
     //action on the copy
     /// \brief put the transfer in pause
-    void pause();
+    void pause() override;
     /// \brief resume the transfer
-    void resume();
+    void resume() override;
     /** \brief skip one transfer entry
      * \param id id of the file to remove */
-    void skip(const uint64_t &id);
+    void skip(const uint64_t &id) override;
     /// \brief cancel all the transfer
-    void cancel();
+    void cancel() override;
     //edit the transfer list
     /** \brief remove the selected item
      * \param ids ids is the id list of the selected items */
-    void removeItems(const std::vector<uint64_t> &ids);
+    void removeItems(const std::vector<uint64_t> &ids) override;
     /** \brief move on top of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnTop(const std::vector<uint64_t> &ids);
+    void moveItemsOnTop(const std::vector<uint64_t> &ids) override;
     /** \brief move up the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsUp(const std::vector<uint64_t> &ids);
+    void moveItemsUp(const std::vector<uint64_t> &ids) override;
     /** \brief move down the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsDown(const std::vector<uint64_t> &ids);
+    void moveItemsDown(const std::vector<uint64_t> &ids) override;
     /** \brief move on bottom of the list the selected item
      * \param ids ids is the id list of the selected items */
-    void moveItemsOnBottom(const std::vector<uint64_t> &ids);
+    void moveItemsOnBottom(const std::vector<uint64_t> &ids) override;
 
     /** \brief give the forced mode, to export/import transfer list */
-    void forceMode(const Ultracopier::CopyMode &mode);
+    void forceMode(const Ultracopier::CopyMode &mode) override;
     /// \brief export the transfer list into a file
-    void exportTransferList();
+    void exportTransferList() override;
     /// \brief import the transfer list into a file
-    void importTransferList();
+    void importTransferList() override;
 
     /** \brief to set the speed limitation
      * -1 if not able, 0 if disabled */
-    bool setSpeedLimitation(const int64_t &speedLimitation);
+    bool setSpeedLimitation(const int64_t &speedLimitation) override;
 
     // specific to this copy engine
 

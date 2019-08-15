@@ -61,52 +61,52 @@ public:
     ~Themes();
     //send information about the copy
     /// \brief to set the action in progress
-    void actionInProgess(const Ultracopier::EngineActionInProgress &);
+    void actionInProgess(const Ultracopier::EngineActionInProgress &) override;
     /// \brief the new folder is listing
-    void newFolderListing(const std::string &path);
+    void newFolderListing(const std::string &path) override;
     /** \brief show the detected speed
      * in byte per seconds */
-    void detectedSpeed(const uint64_t &speed);
+    void detectedSpeed(const uint64_t &speed) override;
     /** \brief show the remaining time
      * time in seconds */
-    void remainingTime(const int &remainingSeconds);
+    void remainingTime(const int &remainingSeconds) override;
     /// \brief set the current collision action
     void newCollisionAction(const std::string &action);
     /// \brief set the current error action
     void newErrorAction(const std::string &action);
     /// \brief set one error is detected
-    void errorDetected();
+    void errorDetected() override;
     /// \brief new error
-    void errorToRetry(const std::string &source,const std::string &destination,const std::string &error);
+    void errorToRetry(const std::string &source,const std::string &destination,const std::string &error) override;
     /** \brief support speed limitation */
-    void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool);
+    void setSupportSpeedLimitation(const bool &supportSpeedLimitationBool) override;
     //get information about the copy
     /// \brief show the general progression
-    void setGeneralProgression(const uint64_t &current,const uint64_t &total);
+    void setGeneralProgression(const uint64_t &current,const uint64_t &total) override;
     /// \brief show the file progression
-    void setFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList);
+    void setFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList) override;
     /// \brief set the copyType -> file or folder
-    void setCopyType(const Ultracopier::CopyType &);
+    void setCopyType(const Ultracopier::CopyType &) override;
     /// \brief set the copyMove -> copy or move, to force in copy or move, else support both
-    void forceCopyMode(const Ultracopier::CopyMode &);
+    void forceCopyMode(const Ultracopier::CopyMode &) override;
     /// \brief set if transfer list is exportable/importable
-    void setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation);
+    void setTransferListOperation(const Ultracopier::TransferListOperation &transferListOperation) override;
     //edit the transfer list
     /// \brief get action on the transfer list (add/move/remove)
-    void getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &returnActions);
+    void getActionOnList(const std::vector<Ultracopier::ReturnActionOnCopyList> &returnActions) override;
     /** \brief set if the order is external (like file manager copy)
      * to notify the interface, which can hide add folder/filer button */
-    void haveExternalOrder();
+    void haveExternalOrder() override;
     /// to get by file speed, size and ms
-    void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList);
+    void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList) override;
     /// \brief set if is in pause
-    void isInPause(const bool &);
+    void isInPause(const bool &) override;
     /// \brief set if have pause
-    void havePause(const bool &);
+    void havePause(const bool &) override;
     /// \brief get the widget for the copy engine
-    QWidget * getOptionsEngineWidget();
+    QWidget * getOptionsEngineWidget() override;
     /// \brief to set if the copy engine is found
-    void getOptionsEngineEnabled(const bool &isEnabled);
+    void getOptionsEngineEnabled(const bool &isEnabled) override;
     enum status{status_never_started,status_started,status_stopped};
     status stat;
 
@@ -177,7 +177,7 @@ private:
     void updateCurrentFileInformation();
     QMenu *menu;
     Ultracopier::EngineActionInProgress action;
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
     int32_t currentSpeed;///< in KB/s, assume as 0KB/s as default like every where
     void updateSpeed();
     bool storeIsInPause;

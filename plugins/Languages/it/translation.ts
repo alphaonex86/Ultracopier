@@ -690,12 +690,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="257"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="258"/>
         <source>Error</source>
         <translation type="unfinished">Errore</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="257"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="258"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -880,12 +880,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="233"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="234"/>
         <source>Error</source>
         <translation type="unfinished">Errore</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="233"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="234"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2120,25 +2120,24 @@ da: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="198"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="486"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="711"/>
-        <source>File not found</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="457"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="478"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="464"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="711"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="747"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="507"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="732"/>
+        <source>File not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="732"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="768"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>

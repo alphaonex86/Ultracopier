@@ -27,8 +27,8 @@ OptionDialog::OptionDialog() :
     oSSpecific=NULL;
     ui->setupUi(this);
     ui->treeWidget->topLevelItem(0)->setSelected(true);
-    ui->treeWidget->topLevelItem(4)->setTextColor(0,QColor(150, 150, 150, 255));
-    ui->treeWidget->topLevelItem(5)->setTextColor(0,QColor(150, 150, 150, 255));
+    ui->treeWidget->topLevelItem(4)->setForeground(0,QColor(150, 150, 150, 255));
+    ui->treeWidget->topLevelItem(5)->setForeground(0,QColor(150, 150, 150, 255));
     ui->treeWidget->expandAll();
     ui->pluginList->expandAll();
     number_of_listener=0;

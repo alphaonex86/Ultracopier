@@ -50,24 +50,24 @@ public:
     CopyEngineFactory();
     ~CopyEngineFactory();
     /// \brief to return the instance of the copy engine
-    PluginInterface_CopyEngine * getInstance();
+    PluginInterface_CopyEngine * getInstance() override;
     /// \brief set the resources, to store options, to have facilityInterface
     void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
     //get mode allowed
     /// \brief define if can copy file, folder or both
-    Ultracopier::CopyType getCopyType();
+    Ultracopier::CopyType getCopyType() override;
     /// \brief to return which kind of transfer list operation is supported
-    Ultracopier::TransferListOperation getTransferListOperation();
+    Ultracopier::TransferListOperation getTransferListOperation() override;
     /// \brief define if can only copy, or copy and move
-    bool canDoOnlyCopy() const;
+    bool canDoOnlyCopy() const override;
     /// \brief to get the supported protocols for the source
-    std::vector<std::string> supportedProtocolsForTheSource() const;
+    std::vector<std::string> supportedProtocolsForTheSource() const override;
     /// \brief to get the supported protocols for the destination
-    std::vector<std::string> supportedProtocolsForTheDestination() const;
+    std::vector<std::string> supportedProtocolsForTheDestination() const override;
     /// \brief to get the options of the copy engine
-    QWidget * options();
+    QWidget * options() override;
     /// \brief to get if have pause
-    bool havePause();
+    bool havePause() override;
 
 private:
     Ui::copyEngineOptions *ui;
@@ -112,8 +112,8 @@ private slots:
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
 public slots:
-    void resetOptions();
-    void newLanguageLoaded();
+    void resetOptions() override;
+    void newLanguageLoaded() override;
 signals:
     void reloadLanguage() const;
 };

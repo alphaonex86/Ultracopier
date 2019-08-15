@@ -26,24 +26,24 @@ class Listener : public PluginInterface_Listener
 public:
     Listener();
     /// \brief try listen the copy/move
-    void listen();
+    void listen() override;
     /// \brief stop listen to copy/move
-    void close();
+    void close() override;
     /// \brief return the error strong
-    const std::string errorString() const;
+    const std::string errorString() const override;
     /// \brief set resources for this plugins
-    void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,const bool &portableVersion);
+    void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,const bool &portableVersion) override;
     /// \brief to get the options widget, NULL if not have
-    QWidget * options();
+    QWidget * options() override;
     /// \brief to get a client list
-    std::vector<std::string> clientsList() const;
+    std::vector<std::string> clientsList() const override;
 public slots:
     /// \brief say to the client that's the copy/move is finished
-    void transferFinished(const uint32_t &orderId,const bool &withError);
+    void transferFinished(const uint32_t &orderId,const bool &withError) override;
     /// \brief say to the client that's the copy/move is finished
-    void transferCanceled(const uint32_t &orderId);
+    void transferCanceled(const uint32_t &orderId) override;
     /// \brief to reload the translation, because the new language have been loaded
-    void newLanguageLoaded();
+    void newLanguageLoaded() override;
 private:
     ServerCatchcopy server;
 private slots:

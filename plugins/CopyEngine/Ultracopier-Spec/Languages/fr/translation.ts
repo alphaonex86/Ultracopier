@@ -218,12 +218,12 @@
         <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="257"/>
+        <location filename="../../FileExistsDialog.cpp" line="258"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="257"/>
+        <location filename="../../FileExistsDialog.cpp" line="258"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -408,12 +408,12 @@
         <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="233"/>
+        <location filename="../../FolderExistsDialog.cpp" line="234"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="233"/>
+        <location filename="../../FolderExistsDialog.cpp" line="234"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -586,9 +586,8 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="198"/>
-        <location filename="../../TransferThread.cpp" line="486"/>
-        <location filename="../../TransferThread.cpp" line="711"/>
+        <location filename="../../TransferThread.cpp" line="507"/>
+        <location filename="../../TransferThread.cpp" line="732"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
@@ -598,18 +597,18 @@
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="457"/>
+        <location filename="../../TransferThread.cpp" line="478"/>
         <source>%name% - copy</source>
         <translation>%name% - copie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="464"/>
+        <location filename="../../TransferThread.cpp" line="485"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="711"/>
-        <location filename="../../TransferThread.cpp" line="747"/>
+        <location filename="../../TransferThread.cpp" line="732"/>
+        <location filename="../../TransferThread.cpp" line="768"/>
         <source>Unable to change the date</source>
         <translation>Impossible de changer la date</translation>
     </message>

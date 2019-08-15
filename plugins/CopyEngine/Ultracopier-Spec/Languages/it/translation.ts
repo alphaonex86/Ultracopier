@@ -218,12 +218,12 @@
         <translation type="unfinished">Copia di %name% (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="257"/>
+        <location filename="../../FileExistsDialog.cpp" line="258"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="257"/>
+        <location filename="../../FileExistsDialog.cpp" line="258"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -411,12 +411,12 @@
         <translation type="unfinished">Copia di %name% (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="233"/>
+        <location filename="../../FolderExistsDialog.cpp" line="234"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="233"/>
+        <location filename="../../FolderExistsDialog.cpp" line="234"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -592,9 +592,8 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="198"/>
-        <location filename="../../TransferThread.cpp" line="486"/>
-        <location filename="../../TransferThread.cpp" line="711"/>
+        <location filename="../../TransferThread.cpp" line="507"/>
+        <location filename="../../TransferThread.cpp" line="732"/>
         <source>File not found</source>
         <translation>File non trovato</translation>
     </message>
@@ -604,18 +603,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="457"/>
+        <location filename="../../TransferThread.cpp" line="478"/>
         <source>%name% - copy</source>
         <translation type="unfinished">Copia di %name%</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="464"/>
+        <location filename="../../TransferThread.cpp" line="485"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">Copia di %name% (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="711"/>
-        <location filename="../../TransferThread.cpp" line="747"/>
+        <location filename="../../TransferThread.cpp" line="732"/>
+        <location filename="../../TransferThread.cpp" line="768"/>
         <source>Unable to change the date</source>
         <translation type="unfinished">Impossibile cambiare la data</translation>
     </message>

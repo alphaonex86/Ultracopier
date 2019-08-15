@@ -46,11 +46,11 @@ public:
                   #ifdef ULTRACOPIER_PLUGIN_DEBUG
                   pluginPath
                   #endif
-                  ,FacilityInterface * facilityEngine,const bool &portableVersion);
+                  ,FacilityInterface * facilityEngine,const bool &portableVersion) override;
     /// \brief to get the default options widget
-    QWidget * options();
+    QWidget * options() override;
     /// \brief to get a resource icon
-    QIcon getIcon(const std::string &fileName) const;
+    QIcon getIcon(const std::string &fileName) const override;
 private slots:
     void checkBoxShowSpeedHaveChanged(bool toggled);
     void checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled);
@@ -73,8 +73,8 @@ private slots:
     void savePositionHaveChanged(bool checked);
     void setDark(bool toggled);
 public slots:
-    void resetOptions();
-    void newLanguageLoaded();
+    void resetOptions() override;
+    void newLanguageLoaded() override;
 private:
     OptionInterface * optionsEngine;
     Ui::themesOptions *ui;
