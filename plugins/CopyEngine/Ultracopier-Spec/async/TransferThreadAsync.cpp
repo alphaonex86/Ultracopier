@@ -275,6 +275,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         if(!is_dir(path))
             if(!TransferThread::mkpath(path))
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path));
                 #ifdef Q_OS_WIN32
                 emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
                 #else
@@ -291,6 +292,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         if(!is_dir(path))
             if(!TransferThread::mkpath(path))
             {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+path);
                 #ifdef Q_OS_WIN32
                 emit errorOnFile(destination,tr("Unable to create the destination folder: ")+TransferThread::GetLastErrorStdStr());
                 #else

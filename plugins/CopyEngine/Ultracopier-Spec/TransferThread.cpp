@@ -1332,6 +1332,8 @@ int64_t TransferThread::transferTime() const
 #ifdef Q_OS_WIN32
 std::wstring TransferThread::toFinalPath(std::wstring path)
 {
+    if(path.size()==2 && path.at(1)==L':')
+        path+=L"\\";
     stringreplaceAll(path,L"/",L"\\");
     std::wstring pathW;
     if(path.size()>2 && path.substr(0,2)==L"\\\\")//nas
@@ -1343,6 +1345,8 @@ std::wstring TransferThread::toFinalPath(std::wstring path)
 
 std::string TransferThread::toFinalPath(std::string path)
 {
+    if(path.size()==2 && path.at(1)==':')
+        path+="\\";
     stringreplaceAll(path,"/","\\");
     std::string pathW;
     if(path.size()>2 && path.substr(0,2)=="\\\\")//nas
