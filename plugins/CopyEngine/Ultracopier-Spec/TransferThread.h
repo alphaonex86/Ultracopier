@@ -121,7 +121,7 @@ public:
     struct dirent_uc
     {
         #ifdef Q_OS_WIN32
-        size_t size;
+        int64_t size;
         #endif
         INTERNALTYPEPATH d_name;
         bool isFolder;
