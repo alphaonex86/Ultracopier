@@ -36,7 +36,7 @@ public:
     ThemesFactory();
     ~ThemesFactory();
     /// \brief to return the instance of the copy engine
-    PluginInterface_Themes * getInstance();
+    PluginInterface_Themes * getInstance() override;
     /// \brief set the resources, to store options, to have facilityInterface
     void setResources(OptionInterface * optionsEngine,const std::string &
                   #ifdef ULTRACOPIER_PLUGIN_DEBUG

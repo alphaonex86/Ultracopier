@@ -52,7 +52,8 @@ public:
     /// \brief to return the instance of the copy engine
     PluginInterface_CopyEngine * getInstance() override;
     /// \brief set the resources, to store options, to have facilityInterface
-    void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,FacilityInterface * facilityInterface,const bool &portableVersion);
+    void setResources(OptionInterface * options,const std::string &writePath,const std::string &pluginPath,
+                      FacilityInterface * facilityInterface,const bool &portableVersion) override;
     //get mode allowed
     /// \brief define if can copy file, folder or both
     Ultracopier::CopyType getCopyType() override;

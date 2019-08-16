@@ -221,16 +221,16 @@ private:
     void dragMoveEvent(QDragMoveEvent* event);
     void dragLeaveEvent(QDragLeaveEvent* event);
     */
-    void dropEvent(QDropEvent *event);
+    void dropEvent(QDropEvent *event) override;
     /** \brief accept all event to allow the drag and drop
       \see dropEvent() */
-    void dragEnterEvent(QDragEnterEvent* event);
+    void dragEnterEvent(QDragEnterEvent* event) override;
     /** \brief accept all event to allow the drag and drop
       \see dropEvent() */
-    void dragMoveEvent(QDragMoveEvent* event);
+    void dragMoveEvent(QDragMoveEvent* event) override;
     /** \brief accept all event to allow the drag and drop
       \see dropEvent() */
-    void dragLeaveEvent(QDragLeaveEvent* event);
+    void dragLeaveEvent(QDragLeaveEvent* event) override;
     //have functionality
     bool shutdown;
     ProgressBarDark * progressBar_all;

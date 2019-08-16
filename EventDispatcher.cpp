@@ -142,24 +142,16 @@ EventDispatcher::EventDispatcher()
             #ifdef Q_OS_WIN32
             const int typeint=GetDriveTypeA(mountedVolumesList.at(index).rootPath().toStdString().c_str());
             std::string type("Unknown type ("+std::to_string(typeint)+")");
-            switch()
+            switch(typeint)
             {
-            case 0: type="Cannot be determined";
-            break;
-            case 1: type="Invalid root path/Not available";
-            break;
-            case 2: type="Removable";
-            break;
-            case 3: type="Fixed";
-            break;
-            case 4: type="Network";
-            break;
-            case 5: type="CD-ROM";
-            break;
-            case 6: type="RAMDISK";
-            break;
-            default:
-                break;
+            case 0: type="Cannot be determined";break;
+            case 1: type="Invalid root path/Not available";break;
+            case 2: type="Removable";break;
+            case 3: type="Fixed";break;
+            case 4: type="Network";break;
+            case 5: type="CD-ROM";break;
+            case 6: type="RAMDISK";break;
+            default:break;
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"mountSysPoint: "+mountedVolumesList.at(index).rootPath().toStdString()+" "+type);
             #else
