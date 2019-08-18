@@ -11,5 +11,7 @@
         <file>Languages/en/translation.qm</file>
         <file>options.png</file>
         <file>warning.png</file>
+        <file>ultracopier-oxygen.png</file>
+        <file>ultracopier-oxygen2.png</file>
     </qresource>
 </RCC>

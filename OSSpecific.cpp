@@ -9,6 +9,11 @@ OSSpecific::OSSpecific(QWidget *parent) :
     if(!QIcon::fromTheme(QStringLiteral("dialog-warning")).isNull())
         setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
     updateText();
+    #if defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || defined(ULTRACOPIER_MODE_SUPERCOPIER)
+    ui->widgetStyle->setVisible(false);
+    updateGeometry();
+    adjustSize();
+    #endif
 }
 
 OSSpecific::~OSSpecific()
@@ -20,7 +25,7 @@ void OSSpecific::updateText()
 {
     QString text;
     #if defined(Q_OS_LINUX)
-    text=tr("The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).<br />Ask the developer to support it.<br />You need do the copy/move manually.");
+    text=tr("The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).<br />Ask the developer of you file manager to support it.<br />You need do the copy/move manually.");
     #elif defined(Q_OS_WIN32)
     text=tr("Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).");
     #elif defined(Q_OS_MAC)
@@ -52,7 +57,29 @@ bool OSSpecific::dontShowAgain()
     return ui->dontShowAgain->isChecked();
 }
 
+QString OSSpecific::theme()
+{
+    #if defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || defined(ULTRACOPIER_MODE_SUPERCOPIER)
+    return "modern";
+    #else
+    if(ui->radioButtonModern->isChecked())
+        return "modern";
+    else
+        return "classic";
+    #endif
+}
+
 void OSSpecific::on_pushButton_clicked()
 {
     close();
+}
+
+void OSSpecific::on_radioButtonClassic_toggled(bool checked)
+{
+    ui->radioButtonModern->setChecked(!checked);
+}
+
+void OSSpecific::on_radioButtonModern_toggled(bool checked)
+{
+    ui->radioButtonClassic->setChecked(!checked);
 }

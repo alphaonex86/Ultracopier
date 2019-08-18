@@ -17,9 +17,12 @@ public:
     explicit OSSpecific(QWidget *parent = 0);
     ~OSSpecific();
     bool dontShowAgain();
+    QString theme();
 private slots:
     void on_pushButton_clicked();
     void updateText();
+    void on_radioButtonClassic_toggled(bool checked);
+    void on_radioButtonModern_toggled(bool checked);
 protected slots:
     void changeEvent(QEvent *e);
 private:

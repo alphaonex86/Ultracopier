@@ -466,6 +466,8 @@ void OptionDialog::oSSpecificClosed()
         return;
     if(oSSpecific->dontShowAgain())
         OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific","false");
+    if(oSSpecific->theme()=="classic")
+        OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme","Oxygen");
     delete oSSpecific;
     oSSpecific=NULL;
 }
