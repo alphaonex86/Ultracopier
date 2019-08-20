@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>276</height>
+    <width>731</width>
+    <height>413</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>750</width>
+    <width>380</width>
     <height>0</height>
    </size>
   </property>
@@ -32,7 +32,10 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QWidget" name="widgetStyle" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -46,9 +49,22 @@
        <number>0</number>
       </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="label_2">
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="themePreview">
           <property name="minimumSize">
            <size>
             <width>360</width>
@@ -67,47 +83,66 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButtonClassic">
-          <property name="text">
-           <string>Classic</string>
+         <spacer name="horizontalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QLabel" name="label_3">
-          <property name="minimumSize">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>360</width>
-            <height>150</height>
+            <width>40</width>
+            <height>20</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>360</width>
-            <height>150</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="resources/ultracopier-resources.qrc">:/ultracopier-oxygen2.png</pixmap>
-          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>Classic</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Modern</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Supercopier</string>
+           </property>
+          </item>
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButtonModern">
-          <property name="text">
-           <string>Modern</string>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="checked">
-           <bool>true</bool>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
           </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </item>

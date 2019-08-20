@@ -21,8 +21,7 @@ public:
 private slots:
     void on_pushButton_clicked();
     void updateText();
-    void on_radioButtonClassic_toggled(bool checked);
-    void on_radioButtonModern_toggled(bool checked);
+    void on_comboBox_currentIndexChanged(int index);
 protected slots:
     void changeEvent(QEvent *e);
 private:

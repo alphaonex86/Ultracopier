@@ -10,10 +10,11 @@ OSSpecific::OSSpecific(QWidget *parent) :
         setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
     updateText();
     #if defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || defined(ULTRACOPIER_MODE_SUPERCOPIER)
+    setMinimumWidth(0);
     ui->widgetStyle->setVisible(false);
+    #endif
     updateGeometry();
     adjustSize();
-    #endif
 }
 
 OSSpecific::~OSSpecific()
@@ -62,10 +63,15 @@ QString OSSpecific::theme()
     #if defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || defined(ULTRACOPIER_MODE_SUPERCOPIER)
     return "modern";
     #else
-    if(ui->radioButtonModern->isChecked())
-        return "modern";
-    else
+    switch (ui->themePreview->currentIndex()) {
+    default:
+    case 0:
         return "classic";
+    case 1:
+        return "modern";
+    case 2:
+        return "supercopier";
+    }
     #endif
 }
 
@@ -74,12 +80,19 @@ void OSSpecific::on_pushButton_clicked()
     close();
 }
 
-void OSSpecific::on_radioButtonClassic_toggled(bool checked)
+void OSSpecific::on_comboBox_currentIndexChanged(int index)
 {
-    ui->radioButtonModern->setChecked(!checked);
-}
-
-void OSSpecific::on_radioButtonModern_toggled(bool checked)
-{
-    ui->radioButtonClassic->setChecked(!checked);
+    switch(index)
+    {
+        default:
+        case 0:
+        ui->themePreview->setPixmap(QPixmap(":/ultracopier-oxygen.png"));
+        break;
+        case 1:
+        ui->themePreview->setPixmap(QPixmap(":/ultracopier-oxygen2.png"));
+        break;
+        case 2:
+        ui->themePreview->setPixmap(QPixmap(":/ultracopier-supercopier.png"));
+        break;
+    }
 }

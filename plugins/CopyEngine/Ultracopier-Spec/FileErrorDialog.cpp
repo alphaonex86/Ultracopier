@@ -21,6 +21,17 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
     ui->setupUi(this);
     action=FileError_Cancel;
     ui->label_error->setText(QString::fromStdString(errorString));
+#ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA fileInfoW;
+    if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&fileInfoW))
+    {
+        uint64_t mdate=fileInfoW.ftLastWriteTime.dwHighDateTime;
+        mdate<<=32;
+        mdate|=fileInfoW.ftLastWriteTime.dwLowDateTime;
+        uint64_t size=fileInfoW.nFileSizeHigh;
+        size<<=32;
+        size|=fileInfoW.nFileSizeLow;
+#else
     struct stat p_statbuf;
     if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
     {
@@ -34,6 +45,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         uint64_t mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
         #endif
         const uint64_t size=p_statbuf.st_size;
+#endif
         ui->label_content_file_name->setText(
                     QString::fromStdString(
                         TransferThread::resolvedName(
@@ -66,7 +78,11 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
             ui->label_modified->setVisible(false);
             ui->label_content_modified->setVisible(false);
         }
+        #ifdef Q_OS_WIN32
+        if(fileInfoW.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        #else
         if(p_statbuf.st_mode==S_IFDIR)
+        #endif
         {
             this->setWindowTitle(tr("Error on folder"));
             ui->label_size->hide();

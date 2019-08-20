@@ -316,7 +316,7 @@ void TransferThreadAsync::ifCanStartTransfer()
     else
         successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
                        COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/// | 0x00001000/*COPY_FILE_NO_BUFFERING*/
-                       )==0;
+                       );
     if(!successFull)
 #else
     bool successFull=false;
@@ -349,7 +349,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         #ifdef Q_OS_WIN32
         readError=true;
         writeError=true;
-        emit errorOnFile(source,strError);
+        emit errorOnFile(destination,strError);
         #else
         if(readError)
             emit errorOnFile(source,strError);

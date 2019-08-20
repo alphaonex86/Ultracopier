@@ -35,6 +35,17 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, INTERNALTYPEPATH fileInfo,
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_folder->setText(QString::fromStdString(folder));
     updateRenameButton();
+#ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA fileInfoW;
+    if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&fileInfoW))
+    {
+        uint64_t mdate=fileInfoW.ftLastWriteTime.dwHighDateTime;
+        mdate<<=32;
+        mdate|=fileInfoW.ftLastWriteTime.dwLowDateTime;
+        uint64_t size=fileInfoW.nFileSizeHigh;
+        size<<=32;
+        size|=fileInfoW.nFileSizeLow;
+#else
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(fileInfo).c_str(), &source_statbuf)==0)
@@ -52,6 +63,7 @@ FileIsSameDialog::FileIsSameDialog(QWidget *parent, INTERNALTYPEPATH fileInfo,
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
         const uint64_t size=source_statbuf.st_size;
+#endif
         ui->label_content_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         ui->label_content_size->setVisible(true);
         if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS<mdate)

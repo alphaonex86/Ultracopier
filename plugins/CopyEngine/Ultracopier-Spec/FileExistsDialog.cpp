@@ -43,6 +43,17 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         folder=folder.substr(0,38)+"..."+folder.substr(folder.size()-38);
     ui->label_content_destination_folder->setText(QString::fromStdString(folder));
     //QDateTime maxTime(QDate(ULTRACOPIER_PLUGIN_MINIMALYEAR,1,1));
+#ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA sourceW;
+    if(GetFileAttributesExW(source.c_str(),GetFileExInfoStandard,&sourceW))
+    {
+        uint64_t mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+        mdate<<=32;
+        mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+        uint64_t size=sourceW.nFileSizeHigh;
+        size<<=32;
+        size|=sourceW.nFileSizeLow;
+#else
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
@@ -60,6 +71,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
         const uint64_t size=source_statbuf.st_size;
+#endif
         ui->label_source_modified->setVisible(true);
         ui->label_content_source_size->setVisible(true);
         ui->label_content_source_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
@@ -75,6 +87,17 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         ui->label_source_modified->setVisible(false);
         ui->label_content_source_modified->setVisible(false);
     }
+#ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA destinationW;
+    if(GetFileAttributesExW(destination.c_str(),GetFileExInfoStandard,&destinationW))
+    {
+        uint64_t mdate=destinationW.ftLastWriteTime.dwHighDateTime;
+        mdate<<=32;
+        mdate|=destinationW.ftLastWriteTime.dwLowDateTime;
+        uint64_t size=destinationW.nFileSizeHigh;
+        size<<=32;
+        size|=destinationW.nFileSizeLow;
+#else
     struct stat destination_statbuf;
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(destination).c_str(), &destination_statbuf)==0)
@@ -92,6 +115,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
         #endif
         const uint64_t size=destination_statbuf.st_size;
+#endif
         ui->label_destination_modified->setVisible(true);
         ui->label_content_destination_size->setVisible(true);
         ui->label_content_destination_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));

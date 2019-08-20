@@ -28,6 +28,17 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     oldName=TransferThread::resolvedName(TransferThread::internalStringTostring(destination));
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
+#ifdef Q_OS_WIN32
+    WIN32_FILE_ATTRIBUTE_DATA fileInfoW;
+    if(GetFileAttributesExW(source.c_str(),GetFileExInfoStandard,&fileInfoW))
+    {
+        uint64_t mdate=fileInfoW.ftLastWriteTime.dwHighDateTime;
+        mdate<<=32;
+        mdate|=fileInfoW.ftLastWriteTime.dwLowDateTime;
+        uint64_t size=fileInfoW.nFileSizeHigh;
+        size<<=32;
+        size|=fileInfoW.nFileSizeLow;
+#else
     struct stat source_statbuf;
     #ifdef Q_OS_UNIX
     if(lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
@@ -44,6 +55,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         #else
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
+#endif
         ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
     }
     else
