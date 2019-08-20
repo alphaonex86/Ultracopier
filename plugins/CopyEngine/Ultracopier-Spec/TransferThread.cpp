@@ -237,8 +237,15 @@ void TransferThread::setFileRename(const std::string &nameForRename)
 
 bool TransferThread::rename(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination)
 {
+    #ifdef Q_OS_WIN32
+    return MoveFileExW(
+                        TransferThread::toFinalPath(source).c_str(),
+                        TransferThread::toFinalPath(destination).c_str(),
+                        MOVEFILE_REPLACE_EXISTING);
+    #else
     return ::rename(TransferThread::internalStringTostring(source).c_str(),
                     TransferThread::internalStringTostring(destination).c_str())==0;
+    #endif
 }
 
 void TransferThread::setAlwaysFileExistsAction(const FileExistsAction &action)
@@ -675,8 +682,15 @@ bool TransferThread::mkdir(const INTERNALTYPEPATH &file_path)
 #ifdef Q_OS_WIN32
     const bool r = CreateDirectory(TransferThread::toFinalPath(file_path).c_str(),NULL);
     const DWORD &t=GetLastError();
-    if(!r && t==183/*is_dir(file_path) performance impact*/)
-        errno=EEXIST;
+    if(!r)
+    {
+        if(t==183/*is_dir(file_path) performance impact*/)
+            errno=EEXIST;
+        else if(t==3/*is_dir(file_path) performance impact*/)
+            errno=ENOENT;
+        else
+            errno=t;
+    }
     return r;
 #else
     #ifdef Q_OS_UNIX
@@ -1151,7 +1165,7 @@ bool TransferThread::exists(const INTERNALTYPEPATH &filename)
     DWORD dwAttrib = GetFileAttributesW(TransferThread::toFinalPath(filename).c_str());
     return dwAttrib != INVALID_FILE_ATTRIBUTES;
     #else
-    return is_dir(TransferThread::internalStringTostring(filename).c_str());
+    return exists(TransferThread::internalStringTostring(filename).c_str());
     #endif
 }
 
@@ -1367,23 +1381,20 @@ std::string TransferThread::GetLastErrorStdStr()
   if (error)
   {
     LPVOID lpMsgBuf;
-    DWORD bufLen = FormatMessage(
+    DWORD bufLen = FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         error,
         MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
-        (LPTSTR) &lpMsgBuf,
+        (LPSTR) &lpMsgBuf,
         0, NULL );
     if (bufLen)
     {
-      LPCSTR lpMsgStr = (LPCSTR)lpMsgBuf;
-      std::string result(lpMsgStr, lpMsgStr+bufLen);
-
+      std::string result((char *)lpMsgBuf, (int)bufLen);
       LocalFree(lpMsgBuf);
-
-      return result+" "+std::to_string(error);
+      return result+" ("+std::to_string(error)+")";
     }
   }
   return std::string();

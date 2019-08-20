@@ -305,11 +305,20 @@ void MkPath::internalDoThisPath()
                 if(stopIt)
                     return;
                 waitAction=true;
+                #ifdef Q_OS_WIN32
+                const std::string &strError=TransferThread::GetLastErrorStdStr();
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+TransferThread::internalStringTostring(item.source)+", soruce exists: "+
                                          std::to_string(TransferThread::is_dir(item.source))+", to: "+TransferThread::internalStringTostring(item.destination)
-                                         +", destination exist: "+std::to_string(TransferThread::is_dir(item.destination))
+                                         +", destination exist: "+std::to_string(TransferThread::is_dir(item.destination))+": "+strError
                                          );
-                emit errorOnFolder(item.destination,tr("Unable to move the folder").toStdString());
+                emit errorOnFolder(item.destination,tr("Unable to move the folder").toStdString()+": "+strError);
+                #else
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Unable to make the folder: from: "+TransferThread::internalStringTostring(item.source)+", soruce exists: "+
+                                         std::to_string(TransferThread::is_dir(item.source))+", to: "+TransferThread::internalStringTostring(item.destination)
+                                         +", destination exist: "+std::to_string(TransferThread::is_dir(item.destination))+": "+std::to_string(errno)
+                                         );
+                emit errorOnFolder(item.destination,tr("Unable to move the folder: errno: %1").arg(errno).toStdString());
+                #endif
                 return;
             }
         }

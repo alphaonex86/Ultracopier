@@ -22,13 +22,18 @@ DriveManagement::DriveManagement()
 /// \todo do network drive support for windows
 std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
 {
-    const std::string &inode=QDir::toNativeSeparators(QString::fromStdString(fileOrFolder)).toStdString();
-    int size=mountSysPoint.size();
-    for (int i = 0; i < size; ++i) {
-        if(stringStartWith(inode,mountSysPoint.at(i)))
-            return QDir::toNativeSeparators(QString::fromStdString(mountSysPoint.at(i))).toStdString();
-    }
+    const std::string &inode=fileOrFolder;
     #ifdef Q_OS_WIN32
+    //optimized to windows version:
+    if(fileOrFolder.size()>=3)
+    {
+        if(fileOrFolder.at(1)==L':' && (fileOrFolder.at(2)==L'\\' || fileOrFolder.at(2)==L'/'))
+        {
+            char driveLetter=toupper(fileOrFolder.at(0));
+            return driveLetter+std::string(":/");
+        }
+    }
+
     if(std::regex_match(fileOrFolder,reg1))
     {
         std::string returnString=fileOrFolder;
@@ -41,6 +46,12 @@ std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
         std::string returnString=fileOrFolder;
         std::regex_replace(returnString,reg4,"$1");
         return QDir::toNativeSeparators(QString::fromStdString(returnString)).toUpper().toStdString();
+    }
+    #else
+    int size=mountSysPoint.size();
+    for (int i = 0; i < size; ++i) {
+        if(stringStartWith(inode,mountSysPoint.at(i)))
+            return mountSysPoint.at(i);
     }
     #endif
     //if unable to locate the right mount point

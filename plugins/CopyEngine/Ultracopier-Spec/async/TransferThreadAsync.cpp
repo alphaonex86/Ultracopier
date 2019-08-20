@@ -304,21 +304,37 @@ void TransferThreadAsync::ifCanStartTransfer()
     #endif
     transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
+    bool realMove=(mode==Ultracopier::Move && driveManagement.isSameDrive(
+                       internalStringTostring(source),
+                       internalStringTostring(destination)
+                       ));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
 #ifdef Q_OS_WIN32
-    if(CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
-                   COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/ | 0x00001000/*COPY_FILE_NO_BUFFERING*/
-                   )==0)
+    BOOL successFull;
+    if(realMove)
+        successFull=TransferThread::rename(source,destination);
+    else
+        successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
+                       COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/// | 0x00001000/*COPY_FILE_NO_BUFFERING*/
+                       )==0;
+    if(!successFull)
 #else
+    bool successFull=false;
     readError=false;
     writeError=false;
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
-    if(copy(TransferThread::internalStringTostring(source).c_str(),TransferThread::internalStringTostring(destination).c_str())<0)
+    if(realMove)
+        successFull=TransferThread::rename(source,destination);
+    else
+        successFull=copy(TransferThread::internalStringTostring(source).c_str(),TransferThread::internalStringTostring(destination).c_str());
+    if(!successFull)
 #endif
     {
         #ifdef Q_OS_WIN32
+        const std::string &strError=TransferThread::GetLastErrorStdStr();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
                                  GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination));
         #else
+        const std::string &strError=strerror(errno);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
                                  TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination));
         #endif
@@ -333,17 +349,17 @@ void TransferThreadAsync::ifCanStartTransfer()
         #ifdef Q_OS_WIN32
         readError=true;
         writeError=true;
-        emit errorOnFile(source,TransferThread::GetLastErrorStdStr());
+        emit errorOnFile(source,strError);
         #else
         if(readError)
-            emit errorOnFile(source,std::string(strerror(errno)));
+            emit errorOnFile(source,strError);
         else
-            emit errorOnFile(destination,std::string(strerror(errno)));
+            emit errorOnFile(destination,strError);
         #endif
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
-    if(mode==Ultracopier::Move)
+    if(mode==Ultracopier::Move && !realMove)
         if(exists(destination))
             unlink(source);
     transfer_stat=TransferStat_PostTransfer;
@@ -629,7 +645,7 @@ void TransferThreadAsync::setFileExistsAction(const FileExistsAction &action)
 }
 
 #ifndef Q_OS_WIN32
-int TransferThreadAsync::copy(const char *from,const char *to)
+bool TransferThreadAsync::copy(const char *from,const char *to)
 {
     transferProgression=0;
     int fd_to, fd_from;
@@ -641,7 +657,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
     if (fd_from < 0)
     {
         readError=true;
-        return -1;
+        return false;
     }
     #ifdef Q_OS_LINUX
     posix_fadvise(fd_from, 0, 0, POSIX_FADV_WILLNEED);
@@ -667,7 +683,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
         {
             close(fd_to);
             close(fd_from);
-            return -1;
+            return false;
         }
         char *out_ptr = buf;
         ssize_t nwritten;
@@ -678,7 +694,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
             {
                 close(fd_to);
                 close(fd_from);
-                return -1;
+                return false;
             }
 
             if (nwritten >= 0)
@@ -710,7 +726,7 @@ int TransferThreadAsync::copy(const char *from,const char *to)
 
         emit readStopped();
         /* Success! */
-        return 0;
+        return true;
     }
 
   out_error:
@@ -721,6 +737,6 @@ int TransferThreadAsync::copy(const char *from,const char *to)
         close(fd_to);
 
     errno = saved_errno;
-    return -1;
+    return false;
 }
 #endif

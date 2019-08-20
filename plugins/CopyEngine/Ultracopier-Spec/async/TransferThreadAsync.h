@@ -91,7 +91,7 @@ public slots:
     void setFileExistsAction(const FileExistsAction &action);
     #ifndef Q_OS_WIN32
     //fake copy for no win32
-    int copy(const char *from,const char *to);
+    bool copy(const char *from,const char *to);
     #endif
     #ifdef Q_OS_WIN32
     void setProgression(const uint64_t &pos,const uint64_t &size);
