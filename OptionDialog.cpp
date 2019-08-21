@@ -402,7 +402,7 @@ void OptionDialog::loadOption()
     newOptionValue("Ultracopier",	"ActionOnManualOpen",		OptionEngine::optionEngine->getOptionValue("Ultracopier","ActionOnManualOpen"));
     newOptionValue("Ultracopier",	"GroupWindowWhen",          OptionEngine::optionEngine->getOptionValue("Ultracopier","GroupWindowWhen"));
     newOptionValue("Ultracopier",	"confirmToGroupWindows",    OptionEngine::optionEngine->getOptionValue("Ultracopier","confirmToGroupWindows"));
-    newOptionValue("Ultracopier",	"displayOSSpecific",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific"));
+    newOptionValue("Ultracopier",	"displayOSSpecific2",		OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific2"));
     newOptionValue("Ultracopier",	"checkTheUpdate",           OptionEngine::optionEngine->getOptionValue("Ultracopier","checkTheUpdate"));
     newOptionValue("Ultracopier",	"remainingTimeAlgorithm",   OptionEngine::optionEngine->getOptionValue("Ultracopier","remainingTimeAlgorithm"));
     newOptionValue("Ultracopier",	"portable",                 OptionEngine::optionEngine->getOptionValue("Ultracopier","portable"));
@@ -449,7 +449,7 @@ void OptionDialog::loadOption()
     allPluginsIsLoaded=true;
     on_Ultracopier_current_theme_currentIndexChanged(ui->Ultracopier_current_theme->currentIndex());
 
-    if(stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific")))
+    if(stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","displayOSSpecific2")))
     {
         if(!quit)
         {
@@ -465,9 +465,11 @@ void OptionDialog::oSSpecificClosed()
     if(oSSpecific==NULL)
         return;
     if(oSSpecific->dontShowAgain())
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific","false");
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific2","false");
     if(oSSpecific->theme()=="classic")
         OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme","Oxygen");
+    else if(oSSpecific->theme()=="supercopier")
+        OptionEngine::optionEngine->setOptionValue("Themes","Ultracopier_current_theme","Supercopier");
     delete oSSpecific;
     oSSpecific=NULL;
 }
@@ -589,7 +591,7 @@ void OptionDialog::newOptionValue(const std::string &group,const std::string &na
             ui->GroupWindowWhen->setCurrentIndex(stringtoint32(value));
         else if(name=="confirmToGroupWindows")
             ui->confirmToGroupWindows->setChecked(stringtobool(value));
-        else if(name=="displayOSSpecific")
+        else if(name=="displayOSSpecific2")
             ui->DisplayOSWarning->setChecked(stringtobool(value));
         else if(name=="checkTheUpdate")
             ui->checkTheUpdate->setChecked(stringtobool(value));
@@ -992,7 +994,7 @@ void OptionDialog::on_DisplayOSWarning_clicked()
     if(allPluginsIsLoaded)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
-        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific",booltostring(ui->DisplayOSWarning->isChecked()));
+        OptionEngine::optionEngine->setOptionValue("Ultracopier","displayOSSpecific2",booltostring(ui->DisplayOSWarning->isChecked()));
     }
 }
 

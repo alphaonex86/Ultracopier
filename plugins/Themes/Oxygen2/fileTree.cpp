@@ -60,7 +60,10 @@ QUrl File::url(const Folder *root) const
 
 void Folder::append(File *p)
 {
-    files.push_back(p);
+    if(p->isFolder())
+        folders[p->name()]=static_cast<Folder *>(p);
+    else
+        onlyFiles.push_back(p);
     Folder *d = this;
     while(d != nullptr) {
         d->m_children++;
@@ -88,23 +91,38 @@ void Folder::append(Folder *d)
 }
 
 ///appends a File
-void Folder::append(const std::string &name, FileSize size)
+void Folder::append(const std::string &name, uint64_t size)
 {
     append(new File(name, size, this));
 }
 
 /// removes a file
 void Folder::remove(const File *f) {
+    bool found=false;
     uint64_t sizeToRemove=0;
-    for (unsigned int i = 0; i < files.size();)
+    for(const auto& n : folders)
     {
-        if(files.at(i)==f)
+        Folder * folder=n.second;
+        if(f==folder)
         {
-            delete f;
             sizeToRemove+=f->size();
+            found=true;
+            break;
         }
-        else
-            i++;
+    }
+    if(!found)
+    {
+        for (unsigned int i = 0; i < onlyFiles.size();)
+        {
+            if(onlyFiles.at(i)==f)
+            {
+                delete f;
+                sizeToRemove+=f->size();
+                break;
+            }
+            else
+                i++;
+        }
     }
     Folder *d = this;
     while(d != nullptr) {

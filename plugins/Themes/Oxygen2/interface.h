@@ -202,6 +202,7 @@ private:
     ChartArea::Widget *chartarea;
     bool darkUi;
     bool m_havePause;
+    QPixmap background;
 
     static QIcon player_play,player_pause,tempExitIcon,editDelete,skinIcon,editFind,documentOpen,documentSave,listAdd;
     static bool iconLoaded;
@@ -245,6 +246,7 @@ private:
     void updateSysTrayIcon();
     void resizeEvent(QResizeEvent*) override;
     uint8_t fileCatNumber(uint64_t size);
+    void paintEvent(QPaintEvent *event) override;
 
     #ifdef Q_OS_WIN32
     QWinTaskbarProgress winTaskbarProgress;

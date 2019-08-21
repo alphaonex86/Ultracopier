@@ -76,7 +76,7 @@ void RadialMap::Map::make(const Folder *tree, bool refresh)
         //**** this is a mess
 
         delete [] m_signature;
-        m_signature = new QList<Segment*>[m_visibleDepth + 1];
+        m_signature = new std::vector<Segment*>[m_visibleDepth + 1];
 
         m_root = tree;
 
@@ -143,9 +143,11 @@ void RadialMap::Map::findVisibleDepth(const Folder *dir, uint currentDepth)
     if (m_visibleDepth < currentDepth) m_visibleDepth = currentDepth;
     if (m_visibleDepth >= stopDepth) return;
 
-    for (File *file : dir->files) {
-        if (file->isFolder() && file->size() > m_minSize) {
-            findVisibleDepth((Folder *)file, currentDepth + 1); //if no files greater than min size the depth is still recorded
+    for(const auto& n : dir->folders)
+    {
+        Folder * folder=n.second;
+        if (folder->size() > m_minSize) {
+            findVisibleDepth(folder, currentDepth + 1); //if no files greater than min size the depth is still recorded
         }
     }
 }
@@ -158,33 +160,38 @@ bool RadialMap::Map::build(const Folder * const dir, const uint depth, uint a_st
     if (dir->children() == 0) //we do fileCount rather than size to avoid chance of divide by zero later
         return false;
 
-    FileSize hiddenSize = 0;
+    uint64_t hiddenSize = 0;
     uint hiddenFileCount = 0;
 
-    for (File *file : dir->files) {
-        if (file->size() < m_limits[depth] * 6) { // limit is half a degree? we want at least 3 degrees
-            hiddenSize += file->size();
-            if (file->isFolder()) { //**** considered virtual, but dir wouldn't count itself!
-                hiddenFileCount += static_cast<const Folder*>(file)->children(); //need to add one to count the dir as well
-            }
+    for(const auto& n : dir->folders)
+    {
+        Folder * folder=n.second;
+        if (folder->size() < m_limits[depth] * 6) { // limit is half a degree? we want at least 3 degrees
+            hiddenSize += folder->size();
+            hiddenFileCount += folder->children(); //need to add one to count the dir as well
             ++hiddenFileCount;
             continue;
         }
-
-        unsigned int a_len = (unsigned int)(5760 * ((double)file->size() / (double)m_root->size()));
-
-        Segment *s = new Segment(file, a_start, a_len);
-        m_signature[depth].append(s);
-
-        if (file->isFolder()) {
-            if (depth != m_visibleDepth) {
-                //recurse
-                s->m_hasHiddenChildren = build((Folder*)file, depth + 1, a_start, a_start + a_len);
-            } else {
-                s->m_hasHiddenChildren = true;
-            }
+        unsigned int a_len = (unsigned int)(5760 * ((double)folder->size() / (double)m_root->size()));
+        Segment *s = new Segment(folder, a_start, a_len);
+        m_signature[depth].push_back(s);
+        if (depth != m_visibleDepth) {
+            //recurse
+            s->m_hasHiddenChildren = build(folder, depth + 1, a_start, a_start + a_len);
+        } else {
+            s->m_hasHiddenChildren = true;
         }
-
+        a_start += a_len; //**** should we add 1?
+    }
+    for (File *file : dir->onlyFiles) {
+        if (file->size() < m_limits[depth] * 6) { // limit is half a degree? we want at least 3 degrees
+            hiddenSize += file->size();
+            ++hiddenFileCount;
+            continue;
+        }
+        unsigned int a_len = (unsigned int)(5760 * ((double)file->size() / (double)m_root->size()));
+        Segment *s = new Segment(file, a_start, a_len);
+        m_signature[depth].push_back(s);
         a_start += a_len; //**** should we add 1?
     }
 
@@ -199,7 +206,7 @@ bool RadialMap::Map::build(const Folder * const dir, const uint depth, uint a_st
                 .arg(QString::number(hiddenSize/hiddenFileCount));
 
 
-        (m_signature + depth)->append(new Segment(new File(s.toUtf8().constData(), hiddenSize), a_start, a_end - a_start, true));
+        (m_signature + depth)->push_back(new Segment(new File(s.toUtf8().constData(), hiddenSize), a_start, a_end - a_start, true));
     }
 
     return false;
@@ -249,8 +256,8 @@ bool RadialMap::Map::resize(const QRect &rect)
 
 void RadialMap::Map::colorise()
 {
-    if (!m_signature || m_signature->isEmpty()) {
-        qDebug() << "no signature yet";
+    if (!m_signature || m_signature->empty()) {
+        //std::cerr << "no signature yet" << std::endl;
         return;
     }
 
@@ -304,7 +311,7 @@ void RadialMap::Map::paint(bool antialias)
         return;
 
     if (!paint.begin(&m_pixmap)) {
-        qWarning() << "Filelight::RadialMap Failed to initialize painting, returning...";
+        //qWarning() << "Filelight::RadialMap Failed to initialize painting, returning...";
         return;
     }
 

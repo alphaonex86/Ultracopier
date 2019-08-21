@@ -174,15 +174,9 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
     else
         name=subPath.substr(0,n);
     //search
-    unsigned int search=0;
-    while(search<tree->files.size())
-    {
-        if(tree->files.at(search)->name()==name)
-            break;
-        search++;
-    }
+    auto search = tree->folders.find(name);
     Folder * folder=nullptr;
-    if(search>=tree->files.size())
+    if(search == tree->folders.end())
     {
         //append or remplace the existing
         if(oldTree!=NULL && (n+1)==subPath.size())
@@ -199,7 +193,7 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
     else
     {
         //create a new leaf
-        File * file=tree->files.at(search);
+        File * file=search->second;
         if(!file->isFolder())
             return nullptr;
         folder=static_cast<Folder *>(file);
@@ -277,19 +271,26 @@ uint64_t TransferModel::checkIntegrity(const Folder * const tree)
 {
     uint64_t size=0;
     unsigned int index=0;
-    while(index<tree->files.size())
+    while(index<tree->onlyFiles.size())
     {
-        File * file=tree->files.at(index);
+        File * file=tree->onlyFiles.at(index);
         if(file->parent()!=tree)
         {
             std::cerr << "tree parrent corrupted" << std::endl;
             abort();
         }
-        if(file->isFolder())
-            size+=checkIntegrity(static_cast<Folder *>(file));
-        else
-            size+=file->size();
+        size+=file->size();
         index++;
+    }
+    for(const auto& n : tree->folders)
+    {
+        Folder * folder=n.second;
+        if(folder->parent()!=tree)
+        {
+            std::cerr << "tree parrent corrupted" << std::endl;
+            abort();
+        }
+        size+=checkIntegrity(folder);
     }
     if(size!=tree->size())
     {

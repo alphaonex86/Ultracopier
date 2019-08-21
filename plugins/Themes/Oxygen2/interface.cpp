@@ -308,7 +308,7 @@ Themes::Themes(const bool &alwaysOnTop,
 
     if(darkUi)
     {
-        ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");
+        //ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");
         ui->labelTimeRemaining->setStyleSheet("color:#fff;");
         ui->labelSPStart->setStyleSheet("color:#aaa;");
         ui->labelSPStop->setStyleSheet("color:#aaa;");
@@ -1958,4 +1958,33 @@ uint8_t Themes::fileCatNumber(uint64_t size)
     if(rlog>5)
         return 5;
     return rlog;
+}
+
+void Themes::paintEvent(QPaintEvent * event)
+{
+    if(darkUi)
+    {
+        if(background.width()!=width() || background.height()!=height())
+        {
+            int minimal=height();
+            if(width()<height())
+                minimal=width();
+
+            QPixmap temp(minimal,minimal);
+            QPainter paint;
+            paint.begin(&temp);
+
+            QRadialGradient radialGrad(QPointF(minimal/2,minimal/2), minimal/2);
+            radialGrad.setColorAt(0, QColor(70, 70, 70));
+            radialGrad.setColorAt(1, QColor(40, 40, 40));
+            QRect rect_radial(0,0,minimal,minimal);
+            paint.fillRect(rect_radial, radialGrad);
+            background=temp.scaled(width(),height(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+        }
+        QPainter paint;
+        paint.begin(this);
+        paint.drawPixmap(0,0,background.width(),    background.height(),    background);
+    }
+    else
+        QWidget::paintEvent(event);
 }

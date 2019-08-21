@@ -25,14 +25,12 @@
 
 #include <QByteArray> //qstrdup
 #include <QFile> //decodeName()
-#include <QDebug>
 #include <QLocale>
+#include <unordered_map>
+#include <string>
 
 #include <stdlib.h>
 #include "../../../interface/FacilityInterface.h"
-
-typedef quint64 FileSize;
-typedef quint64 Dirsize;  //**** currently unused
 
 class Folder;
 
@@ -43,8 +41,8 @@ public:
     static FacilityInterface *facilityEngine;
 
 public:
-    File(const std::string &name, FileSize size) : m_parent(nullptr), m_name(name), m_size(size) {}
-    File(const std::string &name, FileSize size, Folder * parent) : m_parent(parent), m_name(name), m_size(size) {}
+    File(const std::string &name, uint64_t size) : m_parent(nullptr), m_name(name), m_size(size) {}
+    File(const std::string &name, uint64_t size, Folder * parent) : m_parent(parent), m_name(name), m_size(size) {}
     virtual ~File() {
     }
 
@@ -69,7 +67,7 @@ public:
      */
     QString displayName() const;
 
-    FileSize size() const {
+    uint64_t size() const {
         return m_size;
     }
 
@@ -90,11 +88,11 @@ public:
     QUrl url(const Folder *root = nullptr) const;
 
 protected:
-    File(const char *name, FileSize size, Folder *parent) : m_parent(parent), m_name(qstrdup(name)), m_size(size) {}
+    File(const char *name, uint64_t size, Folder *parent) : m_parent(parent), m_name(qstrdup(name)), m_size(size) {}
 
     Folder *m_parent; //0 if this is treeRoot
     std::string m_name;//speed boost with std::string in compare with char * due to string size defined without read all
-    FileSize   m_size;   //in units of KiB
+    uint64_t   m_size;   //in Bytes
 
 private:
     File(const File&);
@@ -118,16 +116,15 @@ public:
     void append(Folder *d, const std::string &name);
     void append(Folder *d);
     ///appends a File
-    void append(const std::string &name, FileSize size);
+    void append(const std::string &name, uint64_t size);
     /// removes a file
     void remove(const File *f);
-    std::vector<File *> files;
-
+    std::unordered_map<std::string,Folder *> folders;
+    std::vector<File *> onlyFiles;
 private:
     void append(File *p);
 
     uint m_children;
-
 private:
     Folder(const Folder&); //undefined
     void operator=(const Folder&); //undefined

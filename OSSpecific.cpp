@@ -26,7 +26,7 @@ void OSSpecific::updateText()
 {
     QString text;
     #if defined(Q_OS_LINUX)
-    text=tr("The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).<br />Ask the developer of you file manager to support it.<br />You need do the copy/move manually.");
+    text=tr("The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).<br />Ask the developer of your file manager to support it.<br />You need do the copy/move manually.");
     #elif defined(Q_OS_WIN32)
     text=tr("Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).");
     #elif defined(Q_OS_MAC)
