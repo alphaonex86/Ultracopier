@@ -97,17 +97,21 @@ protected:
 
 private:
     void paintExplodedLabels(QPainter&) const;
+    void updateCache();
 
     const Folder *m_tree;
     const Segment   *m_focus;
     QPoint           m_offset;
     QTimer           m_timer;
+    QTimer           m_updateCache;
     Map              m_map;
     Segment          *m_rootSegment;
     const Segment    *m_toBeDeleted;
     QLabel           m_tooltip;
     bool            dark;
     int minFontPitch;
+    QPixmap cache;
+    bool newData;
 };
 }
 

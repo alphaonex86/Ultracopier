@@ -48,9 +48,12 @@ RadialMap::Widget::Widget(const bool dark, QWidget *parent)
 
     connect(this, &Widget::folderCreated, this, &Widget::sendFakeMouseEvent);
     connect(&m_timer, &QTimer::timeout, this, &Widget::resizeTimeout);
+    m_updateCache.start(100);
+    connect(&m_updateCache, &QTimer::timeout, this, &Widget::updateCache);
     m_tooltip.setFrameShape(QFrame::StyledPanel);
     m_tooltip.setWindowFlags(Qt::ToolTip | Qt::WindowTransparentForInput);
     this->dark=dark;
+    newData=false;
 }
 
 RadialMap::Widget::~Widget()
@@ -72,6 +75,7 @@ QUrl RadialMap::Widget::url(File const * const file) const
 
 void RadialMap::Widget::invalidate()
 {
+    newData=true;
     if (isValid())
     {
         //**** have to check that only way to invalidate is this function frankly
@@ -103,6 +107,7 @@ void RadialMap::Widget::invalidate()
 void
 RadialMap::Widget::create(const Folder *tree)
 {
+    newData=true;
     //it is not the responsibility of create() to invalidate first
     //skip invalidation at your own risk
 
@@ -152,7 +157,18 @@ RadialMap::Widget::resizeTimeout() //slot
     m_focus = nullptr;
     if (m_tree)
         m_map.make(m_tree, true);
-    update();
+    updateCache();
+}
+
+void
+RadialMap::Widget::updateCache()
+{
+    if(newData)
+    {
+        newData=false;
+        cache=QPixmap();
+        update();
+    }
 }
 
 void

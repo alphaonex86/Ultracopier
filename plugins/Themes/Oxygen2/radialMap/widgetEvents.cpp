@@ -50,64 +50,74 @@ void RadialMap::Widget::resizeEvent(QResizeEvent*)
 
 void RadialMap::Widget::paintEvent(QPaintEvent*)
 {
-    QPainter paint;
-    paint.begin(this);
-
-    if (!m_map.isNull())
+    if(cache.isNull() || cache.width()!=width() || cache.height()!=height())
     {
-        QPixmap p(m_map.pixmap());
+        QImage temp(width(),height(),QImage::Format_ARGB32);
+        temp.fill(Qt::transparent);
+        QPainter paint;
+        paint.begin(&temp);
 
-        int margin=((p.width() < p.height()) ? p.width() : p.height())/50;
-        if(margin<1)
-            margin=1;
-        paint.setRenderHint(QPainter::Antialiasing);
-        QRect rect = p.rect();
-        rect.moveTo(m_offset);
-        rect.adjust(-margin, -margin, margin, margin);
-        paint.setPen(QColor(200,200,200));
-        paint.setBrush(QColor(255,255,255));
-        paint.drawEllipse(rect);
-        paint.setPen(QColor(0,0,0));
-
-        paint.drawPixmap(m_offset,p);
-    }
-    else
-    {
-        const unsigned int w=width();
-        const unsigned int h=height();
-        unsigned int min=w;
-        unsigned int x=0;
-        unsigned int y=0;
-        if(h<w)
+        if (!m_map.isNull())
         {
-            min=h;
-            x=(width()-min)/2;
+            QPixmap p(m_map.pixmap());
+
+            int margin=((p.width() < p.height()) ? p.width() : p.height())/50;
+            if(margin<1)
+                margin=1;
+            paint.setRenderHint(QPainter::Antialiasing);
+            QRect rect = p.rect();
+            rect.moveTo(m_offset);
+            rect.adjust(-margin, -margin, margin, margin);
+            paint.setPen(QColor(200,200,200));
+            paint.setBrush(QColor(255,255,255));
+            paint.drawEllipse(rect);
+            paint.setPen(QColor(0,0,0));
+
+            paint.drawPixmap(m_offset,p);
         }
         else
-            y=(height()-min)/2;
+        {
+            const unsigned int w=width();
+            const unsigned int h=height();
+            unsigned int min=w;
+            unsigned int x=0;
+            unsigned int y=0;
+            if(h<w)
+            {
+                min=h;
+                x=(width()-min)/2;
+            }
+            else
+                y=(height()-min)/2;
 
-        paint.setRenderHint(QPainter::Antialiasing);
-        QRect rect(x,y,min,min);
-        //rect.moveTo(m_offset);
-        paint.setPen(QColor(200,200,200));
-        paint.setBrush(QColor(255,255,255));
-        paint.drawEllipse(rect);
-        paint.setPen(QColor(0,0,0));
-
-        paint.drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, "...");
-        return;
-    }
-
-    //exploded labels
-    if (!m_map.isNull() && !m_timer.isActive())
-    {
-        if (true) {
             paint.setRenderHint(QPainter::Antialiasing);
-            //make lines appear on pixel boundaries
-            paint.translate(0.5, 0.5);
+            QRect rect(x,y,min,min);
+            //rect.moveTo(m_offset);
+            paint.setPen(QColor(200,200,200));
+            paint.setBrush(QColor(255,255,255));
+            paint.drawEllipse(rect);
+            paint.setPen(QColor(0,0,0));
+
+            paint.drawText(rect, Qt::AlignHCenter | Qt::AlignVCenter, "...");
+            return;
         }
-        paintExplodedLabels(paint);
+
+        //exploded labels
+        if (!m_map.isNull() && !m_timer.isActive())
+        {
+            if (true) {
+                paint.setRenderHint(QPainter::Antialiasing);
+                //make lines appear on pixel boundaries
+                paint.translate(0.5, 0.5);
+            }
+            paintExplodedLabels(paint);
+        }
+
+        cache=QPixmap::fromImage(temp);
     }
+    QPainter paint;
+    paint.begin(this);
+    paint.drawPixmap(0,0,cache.width(),    cache.height(),    cache);
 }
 
 const RadialMap::Segment* RadialMap::Widget::segmentAt(QPoint &e) const
