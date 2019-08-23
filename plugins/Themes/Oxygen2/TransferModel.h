@@ -76,7 +76,8 @@ public:
     Folder * tree;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     //check the integrity of tree
-    uint64_t checkIntegrity(const Folder * const tree);
+    uint64_t checkIntegrityChildren(const Folder * const tree);
+    uint64_t checkIntegritySize(const Folder * const tree);
     #endif
 protected:
     std::vector<TransfertItem> transfertItemList;///< To have a transfer list for the user

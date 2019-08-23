@@ -167,6 +167,7 @@ bool TransferModel::setData( const QModelIndex& index, const QVariant& value, in
 Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &subPath,Folder * const oldTree)
 {
     const std::string::size_type n=subPath.find('/');
+
     //isolate the name
     std::string name;
     if(n == std::string::npos)
@@ -187,7 +188,11 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
         else
             folder=new Folder(name);
         if(!folder->isFolder())
+        {
+            if(oldTree!=NULL)
+                abort();
             return nullptr;
+        }
         tree->append(folder);
     }
     else
@@ -201,7 +206,7 @@ Folder * TransferModel::appendToTreeR(Folder * const tree, const std::string &su
     if(n == std::string::npos || n+1==subPath.size())
         return folder;
     else
-        return appendToTreeR(folder,subPath.substr(n+1));
+        return appendToTreeR(folder,subPath.substr(n+1),oldTree);
 }
 
 void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
@@ -261,13 +266,14 @@ void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
     }
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     //check the integrity of tree
-    checkIntegrity(tree);
+    checkIntegrityChildren(tree);
+    checkIntegritySize(tree);
     #endif
 }
 
 #ifdef ULTRACOPIER_PLUGIN_DEBUG
-//check the integrity of tree
-uint64_t TransferModel::checkIntegrity(const Folder * const tree)
+//check the integrity of tree size
+uint64_t TransferModel::checkIntegritySize(const Folder * const tree)
 {
     uint64_t size=0;
     unsigned int index=0;
@@ -290,7 +296,7 @@ uint64_t TransferModel::checkIntegrity(const Folder * const tree)
             std::cerr << "tree parrent corrupted" << std::endl;
             abort();
         }
-        size+=checkIntegrity(folder);
+        size+=checkIntegritySize(folder);
     }
     if(size!=tree->size())
     {
@@ -298,6 +304,29 @@ uint64_t TransferModel::checkIntegrity(const Folder * const tree)
         abort();
     }
     return tree->size();
+}
+
+//check the integrity of tree children
+uint64_t TransferModel::checkIntegrityChildren(const Folder * const tree)
+{
+    uint64_t childrens=0;
+    childrens+=tree->onlyFiles.size();
+    for(const auto& n : tree->folders)
+    {
+        Folder * folder=n.second;
+        if(folder->parent()!=tree)
+        {
+            std::cerr << "tree parrent corrupted" << std::endl;
+            abort();
+        }
+        childrens+=checkIntegrityChildren(folder);
+    }
+    if(childrens!=tree->children())
+    {
+        std::cerr << "tree corrupted" << std::endl;
+        abort();
+    }
+    return tree->children();
 }
 #endif
 

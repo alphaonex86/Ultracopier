@@ -61,14 +61,27 @@ QUrl File::url(const Folder *root) const
 void Folder::append(File *p)
 {
     if(p->isFolder())
+    {
         folders[p->name()]=static_cast<Folder *>(p);
+        Folder *d = this;
+        while(d != nullptr) {
+            d->m_children+=static_cast<Folder *>(p)->children();
+            d->m_size += p->size();
+            d=d->m_parent;
+        }
+    }
     else
+    {
         onlyFiles.push_back(p);
-    Folder *d = this;
-    while(d != nullptr) {
-        d->m_children++;
-        d->m_size += p->size();
-        d=d->m_parent;
+        Folder *d = this;
+        while(d != nullptr) {
+            /*if(p->isFolder())
+                d->m_children+=static_cast<Folder *>(p)->children();
+            else*/
+                d->m_children++;
+            d->m_size += p->size();
+            d=d->m_parent;
+        }
     }
 }
 
@@ -78,14 +91,14 @@ void Folder::append(Folder *d, const std::string &name)
     if (!name.empty())
         m_name=name;
 
-    m_children += d->children(); //doesn't include the dir itself
+    //do into append() m_children += d->children(); //doesn't include the dir itself
     d->m_parent = this;
     append((File*)d); //will add 1 to filecount for the dir itself
 }
 
 void Folder::append(Folder *d)
 {
-    m_children += d->children(); //doesn't include the dir itself
+    //do into append() m_children += d->children(); //doesn't include the dir itself
     d->m_parent = this;
     append((File*)d); //will add 1 to filecount for the dir itself
 }
@@ -100,12 +113,14 @@ void Folder::append(const std::string &name, uint64_t size)
 void Folder::remove(const File *f) {
     bool found=false;
     uint64_t sizeToRemove=0;
+    uint64_t childToRemove=0;
     for(const auto& n : folders)
     {
         Folder * folder=n.second;
         if(f==folder)
         {
             sizeToRemove+=f->size();
+            childToRemove+=static_cast<const Folder *>(f)->children();
             found=true;
             break;
         }
@@ -118,6 +133,7 @@ void Folder::remove(const File *f) {
             {
                 delete f;
                 sizeToRemove+=f->size();
+                childToRemove++;
                 break;
             }
             else
@@ -127,7 +143,7 @@ void Folder::remove(const File *f) {
     Folder *d = this;
     while(d != nullptr) {
         d->m_size -= sizeToRemove;
-        d->m_children--;
+        d->m_children-=childToRemove;
         d=d->m_parent;
     }
 }
