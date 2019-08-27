@@ -99,11 +99,11 @@ enum ActionType
 {
     ActionType_MkPath=1,
     ActionType_MovePath=2,
-    ActionType_RealMove=3
+    ActionType_RealMove=3,
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-    ,
-    ActionType_RmSync=4
+    ActionType_RmSync=4,
     #endif
+    ActionType_SyncDate=5
 };
 
 struct Diskspace

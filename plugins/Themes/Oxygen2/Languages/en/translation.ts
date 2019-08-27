@@ -9,7 +9,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../radialMap/map.cpp" line="197"/>
+        <location filename="../../radialMap/map.cpp" line="204"/>
         <source>%1 file, with an average size of %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17,8 +17,8 @@
 <context>
     <name>RadialMap::Widget</name>
     <message>
-        <location filename="../../radialMap/widgetEvents.cpp" line="184"/>
-        <location filename="../../radialMap/widgetEvents.cpp" line="186"/>
+        <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
+        <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
         <source> into %1 files</source>
         <translation type="unfinished"></translation>
     </message>

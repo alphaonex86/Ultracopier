@@ -61,6 +61,7 @@ signals:
     void newFolderListing(const std::string &path) const;
     void addToMkPath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inode) const;
     void addToMovePath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inodeToRemove) const;
+    void addToKeepAttributePath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inodeToRemove) const;
     void addToRealMove(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination) const;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     void addToRmForRsync(const INTERNALTYPEPATH& destination) const;

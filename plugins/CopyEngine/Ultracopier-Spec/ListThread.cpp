@@ -399,7 +399,7 @@ uint64_t ListThread::addToMkPath(const INTERNALTYPEPATH& source,const INTERNALTY
     return temp.id;
 }
 
-//add rm path to do
+//add path to do
 void ListThread::addToMovePath(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination, const int& inodeToRemove)
 {
     if(stopIt)
@@ -408,6 +408,22 @@ void ListThread::addToMovePath(const INTERNALTYPEPATH &source, const INTERNALTYP
                              ", destination: "+TransferThread::internalStringTostring(destination)+", inodeToRemove: "+std::to_string(inodeToRemove));
     ActionToDoInode temp;
     temp.type	= ActionType_MovePath;
+    temp.id		= generateIdNumber();
+    temp.size	= inodeToRemove;
+    temp.source     = source;
+    temp.destination= destination;
+    temp.isRunning	= false;
+    actionToDoListInode.push_back(temp);
+}
+
+void ListThread::addToKeepAttributePath(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination, const int& inodeToRemove)
+{
+    if(stopIt)
+        return;
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+
+                             ", destination: "+TransferThread::internalStringTostring(destination)+", inodeToRemove: "+std::to_string(inodeToRemove));
+    ActionToDoInode temp;
+    temp.type	= ActionType_SyncDate;
     temp.id		= generateIdNumber();
     temp.size	= inodeToRemove;
     temp.source     = source;
@@ -927,13 +943,14 @@ void ListThread::mkPathFirstFolderFinish()
     const int &loop_size=actionToDoListInode.size();
     while(int_for_loop<loop_size)
     {
-        if(actionToDoListInode.at(int_for_loop).isRunning)
+        const ActionToDoInode &actionToDoInode=actionToDoListInode.at(int_for_loop);
+        if(actionToDoInode.isRunning)
         {
-            if(actionToDoListInode.at(int_for_loop).type==ActionType_MkPath)
+            if(actionToDoInode.type==ActionType_MkPath || actionToDoInode.type==ActionType_SyncDate)
             {
                 //to send to the log
-                emit mkPath(TransferThread::internalStringTostring(actionToDoListInode.at(int_for_loop).destination));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop mkpath: "+TransferThread::internalStringTostring(actionToDoListInode.at(int_for_loop).destination));
+                emit mkPath(TransferThread::internalStringTostring(actionToDoInode.destination));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop mkpath: "+TransferThread::internalStringTostring(actionToDoInode.destination));
                 actionToDoListInode.erase(actionToDoListInode.cbegin()+int_for_loop);
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
                 if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
@@ -945,21 +962,21 @@ void ListThread::mkPathFirstFolderFinish()
                 doNewActions_inode_manipulation();
                 return;
             }
-            if(actionToDoListInode.at(int_for_loop).type==ActionType_MovePath || actionToDoListInode.at(int_for_loop).type==ActionType_RealMove
+            if(actionToDoInode.type==ActionType_MovePath || actionToDoInode.type==ActionType_RealMove
                     #ifdef ULTRACOPIER_PLUGIN_RSYNC
-                     || actionToDoListInode.at(int_for_loop).type==ActionType_RmSync
+                     || actionToDoInode.type==ActionType_RmSync
                     #endif
                     )
             {
                 //to send to the log
                 #ifdef ULTRACOPIER_PLUGIN_RSYNC
-                if(actionToDoListInode.at(int_for_loop).type!=ActionType_RmSync)
-                    emit mkPath(actionToDoListInode.at(int_for_loop).destination);
+                if(actionToDoInode.type!=ActionType_RmSync)
+                    emit mkPath(actionToDoInode.destination);
                 #else
-                emit mkPath(TransferThread::internalStringTostring(actionToDoListInode.at(int_for_loop).destination));
+                emit mkPath(TransferThread::internalStringTostring(actionToDoInode.destination));
                 #endif
-                emit rmPath(TransferThread::internalStringTostring(actionToDoListInode.at(int_for_loop).source));
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop mkpath: "+TransferThread::internalStringTostring(actionToDoListInode.at(int_for_loop).destination));
+                emit rmPath(TransferThread::internalStringTostring(actionToDoInode.source));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"stop mkpath: "+TransferThread::internalStringTostring(actionToDoInode.destination));
                 actionToDoListInode.erase(actionToDoListInode.cbegin()+int_for_loop);
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
                 if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())

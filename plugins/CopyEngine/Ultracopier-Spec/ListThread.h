@@ -327,8 +327,9 @@ private slots:
     void deleteTransferThread();
     //mk path to do
     uint64_t addToMkPath(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination, const int &inode);
-    //add rm path to do
+    //add path to do
     void addToMovePath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inodeToRemove);
+    void addToKeepAttributePath(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination, const int& inodeToRemove);
     //add to real move
     void addToRealMove(const INTERNALTYPEPATH& source,const INTERNALTYPEPATH& destination);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC

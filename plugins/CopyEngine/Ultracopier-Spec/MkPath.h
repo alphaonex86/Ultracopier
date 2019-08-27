@@ -83,13 +83,8 @@ private:
             utimbuf butime;
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                utimbuf butime;
-            #else
                 uint64_t ftCreateL, ftAccessL, ftWriteL;
                 uint64_t ftCreateH, ftAccessH, ftWriteH;
-                std::regex regRead;
-            #endif
         #endif
     #endif
     //fonction to edit the file date time

@@ -4,19 +4,7 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+321"/>
-        <location line="+17"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation>%1 est obsolète, utilisez %2</translation>
-    </message>
-    <message>
-        <location line="-14"/>
-        <location line="+17"/>
-        <source>This will be the last version for Mac, but you can compile from source</source>
-        <translation>Ce sera la dernière version pour Mac, mais vous pouvez compiler à partir des sources</translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location filename="../../interface.cpp" line="+327"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>

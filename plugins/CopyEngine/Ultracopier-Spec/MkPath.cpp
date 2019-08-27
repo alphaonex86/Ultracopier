@@ -219,7 +219,7 @@ void MkPath::internalDoThisPath()
             }
         }
         else
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"TransferThread::mkpath ignore exists: "+TransferThread::internalStringTostring(item.destination));
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"TransferThread::mkpath ignore exists: "+TransferThread::internalStringTostring(item.destination));
     }
     else
     {
@@ -615,41 +615,27 @@ bool MkPath::readFileDateTime(const INTERNALTYPEPATH &source)
         return true;
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                struct stat info;
-                if(stat(TransferThread::internalStringTostring(source).c_str(),&info)!=0)
-                    return false;
-                time_t ctime=info.st_ctime;
-                time_t actime=info.st_atime;
-                time_t modtime=info.st_mtime;
-                //this function avalaible on unix and mingw
-                butime.actime=actime;
-                butime.modtime=modtime;
-                Q_UNUSED(ctime);
-                return true;
-            #else
-                HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
-                if(hFileSouce == INVALID_HANDLE_VALUE)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
-                    return false;
-                }
-                FILETIME ftCreate, ftAccess, ftWrite;
-                if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
-                {
-                    CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get the file time");
-                    return false;
-                }
-                this->ftCreateL=ftCreate.dwLowDateTime;
-                this->ftCreateH=ftCreate.dwHighDateTime;
-                this->ftAccessL=ftAccess.dwLowDateTime;
-                this->ftAccessH=ftAccess.dwHighDateTime;
-                this->ftWriteL=ftWrite.dwLowDateTime;
-                this->ftWriteH=ftWrite.dwHighDateTime;
+            HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY | FILE_FLAG_BACKUP_SEMANTICS, NULL);
+            if(hFileSouce == INVALID_HANDLE_VALUE)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to read: "+TransferThread::internalStringTostring(source)+", error: "+std::to_string(GetLastError()));
+                return false;
+            }
+            FILETIME ftCreate, ftAccess, ftWrite;
+            if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
+            {
                 CloseHandle(hFileSouce);
-                return true;
-            #endif
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get the file time");
+                return false;
+            }
+            this->ftCreateL=ftCreate.dwLowDateTime;
+            this->ftCreateH=ftCreate.dwHighDateTime;
+            this->ftAccessL=ftAccess.dwLowDateTime;
+            this->ftAccessH=ftAccess.dwHighDateTime;
+            this->ftWriteL=ftWrite.dwLowDateTime;
+            this->ftWriteH=ftWrite.dwHighDateTime;
+            CloseHandle(hFileSouce);
+            return true;
         #else
             return false;
         #endif
@@ -669,36 +655,28 @@ bool MkPath::writeFileDateTime(const INTERNALTYPEPATH &destination)
         #endif
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                return utime(TransferThread::internalStringTostring(destination).c_str(),&butime)==0;
-            #else
-                wchar_t filePath[65535];
-                if(std::regex_match(destination,regRead))
-                    filePath[QDir::toNativeSeparators(QStringLiteral("\\\\?\\")+destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                else
-                    filePath[QDir::toNativeSeparators(destination.absoluteFilePath()).toWCharArray(filePath)]=L'\0';
-                HANDLE hFileDestination = CreateFileW(filePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
-                if(hFileDestination == INVALID_HANDLE_VALUE)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
-                    return false;
-                }
-                FILETIME ftCreate, ftAccess, ftWrite;
-                ftCreate.dwLowDateTime=this->ftCreateL;
-                ftCreate.dwHighDateTime=this->ftCreateH;
-                ftAccess.dwLowDateTime=this->ftAccessL;
-                ftAccess.dwHighDateTime=this->ftAccessH;
-                ftWrite.dwLowDateTime=this->ftWriteL;
-                ftWrite.dwHighDateTime=this->ftWriteH;
-                if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
-                {
-                    CloseHandle(hFileDestination);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the file time");
-                    return false;
-                }
+            wchar_t filePath[65535];
+            HANDLE hFileDestination = CreateFileW(TransferThread::toFinalPath(destination).c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+            if(hFileDestination == INVALID_HANDLE_VALUE)
+            {
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
+                return false;
+            }
+            FILETIME ftCreate, ftAccess, ftWrite;
+            ftCreate.dwLowDateTime=this->ftCreateL;
+            ftCreate.dwHighDateTime=this->ftCreateH;
+            ftAccess.dwLowDateTime=this->ftAccessL;
+            ftAccess.dwHighDateTime=this->ftAccessH;
+            ftWrite.dwLowDateTime=this->ftWriteL;
+            ftWrite.dwHighDateTime=this->ftWriteH;
+            if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
+            {
                 CloseHandle(hFileDestination);
-                return true;
-            #endif
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the file time");
+                return false;
+            }
+            CloseHandle(hFileDestination);
+            return true;
         #else
             return false;
         #endif

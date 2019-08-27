@@ -51,7 +51,30 @@ switch(currentActionToDoInode.type)
         }
         else //have do the destination, put the remove to after
         {
-            currentActionToDoInode.size=0;
+            currentActionToDoInode.size=0;//why just not do .size--?
+            actionToDoListInode_afterTheTransfer.push_back(currentActionToDoInode);
+            actionToDoListInode.erase(actionToDoListInode.cbegin()+int_for_internal_loop);
+            int_for_internal_loop--;
+            actionToDoListInode_count--;
+            if(numberOfInodeOperation>=inodeThreads)
+                return;
+        }
+    break;
+    case ActionType_SyncDate:
+        //then empty (no file), can try remove it
+        if(currentActionToDoInode.size==0 || actionToDoListTransfer.empty())//don't put afterTheTransfer because actionToDoListInode_afterTheTransfer -> already afterTheTransfer
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"launch rmpath: source: "+TransferThread::internalStringTostring(currentActionToDoInode.source)+
+                                     ", destination: "+TransferThread::internalStringTostring(currentActionToDoInode.destination));
+            mkPathQueue.addPath(currentActionToDoInode.source,currentActionToDoInode.destination,currentActionToDoInode.type);
+            currentActionToDoInode.isRunning=true;
+            numberOfInodeOperation++;
+            if(numberOfInodeOperation>=inodeThreads)
+                return;
+        }
+        else //have do the destination, put the remove to after
+        {
+            currentActionToDoInode.size=0;//why just not do .size--?
             actionToDoListInode_afterTheTransfer.push_back(currentActionToDoInode);
             actionToDoListInode.erase(actionToDoListInode.cbegin()+int_for_internal_loop);
             int_for_internal_loop--;

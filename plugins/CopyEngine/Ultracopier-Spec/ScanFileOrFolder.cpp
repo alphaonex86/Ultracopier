@@ -849,6 +849,11 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+", sizeEntryList: "+std::to_string(sizeEntryList));
         emit addToMovePath(source,destination,sizeEntryList);
     }
+    else// if(keepDate or keep permition, perfer alwasy send it)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"source: "+TransferThread::internalStringTostring(source)+", sizeEntryList: "+std::to_string(sizeEntryList));
+        emit addToKeepAttributePath(source,destination,sizeEntryList);
+    }
 }
 
 //set if need check if the destination exists

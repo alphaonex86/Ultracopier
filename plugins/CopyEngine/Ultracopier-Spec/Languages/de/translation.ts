@@ -195,12 +195,12 @@
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="71"/>
+        <location filename="../../FileErrorDialog.cpp" line="87"/>
         <source>Error on folder</source>
         <translation>Ordnerfehler</translation>
     </message>
     <message>
-        <location filename="../../FileErrorDialog.cpp" line="74"/>
+        <location filename="../../FileErrorDialog.cpp" line="90"/>
         <source>Folder name</source>
         <translation>Ordnername</translation>
     </message>
@@ -208,22 +208,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="163"/>
+        <location filename="../../FileExistsDialog.cpp" line="187"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="170"/>
+        <location filename="../../FileExistsDialog.cpp" line="194"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="258"/>
+        <location filename="../../FileExistsDialog.cpp" line="282"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="258"/>
+        <location filename="../../FileExistsDialog.cpp" line="282"/>
         <source>Try rename with using special characters</source>
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
@@ -231,22 +231,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="129"/>
+        <location filename="../../FileIsSameDialog.cpp" line="141"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="136"/>
+        <location filename="../../FileIsSameDialog.cpp" line="148"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="206"/>
+        <location filename="../../FileIsSameDialog.cpp" line="218"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="206"/>
+        <location filename="../../FileIsSameDialog.cpp" line="218"/>
         <source>Try rename with using special characters</source>
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
@@ -393,27 +393,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="76"/>
+        <location filename="../../FolderExistsDialog.cpp" line="88"/>
         <source>Folder already exists</source>
         <translation>Ordner existiert bereits</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="161"/>
+        <location filename="../../FolderExistsDialog.cpp" line="173"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="170"/>
+        <location filename="../../FolderExistsDialog.cpp" line="182"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="234"/>
+        <location filename="../../FolderExistsDialog.cpp" line="246"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="234"/>
+        <location filename="../../FolderExistsDialog.cpp" line="246"/>
         <source>Try rename with using special characters</source>
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
@@ -492,13 +492,18 @@
         <translation>Kann den Ordner nicht endgültig verschieben</translation>
     </message>
     <message>
-        <location filename="../../MkPath.cpp" line="312"/>
+        <location filename="../../MkPath.cpp" line="314"/>
         <source>Unable to move the folder</source>
         <translation>Kann den Ordner nicht verschieben</translation>
     </message>
     <message>
+        <location filename="../../MkPath.cpp" line="320"/>
+        <source>Unable to move the folder: errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../MkPath.cpp" line="129"/>
-        <location filename="../../MkPath.cpp" line="390"/>
+        <location filename="../../MkPath.cpp" line="399"/>
         <source>Unable to remove</source>
         <translation>Kann nicht löschen</translation>
     </message>
@@ -586,14 +591,14 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="507"/>
-        <location filename="../../TransferThread.cpp" line="732"/>
+        <location filename="../../TransferThread.cpp" line="514"/>
+        <location filename="../../TransferThread.cpp" line="746"/>
         <source>File not found</source>
         <translation>Datei nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="732"/>
-        <location filename="../../TransferThread.cpp" line="768"/>
+        <location filename="../../TransferThread.cpp" line="746"/>
+        <location filename="../../TransferThread.cpp" line="782"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -603,12 +608,12 @@
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="478"/>
+        <location filename="../../TransferThread.cpp" line="485"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% -  Kopie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="485"/>
+        <location filename="../../TransferThread.cpp" line="492"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - Kopie (%number%)</translation>
     </message>

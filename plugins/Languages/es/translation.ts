@@ -667,12 +667,12 @@ Este motor de copia no soporta mover</translation>
 <context>
     <name>FileErrorDialog</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="71"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="87"/>
         <source>Error on folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="74"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="90"/>
         <source>Folder name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -680,22 +680,22 @@ Este motor de copia no soporta mover</translation>
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="163"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="187"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="170"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="194"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="258"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="282"/>
         <source>Error</source>
         <translation type="unfinished">Error</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="258"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="282"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -703,22 +703,22 @@ Este motor de copia no soporta mover</translation>
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="129"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="141"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="136"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="148"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="206"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="218"/>
         <source>Error</source>
         <translation type="unfinished">Error</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="206"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="218"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -865,27 +865,27 @@ Este motor de copia no soporta mover</translation>
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="76"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="88"/>
         <source>Folder already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="161"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="173"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="170"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="182"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="234"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="246"/>
         <source>Error</source>
         <translation type="unfinished">Error</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="234"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="246"/>
         <source>Try rename with using special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1099,7 +1099,7 @@ Esta versión está compilada en versión:%1.</translation>
     <name>MkPath</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="129"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="390"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="399"/>
         <source>Unable to remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1125,8 +1125,13 @@ Esta versión está compilada en versión:%1.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="312"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="314"/>
         <source>Unable to move the folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="320"/>
+        <source>Unable to move the folder: errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1138,37 +1143,52 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.ui" line="58"/>
+        <location filename="../../../OSSpecific.ui" line="119"/>
+        <source>Classic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="124"/>
+        <source>Modern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="129"/>
+        <source>Supercopier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../OSSpecific.ui" line="177"/>
         <source>Don&apos;t show again</source>
         <translation>No mostrar de nuevo</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.ui" line="83"/>
+        <location filename="../../../OSSpecific.ui" line="202"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="23"/>
-        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation>La sustitución de la copia default / sistema de movimiento no está soportado por el gestor de archivos (Dolphin, Nautilus, ...). &lt;br /&gt; Pregunte al desarrollador para apoyarlo. &lt;br /&gt; Es necesario hacer el copiar / mover manualmente.</translation>
+        <location filename="../../../OSSpecific.cpp" line="29"/>
+        <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer of your file manager to support it.&lt;br /&gt;You need do the copy/move manually.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="25"/>
+        <location filename="../../../OSSpecific.cpp" line="31"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
         <translation>Reinicie el sistema si previamente se había instalado software similar (como TeraCopy, SuperCopier o una versión anterior de Ultracopier).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="27"/>
+        <location filename="../../../OSSpecific.cpp" line="33"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
         <translation>La sustitución de la copia default / sistema de movimiento no se admite y bloquea buscador de Mac OS X. &lt;br /&gt; Es necesario hacer el copiar / mover manualmente haciendo clic derecho sobre el icono de la bandeja del sistema, cerca del reloj (no el icono del Dock).</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="29"/>
+        <location filename="../../../OSSpecific.cpp" line="35"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
         <translation>La sustitución de incumplimiento de copiar / mover sistema no debe ser soportado por el gestor de archivos. &lt;br /&gt; Pregunte al desarrollador para apoyarlo. &lt;br /&gt; Usted necesita hacer el copiar / mover manualmente.</translation>
     </message>
     <message>
-        <location filename="../../../OSSpecific.cpp" line="32"/>
+        <location filename="../../../OSSpecific.cpp" line="38"/>
         <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1471,7 +1491,7 @@ Esta versión está compilada en versión:%1.</translation>
         <translation>Las variables son %1</translation>
     </message>
     <message>
-        <location filename="../../../OptionDialog.cpp" line="951"/>
+        <location filename="../../../OptionDialog.cpp" line="955"/>
         <source>Save logs as: </source>
         <translation>Guardar registros como: </translation>
     </message>
@@ -1777,7 +1797,7 @@ desde: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/radialMap/map.cpp" line="197"/>
+        <location filename="../../Themes/Oxygen2/radialMap/map.cpp" line="204"/>
         <source>%1 file, with an average size of %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1830,8 +1850,8 @@ desde: %2</translation>
 <context>
     <name>RadialMap::Widget</name>
     <message>
-        <location filename="../../Themes/Oxygen2/radialMap/widgetEvents.cpp" line="184"/>
-        <location filename="../../Themes/Oxygen2/radialMap/widgetEvents.cpp" line="186"/>
+        <location filename="../../Themes/Oxygen2/radialMap/widgetEvents.cpp" line="194"/>
+        <location filename="../../Themes/Oxygen2/radialMap/widgetEvents.cpp" line="196"/>
         <source> into %1 files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2114,24 +2134,24 @@ desde: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="478"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="492"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="507"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="732"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="514"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="732"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="768"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="782"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>

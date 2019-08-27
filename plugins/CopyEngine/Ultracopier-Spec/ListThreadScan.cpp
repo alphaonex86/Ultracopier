@@ -34,6 +34,8 @@ ScanFileOrFolder * ListThread::newScanThread(Ultracopier::CopyMode mode)
         abort();
     if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToMovePath,					this,&ListThread::addToMovePath,			Qt::QueuedConnection))
         abort();
+    if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToKeepAttributePath,			this,&ListThread::addToKeepAttributePath,			Qt::QueuedConnection))
+        abort();
     if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToRealMove,					this,&ListThread::addToRealMove,			Qt::QueuedConnection))
         abort();
     if(!connect(scanFileOrFolderThreads,&ScanFileOrFolder::addToMkPath,                      this,&ListThread::addToMkPath,              Qt::QueuedConnection))
