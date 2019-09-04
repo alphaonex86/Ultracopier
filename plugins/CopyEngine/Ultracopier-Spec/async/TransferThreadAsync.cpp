@@ -114,7 +114,7 @@ void TransferThreadAsync::internalStartTheTransfer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(canStartTransfer)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] canStartTransfer is already set to true"));
+        //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true")); -> call for second time, first time was not ready
         ifCanStartTransfer();
         return;
     }
@@ -268,6 +268,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         preOperationStopped();//tiger to seam maybe is can be started
         return;
     }
+    transfer_stat=TransferStat_Transfer;
     #ifdef WIDESTRING
     const size_t destinationIndex=destination.rfind(L'/');
     if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
@@ -303,7 +304,6 @@ void TransferThreadAsync::ifCanStartTransfer()
             }
     }
     #endif
-    transfer_stat=TransferStat_Transfer;
     emit pushStat(transfer_stat,transferId);
     bool realMove=(mode==Ultracopier::Move && driveManagement.isSameDrive(
                        internalStringTostring(source),
