@@ -2039,60 +2039,56 @@ since:%2</source>
     <name>Themes</name>
     <message>
         <location filename="../../Themes/Oxygen2/interface.cpp" line="292"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="294"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="313"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="505"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="510"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="812"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="817"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="814"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="819"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1315"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1320"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1316"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1321"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1317"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1322"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1319"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1324"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1514"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1526"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1538"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1519"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1531"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1543"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1626"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1637"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1646"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1631"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1642"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1651"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation type="unfinished"></translation>
     </message>

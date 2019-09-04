@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<TS version="2.0" language="de" sourcelanguage="en">
 <context>
     <name>AvancedQFile</name>
     <message>
@@ -64,7 +64,7 @@
     <message>
         <location filename="../../CopyEngine.cpp" line="740"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
-        <translation>Der Modus wurde vorher erzwungen. Interner Fehler - Bitte bei mir melden! </translation>
+        <translation>Der Modus wurde vorher erzwungen. Interner Fehler - Bitte bei mir melden</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1070"/>
@@ -276,12 +276,12 @@
     <message>
         <location filename="../../FileExistsDialog.cpp" line="137"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - Kopie%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="144"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - Kopie (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="228"/>
@@ -299,12 +299,12 @@
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="111"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% -  Kopie</translation>
+        <translation>%name% - Kopie</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="118"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - Kopie (%number%)</translation>
+        <translation>%name% - Kopie (%number%)</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="184"/>
@@ -466,12 +466,12 @@
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="122"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% -  Kopie</translation>
+        <translation>%name% - Kopie</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="131"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - Kopie (%number%)</translation>
+        <translation>%name% - Kopie (%number%)</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="190"/>
@@ -604,19 +604,19 @@
         <location filename="../../RenamingRules.ui" line="41"/>
         <source>%name% - copy%suffix%</source>
         <extracomment>%name% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - Kopie%suffix%</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="57"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - Kopie% (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="67"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; für den originalen Dateinamen, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; für die extra Nummer, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; Datei suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="51"/>
@@ -632,13 +632,13 @@
         <location filename="../../RenamingRules.cpp" line="39"/>
         <location filename="../../RenamingRules.cpp" line="62"/>
         <source>%1 - copy%2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - Kopie%2</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="43"/>
         <location filename="../../RenamingRules.cpp" line="73"/>
         <source>%1 - copy (%2)%3</source>
-        <translation type="unfinished">%1 - Kopie (%2) {1 ?} {2)%3?}</translation>
+        <translation>%1 - Kopie (%2) {1 ?} {2)%3?}</translation>
     </message>
 </context>
 <context>
@@ -661,12 +661,12 @@
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="401"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% -  Kopie</translation>
+        <translation>%name% - Kopie</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="408"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - Kopie (%number%)</translation>
+        <translation>%name% - Kopie (%number%)</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="444"/>
@@ -703,62 +703,62 @@
         <location filename="../../TransferThread.cpp" line="346"/>
         <location filename="../../TransferThread.cpp" line="363"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished"></translation>
+        <translation>Falsches Änderungsdatum oder Fehler beim Auslesen, Sie können die Zeitstempel Übermittlung deaktivieren</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="421"/>
         <location filename="../../TransferThread.cpp" line="444"/>
         <source>Internal error: Already opening</source>
-        <translation type="unfinished">Interner Fehler: Bereits geöffnet</translation>
+        <translation>Interner Fehler: Bereits geöffnet</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="586"/>
         <source>Drive %1</source>
-        <translation type="unfinished">Laufwerk %1</translation>
+        <translation>Laufwerk %1</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="588"/>
         <source>Unknown folder</source>
-        <translation type="unfinished">Unbekannter Ordner</translation>
+        <translation>Unbekannter Ordner</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="592"/>
         <source>root</source>
-        <translation type="unfinished">Stammverzeichnis</translation>
+        <translation>Stammverzeichnis</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="787"/>
         <source>The source doesn&apos;t exist</source>
-        <translation type="unfinished">Quelle existiert nicht</translation>
+        <translation>Quelle existiert nicht</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1315"/>
         <location filename="../../TransferThread.cpp" line="1333"/>
         <location filename="../../TransferThread.cpp" line="1348"/>
         <source>Unable to change the date</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann Datum nicht ändern</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="711"/>
         <location filename="../../TransferThread.cpp" line="826"/>
         <source>The source file doesn&apos;t exist</source>
-        <translation type="unfinished">Quelldatei existiert nicht</translation>
+        <translation>Quelldatei existiert nicht</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1134"/>
         <source>The checksums do not match</source>
-        <translation type="unfinished">Prüfsummen sind verschieden</translation>
+        <translation>Prüfsummen sind verschieden</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1239"/>
         <source>Internal error: The size transfered doesn&apos;t match</source>
-        <translation type="unfinished">Interner Fehler: Ubertragene Größe ungleich</translation>
+        <translation>Interner Fehler: Ubertragene Größe ungleich</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="751"/>
         <location filename="../../TransferThread.cpp" line="838"/>
         <source>Unable to do the folder</source>
-        <translation type="unfinished">Ordner kann nicht erstellt werden</translation>
+        <translation>Ordner kann nicht erstellt werden</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="228"/>
@@ -768,27 +768,27 @@
     <message>
         <location filename="../../TransferThread.cpp" line="645"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% -  Kopie</translation>
+        <translation>%name% - Kopie</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="652"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - Kopie (%number%)</translation>
+        <translation>%name% - Kopie (%number%)</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="832"/>
         <source>Another file exists at same place</source>
-        <translation type="unfinished">Andere Datei befindet sich am selben Ort</translation>
+        <translation>Eine andere Datei befindet sich bereits am selben Ort</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1224"/>
         <source>Internal error: The destination is not closed</source>
-        <translation type="unfinished">Interner Fehler: Ziel ist nicht geschlossen</translation>
+        <translation>Interner Fehler: Ziel ist nicht geschlossen</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="1250"/>
         <source>Internal error: The buffer is not empty</source>
-        <translation type="unfinished">Interner Fehler: Puffer ist nicht leer</translation>
+        <translation>Interner Fehler: Puffer ist nicht leer</translation>
     </message>
 </context>
 <context>
@@ -860,22 +860,22 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="145"/>
         <source>When folder error</source>
-        <translation>Bei Ordnerfehlern:</translation>
+        <translation>Bei Ordnerfehler</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="155"/>
         <source>When file error</source>
-        <translation>Bei Dateifehlern:</translation>
+        <translation>Bei Dateifehler</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="181"/>
         <source>When file collision</source>
-        <translation>Bei Dateikollisionen:</translation>
+        <translation>Bei Dateikollision</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="241"/>
         <source>When folder collision</source>
-        <translation>Bei Ordnerkollisionen:</translation>
+        <translation>Bei Ordnerkollision</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="272"/>
@@ -974,18 +974,18 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="582"/>
         <source>Inode threads (unsafe &gt; 1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Inode Threads (unsicher &gt;1)</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="589"/>
         <location filename="../../copyEngineOptions.ui" line="599"/>
         <source>More cpu, but better organisation on the disk</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehr CPU Leitstung, aber bessere Organisation am Laufwerk</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="602"/>
         <source>Order the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste ordnen</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="618"/>
@@ -1000,7 +1000,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="634"/>
         <source>Use this folder when destination is not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Diesen Ordner benutzen, wenn kein Ziel definiert wurde</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="646"/>

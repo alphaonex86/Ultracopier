@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<TS version="2.0" language="de" sourcelanguage="en">
 <context>
     <name>Themes</name>
     <message>
@@ -55,7 +55,7 @@
         <location filename="../../interface.cpp" line="1377"/>
         <location filename="../../interface.cpp" line="1379"/>
         <source>%1 %2% of %3</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% von %3</translation>
     </message>
 </context>
 <context>
@@ -283,7 +283,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="53"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimiert starten</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="306"/>
@@ -298,7 +298,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="190"/>
         <source>Save position</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere Position</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="213"/>

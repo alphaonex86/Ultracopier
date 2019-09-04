@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<TS version="2.0" language="de" sourcelanguage="en">
 <context>
     <name>OptionsWidget</name>
     <message>
@@ -17,7 +17,7 @@
     <message>
         <location filename="../../OptionsWidget.ui" line="34"/>
         <source>Register for all users</source>
-        <translation type="unfinished"></translation>
+        <translation>Für alle Benutzer registrieren</translation>
     </message>
 </context>
 </TS>

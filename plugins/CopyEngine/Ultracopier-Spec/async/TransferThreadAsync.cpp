@@ -115,6 +115,7 @@ void TransferThreadAsync::internalStartTheTransfer()
     if(canStartTransfer)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] canStartTransfer is already set to true"));
+        ifCanStartTransfer();
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] check how start the transfer"));
@@ -309,6 +310,7 @@ void TransferThreadAsync::ifCanStartTransfer()
                        internalStringTostring(destination)
                        ));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
+    needRemove=true;
 #ifdef Q_OS_WIN32
     BOOL successFull;
     if(realMove)
@@ -393,7 +395,7 @@ void TransferThreadAsync::stop()
     exit();
     wait();
     start();
-    if(!source.empty())
+    if(!source.empty() && needRemove)
         if(exists(source) && source!=destination)
             unlink(destination);
     transfer_stat=TransferStat_Idle;
@@ -465,7 +467,7 @@ void TransferThreadAsync::skip()
         resetExtraVariable();
         break;
     case TransferStat_Transfer:
-        if(!source.empty())
+        if(!source.empty() && needRemove)
             if(exists(source) && source!=destination)
                 unlink(destination);
         break;

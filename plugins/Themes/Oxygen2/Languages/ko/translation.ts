@@ -27,16 +27,12 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="+292"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+21"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+211"/>
+        <location line="+197"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">파일 %1/%2, 크기: %3/%4</translation>
     </message>

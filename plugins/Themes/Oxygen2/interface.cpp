@@ -279,18 +279,16 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->labelAlwaysOnTop->hide();
     uiOptions->alwaysOnTop->hide();
     #endif*/
+    QString ultimateUrl;
     if(facilityEngine->isUltimate())
         ui->ad_ultimate->hide();
     else
     {
-        QString ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
+        ultimateUrl=QString::fromStdString(facilityEngine->ultimateUrl());
         if(ultimateUrl.isEmpty())
             ui->ad_ultimate->hide();
         else
             ui->ad_ultimate->setText(
-                    #ifdef SUPERCOPIER
-                    tr("%1 is deprecated, Use %2").arg("<span style=\"color:#ee0000\">Super</span><span style=\"color:#0000cc\">copier</span>").arg("<a href=\"http://ultracopier.first-world.info/\">Ultracopier</a><br />")+
-                    #endif
                     QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development"))+", "
                         +QStringLiteral("Follow us: ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
                         );
@@ -308,6 +306,13 @@ Themes::Themes(const bool &alwaysOnTop,
 
     if(darkUi)
     {
+        if(ultimateUrl.isEmpty())
+            ui->ad_ultimate->hide();
+        else
+            ui->ad_ultimate->setText(
+                QStringLiteral("<a href=\"%1\"><span style=\"color:#cdf;\">%2</span></a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development"))+", "
+                    +QStringLiteral("<span style=\"color:#fff;\">Follow us:</span> ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
+                    );
         //ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");
         ui->labelTimeRemaining->setStyleSheet("color:#fff;");
         ui->labelSPStart->setStyleSheet("color:#aaa;");

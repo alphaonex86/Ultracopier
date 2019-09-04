@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de" sourcelanguage="en">
+<TS version="2.0" language="de" sourcelanguage="en">
 <context>
     <name>QObject</name>
     <message>
         <location filename="../../radialMap/map.cpp" line="108"/>
         <source>%1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Dateien</translation>
     </message>
     <message>
         <location filename="../../radialMap/map.cpp" line="204"/>
         <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Datei, mit einer ungefähren Größe von %2</translation>
     </message>
 </context>
 <context>
@@ -20,7 +20,7 @@
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
         <source> into %1 files</source>
-        <translation type="unfinished"></translation>
+        <translation> in%1 Dateien</translation>
     </message>
 </context>
 <context>
@@ -28,7 +28,7 @@
     <message>
         <location filename="../../interface.cpp" line="292"/>
         <source>%1 is deprecated, Use %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ist veraltet, benutzen Sie %2</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="294"/>
@@ -82,7 +82,7 @@
         <location filename="../../interface.cpp" line="1637"/>
         <location filename="../../interface.cpp" line="1646"/>
         <source>%1 %2% of %3 into %4 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2 von %3 in %4 Dateien</translation>
     </message>
 </context>
 <context>
@@ -180,12 +180,12 @@
     <message>
         <location filename="../../interface.ui" line="232"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="252"/>
         <source>100MB+</source>
-        <translation type="unfinished"></translation>
+        <translation>100MB+</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="389"/>
@@ -315,7 +315,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="124"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimiert starten</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="320"/>
@@ -330,12 +330,12 @@
     <message>
         <location filename="../../themesOptions.ui" line="151"/>
         <source>Save position</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere Position</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="211"/>
         <source>Dark UI</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Design</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="227"/>

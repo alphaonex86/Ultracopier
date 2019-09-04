@@ -575,14 +575,9 @@ uint64_t ListThread::addToTransfer(const INTERNALTYPEPATH &source, const INTERNA
         size=sendedsize;
     else
     {
-        struct stat p_statbuf;
-        #ifdef Q_OS_WIN32
-        if(stat(TransferThread::internalStringTostring(source).c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
-        #else
-        if(lstat(TransferThread::internalStringTostring(source).c_str(), &p_statbuf)==0 && S_ISREG(p_statbuf.st_mode)==1)
-        #endif
-            //if error or file not exists, considere as regular file
-            size=p_statbuf.st_size;
+        const int64_t tempSize=TransferThread::file_stat_size(source);
+        if(tempSize>=0)
+            size=tempSize;
     }
     const std::string &drive=driveManagement.getDrive(TransferThread::internalStringTostring(destination));
     if(!drive.empty())//can be a network drive
