@@ -27,60 +27,56 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="292"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation>%1 ist veraltet, benutzen Sie %2</translation>
-    </message>
-    <message>
-        <location filename="../../interface.cpp" line="294"/>
+        <location filename="../../interface.cpp" line="313"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Kaufe die Ultimate Version um die Entwicklung zu finanzieren</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="505"/>
+        <location filename="../../interface.cpp" line="510"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Datei %1/%2, Größe:%3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="812"/>
+        <location filename="../../interface.cpp" line="817"/>
         <source>Copy list</source>
         <translation>Zu kopierende Dateien</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="814"/>
+        <location filename="../../interface.cpp" line="819"/>
         <source>Move list</source>
         <translation>Zu verschiebende Dateien</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1315"/>
+        <location filename="../../interface.cpp" line="1320"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Nicht schließen, wenn Fehler aufgetreten sind</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1316"/>
+        <location filename="../../interface.cpp" line="1321"/>
         <source>Never close</source>
         <translation>Niemals schließen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1317"/>
+        <location filename="../../interface.cpp" line="1322"/>
         <source>Always close</source>
         <translation>Immer schließen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1319"/>
+        <location filename="../../interface.cpp" line="1324"/>
         <source>File Name, 0KB</source>
         <translation>Dateiname, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1514"/>
-        <location filename="../../interface.cpp" line="1526"/>
-        <location filename="../../interface.cpp" line="1538"/>
+        <location filename="../../interface.cpp" line="1519"/>
+        <location filename="../../interface.cpp" line="1531"/>
+        <location filename="../../interface.cpp" line="1543"/>
         <source>Select a color</source>
         <translation>Farbe auswählen</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1626"/>
-        <location filename="../../interface.cpp" line="1637"/>
-        <location filename="../../interface.cpp" line="1646"/>
+        <location filename="../../interface.cpp" line="1631"/>
+        <location filename="../../interface.cpp" line="1642"/>
+        <location filename="../../interface.cpp" line="1651"/>
         <source>%1 %2% of %3 into %4 files</source>
         <translation>%1 %2 von %3 in %4 Dateien</translation>
     </message>
@@ -279,7 +275,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="281"/>
         <source>Show dual progression</source>
-        <translation>Zweifachen Fortschritt anzeigen</translation>
+        <translation>Zweifachen Fortschrittsbalken anzeigen</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="233"/>
@@ -330,7 +326,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="151"/>
         <source>Save position</source>
-        <translation>Speichere Position</translation>
+        <translation>Speichere Fensterposition</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="211"/>
@@ -365,7 +361,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="144"/>
         <source>Always on top</source>
-        <translation>Fenster immer im Vordergrund</translation>
+        <translation>Fenster immer im Vordergrund  halten</translation>
     </message>
 </context>
 </TS>

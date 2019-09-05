@@ -8,18 +8,18 @@
         <location filename="../../AvancedQFile.cpp" line="57"/>
         <location filename="../../AvancedQFile.cpp" line="88"/>
         <source>Not supported on this platform</source>
-        <translation>Auf dieser Plattform nicht unterstützt</translation>
+        <translation>Wird auf dieser Plattform nicht unterstützt</translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="40"/>
         <source>Last modified date is wrong</source>
-        <translation>Datum der letzten Änderung ist falsch</translation>
+        <translation>Letztes Änderungsdatum ist falsch</translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="71"/>
         <source>Last access date is wrong</source>
         <translatorcomment>   </translatorcomment>
-        <translation>Datum des letzten Zugriffs ist falsch</translation>
+        <translation>Letztes Zugriffsdatum ist falsch</translation>
     </message>
     <message>
         <location filename="../../AvancedQFile.cpp" line="121"/>
@@ -85,7 +85,7 @@
     <message>
         <location filename="../../CopyEngine.cpp" line="1074"/>
         <source>Merge</source>
-        <translation>Fusionieren</translation>
+        <translation>Zusammenfassen</translation>
     </message>
     <message>
         <location filename="../../CopyEngine.cpp" line="1076"/>
@@ -165,7 +165,7 @@
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Merge</source>
-        <translation>Fusionieren</translation>
+        <translation>Zusammenfassen</translation>
     </message>
     <message>
         <location filename="../../CopyEngineFactory.cpp" line="439"/>
@@ -405,12 +405,12 @@
     <message>
         <location filename="../../Filters.ui" line="30"/>
         <source>Exclusion filters</source>
-        <translation>Ausschließungs-Filter</translation>
+        <translation>Ausschließen Filter</translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="93"/>
         <source>Inclusion filters</source>
-        <translation>Einschließungs-Filter</translation>
+        <translation>Einschließen Filter</translation>
     </message>
     <message>
         <location filename="../../Filters.ui" line="105"/>
@@ -616,7 +616,7 @@
         <location filename="../../RenamingRules.ui" line="67"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; für den originalen Dateinamen, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; für die extra Nummer, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; Datei suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variablen: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; für den originalen Dateinamen, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; für die extra Nummer, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; für den Datei suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="51"/>
@@ -824,17 +824,17 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="53"/>
         <source>Move the whole folder</source>
-        <translation>Verschiebe den ganzen Ordner</translation>
+        <translation>Verschiebe ganzen Ordner</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="60"/>
         <source>Transfer the file rights</source>
-        <translation>Übertrage die Dateirechte</translation>
+        <translation>Übertrage Dateirechte</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="70"/>
         <source>Keep the file date</source>
-        <translation>Datum der Dateien beibehalten</translation>
+        <translation>Originales Datum der Dateien beibehalten</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="83"/>
@@ -845,7 +845,7 @@
         <location filename="../../copyEngineOptions.ui" line="90"/>
         <location filename="../../copyEngineOptions.ui" line="110"/>
         <source>Less performance if checked</source>
-        <translation>Leistung drosseln</translation>
+        <translation>Vermindert die Leistung, wenn ausgewählt</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="113"/>
@@ -855,7 +855,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="139"/>
         <source>Error and collision</source>
-        <translation>Fehler und Kollision</translation>
+        <translation>Fehler und Kollisionen</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="145"/>
@@ -1000,7 +1000,7 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="634"/>
         <source>Use this folder when destination is not set</source>
-        <translation>Diesen Ordner benutzen, wenn kein Ziel definiert wurde</translation>
+        <translation>Folgenden Ordner benutzen, falls kein Ziel definiert wurde</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="646"/>
@@ -1276,7 +1276,7 @@
     <message>
         <location filename="../../folderExistsDialog.ui" line="252"/>
         <source>Merge</source>
-        <translation>Fusionieren</translation>
+        <translation>Zusammenfassen</translation>
     </message>
     <message>
         <location filename="../../folderExistsDialog.ui" line="259"/>

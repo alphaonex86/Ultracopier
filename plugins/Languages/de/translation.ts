@@ -97,13 +97,13 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="411"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="434"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
-        <translation>Die Engine kann hier nur verschieben, Sie können hier nicht kopieren</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="446"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="469"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
-        <translation>Die Engine kann hier nur kopieren, Sie können hier nicht verschieben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="493"/>
@@ -113,12 +113,12 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="493"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
-        <translation>Benutzt das aktuelle Ziel &quot;%1&quot;?</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="649"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
-        <translation>Der Modus wurde bereits erzwungen. Dies ist ein interner Fehler. Bitte melden Sie diesen an den Programmierer</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="907"/>
@@ -139,7 +139,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="911"/>
         <source>Merge</source>
-        <translation>Vereinen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="913"/>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="917"/>
         <source>Put at the end</source>
-        <translation>An das Ende versetzen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="921"/>
@@ -160,7 +160,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="922"/>
         <source>Overwrite if different</source>
-        <translation>Überschreiben, wenn unterschiedlich</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="923"/>
@@ -170,17 +170,17 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="924"/>
         <source>Overwrite if older</source>
-        <translation>Überschreiben, wenn älter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="995"/>
         <source>Options error</source>
-        <translation>Fehleroptionen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="995"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation>Options-Engine wurde nicht geladen. Es ist nicht möglich auf die Filter zuzugreifen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="364"/>
         <source>Merge</source>
-        <translation>Vereinen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="366"/>
@@ -215,7 +215,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="370"/>
         <source>Put at the end</source>
-        <translation>An das Ende versetzen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="374"/>
@@ -225,7 +225,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="375"/>
         <source>Overwrite if different</source>
-        <translation>Überschreiben, wenn unterschiedlich</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="376"/>
@@ -235,23 +235,23 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="377"/>
         <source>Overwrite if older</source>
-        <translation>Überschreiben, wenn älter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="393"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="432"/>
         <source>Options error</source>
-        <translation>Fehleroptionen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="393"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
-        <translation>Options-Engine wurde nicht geladen. Es ist nicht möglich auf die Filter zuzugreifen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="432"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
-        <translation>Options-Engine wurde nicht geladen. Auf die Filter kann nicht zuzugreifen werden</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -378,27 +378,27 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="14"/>
         <source>Disk space</source>
-        <translation>Speicherplatz</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="24"/>
         <source>You need more space on this drive to finish this transfer</source>
-        <translation>Sie benötigen mehr Speicherplatz um den Transfer abschließen zu können</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="49"/>
         <source>Continue</source>
-        <translation>Fortfahren</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.ui" line="56"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/DiskSpace.cpp" line="23"/>
         <source>Drives %1 have %2 available but need %3</source>
-        <translation>Laufwerke %1 haben %2 zur Verfügung, benötigen aber %3</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -681,12 +681,12 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="87"/>
         <source>Error on folder</source>
-        <translation>Fehler in Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileErrorDialog.cpp" line="90"/>
         <source>Folder name</source>
-        <translation>Ordnername</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -694,12 +694,12 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="187"/>
         <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="194"/>
         <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%Nummer%)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="282"/>
@@ -709,7 +709,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="282"/>
         <source>Try rename with using special characters</source>
-        <translation>Versuche mit Sonderzeichen umzubennen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -717,12 +717,12 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="141"/>
         <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="148"/>
         <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%Nummer%)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="218"/>
@@ -732,7 +732,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="218"/>
         <source>Try rename with using special characters</source>
-        <translation>Versuche mit Sonderzeichen umzubennen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -740,77 +740,77 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="17"/>
         <source>Filters dialog</source>
-        <translation>Filter Dialog</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="33"/>
         <source>Search:</source>
-        <translation>Suche:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="43"/>
         <source>Search type:</source>
-        <translation>Suche Typ:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="51"/>
         <source>Raw text</source>
-        <translation>Rohtext</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="56"/>
         <source>Simplified regex</source>
-        <translation>Vereinfachte Regex</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="61"/>
         <source>Perl&apos;s regex</source>
-        <translation>Perl&apos;s Regex</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="69"/>
         <source>Apply on:</source>
-        <translation>Anwenden auf:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="77"/>
         <source>File</source>
-        <translation>Datei</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="82"/>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="87"/>
         <source>File and folder</source>
-        <translation>Datei und Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="95"/>
         <source>Whole string must match</source>
-        <translation>Die gesamte Zeichenfolge muss übereinstimmen </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="102"/>
         <source>Checking</source>
-        <translation>Überprüfe</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="108"/>
         <source>The regex is valid</source>
-        <translation>Der Regex ist gültig</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="115"/>
         <source>Test string:</source>
-        <translation>Test Zeichenfolge:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FilterRules.ui" line="125"/>
         <source>The test string matches with the regex</source>
-        <translation>Test Zeichenfolge stimmt mit Regex überein</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -818,52 +818,52 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="14"/>
         <source>Filters</source>
-        <translation>Filter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="30"/>
         <source>Exclusion filters</source>
-        <translation>Ausnahme Filter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="93"/>
         <source>Inclusion filters</source>
-        <translation>Inkludierte Filter</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.ui" line="105"/>
         <source>None = Include all</source>
-        <translation>Nichts = Alle inkludieren</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="93"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="131"/>
         <source>Raw text</source>
-        <translation>Rohtext</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="96"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="134"/>
         <source>Simplified regex</source>
-        <translation>Vereinfachter Regex</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="99"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="137"/>
         <source>Perl&apos;s regex</source>
-        <translation>Perl&apos;s Regex</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="107"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="145"/>
         <source>Only on file</source>
-        <translation>Nur auf Datei</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="110"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="148"/>
         <source>Only on folder</source>
-        <translation>Nur auf Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="116"/>
@@ -871,7 +871,7 @@
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="216"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/Filters.cpp" line="255"/>
         <source>Full match</source>
-        <translation>Gesamte Übereinstimmung</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -879,17 +879,17 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="88"/>
         <source>Folder already exists</source>
-        <translation>Ordner existiert bereits</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="173"/>
         <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="182"/>
         <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%Nummer%)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="246"/>
@@ -899,7 +899,7 @@
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FolderExistsDialog.cpp" line="246"/>
         <source>Try rename with using special characters</source>
-        <translation>Versuche mit Sonderzeichen umzubennen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1022,48 +1022,48 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="245"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="411"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
-        <translation>Kann nicht kopieren oder verschieben in vorgegebenem Modus: %1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="252"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="418"/>
         <source>Unable to save the transfer list: %1</source>
-        <translation>Kann die Übertragungsliste nicht sichern: %1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="268"/>
         <source>Problem reading file, or file-size is 0</source>
-        <translation>Lesefehler, oder Dateigröße=0</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="275"/>
         <source>Wrong header: &quot;%1&quot;</source>
-        <translation>Falscher Header: %1</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="284"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
-        <translation>Die Übertragungsliste wird im gemischten Modus ausgeführt, aber diese Instanz befindet sich nicht in diesem Modus</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="293"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
-        <translation>Die Übertragungsliste wird im Kopier-Modus ausgeführt, aber diese Instanz befindet sich nicht in diesem Modus</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="299"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
-        <translation>Die Übertragungsliste wird im Verschiebungs-Modus ausgeführt, aber diese Instanz befindet sich nicht in diesem Modus</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="363"/>
         <source>Some errors have been found during the line parsing</source>
-        <translation>Einige Fehler sind während der Anlyse der Eingabe erkannt worden</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="371"/>
         <source>Unable to open the transfer list: %1</source>
-        <translation>Kann Übertragungsliste nicht öffnen: %1</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1071,7 +1071,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../Listener/catchcopy-v0002/listener.cpp" line="7"/>
         <source>Ultracopier</source>
-        <translation>Ultracopier</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1114,38 +1114,38 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="129"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="399"/>
         <source>Unable to remove</source>
-        <translation>Konnte nicht entfernt werden</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="192"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="215"/>
         <source>Unable to create the folder</source>
-        <translation>Ordner konnte nicht erstellt werden</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="232"/>
         <source>The source folder don&apos;t exists</source>
-        <translation>Der Quellordner ist nicht verfügbar</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="260"/>
         <source>Unable to temporary rename the folder</source>
-        <translation>Konnte den Ordner temporär nicht umbennen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="283"/>
         <source>Unable to do the final real move the folder</source>
-        <translation>Konnte finales verschieben des Ordners nicht durchführen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="314"/>
         <source>Unable to move the folder</source>
-        <translation>Konnte Ordner nicht verschieben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/MkPath.cpp" line="320"/>
         <source>Unable to move the folder: errno: %1</source>
-        <translation>Konnte Ordner nicht verschieben: Fehlernummer: %1</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1235,7 +1235,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
         <location filename="../../../OptionDialog.ui" line="101"/>
         <location filename="../../../OptionDialog.ui" line="387"/>
         <source>Themes</source>
-        <translation>Themes</translation>
+        <translation>Design</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="106"/>
@@ -1250,12 +1250,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="251"/>
         <source>Check for updates</source>
-        <translation>Nach Updates suchen</translation>
+        <translation>Automatisch nach Updates suchen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="289"/>
         <source>Portable (need restart)</source>
-        <translation>Portbel (Benötigt Neustart)</translation>
+        <translation>Portabel machen (Benötigt Neustart)</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="349"/>
@@ -1321,12 +1321,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="241"/>
         <source>Display the OS warning</source>
-        <translation>OS Warnungen anzeigen</translation>
+        <translation>Betriebssytem Warnungen anzeigen</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="261"/>
         <source>Remaining time algorithm</source>
-        <translation>Verbleibende Zeit Algorithmus</translation>
+        <translation>Algorithmus für verbleibende Zeit</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="269"/>
@@ -1381,12 +1381,12 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="591"/>
         <source>Themes:</source>
-        <translation>Themes:</translation>
+        <translation>Desings:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="653"/>
         <source>Unable to load the themes plugin</source>
-        <translation>Konnte das Themes-Plugin nicht laden</translation>
+        <translation>Konnte das Design-Plugin nicht laden</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="753"/>
@@ -1536,17 +1536,17 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="17"/>
         <source>In normal case, only the dll 64Bits is important with 64Bits OS, and 32Bits dll with 32Bits OS. When it&apos;s important, the UAC can be opened to load the dll.</source>
-        <translation>Im Normalfall sind nur 64Bit DLL-Dateien auf 64Bit Betriebssystemen wichtig und 32Bit DLL-Dateien auf 32Bit Betriebssystemen. Es kann bei wichtigen Dateien vorkommen, dass sich die Windows UAC öffnet.</translation>
+        <translation>Im Normalfall ist für 32 oder 64-Bit-Beriebsysteme nur die jeweilige DLL wichtig. Möglicherweise muss die Windows UAC bestätigt werden, um die DLL zu laden.</translation>
     </message>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="20"/>
         <source>All the dlls are importants</source>
-        <translation>Alle DLLs sind wichtig</translation>
+        <translation>Alle DLLs werden als wichtig eingestuft</translation>
     </message>
     <message>
         <location filename="../../PluginLoader/catchcopy-v0002/OptionsWidget.ui" line="34"/>
         <source>Register for all users</source>
-        <translation>Für alle Benutzer registrieren</translation>
+        <translation>Für alle Benutzer einrichten</translation>
     </message>
 </context>
 <context>
@@ -1614,7 +1614,7 @@ Diese Version wurde kompiliert als Version: %1.</translation>
     <message>
         <location filename="../../../PluginInformation.cpp" line="49"/>
         <source>Themes</source>
-        <translation>Themes</translation>
+        <translation>Designs</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="52"/>
@@ -1808,12 +1808,12 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/radialMap/map.cpp" line="108"/>
         <source>%1 files</source>
-        <translation>%1 Dateien</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/radialMap/map.cpp" line="204"/>
         <source>%1 file, with an average size of %2</source>
-        <translation>%1 Datei, mit einer ungefähren Größe von %2</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1867,7 +1867,7 @@ seit: %2</translation>
         <location filename="../../Themes/Oxygen2/radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../Themes/Oxygen2/radialMap/widgetEvents.cpp" line="196"/>
         <source> into %1 files</source>
-        <translation>in %1 Dateien</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1875,47 +1875,47 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="14"/>
         <source>Renaming rules</source>
-        <translation>Umbenennungsregeln</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="35"/>
         <source>First renaming</source>
-        <translation>Erste Umbenennung</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="41"/>
         <source>%name% - copy%suffix%</source>
         <extracomment>%name% should not be translated</extracomment>
-        <translation>%name% - Kopie%suffix%</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="51"/>
         <source>Second renaming</source>
-        <translation>Zweite Umbenennung</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="57"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation>%name% - Kopie (%number%)%suffix%</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.ui" line="67"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; Für den Originalen Dateinamen, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; für die extre Nummer, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; Datei suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="46"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="71"/>
         <source>%1 - copy%2</source>
-        <translation>%1 - Kopie%2</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="50"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/RenamingRules.cpp" line="84"/>
         <source>%1 - copy (%2)%3</source>
-        <translation>%1 - Kopie (%2)%3</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1924,30 +1924,30 @@ seit: %2</translation>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="436"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="438"/>
         <source>%1 - copy</source>
-        <translation>%1 - Kopie</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="447"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="449"/>
         <source>%1 - copy (%2)</source>
-        <translation>%1 - Kopie (%2)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="539"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="541"/>
         <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="550"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="552"/>
         <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%number%)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="608"/>
         <source>Problem with folder read</source>
-        <translation>Es ist ein Problem beim Lesen des Ordners aufgetreten</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2057,62 +2057,58 @@ seit: %2</translation>
     <name>Themes</name>
     <message>
         <location filename="../../Themes/Oxygen2/interface.cpp" line="292"/>
-        <source>%1 is deprecated, Use %2</source>
-        <translation>%1 ist veraltet, benutzen Sie %2</translation>
-    </message>
-    <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="294"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="313"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation>Kaufen Sie die Ultimate Version um die Entwicklung zu fördern</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="505"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="510"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation>Datei %1/%2, Größe: %3/%4</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="812"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="817"/>
         <source>Copy list</source>
-        <translation>Kopierliste</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="814"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="819"/>
         <source>Move list</source>
-        <translation>Verschieben-Liste</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1315"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1320"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation>Nicht schließen, wenn Fehler gefunden wurden</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1316"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1321"/>
         <source>Never close</source>
-        <translation>Nie schließen</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1317"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1322"/>
         <source>Always close</source>
-        <translation>Immer schließen</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1319"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1324"/>
         <source>File Name, 0KB</source>
-        <translation>Dateiname, 0KB</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1514"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1526"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1538"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1519"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1531"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1543"/>
         <source>Select a color</source>
-        <translation>Wählen Sie eine Farbe</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1626"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1637"/>
-        <location filename="../../Themes/Oxygen2/interface.cpp" line="1646"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1631"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1642"/>
+        <location filename="../../Themes/Oxygen2/interface.cpp" line="1651"/>
         <source>%1 %2% of %3 into %4 files</source>
-        <translation>%1 %2 von %3 in %4 Dateien</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2120,24 +2116,24 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/ThemesFactory.cpp" line="295"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation>Nicht schließen, wenn Fehler gefunden wurden</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/ThemesFactory.cpp" line="296"/>
         <source>Never close</source>
-        <translation>Nie schließen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/ThemesFactory.cpp" line="297"/>
         <source>Always close</source>
-        <translation>Immer schließen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/ThemesFactory.cpp" line="493"/>
         <location filename="../../Themes/Oxygen2/ThemesFactory.cpp" line="508"/>
         <location filename="../../Themes/Oxygen2/ThemesFactory.cpp" line="523"/>
         <source>Select a color</source>
-        <translation>Wählen Sie eine Farbe</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2145,49 +2141,49 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="181"/>
         <source>Try rename with using special characters</source>
-        <translation>Versuche mit Sonderzeichen umzubennen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
         <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="492"/>
         <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%number%)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="514"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
         <source>File not found</source>
-        <translation>Datei nicht gefunden</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="782"/>
         <source>Unable to change the date</source>
-        <translation>Datum konnte nicht geändert werden</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="202"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="203"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation>Falsches Änderungsdatum oder Fehler beim Auslesen, Sie können die Übertragung des Zeitstempels deaktivieren</translation>
-    </message>
-    <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="280"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="297"/>
-        <source>Unable to create the destination folder: </source>
-        <translation>Zielordner konnte nicht erstellt werden: </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="282"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="299"/>
+        <source>Unable to create the destination folder: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="284"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="301"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation>Zielordner konnte nicht erstellt werden, Fehler Nummer: %1</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2195,108 +2191,108 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="44"/>
         <source>Transfer</source>
-        <translation>Übertragung</translation>
+        <translation>Transfer</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="53"/>
         <source>Keep the file date</source>
-        <translation>Dateidatum erhalten</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="73"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="93"/>
         <source>Less performance if checked</source>
-        <translation>Weniger Leistung bei Überprüfung</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="96"/>
         <source>Follow the strict order</source>
-        <translation>Reihenfolge beachten</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="106"/>
         <source>Move the whole folder</source>
-        <translation>Den kompletten Ordner verschieben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="113"/>
         <source>Transfer the file rights</source>
-        <translation>Übertragung der Dateirechte</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="127"/>
         <source>Create full path if not exists</source>
-        <translation>Vollen Pfad erstellen, wenn nicht vorhanden</translation>
+        <translation>Pfad erstellen, wenn er nicht existiert</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="143"/>
         <source>Error and collision</source>
-        <translation>Fehler und Kollision</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="149"/>
         <source>When folder error</source>
-        <translation>Bei Ordnerfehler</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="159"/>
         <source>When file error</source>
-        <translation>Bei Dateifehler</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="185"/>
         <source>When file collision</source>
-        <translation>Bei Dateikollision</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="245"/>
         <source>When folder collision</source>
-        <translation>Bei Ordnerkollision</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="276"/>
         <source>Check if destination folder exists</source>
-        <translation>Überprüfen ob Zielordner existiert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="283"/>
         <source>Renaming rules</source>
-        <translation>Umbenennungsregeln</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="303"/>
         <source>Delete partially transferred files</source>
-        <translation>Lösche nur teilweise übertragene Dateien</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="316"/>
         <source>Rename the original destination</source>
-        <translation>Bennene das Originale Ziel um</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="347"/>
         <source>Performance</source>
-        <translation>Leistung</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="353"/>
         <source>Inode threads (unsafe &gt; 1)</source>
-        <translation>Inode Threads (Unsicher &gt;1)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="395"/>
         <source>Misc</source>
-        <translation>Verschiedenes</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="401"/>
         <source>Check the disk space</source>
-        <translation>Benötigten Speicherplatz überprüfen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="411"/>
         <source>Use this folder when destination is not set</source>
-        <translation>Diesen Ordner benutzen, falls kein Ziel gewählt</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="423"/>
@@ -2306,7 +2302,7 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="445"/>
         <source>Filters</source>
-        <translation>Filter</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2314,7 +2310,7 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="14"/>
         <source>Error with file</source>
-        <translation>Fehler bei Datei</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="20"/>
@@ -2329,12 +2325,12 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="76"/>
         <source>Modified</source>
-        <translation>Verändert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="93"/>
         <source>File name</source>
-        <translation>Dateiname</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="110"/>
@@ -2344,37 +2340,37 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="127"/>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="173"/>
         <source>&amp;Always perform this action</source>
-        <translation>&amp;Diese Aktion immer ausführen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="193"/>
         <source>Try in with elevated privileges</source>
-        <translation>Versuche mit erhöhten Rechten</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="200"/>
         <source>Put to bottom</source>
-        <translation>Ans Ende setzen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="207"/>
         <source>Retry</source>
-        <translation>Wiederholen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="214"/>
         <source>&amp;Skip</source>
-        <translation>&amp;Überspringen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="221"/>
         <source>&amp;Cancel</source>
-        <translation>&amp;Abbrechen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2382,7 +2378,7 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="14"/>
         <source>The file exists</source>
-        <translation>Die Datei existiert bereits</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="34"/>
@@ -2404,49 +2400,49 @@ seit: %2</translation>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="99"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="187"/>
         <source>Modified</source>
-        <translation>Verändert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="116"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="204"/>
         <source>File name</source>
-        <translation>Dateiname</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="133"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="221"/>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="277"/>
         <source>Suggest new &amp;name</source>
-        <translation>Schlage neuen &amp;Namen vor</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="288"/>
         <source>&amp;Always perform this action</source>
-        <translation>&amp;Diese Aktion immer ausführen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="308"/>
         <source>&amp;Rename</source>
-        <translation>&amp;Umbennen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="315"/>
         <source>&amp;Overwrite</source>
-        <translation>&amp;Überschreiben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="325"/>
         <source>&amp;Skip</source>
-        <translation>&amp;Überschpringen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="332"/>
         <source>&amp;Cancel</source>
-        <translation>&amp;Abbrechen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="341"/>
@@ -2457,13 +2453,13 @@ seit: %2</translation>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="346"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="349"/>
         <source>Overwrite if modification date differs</source>
-        <translation>Überschreiben, wenn Änderungsdatum unterschiedlich</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="354"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="357"/>
         <source>Overwrite if older</source>
-        <translation>Überschreiben, falls älter</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2471,7 +2467,7 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="14"/>
         <source>The source and destination are same</source>
-        <translation>Die Quelle und das Ziel sind ident</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="40"/>
@@ -2481,42 +2477,42 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="70"/>
         <source>File name</source>
-        <translation>Dateiname</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="90"/>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="110"/>
         <source>Modified</source>
-        <translation>Verändert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="159"/>
         <source>Suggest new &amp;name</source>
-        <translation>Schlage neuen &amp;Namen vor</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="170"/>
         <source>&amp;Always perform this action</source>
-        <translation>&amp;Diese Aktion immer ausführen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="190"/>
         <source>&amp;Rename</source>
-        <translation>&amp;Umbenennen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="197"/>
         <source>&amp;Skip</source>
-        <translation>&amp;Überspringen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="204"/>
         <source>&amp;Cancel</source>
-        <translation>&amp;Abbrechen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2524,7 +2520,7 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="14"/>
         <source>The source and destination is identical</source>
-        <translation>Die Quelle und das Ziel sind ident</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="34"/>
@@ -2540,39 +2536,39 @@ seit: %2</translation>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="82"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="150"/>
         <source>Modified</source>
-        <translation>Verändert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="99"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="160"/>
         <source>Folder name</source>
-        <translation>Ordnername</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="116"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="184"/>
         <source>Folder</source>
-        <translation>Ordner</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="227"/>
         <source>Suggest new &amp;name</source>
-        <translation>Schlage neuen &amp;Namen vor</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="238"/>
         <source>&amp;Always perform this action</source>
-        <translation>&amp;Diese Aktion immer ausführen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="245"/>
         <source>&amp;Rename</source>
-        <translation>&amp;Umbennen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="252"/>
         <source>Merge</source>
-        <translation>Vereinen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="259"/>
@@ -2582,7 +2578,7 @@ seit: %2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="266"/>
         <source>&amp;Cancel</source>
-        <translation>&amp;Abbrechen</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2590,47 +2586,47 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="232"/>
         <source>0</source>
-        <translation>0</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="252"/>
         <source>100MB+</source>
-        <translation>100MB+</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="301"/>
         <source>&amp;More</source>
-        <translation>&amp;Mehr</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="321"/>
         <source>&amp;Pause</source>
-        <translation>&amp;Pause</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="389"/>
         <source>Close on transfer completion</source>
-        <translation>Schließen, um Transfer zu beenden</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="420"/>
         <source>From:</source>
-        <translation>Von:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="482"/>
         <source>&amp;Skip</source>
-        <translation>&amp;Überspringen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="493"/>
         <source>&amp;Cancel</source>
-        <translation>&amp;Abbrechen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="527"/>
         <source>Limit copy speed to:</source>
-        <translation>Limitiere Kopiergeschwindigkeit auf:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="570"/>
@@ -2640,57 +2636,57 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="593"/>
         <source>Move the selected items to the top</source>
-        <translation>Verschiebe ausgewähle Elemente an den Anfang</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="619"/>
         <source>Move up the selected items</source>
-        <translation>Elemente nach oben verschieben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="645"/>
         <source>Move down the selected items</source>
-        <translation>Elemente nach unten verschieben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="671"/>
         <source>Move the selected items to the bottom</source>
-        <translation>Verschiebe ausgewähle Elemente ans Ende</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="697"/>
         <source>Add file/folder</source>
-        <translation>Füge Datei/Ordner hinzu</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="726"/>
         <source>Delete the selected items</source>
-        <translation>Lösche die ausgewählten Objekte</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="752"/>
         <source>Search</source>
-        <translation>Suche</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="781"/>
         <source>Export the transfer list</source>
-        <translation>Transferliste exportieren</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="807"/>
         <source>Import the transfer list</source>
-        <translation>Transferliste importieren</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="862"/>
         <source>Previous</source>
-        <translation>Vorherige(s)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="869"/>
         <source>Next</source>
-        <translation>Nächste(s)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="904"/>
@@ -2701,7 +2697,7 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="924"/>
         <source>Export the errors into transfer list</source>
-        <translation>Fehler in Transferliste exportieren</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="963"/>
@@ -2716,37 +2712,37 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="982"/>
         <source>Interface</source>
-        <translation>Interface</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="1028"/>
         <source>Add file</source>
-        <translation>Datei hinzufügen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="1037"/>
         <source>Add folder</source>
-        <translation>Ordner hinzufügen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="1046"/>
         <source>Move file(s)</source>
-        <translation>Verschiebe Datei(en)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="1055"/>
         <source>Move folder</source>
-        <translation>Ordner verschieben</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="1064"/>
         <source>Copy file(s)</source>
-        <translation>Kopiere Datei(en)</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/interface.ui" line="1073"/>
         <source>Copy folder</source>
-        <translation>Kopiere Ordner</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2754,38 +2750,38 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="129"/>
         <source>Speed with progress bar</source>
-        <translation>Geschwindigkeit mit Fortschrittsbalken</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="155"/>
         <source>Show speed as main information</source>
-        <translation>Zeige Geschwindigkeit als Hauptinformation</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="162"/>
         <source>Progression color</source>
-        <translation>Fortschrittsbalken Farbe</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="169"/>
         <location filename="../../Themes/Oxygen2/options.ui" line="215"/>
         <source>Limit copy speed at:</source>
-        <translation>Limitiere Kopiergeschwindigkeit auf:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="179"/>
         <source> KB/s</source>
-        <translation>KB/s</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="208"/>
         <source>Show dual progression</source>
-        <translation>Zeige dualen Fortschrittsbalken</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/options.ui" line="235"/>
         <source>At the end of the copy: </source>
-        <translation>Nach ende des Kopiervorgangs: </translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2793,48 +2789,48 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="44"/>
         <source>Use</source>
-        <translation>Benutze</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="57"/>
         <source>Minimize on close to systray</source>
-        <translation>Minimiere in den Systray</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="77"/>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="94"/>
         <source>Limit copy speed to</source>
-        <translation>Limitiere Kopiergeschwindigkeit auf</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="87"/>
         <source>At the end of the copy</source>
-        <translation>Nach beenden des Vorgangs</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="104"/>
         <source> KB/s</source>
-        <translation>KB/s</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="117"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation>Starte mit dem &quot;Mehr Butto&quot; gedrückt</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="124"/>
         <source>Start minimized</source>
-        <translation>Starte minimiert</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="144"/>
         <source>Always on top</source>
-        <translation>Immer im Vordergrund</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="151"/>
         <source>Save position</source>
-        <translation>Speichere Position</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="211"/>
@@ -2844,42 +2840,42 @@ seit: %2</translation>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="227"/>
         <source>Informations</source>
-        <translation>Informationen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="233"/>
         <source>Show speed as main information</source>
-        <translation>Zeige Geschwindigkeit als Hauptinformation</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="265"/>
         <source>Display</source>
-        <translation>Anzeige</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="271"/>
         <source>Speed with progress bar</source>
-        <translation>Geschwindigkeit mit Fortschrittsbalken</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="281"/>
         <source>Show dual progression</source>
-        <translation>Zeige duale Fortschrittsbalken</translation>
+        <translation>Zweifachen Fortschrittsbalken anzeigen</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="291"/>
         <source>Show progression in the title</source>
-        <translation>Zeige Fortschritt  im Titel</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="301"/>
         <source>Progression color</source>
-        <translation>Fortschrittsbalken Farbe</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen2/themesOptions.ui" line="320"/>
         <source>Click to edit the color</source>
-        <translation>Klicken, um Farbe zu ändern</translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

@@ -247,7 +247,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="267"/>
         <source>Show dual progression</source>
-        <translation>Zweifachen Fortschritt anzeigen</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="219"/>
@@ -298,7 +298,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="190"/>
         <source>Save position</source>
-        <translation>Speichere Position</translation>
+        <translation>Speichere Fensterposition</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="213"/>
@@ -328,7 +328,7 @@
     <message>
         <location filename="../../themesOptions.ui" line="183"/>
         <source>Always on top</source>
-        <translation>Fenster immer im Vordergrund</translation>
+        <translation>Fenster immer im Vordergrund halten</translation>
     </message>
 </context>
 </TS>
