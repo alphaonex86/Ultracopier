@@ -587,7 +587,7 @@ char TransferThreadAsync::writingLetter() const
 //not copied size, ...
 uint64_t TransferThreadAsync::realByteTransfered() const
 {
-    switch(transfer_stat)
+    switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
     case TransferStat_PostTransfer:
@@ -603,7 +603,7 @@ uint64_t TransferThreadAsync::realByteTransfered() const
 std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
 {
     std::pair<uint64_t,uint64_t> returnVar;
-    switch(transfer_stat)
+    switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
         returnVar.first=transferProgression;
