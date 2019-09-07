@@ -2018,22 +2018,22 @@ depuis:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="520"/>
         <source>A&amp;dd copy/moving</source>
-        <translation>Une cop&amp;ie/déplacement</translation>
+        <translation>Ajouter cop&amp;ie/déplacement</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="546"/>
         <source>Add &amp;copy</source>
-        <translation>Ajouter et &amp;copie</translation>
+        <translation>Ajouter une &amp;copie</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="547"/>
         <source>Add &amp;transfer</source>
-        <translation>Ajouter et &amp;transférer</translation>
+        <translation>Ajouter un &amp;transfére</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="548"/>
         <source>Add &amp;move</source>
-        <translation>Ajouter et dép&amp;lacement</translation>
+        <translation>Ajouter un dép&amp;lacement</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="177"/>

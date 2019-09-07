@@ -112,6 +112,7 @@ public:
     std::pair<quint64,quint64> getReturnPairQuint64ToCopyEngine() const;
     Ultracopier::ItemOfCopyList getReturnItemOfCopyListToCopyEngine() const;
     void setMkFullPath(const bool mkFullPath);
+    std::unordered_set<void *> overCheckUsedThread;
 
     void autoStartIfNeeded();
 public slots:

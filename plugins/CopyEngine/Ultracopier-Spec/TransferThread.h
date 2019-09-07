@@ -66,7 +66,7 @@ public:
     /// \brief get the transfer time in ms
     int64_t transferTime() const;
     /// \brief to store the transfer id
-    uint64_t			transferId;
+    std::atomic<uint64_t>			transferId;
     /// \brief to store the transfer size
     uint64_t			transferSize;
 
@@ -133,7 +133,7 @@ public:
     static bool rename(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination);
 protected:
     void run();
-    void resetExtraVariable();
+    virtual void resetExtraVariable();
     bool isSame();
     bool destinationExists();
 
@@ -170,7 +170,7 @@ signals:
     void pushStat(const TransferStat &stat,const uint64_t &pos) const;
 public slots:
     /// \brief to set files to transfer
-    bool setFiles(const INTERNALTYPEPATH& source,const int64_t &size,const INTERNALTYPEPATH& destination,const Ultracopier::CopyMode &mode);
+    virtual bool setFiles(const INTERNALTYPEPATH& source,const int64_t &size,const INTERNALTYPEPATH& destination,const Ultracopier::CopyMode &mode);
     /// \brief to set the new name of the destination
     void setFileRename(const std::string &nameForRename);
     /// \brief to start the transfer of data
@@ -200,7 +200,7 @@ protected:
     };
 
     Ultracopier::CopyMode		mode;
-    TransferStat	transfer_stat;
+    std::atomic<TransferStat>	transfer_stat;
     bool			doRightTransfer;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool            rsync;

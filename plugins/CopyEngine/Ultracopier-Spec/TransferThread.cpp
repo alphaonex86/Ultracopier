@@ -186,7 +186,7 @@ void TransferThread::setFileRename(const std::string &nameForRename)
     #else
     std::string::size_type n=destination.rfind('/');
     #endif
-    #ifdef Q_OS_WINDOWS
+    #ifdef Q_OS_WIN32
     const std::wstring::size_type n2=destination.rfind(L'\\');
     if(n2>n && (n2!=std::wstring::npos || n==std::wstring::npos))
         n=n2;
@@ -197,10 +197,19 @@ void TransferThread::setFileRename(const std::string &nameForRename)
     if(n != std::string::npos)
     #endif
     {
-        INTERNALTYPEPATH destinationPath=destination.substr(0,n+1);
+        INTERNALTYPEPATH destinationPath=destination.substr(0,n);//+1
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] nameForRename: "+nameForRename+", destinationPath: "+internalStringTostring(destinationPath));
-        destination=destinationPath+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(nameForRename);
+        if(stringEndsWith(destinationPath,'/')
+        #ifdef Q_OS_WIN32
+                || stringEndsWith(destinationPath,'\\')
+        #endif
+                )
+            destination=destinationPath+TransferThread::stringToInternalString(nameForRename);
+        else
+            destination=destinationPath+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(nameForRename);
     }
+    else
+        destination=TransferThread::stringToInternalString(nameForRename);
 
     /*why all this code?
     if(!renameTheOriginalDestination)

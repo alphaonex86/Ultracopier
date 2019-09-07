@@ -138,14 +138,14 @@ void FileIsSameDialog::on_SuggestNewName_clicked()
         if(num==1)
         {
             if(firstRenamingRule.empty())
-                newFileName=tr("%name% - copy");
+                newFileName=tr("%name% - copy%suffix%");
             else
                 newFileName=QString::fromStdString(firstRenamingRule);
         }
         else
         {
             if(otherRenamingRule.empty())
-                newFileName=tr("%name% - copy (%number%)");
+                newFileName=tr("%name% - copy (%number%)%suffix%");
             else
                 newFileName=QString::fromStdString(otherRenamingRule);
             newFileName.replace(QStringLiteral("%number%"),QString::number(num));

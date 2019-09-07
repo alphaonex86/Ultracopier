@@ -103,6 +103,10 @@ void ListThread::transferInodeIsClosed()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located!");
         return;
     }
+    if(overCheckUsedThread.find(temp_transfer_thread)==overCheckUsedThread.cend())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"transfer thread not located in overcheck");
+    else
+        overCheckUsedThread.erase(temp_transfer_thread);
     if(putAtBottomAfterError.find(temp_transfer_thread)!=putAtBottomAfterError.cend())
     {
         doNewActions_inode_manipulation();
@@ -657,8 +661,8 @@ uint64_t ListThread::generateIdNumber()
 //do new actions
 void ListThread::doNewActions_start_transfer()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2")
-                             .arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()).toStdString());
+    /*ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2")
+                             .arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()).toStdString());*/
     if(stopIt)
         return;
     int numberOfTranferRuning=getNumberOfTranferRuning();
@@ -668,23 +672,24 @@ void ListThread::doNewActions_start_transfer()
     int int_for_loop=0;
     while(int_for_loop<loop_size)
     {
-        if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_WaitForTheTransfer/*ready to start the transfer*/)
+        TransferThreadAsync *transferThread=transferThreadList.at(int_for_loop);
+        if(transferThread->getStat()==TransferStat_WaitForTheTransfer/*ready to start the transfer*/)
         {
             //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
-            if(transferThreadList.at(int_for_loop)->transferSize>=parallelizeIfSmallerThan)
+            if(transferThread->transferSize>=parallelizeIfSmallerThan)
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
                 if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
                 {
-                    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
-                    transferThreadList.at(int_for_loop)->startTheTransfer();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
+                    transferThread->startTheTransfer();
                     numberOfTranferRuning++;
                 }
             }
             else
             {
-                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
-                transferThreadList.at(int_for_loop)->startTheTransfer();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
+                transferThread->startTheTransfer();
                 numberOfTranferRuning++;
             }
         }
@@ -696,23 +701,24 @@ void ListThread::doNewActions_start_transfer()
     int_for_loop=0;
     while(int_for_loop<loop_size)
     {
-        if(transferThreadList.at(int_for_loop)->getStat()==TransferStat_PreOperation/*wait user dialog action*/)
+        TransferThreadAsync *transferThread=transferThreadList.at(int_for_loop);
+        if(transferThread->getStat()==TransferStat_PreOperation/*wait user dialog action*/)
         {
             //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
-            if(transferThreadList.at(int_for_loop)->transferSize>=parallelizeIfSmallerThan)
+            if(transferThread->transferSize>=parallelizeIfSmallerThan)
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
                 if(numberOfTranferRuning<ULTRACOPIER_PLUGIN_MAXPARALLELTRANFER)
                 {
-                    //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
-                    transferThreadList.at(int_for_loop)->startTheTransfer();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
+                    transferThread->startTheTransfer();
                     numberOfTranferRuning++;
                 }
             }
             else
             {
-                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
-                transferThreadList.at(int_for_loop)->startTheTransfer();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
+                transferThread->startTheTransfer();
                 numberOfTranferRuning++;
             }
         }
@@ -780,8 +786,11 @@ void ListThread::doNewActions_inode_manipulation()
                     I this case it lose all data
                     */
                 currentTransferThread=transferThreadList.at(int_for_transfer_thread_search);
-                if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0) // /!\ important!
+                if(currentTransferThread->getStat()==TransferStat_Idle && currentTransferThread->transferId==0 &&
+                        overCheckUsedThread.find(currentTransferThread)==overCheckUsedThread.cend()) // /!\ important!
                 {
+                    overCheckUsedThread.insert(currentTransferThread);
+
                     std::string drive=driveManagement.getDrive(TransferThread::internalStringTostring(currentActionToDoTransfer.destination));
                     if(requiredSpace.find(drive)!=requiredSpace.cend() &&
                             (currentActionToDoTransfer.mode!=Ultracopier::Move ||

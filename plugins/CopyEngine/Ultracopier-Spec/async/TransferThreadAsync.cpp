@@ -33,7 +33,17 @@ TransferThreadAsync::TransferThreadAsync() :
     if(!connect(this,&TransferThreadAsync::internalStartPostOperation,        this,                   &TransferThreadAsync::doFilePostOperation,  Qt::QueuedConnection))
         abort();
 
+    //the thread change operation
+    if(!connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThreadAsync::preOperation,          Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThreadAsync::postOperation,         Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThreadAsync::internalStartTheTransfer,      Qt::QueuedConnection))
+        abort();
+
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: "+std::to_string((int64_t)QThread::currentThreadId()));
     start();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop: "+std::to_string((int64_t)QThread::currentThreadId()));
 }
 
 TransferThreadAsync::~TransferThreadAsync()
@@ -63,16 +73,10 @@ TransferThreadAsync::~TransferThreadAsync()
 
 void TransferThreadAsync::run()
 {
-    //the thread change operation
-    if(!connect(this,&TransferThread::internalStartPreOperation,	this,					&TransferThreadAsync::preOperation,          Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalStartPostOperation,	this,					&TransferThreadAsync::postOperation,         Qt::QueuedConnection))
-        abort();
-    if(!connect(this,&TransferThread::internalTryStartTheTransfer,	this,					&TransferThreadAsync::internalStartTheTransfer,      Qt::QueuedConnection))
-        abort();
-
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: "+std::to_string((int64_t)QThread::currentThreadId()));
     moveToThread(this);
     exec();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop: "+std::to_string((int64_t)QThread::currentThreadId()));
 }
 
 void TransferThreadAsync::startTheTransfer()
@@ -114,8 +118,8 @@ void TransferThreadAsync::internalStartTheTransfer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(canStartTransfer)
     {
-        //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true")); -> call for second time, first time was not ready
-        ifCanStartTransfer();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true"));// call for second time, first time was not ready, if blocked in preop why?
+        //ifCanStartTransfer();
         return;
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] check how start the transfer"));
@@ -127,11 +131,14 @@ void TransferThreadAsync::internalStartTheTransfer()
 
 bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t &size, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode &mode)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
     if(transfer_stat!=TransferStat_Idle)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
         return false;
     }
+    if(!isRunning())
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] The current thread is not running");
     if(!TransferThread::setFiles(source,size,destination,mode))
         return false;
     return true;
@@ -211,6 +218,7 @@ void TransferThreadAsync::preOperation()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after perm");
     transfer_stat=TransferStat_WaitForTheTransfer;
     ifCanStartTransfer();
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit preOperationStopped()");
     emit preOperationStopped();
 }
 
@@ -264,8 +272,8 @@ void TransferThreadAsync::ifCanStartTransfer()
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+
                                  "] transfer_stat:"+std::to_string(transfer_stat)+
-                                 ", wait start call: "+std::to_string(canStartTransfer));
-        preOperationStopped();//tiger to seam maybe is can be started
+                                 ", canStartTransfer: "+std::to_string(canStartTransfer));
+        //preOperationStopped();//tiger to seam maybe is can be started, maybe this generate a bug
         return;
     }
     transfer_stat=TransferStat_Transfer;
