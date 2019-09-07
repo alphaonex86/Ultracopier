@@ -467,7 +467,7 @@ void TransferThreadAsync::skip()
     wait();
     start();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with stat: "+std::to_string(transfer_stat));
-    switch(transfer_stat)
+    switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_WaitForTheTransfer:
         //needRemove=true;never put that's here, can product destruction of the file
@@ -497,7 +497,7 @@ void TransferThreadAsync::skip()
 //return info about the copied size
 int64_t TransferThreadAsync::copiedSize()
 {
-    switch(transfer_stat)
+    switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
     case TransferStat_PostOperation:
@@ -531,7 +531,7 @@ void TransferThreadAsync::setId(int id)
 
 char TransferThreadAsync::readingLetter() const
 {
-    switch(transfer_stat)
+    switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Idle:
         return '_';
@@ -558,7 +558,7 @@ char TransferThreadAsync::readingLetter() const
 
 char TransferThreadAsync::writingLetter() const
 {
-    switch(transfer_stat)
+    switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Idle:
         return '_';

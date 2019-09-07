@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de" sourcelanguage="en">
+<TS version="2.1" language="de" sourcelanguage="en">
 <context>
     <name>CopyEngine</name>
     <message>
@@ -209,13 +209,13 @@
     <name>FileExistsDialog</name>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="187"/>
-        <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <source>%name% - copy%suffix%</source>
+        <translation type="unfinished">%name% - Kopie%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="194"/>
-        <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%number%)</translation>
+        <source>%name% - copy (%number%)%suffix%</source>
+        <translation type="unfinished">%name% - Kopie% (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="282"/>
@@ -232,13 +232,13 @@
     <name>FileIsSameDialog</name>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="141"/>
-        <source>%name% - copy</source>
-        <translation>%name% - Kopie</translation>
+        <source>%name% - copy%suffix%</source>
+        <translation type="unfinished">%name% - Kopie%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="148"/>
-        <source>%name% - copy (%number%)</source>
-        <translation>%name% - Kopie (%number%)</translation>
+        <source>%name% - copy (%number%)%suffix%</source>
+        <translation type="unfinished">%name% - Kopie% (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="218"/>
@@ -591,14 +591,14 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="514"/>
-        <location filename="../../TransferThread.cpp" line="746"/>
+        <location filename="../../TransferThread.cpp" line="523"/>
+        <location filename="../../TransferThread.cpp" line="755"/>
         <source>File not found</source>
         <translation>Datei nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="746"/>
-        <location filename="../../TransferThread.cpp" line="782"/>
+        <location filename="../../TransferThread.cpp" line="755"/>
+        <location filename="../../TransferThread.cpp" line="791"/>
         <source>Unable to change the date</source>
         <translation>Kann Datum nicht ändern</translation>
     </message>
@@ -608,12 +608,12 @@
         <translation>Versuche Umbenennung mit Sonderzeichen</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="485"/>
+        <location filename="../../TransferThread.cpp" line="494"/>
         <source>%name% - copy</source>
         <translation>%name% - Kopie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="492"/>
+        <location filename="../../TransferThread.cpp" line="501"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - Kopie (%number%)</translation>
     </message>
@@ -621,19 +621,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="203"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="210"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Falsches Änderungsdatum oder Fehler beim Auslesen, Sie können die Übertragung des Zeitstempels deaktivieren</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="282"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="299"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="290"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="307"/>
         <source>Unable to create the destination folder: </source>
         <translation>Zielordner konnte nicht erstellt werden: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="284"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="301"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="292"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="309"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>Zielordner konnte nicht erstellt werden, Fehler Nummer: %1</translation>
     </message>

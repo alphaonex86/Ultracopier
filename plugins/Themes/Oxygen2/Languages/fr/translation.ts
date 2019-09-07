@@ -331,7 +331,7 @@
     <message>
         <location line="+60"/>
         <source>Dark UI</source>
-        <translation type="unfinished"></translation>
+        <translation>UI obscure</translation>
     </message>
     <message>
         <location line="+16"/>

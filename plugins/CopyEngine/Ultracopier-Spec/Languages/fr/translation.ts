@@ -209,13 +209,13 @@
     <name>FileExistsDialog</name>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="187"/>
-        <source>%name% - copy</source>
-        <translation>%name% - copie</translation>
+        <source>%name% - copy%suffix%</source>
+        <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="194"/>
-        <source>%name% - copy (%number%)</source>
-        <translation>%name% - copie (%number%)</translation>
+        <source>%name% - copy (%number%)%suffix%</source>
+        <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="282"/>
@@ -232,13 +232,13 @@
     <name>FileIsSameDialog</name>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="141"/>
-        <source>%name% - copy</source>
-        <translation>%name% - copie</translation>
+        <source>%name% - copy%suffix%</source>
+        <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="148"/>
-        <source>%name% - copy (%number%)</source>
-        <translation>%name% - copie (%number%)</translation>
+        <source>%name% - copy (%number%)%suffix%</source>
+        <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="218"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="../../MkPath.cpp" line="320"/>
         <source>Unable to move the folder: errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de déplacer le dossier: errno: %1</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="129"/>
@@ -591,8 +591,8 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="514"/>
-        <location filename="../../TransferThread.cpp" line="746"/>
+        <location filename="../../TransferThread.cpp" line="523"/>
+        <location filename="../../TransferThread.cpp" line="755"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
@@ -602,18 +602,18 @@
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="485"/>
+        <location filename="../../TransferThread.cpp" line="494"/>
         <source>%name% - copy</source>
         <translation>%name% - copie</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="492"/>
+        <location filename="../../TransferThread.cpp" line="501"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="746"/>
-        <location filename="../../TransferThread.cpp" line="782"/>
+        <location filename="../../TransferThread.cpp" line="755"/>
+        <location filename="../../TransferThread.cpp" line="791"/>
         <source>Unable to change the date</source>
         <translation>Impossible de changer la date</translation>
     </message>
@@ -621,21 +621,21 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="203"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="210"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="282"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="299"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="290"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="307"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer le dossier de destination: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="284"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="301"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="292"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="309"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer le dossier de destination, errno: %1</translation>
     </message>
 </context>
 <context>

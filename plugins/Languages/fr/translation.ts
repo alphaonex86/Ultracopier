@@ -577,7 +577,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation>Restant:</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="83"/>
@@ -682,12 +682,12 @@
     <name>FileExistsDialog</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="187"/>
-        <source>%name% - copy</source>
+        <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="194"/>
-        <source>%name% - copy (%number%)</source>
+        <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -705,12 +705,12 @@
     <name>FileIsSameDialog</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="141"/>
-        <source>%name% - copy</source>
+        <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="148"/>
-        <source>%name% - copy (%number%)</source>
+        <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1146,17 +1146,17 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OSSpecific.ui" line="119"/>
         <source>Classic</source>
-        <translation type="unfinished"></translation>
+        <translation>Classique</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="124"/>
         <source>Modern</source>
-        <translation type="unfinished"></translation>
+        <translation>Moderne</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="129"/>
         <source>Supercopier</source>
-        <translation type="unfinished"></translation>
+        <translation>Supercopier</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="177"/>
@@ -1171,7 +1171,7 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OSSpecific.cpp" line="29"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer of your file manager to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le remplacement du système de copie/déplacement par défaut n’est pas pris en charge par le gestionnaire de fichiers (Dolphin, Nautilus, ...). &lt;br /&gt; Demandez au développeur de votre gestionnaire de fichiers de le prendre en charge. &lt;br /&gt; Vous devez effectuer la copie/déplacement manuellement.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="31"/>
@@ -1329,12 +1329,12 @@ Cette version est compilée comme version : %1.</translation>
     <message>
         <location filename="../../../OptionDialog.ui" line="304"/>
         <source>default: finish.opus</source>
-        <translation type="unfinished"></translation>
+        <translation>défaut: finish.opus</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="313"/>
         <source>Sound when finish</source>
-        <translation type="unfinished"></translation>
+        <translation>Son quand fini</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="395"/>
@@ -2132,24 +2132,24 @@ depuis:%2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="494"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="492"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="501"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="514"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="523"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="755"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="782"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="755"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="791"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2157,19 +2157,19 @@ depuis:%2</translation>
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="203"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="210"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="282"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="299"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="290"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="307"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="284"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="301"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="292"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="309"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>

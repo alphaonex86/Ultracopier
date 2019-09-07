@@ -681,12 +681,12 @@ Este motor de copia no soporta mover</translation>
     <name>FileExistsDialog</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="187"/>
-        <source>%name% - copy</source>
+        <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileExistsDialog.cpp" line="194"/>
-        <source>%name% - copy (%number%)</source>
+        <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -704,12 +704,12 @@ Este motor de copia no soporta mover</translation>
     <name>FileIsSameDialog</name>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="141"/>
-        <source>%name% - copy</source>
+        <source>%name% - copy%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/FileIsSameDialog.cpp" line="148"/>
-        <source>%name% - copy (%number%)</source>
+        <source>%name% - copy (%number%)%suffix%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2130,24 +2130,24 @@ desde: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="485"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="494"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="492"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="501"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="514"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="523"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="755"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="746"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="782"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="755"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/TransferThread.cpp" line="791"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2155,19 +2155,19 @@ desde: %2</translation>
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="203"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="210"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="282"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="299"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="290"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="307"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="284"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="301"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="292"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="309"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
