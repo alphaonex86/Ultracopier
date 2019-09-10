@@ -426,7 +426,6 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     //resolv the new name
                     destinationSuffixPath=TransferThread::resolvedName(destination);
                     int num=1;
-                    struct stat source_statbuf;
                     do
                     {
                         if(num==1)
@@ -471,23 +470,44 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                             else
                                 n=destination.rfind(n,'.');
                             if(n == std::string::npos)
-                                destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath;
+                            {
+                                destination=FSabsolutePath(destination);
+                                if(stringEndsWith(destination,'/')
+                                    #ifdef Q_OS_WIN32
+                                        && stringEndsWith(destination,'\\')
+                                    #endif
+                                        )
+                                    destination+=text_slash;
+                                destination+=destinationSuffixPath;
+                            }
                             else
-                                destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath+TransferThread::stringToInternalString(".")+destination.substr(n);
+                            {
+                                destination=FSabsolutePath(destination);
+                                if(stringEndsWith(destination,'/')
+                                    #ifdef Q_OS_WIN32
+                                        && stringEndsWith(destination,'\\')
+                                    #endif
+                                        )
+                                    destination+=text_slash;
+                                destination+=destinationSuffixPath+TransferThread::stringToInternalString(".")+destination.substr(n);
+                            }
                         }
                     }
-                    #ifdef Q_OS_UNIX
-                    while(lstat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0);
-                    #else
-                    while(stat(TransferThread::internalStringTostring(destination).c_str(), &source_statbuf)==0);
-                    #endif
+                    while(TransferThread::exists(destination));
                 }
                 else
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"use new name: "+TransferThread::internalStringTostring(newName));
                     destinationSuffixPath = newName;
                 }
-                destination=FSabsolutePath(destination)+text_slash+destinationSuffixPath;
+                destination=FSabsolutePath(destination);
+                if(stringEndsWith(destination,'/')
+                    #ifdef Q_OS_WIN32
+                        && stringEndsWith(destination,'\\')
+                    #endif
+                        )
+                    destination+=text_slash;
+                destination+=destinationSuffixPath;
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+TransferThread::internalStringTostring(destination));
             break;
             default:
@@ -528,8 +548,8 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     if(newName.empty())
                     {
                         //resolv the new name
-                        QFileInfo destinationInfo;
                         int num=1;
+                        INTERNALTYPEPATH tempdestination;
                         do
                         {
                             if(num==1)
@@ -561,14 +581,20 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                             }
                             #ifdef WIDESTRING
                             stringreplaceAll(destinationSuffixPath,L"%name%",TransferThread::resolvedName(destination));
-                            destinationInfo.setFile(destinationInfo.absolutePath()+QString::fromStdWString(text_slash)+QString::fromStdWString(destinationSuffixPath));
                             #else
                             stringreplaceAll(destinationSuffixPath,"%name%",TransferThread::resolvedName(destination));
-                            destinationInfo.setFile(destinationInfo.absolutePath()+QString::fromStdString(text_slash)+QString::fromStdString(destinationSuffixPath));
                             #endif
+                            tempdestination=FSabsolutePath(destination);
+                            if(stringEndsWith(destination,'/')
+                                #ifdef Q_OS_WIN32
+                                    && stringEndsWith(destination,'\\')
+                                #endif
+                                    )
+                                tempdestination+=text_slash;
+                            tempdestination+=destinationSuffixPath;
                             num++;
                         }
-                        while(destinationInfo.exists());
+                        while(TransferThread::exists(tempdestination));
                     }
                     else
                     {
@@ -582,10 +608,28 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                         else
                             n=destination.rfind(n,'.');
                         if(n == std::string::npos)
-                            destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath;
+                        {
+                            destination=FSabsolutePath(destination);
+                            if(stringEndsWith(destination,'/')
+                                #ifdef Q_OS_WIN32
+                                    && stringEndsWith(destination,'\\')
+                                #endif
+                                    )
+                                destination+=text_slash;
+                            destination+=destinationSuffixPath;
+                        }
                         else
-                            destination=FSabsolutePath(destination)+TransferThread::stringToInternalString("/")+destinationSuffixPath+
+                        {
+                            destination=FSabsolutePath(destination);
+                            if(stringEndsWith(destination,'/')
+                                #ifdef Q_OS_WIN32
+                                    && stringEndsWith(destination,'\\')
+                                #endif
+                                    )
+                                destination+=text_slash;
+                            destination+=destinationSuffixPath+
                                     TransferThread::stringToInternalString(".")+destination.substr(n);
+                        }
                     }
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"destination after rename: "+TransferThread::internalStringTostring(destination));
                 break;
