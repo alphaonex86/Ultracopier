@@ -40,11 +40,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         size|=fileInfoW.nFileSizeLow;
 #else
     struct stat source_statbuf;
-    #ifdef Q_OS_UNIX
-    if(lstat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
-    #else
-    if(stat(TransferThread::internalStringTostring(source).c_str(), &source_statbuf)==0)
-    #endif
+    if(TransferThread::exists(source))
     {
         #ifdef Q_OS_UNIX
             #ifdef Q_OS_MAC
@@ -87,11 +83,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         this->destinationInfo=TransferThread::internalStringTostring(destination);
         this->setWindowTitle(tr("Folder already exists"));
         struct stat destination_statbuf;
-        #ifdef Q_OS_UNIX
-        if(lstat(TransferThread::internalStringTostring(destination).c_str(), &destination_statbuf)==0)
-        #else
-        if(stat(TransferThread::internalStringTostring(destination).c_str(), &destination_statbuf)==0)
-        #endif
+        if(TransferThread::exists(destination))
         {
             #ifdef Q_OS_UNIX
                 #ifdef Q_OS_MAC
@@ -170,7 +162,7 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
         if(num==1)
         {
             if(firstRenamingRule.empty())
-                newFileName=tr("%name% - copy");
+                newFileName=tr("%name% - copy%suffix%");
             else
             {
                 newFileName=QString::fromStdString(firstRenamingRule);
@@ -179,22 +171,25 @@ void FolderExistsDialog::on_SuggestNewName_clicked()
         else
         {
             if(otherRenamingRule.empty())
-                newFileName=tr("%name% - copy (%number%)");
+                newFileName=tr("%name% - copy (%number%)%suffix%");
             else
                 newFileName=QString::fromStdString(otherRenamingRule);
             newFileName.replace(QStringLiteral("%number%"),QString::number(num));
         }
         newFileName.replace(QStringLiteral("%name%"),fileName);
         newFileName.replace(QStringLiteral("%suffix%"),suffix);
-        destination=absolutePath+CURRENTSEPARATOR+newFileName;
+        destination=absolutePath;
+        if(!destination.endsWith('/')
+            #ifdef Q_OS_WIN32
+                && !destination.endsWith('\\')
+            #endif
+                )
+            destination+=CURRENTSEPARATOR;
+        destination+=newFileName;
         destinationInfo=destination.toStdString();
         num++;
     }
-    #ifdef Q_OS_UNIX
-    while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
-    #else
-    while(stat(destinationInfo.c_str(), &p_statbuf)==0);
-    #endif
+    while(TransferThread::exists(destinationInfo.c_str()));
     ui->lineEditNewName->setText(newFileName);
 }
 

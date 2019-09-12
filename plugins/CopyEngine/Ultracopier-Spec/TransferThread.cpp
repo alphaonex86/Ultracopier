@@ -491,22 +491,28 @@ bool TransferThread::checkAlwaysRename()
             if(num==1)
             {
                 if(firstRenamingRule.empty())
-                    newFileName=tr("%name% - copy").toStdString();
+                    newFileName=tr("%name% - copy%suffix%").toStdString();
                 else
                     newFileName=firstRenamingRule;
             }
             else
             {
                 if(otherRenamingRule.empty())
-                    newFileName=tr("%name% - copy (%number%)").toStdString();
+                    newFileName=tr("%name% - copy (%number%)%suffix%").toStdString();
                 else
                     newFileName=otherRenamingRule;
                 stringreplaceAll(newFileName,"%number%",std::to_string(num));
             }
             stringreplaceAll(newFileName,"%name%",fileName);
             stringreplaceAll(newFileName,"%suffix%",suffix);
-            newDestination=FSabsolutePath(newDestination)+
-                    TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(newFileName);
+            newDestination=FSabsolutePath(newDestination);
+            if(!stringEndsWith(newDestination,'/')
+                #ifdef Q_OS_WIN32
+                    && !stringEndsWith(destination,'\\')
+                #endif
+                    )
+                newDestination+=TransferThread::stringToInternalString("/");
+            newDestination+=TransferThread::stringToInternalString(newFileName);
             num++;
         }
         while(is_file(newDestination));

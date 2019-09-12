@@ -198,15 +198,18 @@ void FileExistsDialog::on_SuggestNewName_clicked()
         }
         newFileName.replace(QStringLiteral("%name%"),fileName);
         newFileName.replace(QStringLiteral("%suffix%"),suffix);
-        destination=absolutePath+CURRENTSEPARATOR+newFileName;
+        destination=absolutePath;
+        if(!destination.endsWith('/')
+            #ifdef Q_OS_WIN32
+                && !destination.endsWith('\\')
+            #endif
+                )
+            destination+=CURRENTSEPARATOR;
+        destination+=newFileName;
         destinationInfo=destination.toStdString();
         num++;
     }
-    #ifdef Q_OS_UNIX
-    while(lstat(destinationInfo.c_str(), &p_statbuf)==0);
-    #else
-    while(stat(destinationInfo.c_str(), &p_statbuf)==0);
-    #endif
+    while(TransferThread::exists(destinationInfo.c_str()));
     ui->lineEditNewName->setText(newFileName);
 }
 

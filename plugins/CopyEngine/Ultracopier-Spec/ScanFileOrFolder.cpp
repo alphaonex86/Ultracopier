@@ -335,7 +335,14 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
     ssize_t nbytes=0;
     nbytes=readlink(TransferThread::internalStringTostring(destination).c_str(), buf, sizeof(buf));
     while(nbytes!=-1) {
-        temp=FSabsolutePath(temp)+TransferThread::stringToInternalString("/")+TransferThread::stringToInternalString(std::string(buf,nbytes));
+        temp=FSabsolutePath(temp);
+        if(!stringEndsWith(destination,'/')
+            #ifdef Q_OS_WIN32
+                && !stringEndsWith(destination,'\\')
+            #endif
+                )
+            temp+=TransferThread::stringToInternalString("/");
+        temp+=TransferThread::stringToInternalString(std::string(buf,nbytes));
         /// \todo change for pure c++ code
         #ifdef WIDESTRING
         temp=QFileInfo(QString::fromStdWString(temp)).absoluteFilePath().toStdWString();
@@ -472,9 +479,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                             if(n == std::string::npos)
                             {
                                 destination=FSabsolutePath(destination);
-                                if(stringEndsWith(destination,'/')
+                                if(!stringEndsWith(destination,'/')
                                     #ifdef Q_OS_WIN32
-                                        && stringEndsWith(destination,'\\')
+                                        && !stringEndsWith(destination,'\\')
                                     #endif
                                         )
                                     destination+=text_slash;
@@ -483,9 +490,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                             else
                             {
                                 destination=FSabsolutePath(destination);
-                                if(stringEndsWith(destination,'/')
+                                if(!stringEndsWith(destination,'/')
                                     #ifdef Q_OS_WIN32
-                                        && stringEndsWith(destination,'\\')
+                                        && !stringEndsWith(destination,'\\')
                                     #endif
                                         )
                                     destination+=text_slash;
@@ -501,9 +508,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                     destinationSuffixPath = newName;
                 }
                 destination=FSabsolutePath(destination);
-                if(stringEndsWith(destination,'/')
+                if(!stringEndsWith(destination,'/')
                     #ifdef Q_OS_WIN32
-                        && stringEndsWith(destination,'\\')
+                        && !stringEndsWith(destination,'\\')
                     #endif
                         )
                     destination+=text_slash;
@@ -585,9 +592,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                             stringreplaceAll(destinationSuffixPath,"%name%",TransferThread::resolvedName(destination));
                             #endif
                             tempdestination=FSabsolutePath(destination);
-                            if(stringEndsWith(destination,'/')
+                            if(!stringEndsWith(destination,'/')
                                 #ifdef Q_OS_WIN32
-                                    && stringEndsWith(destination,'\\')
+                                    && !stringEndsWith(destination,'\\')
                                 #endif
                                     )
                                 tempdestination+=text_slash;
@@ -610,9 +617,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                         if(n == std::string::npos)
                         {
                             destination=FSabsolutePath(destination);
-                            if(stringEndsWith(destination,'/')
+                            if(!stringEndsWith(destination,'/')
                                 #ifdef Q_OS_WIN32
-                                    && stringEndsWith(destination,'\\')
+                                    && !stringEndsWith(destination,'\\')
                                 #endif
                                     )
                                 destination+=text_slash;
@@ -621,9 +628,9 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
                         else
                         {
                             destination=FSabsolutePath(destination);
-                            if(stringEndsWith(destination,'/')
+                            if(!stringEndsWith(destination,'/')
                                 #ifdef Q_OS_WIN32
-                                    && stringEndsWith(destination,'\\')
+                                    && !stringEndsWith(destination,'\\')
                                 #endif
                                     )
                                 destination+=text_slash;

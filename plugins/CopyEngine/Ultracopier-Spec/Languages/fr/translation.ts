@@ -218,12 +218,12 @@
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="282"/>
+        <location filename="../../FileExistsDialog.cpp" line="285"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="282"/>
+        <location filename="../../FileExistsDialog.cpp" line="285"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -241,12 +241,12 @@
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="218"/>
+        <location filename="../../FileIsSameDialog.cpp" line="221"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="218"/>
+        <location filename="../../FileIsSameDialog.cpp" line="221"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -393,27 +393,27 @@
 <context>
     <name>FolderExistsDialog</name>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="88"/>
+        <location filename="../../FolderExistsDialog.cpp" line="84"/>
         <source>Folder already exists</source>
         <translation>Dossier déjà existant</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="173"/>
-        <source>%name% - copy</source>
-        <translation>%name% - copie</translation>
+        <location filename="../../FolderExistsDialog.cpp" line="165"/>
+        <source>%name% - copy%suffix%</source>
+        <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="182"/>
-        <source>%name% - copy (%number%)</source>
-        <translation>%name% - copie (%number%)</translation>
+        <location filename="../../FolderExistsDialog.cpp" line="174"/>
+        <source>%name% - copy (%number%)%suffix%</source>
+        <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="246"/>
+        <location filename="../../FolderExistsDialog.cpp" line="241"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="246"/>
+        <location filename="../../FolderExistsDialog.cpp" line="241"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -559,31 +559,31 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="436"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="438"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="442"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="444"/>
         <source>%1 - copy</source>
         <translation>%1 - copie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="447"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="449"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="453"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="455"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - copie (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="539"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="541"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="566"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="568"/>
         <source>%name% - copy</source>
         <translation>%name% - copie</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="550"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="552"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="577"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="579"/>
         <source>%name% - copy (%number%)</source>
         <translation>%name% - copie (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="608"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="659"/>
         <source>Problem with folder read</source>
         <translation>Probléme avec la lecture du dossier</translation>
     </message>
@@ -591,8 +591,18 @@
 <context>
     <name>TransferThread</name>
     <message>
-        <location filename="../../TransferThread.cpp" line="523"/>
-        <location filename="../../TransferThread.cpp" line="755"/>
+        <location filename="../../TransferThread.cpp" line="494"/>
+        <source>%name% - copy%suffix%</source>
+        <translation>%name% - copie%suffix%</translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="501"/>
+        <source>%name% - copy (%number%)%suffix%</source>
+        <translation>%name% - copie (%number%)%suffix%</translation>
+    </message>
+    <message>
+        <location filename="../../TransferThread.cpp" line="529"/>
+        <location filename="../../TransferThread.cpp" line="761"/>
         <source>File not found</source>
         <translation>Fichier non trouvé</translation>
     </message>
@@ -602,18 +612,8 @@
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="494"/>
-        <source>%name% - copy</source>
-        <translation>%name% - copie</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="501"/>
-        <source>%name% - copy (%number%)</source>
-        <translation>%name% - copie (%number%)</translation>
-    </message>
-    <message>
-        <location filename="../../TransferThread.cpp" line="755"/>
-        <location filename="../../TransferThread.cpp" line="791"/>
+        <location filename="../../TransferThread.cpp" line="761"/>
+        <location filename="../../TransferThread.cpp" line="797"/>
         <source>Unable to change the date</source>
         <translation>Impossible de changer la date</translation>
     </message>
