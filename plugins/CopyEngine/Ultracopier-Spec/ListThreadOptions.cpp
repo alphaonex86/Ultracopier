@@ -67,9 +67,8 @@ void ListThread::setCheckDestinationFolderExists(const bool checkDestinationFold
 void ListThread::setCollisionAction(const FileExistsAction &alwaysDoThisActionForFileExists)
 {
     this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
+    unsigned int index=0;
+    while(index<transferThreadList.size())
     {
         transferThreadList.at(index)->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
         index++;
@@ -93,9 +92,8 @@ bool ListThread::setSpeedLimitation(const int64_t &speedLimitation)
 void ListThread::setAlwaysFileExistsAction(const FileExistsAction &alwaysDoThisActionForFileExists)
 {
     this->alwaysDoThisActionForFileExists=alwaysDoThisActionForFileExists;
-    int int_for_loop=0;
-    const int &loop_size=transferThreadList.size();
-    while(int_for_loop<loop_size)
+    unsigned int int_for_loop=0;
+    while(int_for_loop<transferThreadList.size())
     {
         transferThreadList.at(int_for_loop)->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
         int_for_loop++;
@@ -127,9 +125,8 @@ void ListThread::setMoveTheWholeFolder(const bool &moveTheWholeFolder)
 void ListThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)
 {
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
+    unsigned int index=0;
+    while(index<transferThreadList.size())
     {
         transferThreadList.at(index)->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
         index++;
@@ -153,9 +150,8 @@ void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"renameTheOriginalDestination: "+std::to_string(renameTheOriginalDestination));
     this->renameTheOriginalDestination=renameTheOriginalDestination;
-    int index=0;
-    int loop_sub_size_transfer_thread_search=transferThreadList.size();
-    while(index<loop_sub_size_transfer_thread_search)
+    unsigned int index=0;
+    while(index<transferThreadList.size())
     {
         transferThreadList.at(index)->setRenameTheOriginalDestination(renameTheOriginalDestination);
         index++;
@@ -165,6 +161,18 @@ void ListThread::setRenameTheOriginalDestination(const bool &renameTheOriginalDe
 void ListThread::setCheckDiskSpace(const bool &checkDiskSpace)
 {
     this->checkDiskSpace=checkDiskSpace;
+}
+
+void ListThread::setBuffer(const bool &buffer)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"setBuffer: "+std::to_string(buffer));
+    this->buffer=buffer;
+    unsigned int index=0;
+    while(index<transferThreadList.size())
+    {
+        transferThreadList.at(index)->setBuffer(buffer);
+        index++;
+    }
 }
 
 void ListThread::setFollowTheStrictOrder(const bool &order)

@@ -34,6 +34,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     inodeThreads(16),
     renameTheOriginalDestination(false),
     checkDiskSpace(true),
+    buffer(false),
     followTheStrictOrder(true),
     mode(Ultracopier::CopyMode::Copy),
     forcedMode(false),
@@ -1069,6 +1070,7 @@ void ListThread::createTransferThread()
     last->setKeepDate(keepDate);
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
     last->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
+    last->setBuffer(buffer);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     last->setRsync(rsync);
     #endif

@@ -201,6 +201,7 @@ public slots:
     void setInodeThreads(const int &inodeThreads);
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void setCheckDiskSpace(const bool &checkDiskSpace);
+    void setBuffer(const bool &buffer);
     void exportErrorIntoTransferList(const std::string &fileName);
 private:
     QSemaphore          mkpathTransfer;
@@ -233,6 +234,7 @@ private:
     int                 inodeThreads;
     bool                renameTheOriginalDestination;
     bool                checkDiskSpace;
+    bool                buffer;
     bool                followTheStrictOrder;
     std::unordered_set<TransferThreadAsync *> putAtBottomAfterError;
     std::unordered_map<std::string,uint64_t> requiredSpace;

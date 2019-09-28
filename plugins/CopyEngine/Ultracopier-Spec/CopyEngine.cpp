@@ -1026,6 +1026,14 @@ void CopyEngine::setCheckDiskSpace(const bool &checkDiskSpace)
     listThread->setCheckDiskSpace(checkDiskSpace);
 }
 
+void CopyEngine::setBuffer(const bool &buffer)
+{
+    this->buffer=buffer;
+    if(uiIsInstalled)
+        ui->buffer->setChecked(buffer);
+    listThread->setBuffer(buffer);
+}
+
 void CopyEngine::setDefaultDestinationFolder(const std::string &defaultDestinationFolder)
 {
     this->defaultDestinationFolder=defaultDestinationFolder;

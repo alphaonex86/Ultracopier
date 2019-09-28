@@ -740,6 +740,12 @@ void TransferThread::setRightTransfer(const bool doRightTransfer)
     this->doRightTransfer=doRightTransfer;
 }
 
+/// \brief set buffer
+void TransferThread::setBuffer(const bool buffer)
+{
+    this->buffer=buffer;
+}
+
 //set keep date
 void TransferThread::setKeepDate(const bool keepDate)
 {

@@ -112,6 +112,7 @@ private slots:
     void followTheStrictOrder(bool checked);
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
+    void setBuffer(bool checked);
 public slots:
     void resetOptions() override;
     void newLanguageLoaded() override;

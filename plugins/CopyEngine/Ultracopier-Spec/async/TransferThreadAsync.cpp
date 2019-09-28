@@ -324,9 +324,12 @@ void TransferThreadAsync::ifCanStartTransfer()
     if(realMove)
         successFull=TransferThread::rename(source,destination);
     else
-        successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,
-                       COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/// | 0x00001000/*COPY_FILE_NO_BUFFERING*/
-                       );
+    {
+        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/// | 0x00001000/*COPY_FILE_NO_BUFFERING*/;
+        if(!buffer)
+            flags|=COPY_FILE_NO_BUFFERING;
+        successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,flags);
+    }
     if(!successFull)
 #else
     bool successFull=false;
@@ -371,7 +374,15 @@ void TransferThreadAsync::ifCanStartTransfer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
     if(mode==Ultracopier::Move && !realMove)
         if(exists(destination))
-            unlink(source);
+            if(!unlink(source))
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] move and unable to remove: "+
+                                         TransferThread::internalStringTostring(source)+
+                         #ifdef Q_OS_WIN32
+                                         GetLastErrorStdStr()
+                         #else
+                                         strerror(errno)
+                         #endif
+                                         );
     transfer_stat=TransferStat_PostTransfer;
     emit pushStat(transfer_stat,transferId);
     transfer_stat=TransferStat_PostOperation;
@@ -675,7 +686,10 @@ bool TransferThreadAsync::copy(const char *from,const char *to)
     posix_fadvise(fd_from, 0, 0, POSIX_FADV_NOREUSE);
     #endif
 
-    fd_to = open(to, O_WRONLY | O_CREAT/* | O_DSYNC slow down*//* | O_DIRECT*/, 0666);
+    int flags=O_WRONLY | O_CREAT/* | O_DSYNC slow down*//* | O_DIRECT*/;
+    if(!buffer)
+        flags|=O_SYNC;
+    fd_to = open(to, flags, 0666);
     if (fd_to < 0)
     {
         writeError=true;

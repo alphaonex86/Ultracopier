@@ -101,6 +101,7 @@ private:
     bool				forcedMode;
 
     bool checkDiskSpace;
+    bool buffer;
     unsigned int osBufferLimit;
     std::vector<std::string> includeStrings,includeOptions,excludeStrings,excludeOptions;
     std::string firstRenamingRule;
@@ -220,6 +221,7 @@ public:
     void defaultDestinationFolderBrowse();
     std::string askDestination();
     static std::string stringimplode(const std::vector<std::string>& elems, const std::string &delim);
+    void setBuffer(const bool &buffer);
 public slots:
     //user ask ask to add folder (add it with interface ask source/destination)
     /** \brief add folder called on the interface

@@ -63,6 +63,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->deletePartiallyTransferredFiles,&QCheckBox::toggled,            this,&CopyEngineFactory::deletePartiallyTransferredFiles);
     connect(ui->renameTheOriginalDestination,&QCheckBox::toggled,               this,&CopyEngineFactory::renameTheOriginalDestination);
     connect(ui->checkDiskSpace,             &QCheckBox::toggled,                this,&CopyEngineFactory::checkDiskSpace);
+    connect(ui->buffer,                     &QCheckBox::toggled,                this,&CopyEngineFactory::setBuffer);
     connect(ui->defaultDestinationFolderBrowse,&QPushButton::clicked,           this,&CopyEngineFactory::defaultDestinationFolderBrowse);
     connect(ui->defaultDestinationFolder,&QLineEdit::editingFinished,           this,&CopyEngineFactory::defaultDestinationFolder);
 
@@ -117,6 +118,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setRenameTheOriginalDestination(ui->renameTheOriginalDestination->isChecked());
     realObject->setCheckDiskSpace(ui->checkDiskSpace->isChecked());
     realObject->setDefaultDestinationFolder(ui->defaultDestinationFolder->text().toStdString());
+    realObject->setBuffer(ui->buffer->isChecked());
     return newTransferEngine;
 }
 
@@ -211,6 +213,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
         KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(16)));
+        KeysList.push_back(std::pair<std::string, std::string>("buffer","false"));
         options->addOptionGroup(KeysList);
 
         optionsEngine=options;
@@ -290,6 +293,7 @@ void CopyEngineFactory::resetOptions()
     ui->renameTheOriginalDestination->setChecked(stringtobool(options->getOptionValue("renameTheOriginalDestination")));
     ui->checkDiskSpace->setChecked(stringtobool(options->getOptionValue("checkDiskSpace")));
     ui->defaultDestinationFolder->setText(QString::fromStdString(options->getOptionValue("defaultDestinationFolder")));
+    ui->buffer->setChecked(stringtobool(options->getOptionValue("buffer")));
 
     //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
     includeStrings=stringtostringlist(options->getOptionValue("includeStrings"));
@@ -568,3 +572,10 @@ void CopyEngineFactory::setRsync(bool rsync)
         optionsEngine->setOptionValue("rsync",std::to_string(rsync));
 }
 #endif
+
+void CopyEngineFactory::setBuffer(bool checked)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("buffer",booltostring(checked));
+}

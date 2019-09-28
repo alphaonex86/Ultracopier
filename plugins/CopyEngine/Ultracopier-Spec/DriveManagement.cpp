@@ -86,11 +86,16 @@ bool DriveManagement::isSameDrive(const std::string &file1,const std::string &fi
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"drive for the file2 not found: "+file2);
         return false;
     }
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,drive1+" is egal to "+drive2);
     if(drive1==drive2)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,drive1+" is egal to "+drive2);
         return true;
+    }
     else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,drive1+" is NOT egal to "+drive2);
         return false;
+    }
 }
 
 void DriveManagement::tryUpdate()
