@@ -96,70 +96,70 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="360"/>
-        <location filename="../../CopyEngineFactory.cpp" line="363"/>
-        <location filename="../../CopyEngineFactory.cpp" line="368"/>
+        <location filename="../../CopyEngineFactory.cpp" line="364"/>
+        <location filename="../../CopyEngineFactory.cpp" line="367"/>
         <location filename="../../CopyEngineFactory.cpp" line="372"/>
+        <location filename="../../CopyEngineFactory.cpp" line="376"/>
         <source>Ask</source>
         <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="361"/>
         <location filename="../../CopyEngineFactory.cpp" line="365"/>
         <location filename="../../CopyEngineFactory.cpp" line="369"/>
         <location filename="../../CopyEngineFactory.cpp" line="373"/>
+        <location filename="../../CopyEngineFactory.cpp" line="377"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="364"/>
+        <location filename="../../CopyEngineFactory.cpp" line="368"/>
         <source>Merge</source>
         <translation type="unfinished">합치기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="366"/>
-        <location filename="../../CopyEngineFactory.cpp" line="378"/>
+        <location filename="../../CopyEngineFactory.cpp" line="370"/>
+        <location filename="../../CopyEngineFactory.cpp" line="382"/>
         <source>Rename</source>
         <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="370"/>
+        <location filename="../../CopyEngineFactory.cpp" line="374"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="374"/>
+        <location filename="../../CopyEngineFactory.cpp" line="378"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="375"/>
+        <location filename="../../CopyEngineFactory.cpp" line="379"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="376"/>
+        <location filename="../../CopyEngineFactory.cpp" line="380"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">더 최신이면 덮어씌우기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="377"/>
+        <location filename="../../CopyEngineFactory.cpp" line="381"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="393"/>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="397"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="393"/>
+        <location filename="../../CopyEngineFactory.cpp" line="397"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -602,13 +602,13 @@
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="529"/>
-        <location filename="../../TransferThread.cpp" line="761"/>
+        <location filename="../../TransferThread.cpp" line="767"/>
         <source>File not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="761"/>
-        <location filename="../../TransferThread.cpp" line="797"/>
+        <location filename="../../TransferThread.cpp" line="767"/>
+        <location filename="../../TransferThread.cpp" line="803"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,31 +728,36 @@
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="353"/>
-        <source>Inode threads (unsafe &gt; 1)</source>
+        <source>Inode threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="395"/>
+        <location filename="../../copyEngineOptions.ui" line="393"/>
+        <source>Buffer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="409"/>
         <source>Misc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="401"/>
+        <location filename="../../copyEngineOptions.ui" line="415"/>
         <source>Check the disk space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="411"/>
+        <location filename="../../copyEngineOptions.ui" line="425"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="423"/>
+        <location filename="../../copyEngineOptions.ui" line="437"/>
         <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="445"/>
+        <location filename="../../copyEngineOptions.ui" line="459"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>

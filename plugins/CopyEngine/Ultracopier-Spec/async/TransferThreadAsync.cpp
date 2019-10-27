@@ -325,9 +325,9 @@ void TransferThreadAsync::ifCanStartTransfer()
         successFull=TransferThread::rename(source,destination);
     else
     {
-        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/// | 0x00001000/*COPY_FILE_NO_BUFFERING*/;
+        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/;// | 0x00001000/*COPY_FILE_NO_BUFFERING*/
         if(!buffer)
-            flags|=COPY_FILE_NO_BUFFERING;
+            flags|=0x00001000/*COPY_FILE_NO_BUFFERING*/;
         successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,flags);
     }
     if(!successFull)
@@ -686,9 +686,12 @@ bool TransferThreadAsync::copy(const char *from,const char *to)
     posix_fadvise(fd_from, 0, 0, POSIX_FADV_NOREUSE);
     #endif
 
-    int flags=O_WRONLY | O_CREAT/* | O_DSYNC slow down*//* | O_DIRECT*/;
-    if(!buffer)
-        flags|=O_SYNC;
+    /* | O_DSYNC slow down*/
+    /* | O_SYNC slow down*/
+    // O_DIRECT Invalid argument
+    int flags=O_WRONLY | O_CREAT;
+    /*if(!buffer)
+        flags|=??;*/
     fd_to = open(to, flags, 0666);
     if (fd_to < 0)
     {
