@@ -656,7 +656,16 @@ void ScanFileOrFolder::listFolder(INTERNALTYPEPATH source,INTERNALTYPEPATH desti
         fileErrorAction=FileError_NotSet;
         if(!TransferThread::entryInfoList(source,entryList))
         {
-            emit errorOnFolder(source,tr("Problem with folder read").toStdString());
+            #ifdef Q_OS_UNIX
+            int saveerrno=errno;
+            const std::string &errorStr=strerror(saveerrno);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Problem with the folder "+TransferThread::internalStringTostring(source)+" to read: "+std::to_string(saveerrno));
+            emit errorOnFolder(source,tr("Problem with folder read").toStdString()+": "+errorStr);
+            #else
+            const std::string &errorStr=TransferThread::GetLastErrorStdStr();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Problem with the folder "+TransferThread::internalStringTostring(source)+" to read: "+errorStr);
+            emit errorOnFolder(source,tr("Problem with folder read").toStdString()+": "+errorStr);
+            #endif
             waitOneAction.acquire();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"actionNum: "+std::to_string(fileErrorAction));
         }
