@@ -44,7 +44,7 @@ Makefile*
 *build-*
 
 # Qt translations
-*.qm
+#*.qm -> enable to easy compilation
 
 # Qt unit tests
 target_wrapper.*
