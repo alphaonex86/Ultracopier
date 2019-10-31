@@ -1,5 +1,6 @@
 #!/bin/sh
-git clone --recursive https://github.com/alphaonex86/Ultracopier.git ~/src
+cd /home/user/src/
+git pull
 mkdir ~/build && cd ~/build
 qmake -r ~/src/other-pro/ultracopier-little.pro ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libcrypto.so ANDROID_EXTRA_LIBS+=$ANDROID_DEV/lib/libssl.so
 make -j5

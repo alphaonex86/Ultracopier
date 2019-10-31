@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 #include <dirent.h>
+#include <atomic>
 
 #ifdef WIDESTRING
 #define INTERNALTYPEPATH std::wstring
