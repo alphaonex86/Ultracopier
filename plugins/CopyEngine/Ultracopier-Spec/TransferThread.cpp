@@ -1047,7 +1047,7 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
     CloseHandle(hFile);
     if(PSecurityD!=NULL)
     {
-        free(PSecurityD);
+        //free(PSecurityD);//crash on some NAS, it's why is commented, http://forum-ultracopier.first-world.info/viewtopic.php?f=8&t=903&p=3689#p3689
         PSecurityD=NULL;
     }
     if(dacl!=NULL)
