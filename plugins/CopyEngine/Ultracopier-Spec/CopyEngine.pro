@@ -31,7 +31,9 @@ HEADERS         += \
     $$PWD/FileIsSameDialog.h \
     $$PWD/FolderExistsDialog.h \
     $$PWD/ScanFileOrFolder.h \
-    $$PWD/DiskSpace.h
+    $$PWD/DiskSpace.h \
+    async/ReadThread.h \
+    async/WriteThread.h
 SOURCES         += \
     $$PWD/TransferThread.cpp \
     $$PWD/MkPath.cpp \
@@ -59,7 +61,9 @@ SOURCES         += \
     ListThreadNew.cpp \
     ListThreadOptions.cpp \
     ListThreadScan.cpp \
-    ListThreadStat.cpp
+    ListThreadStat.cpp \
+    async/ReadThread.cpp \
+    async/WriteThread.cpp
 TARGET          = $$qtLibraryTarget(copyEngine)
 TRANSLATIONS += \
     $$PWD/Languages/ar/translation.ts \

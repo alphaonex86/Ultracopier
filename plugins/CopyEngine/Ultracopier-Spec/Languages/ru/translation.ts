@@ -583,7 +583,8 @@
         <translation type="unfinished">%name% - копия (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="659"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="663"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="667"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>

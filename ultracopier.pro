@@ -91,7 +91,9 @@ HEADERS += \
     $$PWD/plugins/Themes/Oxygen2/VerticalLabel.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/map.h \
     $$PWD/plugins/Themes/Oxygen2/radialMap/widget.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h
+    $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h \
+    plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
+    plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h
 
 SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngine-collision-and-error.cpp \
@@ -134,7 +136,9 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadNew.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp \
-    $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp \
+    plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp
 
 win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc

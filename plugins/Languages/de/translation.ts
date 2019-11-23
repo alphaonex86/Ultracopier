@@ -1945,7 +1945,8 @@ seit: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="659"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="663"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="667"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
