@@ -5,6 +5,10 @@
 #endif
 #include <QDir>
 
+#ifdef Q_OS_UNIX
+#include <sys/stat.h>
+#endif
+
 QMultiHash<QString,WriteThread *> WriteThread::writeFileList;
 QMutex       WriteThread::writeFileListMutex;
 
@@ -26,6 +30,12 @@ WriteThread::WriteThread()
     needRemoveTheFile               = false;
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     start();
+
+    #ifdef Q_OS_UNIX
+    to=-1;
+    #else
+    to=nullptr;
+    #endif
 }
 
 WriteThread::~WriteThread()
@@ -59,7 +69,6 @@ void WriteThread::run()
     connect(this,&WriteThread::internalStartClose,              this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection);
     connect(this,&WriteThread::internalStartEndOfFile,          this,&WriteThread::internalEndOfFile,		Qt::QueuedConnection);
     connect(this,&WriteThread::internalStartFlushAndSeekToZero,	this,&WriteThread::internalFlushAndSeekToZero,	Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartChecksum,           this,&WriteThread::checkSum,			Qt::QueuedConnection);
     exec();
 }
 
@@ -269,7 +278,7 @@ bool WriteThread::internalOpen()
     }
 }
 
-void WriteThread::open(const QFileInfo &file,const uint64_t &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential)
+void WriteThread::open(const INTERNALTYPEPATH &file, const uint64_t &startSize)
 {
     if(!isRunning())
     {
@@ -600,12 +609,6 @@ void WriteThread::fakeWriteIsStopped()
     emit writeIsStopped();
 }
 
-/// do the checksum
-void WriteThread::startCheckSum()
-{
-    emit internalStartChecksum();
-}
-
 /** \brief set block size
 \param block the new block size in B
 \return Return true if succes */
@@ -635,87 +638,6 @@ void WriteThread::flushAndSeekToZero()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"flushAndSeekToZero: "+std::to_string(blockSize));
     stopIt=true;
     emit internalStartFlushAndSeekToZero();
-}
-
-
-void WriteThread::checkSum()
-{
-    //QByteArray blockArray;
-    QCryptographicHash hash(QCryptographicHash::Sha1);
-    endDetected=false;
-    lastGoodPosition=0;
-    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
-    numberOfBlockCopied=0;
-    #endif
-    if(!file.seek(0))
-    {
-        errorString_internal=file.errorString().toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).arg(QString::fromStdString(errorString_internal)).toStdString());
-        emit error();
-        return;
-    }
-    int sizeReaden=0;
-    do
-    {
-        if(putInPause)
-        {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"["+std::to_string(id)+"] write put in pause");
-            if(stopIt)
-                return;
-            pauseMutex.acquire();
-            if(stopIt)
-                return;
-        }
-        //read one block
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Read;
-        #endif
-        blockArray=file.read(blockSize);
-        #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Idle;
-        #endif
-
-        if(file.error()!=QFile::NoError)
-        {
-            errorString_internal=tr("Unable to read the source file: ").toStdString()+file.errorString().toStdString()+" ("+std::to_string(file.error())+")";
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("file.error()!=QFile::NoError: %1, error: %2").arg(QString::number(file.error())).arg(QString::fromStdString(errorString_internal)).toStdString());
-            emit error();
-            return;
-        }
-        sizeReaden=blockArray.size();
-        if(sizeReaden>0)
-        {
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Checksum;
-            #endif
-            hash.addData(blockArray);
-            #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Idle;
-            #endif
-
-            if(stopIt)
-                break;
-
-            lastGoodPosition+=blockArray.size();
-        }
-    }
-    while(sizeReaden>0 && !stopIt);
-    if(lastGoodPosition>(quint64)file.size())
-    {
-        errorString_internal=tr("File truncated during read, possible data change").toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())).toStdString());
-        emit error();
-        return;
-    }
-    if(stopIt)
-    {
-/*		if(putInPause)
-            emit isInPause();*/
-        stopIt=false;
-        return;
-    }
-    emit checksumFinish(hash.result());
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop the read");
 }
 
 void WriteThread::internalFlushAndSeekToZero()

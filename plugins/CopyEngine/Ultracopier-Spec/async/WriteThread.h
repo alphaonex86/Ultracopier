@@ -16,6 +16,14 @@
 #include "Environment.h"
 #include "../StructEnumDefinition_CopyEngine.h"
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#define INTERNALTYPECHAR wchar_t
+#else
+#define INTERNALTYPEPATH std::string
+#define INTERNALTYPECHAR char
+#endif
+
 /// \brief Thread changed to open/close and write the destination file
 class WriteThread : public QThread
 {
@@ -29,7 +37,7 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const std::string &file,const uint64_t &startSize,const bool &buffer,const int &numberOfBlock,const bool &sequential);
+    void open(const INTERNALTYPEPATH &file,const uint64_t &startSize);
     /// \brief to return the error string
     std::string errorString() const;
     /// \brief to stop all
@@ -46,8 +54,7 @@ public:
         InodeOperation=1,
         Write=2,
         Close=3,
-        Read=5,
-        Checksum=6
+        Read=5
     };
     WriteStat stat;
     #endif
@@ -57,8 +64,6 @@ public:
     void fakeWriteIsStarted();
     /// \brief do the fake writeIsStopped
     void fakeWriteIsStopped();
-    /// do the checksum
-    void startCheckSum();
     /// \brief set block size in KB
     bool setBlockSize(const int blockSize);
     /// \brief get the last good position
@@ -83,8 +88,6 @@ public slots:
     void reopen();
     /// \brief flush and seek to zero
     void flushAndSeekToZero();
-    /// do the checksum
-    void checkSum();
     void setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles);
     /// \brief executed at regular interval to do a speed throling
     void timeOfTheBlockCopyFinished();
@@ -98,10 +101,8 @@ signals:
     void writeIsStopped() const;
     void flushedAndSeekedToZero() const;
     void closed() const;
-    void checksumFinish(const QByteArray&) const;
     //internal signals
     void internalStartOpen() const;
-    void internalStartChecksum() const;
     void internalStartReopen() const;
     void internalStartWrite() const;
     void internalStartClose() const;
@@ -113,7 +114,6 @@ private:
     std::string             errorString_internal;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
-    volatile int		blockSize;//only used in checksum
     int                 numberOfBlock;
     QMutex              accessList;		///< For use the list
     static QMultiHash<QString,WriteThread *> writeFileList;
@@ -145,6 +145,13 @@ private:
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     volatile int        multiForBigSpeed;           ///< Multiple for count the number of block needed
     #endif
+
+    #ifdef Q_OS_UNIX
+    int to;
+    #else
+    HANDLE to;
+    #endif
+    INTERNALTYPEPATH file;
 private slots:
     bool internalOpen();
     void internalWrite();

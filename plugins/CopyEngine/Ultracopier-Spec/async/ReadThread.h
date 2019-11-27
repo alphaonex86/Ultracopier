@@ -17,6 +17,14 @@
 #include "Environment.h"
 #include "../StructEnumDefinition_CopyEngine.h"
 
+#ifdef WIDESTRING
+#define INTERNALTYPEPATH std::wstring
+#define INTERNALTYPECHAR wchar_t
+#else
+#define INTERNALTYPEPATH std::string
+#define INTERNALTYPECHAR char
+#endif
+
 /// \brief Thread changed to open/close and read the source file
 class ReadThread : public QThread
 {
@@ -28,7 +36,7 @@ protected:
     void run();
 public:
     /// \brief open with the name and copy mode
-    void open(const std::string &file, const Ultracopier::CopyMode &mode);
+    void open(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode);
     /// \brief return the error string
     std::string errorString() const;
     //QByteArray read(qint64 position,qint64 maxSize);
@@ -63,8 +71,7 @@ public:
         Idle=0,
         InodeOperation=1,
         Read=2,
-        WaitWritePipe=3,
-        Checksum=4
+        WaitWritePipe=3
     };
     ReadStat stat;
     #endif
@@ -80,14 +87,10 @@ public:
     void fakeReadIsStarted();
     /// \brief do the fake readIsStopped
     void fakeReadIsStopped();
-    /// do the checksum
-    void startCheckSum();
 public slots:
     /// \brief to reset the copy, and put at the same state when it just open
     void seekToZeroAndWait();
     void postOperation();
-    /// do the checksum
-    void checkSum();
 signals:
     void error() const;
     void opened() const;
@@ -98,10 +101,8 @@ signals:
     void checkIfIsWait() const;
     void resumeAfterErrorByRestartAll() const;
     void resumeAfterErrorByRestartAtTheLastPosition() const;
-    void checksumFinish(const QByteArray&) const;
     // internal signals
     void internalStartOpen() const;
-    void internalStartChecksum() const;
     void internalStartReopen() const;
     void internalStartRead() const;
     void internalStartClose() const;
@@ -132,6 +133,13 @@ private:
     bool            fakeMode;
     //internal function
     bool seek(const int64_t &position);/// \todo search if is use full
+
+    #ifdef Q_OS_UNIX
+    int from;
+    #else
+    HANDLE from;
+    #endif
+    INTERNALTYPEPATH file;
 private slots:
     bool internalOpen(bool resetLastGoodPosition=true);
     bool internalOpenSlot();
