@@ -72,7 +72,7 @@ void ReadThread::open(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode 
         emit error();
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] open source: "+TransferThread::internalStringTostring(file));
-    if(from!=-1)
+    if(from>=0)
     {
         if(file==this->file)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+TransferThread::internalStringTostring(file));
@@ -196,7 +196,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     stat=InodeOperation;
     #endif
-    if(from!=-1)
+    if(from>=0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] this file is already open: "+TransferThread::internalStringTostring(file));
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -246,16 +246,44 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             emit closed();
             return false;
         }
-        size_at_open=file.size();
-        mtime_at_open=QFileInfo(file).lastModified().toMSecsSinceEpoch()/1000;
+
+        //do one at same time
+        #ifdef Q_OS_UNIX
+        {
+            struct stat st;
+            fstat(from, &st);
+            size_at_open=st.st_size;
+            mtime_at_open=st.st_mtim.tv_sec;
+        }
+        #else
+        PLARGE_INTEGER lpFileSize=0;
+        if(!GetFileSizeEx(from,lpFileSize))
+            return -1;
+        else
+            to do return lpFileSize;
+        #endif
+
         putInPause=false;
         if(resetLastGoodPosition)
             lastGoodPosition=0;
         if(!seek(lastGoodPosition))
         {
-            file.close();
-            errorString_internal=file.errorString().toStdString();
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to seek after open: %1, error: %2").arg(file.fileName()).toStdString()+errorString_internal);
+            #ifdef Q_OS_WIN32
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
+            to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+            #else
+            int t=errno;
+            errorString_internal=strerror(t);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                     "Unable to seek after open: "+TransferThread::internalStringTostring(file)+
+                                     ", error: "+errorString_internal+" ("+std::to_string(t)+")"
+                                     );
+            #endif
+
+            ::close(from);
+            from=-1;
+            this->file.clear();
+
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             stat=Idle;
@@ -271,8 +299,18 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     }
     else
     {
-        errorString_internal=file.errorString().toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable to open: %1, error: ").arg(file.fileName()).toStdString()+errorString_internal);
+        #ifdef Q_OS_WIN32
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
+        to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        #else
+        int t=errno;
+        errorString_internal=strerror(t);
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                 "Unable to seek after open: "+TransferThread::internalStringTostring(file)+
+                                 ", error: "+errorString_internal+" ("+std::to_string(t)+")"
+                                 );
+        #endif
+
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
@@ -287,11 +325,11 @@ void ReadThread::internalRead()
     tryStartRead=false;
     if(stopIt)
     {
-        if(seekToZero && file.isOpen())
+        if(seekToZero && from>=0)
         {
             stopIt=false;
             lastGoodPosition=0;
-            file.seek(0);
+            seek(0);
         }
         else
         {
@@ -305,7 +343,7 @@ void ReadThread::internalRead()
     stat=InodeOperation;
     #endif
     int sizeReaden=0;
-    if(!file.isOpen())
+    if(from<0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] is not open!");
         isInReadLoop=false;
@@ -352,19 +390,41 @@ void ReadThread::internalRead()
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Read;
         #endif
-        blockArray=file.read(blockSize);
+        #ifdef Q_OS_WIN32
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
+        to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        #else
+        blockArray.resize(blockSize);
+        sizeReaden=::read(from,blockArray.data(),blockSize);
+        if(sizeReaden>=0)
+            blockArray.resize(sizeReaden);
+        #endif
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         stat=Idle;
         #endif
 
-        if(file.error()!=QFile::NoError)
+        #ifdef Q_OS_WIN32
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
+        to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        #else
+        if(sizeReaden<0)
         {
-            errorString_internal=tr("Unable to read the source file: ").toStdString()+file.errorString().toStdString()+" ("+std::to_string(file.error())+")";
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("file.error()!=QFile::NoError: %1, error: ").arg(QString::number(file.error())).toStdString()+errorString_internal);
+            #ifdef Q_OS_WIN32
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
+            to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+            #else
+            int t=errno;
+            errorString_internal=tr("Unable to read the source file: ").toStdString()+strerror(t);
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                     "Unable to read the source file: "+TransferThread::internalStringTostring(file)+
+                                     ", error: "+errorString_internal+" ("+std::to_string(t)+")"
+                                     );
+            #endif
             isInReadLoop=false;
             emit error();
             return;
         }
+        #endif
         sizeReaden=blockArray.size();
         if(sizeReaden>0)
         {
@@ -405,10 +465,11 @@ void ReadThread::internalRead()
         */
     }
     while(sizeReaden>0 && !stopIt);
-    if(lastGoodPosition>file.size())
+    if(lastGoodPosition>size())
     {
         errorString_internal=tr("File truncated during the read, possible data change").toStdString();
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Source truncated during the read: %1 (%2)").arg(file.errorString()).arg(QString::number(file.error())).toStdString());
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                 "Source truncated during the read");
         isInReadLoop=false;
         emit error();
         return;
@@ -452,10 +513,12 @@ void ReadThread::internalClose(bool callByTheDestructor)
     bool closeTheFile=false;
     if(!fakeMode)
     {
-        if(file.isOpen())
+        if(from>=0)
         {
             closeTheFile=true;
-            file.close();
+            ::close(from);
+            from=-1;
+            this->file.clear();
             isInReadLoop=false;
         }
     }
@@ -558,12 +621,32 @@ bool ReadThread::internalReopen()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
     stopIt=false;
-    if(file.isOpen())
+    if(from>=0)
     {
-        file.close();
+        ::close(from);
+        from=-1;
+        this->file.clear();
         isOpen.release();
     }
-    if(size_at_open!=file.size() && mtime_at_open!=(uint64_t)QFileInfo(file).lastModified().toMSecsSinceEpoch()/1000)
+    uint64_t temp_mtime=0;
+    int64_t temp_size=-1;
+    #ifdef Q_OS_UNIX
+    {
+        struct stat st;
+        if(::stat(TransferThread::internalStringTostring(file).c_str(), &st)!=-1)
+        {
+            temp_size=st.st_size;
+            temp_mtime=st.st_mtim.tv_sec;
+        }
+    }
+    #else
+    PLARGE_INTEGER lpFileSize=0;
+    if(!GetFileSizeEx(from,lpFileSize))
+        return -1;
+    else
+        to do return lpFileSize;
+    #endif
+    if(size_at_open!=temp_size && mtime_at_open!=temp_mtime)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source file have changed since the last open, restart all");
         //fix this function like the close function
@@ -586,6 +669,7 @@ bool ReadThread::internalReopen()
         else
             return false;
     }
+    return false;
 }
 
 //set the write thread
@@ -617,7 +701,7 @@ void ReadThread::isInWait()
     {
         stopIt=false;
         seekToZero=false;
-        if(file.isOpen())
+        if(from>=0)
         {
             lastGoodPosition=0;
             seek(0);
