@@ -152,8 +152,12 @@ bool ReadThread::seek(const int64_t &position)
         return false;
 
     #ifdef Q_OS_UNIX
+    if(from<0)
+        abort();//internal failure
     return lseek(from,position,SEEK_SET)==position;
     #else
+    if(from==NULL)
+        abort();//internal failure
     return SetFilePointerEx(from,position,NULL,FILE_BEGIN);
     #endif
 }

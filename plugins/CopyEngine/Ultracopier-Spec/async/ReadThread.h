@@ -9,8 +9,6 @@
 #include <QThread>
 #include <QByteArray>
 #include <QSemaphore>
-#include <QDateTime>
-#include <QFileInfo>
 #include <QCryptographicHash>
 
 #include "WriteThread.h"

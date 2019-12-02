@@ -8,7 +8,6 @@
 
 #include <QThread>
 #include <QByteArray>
-#include <QString>
 #include <QMutex>
 #include <QSemaphore>
 #include <QCryptographicHash>
@@ -33,6 +32,10 @@ public:
     ~WriteThread();
     /// \brief to have semaphore to do mkpath one by one
     void setMkpathTransfer(QSemaphore *mkpathTransfer);
+    //internal function
+    bool seek(const int64_t &position);/// \todo search if is use full
+    /// \brief get the size of the destination file
+    int64_t size() const;
 protected:
     void run();
 public:
@@ -138,9 +141,7 @@ private:
     uint64_t             startSize;
     QSemaphore          *mkpathTransfer;
     bool                fakeMode;
-    bool                buffer;
     bool                needRemoveTheFile;
-    volatile bool       sequential;
     bool                deletePartiallyTransferredFiles;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     volatile int        multiForBigSpeed;           ///< Multiple for count the number of block needed
