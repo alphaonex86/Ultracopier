@@ -15,6 +15,9 @@
 //defore the next define
 #include "../CopyEngineUltracopier-SpecVariable.h"
 
+#include "ReadThread.h"
+#include "WriteThread.h"
+
 #ifdef Q_OS_UNIX
     #include <utime.h>
     #include <time.h>
@@ -68,6 +71,13 @@ private slots:
     void postOperation();
     //force into the right thread
     void internalStartTheTransfer();
+
+    //implemente to connect async
+    void read_error();
+    void read_readIsStopped();
+    void read_closed();
+    void write_error();
+    void write_closed();
 signals:
     //internal signal
     void internalStartResumeAfterErrorAndSeek() const;
@@ -96,11 +106,18 @@ private:
     //ready = open + ready to operation (no error to resolv)
     bool			transferIsReadyVariable;
     uint64_t transferProgression;
+    bool sended_state_readStopped;
+    bool readIsClosedVariable;
+    bool writeIsClosedVariable;
+    bool realMove;
     bool remainFileOpen() const;
     bool remainSourceOpen() const;
     bool remainDestinationOpen() const;
     void resetExtraVariable();
     void ifCanStartTransfer();
+    void checkIfAllIsClosedAndDoOperations();
+    ReadThread readThread;
+    WriteThread writeThread;
 };
 
 #endif // TransferThreadAsync_H
