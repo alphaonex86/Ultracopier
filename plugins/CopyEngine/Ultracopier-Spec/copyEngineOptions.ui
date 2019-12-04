@@ -44,62 +44,6 @@
        <string>Transfer</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="4" column="2">
-        <widget class="QCheckBox" name="rsync"/>
-       </item>
-       <item row="7" column="1">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>278</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_19">
-         <property name="toolTip">
-          <string>Less performance if checked</string>
-         </property>
-         <property name="text">
-          <string>Follow the strict order</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="moveTheWholeFolder"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="keepDate"/>
-       </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="doRightTransfer"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_rsync">
-         <property name="text">
-          <string notr="true">Rsync</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QCheckBox" name="mkpath">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Create full path if not exists</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -114,10 +58,20 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QCheckBox" name="followTheStrictOrder">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_19">
          <property name="toolTip">
           <string>Less performance if checked</string>
+         </property>
+         <property name="text">
+          <string>Follow the strict order</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Create full path if not exists</string>
          </property>
         </widget>
        </item>
@@ -125,6 +79,23 @@
         <widget class="QLabel" name="label_18">
          <property name="text">
           <string>Move the whole folder</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QCheckBox" name="followTheStrictOrder">
+         <property name="toolTip">
+          <string>Less performance if checked</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="moveTheWholeFolder"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="mkpath">
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
@@ -139,6 +110,49 @@
         <widget class="QCheckBox" name="checksum">
          <property name="text">
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QCheckBox" name="rsync"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="doRightTransfer"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_rsync">
+         <property name="text">
+          <string notr="true">Rsync</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QCheckBox" name="keepDate"/>
+       </item>
+       <item row="8" column="1">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>278</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="2">
+        <widget class="QCheckBox" name="autoStart">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Auto start</string>
          </property>
         </widget>
        </item>

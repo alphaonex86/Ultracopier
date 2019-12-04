@@ -113,6 +113,7 @@ private slots:
     void moveTheWholeFolder(bool checked);
     void on_inodeThreads_editingFinished();
     void setBuffer(bool checked);
+    void setAutoStart(bool autoStart);
 public slots:
     void resetOptions() override;
     void newLanguageLoaded() override;

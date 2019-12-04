@@ -22,6 +22,7 @@
 TransferThreadAsync::TransferThreadAsync() :
     transferProgression(0)
 {
+    haveStartTime=false;
     #ifndef Q_OS_UNIX
     PSecurityD=NULL;
     dacl=NULL;
@@ -198,6 +199,7 @@ void TransferThreadAsync::preOperation()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start: source: "+
                              TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+    haveStartTime=true;
     needRemove=false;
     if(isSame())
     {
@@ -456,6 +458,7 @@ void TransferThreadAsync::stop()
     stopItWin=1;
     #endif
     stopIt=true;
+    haveStartTime=false;
     if(transfer_stat==TransferStat_Idle)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
@@ -918,3 +921,31 @@ void TransferThreadAsync::timeOfTheBlockCopyFinished()
 }
 #endif
 
+//pause the copy
+void TransferThreadAsync::pause()
+{
+    //only pause/resume during the transfer of file data
+    //from transfer_stat!=TransferStat_Idle because it resume at wrong order
+    if(transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] wrong stat to put in pause");
+        return;
+    }
+    haveStartTime=false;
+    readThread.pause();
+    writeThread.pause();
+}
+
+//resume the copy
+void TransferThreadAsync::resume()
+{
+    //only pause/resume during the transfer of file data
+    //from transfer_stat!=TransferStat_Idle because it resume at wrong order
+    if(transfer_stat!=TransferStat_Transfer && transfer_stat!=TransferStat_PostTransfer)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] wrong stat to put in pause");
+        return;
+    }
+    readThread.resume();
+    writeThread.resume();
+}

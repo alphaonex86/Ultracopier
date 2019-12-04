@@ -62,6 +62,7 @@ private:
     int                     inodeThreads;
     bool                    renameTheOriginalDestination;
     bool                    moveTheWholeFolder;
+    bool                    autoStart;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool                    rsync;
     #endif
@@ -282,6 +283,8 @@ public slots:
     void setRenameTheOriginalDestination(const bool &renameTheOriginalDestination);
     void inodeThreadsFinished();
 
+    /// \brief set auto start
+    void setAutoStart(const bool autoStart);
     /// \brief set if need check if the destination folder exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
     void setMkFullPath(const bool mkFullPath);

@@ -72,6 +72,12 @@ public:
     void setMultiForBigSpeed(const int &multiForBigSpeed);
     void timeOfTheBlockCopyFinished();
     #endif
+    /// \brief pause the copy
+    void pause();
+    /// \brief resume the copy
+    void resume();
+
+    bool haveStartTime;
 protected:
     void run();
 private slots:

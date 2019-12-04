@@ -63,6 +63,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     blockSize                       = 65536;
     blockSizeAfterSpeedLimitation   = blockSize;
     #endif
+    putInPause                      = false;
+    autoStart=true;
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog))
@@ -144,8 +146,11 @@ void ListThread::transferInodeIsClosed()
             actionDone.push_back(newAction);
             /// \todo check if item is at the right thread
             const int64_t transferTime=temp_transfer_thread->transferTime();
-            if(transferTime>=0)
+            if(transferTime>=0 && temp_transfer_thread->haveStartTime)
+            {
                 timeToTransfer.push_back(std::pair<uint64_t,uint32_t>(temp_transfer_thread->transferSize,transferTime));
+                temp_transfer_thread->haveStartTime=false;
+            }
             actionToDoListTransfer.erase(actionToDoListTransfer.cbegin()+int_for_internal_loop);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, actionToDoListInode: %2, actionToDoListInode_afterTheTransfer: %3").arg(actionToDoListTransfer.size()).arg(actionToDoListInode.size()).arg(actionToDoListInode_afterTheTransfer.size()).toStdString());
             if(actionToDoListTransfer.empty() && actionToDoListInode.empty() && actionToDoListInode_afterTheTransfer.empty())
@@ -295,8 +300,17 @@ void ListThread::autoStartAndCheckSpace()
 
 void ListThread::autoStartIfNeeded()
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
-    startGeneralTransfer();
+    if(autoStart)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Auto start the copy");
+        startGeneralTransfer();
+    }
+    else
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Put the copy engine in pause");
+        putInPause=true;
+        emit isInPause(true);
+    }
 }
 
 void ListThread::startGeneralTransfer()
@@ -671,7 +685,7 @@ void ListThread::doNewActions_start_transfer()
 {
     /*ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,QStringLiteral("actionToDoListTransfer.size(): %1, numberOfTranferRuning: %2")
                              .arg(actionToDoListTransfer.size()).arg(getNumberOfTranferRuning()).toStdString());*/
-    if(stopIt)
+    if(stopIt || putInPause)
         return;
     int numberOfTranferRuning=getNumberOfTranferRuning();
     const int &loop_size=transferThreadList.size();
@@ -748,7 +762,7 @@ void ListThread::doNewActions_inode_manipulation()
     #endif
     if(stopIt)
         checkIfReadyToCancel();
-    if(stopIt)
+    if(stopIt || putInPause)
         return;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");

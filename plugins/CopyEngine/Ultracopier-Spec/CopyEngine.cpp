@@ -102,6 +102,8 @@ void CopyEngine::connectTheSignalsSlots()
     debugDialogWindow.show();
     debugDialogWindow.copyEngine=this;
     #endif
+    if(!connect(listThread,&ListThread::isInPause,				this,&CopyEngine::isInPause,				Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect isInPause()");
     if(!connect(listThread,&ListThread::actionInProgess,	this,&CopyEngine::actionInProgess,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect actionInProgess()");
     if(!connect(listThread,&ListThread::actionInProgess,	this,&CopyEngine::newActionInProgess,	Qt::QueuedConnection))
@@ -246,6 +248,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     ui->label_rsync->setVisible(false);
     ui->rsync->setVisible(false);
     #endif
+    setAutoStart(autoStart);
     setCheckDestinationFolderExists(checkDestinationFolderExists);
     setMkFullPath(mkFullPath);
     setRightTransfer(doRightTransfer);
@@ -346,6 +349,7 @@ void CopyEngine::setInterfacePointer(QWidget * uiinterface)
 
     if(uiIsInstalled)
     {
+        connect(ui->autoStart,                          &QCheckBox::toggled,		this,&CopyEngine::setAutoStart);
         connect(ui->doRightTransfer,                    &QCheckBox::toggled,		this,&CopyEngine::setRightTransfer);
         connect(ui->keepDate,                           &QCheckBox::toggled,		this,&CopyEngine::setKeepDate);
         connect(ui->moveTheWholeFolder,                 &QCheckBox::toggled,		this,&CopyEngine::setMoveTheWholeFolder);
@@ -1050,4 +1054,13 @@ void CopyEngine::exportErrorIntoTransferList()
     if(fileName.empty())
         return;
     emit signal_exportErrorIntoTransferList(fileName);
+}
+
+//set auto start
+void CopyEngine::setAutoStart(const bool autoStart)
+{
+    this->autoStart=autoStart;
+    if(uiIsInstalled)
+        ui->autoStart->setChecked(autoStart);
+    listThread->setAutoStart(autoStart);
 }

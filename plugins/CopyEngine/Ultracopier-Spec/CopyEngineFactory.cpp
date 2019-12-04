@@ -48,6 +48,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
     connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
     connect(ui->inodeThreads,               static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::on_inodeThreads_editingFinished);
+    connect(ui->autoStart,                  &QCheckBox::toggled,                                            this,&CopyEngineFactory::setAutoStart);
     connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
     connect(ui->comboBoxFolderCollision,	static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderCollision);
     connect(ui->comboBoxFileError,          static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileError);
@@ -103,6 +104,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     realObject->setRsync(ui->rsync->isChecked());
     #endif
+    realObject->setAutoStart(ui->autoStart->isChecked());
     realObject->setFolderCollision(ui->comboBoxFolderCollision->currentIndex());
     realObject->setFolderError(ui->comboBoxFolderError->currentIndex());
     realObject->setFileCollision(ui->comboBoxFileCollision->currentIndex());
@@ -180,8 +182,6 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         }
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("detected memory: %1MB").arg(max_memory/1024).toStdString());
         #endif
-        KeysList.push_back(std::pair<std::string, std::string>("sequentialBuffer",std::to_string(sequentialBuffer)));
-        KeysList.push_back(std::pair<std::string, std::string>("parallelBuffer",std::to_string(parallelBuffer)));
         KeysList.push_back(std::pair<std::string, std::string>("parallelizeIfSmallerThan",std::to_string(128)));//128KB, better for modern hardware: Multiple queue en linux, SSD, ...
         KeysList.push_back(std::pair<std::string, std::string>("autoStart","true"));
         #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -274,6 +274,7 @@ void CopyEngineFactory::resetOptions()
     #endif
     ui->doRightTransfer->setChecked(stringtobool(options->getOptionValue("doRightTransfer")));
     ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
+    ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     ui->rsync->setChecked(stringtobool(options->getOptionValue("rsync")));
     #else
@@ -578,4 +579,11 @@ void CopyEngineFactory::setBuffer(bool checked)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("buffer",booltostring(checked));
+}
+
+void CopyEngineFactory::setAutoStart(bool autoStart)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("autoStart",booltostring(autoStart));
 }

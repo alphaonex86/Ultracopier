@@ -16,13 +16,41 @@
 void ListThread::pause()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    if(putInPause)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Seam already in pause!");
+        return;
+    }
+    putInPause=true;
+    int index=0;
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
+    while(index<loop_sub_size_transfer_thread_search)
+    {
+        transferThreadList.at(index)->pause();
+        index++;
+    }
+    emit isInPause(true);
 }
 
 void ListThread::resume()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
+    if(!putInPause)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"Seam already resumed!");
+        return;
+    }
+    putInPause=false;
     startGeneralTransfer();
     doNewActions_start_transfer();
+    int index=0;
+    int loop_sub_size_transfer_thread_search=transferThreadList.size();
+    while(index<loop_sub_size_transfer_thread_search)
+    {
+        transferThreadList.at(index)->resume();
+        index++;
+    }
+    emit isInPause(false);
 }
 
 void ListThread::skip(const uint64_t &id)

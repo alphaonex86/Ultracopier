@@ -115,6 +115,8 @@ public:
     std::unordered_set<void *> overCheckUsedThread;
 
     void autoStartIfNeeded();
+    /// \brief set auto start
+    void setAutoStart(const bool autoStart);
 public slots:
     //action on the copy
     /// \brief put the transfer in pause
@@ -220,6 +222,7 @@ private:
     ScanFileOrFolder *		newScanThread(Ultracopier::CopyMode mode);
     uint64_t				bytesToTransfer;
     uint64_t				bytesTransfered;
+    bool				autoStart;
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     bool                rsync;
     #endif
@@ -297,6 +300,7 @@ private:
     int                 multiForBigSpeed;
     int blockSize;
     #endif
+    bool putInPause;
 
     void realByteTransfered();
     int getNumberOfTranferRuning() const;
@@ -413,6 +417,7 @@ signals:
     void send_parallelizeIfSmallerThan(const int &parallelizeIfSmallerThan) const;
     void send_updateMount();
     void missingDiskSpace(std::vector<Diskspace> list) const;
+    void isInPause(const bool &) const;
 };
 
 #endif // LISTTHREAD_H
