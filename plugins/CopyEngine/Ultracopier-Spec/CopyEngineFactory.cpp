@@ -261,7 +261,7 @@ bool CopyEngineFactory::canDoOnlyCopy() const
 /// \brief to get if have pause
 bool CopyEngineFactory::havePause()
 {
-    return false;
+    return true;
 }
 
 void CopyEngineFactory::resetOptions()

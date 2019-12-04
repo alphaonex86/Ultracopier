@@ -97,5 +97,13 @@ void ListThread::cancel()
         index++;
     }
     scanFileOrFolderThreadsPool.clear();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    if(clockForTheCopySpeed!=NULL)
+    {
+        clockForTheCopySpeed->stop();
+        delete clockForTheCopySpeed;
+        clockForTheCopySpeed=NULL;
+    }
+    #endif
     checkIfReadyToCancel();
 }

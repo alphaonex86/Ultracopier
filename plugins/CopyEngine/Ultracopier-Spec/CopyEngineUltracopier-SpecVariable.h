@@ -36,6 +36,7 @@
 
 //if set, check the inode type at scanFileOrFolder, deprecated into the new algorithm and not used
 #define ULTRACOPIER_PLUGIN_CHECKLISTTYPE
+#define ULTRACOPIER_PLUGIN_SPEED_SUPPORT
 
 //#define ULTRACOPIER_PLUGIN_RIGHTS
 

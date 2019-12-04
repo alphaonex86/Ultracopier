@@ -870,44 +870,9 @@ void WriteThread::internalWrite()
                 #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
                 if(multiForBigSpeed>0)
                 {
-                    if(blockArray.size()==blockSize)
-                    {
-                        theBlockList.removeFirst();
-                        //if remove one block
-                        if(!sequential)
-                            writeFull.release();
-                    }
-                    else
-                    {
-                        blockArray.clear();
-                        while(blockArray.size()!=blockSize)
-                        {
-                            //if larger
-                            if(theBlockList.first().size()>blockSize)
-                            {
-                                blockArray+=theBlockList.first().mid(0,blockSize);
-                                theBlockList.first().remove(0,blockSize);
-                                if(!sequential)
-                                {
-                                    //do write in loop to finish the actual block
-                                    emit internalStartWrite();
-                                }
-                                break;
-                            }
-                            //if smaller
-                            else
-                            {
-                                blockArray+=theBlockList.first();
-                                theBlockList.removeFirst();
-                                //if remove one block
-                                if(!sequential)
-                                    writeFull.release();
-                                if(theBlockList.isEmpty())
-                                    break;
-                            }
-                        }
-                    }
-                    //haveBlock=!blockArray.isEmpty();
+                    theBlockList.removeFirst();
+                    //if remove one block
+                    writeFull.release();
                 }
                 else
                 #endif
@@ -931,7 +896,7 @@ void WriteThread::internalWrite()
         if(multiForBigSpeed>0)
         {
             numberOfBlockCopied++;
-            if(sequential || (!sequential && writeFullBlocked))
+            if(writeFullBlocked)
             {
                 if(numberOfBlockCopied>=(multiForBigSpeed*2))
                 {

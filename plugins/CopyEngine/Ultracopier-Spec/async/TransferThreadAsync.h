@@ -64,6 +64,14 @@ public:
     //not copied size, ...
     uint64_t realByteTransfered() const;
     std::pair<uint64_t, uint64_t> progression() const;
+    /** \brief to set the speed limitation
+     * -1 if not able, 0 if disabled */
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    //set block size in Bytes for speed limitation
+    bool setBlockSize(const unsigned int blockSize);
+    void setMultiForBigSpeed(const int &multiForBigSpeed);
+    void timeOfTheBlockCopyFinished();
+    #endif
 protected:
     void run();
 private slots:

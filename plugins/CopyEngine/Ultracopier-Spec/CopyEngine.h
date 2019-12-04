@@ -304,6 +304,7 @@ signals:
     void signal_pause() const;
     void signal_resume() const;
     void signal_skip(const uint64_t &id) const;
+    void signal_setSpeedLimitation(const int64_t &speedLimitation);
 
     //edit the transfer list
     void signal_removeItems(const std::vector<uint64_t> &ids) const;

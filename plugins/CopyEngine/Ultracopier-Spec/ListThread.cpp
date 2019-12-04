@@ -51,11 +51,18 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     keepDate(false),
     mkFullPath(false),
     alwaysDoThisActionForFileExists(FileExists_NotSet),
+    speedLimitation(0),
     returnBoolToCopyEngine(true)
 {
     moveToThread(this);
     start(HighPriority);
     this->facilityInterface=facilityInterface;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    clockForTheCopySpeed            = NULL;
+    multiForBigSpeed                = 0;
+    blockSize                       = 65536;
+    blockSizeAfterSpeedLimitation   = blockSize;
+    #endif
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog))
@@ -1043,6 +1050,9 @@ void ListThread::errorOnFolder(const INTERNALTYPEPATH &fileInfo,const std::strin
 //to run the thread
 void ListThread::run()
 {
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    clockForTheCopySpeed=new QTimer();
+    #endif
     exec();
 }
 
@@ -1069,6 +1079,10 @@ void ListThread::createTransferThread()
     last->setRightTransfer(doRightTransfer);
     last->setKeepDate(keepDate);
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    if(!last->setBlockSize(blockSizeAfterSpeedLimitation))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to set the block size: "+std::to_string(blockSizeAfterSpeedLimitation));
+    #endif
     last->setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     last->setBuffer(buffer);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
@@ -1101,6 +1115,11 @@ void ListThread::createTransferThread()
 
     if(!connect(this,&ListThread::send_updateMount,                 last,&TransferThread::set_updateMount,          Qt::QueuedConnection))
         abort();
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    last->setMultiForBigSpeed(multiForBigSpeed);
+    //speed limitation
+    connect(clockForTheCopySpeed,	&QTimer::timeout,			last,	&TransferThreadAsync::timeOfTheBlockCopyFinished,		Qt::QueuedConnection);
+    #endif
 
     last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));
     last->setRenamingRules(firstRenamingRule,otherRenamingRule);

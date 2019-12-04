@@ -33,9 +33,6 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     blockSize                       = ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*1024;
     sequentialBuffer                = ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
     parallelBuffer                  = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
-    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
-    blockSizeAfterSpeedLimitation   = blockSize;
-    #endif
     osBufferLimit                   = 512;
     alwaysDoThisActionForFileExists = FileExists_NotSet;
     doChecksum                      = false;
@@ -45,6 +42,7 @@ ListThread::ListThread(FacilityInterface * facilityInterface)
     osBufferLimited                 = false;
     forcedMode                      = false;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    blockSizeAfterSpeedLimitation   = blockSize;
     clockForTheCopySpeed            = NULL;
     multiForBigSpeed                = 0;
     #endif

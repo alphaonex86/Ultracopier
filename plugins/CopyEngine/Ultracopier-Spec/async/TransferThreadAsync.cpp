@@ -893,3 +893,28 @@ void TransferThreadAsync::write_closed()
     checkIfAllIsClosedAndDoOperations();
 }
 
+#ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+
+
+//set block size in Bytes for speed limitation
+bool TransferThreadAsync::setBlockSize(const unsigned int blockSize)
+{
+    bool read=readThread.setBlockSize(blockSize);
+    bool write=writeThread.setBlockSize(blockSize);
+    return (read && write);
+}
+
+//set the current max speed in KB/s
+void TransferThreadAsync::setMultiForBigSpeed(const int &multiForBigSpeed)
+{
+    readThread.setMultiForBigSpeed(multiForBigSpeed);
+    writeThread.setMultiForBigSpeed(multiForBigSpeed);
+}
+
+void TransferThreadAsync::timeOfTheBlockCopyFinished()
+{
+    readThread.timeOfTheBlockCopyFinished();
+    writeThread.timeOfTheBlockCopyFinished();
+}
+#endif
+

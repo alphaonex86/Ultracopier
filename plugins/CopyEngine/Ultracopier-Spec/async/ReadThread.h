@@ -14,6 +14,7 @@
 #include "WriteThread.h"
 #include "Environment.h"
 #include "../StructEnumDefinition_CopyEngine.h"
+#include "../CopyEngineUltracopier-SpecVariable.h"
 
 #ifdef WIDESTRING
 #define INTERNALTYPEPATH std::wstring
@@ -54,7 +55,7 @@ public:
     /// \brief set the current max speed in KB/s
     void setMultiForBigSpeed(const int &multiForBigSpeed);
     #endif
-    /// \brief set block size in KB
+    /// \brief set block size in KB mostly for speed
     bool setBlockSize(const int blockSize);
     /// \brief reopen after an error
     void reopen();

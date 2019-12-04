@@ -285,11 +285,18 @@ private:
     bool mkFullPath;
     std::vector<std::string> drives;
     FileExistsAction alwaysDoThisActionForFileExists;
+    int speedLimitation;
     //to return value to the copyEngine
     bool returnBoolToCopyEngine;
     std::pair<quint64,quint64> returnPairQuint64ToCopyEngine;
     std::vector<Ultracopier::ItemOfCopyList> returnListItemOfCopyListToCopyEngine;
     Ultracopier::ItemOfCopyList returnItemOfCopyListToCopyEngine;
+    #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
+    QTimer *clockForTheCopySpeed;
+    int blockSizeAfterSpeedLimitation;//in Bytes
+    int                 multiForBigSpeed;
+    int blockSize;
+    #endif
 
     void realByteTransfered();
     int getNumberOfTranferRuning() const;

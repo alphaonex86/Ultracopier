@@ -162,6 +162,8 @@ void CopyEngine::connectTheSignalsSlots()
 
     if(!connect(this,&CopyEngine::signal_pause,						listThread,&ListThread::pause,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_pause()");
+    if(!connect(this,&CopyEngine::signal_setSpeedLimitation,						listThread,&ListThread::setSpeedLimitation,				Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect setSpeedLimitation()");
     if(!connect(this,&CopyEngine::signal_exportErrorIntoTransferList,listThread,&ListThread::exportErrorIntoTransferList,				Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect signal_exportErrorIntoTransferList()");
     if(!connect(this,&CopyEngine::signal_resume,						listThread,&ListThread::resume,				Qt::QueuedConnection))
@@ -514,7 +516,7 @@ uint64_t CopyEngine::realByteTransfered()
 //speed limitation
 bool CopyEngine::supportSpeedLimitation() const
 {
-    return false;
+    return true;
 }
 
 /** \brief to sync the transfer list
@@ -694,8 +696,8 @@ void CopyEngine::errorTransferList(const std::string &error)
 
 bool CopyEngine::setSpeedLimitation(const int64_t &speedLimitation)
 {
-    (void)speedLimitation;
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"maxSpeed: "+std::to_string(speedLimitation));
+    emit signal_setSpeedLimitation(speedLimitation);
     return false;
 }
 
