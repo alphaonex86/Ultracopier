@@ -22,7 +22,7 @@ WriteThread::WriteThread()
     setObjectName(QStringLiteral("write"));
     //this->mkpathTransfer            = mkpathTransfer;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    stat                            = Idle;
+    status                            = Idle;
     #endif
     numberOfBlock                   = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     putInPause                      = false;
@@ -82,9 +82,11 @@ bool WriteThread::seek(const int64_t &position)/// \todo search if is use full
         abort();//internal failure
     return lseek(to,position,SEEK_SET)==position;
     #else
-    if(from==NULL)
+    if(to==NULL)
         abort();//internal failure
-    return SetFilePointerEx(to,position,NULL,FILE_BEGIN);
+    LARGE_INTEGER liSize;
+    liSize.QuadPart=position;
+    return SetFilePointerEx(to,liSize,NULL,FILE_BEGIN);
     #endif
 }
 
@@ -99,7 +101,7 @@ int64_t WriteThread::size() const
     if(!GetFileSizeEx(to,lpFileSize))
         return -1;
     else
-        return lpFileSize;
+        return lpFileSize->QuadPart;
     #endif
 }
 
@@ -113,7 +115,11 @@ bool WriteThread::internalOpen()
         emit closed();
         return false;
     }
+    #ifdef Q_OS_UNIX
     if(to>=0)
+    #else
+    if(to!=NULL)
+    #endif
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already open! destination: "+TransferThread::internalStringTostring(file));
         return false;
@@ -135,7 +141,7 @@ bool WriteThread::internalOpen()
     stopIt=false;
     endDetected=false;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    stat=InodeOperation;
+    status=InodeOperation;
     #endif
     //mkpath check if exists and return true if already exists
     {
@@ -152,12 +158,12 @@ bool WriteThread::internalOpen()
                     #ifdef Q_OS_WIN32
                     errorString_internal=tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr();
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable create the folder: %1, error: %2")
-                                 .arg(destinationInfo.absolutePath())
+                                 .arg(destination)
                                  .arg(QString::fromStdString(errorString_internal))
                                              .toStdString());
                     emit error();
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-                    stat=Idle;
+                    status=Idle;
                     #endif
                     mkpathTransfer->release();
                     return false;
@@ -169,7 +175,7 @@ bool WriteThread::internalOpen()
                                  errorString_internal);
                     emit error();
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-                    stat=Idle;
+                    status=Idle;
                     #endif
                     mkpathTransfer->release();
                     return false;
@@ -221,34 +227,17 @@ bool WriteThread::internalOpen()
             }
         }
     }
-    #ifdef Q_OS_UNIX
-    bool fileWasExists=false;
-    {
-        struct stat st;
-        if(::stat(TransferThread::internalStringTostring(file).c_str(), &st)!=-1)
-            fileWasExists=true;
-    }
-    #else
-    PLARGE_INTEGER lpFileSize=0;
-    if(!GetFileSizeEx(from,lpFileSize))
-        return -1;
-    else
-        to do return lpFileSize;
-    #endif
+    bool fileWasExists=TransferThread::is_file(file);
     #ifdef Q_OS_UNIX
     to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY);
     #else
-    from=HANDLE CreateFileW(
-                LPCWSTR               lpFileName,
-                DWORD                 dwDesiredAccess,
-                DWORD                 dwShareMode,
-                LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                DWORD                 dwCreationDisposition,
-                DWORD                 dwFlagsAndAttributes,
-                HANDLE                hTemplateFile
-              );
+    to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
     #endif
+    #ifdef Q_OS_UNIX
     if(to>=0)
+    #else
+    if(to!=INVALID_HANDLE_VALUE)
+    #endif
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the open");
         {
@@ -257,8 +246,13 @@ bool WriteThread::internalOpen()
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] General file corruption detected");
                 stopIt=true;
+                #ifdef Q_OS_UNIX
                 ::close(to);
                 to=-1;
+                #else
+                CloseHandle(to);
+                to=NULL;
+                #endif
                 resumeNotStarted();
                 this->file.clear();
                 return false;
@@ -273,22 +267,35 @@ bool WriteThread::internalOpen()
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
+            #ifdef Q_OS_UNIX
             ::close(to);
             to=-1;
+            #else
+            CloseHandle(to);
+            to=NULL;
+            #endif
             resumeNotStarted();
             this->file.clear();
             emit closed();
             return false;
         }
-        if(ftruncate(to,startSize)!=0)
+        if(destTruncate(startSize)!=0)
         {
+            #ifdef Q_OS_UNIX
             ::close(to);
             to=-1;
+            #else
+            CloseHandle(to);
+            to=NULL;
+            #endif
             resumeNotStarted();
             this->file.clear();
             #ifdef Q_OS_WIN32
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
-            to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+            errorString_internal=TransferThread::GetLastErrorStdStr();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                     "Unable to seek after resize: "+TransferThread::internalStringTostring(file)+
+                                     ", error: "+errorString_internal
+                                     );
             #else
             int t=errno;
             errorString_internal=strerror(t);
@@ -299,15 +306,20 @@ bool WriteThread::internalOpen()
             #endif
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Idle;
+            status=Idle;
             #endif
             return false;
         }
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
+            #ifdef Q_OS_UNIX
             ::close(to);
             to=-1;
+            #else
+            CloseHandle(to);
+            to=NULL;
+            #endif
             resumeNotStarted();
             this->file.clear();
             emit closed();
@@ -315,13 +327,21 @@ bool WriteThread::internalOpen()
         }
         if(!seek(0))
         {
+            #ifdef Q_OS_UNIX
             ::close(to);
             to=-1;
+            #else
+            CloseHandle(to);
+            to=NULL;
+            #endif
             resumeNotStarted();
             this->file.clear();
             #ifdef Q_OS_WIN32
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
-            to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+            errorString_internal=TransferThread::GetLastErrorStdStr();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                     "Unable to seek after open: "+TransferThread::internalStringTostring(file)+
+                                     ", error: "+errorString_internal
+                                     );
             #else
             int t=errno;
             errorString_internal=strerror(t);
@@ -332,15 +352,20 @@ bool WriteThread::internalOpen()
             #endif
             emit error();
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
-            stat=Idle;
+            status=Idle;
             #endif
             return false;
         }
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
+            #ifdef Q_OS_UNIX
             ::close(to);
             to=-1;
+            #else
+            CloseHandle(to);
+            to=NULL;
+            #endif
             resumeNotStarted();
             this->file.clear();
             emit closed();
@@ -350,7 +375,7 @@ bool WriteThread::internalOpen()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] emit opened()");
         emit opened();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Idle;
+        status=Idle;
         #endif
         needRemoveTheFile=false;
         postOperationRequested=false;
@@ -358,17 +383,9 @@ bool WriteThread::internalOpen()
     }
     else
     {
-        #ifdef Q_OS_UNIX
-        struct stat st;
-        if(!fileWasExists && ::stat(TransferThread::internalStringTostring(file).c_str(), &st)!=-1)
+        if(!fileWasExists && TransferThread::is_file(file))
             if(unlink(TransferThread::internalStringTostring(file).c_str())!=0)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] file created but can't be removed");
-        #else
-        to do         struct stat st;
-        if(!fileWasExists && ::stat(TransferThread::internalStringTostring(file).c_str(), &st)!=-1)
-            if(!file.remove())
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] file created but can't be removed");
-        #endif
         if(stopIt)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close because stopIt is at true");
@@ -378,8 +395,11 @@ bool WriteThread::internalOpen()
             return false;
         }
         #ifdef Q_OS_WIN32
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
-        to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        errorString_internal=TransferThread::GetLastErrorStdStr();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                             "Unable to open: "+TransferThread::internalStringTostring(file)+
+                             ", error: "+errorString_internal
+                             );
         #else
         int t=errno;
         errorString_internal=strerror(t);
@@ -390,7 +410,7 @@ bool WriteThread::internalOpen()
         #endif
         emit error();
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Idle;
+        status=Idle;
         #endif
         return false;
     }
@@ -405,7 +425,11 @@ void WriteThread::open(const INTERNALTYPEPATH &file, const uint64_t &startSize)
         emit error();
         return;
     }
+    #ifdef Q_OS_WIN32
+    if(to!=NULL)
+    #else
     if(to>=0)
+    #endif
     {
         if(file==this->file)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+TransferThread::internalStringTostring(file));
@@ -580,7 +604,11 @@ void WriteThread::resume()
     }
     else
         return;
+    #ifdef Q_OS_WIN32
+    if(to==NULL)
+    #else
     if(to<0)
+    #endif
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] file is not open");
         return;
@@ -616,23 +644,30 @@ void WriteThread::internalClose(bool emitSignal)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] close for file: "+TransferThread::internalStringTostring(file));
     /// \note never send signal here, because it's called by the destructor
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    stat=Close;
+    status=Close;
     #endif
     bool emit_closed=false;
     if(!fakeMode)
     {
+        #ifdef Q_OS_WIN32
+        if(to!=NULL)
+        #else
         if(to>=0)
+        #endif
         {
             if(!needRemoveTheFile)
             {
                 if(startSize!=lastGoodPosition)
-                    if(ftruncate(to,lastGoodPosition)!=0)
+                    if(destTruncate(lastGoodPosition)!=0)
                     {
                         if(emitSignal)
                         {
                             #ifdef Q_OS_WIN32
-                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
-                            to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+                            errorString_internal=TransferThread::GetLastErrorStdStr();
+                            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                                     "Unable to resize: "+TransferThread::internalStringTostring(file)+
+                                                     ", error: "+errorString_internal
+                                                     );
                             #else
                             int t=errno;
                             errorString_internal=strerror(t);
@@ -647,8 +682,13 @@ void WriteThread::internalClose(bool emitSignal)
                             needRemoveTheFile=true;
                     }
             }
+            #ifdef Q_OS_UNIX
             ::close(to);
             to=-1;
+            #else
+            CloseHandle(to);
+            to=NULL;
+            #endif
             this->file.clear();
             if(needRemoveTheFile || stopIt)
             {
@@ -678,7 +718,7 @@ void WriteThread::internalClose(bool emitSignal)
         emit closed();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    stat=Idle;
+    status=Idle;
     #endif
 
     /// \note always the last of this function
@@ -773,8 +813,11 @@ void WriteThread::internalFlushAndSeekToZero()
     if(!seek(0))
     {
         #ifdef Q_OS_WIN32
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
-        to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        errorString_internal=TransferThread::GetLastErrorStdStr();
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                 "Unable to seek: "+TransferThread::internalStringTostring(file)+
+                                 ", error: "+errorString_internal
+                                 );
         #else
         int t=errno;
         errorString_internal=strerror(t);
@@ -921,16 +964,17 @@ void WriteThread::internalWrite()
         if(stopIt)
             return;
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Write;
+        status=Write;
         #endif
         #ifdef Q_OS_WIN32
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+internalStringTostring(path)+" "+TransferThread::GetLastErrorStdStr());
-        to do emit errorOnFile(destination,tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr());
+        LPDWORD lpNumberOfBytesRead=0;
+        const BOOL retRead=WriteFile(to,blockArray.data(),blockArray.size(),lpNumberOfBytesRead,NULL);
+        bytesWriten=*lpNumberOfBytesRead;
         #else
         bytesWriten=::write(to,blockArray.data(),blockArray.size());
         #endif
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
-        stat=Idle;
+        status=Idle;
         #endif
         //mutex for stream this data
         if(lastGoodPosition==0)
@@ -941,21 +985,29 @@ void WriteThread::internalWrite()
         if(stopIt)
             return;
         #ifdef Q_OS_WIN32
-        to do
+        if(retRead==FALSE)
         #else
         if(bytesWriten<0)
+        #endif
         {
+            #ifdef Q_OS_WIN32
+            errorString_internal=TransferThread::GetLastErrorStdStr();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                     "Unable to write: "+TransferThread::internalStringTostring(file)+
+                                     ", error: "+errorString_internal
+                                     );
+            #else
             int t=errno;
             errorString_internal=strerror(t);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                      "Unable to write: "+TransferThread::internalStringTostring(file)+
                                      ", error: "+errorString_internal+" ("+std::to_string(t)+")"
                                      );
+            #endif
             stopIt=true;
             emit error();
             return;
         }
-        #endif
         if(bytesWriten!=blockArray.size())
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString());
@@ -966,4 +1018,18 @@ void WriteThread::internalWrite()
         }
         lastGoodPosition+=bytesWriten;
     } while(true);
+}
+
+int WriteThread::destTruncate(const uint64_t &startSize)
+{
+    #ifdef Q_OS_WIN32
+    if(to==NULL)
+        abort();
+    seek(startSize);
+    return SetEndOfFile(to);
+    #else
+    if(to<0)
+        abort();
+    return ::ftruncate(to,startSize);
+    #endif
 }

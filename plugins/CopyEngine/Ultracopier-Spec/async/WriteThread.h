@@ -12,6 +12,10 @@
 #include <QSemaphore>
 #include <QCryptographicHash>
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 #include "Environment.h"
 #include "../StructEnumDefinition_CopyEngine.h"
 #include "../CopyEngineUltracopier-SpecVariable.h"
@@ -60,7 +64,7 @@ public:
         Close=3,
         Read=5
     };
-    WriteStat stat;
+    WriteStat status;
     #endif
     /// \brief do the fake open
     void fakeOpen();
@@ -81,6 +85,7 @@ public:
     void pause();
     void resume();
     void reemitStartOpen();
+    int destTruncate(const uint64_t &startSize);
 public slots:
     /// \brief start the operation
     void postOperation();

@@ -313,6 +313,12 @@ void ListThread::autoStartIfNeeded()
     }
 }
 
+//set auto start
+void ListThread::setAutoStart(const bool autoStart)
+{
+    this->autoStart=autoStart;
+}
+
 void ListThread::startGeneralTransfer()
 {
     doNewActions_inode_manipulation();

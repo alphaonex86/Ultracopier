@@ -11,6 +11,10 @@
 #include <QSemaphore>
 #include <QCryptographicHash>
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 #include "WriteThread.h"
 #include "Environment.h"
 #include "../StructEnumDefinition_CopyEngine.h"
@@ -72,7 +76,7 @@ public:
         Read=2,
         WaitWritePipe=3
     };
-    ReadStat stat;
+    ReadStat status;
     #endif
     /// \brief return if it's reading
     bool isReading() const;
@@ -128,7 +132,11 @@ private:
     volatile bool	seekToZero;
     volatile bool	tryStartRead;
     int64_t          size_at_open;
+    #ifdef Q_OS_UNIX
     uint64_t       mtime_at_open;
+    #else
+    LPFILETIME       mtime_at_open;
+    #endif
     bool            fakeMode;
     //internal function
     bool seek(const int64_t &position);/// \todo search if is use full
