@@ -78,6 +78,8 @@ public:
     void resume();
 
     bool haveStartTime;
+    ReadThread readThread;
+    WriteThread writeThread;
 protected:
     void run();
 private slots:
@@ -130,8 +132,6 @@ private:
     void resetExtraVariable();
     void ifCanStartTransfer();
     void checkIfAllIsClosedAndDoOperations();
-    ReadThread readThread;
-    WriteThread writeThread;
 };
 
 #endif // TransferThreadAsync_H

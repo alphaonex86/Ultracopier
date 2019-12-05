@@ -35,8 +35,6 @@ class WriteThread : public QThread
 public:
     explicit WriteThread();
     ~WriteThread();
-    /// \brief to have semaphore to do mkpath one by one
-    void setMkpathTransfer(QSemaphore *mkpathTransfer);
     //internal function
     bool seek(const int64_t &position);/// \todo search if is use full
     /// \brief get the size of the destination file
@@ -145,7 +143,6 @@ private:
     int                 id;
     volatile bool       endDetected;
     uint64_t             startSize;
-    QSemaphore          *mkpathTransfer;
     bool                fakeMode;
     bool                needRemoveTheFile;
     bool                deletePartiallyTransferredFiles;

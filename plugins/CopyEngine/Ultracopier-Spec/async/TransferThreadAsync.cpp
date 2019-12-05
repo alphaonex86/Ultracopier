@@ -29,6 +29,7 @@ TransferThreadAsync::TransferThreadAsync() :
     #endif
     //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+QStringLiteral("] start: ")+QString::number((qint64)QThread::currentThreadId())));
     //the error push
+    readThread.setWriteThread(&writeThread);
 
     TransferThread::run();
     if(!connect(this,&TransferThreadAsync::internalStartPostOperation,        this,                   &TransferThreadAsync::doFilePostOperation,  Qt::QueuedConnection))
@@ -186,6 +187,21 @@ void TransferThreadAsync::resetExtraVariable()
 {
     transferProgression=0;
     TransferThread::resetExtraVariable();
+}
+
+bool TransferThreadAsync::remainFileOpen() const
+{
+    return remainSourceOpen() || remainDestinationOpen();
+}
+
+bool TransferThreadAsync::remainSourceOpen() const
+{
+    return !readIsClosedVariable;
+}
+
+bool TransferThreadAsync::remainDestinationOpen() const
+{
+    return !writeIsClosedVariable;
 }
 
 void TransferThreadAsync::preOperation()
@@ -418,12 +434,25 @@ void TransferThreadAsync::ifCanStartTransfer()
         #endif
         return;
     }
+    readIsClosedVariable=true;
+    writeIsClosedVariable=true;
     checkIfAllIsClosedAndDoOperations();
 }
 
 void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop copy");
+    if((readError || writeError) && !needSkip && !stopIt)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] resolve error before progress");
+        return;
+    }
+    if(remainFileOpen())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen()");
+        return;
+    }
+
     if(mode==Ultracopier::Move && !realMove)
         if(exists(destination))
             if(!unlink(source))
@@ -536,14 +565,91 @@ void TransferThreadAsync::skip()
     case TransferStat_WaitForTheTransfer:
         //needRemove=true;never put that's here, can product destruction of the file
     case TransferStat_PreOperation:
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
+            return;
+        }
+        needSkip=true;
+        //check if all is source and destination is closed
+        if(remainFileOpen())
+        {
+            if(remainSourceOpen())
+                readThread.stop();
+            if(remainDestinationOpen())
+                writeThread.stop();
+        }
+        else // wait nothing, just quit
+        {
+            transfer_stat=TransferStat_PostOperation;
+            emit internalStartPostOperation();
+        }
         resetExtraVariable();
         break;
     case TransferStat_Transfer:
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
+            return;
+        }
+        //needRemove=true;never put that's here, can product destruction of the file
+        needSkip=true;
+        if(realMove)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] Do the direct FS fake close, realMove: "+std::to_string(realMove));
+            readThread.fakeReadIsStarted();
+            writeThread.fakeWriteIsStarted();
+            readThread.fakeReadIsStopped();
+            writeThread.fakeWriteIsStopped();
+            return;
+        }
+        writeThread.flushBuffer();
+        if(remainFileOpen())
+        {
+            if(remainSourceOpen())
+                readThread.stop();
+            if(remainDestinationOpen())
+                writeThread.stop();
+        }
+        else // wait nothing, just quit
+        {
+            transfer_stat=TransferStat_PostOperation;
+            emit internalStartPostOperation();
+        }
         if(!source.empty() && needRemove)
             if(exists(source) && source!=destination)
                 unlink(destination);
         break;
     case TransferStat_PostTransfer:
+        if(needSkip)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] skip already in progress");
+            return;
+        }
+        //needRemove=true;never put that's here, can product destruction of the file
+        needSkip=true;
+        if(realMove)
+        {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] Do the direct FS fake close, realMove: "+std::to_string(realMove));
+            readThread.fakeReadIsStarted();
+            writeThread.fakeWriteIsStarted();
+            readThread.fakeReadIsStopped();
+            writeThread.fakeWriteIsStopped();
+            return;
+        }
+        writeThread.flushBuffer();
+        if(remainFileOpen())
+        {
+            if(remainSourceOpen())
+                readThread.stop();
+            if(remainDestinationOpen())
+                writeThread.stop();
+        }
+        else // wait nothing, just quit
+        {
+            transfer_stat=TransferStat_PostOperation;
+            emit internalStartPostOperation();
+        }
         break;
     case TransferStat_PostOperation:
         break;

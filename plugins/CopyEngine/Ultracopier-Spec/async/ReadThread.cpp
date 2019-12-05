@@ -82,6 +82,7 @@ void ReadThread::open(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+TransferThread::internalStringTostring(file));
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already open: "+TransferThread::internalStringTostring(this->file));
+        abort();
         emit internalStartClose();
         isOpen.acquire();
         isOpen.release();
@@ -360,6 +361,8 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
 
 void ReadThread::internalRead()
 {
+    if(writeThread==nullptr)
+        abort();
     isInReadLoop=true;
     tryStartRead=false;
     if(stopIt)

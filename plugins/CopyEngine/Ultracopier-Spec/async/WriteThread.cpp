@@ -20,7 +20,6 @@ WriteThread::WriteThread()
     isOpen.release();
     moveToThread(this);
     setObjectName(QStringLiteral("write"));
-    //this->mkpathTransfer            = mkpathTransfer;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     status                            = Idle;
     #endif
@@ -145,7 +144,6 @@ bool WriteThread::internalOpen()
     #endif
     //mkpath check if exists and return true if already exists
     {
-        mkpathTransfer->acquire();
         INTERNALTYPEPATH destination=file;
         #ifdef WIDESTRING
         const size_t destinationIndex=destination.rfind(L'/');
@@ -165,7 +163,7 @@ bool WriteThread::internalOpen()
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
                     status=Idle;
                     #endif
-                    mkpathTransfer->release();
+                    mkpathTransfer.release();
                     return false;
                     #else
                     /// \todo do real folder error here
@@ -177,7 +175,6 @@ bool WriteThread::internalOpen()
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
                     status=Idle;
                     #endif
-                    mkpathTransfer->release();
                     return false;
                     #endif
                 }
@@ -200,7 +197,6 @@ bool WriteThread::internalOpen()
                 }
         }
         #endif
-        mkpathTransfer->release();
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the mkpath");
     if(stopIt)
@@ -831,11 +827,6 @@ void WriteThread::internalFlushAndSeekToZero()
     }
     stopIt=false;
     emit flushedAndSeekedToZero();
-}
-
-void WriteThread::setMkpathTransfer(QSemaphore *mkpathTransfer)
-{
-    this->mkpathTransfer=mkpathTransfer;
 }
 
 void WriteThread::setDeletePartiallyTransferredFiles(const bool &deletePartiallyTransferredFiles)

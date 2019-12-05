@@ -1142,6 +1142,8 @@ void ListThread::createTransferThread()
     #endif
 
     last->setObjectName(QStringLiteral("transfer %1").arg(transferThreadList.size()-1));
+    last->readThread.setObjectName(QStringLiteral("read %1").arg(transferThreadList.size()-1));
+    last->writeThread.setObjectName(QStringLiteral("write %1").arg(transferThreadList.size()-1));
     last->setRenamingRules(firstRenamingRule,otherRenamingRule);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     last->setId(transferThreadList.size()-1);
