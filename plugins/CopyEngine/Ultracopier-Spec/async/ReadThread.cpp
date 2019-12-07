@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <fcntl.h>
 #endif
 
 ReadThread::ReadThread()
@@ -283,7 +284,11 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             struct stat st;
             fstat(from, &st);
             size_at_open=st.st_size;
+            #ifdef Q_OS_MAC
+            mtime_at_open=st.st_mtimespec.tv_sec;
+            #else
             mtime_at_open=st.st_mtim.tv_sec;
+            #endif
         }
         #else
         {
@@ -716,7 +721,11 @@ bool ReadThread::internalReopen()
         if(::stat(TransferThread::internalStringTostring(file).c_str(), &st)!=-1)
         {
             temp_size=st.st_size;
+            #ifdef Q_OS_MAC
+            temp_mtime=st.st_mtimespec.tv_sec;
+            #else
             temp_mtime=st.st_mtim.tv_sec;
+            #endif
         }
     }
     #else

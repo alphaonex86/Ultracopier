@@ -1851,17 +1851,17 @@ since:%2</source>
 <context>
     <name>ReadThread</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="76"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="77"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="478"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="483"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="530"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="535"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2174,24 +2174,24 @@ since:%2</source>
 <context>
     <name>WriteThread</name>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="134"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="137"/>
         <source>Path resolution error (Empty path)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="163"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="197"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="166"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="200"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="175"/>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="199"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="178"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="202"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="425"/>
+        <location filename="../../../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="432"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
