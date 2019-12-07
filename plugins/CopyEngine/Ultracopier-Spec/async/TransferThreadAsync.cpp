@@ -57,6 +57,13 @@ TransferThreadAsync::TransferThreadAsync() :
         abort();
     if(!connect(&writeThread,&WriteThread::closed,                  this,					&TransferThreadAsync::write_closed,         Qt::QueuedConnection))
         abort();
+
+    //when both is ready, startRead()
+    if(!connect(&readThread,&ReadThread::opened,                    this,					&TransferThreadAsync::read_opened,          Qt::QueuedConnection))
+        abort();
+    if(!connect(&writeThread,&WriteThread::opened,                  this,					&TransferThreadAsync::write_opened,         Qt::QueuedConnection))
+        abort();
+
     //error management
 /*    if(!connect(&readThread,&ReadThread::isSeekToZeroAndWait,       this,					&TransferThreadAsync::readThreadIsSeekToZeroAndWait,	Qt::QueuedConnection))
         abort();
@@ -179,6 +186,8 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     sended_state_readStopped=false;
     readIsClosedVariable=false;
     writeIsClosedVariable=false;
+    readIsOpenVariable=false;
+    writeIsOpenVariable=false;
     realMove=false;
     return true;
 }
@@ -186,6 +195,8 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
 void TransferThreadAsync::resetExtraVariable()
 {
     transferProgression=0;
+    readIsOpenVariable=false;
+    writeIsOpenVariable=false;
     TransferThread::resetExtraVariable();
 }
 
@@ -399,7 +410,6 @@ void TransferThreadAsync::ifCanStartTransfer()
         //sync way: successFull=copy(TransferThread::internalStringTostring(source).c_str(),TransferThread::internalStringTostring(destination).c_str());
         readThread.open(source,mode);
         writeThread.open(destination,0);
-        readThread.startRead();
         return;
     }
     if(!successFull)
@@ -701,7 +711,7 @@ void TransferThreadAsync::setId(int id)
 
 char TransferThreadAsync::readingLetter() const
 {
-    switch(static_cast<TransferStat>(transfer_stat))
+    switch(static_cast<TransferStat>(readThread.status))
     {
     case TransferStat_Idle:
         return '_';
@@ -728,7 +738,7 @@ char TransferThreadAsync::readingLetter() const
 
 char TransferThreadAsync::writingLetter() const
 {
-    switch(static_cast<TransferStat>(transfer_stat))
+    switch(static_cast<TransferStat>(writeThread.status))
     {
     case TransferStat_Idle:
         return '_';
@@ -955,6 +965,11 @@ void TransferThreadAsync::read_readIsStopped()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] drop dual read stopped");
         return;
     }
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start");
+    canStartTransfer=false;
+    //check here if need start checksuming or not
+    transfer_stat=TransferStat_PostTransfer;
+    emit pushStat(transfer_stat,transferId);
 }
 
 void TransferThreadAsync::read_closed()
@@ -1054,4 +1069,29 @@ void TransferThreadAsync::resume()
     }
     readThread.resume();
     writeThread.resume();
+}
+
+//when both is ready, startRead()
+void TransferThreadAsync::read_opened()
+{
+    if(readIsOpenVariable)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already readIsOpenVariable=true");
+        return;
+    }
+    readIsOpenVariable=true;
+    if(writeIsOpenVariable)
+        readThread.startRead();
+}
+
+void TransferThreadAsync::write_opened()
+{
+    if(writeIsOpenVariable)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] already writeIsOpenVariable=true");
+        return;
+    }
+    writeIsOpenVariable=true;
+    if(readIsOpenVariable)
+        readThread.startRead();
 }

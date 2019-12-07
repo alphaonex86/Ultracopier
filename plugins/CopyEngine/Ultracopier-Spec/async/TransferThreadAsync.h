@@ -94,6 +94,8 @@ private slots:
     void read_closed();
     void write_error();
     void write_closed();
+    void read_opened();
+    void write_opened();
 signals:
     //internal signal
     void internalStartResumeAfterErrorAndSeek() const;
@@ -125,6 +127,8 @@ private:
     bool sended_state_readStopped;
     bool readIsClosedVariable;
     bool writeIsClosedVariable;
+    bool readIsOpenVariable;
+    bool writeIsOpenVariable;
     bool realMove;
     bool remainFileOpen() const;
     bool remainSourceOpen() const;

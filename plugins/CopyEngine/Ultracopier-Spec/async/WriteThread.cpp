@@ -60,12 +60,18 @@ WriteThread::~WriteThread()
 
 void WriteThread::run()
 {
-    connect(this,&WriteThread::internalStartOpen,               this,&WriteThread::internalOpen,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartReopen,             this,&WriteThread::internalReopen,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartWrite,              this,&WriteThread::internalWrite,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartClose,              this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartEndOfFile,          this,&WriteThread::internalEndOfFile,		Qt::QueuedConnection);
-    connect(this,&WriteThread::internalStartFlushAndSeekToZero,	this,&WriteThread::internalFlushAndSeekToZero,	Qt::QueuedConnection);
+    if(!connect(this,&WriteThread::internalStartOpen,               this,&WriteThread::internalOpen,		Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&WriteThread::internalStartReopen,             this,&WriteThread::internalReopen,		Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&WriteThread::internalStartWrite,              this,&WriteThread::internalWrite,		Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&WriteThread::internalStartClose,              this,&WriteThread::internalCloseSlot,		Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&WriteThread::internalStartEndOfFile,          this,&WriteThread::internalEndOfFile,		Qt::QueuedConnection))
+        abort();
+    if(!connect(this,&WriteThread::internalStartFlushAndSeekToZero,	this,&WriteThread::internalFlushAndSeekToZero,	Qt::QueuedConnection))
+        abort();
     exec();
 }
 
@@ -225,7 +231,7 @@ bool WriteThread::internalOpen()
     }
     bool fileWasExists=TransferThread::is_file(file);
     #ifdef Q_OS_UNIX
-    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY);
+    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT);
     #else
     to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
     #endif
@@ -525,6 +531,7 @@ void WriteThread::internalEndOfFile()
     else
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] writeIsStopped");
+        postOperation();
         emit writeIsStopped();
     }
 }
@@ -768,6 +775,7 @@ void WriteThread::fakeWriteIsStarted()
 /// \brief do the fake writeIsStopped
 void WriteThread::fakeWriteIsStopped()
 {
+    postOperation();
     emit writeIsStopped();
 }
 
