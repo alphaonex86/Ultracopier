@@ -169,7 +169,6 @@ bool WriteThread::internalOpen()
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
                     status=Idle;
                     #endif
-                    mkpathTransfer.release();
                     return false;
                     #else
                     /// \todo do real folder error here
@@ -190,16 +189,20 @@ bool WriteThread::internalOpen()
         if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
         {
             const std::string &path=destination.substr(0,destinationIndex);
-            if(!is_dir(path))
+            if(!TransferThread::is_dir(path))
                 if(!TransferThread::mkpath(path))
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable to create the destination folder: "+path);
                     #ifdef Q_OS_WIN32
-                    emit errorOnFile(destination,tr("Unable to create the destination folder: ")+TransferThread::GetLastErrorStdStr());
+                    errorString_internal=tr("Unable to create the destination folder: ")+TransferThread::GetLastErrorStdStr();
                     #else
-                    emit errorOnFile(destination,tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString());
+                    errorString_internal=tr("Unable to create the destination folder, errno: %1").arg(QString::number(errno)).toStdString();
                     #endif
-                    return;
+                    emit error();
+                    #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                    status=Idle;
+                    #endif
+                    return false;
                 }
         }
         #endif

@@ -49,7 +49,9 @@ SOURCES += \
     ../plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
     ../plugins/CopyEngine/Ultracopier-Spec/ListThreadNew.cpp \
     ../plugins/CopyEngine/Ultracopier-Spec/ListThreadMedia.cpp \
-    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp
+    ../plugins/CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp \
+    ../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp
 
 RESOURCES += \
     ../plugins/CopyEngine/Ultracopier-Spec/copyEngineResources.qrc
@@ -89,7 +91,9 @@ HEADERS += \
     ../plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     ../plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     ../plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
-    ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h
+    ../plugins/CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
+    ../plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/../android-sources
 
