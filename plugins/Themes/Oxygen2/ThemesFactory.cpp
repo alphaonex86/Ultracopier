@@ -3,6 +3,7 @@
 \author alpha_one_x86 */
 
 #include <QColorDialog>
+#include <QDesktopWidget>
 
 #include "ThemesFactory.h"
 #include "../../../cpp11addition.h"
@@ -41,7 +42,7 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 ui->checkBoxStartWithMoreButtonPushed->isChecked(),
                 ui->minimizeToSystray->isChecked(),
                 ui->startMinimized->isChecked(),
-                ui->savePosition->isChecked(),
+                ui->savePosition->currentIndex(),
                 ui->dark->isChecked()
                 );
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -52,16 +53,34 @@ PluginInterface_Themes * ThemesFactory::getInstance()
         abort();
     if(!connect(newInterface,&Themes::destroyed,this,&ThemesFactory::savePositionBeforeClose))
         abort();
-    newInterface->move(
+    switch(ui->savePosition->currentIndex())
+    {
+    default:
+    case 0:
+        break;
+    case 1:
+        newInterface->move(
                 stringtouint32(optionsEngine->getOptionValue("savePositionX")),
                 stringtouint32(optionsEngine->getOptionValue("savePositionY"))
                 );
+        break;
+    case 2:
+        newInterface->setGeometry(
+                    QStyle::alignedRect(
+                        Qt::LeftToRight,
+                        Qt::AlignCenter,
+                        newInterface->size(),
+                        qApp->desktop()->availableGeometry()
+                    )
+                );
+        break;
+    }
     return newInterface;
 }
 
 void ThemesFactory::savePositionBeforeClose(QObject *obj)
 {
-    if(!ui->savePosition->isChecked())
+    if(ui->savePosition->currentIndex()!=1)
         return;
     if(obj == nullptr)
     {
@@ -104,7 +123,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         KeysList.push_back(std::pair<std::string, std::string>("alwaysOnTop","false"));
         KeysList.push_back(std::pair<std::string, std::string>("minimizeToSystray","false"));
         KeysList.push_back(std::pair<std::string, std::string>("startMinimized","false"));
-        KeysList.push_back(std::pair<std::string, std::string>("savePosition","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("savePosition","0"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionX","0"));
         KeysList.push_back(std::pair<std::string, std::string>("savePositionY","0"));
         KeysList.push_back(std::pair<std::string, std::string>("dark","true"));
@@ -121,7 +140,7 @@ void ThemesFactory::setResources(OptionInterface * optionsEngine,const std::stri
         ui->alwaysOnTop->setChecked(stringtobool(optionsEngine->getOptionValue("alwaysOnTop")));
         ui->minimizeToSystray->setChecked(stringtobool(optionsEngine->getOptionValue("minimizeToSystray")));
         ui->startMinimized->setChecked(stringtobool(optionsEngine->getOptionValue("startMinimized")));
-        ui->savePosition->setChecked(stringtobool(optionsEngine->getOptionValue("savePosition")));
+        ui->savePosition->setCurrentIndex(stringtouint8(optionsEngine->getOptionValue("savePosition")));
         ui->dark->setChecked(stringtobool(optionsEngine->getOptionValue("dark")));
     }
     #ifndef __GNUC__
@@ -188,7 +207,7 @@ QWidget * ThemesFactory::options()
             abort();
         if(!connect(ui->startMinimized,&QCheckBox::stateChanged,this,&ThemesFactory::startMinimized))
             abort();
-        if(!connect(ui->savePosition,&QCheckBox::stateChanged,this,&ThemesFactory::savePositionHaveChanged))
+        if(!connect(ui->savePosition,static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this,&ThemesFactory::savePositionHaveChanged))
             abort();
         if(!connect(ui->dark,&QCheckBox::stateChanged,this,&ThemesFactory::setDark))
             abort();
@@ -232,7 +251,7 @@ void ThemesFactory::resetOptions()
 {
     ui->checkBoxShowSpeed->setChecked(true);
     ui->checkBoxStartWithMoreButtonPushed->setChecked(false);
-    ui->savePosition->setChecked(false);
+    ui->savePosition->setCurrentIndex(0);
 }
 
 void ThemesFactory::checkBoxShowSpeedHaveChanged(bool toggled)
@@ -253,11 +272,11 @@ void ThemesFactory::checkBoxStartWithMoreButtonPushedHaveChanged(bool toggled)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }
 
-void ThemesFactory::savePositionHaveChanged(bool toggled)
+void ThemesFactory::savePositionHaveChanged(int value)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"the checkbox have changed");
     if(optionsEngine!=NULL)
-        optionsEngine->setOptionValue("savePosition",std::to_string(toggled));
+        optionsEngine->setOptionValue("savePosition",std::to_string(value));
     else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"internal error, crash prevented");
 }

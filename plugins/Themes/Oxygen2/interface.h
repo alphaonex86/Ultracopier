@@ -56,7 +56,7 @@ public:
            const bool &moreButtonPushed,
            const bool &minimizeToSystray,
            const bool &startMinimized,
-           const bool &savePosition,
+           const quint8 &position,
            const bool &dark);
     ~Themes();
     //send information about the copy

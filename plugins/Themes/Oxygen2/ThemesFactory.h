@@ -70,7 +70,7 @@ private slots:
     void setShowProgressionInTheTitle();
     void startMinimized(bool checked);
     void savePositionBeforeClose(QObject *obj);
-    void savePositionHaveChanged(bool checked);
+    void savePositionHaveChanged(int value);
     void setDark(bool toggled);
 public slots:
     void resetOptions() override;

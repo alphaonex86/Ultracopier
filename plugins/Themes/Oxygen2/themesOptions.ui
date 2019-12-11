@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>519</width>
-        <height>302</height>
+        <width>492</width>
+        <height>300</height>
        </rect>
       </property>
       <attribute name="label">
@@ -63,13 +63,6 @@
        </item>
        <item row="0" column="1">
         <widget class="QCheckBox" name="checkBoxStartWithMoreButtonPushed"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="savePosition">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="label_Slider_speed">
@@ -148,7 +141,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="labelSavePosition">
          <property name="text">
-          <string>Save position</string>
+          <string>Position at start</string>
          </property>
         </widget>
        </item>
@@ -212,6 +205,25 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="1">
+        <widget class="QComboBox" name="savePosition">
+         <item>
+          <property name="text">
+           <string>Default</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Save as previous</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>At Center</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="page_2">
@@ -219,8 +231,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>519</width>
-        <height>302</height>
+        <width>509</width>
+        <height>283</height>
        </rect>
       </property>
       <attribute name="label">
@@ -257,8 +269,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>519</width>
-        <height>302</height>
+        <width>509</width>
+        <height>283</height>
        </rect>
       </property>
       <attribute name="label">

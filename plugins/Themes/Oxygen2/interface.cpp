@@ -49,7 +49,7 @@ Themes::Themes(const bool &alwaysOnTop,
                const bool &moreButtonPushed,
                const bool &minimizeToSystray,
                const bool &startMinimized,
-               const bool &savePosition,
+               const quint8 &position,
                const bool &dark) :
     duration(0),
     durationStarted(false),
@@ -110,7 +110,7 @@ Themes::Themes(const bool &alwaysOnTop,
     uiOptions->checkBoxStartWithMoreButtonPushed->setVisible(false);
     uiOptions->labelSavePosition->setVisible(false);
     uiOptions->savePosition->setVisible(false);
-    uiOptions->savePosition->setChecked(savePosition);
+    uiOptions->savePosition->setCurrentIndex(position);
     uiOptions->label_Slider_speed->setVisible(false);
     uiOptions->SliderSpeed->setVisible(false);
     uiOptions->label_SpeedMaxValue->setVisible(false);
