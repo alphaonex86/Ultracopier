@@ -84,24 +84,24 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="295"/>
+        <location filename="../../ThemesFactory.cpp" line="314"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="296"/>
+        <location filename="../../ThemesFactory.cpp" line="315"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="297"/>
+        <location filename="../../ThemesFactory.cpp" line="316"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="493"/>
-        <location filename="../../ThemesFactory.cpp" line="508"/>
-        <location filename="../../ThemesFactory.cpp" line="523"/>
+        <location filename="../../ThemesFactory.cpp" line="512"/>
+        <location filename="../../ThemesFactory.cpp" line="527"/>
+        <location filename="../../ThemesFactory.cpp" line="542"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
@@ -273,12 +273,12 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="281"/>
+        <location filename="../../themesOptions.ui" line="293"/>
         <source>Show dual progression</source>
         <translation>Mostrar progresión dual</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="233"/>
+        <location filename="../../themesOptions.ui" line="245"/>
         <source>Show speed as main information</source>
         <translation>Mostrar la velocidad como principales informaciones</translation>
     </message>
@@ -288,7 +288,7 @@
         <translation>Uso</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="117"/>
+        <location filename="../../themesOptions.ui" line="110"/>
         <source>Start with the &quot;more button&quot; pushed</source>
         <translation>Comience con el &quot;botón más&quot; empujada</translation>
     </message>
@@ -298,68 +298,83 @@
         <translation>Minimizar en cerca de la bandeja del sistema</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="87"/>
+        <location filename="../../themesOptions.ui" line="80"/>
         <source>At the end of the copy</source>
         <translation>Al final de la copia</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="77"/>
-        <location filename="../../themesOptions.ui" line="94"/>
+        <location filename="../../themesOptions.ui" line="70"/>
+        <location filename="../../themesOptions.ui" line="87"/>
         <source>Limit copy speed to</source>
         <translation>Limitar la velocidad de copia de</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="124"/>
+        <location filename="../../themesOptions.ui" line="117"/>
         <source>Start minimized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="320"/>
+        <location filename="../../themesOptions.ui" line="144"/>
+        <source>Position at start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="332"/>
         <source>Click to edit the color</source>
         <translation>Haga clic para editar el color</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="104"/>
+        <location filename="../../themesOptions.ui" line="97"/>
         <source> KB/s</source>
         <translation> KB/s</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="151"/>
-        <source>Save position</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../themesOptions.ui" line="211"/>
+        <location filename="../../themesOptions.ui" line="204"/>
         <source>Dark UI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="227"/>
+        <location filename="../../themesOptions.ui" line="212"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="217"/>
+        <source>Save as previous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="222"/>
+        <source>At Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../themesOptions.ui" line="239"/>
         <source>Informations</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="265"/>
+        <location filename="../../themesOptions.ui" line="277"/>
         <source>Display</source>
         <translation>Visualización</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="271"/>
+        <location filename="../../themesOptions.ui" line="283"/>
         <source>Speed with progress bar</source>
         <translation>Velocidad con barra de progreso</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="301"/>
+        <location filename="../../themesOptions.ui" line="313"/>
         <source>Progression color</source>
         <translation>Progresión de color</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="291"/>
+        <location filename="../../themesOptions.ui" line="303"/>
         <source>Show progression in the title</source>
         <translation>Mostrar progresión en el título</translation>
     </message>
     <message>
-        <location filename="../../themesOptions.ui" line="144"/>
+        <location filename="../../themesOptions.ui" line="137"/>
         <source>Always on top</source>
         <translation>Siempre visible</translation>
     </message>

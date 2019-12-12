@@ -84,7 +84,7 @@
 <context>
     <name>ThemesFactory</name>
     <message>
-        <location filename="../../ThemesFactory.cpp" line="+295"/>
+        <location filename="../../ThemesFactory.cpp" line="+314"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Garder ouvert s&apos;il y a des erreurs</translation>
     </message>
@@ -273,7 +273,7 @@
 <context>
     <name>themesOptions</name>
     <message>
-        <location filename="../../themesOptions.ui" line="+281"/>
+        <location filename="../../themesOptions.ui" line="+293"/>
         <source>Show dual progression</source>
         <translation>Afficher une double progression</translation>
     </message>
@@ -283,22 +283,22 @@
         <translation>Afficher la vitesse comme information principale</translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-201"/>
         <source>Use</source>
         <translation>Utilisation</translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+66"/>
         <source>Start with the &quot;more button&quot; pushed</source>
         <translation>Déplier automatiquement les détails</translation>
     </message>
     <message>
-        <location line="-60"/>
+        <location line="-53"/>
         <source>Minimize on close to systray</source>
         <translation>Minimiser à la fermeture dans le systray</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+23"/>
         <source>At the end of the copy</source>
         <translation>À la fin de la copie</translation>
     </message>
@@ -314,27 +314,42 @@
         <translation>Démarrer minimisé</translation>
     </message>
     <message>
-        <location line="+196"/>
+        <location line="+27"/>
+        <source>Position at start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+188"/>
         <source>Click to edit the color</source>
         <translation>Cliquer pour éditer la couleur</translation>
     </message>
     <message>
-        <location line="-216"/>
+        <location line="-235"/>
         <source> KB/s</source>
         <translation> Ko/s</translation>
     </message>
     <message>
-        <location line="+47"/>
-        <source>Save position</source>
-        <translation>Sauvegarder la position</translation>
-    </message>
-    <message>
-        <location line="+60"/>
+        <location line="+107"/>
         <source>Dark UI</source>
         <translation>UI obscure</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+8"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Save as previous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>At Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Informations</source>
         <translation>Informations</translation>
     </message>
@@ -359,7 +374,7 @@
         <translation>Afficher la progression dans le titre</translation>
     </message>
     <message>
-        <location line="-147"/>
+        <location line="-166"/>
         <source>Always on top</source>
         <translation>Toujours au 1er plan</translation>
     </message>
