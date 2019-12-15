@@ -105,11 +105,11 @@ int64_t WriteThread::size() const
     fstat(to, &st);
     return st.st_size;
     #else
-    PLARGE_INTEGER lpFileSize=0;
-    if(!GetFileSizeEx(to,lpFileSize))
+    LARGE_INTEGER lpFileSize;
+    if(!GetFileSizeEx(to,&lpFileSize))
         return -1;
     else
-        return lpFileSize->QuadPart;
+        return lpFileSize.QuadPart;
     #endif
 }
 

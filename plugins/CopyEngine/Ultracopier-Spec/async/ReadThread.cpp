@@ -186,11 +186,11 @@ int64_t ReadThread::size() const
     fstat(from, &st);
     return st.st_size;
     #else
-    PLARGE_INTEGER lpFileSize=0;
-    if(!GetFileSizeEx(from,lpFileSize))
+    LARGE_INTEGER lpFileSize;
+    if(!GetFileSizeEx(from,&lpFileSize))
         return -1;
     else
-        return lpFileSize->QuadPart;
+        return lpFileSize.QuadPart;
     #endif
 }
 
@@ -292,9 +292,9 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         }
         #else
         {
-            PLARGE_INTEGER lpFileSize=0;
-            GetFileSizeEx(from,lpFileSize);
-            size_at_open=lpFileSize->QuadPart;
+            LARGE_INTEGER lpFileSize;
+            GetFileSizeEx(from,&lpFileSize);
+            size_at_open=lpFileSize.QuadPart;
             LPFILETIME lpLastWriteTime=0;
             GetFileTime(from,NULL,NULL,lpLastWriteTime);
             mtime_at_open=lpLastWriteTime;
@@ -731,9 +731,9 @@ bool ReadThread::internalReopen()
     #else
     LPFILETIME temp_mtime=0;
     {
-        PLARGE_INTEGER lpFileSize=0;
-        GetFileSizeEx(from,lpFileSize);
-        temp_size=lpFileSize->QuadPart;
+        LARGE_INTEGER lpFileSize;
+        GetFileSizeEx(from,&lpFileSize);
+        temp_size=lpFileSize.QuadPart;
         GetFileTime(from,NULL,NULL,temp_mtime);
     }
     #endif

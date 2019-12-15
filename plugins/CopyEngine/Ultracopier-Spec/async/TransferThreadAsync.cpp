@@ -344,7 +344,8 @@ void TransferThreadAsync::ifCanStartTransfer()
         return;
     }
     transfer_stat=TransferStat_Transfer;
-    /*#ifdef WIDESTRING
+
+    #ifdef WIDESTRING
     const size_t destinationIndex=destination.rfind(L'/');
     if(destinationIndex!=std::string::npos && destinationIndex<destination.size())
     {
@@ -379,7 +380,8 @@ void TransferThreadAsync::ifCanStartTransfer()
                 return;
             }
     }
-    #endif*/
+    #endif
+
     emit pushStat(transfer_stat,transferId);
     realMove=(mode==Ultracopier::Move && driveManagement.isSameDrive(
                        internalStringTostring(source),
@@ -387,19 +389,6 @@ void TransferThreadAsync::ifCanStartTransfer()
                        ));
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start copy");
     needRemove=true;
-#ifdef Q_OS_WIN32
-    BOOL successFull;
-    if(realMove)
-        successFull=TransferThread::rename(source,destination);
-    else
-    {
-        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/;// | 0x00001000/*COPY_FILE_NO_BUFFERING*/
-        if(!buffer)
-            flags|=0x00001000/*COPY_FILE_NO_BUFFERING*/;
-        successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,flags);
-    }
-    if(!successFull)
-#else
     bool successFull=false;
     readError=false;
     writeError=false;
@@ -407,13 +396,17 @@ void TransferThreadAsync::ifCanStartTransfer()
         successFull=TransferThread::rename(source,destination);
     else
     {
+        //        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/;// | 0x00001000/*COPY_FILE_NO_BUFFERING*//*
+        /*if(!buffer)
+            flags|=0x00001000;
+        successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,flags);
+        */
         //sync way: successFull=copy(TransferThread::internalStringTostring(source).c_str(),TransferThread::internalStringTostring(destination).c_str());
         readThread.open(source,mode);
         writeThread.open(destination,0);
         return;
     }
     if(!successFull)
-#endif
     {
         #ifdef Q_OS_WIN32
         const std::string &strError=TransferThread::GetLastErrorStdStr();

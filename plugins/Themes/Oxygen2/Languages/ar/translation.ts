@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="ar_JO">
 <context>
     <name>QObject</name>
     <message>
         <location filename="../../radialMap/map.cpp" line="108"/>
         <source>%1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>ملفات %1</translation>
     </message>
     <message>
         <location filename="../../radialMap/map.cpp" line="204"/>
         <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ملف ، بمتوسط حجم %2</translation>
     </message>
 </context>
 <context>
@@ -20,7 +20,7 @@
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
         <source> into %1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>إلى ملفات %1</translation>
     </message>
 </context>
 <context>
@@ -29,56 +29,56 @@
         <location filename="../../interface.cpp" line="292"/>
         <location filename="../../interface.cpp" line="313"/>
         <source>Buy the Ultimate version to fund development</source>
-        <translation type="unfinished"></translation>
+        <translation>شراء النسخة النهائية لتمويل التنمية</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="510"/>
         <source>File %1/%2, size: %3/%4</source>
-        <translation type="unfinished"></translation>
+        <translation>الملف %1/%2 ، الحجم: %3/%4</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="817"/>
         <source>Copy list</source>
-        <translation type="unfinished"></translation>
+        <translation>قائمة النسخ</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="819"/>
         <source>Move list</source>
-        <translation type="unfinished"></translation>
+        <translation>قائمة التحريك</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1320"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished"></translation>
+        <translation>لا تغلق إذا تم العثور على أخطاء</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1321"/>
         <source>Never close</source>
-        <translation type="unfinished"></translation>
+        <translation>لا تغلق</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1322"/>
         <source>Always close</source>
-        <translation type="unfinished"></translation>
+        <translation>إغلاق دائما</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1324"/>
         <source>File Name, 0KB</source>
-        <translation type="unfinished"></translation>
+        <translation>اسم الملف ، 0KB</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1519"/>
         <location filename="../../interface.cpp" line="1531"/>
         <location filename="../../interface.cpp" line="1543"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>تحديد لون</translation>
     </message>
     <message>
         <location filename="../../interface.cpp" line="1631"/>
         <location filename="../../interface.cpp" line="1642"/>
         <location filename="../../interface.cpp" line="1651"/>
         <source>%1 %2% of %3 into %4 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% من %3 إلى ملفات %4</translation>
     </message>
 </context>
 <context>
@@ -86,24 +86,24 @@
     <message>
         <location filename="../../ThemesFactory.cpp" line="314"/>
         <source>Don&apos;t close if errors are found</source>
-        <translation type="unfinished"></translation>
+        <translation>عدم الإغلاق في حاله العثور على أخطاء</translation>
     </message>
     <message>
         <location filename="../../ThemesFactory.cpp" line="315"/>
         <source>Never close</source>
-        <translation type="unfinished"></translation>
+        <translation>لا تغلق أبدا</translation>
     </message>
     <message>
         <location filename="../../ThemesFactory.cpp" line="316"/>
         <source>Always close</source>
-        <translation type="unfinished"></translation>
+        <translation>إغلاق دائما</translation>
     </message>
     <message>
         <location filename="../../ThemesFactory.cpp" line="512"/>
         <location filename="../../ThemesFactory.cpp" line="527"/>
         <location filename="../../ThemesFactory.cpp" line="542"/>
         <source>Select a color</source>
-        <translation type="unfinished"></translation>
+        <translation>تحديد لون</translation>
     </message>
 </context>
 <context>
@@ -111,163 +111,163 @@
     <message>
         <location filename="../../interface.ui" line="420"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>من:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="301"/>
         <source>&amp;More</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;اكثر </translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="321"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;مهلة</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="482"/>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;تخطي</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="493"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;الغاء الامر</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="389"/>
         <source>Close on transfer completion</source>
-        <translation type="unfinished"></translation>
+        <translation>إغلاق عند إتمام النقل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="232"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="252"/>
         <source>100MB+</source>
-        <translation type="unfinished"></translation>
+        <translation>100MB+</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="527"/>
         <source>Limit copy speed to:</source>
-        <translation type="unfinished"></translation>
+        <translation>الحد من سرعه النسخ إلى:</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="570"/>
         <source>Transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>قائمه النقل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="593"/>
         <source>Move the selected items to the top</source>
-        <translation type="unfinished"></translation>
+        <translation>تحريك المواد المحددة إلى الأعلى</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="619"/>
         <source>Move up the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>تحريك المواد المحددة لاعلى</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="645"/>
         <source>Move down the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>تحريك المواد المحددة لأسفل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="671"/>
         <source>Move the selected items to the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>تحريك العناصر المحددة إلى الأسفل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="697"/>
         <source>Add file/folder</source>
-        <translation type="unfinished"></translation>
+        <translation>أضافه ملف/مجلد</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="726"/>
         <source>Delete the selected items</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف المواد المحددة</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="752"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="781"/>
         <source>Export the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>تصدير قائمه النقل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="807"/>
         <source>Import the transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>استيراد قائمه النقل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="862"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>السابق</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="869"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>التالي</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="904"/>
         <location filename="../../interface.ui" line="973"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>خطا</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="924"/>
         <source>Export the errors into transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>تصدير الأخطاء إلى قائمه النقل</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="963"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>المصدر</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="968"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation>الوجهه</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="982"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>الواجهه</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1028"/>
         <source>Add file</source>
-        <translation type="unfinished"></translation>
+        <translation>اضافة ملف</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1037"/>
         <source>Add folder</source>
-        <translation type="unfinished"></translation>
+        <translation>اضافة مجلد</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1046"/>
         <source>Move file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>نقل الملفات</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1055"/>
         <source>Move folder</source>
-        <translation type="unfinished"></translation>
+        <translation>نقل المجلد</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1064"/>
         <source>Copy file(s)</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخ الملفات</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="1073"/>
         <source>Copy folder</source>
-        <translation type="unfinished"></translation>
+        <translation>نسخ المجلد</translation>
     </message>
 </context>
 <context>
@@ -275,108 +275,108 @@
     <message>
         <location filename="../../themesOptions.ui" line="293"/>
         <source>Show dual progression</source>
-        <translation type="unfinished"></translation>
+        <translation>إظهار التقدم المزدوج</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="245"/>
         <source>Show speed as main information</source>
-        <translation type="unfinished"></translation>
+        <translation>إظهار السرعة كمعلومات رئيسيه</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="44"/>
         <source>Use</source>
-        <translation type="unfinished"></translation>
+        <translation>استخدام</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="110"/>
         <source>Start with the &quot;more button&quot; pushed</source>
-        <translation type="unfinished"></translation>
+        <translation>تبدا مع  &quot;أكثر زر&quot; دفعت</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="57"/>
         <source>Minimize on close to systray</source>
-        <translation type="unfinished"></translation>
+        <translation>تصغير بالقرب من درج النظام</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="80"/>
         <source>At the end of the copy</source>
-        <translation type="unfinished"></translation>
+        <translation>في نهاية النسخ</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="70"/>
         <location filename="../../themesOptions.ui" line="87"/>
         <source>Limit copy speed to</source>
-        <translation type="unfinished"></translation>
+        <translation>الحد من سرعه النسخ إلى</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="97"/>
         <source> KB/s</source>
-        <translation type="unfinished"></translation>
+        <translation>KB/s</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="117"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>بدء التصغير</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="144"/>
         <source>Position at start</source>
-        <translation type="unfinished"></translation>
+        <translation>الموضع في البداية</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="204"/>
         <source>Dark UI</source>
-        <translation type="unfinished"></translation>
+        <translation>واجهه مستخدم داكنه</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="212"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>افتراضي</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="217"/>
         <source>Save as previous</source>
-        <translation type="unfinished"></translation>
+        <translation>حفظ كسابق</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="222"/>
         <source>At Center</source>
-        <translation type="unfinished"></translation>
+        <translation>في الوسط</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="239"/>
         <source>Informations</source>
-        <translation type="unfinished"></translation>
+        <translation>المعلومات</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="277"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>عرض</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="283"/>
         <source>Speed with progress bar</source>
-        <translation type="unfinished"></translation>
+        <translation>السرعة مع شريط التقدم</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="313"/>
         <source>Progression color</source>
-        <translation type="unfinished"></translation>
+        <translation>تدرج اللون</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="332"/>
         <source>Click to edit the color</source>
-        <translation type="unfinished"></translation>
+        <translation>انقر لتحرير اللون</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="303"/>
         <source>Show progression in the title</source>
-        <translation type="unfinished"></translation>
+        <translation>إظهار التقدم في العنوان</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="137"/>
         <source>Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>دائما في القمه</translation>
     </message>
 </context>
 </TS>
