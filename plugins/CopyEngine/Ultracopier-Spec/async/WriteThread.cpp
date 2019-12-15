@@ -239,7 +239,8 @@ bool WriteThread::internalOpen()
     #ifdef Q_OS_UNIX
     to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT);
     #else
-    to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+    to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,CREATE_ALWAYS,
+                   FILE_ATTRIBUTE_NORMAL,NULL);
     #endif
     #ifdef Q_OS_UNIX
     if(to>=0)
@@ -391,6 +392,11 @@ bool WriteThread::internalOpen()
     }
     else
     {
+        #ifdef Q_OS_WIN32
+        errorString_internal=TransferThread::GetLastErrorStdStr();
+        #else
+        int t=errno;
+        #endif
         if(!fileWasExists && TransferThread::is_file(file))
             if(unlink(TransferThread::internalStringTostring(file).c_str())!=0)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] file created but can't be removed");
@@ -403,13 +409,11 @@ bool WriteThread::internalOpen()
             return false;
         }
         #ifdef Q_OS_WIN32
-        errorString_internal=TransferThread::GetLastErrorStdStr();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                              "Unable to open: "+TransferThread::internalStringTostring(file)+
                              ", error: "+errorString_internal
                              );
         #else
-        int t=errno;
         errorString_internal=strerror(t);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                              "Unable to open: "+TransferThread::internalStringTostring(file)+
@@ -452,8 +456,8 @@ void WriteThread::open(const INTERNALTYPEPATH &file, const uint64_t &startSize)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] numberOfBlock wrong, set to default");
         this->numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     }
-    else
-        this->numberOfBlock=numberOfBlock;
+    /*else
+        this->numberOfBlock=numberOfBlock;*/
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] "+"open destination: "+TransferThread::internalStringTostring(file));
     stopIt=false;
     fakeMode=false;
@@ -580,10 +584,13 @@ void WriteThread::resumeNotStarted()
     #endif
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!writeFileList.contains(qtFile))
+    {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] file: \""+
                                  TransferThread::internalStringTostring(file)+
                                  "\" for similar inode is not located into the list of "+
                                  std::to_string(writeFileList.size())+" items!");
+        return;
+    }
     #endif
     writeFileList.remove(qtFile,this);
     if(writeFileList.contains(qtFile))
@@ -972,9 +979,10 @@ void WriteThread::internalWrite()
         status=Write;
         #endif
         #ifdef Q_OS_WIN32
-        LPDWORD lpNumberOfBytesRead=0;
-        const BOOL retRead=WriteFile(to,blockArray.data(),blockArray.size(),lpNumberOfBytesRead,NULL);
-        bytesWriten=*lpNumberOfBytesRead;
+        DWORD lpNumberOfBytesRead=0;
+        const BOOL retRead=WriteFile(to,blockArray.data(),blockArray.size(),
+                                     &lpNumberOfBytesRead,NULL);
+        bytesWriten=lpNumberOfBytesRead;
         #else
         bytesWriten=::write(to,blockArray.data(),blockArray.size());
         #endif
@@ -1025,13 +1033,17 @@ void WriteThread::internalWrite()
     } while(true);
 }
 
+//return 0 if sucess
 int WriteThread::destTruncate(const uint64_t &startSize)
 {
     #ifdef Q_OS_WIN32
     if(to==NULL)
         abort();
     seek(startSize);
-    return SetEndOfFile(to);
+    if(SetEndOfFile(to)!=0)
+        return 0;
+    else
+        return 1;
     #else
     if(to<0)
         abort();

@@ -83,6 +83,7 @@ public:
     void pause();
     void resume();
     void reemitStartOpen();
+    //return 0 if sucess
     int destTruncate(const uint64_t &startSize);
 public slots:
     /// \brief start the operation

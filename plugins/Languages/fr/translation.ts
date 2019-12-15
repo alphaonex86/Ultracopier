@@ -2180,6 +2180,18 @@ depuis:%2</translation>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="358"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="376"/>
+        <source>Unable to create the destination folder: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="361"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="378"/>
+        <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WriteThread</name>

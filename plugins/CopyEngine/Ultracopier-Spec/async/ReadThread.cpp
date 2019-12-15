@@ -454,9 +454,10 @@ void ReadThread::internalRead()
         #endif
         blockArray.resize(blockSize);
         #ifdef Q_OS_WIN32
-        LPDWORD lpNumberOfBytesRead=0;
-        const BOOL retRead=ReadFile(from,blockArray.data(),blockSize,lpNumberOfBytesRead,NULL);
-        sizeReaden=*lpNumberOfBytesRead;
+        DWORD lpNumberOfBytesRead=0;
+        const BOOL retRead=ReadFile(from,blockArray.data(),blockSize,
+                                    &lpNumberOfBytesRead,NULL);
+        sizeReaden=lpNumberOfBytesRead;
         #else
         sizeReaden=::read(from,blockArray.data(),blockSize);
         #endif
