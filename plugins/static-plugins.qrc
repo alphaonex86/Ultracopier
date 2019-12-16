@@ -1,12 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>CopyEngine/Ultracopier-Spec/informations.xml</file>
-        <file>CopyEngine/Ultracopier-Spec/Languages/fr/translation.qm</file>
-        <file>Languages/fr/informations.xml</file>
-        <file>Languages/fr/flag.png</file>
-        <file>Languages/fr/translation.qm</file>
         <file>Listener/catchcopy-v0002/informations.xml</file>
         <file>Themes/Oxygen2/informations.xml</file>
-        <file>Themes/Oxygen2/Languages/fr/translation.qm</file>
     </qresource>
 </RCC>

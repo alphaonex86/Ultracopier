@@ -520,12 +520,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="483"/>
+        <location filename="../../async/ReadThread.cpp" line="484"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="535"/>
+        <location filename="../../async/ReadThread.cpp" line="536"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -650,6 +650,18 @@
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../async/TransferThreadAsync.cpp" line="358"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="376"/>
+        <source>Unable to create the destination folder: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../async/TransferThreadAsync.cpp" line="361"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
+        <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WriteThread</name>
@@ -671,7 +683,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="432"/>
+        <location filename="../../async/WriteThread.cpp" line="436"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>

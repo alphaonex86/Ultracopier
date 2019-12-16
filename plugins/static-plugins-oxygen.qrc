@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>Themes/Oxygen2/informations.xml</file>
-        <file>Themes/Oxygen2/Languages/fr/translation.qm</file>
     </qresource>
 </RCC>

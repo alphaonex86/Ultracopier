@@ -516,12 +516,12 @@
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="483"/>
+        <location filename="../../async/ReadThread.cpp" line="484"/>
         <source>Unable to read the source file: </source>
         <translation>غير قادر على قراءه الملف المصدر:</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="535"/>
+        <location filename="../../async/ReadThread.cpp" line="536"/>
         <source>File truncated during the read, possible data change</source>
         <translation>تم اقتطاع الملف اثناء القراءة ، وتغيير البيانات المحتملة</translation>
     </message>
@@ -644,6 +644,18 @@
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>تاريخ تعديل خاطئ أو غير قادر علي الحصول عليه ، يمكنك تعطيل نقل الوقت للقيام بذلك</translation>
     </message>
+    <message>
+        <location filename="../../async/TransferThreadAsync.cpp" line="358"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="376"/>
+        <source>Unable to create the destination folder: </source>
+        <translation type="unfinished">غير قادر على إنشاء مجلد الوجهة:</translation>
+    </message>
+    <message>
+        <location filename="../../async/TransferThreadAsync.cpp" line="361"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
+        <source>Unable to create the destination folder, errno: %1</source>
+        <translation type="unfinished">errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
+    </message>
 </context>
 <context>
     <name>WriteThread</name>
@@ -665,7 +677,7 @@
         <translation>errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="432"/>
+        <location filename="../../async/WriteThread.cpp" line="436"/>
         <source>Internal error, please report it!</source>
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>
