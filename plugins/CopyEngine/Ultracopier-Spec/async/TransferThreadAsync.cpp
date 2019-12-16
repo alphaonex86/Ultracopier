@@ -679,7 +679,7 @@ int64_t TransferThreadAsync::copiedSize()
     case TransferStat_Transfer:
     case TransferStat_PostOperation:
     case TransferStat_PostTransfer:
-        return transferProgression;
+        return (readThread.getLastGoodPosition()+writeThread.getLastGoodPosition())/2;
     default:
         return 0;
     }
@@ -1090,6 +1090,7 @@ void TransferThreadAsync::write_opened()
         return;
     }
     writeIsOpenVariable=true;
+    transferSize=readThread.size();
     if(readIsOpenVariable)
         readThread.startRead();
 }
