@@ -183,6 +183,8 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] The current thread is not running");
     if(!TransferThread::setFiles(source,size,destination,mode))
         return false;
+    transferProgression=0;
+    transferSize=0;
     sended_state_readStopped=false;
     readIsClosedVariable=false;
     writeIsClosedVariable=false;
@@ -455,6 +457,8 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen()");
         return;
     }
+
+    transferSize=readThread.getLastGoodPosition();
 
     if(mode==Ultracopier::Move && !realMove)
         if(exists(destination))
@@ -760,13 +764,14 @@ char TransferThreadAsync::writingLetter() const
 //not copied size, ...
 uint64_t TransferThreadAsync::realByteTransfered() const
 {
+    const uint64_t &l=readThread.getLastGoodPosition();
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
     case TransferStat_PostTransfer:
-        return transferProgression;
+        return l;
     case TransferStat_PostOperation:
-        return transferSize;
+        return l;
     default:
         return 0;
     }
@@ -779,8 +784,8 @@ std::pair<uint64_t, uint64_t> TransferThreadAsync::progression() const
     switch(static_cast<TransferStat>(transfer_stat))
     {
     case TransferStat_Transfer:
-        returnVar.first=transferProgression;
-        returnVar.second=transferProgression;
+        returnVar.first=readThread.getLastGoodPosition();
+        returnVar.second=writeThread.getLastGoodPosition();
         /*if(returnVar.first<returnVar.second)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+QStringLiteral("] read is smaller than write"));*/
     break;
