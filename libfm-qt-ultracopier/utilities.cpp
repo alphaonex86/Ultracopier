@@ -90,7 +90,7 @@ void pasteFilesFromClipboard(const Fm::FilePath& destPath, QWidget* parent) {
 
     // not even reinterpret_cast can convert between void* and a method ptr,
     // so i'm doing the worst hack i've ever seen.
-    memcpy(&origMethod, &tmpPtr, sizeof(&tmpPtr));
+    memcpy(&origMethod, &tmpPtr, sizeof(tmpPtr));
 
     QClipboard* clipboard = QApplication::clipboard();
     const QMimeData* data = clipboard->mimeData();
