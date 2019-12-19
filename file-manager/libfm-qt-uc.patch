@@ -1,0 +1,94 @@
+diff -ur libfm-qt-0.14.1/CMakeLists.txt libfm-qt-0.14.1-patched/CMakeLists.txt
+--- libfm-qt-0.14.1/CMakeLists.txt	2019-02-24 10:56:00.000000000 -0400
++++ libfm-qt-0.14.1-patched/CMakeLists.txt	2019-12-19 13:58:02.031193213 -0400
+@@ -34,6 +34,7 @@
+ find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
+ find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
+ find_package(Qt5X11Extras "${QT_MINIMUM_VERSION}" REQUIRED)
++find_package(Qt5Network "${QT_MINIMUM_VERSION}" REQUIRED)
+ 
+ find_package(lxqt-build-tools "${LXQTBT_MINIMUM_VERSION}" REQUIRED)
+ find_package(GLIB "${GLIB_MINIMUM_VERSION}" REQUIRED COMPONENTS gio gio-unix gobject gthread)
+diff -ur libfm-qt-0.14.1/src/utilities.cpp libfm-qt-0.14.1-patched/src/utilities.cpp
+--- libfm-qt-0.14.1/src/utilities.cpp	2019-02-24 10:56:00.000000000 -0400
++++ libfm-qt-0.14.1-patched/src/utilities.cpp	2019-12-19 16:25:07.811840646 -0400
+@@ -28,6 +28,7 @@
+ #include <QMessageBox>
+ #include "fileoperation.h"
+ #include <QEventLoop>
++#include <QtNetwork/QLocalSocket>
+ 
+ #include <pwd.h>
+ #include <grp.h>
+@@ -95,6 +96,27 @@
+     return std::make_pair(paths, isCut);
+ }
+ 
++void sendRawOrderList(const QStringList & order, QLocalSocket &socket, int idNextOrder)
++{
++    QByteArray block;
++    QDataStream out(&block, QIODevice::WriteOnly);
++    out.setVersion(QDataStream::Qt_4_4);
++    out << int(0);
++    out << idNextOrder;
++    out << order;
++    out.device()->seek(0);
++    out << block.size();
++    do //cut string list and send it as block of 32KB
++    {
++        QByteArray blockToSend;
++        int byteWriten;
++        blockToSend=block.left(32*1024);//32KB
++        block.remove(0,blockToSend.size());
++        byteWriten = socket.write(blockToSend);
++    }
++    while(block.size());
++}
++
+ void pasteFilesFromClipboard(const Fm::FilePath& destPath, QWidget* parent) {
+     QClipboard* clipboard = QApplication::clipboard();
+     const QMimeData* data = clipboard->mimeData();
+@@ -104,12 +126,38 @@
+     std::tie(paths, isCut) = parseClipboardData(*data);
+ 
+     if(!paths.empty()) {
+-        if(isCut) {
+-            FileOperation::moveFiles(paths, destPath, parent);
+-            clipboard->clear(QClipboard::Clipboard);
++        QLocalSocket socket;
++        socket.connectToServer(QString::fromStdString("advanced-copier-"+std::to_string(getuid())));
++        socket.waitForConnected();
++        if(socket.state()==QLocalSocket::ConnectedState)
++        {
++            sendRawOrderList(QStringList() << "protocol" << "0002", socket, 1);
++            socket.waitForReadyRead();
++            socket.readAll();
++            QStringList l;
++            if(isCut) {
++                l << "mv";
++                clipboard->clear(QClipboard::Clipboard);
++            }
++            else {
++                l << "cp";
++            }
++            for(const FilePath &n : paths)
++                l << n.toString().get();
++            l << destPath.toString().get();
++            sendRawOrderList(l, socket, 2);
++            socket.waitForBytesWritten();
++            socket.close();
+         }
+-        else {
+-            FileOperation::copyFiles(paths, destPath, parent);
++        else
++        {
++            if(isCut) {
++                FileOperation::moveFiles(paths, destPath, parent);
++                clipboard->clear(QClipboard::Clipboard);
++            }
++            else {
++                FileOperation::copyFiles(paths, destPath, parent);
++            }
+         }
+     }
+ }
