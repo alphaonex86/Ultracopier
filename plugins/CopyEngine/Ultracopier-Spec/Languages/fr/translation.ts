@@ -640,19 +640,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="276"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="278"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Mauvaise date de modification ou impossible de l&apos;avoir, vous pouvez désactiver le transfert de celui-ci</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="358"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="376"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="360"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">Impossible de créer le dossier de destination: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="361"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="363"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="380"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">Impossible de créer le dossier de destination, errno: %1</translation>
     </message>
