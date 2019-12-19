@@ -4,7 +4,8 @@ mac:QMAKE_CXXFLAGS+="-stdlib=libc++"
 
 TEMPLATE        = lib
 CONFIG		+= plugin
-QT		+= network
+QT		+= network widgets
+DEFINES         += _GNU_SOURCE
 win32:LIBS += -ladvapi32
 TARGET          = $$qtLibraryTarget(libfm-qt-ultracopier)
 LIBS += libfm-qt

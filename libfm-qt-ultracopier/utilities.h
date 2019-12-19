@@ -20,6 +20,8 @@
 #ifndef FM_UTILITIES_H
 #define FM_UTILITIES_H
 
+#include <QWidget>
+#include <QStringList>
 #include <QLocalSocket>
 #include <libfm-qt/utilities.h>
 #include <libfm-qt/core/filepath.h>

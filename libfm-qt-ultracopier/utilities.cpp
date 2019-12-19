@@ -19,10 +19,14 @@
 
 #include "utilities.h"
 #include <QClipboard>
+#include <QApplication>
+#include <libfm-qt/foldermodel.h>
+#include <libfm-qt/fileoperation.h>
+#include <dlfcn.h>
 
 namespace Fm {
 
-const std::string pathSocket()
+std::string pathSocket()
 {
 #ifdef Q_OS_UNIX
     return "advanced-copier-"+std::to_string(getuid());
@@ -75,31 +79,45 @@ void sendRawOrderList(const QStringList & order, QLocalSocket &socket)
 }
 
 void pasteFilesFromClipboard(const Fm::FilePath& destPath, QWidget* parent) {
-    int (*new_puts)(const char *message);
-int result;
-new_puts = dlsym(RTLD_NEXT, "puts");
-    
+    //https://gist.github.com/mooware/1174572
+    typedef std::pair<Fm::FilePathList, bool> (*methodType)(const QMimeData& data);
+
+    static methodType origMethod = 0;
+
+    // use the mangled method name here. RTLD_NEXT means something like
+    // "search this symbol in any libraries loaded after the current one".
+    void *tmpPtr = dlsym(RTLD_NEXT, "pasteFilesFromClipboard");
+
+    // not even reinterpret_cast can convert between void* and a method ptr,
+    // so i'm doing the worst hack i've ever seen.
+    memcpy(&origMethod, &tmpPtr, sizeof(&tmpPtr));
+
     QClipboard* clipboard = QApplication::clipboard();
     const QMimeData* data = clipboard->mimeData();
     Fm::FilePathList paths;
     bool isCut = false;
 
-    std::tie(paths, isCut) = parseClipboardData(*data);
+    std::tie(paths, isCut) = (*origMethod)(*data);
 
     if(!paths.empty()) {
         QLocalSocket socket;
-        socket.connectToServer(QString::fromStdString(ExtraSocketCatchcopy::pathSocket()));
+        socket.connectToServer(QString::fromStdString(pathSocket()));
         socket.waitForConnected();
         if(socket.state()==QLocalSocket::ConnectedState)
         {
-            sendRawOrderList(QStringList() << "protocol" << CATCHCOPY_PROTOCOL_VERSION);
+            sendRawOrderList(QStringList() << "protocol" << "0002", socket);
+            QStringList l;
             if(isCut) {
-                sendRawOrderList(QStringList() << "mv" << paths << destPath);
+                l << "mv";
                 clipboard->clear(QClipboard::Clipboard);
             }
             else {
-                sendRawOrderList(QStringList() << "cp" << paths << destPath);
+                l << "cp";
             }
+            for(const FilePath &n : paths)
+                l << n.toString().get();
+            l << destPath.toString().get();
+            sendRawOrderList(l, socket);
             socket.close();
         }
         else
