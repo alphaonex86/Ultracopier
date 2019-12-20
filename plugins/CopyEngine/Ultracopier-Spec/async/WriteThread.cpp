@@ -585,10 +585,10 @@ void WriteThread::resumeNotStarted()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!writeFileList.contains(qtFile))
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] file: \""+
+        /*ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] file: \""+
                                  TransferThread::internalStringTostring(file)+
                                  "\" for similar inode is not located into the list of "+
-                                 std::to_string(writeFileList.size())+" items!");
+                                 std::to_string(writeFileList.size())+" items!");*/
         return;
     }
     #endif
@@ -943,7 +943,7 @@ void WriteThread::internalWrite()
             return;
         if(!haveBlock)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] End detected of the file");
+            //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] End detected of the file");
             return;
         }
         #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT

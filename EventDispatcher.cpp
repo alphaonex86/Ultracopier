@@ -51,6 +51,7 @@ EventDispatcher::EventDispatcher()
     qRegisterMetaType<std::vector<Ultracopier::ProgressionItem> >("std::vector<Ultracopier::ProgressionItem>");
     qRegisterMetaType<std::vector<Ultracopier::ReturnActionOnCopyList> >("std::vector<Ultracopier::ReturnActionOnCopyList>");
     qRegisterMetaType<std::vector<std::string> >("std::vector<std::string>");
+    qRegisterMetaType<QLocalSocket::LocalSocketError >("QLocalSocket::LocalSocketError");
 
     copyServer=new CopyListener(&optionDialog);
     if(!connect(&localListener, &LocalListener::cli,                    &cliParser,     &CliParser::cli,Qt::QueuedConnection))

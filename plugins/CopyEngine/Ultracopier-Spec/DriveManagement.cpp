@@ -69,6 +69,16 @@ std::string DriveManagement::getDriveType(const std::string &drive) const
 
 bool DriveManagement::isSameDrive(const std::string &file1,const std::string &file2) const
 {
+    if(file1.empty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"file1 is empty");
+        return false;
+    }
+    if(file2.empty())
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"file2 is empty");
+        return false;
+    }
     if(mountSysPoint.size()==0)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"no mount point found");
@@ -102,24 +112,37 @@ void DriveManagement::tryUpdate()
 {
     mountSysPoint.clear();
     driveType.clear();
+    std::vector<std::pair<std::string/*mountSysPoint*/,std::string/*driveType*/> > temp;
     const QList<QStorageInfo> mountedVolumesList=QStorageInfo::mountedVolumes();
     int index=0;
     while(index<mountedVolumesList.size())
     {
-        mountSysPoint.push_back(QDir::toNativeSeparators(mountedVolumesList.at(index).rootPath()).toStdString());
+        std::string mountSysPoint=QDir::toNativeSeparators(mountedVolumesList.at(index).rootPath()).toStdString();
         #ifdef Q_OS_WIN32
-        if(mountSysPoint.back()!="A:\\" && mountSysPoint.back()!="A:/" && mountSysPoint.back()!="A:" && mountSysPoint.back()!="A" &&
-                mountSysPoint.back()!="a:\\" && mountSysPoint.back()!="a:/" && mountSysPoint.back()!="a:" && mountSysPoint.back()!="a")
+        std::string driveType;
+        if(mountSysPoint!="A:\\" && mountSysPoint!="A:/" && mountSysPoint!="A:" && mountSysPoint!="A" &&
+                mountSysPoint!="a:\\" && mountSysPoint!="a:/" && mountSysPoint!="a:" && mountSysPoint!="a")
         {
             const QByteArray &data=mountedVolumesList.at(index).fileSystemType();
-            driveType.push_back(std::string(data.constData(),data.size()));
+            driveType=std::string(data.constData(),data.size());
         }
-        else
-            driveType.push_back(std::string());
         #else
         const QByteArray &data=mountedVolumesList.at(index).fileSystemType();
-        driveType.push_back(std::string(data.constData(),data.size()));
+        std::string driveType=std::string(data.constData(),data.size());
         #endif
+        temp.push_back(std::pair<std::string/*mountSysPoint*/,std::string/*driveType*/>(mountSysPoint,driveType));
         index++;
+    }
+    /*sort larger to small mount point, to correctly detect it: /mnt, /
+    then /mnt/folder/file will be detected as /mnt
+    then /folder/file will be detected as / */
+    std::sort(temp.begin(), temp.end(), [](
+              std::pair<std::string/*mountSysPoint*/,std::string/*driveType*/> a,
+              std::pair<std::string/*mountSysPoint*/,std::string/*driveType*/> b) {
+            return a.first.size() > b.first.size();
+        });
+    for(const std::pair<std::string/*mountSysPoint*/,std::string/*driveType*/> &a : temp) {
+        mountSysPoint.push_back(a.first);
+        driveType.push_back(a.second);
     }
 }

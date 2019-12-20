@@ -160,7 +160,8 @@ void TransferThreadAsync::internalStartTheTransfer()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
     if(canStartTransfer)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true"));// call for second time, first time was not ready, if blocked in preop why?
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] canStartTransfer is already set to true"));
+        // call for second time, first time was not ready, if blocked in preop why?
         //ifCanStartTransfer();
         return;
     }
@@ -173,10 +174,12 @@ void TransferThreadAsync::internalStartTheTransfer()
 
 bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t &size, const INTERNALTYPEPATH& destination, const Ultracopier::CopyMode &mode)
 {
-    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, source: "+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start, source: "+TransferThread::internalStringTostring(source)+
+                             ", destination: "+TransferThread::internalStringTostring(destination));
     if(transfer_stat!=TransferStat_Idle)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+TransferThread::internalStringTostring(source)+", destination: "+TransferThread::internalStringTostring(destination));
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] already used, source: ")+TransferThread::internalStringTostring(source)+
+                                 ", destination: "+TransferThread::internalStringTostring(destination));
         return false;
     }
     if(!isRunning())
@@ -395,7 +398,20 @@ void TransferThreadAsync::ifCanStartTransfer()
     readError=false;
     writeError=false;
     if(realMove)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start real move");
         successFull=TransferThread::rename(source,destination);
+        #ifdef Q_OS_UNIX
+        if(!successFull && errno==18)
+        {
+            //try full move
+            realMove=false;
+            readThread.open(source,mode);
+            writeThread.open(destination,0);
+            return;
+        }
+        #endif
+    }
     else
     {
         //        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/;// | 0x00001000/*COPY_FILE_NO_BUFFERING*//*
@@ -413,11 +429,16 @@ void TransferThreadAsync::ifCanStartTransfer()
         #ifdef Q_OS_WIN32
         const std::string &strError=TransferThread::GetLastErrorStdStr();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
-                                 GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination));
+                                 GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                 " "+strError
+                                 );
         #else
-        const std::string &strError=strerror(errno);
+        const int terr=errno;
+        const std::string &strError=strerror(terr);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
-                                 TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination));
+                                 TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                 " "+strError+"("+std::to_string(terr)+")"
+                                 );
         #endif
         if(stopIt)
         {
@@ -603,11 +624,16 @@ void TransferThreadAsync::skip()
         needSkip=true;
         if(realMove)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] Do the direct FS fake close, realMove: "+std::to_string(realMove));
-            readThread.fakeReadIsStarted();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+
+                                     "] Do the direct FS fake close, realMove: "+std::to_string(realMove));
+            /*readThread.fakeReadIsStarted();
             writeThread.fakeWriteIsStarted();
             readThread.fakeReadIsStopped();
-            writeThread.fakeWriteIsStopped();
+            writeThread.fakeWriteIsStopped();*/
+            emit readStopped();
+            emit postOperationStopped();
+            transfer_stat=TransferStat_Idle;
+            emit pushStat(transfer_stat,transferId);
             return;
         }
         writeThread.flushBuffer();
@@ -952,6 +978,8 @@ void TransferThreadAsync::read_error()
 
 void TransferThreadAsync::read_readIsStopped()
 {
+    if(realMove)
+        return;
     if(!sended_state_readStopped)
     {
         sended_state_readStopped=true;
@@ -972,6 +1000,8 @@ void TransferThreadAsync::read_readIsStopped()
 
 void TransferThreadAsync::read_closed()
 {
+    if(realMove)
+        return;
     if(readIsClosedVariable)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] double event dropped"));
@@ -998,6 +1028,8 @@ void TransferThreadAsync::write_error()
 
 void TransferThreadAsync::write_closed()
 {
+    if(realMove)
+        return;
     if(writeIsClosedVariable)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] double event dropped");
