@@ -640,19 +640,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="278"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="281"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Falsches Änderungsdatum oder Fehler beim Auslesen, Sie können die Übertragung des Zeitstempels deaktivieren</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="360"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="363"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="381"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="363"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="380"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="366"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="383"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden, Fehler Nummer: %1</translation>
     </message>

@@ -52,7 +52,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         const uint64_t mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
         #endif
 #endif
-        ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+        ui->label_content_source_modified->setText(QDateTime::fromMSecsSinceEpoch(mdate*1000).toString());
     }
     else
         ui->label_content_source_modified->hide();
@@ -94,7 +94,7 @@ FolderExistsDialog::FolderExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
             #else
             const uint64_t mdate=*reinterpret_cast<int64_t*>(&destination_statbuf.st_mtime);
             #endif
-            ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+            ui->label_content_destination_modified->setText(QDateTime::fromMSecsSinceEpoch(mdate*1000).toString());
         }
         else
             ui->label_content_destination_modified->hide();

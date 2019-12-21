@@ -12,12 +12,12 @@
 	<!-- the date-time format should be in timestamps format -->
 	<pubDate>1287496800</pubDate>
 	<!-- the architecture code of this plugin, found PlatformMacro.h into ultracopier source -->
-	<architecture>linux-x86_64-pc</architecture>
+	<architecture>windows-x86</architecture>
 	<!-- Detailed description -->
 	<description xml:lang="en"><![CDATA[Copy engine of Ultracopier, OS Specific, Posix for Unix, Win32API for windows]]></description>
 	<description xml:lang="fr"><![CDATA[Moteur de copie d'ultracopier, spécifique à l'OS, Posix pour Unix, Win32API pour windows]]></description>
 	<!-- Version of this release of this plugin, need be like that's: A.B.C.D, where A, B, C and D is number -->
-	<version>1.4.0.0</version>
+	<version>2.2.0.5</version>
 	<!-- This internal name should never change, because it is used to detect when a particular plugin is updated. It must comprise only lower case ASCII characters (a-z), numerical digits (0-9), "-", "." or "_", and it must be be unique within the category. And have size lower than 64 char. -->
 	<name>Ultracopier Spec</name>
 	<!-- Dependency checking. This is used to check when a plugin may not be compatible with an updated version of either Ultracopier or another plugin. This example only checks Ultracopier. -->

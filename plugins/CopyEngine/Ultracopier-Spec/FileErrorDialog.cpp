@@ -71,7 +71,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         {
             ui->label_modified->setVisible(true);
             ui->label_content_modified->setVisible(true);
-            ui->label_content_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+            ui->label_content_modified->setText(QDateTime::fromMSecsSinceEpoch(mdate*1000).toString());
         }
         else
         {

@@ -76,7 +76,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         ui->label_content_source_size->setVisible(true);
         ui->label_content_source_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         ui->label_content_source_modified->setVisible(true);
-        ui->label_content_source_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+        ui->label_content_source_modified->setText(QDateTime::fromMSecsSinceEpoch(mdate*1000).toString());
     }
     else
     {
@@ -120,7 +120,7 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
         ui->label_content_destination_size->setVisible(true);
         ui->label_content_destination_size->setText(QString::fromStdString(facilityEngine->sizeToString(size)));
         ui->label_content_destination_modified->setVisible(true);
-        ui->label_content_destination_modified->setText(QDateTime::fromSecsSinceEpoch(mdate).toString());
+        ui->label_content_destination_modified->setText(QDateTime::fromMSecsSinceEpoch(mdate*1000).toString());
     }
     else
     {
