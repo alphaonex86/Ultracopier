@@ -66,6 +66,10 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     putInPause                      = false;
     autoStart=true;
 
+    //can't be static into WriteThread, linked by instance then by ListThread
+    writeFileList=new QMultiHash<QString,WriteThread *>();
+    writeFileListMutex=new QMutex();
+
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_WINDOW
     if(!connect(&timerUpdateDebugDialog,&QTimer::timeout,this,&ListThread::timedUpdateDebugDialog))
         abort();
@@ -1108,6 +1112,9 @@ void ListThread::createTransferThread()
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     last->setRsync(rsync);
     #endif
+
+    last->writeThread.writeFileList=new QMultiHash<QString,WriteThread *>();
+    last->writeThread.writeFileListMutex=new QMutex();
 
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(last,&TransferThread::debugInformation,             this,&ListThread::debugInformation,             Qt::QueuedConnection))

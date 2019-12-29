@@ -206,6 +206,10 @@ public slots:
     void setBuffer(const bool &buffer);
     void exportErrorIntoTransferList(const std::string &fileName);
 private:
+    //can't be static into WriteThread, linked by instance then by ListThread
+    QMultiHash<QString,WriteThread *> *writeFileList;
+    QMutex       *writeFileListMutex;
+
     QSemaphore          mkpathTransfer;
     std::string             sourceDrive;
     bool                sourceDriveMultiple;

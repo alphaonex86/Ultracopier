@@ -83,6 +83,7 @@ bool LocalListener::tryConnect()
             int byteWriten =
             #endif
             localSocket.write(blockToSend);
+            localSocket.readAll();
             #ifdef ULTRACOPIER_DEBUG
             if(!localSocket.isValid())
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"localSocket is not valid!");
@@ -92,7 +93,7 @@ bool LocalListener::tryConnect()
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"blockToSend("+std::to_string(blockToSend.size())+
                                          ")!=byteWriten("+std::to_string(byteWriten)+")");
             #endif // ULTRACOPIER_DEBUG
-            if(localSocket.waitForBytesWritten(200))
+            if(localSocket.waitForBytesWritten())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"Block send correctly");
             }
@@ -107,7 +108,12 @@ bool LocalListener::tryConnect()
         }
         while(block.size());
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"disconnect the socket");
+        localSocket.readAll();
+        localSocket.waitForBytesWritten();
+        QThread::msleep(50);
         localSocket.disconnectFromServer();
+        QThread::msleep(50);
+        localSocket.waitForDisconnected();
         return true;
     }
     else

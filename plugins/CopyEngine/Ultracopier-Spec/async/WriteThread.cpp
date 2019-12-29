@@ -12,9 +12,6 @@
 #include <fcntl.h>
 #endif
 
-QMultiHash<QString,WriteThread *> WriteThread::writeFileList;
-QMutex       WriteThread::writeFileListMutex;
-
 WriteThread::WriteThread()
 {
     deletePartiallyTransferredFiles = true;
@@ -219,16 +216,16 @@ bool WriteThread::internalOpen()
     }
     //try open it
     {
-        QMutexLocker lock_mutex(&writeFileListMutex);
+        QMutexLocker lock_mutex(writeFileListMutex);
         #ifdef WIDESTRING
         QString qtFile=QString::fromStdWString(file);
         #else
         QString qtFile=QString::fromStdString(file);
         #endif
-        if(writeFileList.count(qtFile,this)==0)
+        if(writeFileList->count(qtFile,this)==0)
         {
-            writeFileList.insert(qtFile,this);
-            if(writeFileList.count(qtFile)>1)
+            writeFileList->insert(qtFile,this);
+            if(writeFileList->count(qtFile)>1)
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] in waiting because same file is found");
                 return false;
@@ -576,14 +573,14 @@ void WriteThread::timeOfTheBlockCopyFinished()
 
 void WriteThread::resumeNotStarted()
 {
-    QMutexLocker lock_mutex(&writeFileListMutex);
+    QMutexLocker lock_mutex(writeFileListMutex);
     #ifdef WIDESTRING
     QString qtFile=QString::fromStdWString(file);
     #else
     QString qtFile=QString::fromStdString(file);
     #endif
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
-    if(!writeFileList.contains(qtFile))
+    if(!writeFileList->contains(qtFile))
     {
         /*ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] file: \""+
                                  TransferThread::internalStringTostring(file)+
@@ -592,10 +589,10 @@ void WriteThread::resumeNotStarted()
         return;
     }
     #endif
-    writeFileList.remove(qtFile,this);
-    if(writeFileList.contains(qtFile))
+    writeFileList->remove(qtFile,this);
+    if(writeFileList->contains(qtFile))
     {
-        QList<WriteThread *> writeList=writeFileList.values(qtFile);
+        QList<WriteThread *> writeList=writeFileList->values(qtFile);
         if(!writeList.isEmpty())
            writeList.first()->reemitStartOpen();
         return;

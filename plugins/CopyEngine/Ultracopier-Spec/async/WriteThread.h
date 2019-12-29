@@ -39,6 +39,10 @@ public:
     bool seek(const int64_t &position);/// \todo search if is use full
     /// \brief get the size of the destination file
     int64_t size() const;
+
+    //can't be static into WriteThread, linked by instance then by ListThread
+    QMultiHash<QString,WriteThread *> *writeFileList;
+    QMutex       *writeFileListMutex;
 protected:
     void run();
 public:
@@ -124,8 +128,6 @@ private:
     volatile bool       postOperationRequested;
     int                 numberOfBlock;
     QMutex              accessList;		///< For use the list
-    static QMultiHash<QString,WriteThread *> writeFileList;
-    static QMutex       writeFileListMutex;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     QSemaphore          waitNewClockForSpeed,waitNewClockForSpeed2;
     volatile int		numberOfBlockCopied,numberOfBlockCopied2;		///< Multiple for count the number of block copied

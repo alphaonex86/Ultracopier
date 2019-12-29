@@ -94,6 +94,10 @@ TransferThreadAsync::~TransferThreadAsync()
     stopItWin=1;
     #endif
     stopIt=true;
+    readThread.exit();
+    readThread.wait();
+    writeThread.exit();
+    writeThread.wait();
     exit(0);
     wait();
     //else cash without this disconnect
