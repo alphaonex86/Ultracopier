@@ -94,8 +94,10 @@ TransferThreadAsync::~TransferThreadAsync()
     stopItWin=1;
     #endif
     stopIt=true;
+    readThread.stop();
     readThread.exit();
     readThread.wait();
+    writeThread.stop();
     writeThread.exit();
     writeThread.wait();
     exit(0);
@@ -525,6 +527,12 @@ void TransferThreadAsync::stop()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
         return;
     }
+    readThread.stop();
+    readThread.exit();
+    readThread.wait();
+    writeThread.stop();
+    writeThread.exit();
+    writeThread.wait();
     exit();
     wait();
     start();

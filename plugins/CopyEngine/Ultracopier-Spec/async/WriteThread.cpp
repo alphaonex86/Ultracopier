@@ -161,10 +161,9 @@ bool WriteThread::internalOpen()
                 {
                     #ifdef Q_OS_WIN32
                     errorString_internal=tr("Unable to create the destination folder: ").toStdString()+TransferThread::GetLastErrorStdStr();
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Unable create the folder: %1, error: %2")
-                                 .arg(destination)
-                                 .arg(QString::fromStdString(errorString_internal))
-                                             .toStdString());
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Unable create the folder: "+
+                        TransferThread::internalStringTostring(destination)+", error: "+
+                        errorString_internal);
                     emit error();
                     #ifdef ULTRACOPIER_PLUGIN_DEBUG
                     status=Idle;
