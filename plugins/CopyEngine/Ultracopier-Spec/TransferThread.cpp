@@ -7,7 +7,7 @@
 #include <limits.h>
 #ifdef WIDESTRING
 #include <locale>
-#include <codecvt>
+//#include <codecvt>
 #endif
 
 #ifdef Q_OS_WIN32

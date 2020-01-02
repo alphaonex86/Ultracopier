@@ -484,6 +484,10 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen()");
         return;
     }
+    if(!source.empty() && needRemove && (stopIt || needSkip))
+        if(is_file(source) && source!=destination)
+            unlink(destination);
+    transfer_stat=TransferStat_Idle;
 
     transferSize=readThread.getLastGoodPosition();
 
@@ -506,6 +510,7 @@ void TransferThreadAsync::checkIfAllIsClosedAndDoOperations()
 
     source.clear();
     destination.clear();
+    resetExtraVariable();
     //don't need remove because have correctly finish (it's not in: have started)
     needRemove=false;
     needSkip=false;
@@ -528,19 +533,7 @@ void TransferThreadAsync::stop()
         return;
     }
     readThread.stop();
-    readThread.exit();
-    readThread.wait();
     writeThread.stop();
-    writeThread.exit();
-    writeThread.wait();
-    exit();
-    wait();
-    start();
-    if(!source.empty() && needRemove)
-        if(exists(source) && source!=destination)
-            unlink(destination);
-    transfer_stat=TransferStat_Idle;
-    resetExtraVariable();
 }
 
 //retry after error
@@ -596,9 +589,6 @@ void TransferThreadAsync::skip()
     stopItWin=1;
     #endif
     stopIt=true;
-    exit();
-    wait();
-    start();
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] start with stat: "+std::to_string(transfer_stat));
     switch(static_cast<TransferStat>(transfer_stat))
     {

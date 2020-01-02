@@ -107,6 +107,11 @@ ListThread::~ListThread()
 //transfer is finished
 void ListThread::transferInodeIsClosed()
 {
+    if(stopIt)
+    {
+        checkIfReadyToCancel();
+        return;
+    }
     numberOfInodeOperation--;
     #ifdef ULTRACOPIER_PLUGIN_DEBUG_SCHEDULER
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfInodeOperation: "+std::to_string(numberOfInodeOperation));
@@ -377,6 +382,9 @@ void ListThread::checkIfReadyToCancel()
         if(transferThreadList.at(index)!=NULL)
         {
             if(transferThreadList.at(index)->transferId!=0)
+                return;
+            //need wait a clean stop (and then destination remove)
+            if(transferThreadList.at(index)->getStat()!=TransferStat_Idle)
                 return;
             delete transferThreadList.at(index);//->deleteLayer();
             transferThreadList[index]=NULL;

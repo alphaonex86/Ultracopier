@@ -492,7 +492,10 @@ void WriteThread::stop()
     needRemoveTheFile=true;
     stopIt=true;
     if(isOpen.available()>0)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] isOpen.available()>0");
         return;
+    }
     writeFull.release();
     pauseMutex.release();
     pauseMutex.release();

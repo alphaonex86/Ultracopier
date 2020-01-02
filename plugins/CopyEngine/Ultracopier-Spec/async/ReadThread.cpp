@@ -499,6 +499,9 @@ void ReadThread::internalRead()
             #endif
             if(!writeThread->write(blockArray))//speed limitation here
             {
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                status=Idle;
+                #endif
                 if(!stopIt)
                 {
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopped because the write is stopped: "+std::to_string(lastGoodPosition));

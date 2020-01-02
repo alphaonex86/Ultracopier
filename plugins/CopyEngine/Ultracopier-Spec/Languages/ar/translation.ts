@@ -521,7 +521,7 @@
         <translation>غير قادر على قراءه الملف المصدر:</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="536"/>
+        <location filename="../../async/ReadThread.cpp" line="539"/>
         <source>File truncated during the read, possible data change</source>
         <translation>تم اقتطاع الملف اثناء القراءة ، وتغيير البيانات المحتملة</translation>
     </message>
@@ -640,19 +640,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="285"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="287"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>تاريخ تعديل خاطئ أو غير قادر علي الحصول عليه ، يمكنك تعطيل نقل الوقت للقيام بذلك</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="367"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="385"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="369"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="387"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">غير قادر على إنشاء مجلد الوجهة:</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="370"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="387"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="372"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="389"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
@@ -666,18 +666,18 @@
     </message>
     <message>
         <location filename="../../async/WriteThread.cpp" line="163"/>
-        <location filename="../../async/WriteThread.cpp" line="197"/>
+        <location filename="../../async/WriteThread.cpp" line="196"/>
         <source>Unable to create the destination folder: </source>
         <translation>غير قادر على إنشاء مجلد الوجهة:</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="175"/>
-        <location filename="../../async/WriteThread.cpp" line="199"/>
+        <location filename="../../async/WriteThread.cpp" line="174"/>
+        <location filename="../../async/WriteThread.cpp" line="198"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation>errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="433"/>
+        <location filename="../../async/WriteThread.cpp" line="432"/>
         <source>Internal error, please report it!</source>
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>

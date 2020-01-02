@@ -521,7 +521,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="536"/>
+        <location filename="../../async/ReadThread.cpp" line="539"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -640,19 +640,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="285"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="287"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>Falsches Änderungsdatum oder Fehler beim Auslesen, Sie können die Übertragung des Zeitstempels deaktivieren</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="367"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="385"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="369"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="387"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden: </translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="370"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="387"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="372"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="389"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden, Fehler Nummer: %1</translation>
     </message>
@@ -666,18 +666,18 @@
     </message>
     <message>
         <location filename="../../async/WriteThread.cpp" line="163"/>
-        <location filename="../../async/WriteThread.cpp" line="197"/>
+        <location filename="../../async/WriteThread.cpp" line="196"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden: </translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="175"/>
-        <location filename="../../async/WriteThread.cpp" line="199"/>
+        <location filename="../../async/WriteThread.cpp" line="174"/>
+        <location filename="../../async/WriteThread.cpp" line="198"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">Zielordner konnte nicht erstellt werden, Fehler Nummer: %1</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="433"/>
+        <location filename="../../async/WriteThread.cpp" line="432"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
