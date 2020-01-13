@@ -10,7 +10,7 @@ HEADERS         = \
     $$PWD/pluginLoader.h \
     $$PWD/DebugEngineMacro.h \
     $$PWD/Environment.h \
-    $$PWD/Variable.h \
+    $$PWD/PluginLoadercatchcopy-v0002Variable.h \
     $$PWD/PlatformMacro.h \
     $$PWD/../../../interface/PluginInterface_PluginLoader.h \
     $$PWD/../../../cpp11addition.h \

@@ -339,7 +339,7 @@ void DebugEngine::addDebugInformation(const DebugLevel_custom &level,const std::
         if(addDebugInformationCallNumber<ULTRACOPIER_DEBUG_MAX_GUI_LINE)
         {
             addDebugInformationCallNumber++;
-            DebugModel::debugModel->addDebugInformation(startTime.elapsed(),level,function,text,file,static_cast<const unsigned int>(ligne),location);
+            DebugModel::debugModel->addDebugInformation(startTime.elapsed(),level,function,text,file,static_cast<unsigned int>(ligne),location);
         }
     }
 }

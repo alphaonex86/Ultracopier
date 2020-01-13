@@ -8,7 +8,7 @@ LIBS += -ladvapi32
 HEADERS         = \
     $$PWD/sessionLoader.h \
     $$PWD/StructEnumDefinition.h \
-    $$PWD/Variable.h \
+    $$PWD/SessionLoaderWindowsVariable.h \
     $$PWD/Environment.h \
     $$PWD/DebugEngineMacro.h \
     $$PWD/../../../interface/PluginInterface_SessionLoader.h

@@ -147,8 +147,8 @@ void MkPath::internalDoThisPath()
         else if(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS>=sourceLastModified)
         {
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"the sources is older to copy the time: "+TransferThread::internalStringTostring(item.source)+
-                                     ": "+QDateTime::fromMSecsSinceEpoch(ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS*1000).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+
-                                     ">="+QDateTime::fromMSecsSinceEpoch(sourceLastModified*1000).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString());
+                                     ": "+QDateTime::fromMSecsSinceEpoch((uint64_t)ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS*(uint64_t)1000).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString()+
+                                     ">="+QDateTime::fromMSecsSinceEpoch((uint64_t)sourceLastModified*(uint64_t)1000).toString("dd.MM.yyyy hh:mm:ss.zzz").toStdString());
             doTheDateTransfer=false;
         }
         else

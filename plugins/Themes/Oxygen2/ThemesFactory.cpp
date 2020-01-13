@@ -4,6 +4,7 @@
 
 #include <QColorDialog>
 #include <QDesktopWidget>
+#include <QScreen>
 
 #include "ThemesFactory.h"
 #include "../../../cpp11addition.h"
@@ -65,12 +66,17 @@ PluginInterface_Themes * ThemesFactory::getInstance()
                 );
         break;
     case 2:
-        newInterface->setGeometry(
+        if(!qApp->screens().isEmpty())
+            newInterface->setGeometry(
                     QStyle::alignedRect(
                         Qt::LeftToRight,
                         Qt::AlignCenter,
                         newInterface->size(),
+                        #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
                         qApp->desktop()->availableGeometry()
+                        #else
+                        qApp->screens().front()->geometry()
+                        #endif
                     )
                 );
         break;

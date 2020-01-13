@@ -28,8 +28,6 @@
     #include <tchar.h>
     #include <stdio.h>
     #include <strsafe.h>
-    typedef void (WINAPI *PGNSI) (LPSYSTEM_INFO);
-    typedef BOOL (WINAPI *PGPI) (DWORD, DWORD, DWORD, DWORD, PDWORD);
 #endif
 #ifdef Q_OS_MAC
 #include <QStringList>
@@ -411,10 +409,7 @@ std::string EventDispatcher::GetOSDisplayString()
    QString Os;
    OSVERSIONINFOEX osvi;
    SYSTEM_INFO si;
-   PGNSI pGNSI;
-   PGPI pGPI;
    BOOL bOsVersionInfoEx;
-   DWORD dwType;
 
    ZeroMemory(&si, sizeof(SYSTEM_INFO));
    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -424,15 +419,7 @@ std::string EventDispatcher::GetOSDisplayString()
 
    if(bOsVersionInfoEx == 0)
         return "Os detection blocked";
-
-   // Call GetNativeSystemInfo if supported or GetSystemInfo otherwise.
-
-   pGNSI = (PGNSI) GetProcAddress(
-      GetModuleHandle(TEXT("kernel32.dll")),
-      "GetNativeSystemInfo");
-   if(NULL != pGNSI)
-      pGNSI(&si);
-   else GetSystemInfo(&si);
+    GetNativeSystemInfo(&si);
 
    if(VER_PLATFORM_WIN32_NT==osvi.dwPlatformId && osvi.dwMajorVersion>4)
    {
@@ -461,70 +448,6 @@ std::string EventDispatcher::GetOSDisplayString()
                  else Os+=QStringLiteral("Windows Server (dwMajorVersion: %1, dwMinorVersion: %2)").arg(osvi.dwMinorVersion).arg(osvi.dwMinorVersion);
             break;
           }
-
-         pGPI = (PGPI) GetProcAddress(
-            GetModuleHandle(TEXT("kernel32.dll")),
-            "GetProductInfo");
-
-         pGPI(osvi.dwMajorVersion, osvi.dwMinorVersion, 0, 0, &dwType);
-
-         switch(dwType)
-         {
-            case PRODUCT_ULTIMATE:
-               Os+=QStringLiteral("Ultimate Edition");
-               break;
-            case PRODUCT_PROFESSIONAL:
-               Os+=QStringLiteral("Professional");
-               break;
-            case PRODUCT_HOME_PREMIUM:
-               Os+=QStringLiteral("Home Premium Edition");
-               break;
-            case PRODUCT_HOME_BASIC:
-               Os+=QStringLiteral("Home Basic Edition");
-               break;
-            case PRODUCT_ENTERPRISE:
-               Os+=QStringLiteral("Enterprise Edition");
-               break;
-            case PRODUCT_BUSINESS:
-               Os+=QStringLiteral("Business Edition");
-               break;
-            case PRODUCT_STARTER:
-               Os+=QStringLiteral("Starter Edition");
-               break;
-            case PRODUCT_CLUSTER_SERVER:
-               Os+=QStringLiteral("Cluster Server Edition");
-               break;
-            case PRODUCT_DATACENTER_SERVER:
-               Os+=QStringLiteral("Datacenter Edition");
-               break;
-            case PRODUCT_DATACENTER_SERVER_CORE:
-               Os+=QStringLiteral("Datacenter Edition (core installation)");
-               break;
-            case PRODUCT_ENTERPRISE_SERVER:
-               Os+=QStringLiteral("Enterprise Edition");
-               break;
-            case PRODUCT_ENTERPRISE_SERVER_CORE:
-               Os+=QStringLiteral("Enterprise Edition (core installation)");
-               break;
-            case PRODUCT_ENTERPRISE_SERVER_IA64:
-               Os+=QStringLiteral("Enterprise Edition for Itanium-based Systems");
-               break;
-            case PRODUCT_SMALLBUSINESS_SERVER:
-               Os+=QStringLiteral("Small Business Server");
-               break;
-            case PRODUCT_SMALLBUSINESS_SERVER_PREMIUM:
-               Os+=QStringLiteral("Small Business Server Premium Edition");
-               break;
-            case PRODUCT_STANDARD_SERVER:
-               Os+=QStringLiteral("Standard Edition");
-               break;
-            case PRODUCT_STANDARD_SERVER_CORE:
-               Os+=QStringLiteral("Standard Edition (core installation)");
-               break;
-            case PRODUCT_WEB_SERVER:
-               Os+=QStringLiteral("Web Server Edition");
-               break;
-         }
       }
       else if(osvi.dwMajorVersion==5)
       {

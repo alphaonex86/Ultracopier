@@ -110,7 +110,6 @@ HEADERS += $$PWD/../ResourcesManager.h \
     $$PWD/../interface/PluginInterface_Listener.h \
     $$PWD/../interface/PluginInterface_CopyEngine.h \
     $$PWD/../interface/OptionInterface.h \
-    $$PWD/../Variable.h \
     $$PWD/../Version.h \
     $$PWD/../PluginLoaderCore.h \
     $$PWD/../interface/PluginInterface_PluginLoader.h \

@@ -163,7 +163,6 @@ std::string FileExistsDialog::getNewName()
 
 void FileExistsDialog::on_SuggestNewName_clicked()
 {
-    struct stat p_statbuf;
     std::string destinationInfo=this->destinationInfo;
     QString absolutePath=QString::fromStdString(FSabsolutePath(destinationInfo));
     QString fileName=QString::fromStdString(TransferThread::resolvedName(destinationInfo));

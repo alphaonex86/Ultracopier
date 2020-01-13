@@ -70,7 +70,6 @@ HEADERS += \
     ../plugins/Themes/Oxygen2/radialMap/radialMap.h \
     ../little/OptionsEngineLittle.h \
     ../FacilityEngine.h \
-    ../Variable.h \
     ../interface/FacilityInterface.h \
     ../interface/OptionInterface.h \
     ../interface/PluginInterface_CopyEngine.h \
