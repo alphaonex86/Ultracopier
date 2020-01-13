@@ -117,7 +117,7 @@ void FilterRules::updateChecking()
         QString tempString;
         if(ui->search_type->currentIndex()==0)
         {
-            tempString=QRegularExpression::escape(ui->search->text());
+            //tempString=QRegularExpression::escape(ui->search->text()); -> generate bug because escape contains slash
             if(tempString.contains('/') || tempString.contains('\\'))
                 isValid=false;
         }
@@ -190,4 +190,10 @@ void FilterRules::on_buttonBox_clicked(QAbstractButton *button)
         haveBeenValided=true;
         accept();
     }
+}
+
+void FilterRules::on_search_textChanged(const QString &arg1)
+{
+    Q_UNUSED(arg1);
+    updateChecking();
 }

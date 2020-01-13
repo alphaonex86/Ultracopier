@@ -36,6 +36,7 @@ private slots:
     void on_search_type_currentIndexChanged(int index);
     void on_need_match_all_clicked();
     void on_buttonBox_clicked(QAbstractButton *button);
+    void on_search_textChanged(const QString &arg1);
 private:
     Ui::FilterRules *ui;
     void updateChecking();

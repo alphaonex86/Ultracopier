@@ -14,14 +14,23 @@
    <string>Filters</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
-    <normaloff>:/CopyEngine/Ultracopier/resources/filter.png</normaloff>:/CopyEngine/Ultracopier/resources/filter.png</iconset>
+   <iconset resource="copyEngineResources.qrc">
+    <normaloff>:/CopyEngine/Ultracopier-Spec/resources/filter.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/filter.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>1</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>1</number>
+   </property>
+   <property name="topMargin">
+    <number>1</number>
+   </property>
+   <property name="rightMargin">
+    <number>1</number>
+   </property>
+   <property name="bottomMargin">
     <number>1</number>
    </property>
    <item>
@@ -33,7 +42,16 @@
       <property name="spacing">
        <number>1</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
        <number>2</number>
       </property>
       <item>
@@ -48,24 +66,24 @@
         <item>
          <widget class="QToolButton" name="add_exclusion">
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/CopyEngine/Ultracopier/resources/add.png</normaloff>:/CopyEngine/Ultracopier/resources/add.png</iconset>
+           <iconset resource="copyEngineResources.qrc">
+            <normaloff>:/CopyEngine/Ultracopier-Spec/resources/add.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/add.png</iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="edit_exclusion">
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/CopyEngine/Ultracopier/resources/edit.png</normaloff>:/CopyEngine/Ultracopier/resources/edit.png</iconset>
+           <iconset resource="copyEngineResources.qrc">
+            <normaloff>:/CopyEngine/Ultracopier-Spec/resources/edit.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/edit.png</iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="remove_exclusion">
           <property name="icon">
-           <iconset resource="resources.qrc">
-            <normaloff>:/CopyEngine/Ultracopier/resources/remove.png</normaloff>:/CopyEngine/Ultracopier/resources/remove.png</iconset>
+           <iconset resource="copyEngineResources.qrc">
+            <normaloff>:/CopyEngine/Ultracopier-Spec/resources/remove.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/remove.png</iconset>
           </property>
          </widget>
         </item>
@@ -96,7 +114,16 @@
       <property name="spacing">
        <number>1</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>2</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>2</number>
+      </property>
+      <property name="bottomMargin">
        <number>2</number>
       </property>
       <item>
@@ -120,24 +147,24 @@
           <item>
            <widget class="QToolButton" name="add_inclusion">
             <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/CopyEngine/Ultracopier/resources/add.png</normaloff>:/CopyEngine/Ultracopier/resources/add.png</iconset>
+             <iconset resource="copyEngineResources.qrc">
+              <normaloff>:/CopyEngine/Ultracopier-Spec/resources/add.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/add.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="edit_inclusion">
             <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/CopyEngine/Ultracopier/resources/edit.png</normaloff>:/CopyEngine/Ultracopier/resources/edit.png</iconset>
+             <iconset resource="copyEngineResources.qrc">
+              <normaloff>:/CopyEngine/Ultracopier-Spec/resources/edit.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/edit.png</iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QToolButton" name="remove_inclusion">
             <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/CopyEngine/Ultracopier/resources/remove.png</normaloff>:/CopyEngine/Ultracopier/resources/remove.png</iconset>
+             <iconset resource="copyEngineResources.qrc">
+              <normaloff>:/CopyEngine/Ultracopier-Spec/resources/remove.png</normaloff>:/CopyEngine/Ultracopier-Spec/resources/remove.png</iconset>
             </property>
            </widget>
           </item>
@@ -188,7 +215,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="copyEngineResources.qrc"/>
  </resources>
  <connections/>
 </ui>
