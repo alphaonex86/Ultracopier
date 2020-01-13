@@ -81,7 +81,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         #ifdef Q_OS_WIN32
         if(fileInfoW.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         #else
-        if(p_statbuf.st_mode==S_IFDIR)
+        if(S_ISDIR(p_statbuf.st_mode))
         #endif
         {
             this->setWindowTitle(tr("Error on folder"));
@@ -92,7 +92,7 @@ FileErrorDialog::FileErrorDialog(QWidget *parent, INTERNALTYPEPATH fileInfo, std
         #ifdef Q_OS_UNIX
         ui->label_file_destination->setVisible(p_statbuf.st_mode==S_IFLNK);
         ui->label_content_file_destination->setVisible(p_statbuf.st_mode==S_IFLNK);
-        if(p_statbuf.st_mode==S_IFLNK)
+        if(S_ISLNK(p_statbuf.st_mode))
         {
             char buf[1024];
             ssize_t len;
