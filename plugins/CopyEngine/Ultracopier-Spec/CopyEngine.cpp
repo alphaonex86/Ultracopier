@@ -764,7 +764,7 @@ void CopyEngine::setFileError(int index)
             alwaysDoThisActionForFileError=FileError_NotSet;
         break;
     }
-    emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
+    //emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
 void CopyEngine::setRightTransfer(const bool doRightTransfer)
@@ -873,6 +873,10 @@ void CopyEngine::resetTempWidget()
 
 void CopyEngine::setFolderCollision(int index)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
+    if(uiIsInstalled)
+        if(index!=ui->comboBoxFolderCollision->currentIndex())
+            ui->comboBoxFolderCollision->setCurrentIndex(index);
     switch(index)
     {
         case 0:
@@ -888,10 +892,15 @@ void CopyEngine::setFolderCollision(int index)
             setComboBoxFolderCollision(FolderExists_Rename,false);
         break;
     }
+    emit signal_setFolderCollision(alwaysDoThisActionForFolderExists);
 }
 
 void CopyEngine::setFolderError(int index)
 {
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"action index: "+std::to_string(index));
+    if(uiIsInstalled)
+        if(index!=ui->comboBoxFolderError->currentIndex())
+            ui->comboBoxFolderError->setCurrentIndex(index);
     switch(index)
     {
         case 0:
@@ -901,6 +910,7 @@ void CopyEngine::setFolderError(int index)
             setComboBoxFolderError(FileError_Skip,false);
         break;
     }
+    emit signal_setCollisionAction(alwaysDoThisActionForFileExists);
 }
 
 //set the translate
@@ -959,7 +969,7 @@ void CopyEngine::setComboBoxFolderCollision(FolderExistsAction action,bool chang
 
 void CopyEngine::setComboBoxFolderError(FileErrorAction action,bool changeComboBox)
 {
-    alwaysDoThisActionForFileError=action;
+    alwaysDoThisActionForFolderError=action;
     if(!changeComboBox || !uiIsInstalled)
         return;
     switch(action)

@@ -323,7 +323,7 @@ signals:
 
     //action
     void signal_setCollisionAction(FileExistsAction alwaysDoThisActionForFileExists) const;
-    void signal_setComboBoxFolderCollision(FolderExistsAction action) const;
+    //void signal_setComboBoxFolderCollision(FolderExistsAction action) const;// -> duplicate with signal_setFolderCollision ?
     void signal_setFolderCollision(FolderExistsAction action) const;
 
     //internal cancel
