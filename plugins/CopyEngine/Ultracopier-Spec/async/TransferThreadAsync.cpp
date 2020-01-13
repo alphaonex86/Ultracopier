@@ -641,6 +641,7 @@ void TransferThreadAsync::skip()
         writeThread.flushBuffer();
         if(remainFileOpen())
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] remainFileOpen");
             if(remainSourceOpen())
                 readThread.stop();
             if(remainDestinationOpen())
@@ -648,6 +649,7 @@ void TransferThreadAsync::skip()
         }
         else // wait nothing, just quit
         {
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] wait nothing, just quit");
             transfer_stat=TransferStat_PostOperation;
             emit internalStartPostOperation();
         }

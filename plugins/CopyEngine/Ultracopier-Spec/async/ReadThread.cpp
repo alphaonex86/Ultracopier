@@ -248,10 +248,12 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         if(stopIt)
         {
             #ifdef Q_OS_UNIX
-            ::close(from);
+            if(::close(from)!=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+std::to_string(errno));
             from=-1;
             #else
-            CloseHandle(from);
+            if(CloseHandle(from)==0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+TransferThread::GetLastErrorStdStr());
             from=NULL;
             #endif
             this->file.clear();
@@ -267,10 +269,12 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         if(stopIt)
         {
             #ifdef Q_OS_UNIX
-            ::close(from);
+            if(::close(from)!=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+std::to_string(errno));
             from=-1;
             #else
-            CloseHandle(from);
+            if(CloseHandle(from)==0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+TransferThread::GetLastErrorStdStr());
             from=NULL;
             #endif
             this->file.clear();
@@ -322,10 +326,12 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             #endif
 
             #ifdef Q_OS_UNIX
-            ::close(from);
+            if(::close(from)!=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+std::to_string(errno));
             from=-1;
             #else
-            CloseHandle(from);
+            if(CloseHandle(from)==0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+TransferThread::GetLastErrorStdStr());
             from=NULL;
             #endif
             this->file.clear();
@@ -591,10 +597,12 @@ void ReadThread::internalClose(bool callByTheDestructor)
         {
             closeTheFile=true;
             #ifdef Q_OS_UNIX
-            ::close(from);
+            if(::close(from)!=0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+std::to_string(errno));
             from=-1;
             #else
-            CloseHandle(from);
+            if(CloseHandle(from)==0)
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+TransferThread::GetLastErrorStdStr());
             from=NULL;
             #endif
             this->file.clear();
@@ -708,10 +716,12 @@ bool ReadThread::internalReopen()
     #endif
     {
         #ifdef Q_OS_UNIX
-        ::close(from);
+        if(::close(from)!=0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+std::to_string(errno));
         from=-1;
         #else
-        CloseHandle(from);
+        if(CloseHandle(from)==0)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to close: "+TransferThread::GetLastErrorStdStr());
         from=NULL;
         #endif
         this->file.clear();
