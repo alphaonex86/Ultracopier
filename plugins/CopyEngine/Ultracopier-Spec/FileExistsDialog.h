@@ -54,6 +54,8 @@ private slots:
     void on_lineEditNewName_returnPressed();
     void on_actionOverwrite_if_older_triggered();
     void on_lineEditNewName_editingFinished();
+    void on_actionOverwrite_if_not_same_size_triggered();
+    void on_actionOverwrite_if_not_same_size_and_date_triggered();
 private:
     Ui::fileExistsDialog *ui;
     FileExistsAction action;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>162</height>
+    <width>615</width>
+    <height>222</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -355,6 +355,22 @@
    </property>
    <property name="toolTip">
     <string>Overwrite if older</string>
+   </property>
+  </action>
+  <action name="actionOverwrite_if_not_same_size">
+   <property name="text">
+    <string>Overwrite if not same size</string>
+   </property>
+   <property name="toolTip">
+    <string>Overwrite if not same size</string>
+   </property>
+  </action>
+  <action name="actionOverwrite_if_not_same_size_and_date">
+   <property name="text">
+    <string>Overwrite if not same size and date</string>
+   </property>
+   <property name="toolTip">
+    <string>Overwrite if not same size and date</string>
    </property>
   </action>
  </widget>

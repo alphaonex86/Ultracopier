@@ -370,7 +370,33 @@ bool TransferThread::destinationExists()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNotSame || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
             {
-                if(readFileMDateTime(destination)!=readFileMDateTime(source) || destination.size()!=source.size())
+                if(readFileMDateTime(destination)!=readFileMDateTime(source))
+                    return false;
+                else
+                {
+                    transfer_stat=TransferStat_Idle;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transfer_stat=TransferStat_Idle;");
+                    emit postOperationStopped();
+                    return true;
+                }
+            }
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
+            if(fileExistsAction==FileExists_OverwriteIfNotSameSize || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
+            {
+                if(file_stat_size(destination)!=file_stat_size(source))
+                    return false;
+                else
+                {
+                    transfer_stat=TransferStat_Idle;
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] transfer_stat=TransferStat_Idle;");
+                    emit postOperationStopped();
+                    return true;
+                }
+            }
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
+            if(fileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
+            {
+                if(readFileMDateTime(destination)!=readFileMDateTime(source) || file_stat_size(destination)!=file_stat_size(source))
                     return false;
                 else
                 {

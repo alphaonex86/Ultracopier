@@ -23,6 +23,7 @@ DriveManagement::DriveManagement()
 std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
 {
     const std::string &inode=fileOrFolder;
+    Q_UNUSED(inode);
     #ifdef Q_OS_WIN32
     //optimized to windows version:
     if(fileOrFolder.size()>=3)

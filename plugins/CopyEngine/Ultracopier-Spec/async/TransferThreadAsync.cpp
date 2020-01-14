@@ -532,6 +532,12 @@ void TransferThreadAsync::stop()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
         return;
     }
+    if(transfer_stat==TransferStat_PreOperation)
+    {
+        transfer_stat=TransferStat_Idle;
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_PreOperation");
+        return;
+    }
     readThread.stop();
     writeThread.stop();
 }

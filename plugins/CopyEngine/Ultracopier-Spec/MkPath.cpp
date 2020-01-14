@@ -655,11 +655,13 @@ bool MkPath::writeFileDateTime(const INTERNALTYPEPATH &destination)
         #endif
     #else
         #ifdef Q_OS_WIN32
-            wchar_t filePath[65535];
             HANDLE hFileDestination = CreateFileW(TransferThread::toFinalPath(destination).c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
             if(hFileDestination == INVALID_HANDLE_VALUE)
             {
+                #ifdef ULTRACOPIER_PLUGIN_DEBUG
+                wchar_t filePath[65535];
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
+                #endif
                 return false;
             }
             FILETIME ftCreate, ftAccess, ftWrite;

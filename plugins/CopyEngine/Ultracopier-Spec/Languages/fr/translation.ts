@@ -31,64 +31,64 @@
         <translation>Le mode a été forcé. C&apos;est une erreur interne, merci de la repporter</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="913"/>
-        <location filename="../../CopyEngine.cpp" line="916"/>
-        <location filename="../../CopyEngine.cpp" line="921"/>
-        <location filename="../../CopyEngine.cpp" line="925"/>
+        <location filename="../../CopyEngine.cpp" line="923"/>
+        <location filename="../../CopyEngine.cpp" line="926"/>
+        <location filename="../../CopyEngine.cpp" line="931"/>
+        <location filename="../../CopyEngine.cpp" line="935"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="914"/>
-        <location filename="../../CopyEngine.cpp" line="918"/>
-        <location filename="../../CopyEngine.cpp" line="922"/>
-        <location filename="../../CopyEngine.cpp" line="926"/>
+        <location filename="../../CopyEngine.cpp" line="924"/>
+        <location filename="../../CopyEngine.cpp" line="928"/>
+        <location filename="../../CopyEngine.cpp" line="932"/>
+        <location filename="../../CopyEngine.cpp" line="936"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="917"/>
+        <location filename="../../CopyEngine.cpp" line="927"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="919"/>
-        <location filename="../../CopyEngine.cpp" line="931"/>
+        <location filename="../../CopyEngine.cpp" line="929"/>
+        <location filename="../../CopyEngine.cpp" line="941"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="923"/>
+        <location filename="../../CopyEngine.cpp" line="933"/>
         <source>Put at the end</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="927"/>
+        <location filename="../../CopyEngine.cpp" line="937"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="928"/>
+        <location filename="../../CopyEngine.cpp" line="938"/>
         <source>Overwrite if different</source>
         <translation>Écraser si différent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="929"/>
+        <location filename="../../CopyEngine.cpp" line="939"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="930"/>
+        <location filename="../../CopyEngine.cpp" line="940"/>
         <source>Overwrite if older</source>
         <translation>Écraser si plus vieux</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1001"/>
+        <location filename="../../CopyEngine.cpp" line="1011"/>
         <source>Options error</source>
         <translation>Erreur d&apos;options</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1001"/>
+        <location filename="../../CopyEngine.cpp" line="1011"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accédé aux filtres</translation>
     </message>
@@ -96,70 +96,70 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
+        <location filename="../../CopyEngineFactory.cpp" line="357"/>
+        <location filename="../../CopyEngineFactory.cpp" line="360"/>
         <location filename="../../CopyEngineFactory.cpp" line="365"/>
-        <location filename="../../CopyEngineFactory.cpp" line="368"/>
-        <location filename="../../CopyEngineFactory.cpp" line="373"/>
-        <location filename="../../CopyEngineFactory.cpp" line="377"/>
+        <location filename="../../CopyEngineFactory.cpp" line="369"/>
         <source>Ask</source>
         <translation>Demander</translation>
     </message>
     <message>
+        <location filename="../../CopyEngineFactory.cpp" line="358"/>
+        <location filename="../../CopyEngineFactory.cpp" line="362"/>
         <location filename="../../CopyEngineFactory.cpp" line="366"/>
         <location filename="../../CopyEngineFactory.cpp" line="370"/>
-        <location filename="../../CopyEngineFactory.cpp" line="374"/>
-        <location filename="../../CopyEngineFactory.cpp" line="378"/>
         <source>Skip</source>
         <translation>Passer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="369"/>
+        <location filename="../../CopyEngineFactory.cpp" line="361"/>
         <source>Merge</source>
         <translation>Fusionner</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="371"/>
-        <location filename="../../CopyEngineFactory.cpp" line="383"/>
+        <location filename="../../CopyEngineFactory.cpp" line="363"/>
+        <location filename="../../CopyEngineFactory.cpp" line="375"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="375"/>
+        <location filename="../../CopyEngineFactory.cpp" line="367"/>
         <source>Put at the end</source>
         <translation>Mettre à la fin</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="379"/>
+        <location filename="../../CopyEngineFactory.cpp" line="371"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="380"/>
+        <location filename="../../CopyEngineFactory.cpp" line="372"/>
         <source>Overwrite if different</source>
         <translation>Écraser si différent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="381"/>
+        <location filename="../../CopyEngineFactory.cpp" line="373"/>
         <source>Overwrite if newer</source>
         <translation>Écraser si plus récent</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="382"/>
+        <location filename="../../CopyEngineFactory.cpp" line="374"/>
         <source>Overwrite if older</source>
         <translation>Écraser si plus vieux</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="398"/>
-        <location filename="../../CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngineFactory.cpp" line="390"/>
+        <location filename="../../CopyEngineFactory.cpp" line="429"/>
         <source>Options error</source>
         <translation>Erreur d&apos;options</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="398"/>
+        <location filename="../../CopyEngineFactory.cpp" line="390"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Le moteur d&apos;options n&apos;est pas chargé. Impossible d&apos;accédé aux filtres</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngineFactory.cpp" line="429"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation>Moteur d&apos;options non chargé, impossible d&apos;accéder aux filtres</translation>
     </message>
@@ -208,22 +208,22 @@
 <context>
     <name>FileExistsDialog</name>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="187"/>
+        <location filename="../../FileExistsDialog.cpp" line="186"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="194"/>
+        <location filename="../../FileExistsDialog.cpp" line="193"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="285"/>
+        <location filename="../../FileExistsDialog.cpp" line="284"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileExistsDialog.cpp" line="285"/>
+        <location filename="../../FileExistsDialog.cpp" line="284"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -231,22 +231,22 @@
 <context>
     <name>FileIsSameDialog</name>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="141"/>
+        <location filename="../../FileIsSameDialog.cpp" line="140"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="148"/>
+        <location filename="../../FileIsSameDialog.cpp" line="147"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="221"/>
+        <location filename="../../FileIsSameDialog.cpp" line="220"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FileIsSameDialog.cpp" line="221"/>
+        <location filename="../../FileIsSameDialog.cpp" line="220"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -337,17 +337,17 @@
         <translation>Filtres</translation>
     </message>
     <message>
-        <location filename="../../Filters.ui" line="30"/>
+        <location filename="../../Filters.ui" line="39"/>
         <source>Exclusion filters</source>
         <translation>Filtres d&apos;exclusion</translation>
     </message>
     <message>
-        <location filename="../../Filters.ui" line="93"/>
+        <location filename="../../Filters.ui" line="111"/>
         <source>Inclusion filters</source>
         <translation>Filtres d&apos;inclusion</translation>
     </message>
     <message>
-        <location filename="../../Filters.ui" line="105"/>
+        <location filename="../../Filters.ui" line="132"/>
         <source>None = Include all</source>
         <translation>Aucun = tout inclure</translation>
     </message>
@@ -398,22 +398,22 @@
         <translation>Dossier déjà existant</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="165"/>
+        <location filename="../../FolderExistsDialog.cpp" line="164"/>
         <source>%name% - copy%suffix%</source>
         <translation>%name% - copie%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="174"/>
+        <location filename="../../FolderExistsDialog.cpp" line="173"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <translation>%name% - copie (%number%)%suffix%</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="241"/>
+        <location filename="../../FolderExistsDialog.cpp" line="240"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../FolderExistsDialog.cpp" line="241"/>
+        <location filename="../../FolderExistsDialog.cpp" line="240"/>
         <source>Try rename with using special characters</source>
         <translation>Essaie de renommage avec caratéres interdits</translation>
     </message>
@@ -516,12 +516,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="484"/>
+        <location filename="../../async/ReadThread.cpp" line="490"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="539"/>
+        <location filename="../../async/ReadThread.cpp" line="545"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -677,7 +677,7 @@
         <translation type="unfinished">Impossible de créer le dossier de destination, errno: %1</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="432"/>
+        <location filename="../../async/WriteThread.cpp" line="444"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>

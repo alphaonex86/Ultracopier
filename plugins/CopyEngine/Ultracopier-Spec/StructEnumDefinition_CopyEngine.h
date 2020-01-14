@@ -19,6 +19,8 @@ enum FileExistsAction
     FileExists_OverwriteIfNotSame=4,
     FileExists_OverwriteIfNewer=5,
     FileExists_OverwriteIfOlder=6,
+    FileExists_OverwriteIfNotSameSize=7,
+    FileExists_OverwriteIfNotSameSizeAndDate=8,
     FileExists_Rename=7
 };
 

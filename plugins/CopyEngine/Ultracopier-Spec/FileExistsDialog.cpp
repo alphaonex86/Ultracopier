@@ -30,8 +30,13 @@ FileExistsDialog::FileExistsDialog(QWidget *parent, INTERNALTYPEPATH source,
     oldName=TransferThread::resolvedName(TransferThread::internalStringTostring(destination));
     ui->lineEditNewName->setText(QString::fromStdString(oldName));
     ui->lineEditNewName->setPlaceholderText(QString::fromStdString(oldName));
+
     ui->Overwrite->addAction(ui->actionOverwrite_if_newer);
+    ui->Overwrite->addAction(ui->actionOverwrite_if_older);
     ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_modification_date);
+    ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_size);
+    ui->Overwrite->addAction(ui->actionOverwrite_if_not_same_size_and_date);
+
     ui->label_content_source_file_name->setText(QString::fromStdString(TransferThread::resolvedName(TransferThread::internalStringTostring(source))));
     std::string folder=TransferThread::internalStringTostring(FSabsolutePath(source));
     if(folder.size()>80)
@@ -293,4 +298,16 @@ void FileExistsDialog::on_actionOverwrite_if_older_triggered()
 void FileExistsDialog::on_lineEditNewName_editingFinished()
 {
     updateRenameButton();
+}
+
+void FileExistsDialog::on_actionOverwrite_if_not_same_size_triggered()
+{
+    action=FileExists_OverwriteIfNotSameSize;
+    this->close();
+}
+
+void FileExistsDialog::on_actionOverwrite_if_not_same_size_and_date_triggered()
+{
+    action=FileExists_OverwriteIfNotSameSizeAndDate;
+    this->close();
 }
