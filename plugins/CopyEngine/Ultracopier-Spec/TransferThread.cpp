@@ -883,7 +883,7 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
                 return -1;
             }
             CloseHandle(hFileSouce);
-            return ftWrite.dwLowDateTime + 2^32 * ftWrite.dwHighDateTime;
+            return ftWrite.dwLowDateTime + (2^32 * ftWrite.dwHighDateTime);
         #else
             return -1;
         #endif
@@ -941,7 +941,7 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
             this->ftAccess=ftAccess;
             this->ftWrite=ftWrite;
             CloseHandle(hFileSouce);
-            const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + (uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime;
+            const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + ((uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime);
             if(modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
             {
                 //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());
