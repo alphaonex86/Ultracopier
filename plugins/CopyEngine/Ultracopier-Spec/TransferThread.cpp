@@ -41,9 +41,7 @@ TransferThread::TransferThread() :
     id=0;
     renameRegex=std::regex("^(.*)(\\.[a-zA-Z0-9]+)$");
     #ifdef Q_OS_WIN32
-        #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-            regRead=std::regex("^[a-zA-Z]:");
-        #endif
+        regRead=std::regex("^[a-zA-Z]:");
     #endif
     transferSize                    = 0;//external set by ListThread
 
@@ -874,25 +872,18 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
         #endif
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                struct stat info;
-                if(stat(TransferThread::internalStringTostring(source).c_str(),&info)!=0)
-                    return -1;
-                return info.st_mtime;
-            #else
-                HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
-                if(hFileSouce == INVALID_HANDLE_VALUE)
-                    return -1;
-                FILETIME ftCreate, ftAccess, ftWrite;
-                if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
-                {
-                    CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time: "+std::to_string(GetLastError()));
-                    return -1;
-                }
+            HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
+            if(hFileSouce == INVALID_HANDLE_VALUE)
+                return -1;
+            FILETIME ftCreate, ftAccess, ftWrite;
+            if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
+            {
                 CloseHandle(hFileSouce);
-                return this->ftWriteL=ftWrite.dwLowDateTime + 2^32 * ftWrite.dwHighDateTime;
-            #endif
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time: "+TransferThread::GetLastErrorStdStr());
+                return -1;
+            }
+            CloseHandle(hFileSouce);
+            return ftWrite.dwLowDateTime + 2^32 * ftWrite.dwHighDateTime;
         #else
             return -1;
         #endif
@@ -933,52 +924,30 @@ bool TransferThread::readSourceFileDateTime(const INTERNALTYPEPATH &source)
         return true;
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                struct stat info;
-                if(stat(TransferThread::internalStringTostring(source).c_str(),&info)!=0)
-                    return false;
-                time_t ctime=info.st_ctime;
-                time_t actime=info.st_atime;
-                time_t modtime=info.st_mtime;
-                //this function avalaible on unix and mingw
-                butime.actime=actime;
-                butime.modtime=modtime;
-                if((uint64_t)modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+TransferThread::internalStringTostring(source));
-                    return false;
-                }
-                Q_UNUSED(ctime);
-                return true;
-            #else
-                HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
-                if(hFileSouce == INVALID_HANDLE_VALUE)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
-                    return false;
-                }
-                FILETIME ftCreate, ftAccess, ftWrite;
-                if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
-                {
-                    CloseHandle(hFileSouce);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time");
-                    return false;
-                }
-                this->ftCreateL=ftCreate.dwLowDateTime;
-                this->ftCreateH=ftCreate.dwHighDateTime;
-                this->ftAccessL=ftAccess.dwLowDateTime;
-                this->ftAccessH=ftAccess.dwHighDateTime;
-                this->ftWriteL=ftWrite.dwLowDateTime;
-                this->ftWriteH=ftWrite.dwHighDateTime;
+            HANDLE hFileSouce = CreateFileW(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
+            if(hFileSouce == INVALID_HANDLE_VALUE)
+            {
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to read: "+QString::fromWCharArray(filePath).toStdString()+", error: "+TransferThread::GetLastErrorStdStr());
+                return false;
+            }
+            FILETIME ftCreate, ftAccess, ftWrite;
+            if(!GetFileTime(hFileSouce, &ftCreate, &ftAccess, &ftWrite))
+            {
                 CloseHandle(hFileSouce);
-                const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + (uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime;
-                if(modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());
-                    return false;
-                }
-                return true;
-            #endif
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to get the file time");
+                return false;
+            }
+            this->ftCreate=ftCreate;
+            this->ftAccess=ftAccess;
+            this->ftWrite=ftWrite;
+            CloseHandle(hFileSouce);
+            const uint64_t modtime=(uint64_t)ftWrite.dwLowDateTime + (uint64_t)2^32 * (uint64_t)ftWrite.dwHighDateTime;
+            if(modtime<ULTRACOPIER_PLUGIN_MINIMALYEAR_TIMESTAMPS)
+            {
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] the sources is older to copy the time: "+source+": "+source.lastModified().toString().toStdString());
+                return false;
+            }
+            return true;
         #else
             return false;
         #endif
@@ -994,31 +963,24 @@ bool TransferThread::writeDestinationFileDateTime(const INTERNALTYPEPATH &destin
         return utime(TransferThread::internalStringTostring(destination).c_str(),&butime)==0;
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                return utime(TransferThread::internalStringTostring(destination).c_str(),&butime)==0;
-            #else
-                HANDLE hFileDestination = CreateFileW(TransferThread::toFinalPath(source), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-                if(hFileDestination == INVALID_HANDLE_VALUE)
-                {
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+std::to_string(GetLastError()));
-                    return false;
-                }
-                FILETIME ftCreate, ftAccess, ftWrite;
-                ftCreate.dwLowDateTime=this->ftCreateL;
-                ftCreate.dwHighDateTime=this->ftCreateH;
-                ftAccess.dwLowDateTime=this->ftAccessL;
-                ftAccess.dwHighDateTime=this->ftAccessH;
-                ftWrite.dwLowDateTime=this->ftWriteL;
-                ftWrite.dwHighDateTime=this->ftWriteH;
-                if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
-                {
-                    CloseHandle(hFileDestination);
-                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to set the file time");
-                    return false;
-                }
+            HANDLE hFileDestination = CreateFileW(TransferThread::toFinalPath(destination).c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+            if(hFileDestination == INVALID_HANDLE_VALUE)
+            {
+                //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] open failed to write: "+QString::fromWCharArray(filePath).toStdString()+", error: "+TransferThread::GetLastErrorStdStr());
+                return false;
+            }
+            FILETIME ftCreate, ftAccess, ftWrite;
+            ftCreate=this->ftCreate;
+            ftAccess=this->ftAccess;
+            ftWrite=this->ftWrite;
+            if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
+            {
                 CloseHandle(hFileDestination);
-                return true;
-            #endif
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] unable to set the file time");
+                return false;
+            }
+            CloseHandle(hFileDestination);
+            return true;
         #else
             return false;
         #endif
@@ -1037,7 +999,7 @@ bool TransferThread::readSourceFilePermissions(const INTERNALTYPEPATH &source)
     HANDLE hFile = CreateFileW(source.c_str(), GENERIC_READ ,
             FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+std::to_string(GetLastError()));
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr());
       return false;
     }
     DWORD lasterror = GetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION,
@@ -1062,7 +1024,7 @@ bool TransferThread::writeDestinationFilePermissions(const INTERNALTYPEPATH &des
     #else
     HANDLE hFile = CreateFileW(destination.c_str(),READ_CONTROL | WRITE_OWNER | WRITE_DAC | ACCESS_SYSTEM_SECURITY,0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
-      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+std::to_string(GetLastError()));
+      ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] CreateFile() failed. Error: INVALID_HANDLE_VALUE: "+TransferThread::GetLastErrorStdStr());
       return false;
     }
     DWORD lasterror = SetSecurityInfo(hFile, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION , NULL, NULL, dacl, NULL);
@@ -1137,7 +1099,7 @@ bool TransferThread::is_symlink(const char * const filename)
 {
     #ifdef Q_OS_WIN32
     (void)filename;
-    return true;
+    return false;
     #else
     struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)

@@ -240,13 +240,10 @@ protected:
         utimbuf butime;
     #else
         #ifdef Q_OS_WIN32
-            #ifdef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-                utimbuf butime;
-            #else
-                uint32_t ftCreateL, ftAccessL, ftWriteL;
-                uint32_t ftCreateH, ftAccessH, ftWriteH;
-                std::regex regRead;
-            #endif
+            FILETIME ftCreate, ftAccess, ftWrite;
+            std::regex regRead;
+        #else
+            #error Not unix, not windows, fix this
         #endif
     #endif
     #ifdef Q_OS_UNIX
