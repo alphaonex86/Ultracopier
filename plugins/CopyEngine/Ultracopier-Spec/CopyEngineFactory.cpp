@@ -166,21 +166,13 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("keepDate","true"));
         #endif
         KeysList.push_back(std::pair<std::string, std::string>("blockSize",std::to_string(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));
-        uint32_t sequentialBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_SEQUENTIAL_NUMBER_OF_BLOCK;
-        uint32_t parallelBuffer=ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE*ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
         //to prevent swap and other bad effect, only under windows and unix for now
         #if defined(Q_OS_WIN32) or (defined(Q_OS_LINUX) and defined(_SC_PHYS_PAGES))
         size_t max_memory=getTotalSystemMemory()/1024;
-        if(max_memory>0)
-        {
-            if(max_memory>2147483648)
-                max_memory=2147483648;
-            if(sequentialBuffer>(max_memory/10))
-               sequentialBuffer=max_memory/10;
-            if(parallelBuffer>(max_memory/100))
-               parallelBuffer=max_memory/100;
-        }
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("detected memory: %1MB").arg(max_memory/1024).toStdString());
+        if(max_memory>2147483648)
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("detected memory: %1MB").arg(max_memory/1024).toStdString());
+        else
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,QStringLiteral("detected memory: %1GB").arg(max_memory/(1024*1024)).toStdString());
         #endif
         KeysList.push_back(std::pair<std::string, std::string>("parallelizeIfSmallerThan",std::to_string(128)));//128KB, better for modern hardware: Multiple queue en linux, SSD, ...
         KeysList.push_back(std::pair<std::string, std::string>("autoStart","true"));

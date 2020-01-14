@@ -1045,7 +1045,9 @@ XZ_EXTERN enum xz_ret XZ_FUNC xz_dec_lzma2_run(
                 return XZ_DATA_ERROR;
 
             s->lzma2.sequence = SEQ_LZMA_PREPARE;
+            #ifndef __clang__
             __attribute__ ((fallthrough));
+            #endif
         case SEQ_LZMA_PREPARE:
             if (s->lzma2.compressed < RC_INIT_BYTES)
                 return XZ_DATA_ERROR;
@@ -1055,7 +1057,9 @@ XZ_EXTERN enum xz_ret XZ_FUNC xz_dec_lzma2_run(
 
             s->lzma2.compressed -= RC_INIT_BYTES;
             s->lzma2.sequence = SEQ_LZMA_RUN;
+            #ifndef __clang__
             __attribute__ ((fallthrough));
+            #endif
         case SEQ_LZMA_RUN:
             /*
              * Set dictionary limit to indicate how much we want
