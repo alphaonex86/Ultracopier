@@ -235,8 +235,11 @@ bool WriteThread::internalOpen()
     #ifdef Q_OS_UNIX
     to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT);
     #else
+    DWORD flags=FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN;
+    if(buffer)
+        flags|=FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING;
     to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,CREATE_ALWAYS,
-                   FILE_ATTRIBUTE_NORMAL,NULL);
+                   flags,NULL);
     #endif
     #ifdef Q_OS_UNIX
     if(to>=0)

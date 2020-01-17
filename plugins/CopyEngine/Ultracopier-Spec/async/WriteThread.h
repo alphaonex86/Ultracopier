@@ -43,6 +43,7 @@ public:
     //can't be static into WriteThread, linked by instance then by ListThread
     QMultiHash<QString,WriteThread *> *writeFileList;
     QMutex       *writeFileListMutex;
+    bool buffer;
 protected:
     void run();
 public:

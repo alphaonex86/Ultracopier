@@ -767,7 +767,7 @@ void TransferThread::setRightTransfer(const bool doRightTransfer)
 /// \brief set buffer
 void TransferThread::setBuffer(const bool buffer)
 {
-    this->buffer=buffer;
+    Q_UNUSED(buffer);
 }
 
 //set keep date
@@ -1396,7 +1396,7 @@ std::string TransferThread::GetLastErrorStdStr()
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         error,
-        MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+        MAKELANGID(LANG_SYSTEM_DEFAULT, SUBLANG_DEFAULT),
         (LPSTR) &lpMsgBuf,
         0, NULL );
     if (bufLen)
@@ -1405,8 +1405,9 @@ std::string TransferThread::GetLastErrorStdStr()
       LocalFree(lpMsgBuf);
       return result+" ("+std::to_string(error)+")";
     }
+    return "1: "+std::to_string(error);
   }
-  return std::string();
+  return "2: "+std::to_string(error);
 }
 #else
 bool TransferThread::unlink(const INTERNALTYPEPATH &path)

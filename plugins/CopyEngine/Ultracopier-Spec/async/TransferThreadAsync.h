@@ -80,6 +80,7 @@ public:
     bool haveStartTime;
     ReadThread readThread;
     WriteThread writeThread;
+    void setBuffer(const bool buffer);
 protected:
     void run();
 private slots:

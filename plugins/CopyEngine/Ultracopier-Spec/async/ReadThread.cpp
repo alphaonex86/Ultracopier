@@ -188,7 +188,18 @@ int64_t ReadThread::size() const
     #else
     LARGE_INTEGER lpFileSize;
     if(!GetFileSizeEx(from,&lpFileSize))
-        return -1;
+    {
+        WIN32_FILE_ATTRIBUTE_DATA sourceW;
+        if(GetFileAttributesExW(source.c_str(),GetFileExInfoStandard,&sourceW))
+        {
+            uint64_t size=sourceW.nFileSizeHigh;
+            size<<=32;
+            size|=sourceW.nFileSizeLow;
+            return size;
+        }
+        else
+            return -1;
+    }
     else
         return lpFileSize.QuadPart;
     #endif
@@ -237,7 +248,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     #ifdef Q_OS_UNIX
     from = ::open(TransferThread::internalStringTostring(file).c_str(), O_RDONLY);
     #else
-    from=CreateFileW(file.c_str(),GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+    from=CreateFileW(file.c_str(),GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,NULL);
     #endif
     #ifdef Q_OS_UNIX
     if(from>=0)
@@ -352,17 +363,18 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     else
     {
         #ifdef Q_OS_WIN32
+        const int e=GetLastError();
         from=NULL;
         errorString_internal=TransferThread::GetLastErrorStdStr();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
-                                 "Unable to seek after open: "+TransferThread::internalStringTostring(file)+
-                                 ", error: "+errorString_internal
+                                 "Unable to open: "+TransferThread::internalStringTostring(file)+
+                                 ", error: "+errorString_internal+" ("+std::to_string(e)+")"
                                  );
         #else
         int t=errno;
         errorString_internal=strerror(t);
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
-                                 "Unable to seek after open: "+TransferThread::internalStringTostring(file)+
+                                 "Unable to open: "+TransferThread::internalStringTostring(file)+
                                  ", error: "+errorString_internal+" ("+std::to_string(t)+")"
                                  );
         #endif

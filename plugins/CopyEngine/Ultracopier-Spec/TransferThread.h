@@ -179,7 +179,7 @@ public slots:
     /// \brief set the copy info and options before runing
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set buffer
-    void setBuffer(const bool buffer);
+    virtual void setBuffer(const bool buffer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
     /// \brief put the current file at bottom
@@ -260,7 +260,6 @@ protected:
 protected:
     QTime startTransferTime;
     bool haveTransferTime;
-    bool buffer;
 };
 
 #endif // TRANSFERTHREAD_H

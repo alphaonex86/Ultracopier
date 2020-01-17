@@ -342,6 +342,12 @@ void TransferThreadAsync::setProgression(const uint64_t &pos, const uint64_t &si
 }
 #endif
 
+/// \brief set buffer
+void TransferThreadAsync::setBuffer(const bool buffer)
+{
+    writeThread.buffer=buffer;
+}
+
 void TransferThreadAsync::ifCanStartTransfer()
 {
     realMove=false;
@@ -1120,6 +1126,7 @@ void TransferThreadAsync::read_opened()
         return;
     }
     readIsOpenVariable=true;
+    transferSize=readThread.size();
     if(writeIsOpenVariable)
         readThread.startRead();
 }
@@ -1132,7 +1139,6 @@ void TransferThreadAsync::write_opened()
         return;
     }
     writeIsOpenVariable=true;
-    transferSize=readThread.size();
     if(readIsOpenVariable)
         readThread.startRead();
 }
