@@ -183,14 +183,26 @@ int64_t ReadThread::size() const
 {
     #ifdef Q_OS_UNIX
     struct stat st;
-    fstat(from, &st);
-    return st.st_size;
+    if(fstat(from, &st)==0)
+        return st.st_size;
+    else
+    {
+        struct stat source_statbuf;
+        #ifdef Q_OS_UNIX
+        if(lstat(TransferThread::internalStringTostring(file).c_str(), &source_statbuf)==0)
+        #else
+        if(stat(TransferThread::internalStringTostring(file).c_str(), &source_statbuf)==0)
+        #endif
+            return source_statbuf.st_size;
+        else
+            return -1;
+    }
     #else
     LARGE_INTEGER lpFileSize;
     if(!GetFileSizeEx(from,&lpFileSize))
     {
         WIN32_FILE_ATTRIBUTE_DATA sourceW;
-        if(GetFileAttributesExW(source.c_str(),GetFileExInfoStandard,&sourceW))
+        if(GetFileAttributesExW(file.c_str(),GetFileExInfoStandard,&sourceW))
         {
             uint64_t size=sourceW.nFileSizeHigh;
             size<<=32;
