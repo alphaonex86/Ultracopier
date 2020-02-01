@@ -33,11 +33,6 @@ MkPath::MkPath() :
     setObjectName("MkPath");
     moveToThread(this);
     start();
-    #ifdef Q_OS_WIN32
-        #ifndef ULTRACOPIER_PLUGIN_SET_TIME_UNIX_WAY
-            regRead=std::regex("^[a-zA-Z]:");
-        #endif
-    #endif
 }
 
 MkPath::~MkPath()

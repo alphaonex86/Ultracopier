@@ -149,14 +149,10 @@ std::vector<INTERNALTYPEPATH> ScanFileOrFolder::parseWildcardSources(const std::
                     {
                         std::string fileInfo(stringimplode(recomposedSource.at(index_recomposedSource),TransferThread::internalStringTostring(text_slash)));
                         std::vector<TransferThread::dirent_uc> list;
-                        struct stat p_statbuf;
-                        #ifdef Q_OS_UNIX
-                        if(lstat(fileInfo.c_str(), &p_statbuf)==0)
-                        #else
-                        if(stat(fileInfo.c_str(), &p_statbuf)==0)
-                        #endif
+
+                        if(TransferThread::is_dir(fileInfo.c_str()))
                         {
-                            if(S_ISDIR(p_statbuf.st_mode) && TransferThread::entryInfoList(TransferThread::stringToInternalString(fileInfo),list))
+                            if(TransferThread::entryInfoList(TransferThread::stringToInternalString(fileInfo),list))
                             {
                                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"list the folder: "+fileInfo+", with the wildcard: "+toParseFirst);
                                 unsigned int index_fileList=0;

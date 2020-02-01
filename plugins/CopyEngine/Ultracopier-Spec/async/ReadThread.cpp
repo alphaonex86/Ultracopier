@@ -375,8 +375,8 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     else
     {
         #ifdef Q_OS_WIN32
-        const int e=GetLastError();
         from=NULL;
+        DWORD e = GetLastError();
         errorString_internal=TransferThread::GetLastErrorStdStr();
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                  "Unable to open: "+TransferThread::internalStringTostring(file)+

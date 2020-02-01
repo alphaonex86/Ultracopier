@@ -297,20 +297,37 @@ void CopyEngine::errorOnFile(INTERNALTYPEPATH fileInfo,std::string errorString,T
 
             uint64_t size=0;
             uint64_t mdate=0;
-            struct stat p_statbuf;
-            if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
+            #ifdef Q_OS_WIN32
+            WIN32_FILE_ATTRIBUTE_DATA sourceW;
+            if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&sourceW))
             {
-                size=p_statbuf.st_size;
+                mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+                mdate<<=32;
+                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+                size=sourceW.nFileSizeHigh;
+                size<<=32;
+                size|=sourceW.nFileSizeLow;
+            }
+            #else
+            struct stat source_statbuf;
+            #ifdef Q_OS_UNIX
+            if(lstat(TransferThread::internalStringTostring(fileInfo).c_str(), &source_statbuf)==0)
+            #else
+            if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &source_statbuf)==0)
+            #endif
+            {
                 #ifdef Q_OS_UNIX
                     #ifdef Q_OS_MAC
-                    mdate=p_statbuf.st_mtimespec.tv_sec;
+                    mdate=source_statbuf.st_mtimespec.tv_sec;
                     #else
-                    mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
                     #endif
                 #else
-                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+                mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
                 #endif
+                size=source_statbuf.st_size;
             }
+            #endif
 
             emit error(TransferThread::internalStringTostring(fileInfo),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,fileInfo,errorString,errorType,facilityEngine);
@@ -471,20 +488,37 @@ void CopyEngine::errorOnFolder(INTERNALTYPEPATH fileInfo, std::string errorStrin
 
             uint64_t size=0;
             uint64_t mdate=0;
-            struct stat p_statbuf;
-            if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &p_statbuf)==0)
+            #ifdef Q_OS_WIN32
+            WIN32_FILE_ATTRIBUTE_DATA sourceW;
+            if(GetFileAttributesExW(fileInfo.c_str(),GetFileExInfoStandard,&sourceW))
             {
-                size=p_statbuf.st_size;
+                mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+                mdate<<=32;
+                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+                size=sourceW.nFileSizeHigh;
+                size<<=32;
+                size|=sourceW.nFileSizeLow;
+            }
+            #else
+            struct stat source_statbuf;
+            #ifdef Q_OS_UNIX
+            if(lstat(TransferThread::internalStringTostring(fileInfo).c_str(), &source_statbuf)==0)
+            #else
+            if(stat(TransferThread::internalStringTostring(fileInfo).c_str(), &source_statbuf)==0)
+            #endif
+            {
                 #ifdef Q_OS_UNIX
                     #ifdef Q_OS_MAC
-                    mdate=p_statbuf.st_mtimespec.tv_sec;
+                    mdate=source_statbuf.st_mtimespec.tv_sec;
                     #else
-                    mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
                     #endif
                 #else
-                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+                mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
                 #endif
+                size=source_statbuf.st_size;
             }
+            #endif
 
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"show dialog");
             emit error(TransferThread::internalStringTostring(fileInfo),size,mdate,errorString);
@@ -554,20 +588,37 @@ void CopyEngine::mkPathErrorOnFolder(INTERNALTYPEPATH folder, std::string errorS
 
             uint64_t size=0;
             uint64_t mdate=0;
-            struct stat p_statbuf;
-            if(stat(TransferThread::internalStringTostring(folder).c_str(), &p_statbuf)==0)
+            #ifdef Q_OS_WIN32
+            WIN32_FILE_ATTRIBUTE_DATA sourceW;
+            if(GetFileAttributesExW(folder.c_str(),GetFileExInfoStandard,&sourceW))
             {
-                size=p_statbuf.st_size;
+                mdate=sourceW.ftLastWriteTime.dwHighDateTime;
+                mdate<<=32;
+                mdate|=sourceW.ftLastWriteTime.dwLowDateTime;
+                size=sourceW.nFileSizeHigh;
+                size<<=32;
+                size|=sourceW.nFileSizeLow;
+            }
+            #else
+            struct stat source_statbuf;
+            #ifdef Q_OS_UNIX
+            if(lstat(TransferThread::internalStringTostring(folder).c_str(), &source_statbuf)==0)
+            #else
+            if(stat(TransferThread::internalStringTostring(folder).c_str(), &source_statbuf)==0)
+            #endif
+            {
                 #ifdef Q_OS_UNIX
                     #ifdef Q_OS_MAC
-                    mdate=p_statbuf.st_mtimespec.tv_sec;
+                    mdate=source_statbuf.st_mtimespec.tv_sec;
                     #else
-                    mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtim);
+                    mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtim);
                     #endif
                 #else
-                mdate=*reinterpret_cast<int64_t*>(&p_statbuf.st_mtime);
+                mdate=*reinterpret_cast<int64_t*>(&source_statbuf.st_mtime);
                 #endif
+                size=source_statbuf.st_size;
             }
+            #endif
 
             emit error(TransferThread::internalStringTostring(folder),size,mdate,errorString);
             FileErrorDialog dialog(uiinterface,folder,errorString,errorType,facilityEngine);

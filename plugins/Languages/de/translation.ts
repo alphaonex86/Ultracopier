@@ -1878,12 +1878,12 @@ seit: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="490"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="514"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="545"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/ReadThread.cpp" line="569"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2193,14 +2193,14 @@ seit: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="369"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="387"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="375"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="393"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="372"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="389"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="378"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/TransferThreadAsync.cpp" line="395"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2225,7 +2225,7 @@ seit: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="444"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/async/WriteThread.cpp" line="447"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>

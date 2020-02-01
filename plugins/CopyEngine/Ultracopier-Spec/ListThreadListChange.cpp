@@ -3,15 +3,7 @@
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
 
-#if defined(SYNCFILEMANIP)
-#include "sync/TransferThreadSync.h"
-#else
-    #if defined(FSCOPYASYNC)
-    #include "async/TransferThreadAsync.h"
-    #else
-    #error not sync and async set
-    #endif
-#endif
+#include "async/TransferThreadAsync.h"
 
 //warning the first entry is accessible will copy
 void ListThread::removeItems(const std::vector<uint64_t> &ids)

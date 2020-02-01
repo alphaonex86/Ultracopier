@@ -266,8 +266,8 @@ void TransferModel::appendToTree(const std::string &path,const uint64_t &size)
     }
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     //check the integrity of tree
-    checkIntegrityChildren(tree);
-    checkIntegritySize(tree);
+    /*now it's mostly stable checkIntegrityChildren(tree);
+    checkIntegritySize(tree);*/
     #endif
 }
 

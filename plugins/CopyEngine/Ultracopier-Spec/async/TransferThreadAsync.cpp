@@ -399,6 +399,17 @@ void TransferThreadAsync::ifCanStartTransfer()
     }
     #endif
 
+    /* http://www.flexhex.com/docs/articles/hard-links.phtml
+     * Do here the smblink logic
+     * Under windows: BOOLEAN CreateSymbolicLinkA(
+  LPCSTR lpSymlinkFileName,
+  LPCSTR lpTargetFileName,
+  DWORD  dwFlags
+  unix: int symlink(const char *target, const char *linkpath);
+);
+
+    */
+
     emit pushStat(transfer_stat,transferId);
     realMove=(mode==Ultracopier::Move && driveManagement.isSameDrive(
                        internalStringTostring(source),

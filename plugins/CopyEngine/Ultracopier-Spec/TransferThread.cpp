@@ -1092,14 +1092,23 @@ void TransferThread::set_updateMount()
 
 bool TransferThread::is_symlink(const INTERNALTYPEPATH &filename)
 {
+    #ifdef Q_OS_WIN32
+    DWORD dwAttrib = GetFileAttributesW(TransferThread::toFinalPath(filename).c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+           (dwAttrib & FILE_ATTRIBUTE_DIRECTORY && dwAttrib & FILE_ATTRIBUTE_REPARSE_POINT)
+            );
+    #else
     return is_symlink(TransferThread::internalStringTostring(filename).c_str());
+    #endif
 }
 
 bool TransferThread::is_symlink(const char * const filename)
 {
     #ifdef Q_OS_WIN32
-    (void)filename;
-    return false;
+    DWORD dwAttrib = GetFileAttributesA(TransferThread::toFinalPath(filename).c_str());
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+           (dwAttrib & FILE_ATTRIBUTE_DIRECTORY && dwAttrib & FILE_ATTRIBUTE_REPARSE_POINT)
+            );
     #else
     struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)
@@ -1343,7 +1352,8 @@ int TransferThread::ftruncate64(int __fd, uint64_t __length)
     #if defined(__HAIKU__) || defined(Q_OS_MAC) || defined(ANDROID) || defined(__ANDROID_API__)
     return ::ftruncate(__fd,__length);
     #else
-    return ::ftruncate64(__fd,__length);
+    //return ::ftruncate64(__fd,__length);
+    return ::ftruncate(__fd,__length);
     #endif
 }
 

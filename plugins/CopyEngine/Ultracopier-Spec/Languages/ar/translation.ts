@@ -516,12 +516,12 @@
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="490"/>
+        <location filename="../../async/ReadThread.cpp" line="514"/>
         <source>Unable to read the source file: </source>
         <translation>غير قادر على قراءه الملف المصدر:</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="545"/>
+        <location filename="../../async/ReadThread.cpp" line="569"/>
         <source>File truncated during the read, possible data change</source>
         <translation>تم اقتطاع الملف اثناء القراءة ، وتغيير البيانات المحتملة</translation>
     </message>
@@ -645,14 +645,14 @@
         <translation>تاريخ تعديل خاطئ أو غير قادر علي الحصول عليه ، يمكنك تعطيل نقل الوقت للقيام بذلك</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="369"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="387"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="375"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="393"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">غير قادر على إنشاء مجلد الوجهة:</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="372"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="389"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="395"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
@@ -677,7 +677,7 @@
         <translation>errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>
     <message>
-        <location filename="../../async/WriteThread.cpp" line="444"/>
+        <location filename="../../async/WriteThread.cpp" line="447"/>
         <source>Internal error, please report it!</source>
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>

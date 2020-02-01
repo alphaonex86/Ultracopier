@@ -2,16 +2,7 @@
 #include <QStorageInfo>
 #include <QtGlobal>
 #include "../../../cpp11addition.h"
-
-#if defined(SYNCFILEMANIP)
-#include "sync/TransferThreadSync.h"
-#else
-    #if defined(FSCOPYASYNC)
-    #include "async/TransferThreadAsync.h"
-    #else
-    #error not sync and async set
-    #endif
-#endif
+#include "async/TransferThreadAsync.h"
 
 // -> add thread safe, by Qt::BlockingQueuedConnection
 bool ListThread::haveSameSource(const std::vector<std::string> &sources)

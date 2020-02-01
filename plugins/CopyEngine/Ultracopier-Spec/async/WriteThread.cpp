@@ -952,7 +952,7 @@ void WriteThread::internalWrite()
         }
         if(stopIt)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt");
+//            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stopIt");
             return;
         }
         if(stopIt)
@@ -1021,14 +1021,24 @@ void WriteThread::internalWrite()
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Write;
         #endif
+
         #ifdef Q_OS_WIN32
-        DWORD lpNumberOfBytesRead=0;
-        const BOOL retRead=WriteFile(to,blockArray.data(),blockArray.size(),
-                                     &lpNumberOfBytesRead,NULL);
-        bytesWriten=lpNumberOfBytesRead;
-        #else
-        bytesWriten=::write(to,blockArray.data(),blockArray.size());
+        BOOL retRead=TRUE;
         #endif
+        if(blockArray.size()<=0)
+            bytesWriten=0;
+        else
+        {
+            #ifdef Q_OS_WIN32
+            DWORD lpNumberOfBytesWrite=0;
+            retRead=WriteFile(to,blockArray.data(),blockArray.size(),
+                                         &lpNumberOfBytesWrite,NULL);
+            bytesWriten=lpNumberOfBytesWrite;
+            #else
+            bytesWriten=::write(to,blockArray.data(),blockArray.size());
+            #endif
+        }
+
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
         #endif
@@ -1047,17 +1057,18 @@ void WriteThread::internalWrite()
         #endif
         {
             #ifdef Q_OS_WIN32
+            DWORD e = GetLastError();
             errorString_internal=TransferThread::GetLastErrorStdStr();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                      "Unable to write: "+TransferThread::internalStringTostring(file)+
-                                     ", error: "+errorString_internal
+                                     ", error: "+errorString_internal+" ("+std::to_string(e)+") to write "+std::to_string(blockArray.size())+"B at "+std::to_string(lastGoodPosition)+"B"
                                      );
             #else
             int t=errno;
             errorString_internal=strerror(t);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                      "Unable to write: "+TransferThread::internalStringTostring(file)+
-                                     ", error: "+errorString_internal+" ("+std::to_string(t)+")"
+                                     ", error: "+errorString_internal+" ("+std::to_string(t)+") to write "+std::to_string(blockArray.size())+"B at "+std::to_string(lastGoodPosition)+"B"
                                      );
             #endif
             stopIt=true;
