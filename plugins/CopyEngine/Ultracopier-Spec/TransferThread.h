@@ -129,8 +129,8 @@ public:
     };
     static bool entryInfoList(const INTERNALTYPEPATH &path, std::vector<dirent_uc> &list);
     void setMkFullPath(const bool mkFullPath);
-    static int fseeko64(FILE *__stream, uint64_t __off, int __whence);
-    static int ftruncate64(int __fd, uint64_t __length);
+    /*static int fseeko64(FILE *__stream, uint64_t __off, int __whence);
+    static int ftruncate64(int __fd, uint64_t __length);*/
     static bool rename(const INTERNALTYPEPATH &source, const INTERNALTYPEPATH &destination);
 protected:
     void run();

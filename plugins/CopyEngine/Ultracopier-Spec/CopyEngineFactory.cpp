@@ -193,7 +193,6 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("doChecksum","false"));
         KeysList.push_back(std::pair<std::string, std::string>("checksumIgnoreIfImpossible","true"));
         KeysList.push_back(std::pair<std::string, std::string>("checksumOnlyOnError","true"));
-        KeysList.push_back(std::pair<std::string, std::string>("osBuffer","false"));
         KeysList.push_back(std::pair<std::string, std::string>("firstRenamingRule",""));
         KeysList.push_back(std::pair<std::string, std::string>("otherRenamingRule",""));
         KeysList.push_back(std::pair<std::string, std::string>("osBufferLimited","false"));
@@ -205,7 +204,14 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
         KeysList.push_back(std::pair<std::string, std::string>("inodeThreads",std::to_string(16)));
+        #ifdef Q_OS_WIN32
+        //un Windows, without buffer the write seam should be aligned and full block, Ultracopier not support this
+        KeysList.push_back(std::pair<std::string, std::string>("osBuffer","true"));
+        KeysList.push_back(std::pair<std::string, std::string>("buffer","true"));
+        #else
+        KeysList.push_back(std::pair<std::string, std::string>("osBuffer","false"));
         KeysList.push_back(std::pair<std::string, std::string>("buffer","false"));
+        #endif
         options->addOptionGroup(KeysList);
 
         optionsEngine=options;

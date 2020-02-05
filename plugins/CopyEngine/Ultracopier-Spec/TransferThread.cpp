@@ -319,6 +319,7 @@ bool TransferThread::destinationExists()
             #endif
             )
         return false;
+
     bool destinationExists=false;
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] time to first FS access");
     destinationExists=is_file(destination);
@@ -342,7 +343,31 @@ bool TransferThread::destinationExists()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNewer || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNewer))
             {
-                if(readFileMDateTime(destination)<readFileMDateTime(source))
+                const int64_t &sm=readFileMDateTime(source);
+                const int64_t &sd=readFileMDateTime(destination);
+                if(sm==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(source,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(source,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                if(sd==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(destination,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(destination,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileMDateTime(source): "+std::to_string(sm));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileMDateTime(destination): "+std::to_string(sd));
+                if(sm>sd || sm==-1 || sd==-1)
                     return false;
                 else
                 {
@@ -355,7 +380,31 @@ bool TransferThread::destinationExists()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfOlder || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfOlder))
             {
-                if(readFileMDateTime(destination)>readFileMDateTime(source))
+                const int64_t &sm=readFileMDateTime(source);
+                const int64_t &sd=readFileMDateTime(destination);
+                if(sm==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(source,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(source,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                if(sd==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(destination,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(destination,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileMDateTime(source): "+std::to_string(sm));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileMDateTime(destination): "+std::to_string(sd));
+                if(sm<sd/* || sm==-1 || sd==-1*/)
                     return false;
                 else
                 {
@@ -368,7 +417,31 @@ bool TransferThread::destinationExists()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNotSame || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
             {
-                if(readFileMDateTime(destination)!=readFileMDateTime(source))
+                const int64_t &sm=readFileMDateTime(source);
+                const int64_t &sd=readFileMDateTime(destination);
+                if(sm==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(source,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(source,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                if(sd==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(destination,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(destination,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileMDateTime(source): "+std::to_string(sm));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] readFileMDateTime(destination): "+std::to_string(sd));
+                if(sm!=sd || sm==-1 || sd==-1)
                     return false;
                 else
                 {
@@ -381,7 +454,7 @@ bool TransferThread::destinationExists()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNotSameSize || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
             {
-                if(file_stat_size(destination)!=file_stat_size(source))
+                if(file_stat_size(source)!=file_stat_size(destination))
                     return false;
                 else
                 {
@@ -394,7 +467,29 @@ bool TransferThread::destinationExists()
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
             if(fileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
             {
-                if(readFileMDateTime(destination)!=readFileMDateTime(source) || file_stat_size(destination)!=file_stat_size(source))
+                const int64_t &sm=readFileMDateTime(source);
+                const int64_t &sd=readFileMDateTime(destination);
+                if(sm==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(source,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(source,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                if(sd==-1)
+                {
+                    #ifndef Q_OS_WIN32
+                    const int e=errno;
+                    emit errorOnFile(destination,"Unable to read modification time: "+std::string(strerror(e))+" ("+std::to_string(e)+")");
+                    #else
+                    emit errorOnFile(destination,"Unable to read modification time: "+GetLastErrorStdStr());
+                    #endif
+                    return true;
+                }
+                if(sm!=sd || file_stat_size(source)!=file_stat_size(destination))
                     return false;
                 else
                 {
@@ -1338,7 +1433,7 @@ void TransferThread::setMkFullPath(const bool mkFullPath)
     this->mkFullPath=mkFullPath;
 }
 
-int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
+/*int TransferThread::fseeko64(FILE *__stream, uint64_t __off, int __whence)
 {
     #if defined(__HAIKU__) || defined(Q_OS_MAC) || defined(ANDROID) || defined(__ANDROID_API__)
     return ::fseeko(__stream,__off,__whence);
@@ -1355,7 +1450,7 @@ int TransferThread::ftruncate64(int __fd, uint64_t __length)
     //return ::ftruncate64(__fd,__length);
     return ::ftruncate(__fd,__length);
     #endif
-}
+}*/
 
 int64_t TransferThread::transferTime() const
 {

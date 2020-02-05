@@ -29,15 +29,15 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>801</width>
-        <height>388</height>
+        <width>791</width>
+        <height>366</height>
        </rect>
       </property>
       <attribute name="label">
@@ -163,8 +163,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>801</width>
-        <height>388</height>
+        <width>791</width>
+        <height>366</height>
        </rect>
       </property>
       <attribute name="label">
@@ -367,8 +367,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>801</width>
-        <height>388</height>
+        <width>791</width>
+        <height>366</height>
        </rect>
       </property>
       <attribute name="label">
@@ -410,8 +410,8 @@
        </item>
        <item row="1" column="1">
         <widget class="QCheckBox" name="buffer">
-         <property name="text">
-          <string/>
+         <property name="toolTip">
+          <string>Uncheck this under Windows create problem</string>
          </property>
         </widget>
        </item>
@@ -429,8 +429,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>801</width>
-        <height>388</height>
+        <width>791</width>
+        <height>366</height>
        </rect>
       </property>
       <attribute name="label">

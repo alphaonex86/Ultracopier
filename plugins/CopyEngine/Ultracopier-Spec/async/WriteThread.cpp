@@ -236,8 +236,9 @@ bool WriteThread::internalOpen()
     to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT);
     #else
     DWORD flags=FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN;
-    if(buffer)
-        flags|=FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING;
+    /*if(!buffer)
+        //FILE_FLAG_NO_BUFFERING Under Windows 10 do The parameter is incorrect. (87)
+        flags|=FILE_FLAG_NO_BUFFERING;//FILE_FLAG_WRITE_THROUGH |*/
     to=CreateFileW(file.c_str(),GENERIC_WRITE,0,NULL,CREATE_ALWAYS,
                    flags,NULL);
     #endif
