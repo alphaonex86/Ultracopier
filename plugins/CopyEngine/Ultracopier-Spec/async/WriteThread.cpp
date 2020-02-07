@@ -1058,7 +1058,9 @@ void WriteThread::internalWrite()
         #endif
         {
             #ifdef Q_OS_WIN32
+            #ifdef ULTRACOPIER_PLUGIN_DEBUG
             DWORD e = GetLastError();
+            #endif
             errorString_internal=TransferThread::GetLastErrorStdStr();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                      "Unable to write: "+TransferThread::internalStringTostring(file)+

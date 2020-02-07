@@ -437,15 +437,64 @@ void TransferThreadAsync::ifCanStartTransfer()
     }
     else
     {
+        #ifdef Q_OS_WIN32
+        if() to do
+        {
         //        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/;// | 0x00001000/*COPY_FILE_NO_BUFFERING*//*
         /*if(!buffer)
             flags|=0x00001000;
         successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,flags);
         */
         //sync way: successFull=copy(TransferThread::internalStringTostring(source).c_str(),TransferThread::internalStringTostring(destination).c_str());
-        readThread.open(source,mode);
-        writeThread.open(destination,0);
-        return;
+        }
+        else if() to do
+        {}
+        else
+        #else
+        if(TransferThread::is_symlink(source))
+        {
+            realMove=true;
+            char buf[PATH_MAX];
+            const ssize_t s=readlink(TransferThread::internalStringTostring(source).c_str(),buf,sizeof(buf));
+            buf[s]=0x00;
+            if(s<0)
+            {
+                const int terr=errno;
+                const std::string &strError=strerror(terr);
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
+                                         TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                         " "+strError+"("+std::to_string(terr)+")"
+                                         );
+                readError=true;
+                writeError=false;
+                emit errorOnFile(source,strError);
+                return;
+            }
+            else
+            {
+                if(symlink(buf,TransferThread::internalStringTostring(destination).c_str())==0)
+                {
+                    const int terr=errno;
+                    const std::string &strError=strerror(terr);
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
+                                             TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                             " "+strError+"("+std::to_string(terr)+")"
+                                             );
+                    readError=true;
+                    writeError=false;
+                    emit errorOnFile(destination,strError);
+                    return;
+                }
+            }
+            successFull=true;
+        }
+        else
+        #endif
+        {
+            readThread.open(source,mode);
+            writeThread.open(destination,0);
+            return;
+        }
     }
     if(!successFull)
     {
@@ -546,13 +595,19 @@ void TransferThreadAsync::stop()
     haveStartTime=false;
     if(transfer_stat==TransferStat_Idle)
     {
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_Idle");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] transfer_stat==TransferStat_Idle");
         return;
     }
     if(transfer_stat==TransferStat_PreOperation)
     {
         transfer_stat=TransferStat_Idle;
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"transfer_stat==TransferStat_PreOperation");
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] transfer_stat==TransferStat_PreOperation");
+        return;
+    }
+    if(realMove)
+    {
+        if(readError || writeError)
+            transfer_stat=TransferStat_Idle;
         return;
     }
     readThread.stop();

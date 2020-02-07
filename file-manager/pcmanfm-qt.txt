@@ -1,9 +1,3 @@
-mkdir -v build &&
-cd       build &&
-
-cmake -DCMAKE_BUILD_TYPE=Release          \
-      -DCMAKE_INSTALL_PREFIX=$LXQT_PREFIX \
-      -DPULL_TRANSLATIONS=no              \
-      ..       &&
+mkdir -v build;cd build;cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$LXQT_PREFIX -DPULL_TRANSLATIONS=no ..
 
 make
