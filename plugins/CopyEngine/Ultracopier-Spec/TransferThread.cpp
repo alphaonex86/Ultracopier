@@ -1517,6 +1517,6 @@ std::string TransferThread::GetLastErrorStdStr()
 #else
 bool TransferThread::unlink(const INTERNALTYPEPATH &path)
 {
-    return ::unlink(internalStringTostring(path).c_str());
+    return ::unlink(internalStringTostring(path).c_str())==0;
 }
 #endif

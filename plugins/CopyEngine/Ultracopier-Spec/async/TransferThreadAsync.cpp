@@ -454,6 +454,33 @@ void TransferThreadAsync::ifCanStartTransfer()
         if(TransferThread::is_symlink(source))
         {
             realMove=true;
+            bool isFileOrSymlink=false;
+            {
+                struct stat p_statbuf;
+                if (lstat(TransferThread::internalStringTostring(destination).c_str(), &p_statbuf) < 0)
+                {}
+                else if (S_ISLNK(p_statbuf.st_mode))
+                    isFileOrSymlink=true;
+                else if (S_ISREG(p_statbuf.st_mode))
+                    isFileOrSymlink=true;
+            }
+            if(isFileOrSymlink)
+                if(!unlink(destination))
+                {
+                    const int terr=errno;
+                    if(terr!=2)
+                    {
+                        const std::string &strError=strerror(terr);
+                        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
+                                                 TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                                 " "+strError+"("+std::to_string(terr)+")"
+                                                 );
+                        readError=false;
+                        writeError=true;
+                        emit errorOnFile(destination,strError);
+                        return;
+                    }
+                }
             char buf[PATH_MAX];
             const ssize_t s=readlink(TransferThread::internalStringTostring(source).c_str(),buf,sizeof(buf));
             buf[s]=0x00;
@@ -472,12 +499,12 @@ void TransferThreadAsync::ifCanStartTransfer()
             }
             else
             {
-                if(symlink(buf,TransferThread::internalStringTostring(destination).c_str())==0)
+                if(symlink(buf,TransferThread::internalStringTostring(destination).c_str())!=0)
                 {
                     const int terr=errno;
                     const std::string &strError=strerror(terr);
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
-                                             TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                             buf+"->"+TransferThread::internalStringTostring(destination)+
                                              " "+strError+"("+std::to_string(terr)+")"
                                              );
                     readError=true;

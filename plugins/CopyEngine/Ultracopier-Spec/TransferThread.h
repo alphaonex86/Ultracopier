@@ -103,7 +103,7 @@ public:
     static bool unlink(const std::wstring &path);
     static std::string GetLastErrorStdStr();
     #else
-    static bool unlink(const INTERNALTYPEPATH &path);
+    static bool unlink(const INTERNALTYPEPATH &path);//return true if sucess
     #endif
 
     static int64_t readFileMDateTime(const INTERNALTYPEPATH &source);
