@@ -9,6 +9,34 @@
 #include <accctrl.h>
 #include <aclapi.h>
 #include <winbase.h>
+
+#define REPARSE_MOUNTPOINT_HEADER_SIZE   8
+
+typedef struct _REPARSE_DATA_BUFFER {
+  ULONG  ReparseTag;
+  USHORT ReparseDataLength;
+  USHORT Reserved;
+  union {
+    struct {
+      USHORT SubstituteNameOffset;
+      USHORT SubstituteNameLength;
+      USHORT PrintNameOffset;
+      USHORT PrintNameLength;
+      ULONG  Flags;
+      WCHAR  PathBuffer[1];
+    } SymbolicLinkReparseBuffer;
+    struct {
+      USHORT SubstituteNameOffset;
+      USHORT SubstituteNameLength;
+      USHORT PrintNameOffset;
+      USHORT PrintNameLength;
+      WCHAR  PathBuffer[1];
+    } MountPointReparseBuffer;
+    struct {
+      UCHAR DataBuffer[1];
+    } GenericReparseBuffer;
+  } DUMMYUNIONNAME;
+} REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
 #endif
 
 #include "../../../../cpp11addition.h"
@@ -438,17 +466,98 @@ void TransferThreadAsync::ifCanStartTransfer()
     else
     {
         #ifdef Q_OS_WIN32
-        if() to do
+        bool isJunction=false;
+        bool isSymlink=false;
+        WIN32_FILE_ATTRIBUTE_DATA fileInfo;
+        BOOL r = GetFileAttributesExW(TransferThread::toFinalPath(source).c_str(), GetFileExInfoStandard, &fileInfo);
+        if(r != FALSE)
         {
-        //        DWORD flags=COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800/*COPY_FILE_COPY_SYMLINK*/;// | 0x00001000/*COPY_FILE_NO_BUFFERING*//*
-        /*if(!buffer)
-            flags|=0x00001000;
-        successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),(LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,flags);
-        */
-        //sync way: successFull=copy(TransferThread::internalStringTostring(source).c_str(),TransferThread::internalStringTostring(destination).c_str());
+            /*isJunction = fileInfo.dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
+               (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT);*/
+            isSymlink = fileInfo.dwFileAttributes != INVALID_FILE_ATTRIBUTES &&
+               (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT);
         }
-        else if() to do
-        {}
+        if(isSymlink)
+        {
+            BYTE buf[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
+            REPARSE_DATA_BUFFER& ReparseBuffer = (REPARSE_DATA_BUFFER&)buf;
+            DWORD dwRet=NULL;
+            HANDLE hDir = ::CreateFile(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, NULL);
+            if (hDir != INVALID_HANDLE_VALUE)
+            {
+                BOOL ioc = ::DeviceIoControl(hDir, FSCTL_GET_REPARSE_POINT, NULL, 0, &ReparseBuffer,
+                MAXIMUM_REPARSE_DATA_BUFFER_SIZE, &dwRet, NULL);
+                ::CloseHandle(hDir);
+                if(ioc!=FALSE)
+                {
+                    if(ReparseBuffer.ReparseTag == IO_REPARSE_TAG_MOUNT_POINT)
+                    {
+                        //printf("%S\n",ReparseBuffer.MountPointReparseBuffer.PathBuffer);
+                        isJunction=true;
+                    }
+                    else
+                    {
+                        //printf("%S\n",ReparseBuffer.SymbolicLinkReparseBuffer.PathBuffer);
+                    }
+                }
+                else
+                {
+                    const std::string &strError=TransferThread::GetLastErrorStdStr();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
+                                             GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                             " "+strError
+                                             );
+                    readError=true;
+                    writeError=false;
+                    emit errorOnFile(source,strError);
+                    return;
+                }
+            }
+            else
+            {
+                const std::string &strError=TransferThread::GetLastErrorStdStr();
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
+                                         GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                         " "+strError
+                                         );
+                readError=true;
+                writeError=false;
+                emit errorOnFile(source,strError);
+                return;
+            }
+            if(isJunction)//junction
+            {
+                successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),
+                    (LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800);//0x00000800 is COPY_FILE_COPY_SYMLINK
+                if(successFull==FALSE)
+                {
+                    const std::string &strError=TransferThread::GetLastErrorStdStr();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
+                                             GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                             " "+strError
+                                             );
+                    readError=true;
+                    writeError=true;
+                    emit errorOnFile(destination,strError);
+                }
+            }
+            else//symlink or symlinkD
+            {
+                successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),
+                    (LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800);//0x00000800 is COPY_FILE_COPY_SYMLINK
+                if(successFull==FALSE)
+                {
+                    const std::string &strError=TransferThread::GetLastErrorStdStr();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
+                                             GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                             " "+strError
+                                             );
+                    readError=true;
+                    writeError=true;
+                    emit errorOnFile(destination,strError);
+                }
+            }
+        }
         else
         #else
         if(TransferThread::is_symlink(source))
