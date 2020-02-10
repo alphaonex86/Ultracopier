@@ -1250,7 +1250,7 @@ bool TransferThread::is_dir(const INTERNALTYPEPATH &filename)
     DWORD dwAttrib = GetFileAttributesW(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
             (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) &&
-            (dwAttrib & !FILE_ATTRIBUTE_REPARSE_POINT));
+            !(dwAttrib & FILE_ATTRIBUTE_REPARSE_POINT));
     #else
     return is_dir(TransferThread::internalStringTostring(filename).c_str());
     #endif
@@ -1262,7 +1262,7 @@ bool TransferThread::is_dir(const char * const filename)
     DWORD dwAttrib = GetFileAttributesA(TransferThread::toFinalPath(filename).c_str());
     return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
            (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) &&
-            (dwAttrib & !FILE_ATTRIBUTE_REPARSE_POINT));
+            !(dwAttrib & FILE_ATTRIBUTE_REPARSE_POINT));
     #else
     struct stat p_statbuf;
     if (lstat(filename, &p_statbuf) < 0)
@@ -1416,7 +1416,10 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
         #endif
         {
             dirent_uc tempValue;
-            tempValue.isFolder=fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+            tempValue.isFolder=
+                    (fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+                    !(fdFile.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
+                    ;
             tempValue.d_name=fdFile.cFileName;
             tempValue.size=fdFile.nFileSizeHigh;
             tempValue.size<<=32;
