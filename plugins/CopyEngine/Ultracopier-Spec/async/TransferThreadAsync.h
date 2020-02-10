@@ -81,6 +81,10 @@ public:
     ReadThread readThread;
     WriteThread writeThread;
     void setBuffer(const bool buffer);
+
+    #ifdef Q_OS_WIN32
+    static bool mkJunction(LPCWSTR szJunction, LPCWSTR szPath);
+    #endif
 protected:
     void run();
 private slots:

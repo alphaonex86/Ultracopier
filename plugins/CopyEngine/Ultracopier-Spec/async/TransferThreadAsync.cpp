@@ -37,6 +37,21 @@ typedef struct _REPARSE_DATA_BUFFER {
     } GenericReparseBuffer;
   } DUMMYUNIONNAME;
 } REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
+
+/*memo> HANDLE hToken = NULL;
+TOKEN_PRIVILEGES tp;
+try {
+  if (!::OpenProcessToken(::GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &hToken)) throw ::GetLastError();
+  if (!::LookupPrivilegeValue(NULL, SE_RESTORE_NAME, &tp.Privileges[0].Luid))  throw ::GetLastError();
+  tp.PrivilegeCount = 1;
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+  if (!::AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL))  throw ::GetLastError();
+}
+catch (DWORD) {
+    ok=false;
+}
+if (hToken)
+    ::CloseHandle(hToken);*/
 #endif
 
 #include "../../../../cpp11addition.h"
@@ -527,8 +542,13 @@ void TransferThreadAsync::ifCanStartTransfer()
             }
             if(isJunction)//junction
             {
-                successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),
-                    (LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800);//0x00000800 is COPY_FILE_COPY_SYMLINK
+                std::wstring cleanPath(ReparseBuffer.MountPointReparseBuffer.PathBuffer);
+                if(cleanPath.substr(0,4)==L"\\??\\")
+                    cleanPath=cleanPath.substr(4);
+                successFull=TransferThreadAsync::mkJunction(
+                            TransferThread::toFinalPath(destination).c_str(),
+                            cleanPath.c_str()
+                            );
                 if(successFull==FALSE)
                 {
                     const std::string &strError=TransferThread::GetLastErrorStdStr();
@@ -1344,3 +1364,37 @@ void TransferThreadAsync::write_opened()
     if(readIsOpenVariable)
         readThread.startRead();
 }
+
+#ifdef Q_OS_WIN32
+bool TransferThreadAsync::mkJunction(LPCWSTR szJunction, LPCWSTR szPath)
+{
+  BYTE buf[sizeof(REPARSE_DATA_BUFFER) + MAX_PATH * sizeof(WCHAR)];
+  REPARSE_DATA_BUFFER& ReparseBuffer = (REPARSE_DATA_BUFFER&)buf;
+
+  if (!::CreateDirectoryW(szJunction, NULL))
+    return false;
+  HANDLE hDir = ::CreateFileW(szJunction, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, NULL);
+  if (hDir == INVALID_HANDLE_VALUE)
+      return false;
+
+  memset(buf, 0, sizeof(buf));
+  ReparseBuffer.ReparseTag = IO_REPARSE_TAG_MOUNT_POINT;
+  int len = wcslen(szPath)+1;
+  ReparseBuffer.MountPointReparseBuffer.PrintNameOffset = (len--) * sizeof(WCHAR);
+  ReparseBuffer.MountPointReparseBuffer.SubstituteNameLength = len * sizeof(WCHAR);
+  ReparseBuffer.ReparseDataLength = ReparseBuffer.MountPointReparseBuffer.SubstituteNameLength + 12;
+  wcscpy(ReparseBuffer.MountPointReparseBuffer.PathBuffer, szPath);
+
+  DWORD dwRet;
+  if (!::DeviceIoControl(hDir, FSCTL_SET_REPARSE_POINT, &ReparseBuffer,
+                         ReparseBuffer.ReparseDataLength+REPARSE_MOUNTPOINT_HEADER_SIZE, NULL, 0, &dwRet, NULL))
+  {
+    ::CloseHandle(hDir);
+    ::RemoveDirectoryW(szJunction);
+    return false;
+  }
+
+  ::CloseHandle(hDir);
+  return true;
+}
+#endif
