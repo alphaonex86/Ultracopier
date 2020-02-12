@@ -516,12 +516,12 @@
         <translation>خطا داخلي ، يرجى الإبلاغ عن ذلك!</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="514"/>
+        <location filename="../../async/ReadThread.cpp" line="516"/>
         <source>Unable to read the source file: </source>
         <translation>غير قادر على قراءه الملف المصدر:</translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="569"/>
+        <location filename="../../async/ReadThread.cpp" line="571"/>
         <source>File truncated during the read, possible data change</source>
         <translation>تم اقتطاع الملف اثناء القراءة ، وتغيير البيانات المحتملة</translation>
     </message>
@@ -640,19 +640,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="287"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="330"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation>تاريخ تعديل خاطئ أو غير قادر علي الحصول عليه ، يمكنك تعطيل نقل الوقت للقيام بذلك</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="375"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="393"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="418"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="436"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished">غير قادر على إنشاء مجلد الوجهة:</translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="378"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="395"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="421"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="438"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished">errno: %1 غير قادر علي إنشاء المجلد الوجهة</translation>
     </message>

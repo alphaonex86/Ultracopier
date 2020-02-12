@@ -496,7 +496,7 @@ void TransferThreadAsync::ifCanStartTransfer()
         {
             BYTE buf[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
             REPARSE_DATA_BUFFER& ReparseBuffer = (REPARSE_DATA_BUFFER&)buf;
-            DWORD dwRet=NULL;
+            DWORD dwRet=0;
             HANDLE hDir = ::CreateFile(TransferThread::toFinalPath(source).c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, NULL);
             if (hDir != INVALID_HANDLE_VALUE)
             {

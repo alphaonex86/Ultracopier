@@ -1375,10 +1375,10 @@ bool TransferThread::entryInfoList(const INTERNALTYPEPATH &path,std::vector<dire
                     #if defined(__HAIKU__)
                     struct stat sp;
                     memset(&sp,0,sizeof(sp));
-                    if(stat(ep->d_name, &sp))
+                    if(stat((TransferThread::internalStringTostring(path)+"/"+name).c_str(), &sp)==0)
                         tempValue.isFolder=S_ISDIR(sp.st_mode);
                     else
-                        tempValue.isFolder=false;
+                        return false;
                     #else
                     tempValue.isFolder=ep->d_type==DT_DIR;
                     #endif
