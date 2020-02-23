@@ -623,12 +623,9 @@ bool MkPath::readFileDateTime(const INTERNALTYPEPATH &source)
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get the file time");
                 return false;
             }
-            this->ftCreateL=ftCreate.dwLowDateTime;
-            this->ftCreateH=ftCreate.dwHighDateTime;
-            this->ftAccessL=ftAccess.dwLowDateTime;
-            this->ftAccessH=ftAccess.dwHighDateTime;
-            this->ftWriteL=ftWrite.dwLowDateTime;
-            this->ftWriteH=ftWrite.dwHighDateTime;
+            this->ftCreate=ftCreate;
+            this->ftAccess=ftAccess;
+            this->ftWrite=ftWrite;
             CloseHandle(hFileSouce);
             return true;
         #else
@@ -660,12 +657,9 @@ bool MkPath::writeFileDateTime(const INTERNALTYPEPATH &destination)
                 return false;
             }
             FILETIME ftCreate, ftAccess, ftWrite;
-            ftCreate.dwLowDateTime=this->ftCreateL;
-            ftCreate.dwHighDateTime=this->ftCreateH;
-            ftAccess.dwLowDateTime=this->ftAccessL;
-            ftAccess.dwHighDateTime=this->ftAccessH;
-            ftWrite.dwLowDateTime=this->ftWriteL;
-            ftWrite.dwHighDateTime=this->ftWriteH;
+            ftCreate=this->ftCreate;
+            ftAccess=this->ftAccess;
+            ftWrite=this->ftWrite;
             if(!SetFileTime(hFileDestination, &ftCreate, &ftAccess, &ftWrite))
             {
                 CloseHandle(hFileDestination);

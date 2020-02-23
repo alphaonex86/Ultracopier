@@ -415,7 +415,7 @@ bool TransferThread::destinationExists()
                 }
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
-            if(fileExistsAction==FileExists_OverwriteIfNotSame || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
+            if(fileExistsAction==FileExists_OverwriteIfNotSameMdate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameMdate))
             {
                 const int64_t &sm=readFileMDateTime(source);
                 const int64_t &sd=readFileMDateTime(destination);
@@ -452,7 +452,7 @@ bool TransferThread::destinationExists()
                 }
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
-            if(fileExistsAction==FileExists_OverwriteIfNotSameSize || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
+            if(fileExistsAction==FileExists_OverwriteIfNotSameSize || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameMdate))
             {
                 if(file_stat_size(source)!=file_stat_size(destination))
                     return false;
@@ -465,7 +465,7 @@ bool TransferThread::destinationExists()
                 }
             }
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] FS access");
-            if(fileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSame))
+            if(fileExistsAction==FileExists_OverwriteIfNotSameSizeAndDate || (fileExistsAction==FileExists_NotSet && alwaysDoFileExistsAction==FileExists_OverwriteIfNotSameMdate))
             {
                 const int64_t &sm=readFileMDateTime(source);
                 const int64_t &sd=readFileMDateTime(destination);
@@ -978,7 +978,12 @@ int64_t TransferThread::readFileMDateTime(const INTERNALTYPEPATH &source)
                 return -1;
             }
             CloseHandle(hFileSouce);
-            return ftWrite.dwLowDateTime + (2^32 * ftWrite.dwHighDateTime);
+            const int64_t UNIX_TIME_START = 0x019DB1DED53E8000; //January 1, 1970 (start of Unix epoch) in "ticks"
+            const int64_t TICKS_PER_SECOND = 10000000; //a tick is 100ns
+            LARGE_INTEGER li;
+            li.LowPart  = ftWrite.dwLowDateTime;
+            li.HighPart = ftWrite.dwHighDateTime;
+            return (li.QuadPart - UNIX_TIME_START) / TICKS_PER_SECOND;
         #else
             return -1;
         #endif

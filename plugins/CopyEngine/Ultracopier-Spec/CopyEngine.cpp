@@ -272,7 +272,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
         case FileExists_Overwrite:
             ui->comboBoxFileCollision->setCurrentIndex(2);
         break;
-        case FileExists_OverwriteIfNotSame:
+        case FileExists_OverwriteIfNotSameMdate:
             ui->comboBoxFileCollision->setCurrentIndex(3);
         break;
         case FileExists_OverwriteIfNewer:
@@ -282,6 +282,12 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
             ui->comboBoxFileCollision->setCurrentIndex(5);
         break;
         case FileExists_Rename:
+            ui->comboBoxFileCollision->setCurrentIndex(6);
+        break;
+        case FileExists_OverwriteIfNotSameSize:
+            ui->comboBoxFileCollision->setCurrentIndex(6);
+        break;
+        case FileExists_OverwriteIfNotSameSizeAndDate:
             ui->comboBoxFileCollision->setCurrentIndex(6);
         break;
         default:
@@ -723,7 +729,7 @@ void CopyEngine::setFileCollision(int index)
             alwaysDoThisActionForFileExists=FileExists_Overwrite;
         break;
         case 3:
-            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSame;
+            alwaysDoThisActionForFileExists=FileExists_OverwriteIfNotSameMdate;
         break;
         case 4:
             alwaysDoThisActionForFileExists=FileExists_OverwriteIfNewer;

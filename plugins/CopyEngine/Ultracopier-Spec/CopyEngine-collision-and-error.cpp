@@ -52,7 +52,7 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"file is same: "+TransferThread::internalStringTostring(source));
         FileExistsAction tempFileExistsAction=alwaysDoThisActionForFileExists;
-        if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSame || tempFileExistsAction==FileExists_OverwriteIfOlder)
+        if(tempFileExistsAction==FileExists_Overwrite || tempFileExistsAction==FileExists_OverwriteIfNewer || tempFileExistsAction==FileExists_OverwriteIfNotSameMdate || tempFileExistsAction==FileExists_OverwriteIfOlder)
             tempFileExistsAction=FileExists_NotSet;
         switch(tempFileExistsAction)
         {
@@ -129,7 +129,9 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
             case FileExists_Overwrite:
             case FileExists_OverwriteIfNewer:
             case FileExists_OverwriteIfOlder:
-            case FileExists_OverwriteIfNotSame:
+            case FileExists_OverwriteIfNotSameMdate:
+            case FileExists_OverwriteIfNotSameSize:
+            case FileExists_OverwriteIfNotSameSizeAndDate:
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"always do this action: "+std::to_string(tempFileExistsAction));
                 thread->setFileExistsAction(tempFileExistsAction);
             break;
@@ -179,7 +181,7 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                             case FileExists_Overwrite:
                                 ui->comboBoxFileCollision->setCurrentIndex(2);
                             break;
-                            case FileExists_OverwriteIfNotSame:
+                            case FileExists_OverwriteIfNotSameMdate:
                                 ui->comboBoxFileCollision->setCurrentIndex(3);
                             break;
                             case FileExists_OverwriteIfNewer:
@@ -187,6 +189,12 @@ void CopyEngine::fileAlreadyExists(INTERNALTYPEPATH source,INTERNALTYPEPATH dest
                             break;
                             case FileExists_OverwriteIfOlder:
                                 ui->comboBoxFileCollision->setCurrentIndex(5);
+                            break;
+                            case FileExists_OverwriteIfNotSameSize:
+                                ui->comboBoxFileCollision->setCurrentIndex(7);
+                            break;
+                            case FileExists_OverwriteIfNotSameSizeAndDate:
+                                ui->comboBoxFileCollision->setCurrentIndex(8);
                             break;
                         }
                 }

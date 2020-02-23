@@ -249,7 +249,7 @@ void FileExistsDialog::on_actionOverwrite_if_newer_triggered()
 
 void FileExistsDialog::on_actionOverwrite_if_not_same_modification_date_triggered()
 {
-    action=FileExists_OverwriteIfNotSame;
+    action=FileExists_OverwriteIfNotSameMdate;
     this->close();
 }
 

@@ -29,7 +29,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_trasnfer">
       <property name="geometry">
@@ -233,7 +233,7 @@
          </item>
          <item>
           <property name="text">
-           <string notr="true">Overwrite if different</string>
+           <string notr="true">Overwrite if not same size and date</string>
           </property>
          </item>
          <item>
@@ -249,6 +249,16 @@
          <item>
           <property name="text">
            <string notr="true">Rename</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Overwrite if not same size</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Overwrite if modification date differs</string>
           </property>
          </item>
         </widget>

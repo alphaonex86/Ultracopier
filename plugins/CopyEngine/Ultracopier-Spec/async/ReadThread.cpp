@@ -322,9 +322,9 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
             LARGE_INTEGER lpFileSize;
             GetFileSizeEx(from,&lpFileSize);
             size_at_open=lpFileSize.QuadPart;
-            LPFILETIME lpLastWriteTime=0;
-            GetFileTime(from,NULL,NULL,lpLastWriteTime);
-            mtime_at_open=lpLastWriteTime;
+            FILETIME LastWriteTime;
+            GetFileTime(from,NULL,NULL,&LastWriteTime);
+            mtime_at_open=LastWriteTime;
         }
         #endif
 
@@ -768,16 +768,17 @@ bool ReadThread::internalReopen()
             #endif
         }
     }
+    if(size_at_open!=temp_size || mtime_at_open!=temp_mtime)
     #else
-    LPFILETIME temp_mtime=0;
+    FILETIME temp_mtime;
     {
-        LARGE_INTEGER lpFileSize;
-        GetFileSizeEx(from,&lpFileSize);
-        temp_size=lpFileSize.QuadPart;
-        GetFileTime(from,NULL,NULL,temp_mtime);
+        LARGE_INTEGER FileSize;
+        GetFileSizeEx(from,&FileSize);
+        temp_size=FileSize.QuadPart;
+        GetFileTime(from,NULL,NULL,&temp_mtime);
     }
+    if(size_at_open!=temp_size || mtime_at_open.dwLowDateTime!=temp_mtime.dwLowDateTime || mtime_at_open.dwHighDateTime!=temp_mtime.dwHighDateTime)
     #endif
-    if(size_at_open!=temp_size && mtime_at_open!=temp_mtime)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] source file have changed since the last open, restart all");
         //fix this function like the close function

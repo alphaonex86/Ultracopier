@@ -16,12 +16,12 @@ enum FileExistsAction
     FileExists_Cancel=1,
     FileExists_Skip=2,
     FileExists_Overwrite=3,
-    FileExists_OverwriteIfNotSame=4,
+    FileExists_OverwriteIfNotSameMdate=4,
     FileExists_OverwriteIfNewer=5,
     FileExists_OverwriteIfOlder=6,
     FileExists_OverwriteIfNotSameSize=7,
     FileExists_OverwriteIfNotSameSizeAndDate=8,
-    FileExists_Rename=7
+    FileExists_Rename=9
 };
 
 /// \brief Define action if file error

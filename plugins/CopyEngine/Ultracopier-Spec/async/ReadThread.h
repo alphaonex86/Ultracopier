@@ -135,7 +135,7 @@ private:
     #ifdef Q_OS_UNIX
     uint64_t       mtime_at_open;
     #else
-    LPFILETIME       mtime_at_open;
+    FILETIME       mtime_at_open;
     #endif
     bool            fakeMode;
     //internal function
