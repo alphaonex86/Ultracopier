@@ -126,7 +126,7 @@
           </item>
           <item>
            <property name="text">
-            <string>Supercopier</string>
+            <string notr="true">Supercopier</string>
            </property>
           </item>
          </widget>

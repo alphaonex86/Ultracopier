@@ -33,11 +33,7 @@ HelpDialog::HelpDialog() :
     #endif // ULTRACOPIER_DEBUG
     //connect the about Qt
     connect(ui->pushButtonAboutQt,&QPushButton::toggled,&QApplication::aboutQt);
-    #ifdef ULTRACOPIER_MODE_SUPERCOPIER
-    setWindowTitle(tr("About Supercopier"));
-    #else
     setWindowTitle(tr("About Ultracopier"));
-    #endif
     #ifndef ULTRACOPIER_INTERNET_SUPPORT
     ui->checkUpdate->hide();
     #endif

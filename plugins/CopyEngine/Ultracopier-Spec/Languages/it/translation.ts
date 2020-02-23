@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="417"/>
-        <location filename="../../CopyEngine.cpp" line="440"/>
+        <location filename="../../CopyEngine.cpp" line="423"/>
+        <location filename="../../CopyEngine.cpp" line="446"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>Impossibile copiare, il motore per la copia forzerà lo spostamento</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="452"/>
-        <location filename="../../CopyEngine.cpp" line="475"/>
+        <location filename="../../CopyEngine.cpp" line="458"/>
+        <location filename="../../CopyEngine.cpp" line="481"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>Impossibile effettuare lo spostamento, il motore per la copia forzerà la copia</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="499"/>
+        <location filename="../../CopyEngine.cpp" line="505"/>
         <source>Destination</source>
         <translation type="unfinished">Cartella di destinazione</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="499"/>
+        <location filename="../../CopyEngine.cpp" line="505"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="655"/>
+        <location filename="../../CopyEngine.cpp" line="661"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="923"/>
-        <location filename="../../CopyEngine.cpp" line="926"/>
-        <location filename="../../CopyEngine.cpp" line="931"/>
-        <location filename="../../CopyEngine.cpp" line="935"/>
+        <location filename="../../CopyEngine.cpp" line="929"/>
+        <location filename="../../CopyEngine.cpp" line="932"/>
+        <location filename="../../CopyEngine.cpp" line="937"/>
+        <location filename="../../CopyEngine.cpp" line="941"/>
         <source>Ask</source>
         <translation>Chiedi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="924"/>
-        <location filename="../../CopyEngine.cpp" line="928"/>
-        <location filename="../../CopyEngine.cpp" line="932"/>
-        <location filename="../../CopyEngine.cpp" line="936"/>
+        <location filename="../../CopyEngine.cpp" line="930"/>
+        <location filename="../../CopyEngine.cpp" line="934"/>
+        <location filename="../../CopyEngine.cpp" line="938"/>
+        <location filename="../../CopyEngine.cpp" line="942"/>
         <source>Skip</source>
         <translation>Salta</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="927"/>
+        <location filename="../../CopyEngine.cpp" line="933"/>
         <source>Merge</source>
         <translation>Unisci</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="929"/>
-        <location filename="../../CopyEngine.cpp" line="941"/>
+        <location filename="../../CopyEngine.cpp" line="935"/>
+        <location filename="../../CopyEngine.cpp" line="947"/>
         <source>Rename</source>
         <translation>Rinomina</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="933"/>
+        <location filename="../../CopyEngine.cpp" line="939"/>
         <source>Put at the end</source>
         <translation>Metti in coda</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="937"/>
+        <location filename="../../CopyEngine.cpp" line="943"/>
         <source>Overwrite</source>
         <translation>Sovrascrivi</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="938"/>
+        <location filename="../../CopyEngine.cpp" line="944"/>
         <source>Overwrite if different</source>
         <translation>Sovrascrivi se differente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="939"/>
+        <location filename="../../CopyEngine.cpp" line="945"/>
         <source>Overwrite if newer</source>
         <translation>Sovrascrivi se più recente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="940"/>
+        <location filename="../../CopyEngine.cpp" line="946"/>
         <source>Overwrite if older</source>
         <translation>Sovrascrivi se meno recente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1011"/>
+        <location filename="../../CopyEngine.cpp" line="1017"/>
         <source>Options error</source>
         <translation>Opzioni di errore</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1011"/>
+        <location filename="../../CopyEngine.cpp" line="1017"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -757,72 +757,82 @@
         <translation>Quando i file coincidono</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="273"/>
+        <location filename="../../copyEngineOptions.ui" line="256"/>
+        <source>Overwrite if not same size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="261"/>
+        <source>Overwrite if modification date differs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="283"/>
         <source>When folder collision</source>
         <translation>Quando le cartelle coincidono</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="304"/>
+        <location filename="../../copyEngineOptions.ui" line="314"/>
         <source>Check if destination folder exists</source>
         <translation>Controllare se la cartella di destinazione esiste</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="311"/>
+        <location filename="../../copyEngineOptions.ui" line="321"/>
         <source>Renaming rules</source>
         <translation>Regole di rinomina</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="331"/>
+        <location filename="../../copyEngineOptions.ui" line="341"/>
         <source>Delete partially transferred files</source>
         <translation>Eliminare i file parzialmente trasferiti</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="344"/>
+        <location filename="../../copyEngineOptions.ui" line="354"/>
         <source>Rename the original destination</source>
         <translation>Rinominare la destinazione all&apos;origine</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="375"/>
+        <location filename="../../copyEngineOptions.ui" line="385"/>
         <source>Performance</source>
         <translation>Prestazioni</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="381"/>
+        <location filename="../../copyEngineOptions.ui" line="391"/>
         <source>Inode threads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="414"/>
+        <location filename="../../copyEngineOptions.ui" line="424"/>
         <source>Uncheck this under Windows create problem</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="421"/>
+        <location filename="../../copyEngineOptions.ui" line="431"/>
         <source>Buffer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="437"/>
+        <location filename="../../copyEngineOptions.ui" line="447"/>
         <source>Misc</source>
         <translation>Varie</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="443"/>
+        <location filename="../../copyEngineOptions.ui" line="453"/>
         <source>Check the disk space</source>
         <translation>Controllare lo spazio su disco</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="453"/>
+        <location filename="../../copyEngineOptions.ui" line="463"/>
         <source>Use this folder when destination is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="465"/>
+        <location filename="../../copyEngineOptions.ui" line="475"/>
         <source>Browse</source>
         <translation>Sfoglia</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="487"/>
+        <location filename="../../copyEngineOptions.ui" line="497"/>
         <source>Filters</source>
         <translation>Filtri</translation>
     </message>

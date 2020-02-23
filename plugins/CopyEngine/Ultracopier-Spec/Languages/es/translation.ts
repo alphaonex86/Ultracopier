@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="417"/>
-        <location filename="../../CopyEngine.cpp" line="440"/>
+        <location filename="../../CopyEngine.cpp" line="423"/>
+        <location filename="../../CopyEngine.cpp" line="446"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation>El motor se ve obligado a moverse, no se puede copiar con ella</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="452"/>
-        <location filename="../../CopyEngine.cpp" line="475"/>
+        <location filename="../../CopyEngine.cpp" line="458"/>
+        <location filename="../../CopyEngine.cpp" line="481"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation>El motor se ve obligado a copiar, no te puedes mover con él</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="499"/>
+        <location filename="../../CopyEngine.cpp" line="505"/>
         <source>Destination</source>
         <translation>Destino</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="499"/>
+        <location filename="../../CopyEngine.cpp" line="505"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation>Utilice el destino &quot;%1&quot; actual?</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="655"/>
+        <location filename="../../CopyEngine.cpp" line="661"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation>El modo se ha visto obligado previamente. Este es un error interno, por favor repórtelo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="923"/>
-        <location filename="../../CopyEngine.cpp" line="926"/>
-        <location filename="../../CopyEngine.cpp" line="931"/>
-        <location filename="../../CopyEngine.cpp" line="935"/>
+        <location filename="../../CopyEngine.cpp" line="929"/>
+        <location filename="../../CopyEngine.cpp" line="932"/>
+        <location filename="../../CopyEngine.cpp" line="937"/>
+        <location filename="../../CopyEngine.cpp" line="941"/>
         <source>Ask</source>
         <translation>Pedir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="924"/>
-        <location filename="../../CopyEngine.cpp" line="928"/>
-        <location filename="../../CopyEngine.cpp" line="932"/>
-        <location filename="../../CopyEngine.cpp" line="936"/>
+        <location filename="../../CopyEngine.cpp" line="930"/>
+        <location filename="../../CopyEngine.cpp" line="934"/>
+        <location filename="../../CopyEngine.cpp" line="938"/>
+        <location filename="../../CopyEngine.cpp" line="942"/>
         <source>Skip</source>
         <translation>Omitir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="927"/>
+        <location filename="../../CopyEngine.cpp" line="933"/>
         <source>Merge</source>
         <translation>Unir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="929"/>
-        <location filename="../../CopyEngine.cpp" line="941"/>
+        <location filename="../../CopyEngine.cpp" line="935"/>
+        <location filename="../../CopyEngine.cpp" line="947"/>
         <source>Rename</source>
         <translation>Cambiar el nombre</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="933"/>
+        <location filename="../../CopyEngine.cpp" line="939"/>
         <source>Put at the end</source>
         <translation>Ponga al final</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="937"/>
+        <location filename="../../CopyEngine.cpp" line="943"/>
         <source>Overwrite</source>
         <translation>Sobrescribir</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="938"/>
+        <location filename="../../CopyEngine.cpp" line="944"/>
         <source>Overwrite if different</source>
         <translation>Sobrescribir si es diferente</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="939"/>
+        <location filename="../../CopyEngine.cpp" line="945"/>
         <source>Overwrite if newer</source>
         <translation>Sobrescribir si nuevo</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="940"/>
+        <location filename="../../CopyEngine.cpp" line="946"/>
         <source>Overwrite if older</source>
         <translation>Sobrescribir si es mayor</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1011"/>
+        <location filename="../../CopyEngine.cpp" line="1017"/>
         <source>Options error</source>
         <translation>error Opciones</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1011"/>
+        <location filename="../../CopyEngine.cpp" line="1017"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation>Opciones del motor no está cargado. No es posible acceder a los filtros</translation>
     </message>
@@ -210,12 +210,12 @@
     <message>
         <location filename="../../FileExistsDialog.cpp" line="191"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="198"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileExistsDialog.cpp" line="289"/>
@@ -233,12 +233,12 @@
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="140"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="147"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FileIsSameDialog.cpp" line="220"/>
@@ -400,12 +400,12 @@
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="164"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia%suffix%</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="173"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../FolderExistsDialog.cpp" line="240"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="../../MkPath.cpp" line="315"/>
         <source>Unable to move the folder: errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede mover la carpeta: errno: %1</translation>
     </message>
     <message>
         <location filename="../../MkPath.cpp" line="124"/>
@@ -513,17 +513,17 @@
     <message>
         <location filename="../../async/ReadThread.cpp" line="77"/>
         <source>Internal error, please report it!</source>
-        <translation type="unfinished"></translation>
+        <translation>¡Error interno, por favor repórtelo!</translation>
     </message>
     <message>
         <location filename="../../async/ReadThread.cpp" line="516"/>
         <source>Unable to read the source file: </source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede leer el archivo fuente: </translation>
     </message>
     <message>
         <location filename="../../async/ReadThread.cpp" line="571"/>
         <source>File truncated during the read, possible data change</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo truncado durante la lectura, posible cambio de datos</translation>
     </message>
 </context>
 <context>
@@ -537,19 +537,19 @@
         <location filename="../../RenamingRules.ui" line="41"/>
         <source>%name% - copy%suffix%</source>
         <extracomment>%name% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia%suffix%</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="57"/>
         <source>%name% - copy (%number%)%suffix%</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="67"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; for the original file name, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; for the extra number, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; file suffix&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%name%, %number% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Variables: &lt;span style=&quot; font-weight:600;&quot;&gt;%name%&lt;/span&gt; para el nombre del archivo original, &lt;span style=&quot; font-weight:600;&quot;&gt;%number%&lt;/span&gt; para el número extra, &lt;span style=&quot; font-weight:600;&quot;&gt;%suffix%&lt;/span&gt; sufijo de archivo&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.ui" line="51"/>
@@ -565,13 +565,13 @@
         <location filename="../../RenamingRules.cpp" line="46"/>
         <location filename="../../RenamingRules.cpp" line="71"/>
         <source>%1 - copy%2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - copia%2</translation>
     </message>
     <message>
         <location filename="../../RenamingRules.cpp" line="50"/>
         <location filename="../../RenamingRules.cpp" line="84"/>
         <source>%1 - copy (%2)%3</source>
-        <translation type="unfinished">%1 - copia (%2) {1 ?} {2)%3?}</translation>
+        <translation>%1 - copia (%2)%3</translation>
     </message>
 </context>
 <context>
@@ -592,19 +592,19 @@
         <location filename="../../ScanFileOrFolder.cpp" line="562"/>
         <location filename="../../ScanFileOrFolder.cpp" line="564"/>
         <source>%name% - copy</source>
-        <translation type="unfinished">%name% - copia</translation>
+        <translation>%name% - copia</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="573"/>
         <location filename="../../ScanFileOrFolder.cpp" line="575"/>
         <source>%name% - copy (%number%)</source>
-        <translation type="unfinished">%name% - copia (%number%)</translation>
+        <translation>%name% - copia (%number%)</translation>
     </message>
     <message>
         <location filename="../../ScanFileOrFolder.cpp" line="659"/>
         <location filename="../../ScanFileOrFolder.cpp" line="663"/>
         <source>Problem with folder read</source>
-        <translation type="unfinished"></translation>
+        <translation>Problema con la carpeta leída</translation>
     </message>
 </context>
 <context>
@@ -612,12 +612,12 @@
     <message>
         <location filename="../../TransferThread.cpp" line="613"/>
         <source>%name% - copy%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia%suffix%</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="620"/>
         <source>%name% - copy (%number%)%suffix%</source>
-        <translation type="unfinished"></translation>
+        <translation>%name% - copia (%number%)%suffix%</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="648"/>
@@ -629,7 +629,7 @@
         <location filename="../../TransferThread.cpp" line="886"/>
         <location filename="../../TransferThread.cpp" line="922"/>
         <source>Unable to change the date</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede cambiar la fecha</translation>
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="179"/>
@@ -642,19 +642,19 @@
     <message>
         <location filename="../../async/TransferThreadAsync.cpp" line="330"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
-        <translation type="unfinished"></translation>
+        <translation>Fecha de modificación incorrecta o incapaz de obtenerla, puede desactivar la transferencia de tiempo para hacerlo</translation>
     </message>
     <message>
         <location filename="../../async/TransferThreadAsync.cpp" line="418"/>
         <location filename="../../async/TransferThreadAsync.cpp" line="436"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede crear la carpeta de destino: </translation>
     </message>
     <message>
         <location filename="../../async/TransferThreadAsync.cpp" line="421"/>
         <location filename="../../async/TransferThreadAsync.cpp" line="438"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede crear la carpeta de destino, errno: %1</translation>
     </message>
 </context>
 <context>
@@ -662,24 +662,24 @@
     <message>
         <location filename="../../async/WriteThread.cpp" line="134"/>
         <source>Path resolution error (Empty path)</source>
-        <translation type="unfinished"></translation>
+        <translation>Error de resolución de ruta (ruta vacía)</translation>
     </message>
     <message>
         <location filename="../../async/WriteThread.cpp" line="163"/>
         <location filename="../../async/WriteThread.cpp" line="196"/>
         <source>Unable to create the destination folder: </source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede crear la carpeta de destino: </translation>
     </message>
     <message>
         <location filename="../../async/WriteThread.cpp" line="174"/>
         <location filename="../../async/WriteThread.cpp" line="198"/>
         <source>Unable to create the destination folder, errno: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede crear la carpeta de destino, errno: %1</translation>
     </message>
     <message>
         <location filename="../../async/WriteThread.cpp" line="448"/>
         <source>Internal error, please report it!</source>
-        <translation type="unfinished"></translation>
+        <translation>¡Error interno, por favor repórtelo!</translation>
     </message>
 </context>
 <context>
@@ -718,17 +718,17 @@
     <message>
         <location filename="../../copyEngineOptions.ui" line="74"/>
         <source>Create full path if not exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear ruta completa si no existe</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="105"/>
         <source>Checksum</source>
-        <translation type="unfinished"></translation>
+        <translation>Suma de comprobación</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="155"/>
         <source>Auto start</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicio automático</translation>
     </message>
     <message>
         <location filename="../../copyEngineOptions.ui" line="171"/>
@@ -751,72 +751,82 @@
         <translation>Cuando archivo colisión</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="273"/>
+        <location filename="../../copyEngineOptions.ui" line="256"/>
+        <source>Overwrite if not same size</source>
+        <translation>Sobrescribir si no es del mismo tamaño</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="261"/>
+        <source>Overwrite if modification date differs</source>
+        <translation>Sobrescribir si la fecha de modificación difiere</translation>
+    </message>
+    <message>
+        <location filename="../../copyEngineOptions.ui" line="283"/>
         <source>When folder collision</source>
         <translation>Cuando la colisión carpeta</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="304"/>
+        <location filename="../../copyEngineOptions.ui" line="314"/>
         <source>Check if destination folder exists</source>
         <translation>Compruebe si existe la carpeta de destino</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="311"/>
+        <location filename="../../copyEngineOptions.ui" line="321"/>
         <source>Renaming rules</source>
         <translation>Reglas de Cambio de nombre</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="331"/>
+        <location filename="../../copyEngineOptions.ui" line="341"/>
         <source>Delete partially transferred files</source>
         <translation>Eliminar archivos parcialmente transferidos</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="344"/>
+        <location filename="../../copyEngineOptions.ui" line="354"/>
         <source>Rename the original destination</source>
         <translation>Cambie el nombre del destino original</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="375"/>
+        <location filename="../../copyEngineOptions.ui" line="385"/>
         <source>Performance</source>
         <translation>Rendimiento</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="381"/>
+        <location filename="../../copyEngineOptions.ui" line="391"/>
         <source>Inode threads</source>
-        <translation type="unfinished"></translation>
+        <translation>Inode threads</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="414"/>
+        <location filename="../../copyEngineOptions.ui" line="424"/>
         <source>Uncheck this under Windows create problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Desmarca esto en Windows crear problema</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="421"/>
+        <location filename="../../copyEngineOptions.ui" line="431"/>
         <source>Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Buffer</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="437"/>
+        <location filename="../../copyEngineOptions.ui" line="447"/>
         <source>Misc</source>
         <translation>Misc</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="443"/>
+        <location filename="../../copyEngineOptions.ui" line="453"/>
         <source>Check the disk space</source>
         <translation>Compruebe el espacio en disco</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="453"/>
+        <location filename="../../copyEngineOptions.ui" line="463"/>
         <source>Use this folder when destination is not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Use esta carpeta cuando el destino no esté configurado</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="465"/>
+        <location filename="../../copyEngineOptions.ui" line="475"/>
         <source>Browse</source>
         <translation>Busque</translation>
     </message>
     <message>
-        <location filename="../../copyEngineOptions.ui" line="487"/>
+        <location filename="../../copyEngineOptions.ui" line="497"/>
         <source>Filters</source>
         <translation>Filtros</translation>
     </message>
@@ -950,13 +960,13 @@
         <location filename="../../fileExistsDialog.ui" line="362"/>
         <location filename="../../fileExistsDialog.ui" line="365"/>
         <source>Overwrite if not same size</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobrescribir si no es del mismo tamaño</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="370"/>
         <location filename="../../fileExistsDialog.ui" line="373"/>
         <source>Overwrite if not same size and date</source>
-        <translation type="unfinished"></translation>
+        <translation>Sobrescribir si no es del mismo tamaño y fecha</translation>
     </message>
     <message>
         <location filename="../../fileExistsDialog.ui" line="308"/>
