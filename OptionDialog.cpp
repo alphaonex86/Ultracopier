@@ -8,13 +8,20 @@
 #include "OSSpecific.h"
 #include "LanguagesManager.h"
 #include "cpp11addition.h"
+#include "FacilityEngine.h"
 
 #include <QDomElement>
 #include <QFileDialog>
 #include <QMessageBox>
+#ifndef NOAUDIO
+#include <QAudioOutput>
+#endif
 
 OptionDialog::OptionDialog() :
     ui(new Ui::OptionDialog)
+  #ifndef NOAUDIO
+  ,buffer(&data)
+  #endif
 {
     quit=false;
     QStringList ultracopierArguments=QCoreApplication::arguments();
@@ -1063,4 +1070,23 @@ void OptionDialog::on_soundWhenFinish_toggled(bool checked)
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
         OptionEngine::optionEngine->setOptionValue("Ultracopier","soundWhenFinish",std::to_string(checked));
     }
+}
+
+void OptionDialog::on_playSound_clicked()
+{
+    #ifndef NOAUDIO
+    const std::string newSoundFile=ui->soundFile->text().toStdString();
+    buffer.seek(0);
+    data.clear();
+    if(!buffer.isOpen())
+        buffer.open(QIODevice::ReadWrite);
+    QAudioOutput *audio=static_cast<QAudioOutput *>(FacilityEngine::facilityEngine.prepareOpusAudio(newSoundFile,buffer));
+    if(audio!=nullptr)
+    {
+        buffer.seek(0);
+        audio->start(&buffer);
+    }
+    else
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"unable to open sound file: "+newSoundFile);
+    #endif
 }

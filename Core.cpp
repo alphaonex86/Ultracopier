@@ -549,7 +549,7 @@ void Core::actionInProgess(const Ultracopier::EngineActionInProgress &action)
         }
         #ifndef NOAUDIO
         if(action==Ultracopier::Idle)
-            if(!stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","soundWhenFinish")))
+            if(stringtobool(OptionEngine::optionEngine->getOptionValue("Ultracopier","soundWhenFinish")))
             {
                 const std::string newSoundFile=OptionEngine::optionEngine->getOptionValue("Ultracopier","soundFile");
                 if(newSoundFile!=soundFile)

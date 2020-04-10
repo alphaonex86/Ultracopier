@@ -11,6 +11,9 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include <QTreeWidgetItem>
+#ifndef NOAUDIO
+#include <QBuffer>
+#endif
 
 #include "Environment.h"
 #include "OSSpecific.h"
@@ -84,6 +87,7 @@ private slots:
     void on_portable_toggled(bool);
     void on_soundFile_editingFinished();
     void on_soundWhenFinish_toggled(bool checked);
+    void on_playSound_clicked();
 private:
     bool quit;
     Ui::OptionDialog *ui;
@@ -114,6 +118,10 @@ private:
     QTreeWidgetItem * treeWidgetItem;
     OSSpecific *oSSpecific;
     bool allPluginsIsLoaded;
+    #ifndef NOAUDIO
+    QByteArray data;
+    QBuffer buffer;
+    #endif
 public slots:
     void newThemeOptions(const std::string &name,QWidget* theNewOptionsWidget,bool isLoaded,bool havePlugin);
     void newClientList(const std::vector<std::string> &clientsList);

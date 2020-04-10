@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>779</width>
+    <width>808</width>
     <height>455</height>
    </rect>
   </property>
@@ -302,6 +302,13 @@
                </property>
                <property name="placeholderText">
                 <string>default: finish.opus</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="playSound">
+               <property name="text">
+                <string>Play</string>
                </property>
               </widget>
              </item>
