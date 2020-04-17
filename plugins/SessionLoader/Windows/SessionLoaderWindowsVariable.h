@@ -7,7 +7,7 @@
 #define VARIABLE_H
 
 //Un-comment this next line to put ultracopier plugin in debug mode
-#define ULTRACOPIER_PLUGIN_DEBUG
+//#define ULTRACOPIER_PLUGIN_DEBUG
 
 #endif // VARIABLE_H
 

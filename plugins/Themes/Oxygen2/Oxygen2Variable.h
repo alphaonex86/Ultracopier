@@ -9,7 +9,7 @@
 
 //Un-comment this next line to put ultracopier plugin in debug mode
 #ifndef ULTRACOPIER_NODEBUG
-#define ULTRACOPIER_PLUGIN_DEBUG
+//#define ULTRACOPIER_PLUGIN_DEBUG
 #endif
 
 #endif // VARIABLEINTERFACEO2_H
