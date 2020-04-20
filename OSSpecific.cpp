@@ -61,7 +61,7 @@ bool OSSpecific::dontShowAgain()
 QString OSSpecific::theme()
 {
     #if defined(ULTRACOPIER_PLUGIN_ALL_IN_ONE) || defined(ULTRACOPIER_MODE_SUPERCOPIER)
-    return "modern";
+    return "classic";
     #else
     switch (ui->comboBox->currentIndex()) {
     default:

@@ -4,9 +4,9 @@ include(other-pro/ultracopier-core.pro)
 
 RESOURCES += $$PWD/plugins/static-plugins.qrc \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/copyEngineResources.qrc \
-    $$PWD/plugins/Themes/Oxygen2/interfaceResources_unix.qrc \
-    $$PWD/plugins/Themes/Oxygen2/interfaceResources_windows.qrc \
-    $$PWD/plugins/Themes/Oxygen2/interfaceResources.qrc
+    $$PWD/plugins/Themes/Oxygen/interfaceResources_unix.qrc \
+    $$PWD/plugins/Themes/Oxygen/interfaceResources_windows.qrc \
+    $$PWD/plugins/Themes/Oxygen/interfaceResources.qrc
 
 win32:RESOURCES += $$PWD/plugins/static-plugins-windows.qrc
 
@@ -41,9 +41,9 @@ FORMS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/Filters.ui \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/folderExistsDialog.ui \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/RenamingRules.ui \
-    $$PWD/plugins/Themes/Oxygen2/themesOptions.ui \
-    $$PWD/plugins/Themes/Oxygen2/options.ui \
-    $$PWD/plugins/Themes/Oxygen2/interface.ui
+    $$PWD/plugins/Themes/Oxygen/interface.ui \
+    $$PWD/plugins/Themes/Oxygen/options.ui \
+    $$PWD/plugins/Themes/Oxygen/themesOptions.ui
 
 HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CompilerInfo.h \
@@ -68,6 +68,8 @@ HEADERS += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/StructEnumDefinition.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.h \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngineUltracopier-SpecVariable.h \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h \
     $$PWD/plugins/Listener/catchcopy-v0002/Listenercatchcopy-v0002Variable.h \
     $$PWD/plugins/Listener/catchcopy-v0002/StructEnumDefinition.h \
     $$PWD/plugins/Listener/catchcopy-v0002/listener.h \
@@ -77,23 +79,13 @@ HEADERS += \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.h \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.h \
     $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/VariablesCatchcopy.h \
-    $$PWD/plugins/Themes/Oxygen2/DebugEngineMacro.h \
-    $$PWD/plugins/Themes/Oxygen2/Oxygen2Environment.h \
-    $$PWD/plugins/Themes/Oxygen2/ThemesFactory.h \
-    $$PWD/plugins/Themes/Oxygen2/interface.h \
-    $$PWD/plugins/Themes/Oxygen2/Oxygen2Variable.h \
-    $$PWD/plugins/Themes/Oxygen2/TransferModel.h \
-    $$PWD/plugins/Themes/Oxygen2/StructEnumDefinition.h \
-    $$PWD/plugins/Themes/Oxygen2/chartarea.h \
-    $$PWD/plugins/Themes/Oxygen2/fileTree.h \
-    $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.h \
-    $$PWD/plugins/Themes/Oxygen2/DarkButton.h \
-    $$PWD/plugins/Themes/Oxygen2/VerticalLabel.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/map.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/widget.h \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/radialMap.h \
-    plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.h \
-    plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.h
+    $$PWD/plugins/Themes/Oxygen/DebugEngineMacro.h \
+    $$PWD/plugins/Themes/Oxygen/Environment.h \
+    $$PWD/plugins/Themes/Oxygen/interface.h \
+    $$PWD/plugins/Themes/Oxygen/OxygenVariable.h \
+    $$PWD/plugins/Themes/Oxygen/StructEnumDefinition.h \
+    $$PWD/plugins/Themes/Oxygen/ThemesFactory.h \
+    $$PWD/plugins/Themes/Oxygen/TransferModel.h
 
 SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/CopyEngine-collision-and-error.cpp \
@@ -114,22 +106,6 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/TransferThread.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThread.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/listener.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
-    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.cpp \
-    $$PWD/plugins/Themes/Oxygen2/ThemesFactory.cpp \
-    $$PWD/plugins/Themes/Oxygen2/interface.cpp \
-    $$PWD/plugins/Themes/Oxygen2/TransferModel.cpp \
-    $$PWD/plugins/Themes/Oxygen2/chartarea.cpp \
-    $$PWD/plugins/Themes/Oxygen2/fileTree.cpp \
-    $$PWD/plugins/Themes/Oxygen2/ProgressBarDark.cpp \
-    $$PWD/plugins/Themes/Oxygen2/DarkButton.cpp \
-    $$PWD/plugins/Themes/Oxygen2/VerticalLabel.cpp \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/labels.cpp \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/map.cpp \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \
-    $$PWD/plugins/Themes/Oxygen2/radialMap/widget.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadActions.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadMedia.cpp \
@@ -137,8 +113,15 @@ SOURCES += \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadOptions.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadScan.cpp \
     $$PWD/plugins/CopyEngine/Ultracopier-Spec/ListThreadStat.cpp \
-    plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp \
-    plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/ReadThread.cpp \
+    $$PWD/plugins/CopyEngine/Ultracopier-Spec/async/WriteThread.cpp \
+    $$PWD/plugins/Listener/catchcopy-v0002/listener.cpp \
+    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ClientCatchcopy.cpp \
+    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ExtraSocketCatchcopy.cpp \
+    $$PWD/plugins/Listener/catchcopy-v0002/catchcopy-api-0002/ServerCatchcopy.cpp \
+    $$PWD/plugins/Themes/Oxygen/interface.cpp \
+    $$PWD/plugins/Themes/Oxygen/ThemesFactory.cpp \
+    $$PWD/plugins/Themes/Oxygen/TransferModel.cpp
 
 win32 {
     RESOURCES -= $$PWD/resources/resources-windows-qt-plugin.qrc

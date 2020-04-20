@@ -18,7 +18,7 @@
 #ifdef ULTRACOPIER_MODE_SUPERCOPIER
 #define ULTRACOPIER_DEFAULT_STYLE "Supercopier"
 #else
-#define ULTRACOPIER_DEFAULT_STYLE "Oxygen2"
+#define ULTRACOPIER_DEFAULT_STYLE "Oxygen"
 #endif
 
 /// \warning All plugin remain loaded

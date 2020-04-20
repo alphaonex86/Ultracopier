@@ -1,4 +1,6 @@
 include($$PWD/../Oxygen/interfaceInclude.pri)
+TEMPLATE        = lib
+CONFIG         += plugin
 
 !CONFIG(static) {
 RESOURCES	+= \

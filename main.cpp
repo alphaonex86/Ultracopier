@@ -56,7 +56,7 @@ void registerTheOptions()
     KeysList.push_back(std::pair<std::string, std::string>("GroupWindowWhen","0"));
     KeysList.push_back(std::pair<std::string, std::string>("displayOSSpecific2","true"));
     KeysList.push_back(std::pair<std::string, std::string>("confirmToGroupWindows","true"));
-    KeysList.push_back(std::pair<std::string, std::string>("remainingTimeAlgorithm","1"));
+    KeysList.push_back(std::pair<std::string, std::string>("remainingTimeAlgorithm","0"));
     KeysList.push_back(std::pair<std::string, std::string>("portable","false"));
     KeysList.push_back(std::pair<std::string, std::string>("soundFile","finish.opus"));
     KeysList.push_back(std::pair<std::string, std::string>("soundWhenFinish","false"));
