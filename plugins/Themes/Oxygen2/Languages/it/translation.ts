@@ -6,12 +6,12 @@
     <message>
         <location filename="../../radialMap/map.cpp" line="108"/>
         <source>%1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 file</translation>
     </message>
     <message>
         <location filename="../../radialMap/map.cpp" line="204"/>
         <source>%1 file, with an average size of %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 file, con una dimensione media di %2</translation>
     </message>
 </context>
 <context>
@@ -20,7 +20,7 @@
         <location filename="../../radialMap/widgetEvents.cpp" line="194"/>
         <location filename="../../radialMap/widgetEvents.cpp" line="196"/>
         <source> into %1 files</source>
-        <translation type="unfinished"></translation>
+        <translation> in %1 file</translation>
     </message>
 </context>
 <context>
@@ -78,7 +78,7 @@
         <location filename="../../interface.cpp" line="1642"/>
         <location filename="../../interface.cpp" line="1651"/>
         <source>%1 %2% of %3 into %4 files</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2% di %3 in %4 file</translation>
     </message>
 </context>
 <context>
@@ -116,22 +116,22 @@
     <message>
         <location filename="../../interface.ui" line="301"/>
         <source>&amp;More</source>
-        <translation>Altr&amp;o</translation>
+        <translation>Avanzate</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="321"/>
         <source>&amp;Pause</source>
-        <translation>&amp;Pausa</translation>
+        <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="482"/>
         <source>&amp;Skip</source>
-        <translation>&amp;Salta</translation>
+        <translation>Salta</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="493"/>
         <source>&amp;Cancel</source>
-        <translation>&amp;Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="389"/>
@@ -141,12 +141,12 @@
     <message>
         <location filename="../../interface.ui" line="232"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="252"/>
         <source>100MB+</source>
-        <translation type="unfinished"></translation>
+        <translation>100MB+</translation>
     </message>
     <message>
         <location filename="../../interface.ui" line="527"/>
@@ -306,17 +306,17 @@
         <location filename="../../themesOptions.ui" line="70"/>
         <location filename="../../themesOptions.ui" line="87"/>
         <source>Limit copy speed to</source>
-        <translation>Limitare la velocità di copia a</translation>
+        <translation>Limitare velocità di copia a:</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="117"/>
         <source>Start minimized</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvia ridotto a icona</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="144"/>
         <source>Position at start</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione di partenza</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="332"/>
@@ -331,22 +331,22 @@
     <message>
         <location filename="../../themesOptions.ui" line="204"/>
         <source>Dark UI</source>
-        <translation type="unfinished"></translation>
+        <translation>Interfaccia utente scura</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="212"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Predefinito</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="217"/>
         <source>Save as previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Mantenere come precedente</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="222"/>
         <source>At Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Centrale</translation>
     </message>
     <message>
         <location filename="../../themesOptions.ui" line="239"/>
