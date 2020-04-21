@@ -27,10 +27,10 @@ script:
   
 # deploy to Github
 deploy:
-  # deploy on linux
   provider: releases
+  edge: true
   skip_cleanup: true
   github_token: $GITHUB_TOKEN   
-  keep_history: true
+  keep_history: true  
   on:
-    branch: master
+    branch: masterr
