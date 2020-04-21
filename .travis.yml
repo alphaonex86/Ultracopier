@@ -18,7 +18,7 @@ addons:
       - qt513multimedia	
       - libogg-dev	
       - libopus-dev
-      -	libgl1-mesa-dev
+      - libgl1-mesa-dev
 
 script: 
   - source /opt/qt513/bin/qt513-env.sh
