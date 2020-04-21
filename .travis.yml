@@ -1,33 +1,36 @@
-# Copying and distribution of this file, with or without modification,
-# are permitted in any medium without royalty provided this notice is
-# preserved.  This file is offered as-is, without any warranty.
-# Names of contributors must not be used to endorse or promote products
-# derived from this file without specific prior written permission.
-
-
-# See YAML format https://en.wikipedia.org/wiki/YAML
-# See Travis CI (Continuous Integration) https://docs.travis-ci.com/
-
-
+# language target
 language: cpp
+compiler: gcc
 
-os:
-  - linux
+name: "Bionic Ubuntu Linux"
+os: linux
+dist: bionic
+sudo: required
 
-compiler:
-  - clang
-  - gcc
+addons:	
+  apt:	
+    sources:	
+        - sourceline: 'ppa:beineri/opt-qt-5.13.2-bionic'	
+    packages:         
+      - make	
+      - qt513base	
+      - qt513tools	
+      - qt513multimedia	
+      - libogg-dev	
+      - libopus-dev
+      -	libgl1-mesa-dev
 
-addons:
-  apt:
-    packages:
-      - clang
-      - gcc
-      - make
-      - qt-sdk
-      - qt5-qmake
-      - qt5-default
-
-script:
-  - qmake ultracopier-all-in-one-direct.pro
-  - make
+script: 
+  - source /opt/qt513/bin/qt513-env.sh
+  - qmake ./ultracopier.pro
+  - make -j$(nproc)
+  
+# deploy to Github
+deploy:
+  # deploy on linux
+  provider: releases
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN   
+  keep_history: true
+  on:
+    branch: master
