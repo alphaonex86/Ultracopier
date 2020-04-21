@@ -26,11 +26,10 @@ script:
   - make -j$(nproc)
   
 # deploy to Github
-deploy:
-  provider: releases
-  edge: true
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN   
-  keep_history: true  
-  on:
-    branch: master
+after_success:
+  # listing the result
+  - ls -lh 
+  # get the tag version
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - export GITHUB_TOKEN="$OAUTHTOKEN"
+  - bash upload.sh ultracopier
