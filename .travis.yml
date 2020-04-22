@@ -19,6 +19,7 @@ addons:
       - libgl1-mesa-dev
 
 script: 
+  - find ./ -name '*.ts' -exec lrelease {} \; 
   - qmake ./ultracopier.pro
   - make -j$(nproc)
   
