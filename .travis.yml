@@ -8,20 +8,17 @@ dist: bionic
 sudo: required
 
 addons:	
-  apt:	
-    sources:	
-        - sourceline: 'ppa:beineri/opt-qt-5.13.2-bionic'	
-    packages:         
-      - make	
-      - qt513base	
-      - qt513tools	
-      - qt513multimedia	
+  apt:
+    packages:
+      - make
+      - gcc
+      - qt5-default	
+      - qtmultimedia5-dev	
       - libogg-dev	
       - libopus-dev
       - libgl1-mesa-dev
 
 script: 
-  - source /opt/qt513/bin/qt513-env.sh
   - qmake ./ultracopier.pro
   - make -j$(nproc)
   
