@@ -233,7 +233,9 @@ bool WriteThread::internalOpen()
     }
     bool fileWasExists=TransferThread::is_file(file);
     #ifdef Q_OS_UNIX
-    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT);
+    // The last parameter (0755) does nothing. It is simply accepted for compatibility with the UNIX "open" function.
+    // Needed for major build compatibility
+    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT, 0755);  
     #else
     DWORD flags=FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN;
     /*if(!buffer)
