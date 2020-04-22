@@ -233,7 +233,7 @@ bool WriteThread::internalOpen()
     }
     bool fileWasExists=TransferThread::is_file(file);
     #ifdef Q_OS_UNIX
-    to = ::open(TransferThread::internalStringTostring(file).c_str(), S_IRUSR|S_IWUSR, O_WRONLY | O_CREAT);
+    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT);
     #else
     DWORD flags=FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN;
     /*if(!buffer)
