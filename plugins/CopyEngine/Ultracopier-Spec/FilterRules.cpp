@@ -47,9 +47,9 @@ ApplyOn FilterRules::get_apply_on()
     {
         case 0:
             return ApplyOn_file;
-        case 1:
-            return ApplyOn_fileAndFolder;
         case 2:
+            return ApplyOn_fileAndFolder;
+        case 1:
             return ApplyOn_folder;
     }
     return ApplyOn_fileAndFolder;
@@ -89,10 +89,10 @@ void FilterRules::set_apply_on(ApplyOn apply_on)
             ui->apply_on->setCurrentIndex(0);
         break;
         case ApplyOn_fileAndFolder:
-            ui->apply_on->setCurrentIndex(1);
+            ui->apply_on->setCurrentIndex(2);
         break;
         case ApplyOn_folder:
-            ui->apply_on->setCurrentIndex(2);
+            ui->apply_on->setCurrentIndex(1);
         break;
     }
 }

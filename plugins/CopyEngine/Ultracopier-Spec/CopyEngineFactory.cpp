@@ -199,7 +199,7 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("osBufferLimit",std::to_string(512)));
         KeysList.push_back(std::pair<std::string, std::string>("deletePartiallyTransferredFiles","true"));
         KeysList.push_back(std::pair<std::string, std::string>("moveTheWholeFolder","true"));
-        KeysList.push_back(std::pair<std::string, std::string>("followTheStrictOrder","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("followTheStrictOrder","true"));
         KeysList.push_back(std::pair<std::string, std::string>("renameTheOriginalDestination","false"));
         KeysList.push_back(std::pair<std::string, std::string>("checkDiskSpace","true"));
         KeysList.push_back(std::pair<std::string, std::string>("defaultDestinationFolder",""));
