@@ -865,6 +865,11 @@ void TransferThread::setBuffer(const bool buffer)
     Q_UNUSED(buffer);
 }
 
+/*void TransferThread::setBufferSize(const int parallelBuffer,const int serialBuffer)
+{
+    writeThread->setBufferSize(const int parallelBuffer,const int serialBuffer);
+}*/
+
 //set keep date
 void TransferThread::setKeepDate(const bool keepDate)
 {

@@ -57,6 +57,8 @@ private:
     FacilityInterface *		facilityEngine;
     bool                    doRightTransfer;
     bool                    keepDate;
+    bool                    os_spec_flags;
+    bool                    native_copy;
     bool                    followTheStrictOrder;
     bool                    deletePartiallyTransferredFiles;
     int                     inodeThreads;
@@ -275,6 +277,8 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
+    void setOsSpecFlags(bool os_spec_flags);
+    void setNativeCopy(bool native_copy);
 
     void setMoveTheWholeFolder(const bool &moveTheWholeFolder);
     void setFollowTheStrictOrder(const bool &followTheStrictOrder);

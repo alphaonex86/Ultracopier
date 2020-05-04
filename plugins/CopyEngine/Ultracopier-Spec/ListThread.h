@@ -164,6 +164,8 @@ public slots:
     void setRightTransfer(const bool doRightTransfer);
     /// \brief set keep date
     void setKeepDate(const bool keepDate);
+    void setOsSpecFlags(bool os_spec_flags);
+    void setNativeCopy(bool native_copy);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     /// \brief set rsync
     void setRsync(const bool rsync);
@@ -289,6 +291,8 @@ private:
     //memory variable for transfer thread creation
     bool doRightTransfer;
     bool keepDate;
+    bool os_spec_flags;
+    bool native_copy;
     bool mkFullPath;
     std::vector<std::string> drives;
     FileExistsAction alwaysDoThisActionForFileExists;

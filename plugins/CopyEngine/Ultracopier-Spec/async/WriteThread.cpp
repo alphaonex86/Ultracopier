@@ -12,6 +12,8 @@
 #include <fcntl.h>
 #endif
 
+unsigned int WriteThread::numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
+
 WriteThread::WriteThread()
 {
     deletePartiallyTransferredFiles = true;
@@ -23,7 +25,6 @@ WriteThread::WriteThread()
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     status                            = Idle;
     #endif
-    numberOfBlock                   = ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
     putInPause                      = false;
     needRemoveTheFile               = false;
     start();
@@ -138,9 +139,9 @@ bool WriteThread::internalOpen()
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] before the mutex");
     //set to LISTBLOCKSIZE
-    while(writeFull.available()<numberOfBlock)
+    while(writeFull.available()<(int)numberOfBlock)
         writeFull.release();
-    if(writeFull.available()>numberOfBlock)
+    if(writeFull.available()>(int)numberOfBlock)
         writeFull.acquire(writeFull.available()-numberOfBlock);
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the mutex");
     stopIt=false;
@@ -235,9 +236,11 @@ bool WriteThread::internalOpen()
     #ifdef Q_OS_UNIX
     // The last parameter (0755) does nothing. It is simply accepted for compatibility with the UNIX "open" function.
     // Needed for major build compatibility
-    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT, 0755);  
+    to = ::open(TransferThread::internalStringTostring(file).c_str(), O_WRONLY | O_CREAT, 0755);
     #else
-    DWORD flags=FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN;
+    DWORD flags=FILE_ATTRIBUTE_NORMAL;
+    if(os_spec_flags)
+        flags|=SEQUENTIAL;
     /*if(!buffer)
         //FILE_FLAG_NO_BUFFERING Under Windows 10 do The parameter is incorrect. (87)
         flags|=FILE_FLAG_NO_BUFFERING;//FILE_FLAG_WRITE_THROUGH |*/
@@ -253,7 +256,7 @@ bool WriteThread::internalOpen()
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the open");
         {
             QMutexLocker lock_mutex(&accessList);
-            if(!theBlockList.isEmpty())
+            if(!theBlockList.empty())
             {
                 ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] General file corruption detected");
                 stopIt=true;
@@ -273,8 +276,11 @@ bool WriteThread::internalOpen()
         }
         pauseMutex.tryAcquire(pauseMutex.available());
         #ifdef Q_OS_LINUX
-        posix_fadvise(to, 0, 0, POSIX_FADV_NOREUSE);
-        posix_fadvise(to, 0, 0, POSIX_FADV_SEQUENTIAL);
+        if(os_spec_flags)
+        {
+            posix_fadvise(to, 0, 0, POSIX_FADV_NOREUSE);
+            posix_fadvise(to, 0, 0, POSIX_FADV_SEQUENTIAL);
+        }
         #endif
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] after the pause mutex");
         if(stopIt)
@@ -553,7 +559,11 @@ void WriteThread::flushBuffer()
     pauseMutex.release();
     {
         QMutexLocker lock_mutex(&accessList);
-        theBlockList.clear();
+        while(!theBlockList.empty())
+        {
+            free(theBlockList.front().data);
+            theBlockList.pop();
+        }
     }
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+"] stop");
 }
@@ -564,7 +574,7 @@ bool WriteThread::bufferIsEmpty()
     bool returnVal;
     {
         QMutexLocker lock_mutex(&accessList);
-        returnVal=theBlockList.isEmpty();
+        returnVal=theBlockList.empty();
     }
     return returnVal;
 }
@@ -901,7 +911,7 @@ void WriteThread::setDeletePartiallyTransferredFiles(const bool &deletePartially
     this->deletePartiallyTransferredFiles=deletePartiallyTransferredFiles;
 }
 
-bool WriteThread::write(const QByteArray &data)
+bool WriteThread::write(char * data, const unsigned int size)
 {
     if(stopIt)
         return false;
@@ -910,7 +920,10 @@ bool WriteThread::write(const QByteArray &data)
         return false;
     {
         QMutexLocker lock_mutex(&accessList);
-        theBlockList.append(data);
+        DataBlock d;
+        d.data=data;
+        d.size=size;
+        theBlockList.push(d);
         atMax=(theBlockList.size()>=numberOfBlock);
     }
     emit internalStartWrite();
@@ -963,22 +976,22 @@ void WriteThread::internalWrite()
         //read one block
         {
             QMutexLocker lock_mutex(&accessList);
-            if(theBlockList.isEmpty())
+            if(theBlockList.empty())
                 haveBlock=false;
             else
             {
-                blockArray=theBlockList.first();
+                blockArray=theBlockList.front();
                 #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
                 if(multiForBigSpeed>0)
                 {
-                    theBlockList.removeFirst();
+                    theBlockList.pop();
                     //if remove one block
                     writeFull.release();
                 }
                 else
                 #endif
                 {
-                    theBlockList.removeFirst();
+                    theBlockList.pop();
                     //if remove one block
                     writeFull.release();
                 }
@@ -986,10 +999,22 @@ void WriteThread::internalWrite()
             }
         }
         if(stopIt)
+        {
+            if(blockArray.data!=NULL)
+            {
+                free(blockArray.data);
+                blockArray.data=NULL;
+            }
             return;
+        }
         if(!haveBlock)
         {
             //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] End detected of the file");
+            if(blockArray.data!=NULL)
+            {
+                free(blockArray.data);
+                blockArray.data=NULL;
+            }
             return;
         }
         #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
@@ -1004,7 +1029,10 @@ void WriteThread::internalWrite()
                     numberOfBlockCopied=0;
                     waitNewClockForSpeed.acquire();
                     if(stopIt)
+                    {
+                        free(blockArray.data);
                         break;
+                    }
                 }
             }
             else
@@ -1014,13 +1042,27 @@ void WriteThread::internalWrite()
                     numberOfBlockCopied=0;
                     waitNewClockForSpeed.acquire();
                     if(stopIt)
+                    {
+                        if(blockArray.data!=NULL)
+                        {
+                            free(blockArray.data);
+                            blockArray.data=NULL;
+                        }
                         break;
+                    }
                 }
             }
         }
         #endif
         if(stopIt)
+        {
+            if(blockArray.data!=NULL)
+            {
+                free(blockArray.data);
+                blockArray.data=NULL;
+            }
             return;
+        }
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Write;
         #endif
@@ -1028,18 +1070,23 @@ void WriteThread::internalWrite()
         #ifdef Q_OS_WIN32
         BOOL retRead=TRUE;
         #endif
-        if(blockArray.size()<=0)
+        if(blockArray.size<=0)
             bytesWriten=0;
         else
         {
             #ifdef Q_OS_WIN32
             DWORD lpNumberOfBytesWrite=0;
-            retRead=WriteFile(to,blockArray.data(),blockArray.size(),
+            retRead=WriteFile(to,blockArray.data,blockArray.size,
                                          &lpNumberOfBytesWrite,NULL);
             bytesWriten=lpNumberOfBytesWrite;
             #else
-            bytesWriten=::write(to,blockArray.data(),blockArray.size());
+            bytesWriten=::write(to,blockArray.data,blockArray.size);
             #endif
+        }
+        if(blockArray.data!=NULL)
+        {
+            free(blockArray.data);
+            blockArray.data=NULL;
         }
 
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
@@ -1066,24 +1113,24 @@ void WriteThread::internalWrite()
             errorString_internal=TransferThread::GetLastErrorStdStr();
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                      "Unable to write: "+TransferThread::internalStringTostring(file)+
-                                     ", error: "+errorString_internal+" ("+std::to_string(e)+") to write "+std::to_string(blockArray.size())+"B at "+std::to_string(lastGoodPosition)+"B"
+                                     ", error: "+errorString_internal+" ("+std::to_string(e)+") to write "+std::to_string(blockArray.size)+"B at "+std::to_string(lastGoodPosition)+"B"
                                      );
             #else
             int t=errno;
             errorString_internal=strerror(t);
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
                                      "Unable to write: "+TransferThread::internalStringTostring(file)+
-                                     ", error: "+errorString_internal+" ("+std::to_string(t)+") to write "+std::to_string(blockArray.size())+"B at "+std::to_string(lastGoodPosition)+"B"
+                                     ", error: "+errorString_internal+" ("+std::to_string(t)+") to write "+std::to_string(blockArray.size)+"B at "+std::to_string(lastGoodPosition)+"B"
                                      );
             #endif
             stopIt=true;
             emit error();
             return;
         }
-        if(bytesWriten!=blockArray.size())
+        if(bytesWriten!=blockArray.size)
         {
-            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString());
-            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size()).toStdString();
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size).toStdString());
+            errorString_internal=QStringLiteral("Error in writing, bytesWriten: %1, blockArray.size(): %2").arg(bytesWriten).arg(blockArray.size).toStdString();
             stopIt=true;
             emit error();
             return;
@@ -1108,4 +1155,9 @@ int WriteThread::destTruncate(const uint64_t &startSize)
         abort();
     return ::ftruncate(to,startSize);
     #endif
+}
+
+void WriteThread::setOsSpecFlags(bool os_spec_flags)
+{
+    this->os_spec_flags=os_spec_flags;
 }

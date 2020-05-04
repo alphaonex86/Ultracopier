@@ -271,9 +271,10 @@ bool Filters::convertToRegex(Filters_rules &item)
         {
             //here to validate below the regex
             tempString=QRegularExpression::escape(QString::fromStdString(item.search_text)).toStdString();
-            //do search on string, QRegularExpression::escape() introduce \ on special char
-            if(item.search_text.find('/') != std::string::npos || item.search_text.find('\\') != std::string::npos)
-                isValid=false;
+            //do search on string only on file or file and folder, QRegularExpression::escape() introduce \ on special char
+            if(item.apply_on!=ApplyOn::ApplyOn_folder)
+                if(item.search_text.find('/') != std::string::npos || item.search_text.find('\\') != std::string::npos)
+                    isValid=false;
         }
         else if(item.search_type==SearchType_simpleRegex)
         {

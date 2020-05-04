@@ -11,6 +11,9 @@
 #include "../../../cpp11addition.h"
 #include "CopyEngineFactory.h"
 #include "TransferThread.h"
+#ifdef Q_OS_LINUX
+#include <sys/sysinfo.h>
+#endif
 
 // The cmath header from MSVC does not contain round()
 #if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
@@ -47,6 +50,8 @@ CopyEngineFactory::CopyEngineFactory() :
 
     connect(ui->doRightTransfer,            &QCheckBox::toggled,                                            this,&CopyEngineFactory::setDoRightTransfer);
     connect(ui->keepDate,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setKeepDate);
+    connect(ui->native_copy,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setNativeCopy);
+    connect(ui->os_spec_flags,                   &QCheckBox::toggled,                                            this,&CopyEngineFactory::setOsSpecFlags);
     connect(ui->inodeThreads,               static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),	this,&CopyEngineFactory::on_inodeThreads_editingFinished);
     connect(ui->autoStart,                  &QCheckBox::toggled,                                            this,&CopyEngineFactory::setAutoStart);
     connect(ui->comboBoxFolderError,        static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFolderError);
@@ -101,6 +106,8 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     connect(this,&CopyEngineFactory::reloadLanguage,realObject,&CopyEngine::newLanguageLoaded);
     realObject->setRightTransfer(ui->doRightTransfer->isChecked());
     realObject->setKeepDate(ui->keepDate->isChecked());
+    realObject->setOsSpecFlags(ui->os_spec_flags->isChecked());
+    realObject->setNativeCopy(ui->native_copy->isChecked());
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     realObject->setRsync(ui->rsync->isChecked());
     #endif
@@ -155,6 +162,16 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
     #else
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE not set");
     #endif
+    #ifdef Q_OS_WIN32
+    ULONGLONG TotalMemoryInKilobytes;
+    if(GetPhysicallyInstalledSystemMemory(&TotalMemoryInKilobytes))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Detected Memory MB Windows: "+std::to_string(TotalMemoryInKilobytes/1024));
+    #endif
+    #ifdef Q_OS_LINUX
+    struct sysinfo info;
+    if(sysinfo(&info)==0)
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Detected Memory MB Linux: "+std::to_string(info.totalhigh*info.mem_unit/1024/1024));
+    #endif
     if(options!=NULL)
     {
         //load the options
@@ -165,6 +182,8 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         #else
         KeysList.push_back(std::pair<std::string, std::string>("keepDate","true"));
         #endif
+        KeysList.push_back(std::pair<std::string, std::string>("native_copy","false"));
+        KeysList.push_back(std::pair<std::string, std::string>("os_spec_flags","true"));
         KeysList.push_back(std::pair<std::string, std::string>("blockSize",std::to_string(ULTRACOPIER_PLUGIN_DEFAULT_BLOCK_SIZE)));
         //to prevent swap and other bad effect, only under windows and unix for now
         #if defined(Q_OS_WIN32) or (defined(Q_OS_LINUX) and defined(_SC_PHYS_PAGES))
@@ -272,6 +291,12 @@ void CopyEngineFactory::resetOptions()
     #endif
     ui->doRightTransfer->setChecked(stringtobool(options->getOptionValue("doRightTransfer")));
     ui->keepDate->setChecked(stringtobool(options->getOptionValue("keepDate")));
+    ui->os_spec_flags->setChecked(stringtobool(options->getOptionValue("os_spec_flags")));
+    ui->native_copy->setChecked(stringtobool(options->getOptionValue("native_copy")));
+    #ifdef Q_OS_WIN32
+    ui->native_copy->setEnabled(false);
+    ui->native_copy->setToolTip(tr("Supported only on Windows"));
+    #endif
     ui->autoStart->setChecked(stringtobool(options->getOptionValue("autoStart")));
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     ui->rsync->setChecked(stringtobool(options->getOptionValue("rsync")));
@@ -324,6 +349,20 @@ void CopyEngineFactory::setKeepDate(bool keepDate)
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("keepDate",booltostring(keepDate));
+}
+
+void CopyEngineFactory::setOsSpecFlags(bool os_spec_flags)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("os_spec_flags",booltostring(os_spec_flags));
+}
+
+void CopyEngineFactory::setNativeCopy(bool native_copy)
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("native_copy",booltostring(native_copy));
 }
 
 void CopyEngineFactory::setFolderCollision(int index)

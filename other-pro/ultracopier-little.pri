@@ -23,51 +23,34 @@ OTHER_FILES += $$PWD/../resources/resources-windows.rc
 
 SOURCES += \
     ../little/main-little.cpp \
-    ../plugins/Themes/Oxygen2/ThemesFactory.cpp \
-    ../plugins/Themes/Oxygen2/interface.cpp \
-    ../plugins/Themes/Oxygen2/TransferModel.cpp \
-    ../plugins/Themes/Oxygen2/chartarea.cpp \
-    ../plugins/Themes/Oxygen2/fileTree.cpp \
-    ../plugins/Themes/Oxygen2/ProgressBarDark.cpp \
-    ../plugins/Themes/Oxygen2/DarkButton.cpp \
-    ../plugins/Themes/Oxygen2/VerticalLabel.cpp \
-    ../plugins/Themes/Oxygen2/radialMap/labels.cpp \
-    ../plugins/Themes/Oxygen2/radialMap/map.cpp \
-    ../plugins/Themes/Oxygen2/radialMap/widgetEvents.cpp \
-    ../plugins/Themes/Oxygen2/radialMap/widget.cpp \
+    ../plugins/Themes/Oxygen/interface.cpp \
+    ../plugins/Themes/Oxygen/ThemesFactory.cpp \
+    ../plugins/Themes/Oxygen/TransferModel.cpp \
     ../little/OptionsEngineLittle.cpp \
     ../FacilityEngine.cpp \
     ../cpp11addition.cpp \
     ../cpp11additionstringtointcpp.cpp
 
 RESOURCES += \
-    ../plugins/Themes/Oxygen2/interfaceResources_unix.qrc \
-    ../plugins/Themes/Oxygen2/interfaceResources_windows.qrc \
-    ../plugins/Themes/Oxygen2/interfaceResources.qrc
+    ../plugins/Themes/Oxygen/interfaceResources_unix.qrc \
+    ../plugins/Themes/Oxygen/interfaceResources_windows.qrc \
+    ../plugins/Themes/Oxygen/interfaceResources.qrc
 
 FORMS += \
-    ../plugins/Themes/Oxygen2/themesOptions.ui \
-    ../plugins/Themes/Oxygen2/options.ui \
-    ../plugins/Themes/Oxygen2/interface.ui
+    ../plugins/Themes/Oxygen/themesOptions.ui \
+    ../plugins/Themes/Oxygen/options.ui \
+    ../plugins/Themes/Oxygen/interface.ui
 
 DISTFILES +=
 
 HEADERS += \
-    ../plugins/Themes/Oxygen2/DebugEngineMacro.h \
-    ../plugins/Themes/Oxygen2/Oxygen2Environment.h \
-    ../plugins/Themes/Oxygen2/ThemesFactory.h \
-    ../plugins/Themes/Oxygen2/interface.h \
-    ../plugins/Themes/Oxygen2/Oxygen2Variable.h \
-    ../plugins/Themes/Oxygen2/TransferModel.h \
-    ../plugins/Themes/Oxygen2/StructEnumDefinition.h \
-    ../plugins/Themes/Oxygen2/chartarea.h \
-    ../plugins/Themes/Oxygen2/fileTree.h \
-    ../plugins/Themes/Oxygen2/ProgressBarDark.h \
-    ../plugins/Themes/Oxygen2/DarkButton.h \
-    ../plugins/Themes/Oxygen2/VerticalLabel.h \
-    ../plugins/Themes/Oxygen2/radialMap/map.h \
-    ../plugins/Themes/Oxygen2/radialMap/widget.h \
-    ../plugins/Themes/Oxygen2/radialMap/radialMap.h \
+    ../plugins/Themes/Oxygen/DebugEngineMacro.h \
+    ../plugins/Themes/Oxygen/Environment.h \
+    ../plugins/Themes/Oxygen/interface.h \
+    ../plugins/Themes/Oxygen/OxygenVariable.h \
+    ../plugins/Themes/Oxygen/StructEnumDefinition.h \
+    ../plugins/Themes/Oxygen/ThemesFactory.h \
+    ../plugins/Themes/Oxygen/TransferModel.h \
     ../little/OptionsEngineLittle.h \
     ../FacilityEngine.h \
     ../interface/FacilityInterface.h \

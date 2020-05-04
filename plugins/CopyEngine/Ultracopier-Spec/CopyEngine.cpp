@@ -253,6 +253,8 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setMkFullPath(mkFullPath);
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
+    setOsSpecFlags(os_spec_flags);
+    setNativeCopy(native_copy);
     setFollowTheStrictOrder(followTheStrictOrder);
     setDeletePartiallyTransferredFiles(deletePartiallyTransferredFiles);
     setInodeThreads(inodeThreads);
@@ -358,6 +360,8 @@ void CopyEngine::setInterfacePointer(QWidget * uiinterface)
         connect(ui->autoStart,                          &QCheckBox::toggled,		this,&CopyEngine::setAutoStart);
         connect(ui->doRightTransfer,                    &QCheckBox::toggled,		this,&CopyEngine::setRightTransfer);
         connect(ui->keepDate,                           &QCheckBox::toggled,		this,&CopyEngine::setKeepDate);
+        connect(ui->os_spec_flags,                      &QCheckBox::toggled,		this,&CopyEngine::setOsSpecFlags);
+        connect(ui->native_copy,                        &QCheckBox::toggled,		this,&CopyEngine::setNativeCopy);
         connect(ui->moveTheWholeFolder,                 &QCheckBox::toggled,		this,&CopyEngine::setMoveTheWholeFolder);
         connect(ui->deletePartiallyTransferredFiles,    &QCheckBox::toggled,		this,&CopyEngine::setDeletePartiallyTransferredFiles);
         connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
@@ -788,6 +792,22 @@ void CopyEngine::setKeepDate(const bool keepDate)
     if(uiIsInstalled)
         ui->keepDate->setChecked(keepDate);
     listThread->setKeepDate(keepDate);
+}
+
+void CopyEngine::setOsSpecFlags(const bool os_spec_flags)
+{
+    this->os_spec_flags=os_spec_flags;
+    if(uiIsInstalled)
+        ui->os_spec_flags->setChecked(os_spec_flags);
+    listThread->setOsSpecFlags(os_spec_flags);
+}
+
+void CopyEngine::setNativeCopy(const bool native_copy)
+{
+    this->native_copy=native_copy;
+    if(uiIsInstalled)
+        ui->native_copy->setChecked(native_copy);
+    listThread->setNativeCopy(native_copy);
 }
 
 void CopyEngine::setMoveTheWholeFolder(const bool &moveTheWholeFolder)

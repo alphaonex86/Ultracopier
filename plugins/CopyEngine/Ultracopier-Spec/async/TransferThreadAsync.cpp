@@ -173,6 +173,11 @@ void TransferThreadAsync::run()
 void TransferThreadAsync::startTheTransfer()
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"["+std::to_string(id)+("] start"));
+    if(transferId==0)
+    {
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+("] can't start transfert if transferId==0"));
+        return;
+    }
     startTransferTime.restart();
     haveTransferTime=true;
     emit internalTryStartTheTransfer();
@@ -236,7 +241,7 @@ bool TransferThreadAsync::setFiles(const INTERNALTYPEPATH& source, const int64_t
     if(!TransferThread::setFiles(source,size,destination,mode))
         return false;
     transferProgression=0;
-    transferSize=0;
+    //transferSize=0;//set by ListThread at currentTransferThread->transferSize=currentActionToDoTransfer.size; very important to do parallel small file
     sended_state_readStopped=false;
     readIsClosedVariable=false;
     writeIsClosedVariable=false;
@@ -647,9 +652,30 @@ void TransferThreadAsync::ifCanStartTransfer()
         else
         #endif
         {
-            readThread.open(source,mode);
-            writeThread.open(destination,0);
-            return;
+            #ifdef Q_OS_WIN32
+            if(native_copy)
+            {
+                successFull=CopyFileExW(TransferThread::toFinalPath(source).c_str(),TransferThread::toFinalPath(destination).c_str(),
+                    (LPPROGRESS_ROUTINE)progressRoutine,this,&stopItWin,COPY_FILE_ALLOW_DECRYPTED_DESTINATION | 0x00000800);//0x00000800 is COPY_FILE_COPY_SYMLINK
+                if(successFull==FALSE)
+                {
+                    const std::string &strError=TransferThread::GetLastErrorStdStr();
+                    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error: "+
+                                             GetLastErrorStdStr()+" "+TransferThread::internalStringTostring(source)+"->"+TransferThread::internalStringTostring(destination)+
+                                             " "+strError
+                                             );
+                    readError=true;
+                    writeError=true;
+                    emit errorOnFile(destination,strError);
+                }
+            }
+            else
+            #endif
+            {
+                readThread.open(source,mode);
+                writeThread.open(destination,0);
+                return;
+            }
         }
     }
     if(!successFull)
@@ -1398,3 +1424,14 @@ bool TransferThreadAsync::mkJunction(LPCWSTR szJunction, LPCWSTR szPath)
   return true;
 }
 #endif
+
+void TransferThreadAsync::setOsSpecFlags(bool os_spec_flags)
+{
+    readThread.setOsSpecFlags(os_spec_flags);
+    writeThread.setOsSpecFlags(os_spec_flags);
+}
+
+void TransferThreadAsync::setNativeCopy(bool native_copy)
+{
+    this->native_copy=native_copy;
+}

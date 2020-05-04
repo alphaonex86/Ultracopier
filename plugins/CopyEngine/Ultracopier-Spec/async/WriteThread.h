@@ -11,6 +11,7 @@
 #include <QMutex>
 #include <QSemaphore>
 #include <QCryptographicHash>
+#include <queue>
 
 #ifdef Q_OS_WIN32
 #include <windows.h>
@@ -44,6 +45,7 @@ public:
     QMultiHash<QString,WriteThread *> *writeFileList;
     QMutex       *writeFileListMutex;
     bool buffer;
+    static unsigned int                 numberOfBlock;
 protected:
     void run();
 public:
@@ -54,7 +56,7 @@ public:
     /// \brief to stop all
     void stop();
     /// \brief to write data
-    bool write(const QByteArray &data);
+    bool write(char *data, const unsigned int size);
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     /// \brief to set the id
     void setId(int id);
@@ -90,6 +92,7 @@ public:
     void reemitStartOpen();
     //return 0 if sucess
     int destTruncate(const uint64_t &startSize);
+    void setOsSpecFlags(bool os_spec_flags);
 public slots:
     /// \brief start the operation
     void postOperation();
@@ -124,10 +127,15 @@ signals:
     /// \brief To debug source
     void debugInformation(const Ultracopier::DebugLevel &level,const std::string &fonction,const std::string &text,const std::string &file,const int &ligne) const;
 private:
+    struct DataBlock
+    {
+        char * data;
+        unsigned int size;
+    };
     std::string             errorString_internal;
     volatile bool		stopIt;
     volatile bool       postOperationRequested;
-    int                 numberOfBlock;
+    bool os_spec_flags;
     QMutex              accessList;		///< For use the list
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     QSemaphore          waitNewClockForSpeed,waitNewClockForSpeed2;
@@ -140,9 +148,9 @@ private:
     QSemaphore          isOpen;
     QSemaphore          pauseMutex;
     volatile bool		putInPause;
-    QList<QByteArray>	theBlockList;		///< Store the block list
+    std::queue<DataBlock>	theBlockList;		///< Store the block list
     uint64_t             lastGoodPosition;
-    QByteArray          blockArray;		///< temp data for block writing, the data
+    DataBlock          blockArray;		///< temp data for block writing, the data
     int64_t              bytesWriten;		///< temp data for block writing, the bytes writen
     int                 id;
     volatile bool       endDetected;

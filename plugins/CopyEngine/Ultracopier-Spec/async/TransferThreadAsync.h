@@ -71,6 +71,8 @@ public:
     bool setBlockSize(const unsigned int blockSize);
     void setMultiForBigSpeed(const int &multiForBigSpeed);
     void timeOfTheBlockCopyFinished();
+    void setOsSpecFlags(bool os_spec_flags);
+    void setNativeCopy(bool native_copy);
     #endif
     /// \brief pause the copy
     void pause();
@@ -80,6 +82,7 @@ public:
     bool haveStartTime;
     ReadThread readThread;
     WriteThread writeThread;
+    bool native_copy;
     void setBuffer(const bool buffer);
 
     #ifdef Q_OS_WIN32

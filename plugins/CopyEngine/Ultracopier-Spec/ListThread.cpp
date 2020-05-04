@@ -4,6 +4,9 @@
 #include "../../../cpp11addition.h"
 
 #include "async/TransferThreadAsync.h"
+#ifdef Q_OS_LINUX
+#include <sys/sysinfo.h>
+#endif
 
 ListThread::ListThread(FacilityInterface * facilityInterface) :
     numberOfInodeOperation(0),
@@ -41,6 +44,8 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
     localOverSize(0),
     doRightTransfer(false),
     keepDate(false),
+    os_spec_flags(true),
+    native_copy(false),
     mkFullPath(false),
     alwaysDoThisActionForFileExists(FileExists_NotSet),
     speedLimitation(0),
@@ -86,6 +91,22 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
 
     emit askNewTransferThread();
     mkpathTransfer.release();
+
+    int64_t MBMem=100;
+    #ifdef Q_OS_WIN32
+    ULONGLONG TotalMemoryInKilobytes;
+    if(GetPhysicallyInstalledSystemMemory(&TotalMemoryInKilobytes))
+        MBMem=TotalMemoryInKilobytes/1024;
+    #endif
+    #ifdef Q_OS_LINUX
+    struct sysinfo info;
+    if(sysinfo(&info)==0)
+        MBMem=info.totalhigh*info.mem_unit/1024/1024;
+    #endif
+    if(MBMem<1024)
+        WriteThread::numberOfBlock=4+MBMem*0.12;
+    else
+        WriteThread::numberOfBlock=ULTRACOPIER_PLUGIN_DEFAULT_PARALLEL_NUMBER_OF_BLOCK;
 }
 
 ListThread::~ListThread()
@@ -705,7 +726,7 @@ void ListThread::doNewActions_start_transfer()
     while(int_for_loop<loop_size)
     {
         TransferThreadAsync *transferThread=transferThreadList.at(int_for_loop);
-        if(transferThread->getStat()==TransferStat_WaitForTheTransfer/*ready to start the transfer*/)
+        if(transferThread->getStat()==TransferStat_WaitForTheTransfer/*ready to start the transfer*/ && transferThread->transferId!=0)
         {
             //ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
             if(transferThread->transferSize>=parallelizeIfSmallerThan)
@@ -720,7 +741,8 @@ void ListThread::doNewActions_start_transfer()
             }
             else
             {
-                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning));
+                ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"numberOfTranferRuning: "+std::to_string(numberOfTranferRuning)+
+                                         ", start in parallele beacuase size is "+std::to_string(transferThread->transferSize));
                 transferThread->startTheTransfer();
                 numberOfTranferRuning++;
             }
@@ -1102,6 +1124,8 @@ void ListThread::createTransferThread()
     last->transferSize=0;
     last->setRightTransfer(doRightTransfer);
     last->setKeepDate(keepDate);
+    last->setOsSpecFlags(os_spec_flags);
+    last->setNativeCopy(native_copy);
     last->setAlwaysFileExistsAction(alwaysDoThisActionForFileExists);
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     if(!last->setBlockSize(blockSizeAfterSpeedLimitation))

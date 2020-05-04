@@ -260,7 +260,10 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     #ifdef Q_OS_UNIX
     from = ::open(TransferThread::internalStringTostring(file).c_str(), O_RDONLY);
     #else
-    from=CreateFileW(file.c_str(),GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,NULL);
+    DWORD flags=FILE_ATTRIBUTE_NORMAL;
+    if(os_spec_flags)
+        flags|=SEQUENTIAL;
+    from=CreateFileW(file.c_str(),GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,flags,NULL);
     #endif
     #ifdef Q_OS_UNIX
     if(from>=0)
@@ -285,9 +288,12 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
         }
         pauseMutex.tryAcquire(pauseMutex.available());
         #ifdef Q_OS_LINUX
-        posix_fadvise(from, 0, 0, POSIX_FADV_WILLNEED);
-        posix_fadvise(from, 0, 0, POSIX_FADV_SEQUENTIAL);
-        posix_fadvise(from, 0, 0, POSIX_FADV_NOREUSE);
+        if(os_spec_flags)
+        {
+            posix_fadvise(from, 0, 0, POSIX_FADV_WILLNEED);
+            posix_fadvise(from, 0, 0, POSIX_FADV_SEQUENTIAL);
+            posix_fadvise(from, 0, 0, POSIX_FADV_NOREUSE);
+        }
         #endif
         if(stopIt)
         {
@@ -443,7 +449,7 @@ void ReadThread::internalRead()
         isInReadLoop=false;
         return;
     }
-    QByteArray blockArray;
+    char * data=NULL;
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     numberOfBlockCopied=0;
     #endif
@@ -484,17 +490,26 @@ void ReadThread::internalRead()
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Read;
         #endif
-        blockArray.resize(blockSize);
+        data=(char *)malloc(blockSize);
+        if(data==NULL)
+        {
+            errorString_internal="Out of memory";
+            ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] "+
+                                     "Unable to read the source file: "+TransferThread::internalStringTostring(file)+
+                                     ", error: "+"Out of memory"
+                                     );
+            isInReadLoop=false;
+            emit error();
+            return;
+        }
         #ifdef Q_OS_WIN32
         DWORD lpNumberOfBytesRead=0;
-        const BOOL retRead=ReadFile(from,blockArray.data(),blockSize,
+        const BOOL retRead=ReadFile(from,data,blockSize,
                                     &lpNumberOfBytesRead,NULL);
         sizeReaden=lpNumberOfBytesRead;
         #else
-        sizeReaden=::read(from,blockArray.data(),blockSize);
+        sizeReaden=::read(from,data,blockSize);
         #endif
-        if(sizeReaden>=0)
-            blockArray.resize(sizeReaden);
         #ifdef ULTRACOPIER_PLUGIN_DEBUG
         status=Idle;
         #endif
@@ -523,13 +538,12 @@ void ReadThread::internalRead()
             emit error();
             return;
         }
-        sizeReaden=blockArray.size();
         if(sizeReaden>0)
         {
             #ifdef ULTRACOPIER_PLUGIN_DEBUG
             status=WaitWritePipe;
             #endif
-            if(!writeThread->write(blockArray))//speed limitation here
+            if(!writeThread->write(data,sizeReaden))//speed limitation here
             {
                 #ifdef ULTRACOPIER_PLUGIN_DEBUG
                 status=Idle;
@@ -552,7 +566,7 @@ void ReadThread::internalRead()
                 internalClose();//need re-open the destination and then the source
                 return;
             }
-            lastGoodPosition+=blockArray.size();
+            lastGoodPosition+=sizeReaden;
         }
         /*
         if(lastGoodPosition>16*1024)
@@ -853,3 +867,7 @@ bool ReadThread::isReading() const
     return isInReadLoop;
 }
 
+void ReadThread::setOsSpecFlags(bool os_spec_flags)
+{
+    this->os_spec_flags=os_spec_flags;
+}

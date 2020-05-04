@@ -30,6 +30,28 @@ void ListThread::setKeepDate(const bool keepDate)
     }
 }
 
+void ListThread::setOsSpecFlags(bool os_spec_flags)
+{
+    this->os_spec_flags=os_spec_flags;
+    unsigned int index=0;
+    while(index<transferThreadList.size())
+    {
+        transferThreadList.at(index)->setOsSpecFlags(os_spec_flags);
+        index++;
+    }
+}
+
+void ListThread::setNativeCopy(bool native_copy)
+{
+    this->native_copy=native_copy;
+    unsigned int index=0;
+    while(index<transferThreadList.size())
+    {
+        transferThreadList.at(index)->setNativeCopy(native_copy);
+        index++;
+    }
+}
+
 #ifdef ULTRACOPIER_PLUGIN_RSYNC
 /// \brief set rsync
 void ListThread::setRsync(const bool rsync)

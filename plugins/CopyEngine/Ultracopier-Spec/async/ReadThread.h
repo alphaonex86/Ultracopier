@@ -90,6 +90,8 @@ public:
     void fakeReadIsStarted();
     /// \brief do the fake readIsStopped
     void fakeReadIsStopped();
+
+    void setOsSpecFlags(bool os_spec_flags);
 public slots:
     /// \brief to reset the copy, and put at the same state when it just open
     void seekToZeroAndWait();
@@ -116,6 +118,7 @@ private:
     std::string         errorString_internal;
     volatile bool	stopIt;
     Ultracopier::CopyMode	mode;
+    bool os_spec_flags;
     int64_t          lastGoodPosition;
     volatile int	blockSize;//in Bytes
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
