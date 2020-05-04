@@ -14,6 +14,9 @@
 #ifdef Q_OS_LINUX
 #include <sys/sysinfo.h>
 #endif
+#ifdef Q_OS_WIN32
+#include <sysinfoapi.h>
+#endif
 
 // The cmath header from MSVC does not contain round()
 #if (defined(_WIN64) || defined(_WIN32)) && defined(_MSC_VER)
@@ -163,9 +166,9 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"CHECK LIST TYPE not set");
     #endif
     #ifdef Q_OS_WIN32
-    ULONGLONG TotalMemoryInKilobytes;
-    if(GetPhysicallyInstalledSystemMemory(&TotalMemoryInKilobytes))
-        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Detected Memory MB Windows: "+std::to_string(TotalMemoryInKilobytes/1024));
+    MEMORYSTATUSEX memoryStatus;
+    if(GlobalMemoryStatusEx(&memoryStatus))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Information,"Detected Memory MB Windows: "+std::to_string(memoryStatus.ullTotalPhys/1024));
     #endif
     #ifdef Q_OS_LINUX
     struct sysinfo info;

@@ -7,6 +7,9 @@
 #ifdef Q_OS_LINUX
 #include <sys/sysinfo.h>
 #endif
+#ifdef Q_OS_WIN32
+#include <sysinfoapi.h>
+#endif
 
 ListThread::ListThread(FacilityInterface * facilityInterface) :
     numberOfInodeOperation(0),
@@ -94,9 +97,9 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
 
     int64_t MBMem=100;
     #ifdef Q_OS_WIN32
-    ULONGLONG TotalMemoryInKilobytes;
-    if(GetPhysicallyInstalledSystemMemory(&TotalMemoryInKilobytes))
-        MBMem=TotalMemoryInKilobytes/1024;
+    MEMORYSTATUSEX memoryStatus;
+    if(GlobalMemoryStatusEx(&memoryStatus))
+        MBMem=memoryStatus.ullTotalPhys/1024;
     #endif
     #ifdef Q_OS_LINUX
     struct sysinfo info;

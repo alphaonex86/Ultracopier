@@ -262,7 +262,7 @@ bool ReadThread::internalOpen(bool resetLastGoodPosition)
     #else
     DWORD flags=FILE_ATTRIBUTE_NORMAL;
     if(os_spec_flags)
-        flags|=SEQUENTIAL;
+        flags|=FILE_FLAG_SEQUENTIAL_SCAN;
     from=CreateFileW(file.c_str(),GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,flags,NULL);
     #endif
     #ifdef Q_OS_UNIX

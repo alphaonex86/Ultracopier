@@ -240,7 +240,7 @@ bool WriteThread::internalOpen()
     #else
     DWORD flags=FILE_ATTRIBUTE_NORMAL;
     if(os_spec_flags)
-        flags|=SEQUENTIAL;
+        flags|=FILE_FLAG_SEQUENTIAL_SCAN;
     /*if(!buffer)
         //FILE_FLAG_NO_BUFFERING Under Windows 10 do The parameter is incorrect. (87)
         flags|=FILE_FLAG_NO_BUFFERING;//FILE_FLAG_WRITE_THROUGH |*/
