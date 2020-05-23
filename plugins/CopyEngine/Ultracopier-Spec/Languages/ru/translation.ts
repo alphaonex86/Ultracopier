@@ -4,91 +4,91 @@
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine.cpp" line="427"/>
-        <location filename="../../CopyEngine.cpp" line="450"/>
+        <location filename="../../CopyEngine.cpp" line="435"/>
+        <location filename="../../CopyEngine.cpp" line="458"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation type="unfinished">Двигатель вынуждены покинуть свои дома, вы не можете скопировать с ним</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="462"/>
-        <location filename="../../CopyEngine.cpp" line="485"/>
+        <location filename="../../CopyEngine.cpp" line="470"/>
+        <location filename="../../CopyEngine.cpp" line="493"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation type="unfinished">Двигатель вынужден копии, вы не можете двигаться вместе с ним</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="509"/>
+        <location filename="../../CopyEngine.cpp" line="517"/>
         <source>Destination</source>
         <translation type="unfinished">назначение</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="509"/>
+        <location filename="../../CopyEngine.cpp" line="517"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="665"/>
+        <location filename="../../CopyEngine.cpp" line="682"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="949"/>
-        <location filename="../../CopyEngine.cpp" line="952"/>
-        <location filename="../../CopyEngine.cpp" line="957"/>
-        <location filename="../../CopyEngine.cpp" line="961"/>
+        <location filename="../../CopyEngine.cpp" line="966"/>
+        <location filename="../../CopyEngine.cpp" line="969"/>
+        <location filename="../../CopyEngine.cpp" line="974"/>
+        <location filename="../../CopyEngine.cpp" line="978"/>
         <source>Ask</source>
         <translation type="unfinished">просить</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="950"/>
-        <location filename="../../CopyEngine.cpp" line="954"/>
-        <location filename="../../CopyEngine.cpp" line="958"/>
-        <location filename="../../CopyEngine.cpp" line="962"/>
+        <location filename="../../CopyEngine.cpp" line="967"/>
+        <location filename="../../CopyEngine.cpp" line="971"/>
+        <location filename="../../CopyEngine.cpp" line="975"/>
+        <location filename="../../CopyEngine.cpp" line="979"/>
         <source>Skip</source>
         <translation type="unfinished">пропускать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="953"/>
+        <location filename="../../CopyEngine.cpp" line="970"/>
         <source>Merge</source>
         <translation type="unfinished">слияние</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="955"/>
-        <location filename="../../CopyEngine.cpp" line="967"/>
+        <location filename="../../CopyEngine.cpp" line="972"/>
+        <location filename="../../CopyEngine.cpp" line="984"/>
         <source>Rename</source>
         <translation type="unfinished">переименовать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="959"/>
+        <location filename="../../CopyEngine.cpp" line="976"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="963"/>
+        <location filename="../../CopyEngine.cpp" line="980"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="964"/>
+        <location filename="../../CopyEngine.cpp" line="981"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="965"/>
+        <location filename="../../CopyEngine.cpp" line="982"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">Заменить, если новее</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="966"/>
+        <location filename="../../CopyEngine.cpp" line="983"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1037"/>
+        <location filename="../../CopyEngine.cpp" line="1054"/>
         <source>Options error</source>
         <translation type="unfinished">Опции ошибке</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine.cpp" line="1037"/>
+        <location filename="../../CopyEngine.cpp" line="1054"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,70 +101,70 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="405"/>
-        <location filename="../../CopyEngineFactory.cpp" line="408"/>
-        <location filename="../../CopyEngineFactory.cpp" line="413"/>
-        <location filename="../../CopyEngineFactory.cpp" line="417"/>
+        <location filename="../../CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngineFactory.cpp" line="423"/>
+        <location filename="../../CopyEngineFactory.cpp" line="428"/>
+        <location filename="../../CopyEngineFactory.cpp" line="432"/>
         <source>Ask</source>
         <translation type="unfinished">просить</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="406"/>
-        <location filename="../../CopyEngineFactory.cpp" line="410"/>
-        <location filename="../../CopyEngineFactory.cpp" line="414"/>
-        <location filename="../../CopyEngineFactory.cpp" line="418"/>
+        <location filename="../../CopyEngineFactory.cpp" line="421"/>
+        <location filename="../../CopyEngineFactory.cpp" line="425"/>
+        <location filename="../../CopyEngineFactory.cpp" line="429"/>
+        <location filename="../../CopyEngineFactory.cpp" line="433"/>
         <source>Skip</source>
         <translation type="unfinished">пропускать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="409"/>
+        <location filename="../../CopyEngineFactory.cpp" line="424"/>
         <source>Merge</source>
         <translation type="unfinished">слияние</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="411"/>
-        <location filename="../../CopyEngineFactory.cpp" line="423"/>
+        <location filename="../../CopyEngineFactory.cpp" line="426"/>
+        <location filename="../../CopyEngineFactory.cpp" line="438"/>
         <source>Rename</source>
         <translation type="unfinished">переименовать</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="415"/>
+        <location filename="../../CopyEngineFactory.cpp" line="430"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="419"/>
+        <location filename="../../CopyEngineFactory.cpp" line="434"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="420"/>
+        <location filename="../../CopyEngineFactory.cpp" line="435"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="421"/>
+        <location filename="../../CopyEngineFactory.cpp" line="436"/>
         <source>Overwrite if newer</source>
         <translation type="unfinished">Заменить, если новее</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="422"/>
+        <location filename="../../CopyEngineFactory.cpp" line="437"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="438"/>
-        <location filename="../../CopyEngineFactory.cpp" line="477"/>
+        <location filename="../../CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngineFactory.cpp" line="492"/>
         <source>Options error</source>
         <translation type="unfinished">Опции ошибке</translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="438"/>
+        <location filename="../../CopyEngineFactory.cpp" line="453"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngineFactory.cpp" line="477"/>
+        <location filename="../../CopyEngineFactory.cpp" line="492"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished">Параметры двигателя не загружается, не может получить доступ к фильтрам</translation>
     </message>
@@ -357,40 +357,40 @@
         <translation>Ни = Включить все</translation>
     </message>
     <message>
-        <location filename="../../Filters.cpp" line="93"/>
-        <location filename="../../Filters.cpp" line="131"/>
+        <location filename="../../Filters.cpp" line="94"/>
+        <location filename="../../Filters.cpp" line="132"/>
         <source>Raw text</source>
         <translation>Сырой текст</translation>
     </message>
     <message>
-        <location filename="../../Filters.cpp" line="96"/>
-        <location filename="../../Filters.cpp" line="134"/>
+        <location filename="../../Filters.cpp" line="97"/>
+        <location filename="../../Filters.cpp" line="135"/>
         <source>Simplified regex</source>
         <translation>Упрощенная регулярных выражений</translation>
     </message>
     <message>
-        <location filename="../../Filters.cpp" line="99"/>
-        <location filename="../../Filters.cpp" line="137"/>
+        <location filename="../../Filters.cpp" line="100"/>
+        <location filename="../../Filters.cpp" line="138"/>
         <source>Perl&apos;s regex</source>
         <translation>Perl&apos;s regex</translation>
     </message>
     <message>
-        <location filename="../../Filters.cpp" line="107"/>
-        <location filename="../../Filters.cpp" line="145"/>
+        <location filename="../../Filters.cpp" line="108"/>
+        <location filename="../../Filters.cpp" line="146"/>
         <source>Only on file</source>
         <translation>Только на файл</translation>
     </message>
     <message>
-        <location filename="../../Filters.cpp" line="110"/>
-        <location filename="../../Filters.cpp" line="148"/>
+        <location filename="../../Filters.cpp" line="111"/>
+        <location filename="../../Filters.cpp" line="149"/>
         <source>Only on folder</source>
         <translation>Только на папку</translation>
     </message>
     <message>
-        <location filename="../../Filters.cpp" line="116"/>
-        <location filename="../../Filters.cpp" line="154"/>
-        <location filename="../../Filters.cpp" line="216"/>
-        <location filename="../../Filters.cpp" line="255"/>
+        <location filename="../../Filters.cpp" line="117"/>
+        <location filename="../../Filters.cpp" line="155"/>
+        <location filename="../../Filters.cpp" line="217"/>
+        <location filename="../../Filters.cpp" line="256"/>
         <source>Full match</source>
         <translation>Полный матч</translation>
     </message>
@@ -516,17 +516,17 @@
 <context>
     <name>ReadThread</name>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="77"/>
+        <location filename="../../async/ReadThread.cpp" line="78"/>
         <source>Internal error, please report it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="531"/>
+        <location filename="../../async/ReadThread.cpp" line="541"/>
         <source>Unable to read the source file: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/ReadThread.cpp" line="585"/>
+        <location filename="../../async/ReadThread.cpp" line="595"/>
         <source>File truncated during the read, possible data change</source>
         <translation type="unfinished"></translation>
     </message>
@@ -645,19 +645,19 @@
 <context>
     <name>TransferThreadAsync</name>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="335"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="340"/>
         <source>Wrong modification date or unable to get it, you can disable time transfer to do it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="423"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="441"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="428"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="446"/>
         <source>Unable to create the destination folder: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../async/TransferThreadAsync.cpp" line="426"/>
-        <location filename="../../async/TransferThreadAsync.cpp" line="443"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="431"/>
+        <location filename="../../async/TransferThreadAsync.cpp" line="448"/>
         <source>Unable to create the destination folder, errno: %1</source>
         <translation type="unfinished"></translation>
     </message>

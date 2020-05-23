@@ -564,16 +564,22 @@ std::vector<std::string> stringtostringlist(const std::string &string)
     std::vector<std::string> returnedVar;
     size_t start_pos = 0;
     size_t firstChar = 0;
-    while((start_pos = string.find(',', start_pos)) != std::string::npos) {
-        if(start_pos==0 || string.at(start_pos-1)!=',')
+    do
+    {
+        size_t s=start_pos = string.find(',', start_pos);
+        if(s == std::string::npos)
+            start_pos=string.size();
+        if(start_pos>=string.size() || string.at(start_pos+1)!=',')
         {
-            std::string tempString=string.substr(firstChar,start_pos-1);
+            std::string tempString=string.substr(firstChar,start_pos-firstChar);
             stringreplaceAll(tempString,",,",",");
             returnedVar.push_back(tempString);
             start_pos++;
             firstChar=start_pos;
         }
-    }
+        else
+            start_pos+=2;
+    } while(firstChar<start_pos || start_pos<string.size());
     return returnedVar;
 }
 

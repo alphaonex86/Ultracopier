@@ -24,7 +24,7 @@ protected:
     std::vector<std::string> mountSysPoint;
     std::vector<std::string> driveType;
     #ifdef Q_OS_WIN32
-    std::regex reg1,reg2,reg3,reg4;
+    std::regex reg3,reg4;
     #endif
 signals:
     /// \brief To debug source

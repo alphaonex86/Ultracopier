@@ -16,10 +16,10 @@ Filters::~Filters()
     delete ui;
 }
 
-void Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions)
+bool Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions)
 {
     if(includeStrings.size()!=includeOptions.size() || excludeStrings.size()!=excludeOptions.size())
-        return;
+        return false;
     Filters_rules new_item;
 
     include.clear();
@@ -77,6 +77,7 @@ void Filters::setFilters(std::vector<std::string> includeStrings,std::vector<std
     }
 
     reShowAll();
+    return true;
 }
 
 void Filters::reShowAll()

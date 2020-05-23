@@ -18,7 +18,7 @@ class Filters : public QDialog
 public:
     explicit Filters(QWidget *parent = 0);
     ~Filters();
-    void setFilters(std::vector<std::string> includeStrings, std::vector<std::string> includeOptions, std::vector<std::string> excludeStrings, std::vector<std::string> excludeOptions);
+    bool setFilters(std::vector<std::string> includeStrings, std::vector<std::string> includeOptions, std::vector<std::string> excludeStrings, std::vector<std::string> excludeOptions);
     void reShowAll();
     std::vector<Filters_rules> getInclude() const;
     std::vector<Filters_rules> getExclude() const;

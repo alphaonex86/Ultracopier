@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #endif
+#include <iostream>
 
 ReadThread::ReadThread()
 {
@@ -69,7 +70,7 @@ void ReadThread::run()
     exec();
 }
 
-void ReadThread::open(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode)
+void ReadThread::openRead(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode)
 {
     if(!isRunning())
     {
@@ -85,11 +86,20 @@ void ReadThread::open(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode 
     #endif
     {
         if(file==this->file)
+        {
+            std::cerr << "["+std::to_string(id)+"] Try reopen already opened same file: " << TransferThread::internalStringTostring(file) << std::endl;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+TransferThread::internalStringTostring(file));
+        }
         else
+        {
+            std::cerr << "["+std::to_string(id)+"] previous file is already open: "+TransferThread::internalStringTostring(this->file) << ", can't open " << TransferThread::internalStringTostring(file) << std::endl;
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already open: "+TransferThread::internalStringTostring(this->file));
+        }
+        internalCloseSlot();
+        /* try bypass the bug
+        return;//better than hard shutdown
         abort();
-        emit internalStartClose();
+        emit internalStartClose();*/
         isOpen.acquire();
         isOpen.release();
     }
@@ -125,7 +135,7 @@ void ReadThread::stop()
     #ifdef ULTRACOPIER_PLUGIN_SPEED_SUPPORT
     waitNewClockForSpeed.release();
     #endif
-    if(isOpen.available()<=0)
+    //if(isOpen.available()<=0 || from>=0)
         emit internalStartClose();
 }
 

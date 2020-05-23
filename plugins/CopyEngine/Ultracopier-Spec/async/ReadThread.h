@@ -39,7 +39,7 @@ protected:
     void run();
 public:
     /// \brief open with the name and copy mode
-    void open(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode);
+    void openRead(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode);
     /// \brief return the error string
     std::string errorString() const;
     //QByteArray read(qint64 position,qint64 maxSize);

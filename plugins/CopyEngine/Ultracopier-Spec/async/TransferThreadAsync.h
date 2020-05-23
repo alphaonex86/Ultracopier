@@ -108,6 +108,10 @@ signals:
     //internal signal
     void internalStartResumeAfterErrorAndSeek() const;
     void internalStartPostOperation() const;
+    //async due to tread conflict on from, if(from>=0) {do something, abort() -> on abort from =-1}
+    void openRead(const INTERNALTYPEPATH &file, const Ultracopier::CopyMode &mode);
+    //async due to tread conflict on to, if(to>=0) {do something, abort() -> on abort to =-1}
+    void openWrite(const INTERNALTYPEPATH &file,const uint64_t &startSize);
 public slots:
     /// \brief to start the transfer of data
     void startTheTransfer();

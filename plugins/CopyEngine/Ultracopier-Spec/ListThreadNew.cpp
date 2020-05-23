@@ -9,7 +9,7 @@
 bool ListThread::newCopy(const std::vector<std::string> &sources,const std::string &destination)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start: "+stringimplode(sources,";")+", destination: "+destination);
-    ScanFileOrFolder * scanFileOrFolderThread = newScanThread(Ultracopier::Copy);
+    ScanFileOrFolder * scanFileOrFolderThread=newScanThread(Ultracopier::Copy);
     if(scanFileOrFolderThread==NULL)
     {
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"unable to get new thread");

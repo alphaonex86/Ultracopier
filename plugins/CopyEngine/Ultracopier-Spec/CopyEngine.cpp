@@ -352,8 +352,10 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
 void CopyEngine::setInterfacePointer(QWidget * uiinterface)
 {
     this->uiinterface=uiinterface;
-    filters=new Filters(tempWidget);
-    renamingRules=new RenamingRules(tempWidget);
+    if(filters==NULL)
+        filters=new Filters(tempWidget);
+    if(renamingRules==NULL)
+        renamingRules=new RenamingRules(tempWidget);
 
     if(uiIsInstalled)
     {
@@ -388,8 +390,14 @@ void CopyEngine::setInterfacePointer(QWidget * uiinterface)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"unable to connect renamingRules.clicked()");
     }
 
-    filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
-    set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+    if(!filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions))
+    {
+        includeStrings.clear();
+        includeOptions.clear();
+        excludeStrings.clear();
+        excludeOptions.clear();
+        set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+    }
 
     renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);
     emit send_sendNewRenamingRules(firstRenamingRule,otherRenamingRule);
@@ -542,10 +550,19 @@ void CopyEngine::syncTransferList()
 
 void CopyEngine::set_setFilters(std::vector<std::string> includeStrings,std::vector<std::string> includeOptions,std::vector<std::string> excludeStrings,std::vector<std::string> excludeOptions)
 {
+    if(filters==NULL)
+        filters=new Filters();
     if(filters!=NULL)
     {
-        filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+        if(!filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions))
+        {
+            includeStrings.clear();
+            includeOptions.clear();
+            excludeStrings.clear();
+            excludeOptions.clear();
+        }
         emit send_setFilters(filters->getInclude(),filters->getExclude());
+        listThread->set_setFilters(filters->getInclude(),filters->getExclude());
     }
     this->includeStrings=includeStrings;
     this->includeOptions=includeOptions;

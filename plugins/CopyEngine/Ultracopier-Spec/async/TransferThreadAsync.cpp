@@ -101,6 +101,11 @@ TransferThreadAsync::TransferThreadAsync() :
     if(!connect(&writeThread,&WriteThread::closed,                  this,					&TransferThreadAsync::write_closed,         Qt::QueuedConnection))
         abort();
 
+    if(!connect(this,					&TransferThreadAsync::openRead,&readThread,&ReadThread::openRead,                              Qt::QueuedConnection))
+        abort();
+    if(!connect(this,					&TransferThreadAsync::openWrite,&writeThread,&WriteThread::openWrite,                           Qt::QueuedConnection))
+        abort();
+
     //when both is ready, startRead()
     if(!connect(&readThread,&ReadThread::opened,                    this,					&TransferThreadAsync::read_opened,          Qt::QueuedConnection))
         abort();
@@ -477,8 +482,8 @@ void TransferThreadAsync::ifCanStartTransfer()
         {
             //try full move
             realMove=false;
-            readThread.open(source,mode);
-            writeThread.open(destination,0);
+            openRead(source,mode);
+            openWrite(destination,0);
             return;
         }
         #endif
@@ -672,8 +677,8 @@ void TransferThreadAsync::ifCanStartTransfer()
             else
             #endif
             {
-                readThread.open(source,mode);
-                writeThread.open(destination,0);
+                openRead(source,mode);
+                openWrite(destination,0);
                 return;
             }
         }

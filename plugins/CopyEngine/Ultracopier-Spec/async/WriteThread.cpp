@@ -448,7 +448,7 @@ bool WriteThread::internalOpen()
     }
 }
 
-void WriteThread::open(const INTERNALTYPEPATH &file, const uint64_t &startSize)
+void WriteThread::openWrite(const INTERNALTYPEPATH &file, const uint64_t &startSize)
 {
     if(!isRunning())
     {
@@ -467,7 +467,8 @@ void WriteThread::open(const INTERNALTYPEPATH &file, const uint64_t &startSize)
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] Try reopen already opened same file: "+TransferThread::internalStringTostring(file));
         else
             ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"["+std::to_string(id)+"] previous file is already open: "+TransferThread::internalStringTostring(file));
-        emit internalStartClose();
+        //emit internalStartClose();
+        internalCloseSlot();
         isOpen.acquire();
         isOpen.release();
     }

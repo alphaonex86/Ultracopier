@@ -323,11 +323,26 @@ void CopyEngineFactory::resetOptions()
     ui->buffer->setChecked(stringtobool(options->getOptionValue("buffer")));
 
     //ui->autoStart->setChecked(options->getOptionValue("autoStart").toBool());//moved from options(), wrong previous place
-    includeStrings=stringtostringlist(options->getOptionValue("includeStrings"));
-    includeOptions=stringtostringlist(options->getOptionValue("includeOptions"));
-    excludeStrings=stringtostringlist(options->getOptionValue("excludeStrings"));
-    excludeOptions=stringtostringlist(options->getOptionValue("excludeOptions"));
-    filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
+    std::string s;
+    s=options->getOptionValue("includeStrings");
+    includeStrings=stringtostringlist(s);
+    s=options->getOptionValue("includeOptions");
+    includeOptions=stringtostringlist(s);
+    s=options->getOptionValue("excludeStrings");
+    excludeStrings=stringtostringlist(s);
+    s=options->getOptionValue("excludeOptions");
+    excludeOptions=stringtostringlist(s);
+    if(!filters->setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions))
+    {
+        includeStrings.clear();
+        includeOptions.clear();
+        excludeStrings.clear();
+        excludeOptions.clear();
+        options->setOptionValue("includeStrings","");
+        options->setOptionValue("includeOptions","");
+        options->setOptionValue("excludeStrings","");
+        options->setOptionValue("excludeOptions","");
+    }
     firstRenamingRule=options->getOptionValue("firstRenamingRule");
     otherRenamingRule=options->getOptionValue("otherRenamingRule");
     renamingRules->setRenamingRules(firstRenamingRule,otherRenamingRule);

@@ -10,8 +10,6 @@ DriveManagement::DriveManagement()
 {
     tryUpdate();
     #ifdef Q_OS_WIN32
-    reg1=std::regex("^(\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+.*");
-    reg2=std::regex("^((\\\\\\\\|//)[^\\\\\\\\/]+(\\\\|/)[^\\\\\\\\/]+).*$");
     reg3=std::regex("^[a-zA-Z]:[\\\\/].*");
     reg4=std::regex("^([a-zA-Z]:[\\\\/]).*$");
     #endif
@@ -35,11 +33,44 @@ std::string DriveManagement::getDrive(const std::string &fileOrFolder) const
         }
     }
 
-    if(std::regex_match(fileOrFolder,reg1))
+    if(fileOrFolder.size()>=5)
     {
-        std::string returnString=fileOrFolder;
+        char f1=fileOrFolder.at(0);
+        char f2=fileOrFolder.at(1);
+        if(f1=='/' || f1=='\\')
+            if(f2=='/' || f2=='\\')
+            {
+                bool postSeparador=false;
+                std::string post;
+                unsigned int index=2;
+                unsigned int s=2;
+                while(index<fileOrFolder.size())
+                {
+                    const char c=fileOrFolder.at(index);
+                    if(c=='/' || c=='\\')
+                    {
+                        if(postSeparador==false)
+                        {
+                            post="//"+fileOrFolder.substr(2,index-2);
+                            postSeparador=true;
+                            char c;
+                            do
+                            {
+                                index++;
+                                c=fileOrFolder.at(index);
+                            } while((c=='/' || c=='\\') && index<fileOrFolder.size());
+                            s=index;
+                        }
+                        else
+                            return post+"/"+fileOrFolder.substr(s,index-s);
+                    }
+                    index++;
+                }
+                return post;
+            }
+        /*std::string returnString=fileOrFolder;
         std::regex_replace(returnString,reg2,"$1");
-        return returnString;
+        return returnString;*/
     }
     //due to lack of WMI support into mingw, the new drive event is never called, this is a workaround
     if(std::regex_match(fileOrFolder,reg3))

@@ -50,7 +50,7 @@ protected:
     void run();
 public:
     /// \brief open the destination to open it
-    void open(const INTERNALTYPEPATH &file,const uint64_t &startSize);
+    void openWrite(const INTERNALTYPEPATH &file,const uint64_t &startSize);
     /// \brief to return the error string
     std::string errorString() const;
     /// \brief to stop all
