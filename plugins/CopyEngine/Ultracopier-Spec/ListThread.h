@@ -314,6 +314,9 @@ private:
     int getNumberOfTranferRuning() const;
     bool needMoreSpace() const;
 private slots:
+    void exportTransferListInternal(const std::string &fileName);
+    void importTransferListInternal(const std::string &fileName);
+
     void scanThreadHaveFinishSlot();
     void scanThreadHaveFinish(bool skipFirstRemove=false);
     void autoStartAndCheckSpace();
@@ -426,6 +429,9 @@ signals:
     void send_updateMount();
     void missingDiskSpace(std::vector<Diskspace> list) const;
     void isInPause(const bool &) const;
+
+    void exportTransferListSend(const std::string &fileName);
+    void importTransferListSend(const std::string &fileName);
 };
 
 #endif // LISTTHREAD_H

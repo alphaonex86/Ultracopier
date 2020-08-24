@@ -49,6 +49,8 @@ class PluginInterface_Themes : public QWidget
         virtual void setFileProgression(const std::vector<Ultracopier::ProgressionItem> &progressionList) = 0;
         /// to get by file speed, size and ms
         virtual void doneTime(const std::vector<std::pair<uint64_t,uint32_t> > &timeList) = 0;
+
+        virtual void changeToUltimate() = 0;
     public:
         /// \brief get the widget for the copy engine
         virtual QWidget * getOptionsEngineWidget() = 0;
@@ -89,6 +91,7 @@ class PluginInterface_Themes : public QWidget
         void cancel() const;
         //edit the action
         void newSpeedLimitation(const uint64_t &speedLimitation) const;///< -1 if not able, 0 if disabled
+        void askProductKey();
 };
 
 /// \brief To define the interface for the factory to do themes instance

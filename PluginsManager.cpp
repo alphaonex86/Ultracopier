@@ -831,7 +831,7 @@ void PluginsManager::decodingFinished()
                                     {
                                         ResourcesManager::resourcesManager->disableWritablePath();
                                         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"Unable to make the file: "+info.absolutePath().toStdString()+", error:"+currentFile.errorString().toStdString());
-                                        QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to create a file to install the plugin:\n%1\nsince:%2").arg(info.absolutePath()).arg(currentFile.errorString()));
+                                        QMessageBox::critical(NULL,tr("Plugin loader"),tr("Unable to create a file to install the plugin:\n%1\nError:%2").arg(info.absolutePath()).arg(currentFile.errorString()));
                                         errorFound=true;
                                         break;
                                     }

@@ -28,7 +28,7 @@ bool ProductKey::parseKey(QString orgkey)
     if(!key.isEmpty())
     {
         QCryptographicHash hash(QCryptographicHash::Sha224);
-        hash.addData(QStringLiteral("mQcLvEg1HW8JuRXY3BawjSpe").toUtf8());
+        hash.addData(QStringLiteral("mQcLvEg1HW8JuRXY3BawjSpe").toUtf8());//a salt
         hash.addData(key.toUtf8());
         const QByteArray &result=hash.result();
         if(!result.isEmpty() && result.at(0)==0x00 && result.at(1)==0x00)

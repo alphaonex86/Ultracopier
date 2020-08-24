@@ -70,6 +70,7 @@ private:
     #endif
     bool                    checkDestinationFolderExists;
     bool                    mkFullPath;
+    bool                    checksum;
     FileExistsAction		alwaysDoThisActionForFileExists;
     FileErrorAction			alwaysDoThisActionForFileError;
     FileErrorAction			alwaysDoThisActionForFolderError;
@@ -292,6 +293,7 @@ public slots:
     /// \brief set if need check if the destination folder exists
     void setCheckDestinationFolderExists(const bool checkDestinationFolderExists);
     void setMkFullPath(const bool mkFullPath);
+    void setChecksum(const bool checksum);
     /// \brief reset widget
     void resetTempWidget();
     //autoconnect

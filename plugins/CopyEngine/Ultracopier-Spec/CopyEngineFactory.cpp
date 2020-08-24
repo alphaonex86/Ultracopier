@@ -63,6 +63,7 @@ CopyEngineFactory::CopyEngineFactory() :
     connect(ui->comboBoxFileCollision,      static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),		this,&CopyEngineFactory::setFileCollision);
     connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,		this,&CopyEngineFactory::setCheckDestinationFolder);
     connect(ui->mkpath,                     &QCheckBox::toggled,		this,&CopyEngineFactory::setMkFullPath);
+    connect(ui->checksum,                     &QCheckBox::toggled,		this,&CopyEngineFactory::setChecksum);
     #ifdef ULTRACOPIER_PLUGIN_RSYNC
     connect(ui->rsync,                      &QCheckBox::toggled,                this,&CopyEngineFactory::setRsync);
     #endif
@@ -121,6 +122,7 @@ PluginInterface_CopyEngine * CopyEngineFactory::getInstance()
     realObject->setFileError(ui->comboBoxFileError->currentIndex());
     realObject->setCheckDestinationFolderExists(ui->checkBoxDestinationFolderExists->isChecked());
     realObject->setMkFullPath(ui->mkpath->isChecked());
+    realObject->setChecksum(ui->checksum->isChecked());
     realObject->set_setFilters(includeStrings,includeOptions,excludeStrings,excludeOptions);
     realObject->setRenamingRules(firstRenamingRule,otherRenamingRule);
     realObject->setMoveTheWholeFolder(ui->moveTheWholeFolder->isChecked());
@@ -208,11 +210,11 @@ void CopyEngineFactory::setResources(OptionInterface * options,const std::string
         KeysList.push_back(std::pair<std::string, std::string>("transferAlgorithm",std::to_string(0)));
         KeysList.push_back(std::pair<std::string, std::string>("checkDestinationFolder","true"));
         KeysList.push_back(std::pair<std::string, std::string>("mkpath","true"));
+        KeysList.push_back(std::pair<std::string, std::string>("checksum","false"));
         KeysList.push_back(std::pair<std::string, std::string>("includeStrings",""));
         KeysList.push_back(std::pair<std::string, std::string>("includeOptions",""));
         KeysList.push_back(std::pair<std::string, std::string>("excludeStrings",""));
         KeysList.push_back(std::pair<std::string, std::string>("excludeOptions",""));
-        KeysList.push_back(std::pair<std::string, std::string>("doChecksum","false"));
         KeysList.push_back(std::pair<std::string, std::string>("checksumIgnoreIfImpossible","true"));
         KeysList.push_back(std::pair<std::string, std::string>("checksumOnlyOnError","true"));
         KeysList.push_back(std::pair<std::string, std::string>("firstRenamingRule",""));
@@ -313,6 +315,7 @@ void CopyEngineFactory::resetOptions()
     ui->comboBoxFileCollision->setCurrentIndex(stringtouint32(options->getOptionValue("fileCollision")));
     ui->checkBoxDestinationFolderExists->setChecked(stringtobool(options->getOptionValue("checkDestinationFolder")));
     ui->mkpath->setChecked(stringtobool(options->getOptionValue("mkpath")));
+    ui->checksum->setChecked(stringtobool(options->getOptionValue("checksum")));
     ui->deletePartiallyTransferredFiles->setChecked(stringtobool(options->getOptionValue("deletePartiallyTransferredFiles")));
     ui->moveTheWholeFolder->setChecked(stringtobool(options->getOptionValue("moveTheWholeFolder")));
     ui->followTheStrictOrder->setChecked(stringtobool(options->getOptionValue("followTheStrictOrder")));
@@ -409,6 +412,13 @@ void CopyEngineFactory::setMkFullPath()
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
     if(optionsEngine!=NULL)
         optionsEngine->setOptionValue("mkpath",booltostring(ui->mkpath->isChecked()));
+}
+
+void CopyEngineFactory::setChecksum()
+{
+    ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"the value have changed");
+    if(optionsEngine!=NULL)
+        optionsEngine->setOptionValue("checksum",booltostring(ui->checksum->isChecked()));
 }
 
 void CopyEngineFactory::newLanguageLoaded()

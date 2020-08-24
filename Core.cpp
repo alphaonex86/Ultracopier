@@ -726,6 +726,9 @@ void Core::connectInterfaceAndSync(const unsigned int &index)
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::newActionOnList,this,&Core::getActionOnList,	Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for newActionOnList()");
 
+    if(!connect(currentCopyInstance.interface,&PluginInterface_Themes::askProductKey,this,&Core::askProductKey,	Qt::QueuedConnection))
+        ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for newActionOnList()");
+
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushFileProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setFileProgression,		Qt::QueuedConnection))
         ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Critical,"error at connect, the interface can not work correctly: "+std::to_string(index)+": "+std::to_string((uint64_t)sender())+" for pushFileProgression()");
     if(!connect(currentCopyInstance.engine,&PluginInterface_CopyEngine::pushGeneralProgression,		currentCopyInstance.interface,&PluginInterface_Themes::setGeneralProgression,		Qt::QueuedConnection))
@@ -756,6 +759,18 @@ void Core::connectInterfaceAndSync(const unsigned int &index)
 
     //force the updating, without wait the timer
     periodicSynchronizationWithIndex(index);
+}
+
+void Core::changeToUltimate()
+{
+    unsigned int index_sub_loop=0;
+    while(index_sub_loop<copyList.size())
+    {
+        CopyInstance i=copyList.at(index_sub_loop);
+        if(i.interface!=nullptr)
+            i.interface->changeToUltimate();
+        index_sub_loop++;
+    }
 }
 
 void Core::periodicSynchronization()

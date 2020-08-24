@@ -109,6 +109,7 @@ public:
     void getOptionsEngineEnabled(const bool &isEnabled) override;
     enum status{status_never_started,status_started,status_stopped};
     status stat;
+    void changeToUltimate();
 
     static QString simplifiedBigNum(const uint64_t &num);
 public slots:
@@ -160,6 +161,7 @@ private slots:
     void updateTitle();
     void catchAction(QSystemTrayIcon::ActivationReason reason);
     void on_exportErrorToTransferList_clicked();
+    void ad_ultimate_clicked(const QString& link);
 private:
     uint64_t duration;
     bool durationStarted;

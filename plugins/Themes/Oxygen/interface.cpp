@@ -12,6 +12,7 @@
 #include <cmath>
 #include <chrono>
 #include <ctime>
+#include <QDesktopServices>
 #ifdef Q_OS_WIN
     #ifndef NOMINMAX
         #define NOMINMAX
@@ -324,8 +325,9 @@ Themes::Themes(const bool &alwaysOnTop,
             ui->ad_ultimate->hide();
         else
             ui->ad_ultimate->setText(
-                    QStringLiteral("<a href=\"%1\">%2</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")));
+                    QStringLiteral("<a href=\"%1\">%2</a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")).arg(tr("Register your key")));
     }
+    connect(ui->ad_ultimate,&QLabel::linkActivated,this,&Themes::ad_ultimate_clicked);
 
     #ifdef SUPERCOPIER
     uiOptions->labelDualProgression->hide();
@@ -356,6 +358,19 @@ Themes::~Themes()
     delete selectionModel;
     delete menu;
     delete sysTrayIcon;
+}
+
+void Themes::ad_ultimate_clicked(const QString &link)
+{
+    if(link.startsWith("http://") || link.startsWith("https://"))
+        QDesktopServices::openUrl(QUrl(link));
+    else
+        emit askProductKey();
+}
+
+void Themes::changeToUltimate()
+{
+    ui->ad_ultimate->hide();
 }
 
 QWidget * Themes::getOptionsEngineWidget()

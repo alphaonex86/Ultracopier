@@ -103,6 +103,7 @@ public:
     void getOptionsEngineEnabled(const bool &isEnabled);
     enum status{status_never_started,status_started,status_stopped};
     status stat;
+    void changeToUltimate();
 public slots:
     /// \brief set the translate
     void newLanguageLoaded();
@@ -154,6 +155,7 @@ private slots:
     void updateTitle();
     void catchAction(QSystemTrayIcon::ActivationReason reason);
     void on_exportErrorToTransferList_clicked();
+    void ad_ultimate_clicked(const QString& link);
 private:
     uint64_t duration;
     bool durationStarted;

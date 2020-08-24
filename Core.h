@@ -144,6 +144,7 @@ class Core : public QObject
     signals:
         void copyFinished(const uint32_t & orderId,bool withError) const;
         void copyCanceled(const uint32_t & orderId) const;
+        void askProductKey();
     public slots:
         /** \brief do copy with sources, but ask the destination */
         void newCopyWithoutDestination(const uint32_t &orderId,const std::vector<std::string> &protocolsUsedForTheSources,const std::vector<std::string> &sources);
@@ -162,6 +163,7 @@ class Core : public QObject
         void newTransferList(std::string engine,std::string mode,std::string file);
 
         bool startNewTransferOneUniqueCopyEngine();
+        void changeToUltimate();
     private slots:
         /// \brief the copy engine have canceled the transfer
         void copyInstanceCanceledByEngine();

@@ -184,6 +184,11 @@ void ListThread::moveItemsOnBottom(std::vector<uint64_t> ids)
 
 void ListThread::exportTransferList(const std::string &fileName)
 {
+    emit exportTransferListSend(fileName);
+}
+
+void ListThread::exportTransferListInternal(const std::string &fileName)
+{
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QFile transferFile(QString::fromStdString(fileName));
     if(transferFile.open(QIODevice::WriteOnly|QIODevice::Truncate))
@@ -247,6 +252,11 @@ void ListThread::exportTransferList(const std::string &fileName)
 }
 
 void ListThread::importTransferList(const std::string &fileName)
+{
+    emit importTransferListSend(fileName);
+}
+
+void ListThread::importTransferListInternal(const std::string &fileName)
 {
     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Notice,"start");
     QFile transferFile(QString::fromStdString(fileName));

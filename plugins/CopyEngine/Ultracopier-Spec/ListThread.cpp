@@ -85,6 +85,10 @@ ListThread::ListThread(FacilityInterface * facilityInterface) :
         abort();
     if(!connect(this,           &ListThread::send_syncTransferList,				this,&ListThread::syncTransferList_internal,			Qt::QueuedConnection))
         abort();
+    if(!connect(this,           &ListThread::exportTransferListSend,			this,&ListThread::exportTransferListInternal,           Qt::QueuedConnection))
+        abort();
+    if(!connect(this,           &ListThread::importTransferListSend,			this,&ListThread::importTransferListInternal,			Qt::QueuedConnection))
+        abort();
     #ifdef ULTRACOPIER_PLUGIN_DEBUG
     if(!connect(&mkPathQueue,	&MkPath::debugInformation,						this,&ListThread::debugInformation,	Qt::QueuedConnection))
         abort();

@@ -38,6 +38,7 @@ CopyEngine::CopyEngine(FacilityInterface * facilityEngine) :
     #endif
     checkDestinationFolderExists(false),
     mkFullPath(false),
+    checksum(false),
     alwaysDoThisActionForFileExists(FileExistsAction::FileExists_NotSet),
     alwaysDoThisActionForFileError(FileErrorAction::FileError_NotSet),
     alwaysDoThisActionForFolderError(FileErrorAction::FileError_NotSet),
@@ -251,6 +252,7 @@ bool CopyEngine::getOptionsEngine(QWidget * tempWidget)
     setAutoStart(autoStart);
     setCheckDestinationFolderExists(checkDestinationFolderExists);
     setMkFullPath(mkFullPath);
+    setChecksum(checksum);
     setRightTransfer(doRightTransfer);
     setKeepDate(keepDate);
     setOsSpecFlags(os_spec_flags);
@@ -369,6 +371,7 @@ void CopyEngine::setInterfacePointer(QWidget * uiinterface)
         connect(ui->followTheStrictOrder,               &QCheckBox::toggled,        this,&CopyEngine::setFollowTheStrictOrder);
         connect(ui->checkBoxDestinationFolderExists,	&QCheckBox::toggled,        this,&CopyEngine::setCheckDestinationFolderExists);
         connect(ui->mkpath,                             &QCheckBox::toggled,        this,&CopyEngine::setMkFullPath);
+        connect(ui->checksum,                           &QCheckBox::toggled,        this,&CopyEngine::setChecksum);
         #ifdef ULTRACOPIER_PLUGIN_RSYNC
         connect(ui->rsync,                              &QCheckBox::toggled,        this,&CopyEngine::setRsync);
         #endif
@@ -905,6 +908,13 @@ void CopyEngine::setMkFullPath(const bool mkFullPath)
     if(uiIsInstalled)
         ui->mkpath->setChecked(mkFullPath);
     listThread->setMkFullPath(mkFullPath);
+}
+
+void CopyEngine::setChecksum(const bool checksum)
+{
+    this->checksum=checksum;
+    if(uiIsInstalled)
+        ui->checksum->setChecked(checksum);
 }
 
 //reset widget

@@ -15,169 +15,169 @@
     <message>
         <location filename="../../../CliParser.cpp" line="86"/>
         <source>Problem reading file, or file size is 0</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 읽기 문제이거나 파일 크기가 0입니다.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="174"/>
         <location filename="../../../CliParser.cpp" line="185"/>
         <source>The arguments possible are:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">가능한 인수:</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="176"/>
         <location filename="../../../CliParser.cpp" line="187"/>
         <source>To display the options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">옵션 표시</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="177"/>
         <location filename="../../../CliParser.cpp" line="188"/>
         <source>To quit the other instances (if running)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">다른 인스턴스 종료 (실행 중일 경우)</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="179"/>
         <location filename="../../../CliParser.cpp" line="190"/>
         <source>To copy sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>원본을 대상에 복사, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="180"/>
         <location filename="../../../CliParser.cpp" line="191"/>
         <source>To move sources to destination, separated by space. If destination is &quot;?&quot;, ultracopier will ask the user</source>
-        <translation type="unfinished"></translation>
+        <translation>원본을 대상에 이동, 공백으로 구분. 대상이 &quot;?&quot;일 경우 프로그램이 사용자에게 확인합니다. </translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="184"/>
         <source>Command not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>명령이 유효하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="99"/>
         <source>This file is not supported transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation>이 파일은 지원되지 않는 전송 목록 파일 형식입니다.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="32"/>
         <source>Ultracopier is already running, right click on its system tray icon (near the clock) to use it or just copy and paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier가 이미 실행 중입니다. 트레이에 있는 아이콘에서 우-클릭하여 사용하거나 그냥 복사하여 붙여넣기 하세요.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="34"/>
         <source>Ultracopier is already running, view all notification area icons (near the clock), right click on its system tray icon to use it or just copy and paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Ultracopier가 이미 실행 중입니다. 트레이에 있는 아이콘에서 우-클릭하여 사용하거나 그냥 복사하여 붙여넣기 하세요. </translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="109"/>
         <source>Unable to open the transfer list file</source>
-        <translation type="unfinished"></translation>
+        <translation>전송 목록 파일을 열 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="175"/>
         <location filename="../../../CliParser.cpp" line="186"/>
         <source>To display this help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">도움말 표시</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="178"/>
         <location filename="../../../CliParser.cpp" line="189"/>
         <source>Open transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
         <location filename="../../../CliParser.cpp" line="196"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">도움말</translation>
     </message>
 </context>
 <context>
     <name>CopyEngine</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="435"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="458"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="438"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="461"/>
         <source>The engine is forced to move, you can&apos;t copy with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="470"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="493"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="473"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="496"/>
         <source>The engine is forced to copy, you can&apos;t move with it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="517"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="520"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="517"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="520"/>
         <source>Use the actual destination &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="682"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="685"/>
         <source>The mode has been forced previously. This is an internal error, please report it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="966"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="969"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="974"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="978"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="976"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="979"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="984"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="988"/>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="967"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="971"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="975"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="979"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="977"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="981"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="985"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="989"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="970"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="980"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="972"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="984"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="982"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="994"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="976"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="986"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="980"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="990"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="981"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="991"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="982"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="992"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="983"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="993"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1054"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1064"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1054"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngine.cpp" line="1064"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -185,75 +185,75 @@
 <context>
     <name>CopyEngineFactory</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="301"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="303"/>
         <source>Supported only on Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="420"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="423"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="428"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="432"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="430"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="438"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="442"/>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">확인</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="421"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="425"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="429"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="433"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="431"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="435"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="439"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="443"/>
         <source>Skip</source>
         <translation type="unfinished">건너뛰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="424"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="434"/>
         <source>Merge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="426"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="438"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="448"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="430"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="440"/>
         <source>Put at the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="434"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="444"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="435"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="445"/>
         <source>Overwrite if different</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="436"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="446"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="437"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="447"/>
         <source>Overwrite if older</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="492"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="463"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="502"/>
         <source>Options error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="453"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="463"/>
         <source>Options engine is not loaded. Unable to access the filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="492"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/CopyEngineFactory.cpp" line="502"/>
         <source>Options engine is not loaded, can&apos;t access to the filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,12 +271,12 @@
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="234"/>
         <source>Cannot find any copy engine with move support</source>
-        <translation type="unfinished"></translation>
+        <translation>이동이 지원되는 복사 엔진을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="262"/>
         <source>This copy engine does not support move</source>
-        <translation type="unfinished"></translation>
+        <translation>이 복사 엔진은 이동을 지원하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="239"/>
@@ -286,7 +286,7 @@
     <message>
         <location filename="../../../CopyEngineManager.cpp" line="279"/>
         <source>Cannot find any engine with this name: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이 이름의 엔진을 찾을 수 없음: %1</translation>
     </message>
 </context>
 <context>
@@ -300,7 +300,8 @@
         <location filename="../../../CopyListener.cpp" line="160"/>
         <source>Error during the reception of the copy/move list
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">복사/이동 목록 수신 중 오류 발생
+%1</translation>
     </message>
 </context>
 <context>
@@ -332,48 +333,48 @@
         <location filename="../../../Core.cpp" line="220"/>
         <location filename="../../../Core.cpp" line="241"/>
         <source>Unable to get a copy engine instance</source>
-        <translation type="unfinished"></translation>
+        <translation>복사 엔진 인스턴스를 가져올 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="104"/>
         <source>Group window</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">그룹 창</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="104"/>
         <source>Do you want group the transfer with another actual running transfer?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송을 실제 실행 중인 다른 전송과 그룹화하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="127"/>
         <source>Unable to get a engine instance</source>
-        <translation type="unfinished"></translation>
+        <translation>엔진 인스턴스를 가져올 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="227"/>
         <source>The argument for the mode is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>모드에 대한 인수가 올바르지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="1185"/>
         <source>Do you want to copy? If no, it will be moved.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">복사하시겠습니까? 아니오를 선택하면 이동됩니다.</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="275"/>
         <location filename="../../../Core.cpp" line="413"/>
         <source>Unable to load the interface, copy aborted</source>
-        <translation>인터페이스를 불러올 수 없음, 복사가 취소되었습니다</translation>
+        <translation type="unfinished">인터페이스를 불러올 수 없음, 복사가 중단되었습니다</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="418"/>
         <source>Unable to load the copy engine, copy aborted</source>
-        <translation>복사 엔진을 불러올 수 없음, 복사가 취소되었습니다</translation>
+        <translation type="unfinished">복사 엔진을 불러올 수 없음, 복사가 중단되었습니다</translation>
     </message>
     <message>
         <location filename="../../../Core.cpp" line="1184"/>
         <source>Transfer mode</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 모드</translation>
     </message>
 </context>
 <context>
@@ -452,7 +453,7 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="44"/>
         <source>Too big</source>
-        <translation>너무 큽니다</translation>
+        <translation>너무 큽니다.</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="45"/>
@@ -502,154 +503,154 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="54"/>
         <source>Less than %10 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%10 초 미만</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="55"/>
         <source>About %10 seconds remaining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">약 %10 초 남음</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="56"/>
         <source>About %1 minutes remaining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">약 %1 분 남음</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="57"/>
         <source>About %1 hours remaining</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">약 %1 시간 남음</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="63"/>
         <source>Transfer</source>
         <extracomment>a transfer</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="66"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">시작</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="71"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="72"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">크기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="73"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="74"/>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">종료</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="75"/>
         <source>Target</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="76"/>
         <location filename="../../../FacilityEngine.cpp" line="80"/>
         <source>Time remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">남은 시간:</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="77"/>
         <source>Listing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">나열 중</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="78"/>
         <source>Copying</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">복사 중</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="79"/>
         <source>Listing and copying</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">나열 및 복사 중</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="81"/>
         <source>Remaining:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이름 변경 중:</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="83"/>
         <source>Ask</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">확인</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="85"/>
         <source>Overwrite</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">덮어쓰기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="86"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="87"/>
         <source>Overwrite if the last modification dates are different</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">마지막 수정한 날짜가 다르면 덮어쓰기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="88"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이름 바꾸기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="89"/>
         <source>Put to the end of the list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">목록의 끝에 놓기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="90"/>
         <source>Select source directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본 디렉터리 선택</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="91"/>
         <source>Select destination directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상 디렉터리 선택</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="92"/>
         <source>Internal error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">내부 오류</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="93"/>
         <source>Select one or more files to open</source>
-        <translation type="unfinished"></translation>
+        <translation>열려는 파일을 하나 이상 선택하세요.</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="94"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">모든 파일</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="95"/>
         <source>Save transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 목록 저장</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="96"/>
         <source>Open transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 목록 열기</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="97"/>
         <source>Transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 목록</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="98"/>
@@ -659,12 +660,12 @@
     <message>
         <location filename="../../../FacilityEngine.cpp" line="99"/>
         <source>Not supported on this platform</source>
-        <translation type="unfinished"></translation>
+        <translation>이 플랫폼에서는 지원하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../../../FacilityEngine.cpp" line="100"/>
         <source>Completed in %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 후 완료됨</translation>
     </message>
 </context>
 <context>
@@ -898,20 +899,21 @@
     <message>
         <location filename="../../../HelpDialog.cpp" line="36"/>
         <source>About Ultracopier</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ultracopie에 대해</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="67"/>
         <source>Based on Qt. Advanced utility to copy files under GPL3 license.
 This version is compiled as version: %1.</source>
         <extracomment>%1 will be replaced by a variable content (normal, debug, ...)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Qt 기반, GPL3 라이센스 준수. 파일 복사를 위한 고급 유틸리티입니다.
+이 버전은 다음 버전으로 컴파일됨: %1.</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="75"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For more information see the website &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>%1 will be remplaced by the website into the corresponding languages</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;자세한 내용은 웹 사이트 참조: &lt;a href=&quot;%1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;%1&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="85"/>
@@ -922,7 +924,7 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../HelpDialog.ui" line="92"/>
         <source>Author: BRULE Herman Jacques Roger (alpha_one_x86), company: &lt;a href=&quot;http://www.confiared.com/&quot;&gt;confiared&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">저작자: BRULE Herman Jacques Roger (alpha_one_x86), 회사: &lt;a href=&quot;http://www.confiared.com/&quot;&gt;Confiared&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="131"/>
@@ -932,12 +934,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../HelpDialog.ui" line="154"/>
         <source>Check update</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">업데이트 확인</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="161"/>
         <source>Do a crash</source>
-        <translation>충돌 발생시</translation>
+        <translation type="unfinished">충돌 발생 시</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.ui" line="168"/>
@@ -952,12 +954,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../HelpDialog.cpp" line="80"/>
         <source>For http://portableapps.com/</source>
-        <translation>http://portableapps.com을 위해</translation>
+        <translation type="unfinished">http://portableapps.com</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="83"/>
         <source>Portable and all in one version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">포터블 및 올인원 버전</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="85"/>
@@ -967,7 +969,7 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../HelpDialog.cpp" line="90"/>
         <source>All in one version</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">올인원 버전</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="92"/>
@@ -982,70 +984,70 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../HelpDialog.cpp" line="142"/>
         <source>Update checking...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">업데이트 확인 중...</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="148"/>
         <source>Update: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">업데이트: %1</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="154"/>
         <source>No update</source>
-        <translation type="unfinished"></translation>
+        <translation>업데이트가 없습니다.</translation>
     </message>
     <message>
         <location filename="../../../HelpDialog.cpp" line="115"/>
         <source>http://ultracopier.first-world.info/download.html</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">http://ultracopier.first-world.info/download.html</translation>
     </message>
 </context>
 <context>
     <name>ListThread</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="237"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="403"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="242"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="413"/>
         <source>Unable do to move or copy item into wrong forced mode: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="244"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="410"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="249"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="420"/>
         <source>Unable to save the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="260"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="270"/>
         <source>Problem reading file, or file-size is 0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="267"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="277"/>
         <source>Wrong header: &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="276"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="286"/>
         <source>The transfer list is in mixed mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="285"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="295"/>
         <source>The transfer list is in copy mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="291"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="301"/>
         <source>The transfer list is in move mode, but this instance is not in this mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="355"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="365"/>
         <source>Some errors have been found during the line parsing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="363"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ListThreadListChange.cpp" line="373"/>
         <source>Unable to open the transfer list: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1063,12 +1065,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../LocalListener.cpp" line="168"/>
         <source>Warning</source>
-        <translation>알림</translation>
+        <translation type="unfinished">알림</translation>
     </message>
     <message>
         <location filename="../../../LocalListener.cpp" line="168"/>
         <source>Timeout while recomposing data from connected clients</source>
-        <translation>연결된 클라이언트로부터 데이터를 재구성하는 동안에 시간이 초과되었습니다</translation>
+        <translation type="unfinished">연결된 클라이언트로부터 데이터를 재구성하는 동안에 시간이 초과되었습니다</translation>
     </message>
 </context>
 <context>
@@ -1083,13 +1085,13 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../LogThread.cpp" line="107"/>
         <source>Log file already open, error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">로그 파일이 이미 열려 있음, 오류: %1</translation>
     </message>
     <message>
         <location filename="../../../LogThread.cpp" line="116"/>
         <location filename="../../../LogThread.cpp" line="126"/>
         <source>Unable to open the log file, error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">로그 파일을 열 수 없음, 오류: %1</translation>
     </message>
 </context>
 <context>
@@ -1142,47 +1144,47 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OSSpecific.ui" line="119"/>
         <source>Classic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">클래식</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="124"/>
         <source>Modern</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">모던</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="177"/>
         <source>Don&apos;t show again</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">다시 표시 안 함</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.ui" line="202"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">확인</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="29"/>
         <source>The replacement of default copy/move system is not supported by the file manager (Dolphin, Nautilus, ...).&lt;br /&gt;Ask the developer of your file manager to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">파일 관리자(Dolphin, Nautilus...)에서 기본 복사/이동 시스템의 대체를 지원하지 않습니다.&lt;br /&gt;파일 관리자의 개발자에게 지원을 요청하세요.&lt;br /&gt;수동으로 복사/이동해야 합니다.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="31"/>
         <source>Reboot the system if previously had similar software installed (like Teracopy, Supercopier or an earlier version of Ultracopier).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">이전에 유사한 소프트웨어((Teracopy, Supercopier 또는 Ultracopier의 이전 버전 등)를 설치한 경우 시스템을 재부팅하세요.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="33"/>
         <source>The replacement of default copy/move system is not supported and blocked by finder of Mac OS X.&lt;br /&gt;You need do the copy/move manually by right clicking on the system tray icon near the clock (not the dock icon).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">기본 복사/이동 시스템의 대체가 지원되지 않으며 Mac OS X의 파인더에 의해 차단됩니다.&lt;br /&gt;시스템 트레이 아이콘에서 우-클릭하여 수동으로 복사/이동해야 합니다.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="35"/>
         <source>The replacement of default copy/move system should be not supported by the file manager.&lt;br /&gt;Ask to the developer to support it.&lt;br /&gt;You need do the copy/move manually.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">파일 관리자에서 기본 복사/이동 시스템의 대체를 지원하지 않습니다.&lt;br /&gt;개발자에게 지원을 요청하세요.&lt;br /&gt;수동으로 복사/이동해야 합니다.</translation>
     </message>
     <message>
         <location filename="../../../OSSpecific.cpp" line="38"/>
         <source>Consider Supercopier as deprecated, prefer Ultracopier</source>
-        <translation type="unfinished"></translation>
+        <translation>Supercopier 보다 Ultracopier를 사용해주세요. </translation>
     </message>
 </context>
 <context>
@@ -1224,17 +1226,17 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="231"/>
         <source>Confirm to group the windows</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">창 그룹화 확인</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="251"/>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">업데이트 확인</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="289"/>
         <source>Portable (need restart)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">포터블 (재시작 필요)</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="356"/>
@@ -1254,18 +1256,18 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="772"/>
         <source>Write directly to the file when it receive a new entry (can produce 50% of lost of performance)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">새로운 항목을 받으면 파일에 직접 쓰기 (성능 손실 50% 감소 가능)</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="845"/>
         <source>Write the folder operations</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">폴더 작업 로그 작성</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="855"/>
         <source>The variables are %path%, %operation%</source>
         <extracomment>%path%, %operation% should not be translated</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>변수는 %path%, %operation%입니다.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="80"/>
@@ -1291,62 +1293,62 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="126"/>
         <source>Force the language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">언어 강제 적용</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="136"/>
         <source>Replace the default copy and move system</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">기본 복사 및 이동 시스템 대체</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="150"/>
         <source>Load at the session loading</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">세션 불러올 때 불러오기 </translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="164"/>
         <source>When manual open</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">수동으로 열 때</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="190"/>
         <source>Group the windows when</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">다음의 경우 창 그룹화</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="241"/>
         <source>Display the OS warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">OS 알림 표시</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="261"/>
         <source>Remaining time algorithm</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">남은 시간 알고리즘</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="269"/>
         <source>Traditional</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Traditional</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="274"/>
         <source>Logarithmic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Logarithmic</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="304"/>
         <source>default: finish.opus</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">기본값: finish.opus</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="311"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">재생</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="320"/>
         <source>Sound when finish</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">완료 시 소리 재생</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="402"/>
@@ -1371,12 +1373,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="471"/>
         <source>Copy engine by order of preference:</source>
-        <translation>복사 엔진 순서 환경 설정:</translation>
+        <translation type="unfinished">선호 순서에 따른 복사 엔진:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="542"/>
         <source>Client connected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">연결된 클라이언트</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="598"/>
@@ -1401,97 +1403,97 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="785"/>
         <source>Write the transfers</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 로그 작성</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="792"/>
         <source>The variables are %time%, %source%, %size%, %destination%</source>
         <extracomment>%time%, %source%, %size%, %destination% should not be translated</extracomment>
-        <translation>변수는 %time%, %source%, %size%, %destination% 입니다</translation>
+        <translation>변수는 %time%, %source%, %size%, %destination%입니다.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="815"/>
         <source>Write the errors</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">오류 로그 작성</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="822"/>
         <source>The variables are %time%, %path%, %size%, %mtime%, %error%</source>
         <extracomment>%time%, %path%, %size%, %mtime%, %error% should not be translated</extracomment>
-        <translation>변수는 %time%, %path%, %size%, %mtime%, %error% 입니다</translation>
+        <translation>변수는 %time%, %path%, %size%, %mtime%, %error%입니다.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.ui" line="741"/>
         <source>Write the log file into:</source>
-        <translation>로그 파일 작성:</translation>
+        <translation type="unfinished">로그 파일 만들기:</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="197"/>
         <location filename="../../../OptionDialog.cpp" line="211"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">불러오기</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="197"/>
         <source>Load the theme?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">테마를 불러오시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="211"/>
         <source>Load the language?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">언어를 불러오시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="298"/>
         <source>Do nothing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">동작 없음</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="299"/>
         <source>Ask source as folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">폴더 위치 확인</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="300"/>
         <source>Ask sources as files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">파일 위치 확인</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="301"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">안 함</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="302"/>
         <source>When source is same</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본이 같을 때</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="303"/>
         <source>When destination is same</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상이 같을 때</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="304"/>
         <source>When source and destination are same</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본 및 대상이 같을 때</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="305"/>
         <source>When source or destination are same</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본 또는 대상이 같을 때</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="306"/>
         <source>Always</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">항상</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="320"/>
         <location filename="../../../OptionDialog.cpp" line="321"/>
         <location filename="../../../OptionDialog.cpp" line="322"/>
         <source>The variables are %1</source>
-        <translation type="unfinished"></translation>
+        <translation>변수는 %1입니다.</translation>
     </message>
     <message>
         <location filename="../../../OptionDialog.cpp" line="962"/>
@@ -1501,7 +1503,7 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../OptionDialog.ui" line="775"/>
         <source>Synchronized log</source>
-        <translation>로그 동기화됨</translation>
+        <translation type="unfinished">동기화된 로그</translation>
     </message>
 </context>
 <context>
@@ -1512,7 +1514,7 @@ This version is compiled as version: %1.</source>
         <location filename="../../../OptionEngine.cpp" line="211"/>
         <location filename="../../../OptionEngine.cpp" line="215"/>
         <source>The variable was not found: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">변수가 발견되지 않음: %1 %2</translation>
     </message>
 </context>
 <context>
@@ -1603,12 +1605,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginInformation.cpp" line="52"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">알수 없음</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.cpp" line="61"/>
         <source>Information about %1</source>
-        <translation>%1 파일 정보</translation>
+        <translation type="unfinished">%1의 정보</translation>
     </message>
     <message>
         <location filename="../../../PluginInformation.ui" line="65"/>
@@ -1636,7 +1638,7 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="510"/>
         <source>Dependencies %1 are not satisfied, for plugin: %2</source>
-        <translation>플러그인 %2에 대한 %1 종속성이 충족되지 않습니다</translation>
+        <translation type="unfinished">%2 플러그인에 대한 %1 종속성이 충족되지 않습니다</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="673"/>
@@ -1652,7 +1654,8 @@ This version is compiled as version: %1.</source>
         <location filename="../../../PluginsManager.cpp" line="684"/>
         <source>Error while the removing plugin, please check the rights on the folder: 
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">플러그인 제거 중 오류 발생. 폴더에서 권한을 확인하세요: 
+%1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="708"/>
@@ -1662,27 +1665,27 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="257"/>
         <source>%1, parse error at line %2, column %3: %4</source>
-        <translation>%1, %2 라인에서 문법 오류, %3 열: %4</translation>
+        <translation type="unfinished">%1, 라인 %2에서 문법 오류, %3 열: %4</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="231"/>
         <source>informations.xml not found for the plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>플러그인에 대한 informations.xml을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="265"/>
         <source>&quot;package&quot; root tag not found for the xml file</source>
-        <translation>xml 파일을 위한 &quot;패키지&quot; 루트 태그를 찾을 수 없습니다</translation>
+        <translation type="unfinished">xml 파일을 위한 &quot;package&quot; 루트 태그를 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="339"/>
         <source>Duplicated plugin found, already loaded!</source>
-        <translation>중복된 플러그인 발견, 이미 호출되었습니다!</translation>
+        <translation type="unfinished">중복된 플러그인 발견됨, 이미 호출되었습니다!</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="400"/>
         <source>English text missing in the informations.xml for the tag: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">태그의 informations.xml에서 영어 텍스트 누락됨: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="408"/>
@@ -1692,12 +1695,12 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="673"/>
         <source>Are you sure about removing &quot;%1&quot; in version %2?</source>
-        <translation>%2 버전에서 %1을 제거하시겠습니까?</translation>
+        <translation type="unfinished">%2 버전에서 %1를(을) 제거하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="708"/>
         <source>Previous import is in progress...</source>
-        <translation>이전의 가져오기가 진행중입니다...</translation>
+        <translation type="unfinished">이전의 가져오기가 진행 중입니다...</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="711"/>
@@ -1707,7 +1710,7 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="711"/>
         <source>Ultracopier plugin (*.urc)</source>
-        <translation>Ultracopier (*.urc)</translation>
+        <translation type="unfinished">Ultracopier 플러그인 (*.urc)</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="728"/>
@@ -1726,14 +1729,14 @@ This version is compiled as version: %1.</source>
     <message>
         <location filename="../../../PluginsManager.cpp" line="728"/>
         <source>Unable to open the plugin: %1</source>
-        <translation>플러그인 열기 불가: %1</translation>
+        <translation type="unfinished">플러그인을 열 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="753"/>
         <location filename="../../../PluginsManager.cpp" line="871"/>
         <location filename="../../../PluginsManager.cpp" line="884"/>
         <source>Unable to load the plugin content, please check it: %1</source>
-        <translation>플러그인 내용을 불러올 수 없습니다. 확인해주십시오: %1</translation>
+        <translation type="unfinished">플러그인 내용을 불러올 수 없음, 확인해 주세요: %1</translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="821"/>
@@ -1746,16 +1749,14 @@ This version is compiled as version: %1.</source>
         <location filename="../../../PluginsManager.cpp" line="834"/>
         <source>Unable to create a file to install the plugin:
 %1
-since:%2</source>
-        <translation>플러그인을 설치할 파일을 만들 수 없음:
-%1
-since:%2</translation>
+Error:%2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../PluginsManager.cpp" line="853"/>
         <source>Folder with same name is present, skip the plugin installation:
 %1</source>
-        <translation>동일한 이름의 폴더가 존재합니다. 플러그인 설치 건너뛰기:
+        <translation type="unfinished">같은 이름의 폴더가 존재합니다. 플러그인 설치 건너뛰기:
 %1</translation>
     </message>
     <message>
@@ -1763,7 +1764,7 @@ since:%2</translation>
         <location filename="../../../PluginsManager.cpp" line="865"/>
         <location filename="../../../PluginsManager.cpp" line="877"/>
         <source>Unable to load the plugin content, please check it</source>
-        <translation>플러그인 컨태츠를 불러올 수 없습니다. 확인해주십시오</translation>
+        <translation>플러그인 콘텐츠를 불러올 수 없습니다. 확인해 주세요.</translation>
     </message>
 </context>
 <context>
@@ -1772,7 +1773,7 @@ since:%2</translation>
         <location filename="../../../ProductKey.ui" line="14"/>
         <location filename="../../../ProductKey.ui" line="24"/>
         <source>Product key</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">제품 키</translation>
     </message>
     <message>
         <location filename="../../../ProductKey.cpp" line="56"/>
@@ -1782,7 +1783,7 @@ since:%2</translation>
     <message>
         <location filename="../../../ProductKey.cpp" line="56"/>
         <source>Your product key was rejected.&lt;br /&gt;If you buy key, unmark check your spam and unmark the mail as spam&lt;br /&gt;If you have not buy your key, go to &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>제품 키가 거부되었습니다.&lt;br /&gt;키를 구매한 경우, 메일함에서 스팸 폴더를 확인하고 스팸 표시 마크를 해제해 주세요.&lt;br /&gt;키를 구입하지 않은 경우, &lt;a href=&quot;https://shop.first-world.info/&quot;&gt;https://shop.first-world.info/&lt;/a&gt;로 이동하세요. </translation>
     </message>
 </context>
 <context>
@@ -1791,18 +1792,18 @@ since:%2</translation>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="38"/>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="93"/>
         <source>Memory allocation failed</source>
-        <translation>메모리 할당 실패</translation>
+        <translation>메모리를 할당하지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="64"/>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="82"/>
         <source>Write error</source>
-        <translation>오류 작성</translation>
+        <translation type="unfinished">작성 오류</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="97"/>
         <source>Memory usage limit reached</source>
-        <translation>메모리 사용량이 제한에 도달했습니다</translation>
+        <translation>메모리 사용량이 제한에 도달했습니다.</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="101"/>
@@ -1812,12 +1813,12 @@ since:%2</translation>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="105"/>
         <source>Unsupported options in the .xz headers</source>
-        <translation>.xz 헤더에서 지원되지 않는 옵션입니다</translation>
+        <translation>.xz 헤더에서 지원되지 않는 옵션입니다.</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="110"/>
         <source>The file is corrupted</source>
-        <translation>파일이 손상되었습니다</translation>
+        <translation>파일이 손상되었습니다.</translation>
     </message>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="114"/>
@@ -1827,7 +1828,7 @@ since:%2</translation>
     <message>
         <location filename="../../../lib/qt-tar-xz/QXzDecode.cpp" line="124"/>
         <source>The input data is too short</source>
-        <translation>입력 데이터가 너무 짧습니다</translation>
+        <translation>입력 데이터가 너무 짧습니다.</translation>
     </message>
 </context>
 <context>
@@ -1899,32 +1900,32 @@ since:%2</translation>
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="438"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="440"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="442"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="444"/>
         <source>%1 - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="449"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="451"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="453"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="455"/>
         <source>%1 - copy (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="562"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="564"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="566"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="568"/>
         <source>%name% - copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="573"/>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="575"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="577"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="579"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="659"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="663"/>
+        <location filename="../../CopyEngine/Ultracopier-Spec/ScanFileOrFolder.cpp" line="667"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1934,7 +1935,7 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="171"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
-        <translation type="unfinished">복사 리스너를 찾을 수 없습니다. 트레이 아이콘에서 우클릭하여 수동으로 복사하십시오.</translation>
+        <translation type="unfinished">복사 리스너를 찾을 수 없습니다. 트레이 아이콘에서 우-클릭하여 수동으로 복사하세요.</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="177"/>
@@ -1949,17 +1950,17 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="209"/>
         <source>Do not replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">탐색기 복사/이동 대체 안 함</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="214"/>
         <source>Semi replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">탐색기 복사/이동 절반 대체</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="219"/>
         <source>Replace the explorer copy/move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">탐색기 복사/이동 대체</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="398"/>
@@ -1969,67 +1970,67 @@ since:%2</translation>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="398"/>
         <source>The action on the systray icon is unknown!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">시스템 트레이 아이콘의 동작을 알 수 없습니다!</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="446"/>
         <source>&amp;About/Debug report</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;정보/디버그 보고</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="448"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;정보</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="451"/>
         <source>&amp;Save bug report</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;버그 보고서 저장</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="453"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;종료</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="454"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;옵션</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="455"/>
         <source>&amp;Product key</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;제품 키</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>New version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">새 버전: %1</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="493"/>
         <source>Go to the download page:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">다운로드 페이지로 이동:</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="520"/>
         <source>A&amp;dd copy/moving</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">복사/이동 &amp;추가</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="546"/>
         <source>Add &amp;copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;복사 추가</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="547"/>
         <source>Add &amp;transfer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;전송 추가</translation>
     </message>
     <message>
         <location filename="../../../SystrayIcon.cpp" line="548"/>
         <source>Add &amp;move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;이동 추가</translation>
     </message>
 </context>
 <context>
@@ -2194,7 +2195,7 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="44"/>
         <source>Transfer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/copyEngineOptions.ui" line="63"/>
@@ -2373,7 +2374,7 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="59"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">크기</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="76"/>
@@ -2388,7 +2389,7 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="110"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileErrorDialog.ui" line="127"/>
@@ -2436,18 +2437,18 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="34"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="50"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="82"/>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="170"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">크기</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="99"/>
@@ -2500,7 +2501,7 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="341"/>
         <source>Overwrite if newer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">더 최신이면 덮어쓰기</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileExistsDialog.ui" line="346"/>
@@ -2537,7 +2538,7 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="40"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">크기</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/fileIsSameDialog.ui" line="70"/>
@@ -2590,12 +2591,12 @@ since:%2</translation>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="34"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="50"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
         <location filename="../../CopyEngine/Ultracopier-Spec/folderExistsDialog.ui" line="82"/>
@@ -2691,7 +2692,7 @@ since:%2</translation>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="329"/>
         <source>Transfer list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">전송 목록</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="352"/>
@@ -2762,12 +2763,12 @@ since:%2</translation>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="722"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">원본</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="727"/>
         <source>Destination</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">대상</translation>
     </message>
     <message>
         <location filename="../../Themes/Oxygen/interface.ui" line="741"/>
