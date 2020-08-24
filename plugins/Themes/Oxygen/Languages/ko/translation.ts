@@ -4,12 +4,17 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+327"/>
+        <location filename="../../interface.cpp" line="+328"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished">개발 지원을 위해 Ultimate 버전 구입</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+0"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+99"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">%1/%2 파일, 크기: %3/%4</translation>
     </message>
@@ -86,7 +91,7 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+35"/>
+        <location filename="../../interface.ui" line="+44"/>
         <source>From:</source>
         <translation type="unfinished">원본:</translation>
     </message>
@@ -212,7 +217,7 @@
         <translation type="unfinished">대상</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+60"/>
         <source>Add file</source>
         <translation type="unfinished">파일 추가</translation>
     </message>

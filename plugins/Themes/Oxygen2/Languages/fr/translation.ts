@@ -26,13 +26,19 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+292"/>
-        <location line="+21"/>
+        <location filename="../../interface.cpp" line="+293"/>
+        <location line="+22"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="+197"/>
+        <location line="-22"/>
+        <location line="+22"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+211"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>

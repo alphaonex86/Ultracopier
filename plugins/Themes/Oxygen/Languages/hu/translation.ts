@@ -4,56 +4,61 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="327"/>
+        <location filename="../../interface.cpp" line="328"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Vásárold meg az Ultimate verziót a fejlesztés támogatásához</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="412"/>
+        <location filename="../../interface.cpp" line="328"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="427"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fájl %1/%2, méret: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="646"/>
+        <location filename="../../interface.cpp" line="661"/>
         <source>Copy list</source>
         <translation>Lista másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="648"/>
+        <location filename="../../interface.cpp" line="663"/>
         <source>Move list</source>
         <translation>Lista mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1076"/>
+        <location filename="../../interface.cpp" line="1091"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>Ne zárja be, ha hiba történik</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1077"/>
+        <location filename="../../interface.cpp" line="1092"/>
         <source>Never close</source>
         <translation>Sose zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1078"/>
+        <location filename="../../interface.cpp" line="1093"/>
         <source>Always close</source>
         <translation>Mindig zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1080"/>
+        <location filename="../../interface.cpp" line="1095"/>
         <source>File Name, 0KB</source>
         <translation>Fájlnév, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1274"/>
-        <location filename="../../interface.cpp" line="1286"/>
-        <location filename="../../interface.cpp" line="1298"/>
+        <location filename="../../interface.cpp" line="1289"/>
+        <location filename="../../interface.cpp" line="1301"/>
+        <location filename="../../interface.cpp" line="1313"/>
         <source>Select a color</source>
         <translation>Válassz egy színt</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1373"/>
-        <location filename="../../interface.cpp" line="1377"/>
-        <location filename="../../interface.cpp" line="1379"/>
+        <location filename="../../interface.cpp" line="1388"/>
+        <location filename="../../interface.cpp" line="1392"/>
+        <location filename="../../interface.cpp" line="1394"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,158 +91,158 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="35"/>
+        <location filename="../../interface.ui" line="44"/>
         <source>From:</source>
         <translation>Forrás:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="65"/>
+        <location filename="../../interface.ui" line="74"/>
         <source>To:</source>
         <translation>Cél:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="226"/>
+        <location filename="../../interface.ui" line="235"/>
         <source>&amp;More</source>
         <translation>&amp;Több</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="246"/>
+        <location filename="../../interface.ui" line="255"/>
         <source>&amp;Pause</source>
         <translation>&amp;Szünet</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="260"/>
+        <location filename="../../interface.ui" line="269"/>
         <source>&amp;Skip</source>
         <translation>&amp;Kihagy</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="271"/>
+        <location filename="../../interface.ui" line="280"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Mégse</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="329"/>
+        <location filename="../../interface.ui" line="338"/>
         <source>Transfer list</source>
         <translation>Átviteli lista</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="621"/>
+        <location filename="../../interface.ui" line="630"/>
         <source>Previous</source>
         <translation>Előző</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="628"/>
+        <location filename="../../interface.ui" line="637"/>
         <source>Next</source>
         <translation>Következő</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="741"/>
+        <location filename="../../interface.ui" line="750"/>
         <source>Interface</source>
         <translation>Kezelőfelület</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="352"/>
+        <location filename="../../interface.ui" line="361"/>
         <source>Move the selected items to the top</source>
         <translation>Kijelölések elemek mozgatása legfelülre</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="118"/>
+        <location filename="../../interface.ui" line="127"/>
         <source>Close on transfer completion</source>
         <translation>Átvitel végeztével zárja be</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="286"/>
+        <location filename="../../interface.ui" line="295"/>
         <source>Limit copy speed to:</source>
         <translation>Másolási sebesség korlátozása:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="378"/>
+        <location filename="../../interface.ui" line="387"/>
         <source>Move up the selected items</source>
         <translation>Kijelölt elemek mozgatása fel</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="404"/>
+        <location filename="../../interface.ui" line="413"/>
         <source>Move down the selected items</source>
         <translation>Kijelölt elemek mozgatása le</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="430"/>
+        <location filename="../../interface.ui" line="439"/>
         <source>Move the selected items to the bottom</source>
         <translation>Kijelölések elemek mozgatása legalulra</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="456"/>
+        <location filename="../../interface.ui" line="465"/>
         <source>Add file/folder</source>
         <translation>Fájl/mappa hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="485"/>
+        <location filename="../../interface.ui" line="494"/>
         <source>Delete the selected items</source>
         <translation>Kijelölt elemek törlése</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="511"/>
+        <location filename="../../interface.ui" line="520"/>
         <source>Search</source>
         <translation>Keresés</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="540"/>
+        <location filename="../../interface.ui" line="549"/>
         <source>Export the transfer list</source>
         <translation>Átviteli lista exportálása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="566"/>
+        <location filename="../../interface.ui" line="575"/>
         <source>Import the transfer list</source>
         <translation>Átviteli lista importálása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="663"/>
-        <location filename="../../interface.ui" line="732"/>
+        <location filename="../../interface.ui" line="672"/>
+        <location filename="../../interface.ui" line="741"/>
         <source>Error</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="683"/>
+        <location filename="../../interface.ui" line="692"/>
         <source>Export the errors into transfer list</source>
         <translation>Hibák exportálása az átviteli listába</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="722"/>
+        <location filename="../../interface.ui" line="731"/>
         <source>Source</source>
         <translation>Forrás</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="727"/>
+        <location filename="../../interface.ui" line="736"/>
         <source>Destination</source>
         <translation>Cél</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="778"/>
+        <location filename="../../interface.ui" line="796"/>
         <source>Add file</source>
         <translation>Fájl hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="787"/>
+        <location filename="../../interface.ui" line="805"/>
         <source>Add folder</source>
         <translation>Mappa hozzáadása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="796"/>
+        <location filename="../../interface.ui" line="814"/>
         <source>Move file(s)</source>
         <translation>Fájl(ok) mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="805"/>
+        <location filename="../../interface.ui" line="823"/>
         <source>Move folder</source>
         <translation>Mappa mozgatása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="814"/>
+        <location filename="../../interface.ui" line="832"/>
         <source>Copy file(s)</source>
         <translation>Fájl(ok) másolása</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="823"/>
+        <location filename="../../interface.ui" line="841"/>
         <source>Copy folder</source>
         <translation>Mappa másolása</translation>
     </message>

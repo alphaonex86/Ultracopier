@@ -4,56 +4,61 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="327"/>
+        <location filename="../../interface.cpp" line="328"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Comprar la versión Ultimate para financiar el desarrollo</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="412"/>
+        <location filename="../../interface.cpp" line="328"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../interface.cpp" line="427"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>El archivo %1/%2, el tamaño: %3/%4</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="646"/>
+        <location filename="../../interface.cpp" line="661"/>
         <source>Copy list</source>
         <translation>Lista de copia</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="648"/>
+        <location filename="../../interface.cpp" line="663"/>
         <source>Move list</source>
         <translation>Lista de movimiento</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1076"/>
+        <location filename="../../interface.cpp" line="1091"/>
         <source>Don&apos;t close if errors are found</source>
         <translation>No cierre si se encuentran errores</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1077"/>
+        <location filename="../../interface.cpp" line="1092"/>
         <source>Never close</source>
         <translation>Nunca cierre</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1078"/>
+        <location filename="../../interface.cpp" line="1093"/>
         <source>Always close</source>
         <translation>Siempre cerrar</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1080"/>
+        <location filename="../../interface.cpp" line="1095"/>
         <source>File Name, 0KB</source>
         <translation>Nombre de archivo, 0KB</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1274"/>
-        <location filename="../../interface.cpp" line="1286"/>
-        <location filename="../../interface.cpp" line="1298"/>
+        <location filename="../../interface.cpp" line="1289"/>
+        <location filename="../../interface.cpp" line="1301"/>
+        <location filename="../../interface.cpp" line="1313"/>
         <source>Select a color</source>
         <translation>Seleccione un color</translation>
     </message>
     <message>
-        <location filename="../../interface.cpp" line="1373"/>
-        <location filename="../../interface.cpp" line="1377"/>
-        <location filename="../../interface.cpp" line="1379"/>
+        <location filename="../../interface.cpp" line="1388"/>
+        <location filename="../../interface.cpp" line="1392"/>
+        <location filename="../../interface.cpp" line="1394"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,158 +91,158 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="35"/>
+        <location filename="../../interface.ui" line="44"/>
         <source>From:</source>
         <translation>De:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="65"/>
+        <location filename="../../interface.ui" line="74"/>
         <source>To:</source>
         <translation>Para:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="226"/>
+        <location filename="../../interface.ui" line="235"/>
         <source>&amp;More</source>
         <translation>&amp;Más</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="246"/>
+        <location filename="../../interface.ui" line="255"/>
         <source>&amp;Pause</source>
         <translation>&amp;Pausa</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="260"/>
+        <location filename="../../interface.ui" line="269"/>
         <source>&amp;Skip</source>
         <translation>&amp;Omitir</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="271"/>
+        <location filename="../../interface.ui" line="280"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="118"/>
+        <location filename="../../interface.ui" line="127"/>
         <source>Close on transfer completion</source>
         <translation>Cerca de finalización de transferencia</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="286"/>
+        <location filename="../../interface.ui" line="295"/>
         <source>Limit copy speed to:</source>
         <translation>Limitar la velocidad de copia en:</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="329"/>
+        <location filename="../../interface.ui" line="338"/>
         <source>Transfer list</source>
         <translation>Lista de transferencia</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="352"/>
+        <location filename="../../interface.ui" line="361"/>
         <source>Move the selected items to the top</source>
         <translation>Mueve los elementos seleccionados a la parte superior</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="378"/>
+        <location filename="../../interface.ui" line="387"/>
         <source>Move up the selected items</source>
         <translation>Mueva los elementos seleccionados</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="404"/>
+        <location filename="../../interface.ui" line="413"/>
         <source>Move down the selected items</source>
         <translation>Bajar los elementos seleccionados</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="430"/>
+        <location filename="../../interface.ui" line="439"/>
         <source>Move the selected items to the bottom</source>
         <translation>Mueve los elementos seleccionados a la parte inferior</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="456"/>
+        <location filename="../../interface.ui" line="465"/>
         <source>Add file/folder</source>
         <translation>Agregar archivo/carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="485"/>
+        <location filename="../../interface.ui" line="494"/>
         <source>Delete the selected items</source>
         <translation>Eliminar los elementos seleccionados</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="511"/>
+        <location filename="../../interface.ui" line="520"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="540"/>
+        <location filename="../../interface.ui" line="549"/>
         <source>Export the transfer list</source>
         <translation>Exportar la lista de transferencias</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="566"/>
+        <location filename="../../interface.ui" line="575"/>
         <source>Import the transfer list</source>
         <translation>Importe la lista de transferencias</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="621"/>
+        <location filename="../../interface.ui" line="630"/>
         <source>Previous</source>
         <translation>Anterior</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="628"/>
+        <location filename="../../interface.ui" line="637"/>
         <source>Next</source>
         <translation>Próximo</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="663"/>
-        <location filename="../../interface.ui" line="732"/>
+        <location filename="../../interface.ui" line="672"/>
+        <location filename="../../interface.ui" line="741"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="683"/>
+        <location filename="../../interface.ui" line="692"/>
         <source>Export the errors into transfer list</source>
         <translation>Exportar los errores en la lista de transferencias</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="722"/>
+        <location filename="../../interface.ui" line="731"/>
         <source>Source</source>
         <translation>Fuente</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="727"/>
+        <location filename="../../interface.ui" line="736"/>
         <source>Destination</source>
         <translation>Destino</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="741"/>
+        <location filename="../../interface.ui" line="750"/>
         <source>Interface</source>
         <translation>Interfaz</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="778"/>
+        <location filename="../../interface.ui" line="796"/>
         <source>Add file</source>
         <translation>Añadir archivo</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="787"/>
+        <location filename="../../interface.ui" line="805"/>
         <source>Add folder</source>
         <translation>Añadir carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="796"/>
+        <location filename="../../interface.ui" line="814"/>
         <source>Move file(s)</source>
         <translation>Mover archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="805"/>
+        <location filename="../../interface.ui" line="823"/>
         <source>Move folder</source>
         <translation>Mueva la carpeta</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="814"/>
+        <location filename="../../interface.ui" line="832"/>
         <source>Copy file(s)</source>
         <translation>Copia el archivo(s)</translation>
     </message>
     <message>
-        <location filename="../../interface.ui" line="823"/>
+        <location filename="../../interface.ui" line="841"/>
         <source>Copy folder</source>
         <translation>Copia la carpeta</translation>
     </message>

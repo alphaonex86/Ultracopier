@@ -4,12 +4,17 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+327"/>
+        <location filename="../../interface.cpp" line="+328"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="+85"/>
+        <location line="+0"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+99"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation>Fichier %1/%2, taille: %3/%4</translation>
     </message>
@@ -86,7 +91,7 @@
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../interface.ui" line="+35"/>
+        <location filename="../../interface.ui" line="+44"/>
         <source>From:</source>
         <translation>Depuis:</translation>
     </message>
@@ -212,7 +217,7 @@
         <translation>Interface</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+46"/>
         <source>Add file</source>
         <translation>Ajouter un fichier</translation>
     </message>

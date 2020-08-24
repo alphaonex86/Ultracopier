@@ -355,7 +355,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1185"/>
+        <location filename="../../../Core.cpp" line="1200"/>
         <source>Do you want to copy? If no, it will be moved.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -371,7 +371,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../Core.cpp" line="1184"/>
+        <location filename="../../../Core.cpp" line="1199"/>
         <source>Transfer mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1928,102 +1928,97 @@ Error:%2</source>
 <context>
     <name>SystrayIcon</name>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="171"/>
+        <location filename="../../../SystrayIcon.cpp" line="163"/>
         <source>No copy listener found. Do the copy manually by right click one the system tray icon.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="177"/>
+        <location filename="../../../SystrayIcon.cpp" line="169"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="196"/>
+        <location filename="../../../SystrayIcon.cpp" line="188"/>
         <source>Searching information...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="209"/>
+        <location filename="../../../SystrayIcon.cpp" line="201"/>
         <source>Do not replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="214"/>
+        <location filename="../../../SystrayIcon.cpp" line="206"/>
         <source>Semi replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="219"/>
+        <location filename="../../../SystrayIcon.cpp" line="211"/>
         <source>Replace the explorer copy/move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="398"/>
+        <location filename="../../../SystrayIcon.cpp" line="388"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="398"/>
+        <location filename="../../../SystrayIcon.cpp" line="388"/>
         <source>The action on the systray icon is unknown!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="446"/>
+        <location filename="../../../SystrayIcon.cpp" line="436"/>
         <source>&amp;About/Debug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="448"/>
+        <location filename="../../../SystrayIcon.cpp" line="438"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="451"/>
+        <location filename="../../../SystrayIcon.cpp" line="441"/>
         <source>&amp;Save bug report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="453"/>
+        <location filename="../../../SystrayIcon.cpp" line="443"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="454"/>
+        <location filename="../../../SystrayIcon.cpp" line="444"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="455"/>
-        <source>&amp;Product key</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../SystrayIcon.cpp" line="493"/>
+        <location filename="../../../SystrayIcon.cpp" line="482"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="493"/>
+        <location filename="../../../SystrayIcon.cpp" line="482"/>
         <source>Go to the download page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="520"/>
+        <location filename="../../../SystrayIcon.cpp" line="509"/>
         <source>A&amp;dd copy/moving</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="546"/>
+        <location filename="../../../SystrayIcon.cpp" line="535"/>
         <source>Add &amp;copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="547"/>
+        <location filename="../../../SystrayIcon.cpp" line="536"/>
         <source>Add &amp;transfer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../SystrayIcon.cpp" line="548"/>
+        <location filename="../../../SystrayIcon.cpp" line="537"/>
         <source>Add &amp;move</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2031,56 +2026,61 @@ Error:%2</source>
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="327"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="328"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="412"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="328"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="427"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="646"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="661"/>
         <source>Copy list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="648"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="663"/>
         <source>Move list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1076"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1091"/>
         <source>Don&apos;t close if errors are found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1077"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1092"/>
         <source>Never close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1078"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1093"/>
         <source>Always close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1080"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1095"/>
         <source>File Name, 0KB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1274"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1286"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1298"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1289"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1301"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1313"/>
         <source>Select a color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1373"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1377"/>
-        <location filename="../../Themes/Oxygen/interface.cpp" line="1379"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1388"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1392"/>
+        <location filename="../../Themes/Oxygen/interface.cpp" line="1394"/>
         <source>%1 %2% of %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2645,158 +2645,158 @@ Error:%2</source>
 <context>
     <name>interfaceCopy</name>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="35"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="44"/>
         <source>From:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="65"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="74"/>
         <source>To:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="118"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="127"/>
         <source>Close on transfer completion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="226"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="235"/>
         <source>&amp;More</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="246"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="255"/>
         <source>&amp;Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="260"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="269"/>
         <source>&amp;Skip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="271"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="280"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="286"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="295"/>
         <source>Limit copy speed to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="329"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="338"/>
         <source>Transfer list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="352"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="361"/>
         <source>Move the selected items to the top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="378"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="387"/>
         <source>Move up the selected items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="404"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="413"/>
         <source>Move down the selected items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="430"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="439"/>
         <source>Move the selected items to the bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="456"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="465"/>
         <source>Add file/folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="485"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="494"/>
         <source>Delete the selected items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="511"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="520"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="540"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="549"/>
         <source>Export the transfer list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="566"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="575"/>
         <source>Import the transfer list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="621"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="630"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="628"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="637"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="663"/>
-        <location filename="../../Themes/Oxygen/interface.ui" line="732"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="672"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="741"/>
         <source>Error</source>
         <translation type="unfinished">錯誤</translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="683"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="692"/>
         <source>Export the errors into transfer list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="722"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="731"/>
         <source>Source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="727"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="736"/>
         <source>Destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="741"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="750"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="778"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="796"/>
         <source>Add file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="787"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="805"/>
         <source>Add folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="796"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="814"/>
         <source>Move file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="805"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="823"/>
         <source>Move folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="814"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="832"/>
         <source>Copy file(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Themes/Oxygen/interface.ui" line="823"/>
+        <location filename="../../Themes/Oxygen/interface.ui" line="841"/>
         <source>Copy folder</source>
         <translation type="unfinished"></translation>
     </message>

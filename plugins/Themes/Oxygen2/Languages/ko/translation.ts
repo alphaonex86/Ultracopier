@@ -26,13 +26,19 @@
 <context>
     <name>Themes</name>
     <message>
-        <location filename="../../interface.cpp" line="+292"/>
-        <location line="+21"/>
+        <location filename="../../interface.cpp" line="+293"/>
+        <location line="+22"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation type="unfinished">개발 지원을 위해 Ultimate 버전 구입</translation>
     </message>
     <message>
-        <location line="+197"/>
+        <location line="-22"/>
+        <location line="+22"/>
+        <source>Register your key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+211"/>
         <source>File %1/%2, size: %3/%4</source>
         <translation type="unfinished">%1/%2 파일, 크기: %3/%4</translation>
     </message>
