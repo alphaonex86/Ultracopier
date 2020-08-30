@@ -331,9 +331,14 @@ void ScanFileOrFolder::run()
 INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &destination)
 {
     INTERNALTYPEPATH temp(destination);
-    char buf[PATH_MAX];
+    std::vector<char> buf(512);
     ssize_t nbytes=0;
-    nbytes=readlink(TransferThread::internalStringTostring(destination).c_str(), buf, sizeof(buf));
+    do {
+      buf.resize(buf.size()*2);
+      nbytes=readlink(TransferThread::internalStringTostring(destination).c_str(), buf.data(), buf.size());
+    } while (nbytes == buf.size());
+    if (nbytes!=-1)
+      buf.resize(nbytes);
     while(nbytes!=-1) {
         temp=FSabsolutePath(temp);
         if(!stringEndsWith(destination,'/')
@@ -342,14 +347,19 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
             #endif
                 )
             temp+=TransferThread::stringToInternalString("/");
-        temp+=TransferThread::stringToInternalString(std::string(buf,nbytes));
+        temp+=TransferThread::stringToInternalString(std::string(buf.data(), buf.size()));
         /// \todo change for pure c++ code
         #ifdef WIDESTRING
         temp=QFileInfo(QString::fromStdWString(temp)).absoluteFilePath().toStdWString();
         #else
         temp=QFileInfo(QString::fromStdString(temp)).absoluteFilePath().toStdString();
         #endif
-        nbytes=readlink(TransferThread::internalStringTostring(temp).c_str(), buf, sizeof(buf));
+        do {
+          buf.resize(buf.size() * 2);
+          nbytes=readlink(TransferThread::internalStringTostring(temp).c_str(), buf.data(), buf.size());
+        } while (nbytes == buf.size());
+        if (nbytes!=-1)
+          buf.resize(nbytes);
     }
     return temp;
     /*do
