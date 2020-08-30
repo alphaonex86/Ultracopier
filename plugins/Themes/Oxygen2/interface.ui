@@ -515,7 +515,7 @@
       <enum>Qt::RichText</enum>
      </property>
      <property name="openExternalLinks">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -1008,7 +1008,7 @@
             <x>0</x>
             <y>0</y>
             <width>542</width>
-            <height>249</height>
+            <height>236</height>
            </rect>
           </property>
          </widget>

@@ -293,7 +293,6 @@ Themes::Themes(const bool &alwaysOnTop,
                     QStringLiteral("<a href=\"%1\">%2</a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")).arg(tr("Register your key"))+", "
                         +QStringLiteral("Follow us: ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
                         );
-        connect(ui->ad_ultimate,&QLabel::linkActivated,this,&Themes::ad_ultimate_clicked);
     }
 
     sysTrayIcon = new QSystemTrayIcon(this);
@@ -315,7 +314,6 @@ Themes::Themes(const bool &alwaysOnTop,
                 QStringLiteral("<a href=\"%1\"><span style=\"color:#cdf;\">%2</span></a> - <a href=\"register\">%3</a>").arg(ultimateUrl).arg(tr("Buy the Ultimate version to fund development")).arg(tr("Register your key"))+", "
                     +QStringLiteral("<span style=\"color:#fff;\">Follow us:</span> ")+QStringLiteral("<a href=\"%1\"><img src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAAAAAAABupgeRAAAAe0lEQVR4AWOAAPesxQQRUBlCNZEIu+qIjSfPvvn45c/f//////17vLxrJrIsugan3i3HoUq/fPj46c27gwWts/FpsF1x5O2/f////z5+th0uiFNDyb3n/1HBx0+LAwsWUaIB00krj7wHqfx94HgbXJBUDaMaSE58JCdvAAioiiB5mraWAAAAAElFTkSuQmCC\"/></a>").arg("https://www.facebook.com/Ultracopier/")
                     );
-        connect(ui->ad_ultimate,&QLabel::linkActivated,this,&Themes::ad_ultimate_clicked);
         //ui->frame->setStyleSheet("#frame{background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgb(70, 70, 70), stop:1 rgb(40, 40, 40));}");
         ui->labelTimeRemaining->setStyleSheet("color:#fff;");
         ui->labelSPStart->setStyleSheet("color:#aaa;");
@@ -430,6 +428,7 @@ Themes::Themes(const bool &alwaysOnTop,
         ui->cancelButton->setEnabled(false);
         #endif
     }
+    connect(ui->ad_ultimate,&QLabel::linkActivated,this,&Themes::ad_ultimate_clicked);
     isInPause(false);
     showDualProgression_toggled(showDualProgression);
 
