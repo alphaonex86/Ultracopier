@@ -17,7 +17,7 @@ macx {
 #DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
-linux:LIBS += -lopus
+unix:LIBS += -lopus
 win32:LIBS += -lopus
 SOURCES += \
     $$PWD/../libogg/bitwise.c \

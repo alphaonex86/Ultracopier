@@ -3,7 +3,7 @@ android: DEFINES += NOAUDIO
 #DEFINES += NOAUDIO
 !contains(DEFINES, NOAUDIO) {
 QT += multimedia
-linux:LIBS += -lopus
+unix:LIBS += -lopus
 macx:LIBS += -lopus
 win32:LIBS += -lopus
 SOURCES += \
