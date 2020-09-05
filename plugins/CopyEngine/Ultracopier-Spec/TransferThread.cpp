@@ -737,8 +737,7 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
     } while(!pathSplit.empty());
     return true;
     #else
-    char pathC[PATH_MAX];
-    strcpy(pathC,TransferThread::internalStringTostring(path).c_str());
+    std::string pathC(TransferThread::internalStringTostring(path));
     if(!mkdir(path))
         if(errno==EEXIST)
             return true;
@@ -748,8 +747,7 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
     std::string::size_type previouspos=path.size();
     std::string::size_type lastpos=std::string::npos;
 
-    char pathCedit[PATH_MAX];
-    strcpy(pathCedit,pathC);
+    std::string pathCedit(pathC);
     std::vector<std::string::size_type> pathSplit;
     pathSplit.push_back(path.size());
     do
@@ -773,14 +771,14 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
             return false;
         #endif
 
-        pathCedit[lastpos]='\0';
+	pathCedit.resize(lastpos);
         previouspos=lastpos;
 
         errno=0;
         #ifdef Q_OS_UNIX
-        if(::mkdir(pathCedit, mode)==-1)
+        if(::mkdir(pathCedit.c_str(), mode)==-1)
         #else
-        if(::mkdir(pathCedit)==-1)
+        if(::mkdir(pathCedit.c_str())==-1)
         #endif
             if(errno!=EEXIST && errno!=ENOENT)
                 return false;
@@ -791,14 +789,14 @@ bool TransferThread::mkpath(const INTERNALTYPEPATH &path)
 
     do
     {
-        strcpy(pathCedit,pathC);
+        pathCedit = pathC;
         lastpos=pathSplit.back();
         pathSplit.pop_back();
-        pathCedit[lastpos]='\0';
+        pathCedit.resize(lastpos);
         #ifdef Q_OS_UNIX
-        if(::mkdir(pathCedit, mode)==-1)
+        if(::mkdir(pathCedit.c_str(), mode)==-1)
         #else
-        if(::mkdir(pathCedit)==-1)
+        if(::mkdir(pathCedit.c_str())==-1)
         #endif
             if(errno!=EEXIST)
                 return false;

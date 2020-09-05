@@ -620,9 +620,16 @@ void TransferThreadAsync::ifCanStartTransfer()
                         return;
                     }
                 }
-            char buf[PATH_MAX];
-            const ssize_t s=readlink(TransferThread::internalStringTostring(source).c_str(),buf,sizeof(buf));
-            buf[s]=0x00;
+            std::vector<char> buf(512);
+            ssize_t s=0;
+            do {
+              buf.resize(buf.size()*2);
+              s=readlink(TransferThread::internalStringTostring(source).c_str(),buf.data(),buf.size());
+            } while (s == buf.size());
+            if (s!=-1) {
+              buf.resize(s + 1);
+              buf[s]='\0';
+            }
             if(s<0)
             {
                 const int terr=errno;
@@ -638,12 +645,12 @@ void TransferThreadAsync::ifCanStartTransfer()
             }
             else
             {
-                if(symlink(buf,TransferThread::internalStringTostring(destination).c_str())!=0)
+                if(symlink(buf.data(),TransferThread::internalStringTostring(destination).c_str())!=0)
                 {
                     const int terr=errno;
                     const std::string &strError=strerror(terr);
                     ULTRACOPIER_DEBUGCONSOLE(Ultracopier::DebugLevel_Warning,"["+std::to_string(id)+"] stop copy in error "+
-                                             buf+"->"+TransferThread::internalStringTostring(destination)+
+                                             buf.data()+"->"+TransferThread::internalStringTostring(destination)+
                                              " "+strError+"("+std::to_string(terr)+")"
                                              );
                     readError=true;
