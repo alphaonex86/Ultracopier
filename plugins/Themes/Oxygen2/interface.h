@@ -109,7 +109,7 @@ public:
     void getOptionsEngineEnabled(const bool &isEnabled) override;
     enum status{status_never_started,status_started,status_stopped};
     status stat;
-    void changeToUltimate();
+    void changeToUltimate() override;
 
     static QString simplifiedBigNum(const uint64_t &num);
 public slots:

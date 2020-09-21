@@ -27,13 +27,13 @@
     <name>Themes</name>
     <message>
         <location filename="../../interface.cpp" line="+293"/>
-        <location line="+22"/>
+        <location line="+21"/>
         <source>Buy the Ultimate version to fund development</source>
         <translation>Achetez la version Ultimate pour financer le développement</translation>
     </message>
     <message>
-        <location line="-22"/>
-        <location line="+22"/>
+        <location line="-21"/>
+        <location line="+21"/>
         <source>Register your key</source>
         <translation type="unfinished"></translation>
     </message>

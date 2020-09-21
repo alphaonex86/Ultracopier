@@ -336,7 +336,7 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
     do {
       buf.resize(buf.size()*2);
       nbytes=readlink(TransferThread::internalStringTostring(destination).c_str(), buf.data(), buf.size());
-    } while (nbytes == buf.size());
+    } while (nbytes == (ssize_t)buf.size());
     if (nbytes!=-1)
       buf.resize(nbytes);
     while(nbytes!=-1) {
@@ -357,7 +357,7 @@ INTERNALTYPEPATH ScanFileOrFolder::resolvDestination(const INTERNALTYPEPATH &des
         do {
           buf.resize(buf.size() * 2);
           nbytes=readlink(TransferThread::internalStringTostring(temp).c_str(), buf.data(), buf.size());
-        } while (nbytes == buf.size());
+        } while (nbytes == (ssize_t)buf.size());
         if (nbytes!=-1)
           buf.resize(nbytes);
     }

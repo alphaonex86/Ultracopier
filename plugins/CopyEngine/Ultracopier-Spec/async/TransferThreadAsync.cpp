@@ -625,7 +625,7 @@ void TransferThreadAsync::ifCanStartTransfer()
             do {
               buf.resize(buf.size()*2);
               s=readlink(TransferThread::internalStringTostring(source).c_str(),buf.data(),buf.size());
-            } while (s == buf.size());
+            } while (s == (ssize_t)buf.size());
             if (s!=-1) {
               buf.resize(s + 1);
               buf[s]='\0';

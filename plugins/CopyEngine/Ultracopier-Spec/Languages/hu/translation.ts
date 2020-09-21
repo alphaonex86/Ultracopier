@@ -582,32 +582,32 @@
 <context>
     <name>ScanFileOrFolder</name>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="442"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="444"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="452"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="454"/>
         <source>%1 - copy</source>
         <translation>%1 - másolás</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="453"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="455"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="463"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="465"/>
         <source>%1 - copy (%2)</source>
         <translation>%1 - másolás (%2)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="566"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="568"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="576"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="578"/>
         <source>%name% - copy</source>
         <translation type="unfinished">%name% - másolás</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="577"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="579"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="587"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="589"/>
         <source>%name% - copy (%number%)</source>
         <translation type="unfinished">%name% - másolás (%number%)</translation>
     </message>
     <message>
-        <location filename="../../ScanFileOrFolder.cpp" line="663"/>
-        <location filename="../../ScanFileOrFolder.cpp" line="667"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="673"/>
+        <location filename="../../ScanFileOrFolder.cpp" line="677"/>
         <source>Problem with folder read</source>
         <translation type="unfinished"></translation>
     </message>
@@ -626,7 +626,7 @@
     </message>
     <message>
         <location filename="../../TransferThread.cpp" line="648"/>
-        <location filename="../../TransferThread.cpp" line="891"/>
+        <location filename="../../TransferThread.cpp" line="889"/>
         <source>File not found</source>
         <translation>Fájl nem található</translation>
     </message>
@@ -636,8 +636,8 @@
         <translation>Átnevezés speciális karakterek használatával</translation>
     </message>
     <message>
-        <location filename="../../TransferThread.cpp" line="891"/>
-        <location filename="../../TransferThread.cpp" line="927"/>
+        <location filename="../../TransferThread.cpp" line="889"/>
+        <location filename="../../TransferThread.cpp" line="925"/>
         <source>Unable to change the date</source>
         <translation type="unfinished"></translation>
     </message>

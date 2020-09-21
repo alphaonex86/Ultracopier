@@ -292,7 +292,17 @@ void EventDispatcher::initFunction()
             std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
             abort();
         }
+        if(!connect(backgroundIcon,	&SystrayIcon::showProductKey,					ProductKey::productKey,	&ProductKey::show,Qt::DirectConnection))
+        {
+            std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
+            abort();
+        }
         if(!connect(core,	&Core::askProductKey,					ProductKey::productKey,	&ProductKey::show,Qt::DirectConnection))
+        {
+            std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
+            abort();
+        }
+        if(!connect(ProductKey::productKey,	&ProductKey::changeToUltimate,backgroundIcon,	&SystrayIcon::changeToUltimate,Qt::DirectConnection))
         {
             std::cerr << "connect error at " << __FILE__ << ":" << std::to_string(__LINE__) << std::endl;
             abort();
