@@ -492,8 +492,12 @@ std::vector<uint64_t> TransferModel::synchronizeItems(const std::vector<Ultracop
 
     if(!oldIndexes.isEmpty())
     {
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
         const QList<quint64> &l = oldMapping.values();
         const QSet<quint64> ids(l.cbegin(),l.cend());
+        #else
+        const QSet<quint64> ids = oldMapping.values().toSet();
+        #endif
 
         for ( unsigned int i = 0; i < transfertItemList.size(); i++ ) {
             const TransferModel::TransfertItem& item = transfertItemList.at(i);
